@@ -55,6 +55,8 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
 
     // GeometryGroup
     case A_TOKEN( custGeom ):   // custom geometry "CT_CustomGeometry2D"
+        // We got a custom geometry, forget the geometry inherited from the placeholder shape.
+        mrShape.getCustomShapeProperties() = std::make_shared<CustomShapeProperties>();
         return new CustomShapeGeometryContext( *this, *mrShape.getCustomShapeProperties() );
 
     case A_TOKEN( prstGeom ):   // preset geometry "CT_PresetGeometry2D"

@@ -525,6 +525,14 @@ public:
         const css::uno::Reference<css::drawing::XShape>& rXShape,
         const SdrObjCustomShape& rSdrObjCustomShape);
     void WriteEmptyCustomGeometry();
+    /** Writes a graphic object's clip polygon as the shape's own geometry.
+
+        Returns false when the shape has no clip polygon, so that the caller can write the geometry
+        it would have written anyway.
+     */
+    OOX_DLLPUBLIC bool WriteGraphicClipCustomGeometry(
+        const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+        const css::awt::Size& rSize);
     void WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
                           const bool bClosed);
     OOX_DLLPUBLIC void WriteFill(const css::uno::Reference<css::beans::XPropertySet>& xPropSet,

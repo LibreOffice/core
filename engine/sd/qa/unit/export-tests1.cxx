@@ -557,6 +557,30 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testDrawPasswordExport)
     saveAndReload(TestFilter::ODG, /*pPassword*/ "test");
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest1, testCool16078_placeholderOutlineToODF)
+{
+    // Given the same outline the OOXML export test uses - a frame with two holes, one of them
+    // round, and a second <a:path> holding a triangle that crosses the round one:
+    createSdImpressDoc("pptx/custgeom-placeholder.pptx");
+    save(TestFilter::ODP);
+
+    // ODF states it as a child of the frame, so that a placeholder keeps its outline here too.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    static constexpr OString aPath
+        = "//draw:frame[@presentation:class='graphic']/coext:graphic-clip-poly"_ostr;
+    assertXPath(pXmlDoc, aPath, 1);
+
+    // Three contours, the same three the OOXML side writes: the second path adds none of its own,
+    // its triangle taking a piece of the round hole back instead. A contour begins at each M of the
+    // svg:d.
+    const OUString aOutline = getXPath(pXmlDoc, aPath, "d");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
+                         aOutline.getLength()
+                             - aOutline.replaceAll(u"M"_ustr, u""_ustr).getLength());
+    // The frame's own corner, where the outline starts.
+    CPPUNIT_ASSERT(aOutline.startsWith("M0 0"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

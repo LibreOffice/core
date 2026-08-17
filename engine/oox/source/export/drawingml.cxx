@@ -68,6 +68,7 @@
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
@@ -5805,6 +5806,86 @@ void DrawingML::WriteEmptyCustomGeometry()
     mpFS->singleElementNS(XML_a, XML_rect, XML_l, "0", XML_t, "0", XML_r, "r", XML_b, "b");
     mpFS->singleElementNS(XML_a, XML_pathLst);
     mpFS->endElementNS(XML_a, XML_custGeom);
+}
+
+bool DrawingML::WriteGraphicClipCustomGeometry(const Reference<XPropertySet>& rXPropSet,
+                                               const awt::Size& rSize)
+{
+    if (!rXPropSet.is()
+        || !rXPropSet->getPropertySetInfo()->hasPropertyByName(
+               u"GraphicClipPolyPolygon"_ustr))
+        return false;
+
+    drawing::PolyPolygonBezierCoords aClip;
+    if (!(rXPropSet->getPropertyValue(u"GraphicClipPolyPolygon"_ustr) >>= aClip)
+        || !aClip.Coordinates.hasElements())
+        return false;
+
+    mpFS->startElementNS(XML_a, XML_custGeom);
+    mpFS->singleElementNS(XML_a, XML_avLst);
+    mpFS->singleElementNS(XML_a, XML_gdLst);
+    mpFS->singleElementNS(XML_a, XML_ahLst);
+    mpFS->singleElementNS(XML_a, XML_rect, XML_l, "0", XML_t, "0", XML_r, "r", XML_b, "b");
+    mpFS->startElementNS(XML_a, XML_pathLst);
+
+    // The polygon is in the shape's own coordinates, so the path spans the shape and a point needs
+    // no conversion. All the contours share one path, which is what subtracts the areas they
+    // overlap - that is how a frame with a hole in it is described.
+    mpFS->startElementNS(XML_a, XML_path, XML_w, OString::number(rSize.Width), XML_h,
+                         OString::number(rSize.Height));
+
+    auto writePoint = [this](const awt::Point& rPoint) {
+        mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(rPoint.X), XML_y,
+                              OString::number(rPoint.Y));
+    };
+
+    for (sal_Int32 nContour = 0; nContour < aClip.Coordinates.getLength(); ++nContour)
+    {
+        const Sequence<awt::Point>& rPoints = aClip.Coordinates[nContour];
+        // A contour may carry no flags at all; every point is then an ordinary one.
+        const Sequence<drawing::PolygonFlags> aNoFlags;
+        const Sequence<drawing::PolygonFlags>& rFlags
+            = nContour < aClip.Flags.getLength() ? aClip.Flags[nContour] : aNoFlags;
+        if (!rPoints.hasElements())
+            continue;
+
+        mpFS->startElementNS(XML_a, XML_moveTo);
+        writePoint(rPoints[0]);
+        mpFS->endElementNS(XML_a, XML_moveTo);
+
+        for (sal_Int32 nPoint = 1; nPoint < rPoints.getLength(); ++nPoint)
+        {
+            const bool bControl = nPoint < rFlags.getLength()
+                                  && rFlags[nPoint] == drawing::PolygonFlags_CONTROL;
+            if (!bControl)
+            {
+                mpFS->startElementNS(XML_a, XML_lnTo);
+                writePoint(rPoints[nPoint]);
+                mpFS->endElementNS(XML_a, XML_lnTo);
+                continue;
+            }
+
+            // A curve is two control points and the point they lead to. The one that closes a
+            // contour leads back to the point the contour started from and states no end point of
+            // its own, so the start point answers for it.
+            if (nPoint + 1 >= rPoints.getLength())
+                break;
+            const bool bClosing = nPoint + 2 >= rPoints.getLength();
+            mpFS->startElementNS(XML_a, XML_cubicBezTo);
+            writePoint(rPoints[nPoint]);
+            writePoint(rPoints[nPoint + 1]);
+            writePoint(bClosing ? rPoints[0] : rPoints[nPoint + 2]);
+            mpFS->endElementNS(XML_a, XML_cubicBezTo);
+            nPoint += 2;
+        }
+
+        mpFS->singleElementNS(XML_a, XML_close);
+    }
+
+    mpFS->endElementNS(XML_a, XML_path);
+    mpFS->endElementNS(XML_a, XML_pathLst);
+    mpFS->endElementNS(XML_a, XML_custGeom);
+    return true;
 }
 
 // version for SdrPathObj

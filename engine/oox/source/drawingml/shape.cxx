@@ -19,6 +19,9 @@
 
 #include <config_wasm_strip.h>
 
+#include <algorithm>
+#include <cmath>
+
 #include <oox/drawingml/shape.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <oox/drawingml/theme.hxx>
@@ -84,6 +87,10 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/PolygonFlags.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
@@ -102,6 +109,9 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -920,6 +930,185 @@ void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation, sal_Int32 nMSORo
     aTransformation.rotate(fRad);
     aTransformation.translate(aCenter);
     return;
+}
+
+/** Reads a <a:custGeom> as a clip polygon, in the shape's own coordinates and 1/100 mm.
+
+    A placeholder that is clipped to an outline carries that outline as custom geometry, which an
+    image shape has nowhere to keep - GraphicClipPolyPolygon is where it goes. Only literal
+    coordinates are read: a path driven by guides or formulas needs the whole custom-shape
+    machinery, and returning nothing then leaves the shape rectangular, as it was before.
+ */
+std::optional<drawing::PolyPolygonBezierCoords>
+lcl_getClipPolygon(CustomShapeProperties& rProperties, const awt::Rectangle& rShapeRect)
+{
+    const std::vector<Path2D>& rPaths = rProperties.getPath2DList();
+    if (rPaths.empty())
+        return {};
+
+    auto readValue = [](const drawing::EnhancedCustomShapeParameter& rParameter, double& rfValue)
+    {
+        if (rParameter.Type != drawing::EnhancedCustomShapeParameterType::NORMAL)
+            return false;
+        if (double fValue; rParameter.Value >>= fValue)
+            rfValue = fValue;
+        else if (sal_Int32 nValue; rParameter.Value >>= nValue)
+            rfValue = nValue;
+        else
+            return false;
+        return true;
+    };
+
+    // The segments of every path arrive in one list, each path's ended by an ENDSUBPATH, while the
+    // points belong to the path they were read with - so the two are walked in step.
+    std::vector<basegfx::B2DPolyPolygon> aPaths;
+    basegfx::B2DPolyPolygon aPath;
+    basegfx::B2DPolygon aContour;
+    size_t nPath = 0;
+    size_t nPoint = 0;
+
+    auto takePoint = [&](basegfx::B2DPoint& rPoint)
+    {
+        if (nPath >= rPaths.size() || nPoint >= rPaths[nPath].parameter.size())
+            return false;
+        const Path2D& rCurrent = rPaths[nPath];
+        double fX = 0.0;
+        double fY = 0.0;
+        if (rCurrent.w <= 0 || rCurrent.h <= 0
+            || !readValue(rCurrent.parameter[nPoint].First, fX)
+            || !readValue(rCurrent.parameter[nPoint].Second, fY))
+            return false;
+        ++nPoint;
+        rPoint = basegfx::B2DPoint(fX * rShapeRect.Width / rCurrent.w,
+                                   fY * rShapeRect.Height / rCurrent.h);
+        return true;
+    };
+
+    auto endContour = [&]()
+    {
+        if (aContour.count())
+        {
+            aContour.setClosed(true);
+            aPath.append(aContour);
+        }
+        aContour.clear();
+    };
+
+    bool bPathIsFilled = true;
+
+    auto endPath = [&]()
+    {
+        endContour();
+        // A path that paints nothing covers nothing: PowerPoint leaves it out of the clip, which
+        // three renders differing only in this attribute confirm. How the outline is stroked says
+        // nothing about the area, so nostroke is not this.
+        if (aPath.count() && bPathIsFilled)
+            aPaths.push_back(aPath);
+        aPath.clear();
+        bPathIsFilled = true;
+        ++nPath;
+        nPoint = 0;
+    };
+
+    for (const drawing::EnhancedCustomShapeSegment& rSegment : rProperties.getSegments())
+    {
+        basegfx::B2DPoint aPoint;
+        switch (rSegment.Command)
+        {
+            case drawing::EnhancedCustomShapeSegmentCommand::MOVETO:
+                endContour();
+                if (!takePoint(aPoint))
+                    return {};
+                aContour.append(aPoint);
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::LINETO:
+                for (sal_Int32 i = 0; i < rSegment.Count; ++i)
+                {
+                    if (!aContour.count() || !takePoint(aPoint))
+                        return {};
+                    aContour.append(aPoint);
+                }
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::CURVETO:
+                for (sal_Int32 i = 0; i < rSegment.Count; ++i)
+                {
+                    basegfx::B2DPoint aFirst;
+                    basegfx::B2DPoint aSecond;
+                    if (!aContour.count() || !takePoint(aFirst) || !takePoint(aSecond)
+                        || !takePoint(aPoint))
+                        return {};
+                    aContour.appendBezierSegment(aFirst, aSecond, aPoint);
+                }
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO:
+                // A quadratic curve is exactly the cubic one whose two controls sit two thirds of
+                // the way from each end towards the single control the file gives.
+                for (sal_Int32 i = 0; i < rSegment.Count; ++i)
+                {
+                    basegfx::B2DPoint aControl;
+                    if (!aContour.count() || !takePoint(aControl) || !takePoint(aPoint))
+                        return {};
+                    const basegfx::B2DPoint aFrom(aContour.getB2DPoint(aContour.count() - 1));
+                    aContour.appendBezierSegment(aFrom + (aControl - aFrom) * (2.0 / 3.0),
+                                                 aPoint + (aControl - aPoint) * (2.0 / 3.0),
+                                                 aPoint);
+                }
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH:
+                endPath();
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::NOFILL:
+                bPathIsFilled = false;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH:
+            // Shading and stroking say nothing about the area a path covers.
+            case drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE:
+            case drawing::EnhancedCustomShapeSegmentCommand::DARKEN:
+            case drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS:
+            case drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN:
+            case drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS:
+                break;
+            default:
+                return {};
+        }
+    }
+    endPath();
+
+    if (aPaths.empty())
+        return {};
+
+    // The contours of one path are filled by the even-odd rule - two that overlap leave a hole,
+    // which is what PowerPoint draws - and that is the rule a clip is applied with, so one path is
+    // kept exactly as it was read.
+    basegfx::B2DPolyPolygon aClip(aPaths.front());
+    if (aPaths.size() > 1)
+    {
+        // Paths, in contrast, are filled one by one, so the shape covers what they cover together.
+        // Combining them needs each path's own area first, which is that even-odd rule spelled out
+        // as a boolean expression over its contours.
+        auto contour = [](const basegfx::B2DPolyPolygon& rPath, sal_uInt32 nIndex)
+        {
+            // The operations below expect their operands oriented, which is what preparing does.
+            return basegfx::utils::prepareForPolygonOperation(
+                basegfx::B2DPolyPolygon(rPath.getB2DPolygon(nIndex)));
+        };
+
+        auto areaOf = [&contour](const basegfx::B2DPolyPolygon& rPath)
+        {
+            basegfx::B2DPolyPolygon aArea(contour(rPath, 0));
+            for (sal_uInt32 i = 1; i < rPath.count(); ++i)
+                aArea = basegfx::utils::solvePolygonOperationXor(aArea, contour(rPath, i));
+            return aArea;
+        };
+
+        aClip = areaOf(aPaths.front());
+        for (size_t i = 1; i < aPaths.size(); ++i)
+            aClip = basegfx::utils::solvePolygonOperationOr(aClip, areaOf(aPaths[i]));
+    }
+
+    drawing::PolyPolygonBezierCoords aCoords;
+    basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(aClip, aCoords);
+    return aCoords;
 }
 
 Degree100 lcl_MSORotateAngleToAPIAngle(const sal_Int32 nMSORotationAngle)
@@ -2229,7 +2418,16 @@ Reference< XShape > const & Shape::createAndInsert(
         // would make the object behave like a standard outline object. An authored prompt
         // reaches the object through the CustomPromptText property instead.
         if (rServiceName == "com.sun.star.presentation.GraphicObjectShape")
+        {
             mpTextBody.reset();
+
+            // The custom geometry of a picture placeholder is the outline it is clipped to. An
+            // image shape has no geometry of its own to put it in, so it becomes a clip polygon;
+            // making the shape a custom shape instead, as a cropped image does, would cost the
+            // placeholder its identity.
+            if (auto oClip = lcl_getClipPolygon(*mpCustomShapePropertiesPtr, aShapeRectHmm))
+                aPropertySet.setAnyProperty(PROP_GraphicClipPolyPolygon, Any(*oClip));
+        }
 
         // in some cases, we don't have any text body.
         if( mpTextBody && ( !pPlaceholder || !mpTextBody->isEmpty() ) )
