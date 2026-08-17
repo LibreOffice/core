@@ -2743,9 +2743,22 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
         = (mePageType == PageType::MASTER)
           && (ePlaceholder == Title || ePlaceholder == Subtitle || ePlaceholder == Outliner);
 
-    // A slide-side empty picture placeholder inherits the prompt from the layout.
+    // An untouched placeholder shows Impress's own localized prompt resource unless the document
+    // authored one, and that must not reach the file - a reader supplies its own prompt.
+    bool bIsEmptyPresObj(false);
+    if (xProps
+        && xProps->getPropertySetInfo()->hasPropertyByName(u"IsEmptyPresentationObject"_ustr))
+        xProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bIsEmptyPresObj;
+    // Field placeholders carry their field content, and a master's text box carries list styles.
+    const bool bTextIsDefaultPrompt = bIsEmptyPresObj && !bUseCustomPrompt && !bUsePlaceholderIndex
+                                      && !bWritePropertiesAsLstStyles;
+
+    // A slide-side empty picture placeholder inherits the prompt from the layout. The body
+    // properties belong in the file even where the text does not - they carry the insets, the
+    // anchor, the writing direction and the autofit.
     if (ePlaceholder != Picture || mbMaster)
-        WriteTextBox(xShape, XML_p, bUsePlaceholderIndex || bWritePropertiesAsLstStyles);
+        WriteTextBox(xShape, XML_p, bUsePlaceholderIndex || bWritePropertiesAsLstStyles,
+                     /*bText=*/!bTextIsDefaultPrompt);
 
     mpFS->endElementNS(XML_p, XML_sp);
 

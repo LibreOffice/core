@@ -990,15 +990,11 @@ void SdXShape::SetCustomPromptText(const OUString& aVal)
     if (pObj == nullptr)
         return;
 
-    if (!pObj->getSdrPageFromSdrObject()->IsMasterPage())
-    {
-        if (pObj->getSdrPageFromSdrObject()->RestoreDefaultText(pObj, aVal))
-            pObj->SetCustomPromptText(aVal);
-    }
-    else
-    {
+    // A slide layout is imported as a master page, and a layout is where an authored prompt lives,
+    // so the shown text has to follow the property there too - not just on a slide.
+    const bool bTextSet = pObj->getSdrPageFromSdrObject()->RestoreDefaultText(pObj, aVal);
+    if (bTextSet || pObj->getSdrPageFromSdrObject()->IsMasterPage())
         pObj->SetCustomPromptText(aVal);
-    }
 }
 
 bool SdXShape::IsMasterDepend() const noexcept

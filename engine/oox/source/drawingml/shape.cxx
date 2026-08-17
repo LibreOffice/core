@@ -2226,8 +2226,8 @@ Reference< XShape > const & Shape::createAndInsert(
 
         // Make sure to not set text to placeholders. Doing it here would eventually call
         // SvxTextEditSourceImpl::UpdateData, SdrObject::SetEmptyPresObj(false), and that
-        // would make the object behave like a standard outline object.
-        // TODO/FIXME: support custom prompt text in placeholders.
+        // would make the object behave like a standard outline object. An authored prompt
+        // reaches the object through the CustomPromptText property instead.
         if (rServiceName == "com.sun.star.presentation.GraphicObjectShape")
             mpTextBody.reset();
 

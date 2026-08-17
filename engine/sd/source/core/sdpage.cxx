@@ -2744,6 +2744,18 @@ Orientation SdPage::GetOrientation() const
 
 OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
 {
+    // A layout can author its own prompt, and it belongs to the slides using that layout, so ask
+    // the master for one before falling back to our own resource string.
+    if (!mbMaster && TRG_HasMasterPage())
+    {
+        SdPage& rMasterPage = static_cast<SdPage&>(TRG_GetMasterPage());
+        if (SdrObject* pMasterObj = rMasterPage.GetPresObj(eObjKind))
+        {
+            if (!pMasterObj->GetCustomPromptText().isEmpty())
+                return pMasterObj->GetCustomPromptText();
+        }
+    }
+
     OUString aString;
 
 #if defined(IOS) || defined(ANDROID)
@@ -3037,7 +3049,8 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj, const OUString& rStr )
         if (ePresObjKind == PresObjKind::Title   ||
             ePresObjKind == PresObjKind::Outline ||
             ePresObjKind == PresObjKind::Notes   ||
-            ePresObjKind == PresObjKind::Text)
+            ePresObjKind == PresObjKind::Text    ||
+            ePresObjKind == PresObjKind::Graphic)
         {
             sd::ModifyGuard aGuard(static_cast<SdDrawDocument*>(&getSdrModelFromSdrPage()));
 
