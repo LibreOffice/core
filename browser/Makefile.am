@@ -1394,6 +1394,7 @@ tsc-strict.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	@touch $@
 
 tscompile.done: tsc-emit.done tsc-strict.done
+	touch $(MOCHA_DIR)/main.ts
 	@touch $@
 
 $(COOL_TS_JS_DST): tscompile.done
