@@ -21,7 +21,7 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,python3,\
 		cp PC/pyconfig.h.in PC/pyconfig.h && \
 	) \
 	unzip -q -d Lib/ -o Lib/test/wheeldata/setuptools-79.0.1-py3-none-any.whl && \
-	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/pip-26.1.2-py3-none-any.whl && \
+	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/pip-26.2.1-py3-none-any.whl && \
 	mv Lib/setuptools/_vendor/jaraco/text/Lorem\ ipsum.txt Lib/setuptools/_vendor/jaraco/text/Lorem_ipsum.txt \
 ))
 
