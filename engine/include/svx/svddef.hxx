@@ -79,6 +79,7 @@ class SdrEdgeNode2GlueDistItem;
 class SdrEdgeNode2HorzDistItem;
 class SdrEdgeNode2VertDistItem;
 class SdrGrafBlueItem;
+class SdrGrafClipPolyPolygonItem;
 class SdrGrafContrastItem;
 class SdrGrafCropItem;
 class SdrGrafGamma100Item;
@@ -329,125 +330,126 @@ inline constexpr TypedWhichId<SdrGrafTransparenceItem> SDRATTR_GRAFTRANSPARENCE 
 inline constexpr TypedWhichId<SdrGrafInvertItem>       SDRATTR_GRAFINVERT       (SDRATTR_GRAF_FIRST+7);      // 1174
 inline constexpr TypedWhichId<SdrGrafModeItem>         SDRATTR_GRAFMODE         (SDRATTR_GRAF_FIRST+8);      // 1175
 inline constexpr TypedWhichId<SdrGrafCropItem>         SDRATTR_GRAFCROP         (SDRATTR_GRAF_FIRST+9);      // 1176
-inline constexpr sal_uInt16                            SDRATTR_GRAF_LAST        (SDRATTR_GRAFCROP);          // 1176
+inline constexpr TypedWhichId<SdrGrafClipPolyPolygonItem> SDRATTR_GRAFCLIPPOLYPOLYGON (SDRATTR_GRAF_FIRST+10); // 1177
+inline constexpr sal_uInt16                            SDRATTR_GRAF_LAST        (SDRATTR_GRAFCLIPPOLYPOLYGON); // 1177
 
-inline constexpr sal_uInt16 SDRATTR_3D_FIRST (SDRATTR_GRAF_LAST + 1);     // 1177
+inline constexpr sal_uInt16 SDRATTR_3D_FIRST (SDRATTR_GRAF_LAST + 1);     // 1178
 
-inline constexpr sal_uInt16                                SDRATTR_3DOBJ_FIRST                  (SDRATTR_3D_FIRST);          // 1177
-inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_PERCENT_DIAGONAL       (SDRATTR_3DOBJ_FIRST + 0);   // 1177
-inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_BACKSCALE              (SDRATTR_3DOBJ_FIRST + 1);   // 1178
-inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_DEPTH                  (SDRATTR_3DOBJ_FIRST + 2);   // 1179
-inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_HORZ_SEGS              (SDRATTR_3DOBJ_FIRST + 3);   // 1180
-inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_VERT_SEGS              (SDRATTR_3DOBJ_FIRST + 4);   // 1181
-inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_END_ANGLE              (SDRATTR_3DOBJ_FIRST + 5);   // 1182
-inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_DOUBLE_SIDED           (SDRATTR_3DOBJ_FIRST + 6);   // 1183
-inline constexpr TypedWhichId<Svx3DNormalsKindItem>        SDRATTR_3DOBJ_NORMALS_KIND           (SDRATTR_3DOBJ_FIRST + 7);   // 1184
-inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_NORMALS_INVERT         (SDRATTR_3DOBJ_FIRST + 8);   // 1185
-inline constexpr TypedWhichId<Svx3DTextureProjectionXItem> SDRATTR_3DOBJ_TEXTURE_PROJ_X         (SDRATTR_3DOBJ_FIRST + 9);   // 1186
-inline constexpr TypedWhichId<Svx3DTextureProjectionYItem> SDRATTR_3DOBJ_TEXTURE_PROJ_Y         (SDRATTR_3DOBJ_FIRST + 10);  // 1187
-inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_SHADOW_3D              (SDRATTR_3DOBJ_FIRST + 11);  // 1188
-inline constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_COLOR              (SDRATTR_3DOBJ_FIRST + 12);  // 1189
-inline constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_EMISSION           (SDRATTR_3DOBJ_FIRST + 13);  // 1190
-inline constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_SPECULAR           (SDRATTR_3DOBJ_FIRST + 14);  // 1191
-inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY (SDRATTR_3DOBJ_FIRST + 15);  // 1192
-inline constexpr TypedWhichId<Svx3DTextureKindItem>        SDRATTR_3DOBJ_TEXTURE_KIND           (SDRATTR_3DOBJ_FIRST + 16);  // 1193
-inline constexpr TypedWhichId<Svx3DTextureModeItem>        SDRATTR_3DOBJ_TEXTURE_MODE           (SDRATTR_3DOBJ_FIRST + 17);  // 1194
-inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_TEXTURE_FILTER         (SDRATTR_3DOBJ_FIRST + 18);  // 1195
+inline constexpr sal_uInt16                                SDRATTR_3DOBJ_FIRST                  (SDRATTR_3D_FIRST);          // 1178
+inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_PERCENT_DIAGONAL       (SDRATTR_3DOBJ_FIRST + 0);   // 1178
+inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_BACKSCALE              (SDRATTR_3DOBJ_FIRST + 1);   // 1179
+inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_DEPTH                  (SDRATTR_3DOBJ_FIRST + 2);   // 1180
+inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_HORZ_SEGS              (SDRATTR_3DOBJ_FIRST + 3);   // 1181
+inline constexpr TypedWhichId<SfxUInt32Item>               SDRATTR_3DOBJ_VERT_SEGS              (SDRATTR_3DOBJ_FIRST + 4);   // 1182
+inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_END_ANGLE              (SDRATTR_3DOBJ_FIRST + 5);   // 1183
+inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_DOUBLE_SIDED           (SDRATTR_3DOBJ_FIRST + 6);   // 1184
+inline constexpr TypedWhichId<Svx3DNormalsKindItem>        SDRATTR_3DOBJ_NORMALS_KIND           (SDRATTR_3DOBJ_FIRST + 7);   // 1185
+inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_NORMALS_INVERT         (SDRATTR_3DOBJ_FIRST + 8);   // 1186
+inline constexpr TypedWhichId<Svx3DTextureProjectionXItem> SDRATTR_3DOBJ_TEXTURE_PROJ_X         (SDRATTR_3DOBJ_FIRST + 9);   // 1187
+inline constexpr TypedWhichId<Svx3DTextureProjectionYItem> SDRATTR_3DOBJ_TEXTURE_PROJ_Y         (SDRATTR_3DOBJ_FIRST + 10);  // 1188
+inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_SHADOW_3D              (SDRATTR_3DOBJ_FIRST + 11);  // 1189
+inline constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_COLOR              (SDRATTR_3DOBJ_FIRST + 12);  // 1190
+inline constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_EMISSION           (SDRATTR_3DOBJ_FIRST + 13);  // 1191
+inline constexpr TypedWhichId<SvxColorItem>                SDRATTR_3DOBJ_MAT_SPECULAR           (SDRATTR_3DOBJ_FIRST + 14);  // 1192
+inline constexpr TypedWhichId<SfxUInt16Item>               SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY (SDRATTR_3DOBJ_FIRST + 15);  // 1193
+inline constexpr TypedWhichId<Svx3DTextureKindItem>        SDRATTR_3DOBJ_TEXTURE_KIND           (SDRATTR_3DOBJ_FIRST + 16);  // 1194
+inline constexpr TypedWhichId<Svx3DTextureModeItem>        SDRATTR_3DOBJ_TEXTURE_MODE           (SDRATTR_3DOBJ_FIRST + 17);  // 1195
+inline constexpr TypedWhichId<SfxBoolItem>                 SDRATTR_3DOBJ_TEXTURE_FILTER         (SDRATTR_3DOBJ_FIRST + 18);  // 1196
 
 // #107245# New items for 3d objects use former range SDRATTR_3DOBJ_RESERVED_01
 // up to SDRATTR_3DOBJ_RESERVED_05
-inline constexpr TypedWhichId<Svx3DSmoothNormalsItem> SDRATTR_3DOBJ_SMOOTH_NORMALS (SDRATTR_3DOBJ_FIRST + 19);  // 1196
-inline constexpr TypedWhichId<Svx3DSmoothLidsItem>    SDRATTR_3DOBJ_SMOOTH_LIDS    (SDRATTR_3DOBJ_FIRST + 20);  // 1197
-inline constexpr TypedWhichId<Svx3DCharacterModeItem> SDRATTR_3DOBJ_CHARACTER_MODE (SDRATTR_3DOBJ_FIRST + 21);  // 1198
-inline constexpr TypedWhichId<Svx3DCloseFrontItem>    SDRATTR_3DOBJ_CLOSE_FRONT    (SDRATTR_3DOBJ_FIRST + 22);  // 1199
-inline constexpr TypedWhichId<Svx3DCloseBackItem>     SDRATTR_3DOBJ_CLOSE_BACK     (SDRATTR_3DOBJ_FIRST + 23);  // 1200
+inline constexpr TypedWhichId<Svx3DSmoothNormalsItem> SDRATTR_3DOBJ_SMOOTH_NORMALS (SDRATTR_3DOBJ_FIRST + 19);  // 1197
+inline constexpr TypedWhichId<Svx3DSmoothLidsItem>    SDRATTR_3DOBJ_SMOOTH_LIDS    (SDRATTR_3DOBJ_FIRST + 20);  // 1198
+inline constexpr TypedWhichId<Svx3DCharacterModeItem> SDRATTR_3DOBJ_CHARACTER_MODE (SDRATTR_3DOBJ_FIRST + 21);  // 1199
+inline constexpr TypedWhichId<Svx3DCloseFrontItem>    SDRATTR_3DOBJ_CLOSE_FRONT    (SDRATTR_3DOBJ_FIRST + 22);  // 1200
+inline constexpr TypedWhichId<Svx3DCloseBackItem>     SDRATTR_3DOBJ_CLOSE_BACK     (SDRATTR_3DOBJ_FIRST + 23);  // 1201
 
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-inline constexpr TypedWhichId<Svx3DReducedLineGeometryItem> SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY (SDRATTR_3DOBJ_FIRST + 24);  // 1201
+inline constexpr TypedWhichId<Svx3DReducedLineGeometryItem> SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY (SDRATTR_3DOBJ_FIRST + 24);  // 1202
 
-inline constexpr sal_uInt16 SDRATTR_3DOBJ_LAST (SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY);   // 1201
+inline constexpr sal_uInt16 SDRATTR_3DOBJ_LAST (SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY);   // 1202
 
-inline constexpr sal_uInt16                         SDRATTR_3DSCENE_FIRST              (SDRATTR_3DOBJ_LAST + 1);        // 1202
-inline constexpr TypedWhichId<Svx3DPerspectiveItem> SDRATTR_3DSCENE_PERSPECTIVE        (SDRATTR_3DSCENE_FIRST + 0);     // 1202
-inline constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_DISTANCE           (SDRATTR_3DSCENE_FIRST + 1);     // 1203
-inline constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_FOCAL_LENGTH       (SDRATTR_3DSCENE_FIRST + 2);     // 1204
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_TWO_SIDED_LIGHTING (SDRATTR_3DSCENE_FIRST + 3);     // 1205
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_1       (SDRATTR_3DSCENE_FIRST + 4);     // 1206
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_2       (SDRATTR_3DSCENE_FIRST + 5);     // 1207
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_3       (SDRATTR_3DSCENE_FIRST + 6);     // 1208
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_4       (SDRATTR_3DSCENE_FIRST + 7);     // 1209
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_5       (SDRATTR_3DSCENE_FIRST + 8);     // 1210
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_6       (SDRATTR_3DSCENE_FIRST + 9);     // 1211
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_7       (SDRATTR_3DSCENE_FIRST + 10);    // 1212
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_8       (SDRATTR_3DSCENE_FIRST + 11);    // 1213
-inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_AMBIENTCOLOR       (SDRATTR_3DSCENE_FIRST + 12);    // 1214
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_1          (SDRATTR_3DSCENE_FIRST + 13);    // 1215
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_2          (SDRATTR_3DSCENE_FIRST + 14);    // 1216
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_3          (SDRATTR_3DSCENE_FIRST + 15);    // 1217
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_4          (SDRATTR_3DSCENE_FIRST + 16);    // 1218
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_5          (SDRATTR_3DSCENE_FIRST + 17);    // 1219
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_6          (SDRATTR_3DSCENE_FIRST + 18);    // 1220
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_7          (SDRATTR_3DSCENE_FIRST + 19);    // 1221
-inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_8          (SDRATTR_3DSCENE_FIRST + 20);    // 1222
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_1   (SDRATTR_3DSCENE_FIRST + 21);    // 1223
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_2   (SDRATTR_3DSCENE_FIRST + 22);    // 1224
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_3   (SDRATTR_3DSCENE_FIRST + 23);    // 1225
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_4   (SDRATTR_3DSCENE_FIRST + 24);    // 1226
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_5   (SDRATTR_3DSCENE_FIRST + 25);    // 1227
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_6   (SDRATTR_3DSCENE_FIRST + 26);    // 1228
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_7   (SDRATTR_3DSCENE_FIRST + 27);    // 1229
-inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_8   (SDRATTR_3DSCENE_FIRST + 28);    // 1230
-inline constexpr TypedWhichId<SfxUInt16Item>        SDRATTR_3DSCENE_SHADOW_SLANT       (SDRATTR_3DSCENE_FIRST + 29);    // 1231
-inline constexpr TypedWhichId<Svx3DShadeModeItem>   SDRATTR_3DSCENE_SHADE_MODE         (SDRATTR_3DSCENE_FIRST + 30);    // 1232
-inline constexpr sal_uInt16                         SDRATTR_3DSCENE_LAST               (SDRATTR_3DSCENE_SHADE_MODE);    // 1232
-inline constexpr sal_uInt16                         SDRATTR_3D_LAST                    (SDRATTR_3DSCENE_LAST);          // 1232
+inline constexpr sal_uInt16                         SDRATTR_3DSCENE_FIRST              (SDRATTR_3DOBJ_LAST + 1);        // 1203
+inline constexpr TypedWhichId<Svx3DPerspectiveItem> SDRATTR_3DSCENE_PERSPECTIVE        (SDRATTR_3DSCENE_FIRST + 0);     // 1203
+inline constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_DISTANCE           (SDRATTR_3DSCENE_FIRST + 1);     // 1204
+inline constexpr TypedWhichId<SfxUInt32Item>        SDRATTR_3DSCENE_FOCAL_LENGTH       (SDRATTR_3DSCENE_FIRST + 2);     // 1205
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_TWO_SIDED_LIGHTING (SDRATTR_3DSCENE_FIRST + 3);     // 1206
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_1       (SDRATTR_3DSCENE_FIRST + 4);     // 1207
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_2       (SDRATTR_3DSCENE_FIRST + 5);     // 1208
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_3       (SDRATTR_3DSCENE_FIRST + 6);     // 1209
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_4       (SDRATTR_3DSCENE_FIRST + 7);     // 1210
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_5       (SDRATTR_3DSCENE_FIRST + 8);     // 1211
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_6       (SDRATTR_3DSCENE_FIRST + 9);     // 1212
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_7       (SDRATTR_3DSCENE_FIRST + 10);    // 1213
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_LIGHTCOLOR_8       (SDRATTR_3DSCENE_FIRST + 11);    // 1214
+inline constexpr TypedWhichId<SvxColorItem>         SDRATTR_3DSCENE_AMBIENTCOLOR       (SDRATTR_3DSCENE_FIRST + 12);    // 1215
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_1          (SDRATTR_3DSCENE_FIRST + 13);    // 1216
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_2          (SDRATTR_3DSCENE_FIRST + 14);    // 1217
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_3          (SDRATTR_3DSCENE_FIRST + 15);    // 1218
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_4          (SDRATTR_3DSCENE_FIRST + 16);    // 1219
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_5          (SDRATTR_3DSCENE_FIRST + 17);    // 1220
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_6          (SDRATTR_3DSCENE_FIRST + 18);    // 1221
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_7          (SDRATTR_3DSCENE_FIRST + 19);    // 1222
+inline constexpr TypedWhichId<SfxBoolItem>          SDRATTR_3DSCENE_LIGHTON_8          (SDRATTR_3DSCENE_FIRST + 20);    // 1223
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_1   (SDRATTR_3DSCENE_FIRST + 21);    // 1224
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_2   (SDRATTR_3DSCENE_FIRST + 22);    // 1225
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_3   (SDRATTR_3DSCENE_FIRST + 23);    // 1226
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_4   (SDRATTR_3DSCENE_FIRST + 24);    // 1227
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_5   (SDRATTR_3DSCENE_FIRST + 25);    // 1228
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_6   (SDRATTR_3DSCENE_FIRST + 26);    // 1229
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_7   (SDRATTR_3DSCENE_FIRST + 27);    // 1230
+inline constexpr TypedWhichId<SvxB3DVectorItem>     SDRATTR_3DSCENE_LIGHTDIRECTION_8   (SDRATTR_3DSCENE_FIRST + 28);    // 1231
+inline constexpr TypedWhichId<SfxUInt16Item>        SDRATTR_3DSCENE_SHADOW_SLANT       (SDRATTR_3DSCENE_FIRST + 29);    // 1232
+inline constexpr TypedWhichId<Svx3DShadeModeItem>   SDRATTR_3DSCENE_SHADE_MODE         (SDRATTR_3DSCENE_FIRST + 30);    // 1233
+inline constexpr sal_uInt16                         SDRATTR_3DSCENE_LAST               (SDRATTR_3DSCENE_SHADE_MODE);    // 1233
+inline constexpr sal_uInt16                         SDRATTR_3D_LAST                    (SDRATTR_3DSCENE_LAST);          // 1233
 
-inline constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_FIRST    (SDRATTR_3D_LAST + 1);           // 1233
-inline constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_ENGINE   (SDRATTR_CUSTOMSHAPE_FIRST + 0); // 1233
-inline constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_DATA     (SDRATTR_CUSTOMSHAPE_FIRST + 1); // 1234
-inline constexpr TypedWhichId<SdrCustomShapeGeometryItem> SDRATTR_CUSTOMSHAPE_GEOMETRY (SDRATTR_CUSTOMSHAPE_FIRST + 2); // 1235
-inline constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_LAST     (SDRATTR_CUSTOMSHAPE_GEOMETRY);  // 1235
+inline constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_FIRST    (SDRATTR_3D_LAST + 1);           // 1234
+inline constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_ENGINE   (SDRATTR_CUSTOMSHAPE_FIRST + 0); // 1234
+inline constexpr TypedWhichId<SfxStringItem>              SDRATTR_CUSTOMSHAPE_DATA     (SDRATTR_CUSTOMSHAPE_FIRST + 1); // 1235
+inline constexpr TypedWhichId<SdrCustomShapeGeometryItem> SDRATTR_CUSTOMSHAPE_GEOMETRY (SDRATTR_CUSTOMSHAPE_FIRST + 2); // 1236
+inline constexpr sal_uInt16                               SDRATTR_CUSTOMSHAPE_LAST     (SDRATTR_CUSTOMSHAPE_GEOMETRY);  // 1236
 
-inline constexpr sal_uInt16                      SDRATTR_TABLE_FIRST         (SDRATTR_CUSTOMSHAPE_LAST+1); // 1236
-inline constexpr TypedWhichId<SvxBoxItem>        SDRATTR_TABLE_BORDER        (SDRATTR_TABLE_FIRST+0);      // 1236
-inline constexpr TypedWhichId<SvxBoxInfoItem>    SDRATTR_TABLE_BORDER_INNER  (SDRATTR_TABLE_FIRST+1);      // 1237
-inline constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_TLBR   (SDRATTR_TABLE_FIRST+2);      // 1238
-inline constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_BLTR   (SDRATTR_TABLE_FIRST+3);      // 1239
-inline constexpr TypedWhichId<SvxTextRotateItem> SDRATTR_TABLE_TEXT_ROTATION (SDRATTR_TABLE_FIRST+4);      // 1240
-inline constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_CELL_GRABBAG  (SDRATTR_TABLE_FIRST+5);      // 1241
-inline constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_CELL_GRABBAG); // 1241
+inline constexpr sal_uInt16                      SDRATTR_TABLE_FIRST         (SDRATTR_CUSTOMSHAPE_LAST+1); // 1237
+inline constexpr TypedWhichId<SvxBoxItem>        SDRATTR_TABLE_BORDER        (SDRATTR_TABLE_FIRST+0);      // 1237
+inline constexpr TypedWhichId<SvxBoxInfoItem>    SDRATTR_TABLE_BORDER_INNER  (SDRATTR_TABLE_FIRST+1);      // 1238
+inline constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_TLBR   (SDRATTR_TABLE_FIRST+2);      // 1239
+inline constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_BLTR   (SDRATTR_TABLE_FIRST+3);      // 1240
+inline constexpr TypedWhichId<SvxTextRotateItem> SDRATTR_TABLE_TEXT_ROTATION (SDRATTR_TABLE_FIRST+4);      // 1241
+inline constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_CELL_GRABBAG  (SDRATTR_TABLE_FIRST+5);      // 1242
+inline constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_CELL_GRABBAG); // 1242
 
-inline constexpr sal_uInt16                      SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);                // 1242
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_RADIUS(SDRATTR_GLOW_FIRST+0);                // 1242
-inline constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_COLOR (SDRATTR_GLOW_FIRST+1);                // 1243
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TRANSPARENCY(SDRATTR_GLOW_FIRST+2);          // 1244
-inline constexpr sal_uInt16                      SDRATTR_GLOW_LAST(SDRATTR_GLOW_TRANSPARENCY);             // 1244
+inline constexpr sal_uInt16                      SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);                // 1243
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_RADIUS(SDRATTR_GLOW_FIRST+0);                // 1243
+inline constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_COLOR (SDRATTR_GLOW_FIRST+1);                // 1244
+inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TRANSPARENCY(SDRATTR_GLOW_FIRST+2);          // 1245
+inline constexpr sal_uInt16                      SDRATTR_GLOW_LAST(SDRATTR_GLOW_TRANSPARENCY);             // 1245
 
-inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST+1);              // 1245
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST+0);        // 1245
-inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);           // 1245
+inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST+1);              // 1246
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST+0);        // 1246
+inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);           // 1246
 
-inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_FIRST(SDRATTR_SOFTEDGE_LAST+1);         // 1246
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_TEXT_RADIUS(SDRATTR_GLOW_TEXT_FIRST+0);      // 1246
-inline constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_TEXT_COLOR(SDRATTR_GLOW_TEXT_FIRST+1);       // 1247
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TEXT_TRANSPARENCY(SDRATTR_GLOW_TEXT_FIRST+2);// 1248
-inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_LAST(SDRATTR_GLOW_TEXT_TRANSPARENCY);   // 1248
+inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_FIRST(SDRATTR_SOFTEDGE_LAST+1);         // 1247
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_TEXT_RADIUS(SDRATTR_GLOW_TEXT_FIRST+0);      // 1247
+inline constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_TEXT_COLOR(SDRATTR_GLOW_TEXT_FIRST+1);       // 1248
+inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TEXT_TRANSPARENCY(SDRATTR_GLOW_TEXT_FIRST+2);// 1249
+inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_LAST(SDRATTR_GLOW_TEXT_TRANSPARENCY);   // 1249
 
-inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_GLOW_TEXT_LAST+1);      // 1249
-inline constexpr TypedWhichId<SfxInt16Item>      SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST+0);  // 1249
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST+1); // 1250
-inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);    // 1250
+inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_GLOW_TEXT_LAST+1);      // 1250
+inline constexpr TypedWhichId<SfxInt16Item>      SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST+0);  // 1250
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST+1); // 1251
+inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);    // 1251
 
-inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST+1);// 1251
-inline constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1251
-inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1251
+inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST+1);// 1252
+inline constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1252
+inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1252
 
-inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_FIRST(SDRATTR_WRITINGMODE2_LAST+1);// 1252
-inline constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_EDGEOOXMLCURVE_FIRST+0);   // 1252
-inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1252
+inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_FIRST(SDRATTR_WRITINGMODE2_LAST+1);// 1253
+inline constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_EDGEOOXMLCURVE_FIRST+0);   // 1253
+inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1253
 
-inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_EDGEOOXMLCURVE_LAST);      // 1252
+inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_EDGEOOXMLCURVE_LAST);      // 1253
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 

@@ -381,6 +381,7 @@ inline constexpr OUString UNO_NAME_GRAPHIC_GAMMA = u"Gamma"_ustr;
 inline constexpr OUString UNO_NAME_GRAPHIC_TRANSPARENCY = u"Transparency"_ustr;
 inline constexpr OUString UNO_NAME_GRAPHIC_COLOR_MODE = u"GraphicColorMode"_ustr;
 inline constexpr OUString UNO_NAME_GRAPHIC_GRAPHICCROP = u"GraphicCrop"_ustr;
+inline constexpr OUString UNO_NAME_GRAPHIC_GRAPHICCLIPPOLYPOLYGON = u"GraphicClipPolyPolygon"_ustr;
 
 inline constexpr OUString UNO_NAME_OBJ_ISEMPTYPRESOBJ = u"IsEmptyPresentationObject"_ustr;
 

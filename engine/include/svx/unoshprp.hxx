@@ -466,6 +466,7 @@
 #define SPECIAL_GRAPHOBJ_PROPERTIES \
     SPECIAL_GRAPHOBJ_PROPERTIES_DEFAULTS \
     { UNO_NAME_GRAPHIC_GRAPHICCROP,           SDRATTR_GRAFCROP            , ::cppu::UnoType<css::text::GraphicCrop>::get(),        0,  0 }, \
+    { UNO_NAME_GRAPHIC_GRAPHICCLIPPOLYPOLYGON, SDRATTR_GRAFCLIPPOLYPOLYGON, ::cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get(), 0, 0 }, \
     { UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC,  OWN_ATTR_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get()  ,   0,     0}, \
     { UNO_NAME_GRAPHOBJ_REPLACEMENT_MODEL  ,  OWN_ATTR_REPLACEMENT_MODEL,   cppu::UnoType<css::lang::XComponent>::get()  ,    0,     0}, \
     { UNO_NAME_GRAPHOBJ_GRAFSTREAMURL,        OWN_ATTR_GRAFSTREAMURL      , ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 }, \

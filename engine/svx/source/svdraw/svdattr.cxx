@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -31,12 +34,14 @@
 
 #include <docmodel/theme/FormatScheme.hxx>
 
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/charrotateitem.hxx>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <i18nutil/unicode.hxx>
 #include <tools/bigint.hxx>
@@ -97,6 +102,7 @@
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/sdasitm.hxx>
+#include <sdgclitm.hxx>
 #include <sdgcoitm.hxx>
 #include <svx/sdggaitm.hxx>
 #include <sdginitm.hxx>
@@ -349,6 +355,7 @@ static ItemInfoPackage& getItemInfoPackageSdr()
             { SDRATTR_GRAFINVERT, new SdrGrafInvertItem, 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_GRAFMODE, new SdrGrafModeItem, 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_GRAFCROP, new SdrGrafCropItem, SID_ATTR_GRAF_CROP, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFCLIPPOLYPOLYGON, new SdrGrafClipPolyPolygonItem, 0, SFX_ITEMINFOFLAG_NONE },
 
             { SDRATTR_3DOBJ_PERCENT_DIAGONAL, new SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, 10), 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_3DOBJ_BACKSCALE, new SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, 100), 0, SFX_ITEMINFOFLAG_NONE },
@@ -1998,6 +2005,64 @@ bool SdrGrafModeItem::GetPresentation( SfxItemPresentation ePres,
 SdrGrafCropItem* SdrGrafCropItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new SdrGrafCropItem( *this );
+}
+
+SdrGrafClipPolyPolygonItem::SdrGrafClipPolyPolygonItem()
+    : SfxPoolItem(SDRATTR_GRAFCLIPPOLYPOLYGON)
+{
+}
+
+SdrGrafClipPolyPolygonItem::SdrGrafClipPolyPolygonItem(basegfx::B2DPolyPolygon aPolyPolygon)
+    : SfxPoolItem(SDRATTR_GRAFCLIPPOLYPOLYGON)
+    , maPolyPolygon(std::move(aPolyPolygon))
+{
+}
+
+bool SdrGrafClipPolyPolygonItem::operator==(const SfxPoolItem& rItem) const
+{
+    return SfxPoolItem::operator==(rItem)
+        && static_cast<const SdrGrafClipPolyPolygonItem&>(rItem).maPolyPolygon == maPolyPolygon;
+}
+
+SdrGrafClipPolyPolygonItem* SdrGrafClipPolyPolygonItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrGrafClipPolyPolygonItem(*this);
+}
+
+bool SdrGrafClipPolyPolygonItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+{
+    css::drawing::PolyPolygonBezierCoords aBezier;
+    basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(maPolyPolygon, aBezier);
+    rVal <<= aBezier;
+    return true;
+}
+
+bool SdrGrafClipPolyPolygonItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+{
+    // Only assign once the whole conversion has succeeded, so a rejected value
+    // leaves the current polygon untouched.
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    if (rVal.hasValue())
+    {
+        auto pCoords = o3tl::tryAccess<css::drawing::PolyPolygonBezierCoords>(rVal);
+        if (!pCoords)
+            return false;
+
+        if (pCoords->Coordinates.getLength() > 0)
+            aPolyPolygon = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*pCoords);
+    }
+
+    maPolyPolygon = std::move(aPolyPolygon);
+    return true;
+}
+
+void SdrGrafClipPolyPolygonItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrGrafClipPolyPolygonItem"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("polygons"),
+                                      BAD_CAST(OString::number(maPolyPolygon.count()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SdrTextAniStartInsideItem::~SdrTextAniStartInsideItem()
