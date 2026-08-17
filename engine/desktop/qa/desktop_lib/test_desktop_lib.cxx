@@ -196,6 +196,8 @@ public:
     void testRedlineWriter();
     void testRedlineCalc();
     void testPaintPartTile();
+    void testPaintPartTileHidesGridOnOtherPart();
+    void testPaintPartTileHidesGridOnActivePartPreview();
     void testPaintPartTileDifferentSchemes();
 #if HAVE_MORE_FONTS
     void testGetFontSubset();
@@ -286,6 +288,8 @@ public:
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
+    CPPUNIT_TEST(testPaintPartTileHidesGridOnOtherPart);
+    CPPUNIT_TEST(testPaintPartTileHidesGridOnActivePartPreview);
     CPPUNIT_TEST(testPaintPartTileDifferentSchemes);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testGetFontSubset);
@@ -2600,6 +2604,74 @@ void DesktopKitTest::testCreateViewOmitInvalidate()
     // Without the accompanying fix in place, this test would have failed, the 2nd view was not
     // invalidated when it was created after a paintTile().
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
+}
+
+void DesktopKitTest::testPaintPartTileHidesGridOnOtherPart()
+{
+    // Load an impress doc of 2 slides, with a single view on the first one.
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+
+    // The boundary names a slide by its part number, the page's stable unique id.
+    const int nSecondSlide = static_cast<int>(pDocument->getPartUniqueId(1, 0));
+
+    constexpr int nCanvasWidth = 256;
+    constexpr int nCanvasHeight = 256;
+    // this is BGRA format data
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aWithoutGrid;
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aWithGridOnEditedPart;
+
+    // There is no other view already sitting on the second slide, so this
+    // has to temporarily borrow the only view to paint a page it is not
+    // editing. This is a preview request, the way the slide panel asks for
+    // a thumbnail of a slide other than the one being edited.
+    pDocument->paintPartTile(aWithoutGrid.data(), nSecondSlide, 0, nCanvasWidth, nCanvasHeight, 0,
+                              0, 3840, 3840, /*bIsPreview=*/true);
+
+    // Turn the grid on, as if the user enabled it while editing the first slide.
+    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
+
+    pDocument->paintPartTile(aWithGridOnEditedPart.data(), nSecondSlide, 0, nCanvasWidth,
+                              nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/true);
+
+    // The grid is an editing aid for the page being edited, not part of a
+    // page's own content, so the tile of the second slide must come out the
+    // same whether or not the grid is shown on the first slide.
+    CPPUNIT_ASSERT(operator==(aWithoutGrid, aWithGridOnEditedPart));
+}
+
+void DesktopKitTest::testPaintPartTileHidesGridOnActivePartPreview()
+{
+    // Load an impress doc, keep the single view on the (active) first slide.
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+
+    const int nFirstSlide = static_cast<int>(pDocument->getPartUniqueId(0, 0));
+
+    constexpr int nCanvasWidth = 256;
+    constexpr int nCanvasHeight = 256;
+    // this is BGRA format data
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aWithoutGrid;
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aViewportWithGrid;
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPreviewWithGrid;
+
+    // Baseline: grid off, a tile of the (only) active slide.
+    pDocument->paintPartTile(aWithoutGrid.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0,
+                              0, 3840, 3840);
+
+    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
+
+    // The editing viewport's own tile of the active slide still shows the
+    // grid the user turned on: this is not a preview.
+    pDocument->paintPartTile(aViewportWithGrid.data(), nFirstSlide, 0, nCanvasWidth,
+                              nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/false);
+    CPPUNIT_ASSERT(!(aWithoutGrid == aViewportWithGrid));
+
+    // A preview of that same active slide must not carry the grid along,
+    // even though the tile is otherwise identical to the viewport's own.
+    pDocument->paintPartTile(aPreviewWithGrid.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight,
+                              0, 0, 3840, 3840, /*bIsPreview=*/true);
+    CPPUNIT_ASSERT(operator==(aWithoutGrid, aPreviewWithGrid));
 }
 
 void DesktopKitTest::testPaintPartTileDifferentSchemes()

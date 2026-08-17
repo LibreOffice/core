@@ -2049,12 +2049,15 @@ struct COKitDocument
      * presentation or drawing document that is the page's stable unique identifier, resolved to
      * the index the page holds when it paints; the part number of a page that is gone paints
      * nothing.
+     * @param bIsPreview true when the tile is a small preview of the part rather than a tile of
+     * the editing viewport, even when it is a preview of the part currently being edited. A
+     * presentation or drawing document hides its editing grid for the duration of such a render.
      * @see paintTile.
      */
     virtual void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
                                const int nCanvasWidth, const int nCanvasHeight,
                                const int nTilePosX, const int nTilePosY, const int nTileWidth,
-                               const int nTileHeight) = 0;
+                               const int nTileHeight, bool bIsPreview = false) = 0;
 
     /**
      * Returns the viewID for each existing view. Since viewIDs are not reused,

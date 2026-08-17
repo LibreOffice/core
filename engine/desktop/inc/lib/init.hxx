@@ -336,8 +336,8 @@ namespace desktop {
         char* getPartHash(int nPart) override;
         void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
                            const int nCanvasWidth, const int nCanvasHeight, const int nTilePosX,
-                           const int nTilePosY, const int nTileWidth,
-                           const int nTileHeight) override;
+                           const int nTilePosY, const int nTileWidth, const int nTileHeight,
+                           bool bIsPreview = false) override;
         bool getViewIds(int* pArray, size_t nSize) override;
         void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) override;
         void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,

@@ -126,12 +126,15 @@ namespace RenderTiles
         const double area = pixmapWidth * pixmapHeight;
         const auto start = std::chrono::steady_clock::now();
         LOG_TRC("Calling paintPartTile(" << static_cast<void*>(pixmap.data()) << ')');
+        // A preview request is always a single tile, never combined with others.
+        const bool isPreview = tiles.size() == 1 && tiles.front().isPreview();
         document->paintPartTile(pixmap.data(),
                                 tileCombined.getPart(),
                                 tileCombined.getEditMode(),
                                 pixmapWidth, pixmapHeight,
                                 renderArea.getLeft(), renderArea.getTop(),
-                                renderArea.getWidth(), renderArea.getHeight());
+                                renderArea.getWidth(), renderArea.getHeight(),
+                                isPreview);
         auto duration = std::chrono::steady_clock::now() - start;
         const auto elapsedUs = std::chrono::duration_cast<std::chrono::microseconds>(duration);
         LOG_DBG("paintPartTile      " << tileRecs.size() << " tiles at ("

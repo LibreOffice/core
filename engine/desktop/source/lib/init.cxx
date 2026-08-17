@@ -1151,7 +1151,8 @@ static void doc_paintPartTile(COKitDocument* pThis,
                               const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
-                              const int nTileWidth, const int nTileHeight);
+                              const int nTileWidth, const int nTileHeight,
+                              bool bIsPreview = false);
 static COKitTileMode doc_getTileMode(COKitDocument* pThis);
 static void doc_getDocumentSize(COKitDocument* pThis,
                                 long* pWidth,
@@ -1666,10 +1667,11 @@ int COKitDocumentImpl::getViewsCount()
 void COKitDocumentImpl::paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
                                        const int nCanvasWidth, const int nCanvasHeight,
                                        const int nTilePosX, const int nTilePosY,
-                                       const int nTileWidth, const int nTileHeight)
+                                       const int nTileWidth, const int nTileHeight,
+                                       bool bIsPreview)
 {
     doc_paintPartTile(this, pBuffer, nPart, nMode, nCanvasWidth, nCanvasHeight, nTilePosX,
-                      nTilePosY, nTileWidth, nTileHeight);
+                      nTilePosY, nTileWidth, nTileHeight, bIsPreview);
 }
 
 bool COKitDocumentImpl::getViewIds(int* pArray, size_t nSize)
@@ -5272,7 +5274,8 @@ static void doc_paintPartTile(COKitDocument* pThis,
                               const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
-                              const int nTileWidth, const int nTileHeight)
+                              const int nTileWidth, const int nTileHeight,
+                              bool bIsPreview)
 {
     static bool bFirst = true;
     if (bFirst)
@@ -5339,6 +5342,12 @@ static void doc_paintPartTile(COKitDocument* pThis,
         // Remember the selections here and restore it after switching back.
         std::vector<SdrObject*> aSavedMarkedObjects;
 
+        // The grid is a per-view display setting, not a per-page one, so a
+        // preview painted through this view would otherwise carry the grid
+        // along, even one of the page the view is already editing. Remember
+        // it here and hide it for the duration of a preview render.
+        bool bGridWasVisible = false;
+
         // Check if just switching to another view is enough, that has less side-effects.
         // Render state is sometimes empty, don't risk it.
         if ((nPartIndex != pDoc->getPart() || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
@@ -5359,6 +5368,19 @@ static void doc_paintPartTile(COKitDocument* pThis,
             if (!isText)
             {
                 nOrigPart = pDoc->getPart();
+
+                // A preview reuses this view even when it already sits on the
+                // requested part, so hide the grid for the render whether or
+                // not the part below actually needs to change.
+                if (bIsPreview)
+                {
+                    if (SdrView* pPreviewView = pCurrentViewShell ? pCurrentViewShell->GetDrawView() : nullptr)
+                    {
+                        bGridWasVisible = pPreviewView->IsGridVisible();
+                        pPreviewView->SetGridVisible(false);
+                    }
+                }
+
                 if (nPartIndex != nOrigPart)
                 {
                     if (SdrView* pSaveView = pCurrentViewShell ? pCurrentViewShell->GetDrawView() : nullptr)
@@ -5400,6 +5422,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
                 if (nPartIndex != nOrigPart)
                 {
                     doc_setPartIndexImpl(pThis, nOrigPart, false);
+
                     // Re-apply the selections cleared during the view page switching.
                     if (!aSavedMarkedObjects.empty())
                     {
@@ -5415,6 +5438,12 @@ static void doc_paintPartTile(COKitDocument* pThis,
                             }
                         }
                     }
+                }
+
+                if (bIsPreview)
+                {
+                    if (SdrView* pRestoreView = pCurrentViewShell ? pCurrentViewShell->GetDrawView() : nullptr)
+                        pRestoreView->SetGridVisible(bGridWasVisible);
                 }
             }
         }
