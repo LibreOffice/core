@@ -132,6 +132,7 @@ class ImpressTableDesignTab implements NotebookbarTab {
 										type: 'checkbox',
 										command: '.uno:TableStyleSettings',
 										commandField: 'UseFirstRowStyle',
+										commandFieldFlat: true,
 										text: _('Header Row'),
 										accessibility: {
 											focusBack: true,
@@ -148,6 +149,7 @@ class ImpressTableDesignTab implements NotebookbarTab {
 										type: 'checkbox',
 										command: '.uno:TableStyleSettings',
 										commandField: 'UseLastRowStyle',
+										commandFieldFlat: true,
 										text: _('Total Row'),
 										accessibility: {
 											focusBack: true,
@@ -170,6 +172,7 @@ class ImpressTableDesignTab implements NotebookbarTab {
 										type: 'checkbox',
 										command: '.uno:TableStyleSettings',
 										commandField: 'UseBandingRowStyle',
+										commandFieldFlat: true,
 										text: _('Banded Rows'),
 										accessibility: {
 											focusBack: true,
@@ -186,6 +189,7 @@ class ImpressTableDesignTab implements NotebookbarTab {
 										type: 'checkbox',
 										command: '.uno:TableStyleSettings',
 										commandField: 'UseBandingColumnStyle',
+										commandFieldFlat: true,
 										text: _('Banded Columns'),
 										accessibility: {
 											focusBack: true,
@@ -208,6 +212,7 @@ class ImpressTableDesignTab implements NotebookbarTab {
 										type: 'checkbox',
 										command: '.uno:TableStyleSettings',
 										commandField: 'UseFirstColumnStyle',
+										commandFieldFlat: true,
 										text: _('First Column'),
 										accessibility: {
 											focusBack: true,
@@ -224,6 +229,7 @@ class ImpressTableDesignTab implements NotebookbarTab {
 										type: 'checkbox',
 										command: '.uno:TableStyleSettings',
 										commandField: 'UseLastColumnStyle',
+										commandFieldFlat: true,
 										text: _('Last Column'),
 										accessibility: {
 											focusBack: true,

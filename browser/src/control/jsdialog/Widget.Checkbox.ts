@@ -113,6 +113,18 @@ JSDialog.Checkbox = function (
 
 		if (data.command) {
 			if (data.commandField) {
+				if (data.commandFieldFlat) {
+					// Flat write: the command's SDI slot declares commandField
+					// as its own top-level argument, so send it on its own
+					// rather than wrapped in a wider state object.
+					app.map.sendUnoCommand(data.command, {
+						[data.commandField]: {
+							type: _unoType(checkbox.checked),
+							value: checkbox.checked,
+						},
+					});
+					return;
+				}
 				// Compound write: flip one field of the current multi-field
 				// state and send the whole object back. The id-side and
 				// value-side names match because we're echoing what arrived
