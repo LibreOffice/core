@@ -573,14 +573,19 @@ void Shape::setTextBox(bool bTextBox)
     mbTextBox = bTextBox;
 }
 
-void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
+void Shape::applyShapeReference(const Shape& rReferencedShape, ReferencedShapeText eText)
 {
     SAL_INFO("oox.drawingml", "Shape::applyShapeReference: apply '" << rReferencedShape.msId << "' to '" << msId << "'");
 
-    if ( rReferencedShape.mpTextBody && bUseText )
+    if ( !rReferencedShape.mpTextBody || eText == ReferencedShapeText::Nothing )
+        mpTextBody.reset();
+    else if ( eText == ReferencedShapeText::All )
         mpTextBody = std::make_shared<TextBody>( *rReferencedShape.mpTextBody );
     else
-        mpTextBody.reset();
+        // This constructor takes the text properties and the list style, and leaves the paragraphs
+        // behind. Sharing the pointer instead would hand those over as well, and dropping the body
+        // altogether costs the inherited properties, which a placeholder needs to be laid out.
+        mpTextBody = std::make_shared<TextBody>( rReferencedShape.mpTextBody );
     maShapeProperties = rReferencedShape.maShapeProperties;
     mpShapeRefLinePropPtr = std::make_shared<LineProperties>( rReferencedShape.getActualLineProperties(nullptr) );
     mpShapeRefFillPropPtr = std::make_shared<FillProperties>( rReferencedShape.getActualFillProperties(nullptr, nullptr) );

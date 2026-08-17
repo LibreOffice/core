@@ -1634,6 +1634,43 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16080_masterPageOrder)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16083_contentPlaceholderStaysEmpty)
+{
+    // Given four slides, each with one content placeholder, differing only in what the slide says
+    // about its text - and a layout whose placeholder carries text of its own:
+    createSdImpressDoc("pptx/content-placeholder-cases.pptx");
+
+    // The layout's text is a prompt, not content. Taking it filled the placeholder, which then
+    // stopped offering the buttons that insert a table, a chart, a picture or a video. A prompt the
+    // layout authors is a prompt too, and reaches the shape as CustomPromptText.
+    struct Case
+    {
+        std::string_view aWhatTheSlideSays;
+        OUString aText;
+        OUString aPrompt;
+    };
+    static constexpr Case aCases[] = {
+        { "no text body", u""_ustr, u""_ustr },
+        { "an empty text body", u""_ustr, u""_ustr },
+        { "a text body with content", u"Real content, typed by the author"_ustr, u""_ustr },
+        { "no text body, prompt authored on the layout", u""_ustr,
+          u"Custom prompt to insert content"_ustr },
+    };
+
+    for (size_t i = 0; i < std::size(aCases); ++i)
+    {
+        const Case& rCase = aCases[i];
+        const OString aMessage = "slide " + OString::number(i + 1) + ", " + rCase.aWhatTheSlideSays;
+        auto xShape = getShapeFromPage(0, i);
+        OUString aText;
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rCase.aPrompt, aText);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rCase.aText,
+                                     xShape.queryThrow<text::XTextRange>()->getString());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

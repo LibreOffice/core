@@ -90,6 +90,14 @@ struct ChartShapeInfo
     explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
 };
 
+/// How much of a referenced shape's text the shape referencing it takes over.
+enum class ReferencedShapeText
+{
+    All, ///< the paragraphs and how they are formatted
+    FormattingOnly, ///< how they are formatted, but none of the paragraphs themselves
+    Nothing
+};
+
 /// Attributes for a linked textbox.
 struct LinkedTxbxAttr
 {
@@ -223,7 +231,8 @@ public:
     const css::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
 
-    SAL_DLLPRIVATE void applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
+    SAL_DLLPRIVATE void applyShapeReference( const Shape& rReferencedShape,
+                                             ReferencedShapeText eText = ReferencedShapeText::All );
     const ::std::vector<OUString>&
                         getExtDrawings() const { return maExtDrawings; }
     void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }

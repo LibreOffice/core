@@ -134,7 +134,8 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                 }
                 if ( pPlaceholder )
                 {
-                    bool bUseText = true;
+                    using oox::drawingml::ReferencedShapeText;
+                    ReferencedShapeText eText = ReferencedShapeText::All;
                     switch( pPlaceholder->getSubType() )
                     {
                         case XML_title :
@@ -153,11 +154,11 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                         case XML_media :
                         case XML_sldImg :
                         case XML_pic :
-                            bUseText = false;
+                            eText = ReferencedShapeText::Nothing;
                     }
                     pPlaceholder->getShapeProperties().setAnyProperty(
                         PROP_URL, mpShapePtr->getShapeProperties().getProperty(PROP_URL));
-                    mpShapePtr->applyShapeReference( *pPlaceholder, bUseText );
+                    mpShapePtr->applyShapeReference( *pPlaceholder, eText );
                     PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                     if ( pPPTShape )
                         pPPTShape->setReferenced( true );
