@@ -1736,21 +1736,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCustomPromptTexts)
                                      pTxtObj->GetObjIdentifier());
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         OUString aText = aEdit.GetText(0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", aText, u"Click to add Text"_ustr);
-        /* TODO: handle subtitle shape: see tdf#112557 workaround
-            - Expected: Click to edit customized Master Subtitle style
-            - Actual : Click to add Text
-            - Wrong placeholder text!
-        */
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!",
+                                     u"Click to edit customized Master Subtitle style"_ustr, aText);
 
         auto xShapeProps(getShapeFromPage(0, 0));
         CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", aText, u""_ustr);
-        /* TODO: handle subtitle shape: see tdf#112557 workaround
-            - Expected: Click to edit customized Master Subtitle style
-            - Actual :
-            - Wrong placeholder text was set!
-        */
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!",
+                                     u"Click to edit customized Master Subtitle style"_ustr, aText);
     }
 
     {
@@ -1760,12 +1752,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCustomPromptTexts)
                                      pTxtObj->GetObjIdentifier());
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         OUString aText = aEdit.GetText(0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", aText, u"Custom Title 1"_ustr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", u"Custom Title 1"_ustr, aText);
 
         auto xShapeProps(getShapeFromPage(1, 0));
         CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", aText,
-                                     u"Custom Title 1"_ustr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", u"Custom Title 1"_ustr,
+                                     aText);
     }
 
     const SdrPage* pPage2 = GetPage(3);
@@ -1777,12 +1769,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCustomPromptTexts)
                                      pTxtObj->GetObjIdentifier());
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         OUString aText = aEdit.GetText(0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", aText, u"Text placeholder"_ustr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", u"Text placeholder"_ustr, aText);
 
         auto xShapeProps(getShapeFromPage(0, 1));
         CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", aText,
-                                     u"Text placeholder"_ustr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", u"Text placeholder"_ustr,
+                                     aText);
     }
 }
 
@@ -2369,6 +2361,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16080_masterKeepsItsPlaceholder
     assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='body']", 1);
     assertXPath(pMaster, aTree + "/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='body']/p:spPr/a:xfrm/a:off",
                 "y", u"1825560");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16082_layoutKeepsSubtitle)
+{
+    // Given a deck whose Title Slide layout carries a subtitle placeholder:
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+    save(TestFilter::PPTX);
+
+    // The layout keeps it. Without the fix every layout of a master holding more than one lost its
+    // subtitle, so a slide made from the layout afterwards had nowhere to put one.
+    xmlDocUniquePtr pLayout = parseExportedLayoutNamed(u"Title Slide");
+    assertXPath(pLayout, "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='subTitle']",
+                1);
+
+    // The slide master still gets none, which is what PowerPoint refuses the file over.
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='subTitle']",
+                0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16079_dateTimeField)
