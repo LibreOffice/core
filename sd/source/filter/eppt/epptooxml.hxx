@@ -113,7 +113,7 @@ private:
 
     // shapes
     void WriteShapeTree( const ::sax_fastparser::FSHelperPtr& pFS, PageType ePageType, bool bMaster,
-                         bool bSlideMasterPart = false );
+                         bool bSlideMasterPart = false, sal_uInt32 nMasterNum = 0 );
 
     sal_uInt32 GetNewSlideId() { return mnSlideIdMax ++; }
     sal_uInt32 GetNewSlideMasterId() { return mnSlideMasterIdMax ++; }
@@ -139,6 +139,8 @@ private:
     void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
     /** Writes the master page's content placeholders into the layout they belong on */
     void WriteLayoutContentPlaceholders(PowerPointShapeExport& rDML);
+    /** Writes the placeholders a slide master holds that the page standing for it has none of */
+    void WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML, sal_uInt32 nMasterNum);
 
     void FindEquivalentMasterPages();
     sal_uInt32 GetEquivalentMasterPage(sal_uInt32 nMasterPage);
