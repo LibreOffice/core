@@ -138,7 +138,11 @@ RequestDetails::RequestDetails(const std::string& wopiSrc, const std::vector<std
     std::string wopiSrcWithOptions = decodedWopiSrc;
     if (!options.empty())
     {
-        wopiSrcWithOptions += '?';
+        // The WOPISrc itself may already carry its own query string (some WOPI hosts embed
+        // one in the WOPISrc they hand out). Joining our options with '&' in that case keeps
+        // a single query delimiter, so every parameter, including the WOPISrc's own, is later
+        // parsed as a distinct key instead of the options being absorbed into the last one.
+        wopiSrcWithOptions += (decodedWopiSrc.find('?') != std::string::npos) ? '&' : '?';
     }
 
     for (const std::string& option : options)

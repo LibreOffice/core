@@ -36,6 +36,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testLocal);
     CPPUNIT_TEST(testLocalHexified);
     CPPUNIT_TEST(testRequestDetails);
+    CPPUNIT_TEST(testWopiSrcWithOwnQueryString);
     CPPUNIT_TEST(testCoolWs);
     CPPUNIT_TEST(testAuthorization);
     CPPUNIT_TEST(testAuthorizationExpiry);
@@ -50,6 +51,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     void testLocal();
     void testLocalHexified();
     void testRequestDetails();
+    void testWopiSrcWithOwnQueryString();
     void testCoolWs();
     void testAuthorization();
     void testAuthorizationExpiry();
@@ -842,6 +844,30 @@ void RequestDetailsTests::testRequestDetails()
         http::RequestParser reqParser(request2);
         LOK_ASSERT_EQUAL(details, RequestDetails(reqParser, ""));
     }
+}
+
+/// A WOPISrc can already carry its own query string, as with Exchange/OWA's
+/// attachment-preview WOPISrc, which embeds a query-encoded "owaatt" parameter.
+/// The access_token and other options coolwsd adds for the outbound WOPI request
+/// must still be parsed as their own parameters, not merged into the WOPISrc's
+/// own last parameter value.
+void RequestDetailsTests::testWopiSrcWithOwnQueryString()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string wopiSrc = "http://localhost/wopi/files/@/owaatt?owaatt=SomeEncodedValue";
+    const std::vector<std::string> options
+        = { "access_token=SomeAccessToken", "access_token_ttl=0" };
+
+    const RequestDetails details(wopiSrc, options, /*compat=*/std::string());
+
+    std::string accessToken;
+    LOK_ASSERT(details.getParamByName("access_token", accessToken));
+    LOK_ASSERT_EQUAL_STR("SomeAccessToken", accessToken);
+
+    std::string owaatt;
+    LOK_ASSERT(details.getParamByName("owaatt", owaatt));
+    LOK_ASSERT_EQUAL_STR("SomeEncodedValue", owaatt);
 }
 
 /// Tests the Cool URI 2.0.
