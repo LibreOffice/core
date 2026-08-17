@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <tools/debug.hxx>
 
+#include <sdgclitm.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
@@ -41,6 +42,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>
@@ -332,11 +334,13 @@ namespace sdr::contact
             // get the current, unchanged graphic object from SdrGrafObj
             const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
 
+            drawinglayer::primitive2d::Primitive2DContainer aContent;
+
             if(visualisationUsesPresObj())
             {
                 // it's an EmptyPresObj, create the SdrGrafPrimitive2D without content and another scaled one
                 // with the content which is the placeholder graphic
-                rVisitor.visit(createVIP2DSForPresObj(aObjectMatrix, aAttribute));
+                aContent = createVIP2DSForPresObj(aObjectMatrix, aAttribute);
             }
 #ifndef IOS // Enforce swap-in for tiled rendering for now, while we have no delayed updating mechanism
             else if(visualisationUsesDraft())
@@ -346,22 +350,57 @@ namespace sdr::contact
                 // visual update mechanism for swapped-out graphics when they were loaded (see AsynchGraphicLoadingEvent
                 // and ViewObjectContactOfGraphic implementation). Not forcing the swap-in here allows faster
                 // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
-                rVisitor.visit(createVIP2DSForDraft(aObjectMatrix, aAttribute));
+                aContent = createVIP2DSForDraft(aObjectMatrix, aAttribute);
             }
 #endif
             else
             {
                 // create primitive. Info: Calling the copy-constructor of GraphicObject in this
                 // SdrGrafPrimitive2D constructor will force a full swap-in of the graphic
-                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                    new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                        aObjectMatrix,
-                        aAttribute,
-                        rGraphicObject,
-                        aLocalGrafInfo));
-
-                rVisitor.visit(xReference);
+                aContent = drawinglayer::primitive2d::Primitive2DContainer {
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                            aObjectMatrix,
+                            aAttribute,
+                            rGraphicObject,
+                            aLocalGrafInfo)) };
             }
+
+            // A clip polygon covers the fill as well as the graphic, which is what lets a shape
+            // that a file describes as an outline show what is behind the parts it does not cover.
+            basegfx::B2DPolyPolygon aClip(rItemSet.Get(SDRATTR_GRAFCLIPPOLYPOLYGON).GetValue());
+            if (aClip.count() && !aContent.empty())
+            {
+                // The polygon states the shape's own coordinates in 1/100 mm, while the object
+                // matrix maps the unit square onto the shape - so normalise before applying it,
+                // and the clip then follows the shape's rotation and shear along with everything
+                // else.
+                basegfx::B2DHomMatrix aNormalise;
+                aNormalise.scale(
+                    aObjectRange.getWidth() ? 1.0 / aObjectRange.getWidth() : 1.0,
+                    aObjectRange.getHeight() ? 1.0 / aObjectRange.getHeight() : 1.0);
+
+                // A flip reaches the graphic through its own attributes rather than the object
+                // matrix, so the clip has to follow it here, or the picture turns round inside an
+                // outline that stays where it was. A vertical flip is this one plus the half turn
+                // the matrix already carries.
+                if (bMirrored)
+                {
+                    aNormalise.scale(-1.0, 1.0);
+                    aNormalise.translate(1.0, 0.0);
+                }
+
+                aClip.transform(aObjectMatrix * aNormalise);
+
+                // A mask fills even-odd, so a contour leaves a hole by overlapping another rather
+                // than by the direction it runs in.
+                aContent = drawinglayer::primitive2d::Primitive2DContainer {
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            std::move(aClip), std::move(aContent))) };
+            }
+
+            rVisitor.visit(std::move(aContent));
 
             // always append an invisible outline for the cases where no visible content exists
             rVisitor.visit(
