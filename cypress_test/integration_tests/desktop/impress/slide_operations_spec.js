@@ -163,6 +163,31 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', { testI
 		});
 	});
 
+	it('Successive deletes from the sorter remove one slide each', function() {
+		var win = this.win;
+		var deletes = 4;
+
+		for (var i = 0; i < deletes + 1; i++)
+			cy.cGet('#presentation-toolbar #insertpage').click();
+		impressHelper.assertSlidePreviewCountAfterIdle(win, deletes + 2);
+
+		slideFrame(1).click();
+		cy.then(() => {
+			expect(win.app.map._docLayer._preview.partsFocused).to.equal(true);
+		});
+
+		cy.then(() => {
+			for (var d = 0; d < deletes; d++) {
+				win.document.activeElement.dispatchEvent(new win.KeyboardEvent('keydown', {
+					key: 'Backspace', code: 'Backspace', keyCode: 8, which: 8,
+					repeat: d > 0, bubbles: true, cancelable: true,
+				}));
+			}
+		});
+
+		impressHelper.assertSlidePreviewCountAfterIdle(win, 2);
+	});
+
 	it('Check slide sorter focus', function() {
 		cy.cGet('#insertpage-button').click();
 		helper.processToIdle(this.win);

@@ -114,14 +114,14 @@ void DrawViewShell::DeleteActualPage()
 
         GetView()->BegUndo(SdResId(STR_UNDO_DELETEPAGES));
 
+        slidesorter::SlideSorterViewShell* pVShell
+            = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+        const bool bUseSlideSorter = pVShell != nullptr;
+
         for (sal_uInt16 i = 0; i < nPageCount; i++)
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
             sal_uInt16 nPageIndex = maTabControl->GetPagePos(pPage->getPageId());
-
-            slidesorter::SlideSorterViewShell* pVShell
-                = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
-            bool bUseSlideSorter = pVShell != nullptr;
 
             if((bUseSlideSorter && IsSelected(nPageIndex)) || (!bUseSlideSorter && pPage->IsSelected()))
             {
@@ -136,6 +136,14 @@ void DrawViewShell::DeleteActualPage()
         }
 
         GetView()->EndUndo();
+
+        if (!pagesToDelete.empty() && meEditMode == EditMode::Page)
+        {
+            const sal_uInt16 nNewPageCount = GetDoc()->GetSdPageCount(mePageKind);
+            const sal_uInt16 nCurrentIndex = maTabControl->GetCurPagePos();
+            if (nNewPageCount > 0 && nCurrentIndex < nNewPageCount)
+                SelectPage(nCurrentIndex, 1);
+        }
     }
     catch( cpo::uno::Exception& )
     {
