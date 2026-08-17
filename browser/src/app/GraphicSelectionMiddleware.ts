@@ -365,19 +365,22 @@ class GraphicSelection {
 		} else if (textMsg.match('INPLACE EXIT')) {
 			app.map._docLayer._oleCSelections.clear();
 		} else if (textMsg.match('INPLACE')) {
-			if (app.map._docLayer._oleCSelections.empty()) {
-				textMsg = '[' + textMsg.substr('graphicselection:'.length) + ']';
-				try {
-					var msgData = JSON.parse(textMsg);
-					if (msgData.length > 1) this.extractAndSetGraphicSelection(msgData);
-				} catch (error) {
-					window.app.console.warn('cannot parse graphicselection command');
-				}
-				this.renderDarkOverlay();
+			const startingInPlaceEditing = app.map._docLayer._oleCSelections.empty();
 
-				this.rectangle = null;
-				this.updateGraphicSelection();
+			textMsg = '[' + textMsg.substr('graphicselection:'.length) + ']';
+			try {
+				var msgData = JSON.parse(textMsg);
+				if (msgData.length > 1) this.extractAndSetGraphicSelection(msgData);
+			} catch (error) {
+				window.app.console.warn('cannot parse graphicselection command');
 			}
+
+			// The frame comes in twips and the dark overlay holds it in pixels. A
+			// message replayed for a new zoom level has to redo that conversion.
+			if (this.rectangle) this.renderDarkOverlay();
+
+			this.rectangle = null;
+			if (startingInPlaceEditing) this.updateGraphicSelection();
 		} else {
 			textMsg = '[' + textMsg.substr('graphicselection:'.length) + ']';
 			msgData = JSON.parse(textMsg);

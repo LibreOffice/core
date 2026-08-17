@@ -151,6 +151,31 @@ describe('Dimming around a chart activated for in-place editing', function () {
 		assertUndimmedAreaMatchesChart('undimmed area at the starting zoom');
 	});
 
+	it('the undimmed area follows the chart when the zoom changes', function () {
+		GraphicSelection.onMessage(inPlaceMessage);
+
+		// Core does not resend coordinates for a zoom change, so the stored in-place
+		// message is replayed once the new zoom is in force.
+		setZoomScale(zoomedInScale);
+		GraphicSelection.onMessage(inPlaceMessage);
+
+		assertUndimmedAreaMatchesChart('undimmed area after zooming in');
+	});
+
+	it('the undimmed area follows the chart when the zoom changes repeatedly', function () {
+		GraphicSelection.onMessage(inPlaceMessage);
+
+		const scales = [zoomedInScale, defaultScale, 30, zoomedInScale];
+		for (let index = 0; index < scales.length; index++) {
+			setZoomScale(scales[index]);
+			GraphicSelection.onMessage(inPlaceMessage);
+
+			assertUndimmedAreaMatchesChart(
+				'undimmed area at ' + scales[index] + ' twips per pixel',
+			);
+		}
+	});
+
 	it('the dimming stays four bands however often it is redrawn', function () {
 		GraphicSelection.onMessage(inPlaceMessage);
 		nodeassert.strictEqual(bandCount(), 4, 'bands when editing starts');
