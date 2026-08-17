@@ -409,7 +409,7 @@ public:
 
     Point           GetInsertPos() const;
 
-    Point           GetChartInsertPos( const Size& rSize, const ScRange& rCellRange );
+    SC_DLLPUBLIC Point GetChartInsertPos( const Size& rSize, const ScRange& rCellRange );
     Point           GetChartDialogPos( const Size& rDialogSize, const tools::Rectangle& rLogicChart );
 
     void            UpdateAutoFillMark( bool bFromPaste = false );

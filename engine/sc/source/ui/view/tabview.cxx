@@ -2025,10 +2025,15 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
             aInsertPos.setY( aVisible.Top() );
 
         // nNeededWidth / nNeededHeight includes all borders - move aInsertPos to the
-        // object position, inside the border
-
-        aInsertPos.AdjustX(nBorder );
-        aInsertPos.AdjustY(nBorder );
+        // object position, inside the border. Desktop's in-place OLE editing
+        // frame draws that border, so its outer edge is what lands on the
+        // grid line. There is no such frame here, so leave the chart object
+        // itself on the grid line instead.
+        if (!bLOKActive)
+        {
+            aInsertPos.AdjustX(nBorder );
+            aInsertPos.AdjustY(nBorder );
+        }
     }
     return aInsertPos;
 }

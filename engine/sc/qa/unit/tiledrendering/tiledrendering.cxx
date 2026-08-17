@@ -2192,6 +2192,34 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpHorizontallyInvalidation)
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 39525, 13005), aView1.m_aInvalidations[0]);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartInsertPosNoBorderOffset)
+{
+    // cool#2222: a newly inserted chart landed with a stray offset from the
+    // grid line, instead of its edge sitting exactly on it.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    CPPUNIT_ASSERT(comphelper::COKit::isActive());
+
+    // Give the view plenty of room, so the chart can be placed flush against
+    // the selection instead of the position getting clamped into a
+    // constrained viewport.
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 28050, 10605));
+
+    const Size aChartSize(5000, 5000);
+    const ScRange aRange(0, 0, 0, 1, 1, 0); // A1:B2
+    const Point aPos = pViewShell->GetChartInsertPos(aChartSize, aRange);
+
+    // The selection sits at the top-left corner of a fresh sheet, so there is
+    // plenty of room to place the chart directly to its right, flush against
+    // the grid line between the selection and the next column. Without the
+    // fix, this landed 100 (1/100 mm) short of that line on both axes.
+    const tools::Rectangle aSelection = pDoc->GetMMRect(0, 0, 1, 1, 0);
+    CPPUNIT_ASSERT_EQUAL(aSelection.Right() + 1, aPos.X());
+    CPPUNIT_ASSERT_EQUAL(aSelection.Top(), aPos.Y());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
