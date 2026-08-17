@@ -43,6 +43,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/container/XIdentifierAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -1599,6 +1600,38 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16078_placeholderKeepsItsOutline)
     // for: the same outline, from the same document, through the other format.
     saveAndReload(TestFilter::ODP);
     checkOutline("after an ODP round-trip"_ostr);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16080_masterPageOrder)
+{
+    // Given a deck whose slide master lists eleven layouts, related as rId1 to rId11:
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+
+    // The master pages follow the order the slide master lists its layouts in. Without the fix
+    // they followed the relations, which are keyed by the relationship id as a string, so the
+    // tenth and eleventh layouts arrived right behind the first.
+    static constexpr std::u16string_view aExpected[] = {
+        u"Title Slide",
+        u"Title and Content",
+        u"Section Header",
+        u"Two Content",
+        u"Comparison",
+        u"Title Only",
+        u"Blank",
+        u"Content with Caption",
+        u"Picture with Caption",
+        u"Title and Vertical Text",
+        u"Vertical Title and Text",
+    };
+
+    auto xMasterPages = mxComponent.queryThrow<drawing::XMasterPagesSupplier>()->getMasterPages();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(std::size(aExpected)), xMasterPages->getCount());
+    for (sal_Int32 i = 0; i < xMasterPages->getCount(); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(
+            OUString(aExpected[i]),
+            xMasterPages->getByIndex(i).queryThrow<container::XNamed>()->getName());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
