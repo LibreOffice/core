@@ -52,6 +52,11 @@
                   <object class="GtkComboBoxText" id="comboPageFormat">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboPageFormat-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|comboPageFormat">Select a predefined paper size, or create a custom format by entering the dimensions for the paper in the Height  and Width boxes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -80,6 +85,11 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinWidth-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|spinWidth">To define a custom format, enter a width here.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -108,6 +118,11 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinHeight-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|spinHeight">To define a custom format, enter a height here.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -145,6 +160,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="labelOrientation"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radiobuttonPortrait-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|radiobuttonPortrait">Displays and prints the current document with the paper oriented vertically.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -165,6 +185,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="labelOrientation"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="radiobuttonLandscape-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|radiobuttonLandscape">Displays and prints the current document with the paper oriented horizontally.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -213,6 +238,11 @@
                 <property name="use-underline">True</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkResizeAllPages-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|checkResizeAllPages">Resize only current page instead of all pages. This creates a new master page in case only one page is resized.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -265,6 +295,11 @@
                   <object class="GtkComboBoxText" id="comboPaperTray">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboPaperTray-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|comnboPaperTray">Select the paper source for your printer. If you want, you can assign different paper trays to different page styles. For example, assign a different tray to the First Page style and load the tray with your company's letterhead paper.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -366,6 +401,11 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinMargLeft-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|spinMarginLeft">Enter the amount of space to leave between the left  edge of the page and the document text. If you are using the Mirrored page layout, enter the amount of space to leave between the inner text margin and the inner edge of the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -419,6 +459,11 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinMargRight-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|spinMarginRight">Enter the amount of space to leave between the right edge of the page and the document text.  If you are using the Mirrored page layout, enter the amount of space to leave between the outer text margin and the outer edge of the page</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -446,6 +491,11 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinMargTop-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|spinMargTop">Enter the amount of space to leave between the upper edge of the page and the document text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -473,6 +523,11 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinMargBot-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|spinMargBot">Enter the amount of space to leave between the lower edge of the page and the document text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -500,6 +555,11 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinMargGut-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|spinMargGut">Enter the amount of space to leave between the left edge of the page and the left margin. If you are using the Mirrored page layout, enter the amount of space to leave between the inner page margin and the inner edge of the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -565,6 +625,11 @@
                       <item translatable="yes" context="pageformatpage|liststorePageLayout">Only right</item>
                       <item translatable="yes" context="pageformatpage|liststorePageLayout">Only left</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboPageLayout-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|comboPageLayout">Specify whether the current style should show odd pages, even pages, or both odd and even pages.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -609,7 +674,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="checkRegisterTrue-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checkRegisterTrue">If enabled, then all paragraph styles with the option page line-spacing activated will be affected, assuming the line spacing of the Reference Style. This will align them to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended_tip|checkRegisterTrue">If enabled, then all paragraph styles with the option page line-spacing activated will be affected, assuming the line spacing of the Reference Style. This will align them to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
                       </object>
                     </child>
                   </object>
@@ -638,6 +703,11 @@
                   <object class="GtkComboBoxText" id="comboRegisterStyle">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboRegisterStyle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|comboRegisterStyle">Select the Paragraph Style that you want to use as a reference for lining up the text on the selected Page style.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -666,6 +736,11 @@
                     <property name="no-show-all">True</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkbuttonHorz-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|checkbuttonHorz">Centers the cells horizontally on the printed page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -680,6 +755,11 @@
                     <property name="no-show-all">True</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkbuttonVert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|checkbuttonVert">Centers the cells vertically on the printed page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -694,6 +774,11 @@
                     <property name="no-show-all">True</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkAdaptBox-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|checkAdaptBox">Resizes the drawing objects so that they fit on the paper format that you select.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -752,6 +837,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="labelGutterPosition"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rbGutterLeft-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|rbGutterLeft">Places the gutter on the left of the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -770,6 +860,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="labelGutterPosition"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rbGutterRight-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|rbGutterRight">Places the gutter on the right of the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -788,6 +883,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="labelGutterPosition"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rbGutterTop-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|rbGutterTop">Places the gutter on the top of the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
