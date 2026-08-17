@@ -2823,8 +2823,8 @@ bool lclIsPrefixOperator(OpCode eOp)
 
 bool lclIsOoxmlFactorSeparator(OpCode eOp)
 {
-    // Tokens that end one factor and start the next at the same parenthesis
-    // depth, resetting where a # wrapper would splice.
+    // Tokens that stand between two factors at the same parenthesis depth, so an
+    // operand starts behind them.
     if (isBinaryOperatorOpCode(eOp))
         return true;
     return eOp == ocSep || eOp == ocArrayColSep || eOp == ocArrayRowSep;
@@ -3081,14 +3081,10 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     if ( mpArr->IsRecalcModeForced() )
         rBuffer.append( '=');
 
-    // Where the current factor began, one entry per parenthesis
-    // depth. The top is where the ocSpill wrapper splices. Start past
-    // the optional leading '='.
-    std::vector<sal_Int32> aFactorStarts;
-    aFactorStarts.push_back(rBuffer.getLength());
     // The @ markers whose _xlfn.SINGLE wrapper is still to be spliced in.
     std::vector<PendingSingleValue> aPendingSingles;
-    // One entry per parenthesis scope, tracking the scope's union list.
+    // One entry per parenthesis scope, tracking where the scope's expressions
+    // begin and where its union list does. Start past the optional leading '='.
     std::vector<UnionScope> aUnionScopes;
     aUnionScopes.push_back({ rBuffer.getLength(), rBuffer.getLength(), -1, false });
     // Whether the next token stands where an operand starts, so a plus or a
@@ -3120,7 +3116,6 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                         rBuffer.append(GetNativeSymbol(pNext->GetOpCode()));
                         // The consumed parenthesis opens a scope like a written one.
                         lclMarkPendingOperand(aPendingSingles);
-                        aFactorStarts.push_back(rBuffer.getLength());
                         aUnionScopes.push_back(
                             { rBuffer.getLength(), rBuffer.getLength(), -1, false });
                         rBuffer.append(GetNativeSymbol(ocErrRef));
@@ -3139,23 +3134,23 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         // operand stands in the buffer.
         if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocSingleValue)
         {
-            aPendingSingles.push_back({ static_cast<sal_Int32>(aFactorStarts.size()),
+            aPendingSingles.push_back({ sal_Int32(aUnionScopes.size()),
                                         rBuffer.getLength(), false });
             t = maArrIterator.Next();
             continue;
         }
 
-        // XLSX writes the # operator as _xlfn.ANCHORARRAY around the operand
-        // already in the buffer, splicing the prefix at the factor start. Text
-        // that never parsed takes no parentheses, so a # behind it is dropped.
+        // XLSX writes the # operator as _xlfn.ANCHORARRAY around the whole
+        // expression under it, so the union list closes first. Text that
+        // never parsed takes no parentheses, so a # behind it is dropped.
         if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocSpill)
         {
             if (!bBadFactor)
             {
-                rBuffer.insert(aFactorStarts.back(), u"_xlfn.ANCHORARRAY(");
+                lclCloseUnionList(rBuffer, aUnionScopes.back(), aPendingSingles, false);
+                rBuffer.insert(aUnionScopes.back().mnExpressionStart, u"_xlfn.ANCHORARRAY(");
                 rBuffer.append(u")");
                 lclMarkPendingOperand(aPendingSingles);
-                aFactorStarts.back() = rBuffer.getLength();
             }
             t = maArrIterator.Next();
             bOperandPosition = false;
@@ -3164,9 +3159,8 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 
         if (FormulaGrammar::isOOXML(meGrammar))
         {
-            // Track where the current factor begins for the ocSpill
-            // branch. ocOpen pushes a nested scope, ocClose pops it,
-            // and a factor separator starts a fresh factor.
+            // ocOpen pushes a nested scope and ocClose pops it. Inside a scope the
+            // walk tracks where the expression under the union operator begins.
             const OpCode eOpHere = t->GetOpCode();
             const bool bWhitespace = isWhitespaceOpCode(eOpHere);
             // A sign where an operand starts can only be the unary form,
@@ -3186,7 +3180,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             // them stay inside the reference.
             if (eOpHere == ocOpen || eOpHere == ocTableRefOpen)
             {
-                // Leave the outer factor start alone: a separator already
+                // Leave the outer expression start alone: a separator already
                 // marked a grouping '(', and a call is wrapped from its name.
                 if (!AppendTokenOrError(rBuffer, t))
                 {
@@ -3194,7 +3188,6 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                     break;
                 }
                 lclMarkPendingOperand(aPendingSingles);
-                aFactorStarts.push_back(rBuffer.getLength());
                 // A grouping parenthesis stands where an operand starts; a call's
                 // follows its function name.
                 aUnionScopes.push_back({ rBuffer.getLength(), rBuffer.getLength(), -1,
@@ -3205,11 +3198,11 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             }
             if (eOpHere == ocClose || eOpHere == ocTableRefClose)
             {
-                if (aFactorStarts.size() > 1)
+                if (aUnionScopes.size() > 1)
                 {
                     // The union list closes before the @ wrappers, so its
                     // parentheses sit inside theirs.
-                    const sal_Int32 nScope = sal_Int32(aFactorStarts.size());
+                    const sal_Int32 nScope = sal_Int32(aUnionScopes.size());
                     const bool bMayTakeScopeParenthesis = !lclHasWrapperAtStart(
                         aPendingSingles, nScope, aUnionScopes.back().mnContentStart);
                     lclCloseUnionList(rBuffer, aUnionScopes.back(), aPendingSingles,
@@ -3221,8 +3214,6 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                     bUnwritable = true;
                     break;
                 }
-                if (aFactorStarts.size() > 1)
-                    aFactorStarts.pop_back();
                 if (aUnionScopes.size() > 1)
                     aUnionScopes.pop_back();
                 lclMarkPendingOperand(aPendingSingles);
@@ -3236,7 +3227,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             if (bEndsOperand)
             {
                 lclCloseUnionList(rBuffer, aUnionScopes.back(), aPendingSingles, false);
-                lclCloseSingleValues(rBuffer, aPendingSingles, sal_Int32(aFactorStarts.size()));
+                lclCloseSingleValues(rBuffer, aPendingSingles, sal_Int32(aUnionScopes.size()));
             }
 
             if (eOpHere == ocBad)
@@ -3244,7 +3235,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                 // Raw text that no parse could read cannot take parentheses, so
                 // the wrappers waiting on it are left out.
                 aUnionScopes.back().mnListStart = -1;
-                lclCancelSingleValues(aPendingSingles, sal_Int32(aFactorStarts.size()));
+                lclCancelSingleValues(aPendingSingles, sal_Int32(aUnionScopes.size()));
                 bBadFactor = true;
             }
 
@@ -3256,12 +3247,6 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             }
             if (!bPrefix && !bWhitespace && rBuffer.getLength() > nLengthBefore)
                 lclMarkPendingOperand(aPendingSingles);
-            if (bSeparator || bPrefix)
-            {
-                // A separator starts a fresh factor, and a prefix sign stays
-                // outside the # wrapper of the operand it applies to.
-                aFactorStarts.back() = rBuffer.getLength();
-            }
             if (eOpHere == ocUnion && aUnionScopes.back().mnListStart < 0)
             {
                 // The first union operator of the expression opens the list; the
