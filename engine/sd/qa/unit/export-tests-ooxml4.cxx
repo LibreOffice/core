@@ -1028,6 +1028,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideShowsMasterCustomPrompt)
     CPPUNIT_ASSERT_EQUAL(u"Custom prompt to insert an image"_ustr, aPlaceholderText);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testMediaPlaceholder)
+{
+    // Given a deck with an empty media placeholder on a slide, inheriting from its layout:
+    createSdImpressDoc("pptx/media-placeholder.pptx");
+    save(TestFilter::PPTX);
+
+    // It keeps its placeholder identity on both levels. Without the accompanying fix the layout
+    // one degraded to <p:ph type="body"/>, and the slide one was written as a real media object,
+    // a <p:pic> with the internal placeholder icon embedded as its <a:blipFill>. The layout
+    // carries the header and footer placeholders too, so select the media one.
+    xmlDocUniquePtr pLayout = parseExportedLayoutNamed(u"Media placeholder");
+    assertXPath(pLayout, "/p:sldLayout/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='media']",
+                1);
+
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pSlide, "/p:sld/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='media']", 1);
+    assertXPath(pSlide, "/p:sld/p:cSld/p:spTree/p:pic", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPicturePlaceholderCustomPromptText)
 {
     // Given one layout whose picture placeholder authored a prompt, and another whose
