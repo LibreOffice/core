@@ -2333,7 +2333,7 @@ static bool lcl_isTextBox(const Reference<XInterface>& xIface)
     return aTextBox.get<bool>();
 }
 
-ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles )
+ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles, bool bText )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && GetTextExport())
@@ -2354,8 +2354,11 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
 
         pFS->startElementNS(nXmlNamespace,
                             (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_txBody : XML_txbx));
-        WriteText(xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX || mbUserShapes), /*bText=*/true,
+        WriteText(xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX || mbUserShapes), bText,
                   /*nXmlNamespace=*/0, /*bWritePropertiesAsLstStyles=*/bWritePropertiesAsLstStyles);
+        if (!bText)
+            // A text body holds at least one paragraph, and an empty one says the shape has no text
+            pFS->singleElementNS(XML_a, XML_p);
         pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_txBody : XML_txbx) );
         if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes)
             WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );

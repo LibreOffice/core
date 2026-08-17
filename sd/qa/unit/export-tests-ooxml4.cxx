@@ -24,6 +24,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/unoapi.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -932,8 +933,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
             >>= isEmptyPresentationObject;
         CPPUNIT_ASSERT(isEmptyPresentationObject);
 
-        // If we supported custom prompt text, here we would also test "String" property,
-        // which would be equal to "Insert Image". See first tests: testCustomPromptTexts
+        // The slide-side shape does not carry the layout's prompt; only the layout placeholder
+        // does. See testPicturePlaceholderCustomPromptText for the prompt itself.
 
         auto xShape = xShapeProps.queryThrow<drawing::XShape>();
         aSizeBefore = xShape->getSize();
@@ -1001,6 +1002,54 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPicPlaceholderMovedToLayout)
 
     xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pSlide, "/p:sld/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='pic']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideShowsMasterCustomPrompt)
+{
+    // Given a layout whose picture placeholder authored a prompt:
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+
+    // The slide's own placeholder shows it too. PlaceholderText is what the user reads on the
+    // slide; without the accompanying fix the slide ignored the layout and showed Impress's own
+    // resource string instead, so the layout and the slide disagreed about the same placeholder.
+    // The placeholder is looked up by what it is, not by where it sits: which shape comes first on
+    // the slide is not what this test is about.
+    SdPage* pPage = getSdDocShell()->GetDoc()->GetSdPage(0, PageKind::Standard);
+    SdrObject* pPlaceholder = pPage->GetPresObj(PresObjKind::Graphic);
+    CPPUNIT_ASSERT_MESSAGE("no picture placeholder on the slide", pPlaceholder);
+    auto xShapeProps = GetXShapeForSdrObject(pPlaceholder).queryThrow<beans::XPropertySet>();
+
+    OUString aPlaceholderText;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"PlaceholderText"_ustr) >>= aPlaceholderText);
+    CPPUNIT_ASSERT_EQUAL(u"Custom prompt to insert an image"_ustr, aPlaceholderText);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPicturePlaceholderCustomPromptText)
+{
+    // Given one layout whose picture placeholder authored a prompt, and another whose
+    // picture placeholder authored none:
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+    save(TestFilter::PPTX);
+
+    static constexpr OString aPicPlaceholder(
+        "/p:sldLayout/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='pic']"_ostr);
+
+    // The authored prompt survives. Without the accompanying fix it was replaced by Impress's
+    // own localized resource, since a slide layout arrives as a master page and the shown text
+    // was only ever set off a master.
+    xmlDocUniquePtr pAuthored = parseExportedLayoutNamed(u"Picture placeholder, custom prompt");
+    assertXPath(pAuthored, aPicPlaceholder + "/p:nvSpPr/p:nvPr/p:ph", "hasCustomPrompt", u"1");
+    assertXPathContent(pAuthored, aPicPlaceholder + "/p:txBody/a:p/a:r/a:t",
+                       u"Custom prompt to insert an image");
+
+    // The one with no authored prompt writes no text, rather than that same resource string
+    // written out as if the document had contained it. Its body properties stay: a reader needs
+    // the insets and the anchor whether or not there is anything in the box yet.
+    xmlDocUniquePtr pDefault = parseExportedLayoutNamed(u"Picture with Caption");
+    assertXPath(pDefault, aPicPlaceholder, 1);
+    assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:bodyPr", 1);
+    assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p", 1);
+    assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p/a:r", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)
