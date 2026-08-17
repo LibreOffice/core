@@ -773,12 +773,24 @@ void SvxTextEditSourceImpl::UpdateData()
     {
         if( mpOutliner && mpObject && mpText )
         {
+            const bool bEmptyText
+                = (mpOutliner->GetParagraphCount() == 1
+                   && mpOutliner->GetEditEngine().GetTextLen(0) == 0)
+                  || (mpOutliner->GetParagraphCount() == 2
+                      && mpOutliner->GetEditEngine().GetTextLen(0) == 0
+                      && mpOutliner->GetEditEngine().GetTextLen(1) == 0);
+
+            // An empty presentation object holds the prompt to show, but GetBackgroundTextForwarder
+            // hands out an empty outliner for it rather than that prompt. Writing the emptiness
+            // back would delete the prompt and make the object an ordinary one, so leave it as it
+            // is: nothing was typed into it.
+            if (bEmptyText && mpObject->IsEmptyPresObj())
+                return;
+
             SdrTextObj* pTextObj = DynCastSdrTextObj( mpObject );
             if( pTextObj )
             {
-                if( (mpOutliner->GetParagraphCount() == 1 && mpOutliner->GetEditEngine().GetTextLen( 0 ) == 0 )
-                        || (mpOutliner->GetParagraphCount() == 2 && mpOutliner->GetEditEngine().GetTextLen( 0 ) == 0
-                            && mpOutliner->GetEditEngine().GetTextLen( 1 ) == 0) )
+                if (bEmptyText)
                 {
                     pTextObj->NbcSetOutlinerParaObjectForText( std::nullopt, mpText );
                 }

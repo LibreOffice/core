@@ -16,6 +16,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/lrspitem.hxx>
 
@@ -1640,20 +1641,22 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16083_contentPlaceholderStaysEmpty)
     // about its text - and a layout whose placeholder carries text of its own:
     createSdImpressDoc("pptx/content-placeholder-cases.pptx");
 
-    // The layout's text is a prompt, not content. Taking it filled the placeholder, which then
-    // stopped offering the buttons that insert a table, a chart, a picture or a video. A prompt the
-    // layout authors is a prompt too, and reaches the shape as CustomPromptText.
+    // A placeholder the file gives no text to stays an empty presentation object, which is what
+    // makes Impress offer the buttons that insert a table, a chart, a picture or a video. The
+    // layout's text is a prompt, not content: taking it filled the placeholder and took those away.
+    // A prompt the layout authors is a prompt too, and reaches the shape as CustomPromptText.
     struct Case
     {
         std::string_view aWhatTheSlideSays;
+        bool bEmpty;
         OUString aText;
         OUString aPrompt;
     };
     static constexpr Case aCases[] = {
-        { "no text body", u""_ustr, u""_ustr },
-        { "an empty text body", u""_ustr, u""_ustr },
-        { "a text body with content", u"Real content, typed by the author"_ustr, u""_ustr },
-        { "no text body, prompt authored on the layout", u""_ustr,
+        { "no text body", true, u""_ustr, u""_ustr },
+        { "an empty text body", true, u""_ustr, u""_ustr },
+        { "a text body with content", false, u"Real content, typed by the author"_ustr, u""_ustr },
+        { "no text body, prompt authored on the layout", true, u""_ustr,
           u"Custom prompt to insert content"_ustr },
     };
 
@@ -1662,12 +1665,28 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16083_contentPlaceholderStaysEmpty)
         const Case& rCase = aCases[i];
         const OString aMessage = "slide " + OString::number(i + 1) + ", " + rCase.aWhatTheSlideSays;
         auto xShape = getShapeFromPage(0, i);
+        bool bEmpty = false;
+        CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bEmpty);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rCase.bEmpty, bEmpty);
+
         OUString aText;
         CPPUNIT_ASSERT(xShape->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rCase.aPrompt, aText);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rCase.aText,
                                      xShape.queryThrow<text::XTextRange>()->getString());
+
+        // An empty one still holds the text to paint - the prompt - even though the UNO text of an
+        // empty presentation object is empty by design. Losing it leaves a blank frame on screen,
+        // which is only visible on the model. The stock prompt is localized, so only the authored
+        // one is compared.
+        SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+        CPPUNIT_ASSERT(pObject);
+        OutlinerParaObject* pParagraphs = pObject->GetOutlinerParaObject();
+        CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), pParagraphs);
+        if (!rCase.aPrompt.isEmpty())
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rCase.aPrompt,
+                                         pParagraphs->GetTextObject().GetText(0));
     }
 }
 
