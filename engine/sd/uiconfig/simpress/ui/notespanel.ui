@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="sd">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkBox" id="NotesPanel">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="VclCustomWidget" id="notesedit">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="notesedit-atkobject">
+            <property name="AtkObject::accessible-role">text</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="notespanel|notesedit">Speaker notes</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>

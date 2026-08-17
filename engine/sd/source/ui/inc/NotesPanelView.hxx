@@ -37,6 +37,9 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
 
     Idle aModifyIdle;
 
+    /// Called after every change to the notes text, including a refill on a slide change.
+    Link<LinkParamNone*, void> maContentChangedHdl;
+
     bool mbInFocus = false;
 
     void getNotesFromDoc();
@@ -57,6 +60,11 @@ public:
     OutlinerView* GetViewByWindow(vcl::Window const* pWin) const override;
 
     SdOutliner& GetOutliner() { return maOutliner; }
+
+    void SetContentChangedHdl(const Link<LinkParamNone*, void>& rLink)
+    {
+        maContentChangedHdl = rLink;
+    }
 
     void FillOutliner();
     void onUpdateStyleSettings();

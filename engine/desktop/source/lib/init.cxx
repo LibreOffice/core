@@ -6109,6 +6109,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
             sWindowId = sCurrentShellId + "addressinputfield";
         if (nWindowId == static_cast<unsigned long long int>(-5))
             sWindowId = sCurrentShellId + "quickfind";
+        if (nWindowId == static_cast<unsigned long long int>(-6))
+            sWindowId = sCurrentShellId + "notespanel";
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
         if (jsdialog::ExecuteAction(sWindowId, sControlId, aMap))
@@ -6125,6 +6127,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         if (jsdialog::ExecuteAction(sCurrentShellId + "formulabar", sControlId, aMap))
             return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "addressinputfield", sControlId, aMap))
+            return;
+        if (jsdialog::ExecuteAction(sCurrentShellId + "notespanel", sControlId, aMap))
             return;
         // this is needed for dialogs shown before document is loaded: MacroWarning dialog, etc...
         // these dialogs are created with WindowId "0"

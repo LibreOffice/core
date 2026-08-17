@@ -319,6 +319,9 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
         else if (jsdialog::isBuilderEnabledForAddressInput(rUIFile))
             return JSInstanceBuilder::CreateAddressInputBuilder(
                 pParent, AllSettings::GetUIRootDir(), rUIFile, nKitWindowId);
+        else if (jsdialog::isBuilderEnabledForNotesPanel(rUIFile))
+            return JSInstanceBuilder::CreateNotesPanelBuilder(pParent, AllSettings::GetUIRootDir(),
+                                                              rUIFile, nKitWindowId);
         else
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }

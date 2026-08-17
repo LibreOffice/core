@@ -553,6 +553,13 @@ constexpr auto QuickFindList
 });
 
 
+// ========== NOTESPANEL ================================================== //
+
+constexpr auto NotesPanelList
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/simpress/ui/notespanel.ui" }
+});
+
 // ========== NOTEBOOKBAR ================================================= //
 
 constexpr auto NotebookbarList
@@ -683,6 +690,11 @@ bool isBuilderEnabledForNavigator(std::u16string_view rUIFile)
 bool isBuilderEnabledForQuickFind(std::u16string_view rUIFile)
 {
     return isInMap(QuickFindList, rUIFile);
+}
+
+bool isBuilderEnabledForNotesPanel(std::u16string_view rUIFile)
+{
+    return isInMap(NotesPanelList, rUIFile);
 }
 
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)

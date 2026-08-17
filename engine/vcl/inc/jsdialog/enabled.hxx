@@ -26,6 +26,7 @@ bool isBuilderEnabledForAddressInput(std::u16string_view rUIFile);
 bool isBuilderEnabledForFormulabar(std::u16string_view rUIFile);
 bool isBuilderEnabledForNavigator(std::u16string_view rUIFile);
 bool isBuilderEnabledForQuickFind(std::u16string_view rUIFile);
+bool isBuilderEnabledForNotesPanel(std::u16string_view rUIFile);
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile);
 
 // returns vector of writer dialog .ui files not seen that should be seen to have complete coverage

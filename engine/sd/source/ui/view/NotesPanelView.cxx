@@ -86,6 +86,8 @@ void NotesPanelView::FillOutliner()
     getNotesFromDoc();
     SetLinks();
     maOutliner.EnableUndo(true);
+
+    maContentChangedHdl.Call(nullptr);
 }
 
 SdrTextObj* NotesPanelView::getNotesTextObj()
@@ -237,6 +239,8 @@ IMPL_LINK_NOARG(NotesPanelView, EditModifiedHdl, LinkParamNone*, void)
     // (e.g. when deleting multiple lines)
     // Debounce the rapid ModifyHdl calls using a timer.
     aModifyIdle.Start();
+
+    maContentChangedHdl.Call(nullptr);
     return;
 }
 

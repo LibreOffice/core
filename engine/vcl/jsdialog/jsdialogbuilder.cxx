@@ -380,6 +380,15 @@ JSInstanceBuilder::CreateAddressInputBuilder(vcl::Window* pParent, const OUStrin
                                                u"addressinputfield");
 }
 
+std::unique_ptr<JSInstanceBuilder>
+JSInstanceBuilder::CreateNotesPanelBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                           const OUString& rUIFile, sal_uInt64 nKitWindowId)
+{
+    return std::make_unique<JSInstanceBuilder>(nullptr, pParent, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Formulabar, nKitWindowId,
+                                               u"notespanel");
+}
+
 JSInstanceBuilder::~JSInstanceBuilder()
 {
     // tab page closed -> refresh parent window

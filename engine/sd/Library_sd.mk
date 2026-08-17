@@ -503,6 +503,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/zoomlist \
 	sd/source/ui/view/NotesPanelView \
 	sd/source/ui/view/NotesPanelViewShell \
+	sd/source/ui/view/NotesPanelWidget \
 ))
 
 # vim: set noet sw=4 ts=4:

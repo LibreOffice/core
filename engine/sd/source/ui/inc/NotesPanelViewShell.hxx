@@ -12,10 +12,12 @@
 #include "ViewShell.hxx"
 #include "fuoltext.hxx"
 #include <glob.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace sd
 {
 class NotesPanelView;
+class NotesPanelWidget;
 
 class NotesPanelViewShell final : public ViewShell
 {
@@ -90,6 +92,8 @@ public:
 
 private:
     std::unique_ptr<NotesPanelView> mpNotesPanelView;
+    /// Only set when the client renders the notes editor itself rather than receiving tiles.
+    VclPtr<NotesPanelWidget> mpNotesPanelWidget;
     bool mbInitialized = false;
 
     /** Initiates the shell with it's NotesPanelView instance

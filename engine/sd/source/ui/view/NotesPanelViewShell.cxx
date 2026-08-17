@@ -9,6 +9,8 @@
 
 #include <NotesPanelViewShell.hxx>
 #include <NotesPanelView.hxx>
+#include <NotesPanelWidget.hxx>
+#include <COKit/COKit.hxx>
 #include <sal/log.hxx>
 
 #include <DrawController.hxx>
@@ -130,6 +132,7 @@ NotesPanelViewShell::NotesPanelViewShell(ViewShellBase& rViewShellBase, vcl::Win
 
 NotesPanelViewShell::~NotesPanelViewShell()
 {
+    mpNotesPanelWidget.disposeAndClear();
     DisposeFunctions();
     mpFrameView->Disconnect();
     // if ( mxClipEvtLstnr.is() )
@@ -153,6 +156,14 @@ void NotesPanelViewShell::Construct()
 
     mpNotesPanelView = std::make_unique<NotesPanelView>(*GetDocSh(), GetActiveWindow(), *this);
     mpView = mpNotesPanelView.get();
+
+    if (comphelper::COKit::isActive())
+    {
+        mpNotesPanelWidget
+            = VclPtr<NotesPanelWidget>::Create(GetActiveWindow(), *mpNotesPanelView,
+                                               reinterpret_cast<sal_uInt64>(&GetViewShellBase()));
+        mpNotesPanelWidget->SendInitialUpdate();
+    }
 
     SetPool(&GetDoc()->GetPool());
     SetZoom(70);
