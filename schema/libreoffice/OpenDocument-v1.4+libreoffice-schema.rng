@@ -1258,6 +1258,9 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:optional>
           <rng:ref name="loext-qrcode"/>
         </rng:optional>
+        <rng:optional>
+          <rng:ref name="loext-graphic-clip-poly"/>
+        </rng:optional>
 
       </rng:element>
     </rng:define>
@@ -2297,6 +2300,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
       <rng:attribute name="loext:can-add-comment">
         <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:element>
+  </rng:define>
+
+  <rng:define name="loext-graphic-clip-poly">
+    <rng:element name="loext:graphic-clip-poly">
+      <rng:attribute name="svg:d">
+        <rng:ref name="string"/>
       </rng:attribute>
     </rng:element>
   </rng:define>

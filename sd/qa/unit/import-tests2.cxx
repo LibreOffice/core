@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
@@ -1413,6 +1414,22 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf163343_brokenAnimation)
     createSdImpressDoc("odp/tdf163343.odp");
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1),
                          getSdDocShell()->GetDoc()->GetSdPageCount(PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16078_clipPolygonBeforeTheImage)
+{
+    // Given an empty graphic placeholder whose only child is its clip polygon, which is what saving
+    // an Impress deck writes - an empty presentation object has no image for the polygon to follow:
+    createSdImpressDoc("odp/graphic-clip-poly-placeholder.fodp");
+
+    // The polygon still reaches the shape. It used to be read only after a draw:image had made one,
+    // so a placeholder saved to ODF came back unclipped, and the shape of that file is the shape
+    // our own save writes.
+    drawing::PolyPolygonBezierCoords aClip;
+    CPPUNIT_ASSERT(getShapeFromPage(0, 0)->getPropertyValue(u"GraphicClipPolyPolygon"_ustr)
+                   >>= aClip);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aClip.Coordinates.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aClip.Coordinates[0].getLength());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -567,6 +567,8 @@ private:
     bool mbSupportsReplacement;
     SvXMLImportContextRef mxImplContext;
     SvXMLImportContextRef mxReplImplContext;
+    /// The clip polygon a loext:graphic-clip-poly child stated, applied once the shape exists.
+    OUString maGraphicClipPath;
 
 protected:
     /// helper to get the created xShape instance, needs to be overridden
