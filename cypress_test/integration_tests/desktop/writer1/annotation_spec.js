@@ -316,9 +316,16 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('.annotation-button-autosaved').should('not.exist');
 		cy.cGet('.annotation-button-delete').should('not.exist');
 
+		// Tab past the last button cycles back to the text area instead of
+		// leaving the comment popup.
 		cy.realPress('Tab');
-		cy.cGet('.annotation-button-autosaved').should('be.visible');
-		cy.cGet('.annotation-button-delete').should('be.visible');
+		cy.cGet('#annotation-modify-textarea-new:focus-visible');
+		cy.cGet('.annotation-button-autosaved').should('not.exist');
+		cy.cGet('.annotation-button-delete').should('not.exist');
+
+		// Shift+Tab cycles backward the same way.
+		cy.realPress(['Shift', 'Tab']);
+		cy.cGet('#annotation-save-new:focus-visible');
 	});
 
 	it('Global opreations without doc focused', function () {

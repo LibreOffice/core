@@ -1386,6 +1386,11 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
+		if (e.key === 'Tab' && this.isEdit()) {
+			this.cycleEditFocus(e);
+			return;
+		}
+
 		if (e.keyCode === 27 /* Esc */) {
 			// When a comment is being edited and focus is in the textbox,
 			// Esc should not close it but mark it with attention.
@@ -1403,6 +1408,27 @@ export class Comment extends CanvasSectionObject {
 			this.handleCommentPageNav(e);
 			return;
 		}
+	}
+
+	// Tab/Shift+Tab within the modify or reply pane cycles between the text
+	// area and its own buttons, rather than leaving the popup - the "..."
+	// menu button in the comment's author row stays out of this order since
+	// it belongs to the view pane, not the pane currently being edited.
+	private cycleEditFocus(e: KeyboardEvent): void {
+		const props = this.sectionProperties;
+		const inReply = props.nodeReply.style.display !== 'none';
+		const order = inReply
+			? [props.nodeReplyText, props.cancelReplyButton, props.replyButton]
+			: [props.nodeModifyText, props.cancelButton, props.saveButton];
+
+		const current = order.indexOf(document.activeElement as HTMLElement);
+		if (current === -1)
+			return;
+
+		e.preventDefault();
+		e.stopPropagation();
+		const next = (current + (e.shiftKey ? -1 : 1) + order.length) % order.length;
+		order[next].focus();
 	}
 
 	/**
