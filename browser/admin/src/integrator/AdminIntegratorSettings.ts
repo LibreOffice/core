@@ -763,7 +763,7 @@ class SettingIframe {
 		if (this._browserSettingSection) {
 			saves.push(
 				(async () => {
-					this.collectBrowserSettingsFromUI(this._browserSettingSection!);
+					this.collectBrowserSettingsFromUI();
 					const file = new File(
 						[JSON.stringify(this.browserSettingOptions)],
 						'browsersetting.json',
@@ -1526,7 +1526,7 @@ class SettingIframe {
 			['button-primary'],
 			async (button) => {
 				button.disabled = true;
-				this.collectBrowserSettingsFromUI(this._browserSettingSection!);
+				this.collectBrowserSettingsFromUI();
 
 				const file = new File(
 					[JSON.stringify(this.browserSettingOptions)],
@@ -1846,9 +1846,15 @@ class SettingIframe {
 		);
 	}
 
-	private collectBrowserSettingsFromUI(
-		browserSettingSection: HTMLElement,
+	private collectBrowserSettingsFromUI(): void {
+		this.collectBrowserSettingsFromSection(this._browserSettingSection);
+	}
+
+	private collectBrowserSettingsFromSection(
+		browserSettingSection: HTMLElement | null,
 	): void {
+		if (!browserSettingSection) return;
+
 		const inputs = browserSettingSection.querySelectorAll<HTMLInputElement>(
 			'input.checkbox-radio-switch-input,select.dic-input-container',
 		);
