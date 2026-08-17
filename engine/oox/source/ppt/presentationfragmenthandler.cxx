@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <unordered_set>
+
 #include <comphelper/anytostring.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -108,6 +112,73 @@ sal_Int32 getPredefinedClrTokens(PredefinedClrSchemeId eID)
     if (iterator == constPredefinedClrTokens.end())
         return XML_TOKEN_INVALID;
     return iterator->second;
+}
+
+/** Reads a slide master's <p:sldLayoutIdLst> */
+class SldLayoutIdListFragmentHandler final : public FragmentHandler2
+{
+public:
+    SldLayoutIdListFragmentHandler(XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                                   std::vector<OUString>& rRelIds)
+        : FragmentHandler2(rFilter, rFragmentPath)
+        , mrRelIds(rRelIds)
+    {
+    }
+
+    ContextHandlerRef onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs) override
+    {
+        switch (nElement)
+        {
+            case PPT_TOKEN(sldMaster):
+            case PPT_TOKEN(sldLayoutIdLst):
+                return this;
+            case PPT_TOKEN(sldLayoutId):
+                mrRelIds.push_back(rAttribs.getStringDefaulted(R_TOKEN(id)));
+                break;
+        }
+        return nullptr;
+    }
+
+private:
+    std::vector<OUString>& mrRelIds;
+};
+
+/** The layouts of a slide master, in the order the master lists them.
+
+    The relations carry no order at all: a relationship id is opaque, and a producer may assign any
+    id to any part. */
+std::vector<OUString> getLayoutFragmentPaths(XmlFilterBase& rFilter,
+                                             const OUString& rMasterFragmentPath,
+                                             const Relations& rMasterRelations)
+{
+    std::vector<OUString> aRelIds;
+    rFilter.importFragment(
+        new SldLayoutIdListFragmentHandler(rFilter, rMasterFragmentPath, aRelIds));
+
+    std::vector<OUString> aPaths;
+    std::unordered_set<OUString> aNamedRelIds;
+    for (const OUString& rRelId : aRelIds)
+    {
+        OUString aPath = rMasterRelations.getFragmentPathFromRelId(rRelId);
+        if (aPath.isEmpty())
+            continue;
+
+        aPaths.push_back(aPath);
+        aNamedRelIds.insert(rRelId);
+    }
+
+    // A layout the list does not name still gets its master page, as it did before the list was
+    // consulted at all.
+    for (const auto& [rRelId, rRelation] : rMasterRelations)
+    {
+        if (!rRelation.maType.endsWith("relationships/slideLayout")
+            || aNamedRelIds.contains(rRelId))
+            continue;
+
+        aPaths.push_back(rMasterRelations.getFragmentPathFromRelation(rRelation));
+    }
+
+    return aPaths;
 }
 } // end anonymous ns
 
@@ -214,20 +285,15 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
                                                     PowerPointImport& rFilter,
                                                     const OUString& rMasterFragmentPath)
 {
-    OUString aLayoutFragmentPath;
     SlidePersistPtr pMasterPersistPtr;
     Reference< drawing::XDrawPage > xMasterPage;
     Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
     Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_SET_THROW );
     RelationsRef xMasterRelations = rFilter.importRelations( rMasterFragmentPath );
 
-    for (const auto& rEntry : *xMasterRelations)
+    for (const OUString& aLayoutFragmentPath :
+         getLayoutFragmentPaths(rFilter, rMasterFragmentPath, *xMasterRelations))
     {
-        if (!rEntry.second.maType.endsWith("relationships/slideLayout"))
-            continue;
-
-        aLayoutFragmentPath = xMasterRelations->getFragmentPathFromRelation(rEntry.second);
-
         sal_Int32 nIndex;
         if( rFilter.getMasterPages().empty() )
         {
