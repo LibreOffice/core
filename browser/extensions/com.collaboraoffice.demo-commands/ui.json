@@ -125,5 +125,9 @@
                 }
             ]
         }
+    ],
+    "contextMenu": [
+        { "command": "insertWordCount" },
+        { "command": "makeBold", "contexts": ["text-selection"] }
     ]
 }

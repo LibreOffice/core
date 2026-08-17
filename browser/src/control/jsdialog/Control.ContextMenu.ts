@@ -22,6 +22,7 @@ interface MenuEntry {
 	command: string;
 	checked?: string;
 	checktype?: string;
+	icon?: string;
 }
 
 interface CtxtCommandEntry {
@@ -115,6 +116,7 @@ class ContextMenuControl extends JSControl {
 		}
 
 		this._amendContextMenuData(obj);
+		this._appendContributedContextMenuItems(obj.menu);
 
 		const contextMenu = this._createContextMenuStructure(obj);
 
@@ -205,6 +207,12 @@ class ContextMenuControl extends JSControl {
 				return false;
 			}
 
+			if (key.startsWith('ext:')) {
+				app.dispatcher.dispatch(key);
+				this._map?.focus();
+				return false;
+			}
+
 			const unoentry = entry as MenuDefinition;
 			Util.ensureValue(unoentry.uno);
 			const uno =
@@ -263,7 +271,7 @@ class ContextMenuControl extends JSControl {
 					uno: command,
 					type: 'comboboxentry',
 					text: value.name,
-					img: command,
+					img: value.icon || command,
 					class: this._commandClass(command),
 					shortcut: JSDialog.ShortcutsUtil.getShortcutText(command),
 				});
@@ -332,6 +340,70 @@ class ContextMenuControl extends JSControl {
 		}
 	}
 
+	// Appends each loaded extension's contributes.contextMenu entries to the raw menu
+	// array sent by core, before it is turned into the render structure. Every
+	// extension that contributes at least one matching entry gets its own trailing
+	// group, separated from what came before by one separator - an extension never
+	// gets to place an entry among the document's own items. A leading separator
+	// with nothing before it (the first extension's own separator, when core sent no
+	// items at all) is dropped by _createContextMenuStructure's own separator
+	// handling, so this never has to special-case an empty starting menu.
+	private _appendContributedContextMenuItems(menu: MenuEntry[]): void {
+		if (!window.enableExperimentalFeatures) return;
+		const hasTextSelection = !!(
+			app.activeDocument && app.activeDocument.activeView.hasTextSelection
+		);
+		const hasImageSelection = GraphicSelection.hasActiveSelection();
+		const matchesContext = (contexts?: string[]): boolean => {
+			if (!contexts || contexts.length === 0) return true;
+			return contexts.some((context) => {
+				if (context === 'text-selection') return hasTextSelection;
+				if (context === 'image') return hasImageSelection;
+				return false;
+			});
+		};
+
+		const exts = app.map._extensions || {};
+		Object.keys(exts)
+			.sort()
+			.forEach((extId) => {
+				const manifest = exts[extId].options.manifest;
+				const contributed =
+					manifest.contributes && manifest.contributes.contextMenu;
+				if (!contributed || !contributed.length) return;
+				const commands = manifest.contributes.commands || [];
+				const baseUrl = exts[extId].options.baseUrl;
+				let addedSeparator = false;
+				contributed.forEach((contextMenuEntry: any) => {
+					if (!matchesContext(contextMenuEntry.contexts)) return;
+					const command = commands.filter(
+						(c: { id: string }) => c.id === contextMenuEntry.command,
+					)[0];
+					if (!command) {
+						console.warn(
+							'extension ' +
+								extId +
+								': context menu references unknown command "' +
+								contextMenuEntry.command +
+								'"',
+						);
+						return;
+					}
+					if (!addedSeparator) {
+						menu.push({ type: 'separator', command: '', enabled: 'true' });
+						addedSeparator = true;
+					}
+					menu.push({
+						text: command.title,
+						type: 'command',
+						command: 'ext:' + extId + ':' + contextMenuEntry.command,
+						enabled: 'true',
+						icon: command.icon ? baseUrl + command.icon : undefined,
+					});
+				});
+			});
+	}
+
 	private _createContextMenuStructure(obj: any): Record<string, CtxtValueType> {
 		Util.ensureValue(this._map);
 		const docType: string = this._map.getDocType();
@@ -390,7 +462,9 @@ class ContextMenuControl extends JSControl {
 				}
 				isLastItemText = false;
 			} else if (item.type === 'command') {
-				// Custom commands (not .uno:) injected by _amendContextMenuData
+				// A command that isn't a UNO command carries its own display text (and
+				// optionally its own icon) directly, rather than one looked up from a
+				// UNO command name.
 				if (item.command && !item.command.startsWith('.uno:')) {
 					Util.ensureValue(item.text);
 					itemName = item.text;
@@ -398,6 +472,7 @@ class ContextMenuControl extends JSControl {
 						name: _(itemName),
 						isHtmlName: false,
 					};
+					if (item.icon) contextMenu[item.command].icon = item.icon;
 					isLastItemText = true;
 					continue;
 				}

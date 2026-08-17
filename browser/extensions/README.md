@@ -151,6 +151,30 @@ ui.json:
   item whose `type` isn't one of the three above, is dropped with a console warning
   rather than breaking the rest of the tab.
 
+- `contributes.contextMenu` is a flat list of `{ command, contexts? }` entries
+  added to the document's right-click menu:
+
+  ```json
+  "contextMenu": [
+    { "command": "insertDate" },
+    { "command": "makeBold", "contexts": ["text-selection"] }
+  ]
+  ```
+
+  Every extension that contributes at least one matching entry gets its own
+  group at the end of the menu, after a separator - an entry is never
+  inserted among the document's own items, the same "own space only" rule
+  `contributes.notebookbar` follows for the ribbon. `contexts` (optional;
+  omitting it, or passing an empty array, always shows the entry) narrows
+  which right-click menu the entry appears in, using one of:
+  - `"text-selection"` - shown only when text is selected.
+  - `"image"` - shown only when an image or other graphic object is
+    selected.
+
+  The existing top-level `supports` field still decides which document
+  types load the extension at all, so a Calc-only entry belongs in
+  `supports: ["spreadsheet"]`, not in `contexts`.
+
 Command ids are namespaced internally so two extensions can never collide.
 
 ## Local testing

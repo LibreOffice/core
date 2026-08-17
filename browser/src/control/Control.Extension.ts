@@ -178,10 +178,24 @@ interface ExtensionNotebookbarTab {
 	groups: ExtensionNotebookbarGroup[];
 }
 
+// One entry an extension adds to the document's right-click context menu.
+// Every extension's entries render together as their own trailing group, after
+// a separator, at the end of the menu - never interleaved with the document's
+// own items, the same "own space only" rule the notebookbar tab and menu
+// contributions above follow.  `contexts` narrows which right-click menu the
+// entry shows up in; omitting it (or passing an empty array) shows the entry
+// in every right-click menu the manifest's top-level `supports` already
+// allows this extension into.
+interface ExtensionContextMenuEntry {
+	command: string;
+	contexts?: ('text-selection' | 'image')[];
+}
+
 interface ExtensionContributes {
 	commands?: ExtensionCommand[];
 	menus?: { [menuId: string]: string[] };
 	notebookbar?: ExtensionNotebookbarTab[];
+	contextMenu?: ExtensionContextMenuEntry[];
 }
 
 interface ExtensionManifest {
