@@ -66,12 +66,17 @@ class AutoFillPreviewTooltip extends AutoCompletePopup {
 			parseInt(ev.data.celladdress[0]),
 			parseInt(ev.data.celladdress[1]),
 		);
-		ev.data.celladdress.pX -=
-			app.activeDocument.activeLayout.viewedRectangle.pX1 -
-			app.sectionContainer.getDocumentAnchor()[0];
-		ev.data.celladdress.pY -=
-			app.activeDocument.activeLayout.viewedRectangle.pY1 -
-			app.sectionContainer.getDocumentAnchor()[1];
+
+		// documentToViewX/Y already account for a frozen row/column: a cell
+		// in the frozen pane keeps its position regardless of how far the
+		// rest of the sheet has scrolled. Subtracting the raw scroll offset
+		// unconditionally, as this used to do, moved the tooltip for a cell
+		// in the frozen pane as if it had scrolled along with the rest.
+		const layout = app.activeDocument.activeLayout;
+		const viewX = layout.documentToViewX(ev.data.celladdress);
+		const viewY = layout.documentToViewY(ev.data.celladdress);
+		ev.data.celladdress.pX = viewX;
+		ev.data.celladdress.pY = viewY;
 
 		const entry = ev.data.text;
 		let data: PopupData;
