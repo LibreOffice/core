@@ -113,7 +113,7 @@ void ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence(drawingl
     // create media primitive. Always create primitives to allow the
     // decomposition of MediaPrimitive2D to create needed invisible elements for HitTest
     // and/or BoundRect
-    const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);
+    const basegfx::BColor aBackgroundColor(51.0 / 255.0, 51.0 / 255.0, 51.0 / 255.0);
     const OUString& rURL(GetSdrMediaObj().getURL());
     const sal_uInt32 nPixelBorder(4);
     const drawinglayer::primitive2d::Primitive2DReference xRetval(

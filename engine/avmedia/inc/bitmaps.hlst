@@ -10,6 +10,6 @@
 #pragma once
 
 inline constexpr OUString AVMEDIA_BMP_AUDIOLOGO       = u"avmedia/res/avaudiologo.png"_ustr;
-inline constexpr OUString AVMEDIA_BMP_EMPTYLOGO       = u"avmedia/res/avemptylogo.png"_ustr;
+inline constexpr OUString AVMEDIA_BMP_EMPTYLOGO       = u"avmedia/res/play-placeholder.svg"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

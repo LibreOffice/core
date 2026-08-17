@@ -47,7 +47,7 @@ namespace drawinglayer::primitive2d
                     return false;
 
                 static const BitmapChecksum nEmptyLogoChecksum(
-                    Graphic(Bitmap(u"avmedia/res/avemptylogo.png"_ustr)).GetChecksum());
+                    Graphic(Bitmap(u"avmedia/res/play-placeholder.svg"_ustr)).GetChecksum());
                 static const BitmapChecksum nAudioLogoChecksum(
                     Graphic(Bitmap(u"avmedia/res/avaudiologo.png"_ustr)).GetChecksum());
 
@@ -55,9 +55,15 @@ namespace drawinglayer::primitive2d
                 return nChecksum == nEmptyLogoChecksum || nChecksum == nAudioLogoChecksum;
             }
 
-            // Centered, aspect-preserving placement for the fallback icon: up to 3 cm
-            // (in the shape's own 1/100th mm unit) on its longer side, shrunk further if
-            // the shape itself is smaller than that.
+            // The icon takes this share of the shorter side of the shape, so it follows the frame.
+            constexpr double fIconShapeShare(0.25);
+
+            // The sizes it is held between, in the shape's own logic unit: 8 mm and 1.7 cm, which
+            // are about 30 and 64 pixels at 100 percent zoom.
+            constexpr double fIconMinimumSize(800.0);
+            constexpr double fIconMaximumSize(1700.0);
+
+            // Centered, aspect-preserving, and never larger than the shape that holds it.
             basegfx::B2DHomMatrix createPlaceholderIconTransform(
                 const basegfx::B2DHomMatrix& rShapeTransform, const Size& rBitmapSizePixel)
             {
@@ -68,8 +74,10 @@ namespace drawinglayer::primitive2d
                     ? static_cast<double>(rBitmapSizePixel.getWidth()) / rBitmapSizePixel.getHeight()
                     : 1.0);
 
-                constexpr double fMaxSize(3000.0);
-                double fHeight(std::min(fMaxSize, std::min(aShapeRange.getWidth(), aShapeRange.getHeight())));
+                const double fShorterSide(std::min(aShapeRange.getWidth(), aShapeRange.getHeight()));
+
+                double fHeight(std::min(fShorterSide,
+                    std::clamp(fIconShapeShare * fShorterSide, fIconMinimumSize, fIconMaximumSize)));
                 double fWidth(fHeight * fAspect);
 
                 if (fWidth > aShapeRange.getWidth())
