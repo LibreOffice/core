@@ -385,10 +385,9 @@ void PPTShape::addShape(
                     sServiceName = "com.sun.star.presentation.GraphicObjectShape";
                 break;
                 case XML_media :
-                    if (meShapeLocation == Layout)
-                        sServiceName = sOutlinerShapeService;
-                    else
-                        sServiceName = "com.sun.star.presentation.MediaShape";
+                    // As with XML_pic, a real media placeholder on both slides and layouts, so
+                    // the layout's type survives the round-trip and a slide can resolve it.
+                    sServiceName = "com.sun.star.presentation.MediaShape";
                 break;
                 default:
                     if (mnSubType && meShapeLocation == Layout)

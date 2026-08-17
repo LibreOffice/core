@@ -52,7 +52,8 @@ enum PlaceholderType
     Outliner,
     Title,
     Subtitle,
-    Picture
+    Picture,
+    Media
 };
 
 class PowerPointShapeExport;
