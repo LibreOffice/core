@@ -2583,10 +2583,15 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
             SvXMLElementExport aElement(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
-            // optional office:binary-data
+            // draw:image needs either xlink:href or office:binary-data to be complete.
             if (xGraphic.is())
             {
                 mrExport.AddEmbeddedXGraphicAsBase64(xGraphic);
+            }
+            else
+            {
+                SvXMLElementExport aBin(mrExport, XML_NAMESPACE_OFFICE, XML_BINARY_DATA, true,
+                                        true);
             }
             if (!bIsEmptyPresObj)
                 ImpExportText(xShape);
