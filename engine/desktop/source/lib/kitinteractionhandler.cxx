@@ -335,6 +335,7 @@ bool KitInteractionHandler::handlePasswordRequest(const cpo::uno::Sequence<uno::
 {
     bool bPasswordRequestFound = false;
     bool bIsRequestPasswordToModify = false;
+    task::PasswordRequestMode eMode = task::PasswordRequestMode_PASSWORD_ENTER;
 
     OString sUrl;
 
@@ -342,6 +343,7 @@ bool KitInteractionHandler::handlePasswordRequest(const cpo::uno::Sequence<uno::
     if (rRequest >>= passwordRequest)
     {
         bIsRequestPasswordToModify = false;
+        eMode = passwordRequest.Mode;
         sUrl = passwordRequest.Name.toUtf8();
         bPasswordRequestFound = true;
     }
@@ -350,6 +352,7 @@ bool KitInteractionHandler::handlePasswordRequest(const cpo::uno::Sequence<uno::
     if (rRequest >>= passwordRequest2)
     {
         bIsRequestPasswordToModify = passwordRequest2.IsRequestPasswordToModify;
+        eMode = passwordRequest2.Mode;
         sUrl = passwordRequest2.Name.toUtf8();
         bPasswordRequestFound = true;
     }
@@ -358,6 +361,7 @@ bool KitInteractionHandler::handlePasswordRequest(const cpo::uno::Sequence<uno::
     if (rRequest >>= passwordMSRequest)
     {
         bIsRequestPasswordToModify = passwordMSRequest.IsRequestPasswordToModify;
+        eMode = passwordMSRequest.Mode;
         sUrl = passwordMSRequest.Name.toUtf8();
         bPasswordRequestFound = true;
     }
@@ -408,7 +412,8 @@ bool KitInteractionHandler::handlePasswordRequest(const cpo::uno::Sequence<uno::
         }
         else
         {
-            if (bIsRequestPasswordToModify)
+            if (bIsRequestPasswordToModify
+                && eMode != task::PasswordRequestMode_PASSWORD_REENTER)
             {
                 uno::Reference<task::XInteractionPassword2> const xIPW2(cont, uno::UNO_QUERY);
                 if (xIPW2.is())

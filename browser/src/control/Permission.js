@@ -145,6 +145,13 @@ window.L.Map.include({
 			if (extensionInfo && !extensionInfo.canEdit)
 				return;
 		}
+
+		// The document has a separate password for editing, and each view has to enter it itself.
+		if (this._docHasPasswordToModify && !this._modifyPasswordProvided) {
+			this._askForPasswordToModify(false);
+			return;
+		}
+
 		this.options.canTryLock = false; // don't respond to lockfailed anymore
 		$('#mobile-edit-button').hide();
 		this._enterEditMode('edit');
@@ -165,6 +172,48 @@ window.L.Map.include({
 			&& !window.keyboard.hardwareKeyboardAttached;
 		if (!holdBackFocusForOnscreenKeyboard)
 			app.layoutingService.onDrain(this.focus.bind(this));
+	},
+
+	// Ask for the password that makes the document editable, and continue into
+	// edit mode once it is sent.
+	_askForPasswordToModify: function (wrongPassword) {
+		const msg = wrongPassword
+			? _('Wrong password provided. Please try again.')
+			: _('Document requires a password to edit.');
+
+		const that = this;
+
+		// On a retry after a wrong password the button was hidden when edit
+		// mode was first entered. The document is read-only while this prompt
+		// is open, so bring the edit button back.
+		if (window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
+			const button = $('#mobile-edit-button');
+			button.css('display', 'flex');
+			button.off('click');
+			button.on('click', function () {
+				that._switchToEditMode();
+			});
+		}
+
+		this.uiManager.showInputModal(
+			'modify-password-popup',
+			'',
+			msg,
+			'',
+			_('OK'),
+			function (data) {
+				if (data) {
+					app.socket.sendMessage(
+						'editwithpassword password=' + encodeURIComponent(data),
+					);
+				} else {
+					setTimeout(function() {
+						that._askForPasswordToModify(true);
+					}, 0);
+				}
+			},
+			true,
+		);
 	},
 
 	_offerSaveAs: function() {

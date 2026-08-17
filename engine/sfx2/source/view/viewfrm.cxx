@@ -297,6 +297,19 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if (pSh->isEditDocLocked())
                 break;
 
+            // A request to make the document editable while it already is needs no work.
+            if (rReq.GetSlot() == SID_EDITDOC)
+            {
+                const SfxBoolItem* pEditItem = rReq.GetArg(SID_EDITDOC);
+                if (pEditItem && pEditItem->GetValue() && !pSh->IsReadOnly()
+                    && !pSh->IsReadOnlyUI())
+                {
+                    rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), true));
+                    rReq.Done(true);
+                    return;
+                }
+            }
+
             // Only change read-only UI and remove info bar when we succeed
             struct ReadOnlyUIGuard
             {

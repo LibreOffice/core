@@ -113,6 +113,7 @@ ChildSession::ChildSession(const std::shared_ptr<ProtocolHandlerInterface>& prot
     , _viewId(-1)
     , _currentPartUniqueId(-1)
     , _isDocLoaded(false)
+    , _isDocPasswordToModifyEntered(false)
     , _copyToClipboard(false)
     , _canonicalViewId(CanonicalViewId::Invalid)
     , _isDumpingTiles(false)
@@ -599,6 +600,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
     {
         return getStatus();
     }
+    else if (tokens.equals(0, "editwithpassword"))
+    {
+        return editWithPassword(tokens);
+    }
     else if (tokens.equals(0, "getslide"))
     {
         return renderSlide(tokens);
@@ -974,6 +979,11 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             if (tokens.size() > 1 && getTokenString(tokens[1], "value", value))
                 readOnly = (value == "true");
 
+            // A document with a password to modify keeps this view read-only
+            // until the view has entered that password.
+            if (_docManager->hasPasswordToModify() && !_isDocPasswordToModifyEntered)
+                readOnly = true;
+
             if (getLOKitDocument())
             {
                 getLOKitDocument()->setView(_viewId);
@@ -1183,6 +1193,12 @@ bool ChildSession::loadDocument(const StringVector& tokens)
         return false;
     }
 
+    // The document has an edit password, so this view is read-only. The client
+    // can provide the password with an 'editwithpassword' message to make this
+    // view editable.
+    if (_docManager->hasPasswordToModify() && !_isDocPasswordToModifyEntered)
+        sendTextFrame("haspasswordtomodify: true");
+
     // Inform everyone (including this one) about updated view info
     _docManager->notifyViewInfo();
     sendTextFrame("editor: " + std::to_string(_docManager->getEditorId()));
@@ -1332,6 +1348,13 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
     bool success;
     std::string command;
     if (tokens.size() != 2 || !getTokenString(tokens[1], "command", command))
+    {
+        sendTextFrameAndLogError("error: cmd=commandvalues kind=syntax");
+        return false;
+    }
+
+    // Password checks go through the 'editwithpassword' message only.
+    if (command.rfind(".uno:VerifyPasswordToModify", 0) == 0)
     {
         sendTextFrameAndLogError("error: cmd=commandvalues kind=syntax");
         return false;
@@ -2606,6 +2629,58 @@ bool ChildSession::unoCommand(const StringVector& tokens)
 
     getLOKitDocument()->postUnoCommand(tokens[1].c_str(), saveArgs.c_str(), notify);
     return true;
+}
+
+bool ChildSession::editWithPassword(const StringVector& tokens)
+{
+    if (isReadOnly() || !_docManager->hasPasswordToModify())
+    {
+        sendTextFrameAndLogError("error: cmd=editwithpassword kind=notallowed");
+        return false;
+    }
+
+    std::string password;
+    if (tokens.size() < 2 || !getTokenString(tokens[1], "password", password) || password.empty())
+    {
+        sendTextFrameAndLogError("error: cmd=editwithpassword kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+
+    // Check the provided password against the one stored in the document.
+    const std::string verifyCommand = ".uno:VerifyPasswordToModify?password=" + password;
+    const std::string verifyResult(getLOKitDocument()->getCommandValues(verifyCommand.c_str()));
+    if (verifyResult.find("true") == std::string::npos)
+    {
+        sendTextFrameAndLogError("error: cmd=editwithpassword kind=wrongpassword");
+        return false;
+    }
+
+    // The password is right. Only this view becomes editable.
+    _isDocPasswordToModifyEntered = true;
+    getLOKitDocument()->setViewReadOnly(_viewId, false);
+
+    const std::string stillLocked(
+        getLOKitDocument()->getCommandValues(".uno:HasPasswordToModify"));
+    if (stillLocked.find("true") != std::string::npos)
+    {
+        _docManager->setDocPasswordToModify(Uri::decode(password));
+        getLOKitDocument()->postUnoCommand(".uno:EditDoc?Editable:bool=true", "", true);
+
+        const std::string lockedAfterReopen(
+            getLOKitDocument()->getCommandValues(".uno:HasPasswordToModify"));
+        if (lockedAfterReopen.find("true") != std::string::npos)
+        {
+            // The reopen did not go through, so this view stays read-only.
+            _isDocPasswordToModifyEntered = false;
+            getLOKitDocument()->setViewReadOnly(_viewId, true);
+            sendTextFrameAndLogError("error: cmd=editwithpassword kind=failed");
+            return false;
+        }
+    }
+
+    return sendTextFrame("editwithpassword: success");
 }
 
 bool ChildSession::selectText(const StringVector& tokens,

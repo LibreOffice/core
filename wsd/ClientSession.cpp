@@ -1479,6 +1479,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "setpage") ||
              tokens.equals(0, "uno") ||
              tokens.equals(0, "urp") ||
+             tokens.equals(0, "editwithpassword") ||
              tokens.equals(0, "useractive") ||
              tokens.equals(0, "userinactive") ||
              tokens.equals(0, "paintwindow") ||

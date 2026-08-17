@@ -316,6 +316,13 @@ public:
 
     DocumentPasswordType getDocPasswordType() const { return _docPasswordType; }
 
+    /// Store a checked password to modify. It answers the next password-to-modify
+    /// request of the document, and is consumed by that answer.
+    void setDocPasswordToModify(const std::string& password);
+
+    /// Whether the loaded document carries a separate password required to modify it.
+    bool hasPasswordToModify() const { return _hasPasswordToModify; }
+
     void updateActivityHeader() const;
 
     /// Really important that if we drop, we re-start for the kit.
@@ -526,6 +533,15 @@ private:
     bool _isDocPasswordProtected;
     // Whether password is required to view the document, or modify it
     DocumentPasswordType _docPasswordType;
+
+    // Whether the loaded document carries a separate password required to modify it
+    bool _hasPasswordToModify;
+
+    // A checked password to modify, waiting to answer the document's next
+    // password-to-modify request
+    std::string _docPasswordToModify;
+    // Whether a password to modify is stored
+    bool _haveDocPasswordToModify;
 
     std::atomic<bool> _stop;
 

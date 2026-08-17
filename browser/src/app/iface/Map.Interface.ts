@@ -145,8 +145,14 @@ interface MapInterface extends Evented {
 
 	_shouldStartReadOnly(): boolean;
 	_switchToEditMode(): void;
+	_proceedEditMode(): void;
+	_askForPasswordToModify(wrongPassword: boolean): void;
 
 	_permission: 'edit' | 'readonly' | 'view';
+
+	// The document has a separate password for editing.
+	_docHasPasswordToModify: boolean;
+	_modifyPasswordProvided: boolean;
 
 	toolbarUpTemplate: any;
 	menubar: Menubar;

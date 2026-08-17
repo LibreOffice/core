@@ -98,6 +98,7 @@
 #include <comphelper/random.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/legacyunoapinotice.hxx>
@@ -7484,15 +7485,86 @@ static void doc_resetSelection(COKitDocument* pThis)
     pDoc->resetSelection();
 }
 
+/// Whether the document carries a separate password required to modify it.
+static bool hasPasswordToModify(const SfxObjectShell* pObjectShell)
+{
+    return pObjectShell->GetModifyPasswordHash() // binary DOC/XLS/PPT formats
+           || pObjectShell->GetModifyPasswordInfo().hasElements(); // ODF/OOXML
+}
+
+/// Whether the document has a password to modify that has not been entered yet.
+static bool hasPendingPasswordToModify(const SfxObjectShell* pObjectShell)
+{
+    return hasPasswordToModify(pObjectShell) && !pObjectShell->IsModifyPasswordEntered();
+}
+
 static std::string getDocReadOnly(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
     if (!pObjectShell)
         return {};
 
+    bool bReadOnly = pObjectShell->IsLoadReadonly() || hasPendingPasswordToModify(pObjectShell);
+    if (!bReadOnly && hasPasswordToModify(pObjectShell))
+    {
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        bReadOnly = pViewShell && pViewShell->IsKitReadOnlyView();
+    }
+
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:ReadOnly");
-    aTree.put("success", pObjectShell->IsLoadReadonly());
+    aTree.put("success", bReadOnly);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
+    return aStream.str();
+}
+
+static std::string getDocHasPasswordToModify(COKitDocument* pThis)
+{
+    SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
+    if (!pObjectShell)
+        return {};
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:HasPasswordToModify");
+    aTree.put("success", hasPendingPasswordToModify(pObjectShell));
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
+    return aStream.str();
+}
+
+static std::string verifyDocPasswordToModify(COKitDocument* pThis, std::u16string_view rPassword)
+{
+    SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
+    if (!pObjectShell)
+        return {};
+
+    const cpo::uno::Sequence<css::beans::PropertyValue> aInfo
+        = pObjectShell->GetModifyPasswordInfo();
+
+    bool bCorrect = false;
+    if (aInfo.hasElements()) // ODF/OOXML
+    {
+        bCorrect = comphelper::DocPasswordHelper::IsModifyPasswordCorrect(rPassword, aInfo);
+    }
+    else if (pObjectShell->GetModifyPasswordHash()) // binary DOC/XLS/PPT formats
+    {
+        const SfxMedium* pMedium = pObjectShell->GetMedium();
+        const std::shared_ptr<const SfxFilter> pFilter
+            = pMedium ? pMedium->GetFilter() : nullptr;
+        if (pFilter)
+        {
+            const bool bWriter = pFilter->GetServiceName() == "com.sun.star.text.TextDocument";
+            bCorrect = SfxMedium::CreatePasswordToModifyHash(rPassword, bWriter)
+                       == pObjectShell->GetModifyPasswordHash();
+        }
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:VerifyPasswordToModify");
+    aTree.put("success", bCorrect);
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false /* pretty */);
@@ -8056,6 +8128,25 @@ static std::string doc_getCommandValues(COKitDocument* pThis, const char* pComma
     if (aCommand == ".uno:ReadOnly")
     {
         return getDocReadOnly(pThis);
+    }
+    else if (aCommand == ".uno:HasPasswordToModify")
+    {
+        return getDocHasPasswordToModify(pThis);
+    }
+    else if (aCommand.starts_with(".uno:VerifyPasswordToModify"))
+    {
+        // The password parameter is URL-encoded, so it can contain any character.
+        static constexpr std::string_view aPrefix = ".uno:VerifyPasswordToModify?password=";
+        if (!aCommand.starts_with(aPrefix))
+        {
+            SetLastExceptionMsg(u"Missing password parameter for .uno:VerifyPasswordToModify"_ustr);
+            return {};
+        }
+
+        const OUString sEncoded = OUString::fromUtf8(aCommand.substr(aPrefix.size()));
+        const OUString sPassword
+            = rtl::Uri::decode(sEncoded, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+        return verifyDocPasswordToModify(pThis, sPassword);
     }
     else if (aCommand == ".uno:ExternalLinksDisabled")
     {

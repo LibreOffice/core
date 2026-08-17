@@ -92,6 +92,7 @@ all_la_unit_tests = \
 	unit-wopi-temp.la \
 	unit-wopi-transient-connect-fault.la \
 	unit-password-protected.la \
+	unit-password-to-modify.la \
 	unit-calc.la \
 	unit-rendering-options.la \
 	unit-prefork.la \
@@ -429,6 +430,8 @@ unit_invalidation_la_SOURCES = UnitInvalidation.cpp
 unit_invalidation_la_LIBADD = $(CPPUNIT_LIBS)
 unit_password_protected_la_SOURCES = UnitPasswordProtected.cpp
 unit_password_protected_la_LIBADD = $(CPPUNIT_LIBS)
+unit_password_to_modify_la_SOURCES = UnitPasswordToModify.cpp
+unit_password_to_modify_la_LIBADD = $(CPPUNIT_LIBS)
 unit_render_search_result_la_SOURCES = UnitRenderSearchResult.cpp
 unit_render_search_result_la_LIBADD = $(CPPUNIT_LIBS)
 unit_render_shape_la_SOURCES = UnitRenderShape.cpp

@@ -292,6 +292,8 @@ class Socket {
 
 	public connect(socket: SockInterface): void {
 		const map = this._map;
+		map._docHasPasswordToModify = false;
+		map._modifyPasswordProvided = false;
 		map.options.docParams['permission'] = app.getPermission();
 		if (this.socket) {
 			this.close();
@@ -1305,6 +1307,16 @@ class Socket {
 			return;
 		} else if (textMsg.startsWith('filemode:')) {
 			this._onFileModeMsg(textMsg);
+		} else if (textMsg.startsWith('haspasswordtomodify:')) {
+			this._map._docHasPasswordToModify = true;
+			this._map._modifyPasswordProvided = false;
+			return;
+		} else if (textMsg.startsWith('editwithpassword:')) {
+			if (textMsg.substring('editwithpassword:'.length).trim() === 'success') {
+				this._map._modifyPasswordProvided = true;
+				this._map._proceedEditMode();
+			}
+			return;
 		} else if (textMsg.startsWith('lockfailed:')) {
 			this._map.onLockFailed(textMsg.substring('lockfailed:'.length).trim());
 			return;
@@ -2441,6 +2453,22 @@ class Socket {
 		) {
 			const msg = _('Only the document owner can change the password.');
 			this._map.uiManager.showInfoModal('cool_alert', '', msg, '', _('OK'));
+			return true; // caller should exit immediately.
+		} else if (
+			textMsg.startsWith('error:') &&
+			command.errorCmd === 'editwithpassword'
+		) {
+			this._map.hideBusy();
+			this._map._modifyPasswordProvided = false;
+			if (command.errorKind === 'wrongpassword') {
+				this._map._askForPasswordToModify(true);
+			} else {
+				const msg =
+					command.errorKind === 'notallowed'
+						? _('You do not have permission to edit this document.')
+						: _('The document could not be made editable.');
+				this._map.uiManager.showInfoModal('cool_alert', '', msg, '', _('OK'));
+			}
 			return true; // caller should exit immediately.
 		} else if (textMsg.startsWith('error:') && !this._map._docLayer) {
 			textMsg = textMsg.substring(6);
