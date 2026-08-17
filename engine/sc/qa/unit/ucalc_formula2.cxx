@@ -7611,6 +7611,25 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionStaysInsideImplicitIntersectionWrapp
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorsApplyToTheWholeExpression)
+{
+    // The # and the % follow every operator that binds tighter than they do, so
+    // each takes the whole expression in front of it as its operand rather than
+    // the last part of it.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1~B2#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"(A1,B2)%"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1~B2%"_ustr));
+
+    // The range operator binds tighter still, and a range built with it goes
+    // inside the wrapper whole.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1:INDEX(B1:B10,5))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1:INDEX(B1:B10;5)#"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
 {
     // The list's opening parenthesis moves the text behind it along, and a wrapper
