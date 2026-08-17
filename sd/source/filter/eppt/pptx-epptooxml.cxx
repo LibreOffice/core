@@ -2203,19 +2203,12 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     pFS->startElementNS(XML_p, XML_cSld);
 
-    if (GetEquivalentMasterPage(nPageNum) != nPageNum)
-    {
-        if (aXBackgroundPropSet)
-            ImplWriteBackground(pFS, aXBackgroundPropSet);
-        WriteShapeTree(pFS, MASTER, true, /*bSlideMasterPart=*/true);
-    }
-    else
-    {
-        // Minimal shape tree, the actual one will be written in the layout file.
-        pFS->startElementNS(XML_p, XML_spTree);
-        pFS->write(MAIN_GROUP);
-        pFS->endElementNS(XML_p, XML_spTree);
-    }
+    // The master carries its own shapes even where the layouts repeat them, as PowerPoint
+    // authors it: an empty master leaves nothing to inherit from and nothing to edit once for
+    // every layout.
+    if (aXBackgroundPropSet)
+        ImplWriteBackground(pFS, aXBackgroundPropSet);
+    WriteShapeTree(pFS, MASTER, true, /*bSlideMasterPart=*/true);
 
     pFS->endElementNS(XML_p, XML_cSld);
 
@@ -2328,10 +2321,17 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     for (auto nLayout : aLayouts)
     {
+        // GetEquivalentMasterPage says SAL_MAX_UINT32 for a master with no equivalent, its own
+        // index for the one representing a group, and a lower index for a duplicate - and a
+        // duplicate has returned above. So a master of its own gets the layout its autolayout
+        // describes, while one standing for a group hands each layout the pages' own content.
         if (GetEquivalentMasterPage(nPageNum) == nPageNum)
             ImplWritePPTXLayoutWithContent(nLayout, nPageNum, aSlideName, aXBackgroundPropSet);
         else
+        {
+            assert(GetEquivalentMasterPage(nPageNum) == SAL_MAX_UINT32);
             ImplWritePPTXLayout(nLayout, nPageNum, aSlideName);
+        }
         AddLayoutIdAndRelation(pFS, GetLayoutFileId(nLayout, nPageNum));
     }
 
@@ -2733,7 +2733,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
         mpFS->singleElementNS(
             XML_p, XML_ph, XML_type, pType, XML_idx,
             OString::number(
-                static_cast<PowerPointExport*>(GetFB())->CreateNewPlaceholderIndex(xShape)),
+                static_cast<PowerPointExport*>(GetFB())->GetOrCreatePlaceholderIndex(xShape)),
                     XML_hasCustomPrompt, sax_fastparser::UseIf("1", bUseCustomPrompt));
     }
     else
@@ -3282,10 +3282,15 @@ void PowerPointExport::WriteLayoutContentPlaceholders(PowerPointShapeExport& rDM
     }
 }
 
-sal_Int32 PowerPointExport::CreateNewPlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
+sal_Int32 PowerPointExport::GetOrCreatePlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
 {
-    maPlaceholderShapeToIndexMap.insert({rXShape, mnPlaceholderIndexMax});
-    return mnPlaceholderIndexMax++;
+    // One index per shape, however many parts write it: a slide's placeholder pairs with the
+    // layout's by type and index, so handing the second writer a fresh number breaks that pair.
+    const auto [aIter, bInserted]
+        = maPlaceholderShapeToIndexMap.try_emplace(rXShape, mnPlaceholderIndexMax);
+    if (bInserted)
+        ++mnPlaceholderIndexMax;
+    return aIter->second;
 }
 
 Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const PlaceholderType eType,

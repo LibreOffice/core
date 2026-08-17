@@ -2450,6 +2450,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16078_placeholderKeepsItsOutlin
     assertXPath(pLayout, "//p:sp[p:nvSpPr/p:nvPr/p:ph/@type='pic']/p:spPr/a:prstGeom", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16080_masterKeepsItsPlaceholders)
+{
+    // Given a deck of one master and eleven layouts, so one Impress master page stands for the
+    // whole group:
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+    save(TestFilter::PPTX);
+
+    // The master part carries its own placeholders. Without the fix it held a shape tree with
+    // nothing in it, so PowerPoint offered an empty slide master: nothing to inherit from, and
+    // an edit meant for every layout had to be repeated on each of them.
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    static constexpr OString aTree("/p:sldMaster/p:cSld/p:spTree"_ostr);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='title']", 1);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='dt']", 1);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='ftr']", 1);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='sldNum']", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16079_dateTimeField)
 {
     // Given a deck whose date placeholders hold an automatically updated date:
