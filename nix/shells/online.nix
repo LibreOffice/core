@@ -1,0 +1,64 @@
+{
+  pkgs,
+  ...
+}:
+pkgs.mkShell {
+  nativeBuildInputs = with pkgs; [
+    autoconf
+    automake
+    bear
+    bison
+    ccache
+    chromium
+    curl
+    cypress
+    flex
+    fontconfig
+    git
+    gperf
+    jdk17
+    meson
+    ninja
+    nodejs_latest
+    perl
+    pkg-config
+    python3Packages.lxml
+    python3Packages.polib
+    typescript-language-server
+    unzip
+    vscode-langservers-extracted
+    zip
+  ];
+  buildInputs = with pkgs; [
+    atk.dev
+    cacert
+    cairo.dev
+    cups
+    glib.dev
+    gtk3.dev
+    libdatrie
+    libepoxy
+    libice
+    libselinux
+    libsepol
+    libsm
+    libsysprof-capture
+    libthai
+    libtool
+    libuuid
+    libx11
+    libxcb
+    libxdmcp
+    libxext
+    libxkbcommon
+    libxrandr
+    libxrender
+    libxtst
+    pam
+    pcre2
+    systemdLibs
+    xhost
+  ];
+
+  TMPDIR = "/tmp";
+}

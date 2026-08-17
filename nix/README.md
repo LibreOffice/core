@@ -14,10 +14,10 @@ the size of Collabora Online.
 To leave open the option of adding package builds with nix, shells are stored
 under the `shells` option. They are not separated by system (we enter the shell
 for the current system) so to enter a given shell you only need to provide its
-name. For example, to enter the ios shell you would run:
+name. For example, to enter the online shell you would run:
 
 ```
-nix-shell . -A shells.ios
+nix-shell . -A shells.online
 ```
 
 Our shells provide all the tools needed to build Collabora Online, so you can
@@ -26,13 +26,14 @@ some development tools (e.g. ripgrep, your editor, etc.) which are not installed
 in the shells
 
 ```
-nix-shell . -A shells.ios --pure
+nix-shell . -A shells.online --pure
 ```
 
 ## All shells
 
 | Shell          | Description                                                                                                                           |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| ios            | Used for building the Collabora Office iOS apps                                                                                       |
 | android        | Used for building the architecture-universal Collabora Office Android apps                                                            |
 | android-{arch} | Used for building the Collabora Office Android apps for a specific Android architecture (`arm64-v8a`, `armeabi-v7a`, `x86`, `x86_64`) |
+| ios            | Used for building the Collabora Office iOS apps                                                                                       |
+| online         | Used for building the Collabora Online server (e.g. for use with an integrator or development purposes)                               |

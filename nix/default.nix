@@ -10,7 +10,6 @@ let
 in
 {
   shells = {
-    ios = import shells/ios.nix { inherit pkgs; };
     android = import shells/android.nix { inherit pkgs; };
     android-arm64-v8a = import shells/android.nix {
       inherit pkgs;
@@ -28,5 +27,7 @@ in
       inherit pkgs;
       abis = [ "x86_64" ];
     };
+    ios = import shells/ios.nix { inherit pkgs; };
+    online = import shells/online.nix { inherit pkgs; };
   };
 }
