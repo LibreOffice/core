@@ -289,7 +289,12 @@ std::string HostUtil::getNewUri(const Poco::URI& uri)
         return newUri.getPath();
     }
 
-    return newUri.getScheme() + "://" + newUri.getHost() + ':' + std::to_string(newUri.getPort()) +
+    // Poco::URI::getHost() returns an IPv6 literal without its brackets, so bracket it back
+    // here; otherwise the colons inside it would be indistinguishable from the port separator.
+    const std::string& host = newUri.getHost();
+    const std::string bracketedHost = host.find(':') != std::string::npos ? '[' + host + ']' : host;
+
+    return newUri.getScheme() + "://" + bracketedHost + ':' + std::to_string(newUri.getPort()) +
            newUri.getPath();
 }
 

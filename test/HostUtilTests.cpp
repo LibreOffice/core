@@ -29,12 +29,14 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testParseAlias);
     CPPUNIT_TEST(testParseHostUri);
     CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
+    CPPUNIT_TEST(testGetNewUriBracketsIPv6Host);
 
     CPPUNIT_TEST_SUITE_END();
 
     void testParseAlias();
     void testParseHostUri();
     void testFirstHostTrustedOnlyInFirstMode();
+    void testGetNewUriBracketsIPv6Host();
 
 public:
     /// Clear the parsed host state, matching the empty state it starts with, and
@@ -183,6 +185,26 @@ void HostUtilTests::testFirstHostTrustedOnlyInFirstMode()
     LOK_ASSERT_EQUAL_STR(uri.getAuthority(), HostUtil::FirstHost);
     LOK_ASSERT_MESSAGE("first mode trusts the connecting host",
                        HostUtil::allowedWopiHost(uri.getHost()));
+}
+
+void HostUtilTests::testGetNewUriBracketsIPv6Host()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    config->setString("storage.wopi[@allow]", "true");
+
+    const ScopedHostConfig scopedConfig(config.get());
+    resetHostState(true);
+
+    // An IPv6 host must keep its brackets, or the port separator is indistinguishable
+    // from the colons inside the address.
+    const Poco::URI uri("https://[3fff:f1:abcd::1]:8443/wopi/files/1");
+    LOK_ASSERT_EQUAL_STR("https://[3fff:f1:abcd::1]:8443/wopi/files/1", HostUtil::getNewUri(uri));
+
+    // An ordinary IPv4/hostname URI is unaffected.
+    const Poco::URI uriV4("https://example.com:8443/wopi/files/1");
+    LOK_ASSERT_EQUAL_STR("https://example.com:8443/wopi/files/1", HostUtil::getNewUri(uriV4));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HostUtilTests);
