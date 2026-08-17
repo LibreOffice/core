@@ -216,7 +216,9 @@ SvxDateFormat TextField::getLODateFormat(std::u16string_view rDateTimeType)
     if( aDateTimeNum.empty() ) // "datetime"
         return SvxDateFormat::StdSmall;
 
-    int nDateTimeNum = o3tl::toInt32(aDateTimeNum);
+    // "datetimeFigureOut", which is what PowerPoint writes in a date placeholder, is an alias of
+    // datetime1: MS-OI29500 part 1, 21.1.2.2.4 (fld).
+    int nDateTimeNum = aDateTimeNum == u"FigureOut" ? 1 : o3tl::toInt32(aDateTimeNum);
 
     switch( nDateTimeNum )
     {

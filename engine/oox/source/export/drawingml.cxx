@@ -3003,6 +3003,12 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                     rXPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
                     aFieldValue = GetDatetimeTypeFromDate(static_cast<SvxDateFormat>(nNumFmt));
                 }
+                else if(aFieldKind == "DateTime")
+                {
+                    // The date/time field of a header/footer area carries no format of its own -
+                    // the page holds it - and "datetime" seems a perfect fit (see MS-OI29500).
+                    aFieldValue = u"datetime"_ustr;
+                }
                 else if(aFieldKind == "ExtTime")
                 {
                     sal_Int32 nNumFmt = -1;

@@ -2346,6 +2346,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16078_placeholderKeepsItsOutlin
     assertXPath(pLayout, "//p:sp[p:nvSpPr/p:nvPr/p:ph/@type='pic']/p:spPr/a:prstGeom", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16079_dateTimeField)
+{
+    // Given a deck whose date placeholders hold an automatically updated date:
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+    save(TestFilter::PPTX);
+
+    // The placeholder keeps a field. Without the fix it held our own display string as literal
+    // text, so PowerPoint showed "<date/time>" where the original showed a date. The type is the
+    // one that leaves the format to the reader, which is what a field holding none asks for - the
+    // alias PowerPoint writes here stands for a fixed MM/DD/YYYY.
+    xmlDocUniquePtr pLayout = parseExportedLayoutNamed(u"Title Slide");
+    assertXPath(pLayout, "//p:sp[p:nvSpPr/p:nvPr/p:ph/@type='dt']/p:txBody/a:p/a:fld", "type",
+                u"datetime");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
