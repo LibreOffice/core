@@ -393,7 +393,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	bib \
 	chartcore \
 	chartcontroller \
-	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	configmgr \
 	ctl \

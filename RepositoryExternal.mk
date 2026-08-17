@@ -4268,6 +4268,11 @@ endef
 
 endif # SYSTEM_BZIP2
 
+
+$(eval $(call gb_Helper_register_external_libraries_for_install,CLEW,OOOLIBS,ooo,\
+	$(call gb_Helper_optional,OPENCL,clew) \
+))
+
 define gb_LinkTarget__use_clew
 $(call gb_LinkTarget_set_include,$(1), \
     -I$(SRCDIR)/external/clew/source/include \
