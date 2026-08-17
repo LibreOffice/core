@@ -5105,11 +5105,11 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
     }
 }
 
-OUString SdXImpressDocument::getPartInfo(int nPart)
+std::string SdXImpressDocument::getPartInfo(int nPart)
 {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
-        return OUString();
+        return {};
 
     // In master view the parts are the master pages, so describe the master page at
     // that index, the same list getPartName and getPartHash read in that mode.
@@ -5137,7 +5137,7 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     else
         SAL_WARN("sd", "getPartInfo request for SdPage " << nPart << " that does not exist!");
 
-    return OStringToOUString(jsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
+    return jsonWriter.finishAndGetAsStdString();
 }
 
 sal_uInt64 SdXImpressDocument::getPartUniqueId(int nPart, int nMode)

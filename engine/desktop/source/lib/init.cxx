@@ -4831,7 +4831,7 @@ void COKitDocumentImpl::setPart(int nPart)
     doc_setPartImpl(this, nPart, true);
 }
 
-char* COKitDocumentImpl::getPartInfo(int nPart)
+std::string COKitDocumentImpl::getPartInfo(int nPart)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::getPartInfo");
 
@@ -4840,10 +4840,10 @@ char* COKitDocumentImpl::getPartInfo(int nPart)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
-    return convertOUString(pDoc->getPartInfo(nPart));
+    return pDoc->getPartInfo(nPart);
 }
 
 unsigned long long COKitDocumentImpl::getPartUniqueId(int nPart, int nMode)

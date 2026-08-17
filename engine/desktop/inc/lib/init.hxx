@@ -350,7 +350,7 @@ namespace desktop {
         void setViewLanguage(int nId, const char* language) override;
         void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
                                          const char* pText) override;
-        char* getPartInfo(int nPart) override;
+        std::string getPartInfo(int nPart) override;
         void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
                             const int width, const int height, const double dpiscale) override;
         bool insertCertificate(const unsigned char* pCertificateBinary,

@@ -676,11 +676,11 @@ int ScModelObj::getPart()
     return pViewData ? pViewData->GetViewShell()->getPart() : 0;
 }
 
-OUString ScModelObj::getPartInfo( int nPart )
+std::string ScModelObj::getPartInfo( int nPart )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
-        return OUString();
+        return {};
     ScDocument& rDocument = pViewData->GetDocument();
     const bool bIsVisible = rDocument.IsVisible(nPart);
     const bool bIsProtected = rDocument.IsTabProtected(nPart);
@@ -742,7 +742,7 @@ OUString ScModelObj::getPartInfo( int nPart )
     if (aTabBgColor != COL_AUTO)
         jsonWriter.put("color", aTabBgColor.AsRGBHexString());
 
-    return OStringToOUString(jsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
+    return jsonWriter.finishAndGetAsStdString();
 }
 
 OUString ScModelObj::getPartName( int nPart )

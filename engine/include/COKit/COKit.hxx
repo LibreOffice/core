@@ -2136,7 +2136,7 @@ struct COKitDocument
     virtual void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
                                              const char* pText) = 0;
 
-    virtual char* getPartInfo(int nPart) = 0;
+    virtual std::string getPartInfo(int nPart) = 0;
 
     /// Paints window with given id to the buffer with the give DPI scale
     /// (every pixel is dpiscale-times larger).

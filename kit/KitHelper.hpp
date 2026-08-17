@@ -49,9 +49,7 @@ namespace LOKitHelper
 
     inline std::string getPartData(COKitDocument *loKitDocument, int part)
     {
-        ScopedString ptrToData(loKitDocument->getPartInfo(part));
-        std::string result(ptrToData.get());
-        return result;
+        return loKitDocument->getPartInfo(part);
     }
 
     inline std::string MapToJSONString(std::unordered_map<std::string, std::string> &map)

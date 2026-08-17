@@ -615,10 +615,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testRedlineRenderModePartInfo)
     pWrtShell->ApplyViewOptions(aOpt);
 
     // When getting the COKit part info:
-    OUString aPartInfo = getSwTextDoc()->getPartInfo(0);
+    std::string aPartInfo = getSwTextDoc()->getPartInfo(0);
 
     // Then make sure we get the correct value:
-    std::stringstream aStream((std::string(aPartInfo.toUtf8())));
+    std::stringstream aStream(aPartInfo);
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     // Without the accompanying fix in place, this test would have failed with:
@@ -634,10 +634,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCommentOnSecondPagePartInfo)
 
     // When getting the COKit part info right after the load, while the layout pass that builds the
     // comment windows is still pending:
-    OUString aPartInfo = getSwTextDoc()->getPartInfo(0);
+    std::string aPartInfo = getSwTextDoc()->getPartInfo(0);
 
     // Then make sure the part info reports that the document has comments:
-    std::stringstream aStream((std::string(aPartInfo.toUtf8())));
+    std::stringstream aStream(aPartInfo);
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     // Without the accompanying fix in place, this test would have failed with:

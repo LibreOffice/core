@@ -371,7 +371,7 @@ public:
     /// @see vcl::ITiledRenderable::moveSelectedParts().
     virtual void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) override;
     /// @see vcl::ITiledRenderable::getPartInfo().
-    virtual OUString getPartInfo(int nPart) override;
+    virtual std::string getPartInfo(int nPart) override;
     /// @see vcl::ITiledRenderable::getPartUniqueId().
     virtual sal_uInt64 getPartUniqueId(int nPart, int nMode) override;
     /// @see vcl::ITiledRenderable::isDisposed().

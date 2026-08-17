@@ -1480,12 +1480,12 @@ void SwXTextDocument::setEditMode(int nEditMode)
     }
 }
 
-OUString SwXTextDocument::getPartInfo(int /*nPart*/)
+std::string SwXTextDocument::getPartInfo(int /*nPart*/)
 {
     tools::JsonWriter jsonWriter;
     jsonWriter.put("mode", getEditMode());
     jsonWriter.put("partHasComments", partHasComments() ? "true" : "false");
-    return OUString::fromUtf8(jsonWriter.finishAndGetAsOString());
+    return jsonWriter.finishAndGetAsStdString();
 }
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)

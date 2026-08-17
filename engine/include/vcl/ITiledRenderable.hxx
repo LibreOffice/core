@@ -354,9 +354,9 @@ public:
      * Used for sheets in spreadsheet documents,
      * and slides in presentation documents.
      */
-    virtual OUString getPartInfo(int /*nPart*/)
+    virtual std::string getPartInfo(int /*nPart*/)
     {
-        return OUString();
+        return {};
     }
 
     /*
