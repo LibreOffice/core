@@ -273,12 +273,13 @@
 /* Home view specific styles */
 .backstage-home-templates-row {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	gap: 1.5rem;
 	margin-bottom: 1.5rem;
 	padding: 0 12px 0.5rem;
 	justify-content: flex-start;
 	max-width: 100%;
+	overflow: hidden;
 }
 
 .backstage-home-templates-row .backstage-template-card {

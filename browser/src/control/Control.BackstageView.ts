@@ -81,6 +81,10 @@ class BackstageView extends window.L.Class {
 			},
 		});
 
+		new ResizeObserver(() => this.fitHomeTemplateCards()).observe(
+			this.contentArea,
+		);
+
 		this.renderHomeView();
 		return container;
 	}
@@ -280,9 +284,33 @@ class BackstageView extends window.L.Class {
 				},
 			}),
 		);
+		this.fitHomeTemplateCards();
 
 		this.contentArea.appendChild(BackstageTemplates.sectionHeader(_('Recent')));
 		this.renderRecentDocuments();
+	}
+
+	private fitHomeTemplateCards(): void {
+		const row = this.contentArea.querySelector<HTMLElement>(
+			'.backstage-home-templates-row',
+		);
+		if (!row) return;
+
+		const cards = Array.from(
+			row.querySelectorAll<HTMLElement>('.backstage-template-card'),
+		);
+
+		cards.forEach((card) => {
+			card.style.display = '';
+		});
+
+		for (
+			let index = cards.length - 1;
+			index >= 0 && row.scrollWidth > row.clientWidth;
+			index--
+		) {
+			cards[index].style.display = 'none';
+		}
 	}
 
 	private async renderRecentDocuments(): Promise<void> {
