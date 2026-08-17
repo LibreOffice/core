@@ -370,15 +370,32 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		return this.keymap[keyCode] || keyCode;
 	},
 
+	_slideSorterFocused: function () {
+		var docLayer = this._map._docLayer;
+		if (!docLayer ||
+		    (docLayer._docType !== 'presentation' && docLayer._docType !== 'drawing'))
+			return false;
+
+		var preview = docLayer._preview;
+		return !!preview && (preview.partsFocused === true || preview.hasSlideFocus());
+	},
+
+	_isSlideSorterKey: function (ev) {
+		var codes = this.keyCodes;
+		return ev.keyCode === codes.DOWN || ev.keyCode === codes.UP ||
+		       ev.keyCode === codes.RIGHT || ev.keyCode === codes.LEFT ||
+		       ev.keyCode === codes.PAGEDOWN || ev.keyCode === codes.PAGEUP ||
+		       ev.keyCode === codes.DELETE || ev.keyCode === codes.BACKSPACE ||
+		       ev.keyCode === codes.HOME || ev.keyCode === codes.END;
+	},
+
 	// _onKeyDown - called only as a DOM event handler
 	// Calls _handleKeyEvent(), but only if the event doesn't have
 	// a charCode property (set to something different than 0) - that ignores
 	// any 'beforeinput', 'keypress' and 'input' events that would add
 	// printable characters. Those are handled by TextInput.js.
 	_onKeyDown: function (ev) {
-		if (this._map.uiManager.isUIBlocked()
-			|| (this._map._docLayer && (this._map._docLayer._docType === 'presentation' || this._map._docLayer._docType === 'drawing') && this._map._docLayer._preview.partsFocused === true)
-		)
+		if (this._map.uiManager.isUIBlocked() || this._slideSorterFocused())
 			return;
 
 		if (this._map._debug.logKeyboardEvents) {
@@ -440,7 +457,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			}
 		}
 
-		if (this._map._docLayer && (this._map._docLayer._docType === 'presentation' || this._map._docLayer._docType === 'drawing') && this._map._docLayer._preview.partsFocused === true) {
+		if (this._slideSorterFocused()) {
 			if (ev.shiftKey && !ev.ctrlKey && !ev.altKey
 				&& (ev.keyCode === this.keyCodes.DOWN || ev.keyCode === this.keyCodes.UP || ev.keyCode === this.keyCodes.HOME || ev.keyCode === this.keyCodes.END)
 				&& ev.type === 'keydown') {
@@ -456,11 +473,12 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 
 				ev.preventDefault();
 			}
-			else if (!this.modifier && (ev.keyCode === this.keyCodes.DOWN || ev.keyCode === this.keyCodes.UP ||
-				               ev.keyCode === this.keyCodes.RIGHT || ev.keyCode === this.keyCodes.LEFT ||
-				               ev.keyCode === this.keyCodes.PAGEDOWN || ev.keyCode === this.keyCodes.PAGEUP ||
-				               ev.keyCode === this.keyCodes.DELETE || ev.keyCode === this.keyCodes.BACKSPACE ||
-				               ev.keyCode === this.keyCodes.HOME || ev.keyCode === this.keyCodes.END)
+
+			// this.modifier belongs to _onKeyDown, which never runs while the
+			// sorter has the focus, so it would hold whatever the document
+			// last saw. Read the modifiers off this event instead.
+			else if (!ev.ctrlKey && !ev.altKey && !ev.shiftKey && !ev.metaKey
+				           && this._isSlideSorterKey(ev)
 				           && ev.type === 'keydown') {
 
 				var deletePart = (ev.keyCode === this.keyCodes.DELETE || ev.keyCode === this.keyCodes.BACKSPACE) ? true : false;
@@ -509,6 +527,8 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				if (ev.key === 'Meta' || ev.key === 'Alt' ||
 				    ev.key === 'AltGraph' || ev.key === 'CapsLock' ||
 				    ev.key === 'NumLock')
+					return;
+				if (this._isSlideSorterKey(ev))
 					return;
 				this._map._docLayer._preview.partsFocused = false;
 				app.map._clip.clearSelection();

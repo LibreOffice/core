@@ -2395,9 +2395,23 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				      fetchThumbnail: this.options.fetchThumbnail});
 	},
 
+	hasSlideFocus: function () {
+		var active = document.activeElement;
+		return !!active && !!this._previewTiles &&
+		       this._previewTiles.indexOf(active) !== -1;
+	},
+
 	focusCurrentSlide: function () {
-		if (this._previewTiles[this._map._docLayer._selectedPart])
-			this._previewTiles[this._map._docLayer._selectedPart].focus();
+		var img = this._previewTiles[this._map._docLayer._selectedPart];
+		if (!img)
+			return;
+
+		img.focus();
+
+		if (document.activeElement === img) {
+			this.partsFocused = true;
+			this.partsFocusedApplied = true;
+		}
 	},
 
 	// On load, move focus to the current slide preview so arrow keys
