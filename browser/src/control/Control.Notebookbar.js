@@ -21,9 +21,10 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	_lastContexts: null,
 	_lastSelectedTabName: null,
 
-	// Contexts whose exit shouldn't snap back to the surrounding contextual
-	// tab — entering them is a modal toggle, not a navigation.
-	_inPlaceEditingContexts: ['EditCell'],
+	// Contexts that are a modal toggle within whatever was already selected,
+	// not a navigation to a different part of the document: entering or
+	// leaving one of these shouldn't snap the notebookbar to another tab.
+	_inPlaceEditingContexts: ['EditCell', 'DrawText'],
 
 	container: null,
 	builder: null, // see NotebookbarBase
@@ -618,17 +619,19 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			return;
 		}
 
-		// Skip auto-snap when exiting an in-place edit (cell-edit roundtrip).
-		const returningFromEdit =
-			Array.isArray(this._lastContexts) &&
-			this._inPlaceEditingContexts.includes(this._lastContexts[0]);
+		// Skip auto-snap when entering or leaving an in-place edit (for example
+		// a formula-bar cell edit, or editing the text inside a shape).
+		const inPlaceEditTransition =
+			this._inPlaceEditingContexts.includes(requestedContext) ||
+			(Array.isArray(this._lastContexts) &&
+				this._inPlaceEditingContexts.includes(this._lastContexts[0]));
 
 		if (contextTab) {
 			// Switch to the tab of the context, unless we currently show the review tab
 			// for text documents, where jumping to the next change would possibly
 			// switch to the Home or Table tabs, which is not wanted.
 			if ((docType !== 'text' || currentlySelectedTabName !== 'Review') &&
-				!returningFromEdit) {
+				!inPlaceEditTransition) {
 				contextTab.click();
 			}
 			const tabId = contextTab.attr('id');
@@ -637,7 +640,9 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		}
 
 		if (defaultTab) {
-			defaultTab.click();
+			if (!inPlaceEditTransition) {
+				defaultTab.click();
+			}
 			const tabId = defaultTab.attr('id');
 			this.updateButtonVisibilityForContext(requestedContext, tabId);
 			return;

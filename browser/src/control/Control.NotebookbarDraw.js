@@ -68,7 +68,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'id': this.HOME_TAB_ID,
 				'text': _('Home'),
 				'name': 'Home',
-				'context': 'default|DrawText',
+				'context': 'default',
 				'accessibility': { focusBack: true, combination: 'H', de: null }
 			},
 			{

@@ -34,7 +34,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'id': this.HOME_TAB_ID,
 				'text': _('Home'),
 				'name': 'Home',
-				'context': 'default|Cell|Text|DrawText',
+				'context': 'default',
 				'accessibility': { focusBack: true,	combination: 'H', de: null }
 			},
 			{

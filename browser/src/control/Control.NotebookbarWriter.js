@@ -43,7 +43,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'text': _('Home'),
 				'id': this.HOME_TAB_ID,
 				'name': homeTabName,
-				'context': 'default|Text|DrawText',
+				'context': 'default',
 				'accessibility': { focusBack: true, combination: 'H', de: 'R' }
 			},
 			{
