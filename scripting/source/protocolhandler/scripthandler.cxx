@@ -84,6 +84,71 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     m_bInitialised = true;
 }
 
+namespace
+{
+Sequence<Any> lcl_filterAndOrderScriptArgs(const Sequence<PropertyValue>& rArgs)
+{
+    // Copy the Sequence to a local array so we can modify the order
+    Sequence<PropertyValue> aArgs = rArgs;
+    sal_Int32 nSize = aArgs.getLength();
+    PropertyValue* pArgs = aArgs.getArray();
+
+    // For some reason the script gets passed only the values from the PropertyValue array and not
+    // the names so the only way for it to distinguish them is by the order. That means this order
+    // is set in stone. See tdf#173160.
+    static const std::array<OUString, 6> aPropertyOrder = {
+        u"URL"_ustr,       u"InteractionHandler"_ustr, u"OpenNewView"_ustr,
+        u"FrameName"_ustr, u"MacroExecutionMode"_ustr, u"UpdateDocMode"_ustr,
+    };
+    sal_Int32 nUsedArgs = 0;
+
+    // Reorder the property values according to the preset order
+    for (const auto& sPropertyName : aPropertyOrder)
+    {
+        for (sal_Int32 i = nUsedArgs; i < nSize; ++i)
+        {
+            if (sPropertyName == pArgs[i].Name)
+            {
+                // Swap this property with the one in the place we want it to be
+                if (i != nUsedArgs)
+                    std::swap(pArgs[i], pArgs[nUsedArgs]);
+                ++nUsedArgs;
+                break;
+            }
+        }
+    }
+
+    // Sometimes we get a propertyval with name = "Referer" or "SynchronMode". These are not actual
+    // arguments to be passed to script, but flags describing the call, so ignore. Who thought that
+    // passing such "meta-arguments" mixed in with real arguments was a good idea?
+    while (nUsedArgs < nSize)
+    {
+        if (pArgs[nUsedArgs].Name == "Referer" || pArgs[nUsedArgs].Name == "SynchronMode")
+        {
+            // Move the last argument over the place of this one and then decrease the number of
+            // arguments that we’ll use so that the moved one will get ignored
+            if (nUsedArgs + 1 < nSize)
+                pArgs[nUsedArgs] = std::move(pArgs[nSize - 1]);
+            --nSize;
+        }
+        else
+        {
+            // Otherwise keep the argument
+            ++nUsedArgs;
+        }
+    }
+
+    Sequence<Any> aValues(nUsedArgs);
+    Any* pValues = aValues.getArray();
+
+    // Move only the values into the final array
+    for (sal_Int32 i = 0; i < nUsedArgs; ++i)
+        pValues[i] = std::move(pArgs[i].Value);
+
+    return aValues;
+}
+}
+
 Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     const URL& aURL, const OUString&, sal_Int32 )
 {
@@ -178,28 +243,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                 "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
 
 
-            Sequence< Any > inArgs;
+            Sequence< Any > inArgs = lcl_filterAndOrderScriptArgs(lArgs);
             Sequence< Any > outArgs;
             Sequence< sal_Int16 > outIndex;
-
-            if ( lArgs.hasElements() )
-            {
-               int argCount = 0;
-               for ( const auto& rArg : lArgs )
-               {
-                   // Sometimes we get a propertyval with name = "Referer" or "SynchronMode". These
-                   // are not actual arguments to be passed to script, but flags describing the
-                   // call, so ignore. Who thought that passing such "meta-arguments" mixed in with
-                   // real arguments was a good idea?
-                   if ( (rArg.Name != "Referer" &&
-                         rArg.Name != "SynchronMode") ||
-                        rArg.Name.isEmpty() ) //TODO:???
-                   {
-                       inArgs.realloc( ++argCount );
-                       inArgs.getArray()[ argCount - 1 ] = rArg.Value;
-                   }
-               }
-            }
 
             // attempt to protect the document against the script tampering with its Undo Context
             std::unique_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
