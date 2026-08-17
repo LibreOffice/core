@@ -206,8 +206,8 @@ public:
 
         // The primitive2d for the link itself
         std::vector<std::pair<OUString, OUString>> meValues;
-#define LINK_URL "http://libreoffice.org"
-        meValues.emplace_back("URL", OUString(LINK_URL));
+        OString aLinkUrl("http://libreoffice.org"_ostr);
+        meValues.emplace_back("URL", OUString::fromUtf8(aLinkUrl));
         meValues.emplace_back("AltText", "link");
         rtl::Reference<primitive2d::TextHierarchyFieldPrimitive2D> fieldPrimitive(
             new primitive2d::TextHierarchyFieldPrimitive2D(
@@ -237,6 +237,7 @@ public:
 
         bool found = false;
         OString sLine;
+        OString aRectStart("/Rect["_ostr);
         while (pStream->ReadLine(sLine))
         {
             if (sLine.isEmpty())
@@ -245,13 +246,12 @@ public:
             // Look for a line like
             // <</Type/Annot/Subtype/Link/Border[0 0 0]/Rect[23.593 1630.65 52.907 1647.6]/A<</Type/Action/S/URI/URI(http://libreoffice.org/)>>
             // and parse out the Rect[] bits
-            sal_Int32 nLinkIdx = sLine.indexOf(LINK_URL);
+            sal_Int32 nLinkIdx = sLine.indexOf(aLinkUrl);
             if (nLinkIdx > 0 && sLine.startsWith("<</Type/Annot/Subtype/Link/Border[0 0 0]/Rect["))
             {
-#define RECT_START "/Rect["
-                sal_Int32 nStartIdx = sLine.indexOf(RECT_START);
+                sal_Int32 nStartIdx = sLine.indexOf(aRectStart);
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(40), nStartIdx);
-                nStartIdx += strlen(RECT_START);
+                nStartIdx += aRectStart.getLength();
                 sal_Int32 nEndIdx = sLine.indexOf(']', nStartIdx);
                 CPPUNIT_ASSERT_GREATER(nStartIdx + 15, nEndIdx);
 
