@@ -338,6 +338,14 @@ class UIManager extends window.L.Control {
 			this._map.fire('commandstatechanged', {commandName : 'invertbackground', state : 'true'});
 		}
 		this.setCanvasColorAfterModeChange();
+
+		// The grid line colour is a CSS variable that also depends on
+		// data-bg-theme, so it needs to be re-read here too.
+		if (app.sectionContainer && this.map.getDocType() === 'spreadsheet') {
+			const calcGridSection = app.sectionContainer.getSectionWithName(app.CSections.CalcGrid.name);
+			if (calcGridSection)
+				calcGridSection.resetStrokeStyle();
+		}
 	}
 
 	/**

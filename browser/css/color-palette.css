@@ -105,9 +105,10 @@
 	--opacity-icon-disabled: 0.65;
 }
 
-[data-bg-theme='light'] {
+html[data-bg-theme='light'] {
 	--color-cursor-blink-background: #000;
 	--color-background-document: #FFFFFF;
+	--color-calc-grid: #c0c0c0;
 }
 
 [data-doctype='text'] {--doc-type: 3, 105, 163;}
