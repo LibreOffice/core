@@ -456,15 +456,14 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    char* pValues = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
-    if (!pValues)
+    std::string aValues = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
+    if (aValues.empty())
         return;
 
     std::stringstream aInfo;
-    aInfo << "COKitDocument::getCommandValues('.uno:AcceptTrackedChanges') returned '" << pValues << "'" << std::endl;
+    aInfo << "COKitDocument::getCommandValues('.uno:AcceptTrackedChanges') returned '" << aValues << "'" << std::endl;
     g_info("%s", aInfo.str().c_str());
-    std::stringstream aStream(pValues);
-    free(pValues);
+    std::stringstream aStream(aValues);
     assert(!aStream.str().empty());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -565,12 +564,11 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
     for (size_t nType = 0; nType < aTypes.size(); ++nType)
     {
         const std::string& rType = aTypes[nType];
-        char* pValues = pDocument->getCommandValues(rType.c_str());
+        std::string aValues = pDocument->getCommandValues(rType.c_str());
         std::stringstream aInfo;
-        aInfo << "COKitDocument::getCommandValues('" << rType << "') returned '" << pValues << "'" << std::endl;
+        aInfo << "COKitDocument::getCommandValues('" << rType << "') returned '" << aValues << "'" << std::endl;
         g_info("%s", aInfo.str().c_str());
-        std::stringstream aStream(pValues);
-        free(pValues);
+        std::stringstream aStream(aValues);
         assert(!aStream.str().empty());
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);

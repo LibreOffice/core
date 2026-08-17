@@ -367,9 +367,8 @@ static int testJoinsAt( COKitDocument *pDocument, long nX, long nY,
     aForceHeaders << ".uno:ViewRowColumnHeaders?x=" << initPosX << "&y=" << initPosY <<
         "&width=" << (nTileTwipWidth * 2) << "&height=" << (nTileTwipHeight * 2);
     std::string cmd = aForceHeaders.str();
-    char* pJSON = pDocument->getCommandValues(cmd.c_str());
-    fprintf(stderr, "command: '%s' values '%s'\n", cmd.c_str(), pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(cmd.c_str());
+    fprintf(stderr, "command: '%s' values '%s'\n", cmd.c_str(), aJSON.c_str());
 
     // Get a base image 4x the size
     std::vector<unsigned char> vBase(

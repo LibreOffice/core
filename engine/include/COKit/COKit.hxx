@@ -1988,7 +1988,7 @@ struct COKitDocument
      *
      * The caller owns the returned string and frees it.
      */
-    virtual char* getCommandValues(const char* pCommand) = 0;
+    virtual std::string getCommandValues(const char* pCommand) = 0;
 
     /**
      * Save the client's view so that we can compute the right zoom level

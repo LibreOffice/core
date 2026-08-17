@@ -324,7 +324,7 @@ namespace desktop {
         bool paste(const char* pMimeType, const char* pData, size_t nSize) override;
         void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
         void resetSelection() override;
-        char* getCommandValues(const char* pCommand) override;
+        std::string getCommandValues(const char* pCommand) override;
         void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth,
                            int nTileTwipHeight) override;
         void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight) override;

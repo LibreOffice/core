@@ -1255,7 +1255,7 @@ static void doc_setGraphicSelection (COKitDocument* pThis,
                                   int nX,
                                   int nY);
 static void doc_resetSelection (COKitDocument* pThis);
-static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand);
+static std::string doc_getCommandValues(COKitDocument* pThis, const char* pCommand);
 static void doc_setClientZoom(COKitDocument* pThis,
                                     int nTilePixelWidth,
                                     int nTilePixelHeight,
@@ -1623,7 +1623,7 @@ void COKitDocumentImpl::resetSelection()
     doc_resetSelection(this);
 }
 
-char* COKitDocumentImpl::getCommandValues(const char* pCommand)
+std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
 {
     return doc_getCommandValues(this, pCommand);
 }
@@ -2009,10 +2009,10 @@ CallbackFlushHandler::CallbackFlushHandler(COKitDocument* pDocument, COKitCallba
     m_states.emplace(COKitCallbackType::VERTICAL_RULER_UPDATE, "NIL"_ostr);
     m_states.emplace(COKitCallbackType::STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
 
-    if (char* pViewRenderState = pDocument->getCommandValues(".uno:ViewRenderState"))
+    std::string pViewRenderState = pDocument->getCommandValues(".uno:ViewRenderState");
+    if (!pViewRenderState.empty())
     {
         m_aViewRenderState = OString(pViewRenderState);
-        free(pViewRenderState);
     }
 }
 
@@ -5677,61 +5677,61 @@ static void doc_registerCallback(COKitDocument* pThis,
 }
 
 /// Returns the JSON representation of all the comments in the document
-static char* getPostIts(COKitDocument* pThis)
+static std::string getPostIts(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getPostIts(aJsonWriter);
-    return convertOString(aJsonWriter.finishAndGetAsOString());
+    return aJsonWriter.finishAndGetAsStdString();
 }
 
 /// Returns the JSON representation of the positions of all the comments in the document
-static char* getPostItsPos(COKitDocument* pThis)
+static std::string getPostItsPos(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getPostItsPos(aJsonWriter);
-    return convertOString(aJsonWriter.finishAndGetAsOString());
+    return aJsonWriter.finishAndGetAsStdString();
 }
 
-static char* getRulerState(COKitDocument* pThis)
+static std::string getRulerState(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getRulerState(aJsonWriter);
-    return convertOString(aJsonWriter.finishAndGetAsOString());
+    return aJsonWriter.finishAndGetAsStdString();
 }
 
-static char* getAllPartSize(COKitDocument* pThis)
+static std::string getAllPartSize(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getAllPartSize(aJsonWriter);
-    return convertOString(aJsonWriter.finishAndGetAsOString());
+    return aJsonWriter.finishAndGetAsStdString();
 }
 
 static void doc_postKeyEvent(COKitDocument* pThis, COKitKeyEventType eType, int nCharCode,
@@ -7575,11 +7575,11 @@ static void doc_resetSelection(COKitDocument* pThis)
     pDoc->resetSelection();
 }
 
-static char* getDocReadOnly(COKitDocument* pThis)
+static std::string getDocReadOnly(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
     if (!pObjectShell)
-        return nullptr;
+        return {};
 
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:ReadOnly");
@@ -7587,20 +7587,14 @@ static char* getDocReadOnly(COKitDocument* pThis)
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
-    if (!pJson)
-        return nullptr;
-
-    strcpy(pJson, aStream.str().c_str());
-    pJson[aStream.str().size()] = '\0';
-    return pJson;
+    return aStream.str();
 }
 
-static char* getExternalLinksDisabled(COKitDocument* pThis)
+static std::string getExternalLinksDisabled(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
     if (!pObjectShell)
-        return nullptr;
+        return {};
 
     // True when the document has external links currently held back because
     // link updates are not allowed for it yet.
@@ -7614,13 +7608,7 @@ static char* getExternalLinksDisabled(COKitDocument* pThis)
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
-    if (!pJson)
-        return nullptr;
-
-    strcpy(pJson, aStream.str().c_str());
-    pJson[aStream.str().size()] = '\0';
-    return pJson;
+    return aStream.str();
 }
 
 static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale const & rLocale)
@@ -7636,7 +7624,7 @@ static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale co
     rValues.push_back(std::make_pair("", aChild));
 }
 
-static char* getLanguages(const char* pCommand)
+static std::string getLanguages(const char* pCommand)
 {
     cpo::uno::Sequence< css::lang::Locale > aLocales;
     cpo::uno::Sequence< css::lang::Locale > aGrammarLocales;
@@ -7673,22 +7661,18 @@ static char* getLanguages(const char* pCommand)
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
-    assert(pJson); // Don't handle OOM conditions
-    strcpy(pJson, aStream.str().c_str());
-    pJson[aStream.str().size()] = '\0';
-    return pJson;
+    return aStream.str();
 }
 
 namespace
 {
 class FontListCache final : public CacheOwner
 {
-    std::unordered_map<OString, OString> maCache;
+    std::unordered_map<OString, std::string> maCache;
     sal_uInt64 mnGeneration = 0;
 
 public:
-    const OString* find(const OString& rKey)
+    const std::string* find(const OString& rKey)
     {
         const sal_uInt64 nGeneration = OutputDevice::GetFontDataGeneration();
         if (mnGeneration != nGeneration)
@@ -7700,7 +7684,7 @@ public:
         return it != maCache.end() ? &it->second : nullptr;
     }
 
-    void store(const OString& rKey, const OString& rValue) { maCache.emplace(rKey, rValue); }
+    void store(const OString& rKey, const std::string& rValue) { maCache.emplace(rKey, rValue); }
 
     bool dropCaches() override
     {
@@ -7718,7 +7702,7 @@ public:
 };
 }
 
-static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
+static std::string getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
 {
     DBG_TESTSOLARMUTEX();
 
@@ -7733,16 +7717,16 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
     static FontListCache aFontsCache;
 
     const OString aCacheKey = OString::Concat(pCommand) + (bBloatWithRepeatedSizes ? "|b" : "|c");
-    if (const OString* pHit = aFontsCache.find(aCacheKey))
-        return convertOString(*pHit);
+    if (const std::string* pHit = aFontsCache.find(aCacheKey))
+        return *pHit;
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
-        return nullptr;
+        return {};
     const SvxFontListItem* pFonts = pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
-    OString aResult;
+    std::string aResult;
     if (!bBloatWithRepeatedSizes)
     {
         tools::JsonWriter aJson;
@@ -7761,7 +7745,7 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
             for (sal_uInt16 i = 0; pAry[i]; ++i)
                 aJson.putSimpleValue(OUString::number(static_cast<float>(pAry[i]) / 10));
         }
-        aResult = aJson.finishAndGetAsOString();
+        aResult = aJson.finishAndGetAsStdString();
     }
     else // FIXME: remove nonsensical legacy version
     {
@@ -7790,15 +7774,14 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
         aTree.add_child("commandValues", aValues);
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-        const auto aJsonStr = aStream.str();
-        aResult = OString(aJsonStr.data(), aJsonStr.size());
+        aResult = aStream.str();
     }
 
     aFontsCache.store(aCacheKey, aResult);
-    return convertOString(aResult);
+    return aResult;
 }
 
-static char* getFontSubset (std::string_view aFontName)
+static std::string getFontSubset (std::string_view aFontName)
 {
     OUString aFoundFont(::rtl::Uri::decode(OStringToOUString(aFontName, RTL_TEXTENCODING_UTF8), rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8));
 
@@ -7826,11 +7809,7 @@ static char* getFontSubset (std::string_view aFontName)
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
-    assert(pJson); // Don't handle OOM conditions
-    strcpy(pJson, aStream.str().c_str());
-    pJson[aStream.str().size()] = '\0';
-    return pJson;
+    return aStream.str();
 }
 
 // Append one style to the command-values list as { text, id }, where text is the
@@ -7862,7 +7841,7 @@ static void addStyleEntry(boost::property_tree::ptree& rChildren,
     rChildren.push_back(std::make_pair("", aChild));
 }
 
-static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>& rComponent,
+static std::string getComponentStyles(const css::uno::Reference<css::lang::XComponent>& rComponent,
                                 COKitDocumentType docType, const char* pCommand)
 {
     boost::property_tree::ptree aTree;
@@ -7871,7 +7850,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
     const uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     if (!xStyleFamilies.is())
     {
-        return nullptr;
+        return {};
     }
     const cpo::uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
@@ -7981,14 +7960,10 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
     aTree.add_child("commandValues", boost::property_tree::ptree()).swap(aValues);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
-    assert(pJson); // Don't handle OOM conditions
-    strcpy(pJson, aStream.str().c_str());
-    pJson[aStream.str().size()] = '\0';
-    return pJson;
+    return aStream.str();
 }
 
-static char* getStyles(COKitDocument* pThis, const char* pCommand)
+static std::string getStyles(COKitDocument* pThis, const char* pCommand)
 {
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     return getComponentStyles(pDocument->mxComponent, doc_getDocumentType(pThis), pCommand);
@@ -8005,74 +7980,69 @@ enum class UndoOrRedo
 }
 
 /// Returns the JSON representation of either an undo or a redo stack.
-static char* getUndoOrRedo(COKitDocument* pThis, UndoOrRedo eCommand)
+static std::string getUndoOrRedo(COKitDocument* pThis, UndoOrRedo eCommand)
 {
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     auto pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)
-        return nullptr;
+        return {};
 
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     if (!pObjectShell)
-        return nullptr;
+        return {};
 
     SfxUndoManager* pUndoManager = pObjectShell->GetUndoManager();
     if (!pUndoManager)
-        return nullptr;
+        return {};
 
-    OUString aString;
     if (eCommand == UndoOrRedo::UNDO)
-        aString = pUndoManager->GetUndoActionsInfo();
+        return pUndoManager->GetUndoActionsInfo();
     else
-        aString = pUndoManager->GetRedoActionsInfo();
-    char* pJson = convertOUString(aString);
-    return pJson;
+        return pUndoManager->GetRedoActionsInfo();
 }
 
 /// Returns the JSON representation of print ranges in the document
-static char* getPrintRanges(COKitDocument* pThis)
+static std::string getPrintRanges(COKitDocument* pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
-    return convertOString(rtl::OUStringToOString(pDoc->getPrintRanges(), RTL_TEXTENCODING_UTF8));
+    return pDoc->getPrintRanges();
 }
 
 /// Returns only the number of the undo or redo elements
-static char* getUndoOrRedoCount(COKitDocument* pThis, UndoOrRedo eCommand)
+static std::string getUndoOrRedoCount(COKitDocument* pThis, UndoOrRedo eCommand)
 {
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
     auto pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)
-        return nullptr;
+        return {};
 
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     if (!pObjectShell)
-        return nullptr;
+        return {};
 
     SfxUndoManager* pUndoManager = pObjectShell->GetUndoManager();
     if (!pUndoManager)
-        return nullptr;
+        return {};
 
-    size_t nCount;
+    sal_Int32 nCount;
     if (eCommand == UndoOrRedo::UNDO)
         nCount = pUndoManager->GetUndoActionCount();
     else
         nCount = pUndoManager->GetRedoActionCount();
 
-    OUString aString = OUString::number(nCount);
-    char* pCountStr = convertOUString(aString);
-    return pCountStr;
+    return std::string(OString::number(nCount));
 }
 
 /// Returns the JSON representation of the redline stack.
-static char* getTrackedChanges(COKitDocument* pThis)
+static std::string getTrackedChanges(COKitDocument* pThis)
 {
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
@@ -8119,30 +8089,30 @@ static char* getTrackedChanges(COKitDocument* pThis)
         if (!pDoc)
         {
             SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-            return nullptr;
+            return {};
         }
         pDoc->getTrackedChanges(aJson);
     }
 
-    return convertOString(aJson.finishAndGetAsOString());
+    return aJson.finishAndGetAsStdString();
 }
 
 
 /// Returns the JSON representation of the redline author table.
-static char* getTrackedChangeAuthors(COKitDocument* pThis)
+static std::string getTrackedChangeAuthors(COKitDocument* pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getTrackedChangeAuthors(aJsonWriter);
-    return convertOString(aJsonWriter.finishAndGetAsOString());
+    return aJsonWriter.finishAndGetAsStdString();
 }
 
-static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
+static std::string doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
 {
     comphelper::ProfileZone aZone("doc_getCommandValues");
 
@@ -8158,7 +8128,7 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
     if (aCommand.starts_with(".uno:VectorPrimitives"))
@@ -8285,7 +8255,7 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
 
         tools::JsonWriter aJsonWriter;
         pDoc->getRowColumnHeaders(aRectangle, aJsonWriter);
-        return convertOString(aJsonWriter.finishAndGetAsOString());
+        return aJsonWriter.finishAndGetAsStdString();
     }
     else if (aCommand.starts_with(aSheetGeometryData))
     {
@@ -8338,20 +8308,14 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
             } while (nParamIndex >= 0);
         }
 
-        OString aGeomDataStr
-            = pDoc->getSheetGeometryData(bColumns, bRows, bSizes, bHidden, bFiltered, bGroups);
-
-        if (aGeomDataStr.isEmpty())
-            return nullptr;
-
-        return convertOString(aGeomDataStr);
+        return pDoc->getSheetGeometryData(bColumns, bRows, bSizes, bHidden, bFiltered, bGroups);
     }
     else if (aCommand.starts_with(".uno:CellCursor"))
     {
         // Ignore command's deprecated parameters.
         tools::JsonWriter aJsonWriter;
         pDoc->getCellCursor(aJsonWriter);
-        return convertOString(aJsonWriter.finishAndGetAsOString());
+        return aJsonWriter.finishAndGetAsStdString();
     }
     else if (aCommand.starts_with(aFontSubset))
     {
@@ -8361,18 +8325,18 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
     {
         tools::JsonWriter aJsonWriter;
         pDoc->getCommandValues(aJsonWriter, aCommand);
-        return convertOString(aJsonWriter.finishAndGetAsOString());
+        return aJsonWriter.finishAndGetAsStdString();
     }
     else if (KitHelper::supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
     {
         tools::JsonWriter aJsonWriter;
         KitHelper::getCommandValues(aJsonWriter, aCommand);
-        return convertOString(aJsonWriter.finishAndGetAsOString());
+        return aJsonWriter.finishAndGetAsStdString();
     }
     else
     {
         SetLastExceptionMsg(OUString::fromUtf8(aCommand) + u" : Unknown command, no values returned"_ustr);
-        return nullptr;
+        return {};
     }
 }
 
@@ -9649,8 +9613,7 @@ static void preloadData()
         if (component.factory == "private:factory/swriter")
         {
             // Query document styles to initialize writer's on-demand created table style globals
-            char *pThrowaway = getComponentStyles(xComp, COKitDocumentType::TEXT, ".uno:StyleApply");
-            free(pThrowaway);
+            getComponentStyles(xComp, COKitDocumentType::TEXT, ".uno:StyleApply");
         }
 
         uno::Reference<frame::XModel> xModel(xComp, uno::UNO_QUERY);

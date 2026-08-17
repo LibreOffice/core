@@ -3125,7 +3125,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     }
 }
 
-OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+std::string ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
                                         bool bFiltered, bool bGroups)
 {
     ScDocument& rDoc = aViewData.GetDocument();
@@ -3144,7 +3144,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
     if ((!bSizes && !bHidden && !bFiltered && !bGroups) ||
         (!bColumns && !bRows))
     {
-        return OString(getJSONString(aTree));
+        return getJSONString(aTree);
     }
 
     struct GeomEntry
@@ -3196,7 +3196,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
         aTree.add_child(rDimEntry.pKey, aDimTree);
     }
 
-    return OString(getJSONString(aTree));
+    return getJSONString(aTree);
 }
 
 void ScTabView::extendTiledAreaIfNeeded()

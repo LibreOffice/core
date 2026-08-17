@@ -858,7 +858,7 @@ Size ScModelObj::getDataArea(long nPart)
     return aSize;
 }
 
-OUString ScModelObj::getPrintRanges()
+std::string ScModelObj::getPrintRanges()
 {
     const ScDocument& rDoc = pDocShell->GetDocument();
 
@@ -867,7 +867,7 @@ OUString ScModelObj::getPrintRanges()
     tools::JsonWriter aJsonWriter;
     pSaver->GetPrintRangesInfo(aJsonWriter);
 
-    return OStringToOUString(aJsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
+    return aJsonWriter.finishAndGetAsStdString();
 }
 
 void ScModelObj::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
@@ -1236,16 +1236,16 @@ void ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::
     pTabView->getRowColumnHeaders(rRectangle, rJsonWriter);
 }
 
-OString ScModelObj::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+std::string ScModelObj::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
                                          bool bFiltered, bool bGroups)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
-        return ""_ostr;
+        return {};
 
     ScTabView* pTabView = pViewData->GetView();
     if (!pTabView)
-        return ""_ostr;
+        return {};
 
     return pTabView->getSheetGeometryData(bColumns, bRows, bSizes, bHidden, bFiltered, bGroups);
 }

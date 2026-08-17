@@ -316,7 +316,7 @@ public:
     virtual Size getDataArea(long nPart) override;
 
     /// @see vcl::ITiledRenderable::getPrintRanges().
-    virtual OUString getPrintRanges() override;
+    virtual std::string getPrintRanges() override;
 
     /// @see vcl::ITiledRenderable::setPart().
     virtual void setPart(int nPart, bool bAllowChangeFocus = true) override;
@@ -380,7 +380,7 @@ public:
     virtual void getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter) override;
 
     /// @see vcl::ITiledRenderable::getSheetGeometryData().
-    virtual OString getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+    virtual std::string getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
                                          bool bFiltered, bool bGroups) override;
 
     /// @see vcl::ITiledRenderable::getCellCursor().

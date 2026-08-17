@@ -468,10 +468,9 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
     std::stringstream ss;
     ss << "COKitDocument::getCommandValues(" << aCommand.str() << ")";
     g_info("%s", ss.str().c_str());
-    char* pValues = pDocument->getCommandValues(aCommand.str().c_str());
-    g_info("COKitDocument::getCommandValues() returned '%s'", pValues);
-    std::stringstream aStream(pValues);
-    free(pValues);
+    std::string aValues = pDocument->getCommandValues(aCommand.str().c_str());
+    g_info("COKitDocument::getCommandValues() returned '%s'", aValues.c_str());
+    std::stringstream aStream(aValues);
     assert(!aStream.str().empty());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);

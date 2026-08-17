@@ -212,12 +212,12 @@ public:
     OUString                GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     SfxUndoAction*          GetUndoAction( size_t nNo=0 ) const;
     /// Get info about all undo actions (comment, view shell id, etc.)
-    OUString                GetUndoActionsInfo() const;
+    std::string             GetUndoActionsInfo() const;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     OUString                GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     SfxUndoAction* GetRedoAction(size_t nNo = 0) const;
     /// Get info about all redo actions (comment, view shell id, etc.)
-    OUString                GetRedoActionsInfo() const;
+    std::string             GetRedoActionsInfo() const;
     virtual bool            Undo();
     virtual bool            Redo();
     /** Clears both the Redo and the Undo stack.

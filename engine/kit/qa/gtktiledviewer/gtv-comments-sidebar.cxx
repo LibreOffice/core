@@ -43,10 +43,9 @@ gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(sidebar)));
 
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    char* pValues = pDocument->getCommandValues(".uno:ViewAnnotations");
-    g_info("COKitDocument::getCommandValues(%s) : %s", ".uno:ViewAnnotations", pValues);
-    std::stringstream aStream(pValues);
-    free(pValues);
+    std::string aValues = pDocument->getCommandValues(".uno:ViewAnnotations");
+    g_info("COKitDocument::getCommandValues(%s) : %s", ".uno:ViewAnnotations", aValues.c_str());
+    std::stringstream aStream(aValues);
 
     // empty the comments grid
     GtvGtkWrapper<GList> children(gtk_container_get_children(GTK_CONTAINER(sidebar->commentsgrid)),

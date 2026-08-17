@@ -357,5 +357,19 @@ OString JsonWriter::finishAndGetAsOString()
     return mpBuffer;
 }
 
+std::string JsonWriter::finishAndGetAsStdString()
+{
+    assert(mStartNodeCount == 0 && "did not close all nodes");
+    assert(!mbClosed && "data already extracted");
+    ensureSpace(2);
+    // add closing brace
+    *mPos = '}';
+    ++mPos;
+    mbClosed = true;
+
+    mpBuffer->length = mPos - mpBuffer->buffer;
+    return std::string(mpBuffer->buffer, mpBuffer->length);
+}
+
 } // namespace tools
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

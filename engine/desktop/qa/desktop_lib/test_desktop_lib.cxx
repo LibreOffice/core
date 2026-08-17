@@ -528,8 +528,8 @@ void DesktopKitTest::testGetStyles()
 {
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:StyleApply");
-    std::stringstream aStream(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:StyleApply");
+    std::stringstream aStream(aJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( !aTree.empty() );
     CPPUNIT_ASSERT_EQUAL( std::string(".uno:StyleApply"), aTree.get_child("commandName").get_value<std::string>()  );
@@ -556,15 +556,14 @@ void DesktopKitTest::testGetStyles()
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
     }
-    free(pJSON);
 }
 
 void DesktopKitTest::testGetFonts()
 {
     COKitDocumentImpl* pDocument = loadDoc("blank_presentation.odp");
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:CharFontName");
-    std::stringstream aStream(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:CharFontName");
+    std::stringstream aStream(aJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( !aTree.empty() );
     CPPUNIT_ASSERT_EQUAL( std::string(".uno:CharFontName"), aTree.get_child("commandName").get_value<std::string>() );
@@ -576,7 +575,6 @@ void DesktopKitTest::testGetFonts()
         // check that we have font sizes available for each font
         CPPUNIT_ASSERT( !rPair.second.empty());
     }
-    free(pJSON);
 }
 
 void DesktopKitTest::testCreateView()
@@ -960,9 +958,8 @@ void DesktopKitTest::testUndoWriter()
     Scheduler::ProcessEventsToIdle();
     // Get undo info.
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:Undo");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:Undo");
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     // Make sure that pressing a key creates exactly one undo action.
@@ -1016,9 +1013,8 @@ void DesktopKitTest::testRowColumnHeaders()
     aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << nWidth << "&height=" << nHeight;
 
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(aPayload.str().c_str());
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(aPayload.str().c_str());
+    std::stringstream aStream(aJSON);
 
     CPPUNIT_ASSERT(!aStream.str().empty());
 
@@ -1097,12 +1093,11 @@ void DesktopKitTest::testHiddenRowHeaders()
     aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << nWidth << "&height=" << nHeight;
 
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(aPayload.str().c_str());
-    std::stringstream aStream(pJSON);
+    std::string aJSON = pDocument->getCommandValues(aPayload.str().c_str());
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
 
     boost::property_tree::read_json(aStream, aTree);
-    free(pJSON);
     sal_Int32 nPrevious = 0;
     sal_Int32 nIndex = 0;
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
@@ -1125,10 +1120,9 @@ void DesktopKitTest::testCellCursor()
 
     boost::property_tree::ptree aTree;
 
-    char* pJSON = pDocument->getCommandValues(".uno:CellCursor?tileWidth=1&tileHeight=1&outputWidth=1&outputHeight=1");
+    std::string aJSON = pDocument->getCommandValues(".uno:CellCursor?tileWidth=1&tileHeight=1&outputWidth=1&outputHeight=1");
 
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
 
     boost::property_tree::read_json(aStream, aTree);
@@ -2224,9 +2218,8 @@ void DesktopKitTest::testRedlineWriter()
 
     // Get redline info.
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     // Make sure that pressing a key creates exactly one redline.
@@ -2253,9 +2246,8 @@ void DesktopKitTest::testRedlineCalc()
 
     // Get redline info.
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     // Make sure that pressing a key creates exactly one redline.
@@ -2301,10 +2293,9 @@ std::vector<RedlineInfo> getRedlineInfo(const boost::property_tree::ptree& redli
 
 std::vector<RedlineInfo> getRedlineInfo(COKitDocumentImpl* pDocument)
 {
-    char* json
+    std::string json
         = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     std::stringstream stream(json);
-    free(json);
     CPPUNIT_ASSERT(!stream.str().empty());
     boost::property_tree::ptree tree;
     boost::property_tree::read_json(stream, tree);
@@ -2770,14 +2761,13 @@ void DesktopKitTest::testGetFontSubset()
     );
     OString aCommand = ".uno:FontSubset&name=" + OUStringToOString(aFontName, RTL_TEXTENCODING_UTF8);
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(aCommand.getStr());
-    std::stringstream aStream(pJSON);
+    std::string aJSON = pDocument->getCommandValues(aCommand.getStr());
+    std::stringstream aStream(aJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( !aTree.empty() );
     CPPUNIT_ASSERT_EQUAL( std::string(".uno:FontSubset"), aTree.get_child("commandName").get_value<std::string>() );
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( !aValues.empty() );
-    free(pJSON);
 }
 #endif
 
@@ -2793,9 +2783,8 @@ void DesktopKitTest::testCommentsWriter()
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     // There are 3 comments in the document already
@@ -2835,9 +2824,8 @@ void DesktopKitTest::testCommentsCalc()
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     // There are 2 comments in the document already
@@ -2880,9 +2868,8 @@ void DesktopKitTest::testCommentsImpress()
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     // There are 2 comments in the document already
@@ -3153,9 +3140,8 @@ void DesktopKitTest::testCommentsCallbacksWriter()
 
     // .uno:ViewAnnotations returns total of 5 comments
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
+    std::string aJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
+    std::stringstream aStream(aJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());

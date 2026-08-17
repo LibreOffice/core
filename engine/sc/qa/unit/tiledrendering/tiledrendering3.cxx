@@ -46,6 +46,7 @@
 #include <sctestviewcallback.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <cstdlib>
+#include <regex>
 
 using namespace com::sun::star;
 
@@ -272,11 +273,11 @@ public:
         aRows.setDataToDoc(pDoc, false);
     }
 
-    void parseTest(const OString& rJSON) const
+    void parseTest(const std::string& rJSON) const
     {
         // Assumes all flags passed to getSheetGeometryData() are true.
         boost::property_tree::ptree aTree;
-        std::stringstream aStream((std::string(rJSON)));
+        std::stringstream aStream(rJSON);
         boost::property_tree::read_json(aStream, aTree);
 
         CPPUNIT_ASSERT_EQUAL(".uno:SheetGeometryData"_ostr,
@@ -336,27 +337,27 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataInvariance)
             aSGData.setDataToDoc(pDoc);
 
         KitHelper::setView(nView1);
-        OString aGeomStr1 = pModelObj->getSheetGeometryData(
+        std::string aGeomStr1 = pModelObj->getSheetGeometryData(
             /*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
             /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
 
         KitHelper::setView(nView2);
         pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 22474, 47333));
         pModelObj->setClientZoom(256, 256, 6636, 6636);
-        OString aGeomStr2 = pModelObj->getSheetGeometryData(
+        std::string aGeomStr2 = pModelObj->getSheetGeometryData(
             /*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
             /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
 
         // Check vs. view #1
         KitHelper::setView(nView1);
-        OString aGeomStr1_2 = pModelObj->getSheetGeometryData(
+        std::string aGeomStr1_2 = pModelObj->getSheetGeometryData(
             /*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
             /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
         CPPUNIT_ASSERT_EQUAL(aGeomStr1, aGeomStr1_2);
 
         // Check vs. view #2
         KitHelper::setView(nView2);
-        OString aGeomStr2_2 = pModelObj->getSheetGeometryData(
+        std::string aGeomStr2_2 = pModelObj->getSheetGeometryData(
             /*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
             /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
         CPPUNIT_ASSERT_EQUAL(aGeomStr2, aGeomStr2_2);
@@ -416,14 +417,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataCorrectness)
     ScTestViewCallback aView1;
 
     // with the default empty sheet and test the JSON encoding.
-    OString aGeomDefaultStr
+    std::string aGeomDefaultStr
         = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
                                           /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
     aDefaultSGData.parseTest(aGeomDefaultStr);
 
     // Apply geometry settings to the sheet and then test the resulting JSON encoding.
     aSGData.setDataToDoc(pDoc);
-    OString aGeomStr
+    std::string aGeomStr
         = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
                                           /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
     aSGData.parseTest(aGeomStr);
@@ -2214,10 +2215,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPrintRanges)
     /*
         Expected output: { \"printranges\": [ { \"sheet\": 0, \"ranges\": [ [ 2, 6, 2, 6]]}]}
     */
-    OUString printRanges = pModelObj->getPrintRanges().replaceAll(" ", "");
+    std::string printRanges = pModelObj->getPrintRanges();
+    printRanges = std::regex_replace(printRanges, std::regex(" "), "");
 
-    CPPUNIT_ASSERT_EQUAL(u"{\"printranges\":[{\"sheet\":0,\"ranges\":[[2,6,2,6]]}]}"_ustr,
-                         printRanges);
+    CPPUNIT_ASSERT_EQUAL(std::string_view("{\"printranges\":[{\"sheet\":0,\"ranges\":[[2,6,2,6]]}]}"),
+                         std::string_view(printRanges));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
@@ -2562,11 +2564,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartSelectionCoords)
     ScModelObj* pModelObj = createDoc("chartsel.ods");
     auto* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     ScTestViewCallback aView1;
-    OString aJson
+    std::string aJson
         = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
                                           /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
     boost::property_tree::ptree aTree;
-    std::stringstream ss((std::string(aJson)));
+    std::stringstream ss(aJson);
     boost::property_tree::read_json(ss, aTree);
     auto& aCols = aTree.get_child("columns");
     auto& aRows = aTree.get_child("rows");

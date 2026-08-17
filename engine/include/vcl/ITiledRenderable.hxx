@@ -97,9 +97,9 @@ public:
         return Size(1, 1);
     }
 
-    virtual OUString getPrintRanges()
+    virtual std::string getPrintRanges()
     {
-        return OUString();
+        return {};
     }
 
     /**
@@ -245,10 +245,10 @@ public:
      *     are included depending on the settings of the flags bColumns and bRows.
      * @return serialization of the active sheet's geometry data as OString.
      */
-    virtual OString getSheetGeometryData(bool /*bColumns*/, bool /*bRows*/, bool /*bSizes*/,
+    virtual std::string getSheetGeometryData(bool /*bColumns*/, bool /*bRows*/, bool /*bSizes*/,
                                          bool /*bHidden*/, bool /*bFiltered*/, bool /*bGroups*/)
     {
-        return ""_ostr;
+        return {};
     }
 
     /**

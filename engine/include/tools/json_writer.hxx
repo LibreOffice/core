@@ -84,6 +84,10 @@ public:
      * After this no more document modifications may be written. */
     OString finishAndGetAsOString();
 
+    /** Closes the tags, and returns data.
+     * After this no more document modifications may be written. */
+    std::string finishAndGetAsStdString();
+
 private:
     void endNode(char closing);
     void addCommaBeforeField();

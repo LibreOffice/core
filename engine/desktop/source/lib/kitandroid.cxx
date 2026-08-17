@@ -401,11 +401,11 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getC
 
     const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
 
-    char* pValue = pDocument->getCommandValues(pCommand);
+    std::string pValue = pDocument->getCommandValues(pCommand);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
 
-    return pEnv->NewStringUTF(pValue);
+    return pEnv->NewStringUTF(pValue.c_str());
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setClientZoom

@@ -2026,8 +2026,7 @@ void Document::updateEditorSpeeds(int id, int speed)
 // Get the color value for all author names from the core
 std::map<std::string, int> Document::getViewColors()
 {
-    LOKitHelper::ScopedString values(_loKitDocument->getCommandValues(".uno:TrackedChangeAuthors"));
-    const std::string colorValues(!values ? "" : values.get());
+    std::string colorValues(_loKitDocument->getCommandValues(".uno:TrackedChangeAuthors"));
 
     std::map<std::string, int> viewColors;
     try
@@ -2342,10 +2341,10 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         default:
             // impress/draw currently cannot, so use the current document state
             // so simply joining doesn't toggle that shared spelling state
-            LOKitHelper::ScopedString viewRenderState(_loKitDocument->getCommandValues(".uno:ViewRenderState"));
-            if (viewRenderState)
+            std::string viewRenderState(_loKitDocument->getCommandValues(".uno:ViewRenderState"));
+            if (!viewRenderState.empty())
             {
-                StringVector tokens(StringVector::tokenize(viewRenderState.get(), strlen(viewRenderState.get()), ';'));
+                StringVector tokens(StringVector::tokenize(viewRenderState.data(), viewRenderState.size(), ';'));
                 spellOnline = tokens[0] == "S" ? "true" : "false";
             }
             break;
@@ -2411,10 +2410,10 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
     session->initWatermark();
 
-    LOKitHelper::ScopedString viewRenderState(_loKitDocument->getCommandValues(".uno:ViewRenderState"));
-    if (viewRenderState)
+    std::string viewRenderState(_loKitDocument->getCommandValues(".uno:ViewRenderState"));
+    if (!viewRenderState.empty())
     {
-        session->setViewRenderState(viewRenderState.get());
+        session->setViewRenderState(viewRenderState);
     }
 
     invalidateCanonicalId(session->getId());

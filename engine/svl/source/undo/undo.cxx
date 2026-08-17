@@ -1317,7 +1317,7 @@ static boost::property_tree::ptree lcl_ActionToJson(size_t nIndex, SfxUndoAction
     return aRet;
 }
 
-OUString SfxUndoManager::GetUndoActionsInfo() const
+std::string SfxUndoManager::GetUndoActionsInfo() const
 {
     boost::property_tree::ptree aActions;
     const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
@@ -1331,10 +1331,10 @@ OUString SfxUndoManager::GetUndoActionsInfo() const
     aTree.add_child("actions", aActions);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
-    return OUString::fromUtf8(aStream.str());
+    return aStream.str();
 }
 
-OUString SfxUndoManager::GetRedoActionsInfo() const
+std::string SfxUndoManager::GetRedoActionsInfo() const
 {
     boost::property_tree::ptree aActions;
     const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
@@ -1350,7 +1350,7 @@ OUString SfxUndoManager::GetRedoActionsInfo() const
     aTree.add_child("actions", aActions);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
-    return OUString::fromUtf8(aStream.str());
+    return aStream.str();
 }
 
 bool SfxUndoManager::IsEmptyActions() const

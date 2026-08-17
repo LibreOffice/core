@@ -212,8 +212,8 @@ bool ChildSession::_handleInput(const char *buffer, int length)
     LogUiCommands logUndoRelatedcommandAtfunctionEnd(*this, &tokens);
     if (_isDocLoaded && Log::isLogUIEnabled() && _clientVisibleArea.getWidth() != 0)
     {
-        LOKitHelper::ScopedString undoCountString(getLOKitDocument()->getCommandValues(".uno:UndoCount"));
-        logUndoRelatedcommandAtfunctionEnd._lastUndoCount = undoCountString ? atoi(undoCountString.get()) : 0;
+        std::string undoCountString(getLOKitDocument()->getCommandValues(".uno:UndoCount"));
+        logUndoRelatedcommandAtfunctionEnd._lastUndoCount = !undoCountString.empty() ? atoi(undoCountString.c_str()) : 0;
     }
 
     if (COOLProtocol::tokenIndicatesUserInteraction(tokens[0]))
@@ -358,10 +358,9 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         // /cool/extract-link-targets endpoint) always use the reload.
         if (tokens.equals(1, "url=interactive"))
         {
-            LOKitHelper::ScopedString data(
-                getLOKitDocument()->getCommandValues(".uno:ExtractLinkTargets"));
-            if (data && data.get()[0] != '\0')
-                json = data.get();
+            std::string data(getLOKitDocument()->getCommandValues(".uno:ExtractLinkTargets"));
+            if (!data.empty())
+                json = std::move(data);
         }
         if (json.empty())
         {
@@ -418,9 +417,9 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             // optional cell range. The other structure filters run against an
             // on-disk reload via extractDocumentStructureRequest.
             const std::string command = ".uno:ExtractDocumentStructure?filter=" + filter;
-            LOKitHelper::ScopedString data(getLOKitDocument()->getCommandValues(command.c_str()));
-            if (data)
-                json = data.get();
+            std::string data(getLOKitDocument()->getCommandValues(command.c_str()));
+            if (!data.empty())
+                json = std::move(data);
         }
         else
         {
@@ -1341,12 +1340,12 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
 
     if (command == ".uno:DocumentRepair")
     {
-        LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(".uno:Redo"));
-        LOKitHelper::ScopedString undo(getLOKitDocument()->getCommandValues(".uno:Undo"));
+        std::string values(getLOKitDocument()->getCommandValues(".uno:Redo"));
+        std::string undo(getLOKitDocument()->getCommandValues(".uno:Undo"));
         std::ostringstream jsonTemplate;
         jsonTemplate << R"({"commandName":".uno:DocumentRepair","Redo":)"
-                     << (!values ? "" : values.get())
-                     << ",\"Undo\":" << (!undo ? "" : undo.get()) << "}";
+                     << values
+                     << ",\"Undo\":" << undo << "}";
         std::string json = jsonTemplate.str();
         // json only contains view IDs, insert matching user names.
         std::map<int, UserInfo> viewInfo = _docManager->getViewInfo();
@@ -1360,19 +1359,20 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         // them with zstd. Fall back to an uncompressed text frame if
         // compression fails.
         const bool isFont = command.rfind(".uno:VectorRenderingFont", 0) == 0;
-        LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
-        const char* json = values ? values.get() : "{}";
+        std::string json(getLOKitDocument()->getCommandValues(command.c_str()));
+        if (json.empty())
+            json = "{}";
         const std::string_view header = isFont
                                             ? std::string_view("zstdvectorrenderingfont:\n")
                                             : std::string_view("zstdvectorprimitives:\n");
-        success = sendZstdFrame(header, json, std::strlen(json));
+        success = sendZstdFrame(header, json.data(), json.size());
         if (!success)
-            success = sendTextFrame("commandvalues: " + std::string(json));
+            success = sendTextFrame("commandvalues: " + json);
     }
     else
     {
-        LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
-        success = sendTextFrame("commandvalues: " + std::string(!values ? "{}" : values.get()));
+        std::string values(getLOKitDocument()->getCommandValues(command.c_str()));
+        success = sendTextFrame("commandvalues: " + (values.empty() ? std::string("{}") : values));
     }
 
     return success;
@@ -4757,8 +4757,8 @@ LogUiCommands::~LogUiCommands()
     // We have to check if undo-count-change happened because of it
     int undoAct = 0;
     int undoChg = 0;
-    LOKitHelper::ScopedString undoCountString(document->getCommandValues(".uno:UndoCount"));
-    undoAct = undoCountString ? atoi(undoCountString.get()) : 0;
+    std::string undoCountString(document->getCommandValues(".uno:UndoCount"));
+    undoAct = !undoCountString.empty() ? atoi(undoCountString.c_str()) : 0;
     // If undo count decrease without an undo .uno:Undo, then it is probably a fake (when cap reached)
     if (_lastUndoCount!=undoAct && (_lastUndoCount<undoAct || actSubCmd == ".uno:Undo"))
     {

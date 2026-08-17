@@ -623,7 +623,7 @@ public:
     /// @see ScModelObj::getRowColumnHeaders().
     void getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter);
     /// @see ScModelObj::getSheetGeometryData()
-    OString getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+    std::string getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
                                  bool bFiltered, bool bGroups);
     void extendTiledAreaIfNeeded();
 

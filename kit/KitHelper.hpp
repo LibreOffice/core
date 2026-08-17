@@ -133,10 +133,10 @@ namespace LOKitHelper
         resultInfo["lastcolumn"] = std::to_string(lastColumn);
         resultInfo["lastrow"] = std::to_string(lastRow);
 
-        ScopedString value(loKitDocument->getCommandValues(".uno:DefinePrintArea"));
-        if (value)
+        std::string value(loKitDocument->getCommandValues(".uno:DefinePrintArea"));
+        if (!value.empty())
         {
-            resultInfo["printranges"] = std::string(value.get());
+            resultInfo["printranges"] = std::move(value);
         }
     }
 
@@ -168,29 +168,25 @@ namespace LOKitHelper
         resultInfo["height"] = std::to_string(height);
         resultInfo["viewid"] = std::to_string(viewId);
 
-        ScopedString value(loKitDocument->getCommandValues(".uno:ReadOnly"));
-        if (value)
+        std::string value(loKitDocument->getCommandValues(".uno:ReadOnly"));
+        if (!value.empty())
         {
-            const std::string isReadOnly(value.get());
-
-            bool readOnly = (isReadOnly.find("true") != std::string::npos);
+            bool readOnly = (value.find("true") != std::string::npos);
             resultInfo["readonly"] = readOnly ? "true": "false";
         }
 
-        ScopedString externalLinks(loKitDocument->getCommandValues(".uno:ExternalLinksDisabled"));
-        if (externalLinks)
+        std::string externalLinks(loKitDocument->getCommandValues(".uno:ExternalLinksDisabled"));
+        if (!externalLinks.empty())
         {
-            const std::string isExternalLinksDisabled(externalLinks.get());
-
-            bool externalLinksDisabled = (isExternalLinksDisabled.find("true") != std::string::npos);
+            bool externalLinksDisabled = (externalLinks.find("true") != std::string::npos);
             resultInfo["externallinksdisabled"] = externalLinksDisabled ? "true": "false";
         }
 
-        ScopedString values(loKitDocument->getCommandValues(".uno:AllPageSize"));
-        if (values)
+        std::string values(loKitDocument->getCommandValues(".uno:AllPageSize"));
+        if (!values.empty())
         {
             Poco::JSON::Parser parser;
-            const auto var = parser.parse(values.get());
+            const auto var = parser.parse(values);
             const auto& obj = var.extract<Poco::JSON::Object::Ptr>();
             if (obj && obj->has("parts"))
             {

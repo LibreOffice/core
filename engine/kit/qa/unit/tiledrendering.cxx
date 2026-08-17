@@ -488,7 +488,7 @@ void TiledRenderingTest::testMultiKeyInput(COKit *pOffice)
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
     // get track changes ?
-    char *values = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
+    std::string values = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     std::cerr << "Values: '" << values << "'\n";
 }
 
