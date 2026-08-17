@@ -281,9 +281,7 @@ class Dispatcher {
 		};
 
 		this.actionsMap['zoomSettings'] = () => {
-			(app.map as any).settings.showSettingsDialog(
-				'common-smartZoom-container',
-			);
+			(app.map as any).settings.showSettingsDialog('zoom-behaviour');
 		};
 
 		this.actionsMap['searchprev'] = () => {
