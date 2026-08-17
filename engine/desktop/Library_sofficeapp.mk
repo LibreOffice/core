@@ -123,8 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	desktop/source/lib/kitinteractionhandler \
 	desktop/source/lib/kitclipboard \
-	$(if $(filter $(OS),ANDROID), \
-		desktop/source/lib/kitandroid) \
 ))
 $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,services))
 else
