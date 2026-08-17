@@ -25,6 +25,7 @@ enum WindowId {
 	Formulabar = -3,
 	AddressInput = -4,
 	QuickFind = -5,
+	NotesPanel = -6,
 }
 
 enum AutoCompleteDialogId {

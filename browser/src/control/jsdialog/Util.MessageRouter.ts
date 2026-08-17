@@ -61,6 +61,7 @@ class JSDialogMessageRouter {
 		if (jsontype === 'addressinputfield')
 			return !!app.socket._map.addressInputField;
 		if (jsontype === 'formulabar') return !!app.socket._map.formulabar;
+		if (jsontype === 'notespanel') return !!app.socket._map.notesPanel;
 		return true;
 	}
 
@@ -167,6 +168,8 @@ class JSDialogMessageRouter {
 			}
 		} else if (msgData.jsontype === 'quickfind') {
 			app.socket._map.fire('quickfind', { data: msgData });
+		} else if (msgData.jsontype === 'notespanel') {
+			app.socket._map.fire('notespanel', { data: msgData });
 		} else {
 			console.warn(
 				'Unhandled jsdialog message: {jsontype: "' +

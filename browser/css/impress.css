@@ -18,3 +18,44 @@
 	left: 50%;
 	transform: translateX(-50%);
 }
+
+/* Speaker notes pane below the slide (Control.NotesPanel.ts) */
+#notespanel-dock-wrapper {
+	display: none;
+	flex-direction: column;
+	flex: 0 0 auto;
+	height: 180px;
+	min-height: 60px;
+	background: var(--color-main-background);
+	border-top: 1px solid var(--color-border);
+	z-index: 990;
+}
+
+#notespanel-dock-wrapper.visible {
+	display: flex;
+}
+
+#notespanel-splitter {
+	flex: 0 0 auto;
+	height: 6px;
+	cursor: row-resize;
+	background: var(--color-background-dark);
+	touch-action: none;
+}
+
+#notespanel-splitter:hover {
+	background: var(--color-primary);
+}
+
+#notespanel-container {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
+}
+
+#notespanel-container > .jsdialog {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+}

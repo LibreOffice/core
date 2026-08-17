@@ -175,11 +175,9 @@ abstract class SidebarBase extends JSDialogComponent {
 			app.layoutingService.cancelLayoutingTask(this.resizeTaskId);
 
 		this.resizeTaskId = app.layoutingService.appendLayoutingTask(() => {
-			this.wrapper.style.maxHeight =
-				this.documentContainer.getBoundingClientRect().height + 'px';
 			if (this.container) {
 				(this.container as HTMLElement).style.height =
-					this.documentContainer.getBoundingClientRect().height + 'px';
+					this.wrapper.getBoundingClientRect().height + 'px';
 			}
 			this.resizeTaskId = null;
 		});

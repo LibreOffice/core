@@ -215,8 +215,14 @@ m4_ifelse(MOBILEAPP, [true],
         <div id="slide-import-panel"></div>
       </div>
       <div id="navigator-floating-icon"></div>
-      <div id="document-container" class="readonly" dir="ltr">
-        <div id="map"></div>
+      <div id="document-and-notes">
+        <div id="document-container" class="readonly" dir="ltr">
+          <div id="map"></div>
+        </div>
+        <div id="notespanel-dock-wrapper">
+          <div id="notespanel-splitter" role="separator" aria-orientation="horizontal"></div>
+          <div id="notespanel-container"></div>
+        </div>
       </div>
       <div id="sidebar-dock-wrapper">
         <div id="sidebar-panel" class="sidebar-panel"></div>

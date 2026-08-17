@@ -287,6 +287,9 @@ class StatusBar extends JSDialog.Toolbar {
 			{type: 'customtoolitem',  id: 'overview', command: '.uno:InsertCanvasSlide', text: _('Overview'), dataPriority: 9, visible: !app.isReadOnly(),
 				configLabel: _('Overview'), configPeers: ['overviewbreak']},
 			{type: 'separator', id: 'overviewbreak', orientation: 'vertical', dataPriority: 9, visible: !app.isReadOnly()},
+			{type: 'customtoolitem',  id: 'notespanel', command: 'notespanel', text: _('Notes'), icon: 'lc_notesmode.svg', dataPriority: 9, visible: false,
+				configLabel: _('Notes'), configPeers: ['notespanelbreak']},
+			{type: 'separator', id: 'notespanelbreak', orientation: 'vertical', dataPriority: 9, visible: false},
 		].concat(window.mode.isTablet() ? [] : [
 			{type: 'customtoolitem',  id: 'fitwidthzoom-impress', command: 'fitwidthzoom', text: _('Zoom to Fit Slide'), icon: 'pagewidth.svg', dataPriority: 8, visible: false},
 			{type: 'customtoolitem', id: 'fitwidthzoom-writer', command: 'fitwidthzoom', text: app.LOUtil.canOpenSettings() ? _('Fit the page to the window width. Smart Zoom on open can be toggled in Options under File tab.') : _('Fit the page to the window width.'), icon: 'pagewidth.svg', dataPriority: 8, visible: false },
@@ -499,6 +502,8 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('fitwidthzoom-writer', false);
 				this.showItem('fitwidthzoom-impress', true);
 				this.showItem('zoomreset', false);
+				this.showItem('notespanel', true);
+				this.showItem('notespanelbreak', true);
 			}
 			break;
 		case 'drawing':

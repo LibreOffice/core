@@ -737,10 +737,15 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'accessibility': { focusBack: true, combination: 'NV', de: null },
 				'children' : [
 					{
-						'id': 'notesmode',
-						'class': 'notesmode',
-						'type': 'bigcustomtoolitem',
-						'text': _('Notes View'),
+						'id': 'view-notes-menu',
+						'type': 'menubutton',
+						'command': '.uno:NotesMode',
+						'text': _('View Notes'),
+						'menu': [
+							{ 'id': 'notespanelbottom', 'type': 'action', 'text': _('Bottom Panel'), 'action': 'notespanelbottom', 'checked': false },
+							{ 'id': 'notespanelhandout', 'type': 'action', 'text': _('Handout Page'), 'action': 'notespanelhandout', 'checked': false },
+							{ 'id': 'notespanelhidden', 'type': 'action', 'text': _('Hidden'), 'action': 'notespanelhidden', 'checked': false }
+						],
 						'accessibility': { focusBack: false, combination: 'NV' }
 					},
 					{

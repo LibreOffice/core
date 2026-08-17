@@ -84,8 +84,13 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		const viewMode = IMPRESS_VIEW_MODES[newContext];
 		const isDrawOrNotesPage = newContext === 'DrawPage' || newContext === 'NotesPage';
 
-		if (isDrawOrNotesPage)
+		if (isDrawOrNotesPage) {
 			app.impress.notesMode = newContext === 'NotesPage';
+			// The handout page just turned on or off, so the View Notes menu and
+			// the status bar Notes button need their active state refreshed.
+			if (app.map.notesPanel)
+				app.map.notesPanel.refreshState();
+		}
 
 		if (app.map.uiManager.getCurrentMode() === 'notebookbar' && isDrawOrNotesPage) {
 			const targetElement = document.getElementById('notesmode');

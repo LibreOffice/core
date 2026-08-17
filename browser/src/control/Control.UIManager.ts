@@ -890,8 +890,11 @@ class UIManager extends window.L.Control {
 
 		this.initDarkModeFromSettings();
 
-		if (docType === 'presentation')
+		if (docType === 'presentation') {
 			this.syncPresenterConsoleToggle(this.shouldShowPresenterConsole());
+			this.map.notesPanel = JSDialog.NotesPanel(this.map);
+			JSDialog.MessageRouter.flushPending('notespanel');
+		}
 
 		if (docType === 'spreadsheet') {
 			this.sheetsBar = JSDialog.SheetsBar(this.map, isDesktop || window.mode.isTablet());

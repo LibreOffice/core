@@ -225,6 +225,7 @@ function getOverflowGroupDropdownButtons() {
 		'.uno:Paste',
 		'.uno:ToggleSheetGrid',
 		'MenuMargins',
+		'notespanel',
 		'zoomreset',
 	];
 }

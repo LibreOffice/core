@@ -160,6 +160,7 @@ interface MapInterface extends Evented {
 	menubar: Menubar;
 	userList: UserList;
 	sidebar: Sidebar;
+	notesPanel: NotesPanel;
 	getViewColor(viewId: number): number;
 
 	// TODO fix types:

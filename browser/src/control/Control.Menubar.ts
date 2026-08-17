@@ -520,7 +520,11 @@ class Menubar extends window.L.Control {
 				   {name: _('Toggle UI Mode'), id: 'toggleuimode', type: 'action'},
 				   {name: _('Show Ruler'), id: 'showruler', type: 'action'},
 				   {name: _('Show Status Bar'), id: 'showstatusbar', type: 'action'},
-				   {name: _('Notes View'), id: 'notesmode', type: 'action'},
+				   {name: _('View Notes'), id: 'viewnotes', type: 'menu', menu: [
+					{name: _('Bottom Panel'), id: 'notespanelbottom', type: 'action'},
+					{name: _('Handout Page'), id: 'notespanelhandout', type: 'action'},
+					{name: _('Hidden'), id: 'notespanelhidden', type: 'action'},
+				   ]},
 				   {name: _('Hide Menu Bar'), id: 'togglemenubar', type: 'action'},
 				   {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 				   {name: _('Invert Background'), id: 'invertbackground', type: 'action'},
@@ -2223,8 +2227,20 @@ class Menubar extends window.L.Control {
 						} else {
 							$(aItem).removeClass(constChecked);
 						}
-					} else if (id === 'notesmode') {
+					} else if (id === 'notespanelbottom') {
+						if (this._map.notesPanel && this._map.notesPanel.isVisible())
+							$(aItem).addClass(constChecked);
+						else
+							$(aItem).removeClass(constChecked);
+					} else if (id === 'notespanelhandout') {
 						if (app.impress.notesMode)
+							$(aItem).addClass(constChecked);
+						else
+							$(aItem).removeClass(constChecked);
+					} else if (id === 'notespanelhidden') {
+						const bottomVisible =
+							this._map.notesPanel && this._map.notesPanel.isVisible();
+						if (!bottomVisible && !app.impress.notesMode)
 							$(aItem).addClass(constChecked);
 						else
 							$(aItem).removeClass(constChecked);
@@ -2656,8 +2672,12 @@ class Menubar extends window.L.Control {
 			app.dispatcher.dispatch('toggleuimode');
 		} else if (id === 'showstatusbar') {
 			app.dispatcher.dispatch('showstatusbar');
-		} else if (id === 'notesmode') {
-			app.dispatcher.dispatch('notesmode');
+		} else if (id === 'notespanelbottom') {
+			app.dispatcher.dispatch('notespanelbottom');
+		} else if (id === 'notespanelhandout') {
+			app.dispatcher.dispatch('notespanelhandout');
+		} else if (id === 'notespanelhidden') {
+			app.dispatcher.dispatch('notespanelhidden');
 		} else if (id === 'togglemenubar') {
 			this._map.uiManager.toggleMenubar();
 		} else if (id === 'collapsenotebookbar') {

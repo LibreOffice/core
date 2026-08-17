@@ -256,6 +256,16 @@ input, button {
 	top: 36px;
 	position: fixed;
 }
+/* The document and anything docked under it, such as the Impress notes pane. */
+#document-and-notes {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+	min-height: 0;
+	position: relative;
+}
+
 #document-container {
 	font-family: var(--cool-font);
 	background-color: var(--color-main-background);
@@ -266,6 +276,13 @@ input, button {
 	flex: 1;
 	display: block;
 	height: 100%;
+}
+
+/* With a pane below it the document takes the height flex leaves over, so the fixed height
+   above would push the pane off the bottom. */
+#document-and-notes.notes-visible > #document-container {
+	height: auto;
+	min-height: 0;
 }
 
 /* Fade used when a zoom gesture at the zoom limit switches between the Overview slide

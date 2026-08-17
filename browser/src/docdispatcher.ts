@@ -1023,6 +1023,29 @@ class Dispatcher {
 			else app.map.sendUnoCommand('.uno:NotesMode');
 		};
 
+		this.actionsMap['notespanel'] = function () {
+			app.map.notesPanel.toggle();
+		};
+
+		// The three notes views are mutually exclusive. Picking one turns the
+		// others off, and "Hidden" turns both off.
+		this.actionsMap['notespanelbottom'] = function () {
+			if (app.impress.notesMode)
+				app.map.sendUnoCommand('.uno:NormalMultiPaneGUI');
+			if (!app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+		};
+
+		this.actionsMap['notespanelhandout'] = function () {
+			if (app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+			if (!app.impress.notesMode) app.map.sendUnoCommand('.uno:NotesMode');
+		};
+
+		this.actionsMap['notespanelhidden'] = function () {
+			if (app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+			if (app.impress.notesMode)
+				app.map.sendUnoCommand('.uno:NormalMultiPaneGUI');
+		};
+
 		this.actionsMap['animationdeck'] = () => {
 			app.map.sidebarFromNotebookbar.toggleAnimationsSidebar();
 		};
