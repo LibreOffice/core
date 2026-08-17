@@ -621,8 +621,13 @@ export class TilesSection extends CanvasSectionObject {
 	public onClick(point: cool.SimplePoint, e: MouseEvent): void {
 		// Slides pane is not focusable, we are using a variable to follow its focused state.
 		// Until the pane is focusable, we will need to keep below check here.
-		if (this.map._docLayer._docType === 'presentation' || this.map._docLayer._docType === 'drawing')
+		if (this.map._docLayer._docType === 'presentation' || this.map._docLayer._docType === 'drawing') {
 			this.map._docLayer._preview.partsFocused = false; // Parts (slide preview pane) is no longer focused, we need to set this here to avoid unwanted behavior.
+			if (this.map._clip) {
+				this.map._clip.clearSelection();
+			}
+			this.map.focus();
+		}
 	}
 
 	// Return the fraction of intersection area with area1.
