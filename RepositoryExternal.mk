@@ -83,6 +83,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(MDDS_CFLAGS) \
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),mdds)
 
 endef
 
@@ -110,6 +111,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(GLM_CFLAGS) \
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),glm)
 
 endef
 
@@ -140,6 +142,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 	-DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
 	-DSKIA_DLL \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),skia)
 endef
 $(eval $(call gb_Helper_register_external_libraries_for_install,skia,OOOLIBS,ooo,\
         skia \
@@ -155,6 +158,7 @@ $(call gb_LinkTarget_set_include,$(1),\
         -I$(SRCDIR)/external/sane/inc) \
     $$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),SANE)
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_use_unpacked,$(1),twain_dsm)
@@ -301,6 +305,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	mariadb-connector-c \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),connector\/c)
 ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
 	-liconv \
@@ -389,6 +394,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(2) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),zlib)
 
 endef
 
@@ -434,6 +440,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),libjpeg-turbo)
+$(call gb_Helper_LinkTarget_use_external,$(1),libjpeg-turbo)
 
 endef
 
@@ -471,6 +478,7 @@ else
 $(call gb_LinkTarget_add_libs,$(1),$(MYTHES_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),mythes)
 endif
+$(call gb_Helper_LinkTarget_use_external,$(1),mythes)
 
 endef
 
@@ -505,6 +513,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(2) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),libexpat)
 
 endef
 
@@ -549,6 +558,7 @@ else
 $(call gb_LinkTarget_add_libs,$(1),$(HYPHEN_LIB))
 $(call gb_LinkTarget_use_external_project,$(1),hyphen)
 endif
+$(call gb_Helper_LinkTarget_use_external,$(1),hyphen)
 
 endef
 
@@ -588,6 +598,7 @@ else
 $(call gb_LinkTarget_add_libs,$(1),$(HUNSPELL_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),hunspell)
 endif
+$(call gb_Helper_LinkTarget_use_external,$(1),hunspell)
 
 endef
 
@@ -665,6 +676,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),$(2))
+$(call gb_Helper_LinkTarget_use_external,$(1),boost)
 
 endef
 
@@ -673,16 +685,19 @@ $(call gb_LinkTarget__use_boost_lib,$(1),boost_locale)
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(if $(filter $(OS),MACOSX),-liconv) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),boost)
 
 endef
 
 define gb_LinkTarget__use_boost_date_time
 $(call gb_LinkTarget__use_boost_lib,$(1),boost_date_time)
+$(call gb_Helper_LinkTarget_use_external,$(1),boost)
 
 endef
 
 define gb_LinkTarget__use_boost_filesystem
 $(call gb_LinkTarget__use_boost_lib,$(1),boost_filesystem)
+$(call gb_Helper_LinkTarget_use_external,$(1),boost)
 
 endef
 
@@ -692,6 +707,7 @@ endef
 
 define gb_LinkTarget__use_boost_iostreams
 $(call gb_LinkTarget__use_boost_lib,$(1),boost_iostreams)
+$(call gb_Helper_LinkTarget_use_external,$(1),boost)
 
 endef
 
@@ -701,6 +717,7 @@ endef
 
 define gb_LinkTarget__use_boost_system
 $(call gb_LinkTarget__use_boost_lib,$(1),boost_system)
+$(call gb_Helper_LinkTarget_use_external,$(1),boost)
 
 endef
 
@@ -714,6 +731,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(BOOST_CPPFLAGS) \
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),boost)
 
 endef
 
@@ -746,6 +764,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	libcmis \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),libcmis)
 
 endef
 
@@ -793,6 +812,7 @@ $(call gb_LinkTarget_use_external_project,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(gb_UnpackedTarball_workdir)/libatomic_ops/src/lib -latomic_ops \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),libatomic_ops)
 
 endef
 
@@ -837,6 +857,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 $(call gb_LinkTarget_use_external_project,$(1),libexttextcat)
 endif
 
+$(call gb_Helper_LinkTarget_use_external,$(1),libexttextcat)
 
 endef
 
@@ -882,6 +903,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 $(call gb_LinkTarget_use_external_project,$(1),libnumbertext,full)
 
 endif
+$(call gb_Helper_LinkTarget_use_external,$(1),libnumbertext)
 
 endef
 
@@ -1028,6 +1050,9 @@ $(eval $(call gb_Helper_register_external_packages_for_install,xmlsec,ooo,\
 ))
 
 define gb_LinkTarget__use_xmlsec
+ifneq ($(OS),WNT)
+$(call gb_Helper_LinkTarget_use_external,$(1),xmlsec)
+endif
 
 endef
 
@@ -1062,6 +1087,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LIBLANGTAG_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),liblangtag)
+$(call gb_Helper_LinkTarget_use_external,$(1),liblangtag)
 
 endef
 
@@ -1258,6 +1284,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(FREETYPE_CFLAGS) \
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),freetype)
 
 endef
 
@@ -1352,6 +1379,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
     graphite \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),graphite2)
 
 endef
 
@@ -1484,6 +1512,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),$(HARFBUZZ_LIBS))
 $(call gb_LinkTarget_use_external,$(1),icuuc)
 $(call gb_LinkTarget_use_external_project,$(1),harfbuzz)
+$(call gb_Helper_LinkTarget_use_external,$(1),harfbuzz)
 
 endef
 
@@ -1550,6 +1579,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(if $(filter $(OS),LINUX),-pthread) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),openssl)
+$(call gb_Helper_LinkTarget_use_external,$(1),openssl)
 ifeq ($(OS),SOLARIS)
 $(call gb_LinkTarget_add_libs,$(1),\
 	-lnsl \
@@ -1587,7 +1617,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(ARGON2_LIBS))
+ifeq ($(OS),WNT)
 $(call gb_LinkTarget_use_package,$(1),argon2)
+else
+$(call gb_Helper_LinkTarget_use_external,$(1),argon2)
+endif
+
 endef
 
 endif # SYSTEM_ARGON2
@@ -1615,6 +1650,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libcdr/src/lib/.libs/libcdr-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libcdr)
+$(call gb_Helper_LinkTarget_use_external,$(1),libcdr)
 endef
 
 endif # SYSTEM_CDR
@@ -1644,6 +1680,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libebook/src/lib/.libs/libe-book-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libebook)
+$(call gb_Helper_LinkTarget_use_external,$(1),libe-book)
 
 endef
 
@@ -1742,6 +1779,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libfreehand/src/lib/.libs/libfreehand-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libfreehand)
+$(call gb_Helper_LinkTarget_use_external,$(1),libfreehand)
 
 endef
 
@@ -1831,6 +1869,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libepubgen/src/lib/.libs/libepubgen-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libepubgen)
+$(call gb_Helper_LinkTarget_use_external,$(1),libepubgen)
 
 endef
 define gb_ExternalProject__use_epubgen
@@ -1930,6 +1969,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libabw/src/lib/.libs/libabw-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libabw)
+$(call gb_Helper_LinkTarget_use_external,$(1),libabw)
 
 endef
 define gb_ExternalProject__use_abw
@@ -1962,6 +2002,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libmspub/src/lib/.libs/libmspub-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libmspub)
+$(call gb_Helper_LinkTarget_use_external,$(1),libmspub)
 
 endef
 
@@ -1991,6 +2032,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libpagemaker/src/lib/.libs/libpagemaker-0.0$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libpagemaker)
+$(call gb_Helper_LinkTarget_use_external,$(1),libpagemaker)
 
 endef
 define gb_ExternalProject__use_pagemaker
@@ -2024,6 +2066,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libqxp/src/lib/.libs/libqxp-0.0$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libqxp)
+$(call gb_Helper_LinkTarget_use_external,$(1),libqxp)
 
 endef
 define gb_ExternalProject__use_qxp
@@ -2057,6 +2100,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libzmf/src/lib/.libs/libzmf-0.0$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libzmf)
+$(call gb_Helper_LinkTarget_use_external,$(1),libzmf)
 
 endef
 define gb_ExternalProject__use_zmf
@@ -2089,6 +2133,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libvisio/src/lib/.libs/libvisio-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libvisio)
+$(call gb_Helper_LinkTarget_use_external,$(1),libvisio)
 
 endef
 
@@ -2534,6 +2579,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),mDNSResponder)
+$(call gb_Helper_LinkTarget_use_external,$(1),mndsresponder)
 endef
 
 endif # MDNSRESPONDER
@@ -2650,6 +2696,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	libpng \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),libpng)
 $(call gb_LinkTarget__use_zlib,$(1))
 
 endef
@@ -2701,6 +2748,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 endif
 $(call gb_LinkTarget_use_external_project,$(1),libtiff,full)
+$(call gb_Helper_LinkTarget_use_external,$(1),libtiff)
 
 endef
 
@@ -2750,6 +2798,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 endif
 $(call gb_LinkTarget_use_external_project,$(1),libwebp)
+$(call gb_Helper_LinkTarget_use_external,$(1),libwebp)
 
 endef
 
@@ -2858,6 +2907,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),poppler)
+$(call gb_Helper_LinkTarget_use_external,$(1),poppler)
 $(call gb_LinkTarget_use_external,$(1),libjpeg)
 
 ifeq ($(OS),MACOSX)
@@ -2980,6 +3030,7 @@ $(call gb_LinkTarget_add_libs,$(1), \
 	$(gb_UnpackedTarball_workdir)/openldap/libraries/libldap/.libs/libldap.a \
 	$(gb_UnpackedTarball_workdir)/openldap/libraries/liblber/.libs/liblber.a \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),openldap)
 
 endef
 endif
@@ -3012,6 +3063,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libtommath/libtommath$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libtommath)
+$(call gb_Helper_LinkTarget_use_external,$(1),libtommath)
 
 endef
 
@@ -3128,6 +3180,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/postgresql/src/port/libpgport$(gb_StaticLibrary_PLAINEXT) \
     $(if $(WITH_GSSAPI),$(GSSAPI_LIBS)) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),postgresql)
 
 endif # !WNT
 
@@ -3445,6 +3498,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libeot/.libs/libeot$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libeot)
+$(call gb_Helper_LinkTarget_use_external,$(1),libeot)
 
 endef
 
@@ -3631,6 +3685,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/breakpad/src/client/linux/libbreakpad_client.a \
 )
 endif
+$(call gb_Helper_LinkTarget_use_external,$(1),breakpad)
 
 $(call gb_LinkTarget_use_external_project,$(1),breakpad)
 
@@ -4260,6 +4315,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 endif
 
 $(call gb_LinkTarget_use_external_project,$(1),bzip2)
+$(call gb_Helper_LinkTarget_use_external,$(1),bzip2)
 endef
 
 define gb_ExternalProject__use_bzip2
@@ -4312,6 +4368,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(gb_UnpackedTarball_workdir)/dragonbox/include/\
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),dragonbox)
 endef
 
 endif
@@ -4325,6 +4382,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	dtoa \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),dtoa)
 
 endef
 
@@ -4362,6 +4420,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	box2d \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),box2d)
 
 endef
 
@@ -4392,6 +4451,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	zxcvbn-c \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),zxcvbn-c)
 endef
 endif
 
@@ -4423,6 +4483,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	zxing \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),zxing-c\+\+)
 
 endef
 
@@ -4455,6 +4516,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(gb_UnpackedTarball_workdir)/frozen/include/\
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),frozen)
 endef
 endif
 

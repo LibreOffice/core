@@ -610,18 +610,34 @@ def process_install_script(install_script):
     return result
 
 
-def read_externals(path):
-    """Read the gb_Externals value from a temp file."""
+def read_externals_file(path):
+    """Read a temp file."""
     entries = []
     with open(path, "r") as f:
         for line in f.readlines():
-            entries += line.strip().split(" ")
+            if line != "\n":
+                entries += line.strip().split(" ")
         if len(entries) == 0: # practically impossible to build with none
             raise Exception(f"externals file empty: {path}")
+    return entries
+
+def read_externals(path):
+    """Read the gb_Externals value from a temp file."""
+    entries = read_externals_file(path)
     result = {}
     for entry in entries:
         e = entry.split(";")
         result[(e[1], e[2])] = e[0]
+    return result
+
+def read_external_staticlink(path):
+    """Read the gb_External_StaticLink value from a temp file."""
+    # note: this can only contain content in a *top-level* make invocation
+    entries = read_externals_file(path)
+    result = {}
+    for entry in entries:
+        e = entry.split(";")
+        result[e[0]] = result.get(e[0], set()).union({e[1]})
     return result
 
 def assign_externals(files_by_package, externals):
@@ -974,9 +990,19 @@ def add_dependencies(files_by_package):
 #    print(f"SYSDEPS: {SYSDEPS}")
 
 
+def add_static_dependencies(files_by_package, externalstaticlink):
+    """Add static link dependencies on externals to files."""
+
+    for package in files_by_package:
+        for file in files_by_package[package]:
+            filename = os.path.basename(file["instpath"])
+            if filename in externalstaticlink:
+                file["externaldeps"] = externalstaticlink[filename]
+
+
 if __name__ == "__main__":
-    if len(sys.argv) < 13:
-        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script> <languages>")
+    if len(sys.argv) < 14:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <6 packinfo> <path of install script> <languages> <externals> <externalstatic>")
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
@@ -992,14 +1018,17 @@ if __name__ == "__main__":
         install_script = parse_install_script(sys.argv[10])
         languages = sys.argv[11].split()
         externalsfile = sys.argv[12]
+        externalstaticfile = sys.argv[13]
         init_filelistdirs(ziplist)
         gen_packages(packinfos, ziplist, languages)
         files_by_package = process_install_script(install_script)
         externalfiles = read_externals(externalsfile)
+        externalstaticlink = read_external_staticlink(externalstaticfile)
         assign_externals(files_by_package, externalfiles)
         files = locate_files(files_by_package, languages, ziplist)
         filter_files(files)
         add_dependencies(files)
+        add_static_dependencies(files, externalstaticlink)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
