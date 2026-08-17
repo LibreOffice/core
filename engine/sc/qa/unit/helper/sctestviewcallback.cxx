@@ -261,6 +261,11 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_sCellFormula = OString(pPayload);
         }
         break;
+        case COKitCallbackType::REFERENCE_MARKS:
+        {
+            m_sReferenceMarks = OString(pPayload);
+        }
+        break;
         case COKitCallbackType::COMMENT:
         {
             m_aCommentCallbackResult.clear();

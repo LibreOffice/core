@@ -2221,6 +2221,40 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartInsertPosNoBorderOffset)
     CPPUNIT_ASSERT_EQUAL(aSelection.Top(), aPos.Y());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceMarksClearedAfterEdit)
+{
+    // cool#15850: the pink reference-highlight overlay a formula shows while
+    // being edited (e.g. "=" then pick another cell) stayed on screen after
+    // pressing Enter, because nothing told the client to clear it once
+    // editing was over.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    int nView1 = KitHelper::getCurrentView();
+    ScTestViewCallback aView1;
+    KitHelper::setView(nView1);
+
+    // Edit A2 with a formula referencing A1 above it.
+    pViewShell->SetCursor(0, 1);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, '=', 0);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, '=', 0);
+    Scheduler::ProcessEventsToIdle();
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::UP);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::UP);
+    Scheduler::ProcessEventsToIdle();
+
+    // The reference to A1 is now highlighted.
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("rectangle") >= 0);
+
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix, the highlight from above was never cleared.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aView1.m_sReferenceMarks.indexOf("rectangle"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

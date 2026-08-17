@@ -3448,6 +3448,11 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
     }
     pRefViewSh = nullptr; // Also without FormulaMode due to FunctionsAutoPilot
     DeleteRangeFinder();
+    // DeleteRangeFinder() does not itself tell the client the highlighted
+    // references are gone, and nothing else does once editing is over, so
+    // clear them explicitly here.
+    if (comphelper::COKit::isActive() && pActiveViewSh)
+        SendReferenceMarks(pActiveViewSh, std::vector<ReferenceMark>());
     ResetAutoPar();
 
     bool bOldMod = bModified;
@@ -3594,6 +3599,11 @@ void ScInputHandler::CancelHandler()
     }
     pRefViewSh = nullptr; // Also without FormulaMode due to FunctionsAutoPilot
     DeleteRangeFinder();
+    // DeleteRangeFinder() does not itself tell the client the highlighted
+    // references are gone, and nothing else does once editing is over, so
+    // clear them explicitly here.
+    if (comphelper::COKit::isActive() && pActiveViewSh)
+        SendReferenceMarks(pActiveViewSh, std::vector<ReferenceMark>());
     ResetAutoPar();
 
     eMode = SC_INPUT_NONE;

@@ -71,6 +71,7 @@ public:
     bool m_bViewLock;
     int m_nViewLockCount;
     OString m_sCellFormula;
+    OString m_sReferenceMarks;
     boost::property_tree::ptree m_aCommentCallbackResult;
     ScTestEditCursorMessage m_aInvalidateCursorResult;
     ScTestTextSelectionMessage m_aTextSelectionResult;
