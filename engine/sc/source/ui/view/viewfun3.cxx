@@ -690,9 +690,8 @@ void ScViewFunc::PasteDraw()
     ScViewData& rViewData = GetViewData();
     SCCOL nPosX = rViewData.GetCurX();
     SCROW nPosY = rViewData.GetCurY();
-    vcl::Window* pWin = GetActiveWin();
-    Point aPos = pWin->PixelToLogic( rViewData.GetScrPos( nPosX, nPosY,
-                                     rViewData.GetActivePart() ) );
+    SCTAB nTab = rViewData.CurrentTabForData();
+    Point aPos = rViewData.GetDocument().GetMMRect( nPosX, nPosY, nPosX, nPosY, nTab ).TopLeft();
     const ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(rViewData.GetActiveWin()));
     if (pDrawClip)
     {

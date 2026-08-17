@@ -45,10 +45,13 @@ describe(['tagdesktop'], 'Pasting a copied shape in Calc', function() {
 			});
 			helper.processToIdle(win);
 
-			// Leave the shape behind and move a hundred rows down.
+			// Leave the shape behind and move two thousand rows down. Row 2000 is far enough
+			// both to tell a paste that ignores the cell cursor from one that honours it, and
+			// to show up a paste position that drifts by a fraction of a row for every row
+			// above it.
 			helper.typeIntoDocument('{esc}');
 			cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
-			calcHelper.enterCellAddressAndConfirm(win, 'A100');
+			calcHelper.enterCellAddressAndConfirm(win, 'A2000');
 
 			cy.then(function() {
 				const cellCursor = win.app.calc.cellCursorRectangle;
@@ -80,6 +83,9 @@ describe(['tagdesktop'], 'Pasting a copied shape in Calc', function() {
 
 				expect(pasted.top, 'the copy is clear of the original')
 					.to.be.greaterThan(source.bottom);
+				// A pasted object is centred on the paste point, and the paste point is the
+				// corner of the cursor cell moved down by half the object, so its top edge and
+				// the top of that cell meet. Allow a row for the rounding on the way here.
 				expect(pasted.top, 'the copy starts on the row the paste came from')
 					.to.be.closeTo(target.top, target.rowHeight);
 			});

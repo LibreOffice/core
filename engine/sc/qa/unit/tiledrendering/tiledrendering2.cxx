@@ -1010,10 +1010,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteShapeAtCellCursor)
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    // The shape is left behind and the cell cursor goes to A100, far enough down that a paste
-    // ignoring the cursor is easy to tell apart from one honouring it.
+    // Use a large enough row so that the gridofffset errors are noticible.
     pDrawView->UnmarkAllObj();
-    const SCROW nTargetRow = 99;
+    const SCROW nTargetRow = 1999;
     pView->SetCursor(0, nTargetRow);
     Scheduler::ProcessEventsToIdle();
 
@@ -1026,11 +1025,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteShapeAtCellCursor)
     // The copy is clear of the original, which it used to sit exactly on top of.
     CPPUNIT_ASSERT_GREATER(aSourceRectangle.Bottom(), aPastedRectangle.Top());
 
-    // It sits on the cursor row. A pasted object is centred on the paste point, so it reaches
-    // half its own height above the top of that row.
+    // TopLeft of target cell should match the pasted rectangle's TopLeft.
     const tools::Rectangle aTargetCell = pDoc->GetMMRect(0, nTargetRow, 0, nTargetRow, 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aTargetCell.Top()), double(aPastedRectangle.Center().Y()),
-                                 double(aSourceRectangle.GetHeight()));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aTargetCell.Top()), double(aPastedRectangle.Top()), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aTargetCell.Left()), double(aPastedRectangle.Left()), 2.0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
