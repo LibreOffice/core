@@ -725,7 +725,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_internal,\
 	Lib/pip/_internal/__init__.py \
-	Lib/pip/_internal/build_env.py \
 	Lib/pip/_internal/cache.py \
 	Lib/pip/_internal/configuration.py \
 	Lib/pip/_internal/exceptions.py \
@@ -733,6 +732,15 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_internal/pyproject.py \
 	Lib/pip/_internal/self_outdated_check.py \
 	Lib/pip/_internal/wheel_builder.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_internal/build_env,\
+	Lib/pip/_internal/build_env/__init__.py \
+	Lib/pip/_internal/build_env/base.py \
+	Lib/pip/_internal/build_env/installer.py \
+	Lib/pip/_internal/build_env/noop.py \
+	Lib/pip/_internal/build_env/venv.py \
+	Lib/pip/_internal/build_env/virtual.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_internal/cli,\
@@ -982,6 +990,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/idna,\
 	Lib/pip/_vendor/idna/__init__.py \
+	Lib/pip/_vendor/idna/__main__.py \
+	Lib/pip/_vendor/idna/cli.py \
 	Lib/pip/_vendor/idna/codec.py \
 	Lib/pip/_vendor/idna/compat.py \
 	Lib/pip/_vendor/idna/core.py \
@@ -1031,6 +1041,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/platformdirs,\
 	Lib/pip/_vendor/platformdirs/__init__.py \
 	Lib/pip/_vendor/platformdirs/__main__.py \
+	Lib/pip/_vendor/platformdirs/_xdg.py \
 	Lib/pip/_vendor/platformdirs/android.py \
 	Lib/pip/_vendor/platformdirs/api.py \
 	Lib/pip/_vendor/platformdirs/macos.py \
@@ -1091,6 +1102,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/requests/__init__.py \
 	Lib/pip/_vendor/requests/__version__.py \
 	Lib/pip/_vendor/requests/_internal_utils.py \
+	Lib/pip/_vendor/requests/_types.py \
 	Lib/pip/_vendor/requests/adapters.py \
 	Lib/pip/_vendor/requests/api.py \
 	Lib/pip/_vendor/requests/auth.py \
