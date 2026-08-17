@@ -354,7 +354,7 @@ window.L.Map.include({
 		}
 
 		if (!this.isEditMode() && pageRects && pageRects.length > docLayer._currentPage) {
-			const posY = Math.round(pageRects[docLayer._currentPage][1] / app.dpiScale);
+			const posY = Math.round(pageRects[docLayer._currentPage][1] * app.twipsToPixels);
 
 			const section = app.sectionContainer.getSectionWithName(app.CSections.Scroll.name);
 			if (section)
