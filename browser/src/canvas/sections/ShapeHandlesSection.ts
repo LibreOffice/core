@@ -1477,7 +1477,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
 
 		this.context.beginPath();
-		this.context.strokeStyle = 'black';
+		this.context.strokeStyle = app.map.uiManager.isBackgroundDark() ? 'white' : 'black';
 		this.context.setLineDash([3, 3]);
 
 		if (this.containerObject.isDraggingSomething() && this.containerObject.targetSection === this.name) {
