@@ -18,6 +18,36 @@ var NotebookbarAccessibilityDefinitions = function() {
 		return id.substr(0, separatorPos);
 	};
 
+	this.sidebarCombinations = {
+		'paperformat-input': 'KF',
+		'fillstyle-input': 'KB',
+		'orientation-input': 'KO',
+		'marginLB-input': 'KM',
+		'masterslide-input': 'KS'
+	};
+
+	this.checkSidebarWidgets = function(selectedDefinitions) {
+		const sidebar = document.getElementById('sidebar-dock-wrapper');
+		if (!sidebar)
+			return;
+
+		for (const id in this.sidebarCombinations) {
+			if (!Object.prototype.hasOwnProperty.call(this.sidebarCombinations, id))
+				continue;
+
+			if (selectedDefinitions[id] !== undefined)
+				continue;
+
+			if (sidebar.querySelector('[id="' + id + '"]')) {
+				selectedDefinitions[id] = {
+					focusBack: false,
+					combination: this.sidebarCombinations[id],
+					contentList: []
+				};
+			}
+		}
+	};
+
 	this.getContentListRecursive = function(rawList, list, language) {
 		if (Array.isArray(rawList)) {
 			for (var i = 0; i < rawList.length; i++) {
@@ -215,6 +245,7 @@ var NotebookbarAccessibilityDefinitions = function() {
 		var selectedDefinitions = this.getTabsAndContents();
 		this.checkIntegratorButtons(selectedDefinitions);
 		this.optionsToolButtons(selectedDefinitions);
+		this.checkSidebarWidgets(selectedDefinitions);
 
 		return selectedDefinitions;
 	};

@@ -192,6 +192,16 @@ var NotebookbarAccessibility = function() {
 				}
 
 				if (this.state === 0) {
+					const listbox = element.tagName === 'SELECT' ? element : element.querySelector('select');
+					if (listbox) {
+						this.setTabItemDescription(element);
+						this.accessibilityInputElement.blur();
+						listbox.focus();
+						listbox.showPicker();
+						this.filteredItem = null;
+						return true;
+					}
+
 					this.removeFocusFromTab();
 					element.click();
 					this.addTabFocus();
