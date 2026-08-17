@@ -24,6 +24,7 @@
 #endif
 
 #include <memory>
+#include <set>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/edit.hxx>
 
@@ -52,8 +53,10 @@ private:
     bool m_isKeyBoardModify : 1;
     bool m_isMatchCase : 1;
     bool m_bRenderSelectedEntry : 1;
+    bool m_bWholeWidthPreview : 1;
     sal_Int32 m_nMaxWidthChars;
     sal_Int32 m_nWidthInChars;
+    std::set<sal_Int32> m_aHiddenEntries;
     Link<ComboBox&, void> m_SelectHdl;
 
     void ImplInitComboBoxData();
@@ -115,6 +118,14 @@ public:
 
     void            SetRenderSelectedEntry( bool bOn ) { m_bRenderSelectedEntry = bOn; }
     bool            IsRenderSelectedEntry() const { return m_bRenderSelectedEntry; }
+
+    void            SetWholeWidthPreview( bool bOn ) { m_bWholeWidthPreview = bOn; }
+    bool            IsWholeWidthPreview() const { return m_bWholeWidthPreview; }
+
+    /** Marks an entry as one which the box can hold as its value but which is
+        not offered in the drop-down list. Positions are invalidated by
+        inserting and removing entries; Clear() drops them all. */
+    void            SetEntryHidden( sal_Int32 nPos, bool bHidden );
 
     virtual void    SetText( const OUString& rStr ) override;
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) override;

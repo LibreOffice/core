@@ -126,7 +126,7 @@ private:
 
     void Initialize();
 
-    void FillLineEndListBox(weld::ComboBox& rListBox);
+    void FillLineEndListBox(weld::ComboBox& rListBox, tools::Long nExtraStyle = -1);
     void SelectLineEndEntry(weld::ComboBox& rListBox,
                             const std::optional<basegfx::B2DPolyPolygon>& roPolygon);
     const XLineEndEntry* GetSelectedLineEnd(const weld::ComboBox& rListBox) const;

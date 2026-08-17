@@ -881,6 +881,12 @@ public:
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
 
+    /* Marks an entry as one the box can hold as its value - so that it can be
+       selected, and rendered by a custom renderer - but which is not offered
+       in the drop-down list. Only honoured where the list is drawn by the
+       toolkit itself. */
+    virtual void set_entry_hidden(int /*pos*/, bool /*bHidden*/) {}
+
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;
     virtual void clear() = 0;

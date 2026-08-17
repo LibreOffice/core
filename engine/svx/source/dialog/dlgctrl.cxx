@@ -1044,13 +1044,124 @@ void SvxLineLB::Modify(const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& r
 
 SvxLineEndLB::SvxLineEndLB(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
+    , m_ePreview(SvxLineEndPreview::Start)
 {
 }
 
-void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
+namespace
 {
+constexpr tools::Long WHOLE_LINE_PREVIEW_FACTOR = 4;
+}
+
+void SvxLineEndLB::RenderPreview(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
+                                 const Bitmap& rBitmap, bool bStart)
+{
+    const tools::Long nMidY = rRect.Top() + rRect.GetHeight() / 2;
+
+    if (rBitmap.IsEmpty())
+    {
+        // "no arrowhead": a plain line across the preview
+        rDevice.SetLineColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
+        rDevice.DrawLine(Point(rRect.Left() + 2, nMidY), Point(rRect.Right() - 2, nMidY));
+        return;
+    }
+
+    // the bitmap holds both ends of the line, only one of them belongs here
+    const Size aBmpSize(rBitmap.GetSizePixel());
+    const tools::Long nHalfW = aBmpSize.Width() / 2;
+    const Point aSrcPt(bStart ? 0 : nHalfW, 0);
+    const Size aHalfSize(nHalfW, aBmpSize.Height());
+    rDevice.DrawBitmap(Point(rRect.Left() + 2, nMidY - aBmpSize.Height() / 2), aHalfSize, aSrcPt,
+                       aHalfSize, rBitmap);
+}
+
+Size SvxLineEndLB::GetPreviewSize(const vcl::RenderContext& rDevice, const XLineEndListRef& rList)
+{
+    tools::Long nImgWidth = 16; // fallback for the "no arrowhead" line stub
+    tools::Long nHeight = rDevice.GetTextHeight();
+
+    if (rList.is())
+    {
+        const tools::Long nCount = rList->Count();
+        for (tools::Long i = 0; i < nCount; ++i)
+        {
+            const Bitmap aBmp = rList->GetUiBitmap(i);
+            if (!aBmp.IsEmpty())
+            {
+                nImgWidth = std::max<tools::Long>(nImgWidth, aBmp.GetSizePixel().Width() / 2);
+                nHeight = std::max<tools::Long>(nHeight, aBmp.GetSizePixel().Height());
+            }
+        }
+    }
+
+    return Size(nImgWidth + 4, nHeight + 4);
+}
+
+IMPL_LINK(SvxLineEndLB, RenderHdl, weld::ComboBox::render_args, aArgs, void)
+{
+    vcl::RenderContext& rDevice = std::get<0>(aArgs);
+    const tools::Rectangle& rRect = std::get<1>(aArgs);
+
+    // entries are identified by their name, so that adding, renaming and
+    // removing styles cannot make a preview belong to the wrong entry
+    tools::Long nIndex = -1;
+    if (m_xList.is())
+    {
+        const OUString& rId = std::get<3>(aArgs);
+        const tools::Long nCount = m_xList->Count();
+        for (tools::Long i = 0; i < nCount; ++i)
+        {
+            if (m_xList->GetLineEnd(i)->GetName() == rId)
+            {
+                nIndex = i;
+                break;
+            }
+        }
+    }
+
+    if (m_ePreview == SvxLineEndPreview::WholeLine)
+    {
+        if (nIndex < 0)
+            return;
+
+        const Bitmap aBitmap(m_xList->CreateBitmapForUI(nIndex, rRect.GetSize()));
+        if (!aBitmap.IsEmpty())
+            rDevice.DrawBitmap(rRect.TopLeft(), aBitmap);
+        return;
+    }
+
+    const Bitmap aBitmap(nIndex < 0 ? Bitmap() : m_xList->GetUiBitmap(nIndex));
+    RenderPreview(rDevice, rRect, aBitmap, m_ePreview == SvxLineEndPreview::Start);
+}
+
+IMPL_LINK(SvxLineEndLB, GetSizeHdl, vcl::RenderContext&, rDevice, Size)
+{
+    Size aSize = GetPreviewSize(rDevice, m_xList);
+
+    if (m_ePreview == SvxLineEndPreview::WholeLine)
+        aSize.setWidth(aSize.Width() * 2 * WHOLE_LINE_PREVIEW_FACTOR);
+
+    return aSize;
+}
+
+void SvxLineEndLB::Fill( const XLineEndListRef &pList, SvxLineEndPreview ePreview )
+{
+    m_xList = pList;
+    m_ePreview = ePreview;
+
     if( !pList.is() )
         return;
+
+    // A combobox with an entry can draw its own entries: there the styles are
+    // shown as previews rather than by name. A plain dropdown cannot, and gets
+    // an image per entry instead.
+    const bool bRenderPreviews = m_xControl->has_entry();
+    if (bRenderPreviews)
+    {
+        m_xControl->connect_custom_get_size(LINK(this, SvxLineEndLB, GetSizeHdl));
+        m_xControl->connect_custom_render(LINK(this, SvxLineEndLB, RenderHdl));
+        m_xControl->set_custom_renderer(true);
+    }
 
     tools::Long nCount = pList->Count();
     ScopedVclPtrInstance< VirtualDevice > pVD;
@@ -1060,15 +1171,19 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     {
         const XLineEndEntry* pEntry = pList->GetLineEnd(i);
         const Bitmap aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
+        if( !bRenderPreviews && !aBitmap.IsEmpty() )
         {
             const Size aBmpSize(aBitmap.GetSizePixel());
-            pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
-            pVD->DrawBitmap(bStart ? Point() : Point(-aBmpSize.Width() / 2, 0), aBitmap);
-            m_xControl->append(u""_ustr, pEntry->GetName(), *pVD);
+            const bool bHalf = ePreview != SvxLineEndPreview::WholeLine;
+            pVD->SetOutputSizePixel(
+                Size(bHalf ? aBmpSize.Width() / 2 : aBmpSize.Width(), aBmpSize.Height()), false);
+            pVD->DrawBitmap(ePreview == SvxLineEndPreview::End ? Point(-aBmpSize.Width() / 2, 0)
+                                                               : Point(),
+                            aBitmap);
+            m_xControl->append(pEntry->GetName(), pEntry->GetName(), *pVD);
         }
         else
-            m_xControl->append_text(pEntry->GetName());
+            m_xControl->append(pEntry->GetName(), pEntry->GetName());
     }
 
     m_xControl->thaw();
@@ -1076,18 +1191,18 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
 
 void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap )
 {
-    if(!rBitmap.IsEmpty())
+    if(!rBitmap.IsEmpty() && !m_xControl->has_entry())
     {
         ScopedVclPtrInstance< VirtualDevice > pVD;
 
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
         pVD->DrawBitmap(Point(-aBmpSize.Width() / 2, 0), rBitmap);
-        m_xControl->append(u""_ustr, rEntry.GetName(), *pVD);
+        m_xControl->append(rEntry.GetName(), rEntry.GetName(), *pVD);
     }
     else
     {
-        m_xControl->append_text(rEntry.GetName());
+        m_xControl->append(rEntry.GetName(), rEntry.GetName());
     }
 }
 
@@ -1095,18 +1210,19 @@ void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bi
 {
     m_xControl->remove(nPos);
 
-    if(!rBitmap.IsEmpty())
+    const OUString sId(rEntry.GetName());
+    if(!rBitmap.IsEmpty() && !m_xControl->has_entry())
     {
         ScopedVclPtrInstance< VirtualDevice > pVD;
 
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
         pVD->DrawBitmap(Point(-aBmpSize.Width() / 2, 0), rBitmap);
-        m_xControl->insert(nPos, rEntry.GetName(), nullptr, nullptr, pVD);
+        m_xControl->insert(nPos, rEntry.GetName(), &sId, nullptr, pVD);
     }
     else
     {
-        m_xControl->insert_text(nPos, rEntry.GetName());
+        m_xControl->insert(nPos, rEntry.GetName(), &sId, nullptr, nullptr);
     }
 }
 

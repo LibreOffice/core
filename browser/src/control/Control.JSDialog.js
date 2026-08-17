@@ -749,7 +749,13 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				else if (instance.popupAnchor && instance.popupAnchor.indexOf('bottom') >= 0)
 					instance.posy -= instance.content.clientHeight;
 
-				instance.container.style.minWidth = parent.getBoundingClientRect().width + 'px';
+				var anchor = parent;
+				if (parent.classList.contains('ui-combobox-whole-width-preview')) {
+					var field = parent.querySelector(':scope > .ui-combobox-content');
+					if (field)
+						anchor = field;
+				}
+				instance.container.style.minWidth = anchor.getBoundingClientRect().width + 'px';
 
 				if (isRTL)
 					instance.posx = window.innerWidth - instance.posx;

@@ -271,6 +271,8 @@ public:
 
     XLineEndEntry* GetLineEnd(tools::Long nIndex) const;
 
+    Bitmap CreateBitmapForUI(tools::Long nIndex, const Size& rSize);
+
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };

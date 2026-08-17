@@ -81,15 +81,19 @@ bool XLineEndList::Create()
 
 Bitmap XLineEndList::CreateBitmapForUI( tools::Long nIndex )
 {
+    const Size& rSize
+        = Application::GetSettings().GetStyleSettings().GetListBoxPreviewDefaultPixelSize();
+    return CreateBitmapForUI(nIndex, Size(rSize.Width() * 2, rSize.Height()));
+}
+
+Bitmap XLineEndList::CreateBitmapForUI( tools::Long nIndex, const Size& aSize )
+{
     Bitmap aRetval;
     OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
 
     if(nIndex < Count())
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-
-        const Size aSize(rSize.Width() * 2, rSize.Height());
 
         // prepare line geometry
         basegfx::B2DPolygon aLine;

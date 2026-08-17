@@ -30,7 +30,7 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	var entry = window.L.DomUtil.create('div', 'ui-combobox-entry ' + builder.options.cssClass, parentContainer);
 	entry.id = data.id;
 	if (data.class)
-		entry.classList.add(data.class);
+		entry.classList.add.apply(entry.classList, data.class.split(' '));
 	// An icon-only entry (no text) centers its image and shrinks to the
 	// icon width instead of leaving a wide empty row.
 	if (!data.text)
@@ -263,6 +263,9 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	var container = window.L.DomUtil.create('div', 'ui-combobox ' + builder.options.cssClass, parentContainer);
 	container.id = data.id;
 
+	if (data.wholeWidthPreview)
+		window.L.DomUtil.addClass(container, 'ui-combobox-whole-width-preview');
+
 	var content = window.L.DomUtil.create('input', 'ui-combobox-content ' + builder.options.cssClass, container);
 	content.id = data.id + '-input-' + builder.options.suffix;
 	content.value = data.text;
@@ -318,12 +321,40 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 		separatorAfter[lastPreviewEntry] = true;
 	}
 
+	// entries the box can hold as its value without offering them in the list
+	var isHidden = {};
+	for (var h in data.hiddenEntries) {
+		isHidden[parseInt(data.hiddenEntries[h])] = true;
+	}
+
+	if (data.customEntryRenderer || data.renderSelectedEntry) {
+		if (!builder.rendersCache[data.id])
+			builder.rendersCache[data.id] = {
+				persistent: false,
+				images: [],
+				dpiScale: window.devicePixelRatio,
+			};
+
+		var rendersCache = builder.rendersCache[data.id];
+		if (!rendersCache.persistent) {
+			var newTexts = data.entries || [];
+			var cachedTexts = rendersCache.entryTexts || [];
+			var known = Math.max(newTexts.length, cachedTexts.length);
+			for (var p = 0; p < known; p++) {
+				if (cachedTexts[p] !== newTexts[p])
+					delete rendersCache.images[p];
+			}
+			rendersCache.entryTexts = Array.prototype.slice.call(newTexts);
+		}
+	}
+
 	// convert to dropdown entries
 	var entries = [];
 	for (var i in data.entries) {
 		var isPreviewEntry =
 			data.renderSelectedEntry && parseInt(i) <= lastPreviewEntry;
 		entries.push({
+			hidden: isHidden[parseInt(i)],
 			text: data.entries[i].toString(),
 			// keep the name as a tooltip when it is only shown as an icon
 			hint: isPreviewEntry ? data.entries[i].toString() : undefined,
@@ -332,7 +363,11 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 				? isPreviewEntry
 				: data.customEntryRenderer,
 			// icon-only rows for line-end arrow pickers
-			class: isPreviewEntry ? 'ui-combobox-lineend' : undefined,
+			class: isPreviewEntry
+				? data.wholeWidthPreview
+					? 'ui-combobox-lineend ui-combobox-lineend-whole'
+					: 'ui-combobox-lineend'
+				: undefined,
 			separatorAfter: separatorAfter[parseInt(i)]
 		});
 	}
@@ -526,10 +561,10 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 		if (!dropdownRoot)
 			return;
 
-		var dropdown = dropdownRoot.querySelectorAll('.ui-combobox-entry');
-		if (dropdown[pos]) {
-			dropdown[pos].replaceChildren();
-			var img = window.L.DomUtil.create('img', '', dropdown[pos]);
+		var row = dropdownRoot.querySelector('#' + data.id + '-entry-' + pos);
+		if (row) {
+			row.replaceChildren();
+			var img = window.L.DomUtil.create('img', '', row);
 			img.src = builder.rendersCache[data.id].images[pos];
 			img.alt = entries[pos].text;
 			img.title = entries[pos].text;

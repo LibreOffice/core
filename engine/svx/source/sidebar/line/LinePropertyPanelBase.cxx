@@ -22,6 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/dlgctrl.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/linectrl.hxx>
 #include <svx/strings.hrc>
@@ -39,8 +40,6 @@
 #include <comphelper/kit.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/bitmap.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -252,7 +251,7 @@ void LinePropertyPanelBase::ActivateControls()
     mxLBEnd->set_visible(mbArrowSupported);
 }
 
-void LinePropertyPanelBase::FillLineEndListBox(weld::ComboBox& rListBox)
+void LinePropertyPanelBase::FillLineEndListBox(weld::ComboBox& rListBox, tools::Long nExtraStyle)
 {
     rListBox.freeze();
     rListBox.clear();
@@ -274,6 +273,17 @@ void LinePropertyPanelBase::FillLineEndListBox(weld::ComboBox& rListBox)
                 rListBox.append(OUString::number(i), rName);
                 break;
             }
+        }
+
+        // The applied style when it is not one of the offered ones: it is
+        // there to be shown as a preview like the rest, but it stays out of
+        // the list, which offers the six styles and nothing else.
+        if (nExtraStyle >= 0 && nExtraStyle < mxLineEndList->Count()
+            && rListBox.find_id(OUString::number(nExtraStyle)) == -1)
+        {
+            rListBox.append(OUString::number(nExtraStyle),
+                            mxLineEndList->GetLineEnd(nExtraStyle)->GetName());
+            rListBox.set_entry_hidden(rListBox.get_count() - 1, true);
         }
     }
 
@@ -302,16 +312,10 @@ void LinePropertyPanelBase::SelectLineEndEntry(
             if (pEntry->GetLineEnd() != *roPolygon)
                 continue;
 
-            const int nPos = rListBox.find_id(OUString::number(i));
-            if (nPos != -1)
-            {
-                rListBox.set_active(nPos);
-                rListBox.save_value();
-                return;
-            }
+            if (rListBox.find_id(OUString::number(i)) == -1)
+                FillLineEndListBox(rListBox, i);
 
-            rListBox.set_active(-1);
-            rListBox.set_entry_text(pEntry->GetName());
+            rListBox.set_active(rListBox.find_id(OUString::number(i)));
             rListBox.save_value();
             return;
         }
@@ -383,40 +387,20 @@ void LinePropertyPanelBase::updateLineEndList(const SfxPoolItem* /*pState*/)
 
 void LinePropertyPanelBase::RenderLineEndEntry(const weld::ComboBox::render_args& rArgs, bool bStart)
 {
-    vcl::RenderContext& rDevice = std::get<0>(rArgs);
-    const tools::Rectangle& rRect = std::get<1>(rArgs);
     const OUString& rId = std::get<3>(rArgs);
 
     if (rId == MORE_STYLES_ID)
         return;
 
-    const tools::Long nMidY = rRect.Top() + rRect.GetHeight() / 2;
-
-    if (rId == NONE_ID)
+    Bitmap aBitmap;
+    if (rId != NONE_ID && mxLineEndList.is())
     {
-        // "no arrowhead": a short plain line stub
-        rDevice.SetLineColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
-        rDevice.DrawLine(Point(rRect.Left() + 2, nMidY), Point(rRect.Left() + 16, nMidY));
-        return;
+        const tools::Long nIndex = rId.toInt32();
+        if (nIndex >= 0 && nIndex < mxLineEndList->Count())
+            aBitmap = mxLineEndList->GetUiBitmap(nIndex);
     }
 
-    if (!mxLineEndList.is())
-        return;
-
-    const tools::Long nIndex = rId.toInt32();
-    if (nIndex < 0 || nIndex >= mxLineEndList->Count())
-        return;
-
-    const Bitmap aBitmap = mxLineEndList->GetUiBitmap(nIndex);
-    if (aBitmap.IsEmpty())
-        return;
-
-    const Size aBmpSize(aBitmap.GetSizePixel());
-    const tools::Long nHalfW = aBmpSize.Width() / 2;
-    const Point aSrcPt(bStart ? 0 : nHalfW, 0);
-    const Size aHalfSize(nHalfW, aBmpSize.Height());
-    rDevice.DrawBitmap(Point(rRect.Left() + 2, nMidY - aBmpSize.Height() / 2), aHalfSize, aSrcPt,
-                       aHalfSize, aBitmap);
+    SvxLineEndLB::RenderPreview(std::get<0>(rArgs), std::get<1>(rArgs), aBitmap, bStart);
 }
 
 IMPL_LINK(LinePropertyPanelBase, RenderStartHdl, weld::ComboBox::render_args, aArgs, void)
@@ -431,24 +415,7 @@ IMPL_LINK(LinePropertyPanelBase, RenderEndHdl, weld::ComboBox::render_args, aArg
 
 IMPL_LINK(LinePropertyPanelBase, GetSizeHdl, vcl::RenderContext&, rDevice, Size)
 {
-    tools::Long nImgWidth = 16; // fallback for the "none" line stub
-    tools::Long nHeight = rDevice.GetTextHeight();
-
-    if (mxLineEndList.is())
-    {
-        const tools::Long nCount = mxLineEndList->Count();
-        for (tools::Long i = 0; i < nCount; ++i)
-        {
-            const Bitmap aBmp = mxLineEndList->GetUiBitmap(i);
-            if (!aBmp.IsEmpty())
-            {
-                nImgWidth = std::max<tools::Long>(nImgWidth, aBmp.GetSizePixel().Width() / 2);
-                nHeight = std::max<tools::Long>(nHeight, aBmp.GetSizePixel().Height());
-            }
-        }
-    }
-
-    return Size(nImgWidth + 4, nHeight + 4);
+    return SvxLineEndLB::GetPreviewSize(rDevice, mxLineEndList);
 }
 
 template <class ItemType>

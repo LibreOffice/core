@@ -1892,11 +1892,41 @@ img.ui-combobox-value-preview {
 
 /* the whole row is the hover target, so the preview is not outlined on its own */
 .ui-combobox-entry.ui-combobox-lineend img:hover {
-	border: none;
+	border-color: transparent;
 	filter: none;
 }
 
-.modalpopup[id$='-dropdown']:has(.ui-combobox-entry.ui-combobox-lineend) {
+.ui-combobox-entry.ui-combobox-lineend-whole > span {
+	width: 100%;
+}
+
+.ui-combobox-entry.ui-combobox-lineend-whole img {
+	width: 100%;
+	min-width: 0;
+	height: auto;
+	max-height: 24px;
+	padding: 2px 6px;
+	box-sizing: border-box;
+}
+
+.modalpopup[id$='-dropdown']:has(.ui-combobox-entry.ui-combobox-lineend-whole) {
+	width: 0 !important;
+}
+
+.ui-combobox.ui-combobox-whole-width-preview > img.ui-combobox-value-preview {
+	inset-inline-start: 8px;
+	width: calc(100% - 42px);
+	max-width: none;
+	top: 50%;
+	bottom: auto;
+	height: auto;
+	transform: translateY(-50%);
+	object-fit: fill;
+}
+
+.modalpopup[id$='-dropdown']:has(.ui-combobox-entry.ui-combobox-lineend):not(
+:has(.ui-combobox-entry.ui-combobox-lineend-whole)
+) {
 	min-width: 0 !important;
 	width: max-content !important;
 }

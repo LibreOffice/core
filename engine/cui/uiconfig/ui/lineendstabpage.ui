@@ -12,18 +12,6 @@
     <property name="can-focus">False</property>
     <property name="icon-name">res/sc05502.png</property>
   </object>
-  <object class="GtkListStore" id="liststore4">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
-    </columns>
-  </object>
   <object class="GtkFrame" id="LineEndPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -88,23 +76,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="LB_LINEENDS">
+                  <object class="GtkComboBoxText" id="LB_LINEENDS">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="model">liststore4</property>
-                    <property name="entry-text-column">0</property>
-                    <property name="id-column">1</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                      <attributes>
-                        <attribute name="surface">3</attribute>
-                      </attributes>
+                    <property name="has-entry">True</property>
+                    <property name="render-selected-entry">True</property>
+                    <property name="whole-width-preview">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can-focus">True</property>
+                        <property name="editable">False</property>
+                      </object>
                     </child>
                   </object>
                   <packing>

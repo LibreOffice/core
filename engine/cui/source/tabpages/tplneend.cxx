@@ -94,7 +94,7 @@ SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
 
 void SvxLineEndDefTabPage::Construct()
 {
-    m_xLbLineEnds->Fill( pLineEndList );
+    m_xLbLineEnds->Fill( pLineEndList, SvxLineEndPreview::WholeLine );
 
     bool bCreateArrowPossible = true;
 
@@ -566,7 +566,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
                 pLineEndList = std::move(xLeList);
                 static_cast<SvxLineTabDialog*>(GetDialogController())->SetNewLineEndList( pLineEndList );
                 m_xLbLineEnds->clear();
-                m_xLbLineEnds->Fill( pLineEndList );
+                m_xLbLineEnds->Fill( pLineEndList, SvxLineEndPreview::WholeLine );
                 Reset( &rOutAttrs );
 
                 pLineEndList->SetName( aURL.getName() );

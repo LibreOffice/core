@@ -6576,6 +6576,11 @@ void SalInstanceComboBoxWithEdit::insert_separator(int pos, const OUString& /*rI
     m_xComboBox->AddSeparator(nInsertPos - 1);
 }
 
+void SalInstanceComboBoxWithEdit::set_entry_hidden(int pos, bool bHidden)
+{
+    m_xComboBox->SetEntryHidden(pos, bHidden);
+}
+
 void SalInstanceComboBoxWithEdit::set_entry_text(const OUString& rText)
 {
     m_xComboBox->SetText(rText);

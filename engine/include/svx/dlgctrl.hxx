@@ -249,18 +249,38 @@ public:
 
 /************************************************************************/
 
+/// Which part of the line a SvxLineEndLB draws as the preview of an entry.
+enum class SvxLineEndPreview
+{
+    Start,
+    End,
+    WholeLine
+};
+
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndLB
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;
+    XLineEndListRef m_xList;
+    SvxLineEndPreview m_ePreview;
+
+    DECL_DLLPRIVATE_LINK(RenderHdl, weld::ComboBox::render_args, void);
+    DECL_DLLPRIVATE_LINK(GetSizeHdl, vcl::RenderContext&, Size);
 
 public:
     SvxLineEndLB(std::unique_ptr<weld::ComboBox> pControl);
 
-    void Fill( const XLineEndListRef &pList, bool bStart = true );
+    void Fill( const XLineEndListRef &pList, SvxLineEndPreview ePreview );
 
     void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap );
     void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
+
+    /// Draws the half of rBitmap which belongs to this end of the line, or a
+    /// plain stub for an entry which has no arrow. Shared with the sidebar.
+    static void RenderPreview(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
+                              const Bitmap& rBitmap, bool bStart);
+    /// The size one preview of any entry of rList needs.
+    static Size GetPreviewSize(const vcl::RenderContext& rDevice, const XLineEndListRef& rList);
 
     void clear() { m_xControl->clear(); }
     void remove(int nPos) { m_xControl->remove(nPos); }

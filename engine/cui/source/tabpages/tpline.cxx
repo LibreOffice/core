@@ -231,12 +231,12 @@ void SvxLineTabPage::FillListboxes()
     nOldSelect = m_xLbStartStyle->get_active();
     m_xLbStartStyle->clear();
     m_xLbStartStyle->append_text(sNone);
-    m_xLbStartStyle->Fill(m_pLineEndList);
+    m_xLbStartStyle->Fill(m_pLineEndList, SvxLineEndPreview::Start);
     m_xLbStartStyle->set_active(nOldSelect);
     nOldSelect = m_xLbEndStyle->get_active();
     m_xLbEndStyle->clear();
     m_xLbEndStyle->append_text(sNone);
-    m_xLbEndStyle->Fill(m_pLineEndList, false);
+    m_xLbEndStyle->Fill(m_pLineEndList, SvxLineEndPreview::End);
     m_xLbEndStyle->set_active(nOldSelect);
 }
 
@@ -295,7 +295,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             m_xLbStartStyle->clear();
             m_xLbStartStyle->append_text(sNone);
 
-            m_xLbStartStyle->Fill( m_pLineEndList );
+            m_xLbStartStyle->Fill( m_pLineEndList, SvxLineEndPreview::Start );
             nCount = m_xLbStartStyle->get_count();
             if( nCount == 0 )
                 ; // This case should never occur
@@ -307,7 +307,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             m_xLbEndStyle->clear();
             m_xLbEndStyle->append_text(sNone);
 
-            m_xLbEndStyle->Fill( m_pLineEndList, false );
+            m_xLbEndStyle->Fill( m_pLineEndList, SvxLineEndPreview::End );
             nCount = m_xLbEndStyle->get_count();
 
             if( nCount == 0 )

@@ -200,6 +200,8 @@ JSDialog.OpenDropdown = function (
 			}
 		}
 
+		if (entries[i].hidden) entry = null;
+
 		if (entry && json?.children?.length) json.children[0].children?.push(entry);
 
 		if (entries[i].separatorAfter && json?.children?.length)

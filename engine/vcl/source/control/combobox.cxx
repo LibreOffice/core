@@ -104,6 +104,7 @@ void ComboBox::ImplInitComboBoxData()
     m_isKeyBoardModify  = false;
     m_isMatchCase       = false;
     m_bRenderSelectedEntry = false;
+    m_bWholeWidthPreview = false;
     m_cMultiSep         = ';';
     m_nMaxWidthChars    = -1;
     m_nWidthInChars     = -1;
@@ -917,10 +918,19 @@ void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
     CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nPos)) );
 }
 
+void ComboBox::SetEntryHidden( sal_Int32 nPos, bool bHidden )
+{
+    if (bHidden)
+        m_aHiddenEntries.insert(nPos);
+    else
+        m_aHiddenEntries.erase(nPos);
+}
+
 void ComboBox::Clear()
 {
     if (!m_pImplLB)
         return;
+    m_aHiddenEntries.clear();
     m_pImplLB->Clear();
     CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(sal_IntPtr(-1)) );
 }
@@ -1570,6 +1580,8 @@ bool ComboBox::set_property(const OUString &rKey, const OUString &rValue)
         SetPlaceholderText(rValue);
     else if (rKey == "render-selected-entry")
         SetRenderSelectedEntry(toBool(rValue));
+    else if (rKey == "whole-width-preview")
+        SetWholeWidthPreview(toBool(rValue));
     else
         return Control::set_property(rKey, rValue);
     return true;
@@ -1590,6 +1602,14 @@ void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         {
             rJsonWriter.putSimpleValue(GetEntry(i));
         }
+    }
+
+    // Entries which are values of the box but are not offered in its list.
+    if (!m_aHiddenEntries.empty())
+    {
+        auto hiddenNode = rJsonWriter.startArray("hiddenEntries");
+        for (sal_Int32 nPos : m_aHiddenEntries)
+            rJsonWriter.putSimpleValue(OUString::number(nPos));
     }
 
     if (m_pImplLB && m_pImplLB->GetSeparatorPos() != LISTBOX_ENTRY_NOTFOUND)
@@ -1621,6 +1641,8 @@ void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("entrycompletion", false);
     if (IsRenderSelectedEntry())
         rJsonWriter.put("renderSelectedEntry", true);
+    if (IsWholeWidthPreview())
+        rJsonWriter.put("wholeWidthPreview", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
