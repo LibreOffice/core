@@ -37,7 +37,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <svx/seclabel/SecLabelStore.hxx>
-#include <svx/seclabel/StanagLabel.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <fmtrfmrk.hxx>
@@ -1398,13 +1397,8 @@ void GetExtractLinkTargets(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell
 /// the browser's read-only classification banner.
 void GetSecurityLabel(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell)
 {
-    OUString aMarking;
-    if (pDocShell)
-    {
-        svx::seclabel::StanagLabel aLabel;
-        if (svx::seclabel::readLabel(pDocShell->GetModel(), aLabel))
-            aMarking = aLabel.summary();
-    }
+    const OUString aMarking
+        = pDocShell ? svx::seclabel::readMarking(pDocShell->GetModel()) : OUString();
     // Standard {commandName, commandValues} envelope so the browser routes it by
     // command name (the kit forwards this JSON verbatim, adding no envelope).
     rJsonWriter.put("commandName", ".uno:SecurityLabel");

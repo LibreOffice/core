@@ -49,7 +49,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/seclabel/SecLabelStore.hxx>
-#include <svx/seclabel/StanagLabel.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/print.hxx>
@@ -1463,16 +1462,11 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
     OString aCommand(rCommand);
     if (aCommand.startsWith(".uno:SecurityLabel"))
     {
-        // The document's STANAG label as a self-describing marking string (empty when
-        // unlabelled), for the browser's read-only classification banner.
+        // The document's STANAG marking (empty when unlabelled), for the browser's
+        // read-only classification banner. Rendered with the label's provisioned policy.
         rJsonWriter.put("commandName", ".uno:SecurityLabel");
-        OUString aMarking;
-        if (pDocShell)
-        {
-            svx::seclabel::StanagLabel aLabel;
-            if (svx::seclabel::readLabel(pDocShell->GetModel(), aLabel))
-                aMarking = aLabel.summary();
-        }
+        const OUString aMarking
+            = pDocShell ? svx::seclabel::readMarking(pDocShell->GetModel()) : OUString();
         auto aValues = rJsonWriter.startNode("commandValues");
         rJsonWriter.put("marking", aMarking);
         return;

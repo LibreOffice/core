@@ -118,7 +118,6 @@
 #include <svx/svdograf.hxx>
 #include <svx/svditer.hxx>
 #include <svx/seclabel/SecLabelStore.hxx>
-#include <svx/seclabel/StanagLabel.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -2849,16 +2848,11 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 
     if (o3tl::starts_with(rCommand, ".uno:SecurityLabel"))
     {
-        // The document's STANAG label as a self-describing marking string (empty when
-        // unlabelled), for the browser's read-only classification banner.
+        // The document's STANAG marking (empty when unlabelled), for the browser's
+        // read-only classification banner. Rendered with the label's provisioned policy.
         rJsonWriter.put("commandName", ".uno:SecurityLabel");
-        OUString aMarking;
-        if (mpDocShell)
-        {
-            svx::seclabel::StanagLabel aLabel;
-            if (svx::seclabel::readLabel(mpDocShell->GetModel(), aLabel))
-                aMarking = aLabel.summary();
-        }
+        const OUString aMarking
+            = mpDocShell ? svx::seclabel::readMarking(mpDocShell->GetModel()) : OUString();
         auto aValues = rJsonWriter.startNode("commandValues");
         rJsonWriter.put("marking", aMarking);
         return;

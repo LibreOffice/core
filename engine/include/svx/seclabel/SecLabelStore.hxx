@@ -51,6 +51,13 @@ SVXCORE_DLLPUBLIC void removeLabelPart(const css::uno::Reference<css::frame::XMo
 SVXCORE_DLLPUBLIC bool readLabel(const css::uno::Reference<css::frame::XModel>& xModel,
                                  StanagLabel& rLabel);
 
+/// The document's visual marking: read its STANAG label and render the ADatP-4774.2
+/// marking with the provisioned SPIF policy it was created under (matched by OID),
+/// falling back to the label's self-describing summary when that policy is not
+/// provisioned this session. Empty when the document carries no label. The single
+/// source of the on-load banner marking, so it matches the dialog's live preview.
+SVXCORE_DLLPUBLIC OUString readMarking(const css::uno::Reference<css::frame::XModel>& xModel);
+
 /// Resolve a SPIF colour (a W3C colour name or #RRGGBB) to an RGB value; unknown
 /// names fall back to black.
 SVXCORE_DLLPUBLIC sal_Int32 resolveColor(const OUString& rColor);

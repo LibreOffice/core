@@ -31,6 +31,9 @@ class SpifPolicyTest : public CppUnit::TestFixture
     void testPolicySet();
     void testWantsWatermark();
     void testMarkingModifiers();
+    void testDeriveMarking();
+    void testDeriveMarkingOwnership();
+    void testMarkingMatrix();
 
     CPPUNIT_TEST_SUITE(SpifPolicyTest);
     CPPUNIT_TEST(testParse);
@@ -41,6 +44,9 @@ class SpifPolicyTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testPolicySet);
     CPPUNIT_TEST(testWantsWatermark);
     CPPUNIT_TEST(testMarkingModifiers);
+    CPPUNIT_TEST(testDeriveMarking);
+    CPPUNIT_TEST(testDeriveMarkingOwnership);
+    CPPUNIT_TEST(testMarkingMatrix);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -160,13 +166,17 @@ void SpifPolicyTest::testParse()
     std::vector<bool> aSelected(3, false);
     aSelected[0] = true; // CANADA
     aSelected[1] = true; // UNITED KINGDOM
-    CPPUNIT_ASSERT_EQUAL(u"SECRET//CANADA UNITED KINGDOM."_ustr,
-                         aPolicy.buildMarking(u"SECRET"_ustr, aSelected));
+    CPPUNIT_ASSERT_EQUAL(
+        u"SPIF Collabora SECRET CANADA // UNITED KINGDOM."_ustr,
+        aPolicy.deriveMarking(aPolicy.buildLabel(u"SECRET"_ustr, aSelected, OUString(), OUString())));
 
-    // INT is the 3rd selectable; its tag has no qualifiers, so it attaches plainly.
+    // INT is the 3rd selectable; its tag has no qualifiers, so it attaches as a plain
+    // group, joined to the classification by a space.
     std::vector<bool> aIntOnly(3, false);
     aIntOnly[2] = true; // INT
-    CPPUNIT_ASSERT_EQUAL(u"SECRETINT"_ustr, aPolicy.buildMarking(u"SECRET"_ustr, aIntOnly));
+    CPPUNIT_ASSERT_EQUAL(
+        u"SPIF Collabora SECRET INT"_ustr,
+        aPolicy.deriveMarking(aPolicy.buildLabel(u"SECRET"_ustr, aIntOnly, OUString(), OUString())));
 }
 
 void SpifPolicyTest::testValidate()
@@ -495,18 +505,297 @@ void SpifPolicyTest::testMarkingModifiers()
     CPPUNIT_ASSERT(aPolicy.aClassifications[1].bSuppressClassName);
     CPPUNIT_ASSERT(aPolicy.aTagSets[0].aTags[0].aCategories[1].bNoNameDisplay);
 
-    // noNameDisplay: the classification shows its phrase "S", not "SECRET".
-    CPPUNIT_ASSERT_EQUAL(u"S//CANADA."_ustr,
-                         aPolicy.buildMarking(u"SECRET"_ustr, { true, false }));
-    // ... and the category GBR shows its phrase "UK".
-    CPPUNIT_ASSERT_EQUAL(u"S//UK."_ustr, aPolicy.buildMarking(u"SECRET"_ustr, { false, true }));
+    auto marking = [&aPolicy](const OUString& rClass, const std::vector<bool>& rSel) {
+        return aPolicy.deriveMarking(aPolicy.buildLabel(rClass, rSel, OUString(), OUString()));
+    };
 
-    // suppressClassName: the class is dropped and the first group leads without a
-    // separator.
-    CPPUNIT_ASSERT_EQUAL(u"CANADA."_ustr,
-                         aPolicy.buildMarking(u"TOPSECRET"_ustr, { true, false }));
-    CPPUNIT_ASSERT_EQUAL(u"CANADA UK."_ustr,
-                         aPolicy.buildMarking(u"TOPSECRET"_ustr, { true, true }));
+    // noNameDisplay: the classification shows its phrase "S", not "SECRET".
+    CPPUNIT_ASSERT_EQUAL(u"T S CANADA."_ustr, marking(u"SECRET"_ustr, { true, false }));
+    // ... and the category GBR shows its phrase "UK".
+    CPPUNIT_ASSERT_EQUAL(u"T S UK."_ustr, marking(u"SECRET"_ustr, { false, true }));
+
+    // suppressClassName: the class is dropped, but the policy-name ownership still leads.
+    CPPUNIT_ASSERT_EQUAL(u"T CANADA."_ustr, marking(u"TOPSECRET"_ustr, { true, false }));
+    CPPUNIT_ASSERT_EQUAL(u"T CANADA // UK."_ustr, marking(u"TOPSECRET"_ustr, { true, true }));
+}
+
+void SpifPolicyTest::testDeriveMarking()
+{
+    // ADatP-4774.2-conformant marking from a label: per-group markingQualifier
+    // (prefix + values joined by the normalized separator + suffix), groups in
+    // policy tag-set order joined by a space, value order preserved (no sort),
+    // phrase via noNameDisplay, suppressClassName drops the classification.
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
+  <spif:securityPolicyId name="T" id="1.2.3" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="OFFICIAL" color="green" lacv="1" hierarchy="1" />
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4">
+      <spif:markingData phrase="S"><spif:code>noNameDisplay</spif:code></spif:markingData>
+    </spif:securityClassification>
+    <spif:securityClassification name="TOPSECRET" color="red" lacv="5" hierarchy="5">
+      <spif:markingData><spif:code>suppressClassName</spif:code></spif:markingData>
+    </spif:securityClassification>
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="RelSet" id="1.2.3.1">
+      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="JAP" lacv="1" obsolete="false">
+          <spif:markingData phrase="Japan"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="AUS" lacv="2" obsolete="false">
+          <spif:markingData phrase="Australia"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:markingQualifier markingCode="pageTop">
+          <spif:qualifier markingQualifier="Releasable To " qualifierCode="prefix" />
+          <spif:qualifier markingQualifier="," qualifierCode="separator" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="OnlySet" id="1.2.3.2">
+      <spif:securityCategoryTag name="Only" tagType="permissive">
+        <spif:tagCategory name="NOR" lacv="1" obsolete="false">
+          <spif:markingData phrase="Norway"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="USA" lacv="2" obsolete="false">
+          <spif:markingData phrase="United States"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:markingQualifier markingCode="pageTop">
+          <spif:qualifier markingQualifier=" Only" qualifierCode="suffix" />
+          <spif:qualifier markingQualifier="," qualifierCode="separator" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="CwSet" id="1.2.3.3">
+      <spif:securityCategoryTag name="Codewords" tagType="restrictive">
+        <spif:tagCategory name="ATOMIC" lacv="1" obsolete="false" />
+        <spif:tagCategory name="TRIDENT" lacv="2" obsolete="false" />
+        <spif:markingQualifier markingCode="pageTop">
+          <spif:qualifier markingQualifier="//" qualifierCode="separator" />
+          <spif:qualifier markingQualifier="." qualifierCode="suffix" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    svx::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+
+    // deriveMarking works off a built label. Selectable order (all selectable here):
+    // JAP(0) AUS(1) | NOR(2) USA(3) | ATOMIC(4) TRIDENT(5).
+    auto marking = [&aPolicy](const OUString& rClass, const std::vector<bool>& rSel) {
+        return aPolicy.deriveMarking(aPolicy.buildLabel(rClass, rSel, OUString(), OUString()));
+    };
+
+    // Permissive prefix + comma-joined phrases (comma hugs: single trailing space).
+    CPPUNIT_ASSERT_EQUAL(u"T OFFICIAL Releasable To Japan, Australia"_ustr,
+                         marking(u"OFFICIAL"_ustr, { true, true, false, false, false, false }));
+
+    // Suffix group; classification shows its noNameDisplay phrase "S".
+    CPPUNIT_ASSERT_EQUAL(u"T S Norway, United States Only"_ustr,
+                         marking(u"SECRET"_ustr, { false, false, true, true, false, false }));
+
+    // "//" separator gets a space on each side; "." suffix hugs the values.
+    CPPUNIT_ASSERT_EQUAL(u"T OFFICIAL ATOMIC // TRIDENT."_ustr,
+                         marking(u"OFFICIAL"_ustr, { false, false, false, false, true, true }));
+
+    // Groups render in policy tag-set order (Releasable To before Only), space-joined.
+    CPPUNIT_ASSERT_EQUAL(u"T S Releasable To Japan Norway Only"_ustr,
+                         marking(u"SECRET"_ustr, { true, false, true, false, false, false }));
+
+    // suppressClassName: the classification is dropped, but the policy-name ownership
+    // still leads.
+    CPPUNIT_ASSERT_EQUAL(u"T ATOMIC."_ustr,
+                         marking(u"TOPSECRET"_ustr, { false, false, false, false, true, false }));
+}
+
+void SpifPolicyTest::testDeriveMarkingOwnership()
+{
+    // Ownership prefix from replacePolicy: a Context value replaces it (NATO/KFOR),
+    // TOP SECRET's classification replacePolicy overrides it (COSMIC), Context=NATO
+    // deduplicates naturally (its phrase is "NATO"), and the "Releasable" Context
+    // value (noNameDisplay with an empty phrase) is suppressed from the marking.
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="2.0" version="1">
+  <spif:securityPolicyId name="NATO" id="1.3.26.1.3.1" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+    <spif:securityClassification name="TOPSECRET" color="red" lacv="5" hierarchy="5">
+      <spif:markingData phrase="COSMIC"><spif:code>replacePolicy</spif:code></spif:markingData>
+    </spif:securityClassification>
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="CtxSet" id="1.3.26.1.4.4">
+      <spif:securityCategoryTag name="Context" tagType="permissive">
+        <spif:tagCategory name="NATO" lacv="1" obsolete="false">
+          <spif:markingData phrase="NATO"><spif:code>replacePolicy</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="KFOR" lacv="2" obsolete="false">
+          <spif:markingData phrase="NATO/KFOR"><spif:code>replacePolicy</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="Releasable" lacv="3" obsolete="false">
+          <spif:markingData><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="RelSet" id="1.3.26.1.4.2">
+      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="JAP" lacv="1" obsolete="false">
+          <spif:markingData phrase="Japan"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:markingQualifier markingCode="pageTop">
+          <spif:qualifier markingQualifier="Releasable To " qualifierCode="prefix" />
+          <spif:qualifier markingQualifier="," qualifierCode="separator" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    svx::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+
+    CPPUNIT_ASSERT_EQUAL(u"COSMIC"_ustr, aPolicy.aClassifications[1].aReplacePolicyPhrase);
+    CPPUNIT_ASSERT_EQUAL(u"NATO/KFOR"_ustr,
+                         aPolicy.aTagSets[0].aTags[0].aCategories[1].aReplacePolicyPhrase);
+
+    auto marking = [&aPolicy](const OUString& rClass, const std::vector<bool>& rSel) {
+        return aPolicy.deriveMarking(aPolicy.buildLabel(rClass, rSel, OUString(), OUString()));
+    };
+
+    // Selectable order: NATO(0) KFOR(1) Releasable(2) | JAP(3).
+    // Context=NATO -> ownership "NATO"; the Context group renders nothing (its value
+    // fed ownership); Releasable To renders normally.
+    CPPUNIT_ASSERT_EQUAL(u"NATO SECRET Releasable To Japan"_ustr,
+                         marking(u"SECRET"_ustr, { true, false, false, true }));
+
+    // Context=KFOR -> ownership "NATO/KFOR".
+    CPPUNIT_ASSERT_EQUAL(u"NATO/KFOR SECRET Releasable To Japan"_ustr,
+                         marking(u"SECRET"_ustr, { false, true, false, true }));
+
+    // TOP SECRET: the classification replacePolicy (COSMIC) overrides the Context.
+    CPPUNIT_ASSERT_EQUAL(u"COSMIC TOPSECRET"_ustr,
+                         marking(u"TOPSECRET"_ustr, { true, false, false, false }));
+
+    // The suppressed "Releasable" Context value contributes nothing.
+    CPPUNIT_ASSERT_EQUAL(u"NATO SECRET Releasable To Japan"_ustr,
+                         marking(u"SECRET"_ustr, { true, false, true, true }));
+
+    // No replacePolicy value selected -> ownership falls back to the policy name.
+    CPPUNIT_ASSERT_EQUAL(u"NATO SECRET Releasable To Japan"_ustr,
+                         marking(u"SECRET"_ustr, { false, false, false, true }));
+}
+
+void SpifPolicyTest::testMarkingMatrix()
+{
+    // The six worked examples from ADatP-4774.2 Chapter 6, reproduced from a NATO-like
+    // policy. Exercises ownership (Context replacePolicy -> NATO/<ctx>), the Only suffix
+    // and Releasable-to prefix, the Administrative "-STAFF" hug, trigraph->full-name via
+    // phrases, group ordering (Only before Releasable to), and preserved value order.
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="2.0" version="1">
+  <spif:securityPolicyId name="NATO" id="1.3.26.1.3.1" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="RESTRICTED" color="blue" lacv="2" hierarchy="2" />
+    <spif:securityClassification name="CONFIDENTIAL" color="green" lacv="3" hierarchy="3" />
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="CtxSet" id="1.3.26.1.4.4">
+      <spif:securityCategoryTag name="Context" tagType="permissive">
+        <spif:tagCategory name="NATO" lacv="1" obsolete="false">
+          <spif:markingData phrase="NATO"><spif:code>replacePolicy</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="KFOR" lacv="2" obsolete="false">
+          <spif:markingData phrase="NATO/KFOR"><spif:code>replacePolicy</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="EAPC" lacv="3" obsolete="false">
+          <spif:markingData phrase="NATO/EAPC"><spif:code>replacePolicy</spif:code></spif:markingData>
+        </spif:tagCategory>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="AdminSet" id="1.3.26.1.4.3">
+      <spif:securityCategoryTag name="Administrative" tagType="tagType7">
+        <spif:tagCategory name="STAFF" lacv="1" obsolete="false" />
+        <spif:markingQualifier markingCode="pageTop">
+          <spif:qualifier markingQualifier="-" qualifierCode="prefix" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="OnlySet" id="1.3.26.1.4.5">
+      <spif:securityCategoryTag name="Only" tagType="permissive">
+        <spif:tagCategory name="NATO" lacv="1" obsolete="false" />
+        <spif:tagCategory name="IRL" lacv="2" obsolete="false">
+          <spif:markingData phrase="Ireland"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="UKR" lacv="3" obsolete="false">
+          <spif:markingData phrase="Ukraine"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="NOR" lacv="4" obsolete="false">
+          <spif:markingData phrase="Norway"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="USA" lacv="5" obsolete="false">
+          <spif:markingData phrase="United States"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:markingQualifier markingCode="pageTop">
+          <spif:qualifier markingQualifier=" Only" qualifierCode="suffix" />
+          <spif:qualifier markingQualifier="," qualifierCode="separator" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="RelSet" id="1.3.26.1.4.2">
+      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="JAP" lacv="1" obsolete="false">
+          <spif:markingData phrase="Japan"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="AUS" lacv="2" obsolete="false">
+          <spif:markingData phrase="Australia"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="PFP" lacv="3" obsolete="false" />
+        <spif:tagCategory name="SWE" lacv="4" obsolete="false">
+          <spif:markingData phrase="Sweden"><spif:code>noNameDisplay</spif:code></spif:markingData>
+        </spif:tagCategory>
+        <spif:tagCategory name="RESOLUTE SUPPORT" lacv="5" obsolete="false" />
+        <spif:markingQualifier markingCode="pageTop">
+          <spif:qualifier markingQualifier="Releasable to " qualifierCode="prefix" />
+          <spif:qualifier markingQualifier="," qualifierCode="separator" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    svx::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+
+    // Selectable indices (all selectable): Context NATO(0) KFOR(1) EAPC(2) |
+    // Administrative STAFF(3) | Only NATO(4) IRL(5) UKR(6) NOR(7) USA(8) |
+    // Releasable To JAP(9) AUS(10) PFP(11) SWE(12) RESOLUTE SUPPORT(13).
+    auto sel = [](std::initializer_list<int> aIdx) {
+        std::vector<bool> aVec(14, false);
+        for (int i : aIdx)
+            aVec[i] = true;
+        return aVec;
+    };
+    auto marking = [&aPolicy](const OUString& rClass, const std::vector<bool>& rSel) {
+        return aPolicy.deriveMarking(aPolicy.buildLabel(rClass, rSel, OUString(), OUString()));
+    };
+
+    CPPUNIT_ASSERT_EQUAL(u"NATO RESTRICTED"_ustr, marking(u"RESTRICTED"_ustr, sel({ 0 })));
+    CPPUNIT_ASSERT_EQUAL(u"NATO CONFIDENTIAL-STAFF"_ustr,
+                         marking(u"CONFIDENTIAL"_ustr, sel({ 0, 3 })));
+    CPPUNIT_ASSERT_EQUAL(u"NATO RESTRICTED Releasable to Japan, Australia, PFP"_ustr,
+                         marking(u"RESTRICTED"_ustr, sel({ 0, 9, 10, 11 })));
+    CPPUNIT_ASSERT_EQUAL(u"NATO/KFOR CONFIDENTIAL NATO, Ireland, Ukraine Only"_ustr,
+                         marking(u"CONFIDENTIAL"_ustr, sel({ 1, 4, 5, 6 })));
+    CPPUNIT_ASSERT_EQUAL(u"NATO SECRET Norway, United States Only Releasable to Sweden"_ustr,
+                         marking(u"SECRET"_ustr, sel({ 0, 7, 8, 12 })));
+    CPPUNIT_ASSERT_EQUAL(u"NATO/EAPC CONFIDENTIAL Releasable to RESOLUTE SUPPORT"_ustr,
+                         marking(u"CONFIDENTIAL"_ustr, sel({ 2, 13 })));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);

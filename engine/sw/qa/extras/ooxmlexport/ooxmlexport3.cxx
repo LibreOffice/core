@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
         xModel, aLabel.toBindingXml(),
         svx::seclabel::buildItemProps(u"{B6E4D8A1-1A35-4F0E-9B7A-71F4C0F5E0D3}"_ustr,
                                      u"urn:nato:stanag:4778:bindinginformation:1:0"_ustr));
-    sw::seclabel::applyMarking(xModel, aPolicy.buildMarking(u"SECRET"_ustr, aSelected),
+    sw::seclabel::applyMarking(xModel, aPolicy.deriveMarking(aLabel),
                                svx::seclabel::resolveColor(u"red"_ustr), u"Standard"_ustr);
 
     saveAndReload(TestFilter::DOCX);
@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
     // The marking is in the (shared) page-style header.
     uno::Reference<text::XText> xHeader = getProperty<uno::Reference<text::XText>>(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
-    CPPUNIT_ASSERT_EQUAL(u"SECRET//CANADA UNITED KINGDOM."_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"SPIF Collabora SECRET CANADA // UNITED KINGDOM."_ustr,
                          getParagraphOfText(1, xHeader)->getString());
 
     // Read the label back out of the reloaded document.

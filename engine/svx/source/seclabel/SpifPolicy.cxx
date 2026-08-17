@@ -14,6 +14,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/XmlWalker.hxx>
 #include <tools/stream.hxx>
 #include <unotools/pathoptions.hxx>
@@ -62,6 +63,7 @@ struct MarkingData
     OUString aPhrase;
     bool bNoNameDisplay = false;
     bool bSuppressClassName = false;
+    bool bReplacePolicy = false;
 };
 
 // Parse a markingData element (walker positioned on it): @phrase plus its <code>s.
@@ -80,6 +82,8 @@ MarkingData parseMarkingData(tools::XmlWalker& rWalker)
                 aData.bNoNameDisplay = true;
             else if (aCode == "suppressClassName")
                 aData.bSuppressClassName = true;
+            else if (aCode == "replacePolicy")
+                aData.bReplacePolicy = true;
         }
         rWalker.next();
     }
@@ -100,9 +104,16 @@ SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
     {
         if (rWalker.name() == "markingData")
         {
+            // A value may carry several markingData; accumulate rather than clobber
+            // (e.g. a noNameDisplay phrase plus a replacePolicy phrase).
             const MarkingData aData = parseMarkingData(rWalker);
-            aCategory.aMarkingPhrase = aData.aPhrase;
-            aCategory.bNoNameDisplay = aData.bNoNameDisplay;
+            if (aData.bNoNameDisplay)
+            {
+                aCategory.aMarkingPhrase = aData.aPhrase;
+                aCategory.bNoNameDisplay = true;
+            }
+            if (aData.bReplacePolicy)
+                aCategory.aReplacePolicyPhrase = aData.aPhrase;
         }
         else if (rWalker.name() == "excludedClass")
             aCategory.aExcludedClasses.push_back(toOU(rWalker.content()));
@@ -221,6 +232,73 @@ OUString mapTagType(const SpifCategoryTag& rTag)
         return rTag.aEnumType == u"restrictive"_ustr ? u"RESTRICTIVE"_ustr : u"PERMISSIVE"_ustr;
     return u"INFORMATIVE"_ustr; // tagType7 / notApplicable
 }
+
+// Whether a marking fragment begins with punctuation that attaches to the preceding
+// word without a space (a comma, or the "-STAFF" style Administrative join).
+bool leadsWithHugChar(std::u16string_view rText)
+{
+    if (rText.empty())
+        return false;
+    const sal_Unicode c = rText.front();
+    return c == ',' || c == ';' || c == '.' || c == ':' || c == '-';
+}
+
+// Normalize a value separator for the marking: exactly one trailing space, and one
+// leading space unless it hugs the preceding word (so "//" -> " // " but "," -> ", ").
+// An empty separator falls back to a single space.
+OUString normalizeSeparator(std::u16string_view rSep)
+{
+    const std::u16string_view aTrimmed = o3tl::trim(rSep);
+    if (aTrimmed.empty())
+        return u" "_ustr;
+    return (leadsWithHugChar(aTrimmed) ? OUString() : u" "_ustr) + aTrimmed + u" "_ustr;
+}
+
+// Append a marking fragment, preceded by a single space unless the output is empty or
+// the fragment hugs (begins with attaching punctuation, e.g. "-STAFF").
+void appendPart(OUStringBuffer& rOut, std::u16string_view rPart)
+{
+    if (rPart.empty())
+        return;
+    if (!rOut.isEmpty() && !leadsWithHugChar(rPart))
+        rOut.append(u" ");
+    rOut.append(rPart);
+}
+
+// The policy tag category with this name within a tag, or nullptr.
+const SpifTagCategory* findTagCategory(const SpifCategoryTag& rTag, std::u16string_view rName)
+{
+    for (const auto& rCategory : rTag.aCategories)
+    {
+        if (rCategory.aName == rName)
+            return &rCategory;
+    }
+    return nullptr;
+}
+
+// The policy tag with this name across all tag sets, or nullptr.
+const SpifCategoryTag* findTag(const std::vector<SpifCategoryTagSet>& rSets,
+                               std::u16string_view rName)
+{
+    for (const auto& rSet : rSets)
+    {
+        for (const auto& rTag : rSet.aTags)
+        {
+            if (rTag.aName == rName)
+                return &rTag;
+        }
+    }
+    return nullptr;
+}
+
+// The marking text for a resolved tag category: its phrase when noNameDisplay (which
+// may be empty -> the value is suppressed), else the value name itself.
+OUString categoryDisplay(const SpifTagCategory* pCategory, const OUString& rValueName)
+{
+    if (pCategory && pCategory->bNoNameDisplay)
+        return pCategory->aMarkingPhrase;
+    return rValueName;
+}
 }
 
 // SPIF elements are namespace-prefixed (spif:...); XmlWalker::name() yields the
@@ -265,10 +343,18 @@ bool SpifPolicy::parse(SvStream& rStream)
                     {
                         if (aWalker.name() == "markingData")
                         {
+                            // Accumulate across markingData (e.g. TOP SECRET carries a
+                            // replacePolicy=COSMIC alongside its display markingData).
                             const MarkingData aData = parseMarkingData(aWalker);
-                            aClass.aMarkingPhrase = aData.aPhrase;
-                            aClass.bNoNameDisplay = aData.bNoNameDisplay;
-                            aClass.bSuppressClassName = aData.bSuppressClassName;
+                            if (aData.bNoNameDisplay)
+                            {
+                                aClass.aMarkingPhrase = aData.aPhrase;
+                                aClass.bNoNameDisplay = true;
+                            }
+                            if (aData.bSuppressClassName)
+                                aClass.bSuppressClassName = true;
+                            if (aData.bReplacePolicy)
+                                aClass.aReplacePolicyPhrase = aData.aPhrase;
                         }
                         aWalker.next();
                     }
@@ -297,56 +383,96 @@ bool SpifPolicy::parse(SvStream& rStream)
     return true;
 }
 
-OUString SpifPolicy::buildMarking(const OUString& rClassification,
-                                  const std::vector<bool>& rSelected) const
+OUString SpifPolicy::deriveMarking(const StanagLabel& rLabel) const
 {
-    // Classification display honours its markingData codes: suppressClassName drops
-    // it entirely, noNameDisplay shows the marking phrase, otherwise the name.
-    OUString aMarking = rClassification;
-    for (const auto& rClass : aClassifications)
+    OUStringBuffer aOut;
+
+    const SpifClassification* pClass = nullptr;
+    for (const auto& rCandidate : aClassifications)
     {
-        if (rClass.aName != rClassification)
-            continue;
-        if (rClass.bSuppressClassName)
-            aMarking.clear();
-        else if (rClass.bNoNameDisplay && !rClass.aMarkingPhrase.isEmpty())
-            aMarking = rClass.aMarkingPhrase;
-        break;
+        if (rCandidate.aName == rLabel.aClassification)
+        {
+            pClass = &rCandidate;
+            break;
+        }
     }
 
-    size_t nIdx = 0;
+    // Ownership prefix. The marking always leads with the policy name
+    // (securityPolicyId/@name); a selected value's replacePolicy phrase (e.g. Context ->
+    // "NATO/EAPC") replaces it, and the classification's replacePolicy (e.g. TOP SECRET
+    // -> "COSMIC") overrides that in turn.
+    OUString aOwnership = aName;
+    for (const auto& rCat : rLabel.aCategories)
+    {
+        const SpifCategoryTag* pTag = findTag(aTagSets, rCat.aTagName);
+        if (!pTag)
+            continue;
+        for (const auto& rValue : rCat.aValues)
+        {
+            const SpifTagCategory* pTagCat = findTagCategory(*pTag, rValue);
+            if (pTagCat && !pTagCat->aReplacePolicyPhrase.isEmpty())
+                aOwnership = pTagCat->aReplacePolicyPhrase;
+        }
+    }
+    if (pClass && !pClass->aReplacePolicyPhrase.isEmpty())
+        aOwnership = pClass->aReplacePolicyPhrase;
+    appendPart(aOut, aOwnership);
+
+    // Classification: its phrase when noNameDisplay, else the name; suppressClassName
+    // drops it entirely. An unknown classification renders verbatim.
+    OUString aClassText;
+    if (!pClass)
+        aClassText = rLabel.aClassification;
+    else if (!pClass->bSuppressClassName)
+        aClassText = (pClass->bNoNameDisplay && !pClass->aMarkingPhrase.isEmpty())
+                         ? pClass->aMarkingPhrase
+                         : rLabel.aClassification;
+    appendPart(aOut, aClassText);
+
+    // Category groups, in policy tag-set order; the label carries the selected values
+    // keyed by tag name. Each group is prefix + values(joined by the normalized
+    // separator) + suffix; groups join to what precedes them with a single space.
+    // Values that fed the ownership prefix (replacePolicy) are not rendered here.
     for (const auto& rTagSet : aTagSets)
     {
         for (const auto& rTag : rTagSet.aTags)
         {
-            OUString aValues;
-            for (const auto& rCategory : rTag.aCategories)
+            const StanagCategory* pCat = nullptr;
+            for (const auto& rCandidate : rLabel.aCategories)
             {
-                // Walk only the categories the dialog shows for this classification,
-                // so rSelected (built from the filtered rows) stays index-aligned.
-                if (!rCategory.isSelectable(rClassification))
-                    continue;
-                if (nIdx < rSelected.size() && rSelected[nIdx])
+                if (rCandidate.aTagName == rTag.aName)
                 {
-                    if (!aValues.isEmpty())
-                        aValues += u" "_ustr;
-                    // noNameDisplay shows the category's marking phrase, not its name.
-                    aValues += (rCategory.bNoNameDisplay && !rCategory.aMarkingPhrase.isEmpty())
-                                   ? rCategory.aMarkingPhrase
-                                   : rCategory.aName;
+                    pCat = &rCandidate;
+                    break;
                 }
-                ++nIdx;
+            }
+            if (!pCat)
+                continue;
+
+            const OUString aSeparator = normalizeSeparator(rTag.aMarkingSeparator);
+            OUStringBuffer aValues;
+            for (const auto& rValue : pCat->aValues)
+            {
+                const SpifTagCategory* pTagCat = findTagCategory(rTag, rValue);
+                if (pTagCat && !pTagCat->aReplacePolicyPhrase.isEmpty())
+                    continue; // fed the ownership prefix; not shown as a value
+                const OUString aText = categoryDisplay(pTagCat, rValue);
+                if (aText.isEmpty())
+                    continue;
+                if (!aValues.isEmpty())
+                    aValues.append(aSeparator);
+                aValues.append(aText);
             }
             if (aValues.isEmpty())
                 continue;
-            // The separator joins this group to what precedes it; with the class
-            // name suppressed, the first group leads without one.
-            if (!aMarking.isEmpty())
-                aMarking += rTag.aMarkingSeparator;
-            aMarking += rTag.aMarkingPrefix + aValues + rTag.aMarkingSuffix;
+
+            const OUString aGroup
+                = rTag.aMarkingPrefix + aValues.makeStringAndClear() + rTag.aMarkingSuffix;
+            appendPart(aOut, aGroup);
         }
     }
-    return aMarking;
+
+    return aOut.makeStringAndClear();
 }
 
 bool SpifPolicy::anySelectedTag(const OUString& rClassification,

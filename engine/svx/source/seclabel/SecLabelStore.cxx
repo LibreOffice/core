@@ -8,6 +8,7 @@
  */
 
 #include <svx/seclabel/SecLabelStore.hxx>
+#include <svx/seclabel/SpifPolicy.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -202,6 +203,21 @@ bool readLabel(const uno::Reference<frame::XModel>& xModel, StanagLabel& rLabel)
             return true;
     }
     return false;
+}
+
+OUString readMarking(const uno::Reference<frame::XModel>& xModel)
+{
+    StanagLabel aLabel;
+    if (!readLabel(xModel, aLabel))
+        return OUString();
+
+    // Render with the policy the label was created under (matched by OID). When it is
+    // not provisioned this session, the label is self-describing: use its summary.
+    SpifPolicySet aPolicies;
+    aPolicies.loadProvisioned();
+    if (const SpifPolicy* pPolicy = aPolicies.findByLabel(aLabel))
+        return pPolicy->deriveMarking(aLabel);
+    return aLabel.summary();
 }
 
 sal_Int32 resolveColor(const OUString& rColor)

@@ -295,7 +295,10 @@ void SvxSecurityLabelDialog::UpdatePreview()
     const OUString sClassification = m_xClassification->get_active_text();
     const std::vector<bool> aSelected = collectSelection();
 
-    m_xPreview->set_label(m_pPolicy->buildMarking(sClassification, aSelected));
+    // The marking is derived from a label (the authoritative form); timestamps are
+    // irrelevant to the visual marking, so a preview label with empty ones is fine.
+    m_xPreview->set_label(m_pPolicy->deriveMarking(
+        m_pPolicy->buildLabel(sClassification, aSelected, OUString(), OUString())));
 
     OUString sWarning;
     for (const auto& rViolation : m_pPolicy->validate(sClassification, aSelected))
@@ -352,9 +355,10 @@ void SvxSecurityLabelDialog::applyLabel(const OUString& rClassification,
         = svx::seclabel::buildItemProps(makeGuid(), svx::seclabel::STANAG_BINDING_SCHEMA);
     svx::seclabel::storeLabelPart(xModel, aLabel.toBindingXml(), sItemProps);
 
-    // Derive the marking + placements from the policy; the target renders them.
+    // Derive the marking + placements from the policy; the target renders them. The
+    // marking comes from the label just stored (the authoritative source).
     svx::seclabel::LabelPlacement aPlacement;
-    aPlacement.aMarking = m_pPolicy->buildMarking(rClassification, rSelected);
+    aPlacement.aMarking = m_pPolicy->deriveMarking(aLabel);
     for (const auto& rClass : m_pPolicy->aClassifications)
     {
         if (rClass.aName == rClassification)
@@ -369,7 +373,9 @@ void SvxSecurityLabelDialog::applyLabel(const OUString& rClassification,
     aPlacement.bWatermark = m_pPolicy->wantsWatermark(rClassification, rSelected);
     m_pTarget->applyMarking(aPlacement);
 
-    m_pTarget->notify(aLabel.summary());
+    // Push the derived marking (what the banner shows on load), not the label's
+    // generic summary, so the just-applied banner matches the dialog preview.
+    m_pTarget->notify(aPlacement.aMarking);
 }
 
 IMPL_LINK_NOARG(SvxSecurityLabelDialog, PolicyHdl, weld::ComboBox&, void)

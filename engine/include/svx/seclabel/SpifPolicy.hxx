@@ -30,6 +30,7 @@ struct SpifClassification
     OUString aMarkingPhrase; ///< markingData @phrase (shown when noNameDisplay)
     bool bNoNameDisplay = false; ///< markingData code: show phrase, not the name
     bool bSuppressClassName = false; ///< markingData code: omit the class from the marking
+    OUString aReplacePolicyPhrase; ///< markingData replacePolicy @phrase (e.g. COSMIC); replaces ownership
 };
 
 /// A reference to a category in a tag set, by tag-set name + lacv (or all of them).
@@ -59,6 +60,7 @@ struct SVXCORE_DLLPUBLIC SpifTagCategory
     OUString aRequiredClass; ///< @requiredClass: classification required when this category is used
     OUString aMarkingPhrase; ///< markingData @phrase (shown when noNameDisplay)
     bool bNoNameDisplay = false; ///< markingData code: show phrase, not the category name
+    OUString aReplacePolicyPhrase; ///< markingData replacePolicy @phrase (e.g. NATO/EAPC); replaces ownership
     std::vector<OUString> aExcludedClasses; ///< excludedClass: classifications this category excludes
     std::vector<SpifCategoryRef> aExcludedCategories; ///< excludedCategory: categories this excludes
     std::vector<SpifRequiredCategory> aRequiredCategories; ///< requiredCategory groups
@@ -128,16 +130,22 @@ public:
     /// the stream is not a SPIF document.
     bool parse(SvStream& rStream);
 
-    /// Derive the marking string for the given classification and selected
-    /// categories. rSelected is indexed in tag-set/tag/category order (matching
-    /// the order categories appear across aTagSets).
-    OUString buildMarking(const OUString& rClassification,
-                          const std::vector<bool>& rSelected) const;
+    /// Derive the ADatP-4774.2-conformant visual marking from a label (the label
+    /// is the authoritative source; ADatP defers rendering to this SPIF). An
+    /// ownership prefix (a `replacePolicy` phrase, e.g. `NATO/EAPC` or `COSMIC`)
+    /// leads when the policy specifies one. Each category group is `markingQualifier`
+    /// prefix + values joined by `separator` (normalized to single surrounding
+    /// spaces) + suffix; groups render in policy tag-set order, joined by a space;
+    /// values keep the label's order (no sort). Value/classification text is the
+    /// `markingData` phrase when `noNameDisplay`, else the name; `suppressClassName`
+    /// drops the classification.
+    OUString deriveMarking(const StanagLabel& rLabel) const;
 
     /// Whether the selection calls for a watermark / a cover (documentStart) /
     /// an end-page (documentEnd) marking: true if any selected category belongs to
     /// a tag carrying that markingQualifier markingCode. rSelected is indexed as in
-    /// buildMarking. These placements are policy-driven only.
+    /// buildLabel (selectable categories in tag-set/tag/category order). These
+    /// placements are policy-driven only.
     bool wantsWatermark(const OUString& rClassification,
                         const std::vector<bool>& rSelected) const;
     bool wantsDocumentStart(const OUString& rClassification,
@@ -148,14 +156,15 @@ public:
                              const std::vector<bool>& rSelected) const;
 
     /// Check selection-count constraints (minSelection/maxSelection per tag) for
-    /// the given classification and selection. rSelected is indexed as in
-    /// buildMarking (selectable categories in tag-set/tag/category order). Returns
+    /// the given classification and selection. rSelected is indexed as in buildLabel (selectable categories in
+    /// tag-set/tag/category order). Returns
     /// one entry per violating tag; empty means valid.
     std::vector<SpifViolation> validate(const OUString& rClassification,
                                         const std::vector<bool>& rSelected) const;
 
-    /// Build a STANAG 4774 label from the selection. rSelected is indexed as in
-    /// buildMarking; the timestamps are passed through to the label.
+    /// Build a STANAG 4774 label from the selection. rSelected is indexed over the
+    /// selectable categories in tag-set/tag/category order (the dialog's filtered
+    /// rows); the timestamps are passed through to the label.
     StanagLabel buildLabel(const OUString& rClassification, const std::vector<bool>& rSelected,
                            const OUString& rCreationDateTime,
                            const OUString& rReviewDateTime) const;
@@ -168,7 +177,7 @@ public:
 
 private:
     /// True if any selected category belongs to a tag whose pFlag member is set
-    /// (shared by the wants* placement queries). rSelected is indexed as in buildMarking.
+    /// (shared by the wants* placement queries). rSelected is indexed as in buildLabel.
     bool anySelectedTag(const OUString& rClassification, const std::vector<bool>& rSelected,
                         bool SpifCategoryTag::*pFlag) const;
 };
