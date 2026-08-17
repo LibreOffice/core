@@ -355,6 +355,14 @@ void SdXMLShapeContext::endFastElement(sal_Int32 )
         GetImport().GetTextImport()->PopListContext();
     }
 
+    // Applied once the text is in, because setting it is what makes an empty placeholder show it.
+    if (!maPlaceholderPrompt.isEmpty())
+    {
+        auto xProp = mxShape.query<beans::XPropertySet>();
+        if (xProp && xProp->getPropertySetInfo()->hasPropertyByName(u"CustomPromptText"_ustr))
+            xProp->setPropertyValue(u"CustomPromptText"_ustr, uno::Any(maPlaceholderPrompt));
+    }
+
     if( !msHyperlink.isEmpty() ) try
     {
         uno::Reference< beans::XPropertySet > xProp( mxShape, uno::UNO_QUERY );
@@ -852,6 +860,9 @@ bool SdXMLShapeContext::processAttribute( const sax_fastparser::FastAttributeLis
             break;
         case XML_ELEMENT(PRESENTATION, XML_CLASS):
             maPresentationClass = aIter.toString();
+            break;
+        case XML_ELEMENT(LO_EXT, XML_PLACEHOLDER_PROMPT):
+            maPlaceholderPrompt = aIter.toString();
             break;
         case XML_ELEMENT(PRESENTATION, XML_STYLE_NAME):
             maDrawStyleName = aIter.toString();

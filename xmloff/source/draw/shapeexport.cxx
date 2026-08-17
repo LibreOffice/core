@@ -1735,6 +1735,17 @@ bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< bean
             if(!bTemp)
                 mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_USER_TRANSFORMED, XML_TRUE);
         }
+
+        // ODF has no representation for the prompt an empty placeholder shows, so an authored one
+        // travels as an extension; otherwise a reload replaces it with our own localized default.
+        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"CustomPromptText"_ustr)
+            && (mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+        {
+            OUString aPrompt;
+            xPropSet->getPropertyValue(u"CustomPromptText"_ustr) >>= aPrompt;
+            if (!aPrompt.isEmpty())
+                mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_PLACEHOLDER_PROMPT, aPrompt);
+        }
     }
 
     return bIsEmpty;

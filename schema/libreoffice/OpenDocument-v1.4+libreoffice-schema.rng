@@ -2469,6 +2469,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
     </rng:optional>
   </rng:define>
+  <!-- The prompt an empty placeholder shows, when the document authors one of its own. -->
+  <rng:define name="presentation-shape-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:placeholder-prompt">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <rng:define name="loext-columns-and-groups">
     <rng:oneOrMore>
       <rng:choice>
