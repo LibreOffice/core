@@ -158,7 +158,17 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                               {
                                   SAL_INFO("oox.ppt","shape " << mpShapePtr->getId() <<
                                           " will get shape reference " << pPlaceholder->getId() << " applied");
-                                  mpShapePtr->applyShapeReference( *pPlaceholder );
+                                  // A layout placeholder's text is a prompt, and a prompt is
+                                  // not the slide's content: taking it would fill the
+                                  // placeholder and stop it offering what it is for. An
+                                  // authored prompt reaches the shape through
+                                  // CustomPromptText instead.
+                                  using oox::drawingml::ReferencedShapeText;
+                                  const ReferencedShapeText eText
+                                      = eShapeLocation == Slide
+                                            ? ReferencedShapeText::FormattingOnly
+                                            : ReferencedShapeText::All;
+                                  mpShapePtr->applyShapeReference( *pPlaceholder, eText );
                                   PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                                   if ( pPPTShape )
                                       pPPTShape->setReferenced( true );
