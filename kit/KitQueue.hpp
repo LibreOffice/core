@@ -11,35 +11,12 @@
 
 #pragma once
 
+#include <common/TilePrioritizer.hpp>
 #include <wsd/TileDesc.hpp>
 
 #include <deque>
 #include <string>
 #include <vector>
-
-class TilePrioritizer
-{
-public:
-    virtual ~TilePrioritizer() = default;
-
-    enum class Priority : std::int8_t {
-        NONE = -1,  // an error
-        LOWEST,
-        LOW,
-        NORMAL,
-        HIGH,
-        VERYHIGH,
-        ULTRAHIGH
-    };
-    virtual Priority getTilePriority(const TileDesc &) const { return Priority::NORMAL; }
-
-    using ViewIdInactivity = std::pair<CanonicalViewId, float>;
-    virtual std::vector<ViewIdInactivity> getViewIdsByInactivity() const { return {}; }
-
-    /// Maps a canonical view id a session has already left onto the one it holds
-    /// now. Returns the id unchanged when no session ever retired it.
-    virtual CanonicalViewId resolveCanonicalViewId(CanonicalViewId id) const { return id; }
-};
 
 /// Queue for handling the Kit's messaging needs
 class KitQueue final

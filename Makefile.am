@@ -406,6 +406,7 @@ shared_headers = \
                  common/StringVector.hpp \
                  common/Syscall.hpp \
                  common/ThreadPool.hpp \
+                 common/TilePrioritizer.hpp \
                  common/TraceEvent.hpp \
                  common/Unit.hpp \
                  common/Uri.hpp \
