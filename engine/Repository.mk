@@ -301,7 +301,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	bib \
 	chart2 \
 	chart2api \
-	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	configmgr \
 	ctl \

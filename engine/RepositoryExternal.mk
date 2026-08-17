@@ -3454,6 +3454,13 @@ endef
 
 endif # SYSTEM_BZIP2
 
+
+ifneq ($(filter OPENCL,$(BUILD_TYPE)),)
+$(eval $(call gb_Helper_register_external_libraries_for_install,CLEW,OOOLIBS,ooo,\
+	clew \
+))
+endif
+
 define gb_LinkTarget__use_clew
 $(call gb_LinkTarget_set_include,$(1), \
     -I$(SRCDIR)/external/clew/source/include \
