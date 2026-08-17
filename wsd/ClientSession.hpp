@@ -18,6 +18,7 @@
 
 #include <common/Rectangle.hpp>
 #include <common/Session.hpp>
+#include <common/TilePrioritizer.hpp>
 #include <common/Uri.hpp>
 #include <common/Util.hpp>
 #include <wsd/DocumentBroker.hpp>
@@ -275,6 +276,10 @@ public:
     /// again.
     bool canSendTile(const TileDesc& tile) const;
 
+    /// Where a tile sits in what this client is looking at, ranked the same way the kit ranks the
+    /// tiles it renders.
+    TilePrioritizer::Priority getTilePriority(const TileDesc& tile) const;
+
     const Util::Rectangle& getVisibleArea() const { return _clientVisibleArea; }
     /// Visible area can have negative value as position, but we have tiles only in the positive range
     Util::Rectangle getNormalizedVisibleArea() const;
@@ -452,10 +457,6 @@ private:
 
     virtual bool _handleInput(const char* buffer, int length) override;
 
-    /// Distance from the visible area to a tile, counted in whole tiles: zero for a tile the
-    /// client can see now, one for the ring of tiles next to the visible area, and so on.
-    int getTileDistanceFromVisibleArea(const TileDesc& tile) const;
-
     bool handleSignatureAction(const StringVector& tokens);
 
     bool handleUpdateViewSettings(const std::string& firstLine);
@@ -509,8 +510,6 @@ private:
     /// Handle invalidation message coming from a kit and transfer it to a tile request.
     void handleTileInvalidation(const std::string& message,
                                 const std::shared_ptr<DocumentBroker>& docBroker);
-
-    bool isTileInsideVisibleArea(const TileDesc& tile) const;
 
     /// If this session is read-only because of failed lock, try to unlock and make it read-write.
     bool attemptLock(const std::shared_ptr<DocumentBroker>& docBroker);
@@ -584,6 +583,12 @@ private:
 
     /// Visible area of the client
     Util::Rectangle _clientVisibleArea;
+
+    /// The part and the edit mode the visible area above was reported for. They are the values the
+    /// client had selected when it last told us what it was looking at, so they equal the selected
+    /// part and mode until either of those changes.
+    int _visibleAreaPart;
+    int _visibleAreaMode;
 
     Poco::SharedPtr<Poco::JSON::Object> _browserSettingsJSON;
 

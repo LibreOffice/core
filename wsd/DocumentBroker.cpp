@@ -31,6 +31,7 @@
 #include <common/Log.hpp>
 #include <common/Message.hpp>
 #include <common/Protocol.hpp>
+#include <common/TilePrioritizer.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
 #include <common/Uri.hpp>
@@ -5892,10 +5893,8 @@ void DocumentBroker::sendRequestedTiles(const std::shared_ptr<ClientSession>& se
     {
         std::vector<TileDesc> tilesNeedsRendering;
         bool allSamePartAndSize = true;
-        while (!requestedTiles.empty())
+        auto handOverTile = [&](TileDesc& tile)
         {
-            TileDesc& tile = *(requestedTiles.begin());
-
             // Satisfy as many tiles from the cache.
             Tile cachedTile = _tileCache->lookupTile(tile);
             if (cachedTile && cachedTile->isValid())
@@ -5924,8 +5923,26 @@ void DocumentBroker::sendRequestedTiles(const std::shared_ptr<ClientSession>& se
                 bool forceKeyFrame = !cachedTile;
                 allSamePartAndSize &= requestTileRendering(tile, forceKeyFrame, _tileVersion, now, tilesNeedsRendering, session);
             }
+        };
+
+        // A cached tile goes straight out and takes a place in what the client has yet to
+        // acknowledge, so the room the client has left can run out part way through this pass. The
+        // tiles the client is looking at are handed over first for that reason, and the rest keeps
+        // the order it was asked in. Two rounds are enough for that, and they cost no sorting.
+        std::vector<TileDesc> distantTiles;
+        while (!requestedTiles.empty())
+        {
+            TileDesc& tile = *(requestedTiles.begin());
+            if (session->getTilePriority(tile) >= TilePrioritizer::Priority::VERYHIGH)
+                handOverTile(tile);
+            else
+                distantTiles.push_back(tile);
+
             requestedTiles.pop_front();
         }
+
+        for (TileDesc& tile : distantTiles)
+            handOverTile(tile);
 
         // Send rendering request for those tiles which were not prerendered
         if (!tilesNeedsRendering.empty())

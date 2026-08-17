@@ -119,6 +119,8 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _docBroker(docBroker)
     , _lastStateTime(std::chrono::steady_clock::now())
     , _clientVisibleArea(0, 0, 0, 0)
+    , _visibleAreaPart(-1)
+    , _visibleAreaMode(0)
     , _keyEvents(1)
     , _performanceCounterEpoch(0)
     , _splitX(0)
@@ -1129,6 +1131,8 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         }
 
         _clientVisibleArea = Util::Rectangle(x, y, width, height);
+        _visibleAreaPart = _clientSelectedPart;
+        _visibleAreaMode = _clientSelectedMode;
         return forwardToChild(std::string(buffer, length), docBroker);
     }
     else if (tokens.equals(0, "setclientpart"))
@@ -4175,6 +4179,7 @@ void ClientSession::dumpState(std::ostream& os)
     os << "\n\t\tkeyEvents: " << _keyEvents
 //       << "\n\t\tvisibleArea: " << _clientVisibleArea
        << "\n\t\tclientSelectedPart: " << _clientSelectedPart
+       << "\n\t\tvisibleAreaPart: " << _visibleAreaPart
        << "\n\t\ttile size Pixel: " << _tileWidthPixel << 'x' << _tileHeightPixel
        << "\n\t\ttile size Twips: " << _tileWidthTwips << 'x' << _tileHeightTwips
        << "\n\t\tkit ViewId: " << _kitViewId
@@ -4185,6 +4190,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tclip sockets: " << _clipSockets.size()
        << "\n\t\tproxy access:: " << _proxyAccess
        << "\n\t\tclientSelectedMode: " << _clientSelectedMode
+       << "\n\t\tvisibleAreaMode: " << _visibleAreaMode
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()
        << "\n\t\tbeingRendered: " << (!docBroker ? -1 : docBroker->tileCache().countTilesBeingRenderedForSession(client_from_this(), std::chrono::steady_clock::now()));
 
@@ -4382,93 +4388,81 @@ Util::Rectangle ClientSession::getNormalizedVisiblePaneArea(const SplitPaneName 
     return Util::Rectangle();
 }
 
-int ClientSession::getTileDistanceFromVisibleArea(const TileDesc& tile) const
+TilePrioritizer::Priority ClientSession::getTilePriority(const TileDesc& tile) const
 {
-    if (isTileInsideVisibleArea(tile))
-        return 0;
-
-    const Util::Rectangle visibleArea = getNormalizedVisibleArea();
-    const int tileWidth = std::max(getTileWidthInTwips(), 1);
-    const int tileHeight = std::max(getTileHeightInTwips(), 1);
-
-    int columnGap = 0;
-    if (tile.getTilePosX() > visibleArea.getRight())
-        columnGap = tile.getTilePosX() - visibleArea.getRight();
-    else if (tile.getTilePosX() + tile.getTileWidth() < visibleArea.getLeft())
-        columnGap = visibleArea.getLeft() - (tile.getTilePosX() + tile.getTileWidth());
-
-    int rowGap = 0;
-    if (tile.getTilePosY() > visibleArea.getBottom())
-        rowGap = tile.getTilePosY() - visibleArea.getBottom();
-    else if (tile.getTilePosY() + tile.getTileHeight() < visibleArea.getTop())
-        rowGap = visibleArea.getTop() - (tile.getTilePosY() + tile.getTileHeight());
-
-    // The ring number is the larger of the two gaps, so a tile past a corner of the visible area
-    // shares a ring with the tiles straight above it and beside it. Counting starts at one to keep
-    // the ring around the visible area apart from the visible tiles themselves.
-    return std::max(columnGap / tileWidth, rowGap / tileHeight) + 1;
-}
-
-bool ClientSession::canSendTile(const TileDesc& tile) const
-{
-    // A client that has room for another tile gets whatever it asked for, so the distance below
-    // is measured only while its capacity is spent.
-    if (getTilesOnFlyCount() < getTilesOnFlyUpperLimit())
-        return true;
-
-    // A preview is drawn for a slide panel or a thumbnail, so it belongs to no visible area.
-    if (tile.isPreview())
-        return true;
-
     // A text document renders one continuous part, so its tiles always belong to the part the
-    // client is looking at. Elsewhere the client asks for another part to have it ready for a
-    // part switch, and those tiles are wanted wherever they sit.
-    if (!_isTextDocument &&
-        (tile.getPart() != _clientSelectedPart || tile.getEditMode() != _clientSelectedMode))
-        return true;
+    // client is looking at. Elsewhere the client asks for another part to have it ready for a part
+    // switch.
+    const bool isVisiblePart = _isTextDocument || (tile.getPart() == _clientSelectedPart &&
+                                                   tile.getEditMode() == _clientSelectedMode);
 
     const Util::Rectangle visibleArea = getNormalizedVisibleArea();
-    if (!visibleArea.hasSurface() || getTileWidthInTwips() == 0 || getTileHeightInTwips() == 0)
-        return true;
+    if (!visibleArea.hasSurface())
+        return TilePrioritizer::Priority::NORMAL;
 
-    const int tilesAcross = visibleArea.getWidth() / getTileWidthInTwips() + 1;
-    const int tilesDown = visibleArea.getHeight() / getTileHeightInTwips() + 1;
-
-    // The client asks for tiles up to one and a half screens ahead in the direction it is
-    // scrolling, so the reach of that request is what separates a tile it is still waiting for
-    // from one it has left behind. The larger of the two screen extents is used, which keeps the
-    // limit on the generous side: sending a tile that is no longer needed only wastes bandwidth,
-    // while holding one back that is needed leaves a gap on the screen.
-    const int limit = TILE_PRELOAD_SCREENS * std::max(tilesAcross, tilesDown);
-
-    return getTileDistanceFromVisibleArea(tile) <= limit;
-}
-
-bool ClientSession::isTileInsideVisibleArea(const TileDesc& tile) const
-{
-    if (!_splitX && !_splitY)
-    {
-        return tile.intersects( _clientVisibleArea );
-    }
+    const int preloadMargin =
+        TILE_PRELOAD_SCREENS * std::max(visibleArea.getWidth(), visibleArea.getHeight());
 
     static constexpr SplitPaneName panes[4] = {
+        BOTTOMRIGHT_PANE,
         TOPLEFT_PANE,
         TOPRIGHT_PANE,
-        BOTTOMLEFT_PANE,
-        BOTTOMRIGHT_PANE
+        BOTTOMLEFT_PANE
     };
 
-    for (int i = 0; i < 4; ++i)
+    // Only a spreadsheet freezes rows or columns. Without a split the bottom right pane is the
+    // whole visible area and ranks the tile on its own; with one, a frozen pane stays at the
+    // document origin while the rest of the view scrolls away from it, so every pane is ranked and
+    // the highest rank wins. The caret is followed in the kit and not here, so no cursor area is
+    // given and no tile is ranked by it.
+    const int paneCount = (_splitX || _splitY) ? 4 : 1;
+    TilePrioritizer::Priority priority = TilePrioritizer::Priority::NONE;
+    for (int i = 0; i < paneCount; ++i)
     {
         if (!isSplitPane(panes[i]))
             continue;
 
-        const Util::Rectangle paneRect = getNormalizedVisiblePaneArea(panes[i]);
-        if( tile.intersects( paneRect ) )
-            return true;
+        // The bottom right pane is the one that scrolls, so it is the only one that fills in ahead
+        // of itself. A frozen pane keeps showing the same rows or columns, so its tiles rank by
+        // what it shows now.
+        const int margin = panes[i] == BOTTOMRIGHT_PANE ? preloadMargin : 0;
+
+        priority = std::max(priority, TilePrioritizer::rankTile(
+                                          tile, isVisiblePart, Util::Rectangle(),
+                                          getNormalizedVisiblePaneArea(panes[i]), margin, margin));
     }
 
-    return false;
+    return priority;
+}
+
+bool ClientSession::canSendTile(const TileDesc& tile) const
+{
+    // A client that has room for another tile gets whatever it asked for, so where the tile sits
+    // matters only while its capacity is spent.
+    if (getTilesOnFlyCount() < getTilesOnFlyUpperLimit())
+        return true;
+
+    // A preview is drawn for a slide panel or a thumbnail, so it belongs to no visible area and
+    // there is nothing to judge it by. The client asks for one when the panel needs it rather than
+    // as it scrolls, so it goes out.
+    if (tile.isPreview())
+        return true;
+
+    // Nothing is known yet about what the client is looking at, so its tiles get the benefit of
+    // the doubt.
+    if (!getNormalizedVisibleArea().hasSurface())
+        return true;
+
+    // The client has moved to another part or edit mode since it last told us what it was looking
+    // at, so the visible area describes where it used to be and there is nothing to place this
+    // tile against. The tiles of the part it has moved to go out, and the ones it is leaving
+    // behind wait, until it reports the area it is looking at now.
+    if (_visibleAreaPart != _clientSelectedPart || _visibleAreaMode != _clientSelectedMode)
+        return tile.getPart() == _clientSelectedPart && tile.getEditMode() == _clientSelectedMode;
+
+    // What the client shows now and what it is about to show go out. A tile it has scrolled away
+    // from, or one of a part it is not looking at, waits in the cache until it is asked for again.
+    return getTilePriority(tile) >= TilePrioritizer::Priority::HIGH;
 }
 
 // This removes the <div id="meta-origin" ...> tag which was added in
