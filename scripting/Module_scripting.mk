@@ -51,6 +51,7 @@ $(eval $(call gb_Module_add_check_targets,scripting,\
     $(if $(ENABLE_QUICKJS),CppunitTest_scripting_jsprov) \
     $(if $(ENABLE_SCRIPTING_BEANSHELL),CppunitTest_scripting_beanshell) \
     $(if $(DISABLE_PYTHON),,CppunitTest_scripting_pythonscript) \
+    CppunitTest_scripting_scripthandler \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,scripting,\
