@@ -22,6 +22,7 @@
 
 #include <cstring>
 #include <headless/svpbmp.hxx>
+#include <headless/CairoCommon.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/bitmap.hxx>
@@ -237,12 +238,83 @@ bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
 
 bool SvpSalBitmap::ScalingSupported() const
 {
-    return false;
+    return moDIB.has_value() && moDIB->meFormat == SVP_CAIRO_FORMAT && CairoCommon::isCairoCompatible(&*moDIB);
 }
 
-bool SvpSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, BmpScaleFlag /*nScaleFlag*/ )
+bool SvpSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
-    return false;
+    assert(moDIB);
+    assert(moDIB->meFormat == SVP_CAIRO_FORMAT);
+    assert(CairoCommon::isCairoCompatible(&*moDIB));
+
+    sal_Int32 nTargetWidth = std::ceil(rScaleX * moDIB->mnWidth);
+    sal_Int32 nTargetHeight = std::ceil(rScaleY * moDIB->mnHeight);
+    if (nTargetWidth <= 0 || nTargetHeight <= 0)
+    {
+        SAL_WARN("vcl", "scaling to below zero height/width");
+        return false;
+    }
+    // create new surface in the targeted size
+    std::optional<BitmapBuffer> oTargetDIB(std::in_place);
+    oTargetDIB->meFormat = SVP_CAIRO_FORMAT;
+    oTargetDIB->meDirection = ScanlineDirection::TopDown;
+    oTargetDIB->mnWidth = nTargetWidth;
+    oTargetDIB->mnHeight = nTargetHeight;
+    tools::Long nScanlineBase;
+    bool bFail = o3tl::checked_multiply<tools::Long>(oTargetDIB->mnWidth, 32, nScanlineBase);
+    if (bFail)
+    {
+        SAL_WARN("vcl", "checked multiply failed");
+        return false;
+    }
+    oTargetDIB->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
+    if (oTargetDIB->mnScanlineSize < nScanlineBase/8)
+    {
+        SAL_WARN("vcl", "scanline calculation wraparound");
+        return false;
+    }
+    oTargetDIB->mnBitCount = 32;
+    size_t size;
+    bFail = o3tl::checked_multiply<size_t>(oTargetDIB->mnHeight, oTargetDIB->mnScanlineSize, size);
+    if (bFail || size > SAL_MAX_INT32/2)
+    {
+        SAL_WARN("vcl", "checked multiply failed");
+        return false;
+    }
+    try
+    {
+        oTargetDIB->mpBits = new sal_uInt8[size];
+#ifdef __SANITIZE_ADDRESS__
+        // can only happen with ASAN allocator_may_return_null=1
+        if (!oTargetDIB->mpBits)
+            return false;
+#endif
+    }
+    catch (const std::bad_alloc&)
+    {
+        return false;
+    }
+
+    cairo_surface_t* pSurfaceSource = CairoCommon::createCairoSurface(&*moDIB);
+    assert(pSurfaceSource);
+    cairo_surface_t* pSurfaceTarget = CairoCommon::createCairoSurface(&*oTargetDIB);
+    assert(pSurfaceTarget);
+    cairo_t* cr = cairo_create(pSurfaceTarget);
+    cairo_scale(cr, rScaleX, rScaleY);
+    cairo_set_source_surface(cr, pSurfaceSource, 0.0, 0.0);
+    cairo_pattern_set_filter(cairo_get_source(cr),
+        nScaleFlag == BmpScaleFlag::Fast ? CAIRO_FILTER_FAST : CAIRO_FILTER_GOOD);
+    cairo_paint(cr);
+    cairo_destroy(cr);
+    cairo_surface_destroy(pSurfaceSource);
+    cairo_surface_destroy(pSurfaceTarget);
+
+    // free/delete old pixel data
+    delete[] moDIB->mpBits;
+
+    moDIB = std::move(oTargetDIB);
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

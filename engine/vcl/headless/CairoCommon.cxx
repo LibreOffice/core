@@ -1886,9 +1886,7 @@ cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
     return nFormat;
 }
 
-namespace
-{
-bool isCairoCompatible(const BitmapBuffer* pBuffer)
+bool CairoCommon::isCairoCompatible(const BitmapBuffer* pBuffer)
 {
     if (!pBuffer)
         return false;
@@ -1903,7 +1901,6 @@ bool isCairoCompatible(const BitmapBuffer* pBuffer)
 
     cairo_format_t nFormat = getCairoFormat(*pBuffer);
     return (cairo_format_stride_for_width(nFormat, pBuffer->mnWidth) == pBuffer->mnScanlineSize);
-}
 }
 
 cairo_surface_t* CairoCommon::createCairoSurface(const BitmapBuffer* pBuffer)

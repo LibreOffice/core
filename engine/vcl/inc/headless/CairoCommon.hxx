@@ -230,6 +230,8 @@ struct VCL_DLLPUBLIC CairoCommon
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
 
+    static bool isCairoCompatible(const BitmapBuffer* pBuffer);
+
     static bool supportsOperation(OutDevSupportType eType);
 
 private:
