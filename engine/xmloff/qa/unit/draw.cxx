@@ -1127,6 +1127,28 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testEmptyGraphicShapeOdf)
+{
+    // Create a draw document with an empty graphic-object shape:
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    auto xShape = xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr)
+                      .queryThrow<drawing::XShape>();
+    xShape->setPosition(awt::Point(1000, 1000));
+    xShape->setSize(awt::Size(5000, 4000));
+    mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+        ->getDrawPages()
+        ->getByIndex(0)
+        .queryThrow<drawing::XDrawPage>()
+        ->add(xShape);
+
+    // Save and reload as ODG, which validates the saved XML against the ODF schema.
+    // Without the accompanying fix the export emitted <draw:image><text:p/></draw:image>,
+    // leaving draw:image's choice between xlink:href and office:binary-data unsatisfied,
+    // and the validator rejected the element as incomplete.
+    saveAndReload(TestFilter::ODG);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
