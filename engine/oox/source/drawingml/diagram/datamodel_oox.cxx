@@ -165,7 +165,14 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
             bool bWriteFill(false);
             bool bWriteText(false);
 
-            if (xAssociatedShape)
+            if (rPoint.mnXMLType == TypeConstant::XML_doc)
+            {
+                // this is the root point (see DiagramData_svx::getRootPoint())
+                // for this MSO does not write fill or text at all, so suppress it.
+                // Only an empty <dgm:spPr/> will be written (see else in
+                // bWriteFill below)
+            }
+            else if (xAssociatedShape)
             {
                 // only for those mentioned BgShapes because for TextNodes
                 // (presName="textNode") the fill is written to the associated
