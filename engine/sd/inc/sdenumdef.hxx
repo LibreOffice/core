@@ -28,4 +28,11 @@ enum class SnapKind
     Point
 };
 
+enum class ColorInterpolationKind : sal_uInt16
+{
+    RGB,
+    HSLInc,
+    HSLDec
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

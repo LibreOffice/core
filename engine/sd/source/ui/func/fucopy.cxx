@@ -36,6 +36,8 @@
 #include <svx/sdangitm.hxx>
 #include <sfx2/request.hxx>
 #include <sdabstdlg.hxx>
+#include <sdenumdef.hxx>
+
 #include <memory>
 
 using namespace com::sun::star;
@@ -75,7 +77,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSetFixed<ATTR_COPY_START, ATTR_COPY_END> aSet( mrViewShell.GetPool() );
+        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLSTYLE, ATTR_COPY_START, ATTR_COPY_END> aSet( mrViewShell.GetPool() );
 
         // indicate color attribute
         SfxItemSet aAttr( mrDoc.GetPool() );
@@ -91,6 +93,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             {
                 XColorItem aXColorItem( ATTR_COPY_START_COLOR, pFillColorItem->GetName(),
                                                     pFillColorItem->GetColorValue() );
+                aSet.Put(*pFillStyleItem);
                 aSet.Put( aXColorItem );
 
             }
@@ -124,6 +127,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     sal_uInt16              nNumber = 0;
     Color               aStartColor, aEndColor;
     bool                bColor = false;
+    ColorInterpolationKind eKind = ColorInterpolationKind::RGB;
 
     if (pArgs)
     {
@@ -157,6 +161,12 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             if( aStartColor == aEndColor )
                 bColor = false;
         }
+
+        if (const SfxUInt16Item* pPoolItem = pArgs->GetItemIfSet( ATTR_COPY_COLOR_TRANSKIND ))
+        {
+            eKind = static_cast<ColorInterpolationKind>(pPoolItem->GetValue());
+        }
+
     }
 
     // remove handles
@@ -263,11 +273,25 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
         if( bColor )
         {
-            // probably room for optimizations, but may can lead to rounding errors
-            sal_uInt8 nRed = aStartColor.GetRed() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetRed()) - static_cast<::tools::Long>(aStartColor.GetRed()) ) * static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber)  );
-            sal_uInt8 nGreen = aStartColor.GetGreen() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetGreen()) - static_cast<::tools::Long>(aStartColor.GetGreen()) ) *  static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber) );
-            sal_uInt8 nBlue = aStartColor.GetBlue() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetBlue()) - static_cast<::tools::Long>(aStartColor.GetBlue()) ) * static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber) );
-            Color aNewColor( nRed, nGreen, nBlue );
+            basegfx::BColor aStartBColor(aStartColor.getBColor());
+            basegfx::BColor aEndBColor(aEndColor.getBColor());
+            basegfx::BColor aNewBColor;
+            switch(eKind)
+            {
+                case ColorInterpolationKind::RGB:
+                    aNewBColor = basegfx::interpolate(aStartBColor, aEndBColor,
+                                                      static_cast<double>(i) / nNumber);
+                    break;
+                case ColorInterpolationKind::HSLInc:
+                    aNewBColor = basegfx::utils::interpolateInHSL(
+                        aStartBColor, aEndBColor, static_cast<double>(i) / nNumber, true);
+                    break;
+                case ColorInterpolationKind::HSLDec:
+                    aNewBColor = basegfx::utils::interpolateInHSL(
+                        aStartBColor, aEndBColor, static_cast<double>(i) / nNumber, false);
+                    break;
+            }
+            Color aNewColor(aNewBColor);
             SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR> aNewSet( mrViewShell.GetPool() );
             aNewSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
             aNewSet.Put( XFillColorItem( OUString(), aNewColor ) );

@@ -23,6 +23,7 @@
 #include <svx/sdangitm.hxx>
 #include <sfx2/module.hxx>
 #include <svx/xcolit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svl/intitem.hxx>
 
 #include <unotools/viewoptions.hxx>
@@ -32,7 +33,11 @@
 #include <sdattr.hrc>
 #include <View.hxx>
 #include <drawdoc.hxx>
+#include <sdenumdef.hxx>
 
+#include <com/sun/star/drawing/FillStyle.hpp>
+
+using namespace ::com::sun::star;
 
 namespace sd {
 
@@ -54,6 +59,9 @@ CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* 
     , m_xBtnSetDefault(m_xBuilder->weld_button(u"default"_ustr))
     , m_xLbStartColor(new ColorListBox(m_xBuilder->weld_menu_button(u"start"_ustr), [this]{ return m_xDialog.get(); } ))
     , m_xLbEndColor(new ColorListBox(m_xBuilder->weld_menu_button(u"end"_ustr), [this]{ return m_xDialog.get(); } ))
+    , m_xRbRGB(m_xBuilder->weld_radio_button(u"rgb"_ustr))
+    , m_xRbHSLInc(m_xBuilder->weld_radio_button(u"hslinc"_ustr))
+    , m_xRbHSLDec(m_xBuilder->weld_radio_button(u"hsldec"_ustr))
 {
     m_xLbStartColor->SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
     m_xBtnSetViewData->connect_clicked( LINK( this, CopyDlg, SetViewData ) );
@@ -72,6 +80,8 @@ CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* 
 CopyDlg::~CopyDlg()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
+    const sal_uInt16 nColorInterpolationKind(
+        m_xRbHSLInc->get_active() ? 1 : m_xRbHSLDec->get_active() ? 2 : 0);
     OUString sStr =
         OUString::number(m_xNumFldCopies->get_value()) + OUStringChar(TOKEN) +
         OUString::number(m_xMtrFldMoveX->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
@@ -80,7 +90,8 @@ CopyDlg::~CopyDlg()
         OUString::number(m_xMtrFldWidth->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
         OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringChar(TOKEN) +
-        OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
+        OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor())) +  OUStringChar(TOKEN) +
+        OUString::number(nColorInterpolationKind);
     aDlgOpt.SetUserItem(u"UserItem"_ustr, cpo::uno::Any(sStr));
 }
 
@@ -151,6 +162,7 @@ void CopyDlg::Reset()
             Color aColor = pPoolItem->GetColorValue();
             m_xLbStartColor->SelectEntry( aColor );
             m_xLbEndColor->SelectEntry( aColor );
+            m_xRbRGB->set_active(true);
         }
         else
         {
@@ -169,10 +181,25 @@ void CopyDlg::Reset()
         m_xMtrFldAngle->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
         m_xMtrFldWidth->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
         m_xMtrFldHeight->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
-        m_xLbStartColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
-        m_xLbEndColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
+        // tdf#173141: in duplicate dialog, we want to retrieve previously selected start and stop color
+        // only if the shape uses solid color (and not gradient or bitmap for example)
+        if ( const XFillStyleItem* pFillStyleItem = mrOutAttrs.GetItemIfSet( XATTR_FILLSTYLE ) )
+        {
+            drawing::FillStyle eStyle = pFillStyleItem->GetValue();
+            if( eStyle == drawing::FillStyle_SOLID )
+            {
+                m_xLbStartColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
+                m_xLbEndColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
+                const sal_Unicode sKind = nIdx >= 0 ? o3tl::getToken(aStr, 0, TOKEN, nIdx)[0] : '0';
+                if (sKind == '0')
+                    m_xRbRGB->set_active(true);
+                else if (sKind == '1')
+                    m_xRbHSLInc->set_active(true);
+                else
+                    m_xRbHSLDec->set_active(true);
+            }
+        }
     }
-
 }
 
 /**
@@ -196,6 +223,15 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     rOutAttrs.Put(XColorItem(ATTR_COPY_START_COLOR, aColor.m_aName, aColor.m_aColor));
     aColor = m_xLbEndColor->GetSelectedEntry();
     rOutAttrs.Put(XColorItem(ATTR_COPY_END_COLOR, aColor.m_aName, aColor.m_aColor));
+
+    ColorInterpolationKind eKind;
+    if (m_xRbRGB->get_active())
+        eKind = ColorInterpolationKind::RGB;
+    else if (m_xRbHSLInc->get_active())
+        eKind = ColorInterpolationKind::HSLInc;
+    else
+        eKind = ColorInterpolationKind::HSLDec;
+    rOutAttrs.Put(SfxUInt16Item( ATTR_COPY_COLOR_TRANSKIND, static_cast<sal_uInt16>(eKind)));
 }
 
 /**
@@ -230,7 +266,9 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData, weld::Button&, void)
     {
         Color aColor = pPoolItem->GetColorValue();
         m_xLbStartColor->SelectEntry( aColor );
+        m_xLbEndColor->SelectEntry(aColor);
     }
+    m_xRbRGB->set_active(true);
 }
 
 /**
@@ -249,13 +287,12 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault, weld::Button&, void)
     SetMetricValue( *m_xMtrFldWidth, tools::Long(nValue / mfUIScale), MapUnit::Map100thMM);
     SetMetricValue( *m_xMtrFldHeight, tools::Long(nValue / mfUIScale), MapUnit::Map100thMM);
 
-    // set color attribute
-    if( const XColorItem* pPoolItem = mrOutAttrs.GetItemIfSet( ATTR_COPY_START_COLOR ) )
-    {
-        Color aColor = pPoolItem->GetColorValue();
-        m_xLbStartColor->SelectEntry( aColor );
-        m_xLbEndColor->SelectEntry( aColor );
-    }
+    // clear color attributes
+    m_xLbStartColor->SelectEntry(COL_AUTO);
+    m_xLbStartColor->SetNoSelection();
+    m_xLbEndColor->SelectEntry(COL_AUTO);
+    m_xLbEndColor->SetNoSelection();
+    m_xRbRGB->set_active(true);
 }
 
 } // end of namespace sd
