@@ -1010,6 +1010,7 @@ namespace xmloff::token {
         XML_GRADIENTTRANSFORM,
         XML_GRAND_TOTAL,
         XML_GRAPHIC,
+        XML_GRAPHIC_CLIP_POLY,
         XML_GRAY,
         XML_GREEN,
         XML_GREYSCALE,

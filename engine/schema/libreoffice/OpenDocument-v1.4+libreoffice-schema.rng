@@ -1259,6 +1259,9 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
         <rng:optional>
           <rng:ref name="loext-qrcode"/>
         </rng:optional>
+        <rng:optional>
+          <rng:ref name="coext-graphic-clip-poly"/>
+        </rng:optional>
 
       </rng:element>
     </rng:define>
@@ -2324,6 +2327,14 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:attribute>
       <rng:attribute name="loext:can-add-comment">
         <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:element>
+  </rng:define>
+
+  <rng:define name="coext-graphic-clip-poly">
+    <rng:element name="coext:graphic-clip-poly">
+      <rng:attribute name="svg:d">
+        <rng:ref name="string"/>
       </rng:attribute>
     </rng:element>
   </rng:define>

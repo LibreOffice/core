@@ -1022,6 +1022,7 @@ namespace xmloff::token {
         TOKEN( "gradientTransform",               XML_GRADIENTTRANSFORM ),
         TOKEN( "grand-total",                     XML_GRAND_TOTAL ),
         TOKEN( "graphic",                         XML_GRAPHIC ),
+        TOKEN( "graphic-clip-poly",               XML_GRAPHIC_CLIP_POLY ),
         TOKEN( "gray",                            XML_GRAY ),
         TOKEN( "green",                           XML_GREEN ),
         TOKEN( "greyscale",                       XML_GREYSCALE ),

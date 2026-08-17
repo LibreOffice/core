@@ -1426,6 +1426,33 @@ void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xSha
                                             true);
 }
 
+void XMLShapeExport::ImpExportGraphicClipPoly(const uno::Reference<drawing::XShape>& xShape)
+{
+    auto xPropSet = xShape.query<beans::XPropertySet>();
+    if (!xPropSet)
+        return;
+    auto xInfo = xPropSet->getPropertySetInfo();
+    if (!xInfo || !xInfo->hasPropertyByName(u"GraphicClipPolyPolygon"_ustr))
+        return;
+
+    drawing::PolyPolygonBezierCoords aCoords;
+    xPropSet->getPropertyValue(u"GraphicClipPolyPolygon"_ustr) >>= aCoords;
+    if (aCoords.Coordinates.getLength() == 0)
+        return;
+
+    const basegfx::B2DPolyPolygon aPolyPolygon(
+        basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(aCoords));
+    if (!aPolyPolygon.count())
+        return;
+
+    // Shape-local coordinates in 1/100 mm: svg:d here carries neither a unit nor a viewBox.
+    const OUString aPath(basegfx::utils::exportToSvgD(aPolyPolygon, true /*relative*/,
+                                                      false /*quadratic*/,
+                                                      true /*relativeNextPointCompatible*/));
+    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPath);
+    SvXMLElementExport aElement(mrExport, XML_NAMESPACE_CO_EXT, XML_GRAPHIC_CLIP_POLY, true, true);
+}
+
 void XMLShapeExport::ExportGraphicDefaults()
 {
     rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
@@ -2712,6 +2739,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     {
         ImpExportSignatureLine(xShape);
         ImpExportQRCode(xShape);
+        ImpExportGraphicClipPoly(xShape);
     }
 }
 
