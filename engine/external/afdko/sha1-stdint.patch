@@ -1,0 +1,37 @@
+fix(android/afdko): use stdint for uint32_t
+
+sha1.c derives uint32_t from limits.h ranges:
+
+    #if ULONG_MAX == 4294967295U
+    typedef unsigned long int uint32_t;
+    #elif UINT_MAX == 4294967295U
+    typedef unsigned int uint32_t;
+    ...
+
+on 32-bit Android targets this picks `unsigned long int` which conflicts with
+uint32_t (`unsigned int`) from stdint.h:
+
+    sha1.c:10:27: error: typedef redefinition with different types
+        ('unsigned long' vs '__uint32_t' (aka 'unsigned int'))
+
+we can just include stdint.h instead, avoiding the issue entirely...
+
+--- a/c/shared/sha1.c
++++ b/c/shared/sha1.c
+@@ -4,15 +4,7 @@
+ #include "sha1.h"
+
+ #include <stdio.h>
+-#include <limits.h> /* to get info about range unsigned int */
+-
+-#if ULONG_MAX == 4294967295U
+-typedef unsigned long int uint32_t;
+-#elif UINT_MAX == 4294967295U
+-typedef unsigned int uint32_t;
+-#else
+-#error "There must be a way to get an unsigned 32 bit integer"
+-#endif
++#include <stdint.h>
+
+ typedef struct sha1_ctx {
+     uint32_t H[5];

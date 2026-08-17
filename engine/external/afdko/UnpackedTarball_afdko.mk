@@ -42,4 +42,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
 $(eval $(call gb_UnpackedTarball_add_file,afdko,c/shared/include/afdko_version.h,external/afdko/afdko_version.h))
 $(eval $(call gb_UnpackedTarball_add_file,afdko,c/shared/afdko_version.cpp,external/afdko/afdko_version.cpp))
 
+# sha1.c defines uint32_t, but Android already defines it in a conflicting way...
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_UnpackedTarball_add_patches,afdko, \
+    external/afdko/sha1-stdint.patch \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
