@@ -424,13 +424,8 @@ ShapeExport& PowerPointShapeExport::WriteTextShape(const Reference< XShape >& xS
     }
     else if (sShapeType == "com.sun.star.presentation.SubtitleShape")
     {
-        // TODO: handle subtitle shape: see tdf#112557 workaround
-        // MSO does not like subtitles on master slides
-        if (mePageType != MASTER)
-        {
-            if (!WritePlaceholder(xShape, Subtitle, mbMaster))
-                ShapeExport::WriteTextShape(xShape);
-        }
+        if (!WritePlaceholder(xShape, Subtitle, mbMaster))
+            ShapeExport::WriteTextShape(xShape);
     }
     else
         SAL_WARN("sd.eppt", "PowerPointShapeExport::WriteTextShape: shape of type '" << sShapeType << "' is ignored");
