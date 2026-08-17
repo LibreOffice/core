@@ -1313,6 +1313,23 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		let paneRectangles = app.getViewRectangles(); // SimpleRectangle array.
+
+		// A1 sits inside the frozen pane whenever a row and/or column is frozen, so it
+		// always looks "contained" there below, even when the scrollable pane past the
+		// freeze is left showing a stale position from before the cursor moved there.
+		// Only force that pane back to the top for an explicit Ctrl+Home: plain
+		// navigation (e.g. paging up) can also land the cursor on A1 without the user
+		// asking to see the top of the sheet, and A1 is already visible in that case.
+		const resetFreePaneToTop = this._scrollFreePaneToTopOnA1;
+		this._scrollFreePaneToTopOnA1 = false;
+		if (resetFreePaneToTop && paneRectangles.length > 1 &&
+		    app.calc.cellAddress.x === 0 && app.calc.cellAddress.y === 0) {
+			let freePane = paneRectangles[paneRectangles.length - 1];
+			scroll.x = app.calc.splitCoordinate.x - freePane.x1;
+			scroll.y = app.calc.splitCoordinate.y - freePane.y1;
+			return scroll;
+		}
+
 		let contained = false;
 		for (let i = 0; i < paneRectangles.length; i++) {
 			if (paneRectangles[i].containsRectangle(app.calc.cellCursorRectangle.toArray()))

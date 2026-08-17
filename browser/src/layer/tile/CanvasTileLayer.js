@@ -408,6 +408,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		app.calc.cellCursorVisible = false;
 		this._prevCellCursorAddress = null;
+		this._scrollFreePaneToTopOnA1 = false;
 		this._shapeGridOffset = new cool.SimplePoint(0, 0);
 
 		// Position and size of the selection start (as if there would be a cursor caret there).
@@ -2997,6 +2998,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			else if (unoKeyCode == UNOKey.RIGHT + app.UNOModifier.ALT)
 				unoKeyCode = UNOKey.RIGHT + app.UNOModifier.CTRL;
 		}
+
+		// Ctrl+Home asks to see the top of the whole sheet, so remember to scroll the
+		// pane below a frozen row/column back to its start once the cursor gets there,
+		// even though that pane's own view already contains A1's cell address.
+		if (this.isCalc() && type === 'input' && unoKeyCode === UNOKey.HOME + app.UNOModifier.CTRL)
+			this._scrollFreePaneToTopOnA1 = true;
 
 		var completeEvent = app.socket.createCompleteTraceEvent('L.TileSectionManager.postKeyboardEvent', { type: type, charCode: charCode });
 
