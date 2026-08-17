@@ -57,17 +57,21 @@ void btn_clicked(GtkWidget* pButton, gpointer)
 void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
-    std::string aUsedFormat;
+    char* pUsedFormat = nullptr;
     // TODO: Should check `text-selection` signal before trying to copy
-    std::string aSelection = kit_doc_view_copy_selection(KIT_DOC_VIEW(window->kitdocview), "text/html", &aUsedFormat);
-    if (aSelection.isEmpty())
+    char* pSelection = kit_doc_view_copy_selection(KIT_DOC_VIEW(window->kitdocview), "text/html", &pUsedFormat);
+    if (!pSelection)
         return;
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(pButton), GDK_SELECTION_CLIPBOARD);
+    std::string aUsedFormat(pUsedFormat);
     if (aUsedFormat == "text/plain;charset=utf-8")
-        gtk_clipboard_set_text(pClipboard, aSelection.c_str(), -1);
+        gtk_clipboard_set_text(pClipboard, pSelection, -1);
     else
-        GtvHelpers::clipboardSetHtml(pClipboard, aSelection.c_str());
+        GtvHelpers::clipboardSetHtml(pClipboard, pSelection);
+
+    free(pSelection);
+    free(pUsedFormat);
 }
 
 void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
