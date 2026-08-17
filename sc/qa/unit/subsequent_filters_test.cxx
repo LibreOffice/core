@@ -297,6 +297,18 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf150452)
     CPPUNIT_ASSERT_EQUAL(u"1-GE41L"_ustr, pDoc->GetString(0, 3998, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf148749_LMBCS_group_control)
+{
+    createScDoc("123/tdf148749.123");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: abc\ndef
+    //- Actual  : abc-*def
+    CPPUNIT_ASSERT_EQUAL(u"abc\ndef"_ustr, pDoc->GetString(1, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf48731)
 {
     createScDoc("csv/tdf48731.csv");
