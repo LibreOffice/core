@@ -944,9 +944,16 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
             if( pPage == nullptr )
                 break;
 
-            OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
-            pOutliner->SetText( *pOutlinerParaObject );
-            const bool bVertical = pOutliner->IsVertical();
+            // There may be no text to take the style from: a graphic or OLE presentation object
+            // never holds any, and emptying an object removes what it had. Which way the prompt
+            // runs is then the object's own answer.
+            auto pTextObj = DynCastSdrTextObj( pObj );
+            bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
+            if (OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject())
+            {
+                pOutliner->SetText( *pOutlinerParaObject );
+                bVertical = pOutliner->IsVertical();
+            }
 
             pOutliner->Clear();
             pOutliner->SetVertical( bVertical );

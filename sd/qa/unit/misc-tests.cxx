@@ -107,6 +107,7 @@ public:
     void testDuplicateAndMove();
     void testApiXDrawPageDuplicator();
     void testApiXMasterPagesSupplier();
+    void testEmptyPresObjSetOnObjectWithoutText();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396_UndoCellVerticalAlignment);
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testDuplicateAndMove);
     CPPUNIT_TEST(testApiXDrawPageDuplicator);
     CPPUNIT_TEST(testApiXMasterPagesSupplier);
+    CPPUNIT_TEST(testEmptyPresObjSetOnObjectWithoutText);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1365,6 +1367,25 @@ void SdMiscTest::testApiXMasterPagesSupplier()
     uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages(),
                                                      uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xMasterPages->getCount() >= 1);
+}
+
+void SdMiscTest::testEmptyPresObjSetOnObjectWithoutText()
+{
+    // Given an empty picture placeholder, which holds no outliner text at all:
+    createSdImpressDoc("pptx/tdfpictureplaceholder.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    bool bEmpty = false;
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bEmpty);
+    CPPUNIT_ASSERT(bEmpty);
+
+    // Then saying it is not empty and empty again must go through. Setting it back read the
+    // object's text to take a style from it without checking that there is any, so this crashed -
+    // a macro can reach it, and so can anything else that sets the property twice.
+    xShape->setPropertyValue(u"IsEmptyPresentationObject"_ustr, uno::Any(false));
+    xShape->setPropertyValue(u"IsEmptyPresentationObject"_ustr, uno::Any(true));
+
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bEmpty);
+    CPPUNIT_ASSERT(bEmpty);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
