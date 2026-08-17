@@ -21,11 +21,11 @@ describe(['tagdesktop'], 'Sidebar accelerator info boxes', function () {
 		});
 
 		cy.then(function () {
-			helper.processToIdle(win);
-
-			const a11y = win.app.UI.notebookbarAccessibility;
-			a11y.mayShowAcceleratorInfoBoxes = true;
-			a11y.onDocumentKeyUp({ keyCode: 18 });
+			return helper.processToIdle(win).then(function () {
+				const a11y = win.app.UI.notebookbarAccessibility;
+				a11y.mayShowAcceleratorInfoBoxes = true;
+				a11y.onDocumentKeyUp({ keyCode: 18 });
+			});
 		});
 	});
 

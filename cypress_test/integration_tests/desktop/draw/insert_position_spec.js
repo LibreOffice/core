@@ -18,15 +18,15 @@ describe(['tagdesktop'], 'Insert position', function() {
 			.should('not.be.null');
 
 		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
+			return helper.processToIdle(win).then(function() {
+				const object = win.app.definitions.graphicSelection.rectangle;
+				const visible = win.app.activeDocument.activeLayout.viewedRectangle;
 
-			const object = win.app.definitions.graphicSelection.rectangle;
-			const visible = win.app.activeDocument.activeLayout.viewedRectangle;
-
-			expect(object.x1 + object.width / 2,
-				'inserted object centre x').to.be.within(visible.x1, visible.x2);
-			expect(object.y1 + object.height / 2,
-				'inserted object centre y').to.be.within(visible.y1, visible.y2);
+				expect(object.x1 + object.width / 2,
+					'inserted object centre x').to.be.within(visible.x1, visible.x2);
+				expect(object.y1 + object.height / 2,
+					'inserted object centre y').to.be.within(visible.y1, visible.y2);
+			});
 		});
 	}
 
