@@ -191,11 +191,21 @@ interface ExtensionContextMenuEntry {
 	contexts?: ('text-selection' | 'image')[];
 }
 
+// One entry an extension adds to the floating toolbar that appears over a mouse
+// text selection. That toolbar only ever shows on desktop, outside read-only mode
+// and outside Calc, and only while a selection exists, so unlike the context menu
+// there is no separate `contexts` field to narrow it further. Every extension's
+// buttons share one separator after the toolbar's own built-in content.
+interface ExtensionContextToolbarButton {
+	command: string;
+}
+
 interface ExtensionContributes {
 	commands?: ExtensionCommand[];
 	menus?: { [menuId: string]: string[] };
 	notebookbar?: ExtensionNotebookbarTab[];
 	contextMenu?: ExtensionContextMenuEntry[];
+	contextToolbar?: ExtensionContextToolbarButton[];
 }
 
 interface ExtensionManifest {

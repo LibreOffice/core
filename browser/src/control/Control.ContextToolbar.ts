@@ -315,11 +315,18 @@ class ContextToolbar extends JSDialogComponent {
 		return contextItems;
 	}
 
-	insertAdditionalContextButton(button: any) {
-		for (const i in this.additionalContextButtons) {
-			const item = this.additionalContextButtons[i];
-			if (item.id === button.id) return;
-		}
+	// Appends one item to additionalContextButtons, adding a separator ahead of it
+	// first if this is the first one, and skipping it entirely if an item with the
+	// same id is already there. Shared by insertAdditionalContextButton (a WOPI
+	// integrator's button, routed to a UNO command or a postMessage) and the
+	// contributes.contextToolbar entries an extension manifest declares (routed
+	// through the dispatcher instead) - the two differ only in how the item's
+	// `command`/`postmessage` fields get filled in before reaching here.
+	private _pushAdditionalContextButton(item: ToolItemWidgetJSON): void {
+		if (
+			this.additionalContextButtons.some((existing) => existing.id === item.id)
+		)
+			return;
 
 		if (this.additionalContextButtons.length === 0) {
 			this.additionalContextButtons.push({
@@ -329,26 +336,83 @@ class ContextToolbar extends JSDialogComponent {
 			} as SeparatorWidgetJSON);
 		}
 
+		this.additionalContextButtons.push(item);
+	}
+
+	// Discards the already-built toolbar so the next show rebuilds it from the
+	// current additionalContextButtons, since showContextToolbarImpl only ever
+	// reads that list once, the first time the toolbar is shown.
+	private _forceRebuild(): void {
+		document.getElementById('context-toolbar')?.remove();
+		this.setupContainer(undefined);
+		this.initialized = false;
+	}
+
+	insertAdditionalContextButton(button: any) {
 		const isUnoCommand =
 			button.unoCommand && button.unoCommand.indexOf('.uno:') >= 0;
 		if (button.unoCommand && !isUnoCommand)
 			button.unoCommand = '.uno:' + button.unoCommand;
 
-		const contextButton = {
+		this._pushAdditionalContextButton({
 			id: button.id,
 			type: 'bigtoolitem',
 			text: button.label ? button.label : button.hint ? _(button.hint) : ' ',
 			command: button.unoCommand,
 			icon: button.imgurl,
 			postmessage: button.unoCommand ? undefined : true,
-		} as ToolItemWidgetJSON;
+		} as ToolItemWidgetJSON);
 
-		this.additionalContextButtons.push(contextButton);
+		this._forceRebuild();
+	}
 
-		// update context toolbar
-		document.getElementById('context-toolbar')?.remove();
-		this.setupContainer(undefined);
-		this.initialized = false;
+	// Appends each loaded extension's contributes.contextToolbar entries as
+	// bigcustomtoolitems - unlike the plain bigtoolitem the built-in buttons above
+	// use, this type dispatches its command unconditionally rather than treating
+	// anything not starting with .uno: as a dialog event bound for core, so an
+	// ext: id reaches app.dispatcher.dispatch the same way a menu or notebookbar
+	// contribution's does. Called once, after extension discovery resolves (see
+	// ServerConnectionService's onDocumentLoaded) - there is no later point that
+	// needs to call this again, since the extension list itself is only ever
+	// populated once per document.
+	refresh(): void {
+		if (!window.enableExperimentalFeatures) return;
+		const exts = app.map._extensions || {};
+		let addedAny = false;
+		Object.keys(exts)
+			.sort()
+			.forEach((extId) => {
+				const manifest = exts[extId].options.manifest;
+				const contributed =
+					manifest.contributes && manifest.contributes.contextToolbar;
+				if (!contributed || !contributed.length) return;
+				const commands = manifest.contributes.commands || [];
+				const baseUrl = exts[extId].options.baseUrl;
+				contributed.forEach((entry: any) => {
+					const command = commands.filter(
+						(c: { id: string }) => c.id === entry.command,
+					)[0];
+					if (!command) {
+						console.warn(
+							'extension ' +
+								extId +
+								': context toolbar references unknown command "' +
+								entry.command +
+								'"',
+						);
+						return;
+					}
+					this._pushAdditionalContextButton({
+						id: 'ext:' + extId + ':' + entry.command,
+						type: 'bigcustomtoolitem',
+						text: command.title,
+						icon: command.icon ? baseUrl + command.icon : undefined,
+						command: 'ext:' + extId + ':' + entry.command,
+					} as ToolItemWidgetJSON);
+					addedAny = true;
+				});
+			});
+		if (addedAny) this._forceRebuild();
 	}
 
 	setLastInputEventType(e: any) {

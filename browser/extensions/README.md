@@ -175,6 +175,22 @@ ui.json:
   types load the extension at all, so a Calc-only entry belongs in
   `supports: ["spreadsheet"]`, not in `contexts`.
 
+- `contributes.contextToolbar` is a flat list of `{ command }` entries
+  added to the floating toolbar that appears over a mouse text selection:
+
+  ```json
+  "contextToolbar": [
+    { "command": "makeBold" }
+  ]
+  ```
+
+  That toolbar only ever shows on desktop, outside read-only mode, outside
+  Calc, and only while a selection exists, so there is no `contexts` field
+  here the way there is for `contributes.contextMenu` - the toolbar's own
+  show logic already covers it. All extensions' buttons share one
+  separator after the toolbar's own built-in content, the same "own space,
+  appended at the end" rule as the other three contribution points.
+
 Command ids are namespaced internally so two extensions can never collide.
 
 ## Local testing

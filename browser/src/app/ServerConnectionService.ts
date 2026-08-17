@@ -174,6 +174,7 @@ class ServerConnectionService {
 					) {
 						app.map.uiManager.notebookbar.impl.refresh();
 					}
+					if (app.map.contextToolbar) app.map.contextToolbar.refresh();
 				},
 			);
 		}

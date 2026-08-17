@@ -129,5 +129,8 @@
     "contextMenu": [
         { "command": "insertWordCount" },
         { "command": "makeBold", "contexts": ["text-selection"] }
+    ],
+    "contextToolbar": [
+        { "command": "makeBold" }
     ]
 }
