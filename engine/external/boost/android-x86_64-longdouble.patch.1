@@ -1,0 +1,26 @@
+fix(android/boost): correct long-double width #elif
+
+Unlike other x86_64 platforms, Android x86_64 uses the same number of bits in
+its long-double as AArch64. Unfortunately, in boost this long-double width is
+gated only by architecture, so x86_64 Android is mistakenly placed here causing:
+
+    fp_traits.hpp:314: error: static assertion failed due to requirement
+    '113 == 64': Oops, assumption that long double is an 80-bit quantity is
+    incorrect!!
+
+We should write the correct assumption into the #elif here, which will cause
+Android x86_64 to fall through to the generic case below...
+
+--- boost/boost/math/special_functions/detail/fp_traits.hpp
++++ boost/boost/math/special_functions/detail/fp_traits.hpp
+@@ -306,7 +306,8 @@
+ // long double (>64 bits), x86 and x64 -----------------------------------------
+
+-#elif defined(__i386) || defined(__i386__) || defined(_M_IX86) \
++#elif (defined(__i386) || defined(__i386__) || defined(_M_IX86) \
+     || defined(__amd64) || defined(__amd64__)  || defined(_M_AMD64) \
+-    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)
++    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)) \
++    && (LDBL_MANT_DIG == 64)
+
+ // Intel extended double precision format (80 bits)

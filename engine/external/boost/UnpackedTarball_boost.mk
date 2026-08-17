@@ -50,4 +50,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,boost,\
     external/boost/boost-emscripten-nowasm.patch.0 \
 ))
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_UnpackedTarball_add_patches,boost,\
+    external/boost/android-x86_64-longdouble.patch.1 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
