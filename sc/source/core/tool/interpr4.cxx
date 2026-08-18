@@ -4598,7 +4598,7 @@ StackVar ScInterpreter::Interpret()
         pCur = pStack[ sp-1 ];
         if( pCur->GetOpCode() == ocPush )
         {
-            if ( ! aCode.IsLambda() )   // leave everything alone inside a lambda
+            if ( ! aCode.GetCallableInterpretLevel() )   // leave everything alone inside a lambda
             {
                 // An svRefList can be resolved if it a) contains just one
                 // reference, or b) in array context contains an array of single

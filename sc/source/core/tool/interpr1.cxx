@@ -11100,8 +11100,8 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         // A lambda body runs in a fresh nested interpreter and does not pass
         // through the per-cell recursion counter, so bound the nesting depth
         // here. A formula that exceeds the limit yields an error.
-        ScDocument& rLambdaDoc = pLambda->GetDocument();
-        if (rLambdaDoc.GetCallableInterpretLevel() >= MAX_CALLABLE_INTERPRET_LEVEL)
+        sal_uInt16 nLevel = aCode.GetCallableInterpretLevel();
+        if (nLevel >= MAX_CALLABLE_INTERPRET_LEVEL)
         {
             SetError(FormulaError::StackOverflow);
             PushError(nGlobalError);
@@ -11149,16 +11149,15 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         }
 
         // calculate the final result, in the stored context
+        ScDocument& rLambdaDoc = pLambda->GetDocument();
         ScInterpreter aInt(pLambda->GetFormulaCell(), rLambdaDoc, pLambda->GetContext(),
                            pLambda->GetAddress(), aNewTokens);
-        aInt.aCode.Lambda(true);
+        aInt.aCode.SetCallableInterpretLevel(nLevel + 1);
 
         sfx2::LinkManager aNewLinkMgr(rLambdaDoc.GetDocumentShell());
         aInt.SetLinkManager(&aNewLinkMgr);
 
-        rLambdaDoc.IncCallableInterpretLevel();
         formula::StackVar aResultType = aInt.Interpret();
-        rLambdaDoc.DecCallableInterpretLevel();
         formula::FormulaConstTokenRef xLambdaResult( aInt.GetResultToken() );
 
         if (aResultType == formula::svMatrixCell)

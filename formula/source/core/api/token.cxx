@@ -1601,13 +1601,13 @@ void FormulaTokenArray::ReinternStrings( svl::SharedStringPool& rPool )
 
 /*----------------------------------------------------------------------*/
 
-FormulaTokenIterator::Item::Item(const FormulaTokenArray* pArray, short pc, short stop, bool lambda) :
-    pArr(pArray), nPC(pc), nStop(stop), bLambda(lambda)
+FormulaTokenIterator::Item::Item(const FormulaTokenArray* pArray, short pc, short stop, sal_uInt16 callableInterpretLevel) :
+    pArr(pArray), nPC(pc), nStop(stop), nCallableInterpretLevel(callableInterpretLevel)
 {
 }
 
 FormulaTokenIterator::FormulaTokenIterator( const FormulaTokenArray& rArr )
-    : maStack{ FormulaTokenIterator::Item(&rArr, -1, SHRT_MAX, false) }
+    : maStack{ FormulaTokenIterator::Item(&rArr, -1, SHRT_MAX, 0) }
 {
 }
 
@@ -1617,7 +1617,7 @@ FormulaTokenIterator::~FormulaTokenIterator()
 
 void FormulaTokenIterator::Push( const FormulaTokenArray* pArr )
 {
-    FormulaTokenIterator::Item item(pArr, -1, SHRT_MAX, false);
+    FormulaTokenIterator::Item item(pArr, -1, SHRT_MAX, 0);
 
     maStack.push_back(item);
 }
@@ -1627,14 +1627,14 @@ void FormulaTokenIterator::Pop()
     maStack.pop_back();
 }
 
-void FormulaTokenIterator::Lambda(bool bOpt)
+void FormulaTokenIterator::SetCallableInterpretLevel(sal_uInt16 nLevel)
 {
-    maStack.back().bLambda = bOpt;
+    maStack.back().nCallableInterpretLevel = nLevel;
 }
 
-bool FormulaTokenIterator::IsLambda() const
+sal_uInt16 FormulaTokenIterator::GetCallableInterpretLevel() const
 {
-    return maStack.back().bLambda;
+    return maStack.back().nCallableInterpretLevel;
 }
 
 void FormulaTokenIterator::Reset()
@@ -1642,7 +1642,7 @@ void FormulaTokenIterator::Reset()
     while( maStack.size() > 1 )
         maStack.pop_back();
 
-    if (!maStack.back().bLambda)
+    if (!maStack.back().nCallableInterpretLevel)
         maStack.back().nPC = -1;
 }
 

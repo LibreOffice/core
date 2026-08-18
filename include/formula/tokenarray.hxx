@@ -555,9 +555,9 @@ class FORMULA_DLLPUBLIC FormulaTokenIterator
         const FormulaTokenArray* pArr;
         short nPC;
         short nStop;
-        bool bLambda;
+        sal_uInt16 nCallableInterpretLevel;
 
-        Item(const FormulaTokenArray* arr, short pc, short stop, bool lambda);
+        Item(const FormulaTokenArray* arr, short pc, short stop, sal_uInt16 callableInterpretLevel);
     };
 
     std::vector<Item> maStack;
@@ -588,8 +588,8 @@ public:
     void Jump( short nStart, short nNext, short nStop = SHRT_MAX );
     void Push( const FormulaTokenArray* );
     void Pop();
-    void Lambda( bool bOpt );
-    bool IsLambda() const;
+    void SetCallableInterpretLevel(sal_uInt16 nLevel);
+    sal_uInt16 GetCallableInterpretLevel() const;
 
     /** Reconstruct the iterator afresh from a token array
     */
