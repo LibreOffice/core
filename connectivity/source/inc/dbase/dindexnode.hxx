@@ -120,12 +120,15 @@ namespace connectivity::dbase
         sal_uInt32      nPagePos;       // Position in the index file
         bool            bModified : 1;
         sal_uInt16      nCount;
+        sal_uInt16      nNodeCapacity;  // Number of entries allocated in ppNodes, one or more
 
         ONDXPagePtr     aParent,            // Parent page
                         aChild;             // Pointer to the right child page
         ODbaseIndex&    rIndex;
         std::unique_ptr<ONDXNode[]>
                         ppNodes;             // Array of nodes
+
+        sal_uInt16 ClampPos(sal_uInt16 nPos) const;
 
     public:
         // Node operations
