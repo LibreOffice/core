@@ -308,9 +308,22 @@ bool lock(const std::vector<Permission>& perms)
     success =
         success && addPerm(rulesetFd, Permission("/var/cache/fontconfig", Access::ReadOnlyDir));
 
+    // symlinks from /etc point there
+    success = success && addPerm(rulesetFd, Permission("/usr/share/fontconfig", Access::ReadOnlyDir));
+
     // ancient bitmap fonts are not filtered out, presumably that was just done to
     // improve performance of copying
     success = success && addPerm(rulesetFd, Permission("/usr/share/fonts", Access::ReadOnlyDir));
+    success = success && addPerm(rulesetFd, Permission("/usr/share/ghostscript/fonts", Access::ReadOnlyDir));
+    success = success && addPerm(rulesetFd, Permission("/usr/local/share/fonts", Access::ReadOnlyDir));
+
+#if ENABLE_DEBUG
+    auto const pHome = getenv("HOME");
+    if (pHome) {
+        const std::string home{pHome};
+        success = success && addPerm(rulesetFd, Permission(home + "/.fonts", Access::ReadOnlyDir));
+    }
+#endif
 
     for (const char* pattern : {
             "/lib/ld-*",
