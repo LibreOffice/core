@@ -100,8 +100,8 @@ static HTHEME getThemeHandle(HWND hWnd, LPCWSTR name, WinSalGraphicsImplBase* pG
     }
 
     ThemeMap::iterator iter;
-    if( (iter = aThemeMap.find( name )) != aThemeMap.end() )
-        return iter->second;
+    if( aThemeMap.contains( name ) )
+        return aThemeMap[name];
     // theme not found -> add it to map
     HTHEME hTheme = OpenThemeData( hWnd, name );
     if( hTheme != nullptr )
