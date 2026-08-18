@@ -388,10 +388,6 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         OUString aService = OUString::createFromAscii( maTypeInfo.mpcServiceName );
         Reference< XChartType > xChartType( createInstance( aService ), UNO_QUERY_THROW );
 
-        Reference< XChartTypeContainer > xChartTypeContOld( rxCoordSystem, UNO_QUERY_THROW );
-        Sequence< Reference< XChartType > > xOldChartTypes( xChartTypeContOld->getChartTypes() );
-        sal_Int32 nOldChartTypeIdx = -1;
-
         // additional properties
         PropertySet aDiaProp( rxDiagram );
         PropertySet aTypeProp( xChartType );
@@ -501,6 +497,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             case VARPOINTMODE_MULTI:                                                            break;
         }
 
+        sal_Int32 nOldChartTypeIdx = -1;
         /*  Stock chart needs special processing. Create one 'big' series with
             data sequences of different roles. */
         if( maTypeInfo.meTypeId == TYPEID_STOCK )
@@ -562,6 +559,9 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         }
         else
         {
+            Reference< XChartTypeContainer > xChartTypeContOld( rxCoordSystem, UNO_QUERY_THROW );
+            Sequence< Reference< XChartType > > xOldChartTypes( xChartTypeContOld->getChartTypes() );
+
             for( sal_Int32 nCTIdx=0; nCTIdx<xOldChartTypes.getLength(); ++nCTIdx )
             {
                 if ( xChartType->getChartType() == xOldChartTypes[nCTIdx]->getChartType() )

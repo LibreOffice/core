@@ -1180,6 +1180,25 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSRoundtrip)
     CPPUNIT_ASSERT_EQUAL(3.5, fBinWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testParetoImport)
+{
+    loadFromFile(u"xlsx/paretoline-test.xlsx");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    // We should get a clusteredColumn and then a paretoLine
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.ClusteredColumnChartType"_ustr,
+                         xChartType->getChartType());
+
+    xChartType = getChartTypeFromDoc(xChartDoc, 1, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.ParetoLineChartType"_ustr,
+                         xChartType->getChartType());
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleODSRoundtrip)
 {
     loadFromFile(u"fods/correlation-circle.fods");
