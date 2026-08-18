@@ -146,9 +146,8 @@ public:
     SharedPaneStyle GetPaneStyle (const OUString& rsStyleName) const;
 
 private:
-    void ProcessPaneStyle (
-        ReadContext const & rReadContext,
-        const ::std::vector<css::uno::Any>& rValues);
+    void ProcessPaneStyle(const Reference<rendering::XCanvas>& rxCanvas,
+                          const ::std::vector<css::uno::Any>& rValues);
 };
 
 /** A ViewStyle describes how a view is displayed.
@@ -797,13 +796,12 @@ void PaneStyleContainer::Read (
         aProperties,
         [this, &rReadContext] (std::vector<uno::Any> const& rValues)
         {
-            return this->ProcessPaneStyle(rReadContext, rValues);
+            return this->ProcessPaneStyle(rReadContext.mxCanvas, rValues);
         });
 }
 
-void PaneStyleContainer::ProcessPaneStyle(
-    ReadContext const & rReadContext,
-    const ::std::vector<Any>& rValues)
+void PaneStyleContainer::ProcessPaneStyle(const Reference<rendering::XCanvas>& rxCanvas,
+                                          const ::std::vector<Any>& rValues)
 {
     if (rValues.size() != 6)
         return;
@@ -837,14 +835,14 @@ void PaneStyleContainer::ProcessPaneStyle(
         pStyle->maOuterBorderSize.Merge(pStyle->mpParentStyle->maOuterBorderSize);
     }
 
-    if (rReadContext.mxCanvas.is())
+    if (rxCanvas.is())
     {
         Reference<container::XNameAccess> xBitmapsNode (rValues[5], UNO_QUERY);
         pStyle->mpBitmaps = std::make_shared<PresenterBitmapContainer>(
             xBitmapsNode,
             pStyle->mpParentStyle != nullptr ? pStyle->mpParentStyle->mpBitmaps
                                              : std::shared_ptr<PresenterBitmapContainer>(),
-            rReadContext.mxCanvas);
+            rxCanvas);
     }
 
     mStyles.push_back(std::move(pStyle));
