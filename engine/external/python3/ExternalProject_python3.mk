@@ -150,7 +150,8 @@ endif
 
 ifeq ($(OS),MACOSX)
 
-python3_fw_prefix:=$(gb_UnpackedTarball_workdir)/python3/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
+python3_fw_installname:=/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
+python3_fw_prefix:=$(gb_UnpackedTarball_workdir)/python3/python-inst/$(python3_fw_installname)
 python3_EXTENSION_MODULE_SUFFIX:=cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)-darwin
 
 # Since python 3.12 setuptools and pip are not available by default
@@ -188,19 +189,19 @@ cd \"$$origpath\"\n\
 $(call gb_ExternalProject_get_state_target,python3,fixinstallnames) : $(call gb_ExternalProject_get_state_target,python3,build) \
         | $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff)
 	$(INSTALL_NAME_TOOL) -change \
-		$(python3_fw_prefix)/LibreOfficePython \
+		$(python3_fw_installname)/LibreOfficePython \
 		@executable_path/../../../../LibreOfficePython \
 		$(python3_fw_prefix)/Resources/Python.app/Contents/MacOS/LibreOfficePython
 	for file in $(shell $(FIND) $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload -name "*.so") ; do \
 	$(INSTALL_NAME_TOOL) -change \
-		$(python3_fw_prefix)/LibreOfficePython \
+		$(python3_fw_installname)/LibreOfficePython \
 		@loader_path/../../../LibreOfficePython $$file ; done
 	touch $@
 
 $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_ExternalProject_get_state_target,python3,build)
 	cd $(python3_fw_prefix)/bin ; \
 	$(INSTALL_NAME_TOOL) -change \
-		$(python3_fw_prefix)/LibreOfficePython \
+		$(python3_fw_installname)/LibreOfficePython \
 		@executable_path/../LibreOfficePython python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 	touch $@
 
