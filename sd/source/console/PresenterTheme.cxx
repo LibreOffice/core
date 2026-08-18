@@ -181,9 +181,8 @@ public:
     SharedViewStyle GetViewStyle (const OUString& rsStyleName) const;
 
 private:
-    void ProcessViewStyle(
-        ReadContext const & rReadContext,
-        const Reference<beans::XPropertySet>& rxProperties);
+    void ProcessViewStyle(const Reference<rendering::XCanvas>& rxCanvas,
+                          const Reference<beans::XPropertySet>& rxProperties);
 };
 
 class StyleAssociationContainer
@@ -903,14 +902,13 @@ void ViewStyleContainer::Read (
             xViewStyleList,
             [this, &rReadContext] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
             {
-                return this->ProcessViewStyle(rReadContext, xProps);
+                return this->ProcessViewStyle(rReadContext.mxCanvas, xProps);
             });
     }
 }
 
-void ViewStyleContainer::ProcessViewStyle(
-    ReadContext const & rReadContext,
-    const Reference<beans::XPropertySet>& rxProperties)
+void ViewStyleContainer::ProcessViewStyle(const Reference<rendering::XCanvas>& rxCanvas,
+                                          const Reference<beans::XPropertySet>& rxProperties)
 {
     auto pStyle = std::make_shared<ViewStyle>();
 
@@ -945,7 +943,7 @@ void ViewStyleContainer::ProcessViewStyle(
     SharedBitmapDescriptor pBackground (PresenterBitmapContainer::LoadBitmap(
         xBackgroundNode,
         OUString(),
-        rReadContext.mxCanvas,
+        rxCanvas,
         SharedBitmapDescriptor()));
     if (pBackground && pBackground->GetNormalBitmap().is())
         pStyle->mpBackground = std::move(pBackground);
