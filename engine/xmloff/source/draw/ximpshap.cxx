@@ -855,6 +855,9 @@ bool SdXMLShapeContext::processAttribute( const sax_fastparser::FastAttributeLis
         case XML_ELEMENT(PRESENTATION, XML_CLASS):
             maPresentationClass = aIter.toString();
             break;
+        case XML_ELEMENT(CO_EXT, XML_PLACEHOLDER_CLASS):
+            maPlaceholderClass = aIter.toString();
+            break;
         case XML_ELEMENT(CO_EXT, XML_PLACEHOLDER_PROMPT):
             maPlaceholderPrompt = aIter.toString();
             break;
@@ -1542,7 +1545,14 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
         // check if the current document supports presentation shapes
         if( GetImport().GetShapeImport()->IsPresentationShapesSupported() )
         {
-            if( IsXMLToken( maPresentationClass, XML_SUBTITLE ))
+            // A placeholder that holds text is written as an outline one, the only class ODF
+            // has for a frame of text, and says what it really is as an extension.
+            if( IsXMLToken( maPlaceholderClass, XML_GRAPHIC ) )
+            {
+                // XmlShapeType::PresGraphicObjectShape
+                service = u"com.sun.star.presentation.GraphicObjectShape"_ustr;
+            }
+            else if( IsXMLToken( maPresentationClass, XML_SUBTITLE ))
             {
                 // XmlShapeType::PresSubtitleShape
                 service = u"com.sun.star.presentation.SubtitleShape"_ustr;

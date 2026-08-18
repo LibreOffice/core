@@ -54,6 +54,7 @@ protected:
     OUString               maDrawStyleName;
     OUString               maTextStyleName;
     OUString               maPresentationClass;
+    OUString               maPlaceholderClass;
     OUString               maPlaceholderPrompt;
     OUString               maShapeName;
     OUString               maThumbnailURL;

@@ -1472,6 +1472,7 @@ density
 bounciness
 pie-offset
 placeholder
+placeholder-class
 placeholder-prompt
 placeholder-type
 placing

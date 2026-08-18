@@ -40,6 +40,10 @@ class SdrObject;
 class SdXImpressDocument;
 class SdMasterPage;
 
+/** The shape type a presentation object of the given kind claims - what the placeholder is, which
+    can differ from what currently represents it on the page. */
+OUString GetPresObjShapeType(PresObjKind eKind);
+
 class SdGenericDrawPage : public SvxDrawPage,
                           public SdUnoSearchReplaceShape,
                           public css::drawing::XShapeCombiner,

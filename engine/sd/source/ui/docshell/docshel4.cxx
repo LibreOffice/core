@@ -305,6 +305,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         EffectMigration::DocumentLoaded(*pDoc);
         UpdateTablePointers();
         sd::LineSpacingMigrator::migrate(pDoc);
+        pDoc->SwitchPlaceholdersHoldingText();
 
         // If we're an embedded OLE object, use tight bounds
         // for our visArea. No point in showing the user lots of empty
@@ -461,7 +462,10 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     mpDoc->decImportExport();
 
     if (bRet)
+    {
         sd::LineSpacingMigrator::migrate(mpDoc);
+        mpDoc->SwitchPlaceholdersHoldingText();
+    }
 
     if (bRet && !xInsertPosition)
         UpdateLinks();
@@ -581,7 +585,10 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     FinishedLoading();
 
     if (bRet)
+    {
+        mpDoc->SwitchPlaceholdersHoldingText();
         UpdateLinks();
+    }
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )

@@ -839,6 +839,21 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testPlaceholderPromptODFRoundTrip)
     CPPUNIT_ASSERT_EQUAL(u"Custom prompt to insert an image"_ustr, aPrompt);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest4, testPlaceholderClassODFRoundTrip)
+{
+    // Given a slide whose picture placeholder holds text, which an outliner object represents:
+    createSdImpressDoc("pptx/pic-placeholder-with-text.pptx");
+    save(TestFilter::ODP);
+
+    // ODF states the class of what represents it, so what the placeholder is travels as an
+    // extension attribute beside it - the frame is a text one, the placeholder a picture one.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    static constexpr char aFrame[]
+        = "/office:document-content/office:body/office:presentation/draw:page/draw:frame";
+    assertXPath(pXmlDoc, aFrame, "class", u"outline");
+    assertXPath(pXmlDoc, aFrame, "placeholder-class", u"graphic");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
