@@ -35,6 +35,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/file.hxx>
 #include <osl/diagnose.h>
 #include <osl/process.h>
@@ -387,6 +388,9 @@ OUString createVariant(ImageRequestParameters& rParameters)
 
 bool loadDiskCachedVersion(std::u16string_view sVariant, ImageRequestParameters& rParameters)
 {
+    if (comphelper::COKit::isActive()) // UserInstallation created in ForKit
+        return false;
+
     OUString sUrl(getIconCacheUrl(sVariant, rParameters));
     if (!urlExists(sUrl))
         return false;
@@ -400,6 +404,9 @@ bool loadDiskCachedVersion(std::u16string_view sVariant, ImageRequestParameters&
 
 void cacheBitmapToDisk(std::u16string_view sVariant, ImageRequestParameters const & rParameters)
 {
+    if (comphelper::COKit::isActive()) // UserInstallation created in ForKit
+        return;
+
     OUString sUrl(createIconCacheUrl(sVariant, rParameters));
     try
     {
