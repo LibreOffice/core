@@ -1011,21 +1011,23 @@ namespace cool {
 		}
 
 		private getToneChipLabel(): string {
+			// Caret points up while the picker is open, down while closed.
+			const caret = this.tonePickerOpen ? ' ▴' : ' ▾';
 			if (this.selectedTone === null) {
-				return _('Set tone') + ' ▾';
+				return _('Set tone') + caret;
 			}
 			const preset = this.TONE_PRESETS.find((p) => p.id === this.selectedTone);
 			if (preset) {
 				if (this.emojify) {
-					return preset.icon + ' ' + preset.label + ' ▾';
+					return preset.icon + ' ' + preset.label + caret;
 				}
-				return preset.label + ' ▾';
+				return preset.label + caret;
 			}
 			const custom = this.findCustomTone(this.selectedTone);
 			if (custom) {
-				return custom.icon + ' ' + custom.name + ' ▾';
+				return custom.icon + ' ' + custom.name + caret;
 			}
-			return _('Set tone') + ' ▾';
+			return _('Set tone') + caret;
 		}
 
 		private getToneChipJSON(): any {
