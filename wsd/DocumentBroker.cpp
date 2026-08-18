@@ -1420,10 +1420,17 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
     }
 #endif //!MOBILEAPP
 
-    std::string localFilePath =
-        Poco::Path(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces, getJailRoot(),
-                                                  localPath))
-            .toString();
+    const std::string localFilePath =
+#if !MOBILEAPP
+        // Without capabilities there is no chroot, so the storage gives a
+        // local path that is already usable.
+        COOLWSD::NoCapsForKit
+            ? localPath
+            :
+#endif
+              Poco::Path(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
+                                                        getJailRoot(), localPath))
+                  .toString();
     std::ifstream istr(localFilePath, std::ios::binary);
     Poco::SHA1Engine sha1;
     Poco::DigestOutputStream dos(sha1);
