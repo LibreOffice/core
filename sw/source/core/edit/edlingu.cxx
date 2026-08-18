@@ -886,7 +886,12 @@ uno::Reference< XSpellAlternatives >
     SwTextNode *pNode = nullptr;
     SwWrongList *pWrong = nullptr;
     if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
+    {
+        if (eTmpState.m_bInNumPortion || eTmpState.m_bFootnoteNoInfo)
+            return nullptr; // no spell checking over top of numbering
+
         pNode = aPos.GetNode().GetTextNode();
+    }
     if (nullptr == pNode)
         pNode = pCursor->GetPointNode().GetTextNode();
     if (nullptr != pNode)
