@@ -484,7 +484,8 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
     tools->add(makeAITool(
         std::string(AIToolNames::ListCalcFunctions),
         "List all available spreadsheet functions in the current Calc document, "
-        "grouped by category. Returns function names and signatures. "
+        "grouped by category. Returns US English function names and signatures, "
+        "whatever the user's language is. "
         "Call this when you need to verify a function exists or discover "
         "the right function for a task. Only works for Calc/spreadsheet documents.",
         makeParamSchema({}, {})));
@@ -837,6 +838,9 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req, const Desig
             " separators (e.g., =VLOOKUP(A1,B:C,2,FALSE) not =VLOOKUP(A1;B:C;2;FALSE))."
             " Use standard Excel/Calc function names: SUM, AVERAGE, VLOOKUP, IF, COUNTIF,"
             " SUMIF, INDEX, MATCH, etc."
+            " Keep the function names in English even when you are writing to the user in"
+            " another language, and never translate them yourself. The spreadsheet stores"
+            " the formula and shows it back in the user's own language on its own."
             " If you are unsure whether a function exists, call list_calc_functions to check."
             " If the user has selected spreadsheet data, use the cell addresses visible in that "
             "data"
@@ -1587,7 +1591,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
 
         sendToolProgress(fnName, "Loading function catalog...");
         docBroker->forwardToChild(_session.client_from_this(),
-            "commandvalues command=.uno:CalcFunctionList");
+            "commandvalues command=.uno:CalcFunctionList?english=true");
         return true;
     }
 
@@ -2211,8 +2215,9 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
 
             sendToolProgress(std::string(AIToolNames::SetCellFormula), "Setting formulas...");
 
-            // Dispatch GoToCell + EnterString for each pair
+            // Dispatch SetCellFormula for each pair
             Poco::JSON::Array resultArr;
+            std::string lastCell;
             for (std::size_t i = 0; i < pairs->size(); ++i)
             {
                 auto p = pairs->getObject(i);
@@ -2224,20 +2229,27 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
                 std::string escapedCell = JsonUtil::escapeJSONValue(cell);
                 std::string escapedFormula = JsonUtil::escapeJSONValue(formula);
 
-                std::string goToArgs = "{\"ToPoint\":{\"type\":\"string\",\"value\":\""
-                    + escapedCell + "\"}}";
-                docBroker->forwardToChild(_session.client_from_this(),
-                    "uno .uno:GoToCell " + goToArgs);
-
-                std::string enterArgs = "{\"StringName\":{\"type\":\"string\",\"value\":\""
+                std::string setArgs = "{\"Cell\":{\"type\":\"string\",\"value\":\""
+                    + escapedCell + "\"},\"Formula\":{\"type\":\"string\",\"value\":\""
                     + escapedFormula + "\"}}";
                 docBroker->forwardToChild(_session.client_from_this(),
-                    "uno .uno:EnterString " + enterArgs);
+                    "uno .uno:SetCellFormula " + setArgs);
 
                 Poco::JSON::Object::Ptr r = new Poco::JSON::Object();
                 r->set("cell", cell);
                 r->set("formula", formula);
                 resultArr.add(r);
+
+                lastCell = escapedCell;
+            }
+
+            // Leave the cursor on the last cell written, so the user sees the result.
+            if (!lastCell.empty())
+            {
+                std::string goToArgs = "{\"ToPoint\":{\"type\":\"string\",\"value\":\""
+                    + lastCell + "\"}}";
+                docBroker->forwardToChild(_session.client_from_this(),
+                    "uno .uno:GoToCell " + goToArgs);
             }
 
             // Continue tool loop with success
