@@ -710,23 +710,19 @@ void Reader::EndPaste(SwPasteInfo& rPasteInfo)
                 {
                     aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
                 }
-
-                if (pDelNd)
+                // If the first new node isn't empty, convert  the node's text
+                // attributes into hints. Otherwise, set the new node's
+                // paragraph style at the previous (empty) node.
+                if (pTextNode->GetText().getLength())
+                    pDelNd->FormatToTextAttr(pTextNode);
+                else
                 {
-                    // If the first new node isn't empty, convert  the node's text
-                    // attributes into hints. Otherwise, set the new node's
-                    // paragraph style at the previous (empty) node.
-                    if (pTextNode->GetText().getLength())
-                        pDelNd->FormatToTextAttr(pTextNode);
-                    else
+                    pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+                    if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
                     {
-                        pTextNode->ChgFormatColl(pDelNd->GetTextColl());
-                        if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
-                        {
-                            // Lists would need manual merging, but copy paragraph direct formatting
-                            // otherwise.
-                            pDelNd->CopyCollFormat(*pTextNode);
-                        }
+                        // Lists would need manual merging, but copy paragraph direct formatting
+                        // otherwise.
+                        pDelNd->CopyCollFormat(*pTextNode);
                     }
                 }
                 pTextNode->JoinNext();
