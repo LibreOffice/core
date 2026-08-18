@@ -1733,6 +1733,9 @@ TopLevelWindowLocker::~TopLevelWindowLocker()
 
 void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
+    if (!mpWindowImpl)
+        return;
+
     SystemWindow::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("title", GetText());
     if (vcl::Window* pActionArea = get_action_area())
