@@ -74,8 +74,8 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
     , aParent(pParent)
     , rIndex(rInd)
 {
-    sal_uInt16 nT = rIndex.getHeader().db_maxkeys;
-    ppNodes.reset( new ONDXNode[nT] );
+    nNodeCapacity = std::max<sal_uInt16>(1, rIndex.getHeader().db_maxkeys);
+    ppNodes.reset( new ONDXNode[nNodeCapacity] );
 }
 
 ONDXPage::~ONDXPage()
@@ -103,7 +103,7 @@ void ONDXPage::QueryDelete()
         if (aChild.Is())
             aChild->Release(false);
 
-        for (sal_uInt16 i = 0; i < rIndex.getHeader().db_maxkeys;i++)
+        for (sal_uInt16 i = 0; i < nNodeCapacity;i++)
         {
             if (ppNodes[i].GetChild().Is())
                 ppNodes[i].GetChild()->Release(false);
@@ -126,11 +126,30 @@ void ONDXPage::QueryDelete()
     }
 }
 
+// true when the page is already somewhere on the chain of parents, so that loading it would
+// descend into a page the descent is already inside
+static bool lcl_isOnTheParentChain(sal_uInt32 nPagePos, const ONDXPage* pPage)
+{
+    for (const ONDXPage* p = pPage; p; p = p->GetParent())
+    {
+        if (p->GetPagePos() == nPagePos)
+            return true;
+    }
+    return false;
+}
+
 ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex const * pIndex)
 {
     if (!aChild.Is() && pIndex)
     {
-        aChild = rIndex.CreatePage(aChild.GetPagePos(),this,aChild.HasPage());
+        const bool bLoad = aChild.HasPage();
+        if (bLoad && lcl_isOnTheParentChain(aChild.GetPagePos(), this))
+        {
+            SAL_WARN("connectivity.dbase", "page " << aChild.GetPagePos()
+                     << " is its own ancestor, so it is left unread");
+        }
+        else
+            aChild = rIndex.CreatePage(aChild.GetPagePos(),this,bLoad);
     }
     return aChild;
 }
@@ -307,7 +326,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
 
 bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
 {
-    sal_uInt16 nMaxCount = rIndex.getHeader().db_maxkeys;
+    sal_uInt16 nMaxCount = nNodeCapacity;
     if (nPos >= nMaxCount)
         return false;
 
@@ -352,7 +371,7 @@ void ONDXPage::Release(bool bSave)
     // free pointer
     aChild.Clear();
 
-    for (sal_uInt16 i = 0; i < rIndex.getHeader().db_maxkeys;i++)
+    for (sal_uInt16 i = 0; i < nNodeCapacity;i++)
     {
         if (ppNodes[i].GetChild())
             ppNodes[i].GetChild()->Release(bSave);
@@ -482,6 +501,8 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
 {
     DBG_ASSERT(HasParent(), "no parent existing");
     DBG_ASSERT(nParentNodePos != NODE_NOTFOUND, "Wrong index setup");
+    if (!xPage.Is())
+        return;
 
     /*  Merge 2 pages   */
     sal_uInt16 nMaxNodes = rIndex.GetMaxNodes(),
@@ -489,7 +510,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
 
     // Determine if page is right or left neighbour
     bool    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // true when xPage is at the right side
-    sal_uInt16  nNewCount = (*xPage).Count() + Count();
+    sal_uInt32  nNewCount = (*xPage).Count() + Count();
 
     if (IsLeaf())
     {
@@ -731,7 +752,14 @@ ONDXPagePtr& ONDXNode::GetChild(ODbaseIndex* pIndex, ONDXPage* pParent)
 {
     if (!aChild.Is() && pIndex)
     {
-        aChild = pIndex->CreatePage(aChild.GetPagePos(),pParent,aChild.HasPage());
+        const bool bLoad = aChild.HasPage();
+        if (bLoad && lcl_isOnTheParentChain(aChild.GetPagePos(), pParent))
+        {
+            SAL_WARN("connectivity.dbase", "page " << aChild.GetPagePos()
+                     << " is its own ancestor, so it is left unread");
+        }
+        else
+            aChild = pIndex->CreatePage(aChild.GetPagePos(),pParent,bLoad);
     }
     return aChild;
 }
@@ -870,13 +898,13 @@ ONDXPagePtr& ONDXPagePtr::operator=(ONDXPagePtr && rOther)
     return *this;
 }
 
-static sal_uInt32 nValue;
-
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 {
     rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
+    sal_uInt32 nValue(0);
     rStream.ReadUInt32( nValue ) >> rPage.aChild;
-    rPage.nCount = sal_uInt16(nValue);
+    // a page holds at most as many keys as the node array has entries
+    rPage.nCount = std::min(sal_uInt16(nValue), rPage.GetIndex().getHeader().db_maxkeys);
 
     for (sal_uInt16 i = 0; i < rPage.nCount; i++)
         rPage[i].Read(rStream, rPage.GetIndex());
@@ -899,8 +927,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
     }
     rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
 
-    nValue = rPage.nCount;
-    rStream.WriteUInt32( nValue );
+    rStream.WriteUInt32( rPage.nCount );
     WriteONDXPagePtr( rStream, rPage.aChild );
 
     sal_uInt16 i = 0;
@@ -957,11 +984,15 @@ void ONDXPage::PrintPage()
     if (!IsLeaf())
     {
 #if OSL_DEBUG_LEVEL > 1
-        GetChild(&rIndex)->PrintPage();
+        ONDXPagePtr aChildPage = GetChild(&rIndex);
+        if (aChildPage.Is())
+            aChildPage->PrintPage();
         for (sal_uInt16 i = 0; i < nCount; i++)
         {
             ONDXNode rNode = (*this)[i];
-            rNode.GetChild(&rIndex,this)->PrintPage();
+            ONDXPagePtr aNodePage = rNode.GetChild(&rIndex,this);
+            if (aNodePage.Is())
+                aNodePage->PrintPage();
         }
 #endif
     }
@@ -1024,22 +1055,33 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
     }
 }
 
+// a node position inside the node array
+sal_uInt16 ONDXPage::ClampPos(sal_uInt16 nPos) const
+{
+    const sal_uInt16 nLast = nNodeCapacity - 1;
+    SAL_WARN_IF(nPos > nLast, "connectivity.dbase", "node " << nPos
+                << " asked for on a page whose last node is " << nLast);
+    return std::min(nPos, nLast);
+}
+
 ONDXNode& ONDXPage::operator[] (sal_uInt16 nPos)
 {
     DBG_ASSERT(nCount > nPos, "incorrect index access");
-    return ppNodes[nPos];
+    return ppNodes[ClampPos(nPos)];
 }
 
 
 const ONDXNode& ONDXPage::operator[] (sal_uInt16 nPos) const
 {
     DBG_ASSERT(nCount > nPos, "incorrect index access");
-    return ppNodes[nPos];
+    return ppNodes[ClampPos(nPos)];
 }
 
 void ONDXPage::Remove(sal_uInt16 nPos)
 {
     DBG_ASSERT(nCount > nPos, "incorrect index access");
+    if (nPos >= nCount)
+        return;
 
     for (sal_uInt16 i = nPos; i < (nCount-1); i++)
         (*this)[i] = (*this)[i+1];

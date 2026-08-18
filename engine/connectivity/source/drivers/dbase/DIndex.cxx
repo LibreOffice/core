@@ -34,6 +34,8 @@
 #include <strings.hrc>
 #include <unotools/sharedunocomponent.hxx>
 
+#include <algorithm>
+
 using namespace ::comphelper;
 
 using namespace connectivity;
@@ -324,6 +326,11 @@ void connectivity::dbase::ReadHeader(
     rStream.ReadUChar(rHeader.db_unique);
     rStream.ReadBytes(&rHeader.db_name, 488);
     assert(rStream.GetError() || rStream.Tell() == nOldPos + DINDEX_PAGE_SIZE);
+
+    // a page starts with a four byte key count and a four byte child page id, then a record id, a
+    // key and a child page id per key
+    const sal_uInt16 nKeysThatFitAPage = (DINDEX_PAGE_SIZE - 8) / (8 + rHeader.db_keylen);
+    rHeader.db_maxkeys = std::max<sal_uInt16>(1, std::min(rHeader.db_maxkeys, nKeysThatFitAPage));
 }
 
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rIndex)
@@ -518,7 +525,7 @@ void ODbaseIndex::CreateImpl()
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
     m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : static_cast<sal_uInt16>(getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))));
     m_aHeader.db_keylen = (( m_aHeader.db_keylen - 1) / 4 + 1) * 4;
-    m_aHeader.db_maxkeys = (DINDEX_PAGE_SIZE - 4) / (8 + m_aHeader.db_keylen);
+    m_aHeader.db_maxkeys = (DINDEX_PAGE_SIZE - 8) / (8 + m_aHeader.db_keylen);
     if ( m_aHeader.db_maxkeys < 3 )
     {
         impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX_KEYSIZE,sFile);
