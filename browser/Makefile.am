@@ -657,7 +657,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.FixedTextControl.ts \
 	src/control/jsdialog/Widget.ScrolledWindow.js \
 	src/control/jsdialog/Widget.SearchEdit.ts \
-	src/control/jsdialog/Widget.SidebarContainers.ts \
+	src/control/jsdialog/Widget.SidebarContainers.tsx \
 	src/control/jsdialog/Widget.TabControl.tsx \
 	src/control/jsdialog/Widget.Toolitem.ts \
 	src/control/jsdialog/Widget.Text.ts \
@@ -1609,7 +1609,7 @@ pot:
 		src/control/jsdialog/Widget.Comment.ts \
 		src/control/jsdialog/Widget.SpinField.ts \
 		src/control/jsdialog/Widget.FixedTextControl.ts \
-		src/control/jsdialog/Widget.SidebarContainers.ts \
+		src/control/jsdialog/Widget.SidebarContainers.tsx \
 		src/control/jsdialog/Widget.TreeView.ts \
 		src/app/QueuedSocket.ts \
 		src/app/DelaySocket.ts \
