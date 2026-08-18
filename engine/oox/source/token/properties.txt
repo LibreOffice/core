@@ -705,6 +705,7 @@ VisualEffect
 Weight
 WhiteDay
 Width
+WidthType
 Wildcards
 WritingMode
 XLA1Representation

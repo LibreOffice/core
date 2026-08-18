@@ -801,6 +801,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, Any( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, Any( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
+        // A wrap style of "none" means the text stays on one line, so the frame takes its width
+        // from the content instead of the declared shape width.
+        if ( maTypeModel.maWrapStyle == "none" )
+            PropertySet( xShape ).setAnyProperty( PROP_WidthType, Any( SizeType::VARIABLE ) );
         if( getTextBox()->borderDistanceSet )
         {
             PropertySet( xShape ).setAnyProperty( PROP_LeftBorderDistance, Any( sal_Int32( getTextBox()->borderDistanceLeft )));

@@ -1527,6 +1527,25 @@ CPPUNIT_TEST_FIXTURE(Test, testZeroDefaultTabStop)
     assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testVmlTextboxAutoWidth)
+{
+    // A VML shape declared with width:0 and mso-wrap-style:none takes its width from the content,
+    // here a fixed-layout table 4618 twips wide.
+    createSwDoc("vml-textbox-autowidth.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nWidth
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "width").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 4000
+    // - Actual  : 283
+    // i.e. the frame kept the declared (near) zero width and the text wrapped a few characters
+    // per line, as a tall narrow strip.
+    CPPUNIT_ASSERT_GREATER(sal_Int32(4000), nWidth);
+    // It must not fall back to the full column width either.
+    CPPUNIT_ASSERT_LESS(sal_Int32(6000), nWidth);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 } // end of anonymous namespace
