@@ -631,6 +631,11 @@ window.L.Clipboard = window.L.Class.extend({
 		if ($('#search-input').is(':focus'))
 			return true;
 
+		// The file name field is a plain form input, so the browser copies, cuts and
+		// pastes its text itself.
+		if ($('#document-name-input').is(':focus'))
+			return true;
+
 		if ($('.ui-edit').is(':focus'))
 			return true;
 

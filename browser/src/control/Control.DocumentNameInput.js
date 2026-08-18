@@ -147,6 +147,11 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 			input.setAttribute('data-cooltip', input.value);
 			window.L.control.attachTooltipEventListener(input, this.map);
 		}
+
+		// A rename ends with the renamed document loading, and that load brings these
+		// properties along, so the loading bar has nothing left to report.
+		$('#document-name-input-loading-bar').css('display', 'none');
+
 		if (!e.UserCanNotWriteRelative && !this.map.isReadOnlyMode()) {
 			// Save As allowed
 			this.enableDocumentNameInput();
