@@ -2596,6 +2596,8 @@ window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard = function(menu
 		menuStructure['command'] = itemCommand;
 	if (menu.icon)
 		menuStructure['checked'] = true;
+	if (typeof menu._checked === 'function' && menu._checked())
+		menuStructure['checked'] = true;
 	if (menu.callback)
 		menuStructure['callback'] = menu.callback;
 	if (menu.isHtmlName)
