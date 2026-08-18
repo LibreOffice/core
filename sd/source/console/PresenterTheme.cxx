@@ -139,9 +139,8 @@ private:
     ::std::vector<SharedPaneStyle> mStyles;
 
 public:
-    void Read (
-        const ReadContext& rReadContext,
-        const Reference<container::XHierarchicalNameAccess>& rThemeRoot);
+    void Read(const Reference<rendering::XCanvas>& rxCanvas,
+              const Reference<container::XHierarchicalNameAccess>& rThemeRoot);
 
     SharedPaneStyle GetPaneStyle (const OUString& rsStyleName) const;
 
@@ -584,7 +583,7 @@ void PresenterTheme::Theme::Read (
     maStyleAssociations.Read(mxThemeRoot);
 
     // Pane styles.
-    maPaneStyles.Read(rReadContext, mxThemeRoot);
+    maPaneStyles.Read(rReadContext.mxCanvas, mxThemeRoot);
 
     // View styles.
     maViewStyles.Read(rReadContext, mxThemeRoot);
@@ -771,9 +770,8 @@ BorderSize ReadContext::ReadBorderSize (const Reference<container::XNameAccess>&
 
 //===== PaneStyleContainer ====================================================
 
-void PaneStyleContainer::Read (
-    const ReadContext& rReadContext,
-    const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
+void PaneStyleContainer::Read(const Reference<rendering::XCanvas>& rxCanvas,
+                              const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
 {
     Reference<container::XNameAccess> xPaneStyleList (
         PresenterConfigurationAccess::GetConfigurationNode(
@@ -794,9 +792,9 @@ void PaneStyleContainer::Read (
     PresenterConfigurationAccess::ForAll(
         xPaneStyleList,
         aProperties,
-        [this, &rReadContext] (std::vector<uno::Any> const& rValues)
+        [this, &rxCanvas] (std::vector<uno::Any> const& rValues)
         {
-            return this->ProcessPaneStyle(rReadContext.mxCanvas, rValues);
+            return this->ProcessPaneStyle(rxCanvas, rValues);
         });
 }
 
