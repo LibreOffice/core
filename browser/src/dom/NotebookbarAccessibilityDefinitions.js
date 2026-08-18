@@ -31,6 +31,11 @@ var NotebookbarAccessibilityDefinitions = function() {
 			'orientation-input': 'KO',
 			'marginLB-input': 'KM',
 			'masterslide-input': 'KS'
+		},
+		text: {
+			'papersize-input': 'KF',
+			'paperorientation-input': 'KO',
+			'marginLB-input': 'KM'
 		}
 	};
 
