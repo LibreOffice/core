@@ -140,8 +140,12 @@ void Application::initialize()
         generateEmbedCert(embedKey, embedCert, spkiHash);
         if (!spkiHash.isEmpty())
         {
-            qputenv("QTWEBENGINE_CHROMIUM_FLAGS",
-                    "--ignore-certificate-errors-spki-list=" + spkiHash);
+            // Append, so the switches the environment already carries stay in force.
+            QByteArray chromiumFlags = qgetenv("QTWEBENGINE_CHROMIUM_FLAGS");
+            if (!chromiumFlags.isEmpty())
+                chromiumFlags += ' ';
+            chromiumFlags += "--ignore-certificate-errors-spki-list=" + spkiHash;
+            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", chromiumFlags);
         }
 
         globalProfile = new QWebEngineProfile(QStringLiteral("PersistentProfile"));
