@@ -1517,11 +1517,42 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166401_typingSwitchesAnEmptyPlacehold
                          xText.queryThrow<beans::XPropertySet>()
                              ->getPropertyValue(u"PlaceholderShapeType"_ustr)
                              .get<OUString>());
+
+    // One undo step takes the typing back, and the placeholder waits for a picture again.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    auto xUndone = getShapeFromPage(0, 0).queryThrow<drawing::XShape>();
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+                         xUndone->getShapeType());
+    bool bEmptyAgain = false;
+    CPPUNIT_ASSERT(xUndone.queryThrow<beans::XPropertySet>()->getPropertyValue(
+                       u"IsEmptyPresentationObject"_ustr)
+                   >>= bEmptyAgain);
+    CPPUNIT_ASSERT_MESSAGE("the placeholder kept the typing", bEmptyAgain);
+
+    // The identity has to be live after undo too, not the shape type the UNO shape cached when it
+    // was created.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the placeholder identity did not survive undo",
+                                 u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+                                 xUndone.queryThrow<beans::XPropertySet>()
+                                     ->getPropertyValue(u"PlaceholderShapeType"_ustr)
+                                     .get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166401_emptyingHandsBackTheIdentity)
 {
     createSdImpressDoc("pptx/pic-placeholder-with-text.pptx");
+
+    auto styleNameOf = [](const uno::Reference<beans::XPropertySet>& xShape) -> OUString {
+        SdrObject* pShapeObj
+            = SdrObject::getSdrObjectFromXShape(xShape.queryThrow<drawing::XShape>());
+        SfxStyleSheet* pStyle = pShapeObj ? pShapeObj->GetStyleSheet() : nullptr;
+        return pStyle ? pStyle->GetName() : u"<none>"_ustr;
+    };
+    const drawing::FillStyle eFillBefore
+        = getShapeFromPage(0, 0)->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>();
+    const sal_Int32 nFillColorBefore
+        = getShapeFromPage(0, 0)->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>();
+    const OUString aStyleBefore = styleNameOf(getShapeFromPage(0, 0));
 
     // Deleting the whole text hands the placeholder its identity back: it shows what it waits for.
     sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
@@ -1552,6 +1583,30 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166401_emptyingHandsBackTheIdentity)
     CPPUNIT_ASSERT(pBack->GetOutlinerParaObject());
     CPPUNIT_ASSERT_EQUAL(u"Custom prompt to insert an image"_ustr,
                          pBack->GetOutlinerParaObject()->GetTextObject().GetText(0));
+
+    // One undo step takes back the whole deletion: the text is there again, held by the object that
+    // represents a placeholder holding text.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    auto xUndone = getShapeFromPage(0, 0).queryThrow<drawing::XShape>();
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.OutlinerShape"_ustr, xUndone->getShapeType());
+    // It is the object it was, styles and all: left with no style of its own it would fall back to
+    // the pool defaults, which paint it in the default fill colour.
+    CPPUNIT_ASSERT_EQUAL(
+        eFillBefore,
+        getShapeFromPage(0, 0)->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>());
+    CPPUNIT_ASSERT_EQUAL(
+        nFillColorBefore,
+        getShapeFromPage(0, 0)->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(aStyleBefore, styleNameOf(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Typed into a picture placeholder"_ustr,
+                         xUndone.queryThrow<text::XTextRange>()->getString());
+
+    // And it is what the page says it is, not the shape type cached at creation.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the placeholder identity did not survive undo",
+                                 u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+                                 xUndone.queryThrow<beans::XPropertySet>()
+                                     ->getPropertyValue(u"PlaceholderShapeType"_ustr)
+                                     .get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166401_aPictureWithTextKeepsThePicture)

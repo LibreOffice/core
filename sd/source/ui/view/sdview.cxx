@@ -41,6 +41,8 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -785,6 +787,22 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
     SdrTextObj* pObj = GetTextEditObject();
 
+    // RestoreDefaultText below puts the prompt back before the text edit ends, which leaves
+    // SdrObjEditView::SdrEndTextEdit nothing to record, so what the object holds is recorded here.
+    // The group keeps that in one step with the change of what represents a picture placeholder.
+    SdPage* pTextPage = pObj ? dynamic_cast<SdPage*>(pObj->getSdrPageFromSdrObject()) : nullptr;
+    const bool bGroupUndo = IsUndoEnabled() && pTextPage
+                            && pTextPage->GetPresObjKind(pObj) != PresObjKind::NONE;
+    std::unique_ptr<SdrUndoObjSetText> pTextUndo;
+    if (bGroupUndo)
+    {
+        BegUndo(SvxResId(STR_UndoObjSetText), pObj->TakeObjNameSingul());
+        std::unique_ptr<SdrUndoAction> pAction(
+            GetModel().GetSdrUndoFactory().CreateUndoObjectSetText(*pObj, 0));
+        if (dynamic_cast<SdrUndoObjSetText*>(pAction.get()))
+            pTextUndo.reset(static_cast<SdrUndoObjSetText*>(pAction.release()));
+    }
+
     bool bDefaultTextRestored = RestoreDefaultText( pObj );
     const bool bSaveSetModifiedEnabled = mpDocSh && mpDocSh->IsEnableSetModified();
     if (bDefaultTextRestored)
@@ -818,6 +836,14 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
             pObj->SetEmptyPresObj( false );
             bTypedIntoPlaceholder = true;
         }
+    }
+
+    // Before the swap below, so that undo restores the object first and its text afterwards.
+    if (pTextUndo && bDefaultTextRestored)
+    {
+        pTextUndo->AfterSetText();
+        if (pTextUndo->IsDifferent())
+            AddUndo(std::move(pTextUndo));
     }
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
@@ -860,6 +886,9 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
         }
     }
+
+    if (bGroupUndo)
+        EndUndo();
 
     return eKind;
 }

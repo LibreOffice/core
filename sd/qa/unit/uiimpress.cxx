@@ -2563,6 +2563,39 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteInTextEditWithAnimationNode)
     CPPUNIT_ASSERT_EQUAL(u"blahblah"_ustr, rEditView.GetSelected());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testUndoRestoresDeletedPlaceholderText)
+{
+    // Given a slide whose title placeholder was typed into:
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    sd::View* pView = pViewShell->GetView();
+    SdrObject* pTitle = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pTitle);
+    pView->MarkObj(pTitle, pView->GetSdrPageView());
+
+    pView->SdrBeginTextEdit(pTitle);
+    pView->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection::All());
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Typed"_ustr);
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT_EQUAL(u"Typed"_ustr,
+                         pTitle->GetOutlinerParaObject()->GetTextObject().GetText(0));
+
+    // When deleting all of that text, which puts the placeholder's prompt back:
+    pView->SdrBeginTextEdit(pTitle);
+    pView->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection::All());
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(OUString());
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT(pTitle->IsEmptyPresObj());
+
+    // Then one undo brings the text back. Without the fix the deletion was not undoable at all: the
+    // prompt goes in before svx captures the text change, which then looks like no change.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"Typed"_ustr,
+                         pTitle->GetOutlinerParaObject()->GetTextObject().GetText(0));
+    CPPUNIT_ASSERT(!pTitle->IsEmptyPresObj());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_imageFillsAPlaceholderHoldingText)
 {
     // Given a slide whose picture placeholder holds text, so an outliner object represents it:

@@ -23,6 +23,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <sfx2/viewsh.hxx>
@@ -2589,6 +2590,19 @@ rtl::Reference<SdrObject> SdPage::MakePresObjPlaceholder(SdrObject& rObj)
 {
     const PresObjKind eKind = GetPresObjKind(&rObj);
 
+    // CreatePresObj records its insert whenever a list action is open, and the object leaves the
+    // page again below: an insert with no matching remove, which redo would perform a second time.
+    // The pair cancels out on the page, so the caller's replace is the only undoable step.
+    SfxUndoManager* pUndoManager
+        = static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).GetUndoManager();
+    const bool bUndoWasEnabled = pUndoManager && pUndoManager->IsUndoEnabled();
+    if (bUndoWasEnabled)
+        pUndoManager->EnableUndo(false);
+    comphelper::ScopeGuard aUndoGuard([pUndoManager, bUndoWasEnabled] {
+        if (bUndoWasEnabled)
+            pUndoManager->EnableUndo(true);
+    });
+
     // What stands for the placeholder while it waits: for a picture one, the icon and the prompt.
     SdrObject* pPlaceholder = CreatePresObj(eKind, /*bVertical*/false, rObj.GetLogicRect(),
                                             rObj.GetCustomPromptText());
@@ -3197,7 +3211,12 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj, const OUString& rStr )
                 }
 
                 pTextObj->SetTextEditOutliner( nullptr );  // to make stylesheet settings work
-                pTextObj->NbcSetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), true );
+
+                // A kind with no style sheet of its own keeps the one it has: left with none, the
+                // object falls back to the pool defaults, which paint a solid fill.
+                if (SfxStyleSheet* pStyleSheet = GetStyleSheetForPresObj(ePresObjKind))
+                    pTextObj->NbcSetStyleSheet( pStyleSheet, true );
+
                 pTextObj->SetEmptyPresObj(true);
                 bRet = true;
             }
