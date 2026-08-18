@@ -14,14 +14,30 @@
  */
 
 // /* global app */
+
+/// All the deck-navigation state the sidebar keeps, held as one value.
+interface SidebarDeckState {
+	activeDeckId: string | null; /// deck the last message showed, null while closed
+	targetDeckCommand: string | null; /// deck command last asked for
+	/// deck showing when the current deck was requested, and the command that requested it
+	openedFrom: { deckId: string | null; forCommand: string } | null;
+}
+
 class Sidebar extends SidebarBase {
-	targetDeckCommand: string;
 	isUserRequest: boolean; /// automatic or user request to show the sidebar
 	sidebarShownTheFirstTime: boolean = true;
 
 	tabsContainer: HTMLElement;
 	propertiesTabPanel: HTMLElement;
 	extensionsTabPanel: HTMLElement;
+
+	/// The whole deck-navigation state, changed only through setDeckState. Keeping it in one
+	/// value with one writer means the sidebar has a single place its state can move.
+	deckState: SidebarDeckState = {
+		activeDeckId: null,
+		targetDeckCommand: null,
+		openedFrom: null,
+	};
 
 	constructor(map: MapInterface) {
 		super(map, SidebarType.Sidebar);
@@ -169,6 +185,29 @@ class Sidebar extends SidebarBase {
 		this.isUserRequest = false;
 	}
 
+	/// The single point where deck-navigation state changes.
+	setDeckState(patch: Partial<SidebarDeckState>) {
+		this.deckState = { ...this.deckState, ...patch };
+	}
+
+	closeSidebar() {
+		super.closeSidebar();
+		this.setDeckState({ activeDeckId: null });
+	}
+
+	/// Records where a deck request was sent from, tagged with the command it was sent for.
+	/// Runs when the request is sent, before any deck switching starts. Consulted in
+	/// onSidebar only when the deck that arrives matches forCommand, so the transient deck
+	/// changes core makes while carrying the request out cannot misapply the origin.
+	noteDeckRequestOrigin(command: string) {
+		this.setDeckState({
+			openedFrom: {
+				deckId: this.isVisible() ? this.deckState.activeDeckId : null,
+				forCommand: command,
+			},
+		});
+	}
+
 	updateSidebarPrefs(currentDeck: string) {
 		// No longer used:
 		// 'SdSlideTransitionDeck'
@@ -242,15 +281,47 @@ class Sidebar extends SidebarBase {
 			return '.uno:SidebarDeck.StyleListDeck';
 		else if (deckId === 'A11yCheckDeck')
 			return '.uno:SidebarDeck.A11yCheckDeck';
+		else if (deckId === 'ElementsDeck') return '.uno:SidebarDeck.ElementsDeck';
 		return '';
 	}
 
+	/// Adds the close button command to the first panel of the shown overlay deck.
+	/// The properties deck is the main sidebar; every other deck is an overlay and carries
+	/// one close button, in the header of its first panel. Entered from the properties deck,
+	/// closing returns there; opened while the sidebar was closed, the deck's own command
+	/// toggles it off, which closes the whole sidebar. The origin is trusted only when the
+	/// arriving deck matches the command it was recorded for, so a core-driven switch cannot
+	/// inherit it. A deck with no known command, like the navigator, is left alone.
+	markOverlayDeckCloseButton(sidebarData: any, activeDeckId: string) {
+		if (activeDeckId === 'PropertyDeck') return;
+
+		const deckCommand = this.commandForDeck(activeDeckId);
+		if (!deckCommand) return;
+
+		const activeDeck = sidebarData.children.find(
+			(deck: any) => deck.id === activeDeckId,
+		);
+		const firstPanel = (activeDeck.children || []).find(
+			(child: any) => child.type === 'panel',
+		);
+		if (!firstPanel) return;
+
+		const origin = this.deckState.openedFrom;
+		const openedFromProperty =
+			origin &&
+			origin.forCommand === deckCommand &&
+			origin.deckId === 'PropertyDeck';
+		firstPanel.closeCommand = openedFromProperty
+			? '.uno:SidebarDeck.PropertyDeck'
+			: deckCommand;
+	}
+
 	setupTargetDeck(unoCommand: string | null) {
-		this.targetDeckCommand = unoCommand;
+		this.setDeckState({ targetDeckCommand: unoCommand });
 	}
 
 	getTargetDeck(): string {
-		return this.targetDeckCommand;
+		return this.deckState.targetDeckCommand;
 	}
 
 	changeDeck(unoCommand: string | null) {
@@ -291,22 +362,31 @@ class Sidebar extends SidebarBase {
 					sidebarData.children[0] &&
 					sidebarData.children[0].id
 				) {
-					var currentDeck = sidebarData.children[0].id;
-					this.updateSidebarPrefs(currentDeck);
-					this.updatePresentationDeckHighlight(currentDeck);
-					if (this.targetDeckCommand) {
+					// The message lists every deck and marks the inactive ones with
+					// visible false, so the deck being shown is the one left visible.
+					const activeDeckId = (
+						sidebarData.children.find((deck: any) => deck.visible !== false) ||
+						sidebarData.children[0]
+					).id;
+					this.setDeckState({ activeDeckId });
+					this.updateSidebarPrefs(activeDeckId);
+					this.updatePresentationDeckHighlight(activeDeckId);
+
+					this.markOverlayDeckCloseButton(sidebarData, activeDeckId);
+
+					const target = this.deckState.targetDeckCommand;
+					if (target) {
 						var stateHandler = this.map['stateChangeHandler'];
 						var isCurrent = stateHandler
-							? stateHandler.getItemValue(this.targetDeckCommand)
+							? stateHandler.getItemValue(target)
 							: false;
 						// just to be sure check with other method
 						if (isCurrent === 'false' || !isCurrent)
-							isCurrent =
-								this.targetDeckCommand === this.commandForDeck(currentDeck);
-						if (this.targetDeckCommand && (isCurrent === 'false' || !isCurrent))
-							this.changeDeck(this.targetDeckCommand);
+							isCurrent = target === this.commandForDeck(activeDeckId);
+						if (target && (isCurrent === 'false' || !isCurrent))
+							this.changeDeck(target);
 					} else {
-						this.changeDeck(this.targetDeckCommand);
+						this.changeDeck(target);
 					}
 				}
 

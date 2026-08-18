@@ -363,6 +363,7 @@ interface PanelWidgetJSON extends WidgetJSON {
 	command: string; // command to trigger options for a panel
 	text: string; // panel title
 	name?: string; // legacy panel id
+	closeCommand?: string; // UNO command that leaves the panel's deck
 }
 
 type ExpanderWidgetJSON = any;

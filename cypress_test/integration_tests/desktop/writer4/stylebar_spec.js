@@ -87,4 +87,61 @@ describe(['tagdesktop'], 'Test style sidebar', function() {
 		helper.waitForOnDemandRenders(this.win);
 		cy.cGet('#sidebar-dock-wrapper').compareSnapshot('style_sidebar_context_menu', 0.1);
 	});
+
+	// The styles deck was entered from the properties deck, so closing it
+	// returns there instead of closing the sidebar.
+	it('Close button returns to the properties deck', function() {
+		// the panel content is shown without a collapse toggle
+		cy.cGet('#StyleListDeck .ui-expander-content').should('be.visible');
+
+		cy.cGet('#StyleListDeck .ui-panel-close-button').click();
+
+		cy.cGet('#PropertyDeck').should('be.visible');
+		cy.cGet('#sidebar-dock-wrapper').should('be.visible');
+	});
+
+	// The styles deck opened while no sidebar was shown, so closing it
+	// returns to the view without a sidebar rather than to another deck.
+	it('Close button closes the sidebar', function() {
+		// the narrow viewport folds the styles button into the overflow menu,
+		// so widen the window to keep it directly clickable
+		cy.viewport(1920,1080);
+
+		// the styles deck command toggles, so a second click closes the sidebar
+		cy.cGet('#toolbar-up [id^="format-style-dialog"] button:visible').click();
+		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+
+		// reopen the styles deck while no sidebar is shown
+		cy.cGet('#toolbar-up [id^="format-style-dialog"] button:visible').click();
+		cy.cGet('#StyleListDeck').should('be.visible');
+
+		cy.cGet('#StyleListDeck .ui-panel-close-button').click();
+
+		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+	});
+
+	// The close button follows the last open, not a stale origin. The styles
+	// deck is first opened from the properties deck, closed back to it, then
+	// reopened while no sidebar is shown. That second close must close the
+	// whole sidebar rather than returning to the properties deck.
+	it('Close button follows the last open, not an earlier one', function() {
+		cy.viewport(1920,1080);
+
+		// opened from the properties deck, so the close button returns there
+		cy.cGet('#StyleListDeck .ui-panel-close-button').click();
+		cy.cGet('#PropertyDeck').should('be.visible');
+
+		// close the whole sidebar, then reopen the styles deck from a closed one
+		cy.cGet('#toolbar-up [id^="format-style-dialog"] button:visible').click();
+		cy.cGet('#StyleListDeck').should('be.visible');
+		cy.cGet('#toolbar-up [id^="format-style-dialog"] button:visible').click();
+		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+
+		cy.cGet('#toolbar-up [id^="format-style-dialog"] button:visible').click();
+		cy.cGet('#StyleListDeck').should('be.visible');
+
+		// opened while no sidebar was shown, so the close button closes it
+		cy.cGet('#StyleListDeck .ui-panel-close-button').click();
+		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+	});
 });

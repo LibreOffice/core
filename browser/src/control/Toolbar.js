@@ -299,6 +299,8 @@ window.L.Map.include({
 
 			// sidebar control is present only in desktop/tablet case
 			if (this.sidebar) {
+				this.sidebar.noteDeckRequestOrigin(command);
+
 				if (this.sidebar.isVisible()) {
 					this.sidebar.setupTargetDeck(command);
 				} else {

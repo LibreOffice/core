@@ -139,6 +139,14 @@ img.sidebar.ui-image {
 	filter: none;
 }
 
+.sidebar.ui-panel-plain-label::before {
+	content: none;
+}
+
+.sidebar.ui-expander .ui-panel-close-wrapper {
+	margin-inline-end: 8px;
+}
+
 #softedgeframe .sidebar.ui-expander-content,
 #glowframe .sidebar.ui-expander-content {
 	width: 100% !important; /* frame inside frame */
