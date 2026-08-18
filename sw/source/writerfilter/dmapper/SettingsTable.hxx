@@ -123,7 +123,7 @@ private:
     // Table
     virtual void lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref) override;
 
-    int m_nDefaultTabStop;
+    sal_uInt16 m_nDefaultTabStop;
 
     bool m_bRecordChanges;
     bool m_bShowInsDelChanges;

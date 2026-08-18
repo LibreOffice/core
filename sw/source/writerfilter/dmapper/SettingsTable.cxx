@@ -26,6 +26,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <tools/UnitConversion.hxx>
 #include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -40,7 +41,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <ooxml/OOXMLPropertySet.hxx>
-#include "ConversionHelper.hxx"
 #include "DomainMapper.hxx"
 #include "util.hxx"
 #include <SwXDocumentSettings.hxx>
@@ -271,7 +271,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         resolveSprmProps(*this, rSprm);
     break;
     case NS_ooxml::LN_CT_Settings_defaultTabStop: //  92505;
-    m_nDefaultTabStop = nIntValue;
+        m_nDefaultTabStop = static_cast<sal_uInt16>(nIntValue);
     break;
     case NS_ooxml::LN_CT_Settings_linkStyles: // 92663;
     {
@@ -480,7 +480,7 @@ void SettingsTable::lcl_entry(const writerfilter::Reference<Properties>::Pointer
 //returns default TabStop in 1/100th mm
 int SettingsTable::GetDefaultTabStop() const
 {
-    return ConversionHelper::convertTwipToMm100_Limited(m_nDefaultTabStop);
+    return convertTwipToMm100(m_nDefaultTabStop);
 }
 
 bool SettingsTable::GetLinkStyles() const
