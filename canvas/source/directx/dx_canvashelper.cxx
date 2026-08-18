@@ -527,8 +527,7 @@ namespace dxcanvas
                 Gdiplus::Color(
                     dxcanvastools::sequenceToArgb(renderState.DeviceColor)));
 
-            CanvasFont::ImplRef pFont(
-                dxcanvastools::canvasFontFromXFont(xFont) );
+            rtl::Reference<CanvasFont> pFont(dxcanvastools::canvasFontFromXFont(xFont));
 
             // Move glyphs up, such that output happens at the font
             // baseline.

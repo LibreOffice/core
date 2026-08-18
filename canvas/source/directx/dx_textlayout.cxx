@@ -36,7 +36,7 @@ namespace dxcanvas
     TextLayout::TextLayout( const rendering::StringContext&     aText,
                             sal_Int8                            nDirection,
                             sal_Int64                           /*nRandomSeed*/,
-                            const CanvasFont::ImplRef&          rFont ) :
+                            const rtl::Reference<CanvasFont>& rFont) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),

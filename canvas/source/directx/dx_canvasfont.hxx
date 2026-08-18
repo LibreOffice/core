@@ -48,7 +48,6 @@ namespace dxcanvas
                        public CanvasFont_Base
     {
     public:
-        typedef rtl::Reference<CanvasFont> ImplRef;
         /// make noncopyable
         CanvasFont(const CanvasFont&) = delete;
         const CanvasFont& operator=(const CanvasFont&) = delete;

@@ -113,7 +113,7 @@ using namespace dxcanvas;
 
         BitmapSharedPtr bitmapFromXBitmap( const css::uno::Reference< css::rendering::XBitmap >&  xBitmap );
 
-        CanvasFont::ImplRef canvasFontFromXFont( const css::uno::Reference< css::rendering::XCanvasFont >& xFont );
+        rtl::Reference<CanvasFont> canvasFontFromXFont(const css::uno::Reference<css::rendering::XCanvasFont>& xFont);
 
         void setModulateImageAttributes( Gdiplus::ImageAttributes& o_rAttr,
                                          double                           nRedModulation,

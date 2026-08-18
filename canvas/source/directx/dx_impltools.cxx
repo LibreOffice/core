@@ -570,14 +570,14 @@ namespace dxcanvastools
             }
         }
 
-        CanvasFont::ImplRef canvasFontFromXFont( const uno::Reference< rendering::XCanvasFont >& xFont )
+        rtl::Reference<CanvasFont> canvasFontFromXFont(const uno::Reference<rendering::XCanvasFont>& xFont)
         {
             CanvasFont* pCanvasFont = dynamic_cast< CanvasFont* >(xFont.get());
 
             ENSURE_ARG_OR_THROW( pCanvasFont,
                              "canvasFontFromXFont(): Invalid XFont (or incompatible font for this XCanvas)" );
 
-            return CanvasFont::ImplRef( pCanvasFont );
+            return rtl::Reference<CanvasFont>(pCanvasFont);
         }
 
         void setModulateImageAttributes( Gdiplus::ImageAttributes& o_rAttr,

@@ -26,8 +26,6 @@ namespace oglcanvas
     class CanvasFont : public CanvasFontBase
     {
     public:
-        typedef rtl::Reference<CanvasFont> ImplRef;
-
         /// make noncopyable
         CanvasFont(const CanvasFont&) = delete;
         const CanvasFont& operator=(const CanvasFont&) = delete;

@@ -47,7 +47,7 @@ namespace dxcanvas
         TextLayout( const css::rendering::StringContext& aText,
                     sal_Int8                                                  nDirection,
                     sal_Int64                                                 nRandomSeed,
-                    const CanvasFont::ImplRef&                                rFont );
+                    const rtl::Reference<CanvasFont>& rFont);
         /// make noncopyable
         TextLayout(const TextLayout&) = delete;
         const TextLayout& operator=(const TextLayout&) = delete;
@@ -98,7 +98,7 @@ namespace dxcanvas
         css::rendering::StringContext              maText;
         css::uno::Sequence< double >               maLogicalAdvancements;
         css::uno::Sequence< sal_Bool >             maKashidaPositions;
-        CanvasFont::ImplRef                        mpFont;
+        rtl::Reference<CanvasFont> mpFont;
         sal_Int8                                   mnTextDirection;
     };
 

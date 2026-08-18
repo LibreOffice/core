@@ -36,7 +36,7 @@ namespace oglcanvas
     {
         std::unique_lock aGuard( m_aMutex );
 
-        return new TextLayout( aText, nDirection, nRandomSeed, ImplRef( this ) );
+        return new TextLayout(aText, nDirection, nRandomSeed, rtl::Reference<CanvasFont>(this));
     }
 
     rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  )

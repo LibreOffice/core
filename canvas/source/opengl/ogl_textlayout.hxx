@@ -28,7 +28,7 @@ namespace oglcanvas
         TextLayout( css::rendering::StringContext               aText,
                     sal_Int8                                    nDirection,
                     sal_Int64                                   nRandomSeed,
-                    CanvasFont::ImplRef                         rFont );
+                    rtl::Reference<CanvasFont> rFont);
 
         /// make noncopyable
         TextLayout(const TextLayout&) = delete;
@@ -62,7 +62,7 @@ namespace oglcanvas
         css::rendering::StringContext              maText;
         css::uno::Sequence< double >               maLogicalAdvancements;
         css::uno::Sequence< sal_Bool >             maKashidaPositions;
-        CanvasFont::ImplRef                        mpFont;
+        rtl::Reference<CanvasFont> mpFont;
         sal_Int8                                   mnTextDirection;
     };
 

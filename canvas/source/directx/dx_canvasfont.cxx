@@ -87,7 +87,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return new TextLayout( aText, nDirection, nRandomSeed, ImplRef( this ) );
+        return new TextLayout(aText, nDirection, nRandomSeed, rtl::Reference<CanvasFont>(this));
     }
 
     uno::Sequence< double > SAL_CALL CanvasFont::getAvailableSizes(  )

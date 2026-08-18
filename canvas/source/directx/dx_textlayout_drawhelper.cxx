@@ -130,7 +130,7 @@ namespace dxcanvas
             aFont.SetColor( aColor );
             aFont.SetFillColor( aColor );
 
-            CanvasFont::ImplRef pFont(dxcanvastools::canvasFontFromXFont(rCanvasFont));
+            rtl::Reference<CanvasFont> pFont(dxcanvastools::canvasFontFromXFont(rCanvasFont));
             if (pFont.is() && pFont->getEmphasisMark())
                 aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
 
@@ -278,7 +278,7 @@ namespace dxcanvas
             aFont.SetFontWidth( nNewWidth );
         }
 
-        CanvasFont::ImplRef pFont(dxcanvastools::canvasFontFromXFont(rCanvasFont));
+        rtl::Reference<CanvasFont> pFont(dxcanvastools::canvasFontFromXFont(rCanvasFont));
         if (pFont.is() && pFont->getEmphasisMark())
             aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
 

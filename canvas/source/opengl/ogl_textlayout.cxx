@@ -22,7 +22,7 @@ namespace oglcanvas
     TextLayout::TextLayout( rendering::StringContext      aText,
                             sal_Int8                      nDirection,
                             sal_Int64                     /*nRandomSeed*/,
-                            CanvasFont::ImplRef           rFont ) :
+                            rtl::Reference<CanvasFont> rFont) :
         maText(std::move( aText )),
         mpFont(std::move( rFont )),
         mnTextDirection( nDirection )
