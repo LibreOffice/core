@@ -19,11 +19,19 @@ var NotebookbarAccessibilityDefinitions = function() {
 	};
 
 	this.sidebarCombinations = {
-		'paperformat-input': 'KF',
-		'fillstyle-input': 'KB',
-		'orientation-input': 'KO',
-		'marginLB-input': 'KM',
-		'masterslide-input': 'KS'
+		presentation: {
+			'paperformat-input': 'KF',
+			'fillstyle-input': 'KB',
+			'orientation-input': 'KO',
+			'masterslide-input': 'KS'
+		},
+		drawing: {
+			'paperformat-input': 'KF',
+			'fillstyle-input': 'KB',
+			'orientation-input': 'KO',
+			'marginLB-input': 'KM',
+			'masterslide-input': 'KS'
+		}
 	};
 
 	this.checkSidebarWidgets = function(selectedDefinitions) {
@@ -31,8 +39,12 @@ var NotebookbarAccessibilityDefinitions = function() {
 		if (!sidebar)
 			return;
 
-		for (const id in this.sidebarCombinations) {
-			if (!Object.prototype.hasOwnProperty.call(this.sidebarCombinations, id))
+		const combinations = this.sidebarCombinations[app.map.getDocType()];
+		if (!combinations)
+			return;
+
+		for (const id in combinations) {
+			if (!Object.prototype.hasOwnProperty.call(combinations, id))
 				continue;
 
 			if (selectedDefinitions[id] !== undefined)
@@ -41,7 +53,7 @@ var NotebookbarAccessibilityDefinitions = function() {
 			if (sidebar.querySelector('[id="' + id + '"]')) {
 				selectedDefinitions[id] = {
 					focusBack: false,
-					combination: this.sidebarCombinations[id],
+					combination: combinations[id],
 					contentList: []
 				};
 			}
