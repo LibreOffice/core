@@ -174,9 +174,8 @@ private:
     ::std::vector<SharedViewStyle> mStyles;
 
 public:
-    void Read (
-        const ReadContext& rReadContext,
-        const Reference<container::XHierarchicalNameAccess>& rThemeRoot);
+    void Read(const Reference<rendering::XCanvas>& rxCanvas,
+              const Reference<container::XHierarchicalNameAccess>& rThemeRoot);
 
     SharedViewStyle GetViewStyle (const OUString& rsStyleName) const;
 
@@ -585,7 +584,7 @@ void PresenterTheme::Theme::Read (
     maPaneStyles.Read(rReadContext.mxCanvas, mxThemeRoot);
 
     // View styles.
-    maViewStyles.Read(rReadContext, mxThemeRoot);
+    maViewStyles.Read(rReadContext.mxCanvas, mxThemeRoot);
 
     // Read bitmaps.
     mpIconContainer = std::make_shared<PresenterBitmapContainer>(
@@ -887,9 +886,8 @@ PresenterTheme::SharedFontDescriptor PaneStyle::GetFont() const
 
 //===== ViewStyleContainer ====================================================
 
-void ViewStyleContainer::Read (
-    const ReadContext& rReadContext,
-    const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
+void ViewStyleContainer::Read(const Reference<rendering::XCanvas>& rxCanvas,
+                              const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
 {
     Reference<container::XNameAccess> xViewStyleList (
         PresenterConfigurationAccess::GetConfigurationNode(
@@ -900,9 +898,9 @@ void ViewStyleContainer::Read (
     {
         PresenterConfigurationAccess::ForAll(
             xViewStyleList,
-            [this, &rReadContext] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
+            [this, &rxCanvas] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
             {
-                return this->ProcessViewStyle(rReadContext.mxCanvas, xProps);
+                return this->ProcessViewStyle(rxCanvas, xProps);
             });
     }
 }
