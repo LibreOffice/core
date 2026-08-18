@@ -1543,6 +1543,8 @@ SalInstanceCustomWidget::SalInstanceCustomWidget(VclCustomWidget* pWidget,
 
 void SalInstanceCustomWidget::send_update() { m_xCustomWidget->Invalidate(); }
 
+void SalInstanceCustomWidget::send_update_action() {}
+
 void SalInstanceCustomWidget::set_custom_client_controller(weld::CustomClientWidgetController* p)
 {
     m_pController = p;

@@ -438,6 +438,9 @@ class VCL_DLLPUBLIC CustomWidget : virtual public Widget
 {
 public:
     virtual void send_update() = 0;
+    /// Sends the widget model as an action, so the client patches the widget in place instead of
+    /// rebuilding it. A no-op outside the client-rendered path.
+    virtual void send_update_action() = 0;
     virtual void set_custom_client_controller(CustomClientWidgetController* /*p*/) = 0;
     virtual CustomClientWidgetController* get_custom_client_controller() = 0;
 };

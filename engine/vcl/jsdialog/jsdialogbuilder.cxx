@@ -2259,6 +2259,15 @@ JSCustomWidget::JSCustomWidget(JSDialogSender* pSender, VclCustomWidget* pWidget
 
 void JSCustomWidget::send_update() { sendUpdate(); }
 
+void JSCustomWidget::send_update_action()
+{
+    std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
+    // The edit engine widget is the only client-rendered widget that patches itself in place, so
+    // the action type is fixed here. A second such widget would need this made per-widget.
+    (*pData)[ACTION_TYPE ""_ostr] = u"updateeditengine"_ustr;
+    sendAction(std::move(pData));
+}
+
 JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)
     : JSWidget<SalInstanceImage, FixedImage>(pSender, pImage, pBuilder, bTakeOwnership)

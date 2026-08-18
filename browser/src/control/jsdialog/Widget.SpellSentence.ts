@@ -133,71 +133,12 @@ function spellSendAction(
 	);
 }
 
-function caretOffsetWithin(
-	container: HTMLElement,
-	node: Node,
-	offset: number,
-): number {
-	const range = document.createRange();
-	range.selectNodeContents(container);
-	try {
-		range.setEnd(node, offset);
-	} catch {
-		return 0;
-	}
-	return range.toString().length;
-}
-
 function getSelOffsets(container: HTMLElement): SpellSelection | null {
-	const sel = window.getSelection();
-	if (!sel || sel.rangeCount === 0) return null;
-	const range = sel.getRangeAt(0);
-	if (
-		!container.contains(range.startContainer) ||
-		!container.contains(range.endContainer)
-	)
-		return null;
-	const a = caretOffsetWithin(
-		container,
-		range.startContainer,
-		range.startOffset,
-	);
-	const b = caretOffsetWithin(container, range.endContainer, range.endOffset);
-	return { start: Math.min(a, b), end: Math.max(a, b) };
-}
-
-function findNodeOffset(
-	container: HTMLElement,
-	target: number,
-): [Node, number] {
-	const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-	let node = walker.nextNode();
-	if (!node) return [container, 0];
-	let remaining = target;
-	for (;;) {
-		const len = node.textContent ? node.textContent.length : 0;
-		if (remaining <= len) return [node, remaining];
-		remaining -= len;
-		const next = walker.nextNode();
-		if (!next) return [node, len];
-		node = next;
-	}
+	return JSDialog.ContentEditable.getFlatSelection(container);
 }
 
 function setCaret(container: HTMLElement, start: number, end: number): void {
-	const sel = window.getSelection();
-	if (!sel) return;
-	const [sNode, sOff] = findNodeOffset(container, start);
-	const [eNode, eOff] = findNodeOffset(container, end);
-	const range = document.createRange();
-	try {
-		range.setStart(sNode, sOff);
-		range.setEnd(eNode, eOff);
-	} catch {
-		return;
-	}
-	sel.removeAllRanges();
-	sel.addRange(range);
+	JSDialog.ContentEditable.setFlatCaret(container, start, end);
 }
 
 function maybeSendSelection(container: SpellSentenceContainer): void {

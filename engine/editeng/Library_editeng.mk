@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/editdbg \
     editeng/source/editeng/editdoc \
     editeng/source/editeng/editeng \
+    editeng/source/editeng/editenginewidget \
     editeng/source/editeng/EditLine \
     editeng/source/editeng/editobj \
     editeng/source/editeng/editsel \

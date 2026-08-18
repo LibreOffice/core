@@ -223,6 +223,14 @@ public:
             m_pWidget->send_update();
     }
 
+    /// Sends the model as an action, so the client patches the widget in place rather than tearing
+    /// it down and rebuilding it as a full widget update does.
+    void SendUpdateAction()
+    {
+        if (m_pWidget)
+            m_pWidget->send_update_action();
+    }
+
     virtual ~CustomClientWidgetController();
 };
 

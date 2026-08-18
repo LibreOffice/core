@@ -628,3 +628,51 @@ interface AriaLabelAttributes {
 interface SeparatorWidgetJSON extends WidgetJSON {
 	orientation: 'horizontal' | 'vertical';
 }
+
+// one uniformly formatted stretch of a paragraph, offsets are characters from the paragraph start
+interface EditEngineRun {
+	start: number;
+	end: number;
+	bold?: boolean;
+	italic?: boolean;
+	underline?: string; // single, double, dotted, dashed or wave
+	strikeout?: boolean;
+	color?: string; // #rrggbb
+	family?: string; // font family name
+	size?: number; // font height in points
+	escapement?: string; // super or sub
+	spellError?: boolean;
+}
+
+interface EditEngineParagraph {
+	text: string;
+	runs?: EditEngineRun[];
+	depth?: number; // outline level, zero for the topmost
+	bulletText?: string; // rendered bullet or number
+	align?: string; // left, right, center or justify
+	family?: string; // default font family; runs inherit it unless they carry their own
+	size?: number; // default font size in points; runs inherit it
+	color?: string; // #rrggbb default text color; runs inherit it
+}
+
+// paragraph plus character index, the pair the engine text model addresses text with
+interface EditEnginePosition {
+	para: number;
+	index: number;
+}
+
+interface EditEngineSelection {
+	startPara: number;
+	startIndex: number;
+	endPara: number;
+	endIndex: number;
+}
+
+// customType: 'editengine'
+interface EditEngineWidgetJSON {
+	paragraphs: EditEngineParagraph[];
+	selection: EditEngineSelection;
+	backgroundColor?: string; // #rrggbb
+	readOnly?: boolean;
+	extra?: any; // whatever the concrete engine-side widget adds
+}

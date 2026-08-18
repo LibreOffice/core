@@ -2135,6 +2135,7 @@ public:
     SalInstanceCustomWidget(VclCustomWidget* pWidget, SalInstanceBuilder* pBuilder,
                             bool bTakeOwnership);
     virtual void send_update() override;
+    virtual void send_update_action() override;
     virtual void set_custom_client_controller(weld::CustomClientWidgetController* p) override;
     virtual weld::CustomClientWidgetController* get_custom_client_controller() override;
     VclCustomWidget* getVclCustomWidget() { return m_xCustomWidget.get(); }

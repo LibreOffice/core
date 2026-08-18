@@ -11,6 +11,7 @@
 #include <COKit/COKit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/json_writer.hxx>
+#include <vcl/customwidget.hxx>
 #include <vcl/dockwin.hxx>
 
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
@@ -143,6 +144,11 @@ JSDialogNotifyIdle::generateActionMessage(const VclPtr<vcl::Window>& pWindow,
 
         for (auto it = pData->begin(); it != pData->end(); it++)
             aJsonWriter.put(it->first, it->second);
+
+        // A client-rendered widget puts its whole model straight into the data node next to
+        // control_id and action_type, so the client reads the update in one parse.
+        if (auto* pCustomWidget = dynamic_cast<VclCustomWidget*>(pWindow.get()))
+            pCustomWidget->DumpCustomData(aJsonWriter);
     }
 
     return aJsonWriter.finishAndGetAsOString();

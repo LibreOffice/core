@@ -638,6 +638,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Definitions.WindowId.ts \
 	src/control/jsdialog/Util.Accessibility.ts \
 	src/control/jsdialog/Util.ButtonType.ts \
+	src/control/jsdialog/Util.ContentEditable.ts \
 	src/control/jsdialog/Util.Dropdown.ts \
 	src/control/jsdialog/Util.PopoutWindow.ts \
 	src/control/jsdialog/Util.GenerateTableIcon.ts \
@@ -672,6 +673,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.CustomWidget.ts \
 	src/control/jsdialog/Widget.CsvGrid.ts \
 	src/control/jsdialog/Widget.SpellSentence.ts \
+	src/control/jsdialog/Widget.EditEngine.ts \
 	src/control/jsdialog/Widget.Edit.ts \
 	src/control/jsdialog/Widget.EmojiPicker.ts \
 	src/control/jsdialog/Widget.FormulabarEdit.js \

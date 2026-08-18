@@ -2093,6 +2093,13 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			else
 				control.focus();
 			break;
+
+		case 'updateeditengine':
+			if (typeof control.onEditEngineUpdate === 'function')
+				control.onEditEngineUpdate(data);
+			else
+				window.app.console.warn('widget "' + data.control_id + '" doesn\'t support "updateeditengine" action');
+			break;
 		case 'select':
 			if (typeof control.onSelect === 'function')
 				control.onSelect(parseInt(data.position));

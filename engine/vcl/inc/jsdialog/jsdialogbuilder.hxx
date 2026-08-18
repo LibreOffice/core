@@ -915,6 +915,7 @@ public:
                    bool bTakeOwnership);
 
     virtual void send_update() override;
+    virtual void send_update_action() override;
 };
 
 class JSWidgetInstance : public JSWidget<SalInstanceWidget, vcl::Window>

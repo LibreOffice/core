@@ -42,6 +42,14 @@ public:
     void SetCustomType(const OUString& rType) { m_aCustomType = rType; }
 
     void SetDumpCallback(const DumpCallback& rCallback) { m_aDumpCallback = rCallback; }
+
+    /// Writes only the widget model, the same content DumpAsPropertyTree nests under its "data"
+    /// node, without the surrounding id, type and customType keys.
+    void DumpCustomData(tools::JsonWriter& rJsonWriter)
+    {
+        if (m_aDumpCallback)
+            m_aDumpCallback(rJsonWriter);
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
