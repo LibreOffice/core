@@ -12,6 +12,7 @@
 #include <sal/config.h>
 
 #include <functional>
+#include <vector>
 
 #include <jsuno/detail/dllapi.hxx>
 #include <rtl/string.hxx>
@@ -19,8 +20,23 @@
 
 namespace jsuno
 {
+struct Exception {
+    struct Frame {
+        OUString source;
+        OUString line;
+        OUString column;
+        OUString functionName;
+    };
+
+    OUString name;
+    OUString message;
+    std::vector<Frame> stack;
+};
+
 // Run `script` in a JS UNO context and return the JSON-stringified result (empty string for
 // values JSON.stringify drops: `undefined`, a function, or a symbol).
+//
+// `source` and (1-based) `line` are used for any exception stack frames that are reported back.
 //
 // `proxyCallHook`, if non-empty, is captured by every JS-UNO proxy listener stub created
 // during this call and fires (from any thread, possibly after execute() has returned) when
@@ -34,8 +50,8 @@ namespace jsuno
 // If `usedLegacyUnoApi` is non-null, set to true when the script touched the legacy UNO API; not
 // modified otherwise.
 //
-// @throws css.script.provider.ScriptExceptionRaisedException
-LO_DLLPUBLIC_JSUNO OUString execute(OUString const& script,
+// @throws jsuno::Exception
+LO_DLLPUBLIC_JSUNO OUString execute(OUString const& script, OUString const & source, int line,
                                     std::function<void(OUString const&)> proxyCallHook = {},
                                     bool* usedLegacyUnoApi = nullptr);
 

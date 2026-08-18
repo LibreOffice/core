@@ -852,7 +852,7 @@ console.assert(test.StringAttribute === 'foo');
     console.assert(v[2][2] === uno.idl.com.sun.star.testuno.Enum.E_10);
 }
 
-)"_ustr);
+)"_ustr, u"<input>"_ustr, 1);
     }
 
     CPPUNIT_TEST_SUITE(TestUno);

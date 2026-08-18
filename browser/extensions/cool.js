@@ -45,10 +45,28 @@
 		}
 	}
 
+	// Best-effort parse of `new Error().stack` to locate the first frame that isn't inside
+	// cool.js itself; handles the two common stack shapes (Chrome/Edge: `at foo (URL:L:C)`;
+	// Firefox/Safari: `foo@URL:L:C`):
+	function detectCallerLocation() {
+		let stackText;
+		try { throw new Error(); } catch (e) { stackText = e.stack || ''; }
+		const frameRe = /(?:at\s+[^(\n]*\(([^)]+?):(\d+):(\d+)\))|(?:(?:^|@)([^\s@]+?):(\d+):(\d+))/;
+		for (const line of stackText.split('\n')) {
+			const m = frameRe.exec(line);
+			if (!m) continue;
+			const url = m[1] || m[4];
+			if (!url) continue;
+			if (/(?:^|\/)cool\.js(?:[:?]|$)/.test(url)) continue;
+			return { source: url, line: parseInt(m[2] || m[5], 10) };
+		}
+		return null;
+	}
+
 	// Takes a function `fn` followed by arguments `args`.  Runs `fn.apply(null, args)` inside a
 	// JS UNO context in the document's kit process and returns a Promise that resolves to the
-	// function application's JSON-decoded return value, or rejects with an Error wrapping the
-	// exception message.
+	// function application's JSON-decoded return value, or rejects with an Error whose `.name`,
+	// `.message` and `.stack` reflect the JS engine's own error.
 	//
 	// The function `fn` is shipped as source text via `fn.toString()` and evaluated on the
 	// server side, so it must be self-contained: it cannot close over variables in the iframe's
@@ -60,14 +78,32 @@
 		const promise = new Promise(function (resolve, reject) {
 			pending[callId] = { resolve: resolve, reject: reject };
 		});
+		const loc = detectCallerLocation();
 		window.parent.postMessage(JSON.stringify({
 			msgId: 'Extension_Call',
 			callId: callId,
 			fn: fn.toString(),
+			source: loc ? loc.source : '<input>',
+			line: loc ? loc.line : 1,
 			args: args
 		}), '*');
 		return promise;
 	};
+
+	// Reconstruct an Error from the engine's jsuno::Exception payload:
+	function makeStructuredError(payload) {
+		const frames = payload.stack || [];
+		const err = new Error(payload.message || '');
+		err.name = payload.name || 'Error';
+		let stackText = err.name + ': ' + err.message;
+		for (const f of frames) {
+			stackText += '\n    at ' + (f.functionName || '<anonymous>')
+				+ ' (' + (f.source || '') + ':' + f.line + ':' + f.column + ')';
+		}
+		err.stack = stackText;
+		err.toString = function () { return this.name + ': ' + this.message; };
+		return err;
+	}
 
 	// Bundle a UNO listener registration with its iframe-side per-method handlers.
 	//
@@ -261,8 +297,14 @@
 			}
 			delete pending[data.callId];
 			if (data.err !== undefined) {
-				//TODO: reconstruct specific (JS and UNO) exception types?
-				entry.reject(new Error(data.err));
+				let err;
+				if (typeof data.err === 'object' && data.err !== null) {
+					err = makeStructuredError(data.err)
+					console.error(err.stack);
+				} else {
+					err = new Error(data.err);
+				}
+				entry.reject(err);
 			} else {
 				entry.resolve(data.ok);
 			}

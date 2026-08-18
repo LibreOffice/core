@@ -21,6 +21,7 @@
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <regex>
 #include <sstream>
 #include <string_view>
 #include <utility>
@@ -45,7 +46,6 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
-#include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -296,6 +296,14 @@ RuntimeData* getRuntimeData(JSRuntime* rt)
 
 RuntimeData* getRuntimeData(JSContext* ctx) { return getRuntimeData(JS_GetRuntime(ctx)); }
 
+void addCurrentStack(JSContext * ctx, JSValueConst val) {
+    JS_ThrowTypeError(ctx, "");
+    ValueRef const tmp(ctx, JS_GetException(ctx));
+    JSAtom const stack = JS_NewAtom(ctx, "stack");
+    JS_SetProperty(ctx, val, stack, JS_GetProperty(ctx, tmp, stack));
+    JS_FreeAtom(ctx, stack);
+}
+
 template <typename F> JSValue callFromJs(JSContext* ctx, F&& f)
 {
     try
@@ -310,6 +318,7 @@ template <typename F> JSValue callFromJs(JSContext* ctx, F&& f)
     {
         auto const e = cppu::getCaughtException();
         ValueRef val = toJs(ctx, e);
+        addCurrentStack(ctx, val);
         return JS_Throw(ctx, val.release());
     }
     catch (std::exception& e)
@@ -501,6 +510,7 @@ int wrapperGetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueCon
     {
         auto const e = cppu::getCaughtException();
         ValueRef val = toJs(ctx, e);
+        addCurrentStack(ctx, val);
         JS_Throw(ctx, val.release());
         return -1;
     }
@@ -553,6 +563,7 @@ int wrapperSetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValueCon
     {
         auto const e = cppu::getCaughtException();
         ValueRef val(ctx, toJs(ctx, e).release());
+        addCurrentStack(ctx, val);
         JS_Throw(ctx, val.release());
         return -1;
     }
@@ -1111,6 +1122,7 @@ JSValue exceptionCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValue
                 break;
             }
         }
+        addCurrentStack(ctx, obj);
         return obj.release();
     });
 }
@@ -2760,15 +2772,35 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
     });
 }
 
-struct ExceptionData
+// Parse err.stack (QuickJS format) into structured frames.  Each frame appears on its own
+// line, typically "    at NAME (SOURCE:LINE:COL)".  Non-matching lines (e.g. a synthesized
+// "Error\n" preamble, or "at <anonymous> (native)" frames without a source location) are
+// skipped rather than pushed as partial frames.
+void parseStackTrace(
+    JSContext * ctx, ValueRef const & err, std::vector<jsuno::Exception::Frame> & stack)
 {
-    OUString type;
-    OUString message;
-};
+    ValueRef const stackVal(ctx, JS_GetPropertyStr(ctx, err, "stack"));
+    if (!JS_IsString(stackVal)) {
+        return;
+    }
+    UniqueCString8 const p(ctx, JS_ToCString(ctx, stackVal));
+    if (p.get() == nullptr) {
+        return;
+    }
+    std::string const stackText(p.get());
+    static const std::regex reFrame(R"(at\s+([^\n]+?)\s*\(([^)]+?):(\d+):(\d+)\))");
+    auto const end = std::sregex_iterator();
+    for (auto i = std::sregex_iterator(stackText.begin(), stackText.end(), reFrame); i != end; ++i)
+    {
+        stack.emplace_back(
+            OUString::fromUtf8((*i)[2].str()), OUString::fromUtf8((*i)[3].str()),
+            OUString::fromUtf8((*i)[4].str()), OUString::fromUtf8((*i)[1].str()));
+    }
+}
 
-ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
+jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
 {
-    ExceptionData exc;
+    jsuno::Exception exc;
     bool haveMessage = false;
     if (JS_IsObject(err))
     {
@@ -2779,7 +2811,7 @@ ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
             UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, nameVal));
             if (p.get() != nullptr)
             {
-                exc.type = OUString(p.get(), n);
+                exc.name = OUString(p.get(), n);
             }
         }
         ValueRef const msgVal(ctx, JS_GetPropertyStr(ctx, err, "message"));
@@ -2793,6 +2825,7 @@ ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
                 haveMessage = true;
             }
         }
+        parseStackTrace(ctx, err, exc.stack);
         if (!haveMessage)
         {
             // See whether this is a css.uno.Exception with a Message member:
@@ -2826,7 +2859,8 @@ ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
 }
 }
 
-OUString jsuno::execute(OUString const& script, std::function<void(OUString const&)> proxyCallHook,
+OUString jsuno::execute(OUString const& script, OUString const & source, int line,
+                        std::function<void(OUString const&)> proxyCallHook,
                         bool* usedLegacyUnoApi)
 {
     auto const rt = JS_NewRuntime();
@@ -2910,7 +2944,7 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
         JS_SetPropertyFunctionList(ctx, proto, functions, std::size(functions));
         JS_SetClassProto(ctx, getRuntimeData(ctx)->wrapperClassId, proto.release());
     }
-    std::optional<ExceptionData> exc;
+    std::optional<jsuno::Exception> exc;
     OUString result;
     {
         ValueRef const global(ctx, JS_GetGlobalObject(ctx));
@@ -2984,14 +3018,16 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
             ctx, global, "cool",
             wrapUnoObject(ctx, cool::get(comphelper::getProcessComponentContext())));
         auto const input = script.toUtf8();
+        auto const sourceUtf8 = source.toUtf8();
+        JSEvalOptions opts{JS_EVAL_OPTIONS_VERSION, JS_EVAL_TYPE_GLOBAL, sourceUtf8.getStr(), line};
         ValueRef const evalRes(
-            ctx, JS_Eval(ctx, input.getStr(), input.getLength(), "<input>", JS_EVAL_TYPE_GLOBAL));
+            ctx, JS_Eval2(ctx, input.getStr(), input.getLength(), &opts));
         if (JS_IsException(evalRes))
         {
             //TODO: reconstruct UNO exceptions
             ValueRef const err(ctx, JS_GetException(ctx));
             assert(!JS_IsException(err)); //TODO?
-            exc = extractExceptionData(ctx, err);
+            exc = extractException(ctx, err);
         }
         else
         {
@@ -3001,7 +3037,7 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
                 // JSON.stringify itself can throw, e.g. on BigInt values or circular references:
                 ValueRef const err(ctx, JS_GetException(ctx));
                 assert(!JS_IsException(err)); //TODO?
-                exc = extractExceptionData(ctx, err);
+                exc = extractException(ctx, err);
             }
             else if (!JS_IsUndefined(json))
             {
@@ -3026,8 +3062,7 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
     JS_FreeRuntime(rt);
     if (exc)
     {
-        throw css::script::provider::ScriptExceptionRaisedException(
-            exc->message, {}, u"<input>"_ustr, u"JavaScript"_ustr, -1, exc->type);
+        throw *exc;
     }
     return result;
 }

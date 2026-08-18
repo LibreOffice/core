@@ -110,6 +110,8 @@ interface ExtensionCallMessage {
 	msgId: 'Extension_Call';
 	callId: string;
 	fn: string;
+	source: string;
+	line: number;
 	args?: unknown[];
 }
 
@@ -165,10 +167,21 @@ type ExtensionDialogMessage =
 
 type ExtensionMessage = ExtensionSidebarMessage | ExtensionDialogMessage;
 
+interface ExtensionScriptStackFrame {
+	source: string;
+	line: string;
+	column: string;
+	functionName: string;
+}
+interface ExtensionScriptError {
+	message: string;
+	name: string;
+	stack: ExtensionScriptStackFrame[];
+}
 interface ExtensionScriptResult {
 	id: string;
 	ok?: unknown;
-	err?: string;
+	err?: string | ExtensionScriptError;
 	// Set by the engine when the script touched the legacy UNO API:
 	legacyUnoApi?: boolean;
 }
@@ -455,17 +468,23 @@ window.L.Control.Extension = window.L.Control.extend({
 
 	_handleSidebarMessage: function (msg: ExtensionSidebarMessage) {
 		switch (msg.msgId) {
-			case 'Extension_Call':
+			case 'Extension_Call': {
+				// Wire format `executescript <id> <line> <source>\n<script>`:
 				app.socket.sendMessage(
 					'executescript ' +
 						msg.callId +
-						' (' +
+						' ' +
+						msg.line +
+						' ' +
+						msg.source.replace(/\n/g, '') +
+						'\n(' +
 						msg.fn +
 						').apply(null, ' +
 						JSON.stringify(msg.args || []) +
 						');',
 				);
 				break;
+			}
 			case 'Extension_ProxyReturn':
 				app.socket.sendMessage(
 					'proxyreturn ' +

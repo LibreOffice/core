@@ -463,7 +463,8 @@ namespace desktop {
         void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) override;
         int getDocsCount() override;
         void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) override;
-        void executeScript(char const * script, char ** result, char ** error,
+        void executeScript(char const * script, std::string_view source, int line,
+                           char ** result, char ** error,
                            void (*proxyCallback) (void * data, char const * payload),
                            void * proxyCallbackData, bool * usedLegacyUnoApi) override;
         void deliverProxyResult(char const * callId, char const * jsonValue) override;

@@ -15,7 +15,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <jsuno/jsuno.hxx>
 #include <rtl/ustring.hxx>
 
@@ -26,25 +25,30 @@ class Execute : public CppUnit::TestFixture
 public:
     void testReturnValue()
     {
-        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, jsuno::execute(u"42"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, jsuno::execute(u"true"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u"\"hello\""_ustr, jsuno::execute(u"'hello'"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, jsuno::execute(u"null"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u"[1,2,3]"_ustr, jsuno::execute(u"[1, 2, 3]"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, jsuno::execute(u"42"_ustr, u"<input>"_ustr, 1));
+        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, jsuno::execute(u"true"_ustr, u"<input>"_ustr, 1));
+        CPPUNIT_ASSERT_EQUAL(
+            u"\"hello\""_ustr, jsuno::execute(u"'hello'"_ustr, u"<input>"_ustr, 1));
+        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, jsuno::execute(u"null"_ustr, u"<input>"_ustr, 1));
+        CPPUNIT_ASSERT_EQUAL(
+            u"[1,2,3]"_ustr, jsuno::execute(u"[1, 2, 3]"_ustr, u"<input>"_ustr, 1));
         CPPUNIT_ASSERT_EQUAL(u"{\"a\":1,\"b\":\"two\"}"_ustr,
-                             jsuno::execute(u"({a: 1, b: 'two'})"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u""_ustr, jsuno::execute(u"undefined"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u""_ustr, jsuno::execute(u"(function () {})"_ustr));
+                             jsuno::execute(u"({a: 1, b: 'two'})"_ustr, u"<input>"_ustr, 1));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, jsuno::execute(u"undefined"_ustr, u"<input>"_ustr, 1));
+        CPPUNIT_ASSERT_EQUAL(
+            u""_ustr, jsuno::execute(u"(function () {})"_ustr, u"<input>"_ustr, 1));
         CPPUNIT_ASSERT_EQUAL(u"42"_ustr,
-                             jsuno::execute(u"(function () { return 42; }).apply(null, [])"_ustr));
+                             jsuno::execute(
+                                 u"(function () { return 42; }).apply(null, [])"_ustr, u"<input>"_ustr,
+                                 1));
         try
         {
-            jsuno::execute(u"1n"_ustr);
-            CPPUNIT_FAIL("expected ScriptExceptionRaisedException");
+            jsuno::execute(u"1n"_ustr, u"<input>"_ustr, 1);
+            CPPUNIT_FAIL("expected jsuno::Exception");
         }
-        catch (css::script::provider::ScriptExceptionRaisedException const& e)
+        catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT_EQUAL(u"TypeError"_ustr, e.exceptionType);
+            CPPUNIT_ASSERT_EQUAL(u"TypeError"_ustr, e.name);
         }
     }
 
@@ -52,45 +56,47 @@ public:
     {
         try
         {
-            jsuno::execute(u"throw new Error('boom')"_ustr);
-            CPPUNIT_FAIL("expected ScriptExceptionRaisedException");
+            jsuno::execute(u"throw new Error('boom')"_ustr, u"<input>"_ustr, 1);
+            CPPUNIT_FAIL("expected jsuno::Exception");
         }
-        catch (css::script::provider::ScriptExceptionRaisedException const& e)
+        catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT(e.Message.startsWith("boom"));
-            CPPUNIT_ASSERT_EQUAL(u"<input>"_ustr, e.scriptName);
-            CPPUNIT_ASSERT_EQUAL(u"JavaScript"_ustr, e.language);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), e.lineNum);
-            CPPUNIT_ASSERT_EQUAL(u"Error"_ustr, e.exceptionType);
-        }
-        try
-        {
-            jsuno::execute(u"throw new TypeError('bad type')"_ustr);
-            CPPUNIT_FAIL("expected ScriptExceptionRaisedException");
-        }
-        catch (css::script::provider::ScriptExceptionRaisedException const& e)
-        {
-            CPPUNIT_ASSERT(e.Message.startsWith("bad type"));
-            CPPUNIT_ASSERT_EQUAL(u"TypeError"_ustr, e.exceptionType);
+            CPPUNIT_ASSERT_EQUAL(u"boom"_ustr, e.message);
+            CPPUNIT_ASSERT_EQUAL(std::size_t(1), e.stack.size());
+            CPPUNIT_ASSERT_EQUAL(u"<input>"_ustr, e.stack[0].source);
+            CPPUNIT_ASSERT_EQUAL(u"1"_ustr, e.stack[0].line);
+            CPPUNIT_ASSERT_EQUAL(u"10"_ustr, e.stack[0].column);
+            CPPUNIT_ASSERT_EQUAL(u"<eval>"_ustr, e.stack[0].functionName);
+            CPPUNIT_ASSERT_EQUAL(u"Error"_ustr, e.name);
         }
         try
         {
-            jsuno::execute(u"@@@ not valid JS"_ustr);
-            CPPUNIT_FAIL("expected ScriptExceptionRaisedException");
+            jsuno::execute(u"throw new TypeError('bad type')"_ustr, u"<input>"_ustr, 1);
+            CPPUNIT_FAIL("expected jsuno::Exception");
         }
-        catch (css::script::provider::ScriptExceptionRaisedException const& e)
+        catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT_EQUAL(u"SyntaxError"_ustr, e.exceptionType);
+            CPPUNIT_ASSERT_EQUAL(u"bad type"_ustr, e.message);
+            CPPUNIT_ASSERT_EQUAL(u"TypeError"_ustr, e.name);
         }
         try
         {
-            jsuno::execute(u"throw 'plain string'"_ustr);
-            CPPUNIT_FAIL("expected ScriptExceptionRaisedException");
+            jsuno::execute(u"@@@ not valid JS"_ustr, u"<input>"_ustr, 1);
+            CPPUNIT_FAIL("expected jsuno::Exception");
         }
-        catch (css::script::provider::ScriptExceptionRaisedException const& e)
+        catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT(e.Message.startsWith("plain string"));
-            CPPUNIT_ASSERT_EQUAL(u""_ustr, e.exceptionType);
+            CPPUNIT_ASSERT_EQUAL(u"SyntaxError"_ustr, e.name);
+        }
+        try
+        {
+            jsuno::execute(u"throw 'plain string'"_ustr, u"<input>"_ustr, 1);
+            CPPUNIT_FAIL("expected jsuno::Exception");
+        }
+        catch (jsuno::Exception const& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(u"plain string"_ustr, e.message);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, e.name);
         }
     }
 

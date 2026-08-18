@@ -1690,6 +1690,8 @@ struct COKit
      * callback only affects proxies created by that later call.
      *
      * @param script the script source.
+     * @param source used for any exception stack frames that are reported back.
+     * @param line (1-based) used for any exception stack frames that are reported back.
      * @param result out-param for the result.
      * @param error out-param for the error message.
      * @param proxyCallback hook for proxy listener fires; may be null.
@@ -1697,7 +1699,8 @@ struct COKit
      * @param usedLegacyUnoApi must be non-null; set to true if the script touched the legacy
      *        com.sun.star UNO API, not modified otherwise.
      */
-    virtual void executeScript(char const * script, char ** result, char ** error,
+    virtual void executeScript(char const * script, std::string_view source, int line,
+                               char ** result, char ** error,
                                void (*proxyCallback) (void * data, char const * payload),
                                void * proxyCallbackData, bool * usedLegacyUnoApi) = 0;
 

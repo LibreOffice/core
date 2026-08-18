@@ -3222,7 +3222,7 @@ static bool lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes, size_t*
                                   char*** pOutMimeTypes, size_t** pOutSizes, char*** pOutStreams);
 
 static void lo_executeScript(
-    char const * script, char ** result, char ** error,
+    char const * script, std::string_view source, int line, char ** result, char ** error,
     void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData,
     bool * usedLegacyUnoApi);
 static void lo_deliverProxyResult(char const * callId, char const * jsonValue);
@@ -3367,11 +3367,13 @@ void COKitImpl::registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCall
     lo_registerFileSaveDialogCallback(this, pCallback);
 }
 
-void COKitImpl::executeScript(char const * script, char ** result, char ** error,
+void COKitImpl::executeScript(char const * script, std::string_view source, int line,
+                              char ** result, char ** error,
                                void (*proxyCallback) (void * data, char const * payload),
                                void * proxyCallbackData, bool * usedLegacyUnoApi)
 {
-    lo_executeScript(script, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
+    lo_executeScript(
+        script, source, line, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
 }
 
 void COKitImpl::deliverProxyResult(char const * callId, char const * jsonValue)
@@ -9054,7 +9056,7 @@ static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER COKitDocument* /*pThis
 }
 
 static void lo_executeScript(
-    char const * script, char ** result, char ** error,
+    char const * script, std::string_view source, int line, char ** result, char ** error,
     void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData,
     bool * usedLegacyUnoApi)
 {
@@ -9074,16 +9076,37 @@ static void lo_executeScript(
     }
     try {
         OUString value = jsuno::execute(
-            OUString::fromUtf8(script), std::move(hook), usedLegacyUnoApi);
+            OUString::fromUtf8(script), OUString::fromUtf8(source), line, std::move(hook),
+            usedLegacyUnoApi);
         if (!value.isEmpty()) {
             *result = convertOUString(value);
         }
+    } catch (jsuno::Exception const & exception) {
+        // Ship as a JSON object; the receiver (ChildSession::executeScript) recognises the leading
+        // '{' and splices it in as a JSON value rather than an escaped string.
+        SetLastExceptionMsg(exception.message);
+        tools::JsonWriter w;
+        w.put("message", exception.message);
+        w.put("name", exception.name);
+        {
+            auto const frames = w.startArray("stack");
+            for (auto const & f: exception.stack) {
+                auto const obj = w.startStruct();
+                w.put("source", f.source);
+                w.put("line", f.line);
+                w.put("column", f.column);
+                w.put("functionName", f.functionName);
+            }
+        }
+        *error = strdup(w.finishAndGetAsOString().getStr());
     } catch (cpo::uno::Exception const & exception) {
         SetLastExceptionMsg(exception.Message);
         *error = convertOUString(exception.Message);
     }
 #else
     (void) script;
+    (void) source;
+    (void) line;
     (void) proxyCallback;
     (void) proxyCallbackData;
     (void) usedLegacyUnoApi;

@@ -3600,11 +3600,12 @@ bool ChildSession::getPresentationInfo()
 }
 
 bool ChildSession::executeScript(char const * buffer, int length, StringVector const & tokens) {
-    // Wire format: "executescript <id> <script source>".  The id is opaque to us; the iframe uses
-    // it to correlate the result with the originating call.  The script source can contain
-    // arbitrary characters including spaces, so we extract it as the substring after the second
-    // space.
-    if (tokens.size() < 2) {
+    // Wire format: "executescript <id> <line> <source>\n<script>".  The id is opaque to us; the
+    // iframe uses it to correlate the result with the originating call.  The source and line are
+    // used for any exception stack frames that are reported back (and source is guaranteed to be
+    // newline-free; cf. Control.Extension.ts's Extension_Call handler).  The script is the tail
+    // after the newline and can contain any bytes.
+    if (tokens.size() < 4) {
         sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
         return false;
     }
@@ -3616,7 +3617,24 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
         return false;
     }
     std::string const callId(full.substr(prefix.size(), idEnd - prefix.size()));
-    std::string const script(full.substr(idEnd + 1));
+    auto const lineEnd = full.find(' ', idEnd + 1);
+    if (lineEnd == std::string_view::npos) {
+        sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
+        return false;
+    }
+    int line;
+    try {
+        line = std::stoi(std::string(full.substr(idEnd + 1, lineEnd - idEnd - 1)));
+    } catch (std::exception const &) {
+        line = 1;
+    }
+    auto const sourceEnd = full.find('\n', lineEnd + 1);
+    if (sourceEnd == std::string_view::npos) {
+        sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
+        return false;
+    }
+    auto const source = full.substr(lineEnd + 1, sourceEnd - lineEnd - 1);
+    std::string const script(full.substr(sourceEnd + 1));
 
     char * result = nullptr;
     char * error = nullptr;
@@ -3625,7 +3643,7 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     // executeScript has returned, since the callback runs only while the proxy stays
     // attached and ChildSession outlives that:
     _docManager->getLOKit()->executeScript(
-        script.c_str(), &result, &error,
+        script.c_str(), source, line, &result, &error,
         [](void * data, char const * payload) {
             static_cast<ChildSession *>(data)->sendTextFrame(
                 "proxycall: " + std::string(payload));
@@ -3640,7 +3658,14 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     std::string body = "{\"id\":\"" + JsonUtil::escapeJSONValue(callId) + "\"";
     if (error)
     {
-        body += ",\"err\":\"" + JsonUtil::escapeJSONValue(error) + "\"";
+        // A jsuno::Exception arrives as a JSON object, any other exception is a plain message
+        // string:
+        body += ",\"err\":";
+        if (error[0] == '{') {
+            body += error;
+        } else {
+            body += "\"" + JsonUtil::escapeJSONValue(error) + "\"";
+        }
         std::free(error);
     }
     else if (result)
