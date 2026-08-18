@@ -216,7 +216,8 @@ OUString PackageRegistryBackend::createFolder(
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
 
-    const OUString url = ::utl::CreateTempURL(&sDataFolder, true);
+    const OUString sExpandedDataFolder{::dp_misc::expandUnoRcUrl(sDataFolder)};
+    const OUString url = ::utl::CreateTempURL(&sExpandedDataFolder, true);
     return sDataFolder + url.subView(url.lastIndexOf('/'));
 }
 
