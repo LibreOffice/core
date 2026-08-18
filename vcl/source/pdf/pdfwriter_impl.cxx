@@ -9204,10 +9204,17 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit(const Bitmap& i_rBitmap, const
     BitmapID aID;
     aID.m_aPixelSize        = aBitmap.GetSizePixel();
     aID.m_nSize             = vcl::pixelFormatBitCount(ePixelFormat);
-    aID.m_nChecksum         = aBitmap.CreateColorBitmap().GetChecksum();
-    aID.m_nMaskChecksum     = 0;
     if( aBitmap.HasAlpha() )
-        aID.m_nMaskChecksum = aBitmap.CreateAlphaMask().GetChecksum();
+    {
+        std::pair<Bitmap, AlphaMask> aPair = aBitmap.SplitIntoColorAndAlpha();
+        aID.m_nChecksum     = aPair.first.GetChecksum();
+        aID.m_nMaskChecksum = aPair.second.GetChecksum();
+    }
+    else
+    {
+        aID.m_nChecksum         = aBitmap.CreateColorBitmap().GetChecksum();
+        aID.m_nMaskChecksum     = 0;
+    }
     std::list<BitmapEmit>::const_iterator it = std::find_if(rBitmaps.begin(), rBitmaps.end(),
                                              [&](const BitmapEmit& arg) { return aID == arg.m_aID; });
     if (it == rBitmaps.end())
