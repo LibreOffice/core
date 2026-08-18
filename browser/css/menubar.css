@@ -86,11 +86,6 @@
 	justify-content: flex-end;
 }
 
-/* Add a class for the rotating effect */
-.rotate-icon {
-	animation: spin 2s linear infinite;
-}
-
 nav [id^='save'].unotoolbutton,
 #toolbar-up [id^='save'].unotoolbutton {
 	display: flex;
@@ -103,24 +98,45 @@ nav [id^='save'].unotoolbutton,
 	justify-content: center;
 }
 
-nav [id^='save'].saving img {
-	background: url('images/lc_saving.svg') no-repeat center;
-}
-
+/* While a save runs the spinner alone shows. Hiding the image rather than removing it keeps
+   the button at its normal size. */
+nav [id^='save'].saving img,
 #toolbar-up [id^='save'].saving img {
-	background: url('images/compact_saving.svg') no-repeat center;
+	visibility: hidden;
 }
 
-nav.hasnotebookbar [id^='save'].unotoolbutton::after {
+/* The spinner drawn over the save icon while a save runs. The floppy disk in the icon sits
+   still; the drawing animates itself through the animation elements it carries, turning its
+   arc segment along the faint track circle. Both circles stroke with currentColor, so the
+   one drawing follows the light theme, the dark theme and a branded bar alike. The spinner
+   ignores the pointer. */
+[id^='save'] .save-spinner {
+	display: none;
 	position: absolute;
-	bottom: 0px;
+	inset: 0;
+	margin: auto;
+	width: 20px;
+	height: 20px;
+	color: var(--color-main-text);
+	pointer-events: none;
 }
 
-nav.hasnotebookbar [id^='save'].saving::after {
-	content: var(--save-state);
-	font-size: var(--default-font-size);
-	font-family: var(--cool-font);
-	color: var(--color-main-text);
+[id^='save'].saving .save-spinner {
+	display: block;
+}
+
+.save-spinner circle {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+}
+
+.save-spinner .save-spinner-track {
+	opacity: 0.25;
+}
+
+.save-spinner .save-spinner-arc {
+	stroke-linecap: round;
 }
 
 nav [id^='save'].saved img {
@@ -133,17 +149,6 @@ nav [id^='save'].saved img {
 	filter: grayscale(0);
 }
 
-nav.hasnotebookbar [id^='save'].saved::after {
-	content: var(--save-state);
-	color: #309048;
-}
-
-[data-theme='dark'] nav [id^='save'].saving img {
-	background: url('images/dark/lc_saving.svg') no-repeat center;
-}
-[data-theme='dark'] #toolbar-up [id^='save'].saving img {
-	background: url('images/dark/compact_saving.svg') no-repeat center;
-}
 #document-titlebar {
 	display: inline-table; /*new*/
 	table-layout: fixed;

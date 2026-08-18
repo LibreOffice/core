@@ -211,8 +211,6 @@ button.ui-tab.notebookbar {
 
 .unoSave.savemodified .unobutton img,
 .savemodified.unotoolbutton .unobutton img,
-nav [id^='save'].saving img,
-#toolbar-up [id^='save'].saving img,
 nav [id^='save'].saved img,
 #toolbar-up [id^='save'].saved img {
 	box-sizing: border-box;

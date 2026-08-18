@@ -62,6 +62,11 @@ const JSX_SVG_TAGS = new Set([
 	'pattern',
 	'filter',
 	'foreignObject',
+	'animate',
+	'animateMotion',
+	'animateTransform',
+	'mpath',
+	'set',
 ]);
 
 function jsxAppendChildren(parent: Node, children: JSXChild[]): void {

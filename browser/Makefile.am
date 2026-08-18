@@ -679,7 +679,7 @@ COOL_JS_LST =\
 	src/control/Control.SheetsBar.js \
 	src/control/Control.PresentationBar.js \
 	src/control/Control.TopToolbar.js \
-	src/control/Control.SaveState.ts \
+	src/control/Control.SaveState.tsx \
 	src/control/Control.NotebookbarBase.ts \
 	src/control/Control.UIManager.ts \
 	src/control/Control.DocumentNameInput.js \
@@ -1568,7 +1568,7 @@ pot:
 		src/control/Control.ContextToolbar.ts \
 		src/control/Control.PartsPreview.js \
 		src/control/Control.PresentationBar.js \
-		src/control/Control.SaveState.ts \
+		src/control/Control.SaveState.tsx \
 		src/control/SlideDragGhost.tsx \
 		src/control/Control.PaneExpander.ts \
 		src/control/Control.Scroll.Annotation.js \
