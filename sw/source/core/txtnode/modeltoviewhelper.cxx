@@ -182,7 +182,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                 case CH_TXT_ATR_FIELDSEP:
                 {
                     assert(startedFields.back().first->IsCoveringPosition(SwPosition(rNode, i)));
-                    startedFields.back().second = true;
+                    if (!startedFields.empty())
+                    {
+                        startedFields.back().second = true;
+                    }
                     assert(oStartHidden);
                     if (::std::all_of(startedFields.begin(), startedFields.end(),
                             [](auto const& it) { return it.second; }))
