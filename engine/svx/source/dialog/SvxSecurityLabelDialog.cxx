@@ -78,16 +78,31 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
     , m_xEditBox(m_xBuilder->weld_widget(u"editbox"_ustr))
     , m_xPolicy(m_xBuilder->weld_combo_box(u"policy"_ustr))
     , m_xClassification(m_xBuilder->weld_combo_box(u"classification"_ustr))
-    , m_xCategories(m_xBuilder->weld_tree_view(u"categories"_ustr))
     , m_xPreview(m_xBuilder->weld_label(u"preview"_ustr))
     , m_xWarning(m_xBuilder->weld_label(u"seclabelwarning"_ustr))
     , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xRelabelBtn(m_xBuilder->weld_button(u"relabel"_ustr))
     , m_xRemoveBtn(m_xBuilder->weld_button(u"remove"_ustr))
 {
-    m_xCategories->set_size_request(m_xCategories->get_approximate_digit_width() * 32,
-                                    m_xCategories->get_height_rows(6));
-    m_xCategories->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    // Weld the static category pool (group boxes, header labels, checkboxes) and hide
+    // it all; PopulateCategories shows and labels what the active policy needs.
+    for (int i = 0; i < MAX_GROUPS; ++i)
+    {
+        m_xGroupBoxes.push_back(m_xBuilder->weld_widget("group" + OUString::number(i)));
+        m_xGroupLabels.push_back(m_xBuilder->weld_label("group" + OUString::number(i) + "label"));
+        m_xGroupBoxes[i]->set_visible(false);
+
+        std::vector<std::unique_ptr<weld::CheckButton>> aChecks;
+        for (int j = 0; j < MAX_CATS; ++j)
+        {
+            auto xCheck = m_xBuilder->weld_check_button("g" + OUString::number(i) + "c"
+                                                        + OUString::number(j));
+            xCheck->set_visible(false);
+            xCheck->connect_toggled(LINK(this, SvxSecurityLabelDialog, CategoryToggleHdl));
+            aChecks.push_back(std::move(xCheck));
+        }
+        m_xChecks.push_back(std::move(aChecks));
+    }
 
     // The provisioned policies (WOPI-preset spif/ dir, with the dev stopgap).
     m_aPolicySet.loadProvisioned();
@@ -100,7 +115,6 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
 
     m_xPolicy->connect_changed(LINK(this, SvxSecurityLabelDialog, PolicyHdl));
     m_xClassification->connect_changed(LINK(this, SvxSecurityLabelDialog, ClassificationHdl));
-    m_xCategories->connect_toggled(LINK(this, SvxSecurityLabelDialog, CategoryToggleHdl));
     m_xOkBtn->connect_clicked(LINK(this, SvxSecurityLabelDialog, OkHdl));
     m_xRelabelBtn->connect_clicked(LINK(this, SvxSecurityLabelDialog, RelabelHdl));
     m_xRemoveBtn->connect_clicked(LINK(this, SvxSecurityLabelDialog, RemoveHdl));
@@ -164,43 +178,78 @@ void SvxSecurityLabelDialog::PopulateClassifications()
 
 void SvxSecurityLabelDialog::PopulateCategories()
 {
-    // Rebuild the list, dropping categories the current classification excludes
-    // while preserving the checks of those that survive. Identity is the owning
-    // tag index plus the category name (stable across rebuilds).
-    std::set<std::pair<sal_Int32, OUString>> aChecked;
-    const int nOld = m_xCategories->n_children();
-    for (int i = 0; i < nOld; ++i)
+    // Preserve the current checks across a rebuild (classification change), keyed by
+    // group label (tag name) + checkbox label (category name).
+    std::set<std::pair<OUString, OUString>> aChecked;
+    for (size_t g = 0; g < m_aGroups.size(); ++g)
     {
-        if (m_xCategories->get_toggle(i) == TRISTATE_TRUE)
-            aChecked.emplace(m_aRowTag[i], m_xCategories->get_text(i, 0));
+        for (int c = 0; c < m_aGroups[g].nCats; ++c)
+        {
+            if (m_xChecks[g][c]->get_active())
+                aChecked.emplace(m_xGroupLabels[g]->get_label(), m_xChecks[g][c]->get_label());
+        }
     }
 
-    const OUString sClassification = m_xClassification->get_active_text();
-
-    m_xCategories->clear();
-    m_aRowTag.clear();
-    m_aTagSingle.clear();
+    // Reset the pool: hide every group and checkbox, drop the used-slot bookkeeping.
+    for (int g = 0; g < MAX_GROUPS; ++g)
+    {
+        m_xGroupBoxes[g]->set_visible(false);
+        for (int c = 0; c < MAX_CATS; ++c)
+            m_xChecks[g][c]->set_visible(false);
+    }
+    m_aGroups.clear();
+    m_aCheckGroup.clear();
     if (!m_pPolicy)
         return;
 
-    auto xIter = m_xCategories->make_iterator();
-    sal_Int32 nTag = 0;
+    const OUString sClassification = m_xClassification->get_active_text();
+    int g = 0;
     for (const auto& rTagSet : m_pPolicy->aTagSets)
     {
         for (const auto& rTag : rTagSet.aTags)
         {
-            m_aTagSingle.push_back(rTag.bSingleSelection);
+            // A group per securityCategoryTag that has at least one category selectable
+            // under the current classification.
+            std::vector<const svx::seclabel::SpifTagCategory*> aSelectable;
             for (const auto& rCategory : rTag.aCategories)
             {
-                if (!rCategory.isSelectable(sClassification))
-                    continue;
-                m_xCategories->append(xIter.get());
-                const bool bChecked = aChecked.count({ nTag, rCategory.aName }) != 0;
-                m_xCategories->set_toggle(*xIter, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-                m_xCategories->set_text(*xIter, rCategory.aName, 0);
-                m_aRowTag.push_back(nTag);
+                if (rCategory.isSelectable(sClassification))
+                    aSelectable.push_back(&rCategory);
             }
-            ++nTag;
+            if (aSelectable.empty())
+                continue;
+
+            if (g >= MAX_GROUPS)
+            {
+                SAL_WARN("svx.seclabel", "category groups exceed pool of "
+                                             << MAX_GROUPS << "; tag '" << rTag.aName
+                                             << "' truncated");
+                continue;
+            }
+
+            m_xGroupLabels[g]->set_label(rTag.aName);
+            m_xGroupBoxes[g]->set_visible(true);
+
+            int c = 0;
+            for (const auto* pCategory : aSelectable)
+            {
+                if (c >= MAX_CATS)
+                {
+                    SAL_WARN("svx.seclabel", "categories of tag '"
+                                                 << rTag.aName << "' exceed pool of " << MAX_CATS
+                                                 << "; remainder truncated");
+                    break;
+                }
+                const bool bChecked = aChecked.count({ rTag.aName, pCategory->aName }) != 0;
+                m_xChecks[g][c]->set_label(pCategory->aName);
+                m_xChecks[g][c]->set_active(bChecked);
+                m_xChecks[g][c]->set_visible(true);
+                m_aCheckGroup[m_xChecks[g][c].get()] = m_aGroups.size();
+                ++c;
+            }
+            m_aGroups.push_back(
+                { rTag.bSingleSelection, c, static_cast<int>(aSelectable.size()) });
+            ++g;
         }
     }
 }
@@ -244,18 +293,20 @@ void SvxSecurityLabelDialog::initFromExistingLabel()
 
     PopulateCategories();
 
-    // Check the rows whose category name appears among the label's values.
+    // Check the boxes whose category name (label) is among the label's values.
     std::set<OUString> aValues;
     for (const auto& rCategory : aLabel.aCategories)
     {
         for (const auto& rValue : rCategory.aValues)
             aValues.insert(rValue);
     }
-    const int nCount = m_xCategories->n_children();
-    for (int i = 0; i < nCount; ++i)
+    for (size_t nGroup = 0; nGroup < m_aGroups.size(); ++nGroup)
     {
-        if (aValues.count(m_xCategories->get_text(i, 0)))
-            m_xCategories->set_toggle(i, TRISTATE_TRUE);
+        for (int c = 0; c < m_aGroups[nGroup].nCats; ++c)
+        {
+            if (aValues.count(m_xChecks[nGroup][c]->get_label()))
+                m_xChecks[nGroup][c]->set_active(true);
+        }
     }
 }
 
@@ -280,10 +331,24 @@ void SvxSecurityLabelDialog::enterForeignMode(const svx::seclabel::StanagLabel& 
 
 std::vector<bool> SvxSecurityLabelDialog::collectSelection() const
 {
-    const int nCount = m_xCategories->n_children();
-    std::vector<bool> aSelected(nCount);
-    for (int i = 0; i < nCount; ++i)
-        aSelected[i] = m_xCategories->get_toggle(i) == TRISTATE_TRUE;
+    // One bit per selectable category, in tag-set/tag/category order: exactly how
+    // buildLabel and validate index. A tag that outgrew the pool has no checkbox for
+    // the remainder, so pad those false -- otherwise every following group is read at
+    // a shifted index and the label gets categories nobody checked.
+    std::vector<bool> aSelected;
+    for (size_t g = 0; g < m_aGroups.size(); ++g)
+    {
+        for (int c = 0; c < m_aGroups[g].nCats; ++c)
+        {
+            aSelected.push_back(m_xChecks[g][c]->get_active());
+        }
+
+        for (int c = m_aGroups[g].nCats; c < m_aGroups[g].nSelectable; ++c)
+        {
+            aSelected.push_back(false);
+        }
+    }
+
     return aSelected;
 }
 
@@ -317,23 +382,20 @@ IMPL_LINK_NOARG(SvxSecurityLabelDialog, ClassificationHdl, weld::ComboBox&, void
     UpdatePreview();
 }
 
-IMPL_LINK(SvxSecurityLabelDialog, CategoryToggleHdl, const weld::TreeView::iter_col&, rIterCol, void)
+IMPL_LINK(SvxSecurityLabelDialog, CategoryToggleHdl, weld::Toggleable&, rToggle, void)
 {
-    // Single-selection tags: toggling one category clears the others of that tag.
-    const int nRow = m_xCategories->get_iter_index_in_parent(rIterCol.first);
-    if (nRow >= 0 && nRow < static_cast<int>(m_aRowTag.size()))
+    // Single-selection group: when a box is checked, clear the others of its group so
+    // it behaves like a radio set.
+    const auto it = m_aCheckGroup.find(&rToggle);
+    if (it != m_aCheckGroup.end() && m_aGroups[it->second].bSingle && rToggle.get_active())
     {
-        const sal_Int32 nTag = m_aRowTag[nRow];
-        if (m_aTagSingle[nTag] && m_xCategories->get_toggle(nRow) == TRISTATE_TRUE)
+        for (auto& xCheck : m_xChecks[it->second])
         {
-            const int nCount = m_xCategories->n_children();
-            for (int i = 0; i < nCount; ++i)
-            {
-                if (i != nRow && m_aRowTag[i] == nTag)
-                    m_xCategories->set_toggle(i, TRISTATE_FALSE);
-            }
+            if (xCheck.get() != &rToggle)
+                xCheck->set_active(false);
         }
     }
+
     UpdatePreview();
 }
 

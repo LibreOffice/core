@@ -412,6 +412,7 @@ certain functionality.
 @li @c svx.fmcomp
 @li @c svx.form
 @li @c svx.sdr
+@li @c svx.seclabel - security labels (STANAG 4774/4778)
 @li @c svx.sidebar
 @li @c svx.stbcrtls - StatusBarControl
 @li @c svx.svdraw

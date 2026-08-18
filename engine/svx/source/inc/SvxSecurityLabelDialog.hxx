@@ -24,13 +24,22 @@
 #include <svx/seclabel/SecurityLabelTarget.hxx>
 #include <svx/seclabel/SpifPolicy.hxx>
 
+#include <map>
 #include <memory>
+#include <vector>
 
 // SPIF/STANAG security label dialog. The provisioned policies populate the policy
 // selector; the chosen policy's classifications and category tag sets drive the
-// classification dropdown and the flat checkable category list.
+// classification dropdown and the grouped checkable category list.
 class SvxSecurityLabelDialog final : public weld::GenericDialogController
 {
+    // The category area is a static pool of group slots (see seclabeldialog.ui): each
+    // slot is a bold header label plus a box of checkboxes. Runtime relabels/shows one
+    // group per securityCategoryTag and one checkbox per selectable tagCategory, and
+    // hides the rest. Static widgets stay interactive in JSDialog (runtime-created ones
+    // do not), so the pool is fixed; a policy needing more warns and is truncated.
+    static constexpr int MAX_GROUPS = 10;
+    static constexpr int MAX_CATS = 100;
     svx::seclabel::SpifPolicySet m_aPolicySet;
     // The policy currently driving the editor (an entry of m_aPolicySet), or null
     // when no policy is provisioned.
@@ -38,10 +47,21 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // App-specific marking placement + banner push, and the model access.
     std::unique_ptr<svx::seclabel::SecurityLabelTarget> m_pTarget;
 
-    // Per category row: flat index of its owning tag, and whether that tag is
-    // single-selection (toggling one of its categories clears the others).
-    std::vector<sal_Int32> m_aRowTag;
-    std::vector<bool> m_aTagSingle;
+    // The used group slots, in policy tag-set/tag order. nCats is how many checkboxes
+    // of the slot are in use; bSingle is single-selection (checking one clears the
+    // others of that group). collectSelection walks these in order, which matches
+    // buildLabel's selectable-category indexing.
+    struct GroupSlot
+    {
+        bool bSingle = false;
+        int nCats = 0;
+        // Selectable categories the tag really has. Larger than nCats when the tag
+        // outgrew the checkbox pool; collectSelection pads the difference.
+        int nSelectable = 0;
+    };
+    std::vector<GroupSlot> m_aGroups;
+    // Maps a pooled checkbox to its used-group index, for the single-selection handler.
+    std::map<const weld::Toggleable*, size_t> m_aCheckGroup;
 
     // The document carries a label whose policy this dialog cannot edit (its OID
     // does not match the provisioned policy); the dialog shows it read-only and
@@ -54,7 +74,11 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::Widget> m_xEditBox;
     std::unique_ptr<weld::ComboBox> m_xPolicy;
     std::unique_ptr<weld::ComboBox> m_xClassification;
-    std::unique_ptr<weld::TreeView> m_xCategories;
+    // The static category pool: MAX_GROUPS group boxes, each with a header label and
+    // MAX_CATS checkboxes (m_xChecks[group][cat]).
+    std::vector<std::unique_ptr<weld::Widget>> m_xGroupBoxes;
+    std::vector<std::unique_ptr<weld::Label>> m_xGroupLabels;
+    std::vector<std::vector<std::unique_ptr<weld::CheckButton>>> m_xChecks;
     std::unique_ptr<weld::Label> m_xPreview;
     std::unique_ptr<weld::Label> m_xWarning;
     std::unique_ptr<weld::Button> m_xOkBtn;
@@ -63,7 +87,7 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
 
     DECL_LINK(PolicyHdl, weld::ComboBox&, void);
     DECL_LINK(ClassificationHdl, weld::ComboBox&, void);
-    DECL_LINK(CategoryToggleHdl, const weld::TreeView::iter_col&, void);
+    DECL_LINK(CategoryToggleHdl, weld::Toggleable&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(RelabelHdl, weld::Button&, void);
     DECL_LINK(RemoveHdl, weld::Button&, void);
