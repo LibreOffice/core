@@ -3709,6 +3709,21 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         bool bShiftDown = css::text::WrapTextMode_NONE == nSurround;
         bool bSplitFly = pFly->IsFlySplitAllowed();
         const SwRect aFlyRectWithoutSpaces = pFly->GetObjRect();
+        // With the add-vertical-fly-offsets compatibility option, a fly that lies completely
+        // on one side of the table's print area needs no left or right dodging: the two
+        // already lay out side by side.
+        bool bFlyBeyondPrintArea = false;
+        bool bFlyBeforePrintArea = false;
+        if (bAddVerticalFlyOffsets)
+        {
+            const SwTwips nPrintAreaLeft
+                = aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea());
+            const SwTwips nPrintAreaRight = nPrintAreaLeft + aRectFnSet.GetWidth(getFramePrintArea());
+            bFlyBeyondPrintArea
+                = aRectFnSet.XDiff(aRectFnSet.GetLeft(aFlyRectWithoutSpaces), nPrintAreaRight) >= 0;
+            bFlyBeforePrintArea
+                = aRectFnSet.XDiff(nPrintAreaLeft, aRectFnSet.GetRight(aFlyRectWithoutSpaces)) >= 0;
+        }
         if (!bShiftDown && bAddVerticalFlyOffsets)
         {
             if (nSurround == text::WrapTextMode_PARALLEL)
@@ -3807,7 +3822,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         if ((css::text::WrapTextMode_RIGHT == nSurround
              || css::text::WrapTextMode_PARALLEL == nSurround)
             && bFlyHoriOrientLeft
-            && !bShiftDown)
+            && !bShiftDown && !bFlyBeyondPrintArea)
         {
             const tools::Long nWidth
                 = aRectFnSet.XDiff(aRectFnSet.GetRight(aFlyRect),
@@ -3818,7 +3833,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         if ((css::text::WrapTextMode_LEFT == nSurround
              || css::text::WrapTextMode_PARALLEL == nSurround)
             && text::HoriOrientation::RIGHT == rHori.GetHoriOrient()
-            && !bShiftDown)
+            && !bShiftDown && !bFlyBeforePrintArea)
         {
             const tools::Long nWidth
                 = aRectFnSet.XDiff(aRectFnSet.GetRight(pFly->GetAnchorFrame()->getFrameArea()),
