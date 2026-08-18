@@ -3189,13 +3189,13 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     int nParagraphCount = 0;
     while ( pFrame )
     {
-        nParagraphCount++;
         if ( pFrame->IsSctFrame() )
         {
             nMin = lcl_CalcAutoWidth( *static_cast<const SwSectionFrame*>(pFrame) );
         }
         if ( pFrame->IsTextFrame() )
         {
+            nParagraphCount++;
             nMin = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->CalcFitToContent();
             auto const& rParaSet(static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps()->GetSwAttrSet());
             SvxFirstLineIndentItem const& rFirstLine(rParaSet.GetFirstLineIndent());
