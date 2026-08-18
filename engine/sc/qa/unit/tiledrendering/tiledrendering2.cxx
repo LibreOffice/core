@@ -24,9 +24,11 @@
 #include <COKit/COKit.hxx>
 
 #include <sctestviewcallback.hxx>
-#include <docuno.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
+#include <docuno.hxx>
 #include <scmod.hxx>
+#include <tabprotection.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1029,6 +1031,63 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteShapeAtCellCursor)
     const tools::Rectangle aTargetCell = pDoc->GetMMRect(0, nTargetRow, 0, nTargetRow, 0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aTargetCell.Top()), double(aPastedRectangle.Top()), 2.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aTargetCell.Left()), double(aPastedRectangle.Left()), 2.0);
+}
+
+// A formula written in US English syntax has to reach the cell whatever language the
+// view is in, and come back out in the language of the view.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetCellFormulaReadsEnglish)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    rDoc.SetValue(ScAddress(0, 0, 0), 2.0);
+    rDoc.SetValue(ScAddress(0, 1, 0), 3.0);
+
+    // A German view separates formula arguments with a semicolon. Re-reading the formula
+    // options is what picks the separators of the new locale up.
+    SfxViewShell* pView = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView);
+    pView->SetKitLocale(u"de-DE"_ustr);
+    pDocSh->SetFormulaOptions(ScModule::get()->GetFormulaOptions());
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Cell", cpo::uno::Any(u"C1"_ustr) },
+          { "Formula", cpo::uno::Any(u"=SUM(A1,A2)"_ustr) } }));
+    dispatchCommand(mxComponent, u".uno:SetCellFormula"_ustr, aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    const ScAddress aTarget(2, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, rDoc.GetString(aTarget));
+    CPPUNIT_ASSERT_EQUAL(5.0, rDoc.GetValue(aTarget));
+
+    const OUString aShown = rDoc.GetFormula(2, 0, 0);
+    const OUString aMessage = "the German view shows: " + aShown;
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           aShown.indexOf(';') >= 0);
+}
+
+// A protected sheet stays protected: the command refuses the cell the user could not
+// have typed into either.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetCellFormulaRespectsProtection)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    ScTableProtection aProtection;
+    aProtection.setProtected(true);
+    rDoc.SetTabProtection(0, &aProtection);
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Cell", cpo::uno::Any(u"D4"_ustr) },
+          { "Formula", cpo::uno::Any(u"=1+1"_ustr) } }));
+    dispatchCommand(mxComponent, u".uno:SetCellFormula"_ustr, aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(ScAddress(3, 3, 0)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

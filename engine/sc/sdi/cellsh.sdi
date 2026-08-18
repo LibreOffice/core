@@ -84,6 +84,7 @@ interface CellSelection
     SID_RANGE_NOTETEXT      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
     SID_ENTER_STRING        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_SET_CELL_FORMULA    [ ExecMethod = Execute; ]
     SID_INSERT_MATRIX       [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_MARKAREA            [ ExecMethod = Execute; ]
     SID_SELECT_SCENARIO     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]

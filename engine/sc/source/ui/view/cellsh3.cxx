@@ -42,6 +42,8 @@
 #include <inputhdl.hxx>
 #include <inputopt.hxx>
 #include <editable.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
 #include <funcdesc.hxx>
 #include <markdata.hxx>
 #include <scabstdlg.hxx>
@@ -316,6 +318,44 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     //  sideview, when the input was not finished
                     //  (GrabFocus is called in KillEditView)
                 }
+            }
+            break;
+
+        case SID_SET_CELL_FORMULA:
+            {
+                const SfxPoolItem* pFormulaItem;
+                if ( !pReqArgs || !pReqArgs->HasItem(FN_PARAM_1, &pFormulaItem) )
+                    break;
+
+                const OUString aCellRef = pReqArgs->Get(SID_SET_CELL_FORMULA).GetValue();
+                const OUString aFormula
+                    = static_cast<const SfxStringItem*>(pFormulaItem)->GetValue();
+
+                ScDocShell* pDocShell = GetViewData().GetDocShell();
+                ScDocument& rDoc = GetViewData().GetDocument();
+
+                ScAddress aPos;
+                aPos.SetTab( GetViewData().GetTabNumber() );
+                if ( !(aPos.Parse(aCellRef, rDoc) & ScRefFlags::VALID) )
+                    break;
+
+                ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
+                    rDoc, aPos.Tab(), aPos.Col(), aPos.Row(), aPos.Col(), aPos.Row());
+                if ( !aTester.IsEditableOrMatrixCell(rDoc, aPos) )
+                {
+                    pTabViewShell->ErrorMessage( aTester.GetMessageId() );
+                    break;
+                }
+
+                // The string is read in the English A1 grammar: English function names and
+                // a comma between arguments. The cell holds opcodes, so it is shown again
+                // with the names and separators of the user's own locale.
+                pDocShell->GetDocFunc().SetCellText(
+                    aPos, aFormula, true /*bInterpret*/, true /*bEnglish*/, false /*bApi*/,
+                    formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
+
+                pTabViewShell->UpdateInputHandler();
+                rReq.Done();
             }
             break;
 

@@ -6994,6 +6994,23 @@ SfxVoidItem EnterString SID_ENTER_STRING
     GroupId = SfxGroupId::Intern;
 ]
 
+SfxVoidItem SetCellFormula SID_SET_CELL_FORMULA
+(SfxStringItem Cell SID_SET_CELL_FORMULA,SfxStringItem Formula FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Intern;
+]
+
 SfxVoidItem ExportAsGraphic SID_EXPORT_AS_GRAPHIC
 ()
 [

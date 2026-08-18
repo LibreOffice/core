@@ -646,6 +646,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 #define SID_REMOVE_CALCTABLE        (SID_NEW_SLOTS+121)
 #define SID_TABLE_STYLES            (SID_NEW_SLOTS+122)
 #define SID_TABLE_TOTALROW          (SID_NEW_SLOTS+123)
+#define SID_SET_CELL_FORMULA        TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+124)
 
 // idl parameter
 
