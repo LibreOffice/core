@@ -1,7 +1,18 @@
 /* global describe it require cy beforeEach expect */
 
 var helper = require('../../common/helper');
+var calcHelper = require('../../common/calc_helper');
 var desktopHelper = require('../../common/desktop_helper');
+
+// Open a new Date condition from the Conditional menu of the Home tab. A cell that already
+// carries a conditional format brings up a question about editing that format first, so start
+// from a cell that has none.
+function openDateCondition() {
+	calcHelper.selectCellsInRange('E10');
+	cy.cGet('#toolbar-up #Home .unoConditionalFormatMenu:visible').click();
+	desktopHelper.getDropdown('home-conditional-format-menu').click();
+	cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell > span', 'Date...').click();
+}
 
 describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 
@@ -75,5 +86,34 @@ describe(['tagdesktop'], 'Conditional Format Dialog Tests', function() {
 
 	it('Color scale submenu grid has even column spacing', function() {
 		checkSubmenuGridHasEvenColumnSpacing('Color Scale', 'scaleset');
+	});
+
+	it('an ODF spreadsheet offers every date period', function() {
+		openDateCondition();
+
+		cy.cGet('#datetype-input option').should('have.length', 13);
+		cy.cGet('#datetype-input option').first().should('have.text', 'Today');
+		cy.cGet('#datetype-input option').last().should('have.text', 'Next year');
+	});
+});
+
+describe(['tagdesktop'], 'Conditional Format Date Conditions In An Excel Format', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/testfile.xlsx');
+		desktopHelper.switchUIToNotebookbar();
+		cy.viewport(1920,1080);
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			helper.processToIdle(win);
+		});
+	});
+
+	it('the whole year periods are not offered', function() {
+		openDateCondition();
+
+		cy.cGet('#datetype-input option').should('have.length', 10);
+		cy.cGet('#datetype-input option').first().should('have.text', 'Today');
+		cy.cGet('#datetype-input option').last().should('have.text', 'Next month');
 	});
 });

@@ -16,10 +16,13 @@
 #include <condformathelper.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
 
 #include <o3tl/string_view.hxx>
 #include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/frame.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -1255,6 +1258,18 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl, weld::Button&, void )
     });
 }
 
+namespace
+{
+// The OOXML timePeriod attribute has values for days, weeks and months only.
+bool canStoreYearPeriod(const ScDocument& rDoc)
+{
+    const ScDocShell* pDocShell = rDoc.GetDocumentShell();
+    const SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : nullptr;
+    const std::shared_ptr<const SfxFilter> pFilter = pMedium ? pMedium->GetFilter() : nullptr;
+    return !pFilter || !pFilter->IsMSOFormat();
+}
+}
+
 ScDateFrmtEntry::ScDateFrmtEntry(ScCondFormatList* pParent, ScDocument& rDoc, const ScCondDateFormatEntry* pFormat)
     : ScCondFrmtEntry(pParent, rDoc, ScAddress())
     , mxLbDateEntry(mxBuilder->weld_combo_box(u"datetype"_ustr))
@@ -1279,6 +1294,16 @@ ScDateFrmtEntry::ScDateFrmtEntry(ScCondFormatList* pParent, ScDocument& rDoc, co
         mxLbDateEntry->set_active(nPos);
 
         mxLbStyle->set_active_text(pFormat->GetStyleName());
+    }
+
+    // The year periods are the last entries of the list, so dropping them keeps every remaining
+    // position equal to its condformat::ScCondFormatDateType value. A rule that already uses one
+    // of them, which can reach this document by a paste from an ODF one, keeps its own value.
+    if (!canStoreYearPeriod(rDoc) && mxLbDateEntry->get_active() < condformat::THISYEAR)
+    {
+        mxLbDateEntry->remove(condformat::NEXTYEAR);
+        mxLbDateEntry->remove(condformat::LASTYEAR);
+        mxLbDateEntry->remove(condformat::THISYEAR);
     }
 
     StyleSelectHdl(*mxLbStyle);
