@@ -97,6 +97,8 @@
 #include <datauno.hxx>
 #include <docfunc.hxx>
 #include <docoptio.hxx>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
+#include <compiler.hxx>
 #include <docsh.hxx>
 #include <docuno.hxx>
 #include <drwlayer.hxx>
@@ -1483,6 +1485,18 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         if (!pFuncList || !pFuncMgr)
             return;
 
+        // ?english=true asks for the names of the English A1 grammar. Without it the
+        // names come in the language of the view, which is what a function picker wants.
+        const bool bEnglish = aCommand.indexOf("english=true") >= 0;
+
+        ScCompiler::OpCodeMapPtr xEnglishMap;
+        if (bEnglish && pDocShell)
+        {
+            ScAddress aAddress;
+            ScCompiler aComp(pDocShell->GetDocument(), aAddress);
+            xEnglishMap = aComp.GetOpCodeMap(sheet::FormulaLanguage::XL_ENGLISH);
+        }
+
         auto aValues = rJsonWriter.startNode("commandValues");
 
         // Categories
@@ -1514,10 +1528,32 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
                 aHelper.GetNextFunc(eqName, false, nStart, nullptr, &pIDesc, &aArgs);
 
                 auto aFunc = rJsonWriter.startStruct();
-                rJsonWriter.put("name", *pDesc->mxFuncName);
+
+                OUString aName = *pDesc->mxFuncName;
+                // Add-in functions sit above the last opcode and are never translated,
+                // so the name they already carry is the only one they have.
+                if (xEnglishMap && pDesc->nFIndex <= ocLastOpcodeId)
+                {
+                    const OUString& rSymbol
+                        = xEnglishMap->getSymbol(static_cast<OpCode>(pDesc->nFIndex));
+                    if (!rSymbol.isEmpty())
+                        aName = rSymbol;
+                }
+
+                rJsonWriter.put("name", aName);
                 if (pIDesc)
                 {
-                    rJsonWriter.put("signature", pIDesc->getSignature());
+                    OUString aSignature = pIDesc->getSignature();
+                    if (bEnglish)
+                    {
+                        // The signature leads with the translated name and separates the
+                        // arguments the way the locale does. Lead with the English name
+                        // and separate with a comma.
+                        const sal_Int32 nParen = aSignature.indexOf('(');
+                        if (nParen >= 0)
+                            aSignature = aName + aSignature.copy(nParen).replace(';', ',');
+                    }
+                    rJsonWriter.put("signature", aSignature);
                     if (pIDesc->getCategory())
                         rJsonWriter.put("category",
                             static_cast<sal_Int64>(pIDesc->getCategory()->getNumber()));
