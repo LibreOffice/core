@@ -68,6 +68,8 @@
 #include <ViewShell.hxx>
 #include <app.hrc>
 #include <sdpage.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/transfer.hxx>
 #include <unomodel.hxx>
 #include <osl/thread.hxx>
 #include <slideshow.hxx>
@@ -2559,6 +2561,144 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteInTextEditWithAnimationNode)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     CPPUNIT_ASSERT_EQUAL(u"blahblah"_ustr, rEditView.GetSelected());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_imageFillsAPlaceholderHoldingText)
+{
+    // Given a slide whose picture placeholder holds text, so an outliner object represents it:
+    createSdImpressDoc("pptx/pic-placeholder-with-text.pptx");
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    sd::View* pView = pViewShell->GetView();
+    SdrObject* pText = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::OutlineText, pText->GetObjIdentifier());
+
+    // When an image is put into it, which is what it is a placeholder for:
+    pView->MarkObj(pText, pView->GetSdrPageView());
+    Graphic aGraphic(Bitmap(Size(16, 16), vcl::PixelFormat::N24_BPP));
+    sal_Int8 nAction = DND_ACTION_LINK;
+    pView->InsertGraphic(aGraphic, nAction, pText->GetSnapRect().Center(), pText, nullptr);
+
+    // Then a graphic object represents it, still as the picture placeholder, and the text it held
+    // has given way to the image.
+    SdrObject* pFilled = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Graphic, pFilled->GetObjIdentifier());
+    CPPUNIT_ASSERT(!pFilled->HasText());
+
+    // The shape type is what the page answers for the object, so it states the identity.
+    auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                     ->getDrawPages()
+                     ->getByIndex(0)
+                     .queryThrow<drawing::XDrawPage>();
+    auto xShape = xPage->getByIndex(0).queryThrow<drawing::XShape>();
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+                         xShape->getShapeType());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_textGivenThroughTheApi)
+{
+    // Given a slide with an empty picture placeholder:
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+    auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                     ->getDrawPages()
+                     ->getByIndex(0)
+                     .queryThrow<drawing::XDrawPage>();
+
+    // When text reaches it without any editing, which is the route a script takes:
+    xPage->getByIndex(0).queryThrow<text::XTextRange>()->setString(u"Given through the API"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then an outliner object represents it, as it does for text that arrives by any other route,
+    // and the placeholder is still the picture one. Without the fix the placeholder went on
+    // standing for itself, and the text was painted the way a prompt is - unwrapped.
+    auto xShape = xPage->getByIndex(0).queryThrow<drawing::XShape>();
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.OutlinerShape"_ustr, xShape->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+                         xShape.queryThrow<beans::XPropertySet>()
+                             ->getPropertyValue(u"PlaceholderShapeType"_ustr)
+                             .get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Given through the API"_ustr,
+                         xShape.queryThrow<text::XTextRange>()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_theEditedObjectStaysWhileEditing)
+{
+    // Given an empty picture placeholder in text edit, with text typed into it:
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    sd::View* pView = pViewShell->GetView();
+    SdrObject* pEdited = pViewShell->GetActualPage()->GetObj(0);
+    pView->MarkObj(pEdited, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pEdited);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    pView->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection::All());
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"While editing"_ustr);
+
+    // When something asks that shape for its text through UNO, which is what another view does and
+    // which marks the object as no longer empty while the edit is still open:
+    auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                     ->getDrawPages()
+                     ->getByIndex(0)
+                     .queryThrow<drawing::XDrawPage>();
+    xPage->getByIndex(0).queryThrow<text::XTextRange>()->getString();
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the object the edit view is working on is still the one on the page. Switching what
+    // represents the placeholder here took it away mid-typing: the edit was lost and editeng
+    // aborted on its undo manager.
+    CPPUNIT_ASSERT_EQUAL(pEdited, pViewShell->GetActualPage()->GetObj(0));
+    if (pView->IsTextEdit())
+        pView->SdrEndTextEdit();
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_anEditElsewhereIsLeftAlone)
+{
+    // Given two slides with a picture placeholder each, one of them in text edit with text typed
+    // into it:
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    sd::View* pView = pViewShell->GetView();
+    SdrPage* pEditedPage = pViewShell->GetActualPage();
+    SdrObject* pEdited = pEditedPage->GetObj(0);
+    pView->MarkObj(pEdited, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pEdited);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    pView->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection::All());
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"While editing"_ustr);
+
+    // When another view asks that object for its text, which writes the typing back and marks it
+    // no longer empty while the edit is still open:
+    auto xPages = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()->getDrawPages();
+    xPages->getByIndex(pEditedPage->GetPageNum() / 2)
+        .queryThrow<drawing::XShapes>()
+        ->getByIndex(0)
+        .queryThrow<text::XTextRange>()
+        ->getString();
+
+    // and text then reaches the placeholder on the other slide, the pass that switches what
+    // represents a placeholder runs over every page - and the object in text edit is not the one
+    // that asked for it. That is what two views editing one document look like from here.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPages->getCount());
+    const sal_Int32 nElsewhere = pEditedPage->GetPageNum() / 2 == 0 ? 1 : 0;
+    auto xElsewherePage = xPages->getByIndex(nElsewhere).queryThrow<drawing::XShapes>();
+    xElsewherePage->getByIndex(0).queryThrow<text::XTextRange>()->setString(
+        u"Given elsewhere"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then that one is switched, so the pass did run - and the one being edited is still the object
+    // the edit view holds. Taking it away mid-typing lost the edit and aborted editeng on its undo
+    // manager, and the pass had only the object that asked for it to go by. The shape is asked
+    // again, since a UNO shape keeps the type it was made with.
+    CPPUNIT_ASSERT_EQUAL(
+        u"com.sun.star.presentation.OutlinerShape"_ustr,
+        xElsewherePage->getByIndex(0).queryThrow<drawing::XShape>()->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(pEdited, pEditedPage->GetObj(0));
+    if (pView->IsTextEdit())
+        pView->SdrEndTextEdit();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

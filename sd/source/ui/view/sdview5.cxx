@@ -76,6 +76,31 @@ SdrObject* View::GetSelectedSingleObject(SdPage const * pPage)
     return pRet;
 }
 
+SdrObject* View::GetPresentationObjectForGraphic()
+{
+    if (SdrObject* pEmpty = GetEmptyPresentationObject(PresObjKind::Graphic))
+        return pEmpty;
+
+    // A picture placeholder that holds text is not empty and is not a graphic object, so the search
+    // above walks past it - yet an image is what it is a placeholder for.
+    SdPage* pPage = GetPage();
+    if (!pPage || pPage->IsMasterPage())
+        return nullptr;
+
+    sd::ShapeList& rShapes = pPage->GetPresentationShapeList();
+    rShapes.seekShape(0);
+    while (SdrObject* pShape = rShapes.getNextShape())
+    {
+        if (pShape->GetObjIdentifier() == SdrObjKind::OutlineText
+            && pPage->GetPresObjKind(pShape) == PresObjKind::Graphic)
+        {
+            return pShape;
+        }
+    }
+
+    return nullptr;
+}
+
 SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
 {
     SdPage* pPage = GetPage();

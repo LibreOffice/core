@@ -259,6 +259,9 @@ public:
     bool                isLinkedTxbx() const { return mbHasLinkedTxbx; };
     void                setCustomPrompt( bool bValue ) { mbHasCustomPrompt = bValue; }
     bool                getCustomPrompt() const { return mbHasCustomPrompt; }
+    /** Whether the text this shape carries is a placeholder's prompt rather than content the
+        author typed. Only a presentation knows the difference, so it answers for itself. */
+    virtual bool        holdsPromptText() const { return false; }
 
     void setZOrder(sal_Int32 nZOrder) { mnZOrder = nZOrder; }
 

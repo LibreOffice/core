@@ -1736,6 +1736,18 @@ bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< bean
                 mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_USER_TRANSFORMED, XML_TRUE);
         }
 
+        // The class above is the outline one, since an outliner object represents a placeholder
+        // holding text. ODF cannot say it waits for a picture, so that travels as an extension.
+        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"PlaceholderShapeType"_ustr)
+            && (mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+        {
+            OUString aPlaceholderType;
+            xPropSet->getPropertyValue(u"PlaceholderShapeType"_ustr) >>= aPlaceholderType;
+            if (aPlaceholderType == u"com.sun.star.presentation.GraphicObjectShape"
+                && rClass != GetXMLToken(XML_GRAPHIC))
+                mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_PLACEHOLDER_CLASS, XML_GRAPHIC);
+        }
+
         // ODF has no representation for the prompt an empty placeholder shows, so an authored one
         // travels as an extension; otherwise a reload replaces it with our own localized default.
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"CustomPromptText"_ustr)

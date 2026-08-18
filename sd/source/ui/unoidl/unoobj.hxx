@@ -62,6 +62,8 @@ private:
     OUString GetCustomPromptText() const;
     void SetCustomPromptText(const OUString& aVal);
 
+    OUString GetPlaceholderShapeType() const;
+
     bool IsMasterDepend() const noexcept;
     void SetMasterDepend( bool bDepend ) noexcept;
 

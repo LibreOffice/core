@@ -188,7 +188,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                     nAction = DND_ACTION_LINK;
                 else
                 {
-                    pPickObj = mpView->GetEmptyPresentationObject( PresObjKind::Graphic );
+                    pPickObj = mpView->GetPresentationObjectForGraphic();
                     if (pPickObj)
                         nAction = DND_ACTION_LINK;
                 }

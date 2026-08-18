@@ -2481,6 +2481,141 @@ void SdPage::RemovePresObj(const SdrObject* pObj)
     }
 }
 
+void SdPage::onEmptyPresObjFilled(SdrObject& rObj)
+{
+    // Text in a picture placeholder is represented by an outliner object, and this is where every
+    // way of putting it there passes. The switch itself waits: svx is working on the object right
+    // now, and replacing it under its feet is what freed the lines a paint was walking.
+    //
+    // An object in text edit is left alone entirely. This is called from inside that edit as well -
+    // when a view asks the shape for its text through UNO - and the object belongs to the editing
+    // view until the edit ends, which is where the switch happens for it.
+    const SdrTextObj* pTextObj = DynCastSdrTextObj(&rObj);
+    if (pTextObj && !pTextObj->IsTextEditActive() && GetPresObjKind(&rObj) == PresObjKind::Graphic
+        && rObj.HasText() && HoldsPlaceholderStandIn(rObj, GetPlaceholderStandInChecksum()))
+    {
+        static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).ArmPlaceholderSwitch();
+    }
+}
+
+BitmapChecksum SdPage::GetPlaceholderStandInChecksum()
+{
+    // No file stores the art: what CreatePresObj would put there now is what to compare against.
+    return Bitmap(BMP_PRESOBJ_GRAPHIC).GetChecksum();
+}
+
+bool SdPage::HoldsPlaceholderStandIn(const SdrObject& rObj, BitmapChecksum nStandIn)
+{
+    const SdrGrafObj* pGraphic = dynamic_cast<const SdrGrafObj*>(&rObj);
+    if (!pGraphic)
+        return false;
+
+    // Holding nothing counts too: the shape factory creates a placeholder without the art that
+    // CreatePresObj puts there.
+    const Graphic& rGraphic = pGraphic->GetGraphic();
+    return rGraphic.IsNone() || rGraphic.GetChecksum() == nStandIn;
+}
+
+rtl::Reference<SdrObject> SdPage::MakePresObjText(SdrObject& rObj)
+{
+    const PresObjKind eKind = GetPresObjKind(&rObj);
+
+    rtl::Reference<SdrObject> xText = new SdrRectObj(getSdrModelFromSdrPage(), rObj.GetLogicRect(),
+                                                    SdrObjKind::OutlineText);
+    xText->SetName(rObj.GetName());
+    xText->SetTitle(rObj.GetTitle());
+    xText->SetDescription(rObj.GetDescription());
+    xText->SetUserCall(rObj.GetUserCall());
+
+    // An authored prompt belongs to the placeholder, so it has to be there when the text is gone.
+    xText->SetCustomPromptText(rObj.GetCustomPromptText());
+
+    // Text is what an outline placeholder holds, so its styles are the ones that fit.
+    xText->NbcSetStyleSheet(GetStyleSheetForPresObj(PresObjKind::Outline), true);
+
+    // What the file authored on the shape belongs to the shape, whatever represents it. A contour
+    // frame and centred paragraphs do not: they arrange a prompt around an icon.
+    SfxItemSet aAuthored(getSdrModelFromSdrPage().GetItemPool(),
+                         svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST, XATTR_FILL_FIRST,
+                                    XATTR_FILL_LAST, SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
+                                    SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_VERTADJUST,
+                                    SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST>);
+    aAuthored.Put(rObj.GetProperties().GetObjectItemSet());
+
+    // A text frame grows to its text, so without a minimum the box would stop matching the file.
+    aAuthored.Put(makeSdrTextMinFrameHeightItem(rObj.GetLogicRect().GetSize().Height()));
+    xText->SetMergedItemSet(aAuthored);
+
+    if (const OutlinerParaObject* pPara = rObj.GetOutlinerParaObject())
+    {
+        OutlinerParaObject aPara(*pPara);
+        aPara.SetOutlinerMode(OutlinerMode::OutlineObject);
+
+        // The cached layout was measured in an object whose text area is arranged differently.
+        aPara.ClearPortionInfo();
+        xText->SetOutlinerParaObject(std::move(aPara));
+    }
+
+    // Setting the text let the frame follow it, so the placeholder's rectangle has the last word,
+    // and the rectangle alone does not carry a rotated or sheared placeholder.
+    xText->NbcSetLogicRect(rObj.GetLogicRect());
+    if (const SdrTextObj* pTextObj = DynCastSdrTextObj(&rObj))
+    {
+        const GeoStat& rGeo = pTextObj->GetGeoStat();
+        // Both turn the rectangle's own corner about the point they are given, and the rectangle
+        // is the one set above - so the corner stays where it is and only the angles arrive. The
+        // snap rect is the box around a turned shape, and its corner sits somewhere else.
+        const Point aPivot(rObj.GetLogicRect().TopLeft());
+        if (rGeo.m_nShearAngle)
+            xText->NbcShear(aPivot, rGeo.m_nShearAngle, rGeo.mfTanShearAngle, false);
+        if (rGeo.m_nRotationAngle)
+            xText->NbcRotate(aPivot, rGeo.m_nRotationAngle, rGeo.mfSinRotationAngle,
+                             rGeo.mfCosRotationAngle);
+    }
+
+    // A click action, a sound or an animation effect is user data, so it needs its own copy here.
+    if (SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(rObj))
+    {
+        xText->AppendUserData(
+            std::unique_ptr<SdrObjUserData>(new SdAnimationInfo(*pInfo, *xText)));
+    }
+
+    InsertPresObj(xText.get(), eKind);
+
+    return xText;
+}
+
+rtl::Reference<SdrObject> SdPage::MakePresObjPlaceholder(SdrObject& rObj)
+{
+    const PresObjKind eKind = GetPresObjKind(&rObj);
+
+    // What stands for the placeholder while it waits: for a picture one, the icon and the prompt.
+    SdrObject* pPlaceholder = CreatePresObj(eKind, /*bVertical*/false, rObj.GetLogicRect(),
+                                            rObj.GetCustomPromptText());
+    rtl::Reference<SdrObject> xPlaceholder;
+    if (pPlaceholder)
+    {
+        pPlaceholder->SetUserCall(rObj.GetUserCall());
+        pPlaceholder->SetName(rObj.GetName());
+        pPlaceholder->SetTitle(rObj.GetTitle());
+        pPlaceholder->SetDescription(rObj.GetDescription());
+
+        // What the file says about the picture - the outline it is clipped to, colour adjustments -
+        // belongs to the placeholder waiting for one, and travelled with the text meanwhile.
+        SfxItemSet aGraphic(getSdrModelFromSdrPage().GetItemPool(),
+                            svl::Items<SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST>);
+        aGraphic.Put(rObj.GetProperties().GetObjectItemSet());
+        pPlaceholder->SetMergedItemSet(aGraphic);
+
+        // Taking it out of the page drops it from the presentation shape list, which is where the
+        // identity lives, so it goes back in.
+        xPlaceholder = RemoveObject(pPlaceholder->GetOrdNum());
+        InsertPresObj(xPlaceholder.get(), eKind);
+    }
+
+    return xPlaceholder;
+}
+
 void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
 {
     DBG_ASSERT( pObj, "sd::SdPage::InsertPresObj(), invalid presentation object inserted!" );

@@ -1752,6 +1752,10 @@ void SdrPage::MakePageObjectsNamesUnique()
     }
 }
 
+void SdrPage::onEmptyPresObjFilled(SdrObject& /*rObj*/)
+{
+}
+
 bool SdrPage::RestoreDefaultText(SdrObject* /*pObj*/, const OUString& /*rStr*/)
 {
     assert(false);

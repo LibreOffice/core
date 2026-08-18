@@ -309,6 +309,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         // for legacy markup in OOoXML filter, convert the animations now
         EffectMigration::DocumentLoaded(*pDoc);
         UpdateTablePointers();
+        pDoc->SwitchPlaceholdersHoldingText();
 
         // If we're an embedded OLE object, use tight bounds
         // for our visArea. No point in showing the user lots of empty
@@ -464,6 +465,11 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
     mpDoc->decImportExport();
 
+    if (bRet)
+    {
+        mpDoc->SwitchPlaceholdersHoldingText();
+    }
+
     if (bRet && !xInsertPosition)
         UpdateLinks();
 
@@ -581,7 +587,10 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     FinishedLoading();
 
     if (bRet)
+    {
+        mpDoc->SwitchPlaceholdersHoldingText();
         UpdateLinks();
+    }
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )

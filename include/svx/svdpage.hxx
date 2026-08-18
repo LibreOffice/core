@@ -518,6 +518,10 @@ public:
 
     virtual bool RestoreDefaultText(SdrObject* pObj, const OUString& rStr);
 
+    /** Called when an object on this page stops being an empty presentation object, which is where
+        a presentation learns that content reached a placeholder. */
+    virtual void onEmptyPresObjFilled(SdrObject& rObj);
+
 protected:
     void TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage);
 

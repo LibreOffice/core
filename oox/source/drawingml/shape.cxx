@@ -2417,13 +2417,12 @@ Reference< XShape > const & Shape::createAndInsert(
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, Any( maPosition.Y ) );
         }
 
-        // Make sure to not set text to placeholders. Doing it here would eventually call
-        // SvxTextEditSourceImpl::UpdateData, SdrObject::SetEmptyPresObj(false), and that
-        // would make the object behave like a standard outline object. An authored prompt
-        // reaches the object through the CustomPromptText property instead.
         if (rServiceName == "com.sun.star.presentation.GraphicObjectShape")
         {
-            mpTextBody.reset();
+            // A prompt reaches the object through the CustomPromptText property, not as text; what
+            // a slide's placeholder holds is content.
+            if (holdsPromptText())
+                mpTextBody.reset();
 
             // The custom geometry of a picture placeholder is the outline it is clipped to. An
             // image shape has no geometry of its own to put it in, so it becomes a clip polygon;

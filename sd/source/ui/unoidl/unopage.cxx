@@ -1419,6 +1419,76 @@ void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUSt
 {
 }
 
+OUString GetPresObjShapeType(PresObjKind eKind)
+{
+    if (eKind == PresObjKind::NONE)
+        return OUString();
+
+    OUString aShapeType(u"com.sun.star.presentation."_ustr);
+
+    switch( eKind )
+    {
+    case PresObjKind::Title:
+        aShapeType += "TitleTextShape";
+        break;
+    case PresObjKind::Outline:
+        aShapeType += "OutlinerShape";
+        break;
+    case PresObjKind::Text:
+        aShapeType += "SubtitleShape";
+        break;
+    case PresObjKind::Graphic:
+        aShapeType += "GraphicObjectShape";
+        break;
+    case PresObjKind::Object:
+        aShapeType += "OLE2Shape";
+        break;
+    case PresObjKind::Chart:
+        aShapeType += "ChartShape";
+        break;
+    case PresObjKind::OrgChart:
+        aShapeType += "OrgChartShape";
+        break;
+    case PresObjKind::Calc:
+        aShapeType += "CalcShape";
+        break;
+    case PresObjKind::Table:
+        aShapeType += "TableShape";
+        break;
+    case PresObjKind::Media:
+        aShapeType += "MediaShape";
+        break;
+    case PresObjKind::Page:
+        aShapeType += "PageShape";
+        break;
+    case PresObjKind::Handout:
+        aShapeType += "HandoutShape";
+        break;
+    case PresObjKind::PagePreview:
+        aShapeType += "PageShape";
+        break;
+    case PresObjKind::Notes:
+        aShapeType += "NotesShape";
+        break;
+    case PresObjKind::Footer:
+        aShapeType += "FooterShape";
+        break;
+    case PresObjKind::Header:
+        aShapeType += "HeaderShape";
+        break;
+    case PresObjKind::SlideNumber:
+        aShapeType += "SlideNumberShape";
+        break;
+    case PresObjKind::DateTime:
+        aShapeType += "DateTimeShape";
+        break;
+    case PresObjKind::NONE:
+        break;
+    }
+
+    return aShapeType;
+}
+
 Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) const
 {
     DBG_ASSERT( GetPage(), "SdGenericDrawPage::CreateShape(), can't create shape for disposed page!" );
@@ -1467,73 +1537,11 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
 
         if( eKind != PresObjKind::NONE )
         {
-            OUString aShapeType(u"com.sun.star.presentation."_ustr);
-
-            switch( eKind )
-            {
-            case PresObjKind::Title:
-                aShapeType += "TitleTextShape";
-                break;
-            case PresObjKind::Outline:
-                aShapeType += "OutlinerShape";
-                break;
-            case PresObjKind::Text:
-                aShapeType += "SubtitleShape";
-                break;
-            case PresObjKind::Graphic:
-                aShapeType += "GraphicObjectShape";
-                break;
-            case PresObjKind::Object:
-                aShapeType += "OLE2Shape";
-                break;
-            case PresObjKind::Chart:
-                aShapeType += "ChartShape";
-                break;
-            case PresObjKind::OrgChart:
-                aShapeType += "OrgChartShape";
-                break;
-            case PresObjKind::Calc:
-                aShapeType += "CalcShape";
-                break;
-            case PresObjKind::Table:
-                aShapeType += "TableShape";
-                break;
-            case PresObjKind::Media:
-                aShapeType += "MediaShape";
-                break;
-            case PresObjKind::Page:
-                aShapeType += "PageShape";
-                break;
-            case PresObjKind::Handout:
-                aShapeType += "HandoutShape";
-                break;
-            case PresObjKind::PagePreview:
-                aShapeType += "PageShape";
-                break;
-            case PresObjKind::Notes:
-                aShapeType += "NotesShape";
-                break;
-            case PresObjKind::Footer:
-                aShapeType += "FooterShape";
-                break;
-            case PresObjKind::Header:
-                aShapeType += "HeaderShape";
-                break;
-            case PresObjKind::SlideNumber:
-                aShapeType += "SlideNumberShape";
-                break;
-            case PresObjKind::DateTime:
-                aShapeType += "DateTimeShape";
-                break;
-            case PresObjKind::NONE:
-                break;
-            }
-
             if( !pShape )
                 pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
 
             if( pShape )
-                pShape->SetShapeType( aShapeType );
+                pShape->SetShapeType( GetPresObjShapeType( eKind ) );
         }
 
         SvxShape *pSdShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);

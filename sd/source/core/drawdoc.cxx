@@ -57,6 +57,7 @@
 #include <Outliner.hxx>
 #include <sdmod.hxx>
 #include <editeng/editstat.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/unolingu.hxx>
 #include <svl/itempool.hxx>
@@ -1340,6 +1341,61 @@ void SdDrawDocument::UpdateAllLinks()
         m_pLinkManager->UpdateAllLinks(false, pMedium->GetName());
         if (s_pDocLockedInsertingLinks == this)
             s_pDocLockedInsertingLinks = nullptr;
+    }
+}
+
+IMPL_LINK_NOARG(SdDrawDocument, PlaceholderSwitchHdl, Timer*, void)
+{
+    SwitchPlaceholdersHoldingText();
+}
+
+void SdDrawDocument::ArmPlaceholderSwitch()
+{
+    if (!mpPlaceholderSwitchIdle)
+    {
+        mpPlaceholderSwitchIdle.reset(new Idle("PlaceholderSwitch"));
+        mpPlaceholderSwitchIdle->SetInvokeHandler(
+            LINK(this, SdDrawDocument, PlaceholderSwitchHdl));
+        mpPlaceholderSwitchIdle->SetPriority(TaskPriority::LOWEST);
+    }
+
+    mpPlaceholderSwitchIdle->Start();
+}
+
+void SdDrawDocument::SwitchPlaceholdersHoldingText()
+{
+    const BitmapChecksum nStandIn = SdPage::GetPlaceholderStandInChecksum();
+
+    for (sal_uInt16 nPage = 0; nPage < GetPageCount(); ++nPage)
+    {
+        SdPage* pPage = dynamic_cast<SdPage*>(GetPage(nPage));
+        if (!pPage)
+            continue;
+
+        // Switching replaces the object on the page, so collect first and leave the walk alone.
+        std::vector<SdrObject*> aHoldingText;
+        sd::ShapeList& rPresObjs(pPage->GetPresentationShapeList());
+        rPresObjs.seekShape(0);
+        while (SdrObject* pObj = rPresObjs.getNextShape())
+        {
+            // An outliner object cannot hold a picture, so one that has both keeps the picture. One
+            // in text edit stays too: the view owns it until the edit ends, and that is where the
+            // switch happens for it. The pass walks every page, so the object being edited is not
+            // always the one that asked for the pass - another view may hold this one.
+            const SdrTextObj* pTextObj = DynCastSdrTextObj(pObj);
+            if (pTextObj && !pTextObj->IsTextEditActive() && !pObj->IsEmptyPresObj()
+                && pObj->HasText() && pPage->GetPresObjKind(pObj) == PresObjKind::Graphic
+                && SdPage::HoldsPlaceholderStandIn(*pObj, nStandIn))
+            {
+                aHoldingText.push_back(pObj);
+            }
+        }
+
+        for (SdrObject* pHoldsText : aHoldingText)
+        {
+            if (rtl::Reference<SdrObject> xText = pPage->MakePresObjText(*pHoldsText))
+                pPage->ReplaceObject(xText.get(), pHoldsText->GetOrdNum());
+        }
     }
 }
 

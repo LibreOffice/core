@@ -353,6 +353,8 @@ private:
     std::unique_ptr<Timer> mpWorkStartupTimer;
     std::unique_ptr<Idle>
                         mpOnlineSpellingIdle;
+    std::unique_ptr<Idle>
+                        mpPlaceholderSwitchIdle;
     std::unique_ptr<sd::ShapeList>
                         mpOnlineSpellingList;
     std::unique_ptr<SvxSearchItem>
@@ -884,6 +886,16 @@ public:
 
     SAL_DLLPRIVATE void                NewOrLoadCompleted(DocCreationMode eMode);
     SAL_DLLPRIVATE void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
+
+    /** Lets every placeholder that a file states as holding text be represented by an outliner
+        object, which is what makes that text behave as text. Run after a file has been read. */
+    SAL_DLLPRIVATE void                SwitchPlaceholdersHoldingText();
+
+    /** Asks for that pass once the operation in hand is over, for text that reached a
+        placeholder by
+        another route than a file or the text edit. */
+    SAL_DLLPRIVATE void                ArmPlaceholderSwitch();
+    DECL_DLLPRIVATE_LINK(PlaceholderSwitchHdl, Timer*, void);
     SAL_DLLPRIVATE bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     SAL_DLLPRIVATE ::sd::FrameView* GetFrameView(size_t nPos) {

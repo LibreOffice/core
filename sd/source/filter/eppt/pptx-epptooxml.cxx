@@ -240,6 +240,25 @@ bool isPlaceholderStillEmpty(const Reference<XPropertySet>& xProps, PlaceholderT
            && (xProps->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL) && aMediaURL.isEmpty();
 }
 
+// The page knows what a shape is a placeholder for; its class only says what represents it.
+PlaceholderType getPresObjPlaceholderType(const Reference<XShape>& xShape)
+{
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
+    SdPage* pPage = pObj ? dynamic_cast<SdPage*>(pObj->getSdrPageFromSdrObject()) : nullptr;
+    if (!pPage)
+        return None;
+
+    switch (pPage->GetPresObjKind(pObj))
+    {
+        case PresObjKind::Graphic:
+            return Picture;
+        case PresObjKind::Media:
+            return Media;
+        default:
+            return None;
+    }
+}
+
 // A slide master takes only these; PowerPoint refuses to open a file whose master carries any
 // other placeholder type, content ones like pic included.
 bool isPlaceholderAllowedOnSlideMaster(PlaceholderType ePlaceholder)
@@ -407,9 +426,14 @@ ShapeExport& PowerPointShapeExport::WriteTextShape(const Reference< XShape >& xS
         else
             ShapeExport::WriteTextShape(xShape);
     }
-    else if (sShapeType == "com.sun.star.presentation.OutlinerShape")
+    else if (sShapeType == "com.sun.star.presentation.OutlinerShape"
+             || sShapeType == "com.sun.star.presentation.GraphicObjectShape"
+             || sShapeType == "com.sun.star.presentation.MediaShape")
     {
-        if (!WritePlaceholder(xShape, Outliner, mbMaster))
+        // Written as the placeholder it is, with the text it holds: a body one would cost it its
+        // identity, and a picture with no image is written as nothing at all.
+        const PlaceholderType eStandsFor = getPresObjPlaceholderType(xShape);
+        if (!WritePlaceholder(xShape, eStandsFor != None ? eStandsFor : Outliner, mbMaster))
             ShapeExport::WriteTextShape(xShape);
     }
     else if (sShapeType == "com.sun.star.presentation.SlideNumberShape")
@@ -2792,12 +2816,14 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     const bool bTextIsDefaultPrompt = bIsEmptyPresObj && !bUseCustomPrompt && !bUsePlaceholderIndex
                                       && !bWritePropertiesAsLstStyles;
 
-    // A slide-side empty picture placeholder inherits the prompt from the layout. The body
-    // properties belong in the file even where the text does not - they carry the insets, the
-    // anchor, the writing direction and the autofit.
-    if (!isGraphicPlaceholder(ePlaceholder) || mbMaster)
-        WriteTextBox(xShape, XML_p, bUsePlaceholderIndex || bWritePropertiesAsLstStyles,
-                     /*bText=*/!bTextIsDefaultPrompt);
+    // A slide-side empty picture placeholder inherits the prompt from the layout, so it writes no
+    // text; one that is not empty was typed into, and that text is the slide's own content. The
+    // body properties travel either way - they carry the insets, the anchor, the writing direction
+    // and the autofit.
+    const bool bInheritsItsPrompt = isGraphicPlaceholder(ePlaceholder) && !mbMaster
+                                    && bIsEmptyPresObj;
+    WriteTextBox(xShape, XML_p, bUsePlaceholderIndex || bWritePropertiesAsLstStyles,
+                 /*bText=*/!bTextIsDefaultPrompt && !bInheritsItsPrompt);
 
     mpFS->endElementNS(XML_p, XML_sp);
 

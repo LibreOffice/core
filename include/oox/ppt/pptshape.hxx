@@ -74,6 +74,12 @@ public:
             ::oox::drawingml::ShapeIdMap* pShapeMap );
 
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
+    /** A placeholder states its prompt as text on a layout or a master; on a slide the same text
+        is what the author typed into it. */
+    virtual bool holdsPromptText() const override
+    {
+        return mnSubType != 0 && meShapeLocation != Slide;
+    }
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };
     void setPlaceholder(const oox::drawingml::ShapePtr& pPlaceholder) { mpPlaceholder = pPlaceholder; }
     void setModelId( const OUString& rId ) { msModelId = rId; }

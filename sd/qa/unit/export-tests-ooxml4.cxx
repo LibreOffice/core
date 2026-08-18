@@ -2500,6 +2500,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16079_dateTimeField)
                 u"datetime");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf166401_textGivenToAPicturePlaceholder)
+{
+    // Given a slide whose picture placeholder is given text without any editing, which is what a
+    // script does and what leaves the placeholder standing for itself rather than for the text:
+    createSdImpressDoc("pptx/picture-placeholder-custom-prompt.pptx");
+    getShapeFromPage(0, 0).queryThrow<text::XTextRange>()->setString(
+        u"Given to a picture placeholder"_ustr);
+    save(TestFilter::PPTX);
+
+    // The placeholder is written with its text. It holds no image, so writing it as a picture wrote
+    // nothing at all and the text went with the shape.
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    static constexpr OString aPlaceholder(
+        "/p:sld/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='pic']"_ostr);
+    assertXPath(pSlide, aPlaceholder, 1);
+    assertXPathContent(pSlide, aPlaceholder + "/p:txBody/a:p/a:r/a:t",
+                       u"Given to a picture placeholder");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

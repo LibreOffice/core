@@ -795,6 +795,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
+    bool bTypedIntoPlaceholder = false;
     if( bDefaultTextRestored )
     {
         if (bSaveSetModifiedEnabled)
@@ -813,7 +814,10 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
     {
         SdrPage* pPage = pObj->getSdrPageFromSdrObject();
         if( !pPage || !pPage->IsMasterPage() )
+        {
             pObj->SetEmptyPresObj( false );
+            bTypedIntoPlaceholder = true;
+        }
     }
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
@@ -822,6 +826,31 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
     if( pObj )
     {
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
+        if( pPage )
+            pPage->onEndTextEdit( pObj );
+
+        // A picture placeholder is represented by an outliner object as long as it holds text, the
+        // way a graphic object represents it once it holds a picture. Emptying it hands the
+        // representation back: RestoreDefaultText above has put the prompt in and marked the object
+        // empty, which is what says the text is gone. The view does the swap, so the mark follows
+        // and one undo step brings the text back with the object that held it.
+        SdrPageView* pPageView = GetSdrPageView();
+        if (pPage && pPageView && pPage->GetPresObjKind(pObj) == PresObjKind::Graphic)
+        {
+            rtl::Reference<SdrObject> xRepresentation;
+            if (bTypedIntoPlaceholder && pObj->GetObjIdentifier() == SdrObjKind::Graphic)
+                xRepresentation = pPage->MakePresObjText(*pObj);
+            else if (pObj->IsEmptyPresObj()
+                     && pObj->GetObjIdentifier() == SdrObjKind::OutlineText)
+                xRepresentation = pPage->MakePresObjPlaceholder(*pObj);
+
+            if (xRepresentation)
+                ReplaceObjectAtView(pObj, *pPageView, xRepresentation.get());
+        }
+
+        // After the swap, so that what listeners hear about the selection is the object the page
+        // ends up holding.
         if ( mpViewSh )
         {
             mpViewSh->GetViewShellBase().GetDrawController()->FireSelectionChangeListener();
@@ -830,10 +859,6 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
                 SfxLokHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
         }
-
-        SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
-        if( pPage )
-            pPage->onEndTextEdit( pObj );
     }
 
     return eKind;

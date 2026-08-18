@@ -29,6 +29,8 @@
 #include <svx/svdpage.hxx>
 #include <vcl/idle.hxx>
 
+#include <sddllapi.h>
+
 #include "smarttag.hxx"
 #include "fusearch.hxx"
 
@@ -167,7 +169,7 @@ public:
     bool                    InsertMetaFile( const TransferableDataHelper& rDataHelper,
                                             const Point& rInsertPos,
                                             ImageMap const * pImageMap, bool bOptimize );
-    SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
+    SD_DLLPUBLIC SdrGrafObj* InsertGraphic( const Graphic& rGraphic,
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap const * pImageMap );
     void                    InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
@@ -245,6 +247,10 @@ public:
     void SetResizeProtected( bool bSet ) { m_bResizeProtect = bSet; }
 
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
+
+    /** The placeholder an image should fill: an empty one, or a picture placeholder that holds text
+        and is represented by an outliner object while it does. */
+    SdrObject* GetPresentationObjectForGraphic();
     SdPage* GetPage();
     SdrObject* GetSelectedSingleObject(SdPage const * pPage);
     void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }

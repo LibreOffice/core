@@ -2477,6 +2477,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
     </rng:optional>
   </rng:define>
+  <!-- The class a placeholder has, where it differs from the class of what represents it: one
+       waiting for a picture is written as a frame of text while it holds text. -->
+  <rng:define name="presentation-shape-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:placeholder-class">
+        <rng:ref name="presentation-classes"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <rng:define name="loext-columns-and-groups">
     <rng:oneOrMore>
       <rng:choice>

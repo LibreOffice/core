@@ -2735,7 +2735,15 @@ void SdrObject::SetMarkProtect(bool bProt)
 
 void SdrObject::SetEmptyPresObj(bool bEpt)
 {
+    const bool bWasEmpty = m_bEmptyPresObj;
     m_bEmptyPresObj = bEpt;
+
+    // Whatever put the content there - typing, a filter, the API - the page hears about it once.
+    if (bWasEmpty && !bEpt)
+    {
+        if (SdrPage* pPage = getSdrPageFromSdrObject())
+            pPage->onEmptyPresObjFilled(*this);
+    }
 }
 
 void SdrObject::SetCustomPromptText(const OUString& rVal)
