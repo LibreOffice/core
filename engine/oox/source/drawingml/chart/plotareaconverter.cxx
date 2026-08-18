@@ -128,32 +128,6 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                                         bool bSupportsVaryColorsByPoint, bool bUseFixedInnerSize,
                                         ChartType eCT)
 {
-    // chartex clusteredColumn + <cx:binning> is how a histogram is stored in OOXML.
-    // But the same markup also appears on the clusteredColumn sub-chart of a
-    // paretoLine, which must not be reclassified. The difference is visible only at
-    // this level, where we see all sibling type groups.
-    {
-        const bool bHasParetoSibling
-            = lclHasTypeGroupWithLayout(mrModel.maTypeGroups, CX_TOKEN(paretoLine));
-        if (!bHasParetoSibling)
-        {
-            for (auto const& typeGroup : mrModel.maTypeGroups)
-            {
-                if (!typeGroup || typeGroup->mnTypeId != CX_TOKEN(clusteredColumn))
-                    continue;
-                for (auto const& rxSeries : typeGroup->maSeries)
-                {
-                    if (rxSeries && rxSeries->mxLayoutPr.is()
-                        && rxSeries->mxLayoutPr->mxBinning.is())
-                    {
-                        typeGroup->mbForceHistogram = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     // create type group converter objects for all type groups
     typedef RefVector< TypeGroupConverter > TypeGroupConvVector;
     TypeGroupConvVector aTypeGroups;
@@ -379,6 +353,32 @@ static void lclRemoveAxisIdsWithoutScaling(std::vector<sal_Int32>& rAxisIds,
 void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
         DataSourceCxModel& rDataCxModel )
 {
+    // chartex clusteredColumn + <cx:binning> is how a histogram is stored in OOXML.
+    // But the same markup also appears on the clusteredColumn sub-chart of a
+    // paretoLine, which should not be marked as histogram. The difference is visible
+    // only at this level, where we see all sibling type groups.
+    {
+        const bool bHasParetoSibling
+            = lclHasTypeGroupWithLayout(mrModel.maTypeGroups, CX_TOKEN(paretoLine));
+        if (!bHasParetoSibling)
+        {
+            for (auto const& typeGroup : mrModel.maTypeGroups)
+            {
+                if (!typeGroup || typeGroup->mnTypeId != CX_TOKEN(clusteredColumn))
+                    continue;
+                for (auto const& rxSeries : typeGroup->maSeries)
+                {
+                    if (rxSeries && rxSeries->mxLayoutPr.is()
+                        && rxSeries->mxLayoutPr->mxBinning.is())
+                    {
+                        typeGroup->mbForceHistogram = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     /*  Create the diagram object and attach it to the chart document. One
         diagram is used to carry all coordinate systems and data series. */
     Reference< XDiagram > xDiagram;
@@ -585,6 +585,11 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
     // varying point colors only for single series in single chart type
     bool bSupportsVaryColorsByPoint = mrModel.maTypeGroups.size() == 1;
 
+    // A combo chart can have more than two sub-charts, so this test is too
+    // restrictive. However, changing it to "mrModel.maTypeGroups.size() >= 2"
+    // breaks at least one test, so leave it for now.
+    // Example: chart2/qa/extras/data/xlsx/tdf140489.xlsx
+    // TODO
     bool bIsCombinedChart = mrModel.maTypeGroups.size() == 2 &&
         mrModel.maTypeGroups[0]->mnTypeId != mrModel.maTypeGroups[1]->mnTypeId;
 
