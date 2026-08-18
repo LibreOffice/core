@@ -61,18 +61,24 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 
 	it('right-clicking a style offers Set as Default at the pointer', function() {
 		insertTable();
-		cy.cGet('#tablestyles_design .ui-iconview-entry:visible').eq(1).rightclick();
-		cy.cGet('body').contains('Set as Default').should('be.visible');
-		// The menu opens at the pointer, which rightclick places at the
-		// entry's center; allow a small placement margin.
+		// The gallery slides the style of the table at the cursor into view, so the
+		// entry sitting at a given visible position changes while that settles. The
+		// id is taken once and every later step addresses that one entry.
 		cy.cGet('#tablestyles_design .ui-iconview-entry:visible').eq(1).then(function(entry) {
-			var rect = entry[0].getBoundingClientRect();
-			cy.cGet('body').contains('Set as Default').then(function(item) {
-				var menuRect = item[0].getBoundingClientRect();
-				var centerX = rect.left + rect.width / 2;
-				var centerY = rect.top + rect.height / 2;
-				expect(Math.abs(menuRect.left - centerX)).to.be.below(60);
-				expect(Math.abs(menuRect.top - centerY)).to.be.below(60);
+			var entryId = entry[0].id;
+			cy.cGet('#' + entryId).rightclick();
+			cy.cGet('body').contains('Set as Default').should('be.visible');
+			// The menu opens at the pointer, which rightclick places at the
+			// entry's center; allow a small placement margin.
+			cy.cGet('#' + entryId).then(function(clicked) {
+				var rect = clicked[0].getBoundingClientRect();
+				cy.cGet('body').contains('Set as Default').then(function(item) {
+					var menuRect = item[0].getBoundingClientRect();
+					var centerX = rect.left + rect.width / 2;
+					var centerY = rect.top + rect.height / 2;
+					expect(Math.abs(menuRect.left - centerX)).to.be.below(60);
+					expect(Math.abs(menuRect.top - centerY)).to.be.below(60);
+				});
 			});
 		});
 		// Dismiss the menu so it does not linger into the next test.
@@ -91,9 +97,11 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 		// expanded gallery, so the entry cannot be measured afterwards.
 		var entryRect = null;
 		cy.cGet('[id^="tablestyles_design-iconview-list-dropdown"] .ui-iconview-entry:visible').eq(1).then(function(entry) {
+			var entryId = entry[0].id;
 			entryRect = entry[0].getBoundingClientRect();
+			// Address the entry by its id, so the one measured is the one pressed.
+			cy.cGet('[id^="tablestyles_design-iconview-list-dropdown"] #' + entryId).rightclick();
 		});
-		cy.cGet('[id^="tablestyles_design-iconview-list-dropdown"] .ui-iconview-entry:visible').eq(1).rightclick();
 		cy.cGet('body').contains('Set as Default').should('be.visible');
 		// The menu opens at the pointer inside the expanded gallery too.
 		cy.cGet('body').contains('Set as Default').then(function(item) {
@@ -119,8 +127,11 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 		cy.cGet('#tablestyles_design .ui-iconview-entry:visible').eq(1).then(function(entry) {
 			defaultEntryId = entry[0].id;
 			expect(defaultEntryId).to.not.equal(startingEntryId);
+			// The gallery slides the applied style into view, so the entry at a given
+			// visible position changes while that settles. Pressing the entry by its
+			// id makes the style chosen here the one the menu acts on.
+			cy.cGet('#' + defaultEntryId).rightclick();
 		});
-		cy.cGet('#tablestyles_design .ui-iconview-entry:visible').eq(1).rightclick();
 		cy.cGet('body').contains('Set as Default').should('be.visible').click();
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
