@@ -9,7 +9,7 @@ describe(['tagdesktop'], 'Sidebar accelerator info boxes', function () {
 
 	before(function () {
 		cy.viewport(1920, 1024);
-		helper.setupAndLoadDocument('impress/sidebar.odp');
+		helper.setupAndLoadDocument('draw/to_curve.fodg');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.getFrameWindow().then(function (frameWindow) {
@@ -56,7 +56,7 @@ describe(['tagdesktop'], 'Sidebar accelerator info boxes', function () {
 		});
 	});
 
-	it('Slide panel widgets show a clash free accelerator combination', function () {
+	it('Page panel widgets show a clash free accelerator combination', function () {
 		const definitions = win.app.UI.notebookbarAccessibility.definitions;
 		const combinations = definitions.sidebarCombinations[win.app.map.getDocType()] || {};
 
