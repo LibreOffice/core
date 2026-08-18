@@ -100,6 +100,11 @@ namespace drawinglayer::primitive2d
             Primitive2DContainer xRetval;
             xRetval.resize(1);
 
+            // A generic media placeholder has only a dark background and a small centered
+            // fallback icon. It gets no frame border, so the dark background covers the whole
+            // media object rather than being inset by the border.
+            const bool bIsGenericPlaceholder(isGenericMediaPlaceholder(maSnapshot));
+
             // create background object
             basegfx::B2DPolygon aBackgroundPolygon(basegfx::utils::createUnitPolygon());
             aBackgroundPolygon.transform(getTransform());
@@ -115,7 +120,7 @@ namespace drawinglayer::primitive2d
                 const GraphicAttr aGraphicAttr;
                 xRetval.resize(2);
 
-                if (isGenericMediaPlaceholder(maSnapshot))
+                if (bIsGenericPlaceholder)
                 {
                     xRetval[1] = new GraphicPrimitive2D(
                         createPlaceholderIconTransform(getTransform(), maSnapshot.GetSizePixel()),
@@ -127,7 +132,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            if(getDiscreteBorder())
+            if(getDiscreteBorder() && !bIsGenericPlaceholder)
             {
                 const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
                     basegfx::B2DVector(static_cast<double>(getDiscreteBorder()), static_cast<double>(getDiscreteBorder())));
@@ -200,7 +205,9 @@ namespace drawinglayer::primitive2d
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
             aRetval.transform(getTransform());
 
-            if(getDiscreteBorder())
+            // A generic placeholder is drawn without the frame border, so its range stays the
+            // full media object range and is not shrunk here either.
+            if(getDiscreteBorder() && !isGenericMediaPlaceholder(maSnapshot))
             {
                 const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
                     basegfx::B2DVector(static_cast<double>(getDiscreteBorder()), static_cast<double>(getDiscreteBorder())));
