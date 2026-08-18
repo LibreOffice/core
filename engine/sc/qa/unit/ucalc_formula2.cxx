@@ -7461,7 +7461,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testImplicitIntersectionTakesOperandWhole)
     // The wrapper encloses the whole operand, whatever form the operand takes.
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
     m_pDoc->GetRangeName().insert(
-        new ScRangeData(*m_pDoc, u"myrange"_ustr, u"$Sheet1.$A$1:$A$3"_ustr, ScAddress(1, 0, 0)));
+        std::make_unique<ScRangeData>(
+            *m_pDoc, u"myrange"_ustr, u"$Sheet1.$A$1:$A$3"_ustr, ScAddress(1, 0, 0)));
 
     // A name reaches the writer as its own token rather than as a push.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(myrange)"_ustr,
