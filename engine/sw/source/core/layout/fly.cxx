@@ -3209,9 +3209,9 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
         }
         else if ( pFrame->IsTabFrame() )
         {
-            const SwFormatFrameSize& rTableFormatSz = static_cast<const SwTabFrame*>(pFrame)->GetTable()->GetFrameFormat()->GetFrameSize();
-            if ( USHRT_MAX == rTableFormatSz.GetSize().Width() ||
-                 text::HoriOrientation::NONE == static_cast<const SwTabFrame*>(pFrame)->GetFormat()->GetHoriOrient().GetHoriOrient() )
+            const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(pFrame);
+            const SwFormatFrameSize& rTableFormatSz = pTabFrame->GetTable()->GetFrameFormat()->GetFrameSize();
+            if ( USHRT_MAX == rTableFormatSz.GetSize().Width() )
             {
                 const SwPageFrame* pPage = rFrame.FindPageFrame();
                 // auto width table
@@ -3222,6 +3222,11 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
             else
             {
                 nMin = rTableFormatSz.GetSize().Width();
+                // A manually aligned table is placed at its left offset, so the frame must be
+                // wide enough for the offset plus the table.
+                if ( text::HoriOrientation::NONE
+                     == pTabFrame->GetFormat()->GetHoriOrient().GetHoriOrient() )
+                    nMin += pTabFrame->GetFormat()->GetLRSpace().ResolveLeft({});
             }
         }
 
