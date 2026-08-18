@@ -149,11 +149,6 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
         return;
 
     loadFromFile(u"commentsInMargin.odt");
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        vcl::ITiledRenderable* pTiledDoc = dynamic_cast<vcl::ITiledRenderable*>(mxComponent.get());
-        pTiledDoc->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    }
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(
         xFactory->createInstance(u"com.sun.star.document.PDFFilter"_ustr), uno::UNO_QUERY);
