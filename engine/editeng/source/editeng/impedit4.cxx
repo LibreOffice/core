@@ -2587,7 +2587,13 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             if ( nPaintFrom>=0 )
             {
                 maStatus.GetStatusWord() |= EditStatusFlags::WRONGWORDCHANGED;
-                CallStatusHdl();
+
+                // Only when not called from the paint path. The status handler reaches the
+                // application, which answers a pending width or height change by refitting the
+                // text, and that format frees the lines and portions the paint walking them still
+                // holds. The flag stays set, so the notification goes out with the next call.
+                if (bInvalidate)
+                    CallStatusHdl();
 
                 if (!bInvalidate)
                 {
