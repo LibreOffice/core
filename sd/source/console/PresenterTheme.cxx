@@ -83,10 +83,7 @@ public:
 class ReadContext
 {
 public:
-    Reference<rendering::XCanvas> mxCanvas;
-
-    ReadContext (
-        const Reference<rendering::XCanvas>& rxCanvas);
+    ReadContext() = delete;
 
     /** Read data describing a font from the node that can be reached from
         the given root via the given path.
@@ -100,9 +97,10 @@ public:
         const Reference<beans::XPropertySet>& rxFontProperties,
         const PresenterTheme::SharedFontDescriptor& rpDefault);
 
-    std::shared_ptr<PresenterTheme::Theme> ReadTheme (
+    static std::shared_ptr<PresenterTheme::Theme> ReadTheme (
         PresenterConfigurationAccess& rConfiguration,
-        const OUString& rsThemeName);
+        const OUString& rsThemeName,
+        const Reference<rendering::XCanvas>& rxCanvas);
 
     static BorderSize ReadBorderSize (const Reference<container::XNameAccess>& rxNode);
 
@@ -211,7 +209,7 @@ public:
 
     void Read (
         PresenterConfigurationAccess& rConfiguration,
-        ReadContext& rReadContext);
+        const Reference<rendering::XCanvas>& rxCanvas);
 
     OUString msConfigurationNodeName;
     std::shared_ptr<Theme> mpParentTheme;
@@ -250,14 +248,12 @@ PresenterTheme::~PresenterTheme()
 
 std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
 {
-    ReadContext aReadContext(mxCanvas);
-
     PresenterConfigurationAccess aConfiguration (
         mxContext,
         u"/org.openoffice.Office.PresenterScreen/"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
 
-    return aReadContext.ReadTheme(aConfiguration, OUString());
+    return ReadContext::ReadTheme(aConfiguration, OUString(), mxCanvas);
 }
 
 bool PresenterTheme::HasCanvas() const
@@ -559,7 +555,7 @@ PresenterTheme::Theme::Theme (
 
 void PresenterTheme::Theme::Read (
     PresenterConfigurationAccess& rConfiguration,
-    ReadContext& rReadContext)
+    const Reference<rendering::XCanvas>& rxCanvas)
 {
     // Parent theme name.
     OUString sParentThemeName;
@@ -567,24 +563,24 @@ void PresenterTheme::Theme::Read (
             >>= sParentThemeName)
         && !sParentThemeName.isEmpty())
     {
-        mpParentTheme = rReadContext.ReadTheme(rConfiguration, sParentThemeName);
+        mpParentTheme = ReadContext::ReadTheme(rConfiguration, sParentThemeName, rxCanvas);
     }
 
     // Background.
     mpBackground = PresenterBitmapContainer::LoadBitmap(
         mxThemeRoot,
         u"Background"_ustr,
-        rReadContext.mxCanvas,
+        rxCanvas,
         SharedBitmapDescriptor());
 
     // Style associations.
     maStyleAssociations.Read(mxThemeRoot);
 
     // Pane styles.
-    maPaneStyles.Read(rReadContext.mxCanvas, mxThemeRoot);
+    maPaneStyles.Read(rxCanvas, mxThemeRoot);
 
     // View styles.
-    maViewStyles.Read(rReadContext.mxCanvas, mxThemeRoot);
+    maViewStyles.Read(rxCanvas, mxThemeRoot);
 
     // Read bitmaps.
     mpIconContainer = std::make_shared<PresenterBitmapContainer>(
@@ -592,7 +588,7 @@ void PresenterTheme::Theme::Read (
             PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, u"Bitmaps"_ustr), UNO_QUERY),
         mpParentTheme != nullptr ? mpParentTheme->mpIconContainer
                                  : std::shared_ptr<PresenterBitmapContainer>(),
-        rReadContext.mxCanvas);
+        rxCanvas);
 
     // Read fonts.
     Reference<container::XNameAccess> xFontNode(
@@ -638,11 +634,6 @@ void PresenterTheme::Theme::ProcessFont(
 namespace {
 
 //===== ReadContext ===========================================================
-
-ReadContext::ReadContext(const Reference<rendering::XCanvas>& rxCanvas)
-    : mxCanvas(rxCanvas)
-{
-}
 
 PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
     const Reference<container::XHierarchicalNameAccess>& rxNode,
@@ -702,7 +693,8 @@ Any ReadContext::GetByName (
 
 std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
     PresenterConfigurationAccess& rConfiguration,
-    const OUString& rsThemeName)
+    const OUString& rsThemeName,
+    const Reference<rendering::XCanvas>& rxCanvas)
 {
     std::shared_ptr<PresenterTheme::Theme> pTheme;
 
@@ -745,7 +737,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
 
     if (pTheme != nullptr)
     {
-        pTheme->Read(rConfiguration, *this);
+        pTheme->Read(rConfiguration, rxCanvas);
     }
 
     return pTheme;
