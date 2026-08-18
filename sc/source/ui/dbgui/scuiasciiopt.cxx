@@ -374,16 +374,39 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     else
         mxRbDetectSep->set_active(true);
 
-    // Detect character set only once and then use it for "Detect" option.
-    mpDatStream->DetectEncoding();
+    // this can be called from different cases, at least these:
+    // 1) csv file opening
+    //    sc/source/ui/unoobj/filtuno.cxx ScFilterOptionsObj::execute,  part "!bExport && aFilterString == SC_TEXT_CSV_FILTER_NAME"
+    //    (eg: tdf#171097). In this part, we added in the same commit pInStream->SetStreamEncoding(RTL_TEXTENCODING_DONTKNOW)
+    //    since we can't presume about the encoding of a csv
+    //    => we need to call DetectEncoding
+    //
+    // 2) copy paste of 2 CJK lines in Calc from another application
+    //    sc/source/ui/view/viewfun5.cxx ScViewFunc::PasteDataFormatFormattedText,
+    //    part "nFormatId == SotClipboardFormatId::STRING || nFormatId == SotClipboardFormatId::STRING_TSVC..."
+    //    (eg: tdf#172587). In this part, we use ScImportStringStream which sets explicitely the encoding to RTL_TEXTENCODING_UNICODE
+    //    => we don't need to call DetectEncoding
+    //
+    // 3) use of Text to Columns function (in Calc/Data)
+    //    sc/source/ui/view/cellsh2.cxx ScCellShell::ExecuteDB, part SID_TEXT_TO_COLUMNS
+    //    (eg: tdf#166299). In this part, we use a SvMemoryStream and we already sets the encoding to RTL_TEXTENCODING_UNICODE
+    //    => we don't need to call DetectEncoding
+
+    // Retrieve encoding, first time from the stream
     meDetectedCharSet = mpDatStream->GetStreamEncoding();
     if (meDetectedCharSet == RTL_TEXTENCODING_DONTKNOW)
     {
-        meDetectedCharSet = osl_getThreadTextEncoding();
-        // Prefer UTF-8, as UTF-16 would have already been detected from the stream.
-        // This gives a better chance that the file is going to be opened correctly.
-        if ( meDetectedCharSet == RTL_TEXTENCODING_UNICODE && mpDatStream )
-            meDetectedCharSet = RTL_TEXTENCODING_UTF8;
+        // the stream encoding was unknown, second chance
+        mpDatStream->DetectEncoding();
+        meDetectedCharSet = mpDatStream->GetStreamEncoding();
+        if (meDetectedCharSet == RTL_TEXTENCODING_DONTKNOW)
+        {
+            meDetectedCharSet = osl_getThreadTextEncoding();
+            // Prefer UTF-8, as UTF-16 would have already been detected from the stream.
+            // This gives a better chance that the file is going to be opened correctly.
+            if ( meDetectedCharSet == RTL_TEXTENCODING_UNICODE && mpDatStream )
+                meDetectedCharSet = RTL_TEXTENCODING_UTF8;
+        }
     }
 
     if (bIsTSV)

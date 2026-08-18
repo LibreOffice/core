@@ -189,6 +189,10 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         std::unique_ptr<SvStream> pInStream;
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
+        // by default, we don't know what's the encoding of the csv file
+        // see sc/source/ui/dbgui/scuiasciiopt.cxx, ScImportAsciiDlg ctr
+        // there's an explanation of the different cases
+        pInStream->SetStreamEncoding(RTL_TEXTENCODING_DONTKNOW);
 
         ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(Application::GetFrameWeld(xDialogParent), aPrivDatName,
                                                                                   pInStream.get(), SC_IMPORTFILE));
