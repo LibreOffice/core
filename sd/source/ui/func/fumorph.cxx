@@ -437,7 +437,7 @@ void FuMorph::ImpInsertPolygons(B2DPolyPolygonList_impl& rPolyPolyList3D, bool b
     aSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
     aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
 
-    // Prepair linear interpolation of fill and line properties
+    // Prepare linear interpolation of fill and line properties
     const double    fStep = 1. / ( nCount + 1 );
     double          fFactor = fStep;
 
