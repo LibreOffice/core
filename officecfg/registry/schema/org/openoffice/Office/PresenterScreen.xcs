@@ -497,14 +497,6 @@
             default theme is 'DefaultTheme'</desc>
         </info>
       </prop>
-      <prop oor:name="ParentTheme" oor:type="xs:string">
-        <info>
-          <desc>Name of the parent theme. Values not supplied in this theme
-            are taken from the parent theme. Empty string or missing
-            mean default theme.</desc>
-        </info>
-        <value/>
-      </prop>
       <node-ref oor:name="Background" oor:node-type="BitmapDescriptor">
         <info>
           <desc>Color or bitmap that is used to paint the
