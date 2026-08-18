@@ -157,12 +157,8 @@ private:
 
     /** When the theme for the border has not yet been loaded then try again
         when this method is called.
-        @return
-            Returns <TRUE/> only one time when the theme is loaded and/or the
-            renderer is initialized.
     */
-    bool ProvideTheme (
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+    void ProvideTheme(const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
     void ProvideTheme();
 
     /// @throws css::lang::DisposedException

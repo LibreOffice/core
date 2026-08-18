@@ -204,13 +204,12 @@ void PresenterPaneBorderPainter::paintBorder (
         rsPaneBorderStyleName);
 }
 
-bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanvas>& rxCanvas)
+void PresenterPaneBorderPainter::ProvideTheme(const Reference<rendering::XCanvas>& rxCanvas)
 {
-    bool bModified (false);
-
     if ( ! mxContext.is())
-        return false;
+        return;
 
+    bool bModified = false;
     if (mpTheme != nullptr)
     {
         // Check if the theme already has a canvas.
@@ -233,8 +232,6 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
         else
             mpRenderer->SetCanvas(rxCanvas);
     }
-
-    return bModified;
 }
 
 void PresenterPaneBorderPainter::ProvideTheme()
