@@ -108,6 +108,20 @@ $(call gb_Package_add_symbolic_link,$(1),$(2),$(3))
 
 endef
 
+# gb_ExternalPackage_ALL += $(1)
+
+# Duplicate tracking of files in external packages, so that these can be found by gb_ExternalPackage_StaticLink
+define gb_ExternalPackage__register_files
+gb_ExternalPackage_FILES_$(1) += $(foreach file,$(2),$(subst $(INSTDIR)/,,$(file)))
+
+endef
+
+gb_ExternalPackage_StaticLink = $(strip $(foreach package,$(gb_Package_REGISTERED), \
+	$(foreach dependency,$(gb_ExternalProject_STATICLINK_$(gb_ExternalPackage_PROJECT_$(package))), \
+		$(foreach file,$(gb_ExternalPackage_FILES_$(package)),\
+			$(file);$(dependency)))))
+
+
 # Add a file
 #
 # See gb_Package_add_file for details.
@@ -116,6 +130,7 @@ endef
 define gb_ExternalPackage_add_file
 $(if $(4),$(call gb_Output_error,gb_ExternalPackage_add_file: $(1) 4: $(4)))
 $(call gb_ExternalPackage_mark_generated_file,$(1),$(3))
+$(call gb_ExternalPackage__register_files,$(1),$(gb_Package_OUTDIR_$(1))/$(2))
 $(call gb_Package_add_file,$(1),$(2),$(3))
 
 endef
@@ -127,6 +142,7 @@ endef
 # gb_ExternalPackage_add_files package destdir file(s)
 define gb_ExternalPackage_add_files
 $(call gb_ExternalPackage_mark_generated_files,$(1),$(3))
+$(call gb_ExternalPackage__register_files,$(1),$(foreach file,$(3),$(gb_Package_OUTDIR_$(1))/$(2)/$(notdir $(file))))
 $(call gb_Package_add_files,$(1),$(2),$(3))
 
 endef
@@ -138,6 +154,7 @@ endef
 # gb_ExternalPackage_add_files_with_dir package destdir file(s)
 define gb_ExternalPackage_add_files_with_dir
 $(call gb_ExternalPackage_mark_generated_files,$(1),$(3))
+$(call gb_ExternalPackage__register_files,$(1),$(foreach file,$(3),$(gb_Package_OUTDIR_$(1))/$(2)/$(file)))
 $(call gb_Package_add_files_with_dir,$(1),$(2),$(3))
 
 endef
