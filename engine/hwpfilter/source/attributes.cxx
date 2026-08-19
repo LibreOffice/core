@@ -49,7 +49,7 @@ struct AttributeListImpl_impl
     std::vector<struct TagAttribute> vecAttribute;
 };
 
-sal_Int16 SAL_CALL AttributeListImpl::getLength()
+sal_Int16 AttributeListImpl::getLength()
 {
     return static_cast<sal_Int16>(m_pImpl->vecAttribute.size());
 }

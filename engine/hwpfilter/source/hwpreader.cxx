@@ -4754,19 +4754,19 @@ public:
 
 public:
     // XFilter
-    virtual bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel() override;
+    virtual bool filter( const Sequence< PropertyValue >& aDescriptor ) override;
+    virtual void cancel() override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc) override;
+    virtual void setTargetDocument( const Reference< XComponent >& xDoc) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString getImplementationName() override;
+    Sequence< OUString > getSupportedServiceNames() override;
+    bool supportsService(const OUString& ServiceName) override;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+    virtual OUString detect( cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
 private:
     rtl::Reference< HwpReader > rFilter;
