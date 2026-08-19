@@ -639,10 +639,17 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
             const auto nPercentage = o3tl::sanitizing_cast<sal_uInt16>(m_xMtfTolerance->get_value(FieldUnit::PERCENT));
             const auto nTol = nPercentage * 255 / 100;
 
-            AlphaMask aMask = aGraphic.GetBitmap().CreateColorBitmap().CreateAlphaMask( rColor, nTol );
-
-            if( aGraphic.IsTransparent() )
-                aMask.AlphaCombineOr( aGraphic.GetBitmap().CreateAlphaMask() );
+            Bitmap aBmp(aGraphic.GetBitmap());
+            AlphaMask aMask;
+            if (aBmp.HasAlpha())
+            {
+                std::tie(aBmp, aMask) = aBmp.SplitIntoColorAndAlpha();
+                aMask.AlphaCombineOr(aBmp.CreateAlphaMask(rColor, nTol));
+            }
+            else
+            {
+                aMask = aBmp.CreateAlphaMask(rColor, nTol);
+            }
 
             if( !aMask.IsEmpty() )
             {
@@ -653,7 +660,6 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
-                Bitmap aBmp = aGraphic.GetBitmap().CreateColorBitmap();
                 aGraphic = Graphic( Bitmap( aBmp, aMask ) );
                 mnGrfChanged++;
 
