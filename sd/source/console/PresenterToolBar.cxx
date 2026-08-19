@@ -1270,11 +1270,7 @@ void ElementMode::ReadElementMode (
     }
 }
 
-} // end of anonymous namespace
-
 //===== Button ================================================================
-
-namespace {
 
 ::rtl::Reference<PresenterToolBar::Element> Button::Create (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
@@ -1435,11 +1431,7 @@ void SAL_CALL Button::disposing (const css::lang::EventObject& rEvent)
     PresenterToolBar::Element::disposing(rEvent);
 }
 
-} // end of anonymous namespace
-
 //===== PresenterToolBar::Label ===============================================
-
-namespace {
 
 Label::Label (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
     : PresenterToolBar::Element(rpToolBar)
@@ -1493,11 +1485,7 @@ bool Label::SetState (const bool, const bool)
     return PresenterToolBar::Element::SetState(false, false);
 }
 
-} // end of anonymous namespace
-
 //===== Text ==================================================================
-
-namespace {
 
 Text::Text()
 {
