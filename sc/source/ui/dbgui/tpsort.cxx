@@ -50,7 +50,7 @@
 using namespace com::sun::star;
 
 /*
- * Since the settings on the second Tab Page (Options) effects
+ * Since the settings on the second Tab Page (Options) affect
  * the first Tab Page, there must be a way for it to communicate with the
  * other Page.
  *
