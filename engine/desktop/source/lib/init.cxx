@@ -2103,6 +2103,14 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
     std::set<std::pair<int, int>> aParts;
     aParts.swap(m_vectorDeltaParts);
 
+    // A background save sends no content. The parent process pushes the
+    // deltas for the same changes, so the parts taken above are dropped.
+    if (comphelper::COKit::isForkedChild())
+    {
+        SAL_INFO("kit", "Elide vector primitives delta in background save mode");
+        return;
+    }
+
     ITiledRenderable* pDocument = getTiledRenderable(m_pDocument);
     if (!pDocument)
         return;

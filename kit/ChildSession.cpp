@@ -4071,6 +4071,13 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     switch (type)
     {
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
+        // A background save forwards only text messages to the process that
+        // forked it, so it sends no content of its own.
+        if (_docManager->isBackgroundSaveProcess())
+        {
+            LOG_TRC("Skipping callback [" << typeName << "] in the background save process");
+            return;
+        }
         // Push the delta to the client as a zstd binary frame, the same
         // shape the .uno:VectorPrimitives command response uses. When
         // compression fails, send the JSON as a command values text
