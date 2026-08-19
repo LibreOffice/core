@@ -102,10 +102,10 @@ PresenterViewFactory::PresenterViewFactory (
 {
 }
 
-rtl::Reference<sd::framework::ResourceFactory> PresenterViewFactory::Create (
-    const Reference<uno::XComponentContext>& rxContext,
-    const rtl::Reference<::sd::DrawController>& rxController,
-    const ::rtl::Reference<PresenterController>& rpPresenterController)
+rtl::Reference<PresenterViewFactory>
+PresenterViewFactory::Create(const Reference<uno::XComponentContext>& rxContext,
+                             const rtl::Reference<::sd::DrawController>& rxController,
+                             const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
     rtl::Reference<PresenterViewFactory> pFactory (
         new PresenterViewFactory(rxContext,rxController,rpPresenterController));

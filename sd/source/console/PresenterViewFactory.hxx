@@ -59,10 +59,10 @@ public:
         shut down and releases its reference to the factory then the factory
         is destroyed.
     */
-    static rtl::Reference<sd::framework::ResourceFactory> Create (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::Reference<::sd::DrawController>& rxController,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+    static rtl::Reference<PresenterViewFactory>
+    Create(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+           const ::rtl::Reference<::sd::DrawController>& rxController,
+           const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterViewFactory() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
