@@ -1,11 +1,12 @@
 # Jason Deng <chunhui-deng@cxria.com>, 2024.
+# AlexYang <a012-alex@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2024-10-27 13:30+0000\n"
-"Last-Translator: Jason Deng <chunhui-deng@cxria.com>\n"
+"PO-Revision-Date: 2026-08-19 17:51+0000\n"
+"Last-Translator: AlexYang <a012-alex@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/app-store-descriptions/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -13,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #. App name - 50 chars limit
 #: descriptions/google-play.html%2Bhtml.body.h3:5-1
@@ -78,8 +79,9 @@ msgid ""
 "href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
 "that anything you enter in the bugtracker will be public."
 msgstr ""
-"在 <a href=\"https://col.la/android\">https://col.la/android</a> 使用问题追踪"
-"及上传任何可能造成问题的附件。请注意您提交到问题追踪里的任何信息都是公开的。"
+"在 <a href=\"https://col.la/android\"> https://col.la/android</a> 使用问题追"
+"踪及上传任何可能造成问题的附件。请注意您提交到问题追踪里的任何信息都是公开的"
+"。"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:40-1

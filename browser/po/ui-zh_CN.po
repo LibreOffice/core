@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-15 06:51+0000\n"
-"Last-Translator: Poesty Li <poesty7450@gmail.com>\n"
+"PO-Revision-Date: 2026-08-19 17:51+0000\n"
+"Last-Translator: AlexYang <a012-alex@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hans/>\n"
-"Language: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -309,7 +309,7 @@ msgstr "请稍等，Kubernetes 集群正在扩展..."
 
 #: admin/src/AdminClusterOverview.js:550 admin/src/AdminSocketOverview.js:421
 msgid "Failed to set jwt authentication cookie over insecure connection"
-msgstr "无法通过不安全的连接设置 JSON 网络令牌（JWT）的身份验证 cookie"
+msgstr "无法在非安全连接下设置 JWT 认证 Cookie"
 
 #: admin/src/AdminClusterOverview.js:553 admin/src/AdminSocketOverview.js:425
 msgid "Failed to authenticate this session over protocol {0}"
@@ -1093,7 +1093,7 @@ msgstr "文档设置"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3439
 msgid "Upload Xcu"
-msgstr "上传 XCU"
+msgstr "上传 Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3600
 msgid "Enter {0}"
@@ -3515,7 +3515,7 @@ msgstr "在线帮助"
 #: src/control/Control.Menubar.ts:829 src/control/Control.Menubar.ts:1139
 #: src/control/Control.NotebookbarWriter.js:462
 msgid "Keyboard shortcuts"
-msgstr "键盘快捷键"
+msgstr "快捷键"
 
 #: src/control/Control.Menubar.ts:442 src/control/Control.Menubar.ts:658
 #: src/control/Control.Menubar.ts:831 src/control/Control.Menubar.ts:1141
@@ -6495,7 +6495,7 @@ msgstr "文档颜色"
 
 #: src/docstatefunctions.js:259
 msgid ", cluster configuration error: mis-matching serverid"
-msgstr "，集群配置错误：服务器ID不匹配"
+msgstr "，集群配置错误：服务器 ID 不匹配"
 
 #: src/dom/NotebookbarAccessibility.js:257
 msgid "{0} tab selected"
@@ -7330,7 +7330,7 @@ msgstr "体验新版本 {coolversion}"
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:27-7
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:38-7
 msgid "Collabora Online Development Edition"
-msgstr "Collabora Online 开发版本（CODE）"
+msgstr "Collabora Online 开发版本"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:28-7
 msgid ""
@@ -7340,9 +7340,10 @@ msgid ""
 "solutions/collabora-office-android-ios/\">apps</a> are also available for "
 "mobile."
 msgstr ""
-"享受在线生产力的最新发展，您可以在浏览器中免费使用、探索并与其他人一起使用。 "
-"各种<a target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline."
-"com/solutions/collabora-office-android-ios/\">应用</a>也可用于移动设备。"
+"享受在线生产力的最新发展，您可以在浏览器中免费使用、探索并与其他人一同使用。"
+"各种 <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.com/solutions/collabora-office-android-ios/\">应用</a> 也"
+"适用于移动设备。"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
@@ -7355,10 +7356,9 @@ msgid ""
 "all about: The latest Collabora Online Development Edition, aimed at home "
 "users and small teams."
 msgstr ""
-"请查阅<a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.com/code-26-04-release-notes/\">发布说明</a>，"
-"了解最新的针对家庭用户和小团队的 Collabora Online "
-"开发版本（CODE）的所有信息。"
+"请查阅 <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.com/code-26-04-release-notes/\">发布说明</a> 并了解针对家"
+"庭用户和小团队的最新 Collabora Online 开发版的所有信息。"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:48-7
 msgid "Get Involved"
@@ -7379,12 +7379,12 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"您有兴趣贡献但不知从何入手？请前往<a target=\"_blank\" rel=\"noopener\" href="
-"\"https://www.collaboraoffice.org/post/build-code/\">分步说明</"
-"a>从零开始构建 CODE。您还可以帮助<a target=\"_blank\" rel=\"noopener\" href="
-"\"https://www.collaboraoffice.org/post/translate/\">翻译</a>，或通过<a "
+"有兴趣参与贡献但不知道从何入手？请前往 <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/build-code/\">分步指南</a> 从零开"
+"始构建 CODE。你还可以通过协助 <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/translate/\">翻译</a>，或者 <a "
 "target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
-"post/filebugs/\">提交错误报告</a>（附上重现问题的关键步骤）来提供帮助。"
+"post/filebugs/\">提交包含完整复现步骤的缺陷报告</a> 来提供帮助。"
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""

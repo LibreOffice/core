@@ -11,7 +11,7 @@
     <string name="failed_to_insert_image">插入图像失败</string>
     <string name="failed_to_load_file">无法决定要加载的文件</string>
     <string name="storage_permission_required">需要存储权限</string>
-    <string name="temp_file_saving_disabled">此文件是只读文件，已禁用保存功能。</string>
+    <string name="temp_file_saving_disabled">源应用已将其共享为只读。请使用“编辑副本”进行修改。</string>
     <string name="file_chromeos_read_only">此文件无法在本位置保存，因此以只读方式打开。如果要对文件拥有全部读写权限，请将其移动到 Play 文件中。</string>
     <string name="restarting">重启中…</string>
     <string name="view_only">仅查看</string>

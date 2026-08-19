@@ -94,7 +94,7 @@
     <string name="storage_permission_required">需要存储权限</string>
     <string name="file_creation_failed">新建文件失败</string>
     <string name="file_exists_warning">有此文件名的文件已经存在，将覆盖重名文件。</string>
-    <string name="temp_file_saving_disabled">此文件是只读文件，已禁用保存功能。</string>
+    <string name="temp_file_saving_disabled">源应用已将其共享为只读。请使用“编辑副本”进行修改。</string>
     <string name="app_description">$APP_NAME 是一套现代化、易用、开源的办公软件，可帮助您进行文字处理、电子表格、演示文稿等工作。</string>
     <string name="app_version_and_hash">版本: %1$s \n在线源码库 git 哈希值: %2$s \n核心源码库 git 哈希值: %3$s</string>
     <string name="no_recent_items">请点击工具栏中的文件夹图标以打开文件。</string>

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-15 06:51+0000\n"
-"Last-Translator: Poesty Li <poesty7450@gmail.com>\n"
+"PO-Revision-Date: 2026-08-19 17:51+0000\n"
+"Last-Translator: AlexYang <a012-alex@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/help/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -44,9 +44,9 @@ msgid ""
 ">+</span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
 "hidden=\"true\">+</span><kbd>Insert</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-38
 msgid "Paste as unformatted text"
@@ -80,16 +80,15 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>O</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-72
 msgid "Print (Download as PDF)"
@@ -97,7 +96,7 @@ msgstr "打印（下载为PDF文件）"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:22-70
 msgid "Print"
-msgstr ""
+msgstr "打印"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
@@ -147,41 +146,41 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "在光标或所选单元格处打开右键菜单"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"将焦点移至应用程序的下一个区域（菜单栏、公式栏、文档、侧边栏、工作表标签页、"
+"状态栏）"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "将焦点移至应用程序的上一个区域"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -903,7 +902,7 @@ msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Tab</kbd> may be used instead."
 msgstr ""
-"插入一个制表位（仅用于表格）。取决于使用的窗口管理器，可转而使用<kbd>Alt</"
+"在表格单元格中插入制表符。取决于所使用的窗口管理器，可能需要改用 <kbd>Alt</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Tab</kbd>。"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-38
@@ -969,6 +968,7 @@ msgstr ""
 ">+</span><kbd>Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
+#, fuzzy
 msgid ""
 "3 seconds in Insert mode, Arrow Key inserts row/column, <kbd>Ctrl</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</kbd> "
@@ -986,13 +986,14 @@ msgstr ""
 ">+</span><kbd>Del</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
+#, fuzzy
 msgid ""
 "3 seconds in Delete mode, Arrow key deletes row/column, <kbd>Ctrl</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow key</kbd> merges "
 "cell with neighboring cell"
 msgstr ""
-"处于删除模式 3 秒，方向键删除行或列，<kbd>Ctrl</kbd><span class=\"kbd--plus\""
-" aria-hidden=\"true\">+</span><kbd>方向键</kbd>将单元格与相邻单元格合并"
+"处于删除模式 3 秒，方向键删除行或列，<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>方向键</kbd>将单元格与相邻单元格合并"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
 msgid ""
@@ -1328,41 +1329,41 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "选择当前单元格所在的整列。"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "选择当前单元格所在的整行。"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
-msgstr ""
+msgstr "打开焦点所在工作表标签页的右键菜单（插入、重命名、删除、隐藏、移动等）。"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"当选中整列或整行时，打开对应的列标或行号右键菜单（插入、删除、列宽或行高、隐"
+"藏等）。"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1611,7 +1612,7 @@ msgstr "打开、关闭、保存、打印和下载文档"
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "打开、关闭、保存与打印文档"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.h3:481-5
@@ -1716,6 +1717,10 @@ msgid ""
 ">You can work alone on a document, or collaboratively as part of a "
 "team.</span>"
 msgstr ""
+"<span class=\"productname\">{productname}</span> 让你能够以简单直观的方式创建"
+"和编辑典型的 Office 文档（即文本文档、电子表格和演示文稿）， <span "
+"class=\"webBasedCOOLOnly\">直接在浏览器中操作。</span> <span "
+"class=\"webBasedCOOLOnly\">你可以独立编辑文档，也可以与团队协作。</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1741,22 +1746,23 @@ msgstr ""
 "会在页脚处显示小型通知。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
 "span> uses modern browser resources to adapt the user interface to the size "
 "of the viewing area, including small screens found in mobile devices.</span> "
 "The interface is composed of:"
 msgstr ""
-"<span class=\"productname\">{productname}</span> 使用新一代浏览器资源，让用户"
-"界面自动适应可见区域的大小，例如移动设备上的小屏幕。该界面由以下部分构成："
+"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
+"span> 使用新一代浏览器资源，让用户界面自动适应可见区域的大小，包括移动设备上"
+"的小屏幕。</span> 该界面由以下部分构成："
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
 "<span class=\"def\">The document area:</span> The application area shows the "
 "document contents, either spreadsheets, presentations or text documents."
-msgstr "<span class=\"def\">文档区：</span>显示文档内容的应用区域，内容可以是电子表格"
-"、演示文稿或文本文档。"
+msgstr ""
+"<span class=\"def\">文档区：</span> 显示文档内容的应用区域，内容可以是电子表"
+"格、演示文稿或文本文档。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
@@ -1779,8 +1785,9 @@ msgstr ""
 msgid ""
 "<span class=\"def\">Context menus:</span> On clicking with the right mouse "
 "button, a menu appears with commands associated with the underlying object."
-msgstr "<span class=\"def\""
-">快捷菜单：</span>单击鼠标右键时，将会显示与所点击对象相关的命令菜单。"
+msgstr ""
+"<span class=\"def\">快捷菜单：</span> 单击鼠标右键时，将会显示与所点击对象相"
+"关的命令菜单。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:411-5
 msgid ""
@@ -1788,14 +1795,14 @@ msgid ""
 "options for daily editing. Toolbar buttons are dynamic, meaning that their "
 "state (on or off) depends on different factors."
 msgstr ""
-"<span class=\"def\">工具栏：</span>包含平常编辑时最常用到的选项。工具栏上的按"
-"钮会动态显示，其状态（启用或禁用）取决于不同的因素。"
+"<span class=\"def\">工具栏：</span> 包含平常编辑时最常用到的选项。工具栏上的"
+"按钮会动态显示，其状态（启用或禁用）取决于不同的因素。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:414-5
 msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
-msgstr "<span class=\"def\">状态栏：</span>显示于底部，包含几个有用的选项和功能。"
+msgstr "<span class=\"def\">状态栏：</span> 显示于底部，包含几个有用的选项和功能。"
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:415-49
 msgid ""
@@ -1810,9 +1817,9 @@ msgid ""
 "automatically moves to the first occurrence found. Searching is not case-"
 "sensitive. There are three buttons right next to the search box:"
 msgstr ""
-"<span class=\"def\">搜索栏：</span>在搜索框中输入文本时，将自动开始搜索，而且"
-"文档窗口会自动移至显示第一个找到的匹配项。搜索不区分大小写。搜索框旁边有三个"
-"按钮："
+"<span class=\"def\">搜索栏：</span> 在搜索框中输入文本时，将自动开始搜索，而"
+"且文档窗口会自动移至显示第一个找到的匹配项。搜索不区分大小写。搜索框旁边有三"
+"个按钮："
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
 msgid "Search backwards"
@@ -1875,9 +1882,8 @@ msgid ""
 "download formats available depends on the application. All applications "
 "exports documents in PDF format."
 msgstr ""
-"要下载文档，请从 <span class=\"productname\">{productname}</span> "
-"应用程序的<span class=\"ui\""
-">文件</span>菜单中下载。可供下载的文件格式取决于应用程序。"
+"要下载文档，请从 <span class=\"productname\">{productname}</span>应用程序的 "
+"<span class=\"ui\">文件</span> 菜单中下载。可供下载的文件格式取决于应用程序。"
 "所有应用程序都可导出 PDF 格式文档。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:439-30
@@ -1895,9 +1901,9 @@ msgid ""
 "quickly as possible you can also force saving using the <span class=\"ui\""
 ">File</span> menu’s <span class=\"ui\">Save</span> entry."
 msgstr ""
-"<span class=\"productname\">{productname}</span> "
-"中的文档会自动保存。如果你要令文档尽快同步，也可用<span class=\"ui\">文件</"
-"span>菜单的<span class=\"ui\">保存</span>项手动保存。"
+"在 <span class=\"productname\">{productname}</span> 中，文档会自动保存；但如"
+"果你希望确保文档尽快完成同步，也可以通过 <span class=\"ui\">文件</span> 菜单"
+"中的 <span class=\"ui\">保存</span> 选项来手动强制保存。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:441-30
 msgid ""
@@ -1920,6 +1926,9 @@ msgid ""
 "class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
 ">File</span> menu bar button."
 msgstr ""
+"要打开文档，你可以直接在平台的文件管理器中选择“用 <span "
+"class=\"productname\">{productname}</span> 打开”，或者依次点击菜单栏的 <span "
+"class=\"ui\">文件</span> $\\rightarrow$ <span class=\"ui\">打开</span>。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:458-7
 msgid ""
@@ -1927,6 +1936,8 @@ msgid ""
 "as</span> button on the page shown from the <span class=\"ui\">File</span> "
 "menu bar button."
 msgstr ""
+"要将文档另存为其他格式，点击菜单栏的 <span class=\"ui\">文件</span> 按钮，并"
+"选择 <span class=\"ui\">另存为</span>。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:463-7
 msgid ""
@@ -1934,12 +1945,16 @@ msgid ""
 "to be saved right away you can use the <span class=\"ui\">Save</span> button "
 "on the page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"文档会自动定期保存；如果你想立即保存，可以点击菜单栏的 <span class=\"ui\">文"
+"件</span> 按钮，并选择 <span class=\"ui\">保存</span>。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:470-7
 msgid ""
 "To print the document, use the <span class=\"ui\">Print</span> button on the "
 "page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"要打印文档，点击菜单栏的 <span class=\"ui\">文件</span> 按钮，并选择 <span "
+"class=\"ui\">打印</span>。"
 
 #: html/cool-help.html%2Bdiv.div.p:482-5
 msgid ""
@@ -1988,10 +2003,10 @@ msgid ""
 "in external applications. This step also converts complex object types into "
 "static images."
 msgstr ""
-"要向设备上的其它应用程序复制大段内容，用户需要按<span class=\"ui\">开始下载</"
-"span>按钮，然后再将该内容重新复制到剪贴板上，以供目标应用程序读取。这可通过在"
-"右下角弹出的小工具进行，并且只是在向外部应用程序粘贴内容才需要使用。这一步骤"
-"也会把复杂类型的对象转换为静态图像。"
+"要向设备上的其它应用程序复制大段内容，用户需要按 <span class=\"ui\">开始下"
+"载</span> 按钮，然后再将该内容重新复制到剪贴板上，以供目标应用程序读取。这可"
+"通过在右下角弹出的小工具进行，并且只是在向外部应用程序粘贴内容才需要使用。这"
+"一步骤也会把复杂类型的对象转换为静态图像。"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:489-5
 msgid "Document repair"
@@ -2010,8 +2025,9 @@ msgstr "多人同时编辑文档时，可能会发生更改冲突而导致某些
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">Jump to state</span>."
-msgstr "要跳回所选状态，请用鼠标选择该状态并点击<span class=\"ui\""
-">跳转到状态</span>。"
+msgstr ""
+"若要跳回选定的状态，请用鼠标选中该状态，然后点击 <span class=\"ui\">跳转到状"
+"态</span>。"
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:492-55
 msgid ""
@@ -2125,8 +2141,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
-"选择<span class=\"ui\">插入</span> → <span class=\"ui\""
-">图表</span>。在侧边栏中定制图表："
+"选择 <span class=\"ui\">插入</span> → <span class=\"ui\">图表</span> 。在侧边"
+"栏中定制图表："
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:520-53
 msgid ""
@@ -2151,25 +2167,25 @@ msgid ""
 "Choose <span class=\"ui\">Data Range</span> and <span class=\"ui\">Chart "
 "Type</span> to edit chart data and select chart type."
 msgstr ""
-"<span class=\"def\""
-">图表编辑：</span>双击选中图表。使用快捷菜单添加标题、坐标轴等图表元素。"
-"用<span class=\"ui\">数据范围</span>编辑图表数据，用<span class=\"ui\""
-">图表类型</span>选择图表类型。"
+"<span class=\"def\">图表编辑：</span> 双击以选中图表。使用右键菜单添加标题、"
+"坐标轴等图表元素。选择 <span class=\"ui\">数据范围</span> 和 <span "
+"class=\"ui\">图表类型</span> 以编辑图表数据并选择图表类型。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
-msgstr "<span class=\"def\""
-">设置图表格式：</span>同一快捷菜单有图表对应数据表格和选择图表类型的选项。"
+msgstr ""
+"<span class=\"def\">设置图表格式：</span> 同一右键菜单有图表对应数据表格和选"
+"择图表类型的选项。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:527-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
 msgstr ""
-"<span class=\"def\">设置数据序列格式：</span>打开快捷菜单并选择<span class="
-"\"ui\">设置数据序列格式</span>。"
+"<span class=\"def\">设置数据序列格式：</span> 打开右键菜单并选择 <span "
+"class=\"ui\">设置数据序列格式</span>。"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:529-5
 msgid "Handling images"
@@ -2190,15 +2206,16 @@ msgid ""
 ">Insert image</span> icon allows you to choose an image from the cloud "
 "storage's folders and shares."
 msgstr ""
-"<span class=\"def\">插入图像：</span>点击<span class=\"ui\""
-">插入图像</span>图标可选择云存储及共享文件夹里的图像进行插入。"
+"<span class=\"def\">插入图像：</span> 点击 <span class=\"ui\">插入图像</"
+"span> 图标可选择云存储及共享文件夹里的图像进行插入。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "<span class=\"def\">Insert local image:</span> opens the browser file picker "
 "to upload the image from your local computer and insert it into the document."
-msgstr "<span class=\"def\">插入本地图像：</span>打开浏览器的文件选择对话框，上传本地"
-"计算机中的图像并插入到文档中。"
+msgstr ""
+"<span class=\"def\">插入本地图像：</span> 打开浏览器的文件选择对话框，上传本"
+"地计算机中的图像并插入到文档中。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:533-5
 msgid ""
@@ -2259,8 +2276,8 @@ msgid ""
 "To systematically spell-check the whole document use the <span class=\"ui\""
 ">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
 msgstr ""
-"要系统性检查整个文档的拼写，请使用<span class=\"ui\">工具</"
-"span>菜单下的<span class=\"ui\">拼写检查</span>选项。"
+"要系统性检查整个文档的拼写，请使用 <span class=\"ui\">工具</span> 菜单下的 "
+"<span class=\"ui\">拼写检查</span> 选项。"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:552-30
 msgid ""
@@ -2317,11 +2334,11 @@ msgid ""
 "dialog allows complex and custom number formatting, as well as font, complex "
 "border, background, cell protection and other options."
 msgstr ""
-"<span class=\"def\">直接格式：</span>您可以使用菜单、工具栏或快捷菜单中的格式"
-"设置来直接设置电子表格中单元格、行、列和工作表的格式。直接格式仅应用于当前选"
-"中的对象。要设置单元格的格式，可以使用菜单或按 <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd> 组合键。该对话框可设"
-"置复杂的自定义数值格式，以及字体、复杂边框、背景、单元格保护等其他选项。"
+"<span class=\"def\">直接格式：</span> 你可以直接通过菜单、工具栏或右键菜单对"
+"电子表格的单元格、列、行和工作表进行格式设置。直接格式仅适用于当前选中的对象"
+"。要设置单元格格式，可以使用菜单或按 <kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>。该对话框支持复杂的自定义数"
+"字格式，并提供字体、复杂边框、背景、单元格保护及其他选项。"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:567-51
 msgid ""
@@ -2337,9 +2354,9 @@ msgid ""
 "span> automatically detects cells that are headers, and adjoining columns, "
 "to extend the selection."
 msgstr ""
-"<span class=\"def\">数据排序：</span>您可对一组数值或文本进行升序或降序排列。"
-"<span class=\"def\">{productname}</span> "
-"会自动检测表头，也会自动检测邻近的列以扩大选中区域。"
+"<span class=\"def\">数据排序：</span> 您可对一组数值或文本进行升序或降序排列"
+"。<span class=\"def\">{productname}</span> 会自动检测表头，也会自动检测邻近的"
+"列以扩大选中区域。"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:573-30
 msgid ""
