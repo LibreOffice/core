@@ -2037,6 +2037,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                     pText = &m_pCurTextFrame->GetText();
                     m_aDelPam.SetMark();
                     aFInfo.SetFrame( nullptr );
+                    ++nPos; // move past the straight quote that remains here as a deleted redline
                 }
 
                 nPos += TextFrameIndex(sReplace.getLength() - 1);
@@ -2092,6 +2093,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                             m_aDelPam.SetMark();
                             m_aDelPam.DeleteMark();
                             aFInfo.SetFrame( nullptr );
+                            ++nPos;
                         }
 
                         nPos += TextFrameIndex(sReplace.getLength() - 1);
