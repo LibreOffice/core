@@ -56,8 +56,12 @@
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <sfx2/objsh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/memorystream.hxx>
 #include <oox/core/filterdetect.hxx>
@@ -1030,12 +1034,48 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
     pAppProps->endDocument();
 }
 
+static void writeThumbnail(XmlFilterBase& rSelf)
+{
+    if (!officecfg::Office::Common::Save::Document::GenerateThumbnail::get())
+        return;
+
+    SfxObjectShell* pDocShell = SfxObjectShell::GetShellFromComponent(rSelf.getModel());
+    if (!pDocShell || pDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED
+        || !pDocShell->IsUseThumbnailSave())
+        return;
+
+    const Sequence<NamedValue> aEncryptionData
+        = rSelf.getMediaDescriptor().getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_ENCRYPTIONDATA, Sequence<NamedValue>());
+    bool bEncrypted = aEncryptionData.hasElements();
+
+    try
+    {
+        StorageRef xStorage = rSelf.getStorage();
+        StorageRef xPropsDir = xStorage->openSubStorage(u"docProps"_ustr, false);
+        if (!xPropsDir)
+            return;
+
+        Reference<XStream> xStream(xPropsDir->openOutputStream(u"thumbnail.png"_ustr), UNO_QUERY);
+        if (xStream.is() && pDocShell->WriteThumbnail(bEncrypted, xStream))
+        {
+            rSelf.addRelation(
+                u"http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail"_ustr,
+                u"docProps/thumbnail.png");
+        }
+    }
+    catch (Exception&)
+    {
+    }
+}
+
 void XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperties >& xProperties, bool bSecurityOptOpenReadOnly )
 {
     if( xProperties.is() )
     {
         writeCoreProperties( *this, xProperties );
         writeAppProperties( *this, xProperties );
+        writeThumbnail( *this );
         writeCustomProperties( *this, xProperties, bSecurityOptOpenReadOnly );
     }
 }
