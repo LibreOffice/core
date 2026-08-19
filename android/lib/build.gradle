@@ -7,14 +7,21 @@ layout.buildDirectory.set(rootProject.layout.buildDirectory.dir("lib"))
 
 android {
     namespace 'org.libreoffice.androidlib'
-    compileSdk 36
-    buildToolsVersion "36.0.0"
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 0
+        }
+    }
+    buildToolsVersion "37.0.0"
     ndkVersion "29.0.14206865"
-    buildFeatures.buildConfig = true
+    buildFeatures {
+        resValues true
+        buildConfig true
+    }
 
     defaultConfig {
         minSdk 26
-        targetSdk 35
+        targetSdk 37
         versionCode 1
         versionName "1.0"
 

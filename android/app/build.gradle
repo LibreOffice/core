@@ -7,15 +7,22 @@ layout.buildDirectory.set(rootProject.layout.buildDirectory.dir("app"))
 
 android {
     namespace 'org.libreoffice.androidapp'
-    compileSdk 36
-    buildToolsVersion "36.0.0"
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 0
+        }
+    }
+    buildToolsVersion "37.0.0"
     ndkVersion "29.0.14206865"
-    buildFeatures.buildConfig = true
+    buildFeatures {
+        resValues true
+        buildConfig true
+    }
 
     defaultConfig {
         // applicationId, versionCode and versionName are defined in appSettings.gradle
         minSdk 26
-        targetSdk 35
+        targetSdk 37
 
         resValue "string", "app_name", "${liboAppName}"
         resValue "string", "vendor", "${liboVendor}"
@@ -56,7 +63,7 @@ android {
 
             minifyEnabled false // FIXME disabled before we get a good proguardRules for callFakeWebsocketOnMessage calling from C++
             shrinkResources false // FIXME cannot be enabled when minifyEnabled is turned off
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro'
         }
     }
