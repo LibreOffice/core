@@ -40,28 +40,28 @@ IndexEntrySupplier_Common::~IndexEntrySupplier_Common()
 {
 }
 
-Sequence < lang::Locale > SAL_CALL IndexEntrySupplier_Common::getLocaleList()
+Sequence < lang::Locale > IndexEntrySupplier_Common::getLocaleList()
 {
     throw RuntimeException();
 }
 
-Sequence < OUString > SAL_CALL IndexEntrySupplier_Common::getAlgorithmList( const lang::Locale& )
+Sequence < OUString > IndexEntrySupplier_Common::getAlgorithmList( const lang::Locale& )
 {
     throw RuntimeException();
 }
 
-OUString SAL_CALL IndexEntrySupplier_Common::getPhoneticCandidate( const OUString&,
+OUString IndexEntrySupplier_Common::getPhoneticCandidate( const OUString&,
     const lang::Locale& )
 {
     return OUString();
 }
 
-bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& )
+bool IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& )
 {
     throw RuntimeException();
 }
 
-bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& rLocale,
+bool IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& rLocale,
     const OUString& rAlgorithm, sal_Int32 collatorOptions )
 {
     usePhonetic = LocaleDataImpl::get()->isPhonetic(rLocale, rAlgorithm);
@@ -71,14 +71,14 @@ bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& rLoc
     return true;
 }
 
-OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,
+OUString IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,
     const OUString&, const lang::Locale& )
 {
     sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&o3tl::temporary(sal_Int32(0)), 0);
     return OUString(&indexChar, 1);
 }
 
-sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
+sal_Int16 IndexEntrySupplier_Common::compareIndexEntry(
     const OUString& rIndexEntry1, const OUString&, const lang::Locale&,
     const OUString& rIndexEntry2, const OUString&, const lang::Locale& )
 {
@@ -87,13 +87,13 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
         // return value of compareString in { -1, 0, 1 }
 }
 
-OUString SAL_CALL IndexEntrySupplier_Common::getIndexCharacter( const OUString& rIndexEntry,
+OUString IndexEntrySupplier_Common::getIndexCharacter( const OUString& rIndexEntry,
     const lang::Locale& rLocale, const OUString& )
 {
     return getIndexKey(rIndexEntry, rIndexEntry, rLocale);
 }
 
-OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( bool,
+OUString IndexEntrySupplier_Common::getIndexFollowPageWord( bool,
     const lang::Locale& )
 {
     throw RuntimeException();
@@ -115,19 +115,19 @@ IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
         return IndexEntry;
 }
 
-OUString SAL_CALL
+OUString
 IndexEntrySupplier_Common::getImplementationName()
 {
     return OUString::createFromAscii( implementationName );
 }
 
-bool SAL_CALL
+bool
 IndexEntrySupplier_Common::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 IndexEntrySupplier_Common::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii( implementationName ) };

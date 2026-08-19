@@ -220,7 +220,7 @@ TextConversion_zh::getWordConversion(std::u16string_view aText, sal_Int32 nStart
     return aRet;
 }
 
-TextConversionResult SAL_CALL
+TextConversionResult
 TextConversion_zh::getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
 {
@@ -234,7 +234,7 @@ TextConversion_zh::getConversions( const OUString& aText, sal_Int32 nStartPos, s
     return result;
 }
 
-OUString SAL_CALL
+OUString
 TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
 {
@@ -254,7 +254,7 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
     }
 }
 
-OUString SAL_CALL
+OUString
 TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
 {
@@ -276,7 +276,7 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     }
 }
 
-bool SAL_CALL
+bool
 TextConversion_zh::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
 {
     return false;

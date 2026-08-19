@@ -42,39 +42,39 @@ public:
     IndexEntrySupplier( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
 
     // Methods
-    virtual cpo::uno::Sequence < css::lang::Locale > SAL_CALL getLocaleList() override;
+    virtual cpo::uno::Sequence < css::lang::Locale > getLocaleList() override;
 
-    virtual cpo::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
+    virtual cpo::uno::Sequence < OUString > getAlgorithmList(
         const css::lang::Locale& rLocale ) override;
 
-    virtual bool SAL_CALL loadAlgorithm(
+    virtual bool loadAlgorithm(
         const css::lang::Locale& rLocale,
         const OUString& SortAlgorithm, sal_Int32 collatorOptions ) override;
 
-    virtual bool SAL_CALL usePhoneticEntry(
+    virtual bool usePhoneticEntry(
         const css::lang::Locale& rLocale ) override;
 
-    virtual OUString SAL_CALL getPhoneticCandidate( const OUString& IndexEntry,
+    virtual OUString getPhoneticCandidate( const OUString& IndexEntry,
         const css::lang::Locale& rLocale ) override;
 
-    virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
+    virtual OUString getIndexKey( const OUString& IndexEntry,
         const OUString& PhoneticEntry, const css::lang::Locale& rLocale ) override;
 
-    virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
+    virtual sal_Int16 compareIndexEntry( const OUString& IndexEntry1,
         const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
         const OUString& IndexEntry2, const OUString& PhoneticEntry2,
         const css::lang::Locale& rLocale2 ) override;
 
-    virtual OUString SAL_CALL getIndexCharacter( const OUString& IndexEntry,
+    virtual OUString getIndexCharacter( const OUString& IndexEntry,
         const css::lang::Locale& rLocale, const OUString& SortAlgorithm ) override;
 
-    virtual OUString SAL_CALL getIndexFollowPageWord( bool MorePages,
+    virtual OUString getIndexFollowPageWord( bool MorePages,
         const css::lang::Locale& rLocale ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;

@@ -40,34 +40,34 @@ public:
     BreakIterator_Unicode();
     virtual ~BreakIterator_Unicode() override;
 
-    virtual sal_Int32 SAL_CALL previousCharacters( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
         sal_Int32& nDone ) override;
-    virtual sal_Int32 SAL_CALL nextCharacters( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
         sal_Int32& nDone ) override;
 
-    virtual css::i18n::Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary previousWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual css::i18n::Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary nextWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual css::i18n::Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
+    virtual css::i18n::Boundary getWordBoundary( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType, bool bDirection ) override;
 
-    virtual sal_Int32 SAL_CALL beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale ) override;
-    virtual sal_Int32 SAL_CALL endOfSentence( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale ) override;
 
-    virtual css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::LineBreakResults getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const css::i18n::LineBreakHyphenationOptions& hOptions,
         const css::i18n::LineBreakUserOptions& bOptions ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 protected:
     OUString cBreakIterator;

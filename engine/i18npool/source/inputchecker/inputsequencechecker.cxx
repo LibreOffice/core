@@ -44,7 +44,7 @@ InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 {
 }
 
-bool SAL_CALL
+bool
 InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode)
 {
@@ -59,7 +59,7 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
         return true; // not a checkable languages.
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode)
 {
@@ -130,19 +130,19 @@ InputSequenceCheckerImpl::getInputSequenceChecker(char const * rLanguage)
     throw RuntimeException();
 }
 
-OUString SAL_CALL
+OUString
 InputSequenceCheckerImpl::getImplementationName()
 {
     return OUString::createFromAscii(serviceName);
 }
 
-bool SAL_CALL
+bool
 InputSequenceCheckerImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 InputSequenceCheckerImpl::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii(serviceName) };

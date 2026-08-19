@@ -35,14 +35,14 @@ public:
     // Destructor
     virtual ~ChapterCollator() override;
 
-    sal_Int32 SAL_CALL compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
+    sal_Int32 compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const OUString& s2, sal_Int32 off2, sal_Int32 len2) override;
-    sal_Int32 SAL_CALL compareString( const OUString& s1, const OUString& s2) override;
+    sal_Int32 compareString( const OUString& s1, const OUString& s2) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     // CharacterClassification Implementation

@@ -29,7 +29,7 @@ ignoreDiacritics_CTL::ignoreDiacritics_CTL()
         m_transliterator = nullptr;
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 ignoreDiacritics_CTL::transliterateChar2Char(sal_Unicode nInChar)
 {
     if (!m_transliterator)

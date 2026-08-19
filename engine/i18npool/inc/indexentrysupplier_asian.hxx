@@ -32,16 +32,16 @@ public:
     IndexEntrySupplier_asian( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_asian() override;
 
-    OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
+    OUString getIndexCharacter( const OUString& rIndexEntry,
             const css::lang::Locale& rLocale, const OUString& rAlgorithm ) override;
-    OUString SAL_CALL getIndexKey( const OUString& rIndexEntry,
+    OUString getIndexKey( const OUString& rIndexEntry,
             const OUString& rPhoneticEntry, const css::lang::Locale& rLocale) override;
-    sal_Int16 SAL_CALL compareIndexEntry(
+    sal_Int16 compareIndexEntry(
             const OUString& rIndexEntry1, const OUString& rPhoneticEntry1,
             const css::lang::Locale& rLocale1,
             const OUString& rIndexEntry2, const OUString& rPhoneticEntry2,
             const css::lang::Locale& rLocale2 ) override;
-    OUString SAL_CALL getPhoneticCandidate( const OUString& rIndexEntry,
+    OUString getPhoneticCandidate( const OUString& rIndexEntry,
             const css::lang::Locale& rLocale ) override;
 };
 

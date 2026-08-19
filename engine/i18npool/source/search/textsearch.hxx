@@ -136,23 +136,23 @@ public:
     virtual ~TextSearch() override;
 
     // XTextSearch
-    virtual void SAL_CALL
+    virtual void
         setOptions( const css::util::SearchOptions& options ) override;
-    virtual css::util::SearchResult SAL_CALL
+    virtual css::util::SearchResult
         searchForward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos ) override;
-    virtual css::util::SearchResult SAL_CALL
+    virtual css::util::SearchResult
         searchBackward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos ) override;
 
     // XTextSearch2
-    virtual void SAL_CALL
+    virtual void
         setOptions2( const css::util::SearchOptions2& options ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

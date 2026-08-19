@@ -32,20 +32,20 @@ public:
         OUString
         transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 
-        sal_Unicode SAL_CALL
+        sal_Unicode
         transliterateChar2Char( sal_Unicode inChar) override;
 
         // Methods which are shared.
-        sal_Int16 SAL_CALL getType() override;
+        sal_Int16 getType() override;
 
         OUString
         foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 
-        bool SAL_CALL
+        bool
         equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
                 const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
 
-        cpo::uno::Sequence< OUString > SAL_CALL
+        cpo::uno::Sequence< OUString >
         transliterateRange( const OUString& str1, const OUString& str2 ) override;
 
 protected:
@@ -61,7 +61,7 @@ public: \
     OUString \
     transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset ) \
      override; \
-    sal_Unicode SAL_CALL \
+    sal_Unicode \
     transliterateChar2Char( sal_Unicode inChar) \
      override; \
 };

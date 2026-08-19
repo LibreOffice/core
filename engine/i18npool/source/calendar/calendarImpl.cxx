@@ -45,7 +45,7 @@ CalendarImpl::~CalendarImpl()
 {
 }
 
-void SAL_CALL
+void
 CalendarImpl::loadDefaultCalendarTZ( const css::lang::Locale& rLocale, const OUString& rTimeZone )
 {
     const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
@@ -55,7 +55,7 @@ CalendarImpl::loadDefaultCalendarTZ( const css::lang::Locale& rLocale, const OUS
     loadCalendarTZ(pCal->Name, rLocale, rTimeZone);
 }
 
-void SAL_CALL
+void
 CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale& rLocale, const OUString& rTimeZone )
 {
     Reference < XCalendar4 > xOldCalendar( xCalendar );  // backup
@@ -119,7 +119,7 @@ CalendarImpl::loadCalendarTZ( const OUString& uniqueID, const css::lang::Locale&
         throw RuntimeException(u"CalendarImpl::loadCalendarTZ: the calendar is usable but is not in the expected time zone"_ustr);
 }
 
-Calendar2 SAL_CALL
+Calendar2
 CalendarImpl::getLoadedCalendar2()
 {
     if (!xCalendar.is())
@@ -127,7 +127,7 @@ CalendarImpl::getLoadedCalendar2()
     return xCalendar->getLoadedCalendar2();
 }
 
-::css::i18n::Calendar SAL_CALL
+::css::i18n::Calendar
 CalendarImpl::getLoadedCalendar()
 {
     if (!xCalendar.is())
@@ -135,7 +135,7 @@ CalendarImpl::getLoadedCalendar()
     return xCalendar->getLoadedCalendar();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 CalendarImpl::getAllCalendars( const css::lang::Locale& rLocale )
 {
     const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
@@ -145,7 +145,7 @@ CalendarImpl::getAllCalendars( const css::lang::Locale& rLocale )
     return xSeq;
 }
 
-void SAL_CALL
+void
 CalendarImpl::setDateTime( double fTimeInDays )
 {
     if (!xCalendar.is())
@@ -153,7 +153,7 @@ CalendarImpl::setDateTime( double fTimeInDays )
     xCalendar->setDateTime( fTimeInDays );
 }
 
-double SAL_CALL
+double
 CalendarImpl::getDateTime()
 {
     if (!xCalendar.is())
@@ -161,7 +161,7 @@ CalendarImpl::getDateTime()
     return xCalendar->getDateTime();
 }
 
-void SAL_CALL
+void
 CalendarImpl::setLocalDateTime( double fTimeInDays )
 {
     if (!xCalendar.is())
@@ -169,7 +169,7 @@ CalendarImpl::setLocalDateTime( double fTimeInDays )
     xCalendar->setLocalDateTime( fTimeInDays );
 }
 
-double SAL_CALL
+double
 CalendarImpl::getLocalDateTime()
 {
     if (!xCalendar.is())
@@ -177,17 +177,17 @@ CalendarImpl::getLocalDateTime()
     return xCalendar->getLocalDateTime();
 }
 
-void SAL_CALL CalendarImpl::loadDefaultCalendar( const css::lang::Locale& rLocale )
+void CalendarImpl::loadDefaultCalendar( const css::lang::Locale& rLocale )
 {
     loadDefaultCalendarTZ( rLocale, OUString());
 }
 
-void SAL_CALL CalendarImpl::loadCalendar( const OUString& uniqueID, const css::lang::Locale& rLocale )
+void CalendarImpl::loadCalendar( const OUString& uniqueID, const css::lang::Locale& rLocale )
 {
     loadCalendarTZ( uniqueID, rLocale, OUString());
 }
 
-OUString SAL_CALL
+OUString
 CalendarImpl::getUniqueID()
 {
     if (!xCalendar.is())
@@ -195,7 +195,7 @@ CalendarImpl::getUniqueID()
     return xCalendar->getUniqueID();
 }
 
-void SAL_CALL
+void
 CalendarImpl::setValue( sal_Int16 fieldIndex, sal_Int16 value )
 {
     if (!xCalendar.is())
@@ -203,7 +203,7 @@ CalendarImpl::setValue( sal_Int16 fieldIndex, sal_Int16 value )
     xCalendar->setValue( fieldIndex, value );
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 CalendarImpl::getValue( sal_Int16 fieldIndex )
 {
     if (!xCalendar.is())
@@ -211,7 +211,7 @@ CalendarImpl::getValue( sal_Int16 fieldIndex )
     return xCalendar->getValue( fieldIndex );
 }
 
-void SAL_CALL
+void
 CalendarImpl::addValue( sal_Int16 fieldIndex, sal_Int32 amount )
 {
     if (!xCalendar.is())
@@ -219,7 +219,7 @@ CalendarImpl::addValue( sal_Int16 fieldIndex, sal_Int32 amount )
     xCalendar->addValue( fieldIndex, amount);
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 CalendarImpl::getFirstDayOfWeek()
 {
     if (!xCalendar.is())
@@ -227,7 +227,7 @@ CalendarImpl::getFirstDayOfWeek()
     return xCalendar->getFirstDayOfWeek();
 }
 
-void SAL_CALL
+void
 CalendarImpl::setFirstDayOfWeek( sal_Int16 day )
 {
     if (!xCalendar.is())
@@ -235,7 +235,7 @@ CalendarImpl::setFirstDayOfWeek( sal_Int16 day )
     xCalendar->setFirstDayOfWeek(day);
 }
 
-void SAL_CALL
+void
 CalendarImpl::setMinimumNumberOfDaysForFirstWeek( sal_Int16 days )
 {
     if (!xCalendar.is())
@@ -243,7 +243,7 @@ CalendarImpl::setMinimumNumberOfDaysForFirstWeek( sal_Int16 days )
     xCalendar->setMinimumNumberOfDaysForFirstWeek(days);
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 CalendarImpl::getMinimumNumberOfDaysForFirstWeek()
 {
     if (!xCalendar.is())
@@ -252,7 +252,7 @@ CalendarImpl::getMinimumNumberOfDaysForFirstWeek()
 }
 
 
-OUString SAL_CALL
+OUString
 CalendarImpl::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType )
 {
     if (!xCalendar.is())
@@ -260,7 +260,7 @@ CalendarImpl::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 n
     return xCalendar->getDisplayName( displayIndex, idx, nameType );
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 CalendarImpl::getNumberOfMonthsInYear()
 {
     if (!xCalendar.is())
@@ -269,7 +269,7 @@ CalendarImpl::getNumberOfMonthsInYear()
 }
 
 
-sal_Int16 SAL_CALL
+sal_Int16
 CalendarImpl::getNumberOfDaysInWeek()
 {
     if (!xCalendar.is())
@@ -278,7 +278,7 @@ CalendarImpl::getNumberOfDaysInWeek()
 }
 
 
-Sequence< CalendarItem > SAL_CALL
+Sequence< CalendarItem >
 CalendarImpl::getDays()
 {
     if (!xCalendar.is())
@@ -287,7 +287,7 @@ CalendarImpl::getDays()
 }
 
 
-Sequence< CalendarItem > SAL_CALL
+Sequence< CalendarItem >
 CalendarImpl::getMonths()
 {
     if (!xCalendar.is())
@@ -296,7 +296,7 @@ CalendarImpl::getMonths()
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 CalendarImpl::getDays2()
 {
     if (!xCalendar.is())
@@ -305,7 +305,7 @@ CalendarImpl::getDays2()
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 CalendarImpl::getMonths2()
 {
     if (!xCalendar.is())
@@ -314,7 +314,7 @@ CalendarImpl::getMonths2()
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 CalendarImpl::getGenitiveMonths2()
 {
     if (!xCalendar.is())
@@ -323,7 +323,7 @@ CalendarImpl::getGenitiveMonths2()
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 CalendarImpl::getPartitiveMonths2()
 {
     if (!xCalendar.is())
@@ -332,7 +332,7 @@ CalendarImpl::getPartitiveMonths2()
 }
 
 
-bool SAL_CALL
+bool
 CalendarImpl::isValid()
 {
     if (!xCalendar.is())
@@ -340,7 +340,7 @@ CalendarImpl::isValid()
     return xCalendar->isValid();
 }
 
-OUString SAL_CALL
+OUString
 CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {
     if (!xCalendar.is())
@@ -348,19 +348,19 @@ CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativ
     return xCalendar->getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
 }
 
-OUString SAL_CALL
+OUString
 CalendarImpl::getImplementationName()
 {
     return u"com.sun.star.i18n.CalendarImpl"_ustr;
 }
 
-bool SAL_CALL
+bool
 CalendarImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 CalendarImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.LocaleCalendar"_ustr, u"com.sun.star.i18n.LocaleCalendar2"_ustr };

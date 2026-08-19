@@ -36,12 +36,12 @@ class OrdinalSuffixService final : public cppu::WeakImplHelper
         virtual ~OrdinalSuffixService() override;
 
         // XOrdinalSuffix
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const css::lang::Locale &rLocale ) override;
+        virtual cpo::uno::Sequence< OUString > getOrdinalSuffix( sal_Int32 nNumber, const css::lang::Locale &rLocale ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual cpo::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService(const OUString& ServiceName) override;
+        virtual cpo::uno::Sequence < OUString > getSupportedServiceNames() override;
 
 };
 

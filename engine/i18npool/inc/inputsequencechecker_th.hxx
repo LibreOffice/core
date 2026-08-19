@@ -30,10 +30,10 @@ public:
     InputSequenceChecker_th();
     virtual ~InputSequenceChecker_th() override;
 
-    bool SAL_CALL checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
+    bool checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) override;
 
-    sal_Int32 SAL_CALL correctInputSequence(OUString& Text, sal_Int32 nStartPos,
+    sal_Int32 correctInputSequence(OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) override;
 };
 

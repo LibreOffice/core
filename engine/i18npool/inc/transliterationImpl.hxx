@@ -41,45 +41,45 @@ public:
     virtual ~TransliterationImpl() override;
 
     // Methods
-    virtual OUString SAL_CALL getName(  ) override ;
-    virtual sal_Int16 SAL_CALL getType(  ) override ;
+    virtual OUString getName(  ) override ;
+    virtual sal_Int16 getType(  ) override ;
 
-    virtual void SAL_CALL loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override ;
-    virtual void SAL_CALL loadModuleNew( const cpo::uno::Sequence< css::i18n::TransliterationModulesNew >& modName,
+    virtual void loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override ;
+    virtual void loadModuleNew( const cpo::uno::Sequence< css::i18n::TransliterationModulesNew >& modName,
         const css::lang::Locale& rLocale ) override ;
-    virtual void SAL_CALL loadModuleByImplName( const OUString& implName,
+    virtual void loadModuleByImplName( const OUString& implName,
         const css::lang::Locale& rLocale ) override;
-    virtual void SAL_CALL loadModulesByImplNames(const cpo::uno::Sequence< OUString >& modNamelist,
+    virtual void loadModulesByImplNames(const cpo::uno::Sequence< OUString >& modNamelist,
         const css::lang::Locale& rLocale) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableModules(
+    virtual cpo::uno::Sequence< OUString > getAvailableModules(
         const css::lang::Locale& rLocale, sal_Int16 sType ) override;
 
-    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    virtual OUString transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         cpo::uno::Sequence< sal_Int32 >& offset  ) override ;
 
-    virtual OUString SAL_CALL folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    virtual OUString folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         cpo::uno::Sequence< sal_Int32 >& offset ) override;
 
     // Methods in XExtendedTransliteration
-    virtual OUString SAL_CALL transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount ) override ;
-    virtual OUString SAL_CALL transliterateChar2String( sal_Unicode inChar ) override ;
-    virtual sal_Unicode SAL_CALL transliterateChar2Char( sal_Unicode inChar ) override ;
+    virtual OUString transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount ) override ;
+    virtual OUString transliterateChar2String( sal_Unicode inChar ) override ;
+    virtual sal_Unicode transliterateChar2Char( sal_Unicode inChar ) override ;
 
-    virtual bool SAL_CALL equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
+    virtual bool equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
         sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
+    virtual cpo::uno::Sequence< OUString > transliterateRange( const OUString& str1,
         const OUString& str2 ) override ;
 
-    virtual sal_Int32 SAL_CALL compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
+    virtual sal_Int32 compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const OUString& s2, sal_Int32 off2, sal_Int32 len2) override;
 
-    virtual sal_Int32 SAL_CALL compareString( const OUString& s1, const OUString& s2) override;
+    virtual sal_Int32 compareString( const OUString& s1, const OUString& s2) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
 #define maxCascade 27

@@ -29,25 +29,25 @@ public:
     Transliteration_body();
 
     // Methods which are shared.
-    sal_Int16 SAL_CALL getType() override;
+    sal_Int16 getType() override;
 
     OUString transliterateImpl(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         cpo::uno::Sequence< sal_Int32 >* pOffset) override;
 
-        OUString SAL_CALL
+        OUString
         transliterateChar2String( sal_Unicode inChar) override;
 
-        virtual sal_Unicode SAL_CALL
+        virtual sal_Unicode
         transliterateChar2Char( sal_Unicode inChar) override;
 
     OUString foldingImpl(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         cpo::uno::Sequence< sal_Int32 >* pOffset) override;
 
-    bool SAL_CALL equals(
+    bool equals(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
 
-    cpo::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
+    cpo::uno::Sequence< OUString > transliterateRange( const OUString& str1,
         const OUString& str2 ) override;
 
 protected:

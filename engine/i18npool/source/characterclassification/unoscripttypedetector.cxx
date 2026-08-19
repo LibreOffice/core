@@ -23,38 +23,38 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-sal_Int16 SAL_CALL
+sal_Int16
 UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
 {
     return ScriptTypeDetector::getScriptDirection(Text, nPos, defaultScriptDirection);
 }
 
 // return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
-sal_Int32 SAL_CALL
+sal_Int32
 UnoScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {
     return ScriptTypeDetector::beginOfScriptDirection(Text, nPos, direction);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 UnoScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {
     return ScriptTypeDetector::endOfScriptDirection(Text, nPos, direction);
 }
 
-OUString SAL_CALL
+OUString
 UnoScriptTypeDetector::getImplementationName()
 {
     return u"com.sun.star.i18n.ScriptTypeDetector"_ustr;
 }
 
-bool SAL_CALL
+bool
 UnoScriptTypeDetector::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 UnoScriptTypeDetector::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.ScriptTypeDetector"_ustr };

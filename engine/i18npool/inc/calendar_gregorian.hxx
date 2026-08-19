@@ -63,43 +63,43 @@ public:
     virtual ~Calendar_gregorian() override;
 
     // Methods in XCalendar
-    virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const css::lang::Locale& rLocale) override;
-    virtual void SAL_CALL setDateTime(double fTimeInDays) override;
-    virtual double SAL_CALL getDateTime() override;
-    virtual void SAL_CALL setValue( sal_Int16 nFieldIndex, sal_Int16 nValue ) override;
-    virtual sal_Int16 SAL_CALL getValue(sal_Int16 nFieldIndex) override;
-    virtual void SAL_CALL addValue(sal_Int16 nFieldIndex, sal_Int32 nAmount) override;
-    virtual bool SAL_CALL isValid() override;
-    virtual css::i18n:: Calendar SAL_CALL getLoadedCalendar() override;
-    virtual OUString SAL_CALL getUniqueID() override;
-    virtual sal_Int16 SAL_CALL getFirstDayOfWeek() override;
-    virtual void SAL_CALL setFirstDayOfWeek(sal_Int16 nDay) override;
-    virtual void SAL_CALL setMinimumNumberOfDaysForFirstWeek(sal_Int16 nDays) override;
-    virtual sal_Int16 SAL_CALL getMinimumNumberOfDaysForFirstWeek() override;
-    virtual sal_Int16 SAL_CALL getNumberOfMonthsInYear() override;
-    virtual sal_Int16 SAL_CALL getNumberOfDaysInWeek() override;
-    virtual cpo::uno::Sequence < css::i18n::CalendarItem > SAL_CALL getMonths() override;
-    virtual cpo::uno::Sequence < css::i18n::CalendarItem > SAL_CALL getDays() override;
-    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
+    virtual void loadCalendar(const OUString& uniqueID, const css::lang::Locale& rLocale) override;
+    virtual void setDateTime(double fTimeInDays) override;
+    virtual double getDateTime() override;
+    virtual void setValue( sal_Int16 nFieldIndex, sal_Int16 nValue ) override;
+    virtual sal_Int16 getValue(sal_Int16 nFieldIndex) override;
+    virtual void addValue(sal_Int16 nFieldIndex, sal_Int32 nAmount) override;
+    virtual bool isValid() override;
+    virtual css::i18n:: Calendar getLoadedCalendar() override;
+    virtual OUString getUniqueID() override;
+    virtual sal_Int16 getFirstDayOfWeek() override;
+    virtual void setFirstDayOfWeek(sal_Int16 nDay) override;
+    virtual void setMinimumNumberOfDaysForFirstWeek(sal_Int16 nDays) override;
+    virtual sal_Int16 getMinimumNumberOfDaysForFirstWeek() override;
+    virtual sal_Int16 getNumberOfMonthsInYear() override;
+    virtual sal_Int16 getNumberOfDaysInWeek() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem > getMonths() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem > getDays() override;
+    virtual OUString getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
 
     // Methods in XExtendedCalendar
-    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
+    virtual OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
 
     // XCalendar3
-    virtual css::i18n::Calendar2 SAL_CALL getLoadedCalendar2() override;
-    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getDays2() override;
-    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getMonths2() override;
-    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getGenitiveMonths2() override;
-    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getPartitiveMonths2() override;
+    virtual css::i18n::Calendar2 getLoadedCalendar2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getDays2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getMonths2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getGenitiveMonths2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getPartitiveMonths2() override;
 
     // XCalendar4
-    virtual void SAL_CALL setLocalDateTime(double TimeInDays) override;
-    virtual double SAL_CALL getLocalDateTime() override;
+    virtual void setLocalDateTime(double TimeInDays) override;
+    virtual double getLocalDateTime() override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence < OUString > getSupportedServiceNames() override;
 
 protected:
     const Era *eraArray;
@@ -153,7 +153,7 @@ class Calendar_hanja final : public Calendar_gregorian
 public:
     // Constructors
     Calendar_hanja();
-    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
+    virtual OUString getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
 };
 
 class Calendar_hanja_yoil final : public Calendar_gregorian
@@ -161,7 +161,7 @@ class Calendar_hanja_yoil final : public Calendar_gregorian
 public:
     // Constructors
     Calendar_hanja_yoil();
-    virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
+    virtual OUString getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
 };
 
 
@@ -199,7 +199,7 @@ public:
     Calendar_buddhist();
 
     // Methods in XExtendedCalendar
-    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
+    virtual OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
 };
 
 }

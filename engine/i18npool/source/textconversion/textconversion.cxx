@@ -34,19 +34,19 @@ TextConversionService::~TextConversionService()
 {
 }
 
-OUString SAL_CALL
+OUString
 TextConversionService::getImplementationName()
 {
     return OUString::createFromAscii(implementationName);
 }
 
-bool SAL_CALL
+bool
 TextConversionService::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TextConversionService::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii(implementationName) };

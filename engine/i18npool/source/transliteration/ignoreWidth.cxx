@@ -36,7 +36,7 @@ ignoreWidth::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 n
     return t1->transliterateImpl(inStr, startPos, nCount, pOffset);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 ignoreWidth::transliterateRange( const OUString& str1, const OUString& str2 )
 {
     rtl::Reference< fullwidthToHalfwidth > t1(new fullwidthToHalfwidth);
@@ -45,7 +45,7 @@ ignoreWidth::transliterateRange( const OUString& str1, const OUString& str2 )
     return transliteration_Ignore::transliterateRange(str1, str2, *t1, *t2);
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 ignoreWidth::transliterateChar2Char( sal_Unicode inChar)
 {
     rtl::Reference< fullwidthToHalfwidth > t1(new fullwidthToHalfwidth);

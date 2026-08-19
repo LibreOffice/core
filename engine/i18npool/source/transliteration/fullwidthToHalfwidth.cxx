@@ -53,7 +53,7 @@ fullwidthToHalfwidth::transliterateImpl( const OUString& inStr, sal_Int32 startP
     return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 fullwidthToHalfwidth::transliterateChar2Char( sal_Unicode inChar)
 {
     sal_Unicode newChar = i18nutil::widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
@@ -83,7 +83,7 @@ FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::transliterateImpl( const OUString& inStr, s
     return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::transliterateChar2Char( sal_Unicode inChar )
 {
     sal_Unicode newChar = i18nutil::widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
@@ -113,7 +113,7 @@ FULLWIDTH_HALFWIDTH_LIKE_ASC::transliterateImpl( const OUString& inStr, sal_Int3
     return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 FULLWIDTH_HALFWIDTH_LIKE_ASC::transliterateChar2Char( sal_Unicode inChar )
 {
     sal_Unicode newChar = i18nutil::widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);

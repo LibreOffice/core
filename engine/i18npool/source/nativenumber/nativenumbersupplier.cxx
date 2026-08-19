@@ -800,13 +800,13 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
         return aNumberString;
 }
 
-OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
+OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode)
 {
     return getNativeNumberString(aNumberString, rLocale, nNativeNumberMode, nullptr);
 }
 
-OUString SAL_CALL NativeNumberSupplierService::getNativeNumberStringParams(
+OUString NativeNumberSupplierService::getNativeNumberStringParams(
     const OUString& rNumberString, const css::lang::Locale& rLocale, sal_Int16 nNativeNumberMode,
     const OUString& rNativeNumberParams)
 {
@@ -886,7 +886,7 @@ bool NativeNumberSupplierService::isValidNatNumImpl( const Locale& rLocale, sal_
     return false;
 }
 
-NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode )
+NativeNumberXmlAttributes NativeNumberSupplierService::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode )
 {
     static const sal_Int16 attShort         = 0;
     static const sal_Int16 attMedium        = 1;
@@ -965,7 +965,7 @@ static bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
     return false;
 }
 
-sal_Int16 SAL_CALL NativeNumberSupplierService::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr )
+sal_Int16 NativeNumberSupplierService::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr )
 {
     sal_Unicode numberChar[NumberChar_Count];
     for (sal_Int16 i = 0; i < NumberChar_Count; i++)
@@ -1246,18 +1246,18 @@ OUString getCyrillicNativeNumberString(const OUString& aNumberString)
 
 constexpr OUString implementationName = u"com.sun.star.i18n.NativeNumberSupplier"_ustr;
 
-OUString SAL_CALL NativeNumberSupplierService::getImplementationName()
+OUString NativeNumberSupplierService::getImplementationName()
 {
     return implementationName;
 }
 
-bool SAL_CALL
+bool
 NativeNumberSupplierService::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 NativeNumberSupplierService::getSupportedServiceNames()
 {
     return {implementationName, u"com.sun.star.i18n.NativeNumberSupplier2"_ustr};

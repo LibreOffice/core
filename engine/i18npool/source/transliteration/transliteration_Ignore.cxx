@@ -28,7 +28,7 @@ using namespace ::cpo::uno;
 
 namespace i18npool {
 
-bool SAL_CALL
+bool
 transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
 {
@@ -61,7 +61,7 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2 )
 {
     if (str1.isEmpty() || str2.isEmpty())
@@ -71,7 +71,7 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
 }
 
 
-sal_Int16 SAL_CALL
+sal_Int16
 transliteration_Ignore::getType()
 {
     // The type is also defined in com/sun/star/util/TransliterationType.hdl
@@ -186,7 +186,7 @@ transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 transliteration_Ignore::transliterateChar2Char( sal_Unicode inChar)
 {
     return func ? func( inChar) : table ? (*table)[ inChar ] : inChar;

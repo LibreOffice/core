@@ -47,7 +47,7 @@ bool isHangul(sal_Unicode cCh)
 }
 }
 
-LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
+LineBreakResults BreakIterator_CJK::getLineBreak(
     const OUString& Text, sal_Int32 nStartPos, const css::lang::Locale& rLocale,
     sal_Int32 nMinBreakPos, const LineBreakHyphenationOptions& hOptions,
     const LineBreakUserOptions& bOptions)

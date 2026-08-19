@@ -50,19 +50,19 @@ Transliteration_body::Transliteration_body()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_body";
 }
 
-sal_Int16 SAL_CALL Transliteration_body::getType()
+sal_Int16 Transliteration_body::getType()
 {
     return TransliterationType::ONE_TO_ONE;
 }
 
-bool SAL_CALL Transliteration_body::equals(
+bool Transliteration_body::equals(
     const OUString& /*str1*/, sal_Int32 /*pos1*/, sal_Int32 /*nCount1*/, sal_Int32& /*nMatch1*/,
     const OUString& /*str2*/, sal_Int32 /*pos2*/, sal_Int32 /*nCount2*/, sal_Int32& /*nMatch2*/)
 {
     throw RuntimeException();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 Transliteration_body::transliterateRange( const OUString& str1, const OUString& str2 )
 {
     return { str1, str2 };
@@ -164,7 +164,7 @@ Transliteration_body::transliterateImpl(
     return OUString(out, j);
 }
 
-OUString SAL_CALL
+OUString
 Transliteration_body::transliterateChar2String( sal_Unicode inChar )
 {
     const i18nutil::Mapping map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
@@ -179,7 +179,7 @@ Transliteration_body::transliterateChar2String( sal_Unicode inChar )
     return OUString( pStr, SAL_NO_ACQUIRE );
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 Transliteration_body::transliterateChar2Char( sal_Unicode inChar )
 {
     const i18nutil::Mapping map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);

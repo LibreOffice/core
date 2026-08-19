@@ -43,16 +43,16 @@ public:
     InputSequenceCheckerImpl(const char *pServiceName);
     virtual ~InputSequenceCheckerImpl() override;
 
-    virtual bool SAL_CALL checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
+    virtual bool checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) override;
 
-    virtual sal_Int32 SAL_CALL correctInputSequence(OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 correctInputSequence(OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     const char *serviceName;

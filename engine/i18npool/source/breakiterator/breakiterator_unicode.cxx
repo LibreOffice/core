@@ -314,7 +314,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
     icuBI->mpValue->maICUText = rText;
 }
 
-sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
+sal_Int32 BreakIterator_Unicode::nextCharacters( const OUString& Text,
         sal_Int32 nStartPos, const lang::Locale &rLocale,
         sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
 {
@@ -333,7 +333,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
     return nStartPos;
 }
 
-sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Text,
+sal_Int32 BreakIterator_Unicode::previousCharacters( const OUString& Text,
         sal_Int32 nStartPos, const lang::Locale& rLocale,
         sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
 {
@@ -353,7 +353,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
 }
 
 
-Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
+Boundary BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int16 rWordType )
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
@@ -377,7 +377,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 }
 
 
-Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_Int32 nStartPos,
+Boundary BreakIterator_Unicode::previousWord(const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& rLocale, sal_Int16 rWordType)
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
@@ -402,7 +402,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 }
 
 
-Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
+Boundary BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
         sal_Int16 rWordType, bool bDirection )
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
@@ -436,7 +436,7 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
 }
 
 
-sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIterator_Unicode::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale &rLocale )
 {
     loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
@@ -455,7 +455,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
     return nStartPos;
 }
 
-sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIterator_Unicode::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale &rLocale )
 {
     loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
@@ -471,7 +471,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, s
     return nStartPos;
 }
 
-LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
+LineBreakResults BreakIterator_Unicode::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions,
@@ -582,19 +582,19 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
     return lbr;
 }
 
-OUString SAL_CALL
+OUString
 BreakIterator_Unicode::getImplementationName()
 {
     return cBreakIterator;
 }
 
-bool SAL_CALL
+bool
 BreakIterator_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 BreakIterator_Unicode::getSupportedServiceNames()
 {
     return{ cBreakIterator };

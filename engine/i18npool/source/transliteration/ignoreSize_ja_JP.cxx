@@ -34,7 +34,7 @@ ignoreSize_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_In
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2 )
 {
     rtl::Reference< smallToLarge_ja_JP > t1(new smallToLarge_ja_JP);
@@ -43,7 +43,7 @@ ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2
     return transliteration_Ignore::transliterateRange(str1, str2, *t1, *t2);
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 ignoreSize_ja_JP::transliterateChar2Char( sal_Unicode inChar)
 {
     rtl::Reference< smallToLarge_ja_JP > t1(new smallToLarge_ja_JP);

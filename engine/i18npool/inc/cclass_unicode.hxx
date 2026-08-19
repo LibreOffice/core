@@ -67,31 +67,31 @@ public:
     cclass_Unicode(css::uno::Reference < css::uno::XComponentContext > xContext );
     virtual ~cclass_Unicode() override;
 
-    virtual OUString SAL_CALL toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
+    virtual OUString toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         const css::lang::Locale& rLocale ) override;
-    virtual OUString SAL_CALL toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
+    virtual OUString toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         const css::lang::Locale& rLocale ) override;
-    virtual OUString SAL_CALL toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
+    virtual OUString toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         const css::lang::Locale& rLocale ) override;
-    virtual sal_Int16 SAL_CALL getType( const OUString& Text, sal_Int32 nPos ) override;
-    virtual sal_Int16 SAL_CALL getCharacterDirection( const OUString& Text, sal_Int32 nPos ) override;
-    virtual sal_Int16 SAL_CALL getScript( const OUString& Text, sal_Int32 nPos ) override;
-    virtual sal_Int32 SAL_CALL getCharacterType( const OUString& text, sal_Int32 nPos,
+    virtual sal_Int16 getType( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int16 getCharacterDirection( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int16 getScript( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int32 getCharacterType( const OUString& text, sal_Int32 nPos,
         const css::lang::Locale& rLocale ) override;
-    virtual sal_Int32 SAL_CALL getStringType( const OUString& text, sal_Int32 nPos, sal_Int32 nCount,
+    virtual sal_Int32 getStringType( const OUString& text, sal_Int32 nPos, sal_Int32 nCount,
         const css::lang::Locale& rLocale ) override;
-    virtual css::i18n::ParseResult SAL_CALL parseAnyToken( const OUString& Text, sal_Int32 nPos,
+    virtual css::i18n::ParseResult parseAnyToken( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags, const OUString& userDefinedCharactersStart,
         sal_Int32 nContCharFlags, const OUString& userDefinedCharactersCont ) override;
-    virtual css::i18n::ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, const OUString& Text,
+    virtual css::i18n::ParseResult parsePredefinedToken( sal_Int32 nTokenType, const OUString& Text,
         sal_Int32 nPos, const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
         const OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags,
         const OUString& userDefinedCharactersCont ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     // These are performance sensitive, so we don't want to use locking and switch their state, so just

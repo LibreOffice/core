@@ -40,28 +40,28 @@ public:
         TextConversionService(const char* pImplName);
         virtual ~TextConversionService() override;
         // Methods
-        virtual css::i18n::TextConversionResult SAL_CALL
+        virtual css::i18n::TextConversionResult
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override = 0;
-        virtual OUString SAL_CALL
+        virtual OUString
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override = 0;
-        virtual OUString SAL_CALL
+        virtual OUString
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override = 0;
-        virtual bool SAL_CALL
+        virtual bool
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) override = 0;
 
     //XServiceInfo
-    OUString SAL_CALL
+    OUString
         getImplementationName() override;
-    bool SAL_CALL
+    bool
         supportsService(const OUString& ServiceName) override;
-    cpo::uno::Sequence< OUString > SAL_CALL
+    cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 private:
     const char* implementationName;
@@ -82,19 +82,19 @@ public:
     TextConversion_ko( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
 
         // Methods
-        css::i18n::TextConversionResult SAL_CALL
+        css::i18n::TextConversionResult
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
-        OUString SAL_CALL
+        OUString
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
-        OUString SAL_CALL
+        OUString
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override;
-        bool SAL_CALL
+        bool
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
@@ -119,19 +119,19 @@ public:
     TextConversion_zh( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
 
         // Methods
-        css::i18n::TextConversionResult SAL_CALL
+        css::i18n::TextConversionResult
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
-        OUString SAL_CALL
+        OUString
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
-        OUString SAL_CALL
+        OUString
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override;
-        bool SAL_CALL
+        bool
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;

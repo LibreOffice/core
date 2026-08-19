@@ -30,7 +30,7 @@ using namespace cpo::uno;
 
 namespace i18npool {
 
-TextConversionResult SAL_CALL
+TextConversionResult
 TextConversionImpl::getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
 {
@@ -42,7 +42,7 @@ TextConversionImpl::getConversions( const OUString& aText, sal_Int32 nStartPos, 
     return xTC->getConversions(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
-OUString SAL_CALL
+OUString
 TextConversionImpl::getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
 {
@@ -54,7 +54,7 @@ TextConversionImpl::getConversion( const OUString& aText, sal_Int32 nStartPos, s
     return xTC->getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
-OUString SAL_CALL
+OUString
 TextConversionImpl::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence< sal_Int32>& offset)
 {
@@ -66,7 +66,7 @@ TextConversionImpl::getConversionWithOffset( const OUString& aText, sal_Int32 nS
     return xTC->getConversionWithOffset(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions, offset);
 }
 
-bool SAL_CALL
+bool
 TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
 {
     getLocaleSpecificTextConversion(rLocale);
@@ -102,19 +102,19 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale)
         throw NoSupportException(); // aLocale is not supported
 }
 
-OUString SAL_CALL
+OUString
 TextConversionImpl::getImplementationName()
 {
     return u"com.sun.star.i18n.TextConversion"_ustr;
 }
 
-bool SAL_CALL
+bool
 TextConversionImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TextConversionImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.TextConversion"_ustr };

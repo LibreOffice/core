@@ -118,14 +118,14 @@ size_t get_collator_data_zh_zhuyin_length();
 
 #endif
 
-sal_Int32 SAL_CALL
+sal_Int32
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2)
 {
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 Collator_Unicode::compareString( const OUString& str1, const OUString& str2)
 {
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), str1.getLength(),
@@ -138,7 +138,7 @@ extern "C" { static void thisModule() {} }
 
 #endif
 
-sal_Int32 SAL_CALL
+sal_Int32
 Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::Locale& rLocale, sal_Int32 options)
 {
     if (!collator) {
@@ -414,19 +414,19 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 }
 
 
-OUString SAL_CALL
+OUString
 Collator_Unicode::getImplementationName()
 {
     return implementationName;
 }
 
-bool SAL_CALL
+bool
 Collator_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 Collator_Unicode::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { implementationName };

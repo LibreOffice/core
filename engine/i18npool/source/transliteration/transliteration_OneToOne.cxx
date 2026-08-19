@@ -30,7 +30,7 @@ using namespace ::cpo::uno;
 
 namespace i18npool {
 
-sal_Int16 SAL_CALL transliteration_OneToOne::getType()
+sal_Int16 transliteration_OneToOne::getType()
 {
         // This type is also defined in com/sun/star/util/TransliterationType.hdl
         return TransliterationType::ONE_TO_ONE;
@@ -43,14 +43,14 @@ transliteration_OneToOne::foldingImpl( const OUString& /*inStr*/, sal_Int32 /*st
         throw RuntimeException();
 }
 
-bool SAL_CALL
+bool
 transliteration_OneToOne::equals( const OUString& /*str1*/, sal_Int32 /*pos1*/, sal_Int32 /*nCount1*/,
         sal_Int32& /*nMatch1*/, const OUString& /*str2*/, sal_Int32 /*pos2*/, sal_Int32 /*nCount2*/, sal_Int32& /*nMatch2*/ )
 {
     throw RuntimeException();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 transliteration_OneToOne::transliterateRange( const OUString& /*str1*/, const OUString& /*str2*/ )
 {
     throw RuntimeException();
@@ -83,7 +83,7 @@ transliteration_OneToOne::transliterateImpl( const OUString& inStr, sal_Int32 st
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar)
 {
     return func ? func( inChar) : (*table)[ inChar ];

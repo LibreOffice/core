@@ -32,7 +32,7 @@ using namespace ::cpo::uno;
 
 namespace i18npool {
 
-sal_Int16 SAL_CALL transliteration_Numeric::getType()
+sal_Int16 transliteration_Numeric::getType()
 {
     return TransliterationType::NUMERIC;
 }
@@ -43,13 +43,13 @@ OUString
     throw RuntimeException();
 }
 
-bool SAL_CALL
+bool
     transliteration_Numeric::equals( const OUString& /*str1*/, sal_Int32 /*pos1*/, sal_Int32 /*nCount1*/, sal_Int32& /*nMatch1*/, const OUString& /*str2*/, sal_Int32 /*pos2*/, sal_Int32 /*nCount2*/, sal_Int32& /*nMatch2*/ )
 {
     throw RuntimeException();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
     transliteration_Numeric::transliterateRange( const OUString& /*str1*/, const OUString& /*str2*/ )
 {
     throw RuntimeException();
@@ -124,7 +124,7 @@ transliteration_Numeric::transliterateImpl( const OUString& inStr, sal_Int32 sta
         return rtl::Reference(new NativeNumberSupplierService())->getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, pOffset );
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 transliteration_Numeric::transliterateChar2Char( sal_Unicode inChar )
 {
     if (tableSize) {

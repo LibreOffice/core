@@ -39,28 +39,28 @@ public:
     TextConversionImpl( css::uno::Reference < css::uno::XComponentContext > xContext ) : m_xContext(std::move(xContext)) {};
 
         // Methods
-        css::i18n::TextConversionResult SAL_CALL
+        css::i18n::TextConversionResult
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
-        OUString SAL_CALL
+        OUString
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
-        OUString SAL_CALL
+        OUString
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override;
-        bool SAL_CALL
+        bool
         interactiveConversion( const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) override;
 
     //XServiceInfo
-    OUString SAL_CALL
+    OUString
         getImplementationName() override;
-    bool SAL_CALL
+    bool
         supportsService(const OUString& ServiceName) override;
-    cpo::uno::Sequence< OUString > SAL_CALL
+    cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 private:
     css::lang::Locale aLocale;

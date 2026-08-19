@@ -36,15 +36,15 @@ public:
         OUString
         foldingImpl(const OUString & inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset) override;
 
-        sal_Int16 SAL_CALL getType() override;
+        sal_Int16 getType() override;
 
-        bool SAL_CALL
+        bool
         equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32 & nMatch1, const OUString & str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32 & nMatch2) override;
 
-        OUString SAL_CALL
+        OUString
         transliterateChar2String( sal_Unicode inChar) override;
 
-        sal_Unicode SAL_CALL
+        sal_Unicode
         transliterateChar2Char( sal_Unicode inChar) override;
 };
 

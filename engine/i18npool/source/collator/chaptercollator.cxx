@@ -39,7 +39,7 @@ ChapterCollator::~ChapterCollator()
 {
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ChapterCollator::compareString( const OUString& s1, const OUString& s2)
 {
     return compareSubstring(s1, 0, s1.getLength(),  s2, 0, s2.getLength());
@@ -47,7 +47,7 @@ ChapterCollator::compareString( const OUString& s1, const OUString& s2)
 
 #define DIGIT KCharacterType::DIGIT
 
-sal_Int32 SAL_CALL
+sal_Int32
 ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2)
 {
@@ -75,19 +75,19 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
 
 constexpr OUString cChapCollator = u"com.sun.star.i18n.ChapterCollator"_ustr;
 
-OUString SAL_CALL
+OUString
 ChapterCollator::getImplementationName()
 {
     return cChapCollator;
 }
 
-bool SAL_CALL
+bool
 ChapterCollator::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 ChapterCollator::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { cChapCollator };

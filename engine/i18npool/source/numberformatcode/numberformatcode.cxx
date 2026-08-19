@@ -36,7 +36,7 @@ NumberFormatCodeMapper::~NumberFormatCodeMapper()
 }
 
 
-css::i18n::NumberFormatCode SAL_CALL
+css::i18n::NumberFormatCode
 NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const css::lang::Locale& rLocale )
 {
 
@@ -64,7 +64,7 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
 }
 
 
-css::i18n::NumberFormatCode SAL_CALL
+css::i18n::NumberFormatCode
 NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::Locale& rLocale )
 {
     std::scoped_lock g(maMutex);
@@ -85,7 +85,7 @@ NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::L
 }
 
 
-cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
+cpo::uno::Sequence< css::i18n::NumberFormatCode >
 NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang::Locale& rLocale )
 {
     std::scoped_lock g(maMutex);
@@ -110,7 +110,7 @@ NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang
 }
 
 
-cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
+cpo::uno::Sequence< css::i18n::NumberFormatCode >
 NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale )
 {
     std::scoped_lock g(maMutex);
@@ -237,18 +237,18 @@ NumberFormatCodeMapper::mapElementUsageStringToShort(std::u16string_view formatU
 }
 
 
-OUString SAL_CALL
+OUString
 NumberFormatCodeMapper::getImplementationName()
 {
     return u"com.sun.star.i18n.NumberFormatCodeMapper"_ustr;
 }
 
-bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
+bool NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 NumberFormatCodeMapper::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.NumberFormatMapper"_ustr };

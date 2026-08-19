@@ -40,27 +40,27 @@ public:
         NativeNumberSupplierService() {}
 
         // Methods
-        virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
+        virtual OUString getNativeNumberString( const OUString& aNumberString,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) override;
 
-        virtual bool SAL_CALL isValidNatNum( const css::lang::Locale& rLocale,
+        virtual bool isValidNatNum( const css::lang::Locale& rLocale,
                 sal_Int16 nNativeNumberMode ) override { return isValidNatNumImpl(rLocale, nNativeNumberMode); }
 
-        virtual css::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
+        virtual css::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) override;
 
-        virtual sal_Int16 SAL_CALL convertFromXmlAttributes(
+        virtual sal_Int16 convertFromXmlAttributes(
                 const css::i18n::NativeNumberXmlAttributes& aAttr ) override;
 
         // XNativeNumberSupplier2
-        virtual OUString SAL_CALL getNativeNumberStringParams(
+        virtual OUString getNativeNumberStringParams(
             const OUString& rNumberString, const css::lang::Locale& rLocale,
             sal_Int16 nNativeNumberMode, const OUString& rNativeNumberParams) override;
 
         //XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService(const OUString& ServiceName) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
         /// @throws css::uno::RuntimeException

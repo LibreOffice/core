@@ -33,43 +33,43 @@ transliteration_commonclass::transliteration_commonclass()
     implementationName = "";
 }
 
-OUString SAL_CALL transliteration_commonclass::getName()
+OUString transliteration_commonclass::getName()
 {
     return OUString::createFromAscii(transliterationName);
 }
 
-void SAL_CALL transliteration_commonclass::loadModule( TransliterationModules /*modName*/, const Locale& rLocale )
+void transliteration_commonclass::loadModule( TransliterationModules /*modName*/, const Locale& rLocale )
 {
     aLocale = rLocale;
 }
 
 
-void SAL_CALL
+void
 transliteration_commonclass::loadModuleNew( const Sequence < TransliterationModulesNew >& /*modName*/, const Locale& /*rLocale*/ )
 {
     throw RuntimeException();
 }
 
 
-void SAL_CALL
+void
 transliteration_commonclass::loadModuleByImplName( const OUString& /*implName*/, const Locale& /*rLocale*/ )
 {
     throw RuntimeException();
 }
 
-void SAL_CALL
+void
 transliteration_commonclass::loadModulesByImplNames(const Sequence< OUString >& /*modNamelist*/, const Locale& /*rLocale*/)
 {
     throw RuntimeException();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 transliteration_commonclass::getAvailableModules( const Locale& /*rLocale*/, sal_Int16 /*sType*/ )
 {
     throw RuntimeException();
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 transliteration_commonclass::compareSubstring(
         const OUString& str1, sal_Int32 off1, sal_Int32 len1,
         const OUString& str2, sal_Int32 off2, sal_Int32 len2)
@@ -98,35 +98,35 @@ transliteration_commonclass::compareSubstring(
     return strlen1 - strlen2;
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 transliteration_commonclass::compareString( const OUString& str1, const OUString& str2 )
 {
     return compareSubstring(str1, 0, str1.getLength(), str2, 0, str2.getLength());
 }
 
-OUString SAL_CALL
+OUString
 transliteration_commonclass::transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount )
 {
     return transliterateImpl(inStr, startPos, nCount, nullptr);
 }
 
-OUString SAL_CALL
+OUString
 transliteration_commonclass::transliterateChar2String( sal_Unicode inChar )
 {
     return transliteration_commonclass::transliterateString2String(OUString(&inChar, 1), 0, 1);
 }
 
-OUString SAL_CALL transliteration_commonclass::getImplementationName()
+OUString transliteration_commonclass::getImplementationName()
 {
     return OUString::createFromAscii(implementationName);
 }
 
-bool SAL_CALL transliteration_commonclass::supportsService(const OUString& rServiceName)
+bool transliteration_commonclass::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL transliteration_commonclass::getSupportedServiceNames()
+Sequence< OUString > transliteration_commonclass::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.Transliteration.l10n"_ustr };
 }

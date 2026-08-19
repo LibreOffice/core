@@ -63,28 +63,28 @@ public:
     {}
 
 public:
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override
+    virtual sal_Int32 readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override
         {
             nBytesToRead = std::min(nBytesToRead, m_seq.getLength() - nPos);
             aData = Sequence<sal_Int8>(m_seq.getConstArray() + nPos, nBytesToRead);
             nPos += nBytesToRead;
             return nBytesToRead;
         }
-    virtual sal_Int32 SAL_CALL readSomeBytes(
+    virtual sal_Int32 readSomeBytes(
         cpo::uno::Sequence< sal_Int8 >& aData,
         sal_Int32 nMaxBytesToRead ) override
         {
             return readBytes( aData, nMaxBytesToRead );
         }
-    virtual void SAL_CALL skipBytes( sal_Int32 /*nBytesToSkip*/ ) override
+    virtual void skipBytes( sal_Int32 /*nBytesToSkip*/ ) override
         {
             // not implemented
         }
-    virtual sal_Int32 SAL_CALL available(  ) override
+    virtual sal_Int32 available(  ) override
         {
             return m_seq.getLength() - nPos;
         }
-    virtual void SAL_CALL closeInput(  ) override
+    virtual void closeInput(  ) override
         {
             // not needed
         }
@@ -162,7 +162,7 @@ public:
 
 
 public: // Error handler
-    virtual void SAL_CALL error(const Any& aSAXParseException) override
+    virtual void error(const Any& aSAXParseException) override
     {
         ++nError;
         SAL_WARN("i18npool", "Error !");
@@ -171,12 +171,12 @@ public: // Error handler
             Reference < XInterface >() ,
             aSAXParseException );
     }
-    virtual void SAL_CALL fatalError(const Any& /*aSAXParseException*/) override
+    virtual void fatalError(const Any& /*aSAXParseException*/) override
     {
         ++nError;
         SAL_WARN("i18npool", "Fatal Error !");
     }
-    virtual void SAL_CALL warning(const Any& /*aSAXParseException*/) override
+    virtual void warning(const Any& /*aSAXParseException*/) override
     {
         SAL_WARN("i18npool", "Warning !");
     }
@@ -188,7 +188,7 @@ public: // ExtendedDocumentHandler
     std::stack<LocaleNode *> currentNode ;
     LocaleNode * rootNode;
 
-    virtual void SAL_CALL startDocument() override
+    virtual void startDocument() override
     {
     SAL_INFO("i18npool", "parsing document " << theLocale.c_str() << " started");
     of.writeAsciiString("#include <sal/types.h>\n\n\n");
@@ -196,7 +196,7 @@ public: // ExtendedDocumentHandler
     of.writeAsciiString("extern \"C\" {\n\n");
     }
 
-    virtual void SAL_CALL endDocument() override
+    virtual void endDocument() override
     {
         if (rootNode)
         {
@@ -219,7 +219,7 @@ public: // ExtendedDocumentHandler
         of.closeOutput();
     }
 
-    virtual void SAL_CALL startElement(const OUString& aName,
+    virtual void startElement(const OUString& aName,
                               const Reference< XAttributeList > & xAttribs) override
     {
 
@@ -234,33 +234,33 @@ public: // ExtendedDocumentHandler
     }
 
 
-    virtual void SAL_CALL endElement(const OUString& /*aName*/) override
+    virtual void endElement(const OUString& /*aName*/) override
     {
         currentNode.pop();
     }
 
-    virtual void SAL_CALL characters(const OUString& aChars) override
+    virtual void characters(const OUString& aChars) override
     {
 
         LocaleNode * l = currentNode.top();
         l->setValue (aChars);
     }
 
-    virtual void SAL_CALL ignorableWhitespace(const OUString& /*aWhitespaces*/) override
+    virtual void ignorableWhitespace(const OUString& /*aWhitespaces*/) override
     {
     }
 
-    virtual void SAL_CALL processingInstruction(const OUString& /*aTarget*/, const OUString& /*aData*/) override
-    {
-        // ignored
-    }
-
-    virtual void SAL_CALL setDocumentLocator(const Reference< XLocator> & /*xLocator*/) override
+    virtual void processingInstruction(const OUString& /*aTarget*/, const OUString& /*aData*/) override
     {
         // ignored
     }
 
-    virtual InputSource SAL_CALL resolveEntity(
+    virtual void setDocumentLocator(const Reference< XLocator> & /*xLocator*/) override
+    {
+        // ignored
+    }
+
+    virtual InputSource resolveEntity(
         const OUString& sPublicId,
         const OUString& sSystemId) override
     {
@@ -274,20 +274,20 @@ public: // ExtendedDocumentHandler
         return source;
     }
 
-    virtual void SAL_CALL startCDATA() override
+    virtual void startCDATA() override
     {
     }
-    virtual void SAL_CALL endCDATA() override
+    virtual void endCDATA() override
     {
     }
-    virtual void SAL_CALL comment(const OUString& /*sComment*/) override
+    virtual void comment(const OUString& /*sComment*/) override
     {
     }
-    virtual void SAL_CALL unknown(const OUString& /*sString*/) override
+    virtual void unknown(const OUString& /*sString*/) override
     {
     }
 
-    virtual void SAL_CALL allowLineBreak() override
+    virtual void allowLineBreak() override
     {
 
     }

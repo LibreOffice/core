@@ -33,14 +33,14 @@ class UnoScriptTypeDetector final : public cppu::WeakImplHelper
 {
 public:
     // Methods
-    virtual sal_Int32 SAL_CALL beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
-    virtual sal_Int32 SAL_CALL endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
-    virtual sal_Int16 SAL_CALL getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) override;
+    virtual sal_Int32 beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
+    virtual sal_Int32 endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
+    virtual sal_Int16 getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

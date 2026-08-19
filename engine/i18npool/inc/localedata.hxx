@@ -88,35 +88,35 @@ public:
         excluding the one obtained via getFirstLocaleServiceName() */
     static ::std::vector< OUString > getFallbackLocaleServiceNames( const css::lang::Locale & rLocale );
 
-    virtual css::i18n::LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const css::lang::Locale& rLocale ) override;
-    virtual css::i18n::LocaleDataItem SAL_CALL getLocaleItem( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::Calendar2 > SAL_CALL getAllCalendars2( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::Calendar > SAL_CALL getAllCalendars( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::Currency > SAL_CALL getAllCurrencies( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::Currency2 > SAL_CALL getAllCurrencies2( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::FormatElement > SAL_CALL getAllFormats( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::Implementation > SAL_CALL getCollatorImplementations( const css::lang::Locale& rLocale ) override;
+    virtual css::i18n::LanguageCountryInfo getLanguageCountryInfo( const css::lang::Locale& rLocale ) override;
+    virtual css::i18n::LocaleDataItem getLocaleItem( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Calendar2 > getAllCalendars2( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Calendar > getAllCalendars( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Currency > getAllCurrencies( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Currency2 > getAllCurrencies2( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::FormatElement > getAllFormats( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Implementation > getCollatorImplementations( const css::lang::Locale& rLocale ) override;
     /// @throws css::uno::RuntimeException
     OUString getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, std::u16string_view algorithm );
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) override;
-    virtual css::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) override ;
+    virtual cpo::uno::Sequence< OUString > getTransliterations( const css::lang::Locale& rLocale ) override;
+    virtual css::i18n::ForbiddenCharacters getForbiddenCharacters( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > getReservedWord( const css::lang::Locale& rLocale ) override ;
     /// @throws css::uno::RuntimeException
     cpo::uno::Sequence< OUString > getBreakIteratorRules( const css::lang::Locale& rLocale ) ;
-    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getAllInstalledLocaleNames() override;
+    virtual cpo::uno::Sequence< css::lang::Locale > getAllInstalledLocaleNames() override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSearchOptions( const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getCollationOptions( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > getSearchOptions( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > getCollationOptions( const css::lang::Locale& rLocale ) override;
     /// @throws css::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getContinuousNumberingLevels( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
     cpo::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
 
     // XLocaleData4
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;
 
     // XLocaleData5
-    virtual css::i18n::LocaleDataItem2 SAL_CALL getLocaleItem2( const css::lang::Locale& rLocale ) override;
+    virtual css::i18n::LocaleDataItem2 getLocaleItem2( const css::lang::Locale& rLocale ) override;
 
     // following methods are used by indexentry service
     /// @throws css::uno::RuntimeException
@@ -140,9 +140,9 @@ public:
     OUString getHangingCharacters( const css::lang::Locale& rLocale );
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     ::std::optional< LocaleDataLookupTableItem > moCachedItem;

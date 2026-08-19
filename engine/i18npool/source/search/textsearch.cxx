@@ -1565,18 +1565,18 @@ SearchResult TextSearch::WildcardSrchBkwrd( std::unique_lock<std::mutex>& /*rGua
 }
 
 
-OUString SAL_CALL
+OUString
 TextSearch::getImplementationName()
 {
     return u"com.sun.star.util.TextSearch_i18n"_ustr;
 }
 
-bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
+bool TextSearch::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TextSearch::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.TextSearch"_ustr, u"com.sun.star.util.TextSearch2"_ustr };

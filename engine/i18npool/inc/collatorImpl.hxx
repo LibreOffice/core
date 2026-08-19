@@ -49,28 +49,28 @@ public:
     // Destructor
     virtual ~CollatorImpl() override;
 
-    virtual sal_Int32 SAL_CALL compareSubstring(const OUString& s1, sal_Int32 off1, sal_Int32 len1,
+    virtual sal_Int32 compareSubstring(const OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const OUString& s2, sal_Int32 off2, sal_Int32 len2) override;
 
-    virtual sal_Int32 SAL_CALL compareString( const OUString& s1,
+    virtual sal_Int32 compareString( const OUString& s1,
         const OUString& s2) override;
 
-    virtual sal_Int32 SAL_CALL loadDefaultCollator( const css::lang::Locale& rLocale,  sal_Int32 collatorOptions) override;
+    virtual sal_Int32 loadDefaultCollator( const css::lang::Locale& rLocale,  sal_Int32 collatorOptions) override;
 
-    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(  const OUString& impl, const css::lang::Locale& rLocale,
+    virtual sal_Int32 loadCollatorAlgorithm(  const OUString& impl, const css::lang::Locale& rLocale,
         sal_Int32 collatorOptions) override;
 
-    virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString& impl, const css::lang::Locale& rLocale,
+    virtual void loadCollatorAlgorithmWithEndUserOption( const OUString& impl, const css::lang::Locale& rLocale,
         const cpo::uno::Sequence< sal_Int32 >& collatorOptions) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > listCollatorAlgorithms( const css::lang::Locale& rLocale ) override;
 
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& collatorAlgorithmName ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > listCollatorOptions( const OUString& collatorAlgorithmName ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 protected:
     css::lang::Locale nLocale;

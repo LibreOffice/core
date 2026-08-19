@@ -203,7 +203,7 @@ Calendar_hanja::Calendar_hanja()
     cCalendar = u"com.sun.star.i18n.Calendar_hanja"_ustr;
 }
 
-OUString SAL_CALL
+OUString
 Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType )
 {
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
@@ -223,7 +223,7 @@ Calendar_hanja_yoil::Calendar_hanja_yoil()
     cCalendar = u"com.sun.star.i18n.Calendar_hanja_yoil"_ustr;
 }
 
-OUString SAL_CALL
+OUString
 Calendar_hanja_yoil::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType )
 {
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
@@ -282,7 +282,7 @@ Calendar_buddhist::Calendar_buddhist() : Calendar_gregorian(buddhist_eraArray)
     cCalendar = u"com.sun.star.i18n.Calendar_buddhist"_ustr;
 }
 
-void SAL_CALL
+void
 Calendar_gregorian::loadCalendar( const OUString& uniqueID, const css::lang::Locale& rLocale )
 {
     // init. fieldValue[]
@@ -315,25 +315,25 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const css::lang::Loc
 }
 
 
-css::i18n::Calendar2 SAL_CALL
+css::i18n::Calendar2
 Calendar_gregorian::getLoadedCalendar2()
 {
     return aCalendar;
 }
 
-css::i18n::Calendar SAL_CALL
+css::i18n::Calendar
 Calendar_gregorian::getLoadedCalendar()
 {
     return LocaleDataImpl::downcastCalendar( aCalendar);
 }
 
-OUString SAL_CALL
+OUString
 Calendar_gregorian::getUniqueID()
 {
     return aCalendar.Name;
 }
 
-void SAL_CALL
+void
 Calendar_gregorian::setDateTime( double fTimeInDays )
 {
     // ICU handles dates in milliseconds as double values and uses floor()
@@ -353,7 +353,7 @@ Calendar_gregorian::setDateTime( double fTimeInDays )
     getValue();
 }
 
-double SAL_CALL
+double
 Calendar_gregorian::getDateTime()
 {
     if (fieldSet) {
@@ -366,7 +366,7 @@ Calendar_gregorian::getDateTime()
     return fR / U_MILLIS_PER_DAY;
 }
 
-void SAL_CALL
+void
 Calendar_gregorian::setLocalDateTime( double fTimeInDays )
 {
     // See setDateTime() for why the rounding.
@@ -385,7 +385,7 @@ Calendar_gregorian::setLocalDateTime( double fTimeInDays )
     getValue();
 }
 
-double SAL_CALL
+double
 Calendar_gregorian::getLocalDateTime()
 {
     if (fieldSet) {
@@ -495,7 +495,7 @@ static UCalendarDateFields fieldNameConverter(sal_Int16 fieldIndex)
     return f;
 }
 
-void SAL_CALL
+void
 Calendar_gregorian::setValue( sal_Int16 fieldIndex, sal_Int16 value )
 {
     if (fieldIndex < 0 || FIELD_INDEX_COUNT <= fieldIndex)
@@ -633,7 +633,7 @@ void Calendar_gregorian::getValue()
     fieldSet = 0;
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 Calendar_gregorian::getValue( sal_Int16 fieldIndex )
 {
     if (fieldIndex < 0 || FIELD_INDEX_COUNT <= fieldIndex)
@@ -647,7 +647,7 @@ Calendar_gregorian::getValue( sal_Int16 fieldIndex )
     return fieldValue[fieldIndex];
 }
 
-void SAL_CALL
+void
 Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value )
 {
     // since ZONE and DST could not be add, we don't need to convert value here
@@ -657,7 +657,7 @@ Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value )
     getValue();
 }
 
-bool SAL_CALL
+bool
 Calendar_gregorian::isValid()
 {
     if (fieldSet) {
@@ -755,7 +755,7 @@ static sal_Int32 DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
     }
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 Calendar_gregorian::getFirstDayOfWeek()
 {
     // UCAL_SUNDAY == 1, Weekdays::SUNDAY == 0 => offset -1
@@ -765,83 +765,83 @@ Calendar_gregorian::getFirstDayOfWeek()
                     body->getFirstDayOfWeek()) - 1));
 }
 
-void SAL_CALL
+void
 Calendar_gregorian::setFirstDayOfWeek( sal_Int16 day )
 {
     // Weekdays::SUNDAY == 0, UCAL_SUNDAY == 1 => offset +1
     body->setFirstDayOfWeek( static_cast<UCalendarDaysOfWeek>( day + 1));
 }
 
-void SAL_CALL
+void
 Calendar_gregorian::setMinimumNumberOfDaysForFirstWeek( sal_Int16 days )
 {
     aCalendar.MinimumNumberOfDaysForFirstWeek = days;
     body->setMinimalDaysInFirstWeek( static_cast<uint8_t>( days));
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 Calendar_gregorian::getMinimumNumberOfDaysForFirstWeek()
 {
     return aCalendar.MinimumNumberOfDaysForFirstWeek;
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 Calendar_gregorian::getNumberOfMonthsInYear()
 {
     return static_cast<sal_Int16>(aCalendar.Months.getLength());
 }
 
 
-sal_Int16 SAL_CALL
+sal_Int16
 Calendar_gregorian::getNumberOfDaysInWeek()
 {
     return static_cast<sal_Int16>(aCalendar.Days.getLength());
 }
 
 
-Sequence< CalendarItem > SAL_CALL
+Sequence< CalendarItem >
 Calendar_gregorian::getDays()
 {
     return LocaleDataImpl::downcastCalendarItems( aCalendar.Days);
 }
 
 
-Sequence< CalendarItem > SAL_CALL
+Sequence< CalendarItem >
 Calendar_gregorian::getMonths()
 {
     return LocaleDataImpl::downcastCalendarItems( aCalendar.Months);
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 Calendar_gregorian::getDays2()
 {
     return aCalendar.Days;
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 Calendar_gregorian::getMonths2()
 {
     return aCalendar.Months;
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 Calendar_gregorian::getGenitiveMonths2()
 {
     return aCalendar.GenitiveMonths;
 }
 
 
-Sequence< CalendarItem2 > SAL_CALL
+Sequence< CalendarItem2 >
 Calendar_gregorian::getPartitiveMonths2()
 {
     return aCalendar.PartitiveMonths;
 }
 
 
-OUString SAL_CALL
+OUString
 Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType )
 {
     OUString aStr;
@@ -895,7 +895,7 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
 }
 
 // Methods in XExtendedCalendar
-OUString SAL_CALL
+OUString
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {
     return getDisplayStringImpl( nCalendarDisplayCode, nNativeNumberMode, false);
@@ -1042,7 +1042,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
 }
 
 // Methods in XExtendedCalendar
-OUString SAL_CALL
+OUString
 Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {
     // make year and era in different order for year before and after 0.
@@ -1059,19 +1059,19 @@ Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 n
     return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
 }
 
-OUString SAL_CALL
+OUString
 Calendar_gregorian::getImplementationName()
 {
     return cCalendar;
 }
 
-bool SAL_CALL
+bool
 Calendar_gregorian::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 Calendar_gregorian::getSupportedServiceNames()
 {
     return { cCalendar };

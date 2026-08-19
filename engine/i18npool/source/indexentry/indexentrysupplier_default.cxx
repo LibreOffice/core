@@ -44,20 +44,20 @@ IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode()
 {
 }
 
-bool SAL_CALL IndexEntrySupplier_Unicode::loadAlgorithm( const lang::Locale& rLocale,
+bool IndexEntrySupplier_Unicode::loadAlgorithm( const lang::Locale& rLocale,
     const OUString& rAlgorithm, sal_Int32 collatorOptions )
 {
     index->init(rLocale, rAlgorithm);
     return IndexEntrySupplier_Common::loadAlgorithm(rLocale, rAlgorithm, collatorOptions);
 }
 
-OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexKey( const OUString& rIndexEntry,
+OUString IndexEntrySupplier_Unicode::getIndexKey( const OUString& rIndexEntry,
     const OUString& rPhoneticEntry, const lang::Locale& rLocale )
 {
     return index->getIndexDescription(getEntry(rIndexEntry, rPhoneticEntry, rLocale));
 }
 
-sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
+sal_Int16 IndexEntrySupplier_Unicode::compareIndexEntry(
     const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const lang::Locale& rLocale1,
     const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const lang::Locale& rLocale2 )
 {
@@ -71,7 +71,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
     return result > 0 ? 1 : -1;
 }
 
-OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexCharacter( const OUString& rIndexEntry,
+OUString IndexEntrySupplier_Unicode::getIndexCharacter( const OUString& rIndexEntry,
     const lang::Locale& rLocale, const OUString& rAlgorithm ) {
 
     if (loadAlgorithm( rLocale, rAlgorithm, CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT))

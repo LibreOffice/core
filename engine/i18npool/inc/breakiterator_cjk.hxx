@@ -30,7 +30,7 @@ class BreakIterator_CJK : public BreakIterator_Unicode
 public:
     BreakIterator_CJK();
 
-    css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+    css::i18n::LineBreakResults getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const css::i18n::LineBreakHyphenationOptions& hOptions,
         const css::i18n::LineBreakUserOptions& bOptions ) override;

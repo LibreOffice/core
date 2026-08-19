@@ -54,7 +54,7 @@ BreakIteratorImpl::~BreakIteratorImpl()
 {
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
 {
     if (nCount < 0)
@@ -64,7 +64,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_
     return getLocaleSpecificBreakIterator(rLocale)->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
 {
     if (nCount < 0)
@@ -122,7 +122,7 @@ static sal_Int32 skipSpace(std::u16string_view Text, sal_Int32 nPos, sal_Int32 l
     return nPos;
 }
 
-Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 nStartPos,
+Boundary BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 nStartPos,
         const Locale& rLocale, sal_Int16 rWordType )
 {
     sal_Int32 len = Text.getLength();
@@ -152,7 +152,7 @@ static bool isCJK( const Locale& rLocale ) {
         return rLocale.Language == "zh" || rLocale.Language == "ja" || rLocale.Language == "ko";
 }
 
-Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int32 nStartPos,
+Boundary BreakIteratorImpl::previousWord( const OUString& Text, sal_Int32 nStartPos,
         const Locale& rLocale, sal_Int16 rWordType)
 {
     sal_Int32 len = Text.getLength();
@@ -178,7 +178,7 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
 }
 
 
-Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_Int32 nPos, const Locale& rLocale,
+Boundary BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_Int32 nPos, const Locale& rLocale,
         sal_Int16 rWordType, bool bDirection )
 {
     sal_Int32 len = Text.getLength();
@@ -211,7 +211,7 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
     return result;
 }
 
-bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int32 nPos,
+bool BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale, sal_Int16 rWordType )
 {
     sal_Int32 len = Text.getLength();
@@ -227,7 +227,7 @@ bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int32 nP
     return result.startPos == nPos;
 }
 
-bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 nPos,
+bool BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale, sal_Int16 rWordType )
 {
     sal_Int32 len = Text.getLength();
@@ -243,7 +243,7 @@ bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 nPos
     return result.endPos == nPos;
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale )
 {
     if (nStartPos < 0 || nStartPos > Text.getLength())
@@ -252,7 +252,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal
     return getLocaleSpecificBreakIterator(rLocale)->beginOfSentence(Text, nStartPos, rLocale);
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale )
 {
     if (nStartPos < 0 || nStartPos > Text.getLength())
@@ -261,14 +261,14 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_I
     return getLocaleSpecificBreakIterator(rLocale)->endOfSentence(Text, nStartPos, rLocale);
 }
 
-LineBreakResults SAL_CALL BreakIteratorImpl::getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+LineBreakResults BreakIteratorImpl::getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const Locale& rLocale, sal_Int32 nMinBreakPos, const LineBreakHyphenationOptions& hOptions,
         const LineBreakUserOptions& bOptions )
 {
     return getLocaleSpecificBreakIterator(rLocale)->getLineBreak(Text, nStartPos, rLocale, nMinBreakPos, hOptions, bOptions);
 }
 
-sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_Int32 nPos )
+sal_Int16 BreakIteratorImpl::getScriptType( const OUString& Text, sal_Int32 nPos )
 {
     return (nPos < 0 || nPos >= Text.getLength()) ? ScriptType::WEAK :
         getScriptClass(Text.iterateCodePoints(&nPos, 0));
@@ -302,7 +302,7 @@ static sal_Int32 iterateCodePoints(std::u16string_view Text, sal_Int32 &nStartPo
 }
 
 
-sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
+sal_Int32 BreakIteratorImpl::beginOfScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType )
 {
     return beginOfScript(std::u16string_view(Text), nStartPos, ScriptType);
@@ -326,7 +326,7 @@ sal_Int32 BreakIteratorImpl::beginOfScript( std::u16string_view Text,
     return  iterateCodePoints(Text, nStartPos, 1, ch);
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
+sal_Int32 BreakIteratorImpl::endOfScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType )
 {
     return endOfScript(std::u16string_view(Text), nStartPos, ScriptType);
@@ -351,7 +351,7 @@ sal_Int32 BreakIteratorImpl::endOfScript( std::u16string_view Text,
     return  nStartPos;
 }
 
-sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
+sal_Int32  BreakIteratorImpl::previousScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType )
 {
     if (nStartPos < 0)
@@ -372,7 +372,7 @@ sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
     return numberOfChange == 0 ? iterateCodePoints(Text, nStartPos, 1, ch) : -1;
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::nextScript( const OUString& Text, sal_Int32 nStartPos,
         sal_Int16 ScriptType )
 
 {
@@ -394,7 +394,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int3
     return numberOfChange == 0 ? nStartPos : -1;
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const Locale& /*rLocale*/, sal_Int16 CharType )
 {
     if (CharType == CharType::ANY_CHAR) return 0;
@@ -406,7 +406,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sa
     return nStartPos; // begin of char block is inclusive
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const Locale& /*rLocale*/, sal_Int16 CharType )
 {
     sal_Int32 strLen = Text.getLength();
@@ -420,7 +420,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_
     return nStartPos; // end of char block is exclusive
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const Locale& /*rLocale*/, sal_Int16 CharType )
 {
     if (CharType == CharType::ANY_CHAR) return -1;
@@ -437,7 +437,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_I
     return numberOfChange == 0 ? nStartPos : -1;
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 BreakIteratorImpl::previousCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const Locale& /*rLocale*/, sal_Int16 CharType )
 {
     if(CharType == CharType::ANY_CHAR) return -1;
@@ -458,7 +458,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
 }
 
 
-sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& /*Text*/,
+sal_Int16 BreakIteratorImpl::getWordType( const OUString& /*Text*/,
         sal_Int32 /*nPos*/, const Locale& /*rLocale*/ )
 {
     return 0;
@@ -562,19 +562,19 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
     throw RuntimeException(u"getLocaleSpecificBreakIterator: iterator not found"_ustr);
 }
 
-OUString SAL_CALL
+OUString
 BreakIteratorImpl::getImplementationName()
 {
     return u"com.sun.star.i18n.BreakIterator"_ustr;
 }
 
-bool SAL_CALL
+bool
 BreakIteratorImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 BreakIteratorImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.BreakIterator"_ustr };

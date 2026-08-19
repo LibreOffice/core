@@ -40,7 +40,7 @@ IndexEntrySupplier_asian::~IndexEntrySupplier_asian()
 {
 }
 
-OUString SAL_CALL
+OUString
 IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     const Locale& rLocale, const OUString& rAlgorithm )
 {
@@ -87,14 +87,14 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     return OUString(&idxStr[(ch & 0xFFFFFF00) ? 0 : ch], 1);
 }
 
-OUString SAL_CALL
+OUString
 IndexEntrySupplier_asian::getIndexKey( const OUString& rIndexEntry,
     const OUString& rPhoneticEntry, const Locale& rLocale)
 {
     return getIndexCharacter(getEntry(rIndexEntry, rPhoneticEntry, rLocale), rLocale, aAlgorithm);
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 IndexEntrySupplier_asian::compareIndexEntry(
     const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const Locale& rLocale1,
     const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
@@ -111,7 +111,7 @@ IndexEntrySupplier_asian::compareIndexEntry(
     return sal::static_int_cast< sal_Int16 >(result); // result in { -1, 0, 1 }
 }
 
-OUString SAL_CALL
+OUString
 IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         const Locale& rLocale )
 {

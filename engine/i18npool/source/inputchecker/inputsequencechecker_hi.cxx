@@ -106,7 +106,7 @@ static constexpr sal_uInt16 getCharType(sal_Unicode x)
     return (x >= 0x0900 && x < 0x097f) ? devaCT[x - 0x0900] : ND_;
 }
 
-bool SAL_CALL
+bool
 InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
                                             sal_Int32       nStartPos,
                                             sal_Unicode     inputChar,
@@ -119,7 +119,7 @@ InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
     return (DEV_Composible[inputCheckMode][dev_cell_check[ch2][ch1]]);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 InputSequenceChecker_hi::correctInputSequence(OUString& Text,
                                             sal_Int32       nStartPos,
                                             sal_Unicode     inputChar,

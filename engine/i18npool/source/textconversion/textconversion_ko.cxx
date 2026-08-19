@@ -173,7 +173,7 @@ static Sequence< OUString >& operator += (Sequence< OUString > &rSeq1, const Seq
     return rSeq1;
 }
 
-TextConversionResult SAL_CALL
+TextConversionResult
 TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& aLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
 {
@@ -262,7 +262,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
     return result;
 }
 
-OUString SAL_CALL
+OUString
 TextConversion_ko::getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& aLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
 {
@@ -294,7 +294,7 @@ TextConversion_ko::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
     return aBuf.makeStringAndClear();
 }
 
-OUString SAL_CALL
+OUString
 TextConversion_ko::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
 {
@@ -302,7 +302,7 @@ TextConversion_ko::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     return getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
-bool SAL_CALL
+bool
 TextConversion_ko::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
 {
     return true;

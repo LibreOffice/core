@@ -418,7 +418,7 @@ LocaleDataImpl::~LocaleDataImpl()
 }
 
 
-LocaleDataItem SAL_CALL
+LocaleDataItem
 LocaleDataImpl::getLocaleItem( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
@@ -456,7 +456,7 @@ LocaleDataImpl::getLocaleItem( const Locale& rLocale )
 }
 
 
-LocaleDataItem2 SAL_CALL
+LocaleDataItem2
 LocaleDataImpl::getLocaleItem2( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
@@ -750,7 +750,7 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
     return aItems;
 }
 
-Sequence< Calendar2 > SAL_CALL
+Sequence< Calendar2 >
 LocaleDataImpl::getAllCalendars2( const Locale& rLocale )
 {
 
@@ -795,7 +795,7 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale )
 }
 
 
-Sequence< Calendar > SAL_CALL
+Sequence< Calendar >
 LocaleDataImpl::getAllCalendars( const Locale& rLocale )
 {
     const Sequence< Calendar2 > aCal2( getAllCalendars2( rLocale));
@@ -807,7 +807,7 @@ LocaleDataImpl::getAllCalendars( const Locale& rLocale )
 }
 
 
-Sequence< Currency2 > SAL_CALL
+Sequence< Currency2 >
 LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getAllCurrencies" ));
@@ -838,14 +838,14 @@ LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
 }
 
 
-Sequence< Currency > SAL_CALL
+Sequence< Currency >
 LocaleDataImpl::getAllCurrencies( const Locale& rLocale )
 {
     return comphelper::containerToSequence<Currency>(getAllCurrencies2(rLocale));
 }
 
 
-Sequence< FormatElement > SAL_CALL
+Sequence< FormatElement >
 LocaleDataImpl::getAllFormats( const Locale& rLocale )
 {
     const int SECTIONS = 2;
@@ -896,7 +896,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getDateAcceptancePatterns" ));
@@ -940,7 +940,7 @@ LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, std::u16strin
 }
 
 
-Sequence< Implementation > SAL_CALL
+Sequence< Implementation >
 LocaleDataImpl::getCollatorImplementations( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
@@ -962,7 +962,7 @@ LocaleDataImpl::getCollatorImplementations( const Locale& rLocale )
     }
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getCollationOptions( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getCollationOptions" ));
@@ -982,7 +982,7 @@ LocaleDataImpl::getCollationOptions( const Locale& rLocale )
     }
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getSearchOptions( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getSearchOptions" ));
@@ -1126,7 +1126,7 @@ LocaleDataImpl::getFollowPageWords( const Locale& rLocale )
     }
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getTransliterations( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getTransliterations" ));
@@ -1144,7 +1144,7 @@ LocaleDataImpl::getTransliterations( const Locale& rLocale )
 }
 
 
-LanguageCountryInfo SAL_CALL
+LanguageCountryInfo
 LocaleDataImpl::getLanguageCountryInfo( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getLCInfo" ));
@@ -1167,7 +1167,7 @@ LocaleDataImpl::getLanguageCountryInfo( const Locale& rLocale )
 }
 
 
-ForbiddenCharacters SAL_CALL
+ForbiddenCharacters
 LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
@@ -1217,7 +1217,7 @@ LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  )
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getReservedWord( const Locale& rLocale  )
 {
     MyFuncOUString_Type func = reinterpret_cast<MyFuncOUString_Type>(getFunctionSymbol( rLocale, "getReservedWords" ));
@@ -1329,12 +1329,12 @@ public:
     OutlineNumbering(std::unique_ptr<const OutlineNumberingLevel_Impl[]> pOutlineLevels, int nLevels);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount(  ) override;
+    virtual Any getByIndex( sal_Int32 Index ) override;
 
     //XElementAccess
-    virtual Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 };
 
 }
@@ -1457,7 +1457,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
     return pSymbol;
 }
 
-Sequence< Locale > SAL_CALL
+Sequence< Locale >
 LocaleDataImpl::getAllInstalledLocaleNames()
 {
     Sequence< lang::Locale > seq( nbOfLocales );
@@ -1544,18 +1544,18 @@ bool OutlineNumbering::hasElements(  )
     return m_nCount > 0;
 }
 
-OUString SAL_CALL
+OUString
 LocaleDataImpl::getImplementationName()
 {
     return u"com.sun.star.i18n.LocaleDataImpl"_ustr;
 }
 
-bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
+bool LocaleDataImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 LocaleDataImpl::getSupportedServiceNames()
 {
     Sequence< OUString > aRet {

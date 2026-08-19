@@ -41,7 +41,7 @@ CollatorImpl::~CollatorImpl()
 {
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 CollatorImpl::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2)
 {
@@ -56,7 +56,7 @@ CollatorImpl::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 
     return len1 == len2 ? 0 : (len1 < len2 ? -1 : 1);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 CollatorImpl::compareString( const OUString& in_str1, const OUString& in_str2)
 {
     if (cachedItem)
@@ -66,7 +66,7 @@ CollatorImpl::compareString( const OUString& in_str1, const OUString& in_str2)
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collatorOptions)
 {
     const Sequence< Implementation > imp = mxLocaleData->getCollatorImplementations(rLocale);
@@ -79,7 +79,7 @@ CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collato
     //return 0;
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 CollatorImpl::loadCollatorAlgorithm(const OUString& impl, const lang::Locale& rLocale, sal_Int32 collatorOptions)
 {
     if (! cachedItem || ! cachedItem->equals(rLocale, impl))
@@ -93,7 +93,7 @@ CollatorImpl::loadCollatorAlgorithm(const OUString& impl, const lang::Locale& rL
     return 0;
 }
 
-void SAL_CALL
+void
 CollatorImpl::loadCollatorAlgorithmWithEndUserOption(const OUString& impl, const lang::Locale& rLocale,
     const Sequence< sal_Int32 >& collatorOptions)
 {
@@ -102,7 +102,7 @@ CollatorImpl::loadCollatorAlgorithmWithEndUserOption(const OUString& impl, const
     loadCollatorAlgorithm(impl, rLocale, options);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale )
 {
     nLocale = rLocale;
@@ -121,7 +121,7 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale )
     return list;
 }
 
-Sequence< sal_Int32 > SAL_CALL
+Sequence< sal_Int32 >
 CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ )
 {
     const Sequence< OUString > option_str = mxLocaleData->getCollationOptions(nLocale);
@@ -206,17 +206,17 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     }
 }
 
-OUString SAL_CALL CollatorImpl::getImplementationName()
+OUString CollatorImpl::getImplementationName()
 {
     return u"com.sun.star.i18n.Collator"_ustr;
 }
 
-bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)
+bool CollatorImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 CollatorImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.Collator"_ustr };

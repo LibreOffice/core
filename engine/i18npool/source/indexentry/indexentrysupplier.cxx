@@ -34,17 +34,17 @@ IndexEntrySupplier::IndexEntrySupplier( const Reference < XComponentContext >& r
 {
 }
 
-Sequence < Locale > SAL_CALL IndexEntrySupplier::getLocaleList()
+Sequence < Locale > IndexEntrySupplier::getLocaleList()
 {
     return LocaleDataImpl::get()->getAllInstalledLocaleNames();
 }
 
-Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Locale& rLocale )
+Sequence < OUString > IndexEntrySupplier::getAlgorithmList( const Locale& rLocale )
 {
     return LocaleDataImpl::get()->getIndexAlgorithm(rLocale);
 }
 
-bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
+bool IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
         sal_Int32 collatorOptions )
 {
     const Sequence < OUString > algorithmList = getAlgorithmList( rLocale );
@@ -56,12 +56,12 @@ bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OU
     return false;
 }
 
-bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale )
+bool IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale )
 {
     return LocaleDataImpl::get()->hasPhonetic(rLocale);
 }
 
-OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
+OUString IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
         const Locale& rLocale )
 {
     if (!getLocaleSpecificIndexEntrySupplier(rLocale, OUString()).is())
@@ -69,7 +69,7 @@ OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rInd
     return xIES->getPhoneticCandidate(rIndexEntry, rLocale);
 }
 
-OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
+OUString IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
         const OUString& rPhoneticEntry, const Locale& rLocale )
 {
     if (!xIES.is())
@@ -77,7 +77,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
     return xIES->getIndexKey(rIndexEntry, rPhoneticEntry, rLocale);
 }
 
-sal_Int16 SAL_CALL IndexEntrySupplier::compareIndexEntry(
+sal_Int16 IndexEntrySupplier::compareIndexEntry(
         const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const Locale& rLocale1,
         const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
 {
@@ -87,7 +87,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier::compareIndexEntry(
             rIndexEntry2, rPhoneticEntry2, rLocale2);
 }
 
-OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexEntry,
+OUString IndexEntrySupplier::getIndexCharacter( const OUString& rIndexEntry,
         const Locale& rLocale, const OUString& rSortAlgorithm )
 {
     return getLocaleSpecificIndexEntrySupplier(rLocale, rSortAlgorithm)->
@@ -162,7 +162,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
     }
 }
 
-OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( bool bMorePages,
+OUString IndexEntrySupplier::getIndexFollowPageWord( bool bMorePages,
         const Locale& rLocale )
 {
     Sequence< OUString > aFollowPageWords = LocaleDataImpl::get()->getFollowPageWords(rLocale);
@@ -174,19 +174,19 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( bool bMorePages,
 
 constexpr OUString implementationName = u"com.sun.star.i18n.IndexEntrySupplier"_ustr;
 
-OUString SAL_CALL
+OUString
 IndexEntrySupplier::getImplementationName()
 {
     return implementationName;
 }
 
-bool SAL_CALL
+bool
 IndexEntrySupplier::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 IndexEntrySupplier::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { implementationName };

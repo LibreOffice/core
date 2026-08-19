@@ -32,7 +32,7 @@ public:
     Calendar_jewish();
 
     // Methods in XExtendedCalendar
-    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
+    virtual OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
 
 private:
     void mapToGregorian() override;

@@ -41,28 +41,28 @@ CharacterClassificationImpl::~CharacterClassificationImpl() {
 }
 
 
-OUString SAL_CALL
+OUString
 CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->toUpper(Text, nPos, nCount, rLocale);
 }
 
-OUString SAL_CALL
+OUString
 CharacterClassificationImpl::toLower( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->toLower(Text, nPos, nCount, rLocale);
 }
 
-OUString SAL_CALL
+OUString
 CharacterClassificationImpl::toTitle( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->toTitle(Text, nPos, nCount, rLocale);
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
 {
     if (xUCI.is())
@@ -70,7 +70,7 @@ CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
     throw RuntimeException();
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 CharacterClassificationImpl::getCharacterDirection( const OUString& Text, sal_Int32 nPos )
 {
     if (xUCI.is())
@@ -78,7 +78,7 @@ CharacterClassificationImpl::getCharacterDirection( const OUString& Text, sal_In
     throw RuntimeException();
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 CharacterClassificationImpl::getScript( const OUString& Text, sal_Int32 nPos )
 {
     if (xUCI.is())
@@ -86,21 +86,21 @@ CharacterClassificationImpl::getScript( const OUString& Text, sal_Int32 nPos )
     throw RuntimeException();
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 CharacterClassificationImpl::getCharacterType( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->getCharacterType(Text, nPos, rLocale);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 CharacterClassificationImpl::getStringType( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->getStringType(Text, nPos, nCount, rLocale);
 }
 
-ParseResult SAL_CALL CharacterClassificationImpl::parseAnyToken(
+ParseResult CharacterClassificationImpl::parseAnyToken(
         const OUString& Text, sal_Int32 nPos, const Locale& rLocale,
         sal_Int32 startCharTokenType, const OUString& userDefinedCharactersStart,
         sal_Int32 contCharTokenType, const OUString& userDefinedCharactersCont )
@@ -111,7 +111,7 @@ ParseResult SAL_CALL CharacterClassificationImpl::parseAnyToken(
 }
 
 
-ParseResult SAL_CALL CharacterClassificationImpl::parsePredefinedToken(
+ParseResult CharacterClassificationImpl::parsePredefinedToken(
         sal_Int32 nTokenType, const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale, sal_Int32 startCharTokenType,
         const OUString& userDefinedCharactersStart, sal_Int32 contCharTokenType,
@@ -188,19 +188,19 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
     throw RuntimeException();
 }
 
-OUString SAL_CALL
+OUString
 CharacterClassificationImpl::getImplementationName()
 {
     return u"com.sun.star.i18n.CharacterClassification"_ustr;
 }
 
-bool SAL_CALL
+bool
 CharacterClassificationImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 CharacterClassificationImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.CharacterClassification"_ustr };

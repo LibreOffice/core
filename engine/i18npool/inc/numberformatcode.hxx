@@ -44,15 +44,15 @@ public:
                     css::uno::XComponentContext >& rxContext );
     virtual ~NumberFormatCodeMapper() override;
 
-    virtual css::i18n::NumberFormatCode SAL_CALL getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;
-    virtual css::i18n::NumberFormatCode SAL_CALL getFormatCode( sal_Int16 nFormatIndex, const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCode( sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;
-    virtual cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCodes( const css::lang::Locale& rLocale ) override;
+    virtual css::i18n::NumberFormatCode getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;
+    virtual css::i18n::NumberFormatCode getFormatCode( sal_Int16 nFormatIndex, const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::NumberFormatCode > getAllFormatCode( sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::NumberFormatCode > getAllFormatCodes( const css::lang::Locale& rLocale ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     std::mutex maMutex;

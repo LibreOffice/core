@@ -34,60 +34,60 @@ public:
     BreakIteratorImpl();
     virtual ~BreakIteratorImpl() override;
 
-    virtual sal_Int32 SAL_CALL nextCharacters( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
         sal_Int32& nDone ) override;
-    virtual sal_Int32 SAL_CALL previousCharacters( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
         sal_Int32& nDone ) override;
 
-    virtual css::i18n::Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary previousWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual css::i18n::Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary nextWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual css::i18n::Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
+    virtual css::i18n::Boundary getWordBoundary( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType, bool bDirection ) override;
 
-    virtual bool SAL_CALL isBeginWord( const OUString& Text, sal_Int32 nPos,
+    virtual bool isBeginWord( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType ) override;
-    virtual bool SAL_CALL isEndWord( const OUString& Text, sal_Int32 nPos,
+    virtual bool isEndWord( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType ) override;
-    virtual sal_Int16 SAL_CALL getWordType( const OUString& Text, sal_Int32 nPos,
+    virtual sal_Int16 getWordType( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& nLocale ) override;
 
-    virtual sal_Int32 SAL_CALL beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale ) override;
-    virtual sal_Int32 SAL_CALL endOfSentence( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale ) override;
 
-    virtual css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::LineBreakResults getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const css::i18n::LineBreakHyphenationOptions& hOptions,
         const css::i18n::LineBreakUserOptions& bOptions ) override;
 
-    virtual sal_Int16 SAL_CALL getScriptType( const OUString& Text, sal_Int32 nPos ) override;
-    virtual sal_Int32 SAL_CALL beginOfScript( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int16 getScriptType( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int32 beginOfScript( const OUString& Text, sal_Int32 nStartPos,
         sal_Int16 ScriptType ) override;
-    virtual sal_Int32 SAL_CALL endOfScript( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 endOfScript( const OUString& Text, sal_Int32 nStartPos,
         sal_Int16 ScriptType ) override;
-    virtual sal_Int32 SAL_CALL previousScript( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 previousScript( const OUString& Text, sal_Int32 nStartPos,
         sal_Int16 ScriptType ) override;
-    virtual sal_Int32 SAL_CALL nextScript( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 nextScript( const OUString& Text, sal_Int32 nStartPos,
         sal_Int16 ScriptType ) override;
 
-    virtual sal_Int32 SAL_CALL beginOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 beginOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
-    virtual sal_Int32 SAL_CALL endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
-    virtual sal_Int32 SAL_CALL previousCharBlock( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 previousCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
-    virtual sal_Int32 SAL_CALL nextCharBlock( const OUString& Text, sal_Int32 nStartPos,
+    virtual sal_Int32 nextCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     virtual sal_Int32 endOfScript( std::u16string_view Text, sal_Int32 nStartPos, sal_Int16 ScriptType ) override;
     virtual sal_Int32 beginOfScript( std::u16string_view Text, sal_Int32 nStartPos, sal_Int16 ScriptType ) override;

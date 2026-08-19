@@ -179,7 +179,7 @@ TransliterationImpl::~TransliterationImpl()
 
 
 // Methods
-OUString SAL_CALL
+OUString
 TransliterationImpl::getName()
 {
     if (numCascade == 1 && bodyCascade[0].is())
@@ -189,7 +189,7 @@ TransliterationImpl::getName()
     throw RuntimeException();
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 TransliterationImpl::getType()
 {
     if (numCascade > 1)
@@ -206,7 +206,7 @@ static TransliterationModules operator|(TransliterationModules lhs, Transliterat
     return TransliterationModules(sal_Int32(lhs) | sal_Int32(rhs));
 }
 
-void SAL_CALL
+void
 TransliterationImpl::loadModule( TransliterationModules modType, const Locale& rLocale )
 {
     clear();
@@ -247,7 +247,7 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
     }
 }
 
-void SAL_CALL
+void
 TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew > & modType, const Locale& rLocale )
 {
     clear();
@@ -272,7 +272,7 @@ TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew >
     }
 }
 
-void SAL_CALL
+void
 TransliterationImpl::loadModuleByImplName(const OUString& implName, const Locale& rLocale)
 {
     clear();
@@ -281,7 +281,7 @@ TransliterationImpl::loadModuleByImplName(const OUString& implName, const Locale
 }
 
 
-void SAL_CALL
+void
 TransliterationImpl::loadModulesByImplNames(const Sequence< OUString >& implNameList, const Locale& rLocale )
 {
     if (implNameList.getLength() > maxCascade || implNameList.getLength() <= 0)
@@ -294,7 +294,7 @@ TransliterationImpl::loadModulesByImplNames(const Sequence< OUString >& implName
 }
 
 
-Sequence<OUString> SAL_CALL
+Sequence<OUString>
 TransliterationImpl::getAvailableModules( const Locale& rLocale, sal_Int16 sType )
 {
     const Sequence<OUString> translist = mxLocaledata->getTransliterations(rLocale);
@@ -313,7 +313,7 @@ TransliterationImpl::getAvailableModules( const Locale& rLocale, sal_Int16 sType
 }
 
 
-OUString SAL_CALL
+OUString
 TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
                     Sequence< sal_Int32 >& offset )
 {
@@ -361,7 +361,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
 }
 
 
-OUString SAL_CALL
+OUString
 TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset )
 {
@@ -411,7 +411,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
     }
 }
 
-OUString SAL_CALL
+OUString
 TransliterationImpl::transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount )
 {
     if (numCascade == 0)
@@ -427,7 +427,7 @@ TransliterationImpl::transliterateString2String( const OUString& inStr, sal_Int3
     }
 }
 
-OUString SAL_CALL
+OUString
 TransliterationImpl::transliterateChar2String( sal_Unicode inChar )
 {
     if (numCascade == 0)
@@ -443,7 +443,7 @@ TransliterationImpl::transliterateChar2String( sal_Unicode inChar )
     }
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 TransliterationImpl::transliterateChar2Char( sal_Unicode inChar )
 {
     sal_Unicode tmpChar = inChar;
@@ -453,7 +453,7 @@ TransliterationImpl::transliterateChar2Char( sal_Unicode inChar )
 }
 
 
-bool SAL_CALL
+bool
 TransliterationImpl::equals(
     const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
     const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)
@@ -538,7 +538,7 @@ TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TransliterationImpl::transliterateRange( const OUString& str1, const OUString& str2 )
 {
     if (numCascade == 1)
@@ -550,7 +550,7 @@ TransliterationImpl::transliterateRange( const OUString& str1, const OUString& s
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 TransliterationImpl::compareSubstring(
     const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2)
@@ -577,7 +577,7 @@ TransliterationImpl::compareSubstring(
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 TransliterationImpl::compareString(const OUString& str1, const OUString& str2 )
 {
     if (caseignoreOnly && caseignore.is())
@@ -652,19 +652,19 @@ TransliterationImpl::loadModuleByName( std::u16string_view implName,
     return body.is();
 }
 
-OUString SAL_CALL
+OUString
 TransliterationImpl::getImplementationName()
 {
     return u"com.sun.star.i18n.Transliteration"_ustr;
 }
 
-bool SAL_CALL
+bool
 TransliterationImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 TransliterationImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.Transliteration"_ustr };

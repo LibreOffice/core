@@ -62,7 +62,7 @@ cclass_Unicode::~cclass_Unicode() {
 }
 
 
-OUString SAL_CALL
+OUString
 cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) {
     sal_Int32 len = Text.getLength();
     if (nPos >= len)
@@ -74,7 +74,7 @@ cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     return transToUpper->transliterateString2String(Text, nPos, nCount);
 }
 
-OUString SAL_CALL
+OUString
 cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) {
     sal_Int32 len = Text.getLength();
     if (nPos >= len)
@@ -86,7 +86,7 @@ cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     return transToLower->transliterateString2String(Text, nPos, nCount);
 }
 
-OUString SAL_CALL
+OUString
 cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) {
     try
     {
@@ -125,20 +125,20 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     }
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 cclass_Unicode::getType( const OUString& Text, sal_Int32 nPos ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     return static_cast<sal_Int16>(u_charType(Text.iterateCodePoints(&nPos, 0)));
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 cclass_Unicode::getCharacterDirection( const OUString& Text, sal_Int32 nPos ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     return static_cast<sal_Int16>(u_charDirection(Text.iterateCodePoints(&nPos, 0)));
 }
 
 
-sal_Int16 SAL_CALL
+sal_Int16
 cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     // ICU Unicode script type UBlockCode starts from 1 for Basic Latin,
@@ -213,14 +213,14 @@ cclass_Unicode::getCharType( std::u16string_view Text, sal_Int32* nPos, sal_Int3
     }
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 cclass_Unicode::getCharacterType( const OUString& Text, sal_Int32 nPos, const Locale& /*rLocale*/ ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     return getCharType(Text, &nPos, 0);
 
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& /*rLocale*/ ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
 
@@ -237,7 +237,7 @@ cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 n
     return result;
 }
 
-ParseResult SAL_CALL cclass_Unicode::parseAnyToken(
+ParseResult cclass_Unicode::parseAnyToken(
             const OUString& Text,
             sal_Int32 nPos,
             const Locale& rLocale,
@@ -259,7 +259,7 @@ ParseResult SAL_CALL cclass_Unicode::parseAnyToken(
 }
 
 
-ParseResult SAL_CALL cclass_Unicode::parsePredefinedToken(
+ParseResult cclass_Unicode::parsePredefinedToken(
             sal_Int32 nTokenType,
             const OUString& Text,
             sal_Int32 nPos,
@@ -281,17 +281,17 @@ ParseResult SAL_CALL cclass_Unicode::parsePredefinedToken(
     return r;
 }
 
-OUString SAL_CALL cclass_Unicode::getImplementationName()
+OUString cclass_Unicode::getImplementationName()
 {
     return u"com.sun.star.i18n.CharacterClassification_Unicode"_ustr;
 }
 
-bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName)
+bool cclass_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames()
+Sequence< OUString > cclass_Unicode::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.CharacterClassification_Unicode"_ustr };
 }

@@ -28,22 +28,22 @@ public:
     Transliteration_caseignore();
 
     // Methods which are shared.
-    sal_Int16 SAL_CALL getType() override;
+    sal_Int16 getType() override;
 
-    void SAL_CALL loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override;
+    void loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override;
 
-    cpo::uno::Sequence< OUString > SAL_CALL transliterateRange(
+    cpo::uno::Sequence< OUString > transliterateRange(
         const OUString& str1, const OUString& str2 ) override;
 
-    bool SAL_CALL equals(
+    bool equals(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& src2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2) override;
 
-    sal_Int32 SAL_CALL compareSubstring(
+    sal_Int32 compareSubstring(
         const OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const OUString& s2, sal_Int32 off2, sal_Int32 len2) override;
 
-    sal_Int32 SAL_CALL compareString(
+    sal_Int32 compareString(
         const OUString& s1,
         const OUString& s2) override;
 

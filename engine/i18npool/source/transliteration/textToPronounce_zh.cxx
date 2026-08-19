@@ -34,7 +34,7 @@ using namespace ::cpo::uno;
 
 namespace i18npool {
 
-sal_Int16 SAL_CALL TextToPronounce_zh::getType()
+sal_Int16 TextToPronounce_zh::getType()
 {
     return TransliterationType::ONE_TO_ONE| TransliterationType::IGNORE;
 }
@@ -78,13 +78,13 @@ TextToPronounce_zh::foldingImpl(const OUString & inStr, sal_Int32 startPos,
     return sb.makeStringAndClear();
 }
 
-OUString SAL_CALL
+OUString
 TextToPronounce_zh::transliterateChar2String( sal_Unicode inChar)
 {
     return OUString(getPronounce(inChar));
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode
 TextToPronounce_zh::transliterateChar2Char( sal_Unicode inChar)
 {
     const sal_Unicode* pron=getPronounce(inChar);
@@ -95,7 +95,7 @@ TextToPronounce_zh::transliterateChar2Char( sal_Unicode inChar)
     return *pron;
 }
 
-bool SAL_CALL
+bool
 TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32 & nMatch1,
         const OUString & str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32 & nMatch2)
 {
