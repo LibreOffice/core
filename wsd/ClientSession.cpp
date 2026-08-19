@@ -3418,6 +3418,12 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         {
             setState(ClientSession::SessionState::LIVE);
 
+#if MOBILEAPP
+            // A conflict found while the document had no client is put to this one.
+            if (docBroker->isDocumentChangedInStorage())
+                docBroker->handleDocumentConflict();
+#endif
+
             if (firstLine.find("isfirst=true") != std::string::npos)
             {
                 // The document has just loaded.

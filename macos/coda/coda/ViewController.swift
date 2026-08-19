@@ -1011,6 +1011,27 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         NSApp.presentationOptions = []
     }
 
+    /// The web content process that rendered this webview died. The webview is now blank
+    /// and the JavaScript that drove it is gone.
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        let isMain = webView == self.webView
+        let isPresentation = self.presentationController != nil && webView == self.presentationController.webView
+        let isConsole = self.consoleController != nil && webView == self.consoleController.webView
+        let which = isMain ? "main" : (isPresentation ? "presentation" : (isConsole ? "console" : "other"))
+        NSLog("CollaboraOffice: the \(which) renderer died for appDocId \(self.document?.appDocId ?? -1), client fd \(self.document?.fakeClientFd ?? -1)")
+
+        // The presentation and console windows are extra views onto this same document,
+        // and only the main webview holds the connection to the in-process server.
+        if isMain, let document = self.document {
+            document.detachFromView()
+
+            // Load the page again into the same webview, which gives it a fresh renderer.
+            // The document keeps its appDocId, so the new connection rejoins the document
+            // still loaded in the engine, with any unsaved changes.
+            loadDocument(document)
+        }
+    }
+
     func webViewDidClose(_ webView: WKWebView) {
         // Closing either window ends the show and tears down the other too.
         let isPresentation = self.presentationController != nil && webView == self.presentationController.webView

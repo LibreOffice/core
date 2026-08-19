@@ -137,6 +137,11 @@ void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
         }
         else
         {
+            // The document is finished with, so the view held open for a session that was
+            // coming back goes now and the engine disposes of the document.
+            if (_document)
+                _document->destroyKeptView();
+
 #if DOCS_SHARE_PROCESS
             LOG_INF("Setting our KitSocketPoll's termination flag due to 'exit' command.");
             std::unique_lock<std::mutex> lock(_ksPoll->termination->mutex);

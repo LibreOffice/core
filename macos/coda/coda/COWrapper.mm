@@ -39,6 +39,7 @@
 #include <common/Util.hpp>
 #include <net/FakeSocket.hpp>
 #include <wsd/COOLWSD.hpp>
+#include <wsd/DocumentBroker.hpp>
 
 // Declare the coolwsd pointer at global scope
 COOLWSD *coolwsd = nullptr;
@@ -352,6 +353,8 @@ void install_clipboard_provider(COKit &rOffice)
     // Contact the permanently (during app lifetime) listening COOLWSD server
     // "public" socket
     assert(coolwsd_server_socket_fd != -1);
+    NSLog(@"CollaboraOffice: HULLO for appDocId %d, connecting client fd %d to server fd %d",
+          document.appDocId, document.fakeClientFd, coolwsd_server_socket_fd);
     int rc = fakeSocketConnect(document.fakeClientFd, coolwsd_server_socket_fd);
     assert(rc != -1);
 
@@ -363,15 +366,23 @@ void install_clipboard_provider(COKit &rOffice)
     document.closeNotificationSignalFd = closeNotificationPipe[0];
     document.closeNotificationWatchedFd = closeNotificationPipe[1];
 
+    // The forwarding thread keeps its own copy of the two fds it polls and closes. A
+    // reattach gives the document a fresh socket while this thread is still winding down,
+    // and reading the fds from the document here would pick up that newer connection.
+    const int clientFd = document.fakeClientFd;
+    const int watchedFd = document.closeNotificationWatchedFd;
+
     // Start another thread to read responses and forward them to the JavaScript
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                    ^{
                        ProcUtil::setThreadName("app2js");
+                       NSLog(@"CollaboraOffice: forwarding thread started for appDocId %d",
+                             document.appDocId);
                        while (true) {
                            struct pollfd p[2];
-                           p[0].fd = document.fakeClientFd;
+                           p[0].fd = clientFd;
                            p[0].events = POLLIN;
-                           p[1].fd = document.closeNotificationWatchedFd;
+                           p[1].fd = watchedFd;
                            p[1].events = POLLIN;
                            if (fakeSocketPoll(p, 2, -1) > 0) {
                                if (p[1].revents == POLLIN) {
@@ -381,32 +392,42 @@ void install_clipboard_provider(COKit &rOffice)
                                    // too just for cleanliness, even if a FakeSocket as
                                    // such is not a system resource so nothing is saved by
                                    // closing it.
-                                   fakeSocketClose(document.closeNotificationWatchedFd);
+                                   fakeSocketClose(watchedFd);
 
                                    // Close our end of the fake socket connection to the
                                    // ClientSession thread, so that it terminates
-                                   fakeSocketClose(document.fakeClientFd);
+                                   fakeSocketClose(clientFd);
 
+                                   NSLog(@"CollaboraOffice: forwarding thread for appDocId %d "
+                                          "ends on close notification",
+                                         document.appDocId);
                                    return;
                                }
                                if (p[0].revents == POLLIN) {
-                                   size_t n = fakeSocketAvailableDataLength(document.fakeClientFd);
+                                   size_t n = fakeSocketAvailableDataLength(clientFd);
                                    // I don't want to check for n being -1 here, even if
                                    // that will lead to a crash (std::length_error from the
                                    // below std::vector constructor), as n being -1 is a
                                    // sign of something being wrong elsewhere anyway, and I
                                    // prefer to fix the root cause. Let's see how well this
                                    // works out. See tdf#122543 for such a case.
-                                   if (n == 0)
+                                   if (n == 0) {
+                                       NSLog(@"CollaboraOffice: forwarding thread for appDocId %d "
+                                              "ends, the server closed the socket",
+                                             document.appDocId);
                                        return;
+                                   }
                                    std::vector<char> buf(n);
-                                   n = fakeSocketRead(document.fakeClientFd, buf.data(), n);
+                                   n = fakeSocketRead(clientFd, buf.data(), n);
                                    [document send2JS:buf.data() length:n];
                                }
                            }
                            else
                                break;
                        }
+                       NSLog(@"CollaboraOffice: forwarding thread for appDocId %d ends, the poll "
+                              "on client fd %d failed",
+                             document.appDocId, clientFd);
                        assert(false);
                    });
 
@@ -422,10 +443,19 @@ void install_clipboard_provider(COKit &rOffice)
     // so it stays a single token.
     if (document.fileURL != nil)
         message += " " + std::string([[document.fileURL absoluteString] UTF8String]);
+    NSLog(@"CollaboraOffice: sending handshake for appDocId %d on client fd %d: %s",
+          document.appDocId, document.fakeClientFd, message.c_str());
     fakeSocketWriteQueue(document.fakeClientFd, message.c_str(), message.size());
 }
 
 + (void)handleByeWith:(Document *_Nonnull)document {
+    NSLog(@"CollaboraOffice: BYE for appDocId %d, %d documents open",
+          document.appDocId, DocumentData::count());
+
+    // A document with no view of its own is kept loaded on purpose, so closing its
+    // last session is not what ends it. Ask for it directly.
+    closeDetachedDocument(document.appDocId);
+
     if (DocumentData::count() > 1) {
         // Other documents remain open. Keep the content in the shared clipboard;
         // just render it now so a lazy transferable (Writer, Impress) stays
@@ -443,6 +473,27 @@ void install_clipboard_provider(COKit &rOffice)
     // Close the signal end of this document's close-notification pair, which
     // wakes up this document's forwarding thread.
     fakeSocketClose(document.closeNotificationSignalFd);
+}
+
++ (void)detachDocument:(Document *_Nonnull)document {
+    NSLog(@"CollaboraOffice: detaching appDocId %d, client fd %d",
+          document.appDocId, document.fakeClientFd);
+
+    // Mark the document before the socket goes, so the broker never sees an empty
+    // session list that it would read as the document having ended.
+    if (auto broker = findBrokerByMobileAppDocId(document.appDocId))
+        broker->setDetached(true);
+
+    if (document.closeNotificationSignalFd == -1)
+        return;
+
+    // Wake this document's forwarding thread, which closes the watched end of the pair
+    // and the client socket. It holds its own copies of those two, so clearing them here
+    // leaves the document ready for a fresh connection straight away.
+    fakeSocketClose(document.closeNotificationSignalFd);
+    document.closeNotificationSignalFd = -1;
+    document.closeNotificationWatchedFd = -1;
+    document.fakeClientFd = -1;
 }
 
 + (void)handleMessageWith:(Document *)document message:(NSString *)message {

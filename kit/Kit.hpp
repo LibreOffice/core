@@ -303,6 +303,10 @@ public:
     /// if it is the last and only.
     void onUnload(const ChildSession& session);
 
+    /// Destroy the view kept alive with no session of its own, if there is one. The engine
+    /// then has no view left and disposes of the document. Answers whether a view went.
+    bool destroyKeptView();
+
     /// Get a view ID <-> UserInfo map.
     const std::map<int, UserInfo>& getViewInfo() const { return _sessionUserInfo; }
 
@@ -542,6 +546,10 @@ private:
     std::string _docPasswordToModify;
     // Whether a password to modify is stored
     bool _haveDocPasswordToModify;
+
+    /// The view kept alive after the session that owned it left, so the document keeps at
+    /// least one view. -1 when there is no such view, which is the usual state.
+    int _keptViewId;
 
     std::atomic<bool> _stop;
 

@@ -916,6 +916,10 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
             LOG_ERR("Bad document ID \"" << appDocIdView << "\" in \"" << payloadView << "\"");
         }
 
+        LOG_INF("App handshake for appDocId ["
+                << mobileAppDocId << "] with URL [" << payloadView.substr(0, space)
+                << "] and original URL [" << originalDocUrl << ']');
+
         handleClientWsUpgrade(request,
                               RequestDetails(std::string(payloadView.substr(0, space))),
                               disposition, socket, mobileAppDocId, originalDocUrl);
@@ -923,6 +927,8 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
     else
     {
         // no appDocId provided
+        LOG_INF("App handshake with no appDocId, URL [" << payloadView << ']');
+
         handleClientWsUpgrade(
             request,
             RequestDetails(std::string(payloadView)),

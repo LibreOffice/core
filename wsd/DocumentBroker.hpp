@@ -293,11 +293,18 @@ protected:
     {
     }
 
+public:
     /// The app-side numeric identifier of this document in a mobile-style
     /// build; 0 in the server build.
     unsigned getMobileAppDocId() const { return _mobileAppDocId; }
 
-public:
+    /// True while this document has no client sessions on purpose, because the app dropped
+    /// its views and means to open one again later. False at all other times.
+    bool isDetached() const { return _detached; }
+
+    /// Read and written from the app's own thread as well as the polling thread.
+    void setDetached(bool detached) { _detached = detached; }
+
     virtual ~DocumentBroker();
 
     /// Called when removed from the DocBrokers list
@@ -349,6 +356,11 @@ public:
     bool attemptLock(ClientSession& session, std::string& failReason);
 
     bool isDocumentChangedInStorage() const { return _documentChangedInStorage; }
+
+    /// Called when document conflict is detected (i.e. it changed in storage).
+    /// @param details optional un-translated technical fault analysis (differing
+    /// timestamps and the storage response) shown in the conflict dialog.
+    void handleDocumentConflict(std::string details = std::string());
 
     /// Invoked by the client to rename the document filename.
     /// Returns an error message in case of failure, otherwise an empty string.
@@ -1853,11 +1865,6 @@ private:
     /// Performs aggregated work after servicing all client sessions
     void processBatchUpdates();
 
-    /// Called when document conflict is detected (i.e. it changed in storage).
-    /// @param details optional un-translated technical fault analysis (differing
-    /// timestamps and the storage response) shown in the conflict dialog.
-    void handleDocumentConflict(std::string details = std::string());
-
     std::string applyBrowserAccessibility(const std::string& message,
                                        const std::string& viewId);
 
@@ -2010,6 +2017,10 @@ private:
     // Relevant only in the mobile apps
     const unsigned _mobileAppDocId;
 
+    /// True while the document has no client sessions on purpose. The app sets it from
+    /// its own thread before it drops the last view, so it is read atomically.
+    std::atomic<bool> _detached;
+
     ChildType _type;
 
     /// The main state of the document.
@@ -2042,5 +2053,15 @@ private:
     /// Unique DocBroker ID for tracing and debugging.
     static std::atomic<unsigned> DocBrokerId;
 };
+
+#if MOBILEAPP
+/// The broker of the open in-process document with this app-side identifier, or a null
+/// pointer when no open document has it.
+std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDocId);
+
+/// End a document that was left loaded with no views of its own. Does nothing when the
+/// document is not in that state, because closing its last session ends it instead.
+void closeDetachedDocument(unsigned mobileAppDocId);
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

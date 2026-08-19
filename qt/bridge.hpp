@@ -71,6 +71,7 @@ class Bridge : public QObject
     // step (driven by _saveAndClose in JS) has already run, so the
     // re-entry can proceed straight to teardown.
     bool _readyToClose = false;
+    bool _detached = false;
 
     // true while the document was opened from a template and has not yet been
     // saved to a real file. While set, a save is turned into a Save As so the
@@ -132,6 +133,14 @@ public:
     /// host window's closeEvent re-entry uses this to skip the
     /// save-if-dirty path and proceed with teardown.
     bool isReadyToClose() const { return _readyToClose; }
+
+    /// Release the connection to the in-process server after the renderer that drove this
+    /// view died. The document stays loaded under its appDocId.
+    void detachFromView();
+
+    /// True from the moment the connection to the in-process server is released until
+    /// a new one is established. The document stays loaded in the engine throughout.
+    bool isDetached() const { return _detached; }
 
     /// Set _readyToClose so that the next closeEvent re-entry
     /// proceeds with teardown.  Used by the save-in-flight defer

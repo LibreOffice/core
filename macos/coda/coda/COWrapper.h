@@ -24,6 +24,11 @@
 
 + (void)handleHULLOWithDocument:(Document *_Nonnull)document;
 + (void)handleByeWith:(Document *_Nonnull)document NS_SWIFT_NAME(bye(_:));
+/**
+ * Release this document's connection to the in-process server, leaving the
+ * document loaded under its appDocId.
+ */
++ (void)detachDocument:(Document *_Nonnull)document NS_SWIFT_NAME(detach(_:));
 + (void)handleMessageWith:(Document *_Nonnull)document message:(NSString *_Nonnull)message;
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
 + (BOOL)advertiseClipboard:(NSArray<NSString *> *_Nonnull)mimeTypes;

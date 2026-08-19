@@ -820,6 +820,35 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome)
                          request.accept();
                      });
 
+    // The web engine process that renders this view died. The view is now blank and the
+    // JavaScript that drove it is gone. A view opened by window.open, the slideshow and
+    // the presenter console, has no bridge of its own and nothing to release.
+    QObject::connect(page, &QWebEnginePage::renderProcessTerminated,
+                     [this](QWebEnginePage::RenderProcessTerminationStatus status, int exitCode)
+                     {
+                         LOG_WRN("the renderer died for appDocId "
+                                 << _document._appDocId << ", client fd "
+                                 << _document._fakeClientFd << ", termination status "
+                                 << static_cast<int>(status) << ", exit code " << exitCode);
+                         if (!_bridge)
+                             return;
+
+                         _bridge->detachFromView();
+
+                         // Load the page again, which gives the view a fresh renderer.
+                         // The document keeps its appDocId, so the new connection rejoins
+                         // the document still loaded in the engine, with any unsaved
+                         // changes. The reload waits for the event loop, so it runs after
+                         // this handler returns.
+                         QPointer<QWebEngineView> view(_webView.get());
+                         QTimer::singleShot(0, this,
+                                            [view]
+                                            {
+                                                if (view)
+                                                    view->reload();
+                                            });
+                     });
+
     s_instances.push_back(this);
 }
 
@@ -955,6 +984,9 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
         };
         _docType = _isWelcome ? QStringLiteral("welcome")
                               : docTypeFromExtension(QString::fromStdString(fileURL.getPath()));
+        LOG_INF("load into webview with appDocId " << _document._appDocId << ", client fd "
+                                                   << _document._fakeClientFd << ", file "
+                                                   << _document._fileURL.toString());
     }
 
     // setup js c++ communication
@@ -1067,6 +1099,9 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
     // The document type is unknown until the page-JS resolves the file;
     // the tab falls back to the generic icon.
     _docType = QStringLiteral("other");
+
+    LOG_INF("load remote into webview with appDocId " << _document._appDocId << ", client fd "
+                                                      << _document._fakeClientFd);
 
     queryGnomeFontScalingUpdateZoom();
     assert(_bridge == nullptr);

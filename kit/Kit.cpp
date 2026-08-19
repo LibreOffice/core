@@ -844,6 +844,7 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
     , _docPasswordType(DocumentPasswordType::ToView)
     , _hasPasswordToModify(false)
     , _haveDocPasswordToModify(false)
+    , _keptViewId(-1)
     , _stop(false)
     , _deltaGen(new DeltaGenerator())
     , _editorId(-1)
@@ -1421,6 +1422,22 @@ bool Document::onLoad(const std::string& sessionId,
     return false;
 }
 
+bool Document::destroyKeptView()
+{
+    if (_keptViewId == -1 || !_loKitDocument)
+        return false;
+
+    const int keptViewId = _keptViewId;
+    _keptViewId = -1;
+
+    LOG_INF("Destroying kept view [" << keptViewId << "] of document [" << anonymizeUrl(_url)
+                                     << ']');
+    _loKitDocument->setView(keptViewId);
+    _loKitDocument->registerCallback(nullptr, nullptr);
+    _loKitDocument->destroyView(keptViewId);
+    return true;
+}
+
 void Document::onUnload(const ChildSession& session)
 {
     // This is called when we receive 'child-??? disconnect'.
@@ -1475,7 +1492,19 @@ void Document::onUnload(const ChildSession& session)
     _loKitDocument->registerCallback(nullptr, nullptr);
     if (_loKitDocument->getViewsCount() <= 1)
         _loKit->registerCallback(nullptr, nullptr);
-    _loKitDocument->destroyView(viewId);
+
+    // The engine keeps a document while it has a view, so this last one holds the document
+    // open until the next session arrives.
+    if (DOCS_SHARE_PROCESS && _loKitDocument->getViewsCount() <= 1)
+    {
+        LOG_INF("Keeping view [" << viewId << "] of document [" << anonymizeUrl(_url)
+                                 << "] alive, so the document stays loaded with no session");
+        _keptViewId = viewId;
+    }
+    else
+    {
+        _loKitDocument->destroyView(viewId);
+    }
 
     // Since callback messages are processed on idle-timer,
     // we could receive callbacks after destroying a view.
@@ -2412,6 +2441,17 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         return nullptr;
     }
 
+    // The new view is in place before the kept one goes, so the document has a view
+    // throughout.
+    if (_keptViewId != viewId && destroyKeptView())
+    {
+        _loKitDocument->setView(viewId);
+
+        // The process-wide callback carries the progress indicator. It returns with the
+        // session.
+        _loKit->registerCallback(GlobalCallback, this);
+    }
+
     _sessionUserInfo[viewId] = UserInfo(session->getViewUserId(), session->getViewUserName(),
                                         session->getViewUserExtraInfo(), session->getViewUserPrivateInfo(),
                                         session->isReadOnly());
@@ -3027,6 +3067,7 @@ void Document::dumpState(std::ostream& oss)
         << "\n\teditorId: " << _editorId
         << "\n\teditorChangeWarning: " << _editorChangeWarning
         << "\n\tmobileAppDocId: " << _mobileAppDocId
+        << "\n\tkeptViewId: " << _keptViewId
         << "\n\tinputProcessingEnabled: " << processInputEnabled()
         << "\n\tduringLoad: " << _duringLoad << "\n\tmodified: " << name(_modified)
         << "\n\tbgSaveProc: " << _isBgSaveProcess << "\n\tbgSaveDisabled: " << _isBgSaveDisabled;

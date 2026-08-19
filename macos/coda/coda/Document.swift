@@ -41,6 +41,10 @@ class Document: NSDocument {
     /// The webview that contains the document.
     var webView: WKWebView!
 
+    /// True from the moment the connection to the in-process server is released until a
+    /// new one is established. The document stays loaded in the engine throughout.
+    var isDetached = false
+
     /// The URL of the temporary directory where the document's working files are stored.
     private var tempDirectoryURL: URL?
 
@@ -550,13 +554,35 @@ class Document: NSDocument {
     }
 
     /**
+     * Release the connection to the in-process server after the view that used it died.
+     * The appDocId and the temporary file stay, so the document is still there under them.
+     */
+    func detachFromView() {
+        if isDetached {
+            return
+        }
+        isDetached = true
+
+        webView = nil
+        COWrapper.detach(self)
+    }
+
+    /**
      * Initiate loading of cool.html, which also triggers loading of the document via lokit.
      */
     func loadDocumentInWebView(webView: WKWebView, permission: String, isWelcome: Bool) {
         self.webView = webView
 
-        self.appDocId = COWrapper.generateNewAppDocId()
+        // The appDocId names the document to the in-process server for as long as the
+        // document is open. A second call re-establishes the connection to the document
+        // already loaded under this appDocId, so only the socket is fresh.
+        if self.appDocId == -1 {
+            self.appDocId = COWrapper.generateNewAppDocId()
+        }
         self.fakeClientFd = COWrapper.fakeSocketSocket()
+        self.isDetached = false
+
+        NSLog("CollaboraOffice: load into webview with appDocId \(self.appDocId), client fd \(self.fakeClientFd), temp file \(self.tempFileURL?.absoluteString ?? "<none>")")
 
         guard let url = Bundle.main.url(forResource: "cool", withExtension: "html") else {
             fatalError("Resource 'cool.html' not found in the main bundle.")
@@ -733,7 +759,12 @@ class Document: NSDocument {
 
         // Evaluate on main queue
         DispatchQueue.main.async {
-            self.webView.evaluateJavaScript(js) { (obj, error) in
+            // A document whose renderer died has no page to hand this to.
+            guard let webView = self.webView else {
+                COWrapper.LOG_TRC("No view for appDocId \(self.appDocId), dropping: \(truncatedJS)")
+                return
+            }
+            webView.evaluateJavaScript(js) { (obj, error) in
                 if let error = error as NSError? {
                     COWrapper.LOG_ERR("Error after \(truncatedJS): \(error.localizedDescription)")
                     if let jsException = error.userInfo["WKJavaScriptExceptionMessage"] as? String {

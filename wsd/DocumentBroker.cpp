@@ -261,6 +261,7 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
     , _cursorHeight(0)
     , _debugRenderedTileCount(0)
     , _mobileAppDocId(mobileAppDocId)
+    , _detached(false)
     , _type(type)
     , _isModified(false)
     , _stop(false)
@@ -609,7 +610,13 @@ void DocumentBroker::pollThread()
                 {
                     autoSaveAndStop("idle");
                 }
-                else if (_sessions.empty() && (isLoaded() || _docState.isMarkedToDestroy()))
+                // A detached document has dropped its views on purpose, so an empty
+                // session list is the expected state and the document stays loaded. Its
+                // unsaved changes stay in memory until a view comes back, because a save
+                // needs a session to go through. A document that never finished loading
+                // is ended as usual, detached or not.
+                else if (_sessions.empty() && !(isDetached() && isLoaded()) &&
+                         (isLoaded() || _docState.isMarkedToDestroy()))
                 {
                     if (!isLoaded())
                     {
@@ -3145,6 +3152,21 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
         }
     }
 
+    if constexpr (Util::isMobileApp())
+    {
+        // The engine writes the user's own file here, so the file's new modified time is the
+        // document's new time in storage.
+        if (success)
+        {
+            const std::string modifiedTime = Util::getIso8601FracformatTime(
+                FileUtil::Stat(_storage->getRootFilePath()).modifiedTimepoint());
+            _storage->setLastModifiedTime(modifiedTime);
+            _storageManager.setLastModifiedServerTimeString(modifiedTime);
+            LOG_DBG("Saved docKey [" << _docKey << "], whose time in storage is now "
+                                     << _storageManager.getLastModifiedServerTimeString());
+        }
+    }
+
     const bool wasBackgroundSave =
         json->has("background") && json->get("background").toString() == "true";
 
@@ -3923,7 +3945,14 @@ void DocumentBroker::handleDocumentConflict(std::string details)
 
     const std::size_t activeClients = broadcastMessage(message);
     LOG_TRC("There are " << activeClients << " active clients after broadcasting documentconflict");
-    if (activeClients == 0)
+    if (activeClients == 0 && isDetached())
+    {
+        // A detached document has no client to answer right now. The conflict is put to
+        // the next session as soon as it has loaded, so the document stays.
+        LOG_INF("Doc [" << _docKey
+                        << "] is detached, so the conflict waits for its next client");
+    }
+    else if (activeClients == 0)
     {
         // No clients were contacted; we will never resolve this conflict.
 #if !MOBILEAPP
@@ -4548,10 +4577,13 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         _sessions.emplace(session->getId(), session);
         session->setState(ClientSession::SessionState::LOADING);
 
+        // The document has a view again from the moment this session joins.
+        setDetached(false);
+
         const std::size_t count = _sessions.size();
-        LOG_TRC("Added " << (session->isReadOnly() ? "readonly" : "non-readonly") <<
-                " session [" << id << "] to docKey [" <<
-                _docKey << "] to have " << count << " sessions.");
+        LOG_TRC("Added " << (session->isReadOnly() ? "readonly" : "non-readonly") << " session ["
+                         << id << "] to docKey [" << _docKey << "] with appDocId ["
+                         << _mobileAppDocId << "] to have " << count << " sessions.");
 
         UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerAddSession(_docKey, session));
 
@@ -4648,7 +4680,8 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         // auto-save and expect Core has the correct modified flag.
         constexpr bool dontSaveIfUnmodified = true;
 
-        LOG_INF("Removing session [" << id << "] on docKey [" << _docKey << "]. Have "
+        LOG_INF("Removing session [" << id << "] on docKey [" << _docKey << "] with appDocId ["
+                                     << _mobileAppDocId << "]. Have "
                                      << _sessions.size() << " sessions (" << activeSessionCount
                                      << " active). IsLive: " << session->isLive()
                                      << ", IsReadOnly: " << session->isReadOnly()
@@ -4721,7 +4754,14 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         // Last view going away; can destroy?
         if (activeSessionCount <= 1)
         {
-            if (_saveManager.isSaving() || isAsyncUploading())
+            if (isDetached())
+            {
+                // The views were dropped on purpose and one is coming back, so the
+                // document outlives its last session. A save already in flight still
+                // finishes; it just no longer decides the document's lifetime.
+                LOG_DBG("Removing last session of a detached document. It stays loaded.");
+            }
+            else if (_saveManager.isSaving() || isAsyncUploading())
             {
                 // Don't destroy just yet, wait until save and upload are done.
                 // Notice that the save and/or upload could have been triggered
@@ -4855,9 +4895,11 @@ void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSessi
             LOG_DBG("Disconnecting session [" << id << "] from Kit");
             hardDisconnect = session->disconnectFromKit();
 
-            // Clean-up and close loading sessions, if necessary.
+            // Clean-up and close loading sessions, if necessary. Where several documents share
+            // one process the document outlives its last session, so a session loading against
+            // it has a document to finish on.
             const std::size_t loadingSessions = countLoadingSessions();
-            if (_sessions.size() == loadingSessions + 1)
+            if (_sessions.size() == loadingSessions + 1 && !(DOCS_SHARE_PROCESS && isLoaded()))
             {
                 // This session is the last loaded one.
                 // If we remove it, the loading one(s) will never load.
@@ -6712,6 +6754,7 @@ void DocumentBroker::dumpState(std::ostream& os)
         os << "\n  still loading... "
            << std::chrono::duration_cast<std::chrono::seconds>(now - _createTime);
     os << "\n  now: " << Util::getClockAsString(now);
+    os << "\n  detached: " << isDetached();
     const int childPid = _childProcess ? _childProcess->getPid() : 0;
     os << "\n  child PID: " << childPid;
     os << "\n  sent: " << sent << " bytes";
@@ -7048,6 +7091,36 @@ void DocumentBroker::endSwitchingToOnline()
 
 // not beautiful - but neither is editing mobile project files.
 #if MOBILEAPP
+
+std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDocId)
+{
+    std::lock_guard<std::mutex> lock(DocBrokersMutex);
+    for (const auto& it : DocBrokers)
+    {
+        if (it.second && it.second->getMobileAppDocId() == mobileAppDocId)
+            return it.second;
+    }
+
+    return nullptr;
+}
+
+void closeDetachedDocument(unsigned mobileAppDocId)
+{
+    auto broker = findBrokerByMobileAppDocId(mobileAppDocId);
+    if (!broker || !broker->isDetached())
+        return;
+
+    LOG_INF("Closing detached document with appDocId [" << mobileAppDocId << ']');
+    broker->setDetached(false);
+    // The callback runs on the broker's own poll, so it holds the broker weakly and does
+    // nothing once the broker is gone.
+    broker->addCallback([weakBroker = std::weak_ptr<DocumentBroker>(broker)]
+    {
+        if (auto docBroker = weakBroker.lock())
+            docBroker->closeDocument("closed");
+    });
+}
+
 #  include "Exceptions.cpp"
 #endif
 

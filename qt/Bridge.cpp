@@ -18,6 +18,7 @@
 #include <qt/DBusService.hpp>
 #include <qt/RemoteOpen.hpp>
 #include <qt/DocumentOperations.hpp>
+#include <wsd/DocumentBroker.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
@@ -132,6 +133,9 @@ Bridge::Bridge(QObject* parent, WebView* owner, coda::DocumentData& document, QW
 
 Bridge::~Bridge() {
     coda::unregisterBridge(this);
+    // A document with no view of its own is kept loaded on purpose, so closing its
+    // last session is not what ends it. Ask for it directly.
+    closeDetachedDocument(_document._appDocId);
     if (_document._fakeClientFd != -1) {
         fakeSocketClose(_document._fakeClientFd);
     }
@@ -166,6 +170,8 @@ void Bridge::createAndStartMessagePumpThread()
         [this]
         {
             ProcUtil::setThreadName("app2js");
+            LOG_INF("message pump thread started for appDocId "
+                    << _document._appDocId << " on client fd " << _document._fakeClientFd);
             bool unexpectedClose = false;
             bool docUnloading = false;
             while (true)
@@ -217,7 +223,10 @@ void Bridge::createAndStartMessagePumpThread()
                     }
                 }
             }
-            LOG_TRC("Closing message pump thread");
+            LOG_INF("closing message pump thread for appDocId "
+                    << _document._appDocId << " on client fd " << _document._fakeClientFd
+                    << ", the document is unloading: " << docUnloading
+                    << ", the close was unexpected: " << unexpectedClose);
             fakeSocketClose(_closeNotificationPipeForForwardingThread[1]);
             _closeNotificationPipeForForwardingThread[1] = -1;
             fakeSocketClose(_document._fakeClientFd);
@@ -278,6 +287,8 @@ void Bridge::retryLoadAfterUnloading()
     // A fresh client socket for the next attempt; the previous one was closed
     // when the pump thread saw the server drop the connection.
     _document._fakeClientFd = fakeSocketSocket();
+    LOG_INF("reconnecting appDocId " << _document._appDocId << " on new client fd "
+                                     << _document._fakeClientFd);
 
     // Quadratic back-off, the same shape the browser client uses when it
     // retries on a docunloading error.
@@ -294,6 +305,33 @@ void Bridge::retryLoadAfterUnloading()
                            if (webView)
                                webView->reload();
                        });
+}
+
+void Bridge::detachFromView()
+{
+    if (_detached)
+        return;
+    _detached = true;
+
+    LOG_INF("detaching appDocId " << _document._appDocId << ", client fd "
+                                  << _document._fakeClientFd);
+
+    // Mark the document before the socket goes, so the broker never sees an empty
+    // session list that it would read as the document having ended.
+    if (auto broker = findBrokerByMobileAppDocId(_document._appDocId))
+        broker->setDetached(true);
+
+    if (!_app2js.joinable())
+        return;
+
+    // Closing the signal end wakes the pump thread, which closes the watched end
+    // and the client socket and clears the socket from the document.
+    if (_closeNotificationPipeForForwardingThread[0] != -1)
+    {
+        fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
+        _closeNotificationPipeForForwardingThread[0] = -1;
+    }
+    _app2js.join();
 }
 
 void Bridge::evalJS(const std::string& script)
@@ -660,6 +698,17 @@ QVariant Bridge::cool(const QString& messageStr)
 
     if (tokens.equals(0, "HULLO"))
     {
+        if (_detached)
+        {
+            // The connection was released when the renderer died, and the appDocId
+            // survived. A fresh socket carrying the same appDocId rejoins the document
+            // already loaded under it.
+            _document._fakeClientFd = fakeSocketSocket();
+            _detached = false;
+            LOG_INF("reattaching appDocId " << _document._appDocId << " on new client fd "
+                                            << _document._fakeClientFd);
+        }
+
         // Skip for starter screen (no document connection needed)
         if (_document._fakeClientFd == -1) {
             LOG_TRC_NOFILE("Starter screen - skipping COOLWSD connection");
@@ -668,6 +717,9 @@ QVariant Bridge::cool(const QString& messageStr)
 
         // JS side fully initialised – open our fake WebSocket to COOLWSD
         assert(coolwsd_server_socket_fd != -1);
+        LOG_INF("HULLO for appDocId " << _document._appDocId << ", connecting client fd "
+                                      << _document._fakeClientFd << " to server fd "
+                                      << coolwsd_server_socket_fd);
         int rc = fakeSocketConnect(_document._fakeClientFd, coolwsd_server_socket_fd);
         assert(rc != -1);
 
@@ -676,6 +728,7 @@ QVariant Bridge::cool(const QString& messageStr)
         // 1st request: the initial GET /?file_path=...  (mimic WebSocket upgrade)
         std::string initMsg(_document._fileURL.toString() +
                             (" " + std::to_string(_document._appDocId)));
+        LOG_INF("sending handshake on client fd " << _document._fakeClientFd << ": " << initMsg);
         fakeSocketWriteQueue(_document._fakeClientFd, initMsg.c_str(), initMsg.size());
     }
     else if (tokens.equals(0, "loaddocument"))
@@ -915,8 +968,9 @@ QVariant Bridge::cool(const QString& messageStr)
     else if (tokens.equals(0, "BYE") || tokens.equals(0, "EXIT_TEST"))
     {
         const bool quitApp = tokens.equals(0, "EXIT_TEST");
-        LOG_INF((quitApp ? "EXIT_TEST" : "BYE") << " -- closing document"
-                                                << (quitApp ? " and quitting" : ""));
+        LOG_INF((quitApp ? "EXIT_TEST" : "BYE")
+                << " -- closing document with appDocId " << _document._appDocId
+                << (quitApp ? " and quitting" : ""));
         // Materialise the lazy clipboard before closing so an external paste
         // after the document closes still works.
         materializeClipboard(_document._appDocId);
