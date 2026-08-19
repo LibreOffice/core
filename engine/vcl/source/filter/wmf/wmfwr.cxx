@@ -1245,34 +1245,34 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
             case MetaActionType::BMPEX:
             {
                 const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction *>(pMA);
-                Bitmap                  aBmp( pA->GetBitmap().CreateColorBitmap() );
-                AlphaMask               aMsk( pA->GetBitmap().CreateAlphaMask() );
+                const Bitmap& rBmpEx(pA->GetBitmap());
 
-                if( !aMsk.IsEmpty() )
+                if (rBmpEx.HasAlpha())
                 {
+                    auto [ aBmp, aMsk ] = rBmpEx.SplitIntoColorAndAlpha();
                     aBmp.Replace( aMsk, COL_WHITE );
                     WMFRecord_StretchDIB( pA->GetPoint(), aMsk.GetSizePixel(), aBmp, W_SRCPAINT );
                     WMFRecord_StretchDIB( pA->GetPoint(), aBmp.GetSizePixel(), aBmp, W_SRCAND );
                 }
                 else
-                    WMFRecord_StretchDIB( pA->GetPoint(), aBmp.GetSizePixel(), aBmp );
+                    WMFRecord_StretchDIB( pA->GetPoint(), rBmpEx.GetSizePixel(), rBmpEx );
             }
             break;
 
             case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pMA);
-                Bitmap                      aBmp( pA->GetBitmap().CreateColorBitmap() );
-                AlphaMask                   aMsk( pA->GetBitmap().CreateAlphaMask() );
+                const Bitmap& rBmpEx(pA->GetBitmap());
 
-                if( !aMsk.IsEmpty() )
+                if (rBmpEx.HasAlpha())
                 {
+                    auto [ aBmp, aMsk ] = rBmpEx.SplitIntoColorAndAlpha();
                     aBmp.Replace( aMsk, COL_WHITE );
                     WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aMsk.GetBitmap(), W_SRCPAINT );
                     WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aBmp, W_SRCAND );
                 }
                 else
-                    WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aBmp );
+                    WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), rBmpEx );
             }
             break;
 
@@ -1281,17 +1281,16 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pMA);
                 Bitmap                          aBmpEx( pA->GetBitmap() );
                 aBmpEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
-                Bitmap                          aBmp( aBmpEx.CreateColorBitmap() );
 
                 if( aBmpEx.HasAlpha() )
                 {
-                    AlphaMask aMsk( aBmpEx.CreateAlphaMask() );
+                    auto [ aBmp, aMsk ] = aBmpEx.SplitIntoColorAndAlpha();
                     aBmp.Replace( aMsk, COL_WHITE );
                     WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aMsk.GetBitmap(), W_SRCPAINT );
                     WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aBmp, W_SRCAND );
                 }
                 else
-                    WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aBmp );
+                    WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aBmpEx );
             }
             break;
 
