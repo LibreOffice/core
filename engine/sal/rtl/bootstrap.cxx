@@ -207,7 +207,7 @@ static void getExecutableDirectory_Impl(rtl_uString ** ppDirURL)
     rtl_uString_newFromStr_WithLength(ppDirURL,fileName.getStr(),nDirEnd);
 }
 
-static OUString getIniFileName(bool overriding) {
+static OUString getIniFileName() {
     OUString fileName;
 
 #if defined IOS
@@ -215,24 +215,20 @@ static OUString getIniFileName(bool overriding) {
     // directory. Apps are self-contained anyway, there is no
     // possibility to have several "applications" in the same
     // installation location with different inifiles.
-    const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: (overriding ? @"fundamental.override.ini" : @"rc")]] UTF8String];
+    const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"]] UTF8String];
     fileName = OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
     resolvePathnameUrl(&fileName);
 #elif defined ANDROID
     // Apps are self-contained on Android, too, can as well hardcode
     // it as "rc" in the "/assets" directory, i.e.  inside the app's
     // .apk (zip) archive as the /assets/rc file.
-    fileName = overriding
-        ? OUString("vnd.sun.star.pathname:/assets/fundamental.override.ini")
-        : OUString("vnd.sun.star.pathname:/assets/rc");
+    fileName = OUString("vnd.sun.star.pathname:/assets/rc");
     resolvePathnameUrl(&fileName);
 #elif defined(__EMSCRIPTEN__)
-    fileName = overriding
-        ? OUString("vnd.sun.star.pathname:/instdir/program/fundamental.override.ini")
-        : OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
+    fileName = OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
     resolvePathnameUrl(&fileName);
 #else
-    if (!overriding && getFromCommandLineArgs(u"INIFILENAME"_ustr, &fileName))
+    if (getFromCommandLineArgs(u"INIFILENAME"_ustr, &fileName))
     {
         resolvePathnameUrl(&fileName);
     }
@@ -240,28 +236,23 @@ static OUString getIniFileName(bool overriding) {
     {
         osl_getExecutableFile(&(fileName.pData));
 
-        if (overriding) {
-            auto const i = fileName.lastIndexOf('/') + 1;
-            fileName = fileName.replaceAt(i, fileName.getLength() - i, u"fundamental.override.ini");
-        } else {
-            // get rid of a potential executable extension
-            OUString progExt = u".bin"_ustr;
-            if (fileName.getLength() > progExt.getLength()
-                && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
-            {
-                fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
-            }
-
-            progExt = u".exe"_ustr;
-            if (fileName.getLength() > progExt.getLength()
-                && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
-            {
-                fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
-            }
-
-            // append config file suffix
-            fileName += SAL_CONFIGFILE("");
+        // get rid of a potential executable extension
+        OUString progExt = u".bin"_ustr;
+        if (fileName.getLength() > progExt.getLength()
+            && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
+        {
+            fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
         }
+
+        progExt = u".exe"_ustr;
+        if (fileName.getLength() > progExt.getLength()
+            && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
+        {
+            fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
+        }
+
+        // append config file suffix
+        fileName += SAL_CONFIGFILE("");
 
 #ifdef MACOSX
         // We keep only executables in the MacOS folder, and all
@@ -276,16 +267,9 @@ static OUString getIniFileName(bool overriding) {
     return fileName;
 }
 
-static OUString const & getOverrideIniFileName_Impl()
-{
-    static OUString aStaticName = getIniFileName(true);
-
-    return aStaticName;
-}
-
 static OUString & getIniFileName_Impl()
 {
-    static OUString aStaticName = getIniFileName(false);
+    static OUString aStaticName = getIniFileName();
 
     return aStaticName;
 }
@@ -305,7 +289,6 @@ namespace {
 struct Bootstrap_Impl
 {
     sal_Int32 _nRefCount;
-    Bootstrap_Impl * _override_base_ini;
     Bootstrap_Impl * _base_ini;
 
     NameValueVector _nameValueVector;
@@ -339,31 +322,10 @@ struct Bootstrap_Impl
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _nRefCount( 0 ),
-      _override_base_ini( nullptr ),
       _base_ini( nullptr ),
       _iniName (rIniName)
 {
-    OUString override_base_ini(getOverrideIniFileName_Impl());
-    // normalize path
-    FileStatus override_status( osl_FileStatus_Mask_FileURL );
-    DirectoryItem override_dirItem;
-    bool skip_base_ini = false;
-    if (DirectoryItem::get(override_base_ini, override_dirItem) == DirectoryItem::E_None &&
-        override_dirItem.getFileStatus(override_status) == DirectoryItem::E_None)
     {
-        override_base_ini = override_status.getFileURL();
-        if (rIniName != override_base_ini)
-        {
-            _override_base_ini = static_cast< Bootstrap_Impl * >(
-                rtl_bootstrap_args_open(override_base_ini.pData));
-        }
-        else
-        {
-            skip_base_ini = true;
-        }
-    }
-
-    if (!skip_base_ini) {
         OUString base_ini(getIniFileName_Impl());
         // normalize path
         FileStatus status( osl_FileStatus_Mask_FileURL );
@@ -414,8 +376,6 @@ Bootstrap_Impl::~Bootstrap_Impl()
 {
     if (_base_ini)
         rtl_bootstrap_args_close( _base_ini );
-    if (_override_base_ini)
-        rtl_bootstrap_args_close( _override_base_ini );
 }
 
 namespace {
@@ -475,13 +435,6 @@ bool Bootstrap_Impl::getValue(
 
     if (override && getDirectValue(key, value, mode, requestStack))
         return true;
-
-    if (_override_base_ini != nullptr
-        && _override_base_ini->getDirectValue(key, value, mode, requestStack))
-    {
-        SAL_INFO("sal.bootstrap", "getValue(" << key << ") from fundamental.override.ini");
-        return true;
-    }
 
     if (key == "_OS")
     {
