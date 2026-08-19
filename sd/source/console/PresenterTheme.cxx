@@ -97,10 +97,9 @@ public:
         const Reference<beans::XPropertySet>& rxFontProperties,
         const PresenterTheme::SharedFontDescriptor& rpDefault);
 
-    static std::shared_ptr<PresenterTheme::Theme> ReadTheme (
-        PresenterConfigurationAccess& rConfiguration,
-        const OUString& rsThemeName,
-        const Reference<rendering::XCanvas>& rxCanvas);
+    static std::shared_ptr<PresenterTheme::Theme>
+    ReadTheme(PresenterConfigurationAccess& rConfiguration,
+              const Reference<rendering::XCanvas>& rxCanvas);
 
     static BorderSize ReadBorderSize (const Reference<container::XNameAccess>& rxNode);
 
@@ -250,7 +249,7 @@ std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
         u"/org.openoffice.Office.PresenterScreen/"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
 
-    return ReadContext::ReadTheme(aConfiguration, OUString(), mxCanvas);
+    return ReadContext::ReadTheme(aConfiguration, mxCanvas);
 }
 
 bool PresenterTheme::HasCanvas() const
@@ -648,23 +647,19 @@ Any ReadContext::GetByName (
         return Any();
 }
 
-std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
-    PresenterConfigurationAccess& rConfiguration,
-    const OUString& rsThemeName,
-    const Reference<rendering::XCanvas>& rxCanvas)
+std::shared_ptr<PresenterTheme::Theme>
+ReadContext::ReadTheme(PresenterConfigurationAccess& rConfiguration,
+                       const Reference<rendering::XCanvas>& rxCanvas)
 {
     std::shared_ptr<PresenterTheme::Theme> pTheme;
 
-    OUString sCurrentThemeName (rsThemeName);
+    OUString sCurrentThemeName;
+    // Look up the CurrentTheme property.
+    rConfiguration.GetConfigurationNode(u"Presenter/CurrentTheme"_ustr) >>= sCurrentThemeName;
     if (sCurrentThemeName.isEmpty())
     {
-         // No theme name given.  Look up the CurrentTheme property.
-         rConfiguration.GetConfigurationNode(u"Presenter/CurrentTheme"_ustr) >>= sCurrentThemeName;
-         if (sCurrentThemeName.isEmpty())
-         {
-             // Still no name.  Use "DefaultTheme".
-             sCurrentThemeName = "DefaultTheme";
-         }
+        // No name. Use "DefaultTheme".
+        sCurrentThemeName = u"DefaultTheme"_ustr;
     }
 
     Reference<container::XNameAccess> xThemes (
