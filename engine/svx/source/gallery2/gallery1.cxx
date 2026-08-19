@@ -28,6 +28,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -310,35 +311,44 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                 rbDirIsReadOnly = true;
         }
 #else
-        try
+        // Kit installation is defacto read-only, even if by DAC it's owned by the user.
+        // Writing to UserInstallation is pointless too, as it will be deleted on exit.
+        if (comphelper::COKit::isActive())
         {
-            // check readonlyness the very hard way
-            INetURLObject   aTestURL( rBaseURL );
-
-            aTestURL.Append( u"cdefghij.klm" );
-            std::unique_ptr<SvStream> pTestStm(::utl::UcbStreamHelper::CreateStream( aTestURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
-
-            if( pTestStm )
+            rbDirIsReadOnly = true;
+        }
+        else
+        {
+            try
             {
-                pTestStm->WriteInt32( sal_Int32(1) );
+                // check readonlyness the very hard way
+                INetURLObject   aTestURL( rBaseURL );
 
-                if( pTestStm->GetError() )
+                aTestURL.Append( u"cdefghij.klm" );
+                std::unique_ptr<SvStream> pTestStm(::utl::UcbStreamHelper::CreateStream( aTestURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
+
+                if( pTestStm )
+                {
+                    pTestStm->WriteInt32( sal_Int32(1) );
+
+                    if( pTestStm->GetError() )
+                        rbDirIsReadOnly = true;
+
+                    pTestStm.reset();
+                    KillFile( aTestURL );
+                }
+                else
                     rbDirIsReadOnly = true;
-
-                pTestStm.reset();
-                KillFile( aTestURL );
             }
-            else
-                rbDirIsReadOnly = true;
-        }
-        catch( const ucb::ContentCreationException& )
-        {
-        }
-        catch( const uno::RuntimeException& )
-        {
-        }
-        catch( const cpo::uno::Exception& )
-        {
+            catch( const ucb::ContentCreationException& )
+            {
+            }
+            catch( const uno::RuntimeException& )
+            {
+            }
+            catch( const cpo::uno::Exception& )
+            {
+            }
         }
 #endif
         if( xResultSet.is() )
