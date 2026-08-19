@@ -13,18 +13,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-06 13:27+0000\n"
+"PO-Revision-Date: 2026-08-16 13:46+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/pl/>\n"
-"Language: \n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-"X-Generator: Weblate 2026.8.1.dev0\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -417,13 +417,12 @@ msgid "Your WOPI server is not secure: SSL verification failed"
 msgstr "Twój serwer WOPI nie jest bezpieczny: weryfikacja SSL nie powiodła się"
 
 #: admin/src/AdminSocketServerAudit.js:40
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Dokumenty nie są skutecznie chronione: brakuje możliwości lub przestrzeni "
-"nazw."
+"Dokumenty nie są skutecznie chronione: brakuje możliwości, przestrzeni nazw "
+"i blokad."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -552,7 +551,7 @@ msgstr "Tryb ciemny"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automatyczne sprawdzanie pisowni"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -564,7 +563,7 @@ msgstr "Domyślne powiększenie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Płynne przewijanie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -1965,96 +1964,98 @@ msgstr "Asystent AI"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "wstaw %n slajd"
+msgstr[1] "wstaw %n slajdy"
+msgstr[2] "wstaw %n slajdów"
+msgstr[3] "wstaw %n slajdów"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "usuń %n slajd"
+msgstr[1] "usuń %n slajdy"
+msgstr[2] "usuń %n slajdów"
+msgstr[3] "usuń %n slajdów"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "duplikuj %n slajd"
+msgstr[1] "duplikuj %n slajdy"
+msgstr[2] "duplikuj %n slajdów"
+msgstr[3] "duplikuj %n slajdów"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "przesuń %n slajd"
+msgstr[1] "przesuń %n slajdy"
+msgstr[2] "przesuń %n slajdów"
+msgstr[3] "przesuń %n slajdów"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "zmień nazwę %n slajdu"
+msgstr[1] "zmień nazwę %n slajdów"
+msgstr[2] "zmień nazwę %n slajdów"
+msgstr[3] "zmień nazwę %n slajdów"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "zmień %n układ"
+msgstr[1] "zmień %n układy"
+msgstr[2] "zmień %n układów"
+msgstr[3] "zmień %n układów"
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "ustaw tekst w %n miejscu"
+msgstr[1] "ustaw tekst w %n miejscach"
+msgstr[2] "ustaw tekst w %n miejscach"
+msgstr[3] "ustaw tekst w %n miejscach"
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "sformatuj tekst w %n miejscu"
+msgstr[1] "sformatuj tekst w %n miejscach"
+msgstr[2] "sformatuj tekst w %n miejscach"
+msgstr[3] "sformatuj tekst w %n miejscach"
 
 #: src/control/Control.AIChatSidebar.ts:2403
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Wygenerowany obraz"
+msgstr[0] "wygeneruj %n obraz"
+msgstr[1] "wygeneruj %n obrazy"
+msgstr[2] "wygeneruj %n obrazów"
+msgstr[3] "wygeneruj %n obrazów"
 
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "uruchom %n polecenie dokumentu"
+msgstr[1] "uruchom %n polecenia dokumentu"
+msgstr[2] "uruchom %n poleceń dokumentu"
+msgstr[3] "uruchom %n poleceń dokumentu"
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "uruchom %n polecenie %1"
+msgstr[1] "uruchom %n polecenia %1"
+msgstr[2] "uruchom %n poleceń %1"
+msgstr[3] "uruchom %n poleceń %1"
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "zastosuj szablon projektu '%1'"
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "Spowoduje to: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
@@ -2129,11 +2130,11 @@ msgstr "Nie udało się przeanalizować zawartości zaznaczenia"
 
 #: src/control/Control.AIChatSidebar.ts:3005
 msgid "Design (optional):"
-msgstr ""
+msgstr "Projekt (opcjonalnie):"
 
 #: src/control/Control.AIChatSidebar.ts:3022
 msgid "No design"
-msgstr ""
+msgstr "Brak projektu"
 
 #: src/control/Control.AIChatSidebar.ts:3023
 msgid "Continue without a design template"
@@ -2144,50 +2145,52 @@ msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Oto proponowany konspekt. Edytuj tytuły lub opisy, usuń slajdy, których nie "
+"chcesz, a następnie zatwierdź, aby utworzyć prezentację:"
 
 #: src/control/Control.AIChatSidebar.ts:3150
 msgid "Reject outline"
-msgstr ""
+msgstr "Odrzuć konspekt"
 
 #: src/control/Control.AIChatSidebar.ts:3156
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Nadaj każdemu dodanemu slajdowi tytuł, który należy zatwierdzić."
 
 #: src/control/Control.AIChatSidebar.ts:3184
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Tytuł slajdu %1"
 
 #: src/control/Control.AIChatSidebar.ts:3190
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Opis slajdu %1"
 
 #: src/control/Control.AIChatSidebar.ts:3196
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Usuń slajd %1"
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Slide title"
-msgstr ""
+msgstr "Tytuł slajdu"
 
 #: src/control/Control.AIChatSidebar.ts:3256
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Co powinien obejmować ten slajd"
 
 #: src/control/Control.AIChatSidebar.ts:3281
 msgid "Add slide"
-msgstr ""
+msgstr "Dodaj slajd"
 
 #: src/control/Control.AIChatSidebar.ts:3319
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Konspekt zatwierdzony — tworzenie %1 slajdów."
 
 #: src/control/Control.AIChatSidebar.ts:3328
 msgid "Outline rejected."
-msgstr ""
+msgstr "Konspekt odrzucony."
 
 #: src/control/Control.AIChatSidebar.ts:3364
 msgid "Building slides..."
-msgstr ""
+msgstr "Tworzenie slajdów..."
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "Formula analysis timeout"
@@ -5000,10 +5003,12 @@ msgid "Expand All Sections"
 msgstr "Rozwiń wszystkie sekcje"
 
 #: src/control/Control.PartsPreview.js:1065
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Usunąć sekcję „%1” i jej slajdy: %2?"
+msgstr[0] "Usunąć sekcję „%1” i jej %n slajd?"
+msgstr[1] "Usunąć sekcję „%1” i jej %n slajdy?"
+msgstr[2] "Usunąć sekcję „%1” i jej %n slajdów?"
+msgstr[3] "Usunąć sekcję „%1” i jej %n slajdów?"
 
 #: src/control/Control.PartsPreview.js:1114
 msgid "Enter new section name:"
@@ -6034,7 +6039,7 @@ msgstr "Bardzo luźno"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Kopiuj Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6057,26 +6062,24 @@ msgid "All users"
 msgstr "Wszyscy użytkownicy"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Wyróżnij komórki..."
+msgstr "Wyróżnij komórki za pomocą"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Górne/dolne reguły..."
+msgstr "Górne/dolne reguły"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Skala kolorów"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Pasek danych"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Zestaw ikon"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6903,24 +6906,24 @@ msgstr "Poza tabelą"
 #: src/layer/marker/A11yTextInput.js:257
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n wierszem"
+msgstr[1] "%n wierszami"
+msgstr[2] "%n wierszami"
+msgstr[3] "%n wierszami"
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n kolumną"
+msgstr[1] "%n kolumnami"
+msgstr[2] "%n kolumnami"
+msgstr[3] "%n kolumnami"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:261
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tabela z {0} i {1}"
 
 #: src/layer/marker/A11yTextInput.js:266
 msgid "Row {0} through {1}"
@@ -7371,10 +7374,12 @@ msgid "No Notes"
 msgstr "Brak notatek"
 
 #: src/slideshow/PresenterConsole.js:1658
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Powtórz w ciągu {0} sekund"
+msgstr[0] "Powtórz za %n sekundę"
+msgstr[1] "Powtórz za %n sekundy"
+msgstr[2] "Powtórz za %n sekund"
+msgstr[3] "Powtórz za %n sekund"
 
 #: src/slideshow/PresenterConsole.js:1665
 #: src/slideshow/SlideShowPresenter.ts:663
