@@ -245,12 +245,12 @@ bool GIFWriter::CreateAccess( const Bitmap& rBmp )
 {
     if( bStatus )
     {
-        aAccBmp = rBmp.CreateColorBitmap();
         bTransparent = false;
 
         if( rBmp.HasAlpha() )
         {
-            AlphaMask aMask( rBmp.CreateAlphaMask() );
+            AlphaMask aMask;
+            std::tie(aAccBmp, aMask) = rBmp.SplitIntoColorAndAlpha();
 
             if( aAccBmp.Convert( BmpConversion::N8BitTrans ) )
             {
@@ -263,7 +263,10 @@ bool GIFWriter::CreateAccess( const Bitmap& rBmp )
                 aAccBmp.Convert( BmpConversion::N8BitColors );
         }
         else
+        {
+            aAccBmp = rBmp;
             aAccBmp.Convert( BmpConversion::N8BitColors );
+        }
 
         m_pAcc = aAccBmp;
 
