@@ -1159,7 +1159,10 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
 
                 for (const rtl::Reference<SdrObject>& pObj : *pDrawPage)
                 {
-                    if (SdrObjectPrimitiveHit(*pObj, aPos, {fHitLog, fHitLog}, *pDrawView->GetSdrPageView(), nullptr, false))
+                    // tdf#120295 - restrict primitive hit to visible layers
+                    if (SdrObjectPrimitiveHit(
+                            *pObj, aPos, { fHitLog, fHitLog }, *pDrawView->GetSdrPageView(),
+                            &pDrawView->GetSdrPageView()->GetVisibleLayers(), false))
                     {
                         xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
                         break;
