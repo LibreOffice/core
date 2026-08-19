@@ -25,15 +25,12 @@ void connectivity::mysqlc::Tables::impl_refresh()
 static void lcl_unescape(OUString& rName)
 {
     // Remove ending ` if there's one
-    sal_Int32 nLastIndexBacktick = rName.lastIndexOf("`");
-    if ((nLastIndexBacktick > 0) && (nLastIndexBacktick == (rName.getLength() - 1)))
-    {
-        rName = rName.copy(0, nLastIndexBacktick);
-    }
+    if (rName.endsWith('`'))
+        rName = rName.copy(0, rName.getLength() - 1);
 
     // Remove beginning `
-    nLastIndexBacktick = rName.indexOf("`");
-    if (nLastIndexBacktick == 0)
+    sal_Int32 nFirstIndexBacktick = rName.indexOf("`");
+    if (nFirstIndexBacktick == 0)
     {
         rName = rName.copy(1, rName.getLength() - 1);
     }
