@@ -206,9 +206,10 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             WriteDIBBitmapEx(aBitmap, aTemp); // is capable of zlib stream compression
             nZippedFileSize = aTemp.TellEnd();
         }
+        Bitmap aColor(aBitmap);
         if ( aBitmap.HasAlpha() )
-            aAlphaMask = aBitmap.CreateAlphaMask();
-        Graphic aGraphic(aBitmap.CreateColorBitmap());
+            std::tie(aColor, aAlphaMask) = aBitmap.SplitIntoColorAndAlpha();
+        Graphic aGraphic(aColor);
 
         Sequence< PropertyValue > aFilterData{
             comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(i_rContext.m_nJPEGQuality)),
@@ -524,7 +525,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev.disposeAndClear();
 
                                 Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                                implWriteBitmapEx( rPos, rSize, Bitmap(aPaint.CreateColorBitmap(), aAlpha ), aGraphic, pDummyVDev, i_rContext );
+                                implWriteBitmapEx( rPos, rSize, Bitmap(aPaint, aAlpha), aGraphic, pDummyVDev, i_rContext );
                             }
                         }
                     }
