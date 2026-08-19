@@ -51,7 +51,7 @@ class SpellChecker :
     {
         OUString                  m_aDName;
         css::lang::Locale         m_aDLoc;
-        std::unique_ptr<Hunspell> m_pDict;
+        std::shared_ptr<Hunspell> m_pDict;
         rtl_TextEncoding          m_aDEnc;
 
         DictItem(OUString i_DName, css::lang::Locale i_DLoc, rtl_TextEncoding i_DEnc);

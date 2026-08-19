@@ -296,6 +296,23 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
             {
                 if (!currDict.m_pDict)
                 {
+                    // One entry per locale, and a dictionary that names several locales
+                    // appears once for each of them, so the files may already be loaded
+                    // under a sibling entry. Take that one rather than building a second
+                    // copy of the same word list.
+                    for (auto& loadedDict : m_DictItems)
+                    {
+                        if (loadedDict.m_pDict && loadedDict.m_aDName == currDict.m_aDName)
+                        {
+                            currDict.m_pDict = loadedDict.m_pDict;
+                            currDict.m_aDEnc = loadedDict.m_aDEnc;
+                            break;
+                        }
+                    }
+                }
+
+                if (!currDict.m_pDict)
+                {
                     OUString dicpath = currDict.m_aDName + ".dic";
                     OUString affpath = currDict.m_aDName + ".aff";
                     OUString dict;
@@ -315,7 +332,7 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
                     OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 #endif
 
-                    currDict.m_pDict = std::make_unique<Hunspell>(aTmpaff.getStr(),aTmpdict.getStr());
+                    currDict.m_pDict = std::make_shared<Hunspell>(aTmpaff.getStr(),aTmpdict.getStr());
 #if defined(H_DEPRECATED)
                     currDict.m_aDEnc = getTextEncodingFromCharset(currDict.m_pDict->get_dict_encoding().c_str());
 #else
