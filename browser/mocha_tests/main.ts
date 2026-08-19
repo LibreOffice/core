@@ -58,6 +58,7 @@
 /// <reference path="./VectorGradientPrimitives.test.ts" />
 /// <reference path="./VectorHatchPrimitives.test.ts" />
 /// <reference path="./VectorImageFillPrimitives.test.ts" />
+/// <reference path="./VectorPatternFillPrimitives.test.ts" />
 /// <reference path="./InternUtil.test.ts" />
 /// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />

@@ -1068,7 +1068,9 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("type", "patternFill");
             writePathScaled(rPrimitive.getMask());
 
-            writeRange("referenceRange", rPrimitive.getReferenceRange(), mfScaleFactor);
+            // The reference range is relative to the mask's bounds, which act as
+            // the unit square, so it goes out at a scale of one.
+            writeRange("referenceRange", rPrimitive.getReferenceRange(), 1.0);
 
             const Primitive2DContainer& rChildren = rPrimitive.getChildren();
             if (!rChildren.empty())

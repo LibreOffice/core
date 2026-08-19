@@ -159,7 +159,7 @@ namespace cool {
 			// per pixel.
 			if (tileWidth * pixels < 1 || tileHeight * pixels < 1) return;
 
-			this._iterateTiles(
+			VectorScratchCanvases.iterateTiles(
 				range,
 				fill.offsetX ?? 0,
 				fill.offsetY ?? 0,
@@ -167,58 +167,6 @@ namespace cool {
 					context.drawImage(image, x, y, tileWidth, tileHeight);
 				},
 			);
-		}
-
-		// Tiles of a repeating fill over the unit square, as the engine
-		// lays them out: rows or columns step back to cover the near
-		// edge, and an offset shifts every other one.
-		private _iterateTiles(
-			range: number[],
-			offsetX: number,
-			offsetY: number,
-			visit: (x: number, y: number) => void,
-		): void {
-			const width = range[2] - range[0];
-			const height = range[3] - range[1];
-			let startX = range[0];
-			let startY = range[1];
-			let columnIndex = 0;
-			let rowIndex = 0;
-
-			if (startX > 0) {
-				const back = Math.floor(startX / width) + 1;
-				columnIndex -= back;
-				startX -= back * width;
-			}
-			if (startX + width < 0) {
-				const forward = Math.floor(-startX / width);
-				columnIndex += forward;
-				startX += forward * width;
-			}
-			if (startY > 0) {
-				const back = Math.floor(startY / height) + 1;
-				rowIndex -= back;
-				startY -= back * height;
-			}
-			if (startY + height < 0) {
-				const forward = Math.floor(-startY / height);
-				rowIndex += forward;
-				startY += forward * height;
-			}
-
-			if (offsetY !== 0) {
-				for (let x = startX; x < 1; x += width, columnIndex++) {
-					const first =
-						columnIndex % 2 ? startY - height + offsetY * height : startY;
-					for (let y = first; y < 1; y += height) visit(x, y);
-				}
-				return;
-			}
-
-			for (let y = startY; y < 1; y += height, rowIndex++) {
-				const first = rowIndex % 2 ? startX - width + offsetX * width : startX;
-				for (let x = first; x < 1; x += width) visit(x, y);
-			}
 		}
 
 		// Null until the image has arrived and decoded.

@@ -188,6 +188,11 @@ namespace cool {
 						primitive as ModifiedColorPrimitive,
 					);
 					return;
+				case PatternFillPrimitive.type:
+					// The children are one tile, and the pattern fill draws
+					// them once per tile itself.
+					this._renderPatternFill(context, primitive as PatternFillPrimitive);
+					return;
 				case MaskPrimitive.type:
 					this._renderMask(context, primitive as MaskPrimitive);
 					return;
@@ -784,6 +789,54 @@ namespace cool {
 				}
 			}
 			context.stroke();
+		}
+
+		private _renderPatternFill(
+			context: CanvasRenderingContext2D,
+			primitive: PatternFillPrimitive,
+		): void {
+			const path = primitive.path;
+			const area = primitive.bounds;
+			const reference = primitive.referenceRange;
+			if (!path || !area || !reference) return;
+			if (area.length < 4 || reference.length < 4) return;
+			const children = primitive.children;
+			if (!children) return;
+
+			const areaWidth = area[2] - area[0];
+			const areaHeight = area[3] - area[1];
+			const unitWidth = reference[2] - reference[0];
+			const unitHeight = reference[3] - reference[1];
+			const tileWidth = unitWidth * areaWidth;
+			const tileHeight = unitHeight * areaHeight;
+			if (!(tileWidth > 0 && tileHeight > 0)) return;
+
+			const pixels = VectorScratchCanvases.pixelsPerUnit(context);
+			// Skip tiles smaller than a pixel. They draw nothing visible,
+			// and there would be one per pixel.
+			if (tileWidth * pixels < 1 || tileHeight * pixels < 1) return;
+
+			context.save();
+			context.clip(new Path2D(path), 'evenodd');
+			// The tiles are laid out in the unit square of the bounds.
+			context.translate(area[0], area[1]);
+			context.scale(areaWidth, areaHeight);
+
+			// The children are in the unit square too. Map that square
+			// onto each tile in turn, and clip them to it as the engine
+			// clips them.
+			VectorScratchCanvases.iterateTiles(reference, 0, 0, (x, y) => {
+				context.save();
+				context.translate(x, y);
+				context.scale(unitWidth, unitHeight);
+				context.beginPath();
+				context.rect(0, 0, 1, 1);
+				context.clip();
+				this._renderPrimitives(context, children);
+				context.restore();
+			});
+
+			context.restore();
 		}
 
 		private _renderPrimitives(
