@@ -194,8 +194,8 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
         // #107169# For true alpha bitmaps, no longer masking the
         // bitmap, but perform a full alpha blend against a white
         // background here.
-        Bitmap aBmp( rBmp.CreateColorBitmap() );
-        aBmp.Blend( rBmp.CreateAlphaMask(), COL_WHITE );
+        auto [ aBmp, aAlpha ] = rBmp.SplitIntoColorAndAlpha();
+        aBmp.Blend(aAlpha, COL_WHITE);
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
     }
     else
