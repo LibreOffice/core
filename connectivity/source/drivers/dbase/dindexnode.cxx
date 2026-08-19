@@ -515,7 +515,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
     if (IsLeaf())
     {
         // Condition for merge
-        if (nNewCount < (nMaxNodes_2 * 2))
+        if (nNewCount < (nMaxNodes_2 * 2u))
         {
             sal_uInt16 nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
             if (bRight)
@@ -596,7 +596,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
     else // !IsLeaf()
     {
         // Condition for merge
-        if (nNewCount < nMaxNodes_2 * 2)
+        if (nNewCount < nMaxNodes_2 * 2u)
         {
             if (bRight)
             {
