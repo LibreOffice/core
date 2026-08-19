@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <unotools/fontcvt.hxx>
 #include <vcl/font.hxx>
 #include <editeng/langitem.hxx>
 #include <doc.hxx>
@@ -438,8 +439,7 @@ MSWordExportBase::GetNumberingLevelBulletStringAndFont(const SwNumFormat& rLevel
     OUString sFontName = pBulletFont->GetFamilyName();
     FontFamily eFamily = pBulletFont->GetFamilyTypeMaybeAskConfig();
 
-    if (IsOpenSymbol(sFontName))
-        SubstituteBullet(sNumStr, eChrSet, sFontName);
+    SubstituteBullet(sNumStr, eChrSet, sFontName);
 
     if (sFontName.isEmpty())
         sFontName = pBulletFont->GetFamilyName();
@@ -687,14 +687,31 @@ void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
 {
     if (!m_bSubstituteBullets)
         return;
-    OUString sFontName = rFontName;
 
     // If Bullet char is "", don't change
-    if (rNumStr[0] != u'\0')
+    if (rNumStr[0] == u'\0')
+        return;
+
+    OUString sFontName = rFontName;
+
+    // StarBats and StarMath are the old StarOffice symbol fonts. Their characters sit in the
+    // Unicode private use area, so a reader without those fonts installed gets no glyph at all.
+    // Recode the character to the matching OpenSymbol one, and the mapping below then finds a
+    // font that other office suites do have. The IMPORT flag picks the direction that goes from
+    // one of those two fonts to OpenSymbol, and it covers no other font.
+    if (FontToSubsFontConverter hConverter
+            = CreateFontToSubsFontConverter(sFontName, FontToSubsFontFlags::IMPORT))
     {
         rNumStr = rNumStr.replaceAt(0, 1, rtl::OUStringChar(
-            msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName)));
+            ConvertFontToSubsFontChar(hConverter, rNumStr[0])));
+        sFontName = GetFontToSubsFontName(hConverter);
     }
+
+    if (!IsOpenSymbol(sFontName))
+        return;
+
+    rNumStr = rNumStr.replaceAt(0, 1, rtl::OUStringChar(
+        msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName)));
 
     rFontName = sFontName;
 }

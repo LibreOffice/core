@@ -131,6 +131,21 @@ CPPUNIT_TEST_FIXTURE(Test, testCool15788_symbolContentControl)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t", u"\xf04b");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testStarBatsBulletKeepsAVisibleGlyph)
+{
+    createSwDoc("starbats-bullet.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
+    // The bullet comes out in a font that is widely available, at the character that font holds
+    // the bullet at. A reader without the old StarBats font still gets a bullet rather than an
+    // empty rectangle.
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts", "ascii",
+                u"Symbol");
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText", "val", u"\xF0B7");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDocxSaveReportsProgress)
 {
     createSwDoc();
