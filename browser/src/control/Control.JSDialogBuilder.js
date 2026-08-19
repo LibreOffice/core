@@ -1929,7 +1929,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		}
 
 		var icon = null;
-		var commandName = data.command && data.command.startsWith('.uno:') ? data.command.substring('.uno:'.length) : data.id;
+		var commandName = data.iconCommand ? data.iconCommand :
+			(data.command && data.command.startsWith('.uno:') ? data.command.substring('.uno:'.length) : data.id);
 		if (commandName && commandName.length && app.LOUtil.existsIconForCommand(commandName, builder.map.getDocType())) {
 			var iconName = builder._generateMenuIconName(commandName);
 			var iconSpan = window.L.DomUtil.create('span', 'menu-entry-icon ' + iconName, menuEntry);
@@ -2602,6 +2603,9 @@ window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard = function(menu
 		menuStructure['callback'] = menu.callback;
 	if (menu.isHtmlName)
 		menuStructure['hyperlink'] = true;
+	// The _image field holds the name of a command that has an icon file.
+	if (menu._image && app.IconUtil.commandsWithIcons.includes(menu._image))
+		menuStructure['iconCommand'] = menu._image;
 
 	if (mainMenu) {
 		for (var menuItem in menu) {
