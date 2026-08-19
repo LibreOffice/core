@@ -234,7 +234,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         AlphaMask aAlpha( bitmap.GetSizePixel(), &nTransparency );
         if( bitmap.HasAlpha())
             aAlpha.BlendWith( bitmap.CreateAlphaMask());
-        bitmap = Bitmap( bitmap.CreateColorBitmap(), aAlpha );
+        bitmap = Bitmap(bitmap, aAlpha);
     }
 
     // If the backend's implementation is known to not need any optimizations here, pass to it directly.
