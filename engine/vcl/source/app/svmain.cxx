@@ -487,6 +487,8 @@ void DeInitVCL()
     pSVData->maCtrlData.moDisclosurePlus.reset();
     pSVData->maCtrlData.moDisclosureMinus.reset();
     pSVData->mpDefaultWin.disposeAndClear();
+    // we might be about to unload the library containing this OUString literal
+    pSVData->maAppData.mxToolkitName.reset();
 
 #ifndef NDEBUG
     DbgGUIDeInitSolarMutexCheck();
