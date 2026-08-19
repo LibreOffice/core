@@ -1265,7 +1265,7 @@ void ScViewFunc::MergeCells( bool bApi, bool bDoContents, bool bCenter,
             OUString aStartAddress = aMarkRange.aStart.GetColRowString();
             OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
 
-            collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"MERGE_CELLS"_ustr);
+            collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}}, u"MERGE_CELLS"_ustr);
         }
     };
 
@@ -1403,7 +1403,7 @@ bool ScViewFunc::RemoveMerge()
     }
 
     OUString aCellLocation = aRange.aStart.GetColRowString();
-    collectUIInformation({{"CELL", aCellLocation}}, u"UNMERGE_CELL"_ustr);
+    collectUIInformation({{u"CELL"_ustr, aCellLocation}}, u"UNMERGE_CELL"_ustr);
 
     return true;        //! bOk ??
 }

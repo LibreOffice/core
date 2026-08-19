@@ -38,8 +38,8 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
     {
         uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
 
-        auto pTheme = std::make_shared<model::Theme>("MyTheme");
-        auto pColorSet = std::make_shared<model::ColorSet>("MyColorSet");
+        auto pTheme = std::make_shared<model::Theme>(u"MyTheme"_ustr);
+        auto pColorSet = std::make_shared<model::ColorSet>(u"MyColorSet"_ustr);
         pColorSet->add(model::ThemeColorType::Dark1, 0x111111);
         pColorSet->add(model::ThemeColorType::Light1, 0x222222);
         pColorSet->add(model::ThemeColorType::Dark2, 0x333333);

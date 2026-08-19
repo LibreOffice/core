@@ -67,18 +67,18 @@ ScOrcusFilters::ImportResult ScOrcusFiltersImpl::importByName(ScDocument& rDoc, 
                                                               const OUString& rFilterName) const
 {
     const std::unordered_map<OUString, orcus::format_t> aMap = {
-        { "Apache Parquet Spreadsheet", orcus::format_t::parquet },
-        { "Gnumeric Spreadsheet", orcus::format_t::gnumeric },
-        { "MS Excel 2003 XML Orcus", orcus::format_t::xls_xml },
-        { "Orcus JSON", orcus::format_t::json },
-        { "Orcus XML", orcus::format_t::xml },
-        { "Orcus CSV", orcus::format_t::csv },
-        { "csv", orcus::format_t::csv },
-        { "gnumeric", orcus::format_t::gnumeric },
-        { "ods", orcus::format_t::ods },
-        { "parquet", orcus::format_t::parquet },
-        { "xls-xml", orcus::format_t::xls_xml },
-        { "xlsx", orcus::format_t::xlsx },
+        { u"Apache Parquet Spreadsheet"_ustr, orcus::format_t::parquet },
+        { u"Gnumeric Spreadsheet"_ustr, orcus::format_t::gnumeric },
+        { u"MS Excel 2003 XML Orcus"_ustr, orcus::format_t::xls_xml },
+        { u"Orcus JSON"_ustr, orcus::format_t::json },
+        { u"Orcus XML"_ustr, orcus::format_t::xml },
+        { u"Orcus CSV"_ustr, orcus::format_t::csv },
+        { u"csv"_ustr, orcus::format_t::csv },
+        { u"gnumeric"_ustr, orcus::format_t::gnumeric },
+        { u"ods"_ustr, orcus::format_t::ods },
+        { u"parquet"_ustr, orcus::format_t::parquet },
+        { u"xls-xml"_ustr, orcus::format_t::xls_xml },
+        { u"xlsx"_ustr, orcus::format_t::xlsx },
     };
 
     if (auto it = aMap.find(rFilterName); it != aMap.end())

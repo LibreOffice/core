@@ -236,7 +236,7 @@ void ScCellRangeObj::testSortOOB()
     pSort[0].SortAscending = true;
 
     cpo::uno::Sequence<beans::PropertyValue> aProps(
-        comphelper::InitPropertySequence({ { "SortFields", cpo::uno::Any(aSort) } }));
+        comphelper::InitPropertySequence({ { u"SortFields"_ustr, cpo::uno::Any(aSort) } }));
 
     xSortable->sort(aProps);
 }

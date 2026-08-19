@@ -969,7 +969,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
         }
     }
 
-    collectUIInformation({{"NewName", rName}}, u"Rename_Sheet"_ustr);
+    collectUIInformation({{u"NewName"_ustr, rName}}, u"Rename_Sheet"_ustr);
 
     return bValid;
 }

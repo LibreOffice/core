@@ -416,7 +416,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     CursorPosChanged();
 
     OUString aCurrAddress = ScAddress(nPosX,nPosY,0).GetColRowString();
-    collectUIInformation({{"CELL", aCurrAddress}});
+    collectUIInformation({{u"CELL"_ustr, aCurrAddress}});
 
     if (!comphelper::COKit::isActive())
         return;
@@ -539,7 +539,7 @@ void ScTabView::CheckSelectionTransfer()
         const ScRange& aMarkRange = rMark.GetMarkArea();
         OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
         OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}});
+        collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}});
     }
 }
 
@@ -2042,7 +2042,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     }
 
     TabChanged(bSameTabButMoved);                                       // DrawView
-    collectUIInformation({{"TABLE", OUString::number(nTab)}});
+    collectUIInformation({{u"TABLE"_ustr, OUString::number(nTab)}});
     UpdateVisibleRange();
 
     aViewData.GetViewShell()->WindowChanged();          // if the active window has changed

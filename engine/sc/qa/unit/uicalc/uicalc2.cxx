@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150499)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
+        comphelper::InitPropertySequence({ { u"Index"_ustr, cpo::uno::Any(sal_uInt16(0)) } }));
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
@@ -430,9 +430,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131073)
     // Check rows
     pDoc->SetRowHidden(1, 1, 0, true);
     goToCell(u"A1:A3"_ustr);
-    dispatchCommand(
-        mxComponent, u".uno:SetOptimalRowHeight"_ustr,
-        comphelper::InitPropertySequence({ { "aExtraHeight", cpo::uno::Any(sal_uInt16(0)) } }));
+    dispatchCommand(mxComponent, u".uno:SetOptimalRowHeight"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { u"aExtraHeight"_ustr, cpo::uno::Any(sal_uInt16(0)) } }));
 
     CPPUNIT_ASSERT(!pDoc->RowHidden(0, 0));
     // tdf#131073: Without the fix in place, the second row would not be hidden
@@ -446,9 +446,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131073)
     // Check columns
     pDoc->SetColHidden(1, 1, 0, true);
     goToCell(u"A1:C1"_ustr);
-    dispatchCommand(
-        mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
-        comphelper::InitPropertySequence({ { "aExtraWidth", cpo::uno::Any(sal_uInt16(0)) } }));
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { u"aExtraWidth"_ustr, cpo::uno::Any(sal_uInt16(0)) } }));
 
     CPPUNIT_ASSERT(!pDoc->ColHidden(0, 0));
     // tdf#131073: Without the fix in place, the second column would not be hidden
@@ -640,7 +640,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf124778)
 
     // Add a new comment
     cpo::uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
+        = comphelper::InitPropertySequence({ { u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
@@ -664,7 +664,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf138428)
 
     // Add a new comment
     cpo::uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
+        = comphelper::InitPropertySequence({ { u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     ScDocument* pDoc = getScDoc();
@@ -1773,7 +1773,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf152577)
 
     insertNewSheet(*pDoc);
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(2)) } }));
+        comphelper::InitPropertySequence({ { u"Index"_ustr, cpo::uno::Any(sal_uInt16(2)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     ScDBCollection* pDBs = pDoc->GetDBCollection();
@@ -1826,7 +1826,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf156174)
 
     insertNewSheet(*pDoc);
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(3)) } }));
+        comphelper::InitPropertySequence({ { u"Index"_ustr, cpo::uno::Any(sal_uInt16(3)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     ScDBCollection* pDBs = pDoc->GetDBCollection();
@@ -1852,8 +1852,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf154044)
     }
 
     // Set the background color of A1:CV1
-    auto aColorArg(
-        comphelper::InitPropertySequence({ { "BackgroundColor", cpo::uno::Any(COL_LIGHTBLUE) } }));
+    auto aColorArg(comphelper::InitPropertySequence(
+        { { u"BackgroundColor"_ustr, cpo::uno::Any(COL_LIGHTBLUE) } }));
     goToCell(u"A1:CV1"_ustr);
     dispatchCommand(mxComponent, u".uno:BackgroundColor"_ustr, aColorArg);
 
@@ -2284,12 +2284,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf166791_PasteSpecialArrayOriginCell)
     // Helper lambda for Paste Special (values only).
     auto pasteSpecialValues = [this]() {
         cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
-            { { "Flags", cpo::uno::Any(u"V"_ustr) },
-              { "FormulaCommand", cpo::uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
-              { "SkipEmptyCells", cpo::uno::Any(false) },
-              { "Transpose", cpo::uno::Any(false) },
-              { "AsLink", cpo::uno::Any(false) },
-              { "MoveMode", cpo::uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
+            { { u"Flags"_ustr, cpo::uno::Any(u"V"_ustr) },
+              { u"FormulaCommand"_ustr, cpo::uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
+              { u"SkipEmptyCells"_ustr, cpo::uno::Any(false) },
+              { u"Transpose"_ustr, cpo::uno::Any(false) },
+              { u"AsLink"_ustr, cpo::uno::Any(false) },
+              { u"MoveMode"_ustr, cpo::uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
         dispatchCommand(mxComponent, u".uno:InsertContents"_ustr, aArgs);
     };
 

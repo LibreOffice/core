@@ -106,7 +106,7 @@ void ParseDataSheetsValue(const OUString& rDataSheetsValue, std::optional<OUStri
                 // 2 is text.
                 // See SfxHTMLParser::GetTableDataOptionsValNum(), we leave the parse and a number
                 // language unspecified.
-                rNum = ";;@";
+                rNum = u";;@"_ustr;
                 break;
             }
             case 3:
@@ -127,7 +127,7 @@ void ParseDataSheetsValue(const OUString& rDataSheetsValue, std::optional<OUStri
                 {
                     rVal = OUString::fromUtf8(it->second.get_value<std::string>());
                 }
-                rNum = ";;BOOLEAN";
+                rNum = u";;BOOLEAN"_ustr;
                 break;
             }
         }

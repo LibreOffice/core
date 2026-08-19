@@ -141,7 +141,7 @@ void ScFiltersTest::testTdf90299()
 
     auto pExportFilter = std::make_shared<SfxFilter>(
         SC_XL97_FILTER_NAME, OUString(), XLS_FORMAT_TYPE, SotClipboardFormatId::NONE, OUString(),
-        OUString(), OUString(), "private:factory/scalc*");
+        OUString(), OUString(), u"private:factory/scalc*"_ustr);
     pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     aStoreMedium.SetFilter(pExportFilter);

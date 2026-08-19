@@ -201,19 +201,19 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
 void ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
 {
     cpo::uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(rRange) } });
+        = comphelper::InitPropertySequence({ { u"ToPoint"_ustr, cpo::uno::Any(rRange) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 
     dispatchCommand(mxComponent, u".uno:DefinePrintArea"_ustr, {});
 
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "ViewPDFAfterExport", cpo::uno::Any(true) },
-                                           { "Printing", cpo::uno::Any(sal_Int32(2)) } }));
+        comphelper::InitPropertySequence({ { u"ViewPDFAfterExport"_ustr, cpo::uno::Any(true) },
+                                           { u"Printing"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
 
-    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc_pdf_Export"_ustr) },
-                                           { "FilterData", cpo::uno::Any(aFilterData) },
-                                           { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { u"FilterName"_ustr, cpo::uno::Any(u"calc_pdf_Export"_ustr) },
+          { u"FilterData"_ustr, cpo::uno::Any(aFilterData) },
+          { u"URL"_ustr, cpo::uno::Any(maTempFile.GetURL()) } }));
 
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 }
@@ -873,7 +873,7 @@ void ScPDFExportTest::testTdf120190()
     xSheet0->getCellByPosition(0, 0)->setFormula(u"=5&CHAR(10)&6"_ustr);
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(u"A1"_ustr) } });
+        = comphelper::InitPropertySequence({ { u"ToPoint"_ustr, cpo::uno::Any(u"A1"_ustr) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 
     dispatchCommand(mxComponent, u".uno:ConvertFormulaToValue"_ustr, {});

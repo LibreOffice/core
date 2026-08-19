@@ -43,7 +43,7 @@ namespace
 // Theme A: distinct primary accent colors for easy verification
 std::shared_ptr<model::ColorSet> createTestThemeA()
 {
-    auto pColorSet = std::make_shared<model::ColorSet>("ThemeA");
+    auto pColorSet = std::make_shared<model::ColorSet>(u"ThemeA"_ustr);
     pColorSet->add(model::ThemeColorType::Dark1, 0x000000);
     pColorSet->add(model::ThemeColorType::Light1, 0xFFFFFF);
     pColorSet->add(model::ThemeColorType::Dark2, 0x444444);
@@ -62,7 +62,7 @@ std::shared_ptr<model::ColorSet> createTestThemeA()
 // Theme B: swapped accents for theme change verification
 std::shared_ptr<model::ColorSet> createTestThemeB()
 {
-    auto pColorSet = std::make_shared<model::ColorSet>("ThemeB");
+    auto pColorSet = std::make_shared<model::ColorSet>(u"ThemeB"_ustr);
     pColorSet->add(model::ThemeColorType::Dark1, 0x000000);
     pColorSet->add(model::ThemeColorType::Light1, 0xFFFFFF);
     pColorSet->add(model::ThemeColorType::Dark2, 0x333333);

@@ -681,10 +681,10 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
     CPPUNIT_ASSERT_EQUAL(u"$A$1:$A$3"_ustr, aReturnValue);
 
     const std::vector<std::pair<sal_Int32, OUString>> aTestParams(
-        { { excel::XlSpecialCellsValue::xlNumbers, "$A$1:$A$2" },
-          { excel::XlSpecialCellsValue::xlTextValues, "$A$3" },
-          { excel::XlSpecialCellsValue::xlLogical, "$A$1:$A$2" },
-          { excel::XlSpecialCellsValue::xlErrors, "$A$1:$A$4" } });
+        { { excel::XlSpecialCellsValue::xlNumbers, u"$A$1:$A$2"_ustr },
+          { excel::XlSpecialCellsValue::xlTextValues, u"$A$3"_ustr },
+          { excel::XlSpecialCellsValue::xlLogical, u"$A$1:$A$2"_ustr },
+          { excel::XlSpecialCellsValue::xlErrors, u"$A$1:$A$4"_ustr } });
 
     for (auto & [ nXlSpecialCellsValue, sRange ] : aTestParams)
     {
@@ -707,7 +707,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
     utl::TempFileNamed aTempFile(u"testWindowsActivate", true, u".ods");
     aTempFile.EnableKillingFile();
     cpo::uno::Sequence<beans::PropertyValue> descSaveAs(
-        comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc8"_ustr) } }));
+        comphelper::InitPropertySequence({ { u"FilterName"_ustr, cpo::uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
     // Insert initial library
@@ -767,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
     utl::TempFileNamed aTempFile(u"testVBA_PDF_Export", true, u".ods");
     aTempFile.EnableKillingFile();
     cpo::uno::Sequence<beans::PropertyValue> descSaveAs(
-        comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc8"_ustr) } }));
+        comphelper::InitPropertySequence({ { u"FilterName"_ustr, cpo::uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
     utl::TempFileNamed aTempPdfFile(u"exportedfile", true, u".pdf");

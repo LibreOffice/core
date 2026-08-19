@@ -1252,10 +1252,10 @@ void XclChRootData::InitConversion(const XclRoot& rRoot, const uno::Reference<ch
 
     // create object tables
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxChartDoc, uno::UNO_QUERY);
-    mxLineDashTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_DASHTABLE, "Excel line dash ");
-    mxGradientTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_GRADIENTTABLE, "Excel gradient ");
-    mxHatchTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_HATCHTABLE, "Excel hatch ");
-    mxBitmapTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_BITMAPTABLE, "Excel bitmap ");
+    mxLineDashTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_DASHTABLE, u"Excel line dash "_ustr);
+    mxGradientTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_GRADIENTTABLE, u"Excel gradient "_ustr);
+    mxHatchTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_HATCHTABLE, u"Excel hatch "_ustr);
+    mxBitmapTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_BITMAPTABLE, u"Excel bitmap "_ustr);
 }
 
 void XclChRootData::FinishConversion()

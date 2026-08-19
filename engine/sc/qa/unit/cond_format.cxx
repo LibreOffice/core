@@ -238,9 +238,12 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf104026)
     ScDocument* pDoc = getScDoc();
 
     std::unordered_map<OUString, OUString> aExpectedValues
-        = { { "A2", "Cell value != $Sheet1.$B2" }, { "A3", "Cell value != $Sheet1.$B3" },
-            { "A4", "Cell value != $Sheet1.$B4" }, { "A5", "Cell value != $Sheet1.$B5" },
-            { "A6", "Cell value != $Sheet1.$B6" }, { "A7", "Cell value != $Sheet1.$B7" } };
+        = { { u"A2"_ustr, u"Cell value != $Sheet1.$B2"_ustr },
+            { u"A3"_ustr, u"Cell value != $Sheet1.$B3"_ustr },
+            { u"A4"_ustr, u"Cell value != $Sheet1.$B4"_ustr },
+            { u"A5"_ustr, u"Cell value != $Sheet1.$B5"_ustr },
+            { u"A6"_ustr, u"Cell value != $Sheet1.$B6"_ustr },
+            { u"A7"_ustr, u"Cell value != $Sheet1.$B7"_ustr } };
 
     checkConditionalFormatList(*pDoc, aExpectedValues);
 
@@ -248,11 +251,11 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf104026)
     dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
 
     std::unordered_map<OUString, OUString> aExpectedValues2
-        = { { "A2", "Cell value != $Sheet1.$B2" },
-            { "A3", "Cell value != $Sheet1.$B3" },
-            { "A4", "Cell value != $Sheet1.$B4" },
-            { "A5", "Cell value != $Sheet1.$B5" },
-            { "A6", "Cell value != $Sheet1.$B6" } };
+        = { { u"A2"_ustr, u"Cell value != $Sheet1.$B2"_ustr },
+            { u"A3"_ustr, u"Cell value != $Sheet1.$B3"_ustr },
+            { u"A4"_ustr, u"Cell value != $Sheet1.$B4"_ustr },
+            { u"A5"_ustr, u"Cell value != $Sheet1.$B5"_ustr },
+            { u"A6"_ustr, u"Cell value != $Sheet1.$B6"_ustr } };
     // Without the fix in place, this test would have failed with
     // - Expected: Cell value != $Sheet1.$B2
     // - Actual  : Cell value != $Sheet1.$B#REF!
@@ -272,9 +275,11 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf167019)
     ScDocument* pDoc = getScDoc();
 
     std::unordered_map<OUString, OUString> aExpectedValues
-        = { { "D4,G4,J4,M4,G6:G10,J6:J10,M6:M10,D6:D10", "Cell value is not between 100 and 152" },
-            { "E4,H4,K4,N4,E6:E10,H6:H10,K6:K10,N6:N10", "Cell value is not between 54 and 102" },
-            { "F4,I4,L4,O4,F6,I6,L6,O6", "Cell value is not between 32 and 100" } };
+        = { { u"D4,G4,J4,M4,G6:G10,J6:J10,M6:M10,D6:D10"_ustr,
+              u"Cell value is not between 100 and 152"_ustr },
+            { u"E4,H4,K4,N4,E6:E10,H6:H10,K6:K10,N6:N10"_ustr,
+              u"Cell value is not between 54 and 102"_ustr },
+            { u"F4,I4,L4,O4,F6,I6,L6,O6"_ustr, u"Cell value is not between 32 and 100"_ustr } };
 
     checkConditionalFormatList(*pDoc, aExpectedValues);
 }
@@ -292,7 +297,9 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf92963)
     pMod->SetInputOptions(aInputOption);
 
     std::unordered_map<OUString, OUString> aExpectedValues
-        = { { "C1", "Cell value > 14" }, { "C3", "Cell value > 14" }, { "C4", "Cell value > 14" } };
+        = { { u"C1"_ustr, u"Cell value > 14"_ustr },
+            { u"C3"_ustr, u"Cell value > 14"_ustr },
+            { u"C4"_ustr, u"Cell value > 14"_ustr } };
 
     checkConditionalFormatList(*pDoc, aExpectedValues);
 
@@ -304,7 +311,8 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf92963)
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    aExpectedValues = { { "C3,C1", "Cell value > 14" }, { "C4,C2", "Cell value > 14" } };
+    aExpectedValues = { { u"C3,C1"_ustr, u"Cell value > 14"_ustr },
+                        { u"C4,C2"_ustr, u"Cell value > 14"_ustr } };
     checkConditionalFormatList(*pDoc, aExpectedValues);
 
     // Restore previous status

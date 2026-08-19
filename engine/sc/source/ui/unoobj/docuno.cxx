@@ -1732,7 +1732,7 @@ void ScModelObj::initializeForTiledRendering(const cpo::uno::Sequence<css::beans
     {
         cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(sThemeName) }
+            { u"NewTheme"_ustr, cpo::uno::Any(sThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
@@ -1740,7 +1740,7 @@ void ScModelObj::initializeForTiledRendering(const cpo::uno::Sequence<css::beans
     {
         cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(sBackgroundThemeName) }
+            { u"NewTheme"_ustr, cpo::uno::Any(sBackgroundThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, aPropertyValues);
     }

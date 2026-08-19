@@ -154,14 +154,15 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, TestFilter eF
 {
     createScDoc(name);
 
-    std::pair<OUString, OUString> ranges[] = { { "CELLBXX1", "$Sheet1.$BXX$1" },
-                                               { "CELLSA4_AMJ4", "$Sheet1.$A$4:$AMJ$4" },
-                                               { "CELLSBXX1_BXX10", "$Sheet1.$BXX$1:$BXX$10" },
-                                               { "CELLSBXX1_BXX10_RELATIVE", "$Sheet1.BXX1:BXX10" },
-                                               { "CELLSE1_E1024", "$Sheet1.$E$1:$E$1024" },
-                                               { "CELLSE1_E2000000", "$Sheet1.$E$1:$E$2000000" },
-                                               { "COLUMN_E", "$Sheet1.$E:$E" },
-                                               { "ROW_4", "$Sheet1.$4:$4" } };
+    std::pair<OUString, OUString> ranges[]
+        = { { u"CELLBXX1"_ustr, u"$Sheet1.$BXX$1"_ustr },
+            { u"CELLSA4_AMJ4"_ustr, u"$Sheet1.$A$4:$AMJ$4"_ustr },
+            { u"CELLSBXX1_BXX10"_ustr, u"$Sheet1.$BXX$1:$BXX$10"_ustr },
+            { u"CELLSBXX1_BXX10_RELATIVE"_ustr, u"$Sheet1.BXX1:BXX10"_ustr },
+            { u"CELLSE1_E1024"_ustr, u"$Sheet1.$E$1:$E$1024"_ustr },
+            { u"CELLSE1_E2000000"_ustr, u"$Sheet1.$E$1:$E$2000000"_ustr },
+            { u"COLUMN_E"_ustr, u"$Sheet1.$E:$E"_ustr },
+            { u"ROW_4"_ustr, u"$Sheet1.$4:$4"_ustr } };
     {
         ScDocument* pDoc = getScDoc();
         for (const auto& range : ranges)

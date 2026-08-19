@@ -1035,14 +1035,14 @@ ScVbaApplication::getOperatingSystem()
     // TODO Solution should contain the version number of the operating system
     // too.
 #if   defined(_WIN32)
-        return "Windows";
+        return u"Windows"_ustr;
 #elif defined(MACOSX)
         return u"Macintosh"_ustr;
 #elif defined(UNX)
         // M. Office is not available on Unix systems, so it is not documented.
         return u"Unix"_ustr;
 #else
-        return OUString("Unknown");
+        return u"Unknown"_ustr;
 #endif
 }
 

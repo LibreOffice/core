@@ -932,8 +932,8 @@ void collectUIInformation(const OUString& aRow, const OUString& aCol , const OUS
     EventDescription aDescription;
     aDescription.aAction = u"LAUNCH"_ustr;
     aDescription.aID = u"grid_window"_ustr;
-    aDescription.aParameters = {{aevent, ""},
-        {"ROW", aRow}, {"COL", aCol}};
+    aDescription.aParameters = {{aevent, u""_ustr},
+        {u"ROW"_ustr, aRow}, {u"COL"_ustr, aCol}};
     aDescription.aParent = u"MainWindow"_ustr;
     aDescription.aKeyWord = u"ScGridWinUIObject"_ustr;
 

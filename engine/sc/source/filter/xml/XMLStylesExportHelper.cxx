@@ -393,8 +393,8 @@ void ScMyValidationsContainer::WriteValidations(const ScDocument& rDoc, ScXMLExp
 
                         static constexpr OUString sScript(u"Script"_ustr);
                         cpo::uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-                                { "EventType", cpo::uno::Any(bScriptURL ? sScript : u"StarBasic"_ustr) },
-                                { "Library", cpo::uno::Any(OUString()) },
+                                { u"EventType"_ustr, cpo::uno::Any(bScriptURL ? sScript : u"StarBasic"_ustr) },
+                                { u"Library"_ustr, cpo::uno::Any(OUString()) },
                                 { bScriptURL ? sScript : u"MacroName"_ustr, cpo::uno::Any(rValidation.sErrorTitle) }
                             }));
                         // 2) export the sequence

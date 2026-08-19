@@ -293,7 +293,7 @@ std::shared_ptr<model::Theme> getTheme(ScDocShell& rDocShell)
     auto pTheme = pModel->getTheme();
     if (!pTheme)
     {
-        pTheme = std::make_shared<model::Theme>("Office");
+        pTheme = std::make_shared<model::Theme>(u"Office"_ustr);
         pModel->setTheme(pTheme);
     }
     return pTheme;

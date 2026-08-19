@@ -738,7 +738,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         sFileName = pMedium->GetName();
     ScDocShell* pObjSh = rDoc.GetDocumentShell();
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "FileName", cpo::uno::Any(sFileName) }
+            { u"FileName"_ustr, cpo::uno::Any(sFileName) }
         }));
 
     /** property map for export info set */

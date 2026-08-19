@@ -1919,7 +1919,7 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
 
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"INSERT_CELLS"_ustr);
+        collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}}, u"INSERT_CELLS"_ustr);
         return bSuccess;
     }
     else
@@ -2014,7 +2014,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 
     OUString aStartAddress =  aRange.aStart.GetColRowString();
     OUString aEndAddress = aRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"DELETE_CELLS"_ustr);
+    collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}}, u"DELETE_CELLS"_ustr);
 
     Unmark();
 }
@@ -2304,7 +2304,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     }
     OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
     OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"DELETE"_ustr);
+    collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}}, u"DELETE"_ustr);
 }
 
 //  column width/row height (via header) - undo OK

@@ -34,7 +34,7 @@ using namespace ::ooo::vba;
 
 //ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
 
-ScVbaGlobals::ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "ExcelDocumentContext" )
+ScVbaGlobals::ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, u"ExcelDocumentContext"_ustr )
 {
     cpo::uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
     auto pInitArgs = aInitArgs.getArray();

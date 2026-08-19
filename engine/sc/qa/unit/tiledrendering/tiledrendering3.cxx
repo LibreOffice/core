@@ -776,7 +776,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
 
     // Imitate online while creating a new sheet on empty.ods.
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", cpo::uno::Any(u"NewSheet"_ustr) }, { "Index", cpo::uno::Any(sal_Int32(2)) } }));
+        { { u"Name"_ustr, cpo::uno::Any(u"NewSheet"_ustr) }, { u"Index"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
     pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
@@ -808,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxInsert)
 
     // insert textbox
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "CreateDirectly", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"CreateDirectly"_ustr, cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:DrawText"_ustr, aArgs);
 
     // check if we have textbox selected
@@ -839,8 +839,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
 
         // Add a new comment
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "Text", cpo::uno::Any(u"COKit Comment Cell B2"_ustr) },
-            { "Author", cpo::uno::Any(u"COKit Client"_ustr) },
+            { u"Text"_ustr, cpo::uno::Any(u"COKit Comment Cell B2"_ustr) },
+            { u"Author"_ustr, cpo::uno::Any(u"COKit Client"_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -1198,7 +1198,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
             = comphelper::InitPropertySequence({
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             });
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
@@ -2170,7 +2170,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
 
     {
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "Language", cpo::uno::Any(u"Default_Spanish (Spain)"_ustr) },
+            { u"Language"_ustr, cpo::uno::Any(u"Default_Spanish (Spain)"_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
 
@@ -2184,7 +2184,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
 
     {
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "Language", cpo::uno::Any(u"Default_English (USA)"_ustr) },
+            { u"Language"_ustr, cpo::uno::Any(u"Default_English (USA)"_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
 
@@ -2237,8 +2237,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
 
         // 1) Insert a threaded comment via .uno:InsertThreadedComment
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "Text", cpo::uno::Any(u"Threaded comment text"_ustr) },
-            { "Author", cpo::uno::Any(u"Kit Author"_ustr) },
+            { u"Text"_ustr, cpo::uno::Any(u"Threaded comment text"_ustr) },
+            { u"Author"_ustr, cpo::uno::Any(u"Kit Author"_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
 
@@ -2284,7 +2284,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
 
         // 3) Resolve the threaded comment via .uno:ResolveComment
         aArgs = comphelper::InitPropertySequence({
-            { "Id", cpo::uno::Any(OUString::createFromAscii(aCommentId)) },
+            { u"Id"_ustr, cpo::uno::Any(OUString::createFromAscii(aCommentId)) },
         });
         dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr, aArgs);
 
@@ -2347,8 +2347,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
 
         // 1) Insert a threaded comment via .uno:InsertThreadedComment.
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "Text", cpo::uno::Any(u"Kit thread"_ustr) },
-            { "Author", cpo::uno::Any(u"Kit Author"_ustr) },
+            { u"Text"_ustr, cpo::uno::Any(u"Kit thread"_ustr) },
+            { u"Author"_ustr, cpo::uno::Any(u"Kit Author"_ustr) },
         }));
         aView.m_aStateChanges.clear();
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
@@ -2412,7 +2412,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
 
         // 1) No Author arg at all: pAuthorItem == nullptr in the slot.
         cpo::uno::Sequence<beans::PropertyValue> aArgsNoAuthor(comphelper::InitPropertySequence({
-            { "Text", cpo::uno::Any(u"no author arg"_ustr) },
+            { u"Text"_ustr, cpo::uno::Any(u"no author arg"_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgsNoAuthor);
         const ScPostIt* pNote = pDoc->GetNote(aPos);
@@ -2425,8 +2425,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
 
         // 2) Author arg present but empty: the regression case.
         cpo::uno::Sequence<beans::PropertyValue> aArgsEmptyAuthor(comphelper::InitPropertySequence({
-            { "Text", cpo::uno::Any(u"empty author arg"_ustr) },
-            { "Author", cpo::uno::Any(u""_ustr) },
+            { u"Text"_ustr, cpo::uno::Any(u"empty author arg"_ustr) },
+            { u"Author"_ustr, cpo::uno::Any(u""_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgsEmptyAuthor);
         pNote = pDoc->GetNote(aPos);

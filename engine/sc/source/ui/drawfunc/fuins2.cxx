@@ -652,8 +652,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                         = new weld::TransportAsXWindow(pWin->GetFrameWeld());
                     cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                     {
-                        {"ParentWindow", cpo::uno::Any(xParent)},
-                        {"ChartModel", cpo::uno::Any(xChartModel)}
+                        {u"ParentWindow"_ustr, cpo::uno::Any(xParent)},
+                        {u"ChartModel"_ustr, cpo::uno::Any(xChartModel)}
                     }));
                     xInit->initialize( aSeq );
 

@@ -263,7 +263,7 @@ void ScViewFunc::CutToClip()
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
 
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"CUT"_ustr);
+        collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}}, u"CUT"_ustr);
     }
     else
         ErrorMessage( STR_NOMULTISELECT );
@@ -298,7 +298,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi, bool bI
     if( !bCut ){
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"COPY"_ustr);
+        collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}}, u"COPY"_ustr);
     }
     return bDone;
 }
@@ -1732,7 +1732,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     }
     OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
     OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"PASTE"_ustr);
+    collectUIInformation({{u"RANGE"_ustr, aStartAddress + ":" + aEndAddress}}, u"PASTE"_ustr);
     return true;
 }
 

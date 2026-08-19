@@ -76,7 +76,7 @@ namespace
     {
         EventDescription aDescription;
         aDescription.aID = u"grid_window"_ustr;
-        aDescription.aParameters = {{"ZOOM", aZoom}};
+        aDescription.aParameters = {{u"ZOOM"_ustr, aZoom}};
         aDescription.aAction = u"SET"_ustr;
         aDescription.aKeyWord = u"ScGridWinUIObject"_ustr;
         aDescription.aParent = u"MainWindow"_ustr;

@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testDarkModeLightVariantNotPersisted)
 
 std::shared_ptr<model::ColorSet> createTestTheme()
 {
-    auto pColorSet = std::make_shared<model::ColorSet>("TestColorScheme");
+    auto pColorSet = std::make_shared<model::ColorSet>(u"TestColorScheme"_ustr);
     pColorSet->add(model::ThemeColorType::Dark1, 0x000000);
     pColorSet->add(model::ThemeColorType::Light1, 0x111111);
     pColorSet->add(model::ThemeColorType::Dark2, 0x222222);

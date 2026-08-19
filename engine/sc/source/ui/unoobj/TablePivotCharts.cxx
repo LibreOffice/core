@@ -141,9 +141,9 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
         xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
         cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                    { "CellRangeRepresentation", cpo::uno::Any(rDataPilotName) },
-                    { "HasCategories", cpo::uno::Any(true) },
-                    { "DataRowSource", cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) }
+                    { u"CellRangeRepresentation"_ustr, cpo::uno::Any(rDataPilotName) },
+                    { u"HasCategories"_ustr, cpo::uno::Any(true) },
+                    { u"DataRowSource"_ustr, cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) }
                 }));
         xReceiver->setArguments(aArgs);
     }

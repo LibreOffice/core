@@ -388,10 +388,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf131296_legacy)
     // For legacy password-protected library images, we must correctly get the constants' values,
     // and also - for Integer - the type.
     const std::vector<std::pair<OUString, OUString>> aTests({
-        { "TestIntConst", "Integer: 123" },
-        { "TestLongConst", "Double: 123" },
-        { "TestSingleConst", "Double: 123" },
-        { "TestDoubleConst", "Double: 123" },
+        { u"TestIntConst"_ustr, u"Integer: 123"_ustr },
+        { u"TestLongConst"_ustr, u"Double: 123"_ustr },
+        { u"TestSingleConst"_ustr, u"Double: 123"_ustr },
+        { u"TestDoubleConst"_ustr, u"Double: 123"_ustr },
     });
 
     createScDoc("tdf131296_legacy.ods");
@@ -413,11 +413,11 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf131296_new)
     // For new password-protected library images, we must correctly get both the constants' values
     // and their types.
     const std::vector<std::pair<OUString, OUString>> aTests({
-        { "TestIntConst", "Integer: 123" },
-        { "TestLongConst", "Long: 123" },
-        { "TestSingleConst", "Single: 123" },
-        { "TestDoubleConst", "Double: 123" },
-        { "TestCurrencyConst", "Currency: 123.0000" },
+        { u"TestIntConst"_ustr, u"Integer: 123"_ustr },
+        { u"TestLongConst"_ustr, u"Long: 123"_ustr },
+        { u"TestSingleConst"_ustr, u"Single: 123"_ustr },
+        { u"TestDoubleConst"_ustr, u"Double: 123"_ustr },
+        { u"TestCurrencyConst"_ustr, u"Currency: 123.0000"_ustr },
     });
 
     createScDoc("tdf131296_new.ods");
@@ -686,10 +686,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf138646)
     pDoc->SetGrammar(formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_R1C1);
 
     const std::vector<std::pair<OUString, OUString>> aTests({
-        { "GlobalNamedCell", "GlobalNamedCell" },
-        { "GlobalNamedCellSheet", "GlobalNamedCell" },
-        { "LocalNamedCell", "LocalNamedCell" },
-        { "LocalNamedCellAccessError", "Exception" }
+        { u"GlobalNamedCell"_ustr, u"GlobalNamedCell"_ustr },
+        { u"GlobalNamedCellSheet"_ustr, u"GlobalNamedCell"_ustr },
+        { u"LocalNamedCell"_ustr, u"LocalNamedCell"_ustr },
+        { u"LocalNamedCellAccessError"_ustr, u"Exception"_ustr }
     });
 
     {

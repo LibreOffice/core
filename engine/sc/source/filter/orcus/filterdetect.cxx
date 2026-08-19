@@ -78,11 +78,11 @@ OUString OrcusFormatDetect::detect(cpo::uno::Sequence<css::beans::PropertyValue>
         return OUString();
 
     static const std::unordered_map<OUString, orcus::format_t> aMap = {
-        { "Gnumeric XML", orcus::format_t::gnumeric },
-        { "calc_MS_Excel_2003_XML", orcus::format_t::xls_xml },
-        { "Apache Parquet", orcus::format_t::parquet },
-        { "generic_XML", orcus::format_t::xml },
-        { "generic_JSON", orcus::format_t::json },
+        { u"Gnumeric XML"_ustr, orcus::format_t::gnumeric },
+        { u"calc_MS_Excel_2003_XML"_ustr, orcus::format_t::xls_xml },
+        { u"Apache Parquet"_ustr, orcus::format_t::parquet },
+        { u"generic_XML"_ustr, orcus::format_t::xml },
+        { u"generic_JSON"_ustr, orcus::format_t::json },
     };
 
     orcus::format_t eFormat{};

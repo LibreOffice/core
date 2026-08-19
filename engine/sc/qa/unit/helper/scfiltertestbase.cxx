@@ -26,7 +26,7 @@ ScDocShellRef ScFilterTestBase::loadDoc(const OUString& rURL, const OUString& rF
 {
     auto pFilter
         = std::make_shared<SfxFilter>(rFilter, OUString(), nFilterFlags, nClipboardID, rTypeName,
-                                      OUString(), rUserData, "private:factory/scalc");
+                                      OUString(), rUserData, u"private:factory/scalc"_ustr);
     pFilter->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;

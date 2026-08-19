@@ -132,10 +132,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorJumpOnFailedSearch)
 
     // Search for a non-existing string using the start point parameters
     aPropertyValues = comphelper::InitPropertySequence(
-        { { "SearchItem.SearchString", cpo::uno::Any(u"No-existing"_ustr) },
-          { "SearchItem.Backward", cpo::uno::Any(false) },
-          { "SearchItem.SearchStartPointX", cpo::uno::Any(static_cast<sal_Int32>(100)) },
-          { "SearchItem.SearchStartPointY", cpo::uno::Any(static_cast<sal_Int32>(100)) } });
+        { { u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"No-existing"_ustr) },
+          { u"SearchItem.Backward"_ustr, cpo::uno::Any(false) },
+          { u"SearchItem.SearchStartPointX"_ustr, cpo::uno::Any(static_cast<sal_Int32>(100)) },
+          { u"SearchItem.SearchStartPointY"_ustr, cpo::uno::Any(static_cast<sal_Int32>(100)) } });
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
     tools::Rectangle aFinalCursor = aView.m_aCellCursorBounds;
@@ -778,7 +778,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeTextEditAutoColorOnDarkPage)
 
     // Give the document a dark page background
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+        { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
 
@@ -838,11 +838,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartBackgroundFollowsDarkMode)
     comphelper::ScopeGuard aRestoreScheme([this, aOldScheme] {
         dispatchCommand(
             mxComponent, u".uno:ChangeTheme"_ustr,
-            comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(aOldScheme) } }));
+            comphelper::InitPropertySequence({ { u"NewTheme"_ustr, cpo::uno::Any(aOldScheme) } }));
     });
     dispatchCommand(
         mxComponent, u".uno:ChangeTheme"_ustr,
-        comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(u"DarkTest"_ustr) } }));
+        comphelper::InitPropertySequence({ { u"NewTheme"_ustr, cpo::uno::Any(u"DarkTest"_ustr) } }));
 
     // The rest of the test says nothing unless the document background really is dark now
     const SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -885,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartTextFollowsDarkMode)
     comphelper::ScopeGuard aRestoreScheme([this, aOldScheme] {
         dispatchCommand(
             mxComponent, u".uno:ChangeTheme"_ustr,
-            comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(aOldScheme) } }));
+            comphelper::InitPropertySequence({ { u"NewTheme"_ustr, cpo::uno::Any(aOldScheme) } }));
     });
 
     // Render it once before the view has a theme, as a session does
@@ -893,7 +893,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartTextFollowsDarkMode)
 
     dispatchCommand(
         mxComponent, u".uno:ChangeTheme"_ustr,
-        comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(u"DarkTest"_ustr) } }));
+        comphelper::InitPropertySequence({ { u"NewTheme"_ustr, cpo::uno::Any(u"DarkTest"_ustr) } }));
 
     // The rest of the test says nothing unless the document background really is dark now
     const SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -939,11 +939,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartTextNotExportedDarkToPdf)
     comphelper::ScopeGuard aRestoreScheme([this, aOldScheme] {
         dispatchCommand(
             mxComponent, u".uno:ChangeTheme"_ustr,
-            comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(aOldScheme) } }));
+            comphelper::InitPropertySequence({ { u"NewTheme"_ustr, cpo::uno::Any(aOldScheme) } }));
     });
     dispatchCommand(
         mxComponent, u".uno:ChangeTheme"_ustr,
-        comphelper::InitPropertySequence({ { "NewTheme", cpo::uno::Any(u"DarkTest"_ustr) } }));
+        comphelper::InitPropertySequence({ { u"NewTheme"_ustr, cpo::uno::Any(u"DarkTest"_ustr) } }));
 
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);

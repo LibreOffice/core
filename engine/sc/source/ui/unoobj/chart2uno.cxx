@@ -1960,7 +1960,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detect
         InsertTabNumber func;
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getVector(aTableNumVector);
-        aResult.emplace_back( "TableNumberList", -1,
+        aResult.emplace_back( u"TableNumberList"_ustr, -1,
                                   cpo::uno::Any( lcl_createTableNumberList( aTableNumVector ) ),
                                   beans::PropertyState_DIRECT_VALUE );
     }
@@ -1968,13 +1968,13 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detect
     if( bRowSourceDetected )
     {
         // DataRowSource (calculated before)
-        aResult.emplace_back( "DataRowSource", -1,
+        aResult.emplace_back( u"DataRowSource"_ustr, -1,
                                   cpo::uno::Any( eRowSource ), beans::PropertyState_DIRECT_VALUE );
         // HasCategories
-        aResult.emplace_back( "HasCategories", -1,
+        aResult.emplace_back( u"HasCategories"_ustr, -1,
                                   cpo::uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         // FirstCellAsLabel
-        aResult.emplace_back( "FirstCellAsLabel", -1,
+        aResult.emplace_back( u"FirstCellAsLabel"_ustr, -1,
                                   cpo::uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
     }
 
@@ -1999,7 +1999,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detect
     lcl_convertTokensToString(sRangeRep, aAllTokens, *m_pDocument);
 
     // add cell range property
-    aResult.emplace_back( "CellRangeRepresentation", -1,
+    aResult.emplace_back( u"CellRangeRepresentation"_ustr, -1,
                               cpo::uno::Any( sRangeRep ), beans::PropertyState_DIRECT_VALUE );
 
     //Sequence Mapping
@@ -2059,7 +2059,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detect
 
         if( bDifferentIndexes && !aSequenceMappingVector.empty() )
         {
-            aResult.emplace_back( "SequenceMapping", -1,
+            aResult.emplace_back( u"SequenceMapping"_ustr, -1,
                     cpo::uno::Any( comphelper::containerToSequence(aSequenceMappingVector) )
                     , beans::PropertyState_DIRECT_VALUE );
         }

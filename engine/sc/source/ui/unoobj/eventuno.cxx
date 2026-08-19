@@ -132,8 +132,8 @@ cpo::uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     if (pScript)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropSeq( comphelper::InitPropertySequence({
-                { "EventType", cpo::uno::Any( u"Script"_ustr ) },
-                { "Script", cpo::uno::Any( *pScript ) }
+                { u"EventType"_ustr, cpo::uno::Any( u"Script"_ustr ) },
+                { u"Script"_ustr, cpo::uno::Any( *pScript ) }
             }));
         aRet <<= aPropSeq;
     }

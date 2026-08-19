@@ -63,8 +63,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     // Select the 5th row with no modifier
     cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "Row", cpo::uno::Any(sal_Int32(5 - 1)) },
-            { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
+            { u"Row"_ustr, cpo::uno::Any(sal_Int32(5 - 1)) },
+            { u"Modifier"_ustr, cpo::uno::Any(sal_uInt16(0)) }
         }));
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
@@ -74,8 +74,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with shift modifier
-    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(10 - 1)) },
-                                               { "Modifier", cpo::uno::Any(KEY_SHIFT) } });
+    aArgs = comphelper::InitPropertySequence({ { u"Row"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10 - 1)) },
+                                               { u"Modifier"_ustr, cpo::uno::Any(KEY_SHIFT) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Check if all the rows from 5th to 10th get selected
@@ -84,8 +84,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with ctrl modifier
-    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(13 - 1)) },
-                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { u"Row"_ustr, cpo::uno::Any(static_cast<sal_Int32>(13 - 1)) },
+                                               { u"Modifier"_ustr, cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Copying the non-contiguous selection (rows 5-10 plus row 13) now
@@ -104,8 +104,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select Column 5 with ctrl modifier
-    aArgs = comphelper::InitPropertySequence({ { "Col", cpo::uno::Any(static_cast<sal_Int32>(5 - 1)) },
-                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { u"Col"_ustr, cpo::uno::Any(static_cast<sal_Int32>(5 - 1)) },
+                                               { u"Modifier"_ustr, cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
     // Adding column 5 to the row selection yields a non-empty serialization
@@ -121,18 +121,18 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     // Test for deselection of already selected rows
     // First Deselect Row 13 because copy doesn't work for multiple selections
-    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(13 - 1)) },
-                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { u"Row"_ustr, cpo::uno::Any(static_cast<sal_Int32>(13 - 1)) },
+                                               { u"Modifier"_ustr, cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Deselect row 10
-    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(10 - 1)) },
-                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { u"Row"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10 - 1)) },
+                                               { u"Modifier"_ustr, cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Click at row 6 holding shift
-    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(6 - 1)) },
-                                               { "Modifier", cpo::uno::Any(KEY_SHIFT) } });
+    aArgs = comphelper::InitPropertySequence({ { u"Row"_ustr, cpo::uno::Any(static_cast<sal_Int32>(6 - 1)) },
+                                               { u"Modifier"_ustr, cpo::uno::Any(KEY_SHIFT) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     //  only row 5 should remain selected
@@ -190,8 +190,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEmptyColumnSelection)
 
     // Select empty column, 1000
     cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Col", cpo::uno::Any(sal_Int32(1000 - 1)) },
-                { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
+                { u"Col"_ustr, cpo::uno::Any(sal_Int32(1000 - 1)) },
+                { u"Modifier"_ustr, cpo::uno::Any(sal_uInt16(0)) }
         }));
     dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
@@ -356,9 +356,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
         sal_uInt32 oldY = y;
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", cpo::uno::Any(id)},
-            {"NewPosX", cpo::uno::Any(x+1)},
-            {"NewPosY", cpo::uno::Any(y+1)}
+            {u"HandleNum"_ustr, cpo::uno::Any(id)},
+            {u"NewPosX"_ustr, cpo::uno::Any(x+1)},
+            {u"NewPosY"_ustr, cpo::uno::Any(y+1)}
         }));
         dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -384,9 +384,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandleTextBox)
         sal_uInt32 oldY = y;
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", cpo::uno::Any(id)},
-            {"NewPosX", cpo::uno::Any(x+1)},
-            {"NewPosY", cpo::uno::Any(y+1)}
+            {u"HandleNum"_ustr, cpo::uno::Any(id)},
+            {u"NewPosX"_ustr, cpo::uno::Any(x+1)},
+            {u"NewPosY"_ustr, cpo::uno::Any(y+1)}
         }));
         dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -410,9 +410,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Col 3, Tab 0
+
     cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "ColumnWidth", cpo::uno::Any(sal_uInt16(4000)) }, // 4cm
-            { "Column", cpo::uno::Any(sal_Int16(3)) }
+            { u"ColumnWidth"_ustr, cpo::uno::Any(sal_uInt16(4000)) }, // 4cm
+            { u"Column"_ustr, cpo::uno::Any(sal_Int16(3)) }
         }));
     dispatchCommand(mxComponent, u".uno:ColumnWidth"_ustr, aArgs);
 
@@ -421,8 +422,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
 
     // Row 5, Tab 0
     cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-            { "RowHeight", cpo::uno::Any(sal_uInt16(2000)) },
-            { "Row", cpo::uno::Any(sal_Int16(5)) },
+            { u"RowHeight"_ustr, cpo::uno::Any(sal_uInt16(2000)) },
+            { u"Row"_ustr, cpo::uno::Any(sal_Int16(5)) },
         }));
     dispatchCommand(mxComponent, u".uno:RowHeight"_ustr, aArgs2);
 
@@ -689,14 +690,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     createDoc("small.ods");
     {
         cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Col", cpo::uno::Any(sal_Int32(2 - 1)) },
-                { "Modifier", cpo::uno::Any(KEY_SHIFT) }
+                { u"Col"_ustr, cpo::uno::Any(sal_Int32(2 - 1)) },
+                { u"Modifier"_ustr, cpo::uno::Any(KEY_SHIFT) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
         cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-                { "Col", cpo::uno::Any(sal_Int32(3 - 1)) },
-                { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
+                { u"Col"_ustr, cpo::uno::Any(sal_Int32(3 - 1)) },
+                { u"Modifier"_ustr, cpo::uno::Any(sal_uInt16(0)) }
             }));
 
         dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs2);
@@ -717,14 +718,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     CPPUNIT_ASSERT_EQUAL(nOldCurY, nNewCurY);
     {
         cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Row", cpo::uno::Any(sal_Int32(6 - 1)) },
-                { "Modifier", cpo::uno::Any(KEY_SHIFT) }
+                { u"Row"_ustr, cpo::uno::Any(sal_Int32(6 - 1)) },
+                { u"Modifier"_ustr, cpo::uno::Any(KEY_SHIFT) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
         cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-                { "Row", cpo::uno::Any(sal_Int32(7 - 1)) },
-                { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
+                { u"Row"_ustr, cpo::uno::Any(sal_Int32(7 - 1)) },
+                { u"Modifier"_ustr, cpo::uno::Any(sal_uInt16(0)) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs2);
     }
@@ -947,8 +948,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         // Add a new comment
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", cpo::uno::Any(u"Comment"_ustr)},
-            {"Author", cpo::uno::Any(u"Kit User1"_ustr)},
+            {u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr)},
+            {u"Author"_ustr, cpo::uno::Any(u"Kit User1"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -993,9 +994,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
             pTabViewShell->SetCursor(3, 100);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", cpo::uno::Any(OUString::createFromAscii(aCommentId))},
-            {"Text", cpo::uno::Any(u"Edited comment"_ustr)},
-            {"Author", cpo::uno::Any(u"Kit User2"_ustr)},
+            {u"Id"_ustr, cpo::uno::Any(OUString::createFromAscii(aCommentId))},
+            {u"Text"_ustr, cpo::uno::Any(u"Edited comment"_ustr)},
+            {u"Author"_ustr, cpo::uno::Any(u"Kit User2"_ustr)},
         });
         dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
@@ -1016,7 +1017,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
             pTabViewShell->SetCursor(4, 43);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", cpo::uno::Any(OUString::createFromAscii(aCommentId))}
+            {u"Id"_ustr, cpo::uno::Any(OUString::createFromAscii(aCommentId))}
         });
         dispatchCommand(mxComponent, u".uno:DeleteNote"_ustr, aArgs);
 
@@ -1126,7 +1127,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
     KitHelper::setView(nView2);
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"Repair", cpo::uno::Any(true)}
+        {u"Repair"_ustr, cpo::uno::Any(true)}
     }));
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, aPropertyValues);
     // check that undo has been executed on view #2 in repair mode
@@ -1155,7 +1156,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
     // insert an image in view and see if both views are invalidated
     aView.m_bInvalidateTiles = false;
     cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "FileName", cpo::uno::Any(createFileURL(u"smile.png")) }
+            { u"FileName"_ustr, cpo::uno::Any(createFileURL(u"smile.png")) }
         }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
@@ -1467,7 +1468,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterSortUndo)
 
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "ToPoint", cpo::uno::Any(u"A9841:A9850"_ustr) } }));
+                        { { u"ToPoint"_ustr, cpo::uno::Any(u"A9841:A9850"_ustr) } }));
     dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
@@ -1532,7 +1533,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTilesBelowSortedRangeInvalidatedO
 
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "ToPoint", cpo::uno::Any(u"A9841:A9850"_ustr) } }));
+                        { { u"ToPoint"_ustr, cpo::uno::Any(u"A9841:A9850"_ustr) } }));
 
     // The client viewport covers the sorted range and the rows below it; invalidations are
     // clipped to the area the client can show.
@@ -2098,8 +2099,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     aView1.m_aInvalidations.clear();
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "Name", cpo::uno::Any(u""_ustr) },
-            { "Index", cpo::uno::Any(sal_Int32(1)) }
+            { u"Name"_ustr, cpo::uno::Any(u""_ustr) },
+            { u"Index"_ustr, cpo::uno::Any(sal_Int32(1)) }
         }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
@@ -2111,7 +2112,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
     cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-            { "Index", cpo::uno::Any(sal_Int32(1)) }
+            { u"Index"_ustr, cpo::uno::Any(sal_Int32(1)) }
         }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs2);
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);

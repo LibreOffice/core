@@ -679,10 +679,10 @@ cpo::uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detect
         return cpo::uno::Sequence<beans::PropertyValue>();
 
     return comphelper::InitPropertySequence({
-        { "CellRangeRepresentation", cpo::uno::Any(u"PivotChart"_ustr) },
-        { "DataRowSource", cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) },
-        { "FirstCellAsLabel", cpo::uno::Any(false) },
-        { "HasCategories", cpo::uno::Any(true) }
+        { u"CellRangeRepresentation"_ustr, cpo::uno::Any(u"PivotChart"_ustr) },
+        { u"DataRowSource"_ustr, cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) },
+        { u"FirstCellAsLabel"_ustr, cpo::uno::Any(false) },
+        { u"HasCategories"_ustr, cpo::uno::Any(true) }
     });
 }
 

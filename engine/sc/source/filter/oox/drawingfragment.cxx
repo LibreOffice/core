@@ -525,8 +525,8 @@ VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
     maControlConv( rHelper.getBaseFilter().getModel(), rHelper.getBaseFilter().getGraphicHelper() )
 {
     // default font for legacy listboxes and dropdowns: Tahoma, 8pt
-    maListBoxFont.moName = "Tahoma";
-    maListBoxFont.moColor = "auto";
+    maListBoxFont.moName = u"Tahoma"_ustr;
+    maListBoxFont.moColor = u"auto"_ustr;
     maListBoxFont.monSize = 160;
 }
 

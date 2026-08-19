@@ -310,7 +310,7 @@ void ScModelTestBase::requestKitRowColumnHeaders()
 void ScModelTestBase::goToCell(const OUString& rCell)
 {
     cpo::uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(rCell) } });
+        = comphelper::InitPropertySequence({ { u"ToPoint"_ustr, cpo::uno::Any(rCell) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 }
 
@@ -387,7 +387,7 @@ void ScModelTestBase::insertNewSheet(const ScDocument& rDoc)
     sal_Int16 nTabs = rDoc.GetTableCount();
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", cpo::uno::Any(u"NewTab"_ustr) }, { "Index", cpo::uno::Any(sal_Int16(nTabs + 1)) } }));
+        { { u"Name"_ustr, cpo::uno::Any(u"NewTab"_ustr) }, { u"Index"_ustr, cpo::uno::Any(sal_Int16(nTabs + 1)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());
