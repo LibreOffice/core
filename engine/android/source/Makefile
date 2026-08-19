@@ -7,7 +7,7 @@ endif
 
 all: link-so
 
-BOOTSTRAPDIR=../Bootstrap
+BOOTSTRAPDIR=$(SRCDIR)/android/Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py

@@ -16,11 +16,13 @@ $(call gb_CustomTarget_get_target,android/loandroid3) : \
 $(loandroid3_DIR)/done : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),MAK)
-	cd $(SRCDIR)/android/source && $(MAKE) all
+	mkdir -p $(loandroid3_DIR)
+	cd $(loandroid3_DIR) && $(MAKE) -f $(SRCDIR)/android/source/Makefile all
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),MAK)
 
 $(call gb_CustomTarget_get_clean_target,android/loandroid3) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)
-	cd $(SRCDIR)/android/source && $(MAKE) clean
+	rm -rf $(loandroid3_DIR) $(BUILDDIR)/android/obj $(BUILDDIR)/android/jniLibs
+	rm -f $(call gb_CustomTarget_get_target,android/loandroid3)
 
 # vim: set noet sw=4 ts=4:
