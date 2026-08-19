@@ -1396,7 +1396,9 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                         {
                             bUrl = true;
                             rStrm.WriteChar( '<' ).WriteOString( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( ' ' ).WriteOString( OOO_STRING_SVTOOLS_HTML_O_href ).WriteOString( "=\"" );
-                            OUT_STR( pURLField->GetURL() );
+                            // tdf#44196 - keep relative paths on URL export
+                            OUT_STR(URIHelper::simpleNormalizedMakeRelative(aBaseURL,
+                                                                            pURLField->GetURL()));
                             rStrm.WriteOString( "\">" );
                             OUT_STR( pURLField->GetRepresentation() );
                             rStrm.WriteOString( "</" ).WriteOString( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( '>' );

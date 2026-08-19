@@ -57,9 +57,26 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), styles.indexOf(".Default"));
     }
 
+    void testTdf44196_relative_href()
+    {
+        loadFromFile(u"tdf44196_relative_href.html",
+                     {
+                         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarCalc)"_ustr),
+                     });
+        save(TestFilter::HTML_CALC);
+
+        htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+        CPPUNIT_ASSERT(pDoc);
+
+        // Without the fix in place, this test would have failed
+        // i.e. href attribute would have beend turned into an absolute file
+        CPPUNIT_ASSERT(!getXPath(pDoc, "//a", "href").startsWith("file:"));
+    }
+
     CPPUNIT_TEST_SUITE(ScHTMLExportTest);
     CPPUNIT_TEST(testHtmlSkipImage);
     CPPUNIT_TEST(testTdf155244);
+    CPPUNIT_TEST(testTdf44196_relative_href);
     CPPUNIT_TEST_SUITE_END();
 
 };
