@@ -428,17 +428,10 @@ TimerTask::TimerTask (
 {
     ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
 
-    ::rtl::Reference<PresenterClockTimer> pTimer;
-    if (mpInstance.is())
-    {
-        pTimer = mpInstance;
-    }
-    if ( ! pTimer.is())
-    {
-        pTimer.set(new PresenterClockTimer(rxContext));
-        mpInstance = pTimer;
-    }
-    return pTimer;
+    if (!mpInstance.is())
+        mpInstance.set(new PresenterClockTimer(rxContext));
+
+    return mpInstance;
 }
 
 PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rxContext)
