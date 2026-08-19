@@ -92,9 +92,10 @@ endef
 # This is needed to express dependencies on header-only projects, which
 # do not have any ExternalProject.
 #
-# gb_ExternalProject_use_unpacked project unpacked
+# gb_ExternalProject_use_unpacked project unpacked external-name
 define gb_ExternalProject_use_unpacked
 $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(2))
+gb_ExternalProject_STATICLINK_$(1) += $(3)
 
 endef
 
@@ -124,6 +125,7 @@ endef
 # Make an external Project depend on another ExternalProject
 define gb_ExternalProject_use_external_project
 $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_ExternalProject_get_target,$(2))
+gb_ExternalProject_STATICLINK_$(1) += $(3)
 
 endef
 
@@ -170,10 +172,11 @@ endef
 # Realistically there are some externals that do not have a usable build
 # system, and other externals that do may depend on those.
 #
-# gb_ExternalProject_use_static_libraries external staticlibraries
+# gb_ExternalProject_use_static_libraries external staticlibraries external-name
 define gb_ExternalProject_use_static_libraries
 $(call gb_ExternalProject_get_preparation_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
+gb_ExternalProject_STATICLINK_$(1) += $(3)
 
 endef
 

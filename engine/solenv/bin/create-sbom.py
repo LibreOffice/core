@@ -991,19 +991,37 @@ def add_dependencies(files_by_package):
 #    print(f"SYSDEPS: {SYSDEPS}")
 
 
-def add_static_dependencies(files_by_package, externalstaticlink):
+def add_static_dependencies(files_by_package, externalstaticlink, with_path):
     """Add static link dependencies on externals to files."""
 
     for package in files_by_package:
         for file in files_by_package[package]:
-            filename = os.path.basename(file["instpath"])
+            instpath = file["instpath"]
+            filename = instpath if with_path else os.path.basename(instpath)
             if filename in externalstaticlink:
-                file["externaldeps"] = externalstaticlink[filename]
+                # special case for CPython modules static linking, the annotations
+                # in the build system affect everything in the Package
+                if instpath.find("python-core") != -1 and with_path:
+                    if instpath.endswith(".py"):
+                        continue
+                    if len(externalstaticlink[filename].difference({"bzip2", "libexpat", "libffi", "zlib"})) != 0:
+                        raise Exception(f"Unexpected static linking in python module, please adapt: {externalstaticlink[filename]}")
+                    if instpath.find("_bz2.") != -1 and "bzip2" in externalstaticlink[filename]:
+                        file["externaldeps"] = {"bzip2"}
+                    elif instpath.find("_ctypes.") != -1 and "libffi" in externalstaticlink[filename]:
+                        file["externaldeps"] = {"libffi"}
+                    elif instpath.find("pyexpat.") != -1 and "libexpat" in externalstaticlink[filename]:
+                        file["externaldeps"] = {"libexpat"}
+                elif instpath.find("python3") + 2 == instpath.find(".dll") and with_path:
+                    if "zlib" in externalstaticlink[filename]:
+                        file["externaldeps"] = {"zlib"}
+                else:
+                    file["externaldeps"] = externalstaticlink[filename]
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 14:
-        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <6 packinfo> <path of install script> <languages> <externals> <externalstatic>")
+    if len(sys.argv) < 15:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <6 packinfo> <path of install script> <languages> <externals> <externalstatic> <externalpackagestatic>")
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
@@ -1020,16 +1038,19 @@ if __name__ == "__main__":
         languages = sys.argv[11].split()
         externalsfile = sys.argv[12]
         externalstaticfile = sys.argv[13]
+        externalpackagestaticfile = sys.argv[14]
         init_filelistdirs(ziplist)
         gen_packages(packinfos, ziplist, languages)
         files_by_package = process_install_script(install_script)
         externalfiles = read_externals(externalsfile)
         externalstaticlink = read_external_staticlink(externalstaticfile)
+        externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile)
         assign_externals(files_by_package, externalfiles)
         files = locate_files(files_by_package, languages, ziplist)
         filter_files(files)
         add_dependencies(files)
-        add_static_dependencies(files, externalstaticlink)
+        add_static_dependencies(files, externalstaticlink, False)
+        add_static_dependencies(files, externalpackagestaticlink, True)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"

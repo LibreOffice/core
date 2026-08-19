@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalProject_use_externals,nss,\
 nss_PYTHON := $(if $(PYTHON_FOR_BUILD),$(PYTHON_FOR_BUILD),$(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER)/python)
 
 ifneq ($(filter LINUX WNT,$(OS)),)
-$(call gb_ExternalProject_use_unpacked,nss,gyp)
+$(eval $(call gb_ExternalProject_use_unpacked,nss,gyp))
 endif
 
 # Both gyp branches below ask for libpkix, which the gyp defaults leave out and

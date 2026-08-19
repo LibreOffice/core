@@ -103,6 +103,7 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 	)
 	EXTERNALSFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Externals)) \
 	EXTERNALSTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_External_StaticLink)) \
+	EXTERNALPACKAGESTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_ExternalPackage_StaticLink)) \
 	&& $(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
 		$(readlicense_oo_DIR) \
 		$(readlicense_oo_DIR)/LICENSE.html \
@@ -117,7 +118,8 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		"$(if $(filter en-US,$(gb_WITH_LANG)),,en-US) $(gb_WITH_LANG)" \
 		$${EXTERNALSFILE} \
 		$${EXTERNALSTATICFILE} \
-	&& rm -f $${EXTERNALSFILE} $${EXTERNALSTATICFILE}
+		$${EXTERNALPACKAGESTATICFILE} \
+	&& rm -f $${EXTERNALSFILE} $${EXTERNALSTATICFILE} $${EXTERNALPACKAGESTATICFILE}
 	mkdir -p $(SBOM_DIR)
 	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )

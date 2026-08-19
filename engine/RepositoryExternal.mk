@@ -73,7 +73,7 @@ endef
 else # !SYSTEM_MDDS
 
 define gb_ExternalProject__use_mdds_headers
-$(call gb_ExternalProject_use_unpacked,$(1),mdds)
+$(call gb_ExternalProject_use_unpacked,$(1),mdds,mdds)
 
 endef
 
@@ -116,7 +116,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),glm)
 endef
 
 define gb_ExternalProject__use_glm_headers
-$(call gb_ExternalProject_use_unpacked,$(1),glm)
+$(call gb_ExternalProject_use_unpacked,$(1),glm,glm)
 
 endef
 
@@ -317,7 +317,7 @@ $(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib)
 endef
 
 define gb_ExternalProject__use_zlib
-$(call gb_ExternalProject_use_static_libraries,$(1),zlib)
+$(call gb_ExternalProject_use_static_libraries,$(1),zlib,zlib)
 
 endef
 
@@ -387,7 +387,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libjpeg-turbo)
 endef
 
 define gb_ExternalProject__use_libjpeg
-$(call gb_ExternalProject_use_static_libraries,$(1),libjpeg-turbo)
+$(call gb_ExternalProject_use_static_libraries,$(1),libjpeg-turbo,libjpeg-turbo)
 
 endef
 
@@ -478,7 +478,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libexpat)
 endef
 
 define gb_ExternalProject__use_expat
-$(call gb_ExternalProject_use_static_libraries,$(1),expat)
+$(call gb_ExternalProject_use_static_libraries,$(1),expat,libexpat)
 
 endef
 
@@ -558,7 +558,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),hunspell)
 endef
 
 define gb_ExternalProject__use_hunspell
-$(call gb_ExternalProject_use_external_project,$(1),hunspell)
+$(call gb_ExternalProject_use_external_project,$(1),hunspell,hunspell)
 
 endef
 
@@ -650,7 +650,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),boost)
 endef
 
 define gb_ExternalProject__use_boost_filesystem
-$(call gb_ExternalProject_use_static_libraries,$(1),boost_filesystem)
+$(call gb_ExternalProject_use_static_libraries,$(1),boost_filesystem,boost)
 endef
 
 define gb_LinkTarget__use_boost_iostreams
@@ -660,7 +660,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),boost)
 endef
 
 define gb_ExternalProject__use_boost_iostreams
-$(call gb_ExternalProject_use_static_libraries,$(1),boost_iostreams)
+$(call gb_ExternalProject_use_static_libraries,$(1),boost_iostreams,boost)
 endef
 
 define gb_LinkTarget__use_boost_headers
@@ -674,7 +674,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),boost)
 endef
 
 define gb_ExternalProject__use_boost_headers
-$(call gb_ExternalProject_use_unpacked,$(1),boost)
+$(call gb_ExternalProject_use_unpacked,$(1),boost,boost)
 
 endef
 
@@ -1010,7 +1010,7 @@ endef
 endif # MSC
 
 define gb_ExternalProject__use_liblangtag
-$(call gb_ExternalProject_use_external_project,$(1),liblangtag)
+$(call gb_ExternalProject_use_external_project,$(1),liblangtag,$(if $(filter MSC,$(COM)),liblangtag))
 
 endef
 
@@ -1220,7 +1220,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),freetype)
 endef
 
 define gb_ExternalProject__use_freetype
-$(call gb_ExternalProject_use_external_project,$(1),freetype)
+$(call gb_ExternalProject_use_external_project,$(1),freetype,freetype)
 
 endef
 
@@ -1319,9 +1319,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),graphite2)
 endef
 
 define gb_ExternalProject__use_graphite
-$(call gb_ExternalProject_use_static_libraries,$(1),\
-	graphite \
-)
+$(call gb_ExternalProject_use_static_libraries,$(1),graphite,graphite2)
 
 endef
 endif # SYSTEM_GRAPHITE
@@ -1452,7 +1450,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),harfbuzz)
 endef
 
 define gb_ExternalProject__use_harfbuzz
-$(call gb_ExternalProject_use_external_project,$(1),harfbuzz)
+$(call gb_ExternalProject_use_external_project,$(1),harfbuzz,harfbuzz)
 
 endef
 
@@ -1487,7 +1485,7 @@ $(eval $(call gb_Helper_register_external_packages_for_install,openssl,ooo, \
 ))
 
 define gb_ExternalProject__use_openssl
-$(call gb_ExternalProject_use_package,$(1),openssl)
+$(call gb_ExternalProject_use_package,$(1),openssl,openssl)
 
 endef
 
@@ -1620,7 +1618,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libe-book)
 endef
 
 define gb_ExternalProject__use_ebook
-$(call gb_ExternalProject_use_external_project,$(1),libebook)
+$(call gb_ExternalProject_use_external_project,$(1),libebook,libe-book)
 
 endef
 
@@ -1719,7 +1717,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libfreehand)
 endef
 
 define gb_ExternalProject__use_freehand
-$(call gb_ExternalProject_use_external_project,$(1),libfreehand)
+$(call gb_ExternalProject_use_external_project,$(1),libfreehand,libfreehand)
 
 endef
 
@@ -1808,7 +1806,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libepubgen)
 
 endef
 define gb_ExternalProject__use_epubgen
-$(call gb_ExternalProject_use_external_project,$(1),libepubgen)
+$(call gb_ExternalProject_use_external_project,$(1),libepubgen,libepubgen)
 
 endef
 
@@ -1908,7 +1906,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libabw)
 
 endef
 define gb_ExternalProject__use_abw
-$(call gb_ExternalProject_use_external_project,$(1),libabw)
+$(call gb_ExternalProject_use_external_project,$(1),libabw,libabw)
 
 endef
 
@@ -1971,7 +1969,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libpagemaker)
 
 endef
 define gb_ExternalProject__use_pagemaker
-$(call gb_ExternalProject_use_external_project,$(1),libpagemaker)
+$(call gb_ExternalProject_use_external_project,$(1),libpagemaker,libpagemaker)
 
 endef
 
@@ -2005,7 +2003,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libqxp)
 
 endef
 define gb_ExternalProject__use_qxp
-$(call gb_ExternalProject_use_external_project,$(1),libqxp)
+$(call gb_ExternalProject_use_external_project,$(1),libqxp,libqxp)
 
 endef
 
@@ -2039,7 +2037,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libzmf)
 
 endef
 define gb_ExternalProject__use_zmf
-$(call gb_ExternalProject_use_external_project,$(1),libzmf)
+$(call gb_ExternalProject_use_external_project,$(1),libzmf,libzmf)
 
 endef
 
@@ -2612,9 +2610,7 @@ $(call gb_LinkTarget__use_zlib,$(1))
 endef
 
 define gb_ExternalProject__use_libpng
-$(call gb_ExternalProject_use_static_libraries,$(1),\
-	libpng \
-)
+$(call gb_ExternalProject_use_static_libraries,$(1),libpng,libpng)
 
 endef
 
@@ -2663,7 +2659,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libtiff)
 endef
 
 define gb_ExternalProject__use_libtiff
-$(call gb_ExternalProject_use_external_project,$(1),libtiff)
+$(call gb_ExternalProject_use_external_project,$(1),libtiff,libtiff)
 
 endef
 
@@ -2713,7 +2709,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libwebp)
 endef
 
 define gb_ExternalProject__use_libwebp
-$(call gb_ExternalProject_use_external_project,$(1),libwebp)
+$(call gb_ExternalProject_use_external_project,$(1),libwebp,libwebp)
 
 endef
 
@@ -2916,6 +2912,7 @@ endef
 # libffi library delivered to instdir is necessary to use internal python with meson (wants to import _ctypes)
 define gb_ExternalProject__use_libffi
 $(call gb_ExternalProject_use_package,$(1),libffi)
+$(call gb_ExternalProject_use_external_project,$(1),libffi,$(if $(filter-out MSC,$(COM)),libffi))
 
 endef
 
@@ -3054,7 +3051,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),libeot)
 endef
 
 define gb_ExternalProject__use_libeot
-$(call gb_ExternalProject_use_external_project,$(1),libeot)
+$(call gb_ExternalProject_use_external_project,$(1),libeot,libeot)
 
 endef
 
@@ -3497,7 +3494,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),bzip2)
 endef
 
 define gb_ExternalProject__use_bzip2
-$(call gb_ExternalProject_use_external_project,$(1),bzip2)
+$(call gb_ExternalProject_use_external_project,$(1),bzip2,bzip2)
 endef
 
 endif # SYSTEM_BZIP2
@@ -3654,7 +3651,7 @@ $(call gb_Helper_LinkTarget_use_external,$(1),zxing-c\+\+)
 endef
 
 define gb_ExternalProject__use_zxing
-$(call gb_ExternalProject_use_static_libraries,$(1),zxing)
+$(call gb_ExternalProject_use_static_libraries,$(1),zxing,zxing-c\+\+)
 
 endef
 
