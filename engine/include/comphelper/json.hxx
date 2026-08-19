@@ -13,6 +13,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/comphelperdllapi.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
@@ -22,15 +23,20 @@ class Any;
 class Type;
 }
 
-// Internal-only helpers used by the JS-UNO proxy machinery to convert UNO values to JSON
-// (notification payloads to the iframe) and back (per-call return values from the iframe).
+// Helpers to convert UNO values to JSON and back.
+
+namespace comphelper {
 
 // Append a JSON serialisation of the UNO value at `value` (typed `type`) to `buf`; interface
 // values render as `null`, enums by their IDL name as a JSON string:
+COMPHELPER_DLLPUBLIC
 void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const* value);
 
 // Decode the JSON value `json` into an `Any` of type `type`; throws css::uno::RuntimeException
 // on malformed input or on a type whose decoder is not implemented yet:
+COMPHELPER_DLLPUBLIC
 cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type);
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
