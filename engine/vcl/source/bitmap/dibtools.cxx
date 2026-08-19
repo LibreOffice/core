@@ -1691,8 +1691,7 @@ bool ReadRawDIB(
     if (rTarget.HasAlpha())
     {
         // Need to preserve the targets alpha information
-        Bitmap aTmp(rTarget.CreateColorBitmap());
-        AlphaMask aTmpMask(rTarget.CreateAlphaMask());
+        auto [ aTmp, aTmpMask ] = rTarget.SplitIntoColorAndAlpha();
         {
             BitmapScopedWriteAccess pWriteAccess(aTmp);
             for (int nRow = 0; nRow < nHeight; ++nRow)
@@ -1734,16 +1733,20 @@ bool WriteDIBBitmapEx(
     const Bitmap& rSource,
     SvStream& rOStm)
 {
-    if(ImplWriteDIB(rSource.CreateColorBitmap(), rOStm, true, true))
+    Bitmap tmpColor(rSource);
+    AlphaMask tmpAlpha;
+    if (rSource.HasAlpha())
+        std::tie(tmpColor, tmpAlpha) = rSource.SplitIntoColorAndAlpha();
+
+    if (ImplWriteDIB(tmpColor, rOStm, true, true))
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
-        rOStm.WriteUChar( rSource.HasAlpha() ? 2 : 0 ); // Used to be TransparentType enum
+        rOStm.WriteUChar(tmpAlpha.IsEmpty() ? 0 : 2); // Used to be TransparentType enum
 
-        if(rSource.HasAlpha())
+        if (!tmpAlpha.IsEmpty())
         {
             // invert the alpha because the other routines actually want transparency
-            AlphaMask tmpAlpha = rSource.CreateAlphaMask();
             tmpAlpha.Invert();
             return ImplWriteDIB(tmpAlpha.GetBitmap(), rOStm, true, true);
         }
