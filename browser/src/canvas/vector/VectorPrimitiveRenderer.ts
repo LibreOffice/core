@@ -120,6 +120,10 @@ namespace cool {
 						primitive as PolyPolygonAlphaGradientPrimitive,
 					);
 					break;
+				case FillHatchPrimitive.type:
+				case PolyPolygonHatchPrimitive.type:
+					this._renderHatch(context, primitive as FillHatchPrimitive);
+					break;
 				case BitmapPrimitive.type:
 					this._renderBitmap(context, primitive as BitmapPrimitive);
 					break;
@@ -682,6 +686,97 @@ namespace cool {
 			if (primitive.children)
 				this._renderPrimitives(context, primitive.children);
 			context.restore();
+		}
+
+		// Pixels per twip along the x axis of the active transform.
+		// Canvas measures a blur radius in pixels whatever the transform
+		// says, and a hairline stays one pixel wide at every zoom.
+		private _pixelsPerUnit(context: CanvasRenderingContext2D): number {
+			const matrix = context.getTransform();
+			const scale = Math.hypot(matrix.a, matrix.b);
+			return scale > 0 ? scale : 1;
+		}
+
+		private _renderHatch(
+			context: CanvasRenderingContext2D,
+			primitive: FillHatchPrimitive | PolyPolygonHatchPrimitive,
+		): void {
+			const hatch = primitive.hatch;
+			if (!hatch) return;
+
+			const path = (primitive as PolyPolygonHatchPrimitive).path;
+			const output = (primitive as FillHatchPrimitive).outputRange;
+			const area = Range2D.fromArray(
+				(primitive as PolyPolygonHatchPrimitive).bounds ?? output,
+			);
+			if (!area) return;
+
+			context.save();
+			if (path) context.clip(new Path2D(path), 'evenodd');
+			else VectorScratchCanvases.clipToRange(context, area);
+
+			if (hatch.fillBackground && primitive.backgroundColor) {
+				context.fillStyle = primitive.backgroundColor;
+				context.fillRect(area.minX, area.minY, area.width, area.height);
+			}
+
+			this._drawHatchLines(
+				context,
+				hatch,
+				Range2D.fromArray(primitive.definitionRange) ?? area,
+				area,
+			);
+			context.restore();
+		}
+
+		// Single is one set along the hatch angle, double adds one square
+		// to it, and triple a third at forty-five degrees.
+		private _drawHatchLines(
+			context: CanvasRenderingContext2D,
+			hatch: HatchAttribute,
+			layout: Range2D,
+			area: Range2D,
+		): void {
+			const pixels = this._pixelsPerUnit(context);
+			const distance = hatch.distance ?? 0;
+			if (!(distance > 0)) return;
+
+			// Lines under a pixel apart read as a solid area and cost a
+			// stroke each, so they stop at a pixel.
+			const spacing = Math.max(distance, 1 / pixels);
+			const angle = hatch.angle ?? 0;
+			const angles = [angle];
+			if (hatch.style === 'double' || hatch.style === 'triple')
+				angles.push(angle - Math.PI / 2);
+			if (hatch.style === 'triple') angles.push(angle - Math.PI / 4);
+
+			const centerX = layout.centerX;
+			const centerY = layout.centerY;
+			// Far enough to cross the whole area, even though the lines
+			// are laid out around the middle of the definition range.
+			const reach =
+				Math.hypot(area.width, area.height) / 2 +
+				Math.hypot(centerX - area.centerX, centerY - area.centerY);
+			const steps = Math.ceil(reach / spacing);
+
+			context.strokeStyle = hatch.color ?? '#000000';
+			context.lineWidth = 1 / pixels;
+			context.beginPath();
+			for (const lineAngle of angles) {
+				// The hatch angle turns anticlockwise, y grows down.
+				const alongX = Math.cos(lineAngle);
+				const alongY = -Math.sin(lineAngle);
+				const acrossX = Math.sin(lineAngle);
+				const acrossY = Math.cos(lineAngle);
+				for (let step = -steps; step <= steps; step++) {
+					const offset = step * spacing;
+					const originX = centerX + acrossX * offset;
+					const originY = centerY + acrossY * offset;
+					context.moveTo(originX - alongX * reach, originY - alongY * reach);
+					context.lineTo(originX + alongX * reach, originY + alongY * reach);
+				}
+			}
+			context.stroke();
 		}
 
 		private _renderPrimitives(

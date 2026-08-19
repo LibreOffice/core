@@ -56,6 +56,7 @@
 /// <reference path="./Range2D.test.ts" />
 /// <reference path="./VectorGradientFrame.test.ts" />
 /// <reference path="./VectorGradientPrimitives.test.ts" />
+/// <reference path="./VectorHatchPrimitives.test.ts" />
 /// <reference path="./InternUtil.test.ts" />
 /// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />

@@ -61,10 +61,12 @@ class CanvasRecorder {
 	public readonly canvas: { width: number; height: number };
 	/// Every gradient handed out, in the order it was created.
 	public readonly gradients: GradientRecorder[] = [];
-	// Uniform scale of the recorded calls, reported by getTransform.
-	private _scale: number = 1;
-	private _scaleStack: number[] = [];
 	private _depth: number = 0;
+	/// The live transform as [a, b, c, d, e, f], kept up to date through
+	/// the transform calls and the save stack so getTransform answers
+	/// what a real context would.
+	private _transform: number[] = [1, 0, 0, 1, 0, 0];
+	private _transformStack: number[][] = [];
 
 	private static readonly _PROPS = [
 		'fillStyle',
@@ -188,39 +190,71 @@ class CanvasRecorder {
 		// Record at the outer depth, then nest subsequent calls
 		// one level deeper.
 		this._record('save', []);
-		this._scaleStack.push(this._scale);
 		this._depth++;
+		this._transformStack.push(this._transform.slice());
 	}
 	restore(): void {
 		// Pop the level first so the restore() entry itself sits at
 		// the outer depth, matching the save() entry that opened it.
 		if (this._depth > 0) this._depth--;
-		if (this._scaleStack.length) this._scale = this._scaleStack.pop();
 		this._record('restore', []);
+		const saved = this._transformStack.pop();
+		if (saved) this._transform = saved;
 	}
 	translate(...args: any[]): void {
 		this._record('translate', args);
+		this._apply([1, 0, 0, 1, args[0], args[1]]);
 	}
 	scale(...args: any[]): void {
-		this._scale *= args[0] ?? 1;
 		this._record('scale', args);
-	}
-
-	/// Only the uniform scale is tracked, the rest comes back as identity.
-	getTransform(): any {
-		return { a: this._scale, b: 0, c: 0, d: this._scale, e: 0, f: 0 };
+		this._apply([args[0], 0, 0, args[1], 0, 0]);
 	}
 	rotate(...args: any[]): void {
 		this._record('rotate', args);
+		const cos = Math.cos(args[0]);
+		const sin = Math.sin(args[0]);
+		this._apply([cos, sin, -sin, cos, 0, 0]);
 	}
 	transform(...args: any[]): void {
 		this._record('transform', args);
+		this._apply(args.slice(0, 6));
 	}
 	setTransform(...args: any[]): void {
 		this._record('setTransform', args);
+		const first = args[0];
+		this._transform =
+			args.length >= 6
+				? args.slice(0, 6)
+				: [first.a, first.b, first.c, first.d, first.e, first.f];
 	}
 	resetTransform(): void {
 		this._record('resetTransform', []);
+		this._transform = [1, 0, 0, 1, 0, 0];
+	}
+	getTransform(): {
+		a: number;
+		b: number;
+		c: number;
+		d: number;
+		e: number;
+		f: number;
+	} {
+		const t = this._transform;
+		return { a: t[0], b: t[1], c: t[2], d: t[3], e: t[4], f: t[5] };
+	}
+
+	/// Multiply the live transform by another, the way a canvas
+	/// composes a new transform onto the one already in place.
+	private _apply(m: number[]): void {
+		const t = this._transform;
+		this._transform = [
+			t[0] * m[0] + t[2] * m[1],
+			t[1] * m[0] + t[3] * m[1],
+			t[0] * m[2] + t[2] * m[3],
+			t[1] * m[2] + t[3] * m[3],
+			t[0] * m[4] + t[2] * m[5] + t[4],
+			t[1] * m[4] + t[3] * m[5] + t[5],
+		];
 	}
 	setLineDash(...args: any[]): void {
 		this._record('setLineDash', args);

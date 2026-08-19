@@ -487,9 +487,12 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/PolyPolygonRGBAPrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonStrokePrimitive.ts \
 	src/canvas/vector/primitive/FillGradientPrimitive.ts \
+	src/canvas/vector/primitive/FillHatchPrimitive.ts \
 	src/canvas/vector/primitive/GradientAttribute.ts \
+	src/canvas/vector/primitive/HatchAttribute.ts \
 	src/canvas/vector/primitive/PolyPolygonAlphaGradientPrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonGradientPrimitive.ts \
+	src/canvas/vector/primitive/PolyPolygonHatchPrimitive.ts \
 	src/canvas/vector/primitive/Primitive.ts \
 	src/canvas/vector/primitive/SingleLinePrimitive.ts \
 	src/canvas/vector/primitive/TextDecoratedPortionPrimitive.ts \
