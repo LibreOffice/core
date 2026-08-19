@@ -1508,6 +1508,10 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                             COKitCallbackType::INVALIDATE_VIEW_CURSOR, aMessageParams);
 
                 aMessageParams.put("mispelledWord", bIsWrong ? 1 : 0);
+                // The caret's logical position: its paragraph and the character
+                // offset within that paragraph.
+                aMessageParams.put("paragraph", nPara);
+                aMessageParams.put("index", aPaM.GetIndex());
                 aMessageParams.add_child("hyperlink", aHyperlinkTree);
 
                 KitHelper::notifyOtherView(*pThisShell, pThisShell,
