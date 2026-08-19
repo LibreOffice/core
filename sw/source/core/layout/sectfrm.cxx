@@ -1177,7 +1177,7 @@ void SwSectionFrame::CollectEndnotes( SwLayouter* pLayouter )
     bool bEmpty = false;
     // pSect is the last sectionfrm without endnotes or the this-pointer
     // the first sectionfrm with endnotes may be destroyed, when the endnotes
-    // is cutted
+    // is cut
     while( nullptr != (pFootnote = lcl_FindEndnote( pSect, bEmpty, pLayouter )) )
         pLayouter->CollectEndnote( pFootnote );
     if( pLayouter->HasEndnotes() )
@@ -2112,7 +2112,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
                 {
                     if( bJump )     // Did we skip a blank page?
                         SwFlowFrame::SetMoveBwdJump( true );
-                    return static_cast<SwLayoutFrame*>(pCol->Lower());  // The columnm body
+                    return static_cast<SwLayoutFrame*>(pCol->Lower());  // The column body
                 }
                 bJump = true;
             } while( pCol->GetPrev() );
