@@ -575,6 +575,27 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 			aichatHelper.closeTonePicker();
 		});
 
+		it('Tone picker keeps a usable height in a very short panel', function() {
+			// 270px is about what a 1080p screen leaves at 400% browser zoom.
+			// The picker takes part in flex shrinking, so without a floor it
+			// collapsed to its padding and the tones were unreadable.
+			cy.viewport(1280, 270);
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+			aichatHelper.openTonePicker();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-picker').should(($el) => {
+				expect($el[0].getBoundingClientRect().height).to.be.at.least(170);
+			});
+			// The panel is what scrolls once the picker stops shrinking.
+			cy.cGet('#aichat-main').should(($el) => {
+				expect($el[0].scrollHeight).to.be.greaterThan($el[0].clientHeight);
+			});
+			cy.cGet('#aichat-tone-preset-natural').scrollIntoView().should('be.visible');
+			aichatHelper.closeTonePicker();
+		});
+
 		it('Emoji overlay fits inside a short viewport', function() {
 			cy.viewport(1280, 400);
 			cy.clearLocalStorage();

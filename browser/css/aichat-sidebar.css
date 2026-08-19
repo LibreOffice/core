@@ -646,9 +646,15 @@
 	background: var(--color-background-lighter);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
 		0 1px 2px rgba(0, 0, 0, 0.03);
-	/* When the panel is short the picker shrinks and scrolls its content. */
+	/* When the panel is short the picker shrinks and scrolls its content, down
+	   to a floor that still shows the title and a row or two of tones. Past
+	   that the surplus turns into scroll on the panel instead, which is what
+	   keeps the picker a readable size at 400% browser zoom, where the whole
+	   dock is only a couple of hundred CSS pixels tall. The floor stays below
+	   the shortest content the picker ever holds, so a roomy panel is
+	   unchanged and no state gains empty space. */
 	flex-shrink: 1;
-	min-height: 0;
+	min-height: 170px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	scrollbar-width: var(--scrollbar-width);
