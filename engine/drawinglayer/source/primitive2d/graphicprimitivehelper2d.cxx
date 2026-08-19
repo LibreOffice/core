@@ -346,7 +346,8 @@ namespace drawinglayer::primitive2d
                         case Disposal::Previous:
                         {
                             maVirtualDevice->DrawBitmap(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
-                            Bitmap aExpandVisibilityMask(rAnimationFrame.maBitmap.CreateAlphaMask().GetBitmap(), rAnimationFrame.maBitmap.CreateAlphaMask());
+                            AlphaMask aAlphaMask(rAnimationFrame.maBitmap.CreateAlphaMask());
+                            Bitmap aExpandVisibilityMask(aAlphaMask.GetBitmap(), aAlphaMask);
                             maVirtualDeviceMask->DrawBitmap(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             break;
                         }
