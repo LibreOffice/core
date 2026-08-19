@@ -212,9 +212,8 @@ Reference<XGraphic> lclApplyBlackWhiteEffect(const BlipFillProperties& aBlipProp
         Bitmap aBitmap(aGraphic.GetBitmap());
         if (aBitmap.HasAlpha())
         {
-            const AlphaMask aMask(aBitmap.CreateAlphaMask());
+            auto [aTmpBmp, aMask] = aBitmap.SplitIntoColorAndAlpha();
 
-            Bitmap aTmpBmp(aBitmap.CreateColorBitmap());
             BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ nThreshold });
 
             aReturnGraphic = ::Graphic(Bitmap(aTmpBmp, aMask));
