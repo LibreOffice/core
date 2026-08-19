@@ -170,8 +170,9 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 
 		let keep = e.ctrlKey && e.shiftKey;
 
-		// For images, the keepRatio shortcut works the opposite way.
-		if (app.map.context && app.map.context.context === 'Graphic')
+		// For images and videos, the keepRatio shortcut works the opposite way.
+		const context = app.map.context?.context;
+		if (context === 'Graphic' || context === 'Media')
 			keep = !keep;
 
 		return keep;
@@ -230,15 +231,22 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 				shapeRecProps.width, shapeRecProps.height
 			]);
 
-			const newPoint = this.getNewPosition(handleId, tempRectangle);
+			// A side handle moves one edge, so keeping the ratio commits the corner it grew.
+			const sideToCorner: Record<string, string> = app.map._docLayer.isCalcRTL()
+				? { '1': '0', '3': '5', '4': '7', '6': '5' }
+				: { '1': '2', '3': '5', '4': '7', '6': '7' };
+			const keepRatio = this.doWeKeepRatio(e);
+			const committedHandleId = keepRatio ? (sideToCorner[handleId] ?? handleId) : handleId;
 
-			if (!this.doWeKeepRatio(e) || ["1", "3", "4", "6"].includes(handleId)) {
+			const newPoint = this.getNewPosition(committedHandleId, tempRectangle);
+
+			if (!keepRatio) {
 				newPoint[0] = Math.round((parentHandlerSection.sectionProperties.closestX ?? this.mouseToDocX(point)) * app.pixelsToTwips);
 				newPoint[1] = Math.round((parentHandlerSection.sectionProperties.closestY ?? point.pY + this.position[1]) * app.pixelsToTwips);
 			}
 
 			const parameters = {
-				HandleNum: { type: 'long', value: handleId },
+				HandleNum: { type: 'long', value: committedHandleId },
 				NewPosX: { type: 'long', value: newPoint[0] },
 				NewPosY: { type: 'long', value: newPoint[1] }
 			};
