@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-06 13:27+0000\n"
+"PO-Revision-Date: 2026-08-16 18:32+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.8.1.dev0\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -411,13 +411,12 @@ msgid "Your WOPI server is not secure: SSL verification failed"
 msgstr "Níl do fhreastalaí WOPI slán: Theip ar fhíorú SSL"
 
 #: admin/src/AdminSocketServerAudit.js:40
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Níl na doiciméid coimeádta go héifeachtach: cumais nó ainmspásanna ar "
-"iarraidh."
+"Níl doiciméid faoi choinneáil go héifeachtach: cumais ar iarraidh, spásanna "
+"ainm agus glas talún."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -544,7 +543,7 @@ msgstr "Mód Dorcha"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Seiceáil Litrithe Uathoibríoch"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -556,7 +555,7 @@ msgstr "Súmáil Réamhshocraithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Scrolláil réidh"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -1972,106 +1971,109 @@ msgstr "An cúntóir AI"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "cuir %n sleamhnán isteach"
+msgstr[1] "cuir %n shleamhnán isteach"
+msgstr[2] "cuir %n sleamhnán isteach"
+msgstr[3] "cuir %n sleamhnán isteach"
+msgstr[4] "cuir %n sleamhnán isteach"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "scrios %n sleamhnán"
+msgstr[1] "scrios %n shleamhnán"
+msgstr[2] "scrios %n sleamhnán"
+msgstr[3] "scrios %n sleamhnán"
+msgstr[4] "scrios %n sleamhnán"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "dúblach %n sleamhnán"
+msgstr[1] "dúblaigh %n shleamhnán"
+msgstr[2] "dúblach %n sleamhnán"
+msgstr[3] "dúblach %n sleamhnán"
+msgstr[4] "dúblach %n sleamhnán"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "bog %n sleamhnán"
+msgstr[1] "bog %n shleamhnán"
+msgstr[2] "bog %n sleamhnán"
+msgstr[3] "bog %n sleamhnán"
+msgstr[4] "bog %n sleamhnán"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "athainmnigh %n sleamhnán"
+msgstr[1] "athainmnigh %n shleamhnán"
+msgstr[2] "athainmnigh %n sleamhnán"
+msgstr[3] "athainmnigh %n sleamhnán"
+msgstr[4] "athainmnigh %n sleamhnán"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "athraigh %n leagan amach"
+msgstr[1] "athraigh %n leagan amach"
+msgstr[2] "athraigh %n leagan amach"
+msgstr[3] "athraigh %n leagan amach"
+msgstr[4] "athraigh %n leagan amach"
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "socraigh téacs i %n áit"
+msgstr[1] "socraigh téacs i %n áit"
+msgstr[2] "socraigh téacs i %n áit"
+msgstr[3] "socraigh téacs i %n áit"
+msgstr[4] "socraigh téacs i %n áit"
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "formáidigh téacs i %n áit"
+msgstr[1] "formáidigh téacs i %n áit"
+msgstr[2] "formáidigh téacs i %n áit"
+msgstr[3] "formáidigh téacs i %n áit"
+msgstr[4] "formáidigh téacs i %n áit"
 
 #: src/control/Control.AIChatSidebar.ts:2403
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Íomhá ginte"
+msgstr[0] "gin %n íomhá"
+msgstr[1] "gin %n íomhá"
+msgstr[2] "gin %n íomhá"
+msgstr[3] "gin %n íomhá"
+msgstr[4] "gin %n íomhá"
 
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "rith %n ordú doiciméad"
+msgstr[1] "rith %n ordú doiciméad"
+msgstr[2] "rith %n ordú doiciméad"
+msgstr[3] "rith %n ordú doiciméad"
+msgstr[4] "rith %n ordú doiciméad"
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "rith %n %1 ordú"
+msgstr[1] "rith %n %1 ordú"
+msgstr[2] "rith %n %1 ordú"
+msgstr[3] "rith %n %1 ordú"
+msgstr[4] "rith %n %1 ordú"
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "cuir an teimpléad dearaidh '%1' i bhfeidhm"
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "Déanfaidh sé seo: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
@@ -2148,11 +2150,11 @@ msgstr "Theip ar ábhar an roghnúcháin a pharsáil"
 
 #: src/control/Control.AIChatSidebar.ts:3005
 msgid "Design (optional):"
-msgstr ""
+msgstr "Dearadh (roghnach):"
 
 #: src/control/Control.AIChatSidebar.ts:3022
 msgid "No design"
-msgstr ""
+msgstr "Gan dearadh"
 
 #: src/control/Control.AIChatSidebar.ts:3023
 msgid "Continue without a design template"
@@ -2163,50 +2165,52 @@ msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Seo achoimre molta. Cuir na teidil nó na tuairiscí in eagar, bain na "
+"sleamhnáin nach dteastaíonn uait, agus ansin ceadaigh an deic a thógáil:"
 
 #: src/control/Control.AIChatSidebar.ts:3150
 msgid "Reject outline"
-msgstr ""
+msgstr "Diúltaigh don imlíne"
 
 #: src/control/Control.AIChatSidebar.ts:3156
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Tabhair teideal do gach sleamhnán breise le ceadú."
 
 #: src/control/Control.AIChatSidebar.ts:3184
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Teideal sleamhnáin %1"
 
 #: src/control/Control.AIChatSidebar.ts:3190
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Cur síos ar shleamhnán %1"
 
 #: src/control/Control.AIChatSidebar.ts:3196
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Bain sleamhnán %1"
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Slide title"
-msgstr ""
+msgstr "Teideal sleamhnáin"
 
 #: src/control/Control.AIChatSidebar.ts:3256
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Cad ba chóir a chlúdach sa sleamhnán seo"
 
 #: src/control/Control.AIChatSidebar.ts:3281
 msgid "Add slide"
-msgstr ""
+msgstr "Cuir sleamhnán leis"
 
 #: src/control/Control.AIChatSidebar.ts:3319
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Imlíne ceadaithe - ag tógáil %1 sleamhnán."
 
 #: src/control/Control.AIChatSidebar.ts:3328
 msgid "Outline rejected."
-msgstr ""
+msgstr "Diúltaíodh don imlíne."
 
 #: src/control/Control.AIChatSidebar.ts:3364
 msgid "Building slides..."
-msgstr ""
+msgstr "Sleamhnáin á dtógáil..."
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "Formula analysis timeout"
@@ -4718,7 +4722,7 @@ msgstr "Cruthúnas"
 #: src/control/Control.NotebookbarImpress.js:2061
 #: src/control/Control.NotebookbarWriter.js:2287
 msgid "Auto Spell Check"
-msgstr "Seiceáil Litrithe Uathoibríoch"
+msgstr "Seiceáil Litrithe Uath"
 
 #: src/control/Control.NotebookbarCalc.js:2687
 #: src/control/Control.NotebookbarImpress.js:2091
@@ -5028,10 +5032,13 @@ msgid "Expand All Sections"
 msgstr "Leathnaigh Gach Roinn"
 
 #: src/control/Control.PartsPreview.js:1065
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Scrios an chuid \"%1\" agus a %2 sleamhnán(anna)?"
+msgstr[0] "Scrios an chuid \"%1\" agus a %n sleamhnán?"
+msgstr[1] "Scrios an chuid \"%1\" agus a %n shleamhnán?"
+msgstr[2] "Scrios an chuid \"%1\" agus a %n shleamhnán?"
+msgstr[3] "Scrios an chuid \"%1\" agus a %n sleamhnán?"
+msgstr[4] "Scrios an chuid \"%1\" agus a %n sleamhnán?"
 
 #: src/control/Control.PartsPreview.js:1114
 msgid "Enter new section name:"
@@ -6071,7 +6078,7 @@ msgstr "An-scaoilte"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Cóipeáil Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6094,26 +6101,24 @@ msgid "All users"
 msgstr "Gach úsáideoir"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Aibhsigh cealla le..."
+msgstr "Aibhsigh cealla le"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Rialacha Barr / Bun..."
+msgstr "Rialacha Barr/Bun"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Scála Dathanna"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Barra Sonraí"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Tacar Deilbhíní"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6949,26 +6954,26 @@ msgstr "As tábla"
 #: src/layer/marker/A11yTextInput.js:257
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%n sraith"
+msgstr[1] "%n sraitheanna"
+msgstr[2] "%n sraitheanna"
+msgstr[3] "%n sraitheanna"
+msgstr[4] "%n sraitheanna"
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%n colún"
+msgstr[1] "%n cholún"
+msgstr[2] "%n cholún"
+msgstr[3] "%n colún"
+msgstr[4] "%n colún"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:261
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tábla le {0} agus {1}"
 
 #: src/layer/marker/A11yTextInput.js:266
 msgid "Row {0} through {1}"
@@ -7429,10 +7434,13 @@ msgid "No Notes"
 msgstr "Uimh Nótaí"
 
 #: src/slideshow/PresenterConsole.js:1658
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Déan arís i {0} soicind"
+msgstr[0] "Déan arís i %n soicind"
+msgstr[1] "Déan arís i %n shoicind"
+msgstr[2] "Déan arís i %n soicind"
+msgstr[3] "Déan arís i %n soicind"
+msgstr[4] "Déan arís i %n soicind"
 
 #: src/slideshow/PresenterConsole.js:1665
 #: src/slideshow/SlideShowPresenter.ts:663
