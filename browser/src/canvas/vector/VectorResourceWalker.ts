@@ -36,6 +36,10 @@ namespace cool {
 		private _walkPrimitive(primitive: Primitive): void {
 			if (GraphicResource.is(primitive))
 				this._checksums.add(primitive.checksum);
+			// An image fill names its image a level down.
+			const fillGraphic = (primitive as FillGraphicPrimitive).fillGraphic;
+			if (fillGraphic && typeof fillGraphic.checksum === 'number')
+				this._checksums.add(fillGraphic.checksum);
 			const fontId = (primitive as TextSimplePortionPrimitive).fontId;
 			if (typeof fontId === 'string') this._fontIds.add(fontId);
 			if (primitive.children) this.walkPrimitives(primitive.children);

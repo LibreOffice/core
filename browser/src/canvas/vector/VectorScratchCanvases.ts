@@ -11,7 +11,8 @@
 
 namespace cool {
 	/// A canvas a subtree is drawn on before the result lands on the
-	/// target. Clipping a target to a rectangle sits here too.
+	/// target. Clipping a target to a rectangle and reading the scale of
+	/// its transform sit here too.
 	export class VectorScratchCanvases {
 		private _canvas: HTMLCanvasElement | undefined;
 
@@ -45,6 +46,15 @@ namespace cool {
 			context.setTransform(1, 0, 0, 1, 0, 0);
 			context.drawImage(scratch.canvas, 0, 0);
 			context.restore();
+		}
+
+		// Pixels per twip along the x axis of the active transform.
+		// Canvas measures a blur radius in pixels whatever the transform
+		// says, and a hairline stays one pixel wide at every zoom.
+		static pixelsPerUnit(context: CanvasRenderingContext2D): number {
+			const matrix = context.getTransform();
+			const scale = Math.hypot(matrix.a, matrix.b);
+			return scale > 0 ? scale : 1;
 		}
 
 		/// Clip a target to a rectangle, in the coordinates it draws in.

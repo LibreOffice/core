@@ -25,8 +25,9 @@ namespace cool {
 		// Slide size in twips. The background primitive fills this rectangle.
 		private _slideWidth = 0;
 		private _slideHeight = 0;
-		private _scratch = new VectorScratchCanvases();
-		private _gradients = new VectorGradientPrimitiveRenderer(this._scratch);
+		private _scratch: VectorScratchCanvases;
+		private _gradients: VectorGradientPrimitiveRenderer;
+		private _fillGraphics: VectorFillGraphicPrimitiveRenderer;
 		// Whether the content an editing view alone shows is drawn. Every
 		// entry point sets it from what the render is for, so it never
 		// carries over from an earlier render.
@@ -35,6 +36,9 @@ namespace cool {
 		constructor(bitmapLookup?: BitmapLookup, fontLoaded?: FontLoadedLookup) {
 			this._bitmapLookup = bitmapLookup;
 			this._fontLoaded = fontLoaded;
+			this._scratch = new VectorScratchCanvases();
+			this._gradients = new VectorGradientPrimitiveRenderer(this._scratch);
+			this._fillGraphics = new VectorFillGraphicPrimitiveRenderer(bitmapLookup);
 		}
 
 		/// Set the slide size in twips before rendering a primitive tree, so the
@@ -123,6 +127,18 @@ namespace cool {
 				case FillHatchPrimitive.type:
 				case PolyPolygonHatchPrimitive.type:
 					this._renderHatch(context, primitive as FillHatchPrimitive);
+					break;
+				case FillGraphicPrimitive.type:
+					this._fillGraphics.renderFillGraphic(
+						context,
+						primitive as FillGraphicPrimitive,
+					);
+					break;
+				case PolyPolygonGraphicPrimitive.type:
+					this._fillGraphics.renderPolyPolygonGraphic(
+						context,
+						primitive as PolyPolygonGraphicPrimitive,
+					);
 					break;
 				case BitmapPrimitive.type:
 					this._renderBitmap(context, primitive as BitmapPrimitive);
@@ -688,15 +704,6 @@ namespace cool {
 			context.restore();
 		}
 
-		// Pixels per twip along the x axis of the active transform.
-		// Canvas measures a blur radius in pixels whatever the transform
-		// says, and a hairline stays one pixel wide at every zoom.
-		private _pixelsPerUnit(context: CanvasRenderingContext2D): number {
-			const matrix = context.getTransform();
-			const scale = Math.hypot(matrix.a, matrix.b);
-			return scale > 0 ? scale : 1;
-		}
-
 		private _renderHatch(
 			context: CanvasRenderingContext2D,
 			primitive: FillHatchPrimitive | PolyPolygonHatchPrimitive,
@@ -737,7 +744,7 @@ namespace cool {
 			layout: Range2D,
 			area: Range2D,
 		): void {
-			const pixels = this._pixelsPerUnit(context);
+			const pixels = VectorScratchCanvases.pixelsPerUnit(context);
 			const distance = hatch.distance ?? 0;
 			if (!(distance > 0)) return;
 

@@ -487,11 +487,14 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/PolyPolygonRGBAPrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonStrokePrimitive.ts \
 	src/canvas/vector/primitive/FillGradientPrimitive.ts \
+	src/canvas/vector/primitive/FillGraphicAttribute.ts \
+	src/canvas/vector/primitive/FillGraphicPrimitive.ts \
 	src/canvas/vector/primitive/FillHatchPrimitive.ts \
 	src/canvas/vector/primitive/GradientAttribute.ts \
 	src/canvas/vector/primitive/HatchAttribute.ts \
 	src/canvas/vector/primitive/PolyPolygonAlphaGradientPrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonGradientPrimitive.ts \
+	src/canvas/vector/primitive/PolyPolygonGraphicPrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonHatchPrimitive.ts \
 	src/canvas/vector/primitive/Primitive.ts \
 	src/canvas/vector/primitive/SingleLinePrimitive.ts \
@@ -499,6 +502,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/TextSimplePortionPrimitive.ts \
 	src/canvas/vector/primitive/TransformPrimitive.ts \
 	src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts \
+	src/canvas/vector/VectorFillGraphicPrimitiveRenderer.ts \
 	src/canvas/vector/VectorGradientFrame.ts \
 	src/canvas/vector/VectorGradientPrimitiveRenderer.ts \
 	src/canvas/vector/VectorScratchCanvases.ts \
