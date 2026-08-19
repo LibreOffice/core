@@ -983,16 +983,6 @@ if test "$enable_kit_always_active" = yes; then
 fi
 AC_SUBST(ENABLE_KIT_ALWAYS_ACTIVE)
 
-libo_FUZZ_ARG_ENABLE([android-editing],
-    AS_HELP_STRING([--enable-android-editing],
-        [Enable the experimental editing feature on Android.])
-)
-ENABLE_ANDROID_EDITING=
-if test "$enable_android_editing" = yes; then
-    ENABLE_ANDROID_EDITING=TRUE
-fi
-AC_SUBST([ENABLE_ANDROID_EDITING])
-
 disable_database_connectivity_dependencies()
 {
     enable_evolution2=no

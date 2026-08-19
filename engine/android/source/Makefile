@@ -7,8 +7,6 @@ endif
 
 all: link-so
 
-DISABLE_UI=TRUE
-BUILD_VARIANT=$(if $(DISABLE_UI),StrippedUI)$(if $(ENABLE_ANDROID_EDITING),Editing)Release
 BOOTSTRAPDIR=../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
@@ -17,6 +15,5 @@ native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
 	$< -j -g core -g writer -g calc -g draw -g edit > $@
 
 clean:
-	rm -rf assets assets_strippedUI build jniLibs jniLibs_debug res_generated $(OBJLOCAL)
+	rm -rf $(OBJLOCAL)
 	rm -f native-code.cxx
-	rm -f liboSettings.gradle

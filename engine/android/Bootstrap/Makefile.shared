@@ -19,13 +19,6 @@ SODEST=$(JNILIBSDIR)/$(ANDROID_APP_ABI)
 OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
 
 #
-# Helpful rules ...
-#
-
-local.properties: $(BUILDDIR)/config_host.mk
-	echo sdk.dir=$(ANDROID_SDK_DIR) >local.properties
-
-#
 # Build / link the single .so for this app
 #
 
@@ -81,46 +74,3 @@ $(SODEST)/libc++_shared.so : $(ANDROID_TOOLCHAIN)/sysroot/usr/lib/$(ANDROID_SYSR
 	cp $< $@
 
 link-so: $(SODEST)/liblo-native-code.so $(if $(filter TRUE,$(ENABLE_NSS)),$(SODEST)/nss-libraries) $(SODEST)/libc++_shared.so
-
-# If you reinstall an app several times *on the emulator*, even if you
-# uninstall it between, disk space seems to leak that won't get recycled until
-# you stop and start... No idea if this holds for a device, too. (And you
-# can't "stop" a device anyway.)
-
-stop-start-cycle:
-	$(ANDROID_SDK_DIR)/platform-tools/adb shell stop && $(ANDROID_SDK_DIR)/platform-tools/adb shell start && sleep 10
-
-# build-host specific stuff (build paths and the like) to keep build.gradle static
-liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk \
-		$(wildcard $(INSTDIR)/program/version.ini $(INSTDIR)/program/versionrc) \
-		$(SRCDIR)/android/Bootstrap/Makefile.shared
-	@echo "creating $@"
-	( \
-		echo "// created by Makefile.shared - your changes will be overridden" \
-		&& echo "ext {" \
-		&& echo "    liboSrcRoot         = '$(SRC_ROOT)'" \
-		&& echo "    liboJniLibsdir      = '$(JNILIBSDIR)'" \
-		&& echo "    liboWorkdir         = '$(WORKDIR)'" \
-		&& echo "    liboInstdir         = '$(INSTDIR)'" \
-		&& echo "    liboEtcFolder       = '$(LIBO_ETC_FOLDER)'" \
-		&& echo "    liboUreMiscFolder   = '$(LIBO_URE_MISC_FOLDER)'" \
-		&& echo "    liboSharedResFolder = '$(LIBO_SHARE_RESOURCE_FOLDER)'" \
-		&& echo "    liboUREJavaFolder   = '$(LIBO_URE_SHARE_JAVA_FOLDER)'" \
-		&& echo "    liboShareJavaFolder = '$(LIBO_SHARE_JAVA_FOLDER)'" \
-		&& echo "    liboVersionMajor    = '$(LIBO_VERSION_MAJOR)'" \
-		&& echo "    liboVersionMinor    = '$(LIBO_VERSION_MINOR)'" \
-		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \
-		&& echo "}" \
-		&& echo "android {" \
-		&& echo "    ndkPath = '$(ANDROID_NDK_DIR)'" \
-		&& echo "    ndkVersion = '$(ANDROID_NDK_VERSION)'" \
-		&& echo "}" \
-		&& echo "android.defaultConfig {" \
-		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \
-		&& echo "    minSdkVersion $(ANDROID_API_LEVEL)" \
-		&& echo "    versionCode project.hasProperty('cmdVersionCode') ? cmdVersionCode.toInteger() : $(if $(versionCode),$(versionCode),1)" \
-		&& echo "    versionName '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)'" \
-		&& echo "    buildConfigField('String', 'BUILD_ID_SHORT', '\"$(shell cd $(SRCDIR) && git log -1 --format=%h)\"')" \
-		&& echo "    buildConfigField('String', 'VENDOR', '\"$(OOO_VENDOR)\"')" \
-		&& echo "}" \
-	) > $@
