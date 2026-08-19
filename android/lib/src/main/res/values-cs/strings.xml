@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">Soubor je pouze pro čtení, ukládání je zakázáno.</string>
+    <string name="temp_file_saving_disabled">Zdrojová aplikace soubor sdílí jen pro čtení. Chcete-li provést změny, použijte „Upravit kopii“.</string>
     <string name="loading">Načítání…</string>
     <string name="cannot_open_file_chooser">Nelze otevřít dialog pro výběr souboru</string>
     <string name="failed_to_insert_image">Obrázek se nepodařilo vložit</string>

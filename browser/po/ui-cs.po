@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-16 11:53+0000\n"
+"PO-Revision-Date: 2026-08-16 13:35+0000\n"
 "Last-Translator: Michal Várady <miko.vaji@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/cs/>\n"
-"Language: \n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -415,13 +415,12 @@ msgid "Your WOPI server is not secure: SSL verification failed"
 msgstr "Server WOPI není zabezpečený: nepodařilo se ověřit SSL"
 
 #: admin/src/AdminSocketServerAudit.js:40
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"U dokumentů se neuplatňuje umístění do kontejneru: chybí capabilities nebo "
-"jmenné prostory."
+"Dokumenty nejsou účinně izolovány: chybějí capabilities, jmenné prostory a "
+"Landlock."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -547,7 +546,7 @@ msgstr "Tmavý režim"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automatická kontrola pravopisu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -559,7 +558,7 @@ msgstr "Výchozí přiblížení"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Jemné posouvání"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -1283,9 +1282,8 @@ msgid "file type icon"
 msgstr "ikona typu souboru"
 
 #: src/app/TableStylesService.ts:103
-#, fuzzy
 msgid "Light"
-msgstr "Světla"
+msgstr "Světlé"
 
 #: src/app/TableStylesService.ts:105
 msgid "Medium"
@@ -1372,9 +1370,8 @@ msgid "Resolved"
 msgstr "Vyřešit"
 
 #: src/canvas/sections/CommentSection.ts:613
-#, fuzzy
 msgid "Removed"
-msgstr "Odstranit"
+msgstr "Odstraněno"
 
 #: src/canvas/sections/CommentSection.ts:1237
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1604,14 +1601,12 @@ msgid "Natural"
 msgstr "Přirozený"
 
 #: src/control/Control.AIChatSidebar.ts:165
-#, fuzzy
 msgid "Formal"
-msgstr "Formát"
+msgstr "Formální"
 
 #: src/control/Control.AIChatSidebar.ts:166
-#, fuzzy
 msgid "Short"
-msgstr "Řadit"
+msgstr "Stručný"
 
 #: src/control/Control.AIChatSidebar.ts:167
 msgid "Friendly"
@@ -1750,9 +1745,8 @@ msgstr "s emoji"
 #: src/control/Control.AIChatSidebar.ts:1075
 #: src/control/Control.AIChatSidebar.ts:1125
 #: src/control/Control.AIChatSidebar.ts:1497
-#, fuzzy
 msgid "tone"
-msgstr "Žádný"
+msgstr "tón"
 
 #: src/control/Control.AIChatSidebar.ts:1088
 #: src/control/Control.AIChatSidebar.ts:1359
@@ -1772,9 +1766,8 @@ msgid "Your tones"
 msgstr "Vaše tóny"
 
 #: src/control/Control.AIChatSidebar.ts:1130
-#, fuzzy
 msgid "Edit tone"
-msgstr "Režim úprav"
+msgstr "Upravit tón"
 
 #: src/control/Control.AIChatSidebar.ts:1147
 msgid "+ Add my own voice"
@@ -1966,96 +1959,98 @@ msgstr "Asistent AI"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "vložit %n snímek"
+msgstr[1] "vložit %n snímky"
+msgstr[2] "vložit %n snímku"
+msgstr[3] "vložit %n snímků"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "odstranit %n snímek"
+msgstr[1] "odstranit %n snímky"
+msgstr[2] "odstranit %n snímku"
+msgstr[3] "odstranit %n snímků"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "duplikovat %n snímek"
+msgstr[1] "duplikovat %n snímky"
+msgstr[2] "duplikovat %n snímku"
+msgstr[3] "duplikovat %n snímků"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "přesunout %n snímek"
+msgstr[1] "přesunout %n snímky"
+msgstr[2] "přesunout %n snímku"
+msgstr[3] "přesunout %n snímků"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "přejmenovat %n snímek"
+msgstr[1] "přejmenovat %n snímky"
+msgstr[2] "přejmenovat %n snímku"
+msgstr[3] "přejmenovat %n snímků"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "změnit %n rozvržení"
+msgstr[1] "změnit %n rozvržení"
+msgstr[2] "změnit %n rozvržení"
+msgstr[3] "změnit %n rozvržení"
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "nastavit text na %n místě"
+msgstr[1] "nastavit text na %n místech"
+msgstr[2] "nastavit text na %n místa"
+msgstr[3] "nastavit text na %n místech"
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "formátovat text na %n místě"
+msgstr[1] "formátovat text na %n místech"
+msgstr[2] "formátovat text na %n místa"
+msgstr[3] "formátovat text na %n místech"
 
 #: src/control/Control.AIChatSidebar.ts:2403
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Vygenerovaný obrázek"
+msgstr[0] "vygenerovat %n obrázek"
+msgstr[1] "vygenerovat %n obrázky"
+msgstr[2] "vygenerovat %n obrázku"
+msgstr[3] "vygenerovat %n obrázků"
 
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "spustit %n příkaz dokumentu"
+msgstr[1] "spustit %n příkazy dokumentu"
+msgstr[2] "spustit %n příkazu dokumentu"
+msgstr[3] "spustit %n příkazů dokumentu"
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "spustit %n příkaz %1"
+msgstr[1] "spustit %n příkazy %1"
+msgstr[2] "spustit %n příkazu %1"
+msgstr[3] "spustit %n příkazů %1"
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "použít šablonu vzhledu „%1“"
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "Provede se: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
@@ -2130,11 +2125,11 @@ msgstr "Obsah výběru se nepodařilo zpracovat"
 
 #: src/control/Control.AIChatSidebar.ts:3005
 msgid "Design (optional):"
-msgstr ""
+msgstr "Vzhled (volitelně):"
 
 #: src/control/Control.AIChatSidebar.ts:3022
 msgid "No design"
-msgstr ""
+msgstr "Bez vzhledu"
 
 #: src/control/Control.AIChatSidebar.ts:3023
 msgid "Continue without a design template"
@@ -2145,50 +2140,52 @@ msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Zde je navržená osnova. Upravte názvy nebo popisy, odstraňte nežádoucí "
+"snímky a poté schvalte vytvoření prezentace:"
 
 #: src/control/Control.AIChatSidebar.ts:3150
 msgid "Reject outline"
-msgstr ""
+msgstr "Odmítnout osnovu"
 
 #: src/control/Control.AIChatSidebar.ts:3156
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Před schválením pojmenujte každý přidaný snímek."
 
 #: src/control/Control.AIChatSidebar.ts:3184
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Název snímku %1"
 
 #: src/control/Control.AIChatSidebar.ts:3190
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Popis snímku %1"
 
 #: src/control/Control.AIChatSidebar.ts:3196
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Odstranit snímek %1"
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Slide title"
-msgstr ""
+msgstr "Název snímku"
 
 #: src/control/Control.AIChatSidebar.ts:3256
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Co má tento snímek obsahovat"
 
 #: src/control/Control.AIChatSidebar.ts:3281
 msgid "Add slide"
-msgstr ""
+msgstr "Přidat snímek"
 
 #: src/control/Control.AIChatSidebar.ts:3319
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Osnova schválena – vytváří se prezentace (snímků: %1)."
 
 #: src/control/Control.AIChatSidebar.ts:3328
 msgid "Outline rejected."
-msgstr ""
+msgstr "Osnova odmítnuta."
 
 #: src/control/Control.AIChatSidebar.ts:3364
 msgid "Building slides..."
-msgstr ""
+msgstr "Vytvářejí se snímky…"
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "Formula analysis timeout"
@@ -2219,14 +2216,12 @@ msgid "I have a formula error in my spreadsheet."
 msgstr "V sešitu mám chybu ve vzorci."
 
 #: src/control/Control.AIChatSidebar.ts:3469
-#, fuzzy
 msgid "Cell"
-msgstr "Buňky"
+msgstr "Buňka"
 
 #: src/control/Control.AIChatSidebar.ts:3473
-#, fuzzy
 msgid "Sheet"
-msgstr "Listy"
+msgstr "List"
 
 #: src/control/Control.AIChatSidebar.ts:3477
 msgid "contains"
@@ -2264,9 +2259,8 @@ msgstr ""
 "na který lze klepnout: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:3514
-#, fuzzy
 msgid "formula"
-msgstr "Vzorec"
+msgstr "vzorec"
 
 #: src/control/Control.AIChatSidebar.ts:3516
 msgid "ERROR"
@@ -2277,18 +2271,16 @@ msgid "value"
 msgstr "hodnota"
 
 #: src/control/Control.AIChatSidebar.ts:3540
-#, fuzzy
 msgid "text"
-msgstr "Text"
+msgstr "text"
 
 #: src/control/Control.AIChatSidebar.ts:3545
 msgid "empty"
 msgstr "prázdná"
 
 #: src/control/Control.AIChatSidebar.ts:3547
-#, fuzzy
 msgid "range"
-msgstr "Oblast"
+msgstr "oblast"
 
 #: src/control/Control.AIChatSidebar.ts:3549
 msgid "errors in"
@@ -5011,10 +5003,12 @@ msgid "Expand All Sections"
 msgstr "Rozbalit všechny sekce"
 
 #: src/control/Control.PartsPreview.js:1065
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Odstranit sekci „%1“ včetně snímků (%2)?"
+msgstr[0] "Odstranit sekci „%1“ včetně %n snímku?"
+msgstr[1] "Odstranit sekci „%1“ včetně %n snímků?"
+msgstr[2] "Odstranit sekci „%1“ včetně %n snímku?"
+msgstr[3] "Odstranit sekci „%1“ včetně %n snímků?"
 
 #: src/control/Control.PartsPreview.js:1114
 msgid "Enter new section name:"
@@ -6040,7 +6034,7 @@ msgstr "Velmi volné"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Kopírovat Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6063,26 +6057,24 @@ msgid "All users"
 msgstr "Všichni uživatelé"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Zvýraznit buňky..."
+msgstr "Zvýraznit buňky podle"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Pravidla horní/dolní..."
+msgstr "Pravidla pro nejvyšší či nejnižší hodnoty"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Barevná škála"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Datový pruh"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Sada ikon"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6219,9 +6211,8 @@ msgid "Insert Comment"
 msgstr "Vložit komentář"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2448
-#, fuzzy
 msgid "Insert Note"
-msgstr "Vložit datum"
+msgstr "Vložit poznámku"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 #: src/control/jsdialog/Widget.ColorPicker.ts:153
@@ -6245,18 +6236,16 @@ msgid "Color palette"
 msgstr "Paleta barev"
 
 #: src/control/jsdialog/Widget.Combobox.js:278
-#, fuzzy
 msgid "Open "
-msgstr "Otevřít"
+msgstr "Otevřít "
 
 #: src/control/jsdialog/Widget.Combobox.js:278
 msgid " list"
 msgstr " seznam"
 
 #: src/control/jsdialog/Widget.Combobox.js:279
-#, fuzzy
 msgid "Open list"
-msgstr "Otevřít hypertextový odkaz"
+msgstr "Otevřít seznam"
 
 #: src/control/jsdialog/Widget.Combobox.js:440
 msgid "Filter entries"
@@ -6370,9 +6359,8 @@ msgid "Entering text mode"
 msgstr "Přepínání do textového režimu"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Vložit datum"
+msgstr "Režim vkládání"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -6400,19 +6388,16 @@ msgid "Shape Size"
 msgstr "Velikost tvaru"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Zavřít navigaci"
+msgstr "Navigace mezi listy"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:81
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Zavřít navigaci"
+msgstr "Navigace mezi snímky"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:82
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Zavřít navigaci"
+msgstr "Navigace mezi stránkami"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:88
 msgid "Your changes have been saved"
@@ -6909,24 +6894,24 @@ msgstr "Mimo tabulku"
 #: src/layer/marker/A11yTextInput.js:257
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n řádek"
+msgstr[1] "%n řádky"
+msgstr[2] "%n řádku"
+msgstr[3] "%n řádků"
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n sloupec"
+msgstr[1] "%n sloupce"
+msgstr[2] "%n sloupce"
+msgstr[3] "%n sloupců"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:261
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tabulka: {0} a {1}"
 
 #: src/layer/marker/A11yTextInput.js:266
 msgid "Row {0} through {1}"
@@ -7092,18 +7077,15 @@ msgstr "Naposledy uloženo:"
 
 #: src/map/Map.js:1568
 msgid "Please wait!"
-msgstr "Počkejte"
+msgstr "Počkejte!"
 
 #: src/map/handler/Map.Feedback.js:95
 msgid "Please send us your feedback"
 msgstr "Zašlete nám zpětnou vazbu"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr ""
-"Soubor typu: {0} nelze nahrát na server, protože tento soubor není nijak "
-"nazván"
+msgstr "Soubor typu {0} nelze vložit, protože nemá název"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -7115,10 +7097,8 @@ msgstr ""
 "nazván"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr ""
-"Soubor typu: {0} nelze nahrát na server, protože tento soubor je prázdný"
+msgstr "Soubor typu {0} nelze vložit, protože je prázdný"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -7275,14 +7255,12 @@ msgid "Next Slide"
 msgstr "Následující snímek"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Předchozí snímek"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Vložit snímek"
+msgstr "Poslední snímek"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:871
@@ -7337,9 +7315,8 @@ msgid "Present to all"
 msgstr "Prezentovat všem"
 
 #: src/slideshow/PresenterConsole.js:43
-#, fuzzy
 msgid "Exit"
-msgstr "Upravit"
+msgstr "Ukončit"
 
 #: src/slideshow/PresenterConsole.js:44
 msgid "Go Back"
@@ -7387,10 +7364,12 @@ msgid "No Notes"
 msgstr "Bez poznámek"
 
 #: src/slideshow/PresenterConsole.js:1658
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Opakovat za {0} sekund"
+msgstr[0] "Opakovat za %n sekundu"
+msgstr[1] "Opakovat za %n sekundy"
+msgstr[2] "Opakovat za %n sekundy"
+msgstr[3] "Opakovat za %n sekund"
 
 #: src/slideshow/PresenterConsole.js:1665
 #: src/slideshow/SlideShowPresenter.ts:663
@@ -7589,12 +7568,10 @@ msgid "Get Involved"
 msgstr "Zapojte se"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -7605,14 +7582,13 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"Chcete se zapojit, ale nevíte, kde začít? Sestavte si CODE podle <a target="
-"\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/post/"
-"build-code/\">návodu popisujícího krok za krokem</a>. Je také možné pomoci s "
-"<a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline.github."
-"io/post/translate/\">překlady</a> a nebo prostřednictvím <a target=\"_blank\""
-" rel=\"noopener\" href=\"https://www.collaboraonline.org/post/filebugs/\""
-">vyplňování hlášení chyb</a>, jejichž součástí je popis kroků nezbytných k "
-"vyvolání chyby."
+"Chcete se zapojit, ale nevíte, kde začít? Podle <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraoffice.org/post/build-code/\">"
+"podrobného návodu</a> můžete sestavit CODE od základů. Pomoci můžete také s "
+"<a target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/translate/\">překlady</a> nebo <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/filebugs/\">nahlášením chyby</a> "
+"včetně všech podstatných kroků k jejímu zopakování."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
