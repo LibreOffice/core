@@ -2120,8 +2120,7 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
         else if (HasAlpha())
         {
             // clear bitmap with dest color
-            AlphaMask aAlphaMask(CreateAlphaMask());
-            Bitmap aTmpBitmap(CreateColorBitmap());
+            auto [ aTmpBitmap, aAlphaMask ] = SplitIntoColorAndAlpha();
             aTmpBitmap.Erase(Color(pLastModifierReplace->getBColor()));
             aChangedBitmap = createBitmapFromColorAndAlpha(aTmpBitmap, aAlphaMask.GetBitmap());
         }
@@ -2489,11 +2488,18 @@ Bitmap Bitmap::AutoScaleBitmap(Bitmap const & aBitmap, const tools::Long aStanda
 
 void Bitmap::CombineMaskOr(Color rTransColor, sal_uInt8 nTol)
 {
-    Bitmap aColBmp = CreateColorBitmap();
-    AlphaMask aNewMask = aColBmp.CreateAlphaMask( rTransColor, nTol );
+    Bitmap aColBmp = *this;
+    AlphaMask aNewMask;
 
     if ( HasAlpha() )
-        aNewMask.AlphaCombineOr( CreateAlphaMask() );
+    {
+        std::tie(aColBmp, aNewMask) = SplitIntoColorAndAlpha();
+        aNewMask.AlphaCombineOr(aColBmp.CreateAlphaMask(rTransColor, nTol));
+    }
+    else
+    {
+        aNewMask = CreateAlphaMask(rTransColor, nTol);
+    }
 
     const MapMode aMap( maPrefMapMode );
     const Size aSize( maPrefSize );
