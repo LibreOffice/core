@@ -401,6 +401,26 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRefWithHea
     CPPUNIT_ASSERT_EQUAL(u"30"_ustr, aStrings[2].GetString());
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testChartExternalRefCache)
+{
+    // In this test, the chart series read a range in another workbook, but
+    // no formula cell
+    // reads anything there. Verify that the cached values of that range
+    // still get written out
+    createScDoc("xlsx/ExternalRefChart.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pExtLink = parseExport(u"xl/externalLinks/externalLink1.xml"_ustr);
+    CPPUNIT_ASSERT(pExtLink);
+
+    static constexpr char aRowPath[]
+        = "/x:externalLink/x:externalBook/x:sheetDataSet/x:sheetData/x:row";
+    assertXPath(pExtLink, aRowPath, 3);
+    assertXPathContent(pExtLink, OString::Concat(aRowPath) + "[1]/x:cell/x:v", u"10");
+    assertXPathContent(pExtLink, OString::Concat(aRowPath) + "[2]/x:cell/x:v", u"20");
+    assertXPathContent(pExtLink, OString::Concat(aRowPath) + "[3]/x:cell/x:v", u"30");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRefColumn)
 {
     // A name whose body is a column-qualified table reference like MyTable[Score]

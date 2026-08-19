@@ -36,11 +36,11 @@ namespace ScRefTokenHelper
      * Compile an array of reference tokens from a data source range string.
      * The source range may consist of multiple ranges separated by ';'s.
      */
-    void compileRangeRepresentation(
+    SC_DLLPUBLIC void compileRangeRepresentation(
         ::std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument& rDoc,
         const sal_Unicode cSep, ::formula::FormulaGrammar::Grammar eGrammar, bool bOnly3DRef = false);
 
-    bool getRangeFromToken(const ScDocument* pDoc, ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
+    SC_DLLPUBLIC bool getRangeFromToken(const ScDocument* pDoc, ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
 
     void getRangeListFromTokens(const ScDocument* pDoc, ScRangeList& rRangeList, const ::std::vector<ScTokenRef>& pTokens, const ScAddress& rPos);
 
