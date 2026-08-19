@@ -149,6 +149,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 						else if (app.impress.partList[j].selected)
 							window.L.DomUtil.addClass(this._previewTiles[j], 'preview-img-selectedpart');
 					}
+
+					// The engine can move the current slide on its own, as it
+					// does for the slide an insert creates. The focus follows
+					// it while the sorter owns the keyboard, so a screen
+					// reader announces the slide the sorter marks as the
+					// current one.
+					if (this.hasSlideFocus() || this.partsFocused)
+						this.focusCurrentSlide();
 				}
 				this._updateSelectedSection();
 			}

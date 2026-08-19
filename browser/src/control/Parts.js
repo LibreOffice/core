@@ -416,19 +416,27 @@ window.L.Map.include({
 
 		var docLayer = this._docLayer;
 
-		// At least for Impress, we should not fire this. It causes a circular reference.
-		if (!this.isPresentationOrDrawing()) {
-			this.fire('insertpage', {
-				selectedPart: docLayer._selectedPart,
-				parts:        docLayer._parts
-			});
-		}
-
-		docLayer._parts++;
-
 		// user interaction - follow own cursor so it's visible after switch
 		if (this.userList)
 			this.userList.followUser(docLayer._getViewId());
+
+		// A presentation or drawing takes its new selection from the status the
+		// engine sends back, which names the new slide by its part number.
+		if (this.isPresentationOrDrawing()) {
+			// The click on the insert control moves the focus out of the slide
+			// sorter. Focusing the current slide again keeps the focus in the
+			// sorter, and the status that arrives moves it on to the new slide.
+			if (docLayer._preview.partsFocused)
+				docLayer._preview.focusCurrentSlide();
+			return;
+		}
+
+		this.fire('insertpage', {
+			selectedPart: docLayer._selectedPart,
+			parts:        docLayer._parts
+		});
+
+		docLayer._parts++;
 
 		// Since we know which part we want to set, use the index (instead of 'next', 'prev')
 		if (typeof nPos === 'number') {
@@ -451,10 +459,6 @@ window.L.Map.include({
 			var argument = {InsertPos: {type: 'int16', value: pos}};
 			app.socket.sendMessage('uno .uno:DuplicatePage ' + JSON.stringify(argument));
 		}
-		var docLayer = this._docLayer;
-
-		docLayer._parts++;
-		this.setPart('next');
 	},
 
 	deletePage: function (nPos) {
