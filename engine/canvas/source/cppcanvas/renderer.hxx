@@ -33,7 +33,6 @@
 #include <canvas/vclcanvasdllapi.h>
 
 #include "action.hxx"
-#include "color.hxx"
 #include "outdevstate.hxx"
 #include <ViewState.hxx>
 

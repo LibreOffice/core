@@ -60,18 +60,8 @@ namespace vcl::unotools
 {
         // Geometry conversions (vcl/tools <-> x)
 
-
-        // geometry::Real
-        css::geometry::RealSize2D          VCL_DLLPUBLIC size2DFromSize( const Size& );
-
-        Size                               VCL_DLLPUBLIC sizeFromRealSize2D( const css::geometry::RealSize2D& );
-
         // geometry::Integer
         css::geometry::IntegerSize2D       VCL_DLLPUBLIC integerSize2DFromSize( const Size& );
-
-        Size                               VCL_DLLPUBLIC sizeFromIntegerSize2D( const css::geometry::IntegerSize2D& );
-        Point                              VCL_DLLPUBLIC pointFromIntegerPoint2D( const css::geometry::IntegerPoint2D& );
-        tools::Rectangle                          VCL_DLLPUBLIC rectangleFromIntegerRectangle2D( const css::geometry::IntegerRectangle2D& );
 
         // basegfx::B2D
         Size                        VCL_DLLPUBLIC sizeFromB2DSize( const basegfx::B2DVector& );

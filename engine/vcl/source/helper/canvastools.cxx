@@ -44,18 +44,6 @@ using namespace ::com::sun::star;
 
 namespace vcl::unotools
 {
-        geometry::RealSize2D size2DFromSize( const Size& rSize )
-        {
-            return geometry::RealSize2D( rSize.Width(),
-                                         rSize.Height() );
-        }
-
-        Size sizeFromRealSize2D( const geometry::RealSize2D& rSize )
-        {
-            return Size( static_cast<tools::Long>(rSize.Width + .5),
-                         static_cast<tools::Long>(rSize.Height + .5) );
-        }
-
         ::Size sizeFromB2DSize( const basegfx::B2DVector& rVec )
         {
             return ::Size(basegfx::fround<tools::Long>(rVec.getX()),
@@ -135,24 +123,6 @@ namespace vcl::unotools
         {
             return geometry::IntegerSize2D( rSize.Width(),
                                             rSize.Height() );
-        }
-
-        Size sizeFromIntegerSize2D( const geometry::IntegerSize2D& rSize )
-        {
-            return Size( rSize.Width,
-                         rSize.Height );
-        }
-
-        Point pointFromIntegerPoint2D( const geometry::IntegerPoint2D& rPoint )
-        {
-            return Point( rPoint.X,
-                          rPoint.Y );
-        }
-
-        tools::Rectangle rectangleFromIntegerRectangle2D( const geometry::IntegerRectangle2D& rRectangle )
-        {
-            return tools::Rectangle( rRectangle.X1, rRectangle.Y1,
-                              rRectangle.X2, rRectangle.Y2 );
         }
 
 } // namespace canvas

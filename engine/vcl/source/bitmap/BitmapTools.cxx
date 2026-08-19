@@ -574,37 +574,6 @@ cpo::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp)
     return cpo::uno::Sequence< sal_Int8 >();
 }
 
-    cpo::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const geometry::IntegerRectangle2D& rect)
-    {
-        BitmapScopedReadAccess pReadAccess( rBitmap );
-        assert( pReadAccess );
-
-        // TODO(F1): Support more formats.
-        const Size aBmpSize( rBitmap.GetSizePixel() );
-
-        // for the time being, always return as BGRA
-        cpo::uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
-        sal_Int8* pRes = aRes.getArray();
-
-        int nCurrPos(0);
-        for( tools::Long y=rect.Y1;
-             y<aBmpSize.Height() && y<rect.Y2;
-             ++y )
-        {
-            for( tools::Long x=rect.X1;
-                 x<aBmpSize.Width() && x<rect.X2;
-                 ++x )
-            {
-                BitmapColor aCol = pReadAccess->GetColor( y, x );
-                pRes[ nCurrPos++ ] = aCol.GetRed();
-                pRes[ nCurrPos++ ] = aCol.GetGreen();
-                pRes[ nCurrPos++ ] = aCol.GetBlue();
-                pRes[ nCurrPos++ ] = 255 - aCol.GetAlpha();
-            }
-        }
-        return aRes;
-    }
-
     Bitmap createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack)
     {
         BitmapPalette aPalette(2);

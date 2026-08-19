@@ -2216,12 +2216,6 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     }
 }
 
-bool SwTaggedPDFHelper::IsExportTaggedPDF( const OutputDevice& rOut )
-{
-    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData*>( rOut.GetExtOutDevData() );
-    return pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF();
-}
-
 SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       OutputDevice& rOut,
                                                       const OUString& rPageRange,

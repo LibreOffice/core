@@ -38,23 +38,6 @@ using namespace ::com::sun::star;
 
 namespace svx::diagram {
 
-TypeConstant getTypeConstantForName(std::u16string_view aName)
-{
-        if (u"Type" == aName) return TypeConstant::XML_type;
-        if (u"asst" == aName) return TypeConstant::XML_asst;
-        if (u"doc" == aName) return TypeConstant::XML_doc;
-        if (u"node" == aName) return TypeConstant::XML_node;
-        if (u"norm" == aName) return TypeConstant::XML_norm;
-        if (u"parOf" == aName) return TypeConstant::XML_parOf;
-        if (u"parTrans" == aName) return TypeConstant::XML_parTrans;
-        if (u"pres" == aName) return TypeConstant::XML_pres;
-        if (u"presOf" == aName) return TypeConstant::XML_presOf;
-        if (u"presParOf" == aName) return TypeConstant::XML_presParOf;
-        if (u"rel" == aName) return TypeConstant::XML_rel;
-        if (u"sibTrans" == aName) return TypeConstant::XML_sibTrans;
-        return TypeConstant::XML_none;
-}
-
 std::u16string_view getNameForTypeConstant(TypeConstant aTypeConstant)
 {
     switch (aTypeConstant)

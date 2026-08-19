@@ -856,10 +856,6 @@ public:
     vcl::Region                         GetWindowClipRegionPixel() const;
     vcl::Region                         GetPaintRegion() const;
     bool                                IsInPaint() const;
-    // while IsInPaint returns true ExpandPaintClipRegion adds the
-    // submitted region to the paint clip region so you can
-    // paint additional parts of your window if necessary
-    void                                ExpandPaintClipRegion( const vcl::Region& rRegion );
 
     void                                SetParent( vcl::Window* pNewParent );
     vcl::Window*                        GetParent() const;

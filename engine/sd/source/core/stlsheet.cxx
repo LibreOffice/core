@@ -336,37 +336,6 @@ bool SdStyleSheet::IsUsed() const
 }
 
 /**
- * Checks if a cell style is used in two places at once.
- * Typically we modify the formatting of a single place,
- * so such style shouldn't be edited directly.
- */
-bool SdStyleSheet::IsEditable()
-{
-    if (GetFamily() != SfxStyleFamily::Frame)
-        return true;
-
-    if (!IsUserDefined())
-        return false;
-
-    bool bFoundOne = false;
-    ForAllListeners(
-        [this, &bFoundOne] (SfxListener* pListener)
-        {
-            if (pListener != this && dynamic_cast<SdStyleSheet*>(pListener))
-            {
-                bFoundOne = true;
-                return true; // break loop
-            }
-            return false;
-        });
-    if (bFoundOne)
-        return false;
-
-    std::unique_lock aGuard(m_aMutex);
-    return maModifyListeners.getLength(aGuard) <= 1;
-}
-
-/**
  * Determine the style sheet for which this dummy is for.
  */
 SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const

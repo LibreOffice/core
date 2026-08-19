@@ -245,18 +245,6 @@ namespace canvastools
             verifyInput( rArg3, pStr, 3 );
         }
 
-        /** Range checker, which throws css::lang::IllegalArgument exception, when
-            range is violated
-        */
-        template< typename NumType > inline void verifyRange( NumType arg, NumType lowerBound, NumType upperBound )
-        {
-            if( arg < lowerBound ||
-                arg > upperBound )
-            {
-                throw css::lang::IllegalArgumentException();
-            }
-        }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

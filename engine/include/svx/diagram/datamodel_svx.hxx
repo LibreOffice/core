@@ -134,7 +134,6 @@ struct SVXCORE_DLLPUBLIC Point
     void writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget);
 };
 
-TypeConstant SVXCORE_DLLPUBLIC getTypeConstantForName(std::u16string_view aName);
 std::u16string_view SVXCORE_DLLPUBLIC getNameForTypeConstant(TypeConstant aTypeConstant);
 void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint);
 

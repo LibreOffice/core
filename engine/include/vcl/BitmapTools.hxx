@@ -95,8 +95,6 @@ VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const
 
 VCL_DLLPUBLIC cpo::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
 
-VCL_DLLPUBLIC cpo::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const css::geometry::IntegerRectangle2D& rect);
-
 // helper to construct historical 8x8 bitmaps with two colors
 
 Bitmap VCL_DLLPUBLIC createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack);
