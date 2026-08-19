@@ -73,6 +73,7 @@
 #include <svl/cryptosign.hxx>
 
 #include <array>
+#include <unordered_map>
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -1321,6 +1322,16 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                 boost::property_tree::ptree poly;
                 boost::property_tree::ptree custom;
                 boost::property_tree::ptree nodes;
+
+                // Place of each marked object in the selection, so that every handle can
+                // name the object it belongs to.
+                std::unordered_map<const SdrObject*, sal_Int32> aMarkedObjectIndexes;
+                for (size_t nMarkNum = 0; nMarkNum < rMarkList.GetMarkCount(); ++nMarkNum)
+                {
+                    aMarkedObjectIndexes.emplace(rMarkList.GetMark(nMarkNum)->GetMarkedSdrObj(),
+                                                 static_cast<sal_Int32>(nMarkNum));
+                }
+
                 for (size_t i = 0; i < maHdlList.GetHdlCount(); i++)
                 {
                     SdrHdl *pHdl = maHdlList.GetHdl(i);
@@ -1328,6 +1339,14 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                     boost::property_tree::ptree point;
                     sal_Int32 kind = static_cast<sal_Int32>(pHdl->GetKind());
                     child.put("id", pHdl->GetObjHdlNum());
+                    // Position of this handle in the view's handle list. The id above only
+                    // counts within one object, so it repeats once several objects are marked.
+                    child.put("index", static_cast<sal_Int32>(i));
+                    // Place in the selection of the object this handle belongs to, counting
+                    // from zero. It is -1 for a handle that belongs to no marked object.
+                    const auto aMarkedObject = aMarkedObjectIndexes.find(pHdl->GetObj());
+                    child.put("objectIndex", aMarkedObject != aMarkedObjectIndexes.end()
+                                                 ? aMarkedObject->second : -1);
                     child.put("kind", kind);
                     child.put("pointer", static_cast<sal_Int32>(pHdl->GetPointer()));
                     Point pHdlPos = pHdl->GetPos();

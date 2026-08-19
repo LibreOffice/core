@@ -52,6 +52,7 @@
 #include <svl/lstner.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/svdhdl.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdorect.hxx>
@@ -3566,6 +3567,127 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMoveShapeHandle)
         CPPUNIT_ASSERT_EQUAL(x-1, oldX);
         CPPUNIT_ASSERT_EQUAL(y-1, oldY);
     }
+}
+
+namespace
+{
+
+// Collects every handle the selection message carries, flattening the kind groups.
+std::vector<boost::property_tree::ptree> lcl_extractHandles(std::string_view selection)
+{
+    OString aExtraInfo(selection.substr(selection.find("{")));
+    std::stringstream aStream((std::string(aExtraInfo)));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    std::vector<boost::property_tree::ptree> aHandles;
+    for (const auto& rGroup : aTree.get_child("handles").get_child("kinds"))
+        for (const auto& rKind : rGroup.second)
+            for (const auto& rHandle : rKind.second)
+                aHandles.push_back(rHandle.second);
+
+    return aHandles;
+}
+
+// The rectangle that a resize by two about the rectangle's own top-left corner gives.
+tools::Rectangle lcl_doubledAboutTopLeft(const tools::Rectangle& rRect)
+{
+    tools::Rectangle aResult(rRect);
+    aResult.SetRight(rRect.Left() + 2 * (rRect.Right() - rRect.Left()));
+    aResult.SetBottom(rRect.Top() + 2 * (rRect.Bottom() - rRect.Top()));
+    return aResult;
+}
+
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiSelectionHandleIndex)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("multi-selection.fodp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrView* pView = pViewShell->GetView();
+
+    SdrObject* pFirstObject = pPage->GetObj(0);
+    SdrObject* pSecondObject = pPage->GetObj(1);
+    CPPUNIT_ASSERT(pFirstObject);
+    CPPUNIT_ASSERT(pSecondObject);
+
+    pView->MarkObj(pFirstObject, pView->GetSdrPageView());
+    pView->MarkObj(pSecondObject, pView->GetSdrPageView(), /*bUnmark=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Two marked objects each show their own handles instead of one shared frame.
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
+    CPPUNIT_ASSERT(!aView.m_ShapeSelection.isEmpty());
+
+    // Every handle in the message says where it sits in the view's handle list, and that
+    // place holds the very same handle. Several objects are marked here, so each object
+    // contributes an id of its own that runs from zero again.
+    const std::vector<boost::property_tree::ptree> aHandles
+        = lcl_extractHandles(aView.m_ShapeSelection);
+    CPPUNIT_ASSERT(!aHandles.empty());
+    sal_Int32 nScalingHandleCount = 0;
+    for (const boost::property_tree::ptree& rHandle : aHandles)
+    {
+        const size_t nIndex = rHandle.get_child("index").get_value<size_t>();
+        const SdrHdl* pHandle = pView->GetHdlList().GetHdl(nIndex);
+        CPPUNIT_ASSERT(pHandle);
+        CPPUNIT_ASSERT_EQUAL(rHandle.get_child("kind").get_value<sal_Int32>(),
+                             static_cast<sal_Int32>(pHandle->GetKind()));
+        CPPUNIT_ASSERT_EQUAL(rHandle.get_child("id").get_value<sal_uInt32>(),
+                             pHandle->GetObjHdlNum());
+
+        // The handle also says which of the selected objects it belongs to, which is what
+        // lets a client draw one set of handles per object.
+        const sal_Int32 nObjectIndex = rHandle.get_child("objectIndex").get_value<sal_Int32>();
+        if (pHandle->GetObj() == pFirstObject)
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nObjectIndex);
+        else if (pHandle->GetObj() == pSecondObject)
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nObjectIndex);
+        else
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nObjectIndex);
+
+        if (pHandle->GetKind() >= SdrHdlKind::UpperLeft
+            && pHandle->GetKind() <= SdrHdlKind::LowerRight)
+        {
+            ++nScalingHandleCount;
+        }
+    }
+
+    // Both objects get a full set of scaling handles, not just the first one.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), nScalingHandleCount);
+
+    // Look up the bottom-right handle of the second object by the index the message gave it.
+    size_t nDragIndex = 0;
+    bool bHandleFound = false;
+    for (const boost::property_tree::ptree& rHandle : aHandles)
+    {
+        const size_t nIndex = rHandle.get_child("index").get_value<size_t>();
+        const SdrHdl* pHandle = pView->GetHdlList().GetHdl(nIndex);
+        if (pHandle->GetKind() == SdrHdlKind::LowerRight && pHandle->GetObj() == pSecondObject)
+        {
+            nDragIndex = nIndex;
+            bHandleFound = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(bHandleFound);
+
+    const tools::Rectangle aFirstBefore(pFirstObject->GetSnapRect());
+    const tools::Rectangle aSecondBefore(pSecondObject->GetSnapRect());
+
+    // Drop the handle twice as far from its object's top-left corner as it started.
+    const Point aDropPosition(
+        aSecondBefore.Right() + (aSecondBefore.Right() - aSecondBefore.Left()),
+        aSecondBefore.Bottom() + (aSecondBefore.Bottom() - aSecondBefore.Top()));
+    pView->MoveShapeHandle(nDragIndex, aDropPosition, -1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Both objects double, the one whose handle was not touched as well, and each of them
+    // keeps its own top-left corner where it was.
+    CPPUNIT_ASSERT_EQUAL(lcl_doubledAboutTopLeft(aSecondBefore), pSecondObject->GetSnapRect());
+    CPPUNIT_ASSERT_EQUAL(lcl_doubledAboutTopLeft(aFirstBefore), pFirstObject->GetSnapRect());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteUndo)

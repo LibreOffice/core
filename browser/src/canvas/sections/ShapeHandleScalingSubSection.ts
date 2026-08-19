@@ -203,9 +203,12 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			e.stopPropagation();
 
 			const ownInfo = this.sectionProperties.ownInfo;
-			// The handles are counted from zero here, where a handle that names itself counts the
-			// kinds from one, so the maths below works on the number either way.
-			const handleId = ownInfo.name ? Number(ownInfo.kind) - 1 : ownInfo.id;
+			/*
+				Which corner or edge of its own object the handle sits on, counted from zero. The
+				kind numbers these from "1" for the upper left one to "8" for the lower right, while
+				the id counts every handle the object made.
+			*/
+			const handleId = String(Number(ownInfo.kind) - 1);
 			const parentHandlerSection = this.sectionProperties.parentHandlerSection;
 
 			const p = point.clone();
@@ -250,7 +253,8 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 				...ShapeHandlesSection.handleParameters(
 					ownInfo.name
 						? { name: String(Number(committedHandleId) + 1) + '.0.0' }
-						: { id: committedHandleId }),
+						: parentHandlerSection.committedScalingHandle(
+							ownInfo, String(Number(committedHandleId) + 1))),
 				NewPosX: { type: 'long', value: newPoint[0] },
 				NewPosY: { type: 'long', value: newPoint[1] }
 			};

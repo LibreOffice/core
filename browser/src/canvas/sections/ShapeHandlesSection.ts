@@ -954,7 +954,28 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (handleInfo?.name)
 			return { HandleName: { type: 'string', value: String(handleInfo.name) } };
 
-		return { HandleNum: { type: 'long', value: handleInfo?.id } };
+		// The engine looks a number up in the handle list of the whole selection. The index is
+		// the place in that list. The id counts inside one object, so it starts from zero again
+		// for every object of a selection of several.
+		const number = handleInfo?.index ?? handleInfo?.id;
+		return { HandleNum: { type: 'long', value: number } };
+	}
+
+	/*
+		The handle of the given kind on the same object as the handle a drag started on. Keeping
+		the ratio commits the drag on another corner, and core looks a handle up in the list it
+		keeps for the whole selection, so the place in that list is what it is told.
+	*/
+	public committedScalingHandle(ownInfo: any, committedKind: string): any {
+		const siblings = this.sectionProperties.info?.handles?.kinds?.rectangle?.[committedKind];
+
+		if (Array.isArray(siblings)) {
+			const sibling = siblings.find(
+				(handle: any) => handle.objectIndex === ownInfo.objectIndex);
+			if (sibling) return sibling;
+		}
+
+		return ownInfo;
 	}
 
 	private sendShapeDragPreviewRequest(handleInfo: any, point: cool.SimplePoint) {
