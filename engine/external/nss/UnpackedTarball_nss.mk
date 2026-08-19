@@ -42,6 +42,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
         external/nss/nss.nowerror.patch \
         external/nss/nss.utf8bom.patch.1) \
     external/nss/outofbounds.patch.0 \
+    external/nss/nss-skip-command-line-tools.patch.1 \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)

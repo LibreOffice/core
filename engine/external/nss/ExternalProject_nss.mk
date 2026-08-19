@@ -43,6 +43,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 			NSS_DISABLE_GTESTS=1 \
+			NSS_DISABLE_CMD_TOOLS=1 \
 			CCC="$(CXX)" \
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
@@ -80,6 +81,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			$(if $(CROSS_COMPILING),NSINSTALL="$(if $(filter MACOSX,$(OS_FOR_BUILD)),xcrun python3,$(call gb_ExternalExecutable_get_command,python)) $(SRCDIR)/external/nss/nsinstall.py") \
 			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android OS_TARGET_RELEASE=$(ANDROID_API_LEVEL) ARCHFLAG="" DEFAULT_COMPILER=clang ANDROID_NDK=$(ANDROID_NDK_DIR) ANDROID_TOOLCHAIN_VERSION=obsolete ANDROID_PREFIX=$(HOST_PLATFORM) ANDROID_SYSROOT=$(ANDROID_NDK_DIR)/sysroot) \
 			NSS_DISABLE_GTESTS=1 \
+			NSS_DISABLE_CMD_TOOLS=1 \
 			nss_build_all \
 		&& rm -f $(gb_UnpackedTarball_workdir)/nss/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\
