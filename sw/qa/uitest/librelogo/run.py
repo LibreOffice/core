@@ -320,6 +320,40 @@ x 3 ; draw only a few levels
     def test_custom_lock(self):
         self.check_label(True)
 
+    def run_and_get_message(self, program):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            # to check the state of LibreLogo program execution
+            xIsAlive = self.getScript("__is_alive__")
+
+            # to check the last dialog message presented by LibreLogo
+            xLastDialogMessage = self.getScript("__last_dialog_message__")
+
+            # write the given program in the document
+            type_text(xWriterEdit, program)
+
+            # run the written program
+            self.logo("run")
+
+            # wait for LibreLogo program termination closing every opened dialog
+            while xIsAlive.invoke((), (), ())[0]:
+                xCurrentTopWindow = self.xUITest.getTopFocusWindow()
+                if get_state_as_dict(xCurrentTopWindow)['WindowType'] == '130':
+                    xDialogOk = xCurrentTopWindow.getChild('ok')
+                    xDialogOk.executeAction("CLICK", tuple())
+                time.sleep(self.ui_test.get_default_sleep())
+
+            return xLastDialogMessage.invoke((), (), ())[0]
+
+    def test_print_log10(self):
+        self.assertEqual(self.run_and_get_message("print log10 1000"), "3.0")
+
+    def test_print_sqrt(self):
+        self.assertEqual(self.run_and_get_message("print sqrt 16"), "4.0")
+
+
     def set_document_default_language(self, language):
         with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
             xPages = xDialog.getChild("pages")
