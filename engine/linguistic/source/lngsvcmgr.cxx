@@ -180,15 +180,15 @@ public:
     LngSvcMgrListenerHelper& operator=(const LngSvcMgrListenerHelper&) = delete;
 
     // lang::XEventListener
-    virtual void SAL_CALL
+    virtual void
         disposing( const lang::EventObject& rSource ) override;
 
     // linguistic2::XLinguServiceEventListener
-    virtual void SAL_CALL
+    virtual void
         processLinguServiceEvent( const linguistic2::LinguServiceEvent& aLngSvcEvent ) override;
 
     // linguistic2::XDictionaryListEventListener
-    virtual void SAL_CALL
+    virtual void
         processDictionaryListEvent(
                 const linguistic2::DictionaryListEvent& rDicListEvent ) override;
 
@@ -224,7 +224,7 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
 }
 
 
-void SAL_CALL LngSvcMgrListenerHelper::disposing( const lang::EventObject& rSource )
+void LngSvcMgrListenerHelper::disposing( const lang::EventObject& rSource )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -266,7 +266,7 @@ void LngSvcMgrListenerHelper::AddLngSvcEvt( sal_Int16 nLngSvcEvt )
 }
 
 
-void SAL_CALL
+void
     LngSvcMgrListenerHelper::processLinguServiceEvent(
             const linguistic2::LinguServiceEvent& rLngSvcEvent )
 {
@@ -275,7 +275,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     LngSvcMgrListenerHelper::processDictionaryListEvent(
             const linguistic2::DictionaryListEvent& rDicListEvent )
 {
@@ -1270,7 +1270,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 }
 
 
-uno::Reference< linguistic2::XSpellChecker > SAL_CALL
+uno::Reference< linguistic2::XSpellChecker >
     LngSvcMgr::getSpellChecker()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -1289,7 +1289,7 @@ uno::Reference< linguistic2::XSpellChecker > SAL_CALL
 }
 
 
-uno::Reference< linguistic2::XHyphenator > SAL_CALL
+uno::Reference< linguistic2::XHyphenator >
     LngSvcMgr::getHyphenator()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -1307,7 +1307,7 @@ uno::Reference< linguistic2::XHyphenator > SAL_CALL
 }
 
 
-uno::Reference< linguistic2::XThesaurus > SAL_CALL
+uno::Reference< linguistic2::XThesaurus >
     LngSvcMgr::getThesaurus()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -1325,7 +1325,7 @@ uno::Reference< linguistic2::XThesaurus > SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     LngSvcMgr::addLinguServiceManagerListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
@@ -1341,7 +1341,7 @@ bool SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     LngSvcMgr::removeLinguServiceManagerListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
@@ -1358,7 +1358,7 @@ bool SAL_CALL
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
     LngSvcMgr::getAvailableServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale )
@@ -1411,7 +1411,7 @@ cpo::uno::Sequence< OUString > SAL_CALL
 }
 
 
-cpo::uno::Sequence< lang::Locale > SAL_CALL
+cpo::uno::Sequence< lang::Locale >
     LngSvcMgr::getAvailableLocales(
             const OUString& rServiceName )
 {
@@ -1450,7 +1450,7 @@ static bool IsEqSvcList( const cpo::uno::Sequence< OUString > &rList1,
 }
 
 
-void SAL_CALL
+void
     LngSvcMgr::setConfiguredServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale,
@@ -1669,7 +1669,7 @@ static cpo::uno::Sequence< OUString > GetLangSvc( const cpo::uno::Any &rVal )
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
     LngSvcMgr::getConfiguredServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale )
@@ -1736,7 +1736,7 @@ cpo::uno::Sequence< OUString > SAL_CALL
 }
 
 
-void SAL_CALL
+void
     LngSvcMgr::dispose()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -1755,7 +1755,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     LngSvcMgr::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
@@ -1768,7 +1768,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     LngSvcMgr::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
@@ -1793,21 +1793,21 @@ bool LngSvcMgr::AddLngSvcEvtBroadcaster(
 }
 
 
-OUString SAL_CALL
+OUString
     LngSvcMgr::getImplementationName()
 {
     return u"com.sun.star.lingu2.LngSvcMgr"_ustr;
 }
 
 
-bool SAL_CALL
+bool
     LngSvcMgr::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
     LngSvcMgr::getSupportedServiceNames()
 {
     return { u"com.sun.star.linguistic2.LinguServiceManager"_ustr };

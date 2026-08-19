@@ -183,11 +183,11 @@ public:
     void            Deactivate();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override final;
+    virtual void disposing( const css::lang::EventObject& Source ) override final;
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override final;
-    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override final;
+    virtual void queryTermination( const css::lang::EventObject& aEvent ) override final;
+    virtual void notifyTermination( const css::lang::EventObject& aEvent ) override final;
 };
 
 }   // namespace linguistic

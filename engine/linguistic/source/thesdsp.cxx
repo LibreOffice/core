@@ -70,7 +70,7 @@ void ThesaurusDispatcher::ClearSvcList()
 }
 
 
-Sequence< Locale > SAL_CALL
+Sequence< Locale >
     ThesaurusDispatcher::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -85,7 +85,7 @@ Sequence< Locale > SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     ThesaurusDispatcher::hasLocale( const Locale& rLocale )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -94,7 +94,7 @@ bool SAL_CALL
 }
 
 
-Sequence< Reference< XMeaning > > SAL_CALL
+Sequence< Reference< XMeaning > >
     ThesaurusDispatcher::queryMeanings(
             const OUString& rTerm, const Locale& rLocale,
             const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )

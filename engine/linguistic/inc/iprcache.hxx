@@ -59,13 +59,13 @@ public:
     void        SetPropSet( css::uno::Reference< css::linguistic2::XLinguProperties > const &rPS );
 
     //XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) override;
+    virtual void disposing( const css::lang::EventObject& rSource ) override;
 
     // XDictionaryListEventListener
-    virtual void SAL_CALL processDictionaryListEvent( const css::linguistic2::DictionaryListEvent& rDicListEvent ) override;
+    virtual void processDictionaryListEvent( const css::linguistic2::DictionaryListEvent& rDicListEvent ) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
+    virtual void propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
 };
 
 

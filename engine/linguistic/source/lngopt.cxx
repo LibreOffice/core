@@ -196,7 +196,7 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
         pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
 }
 
-Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()
+Reference< XPropertySetInfo > LinguProps::getPropertySetInfo()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -205,7 +205,7 @@ Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()
     return aRef;
 }
 
-void SAL_CALL LinguProps::setPropertyValue(
+void LinguProps::setPropertyValue(
             const OUString& rPropertyName, const Any& rValue )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -223,7 +223,7 @@ void SAL_CALL LinguProps::setPropertyValue(
     }
 }
 
-Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
+Any LinguProps::getPropertyValue( const OUString& rPropertyName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -238,7 +238,7 @@ Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
     return aRet;
 }
 
-void SAL_CALL LinguProps::addPropertyChangeListener(
+void LinguProps::addPropertyChangeListener(
             const OUString& rPropertyName,
             const Reference< XPropertyChangeListener >& rxListener )
 {
@@ -252,7 +252,7 @@ void SAL_CALL LinguProps::addPropertyChangeListener(
     }
 }
 
-void SAL_CALL LinguProps::removePropertyChangeListener(
+void LinguProps::removePropertyChangeListener(
             const OUString& rPropertyName,
             const Reference< XPropertyChangeListener >& rxListener )
 {
@@ -266,20 +266,20 @@ void SAL_CALL LinguProps::removePropertyChangeListener(
     }
 }
 
-void SAL_CALL LinguProps::addVetoableChangeListener(
+void LinguProps::addVetoableChangeListener(
             const OUString& /*rPropertyName*/,
             const Reference< XVetoableChangeListener >& /*xListener*/ )
 {
 }
 
-void SAL_CALL LinguProps::removeVetoableChangeListener(
+void LinguProps::removeVetoableChangeListener(
             const OUString& /*rPropertyName*/,
             const Reference< XVetoableChangeListener >& /*xListener*/ )
 {
 }
 
 
-void SAL_CALL LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
+void LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -293,7 +293,7 @@ void SAL_CALL LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rV
 }
 
 
-Any SAL_CALL LinguProps::getFastPropertyValue( sal_Int32 nHandle )
+Any LinguProps::getFastPropertyValue( sal_Int32 nHandle )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -302,7 +302,7 @@ Any SAL_CALL LinguProps::getFastPropertyValue( sal_Int32 nHandle )
 }
 
 
-Sequence< PropertyValue > SAL_CALL
+Sequence< PropertyValue >
     LinguProps::getPropertyValues()
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -316,7 +316,7 @@ Sequence< PropertyValue > SAL_CALL
     return comphelper::containerToSequence(aProps);
 }
 
-void SAL_CALL
+void
     LinguProps::setPropertyValues( const Sequence< PropertyValue >& rProps )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -327,7 +327,7 @@ void SAL_CALL
     }
 }
 
-void SAL_CALL
+void
     LinguProps::dispose()
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -346,7 +346,7 @@ void SAL_CALL
     }
 }
 
-void SAL_CALL
+void
     LinguProps::addEventListener( const Reference< XEventListener >& rxListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -355,7 +355,7 @@ void SAL_CALL
         aEvtListeners.addInterface( rxListener );
 }
 
-void SAL_CALL
+void
     LinguProps::removeEventListener( const Reference< XEventListener >& rxListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -368,19 +368,19 @@ void SAL_CALL
 // Service specific part
 
 // XServiceInfo
-OUString SAL_CALL LinguProps::getImplementationName()
+OUString LinguProps::getImplementationName()
 {
     return u"com.sun.star.lingu2.LinguProps"_ustr;
 }
 
 // XServiceInfo
-bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
+bool LinguProps::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-cpo::uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LinguProps::getSupportedServiceNames()
 {
     return { u"com.sun.star.linguistic2.LinguProperties"_ustr };
 }

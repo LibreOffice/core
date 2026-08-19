@@ -68,37 +68,37 @@ HyphenatedWord::~HyphenatedWord()
 }
 
 
-OUString SAL_CALL HyphenatedWord::getWord()
+OUString HyphenatedWord::getWord()
 {
     return aWord;
 }
 
 
-Locale SAL_CALL HyphenatedWord::getLocale()
+Locale HyphenatedWord::getLocale()
 {
     return LanguageTag::convertToLocale( nLanguage );
 }
 
 
-sal_Int16 SAL_CALL HyphenatedWord::getHyphenationPos()
+sal_Int16 HyphenatedWord::getHyphenationPos()
 {
     return nHyphenationPos;
 }
 
 
-OUString SAL_CALL HyphenatedWord::getHyphenatedWord()
+OUString HyphenatedWord::getHyphenatedWord()
 {
     return aHyphenatedWord;
 }
 
 
-sal_Int16 SAL_CALL HyphenatedWord::getHyphenPos()
+sal_Int16 HyphenatedWord::getHyphenPos()
 {
     return nHyphPos;
 }
 
 
-bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
+bool HyphenatedWord::isAlternativeSpelling()
 {
     return bIsAltSpelling;
 }
@@ -120,25 +120,25 @@ PossibleHyphens::~PossibleHyphens()
 }
 
 
-OUString SAL_CALL PossibleHyphens::getWord()
+OUString PossibleHyphens::getWord()
 {
     return aWord;
 }
 
 
-Locale SAL_CALL PossibleHyphens::getLocale()
+Locale PossibleHyphens::getLocale()
 {
     return LanguageTag::convertToLocale( nLanguage );
 }
 
 
-OUString SAL_CALL PossibleHyphens::getPossibleHyphens()
+OUString PossibleHyphens::getPossibleHyphens()
 {
     return aWordWithHyphens;
 }
 
 
-Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
+Sequence< sal_Int16 > PossibleHyphens::getHyphenationPositions()
 {
     return aOrigHyphenPos;
 }

@@ -40,7 +40,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL run()
+    virtual void run()
     {
         if (m_aAcceptorSocket.acceptConnection(m_aStreamSocket) != osl_Socket_Ok)
         {

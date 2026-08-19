@@ -82,7 +82,7 @@ public:
     }
 
     // SvXMLImportContext
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
@@ -101,8 +101,8 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
@@ -119,8 +119,8 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     const OUString &    GetLeftText() const { return aLeftText; }
@@ -143,8 +143,8 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
-    virtual void SAL_CALL characters( const OUString &rChars ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
+    virtual void characters( const OUString &rChars ) override;
 };
 
 }

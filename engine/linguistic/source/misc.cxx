@@ -750,7 +750,7 @@ void AppExitListener::Deactivate()
         xDesktop->removeTerminateListener( this );
 }
 
-void SAL_CALL
+void
     AppExitListener::disposing( const EventObject& rEvtSource )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -761,12 +761,12 @@ void SAL_CALL
     }
 }
 
-void SAL_CALL
+void
     AppExitListener::queryTermination( const EventObject& /*rEvtSource*/ )
 {
 }
 
-void SAL_CALL
+void
     AppExitListener::notifyTermination( const EventObject& rEvtSource )
 {
     MutexGuard  aGuard( GetLinguMutex() );

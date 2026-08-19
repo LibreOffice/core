@@ -80,59 +80,59 @@ public:
     virtual ~DictionaryNeo() override;
 
     // XNamed
-    virtual OUString SAL_CALL
+    virtual OUString
         getName() override;
-    virtual void SAL_CALL
+    virtual void
         setName( const OUString& aName ) override;
 
     // XDictionary
-    virtual css::linguistic2::DictionaryType SAL_CALL
+    virtual css::linguistic2::DictionaryType
         getDictionaryType() override;
-    virtual void SAL_CALL
+    virtual void
         setActive( bool bActivate ) override;
-    virtual bool SAL_CALL
+    virtual bool
         isActive() override;
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
         getCount() override;
-    virtual css::lang::Locale SAL_CALL
+    virtual css::lang::Locale
         getLocale() override;
-    virtual void SAL_CALL
+    virtual void
         setLocale( const css::lang::Locale& aLocale ) override;
     virtual css::uno::Reference<
-            css::linguistic2::XDictionaryEntry > SAL_CALL
+            css::linguistic2::XDictionaryEntry >
         getEntry( const OUString& aWord ) override;
-    virtual bool SAL_CALL
+    virtual bool
         addEntry( const css::uno::Reference<
                 css::linguistic2::XDictionaryEntry >& xDicEntry ) override;
-    virtual bool SAL_CALL
+    virtual bool
         add( const OUString& aWord, bool bIsNegative,
                 const OUString& aRplcText ) override;
-    virtual bool SAL_CALL
+    virtual bool
         remove( const OUString& aWord ) override;
-    virtual bool SAL_CALL
+    virtual bool
         isFull() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > >
         getEntries() override;
-    virtual void SAL_CALL
+    virtual void
         clear() override;
-    virtual bool SAL_CALL
+    virtual bool
         addDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
-    virtual bool SAL_CALL
+    virtual bool
         removeDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
 
     // XStorable
-    virtual bool SAL_CALL
+    virtual bool
         hasLocation() override;
-    virtual OUString SAL_CALL
+    virtual OUString
         getLocation() override;
-    virtual bool SAL_CALL
+    virtual bool
         isReadonly() override;
-    virtual void SAL_CALL
+    virtual void
         store() override;
-    virtual void SAL_CALL
+    virtual void
         storeAsURL( const OUString& aURL,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void SAL_CALL
+    virtual void
         storeToURL( const OUString& aURL,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
 };
@@ -159,11 +159,11 @@ public:
     virtual ~DicEntry() override;
 
     // XDictionaryEntry
-    virtual OUString SAL_CALL
+    virtual OUString
         getDictionaryWord() override;
-    virtual bool SAL_CALL
+    virtual bool
         isNegative() override;
-    virtual OUString SAL_CALL
+    virtual OUString
         getReplacementText() override;
 };
 

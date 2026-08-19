@@ -71,15 +71,15 @@ public:
     SpellAlternatives& operator=( const SpellAlternatives& ) = delete;
 
     // XSpellAlternatives
-    virtual OUString SAL_CALL getWord(  ) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
-    virtual ::sal_Int16 SAL_CALL getFailureType(  ) override;
-    virtual ::sal_Int16 SAL_CALL getAlternativesCount(  ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAlternatives(  ) override;
+    virtual OUString getWord(  ) override;
+    virtual css::lang::Locale getLocale(  ) override;
+    virtual ::sal_Int16 getFailureType(  ) override;
+    virtual ::sal_Int16 getAlternativesCount(  ) override;
+    virtual cpo::uno::Sequence< OUString > getAlternatives(  ) override;
 
     // XSetSpellAlternatives
-    virtual void SAL_CALL setAlternatives( const cpo::uno::Sequence< OUString >& aAlternatives ) override;
-    virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) override;
+    virtual void setAlternatives( const cpo::uno::Sequence< OUString >& aAlternatives ) override;
+    virtual void setFailureType( ::sal_Int16 nFailureType ) override;
 
     // non-interface specific functions
     void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetWordLanguage(const OUString &rWord, LanguageType nLang);

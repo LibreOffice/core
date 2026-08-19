@@ -94,18 +94,18 @@ public:
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
 
     // XEventListener
-    virtual void SAL_CALL
+    virtual void
         disposing( const css::lang::EventObject& rSource ) override final;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL
+    virtual void
         propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual bool SAL_CALL
+    virtual bool
         addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
-    virtual bool SAL_CALL
+    virtual bool
         removeLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
 
@@ -136,7 +136,7 @@ public:
     virtual ~PropertyHelper_Thes() override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL
+    virtual void
         propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
 };
 
@@ -192,7 +192,7 @@ public:
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL
+    virtual void
         propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
 
     bool        IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
@@ -269,7 +269,7 @@ public:
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL
+    virtual void
         propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
 
     sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }

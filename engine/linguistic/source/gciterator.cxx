@@ -225,7 +225,7 @@ static lang::Locale lcl_GetPrimaryLanguageOfSentence(
 
 LngXStringKeyMap::LngXStringKeyMap() {}
 
-void SAL_CALL LngXStringKeyMap::insertValue(const OUString& aKey, const cpo::uno::Any& aValue)
+void LngXStringKeyMap::insertValue(const OUString& aKey, const cpo::uno::Any& aValue)
 {
     std::map<OUString, cpo::uno::Any>::const_iterator aIter = maMap.find(aKey);
     if (aIter != maMap.end())
@@ -234,7 +234,7 @@ void SAL_CALL LngXStringKeyMap::insertValue(const OUString& aKey, const cpo::uno
     maMap[aKey] = aValue;
 }
 
-cpo::uno::Any SAL_CALL LngXStringKeyMap::getValue(const OUString& aKey)
+cpo::uno::Any LngXStringKeyMap::getValue(const OUString& aKey)
 {
     std::map<OUString, cpo::uno::Any>::const_iterator aIter = maMap.find(aKey);
     if (aIter == maMap.end())
@@ -243,14 +243,14 @@ cpo::uno::Any SAL_CALL LngXStringKeyMap::getValue(const OUString& aKey)
     return (*aIter).second;
 }
 
-bool SAL_CALL LngXStringKeyMap::hasValue(const OUString& aKey)
+bool LngXStringKeyMap::hasValue(const OUString& aKey)
 {
     return maMap.contains(aKey);
 }
 
-::sal_Int32 SAL_CALL LngXStringKeyMap::getCount() { return maMap.size(); }
+::sal_Int32 LngXStringKeyMap::getCount() { return maMap.size(); }
 
-OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
+OUString LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 {
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maMap.size())
         throw css::lang::IndexOutOfBoundsException();
@@ -258,7 +258,7 @@ OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
     return OUString();
 }
 
-cpo::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
+cpo::uno::Any LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 {
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maMap.size())
         throw css::lang::IndexOutOfBoundsException();
@@ -785,7 +785,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 }
 
 
-void SAL_CALL GrammarCheckingIterator::startProofreading(
+void GrammarCheckingIterator::startProofreading(
     const uno::Reference< ::uno::XInterface > & xDoc,
     const uno::Reference< text::XFlatParagraphIteratorProvider > & xIteratorProvider )
 {
@@ -809,7 +809,7 @@ void SAL_CALL GrammarCheckingIterator::startProofreading(
 }
 
 
-linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceAtPosition(
+linguistic2::ProofreadingResult GrammarCheckingIterator::checkSentenceAtPosition(
     const uno::Reference< uno::XInterface >& xDoc,
     const uno::Reference< text::XFlatParagraph >& xFlatPara,
     const OUString& rText,
@@ -948,7 +948,7 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
 }
 
 
-void SAL_CALL GrammarCheckingIterator::resetIgnoreRules(  )
+void GrammarCheckingIterator::resetIgnoreRules(  )
 {
     for (auto const& elem : m_aGCReferencesByService)
     {
@@ -959,7 +959,7 @@ void SAL_CALL GrammarCheckingIterator::resetIgnoreRules(  )
 }
 
 
-bool SAL_CALL GrammarCheckingIterator::isProofreading(
+bool GrammarCheckingIterator::isProofreading(
     const uno::Reference< uno::XInterface >& xDoc )
 {
     // ---- THREAD SAFE START ----
@@ -1004,7 +1004,7 @@ bool SAL_CALL GrammarCheckingIterator::isProofreading(
 }
 
 
-void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
+void GrammarCheckingIterator::processLinguServiceEvent(
     const linguistic2::LinguServiceEvent& rLngSvcEvent )
 {
     if (rLngSvcEvent.nEvent != linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN)
@@ -1030,7 +1030,7 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
 }
 
 
-bool SAL_CALL GrammarCheckingIterator::addLinguServiceEventListener(
+bool GrammarCheckingIterator::addLinguServiceEventListener(
     const uno::Reference< linguistic2::XLinguServiceEventListener >& xListener )
 {
     if (xListener.is())
@@ -1041,7 +1041,7 @@ bool SAL_CALL GrammarCheckingIterator::addLinguServiceEventListener(
 }
 
 
-bool SAL_CALL GrammarCheckingIterator::removeLinguServiceEventListener(
+bool GrammarCheckingIterator::removeLinguServiceEventListener(
     const uno::Reference< linguistic2::XLinguServiceEventListener >& xListener )
 {
     if (xListener.is())
@@ -1052,7 +1052,7 @@ bool SAL_CALL GrammarCheckingIterator::removeLinguServiceEventListener(
 }
 
 
-void SAL_CALL GrammarCheckingIterator::dispose()
+void GrammarCheckingIterator::dispose()
 {
     lang::EventObject aEvt( static_cast<linguistic2::XProofreadingIterator *>(this) );
     m_aEventListeners.disposeAndClear( aEvt );
@@ -1083,7 +1083,7 @@ void SAL_CALL GrammarCheckingIterator::dispose()
 }
 
 
-void SAL_CALL GrammarCheckingIterator::addEventListener(
+void GrammarCheckingIterator::addEventListener(
     const uno::Reference< lang::XEventListener >& xListener )
 {
     if (xListener.is())
@@ -1093,7 +1093,7 @@ void SAL_CALL GrammarCheckingIterator::addEventListener(
 }
 
 
-void SAL_CALL GrammarCheckingIterator::removeEventListener(
+void GrammarCheckingIterator::removeEventListener(
     const uno::Reference< lang::XEventListener >& xListener )
 {
     if (xListener.is())
@@ -1103,7 +1103,7 @@ void SAL_CALL GrammarCheckingIterator::removeEventListener(
 }
 
 
-void SAL_CALL GrammarCheckingIterator::disposing( const lang::EventObject &rSource )
+void GrammarCheckingIterator::disposing( const lang::EventObject &rSource )
 {
     // if the component (document) is disposing release all references
     //!! There is no need to remove entries from the queue that are from this document
@@ -1200,20 +1200,20 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
 }
 
 
-bool SAL_CALL GrammarCheckingIterator::supportsService(
+bool GrammarCheckingIterator::supportsService(
     const OUString & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 
-OUString SAL_CALL GrammarCheckingIterator::getImplementationName(  )
+OUString GrammarCheckingIterator::getImplementationName(  )
 {
     return u"com.sun.star.lingu2.ProofreadingIterator"_ustr;
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL GrammarCheckingIterator::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > GrammarCheckingIterator::getSupportedServiceNames(  )
 {
     return  { u"com.sun.star.linguistic2.ProofreadingIterator"_ustr };
 }

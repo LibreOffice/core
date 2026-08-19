@@ -113,7 +113,7 @@ void PropertyChgHelper::LaunchEvent( const LinguServiceEvent &rEvt )
 }
 
 
-void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
+void PropertyChgHelper::disposing( const EventObject& rSource )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -126,7 +126,7 @@ void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
 }
 
 
-bool SAL_CALL
+bool
     PropertyChgHelper::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
         throw(RuntimeException)
@@ -143,7 +143,7 @@ bool SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     PropertyChgHelper::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
         throw(RuntimeException)
@@ -250,7 +250,7 @@ void PropertyHelper_Spell::SetDefault()
 }
 
 
-void SAL_CALL
+void
     PropertyHelper_Spell::propertyChange( const PropertyChangeEvent& rEvt )
         throw(RuntimeException)
 {

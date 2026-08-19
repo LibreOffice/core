@@ -83,7 +83,7 @@ HHConvDic::~HHConvDic()
 }
 
 
-void SAL_CALL HHConvDic::addEntry(
+void HHConvDic::addEntry(
         const OUString& aLeftText,
         const OUString& aRightText )
 {
@@ -97,19 +97,19 @@ void SAL_CALL HHConvDic::addEntry(
 }
 
 
-OUString SAL_CALL HHConvDic::getImplementationName(  )
+OUString HHConvDic::getImplementationName(  )
 {
     return u"com.sun.star.lingu2.HHConvDic"_ustr;
 }
 
 
-bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
+bool HHConvDic::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > HHConvDic::getSupportedServiceNames(  )
 {
     return { SN_CONV_DICTIONARY, SN_HH_CONV_DICTIONARY };
 }

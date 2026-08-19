@@ -49,17 +49,17 @@ public:
     virtual ~HyphenatedWord() override;
 
     // XHyphenatedWord
-    virtual OUString SAL_CALL
+    virtual OUString
         getWord() override;
-    virtual css::lang::Locale SAL_CALL
+    virtual css::lang::Locale
         getLocale() override;
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
         getHyphenationPos() override;
-    virtual OUString SAL_CALL
+    virtual OUString
         getHyphenatedWord() override;
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
         getHyphenPos() override;
-    virtual bool SAL_CALL
+    virtual bool
         isAlternativeSpelling() override;
 
     static css::uno::Reference <css::linguistic2::XHyphenatedWord> UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateHyphenatedWord(
@@ -89,13 +89,13 @@ public:
     virtual ~PossibleHyphens() override;
 
     // XPossibleHyphens
-    virtual OUString SAL_CALL
+    virtual OUString
         getWord() override;
-    virtual css::lang::Locale SAL_CALL
+    virtual css::lang::Locale
         getLocale() override;
-    virtual OUString SAL_CALL
+    virtual OUString
         getPossibleHyphens() override;
-    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int16 >
         getHyphenationPositions() override;
 
     static css::uno::Reference < css::linguistic2::XPossibleHyphens > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreatePossibleHyphens

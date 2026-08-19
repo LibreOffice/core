@@ -126,33 +126,33 @@ public:
     virtual ~LngSvcMgr() override;
 
     // XLinguServiceManager
-    virtual css::uno::Reference< css::linguistic2::XSpellChecker > SAL_CALL getSpellChecker(  ) override;
-    virtual css::uno::Reference< css::linguistic2::XHyphenator > SAL_CALL getHyphenator(  ) override;
-    virtual css::uno::Reference< css::linguistic2::XThesaurus > SAL_CALL getThesaurus(  ) override;
-    virtual bool SAL_CALL addLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual bool SAL_CALL removeLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
-    virtual void SAL_CALL setConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale, const cpo::uno::Sequence< OUString >& aServiceImplNames ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
+    virtual css::uno::Reference< css::linguistic2::XSpellChecker > getSpellChecker(  ) override;
+    virtual css::uno::Reference< css::linguistic2::XHyphenator > getHyphenator(  ) override;
+    virtual css::uno::Reference< css::linguistic2::XThesaurus > getThesaurus(  ) override;
+    virtual bool addLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual bool removeLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
+    virtual void setConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale, const cpo::uno::Sequence< OUString >& aServiceImplNames ) override;
+    virtual cpo::uno::Sequence< OUString > getConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
 
     // XAvailableLocales
-    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getAvailableLocales( const OUString& aServiceName ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > getAvailableLocales( const OUString& aServiceName ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose(  ) override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) override;
+    virtual void disposing( const css::lang::EventObject& rSource ) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& rEvent ) override;
+    virtual void modified( const css::lang::EventObject& rEvent ) override;
 
     // comphelper::COKit::ThreadJoinable
     virtual bool joinThreads() override;

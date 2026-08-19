@@ -83,33 +83,33 @@ public:
     virtual ~DicList() override;
 
     // XDictionaryList
-    virtual ::sal_Int16 SAL_CALL getCount(  ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary > > SAL_CALL getDictionaries(  ) override;
-    virtual css::uno::Reference< css::linguistic2::XDictionary > SAL_CALL getDictionaryByName( const OUString& aDictionaryName ) override;
-    virtual bool SAL_CALL addDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
-    virtual bool SAL_CALL removeDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
-    virtual bool SAL_CALL addDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener, bool bReceiveVerbose ) override;
-    virtual bool SAL_CALL removeDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener ) override;
-    virtual ::sal_Int16 SAL_CALL beginCollectEvents(  ) override;
-    virtual ::sal_Int16 SAL_CALL endCollectEvents(  ) override;
-    virtual ::sal_Int16 SAL_CALL flushEvents(  ) override;
-    virtual css::uno::Reference< css::linguistic2::XDictionary > SAL_CALL createDictionary( const OUString& aName, const css::lang::Locale& aLocale, css::linguistic2::DictionaryType eDicType, const OUString& aURL ) override;
+    virtual ::sal_Int16 getCount(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary > > getDictionaries(  ) override;
+    virtual css::uno::Reference< css::linguistic2::XDictionary > getDictionaryByName( const OUString& aDictionaryName ) override;
+    virtual bool addDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
+    virtual bool removeDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
+    virtual bool addDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener, bool bReceiveVerbose ) override;
+    virtual bool removeDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener ) override;
+    virtual ::sal_Int16 beginCollectEvents(  ) override;
+    virtual ::sal_Int16 endCollectEvents(  ) override;
+    virtual ::sal_Int16 flushEvents(  ) override;
+    virtual css::uno::Reference< css::linguistic2::XDictionary > createDictionary( const OUString& aName, const css::lang::Locale& aLocale, css::linguistic2::DictionaryType eDicType, const OUString& aURL ) override;
 
     // XSearchableDictionaryList
-    virtual css::uno::Reference< css::linguistic2::XDictionaryEntry > SAL_CALL queryDictionaryEntry( const OUString& aWord, const css::lang::Locale& aLocale, bool bSearchPosDics, bool bSpellEntry ) override;
+    virtual css::uno::Reference< css::linguistic2::XDictionaryEntry > queryDictionaryEntry( const OUString& aWord, const css::lang::Locale& aLocale, bool bSearchPosDics, bool bSpellEntry ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL
+    virtual void
     initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/) override;
 
     // non UNO-specific

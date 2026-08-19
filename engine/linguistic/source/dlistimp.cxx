@@ -79,11 +79,11 @@ public:
     virtual ~DicEvtListenerHelper() override;
 
     // XEventListener
-    virtual void SAL_CALL
+    virtual void
         disposing( const EventObject& rSource ) override;
 
     // XDictionaryEventListener
-    virtual void SAL_CALL
+    virtual void
         processDictionaryEvent( const DictionaryEvent& rDicEvent ) override;
 
     // non-UNO functions
@@ -122,7 +122,7 @@ void DicEvtListenerHelper::DisposeAndClear( const EventObject &rEvtObj )
 }
 
 
-void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
+void DicEvtListenerHelper::disposing( const EventObject& rSource )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -143,7 +143,7 @@ void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
 }
 
 
-void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
+void DicEvtListenerHelper::processDictionaryEvent(
             const DictionaryEvent& rDicEvent )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -369,13 +369,13 @@ sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
     return -1;
 }
 
-sal_Int16 SAL_CALL DicList::getCount()
+sal_Int16 DicList::getCount()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return static_cast< sal_Int16 >(GetOrCreateDicList().size());
 }
 
-cpo::uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< XDictionary > >
         DicList::getDictionaries()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -385,7 +385,7 @@ cpo::uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
     return comphelper::containerToSequence(rDicList);
 }
 
-uno::Reference< XDictionary > SAL_CALL
+uno::Reference< XDictionary >
         DicList::getDictionaryByName( const OUString& aDictionaryName )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -406,7 +406,7 @@ uno::Reference< XDictionary > SAL_CALL
     return xDic;
 }
 
-bool SAL_CALL DicList::addDictionary(
+bool DicList::addDictionary(
             const uno::Reference< XDictionary >& xDictionary )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -427,7 +427,7 @@ bool SAL_CALL DicList::addDictionary(
     return bRes;
 }
 
-bool SAL_CALL
+bool
     DicList::removeDictionary( const uno::Reference< XDictionary >& xDictionary )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -458,7 +458,7 @@ bool SAL_CALL
     return bRes;
 }
 
-bool SAL_CALL DicList::addDictionaryListEventListener(
+bool DicList::addDictionaryListEventListener(
             const uno::Reference< XDictionaryListEventListener >& xListener,
             bool bReceiveVerbose )
 {
@@ -477,7 +477,7 @@ bool SAL_CALL DicList::addDictionaryListEventListener(
     return bRes;
 }
 
-bool SAL_CALL DicList::removeDictionaryListEventListener(
+bool DicList::removeDictionaryListEventListener(
             const uno::Reference< XDictionaryListEventListener >& xListener )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -493,25 +493,25 @@ bool SAL_CALL DicList::removeDictionaryListEventListener(
     return bRes;
 }
 
-sal_Int16 SAL_CALL DicList::beginCollectEvents()
+sal_Int16 DicList::beginCollectEvents()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return mxDicEvtLstnrHelper->BeginCollectEvents();
 }
 
-sal_Int16 SAL_CALL DicList::endCollectEvents()
+sal_Int16 DicList::endCollectEvents()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return mxDicEvtLstnrHelper->EndCollectEvents();
 }
 
-sal_Int16 SAL_CALL DicList::flushEvents()
+sal_Int16 DicList::flushEvents()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return mxDicEvtLstnrHelper->FlushEvents();
 }
 
-uno::Reference< XDictionary > SAL_CALL
+uno::Reference< XDictionary >
     DicList::createDictionary( const OUString& rName, const Locale& rLocale,
             DictionaryType eDicType, const OUString& rURL )
 {
@@ -523,7 +523,7 @@ uno::Reference< XDictionary > SAL_CALL
 }
 
 
-uno::Reference< XDictionaryEntry > SAL_CALL
+uno::Reference< XDictionaryEntry >
     DicList::queryDictionaryEntry( const OUString& rWord, const Locale& rLocale,
             bool bSearchPosDics, bool bSearchSpellEntry )
 {
@@ -534,7 +534,7 @@ uno::Reference< XDictionaryEntry > SAL_CALL
 }
 
 
-void SAL_CALL
+void
     DicList::dispose()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -579,7 +579,7 @@ void SAL_CALL
     mxDicEvtLstnrHelper.clear();
 }
 
-void SAL_CALL
+void
     DicList::addEventListener( const uno::Reference< XEventListener >& rxListener )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -588,7 +588,7 @@ void SAL_CALL
         aEvtListeners.addInterface( rxListener );
 }
 
-void SAL_CALL
+void
     DicList::removeEventListener( const uno::Reference< XEventListener >& rxListener )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -597,7 +597,7 @@ void SAL_CALL
         aEvtListeners.removeInterface( rxListener );
 }
 
-void SAL_CALL DicList::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
+void DicList::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
 {
     osl::MutexGuard aGuard(GetLinguMutex());
 
@@ -706,18 +706,18 @@ void DicList::SaveDics()
 
 // Service specific part
 
-OUString SAL_CALL DicList::getImplementationName(  )
+OUString DicList::getImplementationName(  )
 {
     return u"com.sun.star.lingu2.DicList"_ustr;
 }
 
 
-bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
+bool DicList::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > DicList::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.linguistic2.DictionaryList"_ustr };
 }

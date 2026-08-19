@@ -57,13 +57,13 @@ public:
     virtual ~ThesaurusDispatcher() override;
 
     // XSupportedLocales
-    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale >
         getLocales() override;
-    virtual bool SAL_CALL
+    virtual bool
         hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XThesaurus
-    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
         queryMeanings( const OUString& aTerm,
                 const css::lang::Locale& aLocale,
                 const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;

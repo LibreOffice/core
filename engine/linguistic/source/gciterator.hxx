@@ -164,30 +164,30 @@ public:
     virtual ~GrammarCheckingIterator() override;
 
     // XProofreadingIterator
-    virtual void SAL_CALL startProofreading( const css::uno::Reference< css::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraphIteratorProvider >& xIteratorProvider ) override;
-    virtual css::linguistic2::ProofreadingResult SAL_CALL checkSentenceAtPosition( const css::uno::Reference< css::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraph >& xFlatParagraph, const OUString& aText, const css::lang::Locale& aLocale, ::sal_Int32 nStartOfSentencePosition, ::sal_Int32 nSuggestedBehindEndOfSentencePosition, ::sal_Int32 nErrorPositionInParagraph ) override;
-    virtual void SAL_CALL resetIgnoreRules(  ) override;
-    virtual bool SAL_CALL isProofreading( const css::uno::Reference< css::uno::XInterface >& xDocument ) override;
+    virtual void startProofreading( const css::uno::Reference< css::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraphIteratorProvider >& xIteratorProvider ) override;
+    virtual css::linguistic2::ProofreadingResult checkSentenceAtPosition( const css::uno::Reference< css::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraph >& xFlatParagraph, const OUString& aText, const css::lang::Locale& aLocale, ::sal_Int32 nStartOfSentencePosition, ::sal_Int32 nSuggestedBehindEndOfSentencePosition, ::sal_Int32 nErrorPositionInParagraph ) override;
+    virtual void resetIgnoreRules(  ) override;
+    virtual bool isProofreading( const css::uno::Reference< css::uno::XInterface >& xDocument ) override;
 
     // XLinguServiceEventListener
-    virtual void SAL_CALL processLinguServiceEvent( const css::linguistic2::LinguServiceEvent& aLngSvcEvent ) override;
+    virtual void processLinguServiceEvent( const css::linguistic2::LinguServiceEvent& aLngSvcEvent ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual bool SAL_CALL addLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& xLstnr ) override;
-    virtual bool SAL_CALL removeLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& xLstnr ) override;
+    virtual bool addLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& xLstnr ) override;
+    virtual bool removeLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& xLstnr ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose(  ) override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // LinguDispatcher
     virtual void SetServiceList( const css::lang::Locale &rLocale, const cpo::uno::Sequence< OUString > &rSvcImplNames ) override;
@@ -205,12 +205,12 @@ class LngXStringKeyMap : public ::cppu::WeakImplHelper<css::container::XStringKe
 public:
     LngXStringKeyMap();
 
-    virtual cpo::uno::Any SAL_CALL getValue(const OUString& aKey) override;
-    virtual bool SAL_CALL hasValue(const OUString& aKey) override;
-    virtual void SAL_CALL insertValue(const OUString& aKey, const cpo::uno::Any& aValue) override;
-    virtual ::sal_Int32 SAL_CALL getCount() override;
-    virtual OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) override;
-    virtual cpo::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
+    virtual cpo::uno::Any getValue(const OUString& aKey) override;
+    virtual bool hasValue(const OUString& aKey) override;
+    virtual void insertValue(const OUString& aKey, const cpo::uno::Any& aValue) override;
+    virtual ::sal_Int32 getCount() override;
+    virtual OUString getKeyByIndex(::sal_Int32 nIndex) override;
+    virtual cpo::uno::Any getValueByIndex(::sal_Int32 nIndex) override;
 
 private:
     LngXStringKeyMap(LngXStringKeyMap const &) = delete;

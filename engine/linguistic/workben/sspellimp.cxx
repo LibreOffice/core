@@ -79,7 +79,7 @@ PropertyHelper_Spell & SpellChecker::GetPropHelper_Impl()
 }
 
 
-Sequence< Locale > SAL_CALL SpellChecker::getLocales()
+Sequence< Locale > SpellChecker::getLocales()
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -97,7 +97,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 }
 
 
-bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
+bool SpellChecker::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -154,7 +154,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale & )
 }
 
 
-bool SAL_CALL
+bool
     SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
@@ -258,7 +258,7 @@ Reference< XSpellAlternatives >
 }
 
 
-Reference< XSpellAlternatives > SAL_CALL
+Reference< XSpellAlternatives >
     SpellChecker::spell( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
@@ -284,7 +284,7 @@ Reference< XSpellAlternatives > SAL_CALL
 }
 
 
-Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
+Reference< XInterface > SpellChecker_CreateInstance(
             const Reference< XMultiServiceFactory > & )
         throw(Exception)
 {
@@ -293,7 +293,7 @@ Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
 }
 
 
-bool SAL_CALL
+bool
     SpellChecker::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
@@ -309,7 +309,7 @@ bool SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     SpellChecker::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
@@ -326,7 +326,7 @@ bool SAL_CALL
 }
 
 
-OUString SAL_CALL
+OUString
     SpellChecker::getServiceDisplayName( const Locale& )
         throw(RuntimeException)
 {
@@ -335,7 +335,7 @@ OUString SAL_CALL
 }
 
 
-void SAL_CALL
+void
     SpellChecker::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
 {
@@ -363,7 +363,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     SpellChecker::dispose()
         throw(RuntimeException)
 {
@@ -378,7 +378,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     SpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -389,7 +389,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     SpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -402,20 +402,20 @@ void SAL_CALL
 
 // Service specific part
 
-OUString SAL_CALL SpellChecker::getImplementationName()
+OUString SpellChecker::getImplementationName()
         throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 
-bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
+bool SpellChecker::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SpellChecker::getSupportedServiceNames()
+Sequence< OUString > SpellChecker::getSupportedServiceNames()
         throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
@@ -430,7 +430,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 }
 
 
-bool SAL_CALL SpellChecker_writeInfo(
+bool SpellChecker_writeInfo(
             void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
 {
     try
@@ -454,7 +454,7 @@ bool SAL_CALL SpellChecker_writeInfo(
 }
 
 
-void * SAL_CALL SpellChecker_getFactory( const char * pImplName,
+void * SpellChecker_getFactory( const char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;

@@ -177,7 +177,7 @@ bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 }
 
 
-void SAL_CALL
+void
     PropertyChgHelper::propertyChange( const PropertyChangeEvent& rEvt )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -216,7 +216,7 @@ void PropertyChgHelper::LaunchEvent( const LinguServiceEvent &rEvt )
 }
 
 
-void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
+void PropertyChgHelper::disposing( const EventObject& rSource )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     if (rSource.Source == xPropSet)
@@ -228,7 +228,7 @@ void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
 }
 
 
-bool SAL_CALL
+bool
     PropertyChgHelper::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
 {
@@ -244,7 +244,7 @@ bool SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     PropertyChgHelper::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
 {
@@ -275,7 +275,7 @@ PropertyHelper_Thes::~PropertyHelper_Thes()
 }
 
 
-void SAL_CALL
+void
     PropertyHelper_Thes::propertyChange( const PropertyChangeEvent& rEvt )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -423,7 +423,7 @@ bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
 }
 
 
-void SAL_CALL
+void
     PropertyHelper_Spell::propertyChange( const PropertyChangeEvent& rEvt )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -594,7 +594,7 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
 }
 
 
-void SAL_CALL
+void
     PropertyHelper_Hyphen::propertyChange( const PropertyChangeEvent& rEvt )
 {
     MutexGuard  aGuard( GetLinguMutex() );

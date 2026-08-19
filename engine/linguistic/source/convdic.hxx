@@ -89,31 +89,31 @@ public:
     virtual ~ConvDic() override;
 
     // XConversionDictionary
-    virtual OUString SAL_CALL getName(  ) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
-    virtual sal_Int16 SAL_CALL getConversionType(  ) override;
-    virtual void SAL_CALL setActive( bool bActivate ) override;
-    virtual bool SAL_CALL isActive(  ) override;
-    virtual void SAL_CALL clear(  ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getConversionEntries( css::linguistic2::ConversionDirection eDirection ) override;
-    virtual void SAL_CALL addEntry( const OUString& aLeftText, const OUString& aRightText ) override;
-    virtual void SAL_CALL removeEntry( const OUString& aLeftText, const OUString& aRightText ) override;
-    virtual sal_Int16 SAL_CALL getMaxCharCount( css::linguistic2::ConversionDirection eDirection ) override;
+    virtual OUString getName(  ) override;
+    virtual css::lang::Locale getLocale(  ) override;
+    virtual sal_Int16 getConversionType(  ) override;
+    virtual void setActive( bool bActivate ) override;
+    virtual bool isActive(  ) override;
+    virtual void clear(  ) override;
+    virtual cpo::uno::Sequence< OUString > getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) override;
+    virtual cpo::uno::Sequence< OUString > getConversionEntries( css::linguistic2::ConversionDirection eDirection ) override;
+    virtual void addEntry( const OUString& aLeftText, const OUString& aRightText ) override;
+    virtual void removeEntry( const OUString& aLeftText, const OUString& aRightText ) override;
+    virtual sal_Int16 getMaxCharCount( css::linguistic2::ConversionDirection eDirection ) override;
 
     // XConversionPropertyType
-    virtual void SAL_CALL setPropertyType( const OUString& aLeftText, const OUString& aRightText, ::sal_Int16 nPropertyType ) override;
-    virtual ::sal_Int16 SAL_CALL getPropertyType( const OUString& aLeftText, const OUString& aRightText ) override;
+    virtual void setPropertyType( const OUString& aLeftText, const OUString& aRightText, ::sal_Int16 nPropertyType ) override;
+    virtual ::sal_Int16 getPropertyType( const OUString& aLeftText, const OUString& aRightText ) override;
 
     // XFlushable
-    virtual void SAL_CALL flush(  ) override;
-    virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
-    virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void flush(  ) override;
+    virtual void addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     bool    HasEntry( const OUString &rLeftText, std::u16string_view rRightText );
     void    AddEntry( const OUString &rLeftText, const OUString &rRightText );

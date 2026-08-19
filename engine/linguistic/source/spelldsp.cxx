@@ -168,7 +168,7 @@ SpellCheckerDispatcher::~SpellCheckerDispatcher()
 }
 
 
-Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
+Sequence< Locale > SpellCheckerDispatcher::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -182,7 +182,7 @@ Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
 }
 
 
-bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
+bool SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     SpellSvcByLangMap_t::const_iterator aIt( m_aSvcMap.find( LinguLocaleToLanguage( rLocale ) ) );
@@ -190,7 +190,7 @@ bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
 }
 
 
-bool SAL_CALL
+bool
     SpellCheckerDispatcher::isValid( const OUString& rWord, const Locale& rLocale,
             const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
 {
@@ -220,7 +220,7 @@ bool SAL_CALL
     return bRet;
 }
 
-Reference< XSpellAlternatives > SAL_CALL
+Reference< XSpellAlternatives >
     SpellCheckerDispatcher::spell( const OUString& rWord, const Locale& rLocale,
             const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
 {

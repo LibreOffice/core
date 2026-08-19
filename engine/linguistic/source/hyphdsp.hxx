@@ -74,24 +74,24 @@ public:
     virtual ~HyphenatorDispatcher() override;
 
     // XSupportedLocales
-    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale >
         getLocales() override;
-    virtual bool SAL_CALL
+    virtual bool
         hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XHyphenator
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord >
         hyphenate( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nMaxLeading,
                 const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord >
         queryAlternativeSpelling( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nIndex,
                 const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
     virtual css::uno::Reference<
-            css::linguistic2::XPossibleHyphens > SAL_CALL
+            css::linguistic2::XPossibleHyphens >
         createPossibleHyphens(
                 const OUString& aWord,
                 const css::lang::Locale& aLocale,

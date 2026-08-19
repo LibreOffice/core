@@ -103,97 +103,97 @@ class LinguProps :
 public:
     LinguProps();
 
-    virtual bool SAL_CALL getIsUseDictionaryList() override
+    virtual bool getIsUseDictionaryList() override
         { return getPropertyBool(UPN_IS_USE_DICTIONARY_LIST); }
-    virtual void SAL_CALL setIsUseDictionaryList(bool p1) override
+    virtual void setIsUseDictionaryList(bool p1) override
         { setProperty(UPN_IS_USE_DICTIONARY_LIST, p1); }
-    virtual bool SAL_CALL getIsIgnoreControlCharacters() override
+    virtual bool getIsIgnoreControlCharacters() override
         { return getPropertyBool(UPN_IS_IGNORE_CONTROL_CHARACTERS); }
-    virtual void SAL_CALL setIsIgnoreControlCharacters(bool p1) override
+    virtual void setIsIgnoreControlCharacters(bool p1) override
         { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, p1); }
-    virtual bool SAL_CALL getIsSpellUpperCase() override
+    virtual bool getIsSpellUpperCase() override
         { return getPropertyBool(UPN_IS_SPELL_UPPER_CASE); }
-    virtual void SAL_CALL setIsSpellUpperCase(bool p1) override
+    virtual void setIsSpellUpperCase(bool p1) override
         { setProperty(UPN_IS_SPELL_UPPER_CASE, p1); }
-    virtual bool SAL_CALL getIsSpellWithDigits() override
+    virtual bool getIsSpellWithDigits() override
         { return getPropertyBool(UPN_IS_SPELL_WITH_DIGITS); }
-    virtual void SAL_CALL setIsSpellWithDigits(bool p1) override
+    virtual void setIsSpellWithDigits(bool p1) override
         { setProperty(UPN_IS_SPELL_WITH_DIGITS, p1); }
-    virtual bool SAL_CALL getIsSpellCapitalization() override
+    virtual bool getIsSpellCapitalization() override
         { return false; }
-    virtual void SAL_CALL setIsSpellCapitalization(bool /*p1*/) override
+    virtual void setIsSpellCapitalization(bool /*p1*/) override
         { throw new css::beans::UnknownPropertyException( u"this deprecated property has been removed"_ustr); }
-    virtual sal_Int16 SAL_CALL getHyphMinLeading() override
+    virtual sal_Int16 getHyphMinLeading() override
         { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
-    virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) override
+    virtual void setHyphMinLeading(sal_Int16 p1) override
         { setProperty(UPN_HYPH_MIN_LEADING, p1); }
-    virtual sal_Int16 SAL_CALL getHyphMinTrailing() override
+    virtual sal_Int16 getHyphMinTrailing() override
         { return getPropertyInt16(UPN_HYPH_MIN_TRAILING); }
-    virtual void SAL_CALL setHyphMinTrailing(sal_Int16 p1) override
+    virtual void setHyphMinTrailing(sal_Int16 p1) override
         { setProperty(UPN_HYPH_MIN_TRAILING, p1); }
-    virtual sal_Int16 SAL_CALL getHyphMinWordLength() override
+    virtual sal_Int16 getHyphMinWordLength() override
         { return getPropertyInt16(UPN_HYPH_MIN_WORD_LENGTH); }
-    virtual void SAL_CALL setHyphMinWordLength(sal_Int16 p1) override
+    virtual void setHyphMinWordLength(sal_Int16 p1) override
         { setProperty(UPN_HYPH_MIN_WORD_LENGTH, p1); }
-    virtual css::lang::Locale SAL_CALL getDefaultLocale() override
+    virtual css::lang::Locale getDefaultLocale() override
         { return getPropertyLocale(UPN_DEFAULT_LOCALE); }
-    virtual void SAL_CALL setDefaultLocale(const css::lang::Locale& p1) override
+    virtual void setDefaultLocale(const css::lang::Locale& p1) override
         { setProperty(UPN_DEFAULT_LOCALE, p1); }
-    virtual bool SAL_CALL getIsHyphAuto() override
+    virtual bool getIsHyphAuto() override
         { return getPropertyBool(UPN_IS_HYPH_AUTO); }
-    virtual void SAL_CALL setIsHyphAuto(bool p1) override
+    virtual void setIsHyphAuto(bool p1) override
         { setProperty(UPN_IS_HYPH_AUTO, p1); }
-    virtual bool SAL_CALL getIsHyphSpecial() override
+    virtual bool getIsHyphSpecial() override
         { return getPropertyBool(UPN_IS_HYPH_SPECIAL); }
-    virtual void SAL_CALL setIsHyphSpecial(bool p1) override
+    virtual void setIsHyphSpecial(bool p1) override
         { setProperty(UPN_IS_HYPH_SPECIAL, p1); }
-    virtual bool SAL_CALL getIsSpellAuto() override
+    virtual bool getIsSpellAuto() override
         { return getPropertyBool(UPN_IS_SPELL_AUTO); }
-    virtual void SAL_CALL setIsSpellAuto(bool p1) override
+    virtual void setIsSpellAuto(bool p1) override
         { setProperty(UPN_IS_SPELL_AUTO, p1); }
-    virtual bool SAL_CALL getIsSpellSpecial() override
+    virtual bool getIsSpellSpecial() override
         { return getPropertyBool(UPN_IS_SPELL_SPECIAL); }
-    virtual void SAL_CALL setIsSpellSpecial(bool p1) override
+    virtual void setIsSpellSpecial(bool p1) override
         { setProperty(UPN_IS_SPELL_SPECIAL, p1); }
-    virtual bool SAL_CALL getIsWrapReverse() override
+    virtual bool getIsWrapReverse() override
         { return getPropertyBool(UPN_IS_WRAP_REVERSE); }
-    virtual void SAL_CALL setIsWrapReverse(bool p1) override
+    virtual void setIsWrapReverse(bool p1) override
         { setProperty(UPN_IS_WRAP_REVERSE, p1); }
-    virtual css::lang::Locale SAL_CALL getDefaultLocale_CJK() override
+    virtual css::lang::Locale getDefaultLocale_CJK() override
         { return getPropertyLocale(UPN_DEFAULT_LOCALE_CJK); }
-    virtual void SAL_CALL setDefaultLocale_CJK(const css::lang::Locale& p1) override
+    virtual void setDefaultLocale_CJK(const css::lang::Locale& p1) override
         { setProperty(UPN_DEFAULT_LOCALE_CJK, p1); }
-    virtual css::lang::Locale SAL_CALL getDefaultLocale_CTL() override
+    virtual css::lang::Locale getDefaultLocale_CTL() override
         { return getPropertyLocale(UPN_DEFAULT_LOCALE_CTL); }
-    virtual void SAL_CALL setDefaultLocale_CTL(const css::lang::Locale& p1) override
+    virtual void setDefaultLocale_CTL(const css::lang::Locale& p1) override
         { setProperty(UPN_DEFAULT_LOCALE_CTL, p1); }
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override;
 
     // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
+    virtual void setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getFastPropertyValue( sal_Int32 nHandle ) override;
 
     // XPropertyAccess
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues() override;
+    virtual void setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

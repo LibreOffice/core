@@ -63,21 +63,21 @@ public:
     virtual ~PropertyChgHelper();
 
     // XEventListener
-    virtual void SAL_CALL
+    virtual void
         disposing( const EventObject& rSource )
             throw(RuntimeException);
 
     // XPropertyChangeListener
-    virtual void SAL_CALL
+    virtual void
         propertyChange( const PropertyChangeEvent& rEvt )
             throw(RuntimeException) = 0;
 
     // XLinguServiceEventBroadcaster
-    virtual bool SAL_CALL
+    virtual bool
         addLinguServiceEventListener(
                 const Reference< XLinguServiceEventListener >& rxListener )
             throw(RuntimeException);
-    virtual bool SAL_CALL
+    virtual bool
         removeLinguServiceEventListener(
                 const Reference< XLinguServiceEventListener >& rxListener )
             throw(RuntimeException);
@@ -127,7 +127,7 @@ public:
     virtual ~PropertyHelper_Spell();
 
     // XPropertyChangeListener
-    virtual void SAL_CALL
+    virtual void
         propertyChange( const PropertyChangeEvent& rEvt )
             throw(RuntimeException);
 

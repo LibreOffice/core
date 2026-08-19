@@ -238,7 +238,7 @@ rtl::Reference<PossibleHyphens> HyphenatorDispatcher::buildPossHyphens(
 }
 
 
-Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
+Sequence< Locale > HyphenatorDispatcher::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -252,7 +252,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
 }
 
 
-bool SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
+bool HyphenatorDispatcher::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     HyphSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LinguLocaleToLanguage( rLocale ) ) );
@@ -260,7 +260,7 @@ bool SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
 }
 
 
-Reference< XHyphenatedWord > SAL_CALL
+Reference< XHyphenatedWord >
     HyphenatorDispatcher::hyphenate(
             const OUString& rWord, const Locale& rLocale, sal_Int16 nMaxLeading,
             const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
@@ -396,7 +396,7 @@ Reference< XHyphenatedWord > SAL_CALL
 }
 
 
-Reference< XHyphenatedWord > SAL_CALL
+Reference< XHyphenatedWord >
     HyphenatorDispatcher::queryAlternativeSpelling(
             const OUString& rWord, const Locale& rLocale, sal_Int16 nIndex,
             const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
@@ -527,7 +527,7 @@ Reference< XHyphenatedWord > SAL_CALL
 }
 
 
-Reference< XPossibleHyphens > SAL_CALL
+Reference< XPossibleHyphens >
     HyphenatorDispatcher::createPossibleHyphens(
             const OUString& rWord, const Locale& rLocale,
             const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )

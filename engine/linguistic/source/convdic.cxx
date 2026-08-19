@@ -312,42 +312,42 @@ void ConvDic::RemoveEntry( const OUString &rLeftText, const OUString &rRightText
 }
 
 
-OUString SAL_CALL ConvDic::getName(  )
+OUString ConvDic::getName(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aName;
 }
 
 
-Locale SAL_CALL ConvDic::getLocale(  )
+Locale ConvDic::getLocale(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return LanguageTag::convertToLocale( nLanguage );
 }
 
 
-sal_Int16 SAL_CALL ConvDic::getConversionType(  )
+sal_Int16 ConvDic::getConversionType(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return nConversionType;
 }
 
 
-void SAL_CALL ConvDic::setActive( bool bActivate )
+void ConvDic::setActive( bool bActivate )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     bIsActive = bActivate;
 }
 
 
-bool SAL_CALL ConvDic::isActive(  )
+bool ConvDic::isActive(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return bIsActive;
 }
 
 
-void SAL_CALL ConvDic::clear(  )
+void ConvDic::clear(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     aFromLeft .clear();
@@ -361,7 +361,7 @@ void SAL_CALL ConvDic::clear(  )
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
+cpo::uno::Sequence< OUString > ConvDic::getConversions(
         const OUString& aText,
         sal_Int32 nStartPos,
         sal_Int32 nLength,
@@ -393,7 +393,7 @@ cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
+cpo::uno::Sequence< OUString > ConvDic::getConversionEntries(
         ConversionDirection eDirection )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -423,7 +423,7 @@ cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
 }
 
 
-void SAL_CALL ConvDic::addEntry(
+void ConvDic::addEntry(
         const OUString& aLeftText,
         const OUString& aRightText )
 {
@@ -436,7 +436,7 @@ void SAL_CALL ConvDic::addEntry(
 }
 
 
-void SAL_CALL ConvDic::removeEntry(
+void ConvDic::removeEntry(
         const OUString& aLeftText,
         const OUString& aRightText )
 {
@@ -449,7 +449,7 @@ void SAL_CALL ConvDic::removeEntry(
 }
 
 
-sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
+sal_Int16 ConvDic::getMaxCharCount( ConversionDirection eDirection )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -492,7 +492,7 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
 }
 
 
-void SAL_CALL ConvDic::setPropertyType(
+void ConvDic::setPropertyType(
         const OUString& rLeftText,
         const OUString& rRightText,
         sal_Int16 nPropertyType )
@@ -509,7 +509,7 @@ void SAL_CALL ConvDic::setPropertyType(
 }
 
 
-sal_Int16 SAL_CALL ConvDic::getPropertyType(
+sal_Int16 ConvDic::getPropertyType(
         const OUString& rLeftText,
         const OUString& rRightText )
 {
@@ -530,7 +530,7 @@ sal_Int16 SAL_CALL ConvDic::getPropertyType(
 }
 
 
-void SAL_CALL ConvDic::flush(  )
+void ConvDic::flush(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -546,7 +546,7 @@ void SAL_CALL ConvDic::flush(  )
 }
 
 
-void SAL_CALL ConvDic::addFlushListener(
+void ConvDic::addFlushListener(
         const uno::Reference< util::XFlushListener >& rxListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -555,7 +555,7 @@ void SAL_CALL ConvDic::addFlushListener(
 }
 
 
-void SAL_CALL ConvDic::removeFlushListener(
+void ConvDic::removeFlushListener(
         const uno::Reference< util::XFlushListener >& rxListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -564,17 +564,17 @@ void SAL_CALL ConvDic::removeFlushListener(
 }
 
 
-OUString SAL_CALL ConvDic::getImplementationName(  )
+OUString ConvDic::getImplementationName(  )
 {
     return u"com.sun.star.lingu2.ConvDic"_ustr;
 }
 
-bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
+bool ConvDic::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > ConvDic::getSupportedServiceNames(  )
 {
     return { SN_CONV_DICTIONARY };
 }

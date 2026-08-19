@@ -128,7 +128,7 @@ void FlushListener::SetPropSet( Reference< XLinguProperties > const &rPS )
 }
 
 
-void SAL_CALL FlushListener::disposing( const EventObject& rSource )
+void FlushListener::disposing( const EventObject& rSource )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -145,7 +145,7 @@ void SAL_CALL FlushListener::disposing( const EventObject& rSource )
 }
 
 
-void SAL_CALL FlushListener::processDictionaryListEvent(
+void FlushListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -166,7 +166,7 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
 }
 
 
-void SAL_CALL FlushListener::propertyChange(
+void FlushListener::propertyChange(
             const PropertyChangeEvent& rEvt )
 {
     MutexGuard  aGuard( GetLinguMutex() );

@@ -84,20 +84,20 @@ public:
     ConvDicNameContainer& operator=(const ConvDicNameContainer&) = delete;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
     // looks for conversion dictionaries with the specified extension
     // in the directory and adds them to the container
@@ -162,18 +162,18 @@ uno::Reference< XConversionDictionary > ConvDicNameContainer::GetByName(
     return xRes;
 }
 
-cpo::uno::Type SAL_CALL ConvDicNameContainer::getElementType(  )
+cpo::uno::Type ConvDicNameContainer::getElementType(  )
 {
     return cppu::UnoType<XConversionDictionary>::get();
 }
 
-bool SAL_CALL ConvDicNameContainer::hasElements(  )
+bool ConvDicNameContainer::hasElements(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return !aConvDics.empty();
 }
 
-cpo::uno::Any SAL_CALL ConvDicNameContainer::getByName( const OUString& rName )
+cpo::uno::Any ConvDicNameContainer::getByName( const OUString& rName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     uno::Reference< XConversionDictionary > xRes( GetByName( rName ) );
@@ -182,7 +182,7 @@ cpo::uno::Any SAL_CALL ConvDicNameContainer::getByName( const OUString& rName )
     return Any( xRes );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ConvDicNameContainer::getElementNames(  )
+cpo::uno::Sequence< OUString > ConvDicNameContainer::getElementNames(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -195,13 +195,13 @@ cpo::uno::Sequence< OUString > SAL_CALL ConvDicNameContainer::getElementNames(  
     return comphelper::containerToSequence(aRes);
 }
 
-bool SAL_CALL ConvDicNameContainer::hasByName( const OUString& rName )
+bool ConvDicNameContainer::hasByName( const OUString& rName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return GetByName( rName ).is();
 }
 
-void SAL_CALL ConvDicNameContainer::replaceByName(
+void ConvDicNameContainer::replaceByName(
         const OUString& rName,
         const cpo::uno::Any& rElement )
 {
@@ -217,7 +217,7 @@ void SAL_CALL ConvDicNameContainer::replaceByName(
     aConvDics[ nRplcIdx ] = std::move(xNew);
 }
 
-void SAL_CALL ConvDicNameContainer::insertByName(
+void ConvDicNameContainer::insertByName(
         const OUString& rName,
         const Any& rElement )
 {
@@ -233,7 +233,7 @@ void SAL_CALL ConvDicNameContainer::insertByName(
     aConvDics.push_back(xNew);
 }
 
-void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
+void ConvDicNameContainer::removeByName( const OUString& rName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -382,7 +382,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
     return *mxNameContainer;
 }
 
-uno::Reference< container::XNameContainer > SAL_CALL ConvDicList::getDictionaryContainer(  )
+uno::Reference< container::XNameContainer > ConvDicList::getDictionaryContainer(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     GetNameContainer();
@@ -390,7 +390,7 @@ uno::Reference< container::XNameContainer > SAL_CALL ConvDicList::getDictionaryC
     return mxNameContainer;
 }
 
-uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
+uno::Reference< XConversionDictionary > ConvDicList::addNewDictionary(
         const OUString& rName,
         const Locale& rLocale,
         sal_Int16 nConvDicType )
@@ -423,7 +423,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
     return xRes;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
+cpo::uno::Sequence< OUString > ConvDicList::queryConversions(
         const OUString& rText,
         sal_Int32 nStartPos,
         sal_Int32 nLength,
@@ -460,7 +460,7 @@ cpo::uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
     return comphelper::containerToSequence(aRes);
 }
 
-sal_Int16 SAL_CALL ConvDicList::queryMaxCharCount(
+sal_Int16 ConvDicList::queryMaxCharCount(
         const Locale& rLocale,
         sal_Int16 nConversionDictionaryType,
         ConversionDirection eDirection )
@@ -485,7 +485,7 @@ sal_Int16 SAL_CALL ConvDicList::queryMaxCharCount(
     return nRes;
 }
 
-void SAL_CALL ConvDicList::dispose(  )
+void ConvDicList::dispose(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     if (!bDisposing)
@@ -498,7 +498,7 @@ void SAL_CALL ConvDicList::dispose(  )
     }
 }
 
-void SAL_CALL ConvDicList::addEventListener(
+void ConvDicList::addEventListener(
         const uno::Reference< XEventListener >& rxListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -506,7 +506,7 @@ void SAL_CALL ConvDicList::addEventListener(
         aEvtListeners.addInterface( rxListener );
 }
 
-void SAL_CALL ConvDicList::removeEventListener(
+void ConvDicList::removeEventListener(
         const uno::Reference< XEventListener >& rxListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -514,17 +514,17 @@ void SAL_CALL ConvDicList::removeEventListener(
         aEvtListeners.removeInterface( rxListener );
 }
 
-OUString SAL_CALL ConvDicList::getImplementationName()
+OUString ConvDicList::getImplementationName()
 {
     return u"com.sun.star.lingu2.ConvDicList"_ustr;
 }
 
-bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
+bool ConvDicList::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ConvDicList::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ConvDicList::getSupportedServiceNames()
 {
     return { u"com.sun.star.linguistic2.ConversionDictionaryList"_ustr };
 }

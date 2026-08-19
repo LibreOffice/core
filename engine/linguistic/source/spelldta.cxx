@@ -176,49 +176,49 @@ SpellAlternatives::~SpellAlternatives()
 }
 
 
-OUString SAL_CALL SpellAlternatives::getWord()
+OUString SpellAlternatives::getWord()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aWord;
 }
 
 
-Locale SAL_CALL SpellAlternatives::getLocale()
+Locale SpellAlternatives::getLocale()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return LanguageTag::convertToLocale( nLanguage );
 }
 
 
-sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
+sal_Int16 SpellAlternatives::getFailureType()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return nType;
 }
 
 
-sal_Int16 SAL_CALL SpellAlternatives::getAlternativesCount()
+sal_Int16 SpellAlternatives::getAlternativesCount()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return static_cast<sal_Int16>(aAlt.getLength());
 }
 
 
-Sequence< OUString > SAL_CALL SpellAlternatives::getAlternatives()
+Sequence< OUString > SpellAlternatives::getAlternatives()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aAlt;
 }
 
 
-void SAL_CALL SpellAlternatives::setAlternatives( const cpo::uno::Sequence< OUString >& rAlternatives )
+void SpellAlternatives::setAlternatives( const cpo::uno::Sequence< OUString >& rAlternatives )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     aAlt = rAlternatives;
 }
 
 
-void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType )
+void SpellAlternatives::setFailureType( sal_Int16 nFailureType )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     nType = nFailureType;
