@@ -584,7 +584,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev.disposeAndClear();
 
                     // draw masked content to target and restore MapMode
-                    DrawBitmap(aDstRect.TopLeft(), Bitmap(aPaint.CreateColorBitmap(), aAlpha));
+                    DrawBitmap(aDstRect.TopLeft(), Bitmap(aPaint, aAlpha));
                     EnableMapMode(bOrigMapModeEnabled);
                 }
                 else
@@ -621,7 +621,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev.disposeAndClear();
 
                     EnableMapMode( false );
-                    DrawBitmap(aDstRect.TopLeft(), Bitmap(aPaint.CreateColorBitmap(), aAlpha));
+                    DrawBitmap(aDstRect.TopLeft(), Bitmap(aPaint, aAlpha));
                     EnableMapMode( bOldMap );
                 }
             }
