@@ -260,7 +260,7 @@ public:
         {}
 
     // XInstanceProvider
-    virtual Reference< XInterface > SAL_CALL getInstance( const OUString & rName ) override;
+    virtual Reference< XInterface > getInstance( const OUString & rName ) override;
 };
 
 }
@@ -325,7 +325,7 @@ struct ODisposingListener : public WeakImplHelper< XEventListener >
     Condition cDisposed;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject & rEvt ) override;
+    virtual void disposing( const EventObject & rEvt ) override;
 
     static void waitFor( const Reference< XComponent > & xComp );
 };

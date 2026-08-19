@@ -189,7 +189,7 @@ template <class E> inline void Sequence<E>::swap(Sequence& other)
     std::swap(_pSequence, other._pSequence);
 }
 
-inline ::cpo::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
+inline ::cpo::uno::Sequence< sal_Int8 > toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence )
 {
     return * reinterpret_cast< const ::cpo::uno::Sequence< sal_Int8 > * >( &rByteSequence );
@@ -317,7 +317,7 @@ getTypeFavourChar(
 // generic sequence template
 template< class E >
 inline const ::cpo::uno::Type &
-SAL_CALL getCppuType(
+getCppuType(
     SAL_UNUSED_PARAMETER const ::cpo::uno::Sequence< E > * )
 {
     return ::cppu::getTypeFavourUnsigned(
@@ -327,7 +327,7 @@ SAL_CALL getCppuType(
 // generic sequence template for given element type (e.g. C++ arrays)
 template< class E >
 inline const ::cpo::uno::Type &
-SAL_CALL getCppuSequenceType( const ::cpo::uno::Type & rElementType )
+getCppuSequenceType( const ::cpo::uno::Type & rElementType )
 {
     if (! ::cpo::uno::Sequence< E >::s_pType)
     {
@@ -341,7 +341,7 @@ SAL_CALL getCppuSequenceType( const ::cpo::uno::Type & rElementType )
 
 // char sequence
 inline const ::cpo::uno::Type &
-SAL_CALL getCharSequenceCppuType()
+getCharSequenceCppuType()
 {
     static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = NULL;
     if (! s_pType_com_sun_star_uno_Sequence_Char)

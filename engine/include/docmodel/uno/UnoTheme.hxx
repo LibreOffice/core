@@ -34,8 +34,8 @@ public:
     std::shared_ptr<model::Theme> const& getTheme() const { return mpTheme; }
 
     // XTheme
-    OUString SAL_CALL getName() override;
-    cpo::uno::Sequence<sal_Int32> SAL_CALL getColorSet() override;
+    OUString getName() override;
+    cpo::uno::Sequence<sal_Int32> getColorSet() override;
 };
 
 namespace model::theme

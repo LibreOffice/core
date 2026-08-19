@@ -29,10 +29,10 @@
 #include "cpo/uno/Any.hxx"
 #include "cppu/cppudllapi.h"
 
-extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
+extern "C" CPPU_DLLPUBLIC rtl_uString * cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
-extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
+extern "C" CPPU_DLLPUBLIC rtl_uString * cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 

@@ -37,7 +37,7 @@
 #include "cppu/cppudllapi.h"
 #include "cppu/unotype.hxx"
 
-extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
+extern "C" CPPU_DLLPUBLIC rtl_uString * cppu_Any_extraction_failure_msg(
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
@@ -234,7 +234,7 @@ template<> bool fromAny(Any const & any, Any * value) {
 }
 
 template< class C >
-inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
+inline void operator <<= ( Any & rAny, const C & value )
 {
     const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     rAny.setValue(static_cast< const void * >( &value ), rType);
@@ -255,10 +255,10 @@ inline void operator <<= ( Any & rAny, rtl::StringNumber< sal_Unicode, nBufSize 
 template<std::size_t nBufSize>
 void operator <<=(Any &, rtl::StringNumber<sal_Unicode, nBufSize> const &) = delete;
 
-template<> void SAL_CALL operator <<=(Any &, Any const &) = delete;
+template<> void operator <<=(Any &, Any const &) = delete;
 
 template< class C >
-inline bool SAL_CALL operator >>= ( const Any & rAny, C & value )
+inline bool operator >>= ( const Any & rAny, C & value )
 {
     const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     return ::uno_type_assignData(
@@ -271,7 +271,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value )
 // bool
 
 template<>
-inline bool SAL_CALL operator >>= ( const ::cpo::uno::Any & rAny, bool & value )
+inline bool operator >>= ( const ::cpo::uno::Any & rAny, bool & value )
 {
     if (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass)
     {
@@ -282,7 +282,7 @@ inline bool SAL_CALL operator >>= ( const ::cpo::uno::Any & rAny, bool & value )
 }
 
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const bool & value )
+inline bool operator == ( const Any & rAny, const bool & value )
 {
     return (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN &&
             (value == *static_cast< bool const * >( rAny.pData )));
@@ -292,7 +292,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const bool & value )
 // byte
 
 template<>
-inline bool SAL_CALL operator >>= ( const ::cpo::uno::Any & rAny, sal_Int8 & value )
+inline bool operator >>= ( const ::cpo::uno::Any & rAny, sal_Int8 & value )
 {
     if (typelib_TypeClass_BYTE == rAny.pType->eTypeClass)
     {
@@ -304,7 +304,7 @@ inline bool SAL_CALL operator >>= ( const ::cpo::uno::Any & rAny, sal_Int8 & val
 // short
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value )
+inline bool operator >>= ( const Any & rAny, sal_Int16 & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -321,7 +321,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value )
 }
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value )
+inline bool operator >>= ( const Any & rAny, sal_uInt16 & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -339,7 +339,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value )
 // long
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value )
+inline bool operator >>= ( const Any & rAny, sal_Int32 & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -362,7 +362,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value )
 }
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value )
+inline bool operator >>= ( const Any & rAny, sal_uInt32 & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -386,7 +386,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value )
 // hyper
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value )
+inline bool operator >>= ( const Any & rAny, sal_Int64 & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -415,7 +415,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value )
 }
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value )
+inline bool operator >>= ( const Any & rAny, sal_uInt64 & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -445,7 +445,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value )
 // float
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, float & value )
+inline bool operator >>= ( const Any & rAny, float & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -468,7 +468,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, float & value )
 // double
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, double & value )
+inline bool operator >>= ( const Any & rAny, double & value )
 {
     switch (rAny.pType->eTypeClass)
     {
@@ -500,7 +500,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, double & value )
 // string
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value )
+inline bool operator >>= ( const Any & rAny, ::rtl::OUString & value )
 {
     if (typelib_TypeClass_STRING == rAny.pType->eTypeClass)
     {
@@ -511,21 +511,21 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value )
 }
 
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value )
+inline bool operator == ( const Any & rAny, const ::rtl::OUString & value )
 {
     return (typelib_TypeClass_STRING == rAny.pType->eTypeClass &&
             value == * static_cast< const ::rtl::OUString * >( rAny.pData ) );
 }
 
 template<std::size_t N>
-inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value)
+inline bool operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value)
 {
     return operator ==(rAny, rtl::OUString(value));
 }
 // type
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, cpo::uno::Type & value )
+inline bool operator >>= ( const Any & rAny, cpo::uno::Type & value )
 {
     if (typelib_TypeClass_TYPE == rAny.pType->eTypeClass)
     {
@@ -536,18 +536,18 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, cpo::uno::Type & value )
 }
 
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const cpo::uno::Type & value )
+inline bool operator == ( const Any & rAny, const cpo::uno::Type & value )
 {
     return (typelib_TypeClass_TYPE == rAny.pType->eTypeClass &&
             value.equals( * static_cast< const cpo::uno::Type * >( rAny.pData ) ));
 }
 // any
 
-template<> bool SAL_CALL operator >>=(Any const &, Any &) = delete;
+template<> bool operator >>=(Any const &, Any &) = delete;
 // interface
 
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::BaseReference & value )
+inline bool operator == ( const Any & rAny, const css::uno::BaseReference & value )
 {
     if (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass)
     {
@@ -559,7 +559,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::BaseReferen
 // operator to compare to an any.
 
 template< class C >
-inline bool SAL_CALL operator == ( const Any & rAny, const C & value )
+inline bool operator == ( const Any & rAny, const C & value )
 {
     const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     return ::uno_type_equalData(
@@ -570,7 +570,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const C & value )
 // operator to compare to an any.  may use specialized operators ==.
 
 template< class C >
-inline bool SAL_CALL operator != ( const Any & rAny, const C & value )
+inline bool operator != ( const Any & rAny, const C & value )
 {
     return (! operator == ( rAny, value ));
 }

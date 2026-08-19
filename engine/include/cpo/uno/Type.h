@@ -106,35 +106,35 @@ public:
         @param rType another type (right side)
         @return this type
     */
-    inline Type & SAL_CALL operator = ( const Type & rType );
+    inline Type & operator = ( const Type & rType );
 
-    inline Type & SAL_CALL operator = ( Type && );
+    inline Type & operator = ( Type && );
 
     /** Gets the type class of set type.
 
         @return type class of set type
     */
-    cpo::uno::TypeClass SAL_CALL getTypeClass() const
+    cpo::uno::TypeClass getTypeClass() const
         { return static_cast<cpo::uno::TypeClass>(_pType->eTypeClass); }
 
     /** Gets the name of the set type.
 
         @return name of the set type
     */
-    inline ::rtl::OUString SAL_CALL getTypeName() const;
+    inline ::rtl::OUString getTypeName() const;
 
     /** Obtains a full type description of set type.
 
         @param ppDescr [inout] type description
     */
-    void SAL_CALL getDescription( typelib_TypeDescription ** ppDescr ) const
+    void getDescription( typelib_TypeDescription ** ppDescr ) const
         { ::typelib_typedescriptionreference_getDescription( ppDescr, _pType ); }
 
     /** Gets the C typelib type description reference pointer. Does not acquire the reference!
 
         @return UNacquired type description reference
     */
-    typelib_TypeDescriptionReference * SAL_CALL getTypeLibType() const
+    typelib_TypeDescriptionReference * getTypeLibType() const
         { return _pType; }
 
     /** Tests if values of this reflected type can be assigned by values of given type.
@@ -145,7 +145,7 @@ public:
         @return true if values of this type can be assigned from values of given type,
                 false otherwise
     */
-    bool SAL_CALL isAssignableFrom( const Type & rType ) const
+    bool isAssignableFrom( const Type & rType ) const
         { return ::typelib_typedescriptionreference_isAssignableFrom( _pType, rType._pType ); }
 
     /** Compares two types.
@@ -153,21 +153,21 @@ public:
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    bool SAL_CALL equals( const Type & rType ) const
+    bool equals( const Type & rType ) const
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Equality operator: Compares two types.
 
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    bool SAL_CALL operator == ( const Type & rType ) const
+    bool operator == ( const Type & rType ) const
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Inequality operator: Compares two types.
 
         @param rType another type
         @return false if both types refer the same type, true otherwise
     */
-    bool SAL_CALL operator != ( const Type & rType ) const
+    bool operator != ( const Type & rType ) const
         { return (! ::typelib_typedescriptionreference_equals( _pType, rType._pType )); }
 };
 

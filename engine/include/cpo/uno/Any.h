@@ -122,7 +122,7 @@ public:
         @param rAny another any (right side)
         @return this any
     */
-    inline Any & SAL_CALL operator = ( const Any & rAny );
+    inline Any & operator = ( const Any & rAny );
 
 #if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     inline Any(Any && other) noexcept;
@@ -133,13 +133,13 @@ public:
 
         @return a Type object of the set value
      */
-    const cpo::uno::Type & SAL_CALL getValueType() const
+    const cpo::uno::Type & getValueType() const
         { return * reinterpret_cast< const cpo::uno::Type * >( &pType ); }
     /** Gets the type of the set value.
 
         @return the unacquired type description reference of the set value
      */
-    typelib_TypeDescriptionReference * SAL_CALL getValueTypeRef() const
+    typelib_TypeDescriptionReference * getValueTypeRef() const
         { return pType; }
 
     /** Gets the type description of the set value. Provides ownership of the type description!
@@ -147,34 +147,34 @@ public:
 
         @param ppTypeDescr a pointer to type description pointer
     */
-    void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const
+    void getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const
         { ::typelib_typedescriptionreference_getDescription( ppTypeDescr, pType ); }
 
     /** Gets the type class of the set value.
 
         @return the type class of the set value
      */
-    cpo::uno::TypeClass SAL_CALL getValueTypeClass() const
+    cpo::uno::TypeClass getValueTypeClass() const
         { return static_cast<cpo::uno::TypeClass>(pType->eTypeClass); }
 
     /** Gets the type name of the set value.
 
         @return the type name of the set value
     */
-    inline ::rtl::OUString SAL_CALL getValueTypeName() const;
+    inline ::rtl::OUString getValueTypeName() const;
 
     /** Tests if any contains a value.
 
         @return true if any has a value, false otherwise
     */
-    bool SAL_CALL hasValue() const
+    bool hasValue() const
         { return (typelib_TypeClass_VOID != pType->eTypeClass); }
 
     /** Gets a pointer to the set value.
 
         @return a pointer to the set value
     */
-    const void * SAL_CALL getValue() const
+    const void * getValue() const
         { return pData; }
 
     /** Provides a value of specified type, so you can easily write e.g.
@@ -198,21 +198,21 @@ public:
         @param pData_ pointer to value
         @param rType type of value
     */
-    inline void SAL_CALL setValue( const void * pData_, const cpo::uno::Type & rType );
+    inline void setValue( const void * pData_, const cpo::uno::Type & rType );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
 
         @param pData_ pointer to value
         @param pType_ type of value
     */
-    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescriptionReference * pType_ );
+    inline void setValue( const void * pData_, typelib_TypeDescriptionReference * pType_ );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
 
         @param pData_ pointer to value
         @param pTypeDescr type description of value
     */
-    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescription * pTypeDescr );
+    inline void setValue( const void * pData_, typelib_TypeDescription * pTypeDescr );
 
     void setValue(bool const *, cpo::uno::Type const &) = delete;
     void setValue(bool const *, typelib_TypeDescriptionReference *) = delete;
@@ -227,7 +227,7 @@ public:
     /** Clears this any. If the any already contains a value, that value will be destructed
         and its memory freed. After this has been called, the any does not contain a value.
     */
-    inline void SAL_CALL clear();
+    inline void clear();
 
     /** Tests whether this any is extractable to a value of given type.
         Widening conversion without data loss is taken into account.
@@ -235,7 +235,7 @@ public:
         @param rType destination type
         @return true if this any is extractable to value of given type (e.g. using >>= operator)
     */
-    inline bool SAL_CALL isExtractableTo( const cpo::uno::Type & rType ) const;
+    inline bool isExtractableTo( const cpo::uno::Type & rType ) const;
 
     /** Tests whether this any can provide a value of specified type.
         Widening conversion without data loss is taken into account.
@@ -252,14 +252,14 @@ public:
         @param rAny another any (right side)
         @return true if both any contains equal values
     */
-    inline bool SAL_CALL operator == ( const Any & rAny ) const;
+    inline bool operator == ( const Any & rAny ) const;
     /** Inequality operator: compares two anys.
         The values need not be of equal type, e.g. a short integer is compared to a long integer.
 
         @param rAny another any (right side)
         @return true if both any contains unequal values
     */
-    inline bool SAL_CALL operator != ( const Any & rAny ) const;
+    inline bool operator != ( const Any & rAny ) const;
 
     // Similar to Reference::query/queryThrow, these allow to simplify calling constructors of
     // Reference taking Any. queryThrow is functionally similar to get(), but doesn't require
@@ -303,7 +303,7 @@ template<> inline bool fromAny(Any const & any, Any * value);
     @param value source value (right side)
 */
 template< class C >
-inline void SAL_CALL operator <<= ( Any & rAny, const C & value );
+inline void operator <<= ( Any & rAny, const C & value );
 
 /** Template binary >>= operator to assign a value from an any.
     If the any does not contain a value that can be assigned without data loss, then this
@@ -315,7 +315,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value );
     @return true if assignment was possible without data loss
 */
 template< class C >
-inline bool SAL_CALL operator >>= ( const Any & rAny, C & value );
+inline bool operator >>= ( const Any & rAny, C & value );
 
 /** Template equality operator: compares set value of left side any to right side value.
     The values need not be of equal type, e.g. a short integer is compared to a long integer.
@@ -328,7 +328,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value );
     @return true if values are equal, false otherwise
 */
 template< class C >
-inline bool SAL_CALL operator == ( const Any & rAny, const C & value );
+inline bool operator == ( const Any & rAny, const C & value );
 /** Template inequality operator: compares set value of left side any to right side value.
     The values need not be of equal type, e.g. a short integer is compared to a long integer.
     This operator can be implemented as template member function, if all supported compilers
@@ -340,53 +340,53 @@ inline bool SAL_CALL operator == ( const Any & rAny, const C & value );
     @return true if values are unequal, false otherwise
 */
 template< class C >
-inline bool SAL_CALL operator != ( const Any & rAny, const C & value );
+inline bool operator != ( const Any & rAny, const C & value );
 
 // additional specialized >>= and == operators
 // bool
 template<>
-inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value );
+inline bool operator >>= ( Any const & rAny, bool & value );
 template<>
-inline bool SAL_CALL operator == ( Any const & rAny, bool const & value );
+inline bool operator == ( Any const & rAny, bool const & value );
 // byte
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int8 & value );
+inline bool operator >>= ( const Any & rAny, sal_Int8 & value );
 // short
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value );
+inline bool operator >>= ( const Any & rAny, sal_Int16 & value );
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value );
+inline bool operator >>= ( const Any & rAny, sal_uInt16 & value );
 // long
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value );
+inline bool operator >>= ( const Any & rAny, sal_Int32 & value );
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value );
+inline bool operator >>= ( const Any & rAny, sal_uInt32 & value );
 // hyper
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value );
+inline bool operator >>= ( const Any & rAny, sal_Int64 & value );
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value );
+inline bool operator >>= ( const Any & rAny, sal_uInt64 & value );
 // float
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, float & value );
+inline bool operator >>= ( const Any & rAny, float & value );
 // double
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, double & value );
+inline bool operator >>= ( const Any & rAny, double & value );
 // string
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value );
+inline bool operator >>= ( const Any & rAny, ::rtl::OUString & value );
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value );
+inline bool operator == ( const Any & rAny, const ::rtl::OUString & value );
 template<std::size_t N>
-inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value);
+inline bool operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value);
 // type
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, cpo::uno::Type & value );
+inline bool operator >>= ( const Any & rAny, cpo::uno::Type & value );
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const cpo::uno::Type & value );
+inline bool operator == ( const Any & rAny, const cpo::uno::Type & value );
 // interface
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::BaseReference & value );
+inline bool operator == ( const Any & rAny, const css::uno::BaseReference & value );
 
 }
 

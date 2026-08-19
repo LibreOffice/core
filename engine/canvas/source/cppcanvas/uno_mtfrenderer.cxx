@@ -36,7 +36,7 @@ public:
                  css::uno::Reference<css::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
-    sal_Int64 SAL_CALL draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
+    sal_Int64 draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
 
     // XServiceIfno
     virtual ::rtl::OUString getImplementationName() override { return u"com.sun.star.comp.rendering.MtfRenderer"_ustr; }

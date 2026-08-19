@@ -1148,7 +1148,7 @@ public:
         m_aPlain = OUString(rPlain.data(), rPlain.size(), RTL_TEXTENCODING_UTF8);
     }
 
-    cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override
+    cpo::uno::Any getTransferData(const datatransfer::DataFlavor& rFlavor) override
     {
         if (rFlavor.MimeType == m_aMarkdownFlavor.MimeType)
             return cpo::uno::Any(m_aMarkdown);
@@ -1157,12 +1157,12 @@ public:
         return {};
     }
 
-    cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+    cpo::uno::Sequence<datatransfer::DataFlavor> getTransferDataFlavors() override
     {
         return { m_aMarkdownFlavor, m_aPlainFlavor };
     }
 
-    bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override
+    bool isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override
     {
         return rFlavor.MimeType == m_aMarkdownFlavor.MimeType
                || rFlavor.MimeType == m_aPlainFlavor.MimeType;

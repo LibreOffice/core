@@ -111,7 +111,7 @@ public:
         @param rSeq another sequence of same type
         @return this sequence
     */
-    inline Sequence & SAL_CALL operator = ( const Sequence & rSeq );
+    inline Sequence & operator = ( const Sequence & rSeq );
 
     inline Sequence & operator =(Sequence && other);
 
@@ -119,7 +119,7 @@ public:
 
         @return length of sequence
     */
-    sal_Int32 SAL_CALL getLength() const
+    sal_Int32 getLength() const
         { return _pSequence->nElements; }
 
     /** Tests whether the sequence has elements, i.e. elements count is
@@ -127,7 +127,7 @@ public:
 
         @return true, if elements count is greater than zero
     */
-    bool SAL_CALL hasElements() const
+    bool hasElements() const
         { return (_pSequence->nElements > 0); }
 
     /** This function allows to use Sequence in cases where  std::size is needed, and the like.
@@ -141,7 +141,7 @@ public:
 
         @return pointer to elements array
     */
-    const E * SAL_CALL getConstArray() const
+    const E * getConstArray() const
         { return reinterpret_cast< const E * >( _pSequence->elements ); }
 
     /** Gets a pointer to elements array for reading and writing.
@@ -153,7 +153,7 @@ public:
 
         @return pointer to elements array
     */
-    inline E * SAL_CALL getArray();
+    inline E * getArray();
 
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
@@ -171,21 +171,21 @@ public:
         @param nIndex index
         @return const C++ reference to element
     */
-    inline const E & SAL_CALL operator [] ( sal_Int32 nIndex ) const;
+    inline const E & operator [] ( sal_Int32 nIndex ) const;
 
     /** Equality operator: Compares two sequences.
 
         @param rSeq another sequence of same type (right side)
         @return true if both sequences are equal, false otherwise
     */
-    inline bool SAL_CALL operator == ( const Sequence & rSeq ) const;
+    inline bool operator == ( const Sequence & rSeq ) const;
 
     /** Inequality operator: Compares two sequences.
 
         @param rSeq another sequence of same type (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline bool SAL_CALL operator != ( const Sequence & rSeq ) const;
+    inline bool operator != ( const Sequence & rSeq ) const;
 
     /** Reallocates sequence to new length.
         If the new length is smaller than the former, then upper elements will
@@ -197,13 +197,13 @@ public:
 
         @param nSize new size of sequence
     */
-    inline void SAL_CALL realloc( sal_Int32 nSize );
+    inline void realloc( sal_Int32 nSize );
 
     /** Provides UNacquired sequence handle.
 
         @return UNacquired sequence handle
     */
-    uno_Sequence * SAL_CALL get() const
+    uno_Sequence * get() const
         { return _pSequence; }
 
     /** Swaps sequences efficiently exchanging their underlying representations.
@@ -218,7 +218,7 @@ public:
     @param rByteSequence a byte sequence
     @return a UNO byte sequence
 */
-inline ::cpo::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
+inline ::cpo::uno::Sequence< sal_Int8 > toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence );
 
 }

@@ -31,17 +31,17 @@ namespace cpo::uno
 {
 
 
-inline void SAL_CALL cpp_acquire( void * pCppI )
+inline void cpp_acquire( void * pCppI )
 {
     static_cast< css::uno::XInterface * >( pCppI )->acquire();
 }
 
-inline void SAL_CALL cpp_release( void * pCppI )
+inline void cpp_release( void * pCppI )
 {
     static_cast< css::uno::XInterface * >( pCppI )->release();
 }
 
-inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
+inline void * cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
 {
     if (pCppI)
     {

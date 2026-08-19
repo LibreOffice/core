@@ -496,7 +496,7 @@ CXXMemberCallExpr const * UnnecessaryOverride::extractCallExpr(Expr const *retur
 
     // In something like
     //
-    //  Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(
+    //  Reference< XResultSet > OPreparedStatement::executeQuery(
     //      const rtl::OUString& sql)
     //      throw(SQLException, RuntimeException, std::exception)
     //  {

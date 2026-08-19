@@ -102,101 +102,101 @@ operator <<(std::basic_ostream<charT, traits> & stream, Type const & type)
 
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const ::cpo::uno::Type * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const ::cpo::uno::Type * )
 {
     return ::cppu::UnoType< ::cpo::uno::Type >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuVoidType()
+inline const ::cpo::uno::Type & getCppuVoidType()
 {
     return ::cppu::UnoType<void>::get();
 }
-inline const ::cpo::uno::Type & SAL_CALL getVoidCppuType()
+inline const ::cpo::uno::Type & getVoidCppuType()
 {
     return ::cppu::UnoType<void>::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuBooleanType()
+inline const ::cpo::uno::Type & getCppuBooleanType()
 {
     return ::cppu::UnoType< bool >::get();
 }
-inline const ::cpo::uno::Type & SAL_CALL getBooleanCppuType()
+inline const ::cpo::uno::Type & getBooleanCppuType()
 {
     return ::cppu::UnoType< bool >::get();
 }
-inline const ::cpo::uno::Type & SAL_CALL getCppuType(
+inline const ::cpo::uno::Type & getCppuType(
     SAL_UNUSED_PARAMETER bool const * )
 {
     return ::cppu::UnoType< bool >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCharCppuType()
+inline const ::cpo::uno::Type & getCharCppuType()
 {
     return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
-inline const ::cpo::uno::Type & SAL_CALL getCppuCharType()
+inline const ::cpo::uno::Type & getCppuCharType()
 {
     return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_Int8 * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const sal_Int8 * )
 {
     return ::cppu::UnoType< ::sal_Int8 >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const ::rtl::OUString * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const ::rtl::OUString * )
 {
     return ::cppu::UnoType< ::rtl::OUString >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_Int16 * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const sal_Int16 * )
 {
     return ::cppu::UnoType< ::sal_Int16 >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_uInt16 * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const sal_uInt16 * )
 {
     return ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_Int32 * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const sal_Int32 * )
 {
     return ::cppu::UnoType< ::sal_Int32 >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_uInt32 * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const sal_uInt32 * )
 {
     return ::cppu::UnoType< ::sal_uInt32 >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_Int64 * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const sal_Int64 * )
 {
     return ::cppu::UnoType< ::sal_Int64 >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_uInt64 * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const sal_uInt64 * )
 {
     return ::cppu::UnoType< ::sal_uInt64 >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const float * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const float * )
 {
     return ::cppu::UnoType< float >::get();
 }
 
-inline const ::cpo::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const double * )
+inline const ::cpo::uno::Type & getCppuType( SAL_UNUSED_PARAMETER const double * )
 {
     return ::cppu::UnoType< double >::get();
 }
 
 template< typename T >
-inline const ::cpo::uno::Type & SAL_CALL getCppuType()
+inline const ::cpo::uno::Type & getCppuType()
 {
     return ::cppu::UnoType< T >::get();
 }
 
 template<>
-inline const ::cpo::uno::Type & SAL_CALL getCppuType< sal_Unicode >()
+inline const ::cpo::uno::Type & getCppuType< sal_Unicode >()
 {
     return ::cppu::UnoType< ::cppu::UnoCharType >::get();
 }
