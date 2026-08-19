@@ -213,12 +213,6 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
     return true;
 }
 
-void SvxColorTabPage::UpdateModified()
-{
-    bool bEnable = m_pColorList.is() && m_pColorList->Count();
-    m_xBtnWorkOn->set_sensitive(bEnable);
-}
-
 void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 {
     SfxItemState nState = rSet->GetItemState( XATTR_FILLCOLOR );
@@ -241,8 +235,6 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     NamedColor aColor;
     aColor.m_aColor = aNewColor;
     ChangeColor(aColor);
-
-    UpdateModified();
 }
 
 std::unique_ptr<SvxColorTabPage> SvxColorTabPage::Create(weld::Container* pPage,
@@ -349,8 +341,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_xBtnDelete->set_sensitive(false);
         m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR2) );
     }
-
-    UpdateModified();
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
