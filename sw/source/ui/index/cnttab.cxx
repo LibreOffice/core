@@ -967,6 +967,29 @@ static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
     return eRet;
 }
 
+static OUString lcl_GetCreateForLabel(CurTOXType eCurType)
+{
+    static const std::array<std::pair<TOXTypes, TranslateId>, 5> aTypeMap = { {
+        { TOX_CONTENT, STR_TOC_CREATEFROM_CONTENT },
+        { TOX_ILLUSTRATIONS, STR_TOC_CREATEFROM_ILLUSTRATIONS },
+        { TOX_USER, STR_TOC_CREATEFROM_USER },
+        { TOX_TABLES, STR_TOC_CREATEFROM_TABLES },
+        { TOX_OBJECTS, STR_TOC_CREATEFROM_OBJECTS },
+    } };
+
+    const auto it = std::find_if(aTypeMap.begin(), aTypeMap.end(), [eCurType](const auto& rPair) {
+        return rPair.first == eCurType.eType;
+    });
+
+    if (it == aTypeMap.end())
+    {
+        OSL_FAIL("Unexpected table of contents type");
+        return SwResId(aTypeMap[0].second);
+    }
+
+    return SwResId(it->second);
+}
+
 void SwTOXSelectTabPage::ApplyTOXDescription()
 {
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
@@ -1321,7 +1344,10 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
     CurTOXType eCurType = lcl_UserData2TOXTypes(nType);
     pTOXDlg->SetCurrentTOXType(eCurType);
 
-    m_xCreateFromLB->set_label(SwResId(STR_TOC_CREATEFROM).replaceAll("%s", m_xTypeLB->get_active_text()));
+    bool bCreateFrameVisible = nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE|TO_OBJECT);
+
+    if (bCreateFrameVisible)
+        m_xCreateFromLB->set_label(lcl_GetCreateForLabel(eCurType));
 
     m_xAreaLB->set_visible( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
     m_xLevelFT->set_visible( 0 != (nType & (TO_CONTENT)) );
@@ -1343,7 +1369,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
 
     m_xTOXMarksCB->set_visible( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
-    m_xCreateFrame->set_visible( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE|TO_OBJECT)) );
+    m_xCreateFrame->set_visible( bCreateFrameVisible );
     m_xCaptionSequenceFT->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
     m_xCaptionSequenceLB->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
     m_xDisplayTypeFT->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
