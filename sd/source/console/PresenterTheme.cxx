@@ -202,11 +202,8 @@ private:
 class PresenterTheme::Theme
 {
 public:
-    Theme (
-        const Reference<container::XHierarchicalNameAccess>& rThemeRoot,
-        OUString sNodeName);
-
-    void Read(const Reference<rendering::XCanvas>& rxCanvas);
+    Theme(const Reference<container::XHierarchicalNameAccess>& rThemeRoot, OUString sNodeName,
+          const Reference<rendering::XCanvas>& rxCanvas);
 
     OUString msConfigurationNodeName;
     SharedBitmapDescriptor mpBackground;
@@ -514,19 +511,13 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
 
 //===== Theme =================================================================
 
-PresenterTheme::Theme::Theme (
-    const Reference<container::XHierarchicalNameAccess>& rxThemeRoot,
-    OUString sNodeName)
-    : msConfigurationNodeName(std::move(sNodeName)),
-      maPaneStyles(),
-      maViewStyles(),
-      maStyleAssociations(),
-      mxThemeRoot(rxThemeRoot)
-{
-}
-
-void PresenterTheme::Theme::Read(
-    const Reference<rendering::XCanvas>& rxCanvas)
+PresenterTheme::Theme::Theme(const Reference<container::XHierarchicalNameAccess>& rxThemeRoot,
+                             OUString sNodeName, const Reference<rendering::XCanvas>& rxCanvas)
+    : msConfigurationNodeName(std::move(sNodeName))
+    , maPaneStyles()
+    , maViewStyles()
+    , maStyleAssociations()
+    , mxThemeRoot(rxThemeRoot)
 {
     // Background.
     mpBackground = PresenterBitmapContainer::LoadBitmap(
@@ -677,12 +668,7 @@ ReadContext::ReadTheme(PresenterConfigurationAccess& rConfiguration,
                 PresenterConfigurationAccess::GetConfigurationNode(xTheme, u"ThemeName"_ustr)
                     >>= sThemeName;
                 if (sThemeName == sCurrentThemeName)
-                {
-                    std::shared_ptr<PresenterTheme::Theme> pTheme
-                        = std::make_shared<PresenterTheme::Theme>(xTheme, rsKey);
-                    pTheme->Read(rxCanvas);
-                    return pTheme;
-                }
+                    return std::make_shared<PresenterTheme::Theme>(xTheme, rsKey, rxCanvas);
             }
         }
     }
