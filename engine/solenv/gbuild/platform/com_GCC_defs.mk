@@ -67,6 +67,7 @@ endif
 
 gb_CFLAGS_COMMON := \
 	-Wall \
+	-Wno-format-zero-length \
 	-Wendif-labels \
 	-Wextra \
 	-Wstrict-prototypes \
@@ -85,6 +86,7 @@ gb_CFLAGS_COMMON := \
 gb_CXXFLAGS_COMMON := \
 	-Wall \
 	-Wno-missing-braces \
+	-Wno-format-zero-length \
 	-Wendif-labels \
 	-Wextra \
 	-Wundef \
