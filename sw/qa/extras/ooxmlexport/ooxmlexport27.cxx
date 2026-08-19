@@ -106,6 +106,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171527_flyInFramePr)
     assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testStarBatsBulletKeepsAVisibleGlyph)
+{
+    createSwDoc("starbats-bullet.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
+    // The bullet comes out in a font that is widely available, at the character that font holds
+    // the bullet at. A reader without the old StarBats font still gets a bullet rather than an
+    // empty rectangle.
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts", "ascii",
+                u"Symbol");
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText", "val", u"\xF0B7");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf171433_equation)
 {
     // given a document with formula
