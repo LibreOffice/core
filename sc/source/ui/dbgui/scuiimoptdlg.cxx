@@ -232,7 +232,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
         m_xCbQuoteAll->show();
         m_xCbQuoteAll->set_active( bQuoteAllTextCells );
         m_xCbFormulas->show();
-        // default option for "save formulas" no longer taken from view shell but from persisted dialog settings
+        // default option for "save formulas" is no longer taken from view shell but from persisted dialog settings
         m_xCbFormulas->set_active( bSaveCellFormulas );
         // if no charset, text separator or field separator exist, keep the values from dialog initialization
         if (strFieldSeparator.getLength() > 0)
