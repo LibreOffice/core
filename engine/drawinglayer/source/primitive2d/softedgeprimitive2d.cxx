@@ -202,16 +202,15 @@ void SoftEdgePrimitive2D::create2DDecomposition(
             fScale = (fScaleX + fScaleY) * 0.5;
         }
 
+        assert(aBitmap.HasAlpha());
+        auto [aColor, aMask] = aBitmap.SplitIntoColorAndAlpha();
         // Get the Alpha and use as base to blur and apply the effect
-        AlphaMask aMask(aBitmap.CreateAlphaMask());
-        if (aMask.IsEmpty()) // There is no mask, fully opaque
-            break;
         AlphaMask blurMask(drawinglayer::primitive2d::ProcessAndBlurAlphaMask(
             aMask, -fDiscreteSoftRadius * fScale, fDiscreteSoftRadius * fScale, 0));
         aMask.BlendWith(blurMask);
 
         // The end result is the original bitmap with blurred 8-bit alpha mask
-        Bitmap result(aBitmap.CreateColorBitmap(), aMask);
+        Bitmap result(aColor, aMask);
 
 #ifdef DBG_UTIL
         static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
