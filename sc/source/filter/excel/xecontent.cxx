@@ -338,7 +338,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     INetURLObject aUrlObj( rUrl );
     const INetProtocol eProtocol = aUrlObj.GetProtocol();
     bool bWithRepr = !rRepr.isEmpty();
-    XclExpStream aXclStrm( *mxVarData, rRoot );         // using in raw write mode.
+    XclExpStream aXclStrm( *mxVarData, rRoot );         // used in raw write mode.
 
     // description
     if( bWithRepr )
@@ -736,7 +736,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
 
     XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
-    // Explicity registers external references if the formula contains any
+    // Explicitly registers external references if the formula contains any
     std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateFlatCopiedTokenArray( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
