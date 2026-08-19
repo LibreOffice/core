@@ -121,7 +121,6 @@ public:
         const SharedElementMode& rpSelectedMode,
         const SharedElementMode& rpDisabledMode,
         const SharedElementMode& rpMouseOverSelectedMode);
-    void CurrentSlideHasChanged();
     void SetLocation (const awt::Point& rLocation);
     void SetSize (const geometry::RealSize2D& rSize);
     virtual void Paint (
@@ -869,7 +868,7 @@ void PresenterToolBar::UpdateSlideNumber()
             for (auto& rxElement : *rxPart)
             {
                 if (rxElement)
-                    rxElement->CurrentSlideHasChanged();
+                    rxElement->UpdateState();
             }
         }
     }
@@ -1078,11 +1077,6 @@ awt::Size const & PresenterToolBar::Element::GetBoundingSize (
 awt::Rectangle PresenterToolBar::Element::GetBoundingBox() const
 {
     return awt::Rectangle(maLocation.X,maLocation.Y, maSize.Width, maSize.Height);
-}
-
-void PresenterToolBar::Element::CurrentSlideHasChanged()
-{
-    UpdateState();
 }
 
 void PresenterToolBar::Element::SetLocation (const awt::Point& rLocation)
