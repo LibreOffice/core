@@ -174,10 +174,13 @@ namespace
         aVDev->SetFillColor( COL_WHITE);
         aVDev->SetLineColor();
 
+        Bitmap aColorBitmap(rBitmap);
         if(rBitmap.HasAlpha())
         {
             // use given alpha channel
-            aVDev->DrawBitmap(Point(0, 0), rBitmap.CreateAlphaMask().GetBitmap());
+            AlphaMask aAlpha;
+            std::tie(aColorBitmap, aAlpha) = rBitmap.SplitIntoColorAndAlpha();
+            aVDev->DrawBitmap(Point(0, 0), aAlpha.GetBitmap());
         }
         else
         {
@@ -229,7 +232,7 @@ namespace
                 Size(
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getWidth()),
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getHeight())),
-                Bitmap(rBitmap.CreateColorBitmap(), aAlpha)));
+                Bitmap(aColorBitmap, aAlpha)));
 
         return true;
     }
