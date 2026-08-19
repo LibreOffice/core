@@ -439,7 +439,7 @@ void CGM::ImplDoClass5()
         case 0x64 : /*Block Text Paragraph Bullet Level*/ break;
         case 0x65 : /*Block Text Paragraph Line Horizontal Alignment*/ break;
         case 0x66 : /*Block Text Paragraph Line Vertical Alignment*/ break;
-        case 0x67 : /*Block Text Paragragh Line Spacing*/ break;
+        case 0x67 : /*Block Text Paragraph Line Spacing*/ break;
         case 0x68 : /*Block Text Paragraph Word Wrap*/ break;
         case 0x70 : /*Block Text Forward Advance Distance*/ break;
         case 0x71 : /*Word Spacing*/ break;
