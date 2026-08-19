@@ -135,13 +135,12 @@ tasks.register('copyUnpackAssets', Copy) {
         ]
     }
     into('etc/fonts') {
-        from "${liboSrcRoot}/android/source/"
-        includes = ['fonts.conf']
+        from 'fonts.conf'
         doFirst {
             // we have changed the filter below; so to always re-generate this
             // file, delete it first - no idea how to set a dependency on
             // build.gradle changes :-(
-            file('fonts.conf').delete()
+            file('src/main/assets/unpack/etc/fonts/fonts.conf').delete()
         }
         filter {
             String line ->
