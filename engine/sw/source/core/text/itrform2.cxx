@@ -2432,7 +2432,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
 
                         // extend line height by (nPropLineSpace - 100) percent of the font height
                         const SwLineLayout* pTextHeightLine = m_pCurr;
-                        if (rIDSA.get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
+                        if (!m_pMulti && rIDSA.get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
                         {
                             // Like Microsoft Word, apply the line spacing gap after the line.
                             // Since we always put it above a line, use the previous line's height.
