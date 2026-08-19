@@ -69,6 +69,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"cui/ui/borderareatransparencydialog.ui",
     u"cui/ui/borderbackgrounddialog.ui",
     u"cui/ui/breaknumberoption.ui",
+    u"cui/ui/bulletandposition.ui",
     u"cui/ui/certdialog.ui",
     u"cui/ui/comment.ui",
     u"cui/ui/databaselinkdialog.ui",
