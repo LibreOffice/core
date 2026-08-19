@@ -137,7 +137,7 @@ void collectUIInformation(const OUString& rAction, const OUString& aParameters)
 {
     EventDescription aDescription;
     aDescription.aAction = rAction;
-    aDescription.aParameters = {{"parameters", aParameters}};
+    aDescription.aParameters = {{u"parameters"_ustr, aParameters}};
     aDescription.aID = u"writer_edit"_ustr;
     aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
     aDescription.aParent = u"MainWindow"_ustr;
@@ -2882,7 +2882,7 @@ void SwWrtShell::InfoReadOnlyDialog(bool bAsync) const
     if (bAsync)
     {
         auto xInfo = std::make_shared<weld::MessageDialogController>(
-                    GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog");
+                    GetView().GetFrameWeld(), u"modules/swriter/ui/inforeadonlydialog.ui"_ustr, u"InfoReadonlyDialog"_ustr);
         if (GetViewOptions()->IsShowOutlineContentVisibilityButton() &&
                 HasFoldedOutlineContentSelected())
         {

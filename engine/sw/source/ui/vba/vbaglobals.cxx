@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
 using namespace ::ooo::vba;
 
-SwVbaGlobals::SwVbaGlobals(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
+SwVbaGlobals::SwVbaGlobals(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, u"WordDocumentContext"_ustr )
 {
     SAL_INFO("sw.vba", "SwVbaGlobals::SwVbaGlobals()");
     cpo::uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );

@@ -734,7 +734,7 @@ namespace sw::mark
 
     OUString CheckboxFieldmark::GetContent() const
     {
-        return IsChecked() ? "1" : "0";
+        return IsChecked() ? u"1"_ustr : u"0"_ustr;
     }
 
     void CheckboxFieldmark::ReplaceContent(const OUString& sNewContent)

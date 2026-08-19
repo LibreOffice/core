@@ -863,8 +863,8 @@ FIELD_INSERT:
             {
                 // Inform the user that the request has been ignored.
                 auto xInfo = std::make_shared<weld::GenericDialogController>(
-                    GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui",
-                    "InfoReadonlyDialog");
+                    GetView().GetFrameWeld(), u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
+                    u"InfoReadonlyDialog"_ustr);
                 weld::DialogController::runAsync(xInfo, [](sal_Int32 /*nResult*/) {});
                 break;
             }
@@ -1236,7 +1236,7 @@ FIELD_INSERT:
                             const OutputDevice* pOutDev = Application::GetDefaultDevice();
                             const SwViewShell* pViewSh
                                 = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
-                            UIName sParaStyle(bHeader ? "Header" : "Footer");
+                            UIName sParaStyle(bHeader ? u"Header"_ustr : u"Footer"_ustr);
                             SwTextFormatColl* pStyle = rDoc.FindTextFormatCollByName(sParaStyle);
                             if (pStyle && pOutDev)
                             {

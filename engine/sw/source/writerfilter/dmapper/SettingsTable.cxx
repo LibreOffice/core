@@ -632,9 +632,9 @@ cpo::uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
     {
         // the default value for an undefined compatibilityMode is 12 (Word 2007)
         cpo::uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
-            { "name", cpo::uno::Any(u"compatibilityMode"_ustr) },
-            { "uri", cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
-            { "val", cpo::uno::Any(u"12"_ustr) } //12: Use word processing features specified in ECMA-376. This is the default.
+            { u"name"_ustr, cpo::uno::Any(u"compatibilityMode"_ustr) },
+            { u"uri"_ustr, cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
+            { u"val"_ustr, cpo::uno::Any(u"12"_ustr) } //12: Use word processing features specified in ECMA-376. This is the default.
         }));
 
         beans::PropertyValue aValue;

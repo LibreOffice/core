@@ -1533,7 +1533,7 @@ void collectUIInformation(const OUString& aPage)
 {
     EventDescription aDescription;
     aDescription.aAction = u"GOTO"_ustr;
-    aDescription.aParameters = {{"PAGE", aPage}};
+    aDescription.aParameters = {{u"PAGE"_ustr, aPage}};
     aDescription.aID = u"writer_edit"_ustr;
     aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
     aDescription.aParent = u"MainWindow"_ustr;

@@ -91,7 +91,7 @@ void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
     {
         const OUString insertFileid = createFileURL(OUString::createFromAscii(aInsertDoc));
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(
-            comphelper::InitPropertySequence({ { "Name", cpo::uno::Any(insertFileid) } }));
+            comphelper::InitPropertySequence({ { u"Name"_ustr, cpo::uno::Any(insertFileid) } }));
         dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
     }
 }
@@ -1029,15 +1029,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testClassificationPaste)
                          checkShells(pSourceShell, pDestinationShell));
 
     // Classified source, not classified destination.
-    cpo::uno::Sequence<beans::PropertyValue> aInternalOnly
-        = comphelper::InitPropertySequence({ { "Name", cpo::uno::Any(u"Internal Only"_ustr) } });
+    cpo::uno::Sequence<beans::PropertyValue> aInternalOnly = comphelper::InitPropertySequence(
+        { { u"Name"_ustr, cpo::uno::Any(u"Internal Only"_ustr) } });
     dispatchCommand(xSourceComponent, u".uno:ClassificationApply"_ustr, aInternalOnly);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified),
                          checkShells(pSourceShell, pDestinationShell));
 
     // Classified source and classified destination -- internal only has a higher level than confidential.
-    cpo::uno::Sequence<beans::PropertyValue> aConfidential
-        = comphelper::InitPropertySequence({ { "Name", cpo::uno::Any(u"Confidential"_ustr) } });
+    cpo::uno::Sequence<beans::PropertyValue> aConfidential = comphelper::InitPropertySequence(
+        { { u"Name"_ustr, cpo::uno::Any(u"Confidential"_ustr) } });
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aConfidential);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow),
                          checkShells(pSourceShell, pDestinationShell));
@@ -1327,7 +1327,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     // Select the first redline.
     pWrtShell->StartOfSection();
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-        { { "NextTrackedChange",
+        { { u"NextTrackedChange"_ustr,
             cpo::uno::Any(o3tl::narrowing<sal_uInt16>(rTable[0]->GetId())) } }));
     dispatchCommand(mxComponent, u".uno:NextTrackedChange"_ustr, aPropertyValues);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -1338,7 +1338,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     // Select the second redline.
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
-        { { "NextTrackedChange",
+        { { u"NextTrackedChange"_ustr,
             cpo::uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
     dispatchCommand(mxComponent, u".uno:NextTrackedChange"_ustr, aPropertyValues);
     pShellCursor = pWrtShell->getShellCursor(false);
@@ -1347,7 +1347,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     // Move the cursor to the start again, and reject the second change.
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
-        { { "RejectTrackedChange",
+        { { u"RejectTrackedChange"_ustr,
             cpo::uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
     dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, aPropertyValues);
     pShellCursor = pWrtShell->getShellCursor(false);
@@ -1498,8 +1498,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testLandscape)
 {
     // Set page orientation to landscape.
     createSwDoc();
-    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(
-        comphelper::InitPropertySequence({ { "AttributePage.Landscape", cpo::uno::Any(true) } }));
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        { { u"AttributePage.Landscape"_ustr, cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:AttributePage"_ustr, aPropertyValues);
 
     // Assert that the document model was modified.
@@ -2265,8 +2265,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
     // insert an annotation with a text
     static constexpr OUString aSomeText(u"some text"_ustr);
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(aSomeText) },
-        { "Author", cpo::uno::Any(u"me"_ustr) },
+        { u"Text"_ustr, cpo::uno::Any(aSomeText) },
+        { u"Author"_ustr, cpo::uno::Any(u"me"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aPropertyValues);
 

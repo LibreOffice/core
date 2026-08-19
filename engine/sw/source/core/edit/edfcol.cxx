@@ -1590,7 +1590,7 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"TextPath", cpo::uno::Any(true)},
+        {u"TextPath"_ustr, cpo::uno::Any(true)},
     }));
     auto it = std::find_if(aGeomPropVec.begin(), aGeomPropVec.end(), [](const beans::PropertyValue& rValue)
     {

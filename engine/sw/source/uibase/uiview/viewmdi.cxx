@@ -59,7 +59,7 @@ void collectUIInformation(const OUString& aFactor)
 {
     EventDescription aDescription;
     aDescription.aID = u"writer_edit"_ustr;
-    aDescription.aParameters = {{"ZOOM", aFactor}};
+    aDescription.aParameters = {{u"ZOOM"_ustr, aFactor}};
     aDescription.aAction = u"SET"_ustr;
     aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
     aDescription.aParent = u"MainWindow"_ustr;

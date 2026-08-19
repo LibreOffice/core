@@ -807,10 +807,10 @@ void Test::testSkipImages()
     // during DOC and DOCX import, using the "SkipImages" FilterOptions.
 
     std::pair<OUString, OUString> aFilterNames[] = {
-        { "skipimages.doc", "" },
-        { "skipimages.doc", "SkipImages" },
-        { "skipimages.docx", "" },
-        { "skipimages.docx", "SkipImages" }
+        { u"skipimages.doc"_ustr, u""_ustr },
+        { u"skipimages.doc"_ustr, u"SkipImages"_ustr },
+        { u"skipimages.docx"_ustr, u""_ustr },
+        { u"skipimages.docx"_ustr, u"SkipImages"_ustr }
     };
 
     for (auto const & rFilterNamePair : aFilterNames)
@@ -922,9 +922,9 @@ void Test::testNestedFieldmark()
     };
 
     std::pair<TestFilter, OUString> const aFilterNames[] = {
-        {TestFilter::ODT, "fieldmark_QUOTE_nest.fodt"},
-        {TestFilter::DOCX, "fieldmark_QUOTE_nest.docx"},
-        {TestFilter::RTF, "fieldmark_QUOTE_nest.rtf"},
+        {TestFilter::ODT, u"fieldmark_QUOTE_nest.fodt"_ustr},
+        {TestFilter::DOCX, u"fieldmark_QUOTE_nest.docx"_ustr},
+        {TestFilter::RTF, u"fieldmark_QUOTE_nest.rtf"_ustr},
     };
 
     for (auto const & rFilterName : aFilterNames)
@@ -1277,7 +1277,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"PDFUACompliance"_ustr, cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -1684,7 +1684,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"PDFUACompliance"_ustr, cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -1748,7 +1748,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"PDFUACompliance"_ustr, cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());

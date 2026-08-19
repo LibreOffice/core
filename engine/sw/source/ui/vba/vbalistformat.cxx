@@ -240,17 +240,17 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                     if (bHasFont)
                     {
                         aNameValues.insert({
-                            { "CharFontName", cpo::uno::Any(aBulletFont.Name) },
-                            { "CharFontStyleName", cpo::uno::Any(aBulletFont.StyleName) },
-                            { "CharFontFamily", cpo::uno::Any(aBulletFont.Family) },
-                            { "CharFontCharSet", cpo::uno::Any(aBulletFont.CharSet) },
-                            { "CharWeight", cpo::uno::Any(aBulletFont.Weight) },
-                            { "CharUnderline", cpo::uno::Any(aBulletFont.Underline) },
-                            { "CharStrikeout", cpo::uno::Any(aBulletFont.Strikeout) },
-                            { "CharAutoKerning", cpo::uno::Any(aBulletFont.Kerning) },
-                            { "CharFontPitch", cpo::uno::Any(aBulletFont.Pitch) },
-                            { "CharWordMode", cpo::uno::Any(aBulletFont.WordLineMode) },
-                            { "CharRotation", cpo::uno::Any(static_cast<sal_Int16>(
+                            { u"CharFontName"_ustr, cpo::uno::Any(aBulletFont.Name) },
+                            { u"CharFontStyleName"_ustr, cpo::uno::Any(aBulletFont.StyleName) },
+                            { u"CharFontFamily"_ustr, cpo::uno::Any(aBulletFont.Family) },
+                            { u"CharFontCharSet"_ustr, cpo::uno::Any(aBulletFont.CharSet) },
+                            { u"CharWeight"_ustr, cpo::uno::Any(aBulletFont.Weight) },
+                            { u"CharUnderline"_ustr, cpo::uno::Any(aBulletFont.Underline) },
+                            { u"CharStrikeout"_ustr, cpo::uno::Any(aBulletFont.Strikeout) },
+                            { u"CharAutoKerning"_ustr, cpo::uno::Any(aBulletFont.Kerning) },
+                            { u"CharFontPitch"_ustr, cpo::uno::Any(aBulletFont.Pitch) },
+                            { u"CharWordMode"_ustr, cpo::uno::Any(aBulletFont.WordLineMode) },
+                            { u"CharRotation"_ustr, cpo::uno::Any(static_cast<sal_Int16>(
                                                   std::round(aBulletFont.Orientation * 10))) },
                             });
                         if (aBulletFont.Height)

@@ -2141,7 +2141,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion(bool bPreventOverlap)
         getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
 
     cpo::uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
-        { { "ParaFrameProperties", cpo::uno::Any(true) } }));
+        { { u"ParaFrameProperties"_ustr, cpo::uno::Any(true) } }));
     aFrameProperties.push_back(comphelper::makePropertyValue(u"FrameInteropGrabBag"_ustr, aGrabBag));
 
     lcl_MoveBorderPropertiesToFrame(aFrameProperties,
@@ -5234,7 +5234,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
                         {
                             cpo::uno::Sequence<beans::PropertyValue> aShapeGrabBag( comphelper::InitPropertySequence({
-                                { "SdtEndBefore", cpo::uno::Any(true) }
+                                { u"SdtEndBefore"_ustr, cpo::uno::Any(true) }
                             }));
                             xShapePropertySet->setPropertyValue(u"InteropGrabBag"_ustr,cpo::uno::Any(aShapeGrabBag));
                         }
@@ -5517,11 +5517,11 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
             xSectionStartingRange = pSectionContext->GetStartingRange();
         }
         cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-            { "InputStream", cpo::uno::Any(xInputStream) },
-            { "InsertMode", cpo::uno::Any(true) },
-            { "TextInsertModeRange", cpo::uno::Any(xInsertTextRange) },
-            { "AltChunkMode", cpo::uno::Any(true) },
-            { "AltChunkStartingRange", cpo::uno::Any(xSectionStartingRange) },
+            { u"InputStream"_ustr, cpo::uno::Any(xInputStream) },
+            { u"InsertMode"_ustr, cpo::uno::Any(true) },
+            { u"TextInsertModeRange"_ustr, cpo::uno::Any(xInsertTextRange) },
+            { u"AltChunkMode"_ustr, cpo::uno::Any(true) },
+            { u"AltChunkStartingRange"_ustr, cpo::uno::Any(xSectionStartingRange) },
         }));
 
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
@@ -6671,100 +6671,100 @@ static ww::eField GetWW8FieldId(OUString const& rType)
 {
     static const std::unordered_map<OUString, ww::eField> mapID
     {
-        {"ADDRESSBLOCK",    ww::eADDRESSBLOCK},
-        {"ADVANCE",         ww::eADVANCE},
-        {"ASK",             ww::eASK},
-        {"AUTONUM",         ww::eAUTONUM},
-        {"AUTONUMLGL",      ww::eAUTONUMLGL},
-        {"AUTONUMOUT",      ww::eAUTONUMOUT},
-        {"AUTOTEXT",        ww::eAUTOTEXT},
-        {"AUTOTEXTLIST",    ww::eAUTOTEXTLIST},
-        {"AUTHOR",          ww::eAUTHOR},
-        {"BARCODE",         ww::eBARCODE},
-        {"BIDIOUTLINE",     ww::eBIDIOUTLINE},
-        {"DATE",            ww::eDATE},
-        {"COMMENTS",        ww::eCOMMENTS},
-        {"COMPARE",         ww::eCOMPARE},
-        {"CONTROL",         ww::eCONTROL},
-        {"CREATEDATE",      ww::eCREATEDATE},
-        {"DATABASE",        ww::eDATABASE},
-        {"DDEAUTOREF",      ww::eDDEAUTOREF},
-        {"DDEREF",          ww::eDDEREF},
-        {"DOCPROPERTY",     ww::eDOCPROPERTY},
-        {"DOCVARIABLE",     ww::eDOCVARIABLE},
-        {"EDITTIME",        ww::eEDITTIME},
-        {"EMBED",           ww::eEMBED},
-        {"EQ",              ww::eEQ},
-        {"FILLIN",          ww::eFILLIN},
-        {"FILENAME",        ww::eFILENAME},
-        {"FILESIZE",        ww::eFILESIZE},
-        {"FOOTREF",         ww::eFOOTREF},
-//        {"FORMULA",         ww::},
-        {"FORMCHECKBOX",    ww::eFORMCHECKBOX},
-        {"FORMDROPDOWN",    ww::eFORMDROPDOWN},
-        {"FORMTEXT",        ww::eFORMTEXT},
-        {"GLOSSREF",        ww::eGLOSSREF},
-        {"GOTOBUTTON",      ww::eGOTOBUTTON},
-        {"GREETINGLINE",    ww::eGREETINGLINE},
-        {"HTMLCONTROL",     ww::eHTMLCONTROL},
-        {"HYPERLINK",       ww::eHYPERLINK},
-        {"IF",              ww::eIF},
-        {"INFO",            ww::eINFO},
-        {"INCLUDEPICTURE",  ww::eINCLUDEPICTURE},
-        {"INCLUDETEXT",     ww::eINCLUDETEXT},
-        {"INCLUDETIFF",     ww::eINCLUDETIFF},
-        {"KEYWORDS",        ww::eKEYWORDS},
-        {"LASTSAVEDBY",     ww::eLASTSAVEDBY},
-        {"LINK",            ww::eLINK},
-        {"LISTNUM",         ww::eLISTNUM},
-        {"MACRO",           ww::eMACRO},
-        {"MACROBUTTON",     ww::eMACROBUTTON},
-        {"MERGEDATA",       ww::eMERGEDATA},
-        {"MERGEFIELD",      ww::eMERGEFIELD},
-        {"MERGEINC",        ww::eMERGEINC},
-        {"MERGEREC",        ww::eMERGEREC},
-        {"MERGESEQ",        ww::eMERGESEQ},
-        {"NEXT",            ww::eNEXT},
-        {"NEXTIF",          ww::eNEXTIF},
-        {"NOTEREF",         ww::eNOTEREF},
-        {"PAGE",            ww::ePAGE},
-        {"PAGEREF",         ww::ePAGEREF},
-        {"PLUGIN",          ww::ePLUGIN},
-        {"PRINT",           ww::ePRINT},
-        {"PRINTDATE",       ww::ePRINTDATE},
-        {"PRIVATE",         ww::ePRIVATE},
-        {"QUOTE",           ww::eQUOTE},
-        {"RD",              ww::eRD},
-        {"REF",             ww::eREF},
-        {"REVNUM",          ww::eREVNUM},
-        {"SAVEDATE",        ww::eSAVEDATE},
-        {"SECTION",         ww::eSECTION},
-        {"SECTIONPAGES",    ww::eSECTIONPAGES},
-        {"SEQ",             ww::eSEQ},
-        {"SET",             ww::eSET},
-        {"SKIPIF",          ww::eSKIPIF},
-        {"STYLEREF",        ww::eSTYLEREF},
-        {"SUBSCRIBER",      ww::eSUBSCRIBER},
-        {"SUBJECT",         ww::eSUBJECT},
-        {"SYMBOL",          ww::eSYMBOL},
-        {"TA",              ww::eTA},
-        {"TEMPLATE",        ww::eTEMPLATE},
-        {"TIME",            ww::eTIME},
-        {"TITLE",           ww::eTITLE},
-        {"TOA",             ww::eTOA},
-        {"USERINITIALS",    ww::eUSERINITIALS},
-        {"USERADDRESS",     ww::eUSERADDRESS},
-        {"USERNAME",        ww::eUSERNAME},
+        {u"ADDRESSBLOCK"_ustr,    ww::eADDRESSBLOCK},
+        {u"ADVANCE"_ustr,         ww::eADVANCE},
+        {u"ASK"_ustr,             ww::eASK},
+        {u"AUTONUM"_ustr,         ww::eAUTONUM},
+        {u"AUTONUMLGL"_ustr,      ww::eAUTONUMLGL},
+        {u"AUTONUMOUT"_ustr,      ww::eAUTONUMOUT},
+        {u"AUTOTEXT"_ustr,        ww::eAUTOTEXT},
+        {u"AUTOTEXTLIST"_ustr,    ww::eAUTOTEXTLIST},
+        {u"AUTHOR"_ustr,          ww::eAUTHOR},
+        {u"BARCODE"_ustr,         ww::eBARCODE},
+        {u"BIDIOUTLINE"_ustr,     ww::eBIDIOUTLINE},
+        {u"DATE"_ustr,            ww::eDATE},
+        {u"COMMENTS"_ustr,        ww::eCOMMENTS},
+        {u"COMPARE"_ustr,         ww::eCOMPARE},
+        {u"CONTROL"_ustr,         ww::eCONTROL},
+        {u"CREATEDATE"_ustr,      ww::eCREATEDATE},
+        {u"DATABASE"_ustr,        ww::eDATABASE},
+        {u"DDEAUTOREF"_ustr,      ww::eDDEAUTOREF},
+        {u"DDEREF"_ustr,          ww::eDDEREF},
+        {u"DOCPROPERTY"_ustr,     ww::eDOCPROPERTY},
+        {u"DOCVARIABLE"_ustr,     ww::eDOCVARIABLE},
+        {u"EDITTIME"_ustr,        ww::eEDITTIME},
+        {u"EMBED"_ustr,           ww::eEMBED},
+        {u"EQ"_ustr,              ww::eEQ},
+        {u"FILLIN"_ustr,          ww::eFILLIN},
+        {u"FILENAME"_ustr,        ww::eFILENAME},
+        {u"FILESIZE"_ustr,        ww::eFILESIZE},
+        {u"FOOTREF"_ustr,         ww::eFOOTREF},
+//        {u"FORMULA"_ustr,         ww::},
+        {u"FORMCHECKBOX"_ustr,    ww::eFORMCHECKBOX},
+        {u"FORMDROPDOWN"_ustr,    ww::eFORMDROPDOWN},
+        {u"FORMTEXT"_ustr,        ww::eFORMTEXT},
+        {u"GLOSSREF"_ustr,        ww::eGLOSSREF},
+        {u"GOTOBUTTON"_ustr,      ww::eGOTOBUTTON},
+        {u"GREETINGLINE"_ustr,    ww::eGREETINGLINE},
+        {u"HTMLCONTROL"_ustr,     ww::eHTMLCONTROL},
+        {u"HYPERLINK"_ustr,       ww::eHYPERLINK},
+        {u"IF"_ustr,              ww::eIF},
+        {u"INFO"_ustr,            ww::eINFO},
+        {u"INCLUDEPICTURE"_ustr,  ww::eINCLUDEPICTURE},
+        {u"INCLUDETEXT"_ustr,     ww::eINCLUDETEXT},
+        {u"INCLUDETIFF"_ustr,     ww::eINCLUDETIFF},
+        {u"KEYWORDS"_ustr,        ww::eKEYWORDS},
+        {u"LASTSAVEDBY"_ustr,     ww::eLASTSAVEDBY},
+        {u"LINK"_ustr,            ww::eLINK},
+        {u"LISTNUM"_ustr,         ww::eLISTNUM},
+        {u"MACRO"_ustr,           ww::eMACRO},
+        {u"MACROBUTTON"_ustr,     ww::eMACROBUTTON},
+        {u"MERGEDATA"_ustr,       ww::eMERGEDATA},
+        {u"MERGEFIELD"_ustr,      ww::eMERGEFIELD},
+        {u"MERGEINC"_ustr,        ww::eMERGEINC},
+        {u"MERGEREC"_ustr,        ww::eMERGEREC},
+        {u"MERGESEQ"_ustr,        ww::eMERGESEQ},
+        {u"NEXT"_ustr,            ww::eNEXT},
+        {u"NEXTIF"_ustr,          ww::eNEXTIF},
+        {u"NOTEREF"_ustr,         ww::eNOTEREF},
+        {u"PAGE"_ustr,            ww::ePAGE},
+        {u"PAGEREF"_ustr,         ww::ePAGEREF},
+        {u"PLUGIN"_ustr,          ww::ePLUGIN},
+        {u"PRINT"_ustr,           ww::ePRINT},
+        {u"PRINTDATE"_ustr,       ww::ePRINTDATE},
+        {u"PRIVATE"_ustr,         ww::ePRIVATE},
+        {u"QUOTE"_ustr,           ww::eQUOTE},
+        {u"RD"_ustr,              ww::eRD},
+        {u"REF"_ustr,             ww::eREF},
+        {u"REVNUM"_ustr,          ww::eREVNUM},
+        {u"SAVEDATE"_ustr,        ww::eSAVEDATE},
+        {u"SECTION"_ustr,         ww::eSECTION},
+        {u"SECTIONPAGES"_ustr,    ww::eSECTIONPAGES},
+        {u"SEQ"_ustr,             ww::eSEQ},
+        {u"SET"_ustr,             ww::eSET},
+        {u"SKIPIF"_ustr,          ww::eSKIPIF},
+        {u"STYLEREF"_ustr,        ww::eSTYLEREF},
+        {u"SUBSCRIBER"_ustr,      ww::eSUBSCRIBER},
+        {u"SUBJECT"_ustr,         ww::eSUBJECT},
+        {u"SYMBOL"_ustr,          ww::eSYMBOL},
+        {u"TA"_ustr,              ww::eTA},
+        {u"TEMPLATE"_ustr,        ww::eTEMPLATE},
+        {u"TIME"_ustr,            ww::eTIME},
+        {u"TITLE"_ustr,           ww::eTITLE},
+        {u"TOA"_ustr,             ww::eTOA},
+        {u"USERINITIALS"_ustr,    ww::eUSERINITIALS},
+        {u"USERADDRESS"_ustr,     ww::eUSERADDRESS},
+        {u"USERNAME"_ustr,        ww::eUSERNAME},
 
-        {"TOC",             ww::eTOC},
-        {"TC",              ww::eTC},
-        {"NUMCHARS",        ww::eNUMCHARS},
-        {"NUMWORDS",        ww::eNUMWORDS},
-        {"NUMPAGES",        ww::eNUMPAGES},
-        {"INDEX",           ww::eINDEX},
-        {"XE",              ww::eXE},
-        {"BIBLIOGRAPHY",    ww::eBIBLIOGRAPHY},
-        {"CITATION",        ww::eCITATION},
+        {u"TOC"_ustr,             ww::eTOC},
+        {u"TC"_ustr,              ww::eTC},
+        {u"NUMCHARS"_ustr,        ww::eNUMCHARS},
+        {u"NUMWORDS"_ustr,        ww::eNUMWORDS},
+        {u"NUMPAGES"_ustr,        ww::eNUMPAGES},
+        {u"INDEX"_ustr,           ww::eINDEX},
+        {u"XE"_ustr,              ww::eXE},
+        {u"BIBLIOGRAPHY"_ustr,    ww::eBIBLIOGRAPHY},
+        {u"CITATION"_ustr,        ww::eCITATION},
     };
     auto const it = mapID.find(rType);
     return (it == mapID.end()) ? ww::eNONE : it->second;
@@ -8857,7 +8857,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText including the index e.g. CITATION Kra06 \l 1033
                     if( !sCmd.isEmpty()){
                         cpo::uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
-                            { "Identifier", cpo::uno::Any(sCmd) }
+                            { u"Identifier"_ustr, cpo::uno::Any(sCmd) }
                         }));
                         xFieldInterface->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aValues));
                     }
@@ -9771,7 +9771,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         if(xPropertySet.is() && bHasGrabBag)
         {
             cpo::uno::Sequence<beans::PropertyValue> aFrameGrabBag( comphelper::InitPropertySequence({
-                { "SdtEndBefore", cpo::uno::Any(true) }
+                { u"SdtEndBefore"_ustr, cpo::uno::Any(true) }
             }));
             xPropertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr,cpo::uno::Any(aFrameGrabBag));
         }
@@ -10157,9 +10157,9 @@ void DomainMapper_Impl::ApplySettingsTable()
             std::vector<beans::PropertyValue> aViewProps;
             if (m_pSettingsTable->GetZoomFactor())
             {
-                aViewProps.emplace_back("ZoomFactor", -1, cpo::uno::Any(m_pSettingsTable->GetZoomFactor()), beans::PropertyState_DIRECT_VALUE);
-                aViewProps.emplace_back("VisibleBottom", -1, cpo::uno::Any(sal_Int32(0)), beans::PropertyState_DIRECT_VALUE);
-                aViewProps.emplace_back("ZoomType", -1,
+                aViewProps.emplace_back(u"ZoomFactor"_ustr, -1, cpo::uno::Any(m_pSettingsTable->GetZoomFactor()), beans::PropertyState_DIRECT_VALUE);
+                aViewProps.emplace_back(u"VisibleBottom"_ustr, -1, cpo::uno::Any(sal_Int32(0)), beans::PropertyState_DIRECT_VALUE);
+                aViewProps.emplace_back(u"ZoomType"_ustr, -1,
                                         cpo::uno::Any(m_pSettingsTable->GetZoomType()),
                                         beans::PropertyState_DIRECT_VALUE);
             }

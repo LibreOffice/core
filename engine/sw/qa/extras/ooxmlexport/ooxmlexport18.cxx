@@ -52,8 +52,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
 
     // The exact numbering style doesn't matter - just any non-bullet pre-defined numbering style.
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", cpo::uno::Any(u"Numbering 123"_ustr) },
-        { "FamilyName", cpo::uno::Any(u"NumberingStyles"_ustr) },
+        { u"Style"_ustr, cpo::uno::Any(u"Numbering 123"_ustr) },
+        { u"FamilyName"_ustr, cpo::uno::Any(u"NumberingStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 

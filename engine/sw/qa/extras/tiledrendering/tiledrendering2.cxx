@@ -1191,8 +1191,8 @@ sal_uInt32 recordCommentDeletion(SwPostItMgr* pPostItMgr, SwTestViewCallback& rV
 {
     comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
                                 comphelper::InitPropertySequence({
-                                    { "Text", cpo::uno::Any(u"a comment"_ustr) },
-                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"a comment"_ustr) },
+                                    { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
                                 }));
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPostItMgr->GetPostItFields().size());
@@ -1203,7 +1203,7 @@ sal_uInt32 recordCommentDeletion(SwPostItMgr* pPostItMgr, SwTestViewCallback& rV
     comphelper::dispatchCommand(u".uno:TrackChanges"_ustr, {});
     comphelper::dispatchCommand(u".uno:DeleteComment"_ustr,
                                 comphelper::InitPropertySequence({
-                                    { "Id", cpo::uno::Any(OUString::number(nPostItId)) },
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
                                 }));
     Scheduler::ProcessEventsToIdle();
     // The client is told to render the comment as pending deletion instead of removing it.
@@ -1297,23 +1297,23 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoCommentDeletionAndTextChange)
 
     comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
                                 comphelper::InitPropertySequence({
-                                    { "Text", cpo::uno::Any(u"first text"_ustr) },
-                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"first text"_ustr) },
+                                    { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
                                 }));
     Scheduler::ProcessEventsToIdle();
     sal_uInt32 nPostItId = getOnlyPostItField(*pPostItMgr)->GetPostItId();
 
     comphelper::dispatchCommand(u".uno:EditAnnotation"_ustr,
                                 comphelper::InitPropertySequence({
-                                    { "Id", cpo::uno::Any(OUString::number(nPostItId)) },
-                                    { "Text", cpo::uno::Any(u"second text"_ustr) },
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"second text"_ustr) },
                                 }));
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"second text"_ustr, getOnlyPostItField(*pPostItMgr)->GetPar2());
 
     comphelper::dispatchCommand(u".uno:DeleteComment"_ustr,
                                 comphelper::InitPropertySequence({
-                                    { "Id", cpo::uno::Any(OUString::number(nPostItId)) },
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
                                 }));
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPostItMgr->GetPostItFields().size());

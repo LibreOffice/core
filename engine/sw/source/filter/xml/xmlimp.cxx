@@ -1805,7 +1805,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
     };
     cpo::uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", cpo::uno::Any(aUserData) },
+        { u"UserData"_ustr, cpo::uno::Any(aUserData) },
     }));
     cpo::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
@@ -1815,8 +1815,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", cpo::uno::Any(xStream) },
-        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
+        { u"InputStream"_ustr, cpo::uno::Any(xStream) },
+        { u"URL"_ustr, cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1895,7 +1895,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     };
     cpo::uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", cpo::uno::Any(aUserData) },
+        { u"UserData"_ustr, cpo::uno::Any(aUserData) },
     }));
     cpo::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
@@ -1905,8 +1905,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", cpo::uno::Any(xStream) },
-        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
+        { u"InputStream"_ustr, cpo::uno::Any(xStream) },
+        { u"URL"_ustr, cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1988,12 +1988,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
         // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generate timeouts trying
         // to export thousands of pages from minimal input size
         cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-            { "PageRange", cpo::uno::Any(u"1-100"_ustr) }
+            { u"PageRange"_ustr, cpo::uno::Any(u"1-100"_ustr) }
         }));
         cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-            { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
-            { "OutputStream", cpo::uno::Any(xOutputStream) },
-            { "FilterData", cpo::uno::Any(aFilterData) }
+            { u"FilterName"_ustr, cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+            { u"OutputStream"_ustr, cpo::uno::Any(xOutputStream) },
+            { u"FilterData"_ustr, cpo::uno::Any(aFilterData) }
         }));
         xPDFFilter->filter(aDescriptor);
     }
@@ -2020,8 +2020,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", cpo::uno::Any(xStream) },
-        { "InputMode", cpo::uno::Any(true) },
+        { u"InputStream"_ustr, cpo::uno::Any(xStream) },
+        { u"InputMode"_ustr, cpo::uno::Any(true) },
     }));
     xImporter->setTargetDocument(xModel);
 

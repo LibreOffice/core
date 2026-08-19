@@ -1356,8 +1356,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
     // _not_ touch pool defaults
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", cpo::uno::Any(createFileURL(u"tdf134971b.odt"))},
-        {"Filter", cpo::uno::Any(u"writer8"_ustr)},
+        {u"Name"_ustr, cpo::uno::Any(createFileURL(u"tdf134971b.odt"))},
+        {u"Filter"_ustr, cpo::uno::Any(u"writer8"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
 
@@ -1393,8 +1393,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138879)
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", cpo::uno::Any(createFileURL(u"tdf138879.odt"))},
-        {"Filter", cpo::uno::Any(u"writer8"_ustr)},
+        {u"Name"_ustr, cpo::uno::Any(createFileURL(u"tdf138879.odt"))},
+        {u"Filter"_ustr, cpo::uno::Any(u"writer8"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
 

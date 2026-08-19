@@ -561,8 +561,9 @@ class NumberingCheck : public NodeCheck
 {
 private:
     const std::vector<std::pair<OUString, OUString>> m_aNumberingCombinations{
-        { "1.", "2." }, { "(1)", "(2)" }, { "1)", "2)" },   { "a.", "b." }, { "(a)", "(b)" },
-        { "a)", "b)" }, { "A.", "B." },   { "(A)", "(B)" }, { "A)", "B)" }
+        { u"1."_ustr, u"2."_ustr }, { u"(1)"_ustr, u"(2)"_ustr }, { u"1)"_ustr, u"2)"_ustr },
+        { u"a."_ustr, u"b."_ustr }, { u"(a)"_ustr, u"(b)"_ustr }, { u"a)"_ustr, u"b)"_ustr },
+        { u"A."_ustr, u"B."_ustr }, { u"(A)"_ustr, u"(B)"_ustr }, { u"A)"_ustr, u"B)"_ustr }
     };
 
 public:

@@ -174,11 +174,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf86790)
 
     // Similarly to testChapterFieldsFollowedBy, the fields are enumerated with #1 first and everything else in reverse order
     std::vector<std::pair<OUString, OUString>> aFieldValues = {
-        { " Heading 1", "1" }, // #1
-        { " foobar", "22.2" }, // #5
-        { " foobar", "4" }, // #4
-        { " Heading 2", "1.1" }, // #3
-        { " Heading 2", "1.1" }, // #2
+        { u" Heading 1"_ustr, u"1"_ustr }, // #1
+        { u" foobar"_ustr, u"22.2"_ustr }, // #5
+        { u" foobar"_ustr, u"4"_ustr }, // #4
+        { u" Heading 2"_ustr, u"1.1"_ustr }, // #3
+        { u" Heading 2"_ustr, u"1.1"_ustr }, // #2
     };
 
     for (const auto& sValue : aFieldValues)
@@ -401,10 +401,10 @@ CPPUNIT_TEST_FIXTURE(Test, testNumericalStyleRef)
 
     // Similarly to testChapterFieldsFollowedBy, the fields are enumerated with #1 first and everything else in reverse order
     std::vector<std::pair<OUString, OUString>> aFieldValues = {
-        { " Heading 1", "3" }, // #1
-        { " Heading 2", ".2\\@123^&~|a....." }, // #4
-        { " Heading 2", ".2\\|a....." }, // #3
-        { " Heading 1", "Chapter 3.!" }, // #2
+        { u" Heading 1"_ustr, u"3"_ustr }, // #1
+        { u" Heading 2"_ustr, u".2\\@123^&~|a....."_ustr }, // #4
+        { u" Heading 2"_ustr, u".2\\|a....."_ustr }, // #3
+        { u" Heading 1"_ustr, u"Chapter 3.!"_ustr }, // #2
     };
 
     for (const auto& sValue : aFieldValues)
@@ -431,11 +431,11 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLStyleRefFlags)
 
     // Similarly to testChapterFieldsFollowedBy, the fields are enumerated with #1 first and everything else in reverse order
     std::vector<std::pair<OUString, OUString>> aFieldValues = {
-        { " Heading 2", "2.1" }, // #1
-        { " Heading 1", "3" }, // #5
-        { " Heading 1", "A top level heading at the top of the page" }, // #4
-        { " Heading 1", "The last top level heading" }, // #3
-        { " Heading 2", "Heading 2.1" }, // #2
+        { u" Heading 2"_ustr, u"2.1"_ustr }, // #1
+        { u" Heading 1"_ustr, u"3"_ustr }, // #5
+        { u" Heading 1"_ustr, u"A top level heading at the top of the page"_ustr }, // #4
+        { u" Heading 1"_ustr, u"The last top level heading"_ustr }, // #3
+        { u" Heading 2"_ustr, u"Heading 2.1"_ustr }, // #2
     };
 
     for (const auto& sValue : aFieldValues)
@@ -468,16 +468,16 @@ CPPUNIT_TEST_FIXTURE(Test, testODFStyleRef)
 
     // Similarly to testChapterFieldsFollowedBy, the fields are enumerated with #1 first and everything else in reverse order
     std::vector<std::pair<OUString, OUString>> aFieldValues = {
-        { " Heading 1", "1:" }, // #1
-        { " Heading 2", "In footnotes" }, // #10
-        { " Heading 2", "In document text" }, // #9
-        { " Heading 1", "STYLEREF in different locations" }, // #8
-        { " Heading 1", "2:" }, // #7
-        { " Heading 1", "With STYLEREF, many things are possible" }, // #6
-        { " Heading 1", "1:" }, // #5
-        { " Heading 1", "STYLEREF in different locations" }, // #4
-        { " Heading 1", "2:" }, // #3
-        { " Heading 1", "With STYLEREF, many things are possible" }, // #2
+        { u" Heading 1"_ustr, u"1:"_ustr }, // #1
+        { u" Heading 2"_ustr, u"In footnotes"_ustr }, // #10
+        { u" Heading 2"_ustr, u"In document text"_ustr }, // #9
+        { u" Heading 1"_ustr, u"STYLEREF in different locations"_ustr }, // #8
+        { u" Heading 1"_ustr, u"2:"_ustr }, // #7
+        { u" Heading 1"_ustr, u"With STYLEREF, many things are possible"_ustr }, // #6
+        { u" Heading 1"_ustr, u"1:"_ustr }, // #5
+        { u" Heading 1"_ustr, u"STYLEREF in different locations"_ustr }, // #4
+        { u" Heading 1"_ustr, u"2:"_ustr }, // #3
+        { u" Heading 1"_ustr, u"With STYLEREF, many things are possible"_ustr }, // #2
     };
 
     for (const auto& sValue : aFieldValues)

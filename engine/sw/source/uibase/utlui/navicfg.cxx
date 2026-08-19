@@ -33,20 +33,20 @@ using namespace cpo::uno;
 namespace {
     std::map<OUString, ContentTypeId> mPropNameToContentTypeId
     {
-        {"TableTracking", ContentTypeId::TABLE},
-        {"FrameTracking", ContentTypeId::FRAME},
-        {"ImageTracking", ContentTypeId::GRAPHIC},
-        {"OLEobjectTracking", ContentTypeId::OLE},
-        {"BookmarkTracking", ContentTypeId::BOOKMARK},
-        {"SectionTracking", ContentTypeId::REGION},
-        {"HyperlinkTracking", ContentTypeId::URLFIELD},
-        {"ReferenceTracking", ContentTypeId::REFERENCE},
-        {"IndexTracking", ContentTypeId::INDEX},
-        {"CommentTracking", ContentTypeId::POSTIT},
-        {"DrawingObjectTracking", ContentTypeId::DRAWOBJECT},
-        {"FieldTracking", ContentTypeId::TEXTFIELD},
-        {"FootnoteTracking", ContentTypeId::FOOTNOTE},
-        {"EndnoteTracking", ContentTypeId::ENDNOTE}
+        {u"TableTracking"_ustr, ContentTypeId::TABLE},
+        {u"FrameTracking"_ustr, ContentTypeId::FRAME},
+        {u"ImageTracking"_ustr, ContentTypeId::GRAPHIC},
+        {u"OLEobjectTracking"_ustr, ContentTypeId::OLE},
+        {u"BookmarkTracking"_ustr, ContentTypeId::BOOKMARK},
+        {u"SectionTracking"_ustr, ContentTypeId::REGION},
+        {u"HyperlinkTracking"_ustr, ContentTypeId::URLFIELD},
+        {u"ReferenceTracking"_ustr, ContentTypeId::REFERENCE},
+        {u"IndexTracking"_ustr, ContentTypeId::INDEX},
+        {u"CommentTracking"_ustr, ContentTypeId::POSTIT},
+        {u"DrawingObjectTracking"_ustr, ContentTypeId::DRAWOBJECT},
+        {u"FieldTracking"_ustr, ContentTypeId::TEXTFIELD},
+        {u"FootnoteTracking"_ustr, ContentTypeId::FOOTNOTE},
+        {u"EndnoteTracking"_ustr, ContentTypeId::ENDNOTE}
     };
 }
 

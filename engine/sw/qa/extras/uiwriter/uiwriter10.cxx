@@ -1834,8 +1834,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     createSwDoc();
     SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
-    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { u"Rows"_ustr, cpo::uno::Any(sal_Int32(2)) },
+                                           { u"Columns"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1867,8 +1868,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
-        { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
+        { u"Style"_ustr, cpo::uno::Any(u"Heading 1"_ustr) },
+        { u"FamilyName"_ustr, cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
@@ -1922,8 +1923,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
     createSwDoc();
     SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
-    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { u"Rows"_ustr, cpo::uno::Any(sal_Int32(2)) },
+                                           { u"Columns"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 

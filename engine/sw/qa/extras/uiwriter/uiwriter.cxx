@@ -1824,8 +1824,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "OutputStream", cpo::uno::Any(xOutputStream) },
-            { "FilterName", cpo::uno::Any(u"SVM"_ustr) }
+            { u"OutputStream"_ustr, cpo::uno::Any(xOutputStream) },
+            { u"FilterName"_ustr, cpo::uno::Any(u"SVM"_ustr) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -2082,7 +2082,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
     CPPUNIT_ASSERT_EQUAL(xFlatPara2->getText(), xFlatPara4->getText());
     //changing the attributes of last para
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-         { "CharWeight", cpo::uno::Any(css::awt::FontWeight::BOLD) }
+         { u"CharWeight"_ustr, cpo::uno::Any(css::awt::FontWeight::BOLD) }
     }));
     xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
     //checking Language Portions

@@ -4520,23 +4520,23 @@ const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
 {
     static CellStyleNameMap const aMap
     {
-        { "first-row"     , FIRST_ROW_STYLE },
-        { "last-row"      , LAST_ROW_STYLE },
-        { "first-column"  , FIRST_COLUMN_STYLE },
-        { "last-column"   , LAST_COLUMN_STYLE },
-        { "body"          , BODY_STYLE },
-        { "even-rows"     , EVEN_ROWS_STYLE },
-        { "odd-rows"      , ODD_ROWS_STYLE },
-        { "even-columns"  , EVEN_COLUMNS_STYLE },
-        { "odd-columns"   , ODD_COLUMNS_STYLE },
-        { "background"    , BACKGROUND_STYLE },
+        { u"first-row"_ustr     , FIRST_ROW_STYLE },
+        { u"last-row"_ustr      , LAST_ROW_STYLE },
+        { u"first-column"_ustr  , FIRST_COLUMN_STYLE },
+        { u"last-column"_ustr   , LAST_COLUMN_STYLE },
+        { u"body"_ustr          , BODY_STYLE },
+        { u"even-rows"_ustr     , EVEN_ROWS_STYLE },
+        { u"odd-rows"_ustr      , ODD_ROWS_STYLE },
+        { u"even-columns"_ustr  , EVEN_COLUMNS_STYLE },
+        { u"odd-columns"_ustr   , ODD_COLUMNS_STYLE },
+        { u"background"_ustr    , BACKGROUND_STYLE },
         // loext namespace
-        { "first-row-start-column"  , FIRST_ROW_START_COLUMN_STYLE },
-        { "first-row-end-column"    , FIRST_ROW_END_COLUMN_STYLE },
-        { "last-row-start-column"   , LAST_ROW_START_COLUMN_STYLE },
-        { "last-row-end-column"     , LAST_ROW_END_COLUMN_STYLE },
-        { "first-row-even-column"   , FIRST_ROW_EVEN_COLUMN_STYLE },
-        { "last-row-even-column"    , LAST_ROW_EVEN_COLUMN_STYLE },
+        { u"first-row-start-column"_ustr  , FIRST_ROW_START_COLUMN_STYLE },
+        { u"first-row-end-column"_ustr    , FIRST_ROW_END_COLUMN_STYLE },
+        { u"last-row-start-column"_ustr   , LAST_ROW_START_COLUMN_STYLE },
+        { u"last-row-end-column"_ustr     , LAST_ROW_END_COLUMN_STYLE },
+        { u"first-row-even-column"_ustr   , FIRST_ROW_EVEN_COLUMN_STYLE },
+        { u"last-row-even-column"_ustr    , LAST_ROW_EVEN_COLUMN_STYLE },
     };
     return aMap;
 }

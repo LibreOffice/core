@@ -430,7 +430,7 @@ void collectUIInformation(SwShellCursor* pCursor)
     OUString aSelStart = OUString::number(pCursor->Start()->GetContentIndex());
     OUString aSelEnd = OUString::number(pCursor->End()->GetContentIndex());
 
-    aDescription.aParameters = {{"START_POS", aSelStart}, {"END_POS", aSelEnd}};
+    aDescription.aParameters = {{u"START_POS"_ustr, aSelStart}, {u"END_POS"_ustr, aSelEnd}};
     aDescription.aAction = u"SELECT"_ustr;
     aDescription.aID = u"writer_edit"_ustr;
     aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;

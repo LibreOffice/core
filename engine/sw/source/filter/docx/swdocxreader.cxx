@@ -78,9 +78,9 @@ ErrCodeMsg SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM
 
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
     {
-        { "InputStream", cpo::uno::Any(xStream) },
-        { "InsertMode", cpo::uno::Any(true) },
-        { "TextInsertModeRange", cpo::uno::Any(uno::Reference<text::XTextRange>(xInsertTextRange)) }
+        { u"InputStream"_ustr, cpo::uno::Any(xStream) },
+        { u"InsertMode"_ustr, cpo::uno::Any(true) },
+        { u"TextInsertModeRange"_ustr, cpo::uno::Any(uno::Reference<text::XTextRange>(xInsertTextRange)) }
     }));
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
@@ -130,8 +130,8 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
         uno::Reference<io::XStream> xStream( new utl::OStreamWrapper( *m_pMedium->GetInStream() ) );
 
         cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-                { "InputStream", cpo::uno::Any(xStream) },
-                { "ReadGlossaries", cpo::uno::Any(true) }
+                { u"InputStream"_ustr, cpo::uno::Any(xStream) },
+                { u"ReadGlossaries"_ustr, cpo::uno::Any(true) }
             }));
 
         if( xFilter->filter( aDescriptor ) )

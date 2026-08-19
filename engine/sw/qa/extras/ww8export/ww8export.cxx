@@ -846,9 +846,9 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
     xParagraph.set(getParagraph(2), uno::UNO_QUERY);
     std::map<OUString, OUString> aExpectedStatements =
     {
-        {"urn:bails:ExportControl:BusinessAuthorization:Identifier", "urn:example:tscp:1"},
-        {"urn:bails:ExportControl:BusinessAuthorizationCategory:Identifier", "urn:example:tscp:1:confidential"},
-        {"urn:bails:ExportControl:Authorization:StartValidity", "2015-11-27"}
+        {u"urn:bails:ExportControl:BusinessAuthorization:Identifier"_ustr, u"urn:example:tscp:1"_ustr},
+        {u"urn:bails:ExportControl:BusinessAuthorizationCategory:Identifier"_ustr, u"urn:example:tscp:1:confidential"_ustr},
+        {u"urn:bails:ExportControl:Authorization:StartValidity"_ustr, u"2015-11-27"_ustr}
     };
     std::map<OUString, OUString> aActualStatements;
     xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());

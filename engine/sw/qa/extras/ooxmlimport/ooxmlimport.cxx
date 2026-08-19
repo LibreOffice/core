@@ -1671,8 +1671,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100072)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "OutputStream", cpo::uno::Any(xOutputStream) },
-            { "FilterName", cpo::uno::Any(u"SVM"_ustr) }
+            { u"OutputStream"_ustr, cpo::uno::Any(xOutputStream) },
+            { u"FilterName"_ustr, cpo::uno::Any(u"SVM"_ustr) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);

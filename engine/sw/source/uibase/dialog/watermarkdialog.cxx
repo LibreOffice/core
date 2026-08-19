@@ -111,11 +111,11 @@ IMPL_LINK_NOARG(SwWatermarkDialog, OKButtonHdl, weld::Button&, void)
 
     cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence(
     {
-        { "Text", cpo::uno::Any( sText ) },
-        { "Font", cpo::uno::Any( m_xFont->get_active_text() ) },
-        { "Angle", cpo::uno::Any( static_cast<sal_Int16>( m_xAngle->get_value(FieldUnit::DEGREE) ) ) },
-        { "Transparency", cpo::uno::Any( static_cast<sal_Int16>( m_xTransparency->get_value(FieldUnit::PERCENT) ) ) },
-        { "Color", cpo::uno::Any( static_cast<sal_uInt32>( m_xColor->GetSelectEntryColor().GetRGBColor() ) ) }
+        { u"Text"_ustr, cpo::uno::Any( sText ) },
+        { u"Font"_ustr, cpo::uno::Any( m_xFont->get_active_text() ) },
+        { u"Angle"_ustr, cpo::uno::Any( static_cast<sal_Int16>( m_xAngle->get_value(FieldUnit::DEGREE) ) ) },
+        { u"Transparency"_ustr, cpo::uno::Any( static_cast<sal_Int16>( m_xTransparency->get_value(FieldUnit::PERCENT) ) ) },
+        { u"Color"_ustr, cpo::uno::Any( static_cast<sal_uInt32>( m_xColor->GetSelectEntryColor().GetRGBColor() ) ) }
     } ) );
     comphelper::dispatchCommand( u".uno:Watermark"_ustr, aPropertyValues );
 

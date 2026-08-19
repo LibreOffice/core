@@ -246,7 +246,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 cpo::uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
                 cpo::uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
-                        { "DefaultParentBaseURL", Any(GetXMLImport().GetBaseURL()) }
+                        { u"DefaultParentBaseURL"_ustr, Any(GetXMLImport().GetBaseURL()) }
                     }));
                 uno::Reference < embed::XEmbeddedObject > xObj( xFactory->createInstanceInitNew(
                     aClass, OUString(), xStorage, u"DummyName"_ustr, aObjArgs), uno::UNO_QUERY );

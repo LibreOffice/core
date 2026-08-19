@@ -1368,7 +1368,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf141525)
 
     // Insert "Line with Arrow/Circle" shape with CTRL key
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:LineArrowCircle"_ustr, aArgs);
 
     // Asserts line shape has been inserted into the doc
@@ -1440,7 +1440,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
     createSwDoc();
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Name", cpo::uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
+        { u"Name"_ustr, cpo::uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
     });
 
     // Inserting a document with text box attached in a table's second column must not crash

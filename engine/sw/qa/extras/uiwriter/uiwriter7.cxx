@@ -112,12 +112,12 @@ public:
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testExportToPicture)
 {
     createSwDoc();
-    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PixelWidth", cpo::uno::Any(sal_Int32(610)) },
-                                           { "PixelHeight", cpo::uno::Any(sal_Int32(610)) } }));
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { u"PixelWidth"_ustr, cpo::uno::Any(sal_Int32(610)) },
+          { u"PixelHeight"_ustr, cpo::uno::Any(sal_Int32(610)) } }));
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        { { "FilterName", cpo::uno::Any(u"writer_png_Export"_ustr) },
-          { "FilterData", cpo::uno::Any(aFilterData) } }));
+        { { u"FilterName"_ustr, cpo::uno::Any(u"writer_png_Export"_ustr) },
+          { u"FilterData"_ustr, cpo::uno::Any(aFilterData) } }));
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
     bool extchk = maTempFile.IsValid();
@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
     //setting some properties
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        { { "CharWeight", cpo::uno::Any(css::awt::FontWeight::BOLD) } }));
+        { { u"CharWeight"_ustr, cpo::uno::Any(css::awt::FontWeight::BOLD) } }));
     xProp->setSearchAttributes(aDescriptor);
     //receiving the defined properties and asserting them with expected values, covering UNO
     cpo::uno::Sequence<beans::PropertyValue> aPropVal2(xProp->getSearchAttributes());
@@ -1863,7 +1863,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat",
+        { { u"SelectedFormat"_ustr,
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::STRING)) } });
 
     // Paste as Unformatted text
@@ -2313,7 +2313,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testDde)
     // Go before the selection and paste as a DDE link.
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat",
+        { { u"SelectedFormat"_ustr,
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::LINK)) } });
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
@@ -2614,26 +2614,29 @@ public:
 
     virtual void Text(TextFrameIndex nLength, PortionType nType) override
     {
-        mPortionItems.emplace_back("text", sal_Int32(nLength), nType);
+        mPortionItems.emplace_back(u"text"_ustr, sal_Int32(nLength), nType);
     }
 
     virtual void Special(TextFrameIndex nLength, const OUString& /*rText*/,
                          PortionType nType) override
     {
-        mPortionItems.emplace_back("special", sal_Int32(nLength), nType);
+        mPortionItems.emplace_back(u"special"_ustr, sal_Int32(nLength), nType);
     }
 
     virtual void LineBreak() override
     {
-        mPortionItems.emplace_back("line_break", 0, PortionType::NONE);
+        mPortionItems.emplace_back(u"line_break"_ustr, 0, PortionType::NONE);
     }
 
     virtual void Skip(TextFrameIndex nLength) override
     {
-        mPortionItems.emplace_back("skip", sal_Int32(nLength), PortionType::NONE);
+        mPortionItems.emplace_back(u"skip"_ustr, sal_Int32(nLength), PortionType::NONE);
     }
 
-    virtual void Finish() override { mPortionItems.emplace_back("finish", 0, PortionType::NONE); }
+    virtual void Finish() override
+    {
+        mPortionItems.emplace_back(u"finish"_ustr, 0, PortionType::NONE);
+    }
 };
 }
 #endif

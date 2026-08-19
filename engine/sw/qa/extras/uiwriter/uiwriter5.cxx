@@ -859,14 +859,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144272)
     // modify with track changes: Standard and Heading 2
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", cpo::uno::Any(u"Standard"_ustr) },
-        { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
+        { u"Style"_ustr, cpo::uno::Any(u"Standard"_ustr) },
+        { u"FamilyName"_ustr, cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
     pWrtShell->Down(/*bSelect=*/false);
     aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", cpo::uno::Any(u"Heading 2"_ustr) },
-        { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
+        { u"Style"_ustr, cpo::uno::Any(u"Heading 2"_ustr) },
+        { u"FamilyName"_ustr, cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
@@ -897,15 +897,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf101873)
 
     // Search for something which does not exist, twice.
     cpo::uno::Sequence<beans::PropertyValue> aFirst(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", cpo::uno::Any(u"fig"_ustr) },
-        { "SearchItem.Backward", cpo::uno::Any(false) },
+        { u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"fig"_ustr) },
+        { u"SearchItem.Backward"_ustr, cpo::uno::Any(false) },
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aFirst);
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aFirst);
 
     cpo::uno::Sequence<beans::PropertyValue> aSecond(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", cpo::uno::Any(u"something"_ustr) },
-        { "SearchItem.Backward", cpo::uno::Any(false) },
+        { u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"something"_ustr) },
+        { u"SearchItem.Backward"_ustr, cpo::uno::Any(false) },
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aSecond);
 
@@ -1901,8 +1901,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf118311)
 
     // Jump to the first cell, selecting its content
     cpo::uno::Sequence<beans::PropertyValue> aSearch(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", cpo::uno::Any(u"a"_ustr) },
-        { "SearchItem.Backward", cpo::uno::Any(false) },
+        { u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"a"_ustr) },
+        { u"SearchItem.Backward"_ustr, cpo::uno::Any(false) },
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aSearch);
 

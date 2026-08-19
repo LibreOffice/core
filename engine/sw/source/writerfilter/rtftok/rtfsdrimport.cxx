@@ -996,7 +996,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         if (!aShapeText.isEmpty())
         {
             cpo::uno::Sequence<beans::PropertyValue> aSequence(comphelper::InitPropertySequence({
-                { "TextPath", cpo::uno::Any(true) },
+                { u"TextPath"_ustr, cpo::uno::Any(true) },
             }));
             aCustomShapeGeometry[u"TextPath"_ustr] <<= aSequence;
             xPropertySet->setPropertyValue(u"TextAutoGrowHeight"_ustr, cpo::uno::Any(false));

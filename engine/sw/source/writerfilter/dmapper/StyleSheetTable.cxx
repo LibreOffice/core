@@ -1651,447 +1651,447 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
     // These are from the w:latentStyles in the styles.xml of a Word 15.0 DOCX,
     // plus some pre-existing additions and variants.
     static const std::map< OUString, OUString> StyleNameMap {
-        { "Normal", "Standard" }, // SwPoolFormatId::COLL_STANDARD
-        { "heading 1", "Heading 1" }, // SwPoolFormatId::COLL_HEADLINE1
-        { "heading 2", "Heading 2" }, // SwPoolFormatId::COLL_HEADLINE2
-        { "heading 3", "Heading 3" }, // SwPoolFormatId::COLL_HEADLINE3
-        { "heading 4", "Heading 4" }, // SwPoolFormatId::COLL_HEADLINE4
-        { "heading 5", "Heading 5" }, // SwPoolFormatId::COLL_HEADLINE5
-        { "heading 6", "Heading 6" }, // SwPoolFormatId::COLL_HEADLINE6
-        { "heading 7", "Heading 7" }, // SwPoolFormatId::COLL_HEADLINE7
-        { "heading 8", "Heading 8" }, // SwPoolFormatId::COLL_HEADLINE8
-        { "heading 9", "Heading 9" }, // SwPoolFormatId::COLL_HEADLINE9
-        { "Heading 1", "Heading 1" }, // SwPoolFormatId::COLL_HEADLINE1
-        { "Heading 2", "Heading 2" }, // SwPoolFormatId::COLL_HEADLINE2
-        { "Heading 3", "Heading 3" }, // SwPoolFormatId::COLL_HEADLINE3
-        { "Heading 4", "Heading 4" }, // SwPoolFormatId::COLL_HEADLINE4
-        { "Heading 5", "Heading 5" }, // SwPoolFormatId::COLL_HEADLINE5
-        { "Heading 6", "Heading 6" }, // SwPoolFormatId::COLL_HEADLINE6
-        { "Heading 7", "Heading 7" }, // SwPoolFormatId::COLL_HEADLINE7
-        { "Heading 8", "Heading 8" }, // SwPoolFormatId::COLL_HEADLINE8
-        { "Heading 9", "Heading 9" }, // SwPoolFormatId::COLL_HEADLINE9
-        { "Index 1", "Index 1" }, // SwPoolFormatId::COLL_TOX_IDX1
-        { "Index 2", "Index 2" }, // SwPoolFormatId::COLL_TOX_IDX2
-        { "Index 3", "Index 3" }, // SwPoolFormatId::COLL_TOX_IDX3
-        { "Index 4", "" },
-        { "Index 5", "" },
-        { "Index 6", "" },
-        { "Index 7", "" },
-        { "Index 8", "" },
-        { "Index 9", "" },
-        { "index 1", "Index 1" }, // SwPoolFormatId::COLL_TOX_IDX1
-        { "index 2", "Index 2" }, // SwPoolFormatId::COLL_TOX_IDX2
-        { "index 3", "Index 3" }, // SwPoolFormatId::COLL_TOX_IDX3
-        { "index 4", "" },
-        { "index 5", "" },
-        { "index 6", "" },
-        { "index 7", "" },
-        { "index 8", "" },
-        { "index 9", "" },
-        { "TOC 1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
-        { "TOC 2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
-        { "TOC 3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
-        { "TOC 4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
-        { "TOC 5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
-        { "TOC 6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
-        { "TOC 7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
-        { "TOC 8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
-        { "TOC 9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
-        { "toc 1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
-        { "toc 2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
-        { "toc 3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
-        { "toc 4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
-        { "toc 5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
-        { "toc 6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
-        { "toc 7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
-        { "toc 8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
-        { "toc 9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
-        { "TOC1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
-        { "TOC2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
-        { "TOC3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
-        { "TOC4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
-        { "TOC5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
-        { "TOC6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
-        { "TOC7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
-        { "TOC8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
-        { "TOC9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
-        { "Normal Indent", "" },
-        { "footnote text", "Footnote" }, // SwPoolFormatId::COLL_FOOTNOTE
-        { "Footnote Text", "Footnote" }, // SwPoolFormatId::COLL_FOOTNOTE
-        { "Annotation Text", "Marginalia" }, // SwPoolFormatId::COLL_MARGINAL
-        { "annotation text", "Marginalia" }, // SwPoolFormatId::COLL_MARGINAL
-        { "Header", "Header" }, // SwPoolFormatId::COLL_HEADER
-        { "header", "Header" }, // SwPoolFormatId::COLL_HEADER
-        { "Footer", "Footer" }, // SwPoolFormatId::COLL_FOOTER
-        { "footer", "Footer" }, // SwPoolFormatId::COLL_FOOTER
-        { "Index Heading", "Index Heading" }, // SwPoolFormatId::COLL_TOX_IDXH
-        { "index heading", "Index Heading" }, // SwPoolFormatId::COLL_TOX_IDXH
-        { "Caption", "Caption" }, // SwPoolFormatId::COLL_LABEL
-        { "caption", "Caption" }, // SwPoolFormatId::COLL_LABEL
-        { "table of figures", "Figure Index 1" }, // SwPoolFormatId::COLL_TOX_ILLUS1
-        { "Table of Figures", "Figure Index 1" }, // SwPoolFormatId::COLL_TOX_ILLUS1
-        { "Envelope Address", "Addressee" }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
-        { "envelope address", "Addressee" }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
-        { "Envelope Return", "Sender" }, // SwPoolFormatId::COLL_SEND_ADDRESS
-        { "envelope return", "Sender" }, // SwPoolFormatId::COLL_SEND_ADDRESS
-        { "footnote reference", "Footnote Symbol" }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
-        { "Footnote Reference", "Footnote Symbol" }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
-        { "Annotation Reference", "" },
-        { "annotation reference", "" },
-        { "Line Number", "Line numbering" }, // SwPoolFormatId::CHR_LINENUM
-        { "line number", "Line numbering" }, // SwPoolFormatId::CHR_LINENUM
-        { "Page Number", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
-        { "page number", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
-        { "PageNumber", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
-        { "endnote reference", "Endnote Symbol" }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
-        { "Endnote Reference", "Endnote Symbol" }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
-        { "endnote text", "Endnote" }, // SwPoolFormatId::COLL_ENDNOTE
-        { "Endnote Text", "Endnote" }, // SwPoolFormatId::COLL_ENDNOTE
-        { "Table of Authorities", "Bibliography Heading" }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
-        { "table of authorities", "Bibliography Heading" }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
-        { "macro", "" },
-        { "TOA Heading", "" },
-        { "toa heading", "" },
-        { "List", "List" }, // SwPoolFormatId::COLL_NUMBER_BULLET_BASE
-        { "List 2", "" },
-        { "List 3", "" },
-        { "List 4", "" },
-        { "List 5", "" },
-        { "List Bullet", "List 1" }, // SwPoolFormatId::COLL_BULLET_LEVEL1
-        { "List Bullet 2", "List 2" }, // SwPoolFormatId::COLL_BULLET_LEVEL2
-        { "List Bullet 3", "List 3" }, // SwPoolFormatId::COLL_BULLET_LEVEL3
-        { "List Bullet 4", "List 4" }, // SwPoolFormatId::COLL_BULLET_LEVEL4
-        { "List Bullet 5", "List 5" }, // SwPoolFormatId::COLL_BULLET_LEVEL5
-        { "List Number", "Numbering 1" }, // SwPoolFormatId::COLL_NUM_LEVEL1
-        { "List Number 2", "Numbering 2" }, // SwPoolFormatId::COLL_NUM_LEVEL2
-        { "List Number 3", "Numbering 3" }, // SwPoolFormatId::COLL_NUM_LEVEL3
-        { "List Number 4", "Numbering 4" }, // SwPoolFormatId::COLL_NUM_LEVEL4
-        { "List Number 5", "Numbering 5" }, // SwPoolFormatId::COLL_NUM_LEVEL5
-        { "Title", "Title" }, // SwPoolFormatId::COLL_DOC_TITLE
-        { "Closing", "Appendix" }, // SwPoolFormatId::COLL_DOC_APPENDIX
-        { "Signature", "Signature" }, // SwPoolFormatId::COLL_SIGNATURE
-        { "Default Paragraph Font", "" },
-        { "DefaultParagraphFont", "" },
-        { "Body Text", "Text body" }, // SwPoolFormatId::COLL_TEXT
-        { "BodyText", "Text body" }, // SwPoolFormatId::COLL_TEXT
-        { "BodyTextIndentItalic", "" },
-        { "Body Text Indent", "Text body indent" }, // SwPoolFormatId::COLL_TEXT_MOVE
-        { "BodyTextIndent", "Text body indent" }, // SwPoolFormatId::COLL_TEXT_MOVE
-        { "BodyTextIndent2", "" },
-        { "List Continue", "List 1 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM1
-        { "List Continue 2", "List 2 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM2
-        { "List Continue 3", "List 3 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM3
-        { "List Continue 4", "List 4 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM4
-        { "List Continue 5", "List 5 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM5
-        { "Message Header", "" },
-        { "Subtitle", "Subtitle" }, // SwPoolFormatId::COLL_DOC_SUBTITLE
-        { "Salutation", "Salutation" }, // SwPoolFormatId::COLL_GREETING
-        { "Date", "" },
-        { "Body Text First Indent", "First line indent" }, // SwPoolFormatId::COLL_TEXT_IDENT
-        { "Body Text First Indent 2", "" },
-        { "Note Heading", "" },
-        { "Body Text 2", "" },
-        { "Body Text 3", "" },
-        { "Body Text Indent 2", "" },
-        { "Body Text Indent 3", "" },
-        { "Block Text", "" },
-        { "Hyperlink", "Internet link" }, // SwPoolFormatId::CHR_INET_NORMAL
-        { "FollowedHyperlink", "Visited Internet Link" }, // SwPoolFormatId::CHR_INET_VISIT
-        { "Strong", "Strong Emphasis" }, // SwPoolFormatId::CHR_HTML_STRONG
-        { "Emphasis", "Emphasis" }, // SwPoolFormatId::CHR_HTML_EMPHASIS
-        { "Document Map", "" },
-        { "DocumentMap", "" },
-        { "Plain Text", "" },
-        { "E-mail Signature", "" },
-        { "HTML Top of Form", "" },
-        { "HTML Bottom of Form", "" },
-        { "Normal (Web)", "" },
-        { "HTML Acronym", "" },
-        { "HTML Address", "" },
-        { "HTML Cite", "" },
-        { "HTML Code", "" },
-        { "HTML Definition", "" },
-        { "HTML Keyboard", "" },
-        { "HTML Preformatted", "" },
-        { "HTML Sample", "" },
-        { "HTML Typewriter", "" },
-        { "HTML Variable", "" },
-        { "", "" },
-        { "", "" },
-        { "", "" },
-        { "Normal Table", "" },
-        { "annotation subject", "" },
-        { "No List", "No List" }, // SwPoolFormatId::NUMRULE_NOLIST
-        { "NoList", "No List" }, // SwPoolFormatId::NUMRULE_NOLIST
-        { "Outline List 1", "" },
-        { "Outline List 2", "" },
-        { "Outline List 3", "" },
-        { "Table Simple 1", "" },
-        { "Table Simple 2", "" },
-        { "Table Simple 3", "" },
-        { "Table Classic 1", "" },
-        { "Table Classic 2", "" },
-        { "Table Classic 3", "" },
-        { "Table Classic 4", "" },
-        { "Table Colorful 1", "" },
-        { "Table Colorful 2", "" },
-        { "Table Colorful 3", "" },
-        { "Table Columns 1", "" },
-        { "Table Columns 2", "" },
-        { "Table Columns 3", "" },
-        { "Table Columns 4", "" },
-        { "Table Columns 5", "" },
-        { "Table Grid 1", "" },
-        { "Table Grid 2", "" },
-        { "Table Grid 3", "" },
-        { "Table Grid 4", "" },
-        { "Table Grid 5", "" },
-        { "Table Grid 6", "" },
-        { "Table Grid 7", "" },
-        { "Table Grid 8", "" },
-        { "Table List 1", "" },
-        { "Table List 2", "" },
-        { "Table List 3", "" },
-        { "Table List 4", "" },
-        { "Table List 5", "" },
-        { "Table List 6", "" },
-        { "Table List 7", "" },
-        { "Table List 8", "" },
-        { "Table 3D effects 1", "" },
-        { "Table 3D effects 2", "" },
-        { "Table 3D effects 3", "" },
-        { "Table Contemporary", "" },
-        { "Table Elegant", "" },
-        { "Table Professional", "" },
-        { "Table Subtle 1", "" },
-        { "Table Subtle 2", "" },
-        { "Table Web 1", "" },
-        { "Table Web 2", "" },
-        { "Table Web 3", "" },
-        { "Balloon Text", "" },
-        { "Table Grid", "" },
-        { "Table Theme", "" },
-        { "Placeholder Text", "" },
-        { "No Spacing", "" },
-        { "Light Shading", "" },
-        { "Light List", "" },
-        { "Light Grid", "" },
-        { "Medium Shading 1", "" },
-        { "Medium Shading 2", "" },
-        { "Medium List 1", "" },
-        { "Medium List 2", "" },
-        { "Medium Grid 1", "" },
-        { "Medium Grid 2", "" },
-        { "Medium Grid 3", "" },
-        { "Dark List", "" },
-        { "Colorful Shading", "" },
-        { "Colorful List", "" },
-        { "Colorful Grid", "" },
-        { "Light Shading Accent 1", "" },
-        { "Light List Accent 1", "" },
-        { "Light Grid Accent 1", "" },
-        { "Medium Shading 1 Accent 1", "" },
-        { "Medium Shading 2 Accent 1", "" },
-        { "Medium List 1 Accent 1", "" },
-        { "Revision", "" },
-        { "List Paragraph", "" },
-        { "Quote", "" },
-        { "Intense Quote", "" },
-        { "Medium List 2 Accent 1", "" },
-        { "Medium Grid 1 Accent 1", "" },
-        { "Medium Grid 2 Accent 1", "" },
-        { "Medium Grid 3 Accent 1", "" },
-        { "Dark List Accent 1", "" },
-        { "Colorful Shading Accent 1", "" },
-        { "Colorful List Accent 1", "" },
-        { "Colorful Grid Accent 1", "" },
-        { "Light Shading Accent 2", "" },
-        { "Light List Accent 2", "" },
-        { "Light Grid Accent 2", "" },
-        { "Medium Shading 1 Accent 2", "" },
-        { "Medium Shading 2 Accent 2", "" },
-        { "Medium List 1 Accent 2", "" },
-        { "Medium List 2 Accent 2", "" },
-        { "Medium Grid 1 Accent 2", "" },
-        { "Medium Grid 2 Accent 2", "" },
-        { "Medium Grid 3 Accent 2", "" },
-        { "Dark List Accent 2", "" },
-        { "Colorful Shading Accent 2", "" },
-        { "Colorful List Accent 2", "" },
-        { "Colorful Grid Accent 2", "" },
-        { "Light Shading Accent 3", "" },
-        { "Light List Accent 3", "" },
-        { "Light Grid Accent 3", "" },
-        { "Medium Shading 1 Accent 3", "" },
-        { "Medium Shading 2 Accent 3", "" },
-        { "Medium List 1 Accent 3", "" },
-        { "Medium List 2 Accent 3", "" },
-        { "Medium Grid 1 Accent 3", "" },
-        { "Medium Grid 2 Accent 3", "" },
-        { "Medium Grid 3 Accent 3", "" },
-        { "Dark List Accent 3", "" },
-        { "Colorful Shading Accent 3", "" },
-        { "Colorful List Accent 3", "" },
-        { "Colorful Grid Accent 3", "" },
-        { "Light Shading Accent 4", "" },
-        { "Light List Accent 4", "" },
-        { "Light Grid Accent 4", "" },
-        { "Medium Shading 1 Accent 4", "" },
-        { "Medium Shading 2 Accent 4", "" },
-        { "Medium List 1 Accent 4", "" },
-        { "Medium List 2 Accent 4", "" },
-        { "Medium Grid 1 Accent 4", "" },
-        { "Medium Grid 2 Accent 4", "" },
-        { "Medium Grid 3 Accent 4", "" },
-        { "Dark List Accent 4", "" },
-        { "Colorful Shading Accent 4", "" },
-        { "Colorful List Accent 4", "" },
-        { "Colorful Grid Accent 4", "" },
-        { "Light Shading Accent 5", "" },
-        { "Light List Accent 5", "" },
-        { "Light Grid Accent 5", "" },
-        { "Medium Shading 1 Accent 5", "" },
-        { "Medium Shading 2 Accent 5", "" },
-        { "Medium List 1 Accent 5", "" },
-        { "Medium List 2 Accent 5", "" },
-        { "Medium Grid 1 Accent 5", "" },
-        { "Medium Grid 2 Accent 5", "" },
-        { "Medium Grid 3 Accent 5", "" },
-        { "Dark List Accent 5", "" },
-        { "Colorful Shading Accent 5", "" },
-        { "Colorful List Accent 5", "" },
-        { "Colorful Grid Accent 5", "" },
-        { "Light Shading Accent 6", "" },
-        { "Light List Accent 6", "" },
-        { "Light Grid Accent 6", "" },
-        { "Medium Shading 1 Accent 6", "" },
-        { "Medium Shading 2 Accent 6", "" },
-        { "Medium List 1 Accent 6", "" },
-        { "Medium List 2 Accent 6", "" },
-        { "Medium Grid 1 Accent 6", "" },
-        { "Medium Grid 2 Accent 6", "" },
-        { "Medium Grid 3 Accent 6", "" },
-        { "Dark List Accent 6", "" },
-        { "Colorful Shading Accent 6", "" },
-        { "Colorful List Accent 6", "" },
-        { "Colorful Grid Accent 6", "" },
-        { "Subtle Emphasis", "" },
-        { "Intense Emphasis", "" },
-        { "Subtle Reference", "" },
-        { "Intense Reference", "" },
-        { "Book Title", "" },
-        { "Bibliography", "" },
-        { "TOC Heading", "Contents Heading" }, // SwPoolFormatId::COLL_TOX_CNTNTH
-        { "TOCHeading", "Contents Heading" }, // SwPoolFormatId::COLL_TOX_CNTNTH
-        { "Plain Table 1", "" },
-        { "Plain Table 2", "" },
-        { "Plain Table 3", "" },
-        { "Plain Table 4", "" },
-        { "Plain Table 5", "" },
-        { "Grid Table Light", "" },
-        { "Grid Table 1 Light", "" },
-        { "Grid Table 2", "" },
-        { "Grid Table 3", "" },
-        { "Grid Table 4", "" },
-        { "Grid Table 5 Dark", "" },
-        { "Grid Table 6 Colorful", "" },
-        { "Grid Table 7 Colorful", "" },
-        { "Grid Table 1 Light Accent 1", "" },
-        { "Grid Table 2 Accent 1", "" },
-        { "Grid Table 3 Accent 1", "" },
-        { "Grid Table 4 Accent 1", "" },
-        { "Grid Table 5 Dark Accent 1", "" },
-        { "Grid Table 6 Colorful Accent 1", "" },
-        { "Grid Table 7 Colorful Accent 1", "" },
-        { "Grid Table 1 Light Accent 2", "" },
-        { "Grid Table 2 Accent 2", "" },
-        { "Grid Table 3 Accent 2", "" },
-        { "Grid Table 4 Accent 2", "" },
-        { "Grid Table 5 Dark Accent 2", "" },
-        { "Grid Table 6 Colorful Accent 2", "" },
-        { "Grid Table 7 Colorful Accent 2", "" },
-        { "Grid Table 1 Light Accent 3", "" },
-        { "Grid Table 2 Accent 3", "" },
-        { "Grid Table 3 Accent 3", "" },
-        { "Grid Table 4 Accent 3", "" },
-        { "Grid Table 5 Dark Accent 3", "" },
-        { "Grid Table 6 Colorful Accent 3", "" },
-        { "Grid Table 7 Colorful Accent 3", "" },
-        { "Grid Table 1 Light Accent 4", "" },
-        { "Grid Table 2 Accent 4", "" },
-        { "Grid Table 3 Accent 4", "" },
-        { "Grid Table 4 Accent 4", "" },
-        { "Grid Table 5 Dark Accent 4", "" },
-        { "Grid Table 6 Colorful Accent 4", "" },
-        { "Grid Table 7 Colorful Accent 4", "" },
-        { "Grid Table 1 Light Accent 5", "" },
-        { "Grid Table 2 Accent 5", "" },
-        { "Grid Table 3 Accent 5", "" },
-        { "Grid Table 4 Accent 5", "" },
-        { "Grid Table 5 Dark Accent 5", "" },
-        { "Grid Table 6 Colorful Accent 5", "" },
-        { "Grid Table 7 Colorful Accent 5", "" },
-        { "Grid Table 1 Light Accent 6", "" },
-        { "Grid Table 2 Accent 6", "" },
-        { "Grid Table 3 Accent 6", "" },
-        { "Grid Table 4 Accent 6", "" },
-        { "Grid Table 5 Dark Accent 6", "" },
-        { "Grid Table 6 Colorful Accent 6", "" },
-        { "Grid Table 7 Colorful Accent 6", "" },
-        { "List Table 1 Light", "" },
-        { "List Table 2", "" },
-        { "List Table 3", "" },
-        { "List Table 4", "" },
-        { "List Table 5 Dark", "" },
-        { "List Table 6 Colorful", "" },
-        { "List Table 7 Colorful", "" },
-        { "List Table 1 Light Accent 1", "" },
-        { "List Table 2 Accent 1", "" },
-        { "List Table 3 Accent 1", "" },
-        { "List Table 4 Accent 1", "" },
-        { "List Table 5 Dark Accent 1", "" },
-        { "List Table 6 Colorful Accent 1", "" },
-        { "List Table 7 Colorful Accent 1", "" },
-        { "List Table 1 Light Accent 2", "" },
-        { "List Table 2 Accent 2", "" },
-        { "List Table 3 Accent 2", "" },
-        { "List Table 4 Accent 2", "" },
-        { "List Table 5 Dark Accent 2", "" },
-        { "List Table 6 Colorful Accent 2", "" },
-        { "List Table 7 Colorful Accent 2", "" },
-        { "List Table 1 Light Accent 3", "" },
-        { "List Table 2 Accent 3", "" },
-        { "List Table 3 Accent 3", "" },
-        { "List Table 4 Accent 3", "" },
-        { "List Table 5 Dark Accent 3", "" },
-        { "List Table 6 Colorful Accent 3", "" },
-        { "List Table 7 Colorful Accent 3", "" },
-        { "List Table 1 Light Accent 4", "" },
-        { "List Table 2 Accent 4", "" },
-        { "List Table 3 Accent 4", "" },
-        { "List Table 4 Accent 4", "" },
-        { "List Table 5 Dark Accent 4", "" },
-        { "List Table 6 Colorful Accent 4", "" },
-        { "List Table 7 Colorful Accent 4", "" },
-        { "List Table 1 Light Accent 5", "" },
-        { "List Table 2 Accent 5", "" },
-        { "List Table 3 Accent 5", "" },
-        { "List Table 4 Accent 5", "" },
-        { "List Table 5 Dark Accent 5", "" },
-        { "List Table 6 Colorful Accent 5", "" },
-        { "List Table 7 Colorful Accent 5", "" },
-        { "List Table 1 Light Accent 6", "" },
-        { "List Table 2 Accent 6", "" },
-        { "List Table 3 Accent 6", "" },
-        { "List Table 4 Accent 6", "" },
-        { "List Table 5 Dark Accent 6", "" },
-        { "List Table 6 Colorful Accent 6", "" },
-        { "List Table 7 Colorful Accent 6", "" },
+        { u"Normal"_ustr, u"Standard"_ustr }, // SwPoolFormatId::COLL_STANDARD
+        { u"heading 1"_ustr, u"Heading 1"_ustr }, // SwPoolFormatId::COLL_HEADLINE1
+        { u"heading 2"_ustr, u"Heading 2"_ustr }, // SwPoolFormatId::COLL_HEADLINE2
+        { u"heading 3"_ustr, u"Heading 3"_ustr }, // SwPoolFormatId::COLL_HEADLINE3
+        { u"heading 4"_ustr, u"Heading 4"_ustr }, // SwPoolFormatId::COLL_HEADLINE4
+        { u"heading 5"_ustr, u"Heading 5"_ustr }, // SwPoolFormatId::COLL_HEADLINE5
+        { u"heading 6"_ustr, u"Heading 6"_ustr }, // SwPoolFormatId::COLL_HEADLINE6
+        { u"heading 7"_ustr, u"Heading 7"_ustr }, // SwPoolFormatId::COLL_HEADLINE7
+        { u"heading 8"_ustr, u"Heading 8"_ustr }, // SwPoolFormatId::COLL_HEADLINE8
+        { u"heading 9"_ustr, u"Heading 9"_ustr }, // SwPoolFormatId::COLL_HEADLINE9
+        { u"Heading 1"_ustr, u"Heading 1"_ustr }, // SwPoolFormatId::COLL_HEADLINE1
+        { u"Heading 2"_ustr, u"Heading 2"_ustr }, // SwPoolFormatId::COLL_HEADLINE2
+        { u"Heading 3"_ustr, u"Heading 3"_ustr }, // SwPoolFormatId::COLL_HEADLINE3
+        { u"Heading 4"_ustr, u"Heading 4"_ustr }, // SwPoolFormatId::COLL_HEADLINE4
+        { u"Heading 5"_ustr, u"Heading 5"_ustr }, // SwPoolFormatId::COLL_HEADLINE5
+        { u"Heading 6"_ustr, u"Heading 6"_ustr }, // SwPoolFormatId::COLL_HEADLINE6
+        { u"Heading 7"_ustr, u"Heading 7"_ustr }, // SwPoolFormatId::COLL_HEADLINE7
+        { u"Heading 8"_ustr, u"Heading 8"_ustr }, // SwPoolFormatId::COLL_HEADLINE8
+        { u"Heading 9"_ustr, u"Heading 9"_ustr }, // SwPoolFormatId::COLL_HEADLINE9
+        { u"Index 1"_ustr, u"Index 1"_ustr }, // SwPoolFormatId::COLL_TOX_IDX1
+        { u"Index 2"_ustr, u"Index 2"_ustr }, // SwPoolFormatId::COLL_TOX_IDX2
+        { u"Index 3"_ustr, u"Index 3"_ustr }, // SwPoolFormatId::COLL_TOX_IDX3
+        { u"Index 4"_ustr, u""_ustr },
+        { u"Index 5"_ustr, u""_ustr },
+        { u"Index 6"_ustr, u""_ustr },
+        { u"Index 7"_ustr, u""_ustr },
+        { u"Index 8"_ustr, u""_ustr },
+        { u"Index 9"_ustr, u""_ustr },
+        { u"index 1"_ustr, u"Index 1"_ustr }, // SwPoolFormatId::COLL_TOX_IDX1
+        { u"index 2"_ustr, u"Index 2"_ustr }, // SwPoolFormatId::COLL_TOX_IDX2
+        { u"index 3"_ustr, u"Index 3"_ustr }, // SwPoolFormatId::COLL_TOX_IDX3
+        { u"index 4"_ustr, u""_ustr },
+        { u"index 5"_ustr, u""_ustr },
+        { u"index 6"_ustr, u""_ustr },
+        { u"index 7"_ustr, u""_ustr },
+        { u"index 8"_ustr, u""_ustr },
+        { u"index 9"_ustr, u""_ustr },
+        { u"TOC 1"_ustr, u"Contents 1"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { u"TOC 2"_ustr, u"Contents 2"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { u"TOC 3"_ustr, u"Contents 3"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { u"TOC 4"_ustr, u"Contents 4"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { u"TOC 5"_ustr, u"Contents 5"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { u"TOC 6"_ustr, u"Contents 6"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { u"TOC 7"_ustr, u"Contents 7"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { u"TOC 8"_ustr, u"Contents 8"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { u"TOC 9"_ustr, u"Contents 9"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { u"toc 1"_ustr, u"Contents 1"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { u"toc 2"_ustr, u"Contents 2"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { u"toc 3"_ustr, u"Contents 3"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { u"toc 4"_ustr, u"Contents 4"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { u"toc 5"_ustr, u"Contents 5"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { u"toc 6"_ustr, u"Contents 6"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { u"toc 7"_ustr, u"Contents 7"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { u"toc 8"_ustr, u"Contents 8"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { u"toc 9"_ustr, u"Contents 9"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { u"TOC1"_ustr, u"Contents 1"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { u"TOC2"_ustr, u"Contents 2"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { u"TOC3"_ustr, u"Contents 3"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { u"TOC4"_ustr, u"Contents 4"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { u"TOC5"_ustr, u"Contents 5"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { u"TOC6"_ustr, u"Contents 6"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { u"TOC7"_ustr, u"Contents 7"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { u"TOC8"_ustr, u"Contents 8"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { u"TOC9"_ustr, u"Contents 9"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { u"Normal Indent"_ustr, u""_ustr },
+        { u"footnote text"_ustr, u"Footnote"_ustr }, // SwPoolFormatId::COLL_FOOTNOTE
+        { u"Footnote Text"_ustr, u"Footnote"_ustr }, // SwPoolFormatId::COLL_FOOTNOTE
+        { u"Annotation Text"_ustr, u"Marginalia"_ustr }, // SwPoolFormatId::COLL_MARGINAL
+        { u"annotation text"_ustr, u"Marginalia"_ustr }, // SwPoolFormatId::COLL_MARGINAL
+        { u"Header"_ustr, u"Header"_ustr }, // SwPoolFormatId::COLL_HEADER
+        { u"header"_ustr, u"Header"_ustr }, // SwPoolFormatId::COLL_HEADER
+        { u"Footer"_ustr, u"Footer"_ustr }, // SwPoolFormatId::COLL_FOOTER
+        { u"footer"_ustr, u"Footer"_ustr }, // SwPoolFormatId::COLL_FOOTER
+        { u"Index Heading"_ustr, u"Index Heading"_ustr }, // SwPoolFormatId::COLL_TOX_IDXH
+        { u"index heading"_ustr, u"Index Heading"_ustr }, // SwPoolFormatId::COLL_TOX_IDXH
+        { u"Caption"_ustr, u"Caption"_ustr }, // SwPoolFormatId::COLL_LABEL
+        { u"caption"_ustr, u"Caption"_ustr }, // SwPoolFormatId::COLL_LABEL
+        { u"table of figures"_ustr, u"Figure Index 1"_ustr }, // SwPoolFormatId::COLL_TOX_ILLUS1
+        { u"Table of Figures"_ustr, u"Figure Index 1"_ustr }, // SwPoolFormatId::COLL_TOX_ILLUS1
+        { u"Envelope Address"_ustr, u"Addressee"_ustr }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
+        { u"envelope address"_ustr, u"Addressee"_ustr }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
+        { u"Envelope Return"_ustr, u"Sender"_ustr }, // SwPoolFormatId::COLL_SEND_ADDRESS
+        { u"envelope return"_ustr, u"Sender"_ustr }, // SwPoolFormatId::COLL_SEND_ADDRESS
+        { u"footnote reference"_ustr, u"Footnote Symbol"_ustr }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
+        { u"Footnote Reference"_ustr, u"Footnote Symbol"_ustr }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
+        { u"Annotation Reference"_ustr, u""_ustr },
+        { u"annotation reference"_ustr, u""_ustr },
+        { u"Line Number"_ustr, u"Line numbering"_ustr }, // SwPoolFormatId::CHR_LINENUM
+        { u"line number"_ustr, u"Line numbering"_ustr }, // SwPoolFormatId::CHR_LINENUM
+        { u"Page Number"_ustr, u"Page Number"_ustr }, // SwPoolFormatId::CHR_PAGENO
+        { u"page number"_ustr, u"Page Number"_ustr }, // SwPoolFormatId::CHR_PAGENO
+        { u"PageNumber"_ustr, u"Page Number"_ustr }, // SwPoolFormatId::CHR_PAGENO
+        { u"endnote reference"_ustr, u"Endnote Symbol"_ustr }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
+        { u"Endnote Reference"_ustr, u"Endnote Symbol"_ustr }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
+        { u"endnote text"_ustr, u"Endnote"_ustr }, // SwPoolFormatId::COLL_ENDNOTE
+        { u"Endnote Text"_ustr, u"Endnote"_ustr }, // SwPoolFormatId::COLL_ENDNOTE
+        { u"Table of Authorities"_ustr, u"Bibliography Heading"_ustr }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
+        { u"table of authorities"_ustr, u"Bibliography Heading"_ustr }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
+        { u"macro"_ustr, u""_ustr },
+        { u"TOA Heading"_ustr, u""_ustr },
+        { u"toa heading"_ustr, u""_ustr },
+        { u"List"_ustr, u"List"_ustr }, // SwPoolFormatId::COLL_NUMBER_BULLET_BASE
+        { u"List 2"_ustr, u""_ustr },
+        { u"List 3"_ustr, u""_ustr },
+        { u"List 4"_ustr, u""_ustr },
+        { u"List 5"_ustr, u""_ustr },
+        { u"List Bullet"_ustr, u"List 1"_ustr }, // SwPoolFormatId::COLL_BULLET_LEVEL1
+        { u"List Bullet 2"_ustr, u"List 2"_ustr }, // SwPoolFormatId::COLL_BULLET_LEVEL2
+        { u"List Bullet 3"_ustr, u"List 3"_ustr }, // SwPoolFormatId::COLL_BULLET_LEVEL3
+        { u"List Bullet 4"_ustr, u"List 4"_ustr }, // SwPoolFormatId::COLL_BULLET_LEVEL4
+        { u"List Bullet 5"_ustr, u"List 5"_ustr }, // SwPoolFormatId::COLL_BULLET_LEVEL5
+        { u"List Number"_ustr, u"Numbering 1"_ustr }, // SwPoolFormatId::COLL_NUM_LEVEL1
+        { u"List Number 2"_ustr, u"Numbering 2"_ustr }, // SwPoolFormatId::COLL_NUM_LEVEL2
+        { u"List Number 3"_ustr, u"Numbering 3"_ustr }, // SwPoolFormatId::COLL_NUM_LEVEL3
+        { u"List Number 4"_ustr, u"Numbering 4"_ustr }, // SwPoolFormatId::COLL_NUM_LEVEL4
+        { u"List Number 5"_ustr, u"Numbering 5"_ustr }, // SwPoolFormatId::COLL_NUM_LEVEL5
+        { u"Title"_ustr, u"Title"_ustr }, // SwPoolFormatId::COLL_DOC_TITLE
+        { u"Closing"_ustr, u"Appendix"_ustr }, // SwPoolFormatId::COLL_DOC_APPENDIX
+        { u"Signature"_ustr, u"Signature"_ustr }, // SwPoolFormatId::COLL_SIGNATURE
+        { u"Default Paragraph Font"_ustr, u""_ustr },
+        { u"DefaultParagraphFont"_ustr, u""_ustr },
+        { u"Body Text"_ustr, u"Text body"_ustr }, // SwPoolFormatId::COLL_TEXT
+        { u"BodyText"_ustr, u"Text body"_ustr }, // SwPoolFormatId::COLL_TEXT
+        { u"BodyTextIndentItalic"_ustr, u""_ustr },
+        { u"Body Text Indent"_ustr, u"Text body indent"_ustr }, // SwPoolFormatId::COLL_TEXT_MOVE
+        { u"BodyTextIndent"_ustr, u"Text body indent"_ustr }, // SwPoolFormatId::COLL_TEXT_MOVE
+        { u"BodyTextIndent2"_ustr, u""_ustr },
+        { u"List Continue"_ustr, u"List 1 Cont."_ustr }, // SwPoolFormatId::COLL_BULLET_NONUM1
+        { u"List Continue 2"_ustr, u"List 2 Cont."_ustr }, // SwPoolFormatId::COLL_BULLET_NONUM2
+        { u"List Continue 3"_ustr, u"List 3 Cont."_ustr }, // SwPoolFormatId::COLL_BULLET_NONUM3
+        { u"List Continue 4"_ustr, u"List 4 Cont."_ustr }, // SwPoolFormatId::COLL_BULLET_NONUM4
+        { u"List Continue 5"_ustr, u"List 5 Cont."_ustr }, // SwPoolFormatId::COLL_BULLET_NONUM5
+        { u"Message Header"_ustr, u""_ustr },
+        { u"Subtitle"_ustr, u"Subtitle"_ustr }, // SwPoolFormatId::COLL_DOC_SUBTITLE
+        { u"Salutation"_ustr, u"Salutation"_ustr }, // SwPoolFormatId::COLL_GREETING
+        { u"Date"_ustr, u""_ustr },
+        { u"Body Text First Indent"_ustr, u"First line indent"_ustr }, // SwPoolFormatId::COLL_TEXT_IDENT
+        { u"Body Text First Indent 2"_ustr, u""_ustr },
+        { u"Note Heading"_ustr, u""_ustr },
+        { u"Body Text 2"_ustr, u""_ustr },
+        { u"Body Text 3"_ustr, u""_ustr },
+        { u"Body Text Indent 2"_ustr, u""_ustr },
+        { u"Body Text Indent 3"_ustr, u""_ustr },
+        { u"Block Text"_ustr, u""_ustr },
+        { u"Hyperlink"_ustr, u"Internet link"_ustr }, // SwPoolFormatId::CHR_INET_NORMAL
+        { u"FollowedHyperlink"_ustr, u"Visited Internet Link"_ustr }, // SwPoolFormatId::CHR_INET_VISIT
+        { u"Strong"_ustr, u"Strong Emphasis"_ustr }, // SwPoolFormatId::CHR_HTML_STRONG
+        { u"Emphasis"_ustr, u"Emphasis"_ustr }, // SwPoolFormatId::CHR_HTML_EMPHASIS
+        { u"Document Map"_ustr, u""_ustr },
+        { u"DocumentMap"_ustr, u""_ustr },
+        { u"Plain Text"_ustr, u""_ustr },
+        { u"E-mail Signature"_ustr, u""_ustr },
+        { u"HTML Top of Form"_ustr, u""_ustr },
+        { u"HTML Bottom of Form"_ustr, u""_ustr },
+        { u"Normal (Web)"_ustr, u""_ustr },
+        { u"HTML Acronym"_ustr, u""_ustr },
+        { u"HTML Address"_ustr, u""_ustr },
+        { u"HTML Cite"_ustr, u""_ustr },
+        { u"HTML Code"_ustr, u""_ustr },
+        { u"HTML Definition"_ustr, u""_ustr },
+        { u"HTML Keyboard"_ustr, u""_ustr },
+        { u"HTML Preformatted"_ustr, u""_ustr },
+        { u"HTML Sample"_ustr, u""_ustr },
+        { u"HTML Typewriter"_ustr, u""_ustr },
+        { u"HTML Variable"_ustr, u""_ustr },
+        { u""_ustr, u""_ustr },
+        { u""_ustr, u""_ustr },
+        { u""_ustr, u""_ustr },
+        { u"Normal Table"_ustr, u""_ustr },
+        { u"annotation subject"_ustr, u""_ustr },
+        { u"No List"_ustr, u"No List"_ustr }, // SwPoolFormatId::NUMRULE_NOLIST
+        { u"NoList"_ustr, u"No List"_ustr }, // SwPoolFormatId::NUMRULE_NOLIST
+        { u"Outline List 1"_ustr, u""_ustr },
+        { u"Outline List 2"_ustr, u""_ustr },
+        { u"Outline List 3"_ustr, u""_ustr },
+        { u"Table Simple 1"_ustr, u""_ustr },
+        { u"Table Simple 2"_ustr, u""_ustr },
+        { u"Table Simple 3"_ustr, u""_ustr },
+        { u"Table Classic 1"_ustr, u""_ustr },
+        { u"Table Classic 2"_ustr, u""_ustr },
+        { u"Table Classic 3"_ustr, u""_ustr },
+        { u"Table Classic 4"_ustr, u""_ustr },
+        { u"Table Colorful 1"_ustr, u""_ustr },
+        { u"Table Colorful 2"_ustr, u""_ustr },
+        { u"Table Colorful 3"_ustr, u""_ustr },
+        { u"Table Columns 1"_ustr, u""_ustr },
+        { u"Table Columns 2"_ustr, u""_ustr },
+        { u"Table Columns 3"_ustr, u""_ustr },
+        { u"Table Columns 4"_ustr, u""_ustr },
+        { u"Table Columns 5"_ustr, u""_ustr },
+        { u"Table Grid 1"_ustr, u""_ustr },
+        { u"Table Grid 2"_ustr, u""_ustr },
+        { u"Table Grid 3"_ustr, u""_ustr },
+        { u"Table Grid 4"_ustr, u""_ustr },
+        { u"Table Grid 5"_ustr, u""_ustr },
+        { u"Table Grid 6"_ustr, u""_ustr },
+        { u"Table Grid 7"_ustr, u""_ustr },
+        { u"Table Grid 8"_ustr, u""_ustr },
+        { u"Table List 1"_ustr, u""_ustr },
+        { u"Table List 2"_ustr, u""_ustr },
+        { u"Table List 3"_ustr, u""_ustr },
+        { u"Table List 4"_ustr, u""_ustr },
+        { u"Table List 5"_ustr, u""_ustr },
+        { u"Table List 6"_ustr, u""_ustr },
+        { u"Table List 7"_ustr, u""_ustr },
+        { u"Table List 8"_ustr, u""_ustr },
+        { u"Table 3D effects 1"_ustr, u""_ustr },
+        { u"Table 3D effects 2"_ustr, u""_ustr },
+        { u"Table 3D effects 3"_ustr, u""_ustr },
+        { u"Table Contemporary"_ustr, u""_ustr },
+        { u"Table Elegant"_ustr, u""_ustr },
+        { u"Table Professional"_ustr, u""_ustr },
+        { u"Table Subtle 1"_ustr, u""_ustr },
+        { u"Table Subtle 2"_ustr, u""_ustr },
+        { u"Table Web 1"_ustr, u""_ustr },
+        { u"Table Web 2"_ustr, u""_ustr },
+        { u"Table Web 3"_ustr, u""_ustr },
+        { u"Balloon Text"_ustr, u""_ustr },
+        { u"Table Grid"_ustr, u""_ustr },
+        { u"Table Theme"_ustr, u""_ustr },
+        { u"Placeholder Text"_ustr, u""_ustr },
+        { u"No Spacing"_ustr, u""_ustr },
+        { u"Light Shading"_ustr, u""_ustr },
+        { u"Light List"_ustr, u""_ustr },
+        { u"Light Grid"_ustr, u""_ustr },
+        { u"Medium Shading 1"_ustr, u""_ustr },
+        { u"Medium Shading 2"_ustr, u""_ustr },
+        { u"Medium List 1"_ustr, u""_ustr },
+        { u"Medium List 2"_ustr, u""_ustr },
+        { u"Medium Grid 1"_ustr, u""_ustr },
+        { u"Medium Grid 2"_ustr, u""_ustr },
+        { u"Medium Grid 3"_ustr, u""_ustr },
+        { u"Dark List"_ustr, u""_ustr },
+        { u"Colorful Shading"_ustr, u""_ustr },
+        { u"Colorful List"_ustr, u""_ustr },
+        { u"Colorful Grid"_ustr, u""_ustr },
+        { u"Light Shading Accent 1"_ustr, u""_ustr },
+        { u"Light List Accent 1"_ustr, u""_ustr },
+        { u"Light Grid Accent 1"_ustr, u""_ustr },
+        { u"Medium Shading 1 Accent 1"_ustr, u""_ustr },
+        { u"Medium Shading 2 Accent 1"_ustr, u""_ustr },
+        { u"Medium List 1 Accent 1"_ustr, u""_ustr },
+        { u"Revision"_ustr, u""_ustr },
+        { u"List Paragraph"_ustr, u""_ustr },
+        { u"Quote"_ustr, u""_ustr },
+        { u"Intense Quote"_ustr, u""_ustr },
+        { u"Medium List 2 Accent 1"_ustr, u""_ustr },
+        { u"Medium Grid 1 Accent 1"_ustr, u""_ustr },
+        { u"Medium Grid 2 Accent 1"_ustr, u""_ustr },
+        { u"Medium Grid 3 Accent 1"_ustr, u""_ustr },
+        { u"Dark List Accent 1"_ustr, u""_ustr },
+        { u"Colorful Shading Accent 1"_ustr, u""_ustr },
+        { u"Colorful List Accent 1"_ustr, u""_ustr },
+        { u"Colorful Grid Accent 1"_ustr, u""_ustr },
+        { u"Light Shading Accent 2"_ustr, u""_ustr },
+        { u"Light List Accent 2"_ustr, u""_ustr },
+        { u"Light Grid Accent 2"_ustr, u""_ustr },
+        { u"Medium Shading 1 Accent 2"_ustr, u""_ustr },
+        { u"Medium Shading 2 Accent 2"_ustr, u""_ustr },
+        { u"Medium List 1 Accent 2"_ustr, u""_ustr },
+        { u"Medium List 2 Accent 2"_ustr, u""_ustr },
+        { u"Medium Grid 1 Accent 2"_ustr, u""_ustr },
+        { u"Medium Grid 2 Accent 2"_ustr, u""_ustr },
+        { u"Medium Grid 3 Accent 2"_ustr, u""_ustr },
+        { u"Dark List Accent 2"_ustr, u""_ustr },
+        { u"Colorful Shading Accent 2"_ustr, u""_ustr },
+        { u"Colorful List Accent 2"_ustr, u""_ustr },
+        { u"Colorful Grid Accent 2"_ustr, u""_ustr },
+        { u"Light Shading Accent 3"_ustr, u""_ustr },
+        { u"Light List Accent 3"_ustr, u""_ustr },
+        { u"Light Grid Accent 3"_ustr, u""_ustr },
+        { u"Medium Shading 1 Accent 3"_ustr, u""_ustr },
+        { u"Medium Shading 2 Accent 3"_ustr, u""_ustr },
+        { u"Medium List 1 Accent 3"_ustr, u""_ustr },
+        { u"Medium List 2 Accent 3"_ustr, u""_ustr },
+        { u"Medium Grid 1 Accent 3"_ustr, u""_ustr },
+        { u"Medium Grid 2 Accent 3"_ustr, u""_ustr },
+        { u"Medium Grid 3 Accent 3"_ustr, u""_ustr },
+        { u"Dark List Accent 3"_ustr, u""_ustr },
+        { u"Colorful Shading Accent 3"_ustr, u""_ustr },
+        { u"Colorful List Accent 3"_ustr, u""_ustr },
+        { u"Colorful Grid Accent 3"_ustr, u""_ustr },
+        { u"Light Shading Accent 4"_ustr, u""_ustr },
+        { u"Light List Accent 4"_ustr, u""_ustr },
+        { u"Light Grid Accent 4"_ustr, u""_ustr },
+        { u"Medium Shading 1 Accent 4"_ustr, u""_ustr },
+        { u"Medium Shading 2 Accent 4"_ustr, u""_ustr },
+        { u"Medium List 1 Accent 4"_ustr, u""_ustr },
+        { u"Medium List 2 Accent 4"_ustr, u""_ustr },
+        { u"Medium Grid 1 Accent 4"_ustr, u""_ustr },
+        { u"Medium Grid 2 Accent 4"_ustr, u""_ustr },
+        { u"Medium Grid 3 Accent 4"_ustr, u""_ustr },
+        { u"Dark List Accent 4"_ustr, u""_ustr },
+        { u"Colorful Shading Accent 4"_ustr, u""_ustr },
+        { u"Colorful List Accent 4"_ustr, u""_ustr },
+        { u"Colorful Grid Accent 4"_ustr, u""_ustr },
+        { u"Light Shading Accent 5"_ustr, u""_ustr },
+        { u"Light List Accent 5"_ustr, u""_ustr },
+        { u"Light Grid Accent 5"_ustr, u""_ustr },
+        { u"Medium Shading 1 Accent 5"_ustr, u""_ustr },
+        { u"Medium Shading 2 Accent 5"_ustr, u""_ustr },
+        { u"Medium List 1 Accent 5"_ustr, u""_ustr },
+        { u"Medium List 2 Accent 5"_ustr, u""_ustr },
+        { u"Medium Grid 1 Accent 5"_ustr, u""_ustr },
+        { u"Medium Grid 2 Accent 5"_ustr, u""_ustr },
+        { u"Medium Grid 3 Accent 5"_ustr, u""_ustr },
+        { u"Dark List Accent 5"_ustr, u""_ustr },
+        { u"Colorful Shading Accent 5"_ustr, u""_ustr },
+        { u"Colorful List Accent 5"_ustr, u""_ustr },
+        { u"Colorful Grid Accent 5"_ustr, u""_ustr },
+        { u"Light Shading Accent 6"_ustr, u""_ustr },
+        { u"Light List Accent 6"_ustr, u""_ustr },
+        { u"Light Grid Accent 6"_ustr, u""_ustr },
+        { u"Medium Shading 1 Accent 6"_ustr, u""_ustr },
+        { u"Medium Shading 2 Accent 6"_ustr, u""_ustr },
+        { u"Medium List 1 Accent 6"_ustr, u""_ustr },
+        { u"Medium List 2 Accent 6"_ustr, u""_ustr },
+        { u"Medium Grid 1 Accent 6"_ustr, u""_ustr },
+        { u"Medium Grid 2 Accent 6"_ustr, u""_ustr },
+        { u"Medium Grid 3 Accent 6"_ustr, u""_ustr },
+        { u"Dark List Accent 6"_ustr, u""_ustr },
+        { u"Colorful Shading Accent 6"_ustr, u""_ustr },
+        { u"Colorful List Accent 6"_ustr, u""_ustr },
+        { u"Colorful Grid Accent 6"_ustr, u""_ustr },
+        { u"Subtle Emphasis"_ustr, u""_ustr },
+        { u"Intense Emphasis"_ustr, u""_ustr },
+        { u"Subtle Reference"_ustr, u""_ustr },
+        { u"Intense Reference"_ustr, u""_ustr },
+        { u"Book Title"_ustr, u""_ustr },
+        { u"Bibliography"_ustr, u""_ustr },
+        { u"TOC Heading"_ustr, u"Contents Heading"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNTH
+        { u"TOCHeading"_ustr, u"Contents Heading"_ustr }, // SwPoolFormatId::COLL_TOX_CNTNTH
+        { u"Plain Table 1"_ustr, u""_ustr },
+        { u"Plain Table 2"_ustr, u""_ustr },
+        { u"Plain Table 3"_ustr, u""_ustr },
+        { u"Plain Table 4"_ustr, u""_ustr },
+        { u"Plain Table 5"_ustr, u""_ustr },
+        { u"Grid Table Light"_ustr, u""_ustr },
+        { u"Grid Table 1 Light"_ustr, u""_ustr },
+        { u"Grid Table 2"_ustr, u""_ustr },
+        { u"Grid Table 3"_ustr, u""_ustr },
+        { u"Grid Table 4"_ustr, u""_ustr },
+        { u"Grid Table 5 Dark"_ustr, u""_ustr },
+        { u"Grid Table 6 Colorful"_ustr, u""_ustr },
+        { u"Grid Table 7 Colorful"_ustr, u""_ustr },
+        { u"Grid Table 1 Light Accent 1"_ustr, u""_ustr },
+        { u"Grid Table 2 Accent 1"_ustr, u""_ustr },
+        { u"Grid Table 3 Accent 1"_ustr, u""_ustr },
+        { u"Grid Table 4 Accent 1"_ustr, u""_ustr },
+        { u"Grid Table 5 Dark Accent 1"_ustr, u""_ustr },
+        { u"Grid Table 6 Colorful Accent 1"_ustr, u""_ustr },
+        { u"Grid Table 7 Colorful Accent 1"_ustr, u""_ustr },
+        { u"Grid Table 1 Light Accent 2"_ustr, u""_ustr },
+        { u"Grid Table 2 Accent 2"_ustr, u""_ustr },
+        { u"Grid Table 3 Accent 2"_ustr, u""_ustr },
+        { u"Grid Table 4 Accent 2"_ustr, u""_ustr },
+        { u"Grid Table 5 Dark Accent 2"_ustr, u""_ustr },
+        { u"Grid Table 6 Colorful Accent 2"_ustr, u""_ustr },
+        { u"Grid Table 7 Colorful Accent 2"_ustr, u""_ustr },
+        { u"Grid Table 1 Light Accent 3"_ustr, u""_ustr },
+        { u"Grid Table 2 Accent 3"_ustr, u""_ustr },
+        { u"Grid Table 3 Accent 3"_ustr, u""_ustr },
+        { u"Grid Table 4 Accent 3"_ustr, u""_ustr },
+        { u"Grid Table 5 Dark Accent 3"_ustr, u""_ustr },
+        { u"Grid Table 6 Colorful Accent 3"_ustr, u""_ustr },
+        { u"Grid Table 7 Colorful Accent 3"_ustr, u""_ustr },
+        { u"Grid Table 1 Light Accent 4"_ustr, u""_ustr },
+        { u"Grid Table 2 Accent 4"_ustr, u""_ustr },
+        { u"Grid Table 3 Accent 4"_ustr, u""_ustr },
+        { u"Grid Table 4 Accent 4"_ustr, u""_ustr },
+        { u"Grid Table 5 Dark Accent 4"_ustr, u""_ustr },
+        { u"Grid Table 6 Colorful Accent 4"_ustr, u""_ustr },
+        { u"Grid Table 7 Colorful Accent 4"_ustr, u""_ustr },
+        { u"Grid Table 1 Light Accent 5"_ustr, u""_ustr },
+        { u"Grid Table 2 Accent 5"_ustr, u""_ustr },
+        { u"Grid Table 3 Accent 5"_ustr, u""_ustr },
+        { u"Grid Table 4 Accent 5"_ustr, u""_ustr },
+        { u"Grid Table 5 Dark Accent 5"_ustr, u""_ustr },
+        { u"Grid Table 6 Colorful Accent 5"_ustr, u""_ustr },
+        { u"Grid Table 7 Colorful Accent 5"_ustr, u""_ustr },
+        { u"Grid Table 1 Light Accent 6"_ustr, u""_ustr },
+        { u"Grid Table 2 Accent 6"_ustr, u""_ustr },
+        { u"Grid Table 3 Accent 6"_ustr, u""_ustr },
+        { u"Grid Table 4 Accent 6"_ustr, u""_ustr },
+        { u"Grid Table 5 Dark Accent 6"_ustr, u""_ustr },
+        { u"Grid Table 6 Colorful Accent 6"_ustr, u""_ustr },
+        { u"Grid Table 7 Colorful Accent 6"_ustr, u""_ustr },
+        { u"List Table 1 Light"_ustr, u""_ustr },
+        { u"List Table 2"_ustr, u""_ustr },
+        { u"List Table 3"_ustr, u""_ustr },
+        { u"List Table 4"_ustr, u""_ustr },
+        { u"List Table 5 Dark"_ustr, u""_ustr },
+        { u"List Table 6 Colorful"_ustr, u""_ustr },
+        { u"List Table 7 Colorful"_ustr, u""_ustr },
+        { u"List Table 1 Light Accent 1"_ustr, u""_ustr },
+        { u"List Table 2 Accent 1"_ustr, u""_ustr },
+        { u"List Table 3 Accent 1"_ustr, u""_ustr },
+        { u"List Table 4 Accent 1"_ustr, u""_ustr },
+        { u"List Table 5 Dark Accent 1"_ustr, u""_ustr },
+        { u"List Table 6 Colorful Accent 1"_ustr, u""_ustr },
+        { u"List Table 7 Colorful Accent 1"_ustr, u""_ustr },
+        { u"List Table 1 Light Accent 2"_ustr, u""_ustr },
+        { u"List Table 2 Accent 2"_ustr, u""_ustr },
+        { u"List Table 3 Accent 2"_ustr, u""_ustr },
+        { u"List Table 4 Accent 2"_ustr, u""_ustr },
+        { u"List Table 5 Dark Accent 2"_ustr, u""_ustr },
+        { u"List Table 6 Colorful Accent 2"_ustr, u""_ustr },
+        { u"List Table 7 Colorful Accent 2"_ustr, u""_ustr },
+        { u"List Table 1 Light Accent 3"_ustr, u""_ustr },
+        { u"List Table 2 Accent 3"_ustr, u""_ustr },
+        { u"List Table 3 Accent 3"_ustr, u""_ustr },
+        { u"List Table 4 Accent 3"_ustr, u""_ustr },
+        { u"List Table 5 Dark Accent 3"_ustr, u""_ustr },
+        { u"List Table 6 Colorful Accent 3"_ustr, u""_ustr },
+        { u"List Table 7 Colorful Accent 3"_ustr, u""_ustr },
+        { u"List Table 1 Light Accent 4"_ustr, u""_ustr },
+        { u"List Table 2 Accent 4"_ustr, u""_ustr },
+        { u"List Table 3 Accent 4"_ustr, u""_ustr },
+        { u"List Table 4 Accent 4"_ustr, u""_ustr },
+        { u"List Table 5 Dark Accent 4"_ustr, u""_ustr },
+        { u"List Table 6 Colorful Accent 4"_ustr, u""_ustr },
+        { u"List Table 7 Colorful Accent 4"_ustr, u""_ustr },
+        { u"List Table 1 Light Accent 5"_ustr, u""_ustr },
+        { u"List Table 2 Accent 5"_ustr, u""_ustr },
+        { u"List Table 3 Accent 5"_ustr, u""_ustr },
+        { u"List Table 4 Accent 5"_ustr, u""_ustr },
+        { u"List Table 5 Dark Accent 5"_ustr, u""_ustr },
+        { u"List Table 6 Colorful Accent 5"_ustr, u""_ustr },
+        { u"List Table 7 Colorful Accent 5"_ustr, u""_ustr },
+        { u"List Table 1 Light Accent 6"_ustr, u""_ustr },
+        { u"List Table 2 Accent 6"_ustr, u""_ustr },
+        { u"List Table 3 Accent 6"_ustr, u""_ustr },
+        { u"List Table 4 Accent 6"_ustr, u""_ustr },
+        { u"List Table 5 Dark Accent 6"_ustr, u""_ustr },
+        { u"List Table 6 Colorful Accent 6"_ustr, u""_ustr },
+        { u"List Table 7 Colorful Accent 6"_ustr, u""_ustr },
 
         // ??? unsure what these are, they are not in Word's styles.xml
-        { "AbstractHeading", "Abstract Heading" },
-        { "AbstractBody", "Abstract Body" },
-        { "TableNormal", "Normal Table" },
+        { u"AbstractHeading"_ustr, u"Abstract Heading"_ustr },
+        { u"AbstractBody"_ustr, u"Abstract Body"_ustr },
+        { u"TableNormal"_ustr, u"Normal Table"_ustr },
     };
 
     // find style-name using map

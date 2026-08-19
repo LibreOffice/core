@@ -335,7 +335,7 @@ void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSe
     auto pTheme = pModel->getTheme();
     if (!pTheme)
     {
-        pTheme = std::make_shared<model::Theme>("Office");
+        pTheme = std::make_shared<model::Theme>(u"Office"_ustr);
         pModel->setTheme(pTheme);
     }
 

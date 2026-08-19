@@ -1021,8 +1021,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
     // Create a document with a comment in it.
     createSwDoc();
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(u"some text"_ustr) },
-        { "Author", cpo::uno::Any(u"me"_ustr) },
+        { u"Text"_ustr, cpo::uno::Any(u"some text"_ustr) },
+        { u"Author"_ustr, cpo::uno::Any(u"me"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aPropertyValues);
 

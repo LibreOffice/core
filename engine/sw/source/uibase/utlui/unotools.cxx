@@ -181,11 +181,11 @@ void SwOneExampleFrame::CreateControl()
 
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     cpo::uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
-            { "DocumentService", cpo::uno::Any(u"com.sun.star.text.TextDocument"_ustr) },
-            { "OpenFlags", cpo::uno::Any(u"-RB"_ustr) },
-            { "Referer", cpo::uno::Any(u"private:user"_ustr) },
-            { "ReadOnly", cpo::uno::Any(true) },
-            { "Hidden", cpo::uno::Any(true) }
+            { u"DocumentService"_ustr, cpo::uno::Any(u"com.sun.star.text.TextDocument"_ustr) },
+            { u"OpenFlags"_ustr, cpo::uno::Any(u"-RB"_ustr) },
+            { u"Referer"_ustr, cpo::uno::Any(u"private:user"_ustr) },
+            { u"ReadOnly"_ustr, cpo::uno::Any(true) },
+            { u"Hidden"_ustr, cpo::uno::Any(true) }
         }));
 
     m_xModel = dynamic_cast<SwXTextDocument*>(xDesktop->loadComponentFromURL(sTempURL, u"_blank"_ustr, 0, args).get());

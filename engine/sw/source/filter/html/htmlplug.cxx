@@ -541,9 +541,9 @@ bool SwHTMLParser::InsertEmbed()
                     if (bOwnFormat)
                     {
                         cpo::uno::Sequence<beans::PropertyValue> aMedium = comphelper::InitPropertySequence(
-                            { { "InputStream", cpo::uno::Any(xInStream) },
-                              { "URL", cpo::uno::Any(u"private:stream"_ustr) },
-                              { "DocumentBaseURL", cpo::uno::Any(m_sBaseURL) } });
+                            { { u"InputStream"_ustr, cpo::uno::Any(xInStream) },
+                              { u"URL"_ustr, cpo::uno::Any(u"private:stream"_ustr) },
+                              { u"DocumentBaseURL"_ustr, cpo::uno::Any(m_sBaseURL) } });
                         xObj = aCnt.InsertEmbeddedObject(aMedium, aName, &m_sBaseURL);
                     }
                     else

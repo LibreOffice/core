@@ -572,8 +572,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testPageSizeKeepsOrientation)
 {
     createSwDoc();
 
-    dispatchCommand(mxComponent, u".uno:Orientation"_ustr,
-                    comphelper::InitPropertySequence({ { "isLandscape", cpo::uno::Any(true) } }));
+    dispatchCommand(
+        mxComponent, u".uno:Orientation"_ustr,
+        comphelper::InitPropertySequence({ { u"isLandscape"_ustr, cpo::uno::Any(true) } }));
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const size_t nPageDesc = pWrtShell->GetCurPageDesc();
@@ -585,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testPageSizeKeepsOrientation)
 
     dispatchCommand(mxComponent, u".uno:AttributePageSize"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "PaperFormat", cpo::uno::Any(sal_uInt16(PAPER_A3)) } }));
+                        { { u"PaperFormat"_ustr, cpo::uno::Any(sal_uInt16(PAPER_A3)) } }));
 
     const SwPageDesc& rPageDesc = pWrtShell->GetPageDesc(nPageDesc);
     CPPUNIT_ASSERT(rPageDesc.GetLandscape());

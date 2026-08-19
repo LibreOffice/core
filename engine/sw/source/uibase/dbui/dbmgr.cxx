@@ -2855,9 +2855,9 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
 
     cpo::uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
     {
-        {"TargetStorage", cpo::uno::Any(xStorage)},
-        {"StreamRelPath", cpo::uno::Any(rStreamRelPath)},
-        {"BaseURI", cpo::uno::Any(rOwnURL)}
+        {u"TargetStorage"_ustr, cpo::uno::Any(xStorage)},
+        {u"StreamRelPath"_ustr, cpo::uno::Any(rStreamRelPath)},
+        {u"BaseURI"_ustr, cpo::uno::Any(rOwnURL)}
     });
     if (bCopyTo)
         xStorable->storeToURL(sTmpName, aSequence);

@@ -681,7 +681,7 @@ bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : NavElementToolBoxControl_Base( rxContext,
                            uno::Reference< frame::XFrame >(),
-                           ".uno:NavElement" ),
+                           u".uno:NavElement"_ustr ),
    m_pBox( nullptr )
 {
 }

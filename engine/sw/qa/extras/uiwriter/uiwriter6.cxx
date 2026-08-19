@@ -116,7 +116,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116640)
     createSwDoc();
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
+        comphelper::InitPropertySequence({ { u"Columns"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
 
@@ -895,11 +895,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108048)
     createSwDoc();
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Kind", cpo::uno::Any(sal_Int16(3)) },
-        { "TemplateName", cpo::uno::Any(u"Default Page Style"_ustr) },
-        { "PageNumber",
+        { u"Kind"_ustr, cpo::uno::Any(sal_Int16(3)) },
+        { u"TemplateName"_ustr, cpo::uno::Any(u"Default Page Style"_ustr) },
+        { u"PageNumber"_ustr,
           cpo::uno::Any(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
-        { "PageNumberFilled", cpo::uno::Any(true) },
+        { u"PageNumberFilled"_ustr, cpo::uno::Any(true) },
     });
     dispatchCommand(mxComponent, u".uno:InsertBreak"_ustr, aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
@@ -2365,12 +2365,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSpellOnlineParameter)
     bool bSet = pOpt->IsOnlineSpell();
 
     cpo::uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(!bSet) } });
+        = comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(!bSet) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
-    params = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(!bSet) } });
+    params = comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(!bSet) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
@@ -2382,7 +2382,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     cpo::uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -2430,7 +2430,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     cpo::uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -2480,7 +2480,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     cpo::uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -2516,7 +2516,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     cpo::uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -3010,7 +3010,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInsertPdf)
 
     // insert the PDF into the document
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "FileName", cpo::uno::Any(createFileURL(u"hello-world.pdf")) } }));
+        { { u"FileName"_ustr, cpo::uno::Any(createFileURL(u"hello-world.pdf")) } }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // Save and load cycle
@@ -3163,7 +3163,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
 
     // Add a basic shape to the document.
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:BasicShapes"_ustr, aArgs);
 
     auto xBasicShape = getShape(1);

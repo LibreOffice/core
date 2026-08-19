@@ -217,9 +217,9 @@ void SwDocTest::testFileNameFields()
     auto pDstMed = std::make_unique<SfxMedium>(sFileURL, StreamMode::STD_READWRITE);
 
     auto pFilter = std::make_shared<SfxFilter>(
-        "Text",
+        u"Text"_ustr,
         OUString(), SfxFilterFlags::NONE, SotClipboardFormatId::NONE, OUString(), OUString(),
-        "TEXT", OUString() );
+        u"TEXT"_ustr, OUString() );
     pDstMed->SetFilter(pFilter);
 
     m_xDocShRef->DoSaveAs(*pDstMed);

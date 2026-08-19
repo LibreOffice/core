@@ -1960,9 +1960,9 @@ void SwWW8ImplReader::ImportDop()
             default: nZoomType = sal_Int16(SvxZoomType::PERCENT);   break;
         }
         cpo::uno::Sequence<beans::PropertyValue> aViewProps( comphelper::InitPropertySequence({
-                { "ZoomFactor", cpo::uno::Any(sal_Int16(m_xWDop->wScaleSaved)) },
-                { "VisibleBottom", cpo::uno::Any(sal_Int32(0)) },
-                { "ZoomType", cpo::uno::Any(nZoomType) }
+                { u"ZoomFactor"_ustr, cpo::uno::Any(sal_Int16(m_xWDop->wScaleSaved)) },
+                { u"VisibleBottom"_ustr, cpo::uno::Any(sal_Int32(0)) },
+                { u"ZoomType"_ustr, cpo::uno::Any(nZoomType) }
             }));
 
         rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
@@ -2050,13 +2050,13 @@ void SwWW8ImplReader::ImportDop()
         // for the benefit of DOCX - if this is ever saved in that format.
         comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
         cpo::uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
-                { "name", cpo::uno::Any(u"compatibilityMode"_ustr) },
-                { "uri", cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
-                { "val", cpo::uno::Any(u"11"_ustr) }  //11: Use features specified in MS-DOC.
+                { u"name"_ustr, cpo::uno::Any(u"compatibilityMode"_ustr) },
+                { u"uri"_ustr, cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
+                { u"val"_ustr, cpo::uno::Any(u"11"_ustr) }  //11: Use features specified in MS-DOC.
         }));
 
         cpo::uno::Sequence< beans::PropertyValue > aValue(comphelper::InitPropertySequence({
-            { "compatSetting", cpo::uno::Any(aCompatSetting) }
+            { u"compatSetting"_ustr, cpo::uno::Any(aCompatSetting) }
         }));
 
         aGrabBag[u"CompatSettings"_ustr] <<= aValue;

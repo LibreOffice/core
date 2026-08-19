@@ -98,7 +98,7 @@ void collectUIInformation( const OUString& aevent , const OUString& aID )
 {
     EventDescription aDescription;
     aDescription.aID =  aID;
-    aDescription.aParameters = {{"" ,  ""}};
+    aDescription.aParameters = {{u""_ustr ,  u""_ustr}};
     aDescription.aAction = aevent;
     aDescription.aParent = u"MainWindow"_ustr;
     aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;

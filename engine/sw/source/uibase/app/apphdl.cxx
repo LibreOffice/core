@@ -776,13 +776,13 @@ void SwModule::ExecOther(SfxRequest& rReq)
             const SwDBData& rDBData = xConfigItem->GetCurrentDBData();
             cpo::uno::Sequence<cpo::uno::Any> vSelection({ cpo::uno::Any(xConfigItem->GetResultSetPosition()) });
             svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
-                        {"Selection",        cpo::uno::Any(vSelection)},
-                        {"DataSourceName",   cpo::uno::Any(rDBData.sDataSource)},
-                        {"Command",          cpo::uno::Any(rDBData.sCommand)},
-                        {"CommandType",      cpo::uno::Any(rDBData.nCommandType)},
-                        {"ActiveConnection", cpo::uno::Any(xConfigItem->GetConnection().getTyped())},
-                        {"Filter",           cpo::uno::Any(xConfigItem->GetFilter())},
-                        {"Cursor",           cpo::uno::Any(xConfigItem->GetResultSet())}
+                        {u"Selection"_ustr,        cpo::uno::Any(vSelection)},
+                        {u"DataSourceName"_ustr,   cpo::uno::Any(rDBData.sDataSource)},
+                        {u"Command"_ustr,          cpo::uno::Any(rDBData.sCommand)},
+                        {u"CommandType"_ustr,      cpo::uno::Any(rDBData.nCommandType)},
+                        {u"ActiveConnection"_ustr, cpo::uno::Any(xConfigItem->GetConnection().getTyped())},
+                        {u"Filter"_ustr,           cpo::uno::Any(xConfigItem->GetFilter())},
+                        {u"Cursor"_ustr,           cpo::uno::Any(xConfigItem->GetResultSet())}
                         }));
 
             SwWrtShell& rSh = pView->GetWrtShell();

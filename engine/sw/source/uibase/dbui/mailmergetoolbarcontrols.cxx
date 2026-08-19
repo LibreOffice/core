@@ -107,7 +107,7 @@ class MMCurrentEntryController : public MMCurrentEntryController_Base
 
 public:
     explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : MMCurrentEntryController_Base(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeCurrentEntry")
+        : MMCurrentEntryController_Base(rContext, uno::Reference<frame::XFrame>(), u".uno:MailMergeCurrentEntry"_ustr)
         , m_xCurrentEdit(nullptr)
     {
     }
@@ -200,7 +200,7 @@ class MMExcludeEntryController : public MMExcludeEntryController_Base
 
 public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : MMExcludeEntryController_Base(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeExcludeEntry")
+        : MMExcludeEntryController_Base(rContext, uno::Reference<frame::XFrame>(), u".uno:MailMergeExcludeEntry"_ustr)
         , m_xExcludeCheckbox(nullptr)
     {
     }

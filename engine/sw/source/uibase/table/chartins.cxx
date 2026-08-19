@@ -185,8 +185,8 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
         //  initialize dialog
         cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
         {
-            {"ParentWindow", cpo::uno::Any(xParent)},
-            {"ChartModel", cpo::uno::Any(xChartModel)}
+            {u"ParentWindow"_ustr, cpo::uno::Any(xParent)},
+            {u"ChartModel"_ustr, cpo::uno::Any(xChartModel)}
         }));
         xInit->initialize( aSeq );
 

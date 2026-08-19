@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertShapeOnAsCharImg_tdf16890)
 
     // Insert a shape over it
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
 
     // Check that the new shape is anchored at para (i.e. has an anchor node)

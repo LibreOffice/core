@@ -8970,7 +8970,7 @@ void DocxAttributeOutput::WritePostItFieldsResolved()
             }
         }
         if (f->GetResolved())
-            sDone = "1";
+            sDone = u"1"_ustr;
         m_pSerializer->singleElementNS(XML_w15, XML_commentEx,
             FSNS(XML_w15, XML_paraId), idstr,
             FSNS(XML_w15, XML_done), sDone,

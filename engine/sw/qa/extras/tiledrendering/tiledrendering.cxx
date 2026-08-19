@@ -355,8 +355,8 @@ static void lcl_search(bool bBackward)
 {
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", cpo::uno::Any(u"shape"_ustr)},
-                {"SearchItem.Backward", cpo::uno::Any(bBackward)}
+                {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"shape"_ustr)},
+                {u"SearchItem.Backward"_ustr, cpo::uno::Any(bBackward)}
                 }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
 }
@@ -436,10 +436,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchViewArea)
     pWrtShell->GotoPage(1, false);
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", cpo::uno::Any(u"Heading"_ustr)},
-                {"SearchItem.Backward", cpo::uno::Any(false)},
-                {"SearchItem.SearchStartPointX", cpo::uno::Any(static_cast<sal_Int32>(aPoint.getX()))},
-                {"SearchItem.SearchStartPointY", cpo::uno::Any(static_cast<sal_Int32>(aPoint.getY()))}
+                {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"Heading"_ustr)},
+                {u"SearchItem.Backward"_ustr, cpo::uno::Any(false)},
+                {u"SearchItem.SearchStartPointX"_ustr, cpo::uno::Any(static_cast<sal_Int32>(aPoint.getX()))},
+                {u"SearchItem.SearchStartPointY"_ustr, cpo::uno::Any(static_cast<sal_Int32>(aPoint.getY()))}
                 }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
@@ -453,8 +453,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrame)
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", cpo::uno::Any(u"TextFrame"_ustr)},
-                {"SearchItem.Backward", cpo::uno::Any(false)},
+                {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"TextFrame"_ustr)},
+                {u"SearchItem.Backward"_ustr, cpo::uno::Any(false)},
                 }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
     // This was empty: nothing was highlighted after searching for 'TextFrame'.
@@ -468,8 +468,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrameWrapAround)
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", cpo::uno::Any(u"TextFrame"_ustr)},
-                {"SearchItem.Backward", cpo::uno::Any(false)},
+                {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"TextFrame"_ustr)},
+                {u"SearchItem.Backward"_ustr, cpo::uno::Any(false)},
                 }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
     CPPUNIT_ASSERT(m_bFound);
@@ -502,9 +502,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAll)
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", cpo::uno::Any(u"shape"_ustr)},
-                {"SearchItem.Backward", cpo::uno::Any(false)},
-                {"SearchItem.Command", cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+                {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"shape"_ustr)},
+                {u"SearchItem.Backward"_ustr, cpo::uno::Any(false)},
+                {u"SearchItem.Command"_ustr, cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
                 }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
     // This was 0; should be 2 results in the body text.
@@ -522,9 +522,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAllNotifications)
     m_nSelectionBeforeSearchResult = 0;
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", cpo::uno::Any(u"shape"_ustr)},
-                {"SearchItem.Backward", cpo::uno::Any(false)},
-                {"SearchItem.Command", cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+                {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"shape"_ustr)},
+                {u"SearchItem.Backward"_ustr, cpo::uno::Any(false)},
+                {u"SearchItem.Command"_ustr, cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
                 }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -540,7 +540,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageDownInvalidation)
     SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {".uno:HideWhitespace", cpo::uno::Any(true)},
+                {u".uno:HideWhitespace"_ustr, cpo::uno::Any(true)},
                 }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1099,7 +1099,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairDispatch)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"Repair", cpo::uno::Any(true)}
+                {u"Repair"_ustr, cpo::uno::Any(true)}
                 }));
     comphelper::dispatchCommand(u".uno:Undo"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1214,7 +1214,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChanges)
     // Reject the change by id, while the cursor does not cover the tracked change.
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"RejectTrackedChange", cpo::uno::Any(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
+                {u"RejectTrackedChange"_ustr, cpo::uno::Any(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
                 }));
     comphelper::dispatchCommand(u".uno:RejectTrackedChange"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1427,7 +1427,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -1444,7 +1444,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -1462,7 +1462,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -1485,7 +1485,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -1502,7 +1502,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -1516,7 +1516,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, xFrame, aPropertyValues);
@@ -1534,7 +1534,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, xFrame, aPropertyValues);
@@ -1553,7 +1553,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, xFrame, aPropertyValues);
@@ -1581,7 +1581,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextEditAutoColorOnDarkPage)
             = pSwView->GetViewFrame().GetFrame().GetFrameInterface();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
             = comphelper::InitPropertySequence({
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             });
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
@@ -1621,7 +1621,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -1631,7 +1631,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) },
             }
         );
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -1788,8 +1788,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-            {"Text", cpo::uno::Any(u"some text"_ustr)},
-            {"Author", cpo::uno::Any(u"me"_ustr)},
+            {u"Text"_ustr, cpo::uno::Any(u"some text"_ustr)},
+            {u"Author"_ustr, cpo::uno::Any(u"me"_ustr)},
             });
     SwTestViewCallback aView;
     comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr, xFrame, aPropertyValues);
@@ -3245,9 +3245,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMoveShapeHandle)
         sal_Int32 oldY = y;
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", cpo::uno::Any(id)},
-            {"NewPosX", cpo::uno::Any(x+1)},
-            {"NewPosY", cpo::uno::Any(y+1)}
+            {u"HandleNum"_ustr, cpo::uno::Any(id)},
+            {u"NewPosX"_ustr, cpo::uno::Any(x+1)},
+            {u"NewPosY"_ustr, cpo::uno::Any(y+1)}
         }));
         comphelper::dispatchCommand(u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         Scheduler::ProcessEventsToIdle();
@@ -3356,7 +3356,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellOnlineRenderParameter)
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {".uno:SpellOnline", cpo::uno::Any(!bSet)},
+        {u".uno:SpellOnline"_ustr, cpo::uno::Any(!bSet)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
@@ -3830,7 +3830,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
-        {".uno:Author", cpo::uno::Any(sAuthor)},
+        {u".uno:Author"_ustr, cpo::uno::Any(sAuthor)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues1);
 
@@ -3868,7 +3868,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
     static constexpr OUString sAuthor(u"XYZ ABCD"_ustr);
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
-        {".uno:Author", cpo::uno::Any(sAuthor)},
+        {u".uno:Author"_ustr, cpo::uno::Any(sAuthor)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues1);
 
@@ -3949,7 +3949,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+            { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
         }
     );
     comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -3998,7 +3998,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPrintDarkModeChart)
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+            { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
         }
     );
     comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
@@ -4152,7 +4152,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAndReplaceInComments)
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", cpo::uno::Any(u"test"_ustr) },
+        { u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"test"_ustr) },
     }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();

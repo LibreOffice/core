@@ -65,9 +65,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
 
     // When: doing search & replace 3 times.
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr) },
-        { "SearchItem.ReplaceString", cpo::uno::Any(u"bar"_ustr) },
-        { "SearchItem.Command", cpo::uno::Any(static_cast<sal_Int16>(SvxSearchCmd::REPLACE)) },
+        { u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"foo"_ustr) },
+        { u"SearchItem.ReplaceString"_ustr, cpo::uno::Any(u"bar"_ustr) },
+        { u"SearchItem.Command"_ustr,
+          cpo::uno::Any(static_cast<sal_Int16>(SvxSearchCmd::REPLACE)) },
     }));
     // Find the first foo.
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aArgs);

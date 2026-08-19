@@ -1452,7 +1452,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     {
         for (size_t i = m_pRows->size(); i < nRowsReq; ++i)
             m_pRows->push_back(std::make_unique<SwXMLTableRow_Impl>(
-                        "", GetColumnCount()));
+                        u""_ustr, GetColumnCount()));
     }
 
     OUString sStyleName( rStyleName );

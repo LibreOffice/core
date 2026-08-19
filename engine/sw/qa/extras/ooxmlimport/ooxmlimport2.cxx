@@ -1229,12 +1229,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156078)
     createSwDoc("tdf156078_rightTabOutsideParaRightIndent.docx");
 
     // Export it to a PNG (96 ppi)
-    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PixelWidth", cpo::uno::Any(sal_Int32(816)) },
-                                           { "PixelHeight", cpo::uno::Any(sal_Int32(1056)) } }));
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { u"PixelWidth"_ustr, cpo::uno::Any(sal_Int32(816)) },
+          { u"PixelHeight"_ustr, cpo::uno::Any(sal_Int32(1056)) } }));
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        { { "FilterName", cpo::uno::Any(u"writer_png_Export"_ustr) },
-          { "FilterData", cpo::uno::Any(aFilterData) } }));
+        { { u"FilterName"_ustr, cpo::uno::Any(u"writer_png_Export"_ustr) },
+          { u"FilterData"_ustr, cpo::uno::Any(aFilterData) } }));
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
     CPPUNIT_ASSERT(maTempFile.IsValid());

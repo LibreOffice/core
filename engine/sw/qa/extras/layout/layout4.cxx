@@ -63,11 +63,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
 
         // hide these just so that the height of the section is what is expected;
         // otherwise height depends on which tests run previously
-        cpo::uno::Sequence<beans::PropertyValue> argsSH(
-            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(false) } }));
+        cpo::uno::Sequence<beans::PropertyValue> argsSH(comphelper::InitPropertySequence(
+            { { u"ShowHiddenParagraphs"_ustr, cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
         cpo::uno::Sequence<beans::PropertyValue> args(
-            comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
+            comphelper::InitPropertySequence({ { u"Fieldnames"_ustr, cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
 
@@ -355,8 +355,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf145826)
     // Something weird going on here. If I run this unit test by itself, it passes fine.
     // But when run as part of the test suite, it needs the following dispatchCommand
     // in order to pass.
-    cpo::uno::Sequence<beans::PropertyValue> argsSH(
-        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(true) } }));
+    cpo::uno::Sequence<beans::PropertyValue> argsSH(comphelper::InitPropertySequence(
+        { { u"ShowHiddenParagraphs"_ustr, cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
     Scheduler::ProcessEventsToIdle();
 
@@ -2139,7 +2139,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
     save(TestFilter::PDF_WRITER,
          { comphelper::makePropertyValue(
              u"FilterData"_ustr,
-             comphelper::InitPropertySequence({ { "UseTaggedPDF", cpo::uno::Any(false) } })) });
+             comphelper::InitPropertySequence({ { u"UseTaggedPDF"_ustr, cpo::uno::Any(false) } })) });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
     if (!pPdf)
@@ -2177,7 +2177,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf32181)
     save(TestFilter::PDF_WRITER,
          { comphelper::makePropertyValue(
              u"FilterData"_ustr,
-             comphelper::InitPropertySequence({ { "UseTaggedPDF", cpo::uno::Any(false) } })) });
+             comphelper::InitPropertySequence({ { u"UseTaggedPDF"_ustr, cpo::uno::Any(false) } })) });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
     if (!pPdf)

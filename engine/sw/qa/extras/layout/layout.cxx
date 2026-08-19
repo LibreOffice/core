@@ -773,12 +773,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
     createSwDoc("fly_hidden_paragraph.fodt");
 
     // first, disable both so para gets hidden
-    cpo::uno::Sequence<beans::PropertyValue> argsSH(
-        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(false) } }));
+    cpo::uno::Sequence<beans::PropertyValue> argsSH(comphelper::InitPropertySequence(
+        { { u"ShowHiddenParagraphs"_ustr, cpo::uno::Any(false) } }));
     dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
 
     cpo::uno::Sequence<beans::PropertyValue> args(
-        comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
+        comphelper::InitPropertySequence({ { u"Fieldnames"_ustr, cpo::uno::Any(false) } }));
 
     dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
     Scheduler::ProcessEventsToIdle();

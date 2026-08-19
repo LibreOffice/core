@@ -260,10 +260,10 @@ cpo::uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDef
             aNumberingProperties.emplace_back( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE );
         else if (rReadId == PROP_FIRST_LINE_INDENT && bDefaults)
             // Writer default is -360 twips, Word default seems to be 0.
-            aNumberingProperties.emplace_back("FirstLineIndent", 0, cpo::uno::Any(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
+            aNumberingProperties.emplace_back(u"FirstLineIndent"_ustr, 0, cpo::uno::Any(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
         else if (rReadId == PROP_INDENT_AT && bDefaults)
             // Writer default is 720 twips, Word default seems to be 0.
-            aNumberingProperties.emplace_back("IndentAt", 0,
+            aNumberingProperties.emplace_back(u"IndentAt"_ustr, 0,
                                               cpo::uno::Any(static_cast<sal_Int32>(0)),
                                               beans::PropertyState_DIRECT_VALUE);
     }

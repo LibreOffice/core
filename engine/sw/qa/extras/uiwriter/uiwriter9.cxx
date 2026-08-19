@@ -773,11 +773,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
     createSwDoc("section-table-section.fodt");
 
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"PDFUACompliance"_ustr, cpo::uno::Any(true) } }));
     cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        { { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
-          { "FilterData", cpo::uno::Any(aFilterData) },
-          { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
+        { { u"FilterName"_ustr, cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+          { u"FilterData"_ustr, cpo::uno::Any(aFilterData) },
+          { u"URL"_ustr, cpo::uno::Any(maTempFile.GetURL()) } }));
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
@@ -812,7 +812,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
 
     // Paste special as RTF
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "SelectedFormat",
+        { { u"SelectedFormat"_ustr,
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aArgs);
     // Without fix Actual was "Abreakhere", the line break \n was missing.
@@ -1073,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 
     // Insert some text to work with
     cpo::uno::Sequence<beans::PropertyValue> aArgsInsert(
-        comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"abcd"_ustr) } }));
+        comphelper::InitPropertySequence({ { u"Text"_ustr, cpo::uno::Any(u"abcd"_ustr) } }));
     dispatchCommand(mxComponent, u".uno:InsertText"_ustr, aArgsInsert);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"abcd"_ustr, xTextDocument->getText()->getString());
@@ -1440,8 +1440,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
                          getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
-        { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
+        { u"Style"_ustr, cpo::uno::Any(u"Heading 1"_ustr) },
+        { u"FamilyName"_ustr, cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
@@ -1962,8 +1962,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testStyleApplyForwardsOriginalName)
     // SwStyleNameMapper.
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
                     comphelper::InitPropertySequence({
-                        { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
-                        { "FamilyName", cpo::uno::Any(u"BogusFamily"_ustr) },
+                        { u"Style"_ustr, cpo::uno::Any(u"Heading 1"_ustr) },
+                        { u"FamilyName"_ustr, cpo::uno::Any(u"BogusFamily"_ustr) },
                     }));
     // Without the fix in place, this would have failed with
     // - Expected: Heading 1
