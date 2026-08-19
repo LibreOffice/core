@@ -53,7 +53,6 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 using vcl::EnumContext;
 
 namespace sd {
@@ -584,7 +583,7 @@ Any SAL_CALL DrawController::getSlideSorterSelection()
     // * traverse Impress resources to find slide preview pane, grab selection from there
     const std::vector<rtl::Reference<framework::ResourceId>> aResIds(
         mxConfigurationController->getCurrentConfiguration()->getResources(
-            {}, u"", drawing::framework::AnchorBindingMode_INDIRECT));
+            {}, u"", sd::framework::AnchorBindingMode::INDIRECT));
 
     for (const rtl::Reference<framework::ResourceId>& rResId : aResIds)
     {

@@ -69,7 +69,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 using namespace ::sd::slidesorter;
 using ::sd::framework::FrameworkHelper;
 

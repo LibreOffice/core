@@ -29,7 +29,6 @@
 
 using namespace css;
 using namespace css::uno;
-using namespace css::drawing::framework;
 
 namespace sdext::presenter {
 

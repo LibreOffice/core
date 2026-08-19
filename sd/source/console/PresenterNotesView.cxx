@@ -42,7 +42,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 const sal_Int32 gnSpaceBelowSeparator (10);
 const sal_Int32 gnSpaceAboveSeparator (10);

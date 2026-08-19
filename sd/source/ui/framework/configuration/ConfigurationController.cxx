@@ -41,7 +41,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 
 namespace sd::framework {
@@ -256,7 +255,7 @@ void ConfigurationController::requestResourceActivation (
             mpImplementation->mxRequestedConfiguration->getResources(
                 rxResourceId->getAnchor(),
                 rxResourceId->getResourceTypePrefix(),
-                AnchorBindingMode_DIRECT));
+                AnchorBindingMode::DIRECT));
 
         for (const auto& rResource : aResourceList)
         {
@@ -297,7 +296,7 @@ void ConfigurationController::requestResourceDeactivation (
         mpImplementation->mxRequestedConfiguration->getResources(
             rxResourceId,
             u"",
-            AnchorBindingMode_DIRECT));
+            AnchorBindingMode::DIRECT));
     for (const auto& rLinkedResource : aLinkedResources)
     {
         // We do not add deactivation requests directly but call this

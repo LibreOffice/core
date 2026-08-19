@@ -39,7 +39,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace {
     const sal_Int32 gnVerticalGap (10);

@@ -24,7 +24,6 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {
 
@@ -56,7 +55,7 @@ void ConfigurationTracer::TraceBoundResources (
     const int nIndentation)
 {
     const std::vector<rtl::Reference<ResourceId> > aResourceList (
-        rxConfiguration->getResources(rxResourceId, u"", AnchorBindingMode_DIRECT));
+        rxConfiguration->getResources(rxResourceId, u"", AnchorBindingMode::DIRECT));
     static constexpr OUStringLiteral sIndentation (u"    ");
     for (rtl::Reference<ResourceId> const & resourceId : aResourceList)
     {

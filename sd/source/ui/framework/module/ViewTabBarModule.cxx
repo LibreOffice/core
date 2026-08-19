@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
@@ -86,7 +85,7 @@ void ViewTabBarModule::notifyConfigurationChange (
     switch (rEvent.Type)
     {
         case ConfigurationChangeEventType::ResourceActivationRequest:
-            if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
+            if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode::DIRECT))
             {
                 mxConfigurationController->requestResourceActivation(
                     mxViewTabBarId,
@@ -95,7 +94,7 @@ void ViewTabBarModule::notifyConfigurationChange (
             break;
 
         case ConfigurationChangeEventType::ResourceDeactivationRequest:
-            if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
+            if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode::DIRECT))
             {
                 mxConfigurationController->requestResourceDeactivation(mxViewTabBarId);
             }

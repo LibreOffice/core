@@ -47,7 +47,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
@@ -136,7 +135,7 @@ rtl::Reference<AbstractResource> BasicViewFactory::createResource (
     const rtl::Reference<ResourceId>& rxViewId)
 {
     const bool bIsCenterPane (
-        rxViewId->isBoundToURL(FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT));
+        rxViewId->isBoundToURL(FrameworkHelper::msCenterPaneURL, AnchorBindingMode::DIRECT));
 
     // Get the pane for the anchor URL.
     rtl::Reference<AbstractPane> xPane;
@@ -202,7 +201,7 @@ void BasicViewFactory::releaseResource (const rtl::Reference<AbstractResource>& 
     std::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);
 
     if ((*iViewShell)->mxViewId->isBoundToURL(
-        FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+        FrameworkHelper::msCenterPaneURL, AnchorBindingMode::DIRECT))
     {
         // Obtain a pointer to and connect to the frame view of the
         // view.  The next view, that is created, will be

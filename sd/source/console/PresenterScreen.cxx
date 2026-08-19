@@ -46,7 +46,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
-using namespace ::com::sun::star::drawing::framework;
 
 constexpr OUString FULL_SCREEN_PANE_URL = u"private:resource/pane/FullScreenPane"_ustr;
 

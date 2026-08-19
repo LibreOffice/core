@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
@@ -114,7 +113,7 @@ void CenterViewFocusModule::HandleNewView (
     std::vector<rtl::Reference<ResourceId> > xViewIds (rxConfiguration->getResources(
         new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix,
-        AnchorBindingMode_DIRECT));
+        AnchorBindingMode::DIRECT));
     rtl::Reference<AbstractView> xView;
     if (!xViewIds.empty())
         xView = dynamic_cast<AbstractView*>( mxConfigurationController->getResource(xViewIds[0]).get() );

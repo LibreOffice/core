@@ -20,9 +20,9 @@
 #pragma once
 
 #include <sal/config.h>
+#include "AnchorBindingMode.hxx"
 #include "sddllapi.h"
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
@@ -159,7 +159,7 @@ public:
     bool
         isBoundTo (
             const rtl::Reference<ResourceId>& rxResourceId,
-            css::drawing::framework::AnchorBindingMode eMode) const;
+            sd::framework::AnchorBindingMode eMode) const;
 
     /** Return whether the anchor of the called resource id object
         represents the same resource as the given anchor URL. This is a
@@ -177,7 +177,7 @@ public:
     bool
         isBoundToURL (
             const OUString& rsAnchorURL,
-            css::drawing::framework::AnchorBindingMode eMode) const;
+            sd::framework::AnchorBindingMode eMode) const;
 
 private:
     /** The set of URLs that consist of the resource URL at index 0 and the
@@ -207,7 +207,7 @@ private:
     */
     bool IsBoundToAnchor (
         const OUString* psFirstAnchorURL,
-        css::drawing::framework::AnchorBindingMode eMode) const;
+        sd::framework::AnchorBindingMode eMode) const;
 
     /** Return whether the called ResourceId object is bound to the anchor
         consisting of the URLs in rResourceURLs.
@@ -220,7 +220,7 @@ private:
     */
     bool IsBoundToAnchor (
         const ::std::vector<OUString>& rResourceURLs,
-        css::drawing::framework::AnchorBindingMode eMode) const;
+        sd::framework::AnchorBindingMode eMode) const;
 
     void ParseResourceURL();
 };

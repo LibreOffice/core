@@ -34,7 +34,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
@@ -123,7 +122,7 @@ void SlideSorterModule::notifyConfigurationChange (
                      FrameworkHelper::msViewURLPrefix
                  && rEvent.ResourceId->isBoundTo(
                         new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
-                        AnchorBindingMode_DIRECT))
+                        AnchorBindingMode::DIRECT))
         {
             // Update the view tab bar because the view in the center pane
             // has changed.
@@ -138,7 +137,7 @@ void SlideSorterModule::notifyConfigurationChange (
         case ConfigurationChangeEventType::ResourceActivationRequest:
             if (rEvent.ResourceId->isBoundToURL(
                 FrameworkHelper::msCenterPaneURL,
-                AnchorBindingMode_DIRECT))
+                AnchorBindingMode::DIRECT))
             {
                 // A resource directly bound to the center pane has been
                 // requested.
@@ -273,7 +272,7 @@ void SlideSorterModule::HandleResourceRequest(
     std::vector<rtl::Reference<ResourceId> > aCenterViews = rxConfiguration->getResources(
         new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
         FrameworkHelper::msViewURLPrefix,
-        AnchorBindingMode_DIRECT);
+        AnchorBindingMode::DIRECT);
     if (aCenterViews.size() == 1)
     {
         if (bActivation)

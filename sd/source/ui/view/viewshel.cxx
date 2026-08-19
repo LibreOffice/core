@@ -441,7 +441,7 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
             return {};
 
         auto aResIdsIndirect
-            = xConfiguration->getResources({}, u"", drawing::framework::AnchorBindingMode_INDIRECT);
+            = xConfiguration->getResources({}, u"", sd::framework::AnchorBindingMode::INDIRECT);
 
         for (const rtl::Reference<framework::ResourceId>& rResId : aResIdsIndirect)
         {

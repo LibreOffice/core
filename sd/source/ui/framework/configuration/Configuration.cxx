@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 
 namespace {
@@ -145,8 +144,8 @@ std::vector<rtl::Reference<ResourceId> > Configuration::getResources (
             // Apply the given resource prefix as filter.
 
             // Make sure that the resource is bound directly to the anchor.
-            if (eMode != AnchorBindingMode_DIRECT
-                && ! rxResource->isBoundTo(rxAnchorId, AnchorBindingMode_DIRECT))
+            if (eMode != AnchorBindingMode::DIRECT
+                && ! rxResource->isBoundTo(rxAnchorId, AnchorBindingMode::DIRECT))
             {
                 continue;
             }
@@ -261,10 +260,10 @@ bool AreConfigurationsEquivalent (
     // Get the lists of resources from the two given configurations.
     const std::vector<rtl::Reference<ResourceId> > aResources1(
         rxConfiguration1->getResources(
-            nullptr, u"", AnchorBindingMode_INDIRECT));
+            nullptr, u"", AnchorBindingMode::INDIRECT));
     const std::vector<rtl::Reference<ResourceId> > aResources2(
         rxConfiguration2->getResources(
-            nullptr, u"", AnchorBindingMode_INDIRECT));
+            nullptr, u"", AnchorBindingMode::INDIRECT));
 
     // When the number of resources differ then the configurations can not
     // be equivalent.

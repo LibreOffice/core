@@ -35,7 +35,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
@@ -125,7 +124,7 @@ void ToolBarModule::notifyConfigurationChange (
                 if (rEvent.ResourceId->getResourceURL().match(
                     FrameworkHelper::msViewURLPrefix)
                     && rEvent.ResourceId->isBoundToURL(
-                        FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+                        FrameworkHelper::msCenterPaneURL, AnchorBindingMode::DIRECT))
                 {
                     mbMainViewSwitchUpdatePending = true;
                 }

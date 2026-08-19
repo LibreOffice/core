@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -17,20 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module com { module sun { module star { module drawing { module framework {
+#pragma once
 
-/** This enum specifies how a resource is bound to an anchor.  This can be
-    direct or indirect.
-    <p>Example: Let r:a1:a2 denote a resource r which is bound to
+#include <sal/config.h>
+
+namespace sd::framework
+{
+/** This enum specifies how a resource is bound to an anchor.
+    This can be direct or indirect.
+
+    Example: Let r:a1:a2 denote a resource r which is bound to
     anchor a1:a2 which itself is a resource a1 bound to anchor a2.
-    Then r:a1:a2 is bound directly to a1:a2 and indirectly to a2.</p>
+    Then r:a1:a2 is bound directly to a1:a2 and indirectly to a2.
 */
-enum AnchorBindingMode
+enum class AnchorBindingMode
 {
     DIRECT,
     INDIRECT
 };
+}
 
-}; }; }; }; }; // ::com::sun::star::drawing::framework
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

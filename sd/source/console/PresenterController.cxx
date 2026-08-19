@@ -59,7 +59,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext::presenter {
 
@@ -663,7 +662,7 @@ void PresenterController::notifyConfigurationChange (
             {
                 InitializeMainPane(dynamic_cast<sd::framework::Pane*>(rEvent.ResourceObject.get()));
             }
-            else if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_DIRECT))
+            else if (rEvent.ResourceId->isBoundTo(mxMainPaneId, sd::framework::AnchorBindingMode::DIRECT))
             {
                 // A pane bound to the main pane has been created and is
                 // stored in the pane container.
@@ -673,7 +672,7 @@ void PresenterController::notifyConfigurationChange (
                     mpPaneContainer->FindPaneId(xPane->getResourceId());
                 }
             }
-            else if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_INDIRECT))
+            else if (rEvent.ResourceId->isBoundTo(mxMainPaneId, sd::framework::AnchorBindingMode::INDIRECT))
             {
                 // A view bound to one of the panes has been created and is
                 // stored in the pane container along with its pane.
@@ -688,7 +687,7 @@ void PresenterController::notifyConfigurationChange (
             break;
 
         case sd::framework::ConfigurationChangeEventType::ResourceDeactivation:
-            if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_INDIRECT))
+            if (rEvent.ResourceId->isBoundTo(mxMainPaneId, sd::framework::AnchorBindingMode::INDIRECT))
             {
                 // If this is a view then remove it from the pane container.
                 rtl::Reference<sd::framework::AbstractView> xView = dynamic_cast<sd::framework::AbstractView*>(rEvent.ResourceObject.get());

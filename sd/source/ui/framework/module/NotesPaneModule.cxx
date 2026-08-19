@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework
 {
@@ -146,7 +145,7 @@ void NotesPaneModule::notifyConfigurationChange(const ConfigurationChangeEvent& 
     {
         case ConfigurationChangeEventType::ResourceActivationRequest:
             if (rEvent.ResourceId->isBoundToURL(FrameworkHelper::msCenterPaneURL,
-                                                AnchorBindingMode_DIRECT))
+                                                AnchorBindingMode::DIRECT))
             {
                 if (rEvent.ResourceId->getResourceTypePrefix() == FrameworkHelper::msViewURLPrefix)
                 {
@@ -233,7 +232,7 @@ void NotesPaneModule::onResourceRequest(
 {
     std::vector<rtl::Reference<ResourceId>> aCenterViews = rxConfiguration->getResources(
         new ::sd::framework::ResourceId(FrameworkHelper::msCenterPaneURL),
-        FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT);
+        FrameworkHelper::msViewURLPrefix, AnchorBindingMode::DIRECT);
 
     if (aCenterViews.size() != 1)
         return;

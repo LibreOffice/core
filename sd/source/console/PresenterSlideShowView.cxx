@@ -45,7 +45,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace {
 /** Return the slide show controller of a running presentation that has

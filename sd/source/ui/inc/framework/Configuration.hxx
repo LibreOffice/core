@@ -19,9 +19,10 @@
 
 #pragma once
 
+#include <AnchorBindingMode.hxx>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
@@ -139,7 +140,7 @@ public:
     std::vector< rtl::Reference<sd::framework::ResourceId> > getResources (
         const rtl::Reference<sd::framework::ResourceId>& rxAnchorId,
         std::u16string_view rsResourceURLPrefix,
-        css::drawing::framework::AnchorBindingMode eMode);
+        sd::framework::AnchorBindingMode eMode);
 
     /** <p>Returns whether the specified resource is part of the
         configuration.</p>

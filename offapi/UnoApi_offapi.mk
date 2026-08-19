@@ -2351,9 +2351,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XSlideSorterSelectionSupplier \
 	XUniversalShapeDescriptor \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
-	AnchorBindingMode \
-))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/embed,\
 	Actions \
 	Aspects \

@@ -37,7 +37,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 using ::std::vector;
 
@@ -280,7 +279,7 @@ void ConfigurationUpdater::CheckPureAnchors (
     // Get a list of all resources in the configuration.
     std::vector<rtl::Reference<ResourceId> > aResources(
         rxConfiguration->getResources(
-            nullptr, u"", AnchorBindingMode_INDIRECT));
+            nullptr, u"", AnchorBindingMode::INDIRECT));
     sal_Int32 nCount (aResources.size());
 
     // Prepare the list of pure anchors that have to be deactivated.
@@ -312,7 +311,7 @@ void ConfigurationUpdater::CheckPureAnchors (
             {
                 const rtl::Reference<ResourceId>& xPrevResourceId (aResources[nIndex+1]);
                 if ( ! xPrevResourceId.is()
-                    || ! xPrevResourceId->isBoundTo(xResourceId, AnchorBindingMode_DIRECT))
+                    || ! xPrevResourceId->isBoundTo(xResourceId, AnchorBindingMode::DIRECT))
                 {
                     // The previous resource (id) does not exist or is not bound to
                     // the current anchor.

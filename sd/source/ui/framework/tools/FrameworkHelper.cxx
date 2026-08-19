@@ -46,7 +46,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {
 
@@ -219,7 +218,7 @@ namespace
         {
             rtl::Reference< sd::framework::Configuration > xConfiguration( i_rConfigController->getRequestedConfiguration() );
             std::vector< rtl::Reference< ResourceId > > aViewIds( xConfiguration->getResources(
-                i_rPaneId, FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT ) );
+                i_rPaneId, FrameworkHelper::msViewURLPrefix, AnchorBindingMode::DIRECT));
             if ( !aViewIds.empty() )
                 return i_rConfigController->getResource( aViewIds[0] );
         }

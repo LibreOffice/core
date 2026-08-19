@@ -32,7 +32,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {
 
@@ -259,7 +258,7 @@ bool ResourceId::IsBoundToAnchor (
 
     // Check the lengths.
     if (nLocalAnchorURLCount<nAnchorURLCount ||
-        (eMode==AnchorBindingMode_DIRECT && nLocalAnchorURLCount!=nAnchorURLCount))
+        (eMode == AnchorBindingMode::DIRECT && nLocalAnchorURLCount != nAnchorURLCount))
     {
         return false;
     }
@@ -284,7 +283,7 @@ bool ResourceId::IsBoundToAnchor (
 
     // Check the lengths.
     if (nLocalAnchorURLCount<nAnchorURLCount ||
-        (eMode==AnchorBindingMode_DIRECT && nLocalAnchorURLCount!=nAnchorURLCount))
+        (eMode == AnchorBindingMode::DIRECT && nLocalAnchorURLCount != nAnchorURLCount))
     {
         return false;
     }

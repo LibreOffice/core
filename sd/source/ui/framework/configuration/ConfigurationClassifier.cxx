@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {
 
@@ -44,8 +43,8 @@ bool ConfigurationClassifier::Partition()
     maC2minusC1.clear();
 
     PartitionResources(
-        mxConfiguration1->getResources(nullptr, u"", AnchorBindingMode_DIRECT),
-        mxConfiguration2->getResources(nullptr, u"", AnchorBindingMode_DIRECT));
+        mxConfiguration1->getResources(nullptr, u"", AnchorBindingMode::DIRECT),
+        mxConfiguration2->getResources(nullptr, u"", AnchorBindingMode::DIRECT));
 
     return !maC1minusC2.empty() || !maC2minusC1.empty();
 }
@@ -76,8 +75,8 @@ void ConfigurationClassifier::PartitionResources (
     for (const auto& rxResource : aC1andC2)
     {
         PartitionResources(
-            mxConfiguration1->getResources(rxResource, u"", AnchorBindingMode_DIRECT),
-            mxConfiguration2->getResources(rxResource, u"", AnchorBindingMode_DIRECT));
+            mxConfiguration1->getResources(rxResource, u"", AnchorBindingMode::DIRECT),
+            mxConfiguration2->getResources(rxResource, u"", AnchorBindingMode::DIRECT));
     }
 }
 
@@ -128,7 +127,7 @@ void ConfigurationClassifier::CopyResources (
             rxConfiguration->getResources(
                 rxResource,
                 u"",
-                AnchorBindingMode_INDIRECT));
+                AnchorBindingMode::INDIRECT));
         const sal_Int32 nL (aBoundResources.size());
 
         rTarget.reserve(rTarget.size() + 1 + nL);

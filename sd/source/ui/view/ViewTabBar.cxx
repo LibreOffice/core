@@ -46,7 +46,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 
 namespace sd {
@@ -96,7 +95,7 @@ ViewTabBar::ViewTabBar (
 
     if (mpViewShellBase != nullptr
         && rxViewTabBarId->isBoundToURL(
-            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+            FrameworkHelper::msCenterPaneURL, sd::framework::AnchorBindingMode::DIRECT))
     {
         mpViewShellBase->SetViewTabBar(this);
     }
@@ -112,7 +111,7 @@ void ViewTabBar::disposing(std::unique_lock<std::mutex>&)
 {
     if (mpViewShellBase != nullptr
         && mxViewTabBarId->isBoundToURL(
-            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+            FrameworkHelper::msCenterPaneURL, sd::framework::AnchorBindingMode::DIRECT))
     {
         mpViewShellBase->SetViewTabBar(nullptr);
     }
@@ -155,7 +154,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
     // The ViewTabBar supports at the moment only the center pane.
     if (rxViewTabBarId.is()
         && rxViewTabBarId->isBoundToURL(
-            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+            FrameworkHelper::msCenterPaneURL, sd::framework::AnchorBindingMode::DIRECT))
     {
         if (pBase != nullptr)
             pWindow = &pBase->GetViewFrame().GetWindow();
@@ -197,7 +196,8 @@ void ViewTabBar::Listener::notifyConfigurationChange (
 {
     if (rEvent.Type == framework::ConfigurationChangeEventType::ResourceActivation
         && rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix)
-        && rEvent.ResourceId->isBoundTo(mrParent.mxViewTabBarId->getAnchor(), AnchorBindingMode_DIRECT))
+        && rEvent.ResourceId->isBoundTo(mrParent.mxViewTabBarId->getAnchor(),
+                                        sd::framework::AnchorBindingMode::DIRECT))
     {
         mrParent.UpdateActiveButton();
     }
