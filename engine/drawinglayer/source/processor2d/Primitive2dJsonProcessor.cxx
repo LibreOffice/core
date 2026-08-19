@@ -274,14 +274,14 @@ void Primitive2dJsonProcessor::writeGradient(
     }
 }
 
-void Primitive2dJsonProcessor::writeRangeScaled(std::string_view sName,
-                                                const basegfx::B2DRange& rRange)
+void Primitive2dJsonProcessor::writeRange(std::string_view sName, const basegfx::B2DRange& rRange,
+                                          double fScale)
 {
     auto aArray = mrWriter.startArray(sName);
-    mrWriter.putSimpleValue(rRange.getMinX() * mfScaleFactor);
-    mrWriter.putSimpleValue(rRange.getMinY() * mfScaleFactor);
-    mrWriter.putSimpleValue(rRange.getMaxX() * mfScaleFactor);
-    mrWriter.putSimpleValue(rRange.getMaxY() * mfScaleFactor);
+    mrWriter.putSimpleValue(rRange.getMinX() * fScale);
+    mrWriter.putSimpleValue(rRange.getMinY() * fScale);
+    mrWriter.putSimpleValue(rRange.getMaxX() * fScale);
+    mrWriter.putSimpleValue(rRange.getMaxY() * fScale);
 }
 
 void Primitive2dJsonProcessor::writeHatchScaled(
@@ -310,7 +310,7 @@ void Primitive2dJsonProcessor::writeHatchScaled(
         mrWriter.put("fillBackground", true);
 }
 
-void Primitive2dJsonProcessor::writeFillGraphicScaled(
+void Primitive2dJsonProcessor::writeFillGraphic(
     const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic)
 {
     auto aFillNode = mrWriter.startNode("fillGraphic");
@@ -318,8 +318,9 @@ void Primitive2dJsonProcessor::writeFillGraphicScaled(
     mrWriter.put("offsetX", rFillGraphic.getOffsetX());
     mrWriter.put("offsetY", rFillGraphic.getOffsetY());
 
-    const basegfx::B2DRange& rRange = rFillGraphic.getGraphicRange();
-    writeRangeScaled("graphicRange", rRange);
+    // The graphic range is a position in the unit square of the area being
+    // filled, not a length, so it goes out at a scale of one.
+    writeRange("graphicRange", rFillGraphic.getGraphicRange(), 1.0);
     writeGraphicData(rFillGraphic.getGraphic());
 }
 
@@ -600,14 +601,8 @@ void Primitive2dJsonProcessor::writePathScaled(const basegfx::B2DPolyPolygon& rP
     const basegfx::B2DPolyPolygon aScaled = scalePolyPolygon(rPolyPolygon);
     mrWriter.put("path", basegfx::utils::exportToSvgD(aScaled, true, true, false));
 
-    const basegfx::B2DRange aRange(aScaled.getB2DRange());
-    {
-        auto aBoundsArray = mrWriter.startArray("bounds");
-        mrWriter.putSimpleValue(aRange.getMinX());
-        mrWriter.putSimpleValue(aRange.getMinY());
-        mrWriter.putSimpleValue(aRange.getMaxX());
-        mrWriter.putSimpleValue(aRange.getMaxY());
-    }
+    // The polygon carries the scale factor already.
+    writeRange("bounds", aScaled.getB2DRange(), 1.0);
 }
 
 void Primitive2dJsonProcessor::decomposeAndWrite(const Primitive2DContainer& rPrimitive2DSequence)
@@ -845,8 +840,8 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         {
             const auto& rPrimitive = static_cast<const FillGradientPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "fillGradient");
-            writeRangeScaled("outputRange", rPrimitive.getOutputRange());
-            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            writeRange("outputRange", rPrimitive.getOutputRange(), mfScaleFactor);
+            writeRange("definitionRange", rPrimitive.getDefinitionRange(), mfScaleFactor);
             writeGradient(rPrimitive.getFillGradient());
 
             if (rPrimitive.hasAlphaGradient())
@@ -863,7 +858,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 = static_cast<const PolyPolygonGradientPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "polyPolygonGradient");
             writePathScaled(rPrimitive.getB2DPolyPolygon());
-            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            writeRange("definitionRange", rPrimitive.getDefinitionRange(), mfScaleFactor);
             writeGradient(rPrimitive.getFillGradient());
 
             if (rPrimitive.hasAlphaGradient())
@@ -878,8 +873,8 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         {
             const auto& rPrimitive = static_cast<const FillHatchPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "fillHatch");
-            writeRangeScaled("outputRange", rPrimitive.getOutputRange());
-            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            writeRange("outputRange", rPrimitive.getOutputRange(), mfScaleFactor);
+            writeRange("definitionRange", rPrimitive.getDefinitionRange(), mfScaleFactor);
             mrWriter.put("backgroundColor", colorToHex(rPrimitive.getBColor()));
             writeHatchScaled(rPrimitive.getFillHatch());
         }
@@ -891,7 +886,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 = static_cast<const PolyPolygonHatchPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "polyPolygonHatch");
             writePathScaled(rPrimitive.getB2DPolyPolygon());
-            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            writeRange("definitionRange", rPrimitive.getDefinitionRange(), mfScaleFactor);
             mrWriter.put("backgroundColor", colorToHex(rPrimitive.getBackgroundColor()));
             writeHatchScaled(rPrimitive.getFillHatch());
         }
@@ -902,7 +897,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const auto& rPrimitive = static_cast<const FillGraphicPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "fillGraphic");
             writeMatrixScaled("matrix", rPrimitive.getTransformation());
-            writeFillGraphicScaled(rPrimitive.getFillGraphic());
+            writeFillGraphic(rPrimitive.getFillGraphic());
 
             if (rPrimitive.hasTransparency())
                 mrWriter.put("transparency", rPrimitive.getTransparency());
@@ -915,8 +910,8 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 = static_cast<const PolyPolygonGraphicPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "polyPolygonGraphic");
             writePathScaled(rPrimitive.getB2DPolyPolygon());
-            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
-            writeFillGraphicScaled(rPrimitive.getFillGraphic());
+            writeRange("definitionRange", rPrimitive.getDefinitionRange(), mfScaleFactor);
+            writeFillGraphic(rPrimitive.getFillGraphic());
 
             if (rPrimitive.hasTransparency())
                 mrWriter.put("transparency", rPrimitive.getTransparency());
@@ -1065,7 +1060,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("type", "patternFill");
             writePathScaled(rPrimitive.getMask());
 
-            writeRangeScaled("referenceRange", rPrimitive.getReferenceRange());
+            writeRange("referenceRange", rPrimitive.getReferenceRange(), mfScaleFactor);
 
             const Primitive2DContainer& rChildren = rPrimitive.getChildren();
             if (!rChildren.empty())

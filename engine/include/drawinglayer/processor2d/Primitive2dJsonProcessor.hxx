@@ -116,9 +116,9 @@ private:
     /// Write path and bounds, scaled
     void writePathScaled(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    void writeRangeScaled(std::string_view sName, const basegfx::B2DRange& rRange);
+    void writeRange(std::string_view sName, const basegfx::B2DRange& rRange, double fScale);
     void writeHatchScaled(const drawinglayer::attribute::FillHatchAttribute& rHatch);
-    void writeFillGraphicScaled(const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic);
+    void writeFillGraphic(const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic);
     void writeLineAttributeScaled(const drawinglayer::attribute::LineAttribute& rLineAttribute);
     void writeStrokeAttributeScaled(const drawinglayer::attribute::StrokeAttribute& rStroke);
     void writeArrowAttributeScaled(std::string_view sName,
