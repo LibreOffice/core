@@ -612,12 +612,23 @@ Bitmap SvxBmpMask::ImpMaskTransparent( const Bitmap& rBitmap, const Color& rColo
 {
     EnterWait();
 
-    AlphaMask   aMask( rBitmap.CreateColorBitmap().CreateAlphaMask( rColor, nTol ) );
+    Bitmap aColor;
+    AlphaMask aMask;
 
     if( rBitmap.HasAlpha() )
-        aMask.AlphaCombineOr( rBitmap.CreateAlphaMask() );
+    {
+        AlphaMask aAlpha;
+        std::tie(aColor, aAlpha) = rBitmap.SplitIntoColorAndAlpha();
+        aMask = aColor.CreateAlphaMask(rColor, nTol);
+        aMask.AlphaCombineOr(aAlpha);
+    }
+    else
+    {
+        aColor = rBitmap;
+        aMask = aColor.CreateAlphaMask(rColor, nTol);
+    }
 
-    Bitmap aBmp( rBitmap.CreateColorBitmap(), aMask );
+    Bitmap aBmp(aColor, aMask);
     LeaveWait();
 
     return aBmp;
