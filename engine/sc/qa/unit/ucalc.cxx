@@ -3699,6 +3699,56 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagShiftUpUndo)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagTableColumnUndo)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    ScDBData* pNamed = new ScDBData(u"Table1"_ustr, 0, 0, 2, 6, 14);
+    pNamed->SetAutoFilter(true);
+    CPPUNIT_ASSERT(
+        m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pNamed)));
+    m_pDoc->ApplyFlagsTab(0, 2, 6, 2, 0, ScMF::Auto);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_xDocShell->GetDocFunc().InsertCells(ScRange(5, 0, 0, 5, m_pDoc->MaxRow(), 0), &aMark,
+                                          INS_INSCOLS_BEFORE, true, false);
+
+    ScRange aArea;
+    ScDBData* pData = m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"Table1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    pData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(7), aArea.aEnd.Col());
+    for (SCCOL nCol = 0; nCol <= 7; ++nCol)
+        CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(nCol, 2, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    m_pDoc->GetUndoManager()->Undo();
+
+    pData = m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"Table1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    pData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(6), aArea.aEnd.Col());
+    for (SCCOL nCol = 0; nCol <= 6; ++nCol)
+        CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(nCol, 2, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT_MESSAGE(
+        "no stray autofilter button right of the table after undo",
+        !m_pDoc->HasAttrib(7, 2, 0, m_pDoc->MaxCol(), 2, 0, HasAttrFlags::AutoFilter));
+
+    m_pDoc->GetUndoManager()->Redo();
+
+    pData = m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"Table1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    pData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(7), aArea.aEnd.Col());
+    for (SCCOL nCol = 0; nCol <= 7; ++nCol)
+        CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(nCol, 2, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT_MESSAGE(
+        "no stray autofilter button right of the table after redo",
+        !m_pDoc->HasAttrib(8, 2, 0, m_pDoc->MaxCol(), 2, 0, HasAttrFlags::AutoFilter));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testAutofilter)
 {
     m_pDoc->InsertTab( 0, u"Test"_ustr );

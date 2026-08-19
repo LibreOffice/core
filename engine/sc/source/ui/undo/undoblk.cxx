@@ -23,6 +23,7 @@
 #include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/kit.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <osl/diagnose.h>
 
 #include <undoblk.hxx>
@@ -65,17 +66,33 @@
 
 namespace
 {
-/** Refresh the header row to update ScMF::Auto flags. */
-void refreshAutoFilterForColumnChange(ScDocument& rDocument, SCTAB nTab)
+/** Note the header row of a range that carries AutoFilter buttons. */
+void collectAutoFilterHeaderRow(const ScDBData* pDBData, SCTAB nTab,
+                                o3tl::sorted_vector<SCROW>& rHeaderRows)
 {
-    ScDBData* pDBData = rDocument.GetAnonymousDBData(nTab);
     if (!pDBData || !pDBData->HasAutoFilter())
         return;
 
     ScRange aRange;
     pDBData->GetArea(aRange);
+    if (aRange.aStart.Tab() == nTab)
+        rHeaderRows.insert(aRange.aStart.Row());
+}
+
+/** Refresh the header rows to update ScMF::Auto flags. */
+void refreshAutoFilterForColumnChange(ScDocument& rDocument, SCTAB nTab)
+{
+    o3tl::sorted_vector<SCROW> aHeaderRows;
+    collectAutoFilterHeaderRow(rDocument.GetAnonymousDBData(nTab), nTab, aHeaderRows);
+    if (const ScDBCollection* pDBs = rDocument.GetDBCollection())
+    {
+        for (const auto& rxDB : pDBs->getNamedDBs())
+            collectAutoFilterHeaderRow(rxDB.get(), nTab, aHeaderRows);
+    }
+
     // Scan the full header row as stale flags may be outside the range.
-    rDocument.RefreshAutoFilter(0, aRange.aStart.Row(),  rDocument.MaxCol(), aRange.aStart.Row(), nTab);
+    for (const SCROW nHeaderRow : aHeaderRows)
+        rDocument.RefreshAutoFilter(0, nHeaderRow, rDocument.MaxCol(), nHeaderRow, nTab);
 }
 } // end anonymous namespace
 
