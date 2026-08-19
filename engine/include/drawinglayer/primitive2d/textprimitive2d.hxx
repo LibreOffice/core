@@ -42,6 +42,17 @@ class SalLayout;
 
 namespace drawinglayer::primitive2d
 {
+/// Paragraph alignment of a text portion. Unknown means the portion is not
+/// laid-out paragraph text (for example path text), so no alignment applies.
+enum class TextPortionAlign
+{
+    Unknown,
+    Left,
+    Right,
+    Center,
+    Block
+};
+
 /** TextSimplePortionPrimitive2D class
 
     This is the basic primitive for representing a text portion. It contains
@@ -151,6 +162,29 @@ private:
     /// Fill color background ascent as fraction of font height (0.0 = unconstrained)
     double mfFillColorMaxAscentFraction{ 0.0 };
 
+    /// Zero-based paragraph this portion belongs to, or -1 when the portion is
+    /// not part of laid-out paragraph text.
+    sal_Int32 mnParagraph{ -1 };
+
+    /// Paragraph alignment of this portion.
+    TextPortionAlign meAlign{ TextPortionAlign::Unknown };
+
+    /// Full height of the line this portion sits on, measured from one baseline
+    /// to the next. Zero when no line geometry is known.
+    double mfLineHeight{ 0.0 };
+
+    /// Distance from the top of the line to the baseline. Zero when no line
+    /// geometry is known.
+    double mfLineAscent{ 0.0 };
+
+    /// Width of the area the text is laid out within. This is the boundary at
+    /// which lines wrap. Zero when no such area is known.
+    double mfTextAreaWidth{ 0.0 };
+
+    /// Height of the area the text is laid out within. Zero when no such area
+    /// is known.
+    double mfTextAreaHeight{ 0.0 };
+
 protected:
     /// local decomposition.
     virtual Primitive2DReference
@@ -195,6 +229,21 @@ public:
     short getLetterSpacing() const { return mnLetterSpacing; }
     sal_Int32 getProportionalFontSize() const { return mnProportionalFontSize; }
     sal_Int32 getEscapement() const { return mnEscapement; }
+    sal_Int32 getParagraph() const { return mnParagraph; }
+    void setParagraph(sal_Int32 nParagraph) { mnParagraph = nParagraph; }
+    TextPortionAlign getAlign() const { return meAlign; }
+    void setAlign(TextPortionAlign eAlign) { meAlign = eAlign; }
+    double getLineHeight() const { return mfLineHeight; }
+    void setLineHeight(double fLineHeight) { mfLineHeight = fLineHeight; }
+    double getLineAscent() const { return mfLineAscent; }
+    void setLineAscent(double fLineAscent) { mfLineAscent = fLineAscent; }
+    double getTextAreaWidth() const { return mfTextAreaWidth; }
+    double getTextAreaHeight() const { return mfTextAreaHeight; }
+    void setTextArea(double fWidth, double fHeight)
+    {
+        mfTextAreaWidth = fWidth;
+        mfTextAreaHeight = fHeight;
+    }
     bool getOpticalSizing() const { return mbOpticalSizing; }
     double getFillColorMaxAscentFraction() const { return mfFillColorMaxAscentFraction; }
 

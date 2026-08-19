@@ -33,6 +33,11 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+namespace drawinglayer::primitive2d
+{
+enum class TextPortionAlign;
+}
+
 namespace com::sun::star::lang
 {
 struct Locale;
@@ -61,6 +66,12 @@ public:
     const Color maOverlineColor;
     const Color maTextLineColor;
     sal_uInt16 mnLineMaxAscent;
+    // Full height of the line this portion sits on, from one baseline to the
+    // next. Zero when the producing path has no line geometry.
+    sal_uInt16 mnLineHeight;
+    // Distance from the top of the line to the baseline. Zero when the
+    // producing path has no line geometry.
+    sal_uInt16 mnLineAscent;
 
     bool IsRTL() const { return mnBiDiLevel % 2 == 1; }
 
@@ -71,7 +82,8 @@ public:
                     const SvxFieldData* pFieldData, bool bEndOfLine, bool bEndOfParagraph,
                     bool bEndOfBullet, const com::sun::star::lang::Locale* pLocale,
                     const Color& rOverlineColor, const Color& rTextLineColor,
-                    sal_uInt16 nLineMaxAscent = 0)
+                    sal_uInt16 nLineMaxAscent = 0, sal_uInt16 nLineHeight = 0,
+                    sal_uInt16 nLineAscent = 0)
         : mrStartPos(rPos)
         , maText(std::move(aTxt))
         , mnTextStart(nTxtStart)
@@ -90,6 +102,8 @@ public:
         , maOverlineColor(rOverlineColor)
         , maTextLineColor(rTextLineColor)
         , mnLineMaxAscent(nLineMaxAscent)
+        , mnLineHeight(nLineHeight)
+        , mnLineAscent(nLineAscent)
     {
     }
 };
@@ -131,6 +145,11 @@ protected:
     void flushTextPortionPrimitivesToLinePrimitives();
     virtual sal_Int16 getOutlineLevelFromParagraph(sal_Int32 nPara) const;
     virtual sal_Int32 getParagraphCount() const;
+    virtual drawinglayer::primitive2d::TextPortionAlign
+    getParagraphAdjust(sal_Int32 nParagraph) const;
+    // Size of the area the text is laid out within, in layout coordinates. The
+    // width is the boundary at which lines wrap. Empty when no such area exists.
+    virtual Size getReferenceTextArea() const;
     void flushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
 
 public:
@@ -153,6 +172,9 @@ class EDITENG_DLLPUBLIC TextHierarchyBreakupOutliner : public TextHierarchyBreak
 protected:
     virtual sal_Int16 getOutlineLevelFromParagraph(sal_Int32 nPara) const override;
     virtual sal_Int32 getParagraphCount() const override;
+    virtual drawinglayer::primitive2d::TextPortionAlign
+    getParagraphAdjust(sal_Int32 nParagraph) const override;
+    virtual Size getReferenceTextArea() const override;
 
 public:
     TextHierarchyBreakupOutliner(Outliner& rOutliner);

@@ -3729,7 +3729,9 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                     aRubyPos, pRuby->GetText(), 0, pRuby->GetText().getLength(),
                                     {}, {}, aTmpFont, nParaPortion, 0, nullptr, nullptr,
                                     bEndOfLine, bEndOfParagraph, false, nullptr, aOverlineColor,
-                                    aTextLineColor);
+                                    aTextLineColor,
+                                    pLine->IsAscentCompressed() ? pLine->GetMaxAscent() : 0,
+                                    pLine->GetHeight(), pLine->GetMaxAscent());
                                 rStripPortionsHelper.processDrawPortionInfo(aInfo);
                                 aTmpFont.SetFontSize(nPrevSz);
                             }
@@ -4055,7 +4057,8 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                     &aLocale,
                                     aOverlineColor,
                                     aTextLineColor,
-                                    pLine->IsAscentCompressed() ? pLine->GetMaxAscent() : 0);
+                                    pLine->IsAscentCompressed() ? pLine->GetMaxAscent() : 0,
+                                    pLine->GetHeight(), pLine->GetMaxAscent());
                                 rStripPortionsHelper.processDrawPortionInfo(aInfo);
 
                                 // #108052# remember that EOP is written already for this ParaPortion
@@ -4103,7 +4106,9 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                         bEndOfLine, bEndOfParagraph, false,
                                         nullptr,
                                         aOverlineColor,
-                                        aTextLineColor);
+                                        aTextLineColor,
+                                        pLine->IsAscentCompressed() ? pLine->GetMaxAscent() : 0,
+                                        pLine->GetHeight(), pLine->GetMaxAscent());
                                     rStripPortionsHelper.processDrawPortionInfo(aInfo);
                                 }
                                 else
@@ -4125,7 +4130,9 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                         bEndOfLine, bEndOfParagraph, false,
                                         nullptr,
                                         aOverlineColor,
-                                        aTextLineColor);
+                                        aTextLineColor,
+                                        pLine->IsAscentCompressed() ? pLine->GetMaxAscent() : 0,
+                                        pLine->GetHeight(), pLine->GetMaxAscent());
                                     rStripPortionsHelper.processDrawPortionInfo(aInfo);
                                 }
                             }
@@ -4196,6 +4203,11 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                 const Color aOverlineColor(rOutDev.GetOverlineColor());
                 const Color aTextLineColor(rOutDev.GetTextLineColor());
 
+                // The metrics of the paragraph's last line, so an empty
+                // paragraph still reports its line geometry.
+                const EditLineList& rLines = rParaPortion.GetLines();
+                const EditLine* pLastLine = rLines.Count() ? &rLines[rLines.Count() - 1] : nullptr;
+
                 const DrawPortionInfo aInfo(
                     aTmpPos, OUString(), 0, 0, {}, {},
                     aTmpFont, nParaPortion, 0,
@@ -4204,7 +4216,10 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                     false, true, false, // support for EOL/EOP TEXT comments
                     nullptr,
                     aOverlineColor,
-                    aTextLineColor);
+                    aTextLineColor,
+                    pLastLine && pLastLine->IsAscentCompressed() ? pLastLine->GetMaxAscent() : 0,
+                    pLastLine ? pLastLine->GetHeight() : 0,
+                    pLastLine ? pLastLine->GetMaxAscent() : 0);
                 rStripPortionsHelper.processDrawPortionInfo(aInfo);
             }
         }

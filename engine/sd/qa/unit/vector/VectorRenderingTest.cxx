@@ -20,6 +20,10 @@
 
 #include <vcl/virdev.hxx>
 
+#include <editeng/adjustitem.hxx>
+#include <editeng/eeitem.hxx>
+
+#include <svx/svdobjkind.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
@@ -195,6 +199,55 @@ protected:
         pPage->NbcInsertObject(pRect.get());
     }
 
+    /// Raw JSON written by the most recent getVectorPrimitives call.
+    OString m_aLastVectorJson;
+
+    /// Add a text box to the first slide. Newlines in rText start new
+    /// paragraphs. When oAdjust is set, it becomes the paragraph
+    /// alignment.
+    void addTextBox(const tools::Rectangle& rRect, const OUString& rText,
+                    std::optional<SvxAdjust> oAdjust = std::nullopt)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrRectObj> pText
+            = new SdrRectObj(pPage->getSdrModelFromSdrPage(), rRect, SdrObjKind::Text);
+        pText->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+        pText->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+        pText->SetText(rText);
+        if (oAdjust)
+            pText->SetMergedItem(SvxAdjustItem(*oAdjust, EE_PARA_JUST));
+        pPage->NbcInsertObject(pText.get());
+    }
+
+    /// Depth-first search for a text portion node whose text contains rText,
+    /// anywhere under rNode.
+    static std::optional<tools::JsonPath> findTextPortionUnder(const tools::JsonPath& rNode,
+                                                               const OString& rText)
+    {
+        const OString sType = rNode.getString("type").value_or(OString());
+        if ((sType == "textSimplePortion" || sType == "textDecoratedPortion")
+            && rNode.getString("text").value_or(OString()).indexOf(rText) >= 0)
+            return rNode;
+        for (const auto& rChild : rNode.tree())
+        {
+            auto oFound = findTextPortionUnder(rNode.sub(rChild.second), rText);
+            if (oFound)
+                return oFound;
+        }
+        return std::nullopt;
+    }
+
+    /// The first text portion in the last vector JSON whose text contains
+    /// rText, or std::nullopt when none does.
+    std::optional<tools::JsonPath> findTextPortion(const OString& rText) const
+    {
+        auto oJson = tools::JsonPath::parse(
+            std::string_view(m_aLastVectorJson.getStr(), m_aLastVectorJson.getLength()));
+        if (!oJson)
+            return std::nullopt;
+        return findTextPortionUnder(*oJson, rText);
+    }
+
     /// Request for the first slide. The raw JSON is written as a
     /// reference. A non-negative nSince asks for a delta against that
     /// version instead of the full slide.
@@ -212,6 +265,7 @@ protected:
                                std::string_view(aCommand.getStr(), aCommand.getLength()));
         OString aResult = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(!aResult.isEmpty());
+        m_aLastVectorJson = aResult;
 
         // Write the wire-format JSON to workdir.
         static constexpr OUString sFolder = u"/VectorRenderingReference/"_ustr;
@@ -662,6 +716,74 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextPortionCarriesFont)
     // A real font file base64-encodes to far more than this. The bound only
     // guards against an empty or missing payload.
     CPPUNIT_ASSERT(oFont->getString("/data").value_or(OString()).getLength() > 1000);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextParagraphIndex)
+{
+    // A text box with two paragraphs. Every text portion carries the
+    // index of the paragraph it belongs to.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)),
+               u"First paragraph\nSecond paragraph"_ustr);
+
+    getVectorPrimitives(u"testTextParagraphIndex");
+
+    const auto oFirst = findTextPortion("First paragraph"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("first paragraph portion missing", oFirst.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), oFirst->getInt("paragraph").value_or(-1));
+    const auto oSecond = findTextPortion("Second paragraph"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("second paragraph portion missing", oSecond.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), oSecond->getInt("paragraph").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextParagraphAlign)
+{
+    // A centered paragraph reports its alignment on the text portions.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Centered text"_ustr,
+               SvxAdjust::Center);
+
+    getVectorPrimitives(u"testTextParagraphAlign");
+
+    const auto oPortion = findTextPortion("Centered text"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("centered portion missing", oPortion.has_value());
+    CPPUNIT_ASSERT_EQUAL("center"_ostr, oPortion->getString("align").value_or(OString()));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextLineMetrics)
+{
+    // Laid-out text reports the height and ascent of its line on the
+    // portions.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Line metrics"_ustr);
+
+    getVectorPrimitives(u"testTextLineMetrics");
+
+    const auto oPortion = findTextPortion("Line metrics"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
+    const double fHeight = oPortion->getDouble("lineHeight").value_or(0.0);
+    const double fAscent = oPortion->getDouble("lineAscent").value_or(0.0);
+    CPPUNIT_ASSERT_MESSAGE("line height missing", fHeight > 0.0);
+    CPPUNIT_ASSERT_MESSAGE("line ascent missing", fAscent > 0.0);
+    // The ascent is the baseline's offset within the line, so it fits
+    // inside the height.
+    CPPUNIT_ASSERT(fAscent <= fHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextAreaSize)
+{
+    // Laid-out text reports the size of the area it wraps within.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Box size"_ustr);
+
+    getVectorPrimitives(u"testTextAreaSize");
+
+    const auto oPortion = findTextPortion("Box size"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
+    CPPUNIT_ASSERT_MESSAGE("text area width missing",
+                           oPortion->getDouble("textAreaWidth").value_or(0.0) > 0.0);
+    CPPUNIT_ASSERT_MESSAGE("text area height missing",
+                           oPortion->getDouble("textAreaHeight").value_or(0.0) > 0.0);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)

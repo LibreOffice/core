@@ -24,6 +24,10 @@
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <editeng/smallcaps.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/itemset.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
@@ -84,12 +88,30 @@ CheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive,
     return xRet;
 }
 
+// Maps an EditEngine paragraph adjustment onto the drawinglayer alignment enum.
+drawinglayer::primitive2d::TextPortionAlign toTextPortionAlign(SvxAdjust eAdjust)
+{
+    switch (eAdjust)
+    {
+        case SvxAdjust::Right:
+            return drawinglayer::primitive2d::TextPortionAlign::Right;
+        case SvxAdjust::Center:
+            return drawinglayer::primitive2d::TextPortionAlign::Center;
+        case SvxAdjust::Block:
+        case SvxAdjust::BlockLine:
+            return drawinglayer::primitive2d::TextPortionAlign::Block;
+        default:
+            return drawinglayer::primitive2d::TextPortionAlign::Left;
+    }
+}
+
 rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D>
 buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
                           const drawinglayer::attribute::FontAttribute& rFontAttribute,
                           const std::vector<double>& rDXArray,
                           const basegfx::B2DHomMatrix& rNewTransform,
-                          double fFillColorMaxAscentFraction = 0.0)
+                          double fFillColorMaxAscentFraction,
+                          drawinglayer::primitive2d::TextPortionAlign eAlign, const Size& rTextArea)
 {
     boost::container::vector< bool > aKashidaArray;
 
@@ -220,6 +242,19 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
             rInfo.mrFont.GetOpticalSizing(), fFillColorMaxAscentFraction);
     }
 
+    // Stamp the source paragraph index, its alignment, the line geometry and
+    // the size of the wrap area onto the portion.
+    if (pNewPrimitive)
+    {
+        auto* pPortion = static_cast<drawinglayer::primitive2d::TextSimplePortionPrimitive2D*>(
+            pNewPrimitive.get());
+        pPortion->setParagraph(rInfo.mnPara);
+        pPortion->setAlign(eAlign);
+        pPortion->setLineHeight(rInfo.mnLineHeight);
+        pPortion->setLineAscent(rInfo.mnLineAscent);
+        pPortion->setTextArea(rTextArea.Width(), rTextArea.Height());
+    }
+
     return pNewPrimitive;
 }
 
@@ -231,18 +266,24 @@ private:
     const basegfx::B2DHomMatrix& mrNewTransformB;
     const DrawPortionInfo& m_rInfo;
     SvxFont m_aFont;
+    drawinglayer::primitive2d::TextPortionAlign m_eAlign;
+    Size m_aTextArea;
 
 public:
     DoCapitalsDrawPortionInfo(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                               const basegfx::B2DHomMatrix& rNewTransformA,
                               const basegfx::B2DHomMatrix& rNewTransformB,
-                              const DrawPortionInfo& rInfo)
+                              const DrawPortionInfo& rInfo,
+                              drawinglayer::primitive2d::TextPortionAlign eAlign,
+                              const Size& rTextArea)
         : SvxDoCapitals(rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen)
         , mrTarget(rTarget)
         , mrNewTransformA(rNewTransformA)
         , mrNewTransformB(rNewTransformB)
         , m_rInfo(rInfo)
         , m_aFont(rInfo.mrFont)
+        , m_eAlign(eAlign)
+        , m_aTextArea(rTextArea)
     {
         assert(!m_rInfo.mpDXArray.empty());
 
@@ -261,7 +302,8 @@ public:
 void CreateTextPortionPrimitivesFromDrawPortionInfo(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB,
-    const DrawPortionInfo& rInfo)
+    const DrawPortionInfo& rInfo, drawinglayer::primitive2d::TextPortionAlign eAlign,
+    const Size& rTextArea)
 {
     // Let end-of-paragraph markers through even if they carry no text, so empty
     // paragraphs still produce a primitive whose getB2DRange() gives a font-height
@@ -357,7 +399,7 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
     OUString caseMappedText = rInfo.mrFont.CalcCaseMap(rInfo.maText);
     rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive(
         buildTextPortionPrimitive(rInfo, caseMappedText, aFontAttribute, aDXArray, aNewTransform,
-                                  fFillColorMaxAscentFraction));
+                                  fFillColorMaxAscentFraction, eAlign, rTextArea));
 
     bool bSmallCaps = rInfo.mrFont.IsCapital();
     if (bSmallCaps && rInfo.mpDXArray.empty())
@@ -368,8 +410,8 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
     if (bSmallCaps)
     {
         // rerun with each sub-portion
-        DoCapitalsDrawPortionInfo aDoDrawPortionInfo(rTarget, rNewTransformA, rNewTransformB,
-                                                     rInfo);
+        DoCapitalsDrawPortionInfo aDoDrawPortionInfo(rTarget, rNewTransformA, rNewTransformB, rInfo,
+                                                     eAlign, rTextArea);
         rInfo.mrFont.DoOnCapitals(aDoDrawPortionInfo);
 
         // transfer collected primitives from rTarget to a new container
@@ -541,10 +583,10 @@ void DoCapitalsDrawPortionInfo::Do(const OUString& rSpanTxt, const sal_Int32 nSp
         m_rInfo.mnBiDiLevel, nullptr, /* no spelling in subportion, handled outside */
         nullptr, /* no field in subportion, handled outside */
         false, false, false, m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor,
-        m_rInfo.mnLineMaxAscent);
+        m_rInfo.mnLineMaxAscent, m_rInfo.mnLineHeight, m_rInfo.mnLineAscent);
 
     CreateTextPortionPrimitivesFromDrawPortionInfo(mrTarget, mrNewTransformA, mrNewTransformB,
-                                                   aInfo);
+                                                   aInfo, m_eAlign, m_aTextArea);
 
     if (!bUpper)
         m_aFont.SetPropr(nProp);
@@ -603,6 +645,14 @@ sal_Int16 TextHierarchyBreakup::getOutlineLevelFromParagraph(sal_Int32 /*nPara*/
     return -1;
 }
 
+drawinglayer::primitive2d::TextPortionAlign
+    TextHierarchyBreakup::getParagraphAdjust(sal_Int32 /*nParagraph*/) const
+{
+    return drawinglayer::primitive2d::TextPortionAlign::Unknown;
+}
+
+Size TextHierarchyBreakup::getReferenceTextArea() const { return Size(); }
+
 sal_Int32 TextHierarchyBreakup::getParagraphCount() const { return 0; }
 
 void TextHierarchyBreakup::flushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara)
@@ -617,8 +667,9 @@ void TextHierarchyBreakup::flushLinePrimitivesToParagraphPrimitives(sal_Int32 nP
 
 void TextHierarchyBreakup::processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo)
 {
-    CreateTextPortionPrimitivesFromDrawPortionInfo(maTextPortionPrimitives, maNewTransformA,
-                                                   maNewTransformB, rDrawPortionInfo);
+    CreateTextPortionPrimitivesFromDrawPortionInfo(
+        maTextPortionPrimitives, maNewTransformA, maNewTransformB, rDrawPortionInfo,
+        getParagraphAdjust(rDrawPortionInfo.mnPara), getReferenceTextArea());
 
     if (rDrawPortionInfo.mbEndOfLine || rDrawPortionInfo.mbEndOfParagraph)
     {
@@ -718,6 +769,40 @@ sal_Int16 TextHierarchyBreakupOutliner::getOutlineLevelFromParagraph(sal_Int32 n
     // Pass -1 to signal VclMetafileProcessor2D that there is no active
     // bullets/numbering in this paragraph (i.e. this is normal text)
     return eInfo.bVisible ? nDepth : -1;
+}
+
+drawinglayer::primitive2d::TextPortionAlign
+TextHierarchyBreakupOutliner::getParagraphAdjust(sal_Int32 nParagraph) const
+{
+    SvxAdjust eAdjust = mrOutliner.GetParaAttribs(nParagraph).Get(EE_PARA_JUST).GetAdjust();
+
+    // Resolve the adjustment the same way the layout did when it placed the
+    // lines: start is the left margin, end the right one, and left and right
+    // swap in a right-to-left paragraph.
+    const bool bRightToLeft = mrOutliner.GetEditEngine().IsRightToLeft(nParagraph);
+    switch (eAdjust)
+    {
+        case SvxAdjust::ParaStart:
+            eAdjust = SvxAdjust::Left;
+            break;
+        case SvxAdjust::ParaEnd:
+            eAdjust = SvxAdjust::Right;
+            break;
+        case SvxAdjust::Left:
+            eAdjust = bRightToLeft ? SvxAdjust::Right : SvxAdjust::Left;
+            break;
+        case SvxAdjust::Right:
+            eAdjust = bRightToLeft ? SvxAdjust::Left : SvxAdjust::Right;
+            break;
+        default:
+            break;
+    }
+    return toTextPortionAlign(eAdjust);
+}
+
+Size TextHierarchyBreakupOutliner::getReferenceTextArea() const
+{
+    return mrOutliner.GetPaperSize();
 }
 
 sal_Int32 TextHierarchyBreakupOutliner::getParagraphCount() const

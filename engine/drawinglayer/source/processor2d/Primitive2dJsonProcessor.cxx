@@ -483,6 +483,45 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         for (double fValue : rPrimitive.getDXArray())
             mrWriter.putSimpleValue(sal_Int64(std::llround(fValue * mfScaleFactor)));
     }
+
+    // The zero-based index of the paragraph this portion belongs to.
+    if (rPrimitive.getParagraph() >= 0)
+        mrWriter.put("paragraph", sal_Int64(rPrimitive.getParagraph()));
+
+    // The paragraph alignment of this portion.
+    const char* pAlign = nullptr;
+    switch (rPrimitive.getAlign())
+    {
+        case drawinglayer::primitive2d::TextPortionAlign::Left:
+            pAlign = "left";
+            break;
+        case drawinglayer::primitive2d::TextPortionAlign::Right:
+            pAlign = "right";
+            break;
+        case drawinglayer::primitive2d::TextPortionAlign::Center:
+            pAlign = "center";
+            break;
+        case drawinglayer::primitive2d::TextPortionAlign::Block:
+            pAlign = "justify";
+            break;
+        case drawinglayer::primitive2d::TextPortionAlign::Unknown:
+            break;
+    }
+    if (pAlign)
+        mrWriter.put("align", pAlign);
+
+    // The height and ascent of the line this portion sits on.
+    if (rPrimitive.getLineHeight() > 0.0)
+        mrWriter.put("lineHeight", rPrimitive.getLineHeight() * mfScaleFactor);
+    if (rPrimitive.getLineAscent() > 0.0)
+        mrWriter.put("lineAscent", rPrimitive.getLineAscent() * mfScaleFactor);
+
+    // The size of the area the text is laid out within. Lines wrap at the
+    // width.
+    if (rPrimitive.getTextAreaWidth() > 0.0)
+        mrWriter.put("textAreaWidth", rPrimitive.getTextAreaWidth() * mfScaleFactor);
+    if (rPrimitive.getTextAreaHeight() > 0.0)
+        mrWriter.put("textAreaHeight", rPrimitive.getTextAreaHeight() * mfScaleFactor);
 }
 
 // Write matrix as 6 elements. Scale all components (unit conversion).
