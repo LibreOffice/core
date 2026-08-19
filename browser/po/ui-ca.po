@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
-"Last-Translator: eternal4411 <joandegenover@protonmail.com>\n"
+"PO-Revision-Date: 2026-08-17 18:51+0000\n"
+"Last-Translator: Joan Montané <jmontane@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ca/>\n"
-"Language: \n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -2689,7 +2689,7 @@ msgstr ""
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Declaració d'accessibilitat"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -2906,7 +2906,7 @@ msgstr "Geòrgia"
 
 #: src/control/Control.ESignature.ts:155
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernsey"
 
 #: src/control/Control.ESignature.ts:156
 msgid "Greece"
@@ -2958,11 +2958,11 @@ msgstr "Corea del Sud"
 
 #: src/control/Control.ESignature.ts:168
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Kazakhstan"
 
 #: src/control/Control.ESignature.ts:169
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Liechtenstein"
 
 #: src/control/Control.ESignature.ts:170
 msgid "Lithuania"
@@ -2982,19 +2982,19 @@ msgstr "Mònaco"
 
 #: src/control/Control.ESignature.ts:174
 msgid "Moldova, Republic of"
-msgstr ""
+msgstr "Moldàvia"
 
 #: src/control/Control.ESignature.ts:175
 msgid "Montenegro"
-msgstr ""
+msgstr "Montenegro"
 
 #: src/control/Control.ESignature.ts:176
 msgid "North Macedonia, Republic of"
-msgstr ""
+msgstr "Macedònia del Nord"
 
 #: src/control/Control.ESignature.ts:177
 msgid "Malta"
-msgstr ""
+msgstr "Malta"
 
 #: src/control/Control.ESignature.ts:178
 msgid "Mexico"
@@ -3026,7 +3026,7 @@ msgstr "Portugal"
 
 #: src/control/Control.ESignature.ts:185
 msgid "Qatar"
-msgstr ""
+msgstr "Qatar"
 
 #: src/control/Control.ESignature.ts:186
 msgid "Romania"
@@ -3038,7 +3038,7 @@ msgstr "Sèrbia"
 
 #: src/control/Control.ESignature.ts:188
 msgid "Russian Federation"
-msgstr ""
+msgstr "Rússia"
 
 #: src/control/Control.ESignature.ts:189
 msgid "Saudi Arabia"
@@ -3062,7 +3062,7 @@ msgstr "Eslovàquia"
 
 #: src/control/Control.ESignature.ts:194
 msgid "San Marino"
-msgstr ""
+msgstr "San Marino"
 
 #: src/control/Control.ESignature.ts:195
 msgid "Turkey"
@@ -3070,7 +3070,7 @@ msgstr "Turquia"
 
 #: src/control/Control.ESignature.ts:196
 msgid "Taiwan, Province of China"
-msgstr ""
+msgstr "Taiwan, província de la Xina"
 
 #: src/control/Control.ESignature.ts:197
 msgid "Ukraine"
@@ -3082,11 +3082,11 @@ msgstr "Estats Units d'Amèrica"
 
 #: src/control/Control.ESignature.ts:199
 msgid "Holy See (Vatican City State)"
-msgstr ""
+msgstr "Santa Seu (Ciutat del Vaticà)"
 
 #: src/control/Control.ESignature.ts:200
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #: src/control/Control.ESignature.ts:201
 msgid "South Africa"
@@ -3111,7 +3111,7 @@ msgstr "Insereix la signatura electrònica"
 
 #: src/control/Control.FormulaBarJSDialog.js:18
 msgid "Expand Formula Bar"
-msgstr ""
+msgstr "Expandeix la barra de fórmules"
 
 #: src/control/Control.FormulaBarJSDialog.js:19
 msgid "Function Wizard"
@@ -3128,7 +3128,7 @@ msgstr "Accepta"
 
 #: src/control/Control.FormulaBarJSDialog.js:211
 msgid "Collapse Formula Bar"
-msgstr ""
+msgstr "Redueix la barra de fórmules"
 
 #: src/control/Control.IdleHandler.ts:45
 msgid "Idle document - please click to reload and resume editing"
@@ -3209,7 +3209,7 @@ msgstr "Estil"
 
 #: src/control/Control.JSDialogBuilder.js:1673
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Commuta el desplegable"
 
 #: src/control/Control.JSDialogBuilder.js:1675
 msgid "Dialog dropdown"
@@ -3222,7 +3222,7 @@ msgstr "Desplegable"
 
 #: src/control/Control.JSDialogBuilder.js:1679
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Aplica el desplegable d'accions"
 
 #: src/control/Control.JSDialogBuilder.js:1705
 msgid "Open {name}"
@@ -3335,7 +3335,7 @@ msgstr "EPUB (.epub)"
 #: src/control/Control.NotebookbarBuilder.js:407
 #: src/control/Control.NotebookbarBuilder.js:597
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/control/Control.Menubar.ts:114 src/control/Control.UIManager.ts:552
 msgid "Rename Document"
@@ -3393,7 +3393,7 @@ msgstr "Repara"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:704 src/control/Control.Menubar.ts:886
 msgid "Find"
-msgstr ""
+msgstr "Cerca"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -3412,7 +3412,7 @@ msgstr "Reinicialitza l'escala"
 
 #: src/control/Control.Menubar.ts:175
 msgid "Fit to Screen"
-msgstr ""
+msgstr "Ajusta a la pantalla"
 
 #: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:519
 #: src/control/Control.Menubar.ts:720 src/control/Control.Menubar.ts:899
@@ -3423,7 +3423,7 @@ msgstr "Commuta el mode de la interfície"
 #: src/control/Control.NotebookbarWriter.js:1756
 #: src/control/Control.StatusBar.js:274 src/control/Control.StatusBar.js:275
 msgid "Multi Page View"
-msgstr ""
+msgstr "Visualització de múltiples pàgines"
 
 #: src/control/Control.Menubar.ts:181 src/control/Control.Menubar.ts:521
 #: src/control/Control.Menubar.ts:725 src/control/Control.Menubar.ts:900
@@ -3462,7 +3462,7 @@ msgstr "Imatge local..."
 #: src/control/Control.Menubar.ts:199 src/control/Control.Menubar.ts:543
 #: src/control/Control.Menubar.ts:734 src/control/Control.Menubar.ts:925
 msgid "Shapes ..."
-msgstr ""
+msgstr "Formes..."
 
 #: src/control/Control.Menubar.ts:220 src/control/Control.Menubar.ts:222
 #: src/control/Control.Menubar.ts:1436 src/control/Control.Menubar.ts:1438
@@ -3678,7 +3678,7 @@ msgstr "Arxiu multimèdia local..."
 #: src/control/Control.NotebookbarImpress.js:2691
 #: src/control/Control.NotebookbarImpress.js:3085
 msgid "Distribute"
-msgstr ""
+msgstr "Distribueix"
 
 #: src/control/Control.Menubar.ts:635 src/control/Control.Menubar.ts:1280
 #: src/control/Control.PresentationBar.js:128
@@ -3875,7 +3875,7 @@ msgstr "La línia de signatura ara es pot moure o redimensionar segons calgui."
 
 #: src/control/Control.Menubar.ts:2562
 msgid "Finish electronic signing"
-msgstr ""
+msgstr "Finalitza la signatura electrònica"
 
 #: src/control/Control.MobileBottomBar.js:28
 #: src/control/Control.MobileBottomBar.js:130
@@ -3928,11 +3928,11 @@ msgstr "Resultats"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Maximitza a la quadrícula"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Cerca i reemplaça"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:439
@@ -3943,6 +3943,7 @@ msgstr "Cerca…"
 #: src/control/Control.QuickFindPanel.ts:122
 msgid "Type in the search box to find anything in your document"
 msgstr ""
+"Escriviu en el quadre de cerca per a trobar qualsevol cosa en el document"
 
 #: src/control/Notebookbar.CalcTableTab.ts:43
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:43
@@ -5461,11 +5462,13 @@ msgstr "Primera diapositiva"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Abans"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Feu doble clic per inserir una tabulació. Feu clic amb el botó dret per a "
+"més opcions."
 
 #: src/control/HRuler.ts:787 src/control/HRuler.ts:954
 msgid "Left Margin"
@@ -5510,16 +5513,17 @@ msgstr "Introduïu un nom de fitxer"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Com voleu editar?"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Altres usuaris estan visualitzant aquest document. Trieu com voleu continuar:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Edita localment"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
@@ -5527,7 +5531,7 @@ msgstr ""
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Edició col·laborativa"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
@@ -5836,7 +5840,7 @@ msgstr ""
 
 #: src/control/jsdialog/Definitions.Menu.ts:1541
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1542
 msgid "Long Bond"
@@ -5844,7 +5848,7 @@ msgstr "Foli"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1543
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloide"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1544
 msgid "B6 (JIS)"
@@ -5860,15 +5864,15 @@ msgstr "B4 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1547
 msgid "16 Kai"
-msgstr ""
+msgstr "16 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1548
 msgid "32 Kai"
-msgstr ""
+msgstr "32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1549
 msgid "Big 32 Kai"
-msgstr ""
+msgstr "Big 32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1550
 msgid "User"
@@ -5876,51 +5880,51 @@ msgstr "Usuari"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1551
 msgid "DL Envelope"
-msgstr ""
+msgstr "Sobre DL"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1552
 msgid "C6 Envelope"
-msgstr ""
+msgstr "Sobre C6"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1553
 msgid "C6/5 Envelope"
-msgstr ""
+msgstr "Sobre C6/5"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1554
 msgid "C5 Envelope"
-msgstr ""
+msgstr "Sobre C5"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1555
 msgid "C4 Envelope"
-msgstr ""
+msgstr "Sobre C4"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1558
 msgid "#6¾ Envelope"
-msgstr ""
+msgstr "Sobre  6344"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1563
 msgid "#7¾ (Monarch) Envelope"
-msgstr ""
+msgstr "Sobre 7373)4 (març)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1566
 msgid "#9 Envelope"
-msgstr ""
+msgstr "Sobre  9"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1567
 msgid "#10 Envelope"
-msgstr ""
+msgstr "Sobre  10"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1568
 msgid "#11 Envelope"
-msgstr ""
+msgstr "Sobre  11"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1569
 msgid "#12 Envelope"
-msgstr ""
+msgstr "Sobre  12"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1572
 msgid "Japanese Postcard"
-msgstr ""
+msgstr "Postal japonesa"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1771
 msgid "Insert Local Image"
@@ -5932,7 +5936,7 @@ msgstr "Insereix multimèdia local"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1783
 msgid "Compare Local Document"
-msgstr ""
+msgstr "Compara el document local"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1789
 msgid "Very Tight"
@@ -5952,11 +5956,11 @@ msgstr "Molt ample"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Copia el Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
-msgstr ""
+msgstr "En línia"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1841
 msgid "Side by Side"
@@ -5964,7 +5968,7 @@ msgstr ""
 
 #: src/control/jsdialog/Definitions.Menu.ts:1847
 msgid "Hidden"
-msgstr ""
+msgstr "Ocult"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1861
 msgid "This user"
@@ -5975,9 +5979,8 @@ msgid "All users"
 msgstr "Tots els usuaris"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Destaca cel·les amb..."
+msgstr "Ressalta les cel·les amb"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
 #, fuzzy
@@ -5986,15 +5989,15 @@ msgstr "Regles superior/inferior..."
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Escala de color"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Barra de dades"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Paquet d'icones"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6026,7 +6029,7 @@ msgstr "Vores superior i inferior"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2053
 msgid "Outer Border"
-msgstr ""
+msgstr "Vora exterior"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2059
 msgid "All Horizontal Lines"
@@ -6034,15 +6037,15 @@ msgstr "Totes les línies horitzontals"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2065
 msgid "Outer Border And Horizontal Lines"
-msgstr ""
+msgstr "Vora exterior i línies horitzontals"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2071
 msgid "Outer Border and Vertical Lines"
-msgstr ""
+msgstr "Vora exterior i línies verticals"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2077
 msgid "Outer Borders And All Inner lines"
-msgstr ""
+msgstr "Vores exteriors i totes les línies internes"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2083
 msgid "Line color"
@@ -6098,11 +6101,11 @@ msgstr "Mitjà/mitjà (4,50 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2250
 msgid "Standard (4:3)"
-msgstr ""
+msgstr "Estàndard (4:3)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2255
 msgid "Widescreen (16:9)"
-msgstr ""
+msgstr "Pantalla ampla (16:9)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2415
 msgid "Grayscale"
@@ -6149,20 +6152,19 @@ msgstr "Automàtic"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Paleta"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
-msgstr ""
+msgstr "Paleta de colors"
 
 #: src/control/jsdialog/Widget.Combobox.js:278
-#, fuzzy
 msgid "Open "
-msgstr "Obre"
+msgstr "Obre "
 
 #: src/control/jsdialog/Widget.Combobox.js:278
 msgid " list"
-msgstr ""
+msgstr " llista"
 
 #: src/control/jsdialog/Widget.Combobox.js:279
 msgid "Open list"
@@ -6170,7 +6172,7 @@ msgstr "Obre la llista"
 
 #: src/control/jsdialog/Widget.Combobox.js:440
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtra les entrades"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
@@ -6567,7 +6569,7 @@ msgstr ""
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "No queda espai al disc."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6800,29 +6802,29 @@ msgstr "Ha fallat la pujada al servidor perquè el fitxer és massa gran."
 
 #: src/layer/marker/A11yTextInput.js:252
 msgid "Out of table"
-msgstr ""
+msgstr "Fora de la taula"
 
 #: src/layer/marker/A11yTextInput.js:257
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n fila"
+msgstr[1] "%n files"
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n columna"
+msgstr[1] "%n columnes"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:261
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Taula amb {0} i {1}"
 
 #: src/layer/marker/A11yTextInput.js:266
 msgid "Row {0} through {1}"
-msgstr ""
+msgstr "Fila {0} a través de {1}"
 
 #: src/layer/marker/A11yTextInput.js:269
 msgid "Row {0}"
@@ -6830,7 +6832,7 @@ msgstr "Fila {0}"
 
 #: src/layer/marker/A11yTextInput.js:277
 msgid "Column {0} through {1}"
-msgstr ""
+msgstr "Columna {0} a través de {1}"
 
 #: src/layer/marker/A11yTextInput.js:280
 msgid "Column {0}"
@@ -6838,11 +6840,11 @@ msgstr "Columna {0}"
 
 #: src/layer/marker/A11yTextInput.js:308
 msgid "Editing activated. "
-msgstr ""
+msgstr "Edició activada. "
 
 #: src/layer/marker/A11yTextInput.js:327
 msgid "{0} selected"
-msgstr ""
+msgstr "{0} seleccionats"
 
 #: src/layer/marker/A11yTextInput.js:329
 msgid "Has text: "
@@ -6850,19 +6852,22 @@ msgstr "Té el text: "
 
 #: src/layer/marker/A11yTextInput.js:334
 msgid "{0} unselected"
-msgstr ""
+msgstr "{0} no seleccionat"
 
 #: src/layer/marker/A11yTextInput.js:338
 msgid "{0} deleted"
-msgstr ""
+msgstr "{0} suprimit"
 
 #: src/layer/marker/TextInput.js:486
 msgid "Screen reader support for text content is disabled. "
 msgstr ""
+"La compatibilitat amb el lector de pantalla per al contingut de text està "
+"desactivada. "
 
 #: src/layer/marker/TextInput.js:487
 msgid "You need to enable it both at server level and in the UI. "
 msgstr ""
+"Heu d'habilitar-lo tant a nivell de servidor com a la interfície d'usuari. "
 
 #: src/layer/marker/TextInput.js:488
 msgid "Look for the accessibility section in coolwsd.xml for server setting. "
@@ -6882,7 +6887,7 @@ msgstr "el menú Visualitza"
 
 #: src/layer/tile/CanvasTileLayer.js:460
 msgid "Online Editor"
-msgstr ""
+msgstr "Editor en línia"
 
 #: src/layer/tile/CanvasTileLayer.js:1591
 msgid "Functions"
@@ -7307,7 +7312,7 @@ msgstr ""
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
@@ -7315,11 +7320,11 @@ msgstr ""
 
 #: templates/templates.js:56
 msgid "Modern Style"
-msgstr ""
+msgstr "Estil modern"
 
 #: templates/templates.js:66
 msgid "Simple Style"
-msgstr ""
+msgstr "Estil simple"
 
 #: templates/templates.js:76
 msgid "Beehive"
@@ -7411,15 +7416,15 @@ msgstr ""
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Idea groga"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Us donem la benvinguda al full de càlcul"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Us donem la benvinguda a la presentació"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
@@ -7469,9 +7474,8 @@ msgid "Get Involved"
 msgstr "Impliqueu-vos-hi"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/ (en anglès)"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 #, fuzzy

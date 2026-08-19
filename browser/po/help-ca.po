@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-07-21 07:01+0000\n"
-"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
+"PO-Revision-Date: 2026-08-16 18:32+0000\n"
+"Last-Translator: Joan Montané <jmontane@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "help/ca/>\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -100,11 +100,11 @@ msgstr "Imprimeix"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Cerca"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Cerca i reemplaça"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -146,41 +146,41 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Obre el menú contextual al cursor o a la cel·la seleccionada"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
 msgstr ""
-"<kbd>Maj</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Finalització</kbd>"
+"<kbd>Majúscules</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Mou el focus a l'àrea següent de l'aplicació (barra de menús, barra de "
+"fórmules, document, barra lateral, pestanyes de full, barra d'estat)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Mou el focus a l'àrea anterior de l'aplicació"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
 msgstr ""
-"<kbd>Maj</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Finalització</kbd>"
+"<kbd>Majúscules</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -1374,41 +1374,44 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Selecciona tota la columna de la cel·la actual."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Espai</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Selecciona tota la fila de la cel·la actual."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Maj</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tabulació</kbd>"
+"<kbd>Majúscula</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>Espai</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Obre el menú contextual de la pestanya del full amb focus (insereix, canvia "
+"el nom, suprimeix, amaga, mou i molt més)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"Amb tota una columna o fila seleccionada, s'obre el menú contextual "
+"corresponent a la columna o la capçalera de fila (insereix, suprimeix, "
+"amplada o alçada, amaga i més)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1663,7 +1666,7 @@ msgstr "Obertura, tancament, desament, impressió i baixada de documents"
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Obertura, tancament, desament i impressió de documents"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.h3:481-5
@@ -1768,6 +1771,12 @@ msgid ""
 ">You can work alone on a document, or collaboratively as part of a "
 "team.</span>"
 msgstr ""
+"<span class=\"productname\">{productname}</span> us permet crear i editar "
+"documents típics d'oficina, és a dir, documents de text, fulls de càlcul i "
+"presentacions, <span class=\"webBasedCOOLOnly\">directament al navegador,</"
+"span> d'una manera senzilla i directa. <span class=\"webBasedCOOLOnly\">"
+"Podeu treballar sols en un document, o col·laborativament com a part d'un "
+"equip.</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1796,16 +1805,17 @@ msgstr ""
 "notificació en la part inferior si entra un nou usuari o en surt."
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
 "span> uses modern browser resources to adapt the user interface to the size "
 "of the viewing area, including small screens found in mobile devices.</span> "
 "The interface is composed of:"
 msgstr ""
-"El <span class=\"productname\">{productname}</span> utilitza tecnologies "
-"modernes del navegador per a adaptar la interfície d'usuari a la mida de "
-"l'àrea de visualització, dispositius mòbils inclosos. La interfície comprèn:"
+"El <span class=\"webBasedCOOLOnly\"> <span class=\"productname\">"
+"{productname}</span> utilitza recursos moderns del navegador per adaptar la "
+"interfície d'usuari a la mida de l'àrea de visualització, incloses petites "
+"pantalles que es troben als dispositius mòbils.</span> La interfície es "
+"compon de:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
@@ -2008,6 +2018,10 @@ msgid ""
 "class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
 ">File</span> menu bar button."
 msgstr ""
+"Per a obrir un document, o bé obriu-lo en el <span class=\"productname\">"
+"{productname}</span> des del gestor de fitxers de la vostra plataforma o bé "
+"useu el botó <span class=\"ui\">Obre</span> a la pàgina que es mostra des "
+"del botó <span class=\"ui\">Fitxer</span> de la barra de menús."
 
 #: html/cool-help.html%2Bdiv.div.div.p:458-7
 msgid ""
@@ -2015,6 +2029,9 @@ msgid ""
 "as</span> button on the page shown from the <span class=\"ui\">File</span> "
 "menu bar button."
 msgstr ""
+"Per a desar el document en un format diferent, useu el botó <span "
+"class=\"ui\">Anomena i desa</span> a la pàgina que es mostra des del botó "
+"<span class=\"ui\">Fitxer</span> de la barra de menús."
 
 #: html/cool-help.html%2Bdiv.div.div.p:463-7
 msgid ""
@@ -2022,12 +2039,19 @@ msgid ""
 "to be saved right away you can use the <span class=\"ui\">Save</span> button "
 "on the page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"Els documents es desen automàticament perdiòdicament, però si voleu que es "
+"desi un document immediatament, podeu usar el botó <span class=\"ui\">Desa</"
+"span> a la pàgina que es mostra des del botó <span class=\"ui\">Fitxer</"
+"span> de la barra de menús."
 
 #: html/cool-help.html%2Bdiv.div.div.p:470-7
 msgid ""
 "To print the document, use the <span class=\"ui\">Print</span> button on the "
 "page shown from the <span class=\"ui\">File</span> menu bar button."
 msgstr ""
+"Per a imprimir el document, useu el botó <span class=\"ui\">Imprimeix</span> "
+"a la pàgina que es mostra des del botó <span class=\"ui\">Fitxer</span> de "
+"la barra de menús."
 
 #: html/cool-help.html%2Bdiv.div.p:482-5
 msgid ""
@@ -3259,6 +3283,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Diàleg de caràcters especials amb una quadrícula de caràcters, camps de "
+"cerca i tipus de lletra, entrades de codi hexadecimal i decimal, i caràcters "
+"recents i preferits a la part inferior"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:760-7
 msgid ""
@@ -3368,6 +3395,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Gestiona el diàleg de canvis amb una llista de canvis seguits que mostren "
+"les columnes d'acció, autor, data i comentari, i els botons Accepta, "
+"Rebutja, Accepta-ho tot, Rebutja-ho tot"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
 msgid "How do I set the margins of the document?"
@@ -3402,6 +3432,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"El diàleg Estil de pàgina a la pestanya Organitzador que mostra el nom de "
+"l'estil, el següent estil, hereta i els camps de categoria, amb un resum de "
+"les propietats de la pàgina"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:791-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3567,6 +3600,9 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Diàleg d'importació de text amb el joc de caràcters, la configuració "
+"regional, les opcions del separador i una vista prèvia de les dades CSV "
+"importades"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:839-7
 msgid ""
@@ -3684,6 +3720,9 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Diàleg d'àrea a la pestanya Color amb una paleta de colors, "
+"previsualitzacions de color actives i noves, camps de valors RGB i una "
+"secció de paleta personalitzada"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
