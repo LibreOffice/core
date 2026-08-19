@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
     SwFlyFrameFormat* pFlyFormat
         = rIDCO.InsertGraphic(*pCursor, aGraphicURL, OUString(), &aGraphic, &aFrameSet,
                               /*pGrfAttrSet=*/nullptr, /*SwFrameFormat=*/nullptr);
-    pFlyFormat->SetObjDescription(u"mydesc"_ustr);
+    pFlyFormat->SetObjDescription(u"mydesc\nsecondpart"_ustr);
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
@@ -338,9 +338,9 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
 
     // Then make sure the image is exported:
     std::string aActual = TempFileToString();
-    std::string aExpected("A ![mydesc](./test.png) B" SAL_NEWLINE_STRING);
+    std::string aExpected("A ![mydesc secondpart](./test.png) B" SAL_NEWLINE_STRING);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: A ![mydesc](./test.png) B
+    // - Expected: A ![mydesc secondpart](./test.png) B
     // - Actual  : A  B
     // i.e. the image was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);

@@ -380,7 +380,8 @@ void OutMarkdown_SwMDImageInfo(const SwMDImageInfo& rImageInfo, SwMDWriter& rWrt
     }
 
     rWrt.Strm().WriteUnicodeOrByteText(u"![");
-    OutEscapedChars(rWrt, rImageInfo.aDescription);
+    // tdf#171037 Descriptions might have newlines, but Markdown doesn't allow them in alt texts
+    OutEscapedChars(rWrt, rImageInfo.aDescription.replaceAll("\n", " "));
     rWrt.Strm().WriteUnicodeOrByteText(u"](");
     rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aURL);
 
