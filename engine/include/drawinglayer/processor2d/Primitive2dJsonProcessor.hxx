@@ -48,7 +48,6 @@ class FillHatchAttribute;
 class FillGraphicAttribute;
 class LineAttribute;
 class StrokeAttribute;
-class LineStartEndAttribute;
 }
 
 namespace drawinglayer
@@ -123,8 +122,6 @@ private:
     void writeFillGraphic(const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic);
     void writeLineAttributeScaled(const drawinglayer::attribute::LineAttribute& rLineAttribute);
     void writeStrokeAttributeScaled(const drawinglayer::attribute::StrokeAttribute& rStroke);
-    void writeArrowAttributeScaled(std::string_view sName,
-                                   const drawinglayer::attribute::LineStartEndAttribute& rArrow);
     void
     writeTextPortionScaled(const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim);
 

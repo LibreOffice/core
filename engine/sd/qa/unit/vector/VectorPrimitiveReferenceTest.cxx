@@ -21,6 +21,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
@@ -61,6 +62,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
@@ -250,6 +252,46 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStroke)
     assertJsonPath(aJson, "/primitives/0/line/linejoin", "miter");
     assertJsonPath(aJson, "/primitives/0/line/linecap", "butt");
     assertJsonPathExists(aJson, "/primitives/0/path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeArrow)
+{
+    // An arrow goes out as a group of the line, cut back under the head, and the filled head.
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+    aPolygon.append(basegfx::B2DPoint(1000.0, 0.0));
+
+    drawinglayer::attribute::LineAttribute aLine(basegfx::BColor(0.0, 0.0, 1.0), 20.0,
+                                                 basegfx::B2DLineJoin::Miter,
+                                                 css::drawing::LineCap_BUTT);
+
+    // The point of the head is at the top middle of its polygon.
+    basegfx::B2DPolygon aHead;
+    aHead.append(basegfx::B2DPoint(50.0, 0.0));
+    aHead.append(basegfx::B2DPoint(100.0, 100.0));
+    aHead.append(basegfx::B2DPoint(0.0, 100.0));
+    aHead.setClosed(true);
+    const drawinglayer::attribute::LineStartEndAttribute aEnd(100.0, basegfx::B2DPolyPolygon(aHead),
+                                                              false);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new PolygonStrokeArrowPrimitive2D(
+        aPolygon, aLine, drawinglayer::attribute::LineStartEndAttribute(), aEnd));
+
+    auto aJson = writeReference(u"testPolygonStrokeArrow", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "polygonStrokeArrow");
+    assertJsonPathMissing(aJson, "/primitives/0/path");
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "group");
+    assertJsonPathSize(aJson, "/primitives/0/children/0/children", 2);
+
+    assertJsonPath(aJson, "/primitives/0/children/0/children/0/type", "polygonStroke");
+    assertJsonPath(aJson, "/primitives/0/children/0/children/0/line/color", "#0000ff");
+
+    assertJsonPath(aJson, "/primitives/0/children/0/children/1/type", "polyPolygonColor");
+    assertJsonPath(aJson, "/primitives/0/children/0/children/1/color", "#0000ff");
+    // The point of the head is on the end of the line.
+    assertJsonPathDouble(aJson, "/primitives/0/children/0/children/1/bounds/2", 1000.0, 1e-3);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGroup)

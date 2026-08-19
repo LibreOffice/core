@@ -163,6 +163,7 @@ namespace cool {
 					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
+				case PolygonStrokeArrowPrimitive.type:
 					// Pure container - recursion into children happens
 					// below for every primitive type.
 					break;

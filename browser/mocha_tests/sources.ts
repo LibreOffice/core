@@ -128,6 +128,7 @@
 /// <reference path="../src/canvas/vector/primitive/GradientAttribute.ts" />
 /// <reference path="../src/canvas/vector/primitive/HatchAttribute.ts" />
 /// <reference path="../src/canvas/vector/primitive/PatternFillPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/PolygonStrokeArrowPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonAlphaGradientPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonGradientPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonGraphicPrimitive.ts" />

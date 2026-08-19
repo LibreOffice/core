@@ -63,6 +63,7 @@
 /// <reference path="./VectorPatternFillPrimitives.test.ts" />
 /// <reference path="./VectorEffectPrimitives.test.ts" />
 /// <reference path="./VectorResourceWalker.test.ts" />
+/// <reference path="./VectorArrowPrimitives.test.ts" />
 /// <reference path="./InternUtil.test.ts" />
 /// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />

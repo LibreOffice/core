@@ -38,7 +38,6 @@
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
@@ -383,29 +382,6 @@ void Primitive2dJsonProcessor::writeStrokeAttributeScaled(
         for (double fValue : rDashArray)
             mrWriter.putSimpleValue(fValue * mfScaleFactor);
     }
-}
-
-void Primitive2dJsonProcessor::writeArrowAttributeScaled(
-    std::string_view sName, const drawinglayer::attribute::LineStartEndAttribute& rArrow)
-{
-    if (!rArrow.isActive())
-        return;
-
-    auto aArrowNode = mrWriter.startNode(sName);
-    mrWriter.put("width", rArrow.getWidth() * mfScaleFactor);
-    mrWriter.put("centered", rArrow.isCentered());
-
-    // Arrow polygon is in arbitrary coordinates.
-    mrWriter.put("path",
-                 basegfx::utils::exportToSvgD(rArrow.getB2DPolyPolygon(), true, true, false));
-
-    // Reference point in path coordinates (the point placed at the line endpoint).
-    // Non-centered: top-center of the bounding box.
-    // Centered: center of bbox.
-    const basegfx::B2DRange aRange(rArrow.getB2DPolyPolygon().getB2DRange());
-    mrWriter.put("tipX", aRange.getCenter().getX());
-    mrWriter.put("tipY",
-                 rArrow.isCentered() ? aRange.getCenter().getY() : aRange.getMinimum().getY());
 }
 
 void Primitive2dJsonProcessor::writeBoundsScaled(const BasePrimitive2D& rPrimitive)
