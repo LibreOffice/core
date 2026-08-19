@@ -665,8 +665,6 @@
                     <property name="no-show-all">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="label-xalign">0</property>
-                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkScrolledWindow" id="objectwin">
                         <property name="visible">True</property>
