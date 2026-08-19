@@ -37,6 +37,11 @@ void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const*
 COMPHELPER_DLLPUBLIC
 cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type);
 
+// Decode the JSON value `json` into an `Any` of inferred type (`VOID`, `BOOLEAN`, `DOUBLE`,
+// `STRING`, or sequence of `ANY`); throws css::uno::RuntimeException on malformed input and on JSON
+// object representations:
+COMPHELPER_DLLPUBLIC cpo::uno::Any parseJsonToInferredAny(OUString const & json);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

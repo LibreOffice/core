@@ -316,6 +316,69 @@ public:
                              css::uno::RuntimeException);
     }
 
+    void testParseInferredScalars() {
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), comphelper::parseJsonToInferredAny(u"null"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true), comphelper::parseJsonToInferredAny(u"true"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(false), comphelper::parseJsonToInferredAny(u"false"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(42.0), comphelper::parseJsonToInferredAny(u"42"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(-1.5), comphelper::parseJsonToInferredAny(u"-1.5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(1E10), comphelper::parseJsonToInferredAny(u"1e10"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(u"hä"_ustr), comphelper::parseJsonToInferredAny(u"\"hä\""_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(u""_ustr), comphelper::parseJsonToInferredAny(u"\"\""_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(u"a\"b\\c\nd"_ustr),
+            comphelper::parseJsonToInferredAny(u"\"a\\\"b\\\\c\\nd\""_ustr));
+    }
+
+    void testParseInferredArray() {
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(
+                cpo::uno::Sequence{cpo::uno::Any(1.0), cpo::uno::Any(2.0), cpo::uno::Any(3.0)}),
+            comphelper::parseJsonToInferredAny(u"[1,2,3]"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(
+                cpo::uno::Sequence{
+                    cpo::uno::Any(42.0), cpo::uno::Any(u"hä"_ustr), cpo::uno::Any(true),
+                    cpo::uno::Any()}),
+            comphelper::parseJsonToInferredAny(u"[42, \"hä\", true, null]"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(cpo::uno::Sequence<cpo::uno::Any>()),
+            comphelper::parseJsonToInferredAny(u"[]"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            cpo::uno::Any(
+                cpo::uno::Sequence{
+                    cpo::uno::Any(cpo::uno::Sequence{cpo::uno::Any(1.0), cpo::uno::Any(2.0)}),
+                    cpo::uno::Any(cpo::uno::Sequence{cpo::uno::Any(3.0), cpo::uno::Any(4.0)})}),
+            comphelper::parseJsonToInferredAny(u"[[1,2],[3,4]]"_ustr));
+    }
+
+    void testParseInferredObjectRejected() {
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u"{}"_ustr), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u"{\"a\":1}"_ustr), css::uno::RuntimeException);
+    }
+
+    void testParseInferredMalformed() {
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u""_ustr), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u" 42"_ustr), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u"42 "_ustr), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u"tru"_ustr), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u"\"hä"_ustr), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u"[1,2"_ustr), css::uno::RuntimeException);
+        CPPUNIT_ASSERT_THROW(
+            comphelper::parseJsonToInferredAny(u"foo"_ustr), css::uno::RuntimeException);
+    }
+
     CPPUNIT_TEST_SUITE(Json);
     CPPUNIT_TEST(testAppendScalars);
     CPPUNIT_TEST(testAppendString);
@@ -338,6 +401,10 @@ public:
     CPPUNIT_TEST(testParseStruct);
     CPPUNIT_TEST(testParseAny);
     CPPUNIT_TEST(testParseInterface);
+    CPPUNIT_TEST(testParseInferredScalars);
+    CPPUNIT_TEST(testParseInferredArray);
+    CPPUNIT_TEST(testParseInferredObjectRejected);
+    CPPUNIT_TEST(testParseInferredMalformed);
     CPPUNIT_TEST_SUITE_END();
 };
 }
