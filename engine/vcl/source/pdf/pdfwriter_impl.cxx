@@ -9261,7 +9261,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit(const Bitmap& i_rBitmap, const
     }
     else
     {
-        aID.m_nChecksum         = aBitmap.CreateColorBitmap().GetChecksum();
+        aID.m_nChecksum         = aBitmap.GetChecksum();
         aID.m_nMaskChecksum     = 0;
     }
     std::list<BitmapEmit>::const_iterator it = std::find_if(rBitmaps.begin(), rBitmaps.end(),
