@@ -651,8 +651,6 @@ std::shared_ptr<PresenterTheme::Theme>
 ReadContext::ReadTheme(PresenterConfigurationAccess& rConfiguration,
                        const Reference<rendering::XCanvas>& rxCanvas)
 {
-    std::shared_ptr<PresenterTheme::Theme> pTheme;
-
     OUString sCurrentThemeName;
     // Look up the CurrentTheme property.
     rConfiguration.GetConfigurationNode(u"Presenter/CurrentTheme"_ustr) >>= sCurrentThemeName;
@@ -680,19 +678,16 @@ ReadContext::ReadTheme(PresenterConfigurationAccess& rConfiguration,
                     >>= sThemeName;
                 if (sThemeName == sCurrentThemeName)
                 {
-                    pTheme = std::make_shared<PresenterTheme::Theme>(xTheme,rsKey);
-                    break;
+                    std::shared_ptr<PresenterTheme::Theme> pTheme
+                        = std::make_shared<PresenterTheme::Theme>(xTheme, rsKey);
+                    pTheme->Read(rxCanvas);
+                    return pTheme;
                 }
             }
         }
     }
 
-    if (pTheme != nullptr)
-    {
-        pTheme->Read(rxCanvas);
-    }
-
-    return pTheme;
+    return {};
 }
 
 BorderSize ReadContext::ReadBorderSize (const Reference<container::XNameAccess>& rxNode)
