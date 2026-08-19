@@ -350,7 +350,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		removeBtn.title = removeText;
 		const removeIcon = document.createElement('img');
 		removeIcon.alt = '';
-		app.LOUtil.setImage(removeIcon, 'lc_aichat_trash.svg', this.map);
+		app.LOUtil.setImage(removeIcon, 'lc_aichat_close.svg', this.map);
 		removeBtn.appendChild(removeIcon);
 		removeBtn.onclick = (e) => {
 			e.stopPropagation();

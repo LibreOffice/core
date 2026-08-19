@@ -50,10 +50,6 @@
 	transform: rotate(-90deg);
 }
 
-.extension-panel-header:hover {
-	background: var(--color-background-darker);
-}
-
 .extension-panel-title {
 	flex: 1;
 	color: var(--color-main-text);
