@@ -81,7 +81,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 					return !this._isProtectedSheet(this._tabForContextMenu);
 				}.bind(this),
 				_uno: '.uno:RenameTable',
-				_image: 'Name',
+				_image: 'RenameTable',
 			},
 			'.uno:DuplicateSheet': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:DuplicateSheet', 'spreadsheet', true), 'DuplicateSheet'),
