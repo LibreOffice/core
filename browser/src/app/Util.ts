@@ -291,6 +291,35 @@ class Util {
 		if (obj === null) throw new Error('Object is null!');
 	}
 
+	public static humanizeDuration(durationMs: number, maxParts = 2): string {
+		const units = [
+			{
+				seconds: 365 * 24 * 3600,
+				one: _('1 year'),
+				several: _('{count} years'),
+			},
+			{ seconds: 24 * 3600, one: _('1 day'), several: _('{count} days') },
+			{ seconds: 3600, one: _('1 hour'), several: _('{count} hours') },
+			{ seconds: 60, one: _('1 minute'), several: _('{count} minutes') },
+		];
+		const withCount = (wording: string, count: number): string =>
+			wording.replace('{count}', String(count));
+
+		let remaining = Math.max(0, Math.round(durationMs / 1000));
+		const parts: string[] = [];
+		for (const unit of units) {
+			if (parts.length === maxParts) break;
+			const count = Math.floor(remaining / unit.seconds);
+			if (!count) continue;
+			remaining -= count * unit.seconds;
+			parts.push(count === 1 ? unit.one : withCount(unit.several, count));
+		}
+		if (!parts.length) {
+			parts.push(_('less than a minute'));
+		}
+		return parts.join(' ');
+	}
+
 	public static MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
 	public static MIN_SAFE_INTEGER = -Util.MAX_SAFE_INTEGER;
 }

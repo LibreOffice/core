@@ -729,31 +729,17 @@ class Socket {
 
 	private _sessionExpiredWarning(): void {
 		clearTimeout(this._accessTokenExpireTimeout);
-		let expirymsg = window.errorMessages.sessionexpiry;
-		if (
-			parseInt(this._map.options.docParams.access_token_ttl as string) -
-				Date.now() <=
-			0
-		) {
-			expirymsg = window.errorMessages.sessionexpired;
-		}
-		const dateTime = new Date(
-			parseInt(this._map.options.docParams.access_token_ttl as string),
-		);
-		const dateOptions: Intl.DateTimeFormatOptions = {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-		};
-		const timerepr = dateTime.toLocaleDateString(String.locale, dateOptions);
-		this._map.fire('warn', { msg: expirymsg.replace('{time}', timerepr) });
-
-		// Notify the host so it can refresh the token programmatically.
 		const remainingMs =
 			parseInt(this._map.options.docParams.access_token_ttl as string) -
 			Date.now();
+		const expirymsg =
+			remainingMs <= 0
+				? window.errorMessages.sessionexpired
+				: window.errorMessages.sessionexpiry;
+		const timerepr = Util.humanizeDuration(remainingMs, 1);
+		this._map.fire('warn', { msg: expirymsg.replace('{time}', timerepr) });
+
+		// Notify the host so it can refresh the token programmatically.
 		this._map.fire('postMessage', {
 			msgId: 'App_TokenExpiring',
 			args: {
