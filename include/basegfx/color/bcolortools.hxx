@@ -38,6 +38,27 @@ BASEGFX_DLLPUBLIC BColor rgb2hsv(const BColor& rRGBColor);
 /// Transform from HSV to RGB
 BASEGFX_DLLPUBLIC BColor hsv2rgb(const BColor& rHSVColor);
 
+/** Determines an interpolated color using HSL color model
+
+    @param rStartRGB color at position 0
+    @param rEndRGB color at position 1
+    The components are assumed to contain RGB values, such as Color.getBColor() produces.
+
+    @param fFact position in interval [0..1] for which the interpolated color is requested.
+    Values <0 are treated as 0, values >1 are treated as 1.
+
+    @param bInc. If bInc is true, the arc of the color wheel where the angles increase from the start
+    color to the end color is used. If bInc is false, the opposite arc is used. Example:
+    For start color Magenta (Hue 300°) and end color Cyan (Hue 180°) and fFact=0.5, for bInc value
+    true the color Yellow (Hue 60°) is used for the result, whereas for value false the color Blue
+    (Hue 240°) is used.
+
+    @returns the color at the position fFact as BColor to be interpreted as RGB color, with each
+    component in range [0..1].
+*/
+BASEGFX_DLLPUBLIC BColor interpolateInHSL(const BColor& rStartRGB, const BColor& rEndRGB,
+                                          const double fFact, const bool bInc);
+
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

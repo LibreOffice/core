@@ -190,6 +190,49 @@ namespace basegfx::utils
         }
     }
 
+    BColor interpolateInHSL(const BColor& rStartRGB, const BColor& rEndRGB, const double fFact,
+                            const bool bInc)
+    {
+        // This function is primarily designed for use with Microsoft Office SmartArt diagrams. For
+        // compatibility reasons, no gamma correction is applied.
+
+        if (fFact <= 0.0 || rStartRGB.equal(rEndRGB))
+            return BColor(rStartRGB.getRed(), rStartRGB.getGreen(), rStartRGB.getBlue());
+        if (fFact >= 1.0)
+            return BColor(rEndRGB.getRed(), rEndRGB.getGreen(), rEndRGB.getBlue());
+
+        // The hue is undefined for Gray, the rgb2hsl conversion sets it to 0 degree. Thus Gray needs
+        // some special treatment in interpolating.
+        const bool bIsStartGray = rStartRGB.getRed() == rStartRGB.getGreen()
+                                  && rStartRGB.getGreen() == rStartRGB.getBlue();
+        const bool bIsEndGray = rEndRGB.getRed() == rEndRGB.getGreen()
+                                && rEndRGB.getGreen() == rEndRGB.getBlue();
+        if (bIsStartGray && bIsEndGray)
+            return BColor(interpolate(rStartRGB, rEndRGB, fFact));
+
+        BColor aStartHSL(rgb2hsl(rStartRGB));
+        BColor aEndHSL(rgb2hsl(rEndRGB));
+        if (bIsStartGray)
+            aStartHSL[0] = aEndHSL[0];
+        if (bIsEndGray)
+            aEndHSL[0] = aStartHSL[0];
+
+        double fInterpolatedSaturation = std::lerp(aStartHSL[1], aEndHSL[1], fFact);
+        double fInterpolatedLightness = std::lerp(aStartHSL[2], aEndHSL[2], fFact);
+
+        double fInterpolatedHue = aStartHSL[0];
+        double fColorSwing = aEndHSL[0] - aStartHSL[0];
+        if (bInc && fColorSwing < 0)
+            fColorSwing += 360;
+        if (!bInc && fColorSwing > 0)
+            fColorSwing -= 360;
+        fInterpolatedHue += fFact * fColorSwing;
+
+        // hsl2rgb handles out of range hue values. There is no need to take action here.
+
+        return hsl2rgb(BColor(fInterpolatedHue, fInterpolatedSaturation, fInterpolatedLightness));
+    }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

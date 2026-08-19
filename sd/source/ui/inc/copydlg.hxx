@@ -24,6 +24,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Button.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class ColorListBox;
@@ -33,7 +34,7 @@ namespace sd
 class View;
 
 /**
- * dialog to adjust screen
+ * dialog to create a series of modified copies of selected shapes
  */
 class CopyDlg final : public SfxDialogController
 {
@@ -60,6 +61,9 @@ private:
     std::unique_ptr<weld::Button> m_xBtnSetDefault;
     std::unique_ptr<ColorListBox> m_xLbStartColor;
     std::unique_ptr<ColorListBox> m_xLbEndColor;
+    std::unique_ptr<weld::RadioButton> m_xRbRGB;
+    std::unique_ptr<weld::RadioButton> m_xRbHSLInc;
+    std::unique_ptr<weld::RadioButton> m_xRbHSLDec;
 
     DECL_LINK(SelectColorHdl, ColorListBox&, void);
     DECL_LINK(SetViewData, weld::Button&, void);

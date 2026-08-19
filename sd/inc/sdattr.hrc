@@ -26,6 +26,7 @@ class SfxInt32Item;
 class SfxStringItem;
 class SfxUInt32Item;
 class XColorItem;
+class SfxUInt16Item;
 
 // Layer attributes
 #define ATTR_LAYER_START        SID_SD_START + 1234
@@ -91,7 +92,8 @@ class XColorItem;
 #define ATTR_COPY_HEIGHT                TypedWhichId<SfxInt32Item>(ATTR_COPY_START + 5)
 #define ATTR_COPY_START_COLOR           TypedWhichId<XColorItem>(ATTR_COPY_START + 6)
 #define ATTR_COPY_END_COLOR             TypedWhichId<XColorItem>(ATTR_COPY_START + 7)
-#define ATTR_COPY_END                   ATTR_COPY_END_COLOR
+#define ATTR_COPY_COLOR_TRANSKIND       TypedWhichId<SfxUInt16Item>(ATTR_COPY_START + 8)
+#define ATTR_COPY_END                   ATTR_COPY_COLOR_TRANSKIND
 
 #define ATTR_SNAPLINE_START             ATTR_COPY_END + 1
 #define ATTR_SNAPLINE_KIND              TypedWhichId<SfxUInt16Item>(ATTR_SNAPLINE_START)

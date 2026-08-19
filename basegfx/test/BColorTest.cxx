@@ -137,9 +137,35 @@ public:
                                      utils::rgb2hsv(BColor(.5, .25, .25)));
     }
 
+    void interpolateInHSL_Test()
+    {
+        // arc with increasing angles
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("red to green, inc", maYellow,
+                                     utils::interpolateInHSL(maRed, maGreen, 0.5, true));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("red to cyan, inc", maYellow,
+                                     utils::interpolateInHSL(maRed, maCyan, 1.0 / 3.0, true));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("magenta to cyan, inc via red", maGreen,
+                                     utils::interpolateInHSL(maMagenta, maCyan, 0.75, true));
+
+        // arc with decreasing angles
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("red to green, dec", maCyan,
+                                     utils::interpolateInHSL(maRed, maGreen, 0.75, false));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("magenta to green, dec", maCyan,
+                                     utils::interpolateInHSL(maMagenta, maGreen, 2.0 / 3.0, false));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("yellow to cyan, dec via red", maMagenta,
+                                     utils::interpolateInHSL(maYellow, maCyan, 0.5, false));
+
+        // interpolate with Gray
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("white to blue, inc", BColor(27.0 / 32, 27.0 / 32, 29.0 / 32),
+                                     utils::interpolateInHSL(maWhite, maBlue, 0.25, true));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("yellow to black, dec", BColor(0.375, 0.375, 0.125),
+                                     utils::interpolateInHSL(maYellow, maBlack, 0.5, true));
+    }
+
     CPPUNIT_TEST_SUITE(bcolor);
     CPPUNIT_TEST(hslTest);
     CPPUNIT_TEST(hsvTest);
+    CPPUNIT_TEST(interpolateInHSL_Test);
     CPPUNIT_TEST_SUITE_END();
 };
 
