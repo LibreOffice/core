@@ -1,0 +1,22 @@
+Add a switch that leaves out the nss command-line tools.
+
+The build only needs the nss shared libraries. The tools under nss/cmd, such as
+certutil and pk12util, are never installed or run. Building them costs about a
+tenth of the whole nss build. The library headers that the tools directory
+exports, and shlibsign, are still built.
+
+diff --git a/nss/cmd/manifest.mn b/nss/cmd/manifest.mn
+--- a/nss/cmd/manifest.mn
++++ b/nss/cmd/manifest.mn
+@@ -92,6 +92,11 @@
+ endif
+ endif
+ 
++ifdef NSS_DISABLE_CMD_TOOLS
++SOFTOKEN_SRCDIRS = $(SHLIBSIGN_SRCDIR)
++NSS_SRCDIRS =
++endif
++
+ DIRS = \
+  $(LIB_SRCDIRS) \
+  $(SOFTOKEN_SRCDIRS) \
