@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-16 10:18+0000\n"
+"PO-Revision-Date: 2026-08-16 18:32+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/sl/>\n"
-"Language: \n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Accelerator-Marker: ~\n"
 "X-Generator: Weblate 2026.9.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -413,13 +413,12 @@ msgid "Your WOPI server is not secure: SSL verification failed"
 msgstr "Strežnik WOPI ni varen: overjanje SSL je spodletelo"
 
 #: admin/src/AdminSocketServerAudit.js:40
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Dokumenti niso učinkovito vsebovani: manjkajoče zmogljivosti ali imenski "
-"prostori."
+"Dokumenti niso učinkovito vsebovani: manjkajoče zmogljivosti, imenski "
+"prostori in zajetosti."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -546,7 +545,7 @@ msgstr "Temni način"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Samodejno preverjanje črkovanja"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -558,7 +557,7 @@ msgstr "Privzeta povečava"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Gladko drsenje"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -1962,96 +1961,98 @@ msgstr "UI-pomočnik"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "vstavi %n prosojnic"
+msgstr[1] "vstavi %n prosojnico"
+msgstr[2] "vstavi %n prosojnici"
+msgstr[3] "vstavi %n prosojnice"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "izbriši %n prosojnic"
+msgstr[1] "izbriši %n prosojnico"
+msgstr[2] "izbriši %n prosojnici"
+msgstr[3] "izbriši %n prosojnice"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "podvoji %n prosojnic"
+msgstr[1] "podvoji %n prosojnico"
+msgstr[2] "podvoji %n prosojnici"
+msgstr[3] "podvoji %n prosojnice"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "premakni %n prosojnic"
+msgstr[1] "premakni %n prosojnico"
+msgstr[2] "premakni %n prosojnici"
+msgstr[3] "premakni %n prosojnice"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "preimenuj %n prosojnic"
+msgstr[1] "preimenuj %n prosojnico"
+msgstr[2] "preimenuj %n prosojnici"
+msgstr[3] "preimenuj %n prosojnice"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "spremeni %n postavitev"
+msgstr[1] "spremeni %n postavitev"
+msgstr[2] "spremeni %n postavitvi"
+msgstr[3] "spremeni %n postavitve"
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "določi besedilo na %n mestih"
+msgstr[1] "določi besedilo na %n mestu"
+msgstr[2] "določi besedilo na %n mestih"
+msgstr[3] "določi besedilo na %n mestih"
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "oblikuj besedilo na %n mestih"
+msgstr[1] "oblikuj besedilo na %n mestu"
+msgstr[2] "oblikuj besedilo na %n mestih"
+msgstr[3] "oblikuj besedilo na %n mestih"
 
 #: src/control/Control.AIChatSidebar.ts:2403
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Tvorjena slika"
+msgstr[0] "tvori %n slik"
+msgstr[1] "tvori %n sliko"
+msgstr[2] "tvori %n sliki"
+msgstr[3] "tvori %n slike"
 
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "izvrši %n ukazov dokumenta"
+msgstr[1] "izvrši %n ukaz dokumenta"
+msgstr[2] "izvrši %n ukaza dokumenta"
+msgstr[3] "izvrši %n ukaze dokumenta"
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "izvrši %n ukazov %1"
+msgstr[1] "izvrši %n ukaz %1"
+msgstr[2] "izvrši %n ukaza %1"
+msgstr[3] "izvrši %n ukaze %1"
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "uveljavi predlogo oblikovanja »%1«"
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "S tem bo: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
@@ -2126,11 +2127,11 @@ msgstr "Vsebine izbora ni možno razčleniti"
 
 #: src/control/Control.AIChatSidebar.ts:3005
 msgid "Design (optional):"
-msgstr ""
+msgstr "Oblikovanje (neobvezno):"
 
 #: src/control/Control.AIChatSidebar.ts:3022
 msgid "No design"
-msgstr ""
+msgstr "Brez oblikovanja"
 
 #: src/control/Control.AIChatSidebar.ts:3023
 msgid "Continue without a design template"
@@ -2141,50 +2142,52 @@ msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Tukaj je predlog orisa. Uredite naslove ali opise, odstranite neželene "
+"prosojnice, nato odobrite za izdelavo sklopa predstavitve:"
 
 #: src/control/Control.AIChatSidebar.ts:3150
 msgid "Reject outline"
-msgstr ""
+msgstr "Zavrni oris"
 
 #: src/control/Control.AIChatSidebar.ts:3156
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Podajte vsaki dodani prosojnici naslov, da jo odobrite."
 
 #: src/control/Control.AIChatSidebar.ts:3184
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Naslov prosojnice %1"
 
 #: src/control/Control.AIChatSidebar.ts:3190
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Opis prosojnice %1"
 
 #: src/control/Control.AIChatSidebar.ts:3196
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Odstrani prosojnico %1"
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Slide title"
-msgstr ""
+msgstr "Naslov prosojnice"
 
 #: src/control/Control.AIChatSidebar.ts:3256
 msgid "What this slide should cover"
-msgstr ""
+msgstr "O čem naj ta prosojnica govori"
 
 #: src/control/Control.AIChatSidebar.ts:3281
 msgid "Add slide"
-msgstr ""
+msgstr "Dodaj prosojnico"
 
 #: src/control/Control.AIChatSidebar.ts:3319
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Oris odobren – izdelovanje %1 prosojnic."
 
 #: src/control/Control.AIChatSidebar.ts:3328
 msgid "Outline rejected."
-msgstr ""
+msgstr "Oris zavrnjen."
 
 #: src/control/Control.AIChatSidebar.ts:3364
 msgid "Building slides..."
-msgstr ""
+msgstr "Izdelovanje prosojnic ..."
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "Formula analysis timeout"
@@ -4999,10 +5002,12 @@ msgid "Expand All Sections"
 msgstr "Razširi vse odseke"
 
 #: src/control/Control.PartsPreview.js:1065
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Ali želite izbrisati odsek \"%1\" in njegovih %2 prosojnic?"
+msgstr[0] "Ali želite izbrisati odsek »%1« in njegovih %n prosojnic?"
+msgstr[1] "Ali želite izbrisati odsek »%1« in njegovo %n prosojnico?"
+msgstr[2] "Ali želite izbrisati odsek »%1« in njegovi %n prosojnici?"
+msgstr[3] "Ali želite izbrisati odsek »%1« in njegove %n prosojnice?"
 
 #: src/control/Control.PartsPreview.js:1114
 msgid "Enter new section name:"
@@ -6032,7 +6037,7 @@ msgstr "Zelo široko"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Kopiraj Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6055,26 +6060,24 @@ msgid "All users"
 msgstr "Vsi uporabniki"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Poudari celice z ..."
+msgstr "Poudari celice s/z"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Pravila vrhnjih/spodnjih ..."
+msgstr "Pravila vrhnjih/spodnjih"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Barvna lestvica"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Podatkovna vrstica"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Nabor ikon"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6897,24 +6900,24 @@ msgstr "Izven tabele"
 #: src/layer/marker/A11yTextInput.js:257
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n vrstic"
+msgstr[1] "%n vrstico"
+msgstr[2] "%n vrstici"
+msgstr[3] "%n vrstice"
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n stolpcev"
+msgstr[1] "%n stolpec"
+msgstr[2] "%n stolpca"
+msgstr[3] "%n stolpce"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:261
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tabela ima {0} in {1}"
 
 #: src/layer/marker/A11yTextInput.js:266
 msgid "Row {0} through {1}"
@@ -7367,10 +7370,12 @@ msgid "No Notes"
 msgstr "Brez opomb"
 
 #: src/slideshow/PresenterConsole.js:1658
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
 msgstr[0] "Ponovi čez {0} sekund"
+msgstr[1] "Ponovi čez {0} sekundo"
+msgstr[2] "Ponovi čez {0} sekundi"
+msgstr[3] "Ponovi čez {0} sekunde"
 
 #: src/slideshow/PresenterConsole.js:1665
 #: src/slideshow/SlideShowPresenter.ts:663
