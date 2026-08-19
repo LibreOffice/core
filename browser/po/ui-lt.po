@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-07-09 15:01+0000\n"
+"PO-Revision-Date: 2026-08-19 17:51+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/lt/>\n"
-"Language: \n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -541,7 +541,7 @@ msgstr "Tamsus režimas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automatinis Rašybos tikrinimas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -553,7 +553,7 @@ msgstr "Numatytasis mastelis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Sklandus slinkimas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -873,14 +873,16 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Įkelti supakuotą plėtinį kaip .zip; jo turinys (manifest.json, ...) "
+"išpakuojamas serveryje."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:972
 msgid "Upload Extension"
-msgstr ""
+msgstr "Įkelti plėtinį"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1061
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Nustatymai prieinami tik įsiregistravusiems vartotojams."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1070
 msgid "Something went wrong. Please try to refresh the page."
@@ -1043,7 +1045,7 @@ msgstr "pvz"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2445
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Palikite tuščią jei jūsų serveris to nereikalauja"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2464
 msgid ""
@@ -1104,7 +1106,7 @@ msgstr "Įkelkite modelius, kuriuos norite pasirinkti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3175
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "Viršyta API kvota – pasitikrinkite savo planą ir atsiskaitymo detales"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3180
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1446,7 +1448,7 @@ msgstr "Esama Versija"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n daugiau"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1553,7 +1555,7 @@ msgstr "celės adresas"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Vardo laukelis"
 
 #: src/control/Control.AIChatSidebar.ts:136
 msgid "Make the following text more concise"
@@ -1561,7 +1563,7 @@ msgstr "Padarykite toliau pateiktą tekstą glaustesnį"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Make it more concise"
-msgstr ""
+msgstr "Padarykite jį glaustesniu"
 
 #: src/control/Control.AIChatSidebar.ts:140
 msgid "Summarize the key points of this text"
@@ -1569,7 +1571,7 @@ msgstr "Apibendrinkite pagrindinius šio teksto punktus"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Summarize this text"
-msgstr ""
+msgstr "Apibendrinkite šį tekstą"
 
 #: src/control/Control.AIChatSidebar.ts:144
 msgid "Expand and add more detail to this text"
@@ -1577,7 +1579,7 @@ msgstr "Išplėsti ir pridėti daugiau informacijos prie šio teksto"
 
 #: src/control/Control.AIChatSidebar.ts:145
 msgid "Expand this text"
-msgstr ""
+msgstr "Išplėskite šį tekstą"
 
 #: src/control/Control.AIChatSidebar.ts:148
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1585,7 +1587,7 @@ msgstr "Gramatikos, rašybos ir skyrybos klaidų taisymas"
 
 #: src/control/Control.AIChatSidebar.ts:149
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Taisyti gramatiką ir rašybą"
 
 #: src/control/Control.AIChatSidebar.ts:164
 msgid "Natural"
@@ -1613,7 +1615,7 @@ msgstr "Paprastas"
 
 #: src/control/Control.AIChatSidebar.ts:411
 msgid "Best"
-msgstr ""
+msgstr "Geriausias"
 
 #: src/control/Control.AIChatSidebar.ts:413
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1622,7 +1624,7 @@ msgstr "Geras(ai)"
 
 #: src/control/Control.AIChatSidebar.ts:415
 msgid "Poor"
-msgstr ""
+msgstr "Prastas"
 
 #: src/control/Control.AIChatSidebar.ts:417
 msgid "Unknown"
@@ -1916,6 +1918,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Užklausai skirtas laikas baigėsi. Užklausai skirtą laiką galite padidinti "
+"nustatymų skiltyje „DI“."
 
 #: src/control/Control.AIChatSidebar.ts:2113
 #: src/control/Control.AIChatSidebar.ts:3626
@@ -1949,58 +1953,58 @@ msgstr "DI asistentas"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "įterpti %n skaidrę"
+msgstr[1] "įterpti %n skaidres"
+msgstr[2] "įterpti %n skaidrių"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "ištrinti %n skaidrę"
+msgstr[1] "ištrinti %n skaidres"
+msgstr[2] "ištrinti %n skaidrių"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "dubliuoti %n skaidrę"
+msgstr[1] "dubliuoti %n skaidres"
+msgstr[2] "dubliuoti %n skaidrių"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "perkelti %n skaidrę"
+msgstr[1] "perkelti %n skaidres"
+msgstr[2] "perkelti %n skaidrių"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "pervadinti %n skaidrę"
+msgstr[1] "pervadinti %n skaidres"
+msgstr[2] "pervadinti %n skaidrių"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "pakeisti %n išdėstymą"
+msgstr[1] "pakeisti %n išdėstymus"
+msgstr[2] "pakeisti %n išdėstymų"
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "nustatyti tekstą %n vietoje"
+msgstr[1] "nustatyti tekstą %n vietose"
+msgstr[2] "nustatyti tekstą %n vietų"
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "formatuoti tekstą %n vietoje"
+msgstr[1] "formatuoti tekstą %n vietose"
+msgstr[2] "formatuoti tekstą %n vietų"
 
 #: src/control/Control.AIChatSidebar.ts:2403
 #, fuzzy
@@ -2011,9 +2015,9 @@ msgstr[0] "Sugeneruotas vaizdas"
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "vykdyti %n dokumento komandą"
+msgstr[1] "vykdyti %n dokumentų komandas"
+msgstr[2] "vykdyti %n dokumentų komandas"
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
@@ -2024,11 +2028,11 @@ msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "pritaikyti '%1' dizaino šabloną"
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "Tai bus: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
@@ -2103,65 +2107,67 @@ msgstr "Nepavyko išanalizuoti pasirinkimo turinio"
 
 #: src/control/Control.AIChatSidebar.ts:3005
 msgid "Design (optional):"
-msgstr ""
+msgstr "Dizainas (neprivaloma):"
 
 #: src/control/Control.AIChatSidebar.ts:3022
 msgid "No design"
-msgstr ""
+msgstr "Be dizaino"
 
 #: src/control/Control.AIChatSidebar.ts:3023
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Tęsti be dizaino šablono"
 
 #: src/control/Control.AIChatSidebar.ts:3089
 msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Pateikiamas siūlomas planas. Redaguokite pavadinimus arba aprašymus, "
+"pašalinkite nereikalingas skaidres ir patvirtinkite plano sudarymą:"
 
 #: src/control/Control.AIChatSidebar.ts:3150
 msgid "Reject outline"
-msgstr ""
+msgstr "Atmesti planą"
 
 #: src/control/Control.AIChatSidebar.ts:3156
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Suteikite kiekvienai pridėtai skaidrei pavadinimą patvirtinimui."
 
 #: src/control/Control.AIChatSidebar.ts:3184
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Skaidrės %1 pavadinimas"
 
 #: src/control/Control.AIChatSidebar.ts:3190
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Skaidrės %1 aprašymas"
 
 #: src/control/Control.AIChatSidebar.ts:3196
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Pašalinti skaidrę %1"
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Slide title"
-msgstr ""
+msgstr "Skaidrės pavadinimas"
 
 #: src/control/Control.AIChatSidebar.ts:3256
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Ką turėtų apimti ši skaidrė"
 
 #: src/control/Control.AIChatSidebar.ts:3281
 msgid "Add slide"
-msgstr ""
+msgstr "Pridėti skaidrę"
 
 #: src/control/Control.AIChatSidebar.ts:3319
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Planas patvirtintas – kuriamos %1 skaidrės."
 
 #: src/control/Control.AIChatSidebar.ts:3328
 msgid "Outline rejected."
-msgstr ""
+msgstr "Planas atmestas."
 
 #: src/control/Control.AIChatSidebar.ts:3364
 msgid "Building slides..."
-msgstr ""
+msgstr "Kuriamos skaidrės..."
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "Formula analysis timeout"
@@ -2635,11 +2641,11 @@ msgstr "Daugiau informacijos apie objektą"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Atidarykite dokumentą iš savo kompiuterio arba debesies saugyklos."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Atidaryti kompiuteryje esantį dokumentą"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
