@@ -312,16 +312,18 @@ class NavigatorPanel extends SidebarBase {
 			navHeader,
 		);
 		this.expandButton = button;
+		const expanded =
+			this.map.paneExpander && this.map.paneExpander.getMode() === 'expanded';
 		const expandText = _('Maximize to grid');
 		button.setAttribute('aria-label', expandText);
-		button.setAttribute('aria-pressed', 'false');
+		button.setAttribute('aria-pressed', expanded ? 'true' : 'false');
 		button.setAttribute('data-cooltip', expandText);
 		button.setAttribute('tabindex', '0');
 		window.L.control.attachTooltipEventListener(button, this.map);
 
 		const img = window.L.DomUtil.create('img', '', button);
 		img.alt = '';
-		app.LOUtil.setImage(img, 'lc_fullscreen.svg', this.map);
+		PaneExpander.setToggleIcon(button, expanded);
 
 		button.addEventListener('click', () => {
 			if (this.map.paneExpander) this.map.paneExpander.toggle();

@@ -36,6 +36,7 @@ class PaneExpander {
 		this.map = map;
 		this.mainContent = document.getElementById('main-document-content');
 		document.addEventListener('keydown', this.onKeyDown.bind(this), true);
+		this.map.on('themechanged', this.updateToggles, this);
 		// A document loads in the normal side-by-side layout. When one is
 		// opened in place of another the maximized state would otherwise
 		// carry over, so clear it as the new document's layer comes up.
@@ -85,11 +86,17 @@ class PaneExpander {
 
 	private updateToggles(): void {
 		const pressed = this.mode === 'expanded';
-		document
-			.querySelectorAll('.navigation-expand-button')
-			.forEach((button) =>
-				button.setAttribute('aria-pressed', pressed ? 'true' : 'false'),
-			);
+		document.querySelectorAll('.navigation-expand-button').forEach((button) => {
+			button.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+			PaneExpander.setToggleIcon(button, pressed);
+		});
+	}
+
+	public static setToggleIcon(button: Element, expanded: boolean): void {
+		const img = button.querySelector('img');
+		if (!img) return;
+		const name = expanded ? 'collapse-slides.svg' : 'expand-slides.svg';
+		img.src = app.LOUtil.getImageURL(name);
 	}
 
 	// Escape returns to the normal layout before any panel handles it as a

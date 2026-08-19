@@ -651,8 +651,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	border-radius: var(--border-radius);
 }
 
-.navigation-expand-button:hover,
-.navigation-expand-button[aria-pressed='true'] {
+.navigation-expand-button:hover {
 	background-color: var(--color-background-darker);
 }
 
