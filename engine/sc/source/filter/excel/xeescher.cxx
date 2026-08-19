@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <set>
 #include <vcl/BitmapReadAccess.hxx>
@@ -44,8 +45,12 @@
 #include <svtools/embedhlp.hxx>
 
 #include <unonames.hxx>
+#include <charthelper.hxx>
+#include <compiler.hxx>
 #include <convuno.hxx>
 #include <postit.hxx>
+#include <reftokenhelper.hxx>
+#include <token.hxx>
 
 #include <fapihelper.hxx>
 #include <xcl97esc.hxx>
@@ -395,6 +400,46 @@ const char* lcl_GetDrawingUnderline(FontLineStyle eUnderline)
             return "dbl";
         default:
             return "sng";
+    }
+}
+  
+// Mark the cells of each range in another document that the chart on the
+// passed object reads.
+//  Marked cells keep their cached values in the export.
+void lcl_StoreChartExternalCells( const XclExpRoot& rRoot, const SdrObject* pSdrObject )
+{
+    Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pSdrObject ) );
+    if (!xChartDoc.is()) return;
+
+    std::vector< OUString > aRangeStrings;
+    ScChartHelper::GetChartRanges( xChartDoc, aRangeStrings );
+
+    ScDocument& rDoc = rRoot.GetDoc();
+    XclExpLinkManager& rLinkManager = rRoot.GetLocalLinkManager();
+    const sal_Unicode cSeparator = ScCompiler::GetNativeSymbolChar( ocSep );
+    for (const OUString& rRangeString : aRangeStrings )
+    {
+        std::vector< ScTokenRef > aTokens;
+        ScRefTokenHelper::compileRangeRepresentation(
+            aTokens, rRangeString, rDoc, cSeparator, rDoc.GetGrammar(), true );
+
+        for (const ScTokenRef& rToken : aTokens)
+        {
+            if (!ScRefTokenHelper::isExternalRef( rToken))
+                continue;
+
+            // The addresses count from the start of the other document,
+            // so ask for them as external.
+            ScRange aRange;
+            if (!ScRefTokenHelper::getRangeFromToken( &rDoc, aRange, rToken, ScAddress(), true))
+                continue;
+
+            const sal_uInt16 nFileId = static_cast< const ScExternalToken* >( rToken.get() )->GetFileId();
+            const OUString aTableName = (rToken->GetType() == formula::svExternalSingleRef) ?
+                static_cast< const ScExternalSingleRefToken* >( rToken.get() )->GetTableName().getString() :
+                static_cast< const ScExternalDoubleRefToken* >( rToken.get() )->GetTableName().getString();
+            rLinkManager.StoreCellRange( nFileId, aTableName, aRange );
+        }
     }
 }
 
@@ -2126,6 +2171,8 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     // load the chart OLE object
     if( SdrOle2Obj* pSdrOleObj = dynamic_cast< SdrOle2Obj* >( pSdrObj ) )
         (void)svt::EmbeddedObjectRef::TryRunningState(pSdrOleObj->GetObjRef());
+
+    lcl_StoreChartExternalCells( GetRoot(), pSdrObj );
 
     // create the chart substream object
     ScfPropertySet aShapeProp( xShape );
