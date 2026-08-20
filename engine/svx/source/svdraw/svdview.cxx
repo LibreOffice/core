@@ -36,6 +36,8 @@
 #include <editeng/flditem.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 #include <tools/debug.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -1464,11 +1466,6 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
     }
 }
 
-// Report the geometry the shape would get if the dragged handle was
-// dropped at the current drag position. The same approach as the desktop
-// drag overlay: the drag is applied to a clone of the shape, the document
-// stays untouched. A connector clone re-routes its line, so the reported
-// polygon is the real line the drop would produce.
 /** What a handle is called: the kind, the polygon and the point it belongs to, with "behind"
     added for the weight that sits behind its point.
 
@@ -1490,6 +1487,32 @@ static OString handleName(const SdrHdl* pHandle)
     return aName;
 }
 
+namespace
+{
+// The colour a drag preview paints an object's outline with, as six hex digits. It is empty
+// for an object with no plain colour fill, which is drawn as an outline and nothing more.
+OString lcl_getPreviewFillColor(const SdrObject& rObject)
+{
+    const SfxItemSet& rItemSet = rObject.GetMergedItemSet();
+
+    const XFillStyleItem* pFillStyle = rItemSet.GetItem(XATTR_FILLSTYLE);
+    if (!pFillStyle || pFillStyle->GetValue() != css::drawing::FillStyle_SOLID)
+        return OString();
+
+    const XFillColorItem* pFillColor = rItemSet.GetItem(XATTR_FILLCOLOR);
+    if (!pFillColor)
+        return OString();
+
+    return pFillColor->GetColorValue().AsRGBHexString().toUtf8();
+}
+}
+
+// Report the geometry the selection would get if the dragged handle was dropped at the
+// current drag position. The document stays untouched. The same two approaches as the
+// desktop drag overlay: one marked object is dragged through a clone of itself, so a
+// connector clone re-routes its line and the reported polygon is the real line the drop
+// would produce, while several marked objects are reported through the transformation the
+// drag carries.
 void SdrView::SendShapeDragPreview()
 {
     if (!comphelper::COKit::isActive())
@@ -1500,14 +1523,50 @@ void SdrView::SendShapeDragPreview()
         return;
 
     const SdrHdl* pHdl = GetDragStat().GetHdl();
-    const SdrObject* pObj = pHdl ? pHdl->GetObj() : nullptr;
-    if (!pObj || !pObj->hasSpecialDrag())
-        return;
 
     basegfx::B2DPolyPolygon aPolyPolygon;
-    rtl::Reference<SdrObject> pClone = pObj->getFullDragClone();
-    if (pClone && pClone->applySpecialDrag(maDragStat))
-        aPolyPolygon = pClone->TakeXorPoly();
+    std::vector<OString> aFillColors;
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+
+    if (rMarkList.GetMarkCount() > 1)
+    {
+        // A drag that holds several objects carries one transformation that all of them
+        // follow, each about its own origin. The same transformation drives the desktop drag
+        // overlay, so reporting every object through it gives the geometry the drop lands on.
+        const SdrDragMethod* pDragMethod = GetDragMethod();
+        if (!pDragMethod)
+            return;
+
+        for (size_t nMarkNum = 0; nMarkNum < rMarkList.GetMarkCount(); ++nMarkNum)
+        {
+            const SdrObject* pMarkedObject = rMarkList.GetMark(nMarkNum)->GetMarkedSdrObj();
+            if (!pMarkedObject)
+                continue;
+
+            basegfx::B2DPolyPolygon aObjectPolyPolygon(pMarkedObject->TakeXorPoly());
+            const std::optional<Point> oOrigin
+                = pDragMethod->getIndividualDragOrigin(*pMarkedObject);
+            aObjectPolyPolygon.transform(oOrigin
+                ? pDragMethod->getCurrentTransformationForOrigin(*oOrigin)
+                : pDragMethod->getCurrentTransformation());
+
+            // Every polygon this object contributes carries the object's own fill.
+            const OString aFillColor(lcl_getPreviewFillColor(*pMarkedObject));
+            aFillColors.insert(aFillColors.end(), aObjectPolyPolygon.count(), aFillColor);
+
+            aPolyPolygon.append(aObjectPolyPolygon);
+        }
+    }
+    else
+    {
+        const SdrObject* pObj = pHdl ? pHdl->GetObj() : nullptr;
+        if (!pObj || !pObj->hasSpecialDrag())
+            return;
+
+        rtl::Reference<SdrObject> pClone = pObj->getFullDragClone();
+        if (pClone && pClone->applySpecialDrag(maDragStat))
+            aPolyPolygon = pClone->TakeXorPoly();
+    }
 
     // Flatten bezier curves, the payload carries plain points.
     if (aPolyPolygon.areControlPointsUsed())
@@ -1527,9 +1586,14 @@ void SdrView::SendShapeDragPreview()
         if (nPoly > 0)
             aPayload.append(", ");
         aPayload.append("\"");
-        for (sal_uInt32 nPoint = 0; nPoint < rPolygon.count(); ++nPoint)
+        // A closed polygon keeps no copy of its start point, so repeat it at the end. The
+        // point list then traces the whole outline and needs no closing rule of its own.
+        const sal_uInt32 nPointCount = rPolygon.count();
+        const sal_uInt32 nReportCount
+            = rPolygon.isClosed() && nPointCount > 1 ? nPointCount + 1 : nPointCount;
+        for (sal_uInt32 nPoint = 0; nPoint < nReportCount; ++nPoint)
         {
-            const basegfx::B2DPoint aB2Point = rPolygon.getB2DPoint(nPoint);
+            const basegfx::B2DPoint aB2Point = rPolygon.getB2DPoint(nPoint % nPointCount);
             Point aPoint(basegfx::fround(aB2Point.getX()), basegfx::fround(aB2Point.getY()));
             if (bConvertMapMode)
                 aPoint = o3tl::convert(aPoint, o3tl::Length::mm100, o3tl::Length::twip);
@@ -1539,7 +1603,21 @@ void SdrView::SendShapeDragPreview()
         }
         aPayload.append("\"");
     }
-    aPayload.append("] }");
+    aPayload.append("]");
+
+    if (!aFillColors.empty())
+    {
+        aPayload.append(", \"fills\": [");
+        for (size_t nFill = 0; nFill < aFillColors.size(); ++nFill)
+        {
+            if (nFill > 0)
+                aPayload.append(", ");
+            aPayload.append("\"" + aFillColors[nFill] + "\"");
+        }
+        aPayload.append("]");
+    }
+
+    aPayload.append(" }");
 
     pViewShell->viewCallback(COKitCallbackType::SHAPE_DRAG_PREVIEW, aPayload.makeStringAndClear());
 }

@@ -17,6 +17,7 @@
 #include <test/JsonTestTools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <svx/svdlayer.hxx>
+#include <cmath>
 #include <functional>
 #include <optional>
 #include <set>
@@ -68,6 +69,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <svtools/colorcfg.hxx>
 #include <unotools/datetime.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 
 #include <DrawDocShell.hxx>
@@ -3589,6 +3591,60 @@ std::vector<boost::property_tree::ptree> lcl_extractHandles(std::string_view sel
     return aHandles;
 }
 
+// Parses a drag preview message.
+boost::property_tree::ptree lcl_parsePreview(std::string_view preview)
+{
+    std::stringstream aStream((std::string(preview)));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree;
+}
+
+// Extent of every outline the drag preview message carries, in twips.
+std::vector<tools::Rectangle> lcl_extractPreviewBoxes(std::string_view preview)
+{
+    const boost::property_tree::ptree aTree = lcl_parsePreview(preview);
+
+    std::vector<tools::Rectangle> aBoxes;
+    for (const auto& rPolygon : aTree.get_child("polygons"))
+    {
+        const OString aPoints(rPolygon.second.get_value<std::string>());
+        tools::Rectangle aBox;
+        sal_Int32 nPointIndex = 0;
+        do
+        {
+            const std::string_view aPoint = o3tl::getToken(aPoints, 0, ' ', nPointIndex);
+            sal_Int32 nCoordinate = 0;
+            // Read the two coordinates in their own statements, so that they keep the order
+            // they are written in.
+            const tools::Long nX = o3tl::toInt64(o3tl::getToken(aPoint, 0, ',', nCoordinate));
+            const tools::Long nY = o3tl::toInt64(o3tl::getToken(aPoint, 0, ',', nCoordinate));
+            const Point aParsed(nX, nY);
+            aBox.Union(tools::Rectangle(aParsed, aParsed));
+        } while (nPointIndex >= 0);
+
+        aBoxes.push_back(aBox);
+    }
+
+    return aBoxes;
+}
+
+// The two rectangles cover the same place, allowing for the rounding that the conversion to
+// twips introduces.
+void lcl_assertSameArea(const OString& rMessage, const tools::Rectangle& rExpected,
+                        const tools::Rectangle& rActual)
+{
+    const double fTolerance = 2;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(std::string(rMessage) + " left",
+        double(rExpected.Left()), double(rActual.Left()), fTolerance);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(std::string(rMessage) + " top",
+        double(rExpected.Top()), double(rActual.Top()), fTolerance);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(std::string(rMessage) + " right",
+        double(rExpected.Right()), double(rActual.Right()), fTolerance);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(std::string(rMessage) + " bottom",
+        double(rExpected.Bottom()), double(rActual.Bottom()), fTolerance);
+}
+
 // The rectangle that a resize by two about the rectangle's own top-left corner gives.
 tools::Rectangle lcl_doubledAboutTopLeft(const tools::Rectangle& rRect)
 {
@@ -3688,6 +3744,87 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiSelectionHandleIndex)
     // keeps its own top-left corner where it was.
     CPPUNIT_ASSERT_EQUAL(lcl_doubledAboutTopLeft(aSecondBefore), pSecondObject->GetSnapRect());
     CPPUNIT_ASSERT_EQUAL(lcl_doubledAboutTopLeft(aFirstBefore), pFirstObject->GetSnapRect());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiSelectionDragPreview)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("multi-selection.fodp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrView* pView = pViewShell->GetView();
+
+    SdrObject* pFirstObject = pPage->GetObj(0);
+    SdrObject* pSecondObject = pPage->GetObj(1);
+    CPPUNIT_ASSERT(pFirstObject);
+    CPPUNIT_ASSERT(pSecondObject);
+
+    pView->MarkObj(pFirstObject, pView->GetSdrPageView());
+    pView->MarkObj(pSecondObject, pView->GetSdrPageView(), /*bUnmark=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    size_t nDragIndex = 0;
+    bool bHandleFound = false;
+    for (size_t i = 0; i < pView->GetHdlList().GetHdlCount(); ++i)
+    {
+        const SdrHdl* pHandle = pView->GetHdlList().GetHdl(i);
+        if (pHandle->GetKind() == SdrHdlKind::LowerRight && pHandle->GetObj() == pSecondObject)
+        {
+            nDragIndex = i;
+            bHandleFound = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(bHandleFound);
+
+    const tools::Rectangle aFirstBefore(pFirstObject->GetSnapRect());
+    const tools::Rectangle aSecondBefore(pSecondObject->GetSnapRect());
+    const Point aDropPosition(
+        aSecondBefore.Right() + (aSecondBefore.Right() - aSecondBefore.Left()),
+        aSecondBefore.Bottom() + (aSecondBefore.Bottom() - aSecondBefore.Top()));
+
+    // Ask what dropping the handle here would produce.
+    pView->MoveShapeHandle(nDragIndex, aDropPosition, -1, /*bPreview=*/true);
+    Scheduler::ProcessEventsToIdle();
+
+    // One outline per selected object, and the document is left as it was.
+    const std::vector<tools::Rectangle> aPreviewBoxes
+        = lcl_extractPreviewBoxes(aView.m_ShapeDragPreview);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPreviewBoxes.size());
+    CPPUNIT_ASSERT_EQUAL(aFirstBefore, pFirstObject->GetSnapRect());
+    CPPUNIT_ASSERT_EQUAL(aSecondBefore, pSecondObject->GetSnapRect());
+
+    // Each outline says what to paint it with, so a client can show the shape rather than an
+    // empty frame. Both objects here have a plain colour fill.
+    const boost::property_tree::ptree aTree = lcl_parsePreview(aView.m_ShapeDragPreview);
+    std::vector<OString> aFills;
+    for (const auto& rFill : aTree.get_child("fills"))
+        aFills.push_back(OString(rFill.second.get_value<std::string>()));
+
+    CPPUNIT_ASSERT_EQUAL(aPreviewBoxes.size(), aFills.size());
+    for (const OString& rFill : aFills)
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rFill.getLength());
+
+    // Now drop it at the very same place.
+    pView->MoveShapeHandle(nDragIndex, aDropPosition, -1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Each outline the preview reported covers the place its object ended up in. The preview
+    // is in twips while the objects are in 100th mm.
+    const tools::Rectangle aFirstAfter(
+        o3tl::convert(pFirstObject->GetSnapRect(), o3tl::Length::mm100, o3tl::Length::twip));
+    const tools::Rectangle aSecondAfter(
+        o3tl::convert(pSecondObject->GetSnapRect(), o3tl::Length::mm100, o3tl::Length::twip));
+
+    for (const tools::Rectangle& rPreviewBox : aPreviewBoxes)
+    {
+        // The two objects are far apart, so the nearer center says which one an outline is for.
+        const bool bIsFirst
+            = std::abs(rPreviewBox.Center().X() - aFirstAfter.Center().X())
+              < std::abs(rPreviewBox.Center().X() - aSecondAfter.Center().X());
+        lcl_assertSameArea(bIsFirst ? "first object"_ostr : "second object"_ostr,
+                           bIsFirst ? aFirstAfter : aSecondAfter, rPreviewBox);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteUndo)

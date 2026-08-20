@@ -80,6 +80,8 @@ public:
     std::vector<OString> m_aTextSelections;
     boost::property_tree::ptree m_aCommentCallbackResult;
     OString m_ShapeSelection;
+    /// The last drag preview message holds the outlines that a drop would produce.
+    OString m_ShapeDragPreview;
     std::vector<std::string> m_aStateChanged;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     /// Number of jsdialog "select" actions seen for a given control id.

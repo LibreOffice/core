@@ -211,6 +211,46 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			: this.position[0] + point.pX;
 	}
 
+	/*
+		Where a drop at the given point leads: the object's new rectangle, the handle the move is
+		committed on, and the twips position that handle lands on. The preview and the drop both
+		read it, so the preview shows the geometry the drop produces.
+	*/
+	private dropOfDrag(point: cool.SimplePoint, e: MouseEvent): any {
+		const ownInfo = this.sectionProperties.ownInfo;
+		/*
+			Which corner or edge of its own object the handle sits on, counted from zero. The kind
+			numbers these from "1" for the upper left one to "8" for the lower right, while the id
+			counts every handle the object made.
+		*/
+		const handleId = String(Number(ownInfo.kind) - 1);
+
+		const p = point.clone();
+		p.pX = this.mouseToDocX(point);
+		p.pY += this.position[1];
+
+		const keepRatio = HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled);
+		const shapeRecProps = HandleScaling.shapeAfterDrag(
+			p, this.getOwnShapeRectangleProperties(), ownInfo.kind, keepRatio);
+
+		const rectangle = cool.SimpleRectangle.fromCorePixels([
+			shapeRecProps.center.pX - shapeRecProps.width * 0.5,
+			shapeRecProps.center.pY - shapeRecProps.height * 0.5,
+			shapeRecProps.width, shapeRecProps.height
+		]);
+
+		const committedHandleId = HandleScaling.committedHandle(handleId, keepRatio);
+		const position = HandleScaling.positionOfHandle(committedHandleId, rectangle);
+
+		if (!keepRatio) {
+			const snapped = this.sectionProperties.parentHandlerSection.snappedAt();
+			position[0] = Math.round((snapped[0] ?? this.mouseToDocX(point)) * app.pixelsToTwips);
+			position[1] = Math.round((snapped[1] ?? point.pY + this.position[1]) * app.pixelsToTwips);
+		}
+
+		return { committedHandleId: committedHandleId, rectangle: rectangle, position: position };
+	}
+
 	onMouseUp(point: cool.SimplePoint, e: MouseEvent): void {
 		if (this.containerObject.isDraggingSomething()) {
 			Util.ensureValue(app.activeDocument);
@@ -218,49 +258,23 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			e.stopPropagation();
 
 			const ownInfo = this.sectionProperties.ownInfo;
-			/*
-				Which corner or edge of its own object the handle sits on, counted from zero. The
-				kind numbers these from "1" for the upper left one to "8" for the lower right, while
-				the id counts every handle the object made.
-			*/
-			const handleId = String(Number(ownInfo.kind) - 1);
 			const parentHandlerSection = this.sectionProperties.parentHandlerSection;
-
-			const p = point.clone();
-			p.pX = this.mouseToDocX(point);
-			p.pY += this.position[1];
-
-			const keepRatio = HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled);
-			const shapeRecProps = HandleScaling.shapeAfterDrag(
-				p, this.getOwnShapeRectangleProperties(), ownInfo.kind, keepRatio);
-
-			const tempRectangle = cool.SimpleRectangle.fromCorePixels([
-				shapeRecProps.center.pX - shapeRecProps.width * 0.5,
-				shapeRecProps.center.pY - shapeRecProps.height * 0.5,
-				shapeRecProps.width, shapeRecProps.height
-			]);
+			const drop = this.dropOfDrag(point, e);
+			const committedHandleId = drop.committedHandleId;
+			const newPoint = drop.position;
 
 			if (GraphicSelection.inPlaceActive) {
 				parentHandlerSection.sectionProperties.inPlaceResizeRectangle = null;
-				GraphicSelection.sendInPlaceArea(tempRectangle);
+				GraphicSelection.sendInPlaceArea(drop.rectangle);
 				parentHandlerSection.hideSVG();
 				return;
 			}
 
 			if (GraphicSelection.hasDarkOverlay()) {
 				parentHandlerSection.sectionProperties.inPlaceResizeRectangle = null;
-				GraphicSelection.sendElementArea(tempRectangle);
+				GraphicSelection.sendElementArea(drop.rectangle);
 				parentHandlerSection.hideSVG();
 				return;
-			}
-
-			const committedHandleId = HandleScaling.committedHandle(handleId, keepRatio);
-			const newPoint = HandleScaling.positionOfHandle(committedHandleId, tempRectangle);
-
-			if (!keepRatio) {
-				const snapped = parentHandlerSection.snappedAt();
-				newPoint[0] = Math.round((snapped[0] ?? this.mouseToDocX(point)) * app.pixelsToTwips);
-				newPoint[1] = Math.round((snapped[1] ?? point.pY + this.position[1]) * app.pixelsToTwips);
 			}
 
 			const parameters = {
@@ -275,6 +289,7 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 
 			app.map.sendUnoCommand('.uno:MoveShapeHandle', parameters);
 			parentHandlerSection.hideSVG();
+			parentHandlerSection.clearShapeDragPreview();
 		}
 	}
 
@@ -332,7 +347,8 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			]);
 		}
 
-		if (!this.sectionProperties.cropModeEnabled)
+		if (!this.sectionProperties.cropModeEnabled
+			&& !this.sectionProperties.parentHandlerSection.usesCoreDragPreview())
 			this.sectionProperties.parentHandlerSection.scalePreviewTo(shapeRecProps, objectNumber);
 	}
 
@@ -344,11 +360,13 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			if (!this.sectionProperties.cropModeEnabled && GraphicSelection.extraInfo?.isResizable === false)
 				return;
 
-			const parentSVG =
-				this.sectionProperties.parentHandlerSection.sectionProperties.svg;
-			if (parentSVG) parentSVG.style.opacity = 0.5;
+			const parentHandlerSection = this.sectionProperties.parentHandlerSection;
+			const parentProperties = parentHandlerSection.sectionProperties;
+			const useCorePreview = parentHandlerSection.usesCoreDragPreview();
 
-			const parentProperties = this.sectionProperties.parentHandlerSection.sectionProperties;
+			const parentSVG = parentProperties.svg;
+			if (!useCorePreview && parentSVG) parentSVG.style.opacity = 0.5;
+
 			const snapPosition = [
 				this.mouseToDocX(point) - parentProperties.handleWidth * 0.5,
 				point.pY + this.position[1] - parentProperties.handleHeight * 0.5
@@ -357,10 +375,20 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			this.moveHandlesOnDrag(point, e);
 
 			// Here we are checking a point, so the size 0. dragDistance is also 0 because we already set the new position (moveHandlesOnDrag).
-			this.sectionProperties.parentHandlerSection.checkHelperLinesAndSnapPoints([0, 0], snapPosition, [0, 0]);
+			parentHandlerSection.checkHelperLinesAndSnapPoints([0, 0], snapPosition, [0, 0]);
 
 			this.containerObject.requestReDraw();
-			this.sectionProperties.parentHandlerSection.showSVG();
+
+			if (useCorePreview) {
+				// The snap points are ready by now, so this asks core to preview the position a
+				// drop here would give.
+				const dropPosition = this.dropOfDrag(point, e).position;
+				parentHandlerSection.requestShapeDragPreview(
+					this.sectionProperties.ownInfo,
+					new cool.SimplePoint(dropPosition[0], dropPosition[1]));
+			}
+			else
+				parentHandlerSection.showSVG();
 		}
 	}
 }

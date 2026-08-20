@@ -112,6 +112,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		// Drag preview polyline sent by core while a handle is dragged.
 		// Array of polygons, each an array of [x, y] in core pixels.
 		this.sectionProperties.shapeDragPreviewPolygons = null;
+		// Fill of each of those polygons, six hex digits, or an empty string for an outline
+		// with nothing inside it.
+		this.sectionProperties.shapeDragPreviewFills = null;
 		this.sectionProperties.shapeDragPreviewRequestTime = null;
 		this.sectionProperties.queuedShapeDragPreview = null;
 
@@ -1039,6 +1042,15 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	/*
+		Whether a resize drag previews with the outlines core reports instead of the scaled
+		selection SVG. Core resizes each object about its own corner, which one scale of the
+		whole SVG cannot show, while a single object is a plain scale of itself.
+	*/
+	public usesCoreDragPreview(): boolean {
+		return this.sectionProperties.selectedObjectCount > 1;
+	}
+
+	/*
 		Ask core for the geometry the shape would get if the dragged handle
 		was dropped at the given position. Core answers with a
 		shapedragpreview message. At most one request is in flight, newer
@@ -1129,6 +1141,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		}
 
 		this.sectionProperties.shapeDragPreviewPolygons = polygons.length > 0 ? polygons : null;
+		this.sectionProperties.shapeDragPreviewFills = Array.isArray(preview?.fills)
+			? preview.fills.map(String)
+			: null;
 		this.containerObject.requestReDraw();
 
 		const queued = this.sectionProperties.queuedShapeDragPreview;
@@ -1160,6 +1175,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	public clearShapeDragPreview() {
 		this.sectionProperties.shapeDragPreviewPolygons = null;
+		this.sectionProperties.shapeDragPreviewFills = null;
 		this.sectionProperties.shapeDragPreviewRequestTime = null;
 		this.sectionProperties.queuedShapeDragPreview = null;
 		this.containerObject.requestReDraw();
@@ -1169,19 +1185,29 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		const polygons = this.sectionProperties.shapeDragPreviewPolygons;
 		if (!polygons) return;
 
+		const fills = this.sectionProperties.shapeDragPreviewFills;
+
 		this.context.save();
 		this.context.strokeStyle = app.map.uiManager.isBackgroundDark() ? 'white' : 'black';
 		this.context.lineWidth = app.dpiScale;
-		this.context.beginPath();
 
 		for (let i = 0; i < polygons.length; i++) {
 			const points = polygons[i];
+			this.context.beginPath();
 			this.context.moveTo(points[0][0] - this.position[0], points[0][1] - this.position[1]);
 			for (let j = 1; j < points.length; j++)
 				this.context.lineTo(points[j][0] - this.position[0], points[j][1] - this.position[1]);
+
+			const fill = fills ? fills[i] : null;
+			if (fill) {
+				// Half transparent, so the document underneath stays readable.
+				this.context.fillStyle = '#' + fill + '80';
+				this.context.fill();
+			}
+
+			this.context.stroke();
 		}
 
-		this.context.stroke();
 		this.context.restore();
 	}
 
