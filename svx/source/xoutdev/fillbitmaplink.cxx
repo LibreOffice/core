@@ -97,7 +97,7 @@ public:
         const OUString aName = m_pObj->GetMergedItem(XATTR_FILLBITMAP).GetName();
         SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILLBITMAP, XATTR_FILLBITMAP>(
             m_pObj->GetObjectItemPool()));
-        aSet.Put(XFillBitmapItem(aName, aGrf));
+        aSet.Put(XFillBitmapItem(aName, std::move(aGrf)));
         m_rTracker.setUpdatingHost(m_pObj);
         m_pObj->SetMergedItemSetAndBroadcast(aSet);
         m_rTracker.clearUpdatingHost();
@@ -158,7 +158,7 @@ public:
             = rProps.GetItemSet().GetItemIfSet(XATTR_FILLBITMAP, false))
             aName = pItem->GetName();
         m_rTracker.setUpdatingHost(m_pPage);
-        rProps.PutItem(XFillBitmapItem(aName, aGrf));
+        rProps.PutItem(XFillBitmapItem(aName, std::move(aGrf)));
         m_rTracker.clearUpdatingHost();
         return SUCCESS;
     }
@@ -211,7 +211,7 @@ public:
         OUString aName;
         if (const XFillBitmapItem* pItem = rSet.GetItemIfSet(XATTR_FILLBITMAP, false))
             aName = pItem->GetName();
-        rSet.Put(XFillBitmapItem(aName, aGrf));
+        rSet.Put(XFillBitmapItem(aName, std::move(aGrf)));
         m_pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
         return SUCCESS;
     }

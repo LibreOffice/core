@@ -81,7 +81,7 @@ public:
         // here instead would free the link inside SvBaseLink::Update, which
         // still reads its members after DataChanged returns.
         m_rTracker.setUpdatingHost(&m_rHost);
-        HostOps<Host>::setAttr(m_rHost, XFillBitmapItem(aName, aGrf));
+        HostOps<Host>::setAttr(m_rHost, XFillBitmapItem(aName, std::move(aGrf)));
         m_rTracker.clearUpdatingHost();
         return SUCCESS;
     }
