@@ -107,7 +107,7 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
     if (!pWriteAcc)
         return false;
 
-   // We can do the same calculations for RGBA and BGRA
+    // We can do the same calculations for RGBA and BGRA
     if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcRgba
         || pReadAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcBgra)
     {
@@ -122,9 +122,9 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
             {
                 const sal_Int32 nBaseIndex(x * nNumberOfContributions);
                 sal_Int32 nSum(0);
-                sal_Int32 nValueRed(0);
-                sal_Int32 nValueGreen(0);
-                sal_Int32 nValueBlue(0);
+                sal_Int32 nValueColor1(0);
+                sal_Int32 nValueColor2(0);
+                sal_Int32 nValueColor3(0);
                 sal_Int32 nValueAlpha(0);
 
                 for (sal_Int32 j(0); j < aCounts[x]; j++)
@@ -136,18 +136,18 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
 
                     auto p = pScanlineRead + (4 * aPixels[nIndex]);
 
-                    nValueRed += nWeight * *p;
-                    nValueGreen += nWeight * *(p+1);
-                    nValueBlue += nWeight * *(p+2);
+                    nValueColor1 += nWeight * *p;
+                    nValueColor2 += nWeight * *(p+1);
+                    nValueColor3 += nWeight * *(p+2);
                     nValueAlpha += nWeight * *(p+3);
                 }
 
                 assert(nSum != 0);
 
                 auto p = pScanline + (4 * x);
-                *p = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255));
-                *(p+1) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255));
-                *(p+2) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255));
+                *p = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueColor1 / nSum, 0, 255));
+                *(p+1) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueColor2 / nSum, 0, 255));
+                *(p+2) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueColor3 / nSum, 0, 255));
                 *(p+3) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueAlpha / nSum, 0, 255));
             }
         }
