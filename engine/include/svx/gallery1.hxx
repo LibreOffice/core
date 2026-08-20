@@ -100,6 +100,7 @@ private:
     INetURLObject               m_aRelURL;
     INetURLObject               m_aUserURL;
     bool                        m_bMultiPath;
+    bool                        m_bAssumeReadOnly;
 
     SAL_DLLPRIVATE void         ImplLoad( std::u16string_view rMultiPath );
     SAL_DLLPRIVATE void         ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbIsReadOnly );
@@ -114,7 +115,7 @@ private:
 
 public:
                                 // only for gengal utility!
-                                Gallery( std::u16string_view rMultiPath );
+                                Gallery(std::u16string_view rMultiPath, bool bAssumeReadOnly = false);
                                 virtual ~Gallery() override;
 
     static Gallery*             GetGalleryInstance();

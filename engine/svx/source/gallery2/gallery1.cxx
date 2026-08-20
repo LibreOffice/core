@@ -230,8 +230,8 @@ public:
 };
 
 
-Gallery::Gallery( std::u16string_view rMultiPath )
-:       m_bMultiPath          ( false )
+Gallery::Gallery(std::u16string_view rMultiPath, bool bAssumeReadOnly)
+    : m_bAssumeReadOnly(bAssumeReadOnly)
 {
     ImplLoad( rMultiPath );
 }
@@ -242,10 +242,11 @@ Gallery::~Gallery()
 
 Gallery* Gallery::GetGalleryInstance()
 {
+    // The Kit must not write into the installation's gallery; gengal and the tests do write.
     // note: this would deadlock if it used osl::Mutex::getGlobalMutex()
     static Gallery *const s_pGallery(
         comphelper::IsFuzzing() ? nullptr :
-            new Gallery(SvtPathOptions().GetGalleryPath()));
+            new Gallery(SvtPathOptions().GetGalleryPath(), comphelper::COKit::isActive()));
 
     return s_pGallery;
 }
@@ -313,7 +314,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 #else
         // Kit installation is defacto read-only, even if by DAC it's owned by the user.
         // Writing to UserInstallation is pointless too, as it will be deleted on exit.
-        if (comphelper::COKit::isActive())
+        if (m_bAssumeReadOnly)
         {
             rbDirIsReadOnly = true;
         }
