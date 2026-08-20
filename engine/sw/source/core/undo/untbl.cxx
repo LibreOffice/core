@@ -3157,7 +3157,8 @@ SwRewriter SwUndoTableStyleMake::GetRewriter() const
     return aResult;
 }
 
-SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, std::vector<SwTable*>&& rAffectedTables, const SwDoc& rDoc)
+SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat,
+        std::vector<std::pair<SwTable*, SwTableStyleSettings>>&& rAffectedTables, const SwDoc& rDoc)
     : SwUndo(SwUndoId::TBLSTYLE_DELETE, rDoc),
     m_pAutoFormat(std::move(pAutoFormat)),
     m_rAffectedTables(std::move(rAffectedTables))
@@ -3170,8 +3171,12 @@ void SwUndoTableStyleDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwTableAutoFormat* pNewFormat = rContext.GetDoc().MakeTableStyle(m_pAutoFormat->GetName());
     *pNewFormat = *m_pAutoFormat;
-    for (size_t i=0; i < m_rAffectedTables.size(); i++)
-        m_rAffectedTables[i]->SetTableStyleName(m_pAutoFormat->GetName());
+    for (const auto& rAffectedTable : m_rAffectedTables)
+    {
+        rAffectedTable.first->SetTableStyleName(m_pAutoFormat->GetName());
+        rAffectedTable.first->SetTableStyleSettings(rAffectedTable.second);
+        rContext.GetDoc().ApplyTableStyleLive(*rAffectedTable.first->GetTableNode());
+    }
 }
 
 void SwUndoTableStyleDelete::RedoImpl(::sw::UndoRedoContext & rContext)

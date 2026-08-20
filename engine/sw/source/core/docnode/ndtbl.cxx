@@ -27,6 +27,7 @@
 #include <editeng/boxitem.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/brushitem.hxx>
 #include <fmtfsize.hxx>
 #include <formatflysplit.hxx>
 #include <fmtornt.hxx>
@@ -3688,6 +3689,7 @@ SwTableNode* SwNodes::SplitTable( SwNode& rPos, bool bAfter,
         pNewTableNd->GetTable().RegisterToFormat( *pNewTableFormat );
 
         pNewTableNd->GetTable().SetTableStyleName(rTable.GetTableStyleName());
+        pNewTableNd->GetTable().SetTableStyleSettings(rTable.GetTableStyleSettings());
 
         // Calculate a new Size?
         // lcl_ChgTableSize: Only execute the second call if the first call was
@@ -4054,6 +4056,169 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
     getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
 
     return true;
+}
+
+namespace {
+
+/// The 4 roles a row or column can play when resolving a table style live: one of the two
+/// fixed ends, or one of the two bands that alternate between the ends.
+enum class RowColRole : sal_uInt8
+{
+    First = 0,
+    BandA = 1,
+    BandB = 2,
+    Last = 3
+};
+
+/// Which of a table style's 16 box-format positions applies to a row, given how many rows the
+/// table has and which row roles are switched on. Falls back to a banding role - or, with
+/// banding off too, uniformly to the first banding role - when a row's own role is off, the
+/// same way an unused role already renders as a plain body row in the style itself.
+sal_uInt8 lcl_TableStyleRowRole(size_t nRow, size_t nRows, const SwTableStyleSettings& rSettings)
+{
+    RowColRole eRole;
+    if (!nRow)
+        eRole = RowColRole::First;
+    else if (nRow + 1 == nRows)
+        eRole = RowColRole::Last;
+    else
+        eRole = (nRow - 1) & 1 ? RowColRole::BandB : RowColRole::BandA;
+
+    if (eRole == RowColRole::First && !rSettings.m_bUseFirstRowStyle)
+        eRole = RowColRole::BandA;
+    else if (eRole == RowColRole::Last && !rSettings.m_bUseLastRowStyle)
+        eRole = RowColRole::BandB;
+
+    if ((eRole == RowColRole::BandA || eRole == RowColRole::BandB) && !rSettings.m_bUseRowBandingStyle)
+        eRole = RowColRole::BandA;
+
+    return static_cast<sal_uInt8>(eRole);
+}
+
+/// Column equivalent of lcl_TableStyleRowRole, scoped to one line's own box count (a line's
+/// box count can differ from another line's in the presence of merged cells).
+sal_uInt8 lcl_TableStyleColRole(size_t nCol, size_t nCols, const SwTableStyleSettings& rSettings)
+{
+    RowColRole eRole;
+    if (!nCol)
+        eRole = RowColRole::First;
+    else if (nCol + 1 == nCols)
+        eRole = RowColRole::Last;
+    else
+        eRole = (nCol - 1) & 1 ? RowColRole::BandB : RowColRole::BandA;
+
+    if (eRole == RowColRole::First && !rSettings.m_bUseFirstColumnStyle)
+        eRole = RowColRole::BandA;
+    else if (eRole == RowColRole::Last && !rSettings.m_bUseLastColumnStyle)
+        eRole = RowColRole::BandB;
+
+    if ((eRole == RowColRole::BandA || eRole == RowColRole::BandB) && !rSettings.m_bUseColumnBandingStyle)
+        eRole = RowColRole::BandA;
+
+    return static_cast<sal_uInt8>(eRole);
+}
+
+/// Look up (or lazily build) the frame format this table shares between every cell in the
+/// given role, so that toggling a role or switching styles later is a re-parenting of a few
+/// shared formats rather than a rewrite of every cell's attributes.
+SwTableBoxFormat* lcl_GetOrCreateTableStyleRoleFormat(SwDoc& rDoc, SwTable& rTable,
+        const SwTableAutoFormat& rStyle, sal_uInt8 nPos, bool bSingleRow, bool bSingleCol)
+{
+    const sal_uInt8 nRoleKey
+        = static_cast<sal_uInt8>(nPos + (bSingleRow ? 16 : 0) + (bSingleCol ? 32 : 0));
+    if (SwTableBoxFormat* pExisting = rTable.FindTableStyleRoleFormat(nRoleKey))
+        return pExisting;
+
+    SfxItemSet aBoxSet(rDoc.GetAttrPool(), aTableBoxSetRange);
+    rStyle.UpdateToSet(nPos, bSingleRow, bSingleCol, aBoxSet, SwTableAutoFormatUpdateFlags::Box, nullptr);
+
+    SwTableBoxFormat* pRoleFormat = rDoc.MakeTableBoxFormat();
+    // Only the box border and background resolve live for now; leave every other item unset
+    // on the role format so a cell's own size, protection, etc. are never masked by it.
+    if (const SvxBoxItem* pBox = aBoxSet.GetItemIfSet(RES_BOX, false))
+        pRoleFormat->SetFormatAttr(*pBox);
+    if (const SvxBrushItem* pBackground = aBoxSet.GetItemIfSet(RES_BACKGROUND, false))
+        pRoleFormat->SetFormatAttr(*pBackground);
+
+    rTable.AddTableStyleRoleFormat(nRoleKey, pRoleFormat);
+    return pRoleFormat;
+}
+
+}
+
+bool SwDoc::ApplyTableStyleLive(SwTableNode& rTableNode)
+{
+    SwTable& rTable = rTableNode.GetTable();
+    const TableStyleName& rStyleName = rTable.GetTableStyleName();
+    SwTableAutoFormat* pStyle
+        = rStyleName.isEmpty() ? nullptr : GetTableStyles().FindAutoFormat(rStyleName);
+
+    // A cached role format is only valid for the exact style and settings combination it was
+    // built under, either of which may have changed since cells last derived from it. Start
+    // every application from a clean cache rather than trying to tell which entries still
+    // apply; TakeTableStyleRoleFormats keeps the old formats around just long enough to free
+    // whichever ones end up with no cells still deriving from them, below.
+    std::vector<SwTableBoxFormat*> aPreviousRoleFormats = rTable.TakeTableStyleRoleFormats();
+
+    bool bChangedAnyBox = false;
+    const SwTableStyleSettings& rSettings = rTable.GetTableStyleSettings();
+    const SwTableLines& rLines = rTable.GetTabLines();
+    const size_t nRows = rLines.size();
+    for (size_t nRow = 0; nRow < nRows; ++nRow)
+    {
+        const SwTableBoxes& rBoxes = rLines[nRow]->GetTabBoxes();
+        const size_t nCols = rBoxes.size();
+        const sal_uInt8 nRowRole = pStyle ? lcl_TableStyleRowRole(nRow, nRows, rSettings) : 0;
+        for (size_t nCol = 0; nCol < nCols; ++nCol)
+        {
+            SwTableBox* pBox = rBoxes[nCol];
+            // A box without its own start node is a container for a nested table rather
+            // than a real cell; leave whatever formatting it already has alone.
+            if (!pBox->GetSttNd() || pBox->HasDirectFormatting())
+                continue;
+
+            SwTableBoxFormat* pOwnFormat = pBox->ClaimFrameFormat();
+            SwFrameFormat* pTargetFormat;
+            if (pStyle)
+            {
+                const sal_uInt8 nColRole = lcl_TableStyleColRole(nCol, nCols, rSettings);
+                const sal_uInt8 nPos = static_cast<sal_uInt8>(nRowRole * 4 + nColRole);
+                pTargetFormat = lcl_GetOrCreateTableStyleRoleFormat(
+                        *this, rTable, *pStyle, nPos, nRows == 1, nCols == 1);
+            }
+            else
+            {
+                // No style applies any more: fall back to the same parent a freshly created
+                // table box format gets, so the cell's border and background resolve like
+                // any other never-styled cell instead of keeping a stale derivation.
+                pTargetFormat = GetDfltFrameFormat();
+                if (pOwnFormat->DerivedFrom() == pTargetFormat)
+                    continue;
+            }
+
+            pOwnFormat->ResetFormatAttr(RES_BOX);
+            pOwnFormat->ResetFormatAttr(RES_BACKGROUND);
+            pOwnFormat->SetDerivedFrom(pTargetFormat);
+
+            // SetDerivedFrom's own change notification only invalidates this cell's own
+            // frame; re-notify as a table-box format change so a collapsing-borders table
+            // also invalidates the neighbouring row that shares a border with this cell,
+            // the same way the table style bake already does via SetFormatAttr.
+            pOwnFormat->CallSwClientNotify(sw::TableBoxFormatChanged(*pOwnFormat, *pBox));
+            bChangedAnyBox = true;
+        }
+    }
+
+    // Any of the previous role formats left with no cells still deriving from them (because
+    // this table no longer uses that role, or no longer uses a style at all) can go.
+    for (SwTableBoxFormat* pOldFormat : aPreviousRoleFormats)
+        if (!pOldFormat->HasWriterListeners())
+            delete pOldFormat;
+
+    if (bChangedAnyBox)
+        getIDocumentState().SetModified();
+
+    return pStyle != nullptr;
 }
 
 /**
@@ -4822,7 +4987,7 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const TableStyleName& rN
 
     std::unique_ptr<SwTableAutoFormat> pReleasedFormat = GetTableStyles().ReleaseAutoFormat(rName);
 
-    std::vector<SwTable*> vAffectedTables;
+    std::vector<std::pair<SwTable*, SwTableStyleSettings>> vAffectedTables;
     if (pReleasedFormat)
     {
         size_t nTableCount = GetTableFrameFormatCount(true);
@@ -4832,10 +4997,17 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const TableStyleName& rN
             SwTable* pTable = SwTable::FindTable(pFrameFormat);
             if (pTable->GetTableStyleName() == pReleasedFormat->GetName())
             {
+                // Keep the table's settings for undo before they are reset below: the
+                // style being deleted is what gave them meaning, but a later undo restores
+                // the style and expects its own settings back too, not the defaults.
+                vAffectedTables.emplace_back(pTable, pTable->GetTableStyleSettings());
                 pTable->SetTableStyleName(TableStyleName());
-                vAffectedTables.push_back(pTable);
+                pTable->SetTableStyleSettings(SwTableStyleSettings());
             }
         }
+
+        for (const auto& rAffectedTable : vAffectedTables)
+            ApplyTableStyleLive(*rAffectedTable.first->GetTableNode());
 
         getIDocumentState().SetModified();
 
@@ -4865,8 +5037,7 @@ void SwDoc::ChgTableStyle(const TableStyleName& rName, const SwTableAutoFormat& 
         SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
         SwTable* pTable = SwTable::FindTable(pFrameFormat);
         if (pTable->GetTableStyleName() == rName)
-            if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
-                pFEShell->UpdateTableStyleFormatting(pTable->GetTableNode());
+            ApplyTableStyleLive(*pTable->GetTableNode());
     }
 
     getIDocumentState().SetModified();

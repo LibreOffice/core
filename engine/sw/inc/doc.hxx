@@ -1279,6 +1279,13 @@ public:
     /// @param bResetDirect Reset direct formatting that might be applied to the cells.
     bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, TableStyleName const* pStyleNameToSet = nullptr);
 
+    /// Resolve the whole table's current table style name and settings (SwTable::
+    /// GetTableStyleName/GetTableStyleSettings) live: cells without direct formatting derive
+    /// their box border and background from shared per-role frame formats instead of having
+    /// those values baked in, so a later settings or style change takes effect without
+    /// touching cell content again. Returns false if the table has no style set.
+    SW_DLLPUBLIC bool ApplyTableStyleLive(SwTableNode& rTableNode);
+
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );
 

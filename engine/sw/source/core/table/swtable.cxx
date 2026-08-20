@@ -202,9 +202,48 @@ SwTable::SwTable( const SwTable& rTable )
     m_nGraphicsThatResize( 0 ),
     m_nRowsToRepeat( rTable.GetRowsToRepeat() ),
     maTableStyleName(rTable.maTableStyleName),
+    maTableStyleSettings(rTable.maTableStyleSettings),
     m_bModifyLocked( false ),
     m_bNewModel( rTable.m_bNewModel )
 {
+}
+
+SwTableBoxFormat* SwTable::FindTableStyleRoleFormat(sal_uInt8 nRoleKey) const
+{
+    auto it = m_TableStyleRoleFormats.find(nRoleKey);
+    return it == m_TableStyleRoleFormats.end() ? nullptr : it->second;
+}
+
+void SwTable::AddTableStyleRoleFormat(sal_uInt8 nRoleKey, SwTableBoxFormat* pFormat)
+{
+    m_TableStyleRoleFormats.emplace(nRoleKey, pFormat);
+}
+
+std::vector<SwTableBoxFormat*> SwTable::TakeTableStyleRoleFormats()
+{
+    std::vector<SwTableBoxFormat*> aFormats;
+    aFormats.reserve(m_TableStyleRoleFormats.size());
+    for (auto& [nKey, pFormat] : m_TableStyleRoleFormats)
+        aFormats.push_back(pFormat);
+    m_TableStyleRoleFormats.clear();
+    return aFormats;
+}
+
+bool SwTable::ReleaseTableStyleRoleFormatIfOrphaned(SwFrameFormat* pFormat)
+{
+    if (!pFormat)
+        return false;
+    for (auto it = m_TableStyleRoleFormats.begin(); it != m_TableStyleRoleFormats.end(); ++it)
+    {
+        if (it->second != pFormat)
+            continue;
+        if (pFormat->HasWriterListeners())
+            return false;
+        m_TableStyleRoleFormats.erase(it);
+        delete pFormat;
+        return true;
+    }
+    return false;
 }
 
 void DelBoxNode( SwTableSortBoxes const & rSortCntBoxes )
@@ -2099,8 +2138,17 @@ void SwTableBox::RemoveFromTable()
 
 SwTableBox::~SwTableBox()
 {
+    SwTable* pOwningTable = nullptr;
+    SwFrameFormat* pDerivedFrom = nullptr;
     if (!GetFrameFormat()->GetDoc().IsInDtor())
     {
+        // RemoveFromTable() below clears m_pStartNode, so the owning table has to be found
+        // here first.
+        if (m_pStartNode)
+        {
+            pOwningTable = &const_cast<SwTable&>(m_pStartNode->FindTableNode()->GetTable());
+            pDerivedFrom = static_cast<SwFrameFormat*>(GetFrameFormat()->DerivedFrom());
+        }
         RemoveFromTable();
     }
 
@@ -2109,6 +2157,9 @@ SwTableBox::~SwTableBox()
     pMod->Remove(*this);               // remove,
     if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
+
+    if (pOwningTable && pDerivedFrom)
+        pOwningTable->ReleaseTableStyleRoleFormatIfOrphaned(pDerivedFrom);
 }
 
 SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )

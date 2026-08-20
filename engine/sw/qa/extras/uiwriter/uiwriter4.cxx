@@ -28,6 +28,8 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <UndoManager.hxx>
 #include <tblafmt.hxx>
+#include <swtable.hxx>
+#include <itabenum.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
@@ -1238,6 +1240,98 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     pStyle = pDoc->GetTableStyles().FindAutoFormat(TableStyleName(u"Test Style"_ustr));
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetProps().GetBackground() == aBackground2));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleLiveDeleteResetsCells)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle(TableStyleName(u"Test Style"_ustr));
+    SvxBrushItem aBackground(COL_LIGHTMAGENTA, RES_BACKGROUND);
+    pStyle->GetBoxFormat(0).GetProps().SetBackground(aBackground);
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    aSettings.m_bUseFirstColumnStyle = true;
+    rMutableTable.SetTableStyleName(TableStyleName(u"Test Style"_ustr));
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+
+    SwTableBox* pTopLeftBox = rMutableTable.GetTabLines()[0]->GetTabBoxes()[0];
+    CPPUNIT_ASSERT(bool(pTopLeftBox->GetFrameFormat()->GetFormatAttr(RES_BACKGROUND) == aBackground));
+
+    // The style going away has to reach cells already resolved against it too, not just
+    // leave them holding on to a role format that no longer means anything.
+    pDoc->DelTableStyle(TableStyleName(u"Test Style"_ustr));
+    CPPUNIT_ASSERT(!(pTopLeftBox->GetFrameFormat()->GetFormatAttr(RES_BACKGROUND) == aBackground));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleDeleteUndoRestoresSettings)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    pDoc->MakeTableStyle(TableStyleName(u"Test Style"_ustr));
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+
+    // Non-default, so it is distinguishable from the SwTableStyleSettings() a deleted
+    // style's tables fall back to.
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstColumnStyle = true;
+    rMutableTable.SetTableStyleName(TableStyleName(u"Test Style"_ustr));
+    rMutableTable.SetTableStyleSettings(aSettings);
+
+    pDoc->DelTableStyle(TableStyleName(u"Test Style"_ustr));
+    CPPUNIT_ASSERT(bool(rMutableTable.GetTableStyleSettings() == SwTableStyleSettings()));
+
+    // Undoing the delete has to bring back this table's own settings, not just the style.
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(bool(rMutableTable.GetTableStyleSettings() == aSettings));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleChgUpdatesLiveCells)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle(TableStyleName(u"Test Style"_ustr));
+    SvxBrushItem aBackground(COL_LIGHTMAGENTA, RES_BACKGROUND);
+    pStyle->GetBoxFormat(0).GetProps().SetBackground(aBackground);
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    aSettings.m_bUseFirstColumnStyle = true;
+    rMutableTable.SetTableStyleName(TableStyleName(u"Test Style"_ustr));
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+
+    SwTableBox* pTopLeftBox = rMutableTable.GetTabLines()[0]->GetTabBoxes()[0];
+    CPPUNIT_ASSERT(bool(pTopLeftBox->GetFrameFormat()->GetFormatAttr(RES_BACKGROUND) == aBackground));
+
+    // Editing the style's own definition has to reach a cell already resolved against it,
+    // the same way toggling which style or settings apply does.
+    SwTableAutoFormat aNewStyle(TableStyleName(u"Test Style"_ustr));
+    SvxBrushItem aBackground2(COL_LIGHTGREEN, RES_BACKGROUND);
+    aNewStyle.GetBoxFormat(0).GetProps().SetBackground(aBackground2);
+    pDoc->ChgTableStyle(TableStyleName(u"Test Style"_ustr), aNewStyle);
+
+    CPPUNIT_ASSERT(bool(pTopLeftBox->GetFrameFormat()->GetFormatAttr(RES_BACKGROUND) == aBackground2));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineCopyPaste)

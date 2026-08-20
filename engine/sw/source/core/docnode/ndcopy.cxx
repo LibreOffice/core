@@ -274,6 +274,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
 
     SwTable& rTable = pTableNd->GetTable();
     rTable.SetTableStyleName(GetTable().GetTableStyleName());
+    rTable.SetTableStyleSettings(GetTable().GetTableStyleSettings());
     rTable.RegisterToFormat( *pTableFormat );
 
     rTable.SetRowsToRepeat( GetTable().GetRowsToRepeat() );

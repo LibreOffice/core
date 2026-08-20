@@ -29,6 +29,7 @@
 #include "docary.hxx"
 #include "nodeoffset.hxx"
 
+#include <map>
 #include <memory>
 #include <vector>
 #include <algorithm>
@@ -108,6 +109,22 @@ using SwTableBoxes = std::vector<SwTableBox*>;
 // (for calculation in table).
 class SwTableSortBoxes : public o3tl::sorted_vector<SwTableBox*> {};
 
+/// Which of a table style's row/column roles are active for a given table, independently of
+/// the style itself: the same role can be switched on for one table using a style and off for
+/// another table using the same style. Defaults match sdr::table::TableStyleSettings, so a
+/// style looks the same switching between Impress and Writer.
+struct SwTableStyleSettings
+{
+    bool m_bUseFirstRowStyle = true;
+    bool m_bUseLastRowStyle = false;
+    bool m_bUseFirstColumnStyle = false;
+    bool m_bUseLastColumnStyle = false;
+    bool m_bUseRowBandingStyle = true;
+    bool m_bUseColumnBandingStyle = false;
+
+    bool operator==(const SwTableStyleSettings&) const = default;
+};
+
 /// SwTable is one table in the document model, containing rows (which contain cells).
 class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwTable: public SwClient          //Client of FrameFormat.
 {
@@ -134,6 +151,15 @@ protected:
 
     /// Name of the table style to be applied on this table.
     TableStyleName maTableStyleName;
+
+    /// Which of that style's row/column roles apply to this table.
+    SwTableStyleSettings maTableStyleSettings;
+
+    /// Shared frame formats backing live table-style box formatting (see
+    /// SwDoc::ApplyTableStyleLive), keyed by a packed role id (row/column role position,
+    /// combined with whether this is a single-row and/or single-column table). Empty unless
+    /// this table currently uses a live style.
+    std::map<sal_uInt8, SwTableBoxFormat*> m_TableStyleRoleFormats;
 
     bool        m_bModifyLocked   :1;
     bool        m_bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
@@ -197,6 +223,27 @@ public:
 
     /// Set the new table style name for this table.
     void SetTableStyleName(const TableStyleName& rName) { maTableStyleName = rName; }
+
+    /// Return which of the table style's row/column roles apply to this table.
+    const SwTableStyleSettings& GetTableStyleSettings() const { return maTableStyleSettings; }
+
+    /// Set which of the table style's row/column roles apply to this table.
+    void SetTableStyleSettings(const SwTableStyleSettings& rNew) { maTableStyleSettings = rNew; }
+
+    /// Look up a cached shared frame format for a live table-style role, or nullptr if this
+    /// table hasn't needed that role/single-row/single-column combination yet.
+    SwTableBoxFormat* FindTableStyleRoleFormat(sal_uInt8 nRoleKey) const;
+
+    /// Cache a shared frame format for a live table-style role. The table takes ownership.
+    void AddTableStyleRoleFormat(sal_uInt8 nRoleKey, SwTableBoxFormat* pFormat);
+
+    /// Empty the live table-style role-format cache, returning what it held so the caller can
+    /// delete whichever of those formats end up with no cells still deriving from them.
+    std::vector<SwTableBoxFormat*> TakeTableStyleRoleFormats();
+
+    /// If pFormat is one of this table's cached live-style role formats and it now has no
+    /// remaining listeners, drop it from the cache and free it. Returns whether it did.
+    bool ReleaseTableStyleRoleFormatIfOrphaned(SwFrameFormat* pFormat);
 
     sal_uInt16 GetRowsToRepeat() const { return std::min( o3tl::narrowing<sal_uInt16>(GetTabLines().size()), m_nRowsToRepeat ); }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { m_nRowsToRepeat = nNumOfRows; }

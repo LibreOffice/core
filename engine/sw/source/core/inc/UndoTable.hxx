@@ -23,6 +23,7 @@
 #include <tools/long.hxx>
 #include <tools/solar.h>
 #include <ndarr.hxx>
+#include <swtable.hxx>
 #include <undobj.hxx>
 #include <set>
 #include <itabenum.hxx>
@@ -402,9 +403,10 @@ public:
 class SwUndoTableStyleDelete final : public SwUndo
 {
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
-    std::vector<SwTable*> m_rAffectedTables;
+    std::vector<std::pair<SwTable*, SwTableStyleSettings>> m_rAffectedTables;
 public:
-    SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, std::vector<SwTable*>&& rAffectedTables, const SwDoc& rDoc);
+    SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat,
+            std::vector<std::pair<SwTable*, SwTableStyleSettings>>&& rAffectedTables, const SwDoc& rDoc);
 
     virtual ~SwUndoTableStyleDelete() override;
 
