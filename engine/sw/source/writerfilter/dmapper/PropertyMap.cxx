@@ -1650,10 +1650,7 @@ void SectionPropertyMap::EmulateSectPrBelowSpacing(DomainMapper_Impl& rDM_Impl)
     {
         const cpo::uno::Any aBelowSpacingOfPrevSection(*pPrevSection->GetBelowSpacing());
         const OUString sProp(getPropertyName(PROP_PARA_BOTTOM_MARGIN));
-        if (m_xPreStartingRange)
-            m_xPreStartingRange->setPropertyValue(sProp, aBelowSpacingOfPrevSection);
-        else
-            SAL_WARN("writerfilter", "Failed to transfer below spacing to last para.");
+        m_xPreStartingRange->setPropertyValue(sProp, aBelowSpacingOfPrevSection);
     }
     catch (cpo::uno::Exception&)
     {
