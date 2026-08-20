@@ -13,6 +13,7 @@
 
 #include <comphelper/hash.hxx>
 #include <rtl/string.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svx/svdocapt.hxx>
 #include <tools/Guid.hxx>
 #include <tools/datetime.hxx>
@@ -44,6 +45,9 @@ InsertThreadedCommentOperation::InsertThreadedCommentOperation(ScDocShell& rDocS
 
 bool InsertThreadedCommentOperation::runImplementation()
 {
+    // Read the clock of the timezone the user of the current view is in.
+    SfxKitTimezoneGuard aTimezoneGuard;
+
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
 

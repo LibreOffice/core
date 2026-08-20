@@ -32,6 +32,8 @@
 #include <editeng/colritem.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/useroptions.hxx>
 
@@ -2777,6 +2779,103 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForOverflowingText)
 
     // But not the whole row to the sheet edge, which the width hint avoids.
     CPPUNIT_ASSERT_LESS(tools::Long(32212230), aInvalidation.Right());
+}
+
+namespace
+{
+/// The comment timezone tests put the server on UTC and the author in Kolkata, which is five and a
+/// half hours ahead of it the whole year round. Restores what it found on delete.
+class KitTimezoneSetup
+{
+    std::pair<bool, OUString> m_aOldDefaultTimezone;
+
+public:
+    KitTimezoneSetup(int nAuthorView)
+        : m_aOldDefaultTimezone(KitHelper::getDefaultTimezone())
+    {
+        KitHelper::setDefaultTimezone(true, u"UTC"_ustr);
+        comphelper::COKit::setTimezone(true, u"UTC"_ustr);
+        KitHelper::setViewTimezone(nAuthorView, true, u"Asia/Kolkata"_ustr);
+    }
+
+    ~KitTimezoneSetup()
+    {
+        KitHelper::setDefaultTimezone(m_aOldDefaultTimezone.first, m_aOldDefaultTimezone.second);
+        comphelper::COKit::setTimezone(m_aOldDefaultTimezone.first, m_aOldDefaultTimezone.second);
+    }
+
+    static tools::Time GetAuthorOffset() { return tools::Time(5, 30); }
+};
+
+/// Whether the given ISO 8601 string falls in the window the two server-clock readings bound, once
+/// the author's offset is added to both.
+bool isAuthorLocalTime(std::u16string_view rDateTime, const DateTime& rBefore, const DateTime& rAfter)
+{
+    css::util::DateTime aParsed;
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(rDateTime, aParsed));
+    const tools::Time aOffset = KitTimezoneSetup::GetAuthorOffset();
+    return DateTime(aParsed).IsBetween(rBefore + aOffset, rAfter + aOffset);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoteDateTimeUsesViewTimezone)
+{
+    // A new cell note is stamped with the clock of the timezone its author reads.
+    createDoc("small.ods");
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabViewShell = aView.getTabViewShell();
+    CPPUNIT_ASSERT(pTabViewShell);
+    pTabViewShell->SetCursor(2, 3);
+
+    KitTimezoneSetup aTimezoneSetup(aView.getViewID());
+
+    const DateTime aBefore(DateTime::SYSTEM);
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr,
+                    comphelper::InitPropertySequence({
+                        { "Text", cpo::uno::Any(u"a note"_ustr) },
+                        { "Author", cpo::uno::Any(u"Kit Author"_ustr) },
+                    }));
+    Scheduler::ProcessEventsToIdle();
+    const DateTime aAfter(DateTime::SYSTEM);
+
+    // Without the accompanying fix in place, this test would have failed: the note carried the
+    // server's own reading of the clock, five and a half hours behind the author's.
+    const OUString aDateTime = OUString::createFromAscii(
+        aView.m_aCommentCallbackResult.get<std::string>("dateTime"));
+    CPPUNIT_ASSERT(isAuthorLocalTime(aDateTime, aBefore, aAfter));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDateTimeUsesViewTimezone)
+{
+    // A threaded comment carries two stamps, the note's own and the one on its root entry. Both
+    // read the clock of the timezone the author is in.
+    ScModelObj* pModelObj = createDoc("small.ods");
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabViewShell = aView.getTabViewShell();
+    CPPUNIT_ASSERT(pTabViewShell);
+    pTabViewShell->SetCursor(2, 3);
+
+    KitTimezoneSetup aTimezoneSetup(aView.getViewID());
+
+    const DateTime aBefore(DateTime::SYSTEM);
+    dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr,
+                    comphelper::InitPropertySequence({
+                        { "Text", cpo::uno::Any(u"a comment"_ustr) },
+                        { "Author", cpo::uno::Any(u"Kit Author"_ustr) },
+                    }));
+    Scheduler::ProcessEventsToIdle();
+    const DateTime aAfter(DateTime::SYSTEM);
+
+    const OUString aDateTime = OUString::createFromAscii(
+        aView.m_aCommentCallbackResult.get<std::string>("dateTime"));
+    CPPUNIT_ASSERT(isAuthorLocalTime(aDateTime, aBefore, aAfter));
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    const ScPostIt* pNote = pDoc->GetNote(ScAddress(2, 3, 0));
+    CPPUNIT_ASSERT(pNote);
+    const ScThreadedCommentData* pThreaded = pNote->GetThreadedCommentData();
+    CPPUNIT_ASSERT(pThreaded);
+    CPPUNIT_ASSERT(isAuthorLocalTime(pThreaded->maRoot.maDateTime, aBefore, aAfter));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
