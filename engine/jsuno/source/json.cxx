@@ -17,10 +17,12 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <limits>
 #include <map>
 #include <optional>
 #include <string_view>
 #include <system_error>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -30,6 +32,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <o3tl/unreachable.hxx>
+#include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -96,14 +99,37 @@ bool isJsonWS(sal_Unicode c) { return c == ' ' || c == '\t' || c == '\n' || c ==
 // returns std::nullopt otherwise:
 template <typename T> std::optional<T> parseJsonNumberAs(OUString const& json)
 {
-    auto const utf8 = json.toUtf8();
-    T value;
-    auto const[p, ec] = std::from_chars(utf8.getStr(), utf8.getStr() + utf8.getLength(), value);
-    if (ec != std::errc{} || p != utf8.getStr() + utf8.getLength())
+#if (defined __ANDROID__ /*TODO: drop once Android NDK supports it*/ \
+     && defined _LIBCPP_VERSION && !_LIBCPP_AVAILABILITY_HAS_FROM_CHARS_FLOATING_POINT) \
+    || (defined __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ \
+        && __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ < 260000) \
+    || (defined __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ \
+        && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ < 260000)
+    if constexpr (std::is_floating_point_v<T>) {
+        rtl_math_ConversionStatus status = rtl_math_ConversionStatus_Ok;
+        sal_Int32 parsedEnd = 0;
+        auto const d = rtl::math::stringToDouble(json, '.', u'\0', &status, &parsedEnd);
+        if (status != rtl_math_ConversionStatus_Ok || parsedEnd != json.getLength()) {
+            return std::nullopt;
+        }
+        if constexpr (std::is_same_v<T, float>) {
+            return std::abs(d) > std::numeric_limits<float>::max()
+                ? std::nullopt : std::optional<float>(d);
+        } else {
+            return d;
+        }
+    } else
+#endif
     {
-        return std::nullopt;
+        auto const utf8 = json.toUtf8();
+        T value;
+        auto const[p, ec] = std::from_chars(utf8.getStr(), utf8.getStr() + utf8.getLength(), value);
+        if (ec != std::errc{} || p != utf8.getStr() + utf8.getLength())
+        {
+            return std::nullopt;
+        }
+        return value;
     }
-    return value;
 }
 
 // Return the position just past the JSON string token that starts at `json[pos]` (which must
