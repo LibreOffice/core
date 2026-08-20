@@ -827,7 +827,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long startInde
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {

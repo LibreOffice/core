@@ -1090,7 +1090,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, B
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_iRole = pRole;
     return S_OK;
@@ -1103,7 +1103,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRol
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_dState &= (~pXSate);
     return S_OK;
@@ -1116,7 +1116,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_dState |= pXSate;
     return S_OK;
@@ -1129,7 +1129,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_dState = pXSate;
     return S_OK;
@@ -1142,7 +1142,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     try {
         if (m_isDestroy) return S_FALSE;
@@ -1168,7 +1168,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RP
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     try {
         if (m_isDestroy) return S_FALSE;
@@ -1185,7 +1185,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     try {
         if (m_isDestroy) return S_FALSE;
@@ -1220,7 +1220,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_pIParent = pIParent;
 
@@ -1237,7 +1237,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RP
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_dChildID = dChildID;
     return S_OK;
@@ -1250,7 +1250,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccObjectManager(hyper pManager)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     g_pAccObjectManager = reinterpret_cast<AccObjectWinManager*>(pManager);
     return S_OK;
@@ -1264,7 +1264,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccObjectManager(hyper pMan
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::NotifyDestroy()
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_isDestroy = true;
     m_xAccessible.clear();
@@ -2039,7 +2039,7 @@ XAccessibleContext* CMAccessible::GetContextByXAcc( XAccessible* pXAcc )
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 {
-    // internal IMAccessible - no mutex meeded
+    // internal IMAccessible - no mutex needed
 
     m_xAccessible = reinterpret_cast<XAccessible*>(pXAcc);
     m_pEnumVar->PutSelection(/*XAccessibleSelection*/

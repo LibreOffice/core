@@ -81,7 +81,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_imageSize(
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {

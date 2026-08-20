@@ -33,7 +33,7 @@ CAccTableCell::CAccTableCell()
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {
