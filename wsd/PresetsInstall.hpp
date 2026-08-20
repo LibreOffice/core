@@ -17,6 +17,7 @@
 #pragma once
 
 #include <net/Socket.hpp>
+#include <wsd/CacheUtil.hpp>
 
 #include <Poco/Timestamp.h>
 
@@ -25,14 +26,24 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <vector>
 
-struct CacheQuery;
 class ClientSession;
 
 class PresetsInstallTask : public std::enable_shared_from_this<PresetsInstallTask>
 {
 private:
+    // At most this many preset fetches run at once; the rest wait in _queuedPresets. Opening one
+    // connection per preset in a single burst can exceed a host's or proxy's per-client connection
+    // limit, turning one dropped connection into a document that never finishes loading. A user
+    // report (cool#16075) put that limit somewhere between 8 and 9 simultaneous connections on
+    // their setup; 4 stays comfortably under limits of that order while still fetching several
+    // presets in parallel rather than falling back to one at a time.
+    static constexpr std::size_t MaxConcurrentFetches = 4;
+
     std::set<std::string> _installingPresets;
+    std::vector<CacheQuery> _queuedPresets;
+    std::shared_ptr<ClientSession> _session;
     std::string _configId;
     std::string _presetsPath;
     // Per-group destination override; a group listed here goes under <override>/<group>/ instead of
@@ -55,6 +66,9 @@ private:
     void asyncInstall(const std::string& uri, const std::string& stamp,
                       const std::string& fileName,
                       const std::shared_ptr<ClientSession>& session);
+
+    // Starts the next queued preset fetch, if any and if a fetch slot is free.
+    void launchNextPreset();
 
     void installPresetStarted(const std::string& id);
 

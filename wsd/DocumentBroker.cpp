@@ -1783,14 +1783,26 @@ void PresetsInstallTask::installPresetFinished(const std::string& id, bool prese
 {
     _overallSuccess &= presetResult;
     _installingPresets.erase(id);
-    // If there are no remaining presets to fetch, or this one has
-    // failed, then we can respond. TODO could we cancel outstanding
-    // downloads?
-    if (_installingPresets.empty() && !_reportedStatus)
+
+    launchNextPreset();
+
+    // If there are no remaining or queued presets to fetch, then we can respond.
+    // TODO could we cancel outstanding downloads on failure instead of waiting them out?
+    if (_installingPresets.empty() && _queuedPresets.empty() && !_reportedStatus)
     {
         LOG_INF("Async fetch of presets for " << _configId << " completed. Success: " << _overallSuccess);
         completed();
     }
+}
+
+void PresetsInstallTask::launchNextPreset()
+{
+    if (_queuedPresets.empty() || _installingPresets.size() >= MaxConcurrentFetches)
+        return;
+
+    const CacheQuery preset = std::move(_queuedPresets.back());
+    _queuedPresets.pop_back();
+    asyncInstall(preset._uri, preset._stamp, preset._dest, _session);
 }
 
 void PresetsInstallTask::sweepStaleExtensions() {
@@ -2107,8 +2119,10 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
         if (!presets.empty())
         {
             LOG_INF("Async fetch of presets for " << _configId << " launched");
-            for (const auto& preset : presets)
-                asyncInstall(preset._uri, preset._stamp, preset._dest, session);
+            _session = session;
+            _queuedPresets = std::move(presets);
+            for (std::size_t i = 0; i < MaxConcurrentFetches && !_queuedPresets.empty(); ++i)
+                launchNextPreset();
         }
         else
         {
