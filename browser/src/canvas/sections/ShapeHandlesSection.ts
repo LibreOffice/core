@@ -95,7 +95,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.sectionProperties.subSectionPrefix = 'shape-handle-';
 		this.sectionProperties.svg = null; // This is for preview of modifications.
 		this.sectionProperties.hasVideo = false; // Don't hide svg when there is video content.
-		this.sectionProperties.shapeRectangleProperties = null; // Not null when there are scaling handles.
+		this.sectionProperties.shapeRectangleProperties = []; // One entry per selected object that has scaling handles.
+		this.sectionProperties.scalingHandlesPerObject = []; // Same order, holding the handles themselves.
+		this.sectionProperties.selectedObjectCount = 0; // How many objects the selection holds.
 		this.sectionProperties.inPlaceResizeRectangle = null;
 		this.sectionProperties.lastDragDistance = [0, 0];
 		// What the drag could line up with on the page, and the lines that mark it.
@@ -123,9 +125,35 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (HelperLineStyles.gridDashedStyle === null) HelperLineStyles.initiate();
 	}
 
+	/*
+		How many objects the selection holds, taken from the highest place any handle reports.
+		It is zero when core sends no places, which keeps the single-object sub section names.
+	*/
+	private getSelectedObjectCount(): number {
+		const kinds = this.sectionProperties.info?.handles?.kinds;
+		if (!kinds) return 0;
+
+		let highest = -1;
+		for (const group of Object.values(kinds) as Record<string, any[]>[]) {
+			if (!group) continue;
+
+			for (const handles of Object.values(group)) {
+				if (!Array.isArray(handles)) continue;
+
+				for (const handle of handles) {
+					const objectIndex = parseInt(handle.objectIndex);
+					if (objectIndex > highest) highest = objectIndex;
+				}
+			}
+		}
+
+		return highest + 1;
+	}
+
 	public refreshInfo(info: any) {
 		this.sectionProperties.info = info;
 		this.convertToTileTwipsIfNeeded();
+		this.sectionProperties.selectedObjectCount = this.getSelectedObjectCount();
 		this.getHandles();
 		this.updateSize();
 
@@ -184,63 +212,101 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		}
 	}
 
-	public calculateInitialAnglesOfShapeHandlers(shapeRecProps?: any) {
-		if (this.sectionProperties.info?.handles?.kinds?.rectangle) {
-			if (!shapeRecProps)
-				shapeRecProps = this.sectionProperties.shapeRectangleProperties;
+	/*
+		Fills in each scaling handle's distance and angle to the center of its own object.
+		Passing shapeRecProps overrides the stored geometry of the object named by objectNumber,
+		so a drag moves that object's handles and leaves the others where they are.
+	*/
+	public calculateInitialAnglesOfShapeHandlers(shapeRecProps?: any, objectNumber = 0) {
+		// In Calc RTL, convertToTileTwipsIfNeeded's abs flips the handle
+		// doc-X: core's internal topLeft (min internal X) becomes the
+		// shape's doc-max-X (= visual top-left on the mirrored canvas).
+		// So kind '1' is at (+w/2, +h/2) relative to center, not (-w/2, +h/2).
+		// Flip the X factor for every non-vertical handle.
+		const xSign = app.map._docLayer.isCalcRTL() ? 1 : -1;
 
-			const halfDiagonal = Math.pow(Math.pow(shapeRecProps.width * 0.5, 2) + Math.pow(shapeRecProps.height * 0.5, 2), 0.5);
-			// In Calc RTL, convertToTileTwipsIfNeeded's abs flips the handle
-			// doc-X: core's internal topLeft (min internal X) becomes the
-			// shape's doc-max-X (= visual top-left on the mirrored canvas).
-			// So kind '1' is at (+w/2, +h/2) relative to center, not (-w/2, +h/2).
-			// Flip the X factor for every non-vertical handle.
-			const xSign = app.map._docLayer.isCalcRTL() ? 1 : -1;
-			for (let i = 0; i < this.sectionProperties.subSections.length; i++) {
-				const subSection = this.sectionProperties.subSections[i];
+		for (const subSection of this.sectionProperties.subSections) {
+			const ownInfo = subSection.sectionProperties.ownInfo;
+			const ownObjectNumber = ownInfo.objectNumber ?? 0;
+			const props = shapeRecProps && ownObjectNumber === objectNumber
+				? shapeRecProps
+				: this.sectionProperties.shapeRectangleProperties[ownObjectNumber];
 
-				if (subSection.sectionProperties.ownInfo.kind === '1') {
-					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(shapeRecProps.height * 0.5, xSign * shapeRecProps.width * 0.5);
-				}
-				else if (subSection.sectionProperties.ownInfo.kind === '2') {
-					subSection.sectionProperties.distanceToCenter = shapeRecProps.height * 0.5;
-					subSection.sectionProperties.initialAngle = Math.atan2(shapeRecProps.height * 0.5, 0);
-				}
-				else if (subSection.sectionProperties.ownInfo.kind === '3') {
-					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(shapeRecProps.height * 0.5, -xSign * shapeRecProps.width * 0.5);
-				}
-				else if (subSection.sectionProperties.ownInfo.kind === '4') {
-					subSection.sectionProperties.distanceToCenter = shapeRecProps.width * 0.5;
-					subSection.sectionProperties.initialAngle = Math.atan2(0, xSign * shapeRecProps.width * 0.5);
-				}
-				else if (subSection.sectionProperties.ownInfo.kind === '5') {
-					subSection.sectionProperties.distanceToCenter = shapeRecProps.width * 0.5;
-					subSection.sectionProperties.initialAngle = Math.atan2(0, -xSign * shapeRecProps.width * 0.5);
-				}
-				else if (subSection.sectionProperties.ownInfo.kind === '6') {
-					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(-shapeRecProps.height * 0.5, xSign * shapeRecProps.width * 0.5);
-				}
-				else if (subSection.sectionProperties.ownInfo.kind === '7') {
-					subSection.sectionProperties.distanceToCenter = shapeRecProps.height * 0.5;
-					subSection.sectionProperties.initialAngle = Math.atan2(-shapeRecProps.height * 0.5, 0);
-				}
-				else if (subSection.sectionProperties.ownInfo.kind === '8') {
-					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(-shapeRecProps.height * 0.5, -xSign * shapeRecProps.width * 0.5);
-				}
+			if (!props) continue;
+
+			const halfWidth = props.width * 0.5;
+			const halfHeight = props.height * 0.5;
+			const halfDiagonal = Math.pow(Math.pow(halfWidth, 2) + Math.pow(halfHeight, 2), 0.5);
+
+			switch (ownInfo.kind) {
+			case '1':
+				subSection.sectionProperties.distanceToCenter = halfDiagonal;
+				subSection.sectionProperties.initialAngle = Math.atan2(halfHeight, xSign * halfWidth);
+				break;
+			case '2':
+				subSection.sectionProperties.distanceToCenter = halfHeight;
+				subSection.sectionProperties.initialAngle = Math.atan2(halfHeight, 0);
+				break;
+			case '3':
+				subSection.sectionProperties.distanceToCenter = halfDiagonal;
+				subSection.sectionProperties.initialAngle = Math.atan2(halfHeight, -xSign * halfWidth);
+				break;
+			case '4':
+				subSection.sectionProperties.distanceToCenter = halfWidth;
+				subSection.sectionProperties.initialAngle = Math.atan2(0, xSign * halfWidth);
+				break;
+			case '5':
+				subSection.sectionProperties.distanceToCenter = halfWidth;
+				subSection.sectionProperties.initialAngle = Math.atan2(0, -xSign * halfWidth);
+				break;
+			case '6':
+				subSection.sectionProperties.distanceToCenter = halfDiagonal;
+				subSection.sectionProperties.initialAngle = Math.atan2(-halfHeight, xSign * halfWidth);
+				break;
+			case '7':
+				subSection.sectionProperties.distanceToCenter = halfHeight;
+				subSection.sectionProperties.initialAngle = Math.atan2(-halfHeight, 0);
+				break;
+			case '8':
+				subSection.sectionProperties.distanceToCenter = halfDiagonal;
+				subSection.sectionProperties.initialAngle = Math.atan2(-halfHeight, -xSign * halfWidth);
+				break;
 			}
 		}
 	}
 
-	getShapeWidth(twips = true) {
-		let middleLeft = this.sectionProperties.info.handles.kinds.rectangle['4'][0];
-		middleLeft = new cool.SimplePoint(parseInt(middleLeft.point.x), parseInt(middleLeft.point.y));
+	/*
+		Core sends the scaling handles as one list per kind, each holding an entry for every
+		selected object. This turns them round into one entry per object, keyed by kind, and
+		leaves out an object that did not send all eight.
+	*/
+	private getScalingHandlesPerObject(): Array<Record<string, any>> {
+		const rectangle = this.sectionProperties.info?.handles?.kinds?.rectangle;
+		if (!rectangle) return [];
 
-		let middleRight = this.sectionProperties.info.handles.kinds.rectangle['5'][0];
-		middleRight = new cool.SimplePoint(parseInt(middleRight.point.x), parseInt(middleRight.point.y));
+		const kinds = ['1', '2', '3', '4', '5', '6', '7', '8'];
+		const perObject = new Map<number, Record<string, any>>();
+
+		for (const kind of kinds) {
+			if (!Array.isArray(rectangle[kind])) continue;
+
+			for (const handle of rectangle[kind]) {
+				const objectIndex = parseInt(handle.objectIndex);
+				if (!perObject.has(objectIndex)) perObject.set(objectIndex, {});
+				perObject.get(objectIndex)[kind] = handle;
+			}
+		}
+
+		const objectIndices = Array.from(perObject.keys()).sort((a, b) => a - b);
+
+		return objectIndices
+			.map((objectIndex) => perObject.get(objectIndex))
+			.filter((handles) => kinds.every((kind) => handles[kind] !== undefined));
+	}
+
+	getShapeWidth(handles: Record<string, any>, twips = true) {
+		const middleLeft = new cool.SimplePoint(parseInt(handles['4'].point.x), parseInt(handles['4'].point.y));
+		const middleRight = new cool.SimplePoint(parseInt(handles['5'].point.x), parseInt(handles['5'].point.y));
 
 		if (twips)
 			return Math.abs(middleLeft.distanceTo(middleRight.toArray()));
@@ -248,12 +314,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			return Math.abs(middleLeft.pDistanceTo(middleRight.pToArray()));
 	}
 
-	getShapeHeight(twips = true) {
-		let topMiddle = this.sectionProperties.info.handles.kinds.rectangle['2'][0];
-		topMiddle = new cool.SimplePoint(parseInt(topMiddle.point.x), parseInt(topMiddle.point.y));
-
-		let bottomMiddle = this.sectionProperties.info.handles.kinds.rectangle['7'][0];
-		bottomMiddle = new cool.SimplePoint(parseInt(bottomMiddle.point.x), parseInt(bottomMiddle.point.y));
+	getShapeHeight(handles: Record<string, any>, twips = true) {
+		const topMiddle = new cool.SimplePoint(parseInt(handles['2'].point.x), parseInt(handles['2'].point.y));
+		const bottomMiddle = new cool.SimplePoint(parseInt(handles['7'].point.x), parseInt(handles['7'].point.y));
 
 		if (twips)
 			return Math.abs(topMiddle.distanceTo(bottomMiddle.toArray()));
@@ -264,63 +327,55 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	/*
 		This is also sent from the core side.
 	*/
-	getShapeAngleRadians() {
-		let topMiddle = this.sectionProperties.info.handles.kinds.rectangle['2'][0];
-		topMiddle = new cool.SimplePoint(parseInt(topMiddle.point.x), parseInt(topMiddle.point.y));
+	getShapeAngleRadians(handles: Record<string, any>) {
+		const topMiddle = new cool.SimplePoint(parseInt(handles['2'].point.x), parseInt(handles['2'].point.y));
 
-		const center = this.getShapeCenter();
+		const center = this.getShapeCenter(handles);
 
 		const radians = Math.atan2((center.y - topMiddle.y), (topMiddle.x - center.x));
 		return radians - Math.PI * 0.5;
 	}
 
-	private getShapeCenter() {
-		let topLeft = this.sectionProperties.info.handles.kinds.rectangle['1'][0];
-		topLeft = new cool.SimplePoint(parseInt(topLeft.point.x), parseInt(topLeft.point.y));
+	private getShapeCenter(handles: Record<string, any>) {
+		const topLeft = new cool.SimplePoint(parseInt(handles['1'].point.x), parseInt(handles['1'].point.y));
+		const bottomRight = new cool.SimplePoint(parseInt(handles['8'].point.x), parseInt(handles['8'].point.y));
 
-		let bottomRight = this.sectionProperties.info.handles.kinds.rectangle['8'][0];
-		bottomRight = new cool.SimplePoint(parseInt(bottomRight.point.x), parseInt(bottomRight.point.y));
-
-		const center = new cool.SimplePoint((topLeft.x + bottomRight.x) * 0.5, (topLeft.y + bottomRight.y) * 0.5);
-
-		return center;
+		return new cool.SimplePoint((topLeft.x + bottomRight.x) * 0.5, (topLeft.y + bottomRight.y) * 0.5);
 	}
 
 	/*
 		Selection rectangle is different from the object's inner rectangle.
 		Handlers are positioned based on object's inner rectangle (~borders). So we need to get the object's inner rectangle and its rotation angle.
+		The result holds one entry per selected object, in the same order as
+		scalingHandlesPerObject. The objectNumber on a handle is the position of its object in
+		that order.
 	*/
-	private getShapeRectangleProperties() {
-		if (!this.sectionProperties.info.handles?.kinds?.rectangle)
-			return null;
-
-		return {
-			angleRadian: this.getShapeAngleRadians(),
-			center: this.getShapeCenter(),
-			height: this.getShapeHeight(false),
-			width: this.getShapeWidth(false)
-		};
+	private getShapeRectangleProperties(): Array<any> {
+		return this.sectionProperties.scalingHandlesPerObject.map((handles: Record<string, any>) => {
+			return {
+				angleRadian: this.getShapeAngleRadians(handles),
+				center: this.getShapeCenter(handles),
+				height: this.getShapeHeight(handles, false),
+				width: this.getShapeWidth(handles, false)
+			};
+		});
 	}
 
-	private getScalingHandles(halfWidth: number, halfHeight: number) {
-		if (this.sectionProperties.info?.handles?.kinds?.rectangle) {
-			const topLeft = this.sectionProperties.info.handles.kinds.rectangle['1'][0];
-			const topMiddle = this.sectionProperties.info.handles.kinds.rectangle['2'][0];
-			const topRight = this.sectionProperties.info.handles.kinds.rectangle['3'][0];
-			const middleLeft = this.sectionProperties.info.handles.kinds.rectangle['4'][0];
-			const middleRight = this.sectionProperties.info.handles.kinds.rectangle['5'][0];
-			const bottomLeft = this.sectionProperties.info.handles.kinds.rectangle['6'][0];
-			const bottomMiddle = this.sectionProperties.info.handles.kinds.rectangle['7'][0];
-			const bottomRight = this.sectionProperties.info.handles.kinds.rectangle['8'][0];
+	private getScalingHandles(perObject: Array<Record<string, any>>, halfWidth: number, halfHeight: number) {
+		for (let objectNumber = 0; objectNumber < perObject.length; objectNumber++) {
+			const handles = perObject[objectNumber];
 
-			this.sectionProperties.handles.push({ info: topLeft, point: new cool.SimplePoint(topLeft.point.x - halfWidth, topLeft.point.y - halfHeight) });
-			this.sectionProperties.handles.push({ info: topMiddle, point: new cool.SimplePoint(topMiddle.point.x - halfWidth, topMiddle.point.y - halfHeight) });
-			this.sectionProperties.handles.push({ info: topRight, point: new cool.SimplePoint(topRight.point.x - halfWidth, topRight.point.y - halfHeight) });
-			this.sectionProperties.handles.push({ info: middleLeft, point: new cool.SimplePoint(middleLeft.point.x - halfWidth, middleLeft.point.y - halfHeight) });
-			this.sectionProperties.handles.push({ info: middleRight, point: new cool.SimplePoint(middleRight.point.x - halfWidth, middleRight.point.y - halfHeight) });
-			this.sectionProperties.handles.push({ info: bottomLeft, point: new cool.SimplePoint(bottomLeft.point.x - halfWidth, bottomLeft.point.y - halfHeight) });
-			this.sectionProperties.handles.push({ info: bottomMiddle, point: new cool.SimplePoint(bottomMiddle.point.x - halfWidth, bottomMiddle.point.y - halfHeight) });
-			this.sectionProperties.handles.push({ info: bottomRight, point: new cool.SimplePoint(bottomRight.point.x - halfWidth, bottomRight.point.y - halfHeight) });
+			for (const kind of ['1', '2', '3', '4', '5', '6', '7', '8']) {
+				const handle = handles[kind];
+				// This number pairs the handle with its object's entry in
+				// shapeRectangleProperties. Core's own object numbering counts every marked
+				// object, so it does not match that list.
+				handle.objectNumber = objectNumber;
+				this.sectionProperties.handles.push({
+					info: handle,
+					point: new cool.SimplePoint(handle.point.x - halfWidth, handle.point.y - halfHeight)
+				});
+			}
 		}
 	}
 
@@ -357,9 +412,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		return result;
 	}
 
-	getRotationHandlePosition(rotationInfo: any) {
-		const centerX = parseInt(this.sectionProperties.info.handles.kinds.rectangle['2'][0].point.x) * app.twipsToPixels - this.position[0];
-		const centerY = parseInt(this.sectionProperties.info.handles.kinds.rectangle['2'][0].point.y) * app.twipsToPixels - this.position[1];
+	// Core sends no position for the single-object rotation handle. It sits above the shape's
+	// top edge and turns with the shape.
+	getRotationHandlePosition(rotationInfo: any, handles: Record<string, any>) {
+		const topMiddle = handles['2'];
+		const centerX = parseInt(topMiddle.point.x) * app.twipsToPixels - this.position[0];
+		const centerY = parseInt(topMiddle.point.y) * app.twipsToPixels - this.position[1];
+
 		const diff = 30 * app.dpiScale;
 
 		let y = centerY - diff * Math.sin(rotationInfo.coreAngle + Math.PI * 0.5);
@@ -371,14 +430,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		return new cool.SimplePoint((this.position[0] + x) * app.pixelsToTwips, (this.position[1] + y) * app.pixelsToTwips);
 	}
 
-	private getRotationHandle() {
-		if (
-			this.sectionProperties.info?.handles?.kinds?.rectangle &&
-			GraphicSelection.extraInfo?.isRotatable !== false &&
-			!this.sectionProperties.hasVideo
-		) {
+	private getRotationHandle(perObject: Array<Record<string, any>>) {
+		if (GraphicSelection.extraInfo?.isRotatable === false || this.sectionProperties.hasVideo)
+			return;
+
+		if (perObject.length > 0) {
 			const rotationInfo = this.getRotationInfo(); // Rotation section will read the information from this (parent) class.
-			const rotationHandlePosition: cool.SimplePoint = this.getRotationHandlePosition(rotationInfo);
+			const rotationHandlePosition: cool.SimplePoint = this.getRotationHandlePosition(rotationInfo, perObject[0]);
 			rotationInfo.initialPosition = rotationHandlePosition.clone();
 
 			// Core side doesn't send a position information for rotation handle. We add this.
@@ -432,19 +490,20 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		}
 	}
 
-	private getDiagram(halfWidth: number, halfHeight: number) {
-		if (this.isDiagram() && this.sectionProperties.info?.handles?.kinds?.rectangle) {
+	private getDiagram(perObject: Array<Record<string, any>>, halfWidth: number, halfHeight: number) {
+		if (this.isDiagram() && perObject.length > 0) {
 			// get a scaled oversize measurement in X and Y
 			const scaleFactor = 3;
 			halfWidth *= scaleFactor;
 			halfHeight *= scaleFactor;
 
-			// get object size as base for calculations
-			const topLeft = this.sectionProperties.info.handles.kinds.rectangle['1'][0];
+			// A diagram is always selected on its own, so the first object holds its handles.
+			const handles = perObject[0];
+			const topLeft = handles['1'];
 
 			// create a shape with overhang of halfWidth/Height on all sides,
-			const width : number = this.getShapeWidth(true) + 2 * halfWidth;
-			const height : number = this.getShapeHeight(true) + 2 * halfHeight;
+			const width : number = this.getShapeWidth(handles, true) + 2 * halfWidth;
+			const height : number = this.getShapeHeight(handles, true) + 2 * halfHeight;
 			const info = {
 				kind: 'DiagramHandle',
 				size: new cool.SimplePoint(width, height),
@@ -466,10 +525,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		const halfWidth = app.pixelsToTwips * (this.sectionProperties.handleWidth * 0.5);
 		const halfHeight = app.pixelsToTwips * (this.sectionProperties.handleHeight * 0.5);
 
-		this.getDiagram(halfWidth, halfHeight);
-		this.getScalingHandles(halfWidth, halfHeight);
+		const perObject = this.getScalingHandlesPerObject();
+		this.sectionProperties.scalingHandlesPerObject = perObject;
+
+		this.getDiagram(perObject, halfWidth, halfHeight);
+		this.getScalingHandles(perObject, halfWidth, halfHeight);
 		this.getAnchorHandle(halfWidth, halfHeight);
-		this.getRotationHandle();
+		this.getRotationHandle(perObject);
 		this.getCustomHandles(halfWidth, halfHeight);
 		this.getPolyHandles(halfWidth, halfHeight);
 		this.getGluePoints();
@@ -646,13 +708,32 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			this.hideSVG();
 	}
 
+	/*
+		Name of the sub section that draws the given handle. An id counts within one object, so
+		a selection of several takes core's handle index, which is unique across the whole of
+		it, and a single object keeps the id.
+	*/
+	private getSubSectionName(info: any): string {
+		if (info.kind === 'DiagramHandle')
+			return this.sectionProperties.subSectionPrefix + 'diagram';
+
+		if (this.sectionProperties.selectedObjectCount > 1 && info.index !== undefined)
+			return this.sectionProperties.subSectionPrefix + 'index' + info.index;
+
+		if (info.kind === 'ShapeRotationHandle')
+			return this.sectionProperties.subSectionPrefix + 'rotation';
+
+		return this.sectionProperties.subSectionPrefix + info.id;
+	}
+
 	checkAnchorSubSection(handle: any): any {
-		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + handle.info.id);
+		const subSectionName = this.getSubSectionName(handle.info);
+		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
 
 		if (!newSubSection) {
 			newSubSection = new ShapeHandleAnchorSubSection(
 				this,
-				this.sectionProperties.subSectionPrefix + handle.info.id,
+				subSectionName,
 				[this.sectionProperties.anchorWidth / app.dpiScale, this.sectionProperties.anchorHeight / app.dpiScale],
 				handle.point.clone(),
 				handle.info
@@ -667,12 +748,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	checkScalingSubSection(handle: any): any {
-		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + handle.info.id);
+		const subSectionName = this.getSubSectionName(handle.info);
+		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
 
 		if (!newSubSection) {
 			newSubSection = new ShapeHandleScalingSubSection(
 				this,
-				this.sectionProperties.subSectionPrefix + handle.info.id,
+				subSectionName,
 				[this.sectionProperties.handleWidth, this.sectionProperties.handleHeight],
 				handle.point.clone(),
 				handle.info,
@@ -691,12 +773,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	checkRotationSubSection(handle: any) {
-		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + 'rotation');
+		const subSectionName = this.getSubSectionName(handle.info);
+		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleRotationSubSection(
 				this,
-				this.sectionProperties.subSectionPrefix + 'rotation',
+				subSectionName,
 				[this.sectionProperties.rotationHandleWidth, this.sectionProperties.rotationHandleHeight],
 				handle.point.clone(),
 				handle.info
@@ -711,12 +794,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	checkDiagramSubSection(handle: any) {
-		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + 'diagram');
+		const subSectionName = this.getSubSectionName(handle.info);
+		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleDiagramSubSection(
 				this,
-				this.sectionProperties.subSectionPrefix + 'diagram',
+				subSectionName,
 				[handle.info.size.pX, handle.info.size.pY],
 				new cool.SimplePoint(
 					handle.point.x,
@@ -744,12 +828,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	checkCustomSubSection(handle: any): any {
-		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + handle.info.id);
+		const subSectionName = this.getSubSectionName(handle.info);
+		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleCustomSubSection(
 				this,
-				this.sectionProperties.subSectionPrefix + handle.info.id,
+				subSectionName,
 				[this.sectionProperties.handleWidth, this.sectionProperties.handleHeight],
 				handle.point.clone(),
 				handle.info
@@ -764,12 +849,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	checkPolySubSection(handle: any): any {
-		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + handle.info.id);
+		const subSectionName = this.getSubSectionName(handle.info);
+		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandlePolySubSection(
 				this,
-				this.sectionProperties.subSectionPrefix + handle.info.id,
+				subSectionName,
 				[this.sectionProperties.handleWidth, this.sectionProperties.handleHeight],
 				handle.point.clone(),
 				handle.info
@@ -784,12 +870,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	checkGluePointSubSection(handle: any): any {
-		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + handle.info.id);
+		const subSectionName = this.getSubSectionName(handle.info);
+		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleGluePointSubSection(
 				this,
-				this.sectionProperties.subSectionPrefix + handle.info.id,
+				subSectionName,
 				[this.sectionProperties.gluePointRadius, this.sectionProperties.gluePointRadius],
 				handle.point.clone(),
 				handle.info
@@ -817,10 +904,32 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		return kind === '16';
 	}
 
+	/*
+		A sub section whose name no handle carries any more is left from the selection before,
+		and would go on drawing a handle that is not there. Losing an object leaves one behind,
+		and so does dropping to a single object, which puts the names back.
+	*/
+	private removeStaleSubSections(currentNames: Set<string>) {
+		const remaining = [];
+
+		for (const subSection of this.sectionProperties.subSections) {
+			if (currentNames.has(subSection.name))
+				remaining.push(subSection);
+			else
+				this.containerObject.removeSection(subSection.name);
+		}
+
+		this.sectionProperties.subSections = remaining;
+	}
+
 	addSubSections() {
+		const currentNames = new Set<string>();
+
 		for (let i = 0; i < this.sectionProperties.handles.length; i++) {
 			if (!this.handleGetsItsOwnSection(this.sectionProperties.handles[i].info.kind))
 				continue;
+
+			currentNames.add(this.getSubSectionName(this.sectionProperties.handles[i].info));
 
 			let newSubSection: any = null;
 			if (this.sectionProperties.handles[i].info.kind === '16')
@@ -843,6 +952,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 				this.sectionProperties.subSections.push(newSubSection);
 			}
 		}
+
+		this.removeStaleSubSections(currentNames);
 	}
 
 	onMouseEnter() {
@@ -1314,13 +1425,15 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	/*
 		Shows what a scaling drag would do to the shape, by taking the picture of it to the size
-		and the place the drag leads to. Does nothing while there is no picture to take.
+		and the place the drag leads to. One picture stands for the whole selection, so it
+		follows the object the drag works on. Does nothing while there is no picture to take.
 	*/
-	public scalePreviewTo(shapeRecProps: any): void {
+	public scalePreviewTo(shapeRecProps: any, objectNumber = 0): void {
 		const svg = this.sectionProperties.svg;
 		if (!svg) return;
 
-		const shape = this.sectionProperties.shapeRectangleProperties;
+		const shape = this.sectionProperties.shapeRectangleProperties[objectNumber];
+		if (!shape) return;
 		let scaleX = shapeRecProps.width / shape.width;
 		let scaleY = shapeRecProps.height / shape.height;
 

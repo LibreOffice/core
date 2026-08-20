@@ -1527,9 +1527,12 @@ class GraphicSelection {
 			return;
 		}
 
+		// Every selected object has a handle of each kind, so each list is walked to the end.
 		for (const key of ['1', '2', '3', '4', '5', '6', '7', '8']) {
-			const y = parseInt(rectangle[key][0].point.y);
-			rectangle[key][0].point.y = y + verticalOffset;
+			for (const handle of rectangle[key]) {
+				const y = parseInt(handle.point.y);
+				handle.point.y = y + verticalOffset;
+			}
 		}
 	}
 

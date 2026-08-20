@@ -43,6 +43,21 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 		);
 	}
 
+	// The object this handle sits on, numbered from zero. Each selection message brings new
+	// handle information, so the number is read fresh.
+	private getOwnObjectNumber(): number {
+		return this.sectionProperties.ownInfo.objectNumber ?? 0;
+	}
+
+	/*
+		Inner rectangle, rotation angle and center of the object this handle sits on. A selection
+		can hold several objects, each with its own eight handles.
+	*/
+	private getOwnShapeRectangleProperties() {
+		return this.sectionProperties.parentHandlerSection.sectionProperties
+			.shapeRectangleProperties[this.getOwnObjectNumber()];
+	}
+
 	onDraw(frameCount?: number, elapsedTime?: number): void {
 		this.context.save();
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
@@ -77,7 +92,7 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 	drawCropCornerHandle() {
 		const markerWidth = this.size[0];
 		const halfMarkerWidth = markerWidth * 0.5;
-		const shapeAngle = this.sectionProperties.parentHandlerSection.sectionProperties.shapeRectangleProperties.angleRadian;
+		const shapeAngle = this.getOwnShapeRectangleProperties().angleRadian;
 		let x = halfMarkerWidth, y = halfMarkerWidth;
 		this.context.translate(x, y);
 		this.context.rotate(shapeAngle * -1);
@@ -98,7 +113,7 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 	drawCropSideHandle() {
 		const markerWidth = this.size[0];
 		const halfMarkerWidth = markerWidth * 0.5;
-		const shapeAngle = this.sectionProperties.parentHandlerSection.sectionProperties.shapeRectangleProperties.angleRadian;
+		const shapeAngle = this.getOwnShapeRectangleProperties().angleRadian;
 		let x = halfMarkerWidth, y = halfMarkerWidth;
 		this.context.translate(x, y);
 		this.context.rotate(shapeAngle * -1);
@@ -217,8 +232,7 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 
 			const keepRatio = HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled);
 			const shapeRecProps = HandleScaling.shapeAfterDrag(
-				p, parentHandlerSection.sectionProperties.shapeRectangleProperties,
-				ownInfo.kind, keepRatio);
+				p, this.getOwnShapeRectangleProperties(), ownInfo.kind, keepRatio);
 
 			const tempRectangle = cool.SimpleRectangle.fromCorePixels([
 				shapeRecProps.center.pX - shapeRecProps.width * 0.5,
@@ -272,12 +286,13 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 		p.pX = this.mouseToDocX(point);
 		p.pY += this.position[1];
 
+		const objectNumber = this.getOwnObjectNumber();
 		const shapeRecProps = HandleScaling.shapeAfterDrag(
-			p, this.sectionProperties.parentHandlerSection.sectionProperties.shapeRectangleProperties,
+			p, this.getOwnShapeRectangleProperties(),
 			this.sectionProperties.ownInfo.kind,
 			HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled));
 
-		this.sectionProperties.parentHandlerSection.calculateInitialAnglesOfShapeHandlers(shapeRecProps);
+		this.sectionProperties.parentHandlerSection.calculateInitialAnglesOfShapeHandlers(shapeRecProps, objectNumber);
 
 		const halfWidth = this.sectionProperties.parentHandlerSection.sectionProperties.handleWidth * 0.5;
 		const halfHeight = this.sectionProperties.parentHandlerSection.sectionProperties.handleHeight * 0.5;
@@ -288,6 +303,18 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 
 		for (let i = 0; i < subSections.length; i++) {
 			const subSection = subSections[i];
+
+			// Only the scaling handles carry a distance and an angle to the shape's center for
+			// this loop to follow. A rotation handle gets its position another way, so it is
+			// skipped here.
+			if (!['1', '2', '3', '4', '5', '6', '7', '8']
+				.includes(subSection.sectionProperties.ownInfo.kind))
+				continue;
+
+			// The other selected objects keep their handles where they are. Core resizes them
+			// too, and their new positions arrive with the next selection message.
+			if ((subSection.sectionProperties.ownInfo.objectNumber ?? 0) !== objectNumber)
+				continue;
 
 			pointAngle = subSection.sectionProperties.initialAngle + shapeRecProps.angleRadian;
 			x = shapeRecProps.center.pX + subSection.sectionProperties.distanceToCenter * Math.cos(pointAngle);
@@ -306,7 +333,7 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 		}
 
 		if (!this.sectionProperties.cropModeEnabled)
-			this.sectionProperties.parentHandlerSection.scalePreviewTo(shapeRecProps);
+			this.sectionProperties.parentHandlerSection.scalePreviewTo(shapeRecProps, objectNumber);
 	}
 
 	onMouseMove(point: cool.SimplePoint, dragDistance: Array<number>, e: MouseEvent) {
