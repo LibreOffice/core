@@ -152,7 +152,7 @@ struct FontModel
     bool                mbItalic;           /// True = italic characters.
     bool                mbStrikeout;        /// True = Strike out characters.
     bool                mbOutline;          /// True = outlined characters.
-    bool                mbShadow;           /// True = shadowed chgaracters.
+    bool                mbShadow;           /// True = shadowed characters.
 
     explicit            FontModel();
 
@@ -205,7 +205,7 @@ struct ApiFontData
     sal_Int16                mnEscapement;       /// Escapement style.
     sal_Int8                 mnEscapeHeight;     /// Escapement font height.
     bool                     mbOutline;          /// True = outlined characters.
-    bool                     mbShadow;           /// True = shadowed chgaracters.
+    bool                     mbShadow;           /// True = shadowed characters.
 
     explicit            ApiFontData();
 };

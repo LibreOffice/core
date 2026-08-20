@@ -468,7 +468,7 @@ public class SourceCodeGenerator {
                 sTypeString = m_xLanguageSourceCodeGenerator.getdoubleTypeDescription();
                 break;
             case TypeClass.SEQUENCE_value:
-                //TODO consider mulitdimensional Arrays
+                //TODO consider multidimensional Arrays
                 XTypeDescription xTypeDescription = Introspector.getIntrospector().getReferencedType(_sTypeName);
                 if (xTypeDescription != null){
                     sTypeString = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), _bAsHeaderSourceCode);
@@ -583,7 +583,7 @@ private class UnoObjectDefinition{
             int nTypeClass = _aTypeClass.getValue();
             switch(nTypeClass){
                 case TypeClass.SEQUENCE_value:
-                    //TODO consider mulitdimensional Arrays
+                    //TODO consider multidimensional Arrays
                     XTypeDescription xTypeDescription = Introspector.getIntrospector().getReferencedType(getTypeName());
                     if (xTypeDescription != null){
                         sCentralVariableStemName = getCentralVariableStemName(xTypeDescription.getTypeClass());
@@ -674,7 +674,7 @@ private class UnoObjectDefinition{
                     sVariableStemName = "s" + m_sCentralVariableStemName;
                     break;
                 case TypeClass.SEQUENCE_value:
-                    //TODO consider mulitdimensional Arrays
+                    //TODO consider multidimensional Arrays
                     XTypeDescription xTypeDescription = Introspector.getIntrospector().getReferencedType(getTypeName());
                     if (xTypeDescription != null){
                         sVariableStemName = getVariableStemName(xTypeDescription.getTypeClass());

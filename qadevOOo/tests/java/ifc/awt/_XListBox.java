@@ -215,7 +215,7 @@ public class _XListBox extends MultiMethodTest {
     /**
     * After <code>addItem</code> and <code>addItems</code> methods
     * test the following items must exist {..., "Item1", "Item2", "Item3"}
-    * Retrieves the item from the position which was ititially the last.<p>
+    * Retrieves the item from the position which was initially the last.<p>
     * Has <b>OK</b> status if the "Item1" was retrieved. <p>
     * The following method tests are to be executed before :
     * <ul>

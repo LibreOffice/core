@@ -163,7 +163,7 @@ public class RunnerService implements XJob, XServiceInfo,
     /**
      * Function for reading all supported services
      *
-     * @return An aaray with all supported service names
+     * @return An array with all supported service names
      * @see com.sun.star.lang.XServiceInfo
      */
     public String[] getSupportedServiceNames() {
