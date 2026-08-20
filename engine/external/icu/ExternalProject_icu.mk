@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				$(if $(CROSS_COMPILING), \
 					--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
 					--disable-tools --disable-extras) \
-		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
+		&& $(MAKE) $(if $(gb_FULLDEPS),,DEPS=) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 	,source)
 	$(call gb_Trace_EndRange,icu,EXTERNAL)
 
@@ -88,7 +88,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
 				--disable-tools --disable-extras) \
 			AR="$(AR)" RANLIB="$(RANLIB)" \
-		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
+		&& $(MAKE) $(if $(gb_FULLDEPS),,DEPS=) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
 				OOO \
