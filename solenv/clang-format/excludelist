@@ -3954,7 +3954,6 @@ formula/source/ui/dlg/formula.cxx
 formula/source/ui/dlg/funcpage.hxx
 formula/source/ui/dlg/funcutl.cxx
 formula/source/ui/dlg/parawin.cxx
-formula/source/ui/dlg/parawin.hxx
 formula/source/ui/dlg/structpg.cxx
 formula/source/ui/dlg/structpg.hxx
 fpicker/source/aqua/ControlHelper.hxx
