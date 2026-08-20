@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <tools/UniqueID.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -139,6 +140,12 @@ public:
                            bool bTreeMode, int nWidth, bool bIsMultiField = false);
     ~ScCheckListMenuControl();
 
+    /**
+     * Get a unique ID for this instance. This is used to identify the
+     * instance in the client code.
+     */
+    sal_uInt64 GetUniqueID() const { return maUniqueID.getID(); }
+
     void addMenuItem(const OUString& rText, Action* pAction);
     void addSeparator();
     ScListSubMenuControl* addSubMenuItem(const OUString& rText, bool bEnabled, bool bColorMenu);
@@ -265,6 +272,7 @@ private:
     DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
     DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 
     DECL_LINK(SearchEditTimeoutHdl, Timer*, void);
     DECL_LINK(ComboChangedHdl, weld::ComboBox&, void);
@@ -369,6 +377,7 @@ private:
 
     Timer maSearchEditTimer;
     bool mbIsMultiField;
+    UniqueID maUniqueID;
 };
 
 class ScListSubMenuControl final

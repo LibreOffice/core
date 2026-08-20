@@ -245,7 +245,8 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScGridWindow : public vcl::DocWindow,
 
     bool            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
-    void            SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow);
+    void            SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow, sal_uInt64 nPopupID);
+    void            SendPivotTableFilterPopupPosition(const ScAddress& rAddress, sal_uInt64 nPopupID);
     void            SendAutofilterChange();
     void DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup, bool bMultiField );
     void DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
@@ -476,7 +477,8 @@ public:
 
     void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
                                 tools::Long nDimIndex, ScDPObject* pDPObj,
-                                bool bBottomLeftAnchor = false);
+                                bool bBottomLeftAnchor = false,
+                                const ScAddress* pFilterCell = nullptr);
 
     void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev,
                      const ScKitRTLContext* pKitRTLContext);

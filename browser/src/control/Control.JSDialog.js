@@ -928,22 +928,22 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			return;
 
 		/*
-			AutoFilter and Cell Dropdown dialogs both use this function.
-			Core side sends the column and row indexes for AutoFilter dialog. We use those indexes to determine the position of the dialog.
-			Cell DropDown (Data->Validity) doesn't get a row and column index message before opening.
+			AutoFilter, pivot table filter and Cell Dropdown dialogs all use this function.
+			A filter popup carries its own id, and core reports the cell that popup belongs to
+			under the same id, so the two are matched here.
+			Cell DropDown (Data->Validity) reports no cell before opening.
 			But Cell DropDown can not be opened without first clicking on the cell. Therefore we can use current cell's rectangle for positioning of the dialog.
 		*/
 		let cellRectangle;
 
 		this.parentAutofilter = instance.form;
 
-		if (app.calc.autoFilterCell) {
-			// This is an AutoFilterDialog. We have the row and column indexes. Get cell rectangle with this info.
-			cellRectangle = app.map._docLayer.sheetGeometry.getCellSimpleRectangle(app.calc.autoFilterCell.column, app.calc.autoFilterCell.row);
-		}
-		else if (app.calc.pivotTableFilterCell) {
-			// This is a pivot table filter dialog. We have the row and column indexes. Get cell rectangle with this info.
-			cellRectangle = app.map._docLayer.sheetGeometry.getCellSimpleRectangle(app.calc.pivotTableFilterCell.column, app.calc.pivotTableFilterCell.row);
+		const filterPopupCell = app.calc.filterPopupCell;
+		const popupId = this.getPopupId(instance);
+
+		if (filterPopupCell && popupId !== undefined && filterPopupCell.popupId === popupId) {
+			// This is a filter popup. We have the row and column indexes. Get cell rectangle with this info.
+			cellRectangle = app.map._docLayer.sheetGeometry.getCellSimpleRectangle(filterPopupCell.column, filterPopupCell.row);
 		}
 		else if (GraphicSelection.hasDarkOverlay()) {
 			// Autofilter style menu from Chart edit mode (pivot-chart).
@@ -978,9 +978,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			canvasTrailY = layout.documentToViewY(trailingPoint);
 		}
 
-		app.calc.autoFilterCell = null; // Set to null after using to ensure it doesn't confuse consequent calls.
-		app.calc.pivotTableFilterCell = null;
-
 		const canvasEl = this.map._docLayer._canvas.getBoundingClientRect();
 		instance.posy = canvasTrailY / app.dpiScale + canvasEl.top;
 		instance.posx = canvasTrailX / app.dpiScale + canvasEl.left;
@@ -988,6 +985,19 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			instance.posx -= instance.container.offsetWidth;
 
 		this.updateAutoPopPosition(instance.container, instance.posx, instance.posy);
+	},
+
+	// A filter popup reports its own id. The popup's container widget contributes it, so it
+	// arrives one level below the message root.
+	getPopupId: function(instance) {
+		if (instance.popupId !== undefined)
+			return instance.popupId;
+
+		const children = instance.children;
+		if (children && children.length && children[0].popupId !== undefined)
+			return children[0].popupId;
+
+		return undefined;
 	},
 
 	isChildAutoFilter: function(instance) {

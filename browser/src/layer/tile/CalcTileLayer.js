@@ -975,14 +975,14 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			}
 		}
 		else if (e.commandName === 'AutoFilterInfo') {
-			app.calc.autoFilterCell = { 'row': e.state.row, 'column': e.state.column };
+			app.calc.filterPopupCell = { 'popupId': e.state.popupId, 'row': e.state.row, 'column': e.state.column };
 		}
 		else if (e.commandName === 'AutoFilterChange')
 		{
 			this.sheetGeometry.autoFilterChanged = true;
 		}
 		else if (e.commandName === 'PivotTableFilterInfo') {
-			app.calc.pivotTableFilterCell = { 'row': e.state.row, 'column': e.state.column };
+			app.calc.filterPopupCell = { 'popupId': e.state.popupId, 'row': e.state.row, 'column': e.state.column };
 		}
 		else if (e.commandName === 'TableAutoFillInfo') {
 			this._onTableAutoFillStateChanged(e.state.rectangle);

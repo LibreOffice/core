@@ -55,8 +55,7 @@
 		otherCellCursors: {},
 		splitCoordinate: null, // SimplePoint.
 		partHashes: null, // hashes used to distinguish parts (we use sheet name)
-		autoFilterCell: null, // The cell of the current autofilter popup.
-		pivotTableFilterCell: null, // The cell of the current pivot table filter popup.
+		filterPopupCell: null, // The cell a filter popup belongs to: { popupId, column, row }.
 		partWithActiveSheetView: -1, // Default part index with an active sheet view, or -1 if none.
 	},
 	impress: {

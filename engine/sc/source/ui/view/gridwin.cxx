@@ -942,7 +942,7 @@ void collectUIInformation(const OUString& aRow, const OUString& aCol , const OUS
 
 }
 
-void ScGridWindow::SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow) {
+void ScGridWindow::SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow, sal_uInt64 nPopupID) {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     if (pViewShell)
     {
@@ -952,6 +952,7 @@ void ScGridWindow::SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow) {
             const auto aState = writer.startNode("state");
             writer.put("column", nCol);
             writer.put("row", nRow);
+            writer.put("popupId", nPopupID);
         }
         OString info = writer.finishAndGetAsOString();
         pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, info);
@@ -1037,7 +1038,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     aPos.setY(aPos.getY() / fZoomY);
     nSizeX = nSizeX / fZoomX;
     nSizeY = nSizeY / fZoomY;
-    SendAutofilterPopupPosition(nCol, nRow); // Send the position of the autofilter popup.
+    // Send the position of the autofilter popup.
+    SendAutofilterPopupPosition(nCol, nRow, mpAutoFilterPopup->GetUniqueID());
 
     tools::Rectangle aCellRect(aPos, Size(nSizeX, nSizeY));
 

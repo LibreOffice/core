@@ -554,25 +554,25 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Si
     DataPilotFieldOrientation nOrient;
     tools::Long nDimIndex = pDPObject->GetHeaderDim(rAddress, nOrient);
 
-    if (comphelper::COKit::isActive())
-    {
-        // We send the cell position of the filter button to Online side. So the position of the popup can be adjusted near to the cell.
-        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        if (pViewShell)
-        {
-            tools::JsonWriter writer;
-            writer.put("commandName", "PivotTableFilterInfo");
-            {
-                const auto aState = writer.startNode("state");
-                writer.put("column", rAddress.Col());
-                writer.put("row", rAddress.Row());
-            }
-            OString info = writer.finishAndGetAsOString();
-            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, info);
-        }
-    }
+    DPLaunchFieldPopupMenu(rScreenPosition, rScreenSize, nDimIndex, pDPObject, false, &rAddress);
+}
 
-    DPLaunchFieldPopupMenu(rScreenPosition, rScreenSize, nDimIndex, pDPObject);
+void ScGridWindow::SendPivotTableFilterPopupPosition(const ScAddress& rAddress, sal_uInt64 nPopupID)
+{
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+    if (pViewShell)
+    {
+        tools::JsonWriter writer;
+        writer.put("commandName", "PivotTableFilterInfo");
+        {
+            const auto aState = writer.startNode("state");
+            writer.put("column", rAddress.Col());
+            writer.put("row", rAddress.Row());
+            writer.put("popupId", nPopupID);
+        }
+        OString info = writer.finishAndGetAsOString();
+        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, info);
+    }
 }
 
 bool lcl_FillDPFieldPopupData(tools::Long nDimIndex, ScDPObject* pDPObj,
@@ -725,7 +725,7 @@ void ScGridWindow::DPConfigFieldPopup(bool bBottomLeftAnchor)
 
 void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
                                           tools::Long nDimIndex, ScDPObject* pDPObj,
-                                          bool bBottomLeftAnchor)
+                                          bool bBottomLeftAnchor, const ScAddress* pFilterCell)
 {
     std::unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
     bool bDimOrientNotPage = true;
@@ -737,6 +737,9 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
     weld::Window* pPopupParent = GetFrameWeld();
     mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, mrViewData,
                                                     false, -1));
+
+    if (pFilterCell && comphelper::COKit::isActive())
+        SendPivotTableFilterPopupPosition(*pFilterCell, mpDPFieldPopup->GetUniqueID());
 
     DPSetupFieldPopup(std::move(pDPData), bDimOrientNotPage, pDPObj);
 

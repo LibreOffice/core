@@ -153,8 +153,7 @@ interface AppInterface {
 		otherCellCursors: any;
 		splitCoordinate: null | cool.SimplePoint;
 		partHashes: null | Array<any>; // hashes used to distinguish parts (we use sheet name)
-		autoFilterCell: any; // The cell of the current autofilter popup.
-		pivotTableFilterCell: any; // The cell of the current pivot table filter popup.
+		filterPopupCell: any; // The cell a filter popup belongs to: { popupId, column, row }.
 		isRTL(): boolean;
 		isSelectedPartSheetView(): boolean;
 	};
