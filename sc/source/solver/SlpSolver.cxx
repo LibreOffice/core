@@ -610,9 +610,9 @@ void SAL_CALL SLPSolver::solve()
             }
             updateCurvature(aB, aPointChange, aGradientChange);
 
-            aX = aTrial;
-            aGradient = aNewGradient;
-            aCells = aCellsNew;
+            aX = std::move(aTrial);
+            aGradient = std::move(aNewGradient);
+            aCells = std::move(aCellsNew);
             fMerit = fMeritTrial;
 
             double fRatio = fPredicted > fMinPredictedReduction ? fActual / fPredicted : 1.0;
