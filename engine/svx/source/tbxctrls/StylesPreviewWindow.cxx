@@ -827,6 +827,7 @@ StylePreviewList StylesPreviewWindow_Base::GetStyleList(SfxObjectShell* pDocShel
     }
 
     // A document with no explicit style pane filter defaults to the "Recommended"
+    const bool bNoImportedFilter = !aFilter.bValid;
     if (!aFilter.bValid)
     {
         aFilter.bValid = true;
@@ -838,6 +839,18 @@ StylePreviewList StylesPreviewWindow_Base::GetStyleList(SfxObjectShell* pDocShel
     {
         lcl_AppendFilteredStyles(aAllStyles, pStyleSheetPool, aFilter, SfxStyleFamily::Para);
         lcl_AppendFilteredStyles(aAllStyles, pStyleSheetPool, aFilter, SfxStyleFamily::Char);
+    }
+
+    // A document with no imported style pane filter (a freshly created or ODF
+    // imported one, or a DOCX saved without the setting) defaulted to the
+    // "Recommended" view above, but may recommend few or none of the well-known
+    // styles. Add the default styles so the list stays usable instead of
+    // collapsing to a single style. Duplicates are dropped. A document that did
+    // import filtering options is left exactly as it asked for.
+    if (bNoImportedFilter)
+    {
+        for (const auto& rStyle : rDefaultStyles)
+            lcl_AppendStyle(aAllStyles, rStyle.commonName, rStyle.translatedName, rStyle.eFamily);
     }
 
     // Documents without any recommended styles (for example freshly created or
