@@ -428,6 +428,14 @@ std::map<std::string, std::string> extractAll(const Poco::Util::AbstractConfigur
     config.keys(keys);
     for (const std::string& key : keys)
     {
+        // extract() only records a key's children, so a top-level leaf with
+        // no children of its own (e.g. server_name) would never be recorded
+        // by the loop below.
+        std::vector<std::string> childKeys;
+        config.keys(key, childKeys);
+        if (childKeys.empty() && config.has(key))
+            map.emplace(key, getConfigValue(config, key, std::string()));
+
         extract(key, config, map);
     }
 
