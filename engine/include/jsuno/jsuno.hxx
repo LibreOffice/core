@@ -20,13 +20,18 @@
 
 namespace jsuno
 {
-struct Exception {
+struct LO_DLLPUBLIC_JSUNO Exception {
     struct Frame {
         OUString source;
         OUString line;
         OUString column;
         OUString functionName;
     };
+
+    Exception() = default;
+    Exception(Exception const &) = default;
+    Exception & operator =(Exception const &) = default;
+    virtual ~Exception();
 
     OUString name;
     OUString message;

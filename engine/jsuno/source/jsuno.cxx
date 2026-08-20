@@ -2858,6 +2858,8 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
 }
 }
 
+jsuno::Exception::~Exception() = default;
+
 OUString jsuno::execute(OUString const& script, OUString const & source, int line,
                         std::function<void(OUString const&)> proxyCallHook,
                         bool* usedLegacyUnoApi)
