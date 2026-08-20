@@ -99,10 +99,10 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="charsetft">
+                  <object class="GtkLabel" id="encodingft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="imoptdialog|charsetft">_Character set:</property>
+                    <property name="label" translatable="yes" context="imoptdialog|encodingft">_Encoding:</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                   </object>
@@ -118,13 +118,13 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <child>
-                      <object class="GtkComboBoxText" id="charsetdropdown">
+                      <object class="GtkComboBoxText" id="encodingdropdown">
                         <property name="can-focus">False</property>
                         <property name="no-show-all">True</property>
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="charsetdropdown-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|charsetdropdown">Specifies the character set for text export.</property>
+                          <object class="AtkObject" id="encodingdropdown-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|encodingdropdown">Specifies the encoding for text export.</property>
                           </object>
                         </child>
                       </object>
@@ -142,7 +142,7 @@
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
                         <child>
-                          <object class="GtkTreeView" id="charsetlist">
+                          <object class="GtkTreeView" id="encodinglist">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
@@ -168,8 +168,8 @@
                               </object>
                             </child>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="charsetlist-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|charsetlist">Select the character set from the options used for import/export.</property>
+                              <object class="AtkObject" id="encodinglist-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|encodinglist">Select the encoding from the options used for import/export.</property>
                               </object>
                             </child>
                           </object>

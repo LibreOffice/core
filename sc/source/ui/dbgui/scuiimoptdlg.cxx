@@ -95,17 +95,17 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 void ScImportOptionsDlg::FillFromTextEncodingTable(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags)
 {
     if (m_bIsAsciiImport)
-        m_xLbCharset->FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags);
+        m_xLbEncoding->FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags);
     else
-        m_xTvCharset->FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags);
+        m_xTvEncoding->FillFromTextEncodingTable(bExcludeImportSubsets, nExcludeInfoFlags);
 }
 
 void ScImportOptionsDlg::FillFromDbTextEncodingMap(bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags)
 {
     if (m_bIsAsciiImport)
-        m_xLbCharset->FillFromDbTextEncodingMap(bExcludeImportSubsets, nExcludeInfoFlags);
+        m_xLbEncoding->FillFromDbTextEncodingMap(bExcludeImportSubsets, nExcludeInfoFlags);
     else
-        m_xTvCharset->FillFromDbTextEncodingMap(bExcludeImportSubsets, nExcludeInfoFlags);
+        m_xTvEncoding->FillFromDbTextEncodingMap(bExcludeImportSubsets, nExcludeInfoFlags);
 }
 
 // ScImportOptionsDlg
@@ -117,7 +117,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     : GenericDialogController(pParent, u"modules/scalc/ui/imoptdialog.ui"_ustr, u"ImOptDialog"_ustr)
     , m_bIsAsciiImport(bAscii)
     , m_xFieldFrame(m_xBuilder->weld_frame(u"fieldframe"_ustr))
-    , m_xFtCharset(m_xBuilder->weld_label(u"charsetft"_ustr))
+    , m_xFtEncoding(m_xBuilder->weld_label(u"encodingft"_ustr))
     , m_xEncGrid(m_xBuilder->weld_widget(u"grid2"_ustr))
     , m_xFtFieldSep(m_xBuilder->weld_label(u"fieldft"_ustr))
     , m_xEdFieldSep(m_xBuilder->weld_combo_box(u"field"_ustr))
@@ -127,23 +127,23 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     , m_xCbFormulas(m_xBuilder->weld_check_button(u"formulas"_ustr))
     , m_xCbQuoteAll(m_xBuilder->weld_check_button(u"quoteall"_ustr))
     , m_xCbFixed(m_xBuilder->weld_check_button(u"fixedwidth"_ustr))
-    , m_xLbCharset(new SvxTextEncodingBox(m_xBuilder->weld_combo_box(u"charsetdropdown"_ustr)))
-    , m_xTvCharset(new SvxTextEncodingTreeView(m_xBuilder->weld_tree_view(u"charsetlist"_ustr)))
+    , m_xLbEncoding(new SvxTextEncodingBox(m_xBuilder->weld_combo_box(u"encodingdropdown"_ustr)))
+    , m_xTvEncoding(new SvxTextEncodingTreeView(m_xBuilder->weld_tree_view(u"encodinglist"_ustr)))
 {
     if (bAscii)
     {
         m_xDialog->set_help_id(m_xDialog->get_help_id() + "?config=NonTextImport");
-        m_xLbCharset->show();
-        m_xTvCharset->hide();
-        m_xFtCharset->set_mnemonic_widget(&m_xLbCharset->getComboBox());
+        m_xLbEncoding->show();
+        m_xTvEncoding->hide();
+        m_xFtEncoding->set_mnemonic_widget(&m_xLbEncoding->getComboBox());
     }
     else
     {
-        m_xTvCharset->set_size_request(-1, m_xTvCharset->get_height_rows(6));
+        m_xTvEncoding->set_size_request(-1, m_xTvEncoding->get_height_rows(6));
         m_xEncGrid->set_vexpand(true);
-        m_xLbCharset->hide();
-        m_xTvCharset->show();
-        m_xFtCharset->set_mnemonic_widget(&m_xTvCharset->getTreeView());
+        m_xLbEncoding->hide();
+        m_xTvEncoding->show();
+        m_xFtEncoding->set_mnemonic_widget(&m_xTvEncoding->getTreeView());
     }
 
     OUString sFieldSep(SCSTR_FIELDSEP);
@@ -215,7 +215,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
 
     if( bAscii )
     {
-        sal_Int32 nCharSet = officecfg::Office::Calc::Dialogs::CSVExport::CharSet::get();
+        sal_Int32 nEncoding = officecfg::Office::Calc::Dialogs::CSVExport::Encoding::get();
         OUString strFieldSeparator = officecfg::Office::Calc::Dialogs::CSVExport::FieldSeparator::get();
         OUString strTextSeparator = officecfg::Office::Calc::Dialogs::CSVExport::TextSeparator::get();
         bool bSaveTrueCellContent = officecfg::Office::Calc::Dialogs::CSVExport::SaveTrueCellContent::get();
@@ -234,31 +234,31 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
         m_xCbFormulas->show();
         // default option for "save formulas" is no longer taken from view shell but from persisted dialog settings
         m_xCbFormulas->set_active( bSaveCellFormulas );
-        // if no charset, text separator or field separator exist, keep the values from dialog initialization
+        // if no encoding, text separator or field separator exist, keep the values from dialog initialization
         if (strFieldSeparator.getLength() > 0)
             m_xEdFieldSep->set_entry_text(strFieldSeparator);
         if (strTextSeparator.getLength() > 0)
             m_xEdTextSep->set_entry_text(strTextSeparator);
-        if (nCharSet < 0 || nCharSet == RTL_TEXTENCODING_DONTKNOW )
-            m_xLbCharset->SelectTextEncoding(pOptions ? pOptions->eEncoding : osl_getThreadTextEncoding());
+        if (nEncoding < 0 || nEncoding == RTL_TEXTENCODING_DONTKNOW )
+            m_xLbEncoding->SelectTextEncoding(pOptions ? pOptions->eEncoding : osl_getThreadTextEncoding());
         else
-            m_xLbCharset->SelectTextEncoding(nCharSet);
+            m_xLbEncoding->SelectTextEncoding(nEncoding);
     }
     else
     {
-        m_xFieldFrame->set_label(m_xFtCharset->get_label());
+        m_xFieldFrame->set_label(m_xFtEncoding->get_label());
         m_xFtFieldSep->hide();
         m_xFtTextSep->hide();
-        m_xFtCharset->hide();
+        m_xFtEncoding->hide();
         m_xEdFieldSep->hide();
         m_xEdTextSep->hide();
         m_xCbFixed->hide();
         m_xCbShown->hide();
         m_xCbQuoteAll->hide();
         m_xCbFormulas->hide();
-        m_xTvCharset->grab_focus();
-        m_xTvCharset->connect_item_activated(LINK(this, ScImportOptionsDlg, DoubleClickHdl));
-        m_xTvCharset->SelectTextEncoding(pOptions ? pOptions->eEncoding : osl_getThreadTextEncoding());
+        m_xTvEncoding->grab_focus();
+        m_xTvEncoding->connect_item_activated(LINK(this, ScImportOptionsDlg, DoubleClickHdl));
+        m_xTvEncoding->SelectTextEncoding(pOptions ? pOptions->eEncoding : osl_getThreadTextEncoding());
     }
 
     // optional title:
@@ -279,7 +279,7 @@ ScImportOptionsDlg::~ScImportOptionsDlg()
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
-    auto nEncoding = m_bIsAsciiImport ? m_xLbCharset->GetSelectTextEncoding() : m_xTvCharset->GetSelectTextEncoding();
+    auto nEncoding = m_bIsAsciiImport ? m_xLbEncoding->GetSelectTextEncoding() : m_xTvEncoding->GetSelectTextEncoding();
     rOptions.SetTextEncoding(nEncoding);
 
     if (m_xCbFixed->get_visible())
@@ -339,8 +339,8 @@ IMPL_LINK_NOARG(ScImportOptionsDlg, DoubleClickHdl, const weld::TreeIter&, bool)
 void ScImportOptionsDlg::SaveImportOptions() const
 {
     std::shared_ptr < comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-    auto nEncoding = m_bIsAsciiImport ? m_xLbCharset->GetSelectTextEncoding() : m_xTvCharset->GetSelectTextEncoding();
-    officecfg::Office::Calc::Dialogs::CSVExport::CharSet::set(nEncoding, batch);
+    auto nEncoding = m_bIsAsciiImport ? m_xLbEncoding->GetSelectTextEncoding() : m_xTvEncoding->GetSelectTextEncoding();
+    officecfg::Office::Calc::Dialogs::CSVExport::Encoding::set(nEncoding, batch);
     officecfg::Office::Calc::Dialogs::CSVExport::FieldSeparator::set(m_xEdFieldSep->get_active_text(), batch);
     officecfg::Office::Calc::Dialogs::CSVExport::TextSeparator::set(m_xEdTextSep->get_active_text(), batch);
     officecfg::Office::Calc::Dialogs::CSVExport::FixedWidth::set(m_xCbFixed->get_active(), batch);

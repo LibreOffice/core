@@ -1992,7 +1992,7 @@ OSQLColumns::const_iterator find(OSQLColumns::const_iterator first,
 
 namespace dbase
 {
-    bool dbfDecodeCharset(rtl_TextEncoding &_out_encoding, sal_uInt8 nType, sal_uInt8 nCodepage)
+    bool dbfDecodeEncoding(rtl_TextEncoding &_out_encoding, sal_uInt8 nType, sal_uInt8 nCodepage)
     {
         switch (nType)
         {
@@ -2055,7 +2055,7 @@ namespace dbase
         return false;
     }
 
-    bool dbfReadCharset(rtl_TextEncoding &nCharSet, SvStream* dbf_Stream)
+    bool dbfReadEncoding(rtl_TextEncoding &nCharSet, SvStream* dbf_Stream)
     {
         sal_uInt8 nType=0;
         dbf_Stream->ReadUChar( nType );
@@ -2069,7 +2069,7 @@ namespace dbase
         {
             sal_uInt8 nEncoding=0;
             dbf_Stream->ReadUChar( nEncoding );
-            return dbfDecodeCharset(nCharSet, nType, nEncoding);
+            return dbfDecodeEncoding(nCharSet, nType, nEncoding);
         }
     }
 

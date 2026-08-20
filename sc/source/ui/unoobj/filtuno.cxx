@@ -61,30 +61,30 @@ constexpr OUStringLiteral SC_UNONAME_FILTERNAME = u"FilterName";
 constexpr OUString SC_UNONAME_FILTEROPTIONS = u"FilterOptions"_ustr;
 constexpr OUStringLiteral SC_UNONAME_INPUTSTREAM = u"InputStream";
 
-constexpr OUString DBF_CHAR_SET = u"CharSet"_ustr;
+constexpr OUString DBF_ENCODING = u"Encoding"_ustr;
 constexpr OUString DBF_SEP_PATH_IMPORT = u"Office.Calc/Dialogs/DBFImport"_ustr;
 constexpr OUString DBF_SEP_PATH_EXPORT = u"Office.Calc/Dialogs/DBFExport"_ustr;
 
 namespace
 {
 
-    enum class charsetSource
+    enum class encodingSource
     {
-        charset_from_file,
-        charset_from_user_setting,
-        charset_default
+        encoding_from_file,
+        encoding_from_user_setting,
+        encoding_default
     };
 
-    charsetSource load_CharSet(rtl_TextEncoding &nCharSet, bool bExport, SvStream* dbf_Stream)
+    encodingSource load_Encoding(rtl_TextEncoding &nEncoding, bool bExport, SvStream* dbf_Stream)
     {
-        if (dbf_Stream && dbfReadCharset(nCharSet, dbf_Stream))
+        if (dbf_Stream && dbfReadEncoding(nEncoding, dbf_Stream))
         {
-            return charsetSource::charset_from_file;
+            return encodingSource::encoding_from_file;
         }
 
         Sequence<Any> aValues;
         const Any *pProperties;
-        Sequence<OUString> aNames { DBF_CHAR_SET };
+        Sequence<OUString> aNames { DBF_ENCODING };
         ScLinkConfigItem aItem( bExport ? DBF_SEP_PATH_EXPORT : DBF_SEP_PATH_IMPORT );
 
         aValues = aItem.GetProperties( aNames );
@@ -96,26 +96,26 @@ namespace
             pProperties[0] >>= nChar;
             if( nChar >= 0)
             {
-                nCharSet = static_cast<rtl_TextEncoding>(nChar);
-                return charsetSource::charset_from_user_setting;
+                nEncoding = static_cast<rtl_TextEncoding>(nChar);
+                return encodingSource::encoding_from_user_setting;
             }
         }
 
         // Default choice
-        nCharSet = RTL_TEXTENCODING_IBM_850;
-        return charsetSource::charset_default;
+        nEncoding = RTL_TEXTENCODING_IBM_850;
+        return encodingSource::encoding_default;
     }
 
-    void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
+    void save_Encoding( rtl_TextEncoding nEncoding, bool bExport )
     {
         Sequence<Any> aValues;
         Any *pProperties;
-        Sequence<OUString> aNames { DBF_CHAR_SET };
+        Sequence<OUString> aNames { DBF_ENCODING };
         ScLinkConfigItem aItem( bExport ? DBF_SEP_PATH_EXPORT : DBF_SEP_PATH_IMPORT );
 
         aValues = aItem.GetProperties( aNames );
         pProperties = aValues.getArray();
-        pProperties[0] <<= static_cast<sal_Int32>(nCharSet);
+        pProperties[0] <<= static_cast<sal_Int32>(nEncoding);
 
         aItem.PutProperties(aNames, aValues);
     }
@@ -293,13 +293,13 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             std::unique_ptr<SvStream> pInStream;
             if ( xInputStream.is() )
                 pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
-            switch(load_CharSet( eEncoding, bExport, pInStream.get()))
+            switch(load_Encoding( eEncoding, bExport, pInStream.get()))
             {
-                case charsetSource::charset_from_file:
+                case encodingSource::encoding_from_file:
                   skipDialog = true;
                   break;
-                case charsetSource::charset_from_user_setting:
-                case charsetSource::charset_default:
+                case encodingSource::encoding_from_user_setting:
+                case encodingSource::encoding_default:
                    break;
             }
             bDBEnc = true;
@@ -343,7 +343,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             {
                 pDlg->SaveImportOptions();
                 pDlg->GetImportOptions( aOptions );
-                save_CharSet( aOptions.eEncoding, bExport );
+                save_Encoding( aOptions.eEncoding, bExport );
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
             }
         }

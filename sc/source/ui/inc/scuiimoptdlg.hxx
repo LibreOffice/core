@@ -55,7 +55,7 @@ private:
     bool m_bIsAsciiImport;
 
     std::unique_ptr<weld::Frame> m_xFieldFrame;
-    std::unique_ptr<weld::Label> m_xFtCharset;
+    std::unique_ptr<weld::Label> m_xFtEncoding;
     std::unique_ptr<weld::Widget> m_xEncGrid;
     std::unique_ptr<weld::Label> m_xFtFieldSep;
     std::unique_ptr<weld::ComboBox> m_xEdFieldSep;
@@ -65,8 +65,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbFormulas;
     std::unique_ptr<weld::CheckButton> m_xCbQuoteAll;
     std::unique_ptr<weld::CheckButton> m_xCbFixed;
-    std::unique_ptr<SvxTextEncodingBox> m_xLbCharset;
-    std::unique_ptr<SvxTextEncodingTreeView> m_xTvCharset;
+    std::unique_ptr<SvxTextEncodingBox> m_xLbEncoding;
+    std::unique_ptr<SvxTextEncodingTreeView> m_xTvEncoding;
 
 private:
     sal_uInt16 GetCodeFromCombo( const weld::ComboBox& rEd ) const;

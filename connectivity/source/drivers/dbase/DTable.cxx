@@ -254,7 +254,7 @@ void ODbaseTable::readHeader()
             case FoxProMemo:
                 m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
                 if( getConnection()->isTextEncodingDefaulted() &&
-                   !dbfDecodeCharset(m_eEncoding, nType, m_aHeader.trailer[17]))
+                   !dbfDecodeEncoding(m_eEncoding, nType, m_aHeader.trailer[17]))
                 {
                     m_eEncoding = RTL_TEXTENCODING_IBM_850;
                 }
