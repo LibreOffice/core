@@ -50,6 +50,35 @@ OUString formatViolation(const svx::seclabel::SpifViolation& rViolation)
     return OUString();
 }
 
+// A short note on how many categories the tag admits (empty when unconstrained),
+// derived from singleSelection (a max of one) and min/maxSelection (-1 = unbounded).
+// nSelectable is how many categories the group actually offers.
+OUString selectionHint(const svx::seclabel::SpifCategoryTag& rTag, sal_Int32 nSelectable)
+{
+    const sal_Int32 nMin = rTag.nMinSelection < 0 ? 0 : rTag.nMinSelection;
+    sal_Int32 nMax = rTag.bSingleSelection ? 1 : rTag.nMaxSelection;
+
+    // A max that admits every category on offer rules nothing out.
+    if (nMax >= nSelectable)
+    {
+        nMax = -1;
+    }
+
+    if (nMax < 0)
+    {
+        if (nMin <= 0)
+            return OUString(); // unbounded both ways: no note
+        return SvxResId(RID_SVXSTR_SECLABEL_HINT_ATLEAST).replaceFirst(u"%1", OUString::number(nMin));
+    }
+    if (nMin <= 0)
+        return SvxResId(RID_SVXSTR_SECLABEL_HINT_ATMOST).replaceFirst(u"%1", OUString::number(nMax));
+    if (nMin >= nMax)
+        return SvxResId(RID_SVXSTR_SECLABEL_HINT_EXACTLY).replaceFirst(u"%1", OUString::number(nMax));
+    return SvxResId(RID_SVXSTR_SECLABEL_HINT_RANGE)
+        .replaceFirst(u"%1", OUString::number(nMin))
+        .replaceFirst(u"%2", OUString::number(nMax));
+}
+
 // Random itemID for the customXml part: {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.
 OUString makeGuid()
 {
@@ -90,6 +119,7 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
     {
         m_xGroupBoxes.push_back(m_xBuilder->weld_widget("group" + OUString::number(i)));
         m_xGroupLabels.push_back(m_xBuilder->weld_label("group" + OUString::number(i) + "label"));
+        m_xGroupHints.push_back(m_xBuilder->weld_label("group" + OUString::number(i) + "hint"));
         m_xGroupBoxes[i]->set_visible(false);
 
         std::vector<std::unique_ptr<weld::CheckButton>> aChecks;
@@ -228,6 +258,9 @@ void SvxSecurityLabelDialog::PopulateCategories()
             }
 
             m_xGroupLabels[g]->set_label(rTag.aName);
+            const OUString sHint = selectionHint(rTag, static_cast<sal_Int32>(aSelectable.size()));
+            m_xGroupHints[g]->set_label(sHint);
+            m_xGroupHints[g]->set_visible(!sHint.isEmpty());
             m_xGroupBoxes[g]->set_visible(true);
 
             int c = 0;

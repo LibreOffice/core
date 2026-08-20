@@ -78,6 +78,8 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // MAX_CATS checkboxes (m_xChecks[group][cat]).
     std::vector<std::unique_ptr<weld::Widget>> m_xGroupBoxes;
     std::vector<std::unique_ptr<weld::Label>> m_xGroupLabels;
+    // Italic selection-count note beside each group header (e.g. "select at least 1").
+    std::vector<std::unique_ptr<weld::Label>> m_xGroupHints;
     std::vector<std::vector<std::unique_ptr<weld::CheckButton>>> m_xChecks;
     std::unique_ptr<weld::Label> m_xPreview;
     std::unique_ptr<weld::Label> m_xWarning;

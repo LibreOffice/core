@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Security label dialog (SPIF/STANAG). The category area is a static pool of
-     group slots group{i}: a bold header label group{i}label + a box of checkboxes
-     g{i}c{j}. At runtime the dialog relabels and shows one group per
-     securityCategoryTag (and one checkbox per selectable tagCategory) and hides the
-     rest. Static widgets stay interactive in JSDialog; runtime-created ones do not.
-     The pool size (8 groups x 32 checkboxes) is repetitive boilerplate; keep it in
-     sync with MAX_GROUPS/MAX_CATS in SvxSecurityLabelDialog. -->
+     group slots group{i}: a header (bold label group{i}label + an italic
+     selection-count hint group{i}hint) and a box of checkboxes g{i}c{j}. At
+     runtime the dialog relabels and shows one group per securityCategoryTag (and one
+     checkbox per selectable tagCategory) and hides the rest. Static widgets stay
+     interactive in JSDialog; runtime-created ones do not. The pool size
+     (10 groups x 100 checkboxes) is repetitive boilerplate; keep it in sync
+     with MAX_GROUPS/MAX_CATS in SvxSecurityLabelDialog. A checkbox slot carries
+     only what is not already the default: can-focus, which VclBuilder does not
+     default for a CheckBox (no WB_TABSTOP without it), and a placeholder label,
+     which gla11y insists a button have (the real one comes from the policy at
+     runtime). -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkDialog" id="SecurityLabelDialog">
@@ -195,14 +200,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group0label">
+                      <object class="GtkBox" id="group0header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group0label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group0hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -939,14 +973,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group1label">
+                      <object class="GtkBox" id="group1header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group1label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group1hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1683,14 +1746,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group2label">
+                      <object class="GtkBox" id="group2header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group2label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group2hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2427,14 +2519,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group3label">
+                      <object class="GtkBox" id="group3header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group3label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group3hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -3171,14 +3292,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group4label">
+                      <object class="GtkBox" id="group4header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group4label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group4hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -3915,14 +4065,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group5label">
+                      <object class="GtkBox" id="group5header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group5label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group5hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -4659,14 +4838,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group6label">
+                      <object class="GtkBox" id="group6header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group6label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group6hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5403,14 +5611,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group7label">
+                      <object class="GtkBox" id="group7header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group7label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group7hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6147,14 +6384,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group8label">
+                      <object class="GtkBox" id="group8header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group8label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group8hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6891,14 +7157,43 @@
                     <property name="spacing">2</property>
                     <property name="margin-bottom">4</property>
                     <child>
-                      <object class="GtkLabel" id="group9label">
+                      <object class="GtkBox" id="group9header">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">Group</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="group9label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">Group</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="group9hint">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label">hint</property>
+                            <attributes>
+                              <attribute name="style" value="italic"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

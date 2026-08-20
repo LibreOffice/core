@@ -1877,6 +1877,10 @@
 #define RID_SVXSTR_SECLABEL_REQUIRED          NC_("RID_SVXSTR_SECLABEL_REQUIRED", "'%1' requires another category to be selected.")
 #define RID_SVXSTR_SECLABEL_FOREIGN           NC_("RID_SVXSTR_SECLABEL_FOREIGN", "This document is labeled under policy '%1', which is not available here. You can view it, or re-label it under an available policy.")
 #define RID_SVXSTR_SECLABEL_NOPOLICY          NC_("RID_SVXSTR_SECLABEL_NOPOLICY", "No security policies are available.")
+#define RID_SVXSTR_SECLABEL_HINT_EXACTLY      NC_("RID_SVXSTR_SECLABEL_HINT_EXACTLY", "select exactly %1")
+#define RID_SVXSTR_SECLABEL_HINT_ATLEAST      NC_("RID_SVXSTR_SECLABEL_HINT_ATLEAST", "select at least %1")
+#define RID_SVXSTR_SECLABEL_HINT_ATMOST       NC_("RID_SVXSTR_SECLABEL_HINT_ATMOST", "select at most %1")
+#define RID_SVXSTR_SECLABEL_HINT_RANGE        NC_("RID_SVXSTR_SECLABEL_HINT_RANGE", "select %1 to %2")
 
 #endif
 
