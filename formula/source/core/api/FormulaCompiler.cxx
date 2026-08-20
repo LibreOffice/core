@@ -2853,13 +2853,14 @@ bool lclEndsSingleValueOperand(OpCode eOp)
            || eOp == ocPercentSign;
 }
 
-// An @ whose wrapper is still to go in: where it goes, the parenthesis scope
-// of its operand, and whether the operand has written text yet. An operand
-// that stays empty takes no wrapper.
+// An @ whose wrapper is still to go in.
 struct PendingSingleValue
 {
+    // The parenthesis scope its operand lives in, 1 for the outermost level.
     sal_Int32 mnScope;
+    // Where the wrapper begins, as an offset into the formula text written so far.
     sal_Int32 mnWrapStart;
+    // Whether text for the operand stands in the buffer.
     bool mbHasOperand;
 };
 
@@ -2874,6 +2875,20 @@ void lclMarkPendingOperand(std::vector<PendingSingleValue>& rPending)
         rSingle.mbHasOperand = true;
     }
 }
+
+// Buffer positions for one open parenthesis scope, as offsets into the formula
+// text written so far.
+struct UnionScope
+{
+    // Where the scope's own text begins.
+    sal_Int32 mnContentStart;
+    // Where the union-level expression being written began.
+    sal_Int32 mnExpressionStart;
+    // Where an open union list began. -1 while the scope has none.
+    sal_Int32 mnListStart;
+    // The scope is a grouping parenthesis rather than a call's argument list.
+    bool mbGroupParenthesis;
+};
 
 // Whether the text from nStart to the end is one parenthesised group, so its
 // parentheses can double as the wrapper's. Quoted literals are skipped. A
@@ -2923,12 +2938,16 @@ bool lclIsOneParenthesizedGroup(const OUStringBuffer& rBuffer, sal_Int32 nStart)
 
 // Splice in the wrappers pending from nScope and deeper, innermost first.
 // Each operand runs from its recorded start to the buffer's end.
-void lclCloseSingleValues(OUStringBuffer& rBuffer, std::vector<PendingSingleValue>& rPending,
-                          sal_Int32 nScope)
+void lclCloseSingleValues(OUStringBuffer& rBuffer, UnionScope& rScope,
+                          std::vector<PendingSingleValue>& rPending, sal_Int32 nScope)
 {
+    // The wrappers stand in the order their operands begin, so splicing the one at
+    // the back in leaves the starts still waiting where they are.
+    assert(std::ranges::is_sorted(rPending, {}, &PendingSingleValue::mnWrapStart));
     while (!rPending.empty() && rPending.back().mnScope >= nScope)
     {
         const PendingSingleValue& rSingle = rPending.back();
+        // An operand that stayed empty takes no wrapper.
         if (rSingle.mbHasOperand)
         {
             if (lclIsOneParenthesizedGroup(rBuffer, rSingle.mnWrapStart))
@@ -2938,6 +2957,9 @@ void lclCloseSingleValues(OUStringBuffer& rBuffer, std::vector<PendingSingleValu
                 rBuffer.insert(rSingle.mnWrapStart, u"_xlfn.SINGLE(");
                 rBuffer.append(u")");
             }
+            // The wrapper encloses the expression, which now begins at it.
+            if (rScope.mnExpressionStart > rSingle.mnWrapStart)
+                rScope.mnExpressionStart = rSingle.mnWrapStart;
         }
         rPending.pop_back();
     }
@@ -2950,23 +2972,8 @@ void lclCancelSingleValues(std::vector<PendingSingleValue>& rPending, sal_Int32 
         rPending.pop_back();
 }
 
-// Buffer positions for one open parenthesis scope. Parentheses are spliced in
-// once the text they enclose stands in the buffer, so the walk records where
-// each of them would go.
-struct UnionScope
-{
-    // Where the scope's own text begins.
-    sal_Int32 mnContentStart;
-    // Where the union-level expression being written began.
-    sal_Int32 mnExpressionStart;
-    // Where an open union list began. -1 while the scope has none.
-    sal_Int32 mnListStart;
-    // The scope is a grouping parenthesis rather than a call's argument list.
-    bool mbGroupParenthesis;
-};
-
-// Whether a wrapper still to be spliced in begins where the scope's text does, so
-// the scope's own parentheses are already spoken for.
+// Whether a wrapper still to be spliced in begins where the scope's text does or
+// ahead of it, so the scope's own parentheses are already spoken for.
 bool lclHasWrapperAtStart(const std::vector<PendingSingleValue>& rPending, sal_Int32 nScope,
                           sal_Int32 nContentStart)
 {
@@ -2974,7 +2981,7 @@ bool lclHasWrapperAtStart(const std::vector<PendingSingleValue>& rPending, sal_I
     {
         if (rSingle.mnScope < nScope)
             break;
-        if (rSingle.mnWrapStart == nContentStart)
+        if (rSingle.mnWrapStart <= nContentStart)
             return true;
     }
     return false;
@@ -2999,6 +3006,9 @@ void lclCloseUnionList(OUStringBuffer& rBuffer, UnionScope& rScope,
             if (rSingle.mnWrapStart > rScope.mnListStart)
                 ++rSingle.mnWrapStart;
         }
+        // An expression that began inside the list moves along with it.
+        if (rScope.mnExpressionStart > rScope.mnListStart)
+            ++rScope.mnExpressionStart;
     }
     rScope.mnListStart = -1;
 }
@@ -3148,8 +3158,17 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             if (!bBadFactor)
             {
                 lclCloseUnionList(rBuffer, aUnionScopes.back(), aPendingSingles, false);
-                rBuffer.insert(aUnionScopes.back().mnExpressionStart, u"_xlfn.ANCHORARRAY(");
+                const sal_Int32 nWrapStart = aUnionScopes.back().mnExpressionStart;
+                rBuffer.insert(nWrapStart, u"_xlfn.ANCHORARRAY(");
                 rBuffer.append(u")");
+                // The # binds tighter than an @ in front of it, so an @ that
+                // begins inside the wrapper takes the whole of it as its operand.
+                // An @ on one part of a union list is such an @.
+                for (PendingSingleValue& rSingle : aPendingSingles)
+                {
+                    if (rSingle.mnWrapStart > nWrapStart)
+                        rSingle.mnWrapStart = nWrapStart;
+                }
                 lclMarkPendingOperand(aPendingSingles);
             }
             t = maArrIterator.Next();
@@ -3207,7 +3226,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                         aPendingSingles, nScope, aUnionScopes.back().mnContentStart);
                     lclCloseUnionList(rBuffer, aUnionScopes.back(), aPendingSingles,
                                       bMayTakeScopeParenthesis);
-                    lclCloseSingleValues(rBuffer, aPendingSingles, nScope);
+                    lclCloseSingleValues(rBuffer, aUnionScopes.back(), aPendingSingles, nScope);
                 }
                 if (!AppendTokenOrError(rBuffer, t))
                 {
@@ -3227,7 +3246,8 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             if (bEndsOperand)
             {
                 lclCloseUnionList(rBuffer, aUnionScopes.back(), aPendingSingles, false);
-                lclCloseSingleValues(rBuffer, aPendingSingles, sal_Int32(aUnionScopes.size()));
+                lclCloseSingleValues(rBuffer, aUnionScopes.back(), aPendingSingles,
+                                     sal_Int32(aUnionScopes.size()));
             }
 
             if (eOpHere == ocBad)
@@ -3240,6 +3260,12 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             }
 
             const sal_Int32 nLengthBefore = rBuffer.getLength();
+            // Whitespace ahead of a scope or of an expression is not part of it,
+            // so the start it is measured from moves past the whitespace.
+            const bool bAtContentStart
+                = bWhitespace && nLengthBefore == aUnionScopes.back().mnContentStart;
+            const bool bAtExpressionStart
+                = bWhitespace && nLengthBefore == aUnionScopes.back().mnExpressionStart;
             if (!AppendTokenOrError(rBuffer, t))
             {
                 bUnwritable = true;
@@ -3247,6 +3273,10 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             }
             if (!bPrefix && !bWhitespace && rBuffer.getLength() > nLengthBefore)
                 lclMarkPendingOperand(aPendingSingles);
+            if (bAtContentStart)
+                aUnionScopes.back().mnContentStart = rBuffer.getLength();
+            if (bAtExpressionStart)
+                aUnionScopes.back().mnExpressionStart = rBuffer.getLength();
             if (eOpHere == ocUnion && aUnionScopes.back().mnListStart < 0)
             {
                 // The first union operator of the expression opens the list; the
@@ -3277,7 +3307,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     {
         for (UnionScope& rScope : std::views::reverse(aUnionScopes))
             lclCloseUnionList(rBuffer, rScope, aPendingSingles, false);
-        lclCloseSingleValues(rBuffer, aPendingSingles, 1);
+        lclCloseSingleValues(rBuffer, aUnionScopes.front(), aPendingSingles, 1);
     }
 
     if (pSaveArr != mpArr)

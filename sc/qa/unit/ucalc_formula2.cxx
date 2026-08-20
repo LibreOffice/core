@@ -7048,9 +7048,32 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeBindsTighterThanSignAndMarker
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1 ))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"@A1 #"_ustr));
 
+    // Whitespace in front of an operand stays outside the wrappers around it.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE( _xlfn.ANCHORARRAY(A1))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@ A1#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"SUM( _xlfn.SINGLE(_xlfn.ANCHORARRAY(A1)))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"SUM( @A1#)"_ustr));
+
     // A # on an argument inside a wrapped call wraps just that argument.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(SUM(_xlfn.ANCHORARRAY(A1)))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"@SUM(A1#)"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeTakesTheWrapperThePercentSignClosed)
+{
+    // The percent sign ends an @ operand, so a # behind it takes the @ wrapper too.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(_xlfn.SINGLE(A1)%)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@A1%#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(_xlfn.SINGLE(-A1)%)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@-A1%#"_ustr));
+
+    // A union list that follows such a wrapper begins in front of it as well.
+    CPPUNIT_ASSERT_EQUAL(u"(_xlfn.SINGLE(-A1)%,B2)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@-A1%~B2"_ustr));
 
     m_pDoc->DeleteTab(0);
 }
@@ -7079,6 +7102,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionSavesAsParenthesizedListInOoxml)
 
     // Not doubling the pair is what holds a formula's shape over round trips.
     CPPUNIT_ASSERT_EQUAL(u"(A1,B2)"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"(A1~B2)"_ustr));
+    // Whitespace in front of the list is not part of it, so the group's pair serves.
+    CPPUNIT_ASSERT_EQUAL(u"( A1,B2)"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"( A1~B2)"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"SUM((A1,B2))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"SUM((A1~B2))"_ustr));
 
@@ -7105,6 +7130,16 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionStaysInsideImplicitIntersectionWrapp
     CPPUNIT_ASSERT_EQUAL(u"SUM((_xlfn.SINGLE((A1,B2))))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"SUM((@A1~B2))"_ustr));
 
+    // That holds on either side of whitespace behind the group's parenthesis.
+    CPPUNIT_ASSERT_EQUAL(u"( _xlfn.SINGLE((A1,B2)))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"( @A1~B2)"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"(_xlfn.SINGLE( (A1,B2)))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"(@ A1~B2)"_ustr));
+
+    // A # takes the whole list, so an @ on one part of it wraps the list's wrapper.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(_xlfn.ANCHORARRAY((A1,B2)))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1~@B2#"_ustr));
+
     m_pDoc->DeleteTab(0);
 }
 
@@ -7123,6 +7158,12 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorsApplyToTheWholeExpression
     // inside the wrapper whole.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1:INDEX(B1:B10,5))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1:INDEX(B1:B10;5)#"_ustr));
+
+    // A prefix sign on one part of a union list stays outside the wrapper too.
+    CPPUNIT_ASSERT_EQUAL(u"(A1,-_xlfn.ANCHORARRAY(B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1~-B2#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"SUM((A1,-_xlfn.ANCHORARRAY(B2)))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"SUM(A1~-B2#)"_ustr));
 
     m_pDoc->DeleteTab(0);
 }
