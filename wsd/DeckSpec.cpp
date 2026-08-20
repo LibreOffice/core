@@ -878,7 +878,7 @@ rewriteGenerateImageCommands(const Poco::JSON::Object::Ptr& transformObj, int nE
                 pageCount--;
         }
 
-        constexpr std::string_view kGenerateImagePrefix = "GenerateImage.";
+        static constexpr std::string_view kGenerateImagePrefix = "GenerateImage.";
         for (const auto& key : cmd->getNames())
         {
             if (key.substr(0, kGenerateImagePrefix.size()) != kGenerateImagePrefix)
