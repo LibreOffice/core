@@ -420,15 +420,45 @@ public:
     /// Returns the number of bytes consumed (and must be removed from the input).
     int64_t parse(const char* p, int64_t len);
 
-    /// Add an HTTP header field.
-    void add(std::string key, std::string value)
+    /// True when the given string holds only the bytes RFC 9110 section 5.5 allows in a field
+    /// value, which are HTAB, SP, 0x21 to 0x7e and 0x80 to 0xff. Field names get the same test,
+    /// which is looser than the token rule the RFC gives them.
+    [[nodiscard]] static bool hasOnlyValidFieldBytes(const std::string_view field)
     {
+        return std::none_of(field.begin(), field.end(),
+                            [](const char ch) -> bool
+                            {
+                                const unsigned char byte = static_cast<unsigned char>(ch);
+                                return (byte < 0x20 && byte != '\t') || byte == 0x7f;
+                            });
+    }
+
+    /// Add an HTTP header field. Returns false, and adds nothing, when the name or the value
+    /// holds a byte a field cannot carry.
+    bool add(std::string key, std::string value)
+    {
+        if (!hasOnlyValidFieldBytes(key) || !hasOnlyValidFieldBytes(value))
+        {
+            LOG_WRN_S("Not adding HTTP header field with an invalid byte in it");
+            return false;
+        }
+
         _headers.emplace_back(std::move(key), std::move(value));
+        return true;
     }
 
     /// Set an HTTP header field, replacing an earlier value, if exists (case insensitive).
-    void set(const std::string_view key, std::string value)
+    /// Returns false when the name or the value holds a byte a field cannot carry, and removes
+    /// any earlier value, so the field holds what the caller passed or nothing at all.
+    bool set(const std::string_view key, std::string value)
     {
+        if (!hasOnlyValidFieldBytes(key) || !hasOnlyValidFieldBytes(value))
+        {
+            LOG_WRN_S("Not setting HTTP header field with an invalid byte in it");
+            remove(key);
+            return false;
+        }
+
         const Iterator end = _headers.end();
         const Iterator it = std::find_if(_headers.begin(), end, [&key](const Pair& pair) -> bool
                                          { return Util::iequal(pair.first, key); });
@@ -440,6 +470,8 @@ public:
         {
             _headers.emplace_back(key, std::move(value));
         }
+
+        return true;
     }
 
     // Returns true if the HTTP header field exists (case insensitive)
@@ -729,13 +761,14 @@ protected:
     void setVerb(const std::string& verb) { _verb = verb; }
     /// Set the protocol version (typically HTTP/1.1).
     void setVersion(const std::string& version) { _version = version; }
-    /// Add an HTTP header field.
-    void add(std::string key, std::string value) { _header.add(std::move(key), std::move(value)); }
+    /// Add an HTTP header field. Returns false when the field holds a byte it cannot carry.
+    bool add(std::string key, std::string value) { return _header.add(std::move(key), std::move(value)); }
 
     Header& editHeader() { return _header; }
 
     /// Set an HTTP header field, replacing an earlier value, if exists.
-    void set(const std::string& key, std::string value) { _header.set(key, std::move(value)); }
+    /// Returns false when the field holds a byte it cannot carry.
+    bool set(const std::string& key, std::string value) { return _header.set(key, std::move(value)); }
 
     void setStage(Stage stage) { _stage = stage; }
 
@@ -779,14 +812,15 @@ public:
     void setContentType(std::string type) { editHeader().setContentType(std::move(type)); }
     void setContentLength(int64_t length) { editHeader().setContentLength(length); }
 
-    /// Add an HTTP header field.
-    void add(std::string key, std::string value)
+    /// Add an HTTP header field. Returns false when the field holds a byte it cannot carry.
+    bool add(std::string key, std::string value)
     {
-        editHeader().add(std::move(key), std::move(value));
+        return editHeader().add(std::move(key), std::move(value));
     }
 
     /// Set an HTTP header field, replacing an earlier value, if exists.
-    void set(const std::string& key, std::string value) { editHeader().set(key, std::move(value)); }
+    /// Returns false when the field holds a byte it cannot carry.
+    bool set(const std::string& key, std::string value) { return editHeader().set(key, std::move(value)); }
 
     /// Set the request body source to upload some data. Meaningful for POST.
     /// Size is needed to set the Content-Length.
@@ -1171,11 +1205,12 @@ public:
 
     const Header& header() const { return _header; }
 
-    /// Add an HTTP header field.
-    void add(std::string key, std::string value) { _header.add(std::move(key), std::move(value)); }
+    /// Add an HTTP header field. Returns false when the field holds a byte it cannot carry.
+    bool add(std::string key, std::string value) { return _header.add(std::move(key), std::move(value)); }
 
     /// Set an HTTP header field, replacing an earlier value, if exists.
-    void set(const std::string& key, std::string value) { _header.set(key, std::move(value)); }
+    /// Returns false when the field holds a byte it cannot carry.
+    bool set(const std::string& key, std::string value) { return _header.set(key, std::move(value)); }
 
     /// Set the Connection header.
     void setConnectionToken(Header::ConnectionToken token) { _header.setConnectionToken(token); }
