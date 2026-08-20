@@ -200,12 +200,27 @@ interface ExtensionContextToolbarButton {
 	command: string;
 }
 
+// A single key bound to a command. `modifier` is drawn from "ctrl"/"alt"/"shift" -
+// "ctrl" already means Cmd on macOS, the same as it does for every built-in
+// keyboard shortcut. A key combination that collides with an existing shortcut
+// (built-in, or from another extension) is dropped with a console warning rather
+// than registered, since two shortcuts sharing the same combination is something
+// the underlying dispatch mechanism cannot recover from at the point the key is
+// actually pressed. A single printable key needs at least "ctrl" or "alt" in
+// modifier - "shift" alone (or no modifier at all) would fight with ordinary typing.
+interface ExtensionKeybinding {
+	command: string;
+	key: string;
+	modifier?: ('ctrl' | 'alt' | 'shift')[];
+}
+
 interface ExtensionContributes {
 	commands?: ExtensionCommand[];
 	menus?: { [menuId: string]: string[] };
 	notebookbar?: ExtensionNotebookbarTab[];
 	contextMenu?: ExtensionContextMenuEntry[];
 	contextToolbar?: ExtensionContextToolbarButton[];
+	keybindings?: ExtensionKeybinding[];
 }
 
 interface ExtensionManifest {

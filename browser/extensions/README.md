@@ -191,6 +191,29 @@ ui.json:
   separator after the toolbar's own built-in content, the same "own space,
   appended at the end" rule as the other three contribution points.
 
+- `contributes.keybindings` is a flat list of `{ command, key, modifier? }`
+  entries binding a command to a key combination:
+
+  ```json
+  "keybindings": [
+    { "command": "insertDate", "key": "d", "modifier": ["ctrl", "alt"] }
+  ]
+  ```
+
+  `modifier` is an array drawn from `"ctrl"`/`"alt"`/`"shift"` - `"ctrl"`
+  already means Cmd on macOS, the same as every built-in shortcut. A
+  single printable `key` needs at least `"ctrl"` or `"alt"` in `modifier` -
+  `"shift"` alone, or no modifier at all, would fight with ordinary
+  typing, and is rejected with a console warning. A combination that
+  collides with an existing shortcut - built-in, or from another
+  extension - is also rejected with a console warning rather than
+  registered: two shortcuts sharing the same combination is something the
+  underlying keyboard-shortcut dispatch cannot recover from once the key
+  is actually pressed, so this is caught up front instead. Pressing the
+  combination in read-only (viewing) mode shows the same "you are in
+  view mode" attention animation a built-in shortcut shows, rather than
+  running the command.
+
 Command ids are namespaced internally so two extensions can never collide.
 
 ## Local testing

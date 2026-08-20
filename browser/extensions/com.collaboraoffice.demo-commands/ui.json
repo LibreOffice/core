@@ -132,5 +132,8 @@
     ],
     "contextToolbar": [
         { "command": "makeBold" }
+    ],
+    "keybindings": [
+        { "command": "insertDate", "key": "d", "modifier": ["ctrl", "alt"] }
     ]
 }

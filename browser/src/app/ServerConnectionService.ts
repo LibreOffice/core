@@ -175,6 +175,9 @@ class ServerConnectionService {
 						app.map.uiManager.notebookbar.impl.refresh();
 					}
 					if (app.map.contextToolbar) app.map.contextToolbar.refresh();
+					// KeyboardShortcuts' class lives in a @ts-strict-ignore'd file, so
+					// its methods are not visible to the strict compile of this file.
+					(window.KeyboardShortcuts as any).applyExtensionKeybindings();
 				},
 			);
 		}

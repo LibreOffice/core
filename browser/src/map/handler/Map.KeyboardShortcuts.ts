@@ -263,10 +263,14 @@ class KeyboardShortcuts {
         const shortcut = this.findShortcut(language, eventType, modifier, keyCode, key, platform);
 
         if (shortcut) {
-            // In read-only mode, block shortcuts that send uno commands
-            // to core unless they are explicitly meant for read-only use.
+            // In read-only mode, block shortcuts that send uno commands to core, or
+            // that run an extension's own command (an opaque script we cannot
+            // otherwise tell apart from one that edits the document), unless they
+            // are explicitly meant for read-only use.
+            const isExtensionAction =
+                !!shortcut.dispatchAction && shortcut.dispatchAction.startsWith('ext:');
 
-            if (!this.map.isEditMode() && shortcut.unoAction &&
+            if (!this.map.isEditMode() && (shortcut.unoAction || isExtensionAction) &&
                 shortcut.showViewModeAttention &&
                 shortcut.viewType !== ViewType.ReadOnly) {
                 event.preventDefault();
@@ -315,6 +319,76 @@ class KeyboardShortcuts {
         }
 
         return this.processEventImpl('default', event);
+    }
+
+    // True if some existing 'default'-language descriptor would already match a
+    // keydown with this exact modifier and key, for this document's own docType or
+    // for every docType. Registering a second, colliding descriptor is not safe to
+    // do at all: findShortcut throws the moment a matching keypress finds more than
+    // one candidate, so a collision has to be caught here, before it is ever added,
+    // rather than left for that check to catch (and crash on) at keypress time.
+    private collidesWithExisting(docType: string, modifier: Mod, key: string): boolean {
+        const descriptors = this.definitions.get('default') || [];
+        return descriptors.some((d) => {
+            const eventTypes = Array.isArray(d.eventType) ? d.eventType : [d.eventType];
+            return eventTypes.indexOf('keydown') !== -1 &&
+                d.modifier === modifier &&
+                d.key === key &&
+                (!d.docType || d.docType === docType);
+        });
+    }
+
+    // Registers each loaded extension's contributes.keybindings entries as
+    // dispatchAction-based shortcuts in the 'default' language list. Called once,
+    // after extension discovery resolves (see ServerConnectionService's
+    // onDocumentLoaded) - there is no later point that needs to call this again,
+    // since the extension list itself is only ever populated once per document.
+    public applyExtensionKeybindings(): void {
+        if (!window.enableExperimentalFeatures) return;
+        const exts = (this.map && this.map._extensions) || {};
+        const docType = this.map && this.map._docLayer ? this.map._docLayer._docType : '';
+        const defaultShortcuts = this.definitions.get('default');
+
+        Object.keys(exts).sort().forEach((extId: string) => {
+            const manifest = exts[extId].options.manifest;
+            const contributed = manifest.contributes && manifest.contributes.keybindings;
+            if (!contributed || !contributed.length) return;
+            const commands = manifest.contributes.commands || [];
+
+            contributed.forEach((entry: any) => {
+                const command = commands.filter((c: any) => c.id === entry.command)[0];
+                if (!command) {
+                    console.warn('extension ' + extId + ': keybinding references unknown command "' + entry.command + '"');
+                    return;
+                }
+
+                const modifierNames: string[] = entry.modifier || [];
+                let modifier = Mod.NONE;
+                if (modifierNames.indexOf('ctrl') !== -1) modifier |= Mod.CTRL;
+                if (modifierNames.indexOf('alt') !== -1) modifier |= Mod.ALT;
+                if (modifierNames.indexOf('shift') !== -1) modifier |= Mod.SHIFT;
+
+                const key: string = entry.key;
+                if (key.length === 1 && !(modifier & (Mod.CTRL | Mod.ALT))) {
+                    console.warn('extension ' + extId + ': keybinding for "' + entry.command +
+                        '" ("' + key + '") needs ctrl or alt, not shift alone or no modifier');
+                    return;
+                }
+
+                if (this.collidesWithExisting(docType, modifier, key)) {
+                    console.warn('extension ' + extId + ': keybinding for "' + entry.command +
+                        '" ("' + key + '") collides with an existing shortcut and was not registered');
+                    return;
+                }
+
+                defaultShortcuts.push(new ShortcutDescriptor({
+                    eventType: 'keydown',
+                    modifier: modifier,
+                    key: key,
+                    dispatchAction: 'ext:' + extId + ':' + entry.command,
+                }));
+            });
+        });
     }
 
     public verifyShortcuts() : void {
