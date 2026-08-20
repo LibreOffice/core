@@ -736,6 +736,47 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
                          pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testCool14348)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+
+    goToCell(u"A1"_ustr);
+
+    typeString(u"foo");
+
+    // Insert Newline
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_MOD1 | awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, KEY_MOD1 | awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // The trailing space finishes the word and is what triggers autocorrect's
+    // capitalize-first-letter-of-sentence check.
+    typeString(u"bar. baz ");
+
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: foo\nbar. baz
+    // - Actual  : foo\nBar. Baz
+    CPPUNIT_ASSERT_EQUAL(OUString(u"foo" + OUStringChar(u'\xA') + u"bar. baz "),
+                         pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // A sentence that starts in the middle of the first line is left alone too.
+    goToCell(u"A2"_ustr);
+
+    typeString(u"one. two ");
+
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u"one. two "_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf90579)
 {
     createScDoc();

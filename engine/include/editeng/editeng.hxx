@@ -531,8 +531,9 @@ public:
     SAL_DLLPRIVATE void            SetEndDropHdl( const Link<EditView*,void>& rLink );
     SAL_DLLPRIVATE Link<EditView*,void> const & GetEndDropHdl() const;
 
-    /// specifies if auto-correction should capitalize the first word or not (default is on)
-    void            SetFirstWordCapitalization( bool bCapitalize );
+    /** specifies if auto-correction should capitalize the start of a sentence
+        or not (default is on) */
+    void            SetCapitalizeSentenceStart( bool bCapitalize );
 
     /** specifies if auto-correction should replace a leading single quotation
         mark (apostrophe) or not (default is on) */

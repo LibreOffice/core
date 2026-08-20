@@ -1853,9 +1853,9 @@ Link<EditView*,void> const & EditEngine::GetEndDropHdl() const
     return getImpl().GetEndDropHdl();
 }
 
-void EditEngine::SetFirstWordCapitalization( bool bCapitalize )
+void EditEngine::SetCapitalizeSentenceStart( bool bCapitalize )
 {
-    getImpl().SetFirstWordCapitalization(bCapitalize);
+    getImpl().SetCapitalizeSentenceStart(bCapitalize);
 }
 
 void EditEngine::SetReplaceLeadingSingleQuotationMark( bool bReplace )

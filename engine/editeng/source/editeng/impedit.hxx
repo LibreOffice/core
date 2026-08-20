@@ -663,7 +663,7 @@ private:
     bool mbUseAutoColor : 1;
     bool mbForceAutoColor : 1;
     bool mbCallParaInsertedOrDeleted : 1;
-    bool mbFirstWordCapitalization : 1;   // specifies if auto-correction should capitalize the first word or not
+    bool mbCapitalizeSentenceStart : 1;
     bool mbLastTryMerge : 1;
     bool mbReplaceLeadingSingleQuotationMark : 1;
     bool mbSkipOutsideFormat : 1;
@@ -1349,8 +1349,8 @@ public:
     const Link<EditView*,void>&  GetEndDropHdl() const { return maEndDropHdl; }
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
-    void SetFirstWordCapitalization( bool bCapitalize ) { mbFirstWordCapitalization = bCapitalize; }
-    bool IsFirstWordCapitalization() const { return mbFirstWordCapitalization; }
+    void SetCapitalizeSentenceStart( bool bCapitalize ) { mbCapitalizeSentenceStart = bCapitalize; }
+    bool IsCapitalizeSentenceStart() const { return mbCapitalizeSentenceStart; }
 
     /** specifies if auto-correction should replace a leading single quotation
         mark (apostrophe) or not (default is on) */

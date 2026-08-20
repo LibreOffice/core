@@ -128,7 +128,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mbUseAutoColor(true),
     mbForceAutoColor(false),
     mbCallParaInsertedOrDeleted(false),
-    mbFirstWordCapitalization(true),
+    mbCapitalizeSentenceStart(true),
     mbLastTryMerge(false),
     mbReplaceLeadingSingleQuotationMark(true),
     mbSkipOutsideFormat(false),
@@ -2647,42 +2647,12 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         if ( aSel.HasRange() )
             aSel = ImpDeleteSelection( rCurSel );
 
-        // #i78661 allow application to turn off capitalization of
-        // start sentence explicitly.
-        // (This is done by setting IsFirstWordCapitalization to false.)
+        // #i78661 an application can turn off capitalization of a sentence
+        // start explicitly. Switching it off covers every sentence in this
+        // engine, including the one that a line break starts.
         bool bOldCapitalStartSentence = pAutoCorrect->IsAutoCorrFlag( ACFlags::CapitalStartSentence );
-        if (!IsFirstWordCapitalization())
-        {
-            ESelection aESel( CreateESel(aSel) );
-            EditSelection aFirstWordSel;
-            EditSelection aSecondWordSel;
-            if (aESel.end.nPara == 0)    // is this the first para?
-            {
-                // select first word...
-                // start by checking if para starts with word.
-                aFirstWordSel = SelectWord( CreateSel(ESelection()) );
-                if (aFirstWordSel.Min().GetIndex() == 0 && aFirstWordSel.Max().GetIndex() == 0)
-                {
-                    // para does not start with word -> select next/first word
-                    EditPaM aRightWord( WordRight( aFirstWordSel.Max() ) );
-                    aFirstWordSel = SelectWord( EditSelection( aRightWord ) );
-                }
-
-                // select second word
-                // (sometimes aSel might not point to the end of the first word
-                // but to some following char like '.'. ':', ...
-                // In those cases we need aSecondWordSel to see if aSel
-                // will actually effect the first word.)
-                EditPaM aRight2Word( WordRight( aFirstWordSel.Max() ) );
-                aSecondWordSel = SelectWord( EditSelection( aRight2Word ) );
-            }
-            bool bIsFirstWordInFirstPara = aESel.end.nPara == 0 &&
-                    aFirstWordSel.Max().GetIndex() <= aSel.Max().GetIndex() &&
-                    aSel.Max().GetIndex() <= aSecondWordSel.Min().GetIndex();
-
-            if (bIsFirstWordInFirstPara)
-                pAutoCorrect->SetAutoCorrFlag( ACFlags::CapitalStartSentence, IsFirstWordCapitalization() );
-        }
+        if (!IsCapitalizeSentenceStart())
+            pAutoCorrect->SetAutoCorrFlag( ACFlags::CapitalStartSentence, false );
 
         ContentNode* pNode = aSel.Max().GetNode();
         const sal_Int32 nIndex = aSel.Max().GetIndex();

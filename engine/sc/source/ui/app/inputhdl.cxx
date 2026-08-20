@@ -1125,7 +1125,10 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
         rDoc.ApplyAsianEditSettings( *mpEditEngine );
         mpEditEngine->SetDefaultHorizontalTextDirection(
             rDoc.GetEditTextDirection( rViewData.CurrentTabForData() ) );
-        mpEditEngine->SetFirstWordCapitalization( false );
+        // Cell text belongs to a grid rather than to prose, so a lower case
+        // letter stays as typed, both at the start of the cell and after a
+        // line break added with Ctrl+Enter.
+        mpEditEngine->SetCapitalizeSentenceStart( false );
     }
 
     //  Language is set separately, so the speller is needed only if online spelling is active
