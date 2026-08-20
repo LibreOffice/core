@@ -1039,7 +1039,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, FormulaCompiler::InitSymbols eWhat = FormulaCompiler::InitSymbols::INIT )
 {
     static OpCodeMapData aSymbolMap;
-    static std::map<OUString, OpCodeMapData> aLocaleSymbolMap;
+    static std::unordered_map<OUString, OpCodeMapData> aLocaleSymbolMap;
     std::unique_lock aGuard(aSymbolMap.maMtx);
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -1050,23 +1050,25 @@ static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
             return aLocaleSymbolMap.contains(language)
                    && bool(aLocaleSymbolMap[language].mxSymbolMap);
         }
-        else if (eWhat == FormulaCompiler::InitSymbols::DESTROY)
+
+        auto& rEntry = aLocaleSymbolMap[language];
+        if (eWhat == FormulaCompiler::InitSymbols::DESTROY)
         {
-            aLocaleSymbolMap[language].mxSymbolMap.reset();
+            rEntry.mxSymbolMap.reset();
         }
-        else if (!aLocaleSymbolMap[language].mxSymbolMap)
+        else if (!rEntry.mxSymbolMap)
         {
             // Core
-            aLocaleSymbolMap[language].mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
+            rEntry.mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
                 ocLastOpcodeId + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
             OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS,
-                                          aLocaleSymbolMap[language].mxSymbolMap);
+                                          rEntry.mxSymbolMap);
             OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES,
-                                         aLocaleSymbolMap[language].mxSymbolMap);
+                                         rEntry.mxSymbolMap);
             // No AddInMap for native core mapping.
         }
 
-        xMap = aLocaleSymbolMap[language].mxSymbolMap;
+        xMap = rEntry.mxSymbolMap;
     }
     else
     {
