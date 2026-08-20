@@ -136,24 +136,19 @@ ArgInput::ArgInput()
     pRefBtn=nullptr;
 }
 
-void ArgInput::InitArgInput(weld::Label* pftArg, weld::Button* pbtnFx,
-                            ArgEdit* pedArg, RefButton* prefBtn)
+void ArgInput::InitArgInput(weld::Label& rArgLabel, weld::Button& rFxButton, ArgEdit& rArgEdit,
+                            RefButton& rRefButton)
 {
-    pFtArg =pftArg;
-    pBtnFx =pbtnFx;
-    pEdArg =pedArg;
-    pRefBtn=prefBtn;
+    pFtArg = &rArgLabel;
+    pBtnFx = &rFxButton;
+    pEdArg = &rArgEdit;
+    pRefBtn = &rRefButton;
 
-    if(pBtnFx!=nullptr)
-    {
-        pBtnFx->connect_clicked( LINK( this, ArgInput, FxBtnClickHdl ) );
-        pBtnFx->connect_focus_in( LINK( this, ArgInput, FxBtnFocusHdl ) );
-    }
-    if(pEdArg!=nullptr)
-    {
-        pEdArg->SetGetFocusHdl ( LINK( this, ArgInput, EdFocusHdl ) );
-        pEdArg->SetModifyHdl   ( LINK( this, ArgInput, EdModifyHdl ) );
-    }
+    pBtnFx->connect_clicked(LINK(this, ArgInput, FxBtnClickHdl));
+    pBtnFx->connect_focus_in(LINK(this, ArgInput, FxBtnFocusHdl));
+
+    pEdArg->SetGetFocusHdl(LINK(this, ArgInput, EdFocusHdl));
+    pEdArg->SetModifyHdl(LINK(this, ArgInput, EdModifyHdl));
 }
 
 // Sets the Name for the Argument

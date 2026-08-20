@@ -392,7 +392,7 @@ void ParaWin::InitArgInput(sal_uInt16 nPos, weld::Label& rFtArg, weld::Button& r
     rRefBtn.SetReferences(pMyParent, &rEdArg);
     rEdArg.SetReferences(pMyParent, &rFtArg);
 
-    aArgInput[nPos].InitArgInput (&rFtArg,&rBtnFx,&rEdArg,&rRefBtn);
+    aArgInput[nPos].InitArgInput(rFtArg, rBtnFx, rEdArg, rRefBtn);
 
     aArgInput[nPos].Hide();
 

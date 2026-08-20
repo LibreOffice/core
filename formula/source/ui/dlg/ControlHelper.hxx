@@ -74,10 +74,8 @@ public:
 
     ArgInput();
 
-    void        InitArgInput(weld::Label* pftArg,
-                             weld::Button* pbtnFx,
-                             ArgEdit* pedArg,
-                             RefButton* prefBtn);
+    void InitArgInput(weld::Label& rArgLabel, weld::Button& rFxButton, ArgEdit& rArgEdit,
+                      RefButton& rRefButton);
 
     void        SetArgName(const OUString &aArg);
     OUString    GetArgName() const;
