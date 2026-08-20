@@ -1059,6 +1059,14 @@ class Dispatcher {
 					commandState = true;
 				}
 
+				// The new layout starts with no notion of where the document
+				// section sits on the canvas, so mouse clicks land one anchor's
+				// worth of pixels away from where the user clicked until the
+				// next section reflow catches up. Seed it from the current
+				// anchor right away.
+				app.activeDocument.activeLayout.documentAnchorPosition =
+					app.sectionContainer.getDocumentAnchor();
+
 				app.map.fire('commandstatechanged', {
 					commandName: 'multipageview',
 					state: commandState ? 'true' : 'false',
