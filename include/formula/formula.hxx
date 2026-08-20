@@ -60,7 +60,7 @@ class UNLESS_MERGELIBS_MORE(FORMULA_DLLPUBLIC) FormulaModalDialog
     friend class FormulaDlg_Impl;
 public:
     FormulaModalDialog(weld::Window* pParent, IFunctionManager const * _pFunctionMgr,
-                       IControlReferenceHandler* _pDlg);
+                       IControlReferenceHandler& rDlg);
     virtual ~FormulaModalDialog() override;
 
 private:
@@ -88,7 +88,7 @@ public:
     FormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
                weld::Window* pParent,
                IFunctionManager const * _pFunctionMgr,
-               IControlReferenceHandler* _pDlg);
+               IControlReferenceHandler& rDlg);
     virtual ~FormulaDlg() override;
 private:
     std::unique_ptr<FormulaDlg_Impl, o3tl::default_delete<FormulaDlg_Impl>> m_pImpl;

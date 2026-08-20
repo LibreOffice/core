@@ -59,7 +59,7 @@ using namespace com::sun::star;
 
 ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
                            weld::Window* pParent, const ScViewData& rViewData, const formula::IFunctionManager* _pFunctionMgr)
-    : formula::FormulaDlg(pB, pCW, pParent, _pFunctionMgr, this)
+    : formula::FormulaDlg(pB, pCW, pParent, _pFunctionMgr, *this)
     , m_aHelper(this, pB, m_xDialog.get())
     , m_pViewShell( nullptr )
 {

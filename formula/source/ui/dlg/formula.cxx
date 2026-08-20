@@ -1789,11 +1789,11 @@ void FormulaDlg_Impl::SetEdSelection()
 
 FormulaModalDialog::FormulaModalDialog(weld::Window* pParent,
                                        IFunctionManager const * _pFunctionMgr,
-                                       IControlReferenceHandler* _pDlg)
+                                       IControlReferenceHandler& rDlg)
     : GenericDialogController(pParent, u"formula/ui/formuladialog.ui"_ustr, u"FormulaDialog"_ustr)
     , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, false/*_bSupportFunctionResult*/,
                                   false/*_bSupportResult*/, false/*_bSupportMatrix*/,
-                                  this, _pFunctionMgr, _pDlg))
+                                  this, _pFunctionMgr, &rDlg))
 {
     m_xDialog->set_title(m_pImpl->m_aTitle1);
 }
@@ -1843,12 +1843,12 @@ void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
 //      Initialisation / General functions  for Dialog
 FormulaDlg::FormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
                        weld::Window* pParent,
-                       IFunctionManager const * _pFunctionMgr, IControlReferenceHandler* _pDlg)
+                       IFunctionManager const * _pFunctionMgr, IControlReferenceHandler& rDlg)
     : SfxModelessDialogController( pB, pCW, pParent, u"formula/ui/formuladialog.ui"_ustr, u"FormulaDialog"_ustr)
     , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, true/*_bSupportFunctionResult*/
                                              , true/*_bSupportResult*/
                                              , true/*_bSupportMatrix*/
-                                             , this, _pFunctionMgr, _pDlg))
+                                             , this, _pFunctionMgr, &rDlg))
 {
     m_xDialog->set_title(m_pImpl->m_aTitle1);
 }

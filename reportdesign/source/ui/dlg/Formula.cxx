@@ -51,7 +51,7 @@ FormulaDialog::FormulaDialog(weld::Window* pParent
                              , const OUString& _sFormula
                              , css::uno::Reference < css::beans::XPropertySet > _xRowSet
                              , svl::SharedStringPool& rStrPool )
-    : FormulaModalDialog( pParent, _pFunctionMgr.get(),this)
+    : FormulaModalDialog(pParent, _pFunctionMgr.get(), *this)
     ,m_aFunctionManager(_pFunctionMgr)
     ,m_xFormulaData(new FormEditData())
     ,m_xRowSet(std::move(_xRowSet))
