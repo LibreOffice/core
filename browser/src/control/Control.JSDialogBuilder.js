@@ -1765,6 +1765,12 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		};
 
 		var clickFunction = function (e) {
+			if (builder.map.isLockedUser() && builder.map.isLockedItem(data)) {
+				builder.map.openUnlockPopup(data.command);
+				e.preventDefault();
+				e.stopPropagation();
+				return;
+			}
 			if (!div.hasAttribute('disabled')) {
 				if (data.postmessage) {
 					let isContextualButton = e.target.offsetParent.id === 'context-toolbar';
