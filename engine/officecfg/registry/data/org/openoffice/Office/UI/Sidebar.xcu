@@ -435,7 +435,7 @@
           <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
-          <value>.uno:SidebarDeck.StyleListDeck</value>
+          <value>.uno:EditStyle</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -444,13 +444,13 @@
             WriterVariants,   Table,              visible                    ;
             WriterVariants,   Text,               visible                    ;
             WriterVariants,   default,            visible                    ;
-            Calc,             Auditing,           visible                    ;
-            Calc,             Cell,               visible                    ;
-            Calc,             default,            visible                    ;
-            Calc,             EditCell,           visible                    ;
-            Calc,             Pivot,              visible                    ;
-            Calc,             Sparkline,          visible                    ;
-            Calc,             Table,              visible                    ;
+            Calc,             Auditing,           visible, .uno:SidebarDeck.StyleListDeck ;
+            Calc,             Cell,               visible, .uno:SidebarDeck.StyleListDeck ;
+            Calc,             default,            visible, .uno:SidebarDeck.StyleListDeck ;
+            Calc,             EditCell,           visible, .uno:SidebarDeck.StyleListDeck ;
+            Calc,             Pivot,              visible, .uno:SidebarDeck.StyleListDeck ;
+            Calc,             Sparkline,          visible, .uno:SidebarDeck.StyleListDeck ;
+            Calc,             Table,              visible, .uno:SidebarDeck.StyleListDeck ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">

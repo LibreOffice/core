@@ -143,6 +143,11 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (!IsVisible())
         rJsonWriter.put("visible", false);
 
+    // headerText is the deck's localized title. Only the properties deck, the
+    // main sidebar, has one.
+    if (msId == "PropertyDeck" && GetTitleBar())
+        rJsonWriter.put("headerText", GetTitleBar()->GetTitle());
+
     auto childrenNode = rJsonWriter.startArray("children");
     for (const auto &it : maPanels)
     {

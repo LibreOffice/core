@@ -18,7 +18,7 @@ declare var JSDialog: any;
 
 JSDialog.deck = function (
   parentContainer: Element,
-  data: WidgetJSON,
+  data: DeckWidgetJSON,
   builder: JSBuilder,
 ) {
   var deck = window.L.DomUtil.create(
@@ -28,6 +28,19 @@ JSDialog.deck = function (
   );
   deck.id = data.id;
   deck.tabIndex = '-1';
+
+  if (data.headerText) {
+    deck.appendChild(
+      <div class={'ui-panel-header ui-deck-header ' + builder.options.cssClass}>
+        <h2
+          class={'ui-panel-title ' + builder.options.cssClass}
+          id={data.id + '-header-label'}
+        >
+          {data.headerText}
+        </h2>
+      </div>,
+    );
+  }
 
   for (var i = 0; i < data.children.length; i++) {
     builder.build(deck, [data.children[i]], undefined);

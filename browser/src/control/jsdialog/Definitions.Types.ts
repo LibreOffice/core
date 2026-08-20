@@ -359,6 +359,10 @@ interface ToolItemWidgetJSON extends WidgetJSON {
 	items?: Array<ToolItemWidgetJSON>; // DEPRECATED: w2 menus
 }
 
+interface DeckWidgetJSON extends WidgetJSON {
+	headerText?: string; // title shown in a heading row above the deck's panels
+}
+
 interface PanelWidgetJSON extends WidgetJSON {
 	hidden: boolean; // is hidden
 	command: string; // command to trigger options for a panel

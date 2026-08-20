@@ -39,6 +39,21 @@ describe(['tagdesktop'], 'Sidebar tests', function() {
 		cy.cGet('#PropertyDeck').should('be.visible');
 	});
 
+	it('Properties deck shows its heading', function() {
+		cy.cGet('#PropertyDeck .ui-deck-header .ui-panel-title')
+			.should('be.visible')
+			.should('have.text', 'Properties');
+	});
+
+	it('Style panel more button opens the style dialog for the cursor style', function() {
+		cy.cGet('.StylesPropertyPanel .ui-expander-icon-right button').click();
+
+		cy.cGet('[id^="TemplateDialog"].jsdialog').should('exist');
+
+		cy.cGet('.button-primary').click();
+		cy.cGet('[id^="TemplateDialog"].jsdialog').should('not.exist');
+	});
+
 	it('Show table panel multiple times', function() {
 		cy.cGet('.TableEditPanel').should('not.exist');
 
