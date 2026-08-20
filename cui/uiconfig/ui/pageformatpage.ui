@@ -240,7 +240,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="checkResizeAllPages-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|checkResizeAllPages">Resize only current page instead of all pages. This creates a new master page in case only one page is resized.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|checkResizeAllPages">Resize all pages in the document. If unchecked, creates a master slide or page specific to the slide or page.</property>
                   </object>
                 </child>
               </object>
