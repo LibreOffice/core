@@ -92,11 +92,8 @@ android {
         debug {
             // make android studio happy...
             isJniDebuggable = true
-            // would work just fine with external, but setting emulator up is a little more work
-            manifestPlaceholders["installLocation"] = "auto"
         }
         release {
-            manifestPlaceholders["installLocation"] = "preferExternal"
         }
     }
 
