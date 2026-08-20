@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-06-27 18:12+0000\n"
-"Last-Translator: Tigran Zargaryan <tigranflib@gmail.com>\n"
-"Language-Team: Armenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hy/>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-08-21 03:03+0000\n"
+"Last-Translator: tigran54 <tigran@flib.sci.am>\n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hy/>\n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -414,13 +414,12 @@ msgid "Your WOPI server is not secure: SSL verification failed"
 msgstr "Ձեր WOPI սերվերը անվտանգ չէ. SSL ստուգումը ձախողվել է"
 
 #: admin/src/AdminSocketServerAudit.js:40
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Փաստաթղթերը արդյունավետորեն չեն պարունակվում. բացակայում են "
-"հնարավորություններ կամ անվանատարածքներ։"
+"Փաստաթղթերը արդյունավետորեն չեն պարունակվում՝ բացակայում են "
+"հնարավորություններ, անվանատարածքներ և ցամաքային սահմանափակումներ։"
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -547,7 +546,7 @@ msgstr "Մութ ռեժիմ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Ինքնաշխատ ուղղագրության ստուգում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -559,7 +558,7 @@ msgstr "Լռելյայն խոշորացում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Կոկիկ գլորում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -879,14 +878,16 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Վերբեռնեք փաթեթի ընդլայնումը որպես .zip նիշքլ։ Դրա պարունակությունը "
+"(manifest.json, ...) բացվում է սերվերի վրա։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:972
 msgid "Upload Extension"
-msgstr ""
+msgstr "Վերբեռնեք ընդլայնումը"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1061
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Կարգավորումները հասանելի են միայն մուտք գործած օգտատերերին։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1070
 msgid "Something went wrong. Please try to refresh the page."
@@ -1053,7 +1054,7 @@ msgstr "օրինակ՝"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2445
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Թողեք դատարկ, եթե ձեր սերվերը չի պահանջում դա"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2464
 msgid ""
@@ -1114,7 +1115,7 @@ msgstr "Բեռնել մոդելները ընտրելու համար"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3175
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "API-ի քվոտան գերազանցվել է. ստուգեք ձեր պլանը և վճարման մանրամասները"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3180
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1459,7 +1460,7 @@ msgstr "Ընթացիկ տարբերակ"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n ավելի"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1566,7 +1567,7 @@ msgstr "բջջի հասցե"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Անվան վանդակ"
 
 #: src/control/Control.AIChatSidebar.ts:136
 msgid "Make the following text more concise"
@@ -1574,7 +1575,7 @@ msgstr "Հետևյալ տեքստը դարձրեք ավելի հակիրճ"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Make it more concise"
-msgstr ""
+msgstr "Դարձրեք այն ավելի հակիրճ"
 
 #: src/control/Control.AIChatSidebar.ts:140
 msgid "Summarize the key points of this text"
@@ -1582,7 +1583,7 @@ msgstr "Ամփոփեք այս տեքստի հիմնական կետերը"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Summarize this text"
-msgstr ""
+msgstr "Ամփոփեք այս տեքստը"
 
 #: src/control/Control.AIChatSidebar.ts:144
 msgid "Expand and add more detail to this text"
@@ -1590,7 +1591,7 @@ msgstr "Ընդարձակեք և ավելացրեք ավելի շատ մանրա�
 
 #: src/control/Control.AIChatSidebar.ts:145
 msgid "Expand this text"
-msgstr ""
+msgstr "Ընդարձակեք այս տեքստը"
 
 #: src/control/Control.AIChatSidebar.ts:148
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1598,7 +1599,7 @@ msgstr "Շտկեք քերականության, ուղղագրության և կ�
 
 #: src/control/Control.AIChatSidebar.ts:149
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Շտկեք քերականությունը և ուղղագրությունը"
 
 #: src/control/Control.AIChatSidebar.ts:164
 msgid "Natural"
@@ -1626,7 +1627,7 @@ msgstr "Պատահական"
 
 #: src/control/Control.AIChatSidebar.ts:411
 msgid "Best"
-msgstr ""
+msgstr "Լավագույնը"
 
 #: src/control/Control.AIChatSidebar.ts:413
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1635,7 +1636,7 @@ msgstr "Լավ"
 
 #: src/control/Control.AIChatSidebar.ts:415
 msgid "Poor"
-msgstr ""
+msgstr "Աղքատիկ"
 
 #: src/control/Control.AIChatSidebar.ts:417
 msgid "Unknown"
@@ -1932,6 +1933,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Հարցման ժամանակը սպառվեց։ Դուք կարող եք մեծացնել հարցման ժամանակը "
+"կարգավորումների ԱԲ բաժնում։"
 
 #: src/control/Control.AIChatSidebar.ts:2113
 #: src/control/Control.AIChatSidebar.ts:3626
@@ -1966,76 +1969,76 @@ msgstr "ԱԲ-ի օգնական"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "տեղադրեք %n սահիկ"
+msgstr[1] "տեղադրեք %n սահիկներ"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ջնջեք %n սահիկը"
+msgstr[1] "ջնջեք %n սահիկները"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "պատճենեք %n սահիկը"
+msgstr[1] "պատճենեք %n սահիկները"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "տեղաշարժեք %n սահիկը"
+msgstr[1] "տեղաշարժեք %n սահիկները"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "անվանափոխեք %n սահիկը"
+msgstr[1] "անվանափոխեք %n սահիկները"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "փոխել %n դասավորությունը"
+msgstr[1] "փոխել %n դասավորությունները"
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "տեքստը տեղադրել %n տեղում"
+msgstr[1] "տեքստը տեղադրել %n տեղերում"
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ձևաչափեք տեքստը %n տեղում"
+msgstr[1] "ձևաչափեք տեքստը %n տեղերում"
 
 #: src/control/Control.AIChatSidebar.ts:2403
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Գեներացված պատկեր"
+msgstr[0] "գեներացրու %n պատկեր"
+msgstr[1] "գեներացրու %n պատկերներ"
 
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "գործարկել %n փաստաթղթի հրամանը"
+msgstr[1] "գործարկել %n փաստաթղթի հրամանները"
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "գործարկել %n %1 հրամանը"
+msgstr[1] "գործարկել %n %1 հրամանները"
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "կիրառել '%1' դիզայնի ձևանմուշը"
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "Սա կհանգեցնի՝ %1։"
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
@@ -2110,65 +2113,67 @@ msgstr "Չհաջողվեց վերլուծել ընտրության բովանդ�
 
 #: src/control/Control.AIChatSidebar.ts:3005
 msgid "Design (optional):"
-msgstr ""
+msgstr "Դիզայն (ըստ ցանկության):"
 
 #: src/control/Control.AIChatSidebar.ts:3022
 msgid "No design"
-msgstr ""
+msgstr "Դիզայն չկա"
 
 #: src/control/Control.AIChatSidebar.ts:3023
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Շարունակել առանց դիզայնի ձևանմուշի"
 
 #: src/control/Control.AIChatSidebar.ts:3089
 msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Ահա առաջարկվող ուրվագիծը։ Խմբագրեք վերնագրերը կամ նկարագրությունները, "
+"հեռացրեք անցանկալի սահիկները, ապա հաստատեք տախտակամածի կառուցումը:"
 
 #: src/control/Control.AIChatSidebar.ts:3150
 msgid "Reject outline"
-msgstr ""
+msgstr "Մերժել ուրվագիծը"
 
 #: src/control/Control.AIChatSidebar.ts:3156
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Յուրաքանչյուր ավելացված սահիկին հաստատման համար տվեք վերնագիր։"
 
 #: src/control/Control.AIChatSidebar.ts:3184
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Սահիկ %1 վերնագիր"
 
 #: src/control/Control.AIChatSidebar.ts:3190
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Սահիկ %1 նկարագրություն"
 
 #: src/control/Control.AIChatSidebar.ts:3196
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Հեռացնել սահիկ %1 -ը"
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Slide title"
-msgstr ""
+msgstr "Սահիկի վերնագիր"
 
 #: src/control/Control.AIChatSidebar.ts:3256
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Ինչ պետք է ներառի այս սահիկը"
 
 #: src/control/Control.AIChatSidebar.ts:3281
 msgid "Add slide"
-msgstr ""
+msgstr "Ավելացնել սահիկ"
 
 #: src/control/Control.AIChatSidebar.ts:3319
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Հաստատված ուրվագիծ - %1 սահիկների կառուցում։"
 
 #: src/control/Control.AIChatSidebar.ts:3328
 msgid "Outline rejected."
-msgstr ""
+msgstr "Ուրվագիծը մերժվեց։"
 
 #: src/control/Control.AIChatSidebar.ts:3364
 msgid "Building slides..."
-msgstr ""
+msgstr "Սահիկների կառուցում..."
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "Formula analysis timeout"
@@ -2641,104 +2646,104 @@ msgstr "Ավելին հատկությունների մասին"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Բացեք փաստաթուղթը ձեր համակարգչից կամ ամպային տիրույթից։"
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Բացեք նիշքը համակարգչից"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Ավելացնել Cloud +"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Խմբագրել հաշիվը"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Ավելացնել նոր հաշիվ"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "Սերվերի URL"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Մուտքագրեք սերվերի URL-ը"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Ցուցադրվող անուն"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Խմբագրել ցուցադրվող անունը"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Անունը ցուցադրվում է ձեր ամպային ցանկում (առավելագույնը՝ 40 նիշ):"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Պահպանել փոփոխությունները"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Ավելացնել հաշիվ"
 
 #: src/control/backstage/CloudDialogs.tsx:184
 msgid "Remove account"
-msgstr ""
+msgstr "Հեռացնել հաշիվը"
 
 #: src/control/backstage/CloudDialogs.tsx:186
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Անջատում է այս ամպը"
 
 #: src/control/backstage/CloudDialogs.tsx:214
 msgid "New account successfully added"
-msgstr ""
+msgstr "Նոր հաշիվը հաջողությամբ ավելացվեց"
 
 #: src/control/backstage/CloudDialogs.tsx:219
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "Այժմ դուք կարող եք մուտք գործել ձեր նիշքերին այս ամպից։"
 
 #: src/control/backstage/CloudDialogs.tsx:242
 msgid "Open Files"
-msgstr ""
+msgstr "Բացել նիշքերը"
 
 #: src/control/backstage/CloudDialogs.tsx:268
 msgid "Remove this account?"
-msgstr ""
+msgstr "Հեռացնե՞լ այս հաշիվը։"
 
 #: src/control/backstage/CloudDialogs.tsx:273
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Դուք կանջատվեք այս ամպային հաշվից։"
 
 #: src/control/backstage/CloudDialogs.tsx:316
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/control/backstage/CloudDialogs.tsx:317
 msgid "OpenCloud"
-msgstr ""
+msgstr "OpenCloud"
 
 #: src/control/backstage/CloudDialogs.tsx:318
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Բացելու համար գցեք նիշքը"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Այս բջջային տեսքը լիովին հասանելի չէ։"
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Հասանելիության հայտարարություն"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -3903,7 +3908,7 @@ msgstr "Ավելին..."
 
 #: src/control/Control.Menubar.ts:1979
 msgid "Menu"
-msgstr ""
+msgstr "Ընտրացանկ"
 
 #: src/control/Control.Menubar.ts:2183
 msgid "Use Compact view"
@@ -3978,11 +3983,11 @@ msgstr "Արյունքներ"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Մեծացնել մինչև ցանց"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Գտնել և Փոխարինել"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:439
@@ -4190,7 +4195,7 @@ msgstr "Անիմացիաներ"
 #: src/control/Control.NotebookbarBuilder.js:167
 #: src/control/Control.NotebookbarBuilder.js:748
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Չպահպանված փոփոխություններ։ Պահպանել"
 
 #: src/control/Control.NotebookbarBuilder.js:231
 msgid "Click to expand"
@@ -4230,7 +4235,7 @@ msgstr "Պատկեր (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:746
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Չպահպանված փոփոխություններ։"
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:63
@@ -4986,10 +4991,10 @@ msgid "Expand All Sections"
 msgstr "Ընդարձակել բոլոր ենթաբաժինները"
 
 #: src/control/Control.PartsPreview.js:1065
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Ջնջե՞լ \"%1\" բաժինը և դրա %2 սահիկ(ներ)ը։"
+msgstr[0] "Ջնջե՞լ \"%1\" բաժինը և դրա %n սահիկը։"
+msgstr[1] "Ջնջե՞լ \"%1\" բաժինը և դրա %n սահիկները։"
 
 #: src/control/Control.PartsPreview.js:1114
 msgid "Enter new section name:"
@@ -5231,7 +5236,7 @@ msgstr "Պատճենել թերթիկը..."
 
 #: src/control/Control.Tabs.js:352
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, պաշտպանված"
 
 #: src/control/Control.Tabs.js:674
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5294,6 +5299,8 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Ներդրված սկրիպտը օգտագործում է հնացած com.sun.star UNO API-ը, որը կարող է "
+"հեռացվել ապագա թողարկումներում։"
 
 #: src/control/Control.UIManager.ts:2871
 msgid "Copy error details"
@@ -5572,63 +5579,69 @@ msgstr "Մուտքագրեք նիշքի անունը"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Ինչպե՞ս կցանկանայիք խմբագրել։"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Այլ օգտատերեր դիտում են այս փաստաթուղթը։ Ընտրեք, թե ինչպես եք ցանկանում "
+"շարունակել:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Խմբագրել տեղում"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Փոփոխությունները համաժամացվում են, երբ դուք պահպանում եք"
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Համագործակցային խմբագրում"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Խմբագրեք միասին իրական ժամանակում"
 
 #: src/control/Permission.js:402
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Շարունակեք դիտել տեղային օրինակը"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Շարունակեք ձեր տարբերակով"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Միացեք համագործակցային խմբագրմանը"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Սպասում ենք փոփոխությունների պահպանմանը..."
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
 msgstr ""
+"Այլ օգտատերեր խմբագրում են այս փաստաթուղթը։ Ընտրեք, թե ինչպես եք ցանկանում "
+"շարունակել:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "սկսեց խմբագրումը"
 
 #: src/control/Permission.js:538
 msgid "{0} started editing"
-msgstr ""
+msgstr "{0} սկսեց խմբագրումը"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
 msgstr ""
+"Մեկ ուրիշը այժմ խմբագրում է այս փաստաթուղթը։ Ընտրեք, թե ինչպես եք ցանկանում "
+"շարունակել:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5777,7 +5790,7 @@ msgstr "Վերանվանվում է..."
 
 #: src/control/Toolbar.js:847
 msgid "Unable to share"
-msgstr ""
+msgstr "Հնարավոր չէ կիսվել"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:426
 msgid "Top Margin"
@@ -6013,7 +6026,7 @@ msgstr "Շատ թույլ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Պատճենել Markdown-ը"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6036,26 +6049,24 @@ msgid "All users"
 msgstr "Բոլոր օգտատերերը"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Գունանշեք բջիջները սրանով..."
+msgstr "Գունանշեք բջիջները սրանով"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Վերևի/Ներքևի կանոններ..."
+msgstr "Վերևի/Ներքևի կանոններ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Գունային սանդղակ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Տվյալների վահանակ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Պատկերակների բազմություն"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6363,11 +6374,11 @@ msgstr "Աղյուսակի բջիջների ֆունկցիաներ"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Ընտրված ձևի չափը"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Ձևի չափը"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -6596,12 +6607,11 @@ msgid "Server is shutting down"
 msgstr "Սերվերը անջատվում է"
 
 #: src/docdispatcher.ts:611
-#, fuzzy
 msgid ""
 "AI is not configured. Go to File > Options > AI Assistant to set it up."
 msgstr ""
-"ԱԲ-ն կարգավորված չէ: Անցեք Նիշք > Ընտրանքներ > Դիտման կարգավորումներ՝ այն "
-"կարգավորելու համար:"
+"ԱԲ-ն կարգավորված չէ: Անցեք Նիշք > Ընտրանքներ > ԱԲ աջակից՝ այն կարգավորելու "
+"համար:"
 
 #: src/docdispatcher.ts:869
 msgid "Are you sure you want to delete this slide?"
@@ -6889,20 +6899,20 @@ msgstr "Աղյուսակից դուրս"
 #: src/layer/marker/A11yTextInput.js:257
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n տող"
+msgstr[1] "%n տողեր"
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n սյունակ"
+msgstr[1] "%n սյունակներ"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:261
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Աղյուսակ {0}-ով և {1}-ով"
 
 #: src/layer/marker/A11yTextInput.js:266
 msgid "Row {0} through {1}"
@@ -6992,7 +7002,7 @@ msgstr "{productname}-ից դուրս տեղադրելու համար նախ ս�
 
 #: src/map/Clipboard.js:203
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Փաստաթղթից պատճենումը անջատվել է ձեր ադմինիստրատորի կողմից"
 
 #: src/map/Clipboard.js:316
 msgid "warning: copy/paste request timed out"
@@ -7141,7 +7151,7 @@ msgstr "Պատուհանային ներկայացում: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1220
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Ներկայացվում է մեկ այլ պատուհանում"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1221
@@ -7212,6 +7222,8 @@ msgstr "Ողջույնի երկխոսություն"
 #: src/map/handler/Map.Settings.ts:159
 msgid "Settings saved. Add an API key to use the AI assistant."
 msgstr ""
+"Կարգավորումները պահպանված են: Ավելացրեք API բանալի՝ ԱԲ օգնականն օգտագործելու "
+"համար:"
 
 #: src/map/handler/Map.Settings.ts:164
 msgid "Settings saved"
@@ -7316,11 +7328,11 @@ msgstr "Փոքրացնել"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Ընթացիկ սահիկի նախադիտում"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Հաջորդ սահիկի նախադիտում"
 
 #: src/slideshow/PresenterConsole.js:211
 msgid "Preview Slide {1}"
@@ -7328,11 +7340,11 @@ msgstr "Նախադիտել սահիկ {1}"
 
 #: src/slideshow/PresenterConsole.js:815
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Դուք լքում եք ներկայացումը։"
 
 #: src/slideshow/PresenterConsole.js:816
 msgid "The link is not valid."
-msgstr ""
+msgstr "Հղումը վավեր չէ։"
 
 #: src/slideshow/PresenterConsole.js:1148
 #: src/slideshow/SlideShowPresenter.ts:919
@@ -7348,10 +7360,10 @@ msgid "No Notes"
 msgstr "Նշումներ չկան"
 
 #: src/slideshow/PresenterConsole.js:1658
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Կրկնել {0} վայրկյանից"
+msgstr[0] "Կրկնել %n վայրկյանից"
+msgstr[1] "Կրկնել %n վայրկյանից"
 
 #: src/slideshow/PresenterConsole.js:1665
 #: src/slideshow/SlideShowPresenter.ts:663
@@ -7496,11 +7508,11 @@ msgstr "Դեղին գաղափար"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Բարի գալուստ էլ․ աղյուսակ"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Բարի գալուստ Ներկայացում"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
