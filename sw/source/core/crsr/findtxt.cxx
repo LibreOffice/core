@@ -421,8 +421,8 @@ bool FindTextImpl(SwPaM & rSearchPam,
                         ( rSearchOpt.searchString == "^$" ||
                           rSearchOpt.searchString == "$^" );
     const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString == "$";
-    const bool bAvoidGettingStuck = bRegSearch
-        && (rSrch == "^" || rSrch == "\\A"); // beginning of the paragraph
+    const bool bAvoidGettingStuck = bRegSearch && !bChkEmptyPara
+        && (rSrch.startsWith("^") || rSrch.startsWith("\\A")); // beginning of the paragraph
     if (bAvoidGettingStuck)
     {
         // Do not search the current paragraph: prevent repeated finds of the same para.
@@ -924,7 +924,19 @@ bool DoSearch(SwPaM & rSearchPam,
         return true;
 
     if (!bChkEmptyPara && !bChkParaEnd)
+    {
+        if (bZeroMatch)
+        {
+            if (pLayout)
+                *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(nEnd.GetFrameIndex());
+            else
+                rSearchPam.GetPoint()->SetContent(nEnd.GetModelIndex());
+            rSearchPam.SetMark();
+
+            return true;
+        }
         return false;
+    }
 
     if (bChkEmptyPara && bSrchForward && nTextLen.GetAnyIndex())
         return false; // the length is not zero - there is content here
