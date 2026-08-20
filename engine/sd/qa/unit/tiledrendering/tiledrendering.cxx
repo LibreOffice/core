@@ -76,6 +76,9 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <tools/datetime.hxx>
 
 #include <config_cairo_rgba.h>
 
@@ -5312,6 +5315,67 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitivesMasterPagePl
 
     // The slide itself should still contain its rectangle.
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnnotationDateTimeUsesViewTimezone)
+{
+    // A new annotation and a reply to it are both stamped with the clock of the timezone their
+    // author reads.
+    createDoc("dummy.odp", comphelper::InitPropertySequence({
+                               { ".uno:Author", cpo::uno::Any(u"Kit User1"_ustr) },
+                           }));
+    SdTestViewCallback aView;
+
+    // The server keeps time in UTC and the author reads the clock in Kolkata, which is five and a
+    // half hours ahead of it the whole year round.
+    const std::pair<bool, OUString> aOldDefaultTimezone = KitHelper::getDefaultTimezone();
+    comphelper::ScopeGuard aRestoreTimezone(
+        [aOldDefaultTimezone]()
+        {
+            KitHelper::setDefaultTimezone(aOldDefaultTimezone.first, aOldDefaultTimezone.second);
+            comphelper::COKit::setTimezone(aOldDefaultTimezone.first, aOldDefaultTimezone.second);
+        });
+    KitHelper::setDefaultTimezone(true, u"UTC"_ustr);
+    comphelper::COKit::setTimezone(true, u"UTC"_ustr);
+    KitHelper::setViewTimezone(KitHelper::getCurrentView(), true, u"Asia/Kolkata"_ustr);
+    const tools::Time aAuthorOffset(5, 30);
+
+    // Both readings are in the server's zone, so the annotation has to fall between them once the
+    // author's offset is added.
+    const DateTime aBefore(DateTime::SYSTEM);
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr,
+                    comphelper::InitPropertySequence({
+                        { "Text", cpo::uno::Any(u"a comment"_ustr) },
+                    }));
+    Scheduler::ProcessEventsToIdle();
+    const DateTime aAfter(DateTime::SYSTEM);
+
+    // An annotation stamp carries whole seconds, so the lower bound drops its fraction too.
+    DateTime aExpectedFrom = aBefore + aAuthorOffset;
+    aExpectedFrom.SetNanoSec(0);
+    const DateTime aExpectedTo = aAfter + aAuthorOffset;
+    css::util::DateTime aParsed;
+    OUString aDateTime = OUString::createFromAscii(
+        aView.m_aCommentCallbackResult.get<std::string>("dateTime"));
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTime, aParsed));
+    // Without the accompanying fix in place, this test would have failed: the annotation carried
+    // the server's own reading of the clock, five and a half hours behind the author's.
+    CPPUNIT_ASSERT(DateTime(aParsed).IsBetween(aExpectedFrom, aExpectedTo));
+
+    const int nComment = aView.m_aCommentCallbackResult.get<int>("id");
+    dispatchCommand(mxComponent, u".uno:ReplyToAnnotation"_ustr,
+                    comphelper::InitPropertySequence({
+                        { "Id", cpo::uno::Any(OUString::number(nComment)) },
+                        { "Text", cpo::uno::Any(u"a reply"_ustr) },
+                    }));
+    Scheduler::ProcessEventsToIdle();
+    const DateTime aAfterReply(DateTime::SYSTEM);
+
+    // A reply carries the time it was written, in the same zone.
+    aDateTime = OUString::createFromAscii(
+        aView.m_aCommentCallbackResult.get<std::string>("dateTime"));
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTime, aParsed));
+    CPPUNIT_ASSERT(DateTime(aParsed).IsBetween(aExpectedFrom, aAfterReply + aAuthorOffset));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

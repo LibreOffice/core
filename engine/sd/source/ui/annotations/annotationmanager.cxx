@@ -24,6 +24,7 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <comphelper/kit.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svditer.hxx>
 
@@ -144,6 +145,9 @@ static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 
 css::util::DateTime getCurrentDateTime()
 {
+    // Read the clock of the timezone the user of the current view is in.
+    SfxKitTimezoneGuard aTimezoneGuard;
+
     DateTime aCurrentDate( DateTime::SYSTEM );
     return css::util::DateTime( 0, aCurrentDate.GetSec(),
             aCurrentDate.GetMin(), aCurrentDate.GetHour(),
