@@ -10,7 +10,7 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <mutex>
 #include <string_view>
@@ -134,7 +134,7 @@ cpo::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(std::u1
     // Note that this cache is only used by the officecfg:: auto-generated code, using it for anything
     // else would be unwise because the cache could end up containing stale entries.
     static std::mutex gMutex;
-    static std::map<OUString, css::uno::Reference< css::container::XNameAccess >> gAccessMap;
+    static std::unordered_map<OUString, css::uno::Reference< css::container::XNameAccess >> gAccessMap;
 
     sal_Int32 idx = path.rfind('/');
     assert(idx!=-1);
