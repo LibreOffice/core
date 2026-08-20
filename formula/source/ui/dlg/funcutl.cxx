@@ -130,130 +130,130 @@ bool ArgEdit::KeyInput(const KeyEvent& rKEvt)
 
 ArgInput::ArgInput()
 {
-    pFtArg=nullptr;
-    pBtnFx=nullptr;
-    pEdArg=nullptr;
-    pRefBtn=nullptr;
+    m_pFtArg = nullptr;
+    m_pBtnFx = nullptr;
+    m_pEdArg = nullptr;
+    m_pRefBtn = nullptr;
 }
 
 void ArgInput::InitArgInput(weld::Label& rArgLabel, weld::Button& rFxButton, ArgEdit& rArgEdit,
                             RefButton& rRefButton)
 {
-    pFtArg = &rArgLabel;
-    pBtnFx = &rFxButton;
-    pEdArg = &rArgEdit;
-    pRefBtn = &rRefButton;
+    m_pFtArg = &rArgLabel;
+    m_pBtnFx = &rFxButton;
+    m_pEdArg = &rArgEdit;
+    m_pRefBtn = &rRefButton;
 
-    pBtnFx->connect_clicked(LINK(this, ArgInput, FxBtnClickHdl));
-    pBtnFx->connect_focus_in(LINK(this, ArgInput, FxBtnFocusHdl));
+    m_pBtnFx->connect_clicked(LINK(this, ArgInput, FxBtnClickHdl));
+    m_pBtnFx->connect_focus_in(LINK(this, ArgInput, FxBtnFocusHdl));
 
-    pEdArg->SetGetFocusHdl(LINK(this, ArgInput, EdFocusHdl));
-    pEdArg->SetModifyHdl(LINK(this, ArgInput, EdModifyHdl));
+    m_pEdArg->SetGetFocusHdl(LINK(this, ArgInput, EdFocusHdl));
+    m_pEdArg->SetModifyHdl(LINK(this, ArgInput, EdModifyHdl));
 }
 
 // Sets the Name for the Argument
 void ArgInput::SetArgName(const OUString &aArg)
 {
-    if (pFtArg)
-        pFtArg->set_label(aArg );
+    if (m_pFtArg)
+        m_pFtArg->set_label(aArg);
 }
 
 // Returns the Name for the Argument
 OUString ArgInput::GetArgName() const
 {
     OUString aPrivArgName;
-    if (pFtArg)
-        aPrivArgName = pFtArg->get_label();
+    if (m_pFtArg)
+        aPrivArgName = m_pFtArg->get_label();
     return aPrivArgName;
 }
 
 //Sets the Name for the Argument
 void ArgInput::SetArgNameFont(const vcl::Font &aFont)
 {
-    if (pFtArg)
-        pFtArg->set_font(aFont);
+    if (m_pFtArg)
+        m_pFtArg->set_font(aFont);
 }
 
 //Sets up the Selection for the EditBox.
 void ArgInput::SelectAll()
 {
-    if (pEdArg)
-        pEdArg->SelectAll();
+    if (m_pEdArg)
+        m_pEdArg->SelectAll();
 }
 
 //Sets the Value for the Argument
 void ArgInput::SetArgVal(const OUString &rVal)
 {
-    if (pEdArg)
-        pEdArg->SetRefString(rVal);
+    if (m_pEdArg)
+        m_pEdArg->SetRefString(rVal);
 }
 
 //Returns the Value for the Argument
 OUString ArgInput::GetArgVal() const
 {
     OUString aResult;
-    if (pEdArg)
-        aResult=pEdArg->GetText();
+    if (m_pEdArg)
+        aResult = m_pEdArg->GetText();
     return aResult;
 }
 
 //Hides the Controls
 void ArgInput::Hide()
 {
-    if (pFtArg && pBtnFx && pEdArg && pRefBtn)
+    if (m_pFtArg && m_pBtnFx && m_pEdArg && m_pRefBtn)
     {
-        pFtArg->hide();
-        pBtnFx->hide();
-        pEdArg->GetWidget()->hide();
-        pRefBtn->GetWidget()->hide();
+        m_pFtArg->hide();
+        m_pBtnFx->hide();
+        m_pEdArg->GetWidget()->hide();
+        m_pRefBtn->GetWidget()->hide();
     }
 }
 
 //Casts the Controls again.
 void ArgInput::Show()
 {
-    if (pFtArg && pBtnFx && pEdArg && pRefBtn)
+    if (m_pFtArg && m_pBtnFx && m_pEdArg && m_pRefBtn)
     {
-        pFtArg->show();
-        pBtnFx->show();
-        pEdArg->GetWidget()->show();
-        pRefBtn->GetWidget()->show();
+        m_pFtArg->show();
+        m_pBtnFx->show();
+        m_pEdArg->GetWidget()->show();
+        m_pRefBtn->GetWidget()->show();
     }
 }
 
 void ArgInput::UpdateAccessibleNames()
 {
-    OUString aArgName = ":" + pFtArg->get_label();
+    OUString aArgName = ":" + m_pFtArg->get_label();
 
-    OUString aName = pBtnFx->get_tooltip_text() + aArgName;
-    pBtnFx->set_accessible_name(aName);
+    OUString aName = m_pBtnFx->get_tooltip_text() + aArgName;
+    m_pBtnFx->set_accessible_name(aName);
 
-    aName = pRefBtn->GetWidget()->get_tooltip_text() + aArgName;
-    pRefBtn->GetWidget()->set_accessible_name(aName);
+    aName = m_pRefBtn->GetWidget()->get_tooltip_text() + aArgName;
+    m_pRefBtn->GetWidget()->set_accessible_name(aName);
 }
 
 IMPL_LINK(ArgInput, FxBtnClickHdl, weld::Button&, rBtn, void)
 {
-    if (&rBtn == pBtnFx)
-        aFxClickLink.Call(*this);
+    if (&rBtn == m_pBtnFx)
+        m_aFxClickLink.Call(*this);
 }
 
 IMPL_LINK( ArgInput, FxBtnFocusHdl, weld::Widget&, rControl, void )
 {
-    if (&rControl == pBtnFx)
-        aFxFocusLink.Call(*this);
+    if (&rControl == m_pBtnFx)
+        m_aFxFocusLink.Call(*this);
 }
 
 IMPL_LINK( ArgInput, EdFocusHdl, RefEdit&, rControl, void )
 {
-    if (&rControl == pEdArg)
-        aEdFocusLink.Call(*this);
+    if (&rControl == m_pEdArg)
+        m_aEdFocusLink.Call(*this);
 }
 
 IMPL_LINK( ArgInput, EdModifyHdl, RefEdit&, rEdit, void )
 {
-    if (&rEdit == pEdArg)
-        aEdModifyLink.Call(*this);
+    if (&rEdit == m_pEdArg)
+        m_aEdModifyLink.Call(*this);
 }
 
 RefEdit::RefEdit(std::unique_ptr<weld::Entry> xControl)

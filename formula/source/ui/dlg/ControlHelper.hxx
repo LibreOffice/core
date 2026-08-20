@@ -55,15 +55,15 @@ private:
 class ArgInput final
 {
 private:
-    Link<ArgInput&,void>          aFxClickLink;
-    Link<ArgInput&,void>          aFxFocusLink;
-    Link<ArgInput&,void>          aEdFocusLink;
-    Link<ArgInput&,void>          aEdModifyLink;
+    Link<ArgInput&, void> m_aFxClickLink;
+    Link<ArgInput&, void> m_aFxFocusLink;
+    Link<ArgInput&, void> m_aEdFocusLink;
+    Link<ArgInput&, void> m_aEdModifyLink;
 
-    weld::Label*pFtArg;
-    weld::Button* pBtnFx;
-    ArgEdit* pEdArg;
-    RefButton* pRefBtn;
+    weld::Label* m_pFtArg;
+    weld::Button* m_pBtnFx;
+    ArgEdit* m_pEdArg;
+    RefButton* m_pRefBtn;
 
     DECL_LINK( FxBtnClickHdl, weld::Button&, void );
     DECL_LINK( FxBtnFocusHdl, weld::Widget&, void );
@@ -86,16 +86,15 @@ public:
 
     void        SelectAll();
 
-    ArgEdit*    GetArgEdPtr() { return pEdArg; }
+    ArgEdit* GetArgEdPtr() { return m_pEdArg; }
 
+    void SetFxClickHdl(const Link<ArgInput&, void>& rLink) { m_aFxClickLink = rLink; }
 
-    void            SetFxClickHdl( const Link<ArgInput&,void>& rLink ) { aFxClickLink = rLink; }
+    void SetFxFocusHdl(const Link<ArgInput&, void>& rLink) { m_aFxFocusLink = rLink; }
 
-    void            SetFxFocusHdl( const Link<ArgInput&,void>& rLink ) { aFxFocusLink = rLink; }
+    void SetEdFocusHdl(const Link<ArgInput&, void>& rLink) { m_aEdFocusLink = rLink; }
 
-    void            SetEdFocusHdl( const Link<ArgInput&,void>& rLink ) { aEdFocusLink = rLink; }
-
-    void            SetEdModifyHdl( const Link<ArgInput&,void>& rLink ) { aEdModifyLink = rLink; }
+    void SetEdModifyHdl(const Link<ArgInput&, void>& rLink) { m_aEdModifyLink = rLink; }
 
     void Hide();
     void Show();
