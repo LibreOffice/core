@@ -15,6 +15,7 @@
 
 #include <autonamecache.hxx>
 #include <tokenarray.hxx>
+#include <formula/token.hxx>
 #include <sharedformulagroups.hxx>
 #include <externalrefmgr.hxx>
 #include <tokenstringcontext.hxx>
@@ -79,16 +80,16 @@ void stripRedundantParentheses(ScTokenArray& rArray,
 }
 
 // Rewrite each four-token span
-//   ocSpill ocOpen <push> ocClose
+//   ocAnchorArray ocOpen <push> ocClose
 // to
 //   <push> ocSpill
-// so the parse array matches the native postfix form.
+// so the parse array matches the native postfix form. Inverse of what the export does.
 void liftAnchorArrayToPostfix(ScTokenArray& rArray)
 {
     sal_uInt16 nPosition = 0;
     while (nPosition + 1 < rArray.GetLen())
     {
-        if (rArray.TokenAt(nPosition)->GetOpCode() == ocSpill
+        if (rArray.TokenAt(nPosition)->GetOpCode() == ocAnchorArray
             && rArray.TokenAt(nPosition + 1)->GetOpCode() == ocOpen)
         {
             // Find the parenthesis that closes the one right after the
@@ -107,12 +108,9 @@ void liftAnchorArrayToPostfix(ScTokenArray& rArray)
             }
             if (nClose < rArray.GetLen())
             {
-                // Turn #(operand) into operand#: move the spill opcode
-                // past the operand and drop the wrapper parentheses,
-                // keeping any inner ones. The reference keeps the spill
-                // token alive when it leaves its old slot.
-                formula::FormulaTokenRef pSpill(rArray.TokenAt(nPosition));
-                rArray.ReplaceToken(nClose, pSpill.get(),
+                // Put the postfix operator behind the operand and drop the
+                // wrapper parentheses, keeping any inner ones.
+                rArray.ReplaceToken(nClose, new formula::FormulaByteToken(ocSpill),
                                     formula::FormulaTokenArray::CODE_ONLY);
                 rArray.RemoveToken(nPosition + 1, 1);
                 rArray.RemoveToken(nPosition, 1);

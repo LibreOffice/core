@@ -230,7 +230,10 @@ enum OpCode : sal_uInt16
         ocIsoWeeknum        = 178,
         ocNot               = 179,
         ocNeg               = 180,
-        ocStopOneParameter  = 181,
+        // OOXML spelling of the # operator, a call in front of its operand. Only a
+        // rewritten token array has this.
+        ocAnchorArray       = 181,
+        ocStopOneParameter  = 182,
 
     // Functions with more than one parameter
         ocStartTwoParameters = 201,
