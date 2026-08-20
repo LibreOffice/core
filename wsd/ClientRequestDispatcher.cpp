@@ -39,6 +39,7 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
+#include <wsd/RemoteDocumentBroker.hpp>
 #include <wsd/Exceptions.hpp>
 #include <wsd/FileServer.hpp>
 #include <wsd/ProofKey.hpp>
@@ -1245,7 +1246,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                     CommandControl::LockManager::getUnlockImageUri();
                 if (!unlockImageUri.empty())
                 {
-                    const std::string& serverUri =
+                    const std::string serverUri =
                         unlockImageUri.getScheme() + "://" + unlockImageUri.getAuthority();
                     ProxyRequestHandler::handleRequest(
                         uri.substr(pos + sizeof("/remote/static") - 1), socket, serverUri);
@@ -1388,6 +1389,12 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                  requestDetails.equals(1, "clipboard"))
         {
             servedSync = handleClipboardRequest(request, message, disposition, socket);
+        }
+        else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
+                 requestDetails.equals(1, "relateddocument") &&
+                 request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST)
+        {
+            servedSync = handleRelatedDocumentRequest(request, message, disposition, socket);
         }
         else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
                  requestDetails.equals(1, "signature"))
@@ -2215,6 +2222,126 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
         return true;
     }
     return false;
+}
+
+bool ClientRequestDispatcher::handleRelatedDocumentRequest(
+    const Poco::Net::HTTPRequest& request, std::istream& message, SocketDisposition& disposition,
+    const std::shared_ptr<StreamSocket>& socket)
+{
+    assert(socket && "Must have a valid socket");
+
+    LOG_DBG_S("RelatedDocument POST request: " << Anonymizer::anonymizeUrl(request.getURI()));
+
+    if (!RemoteDocumentBroker::isEnabled())
+    {
+        LOG_ERR_S("RelatedDocument request rejected: remote_documents is disabled in the "
+                  "configuration: "
+                  << Anonymizer::anonymizeUrl(request.getURI()));
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket,
+                                         "remote documents are disabled");
+        return true;
+    }
+
+    std::string wopiSrc;
+    const Poco::URI requestUri(request.getURI());
+    for (const auto& param : requestUri.getQueryParameters())
+    {
+        if (param.first == "WOPISrc")
+            wopiSrc = param.second;
+    }
+
+    if (wopiSrc.empty())
+    {
+        LOG_ERR_S("RelatedDocument request without a WOPISrc query parameter: "
+                  << Anonymizer::anonymizeUrl(request.getURI()));
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing WOPISrc");
+        return true;
+    }
+
+    // Verify that the WOPISrc is properly encoded.
+    if (!HttpHelper::verifyWOPISrc(request.getURI(), wopiSrc, socket))
+    {
+        LOG_ERR_S("RelatedDocument request with an unencoded WOPISrc, rejected: "
+                  << Anonymizer::anonymizeUrl(request.getURI()));
+        return false;
+    }
+
+    // Tokens travel only in the body, never in the URL. The caller proves
+    // access to the target document with its own token, and names the
+    // related document the same way a CheckFileInfo RelatedDocuments entry
+    // does:
+    //   { "AccessToken": "<token of the target document>",
+    //     "RelatedDocument": { "WOPISrc": "...", "AccessToken": "..." } }
+    const std::string body(std::istreambuf_iterator<char>(message), {});
+    std::string accessToken;
+    std::string remoteWopiSrc;
+    std::string remoteAccessToken;
+    Poco::JSON::Object::Ptr object;
+    if (JsonUtil::parseJSON(body, object))
+    {
+        JsonUtil::findJSONValue(object, "AccessToken", accessToken);
+        if (auto relatedDocument = object->getObject("RelatedDocument"))
+        {
+            JsonUtil::findJSONValue(relatedDocument, "WOPISrc", remoteWopiSrc);
+            JsonUtil::findJSONValue(relatedDocument, "AccessToken", remoteAccessToken);
+        }
+    }
+
+    if (accessToken.empty() || remoteWopiSrc.empty() || remoteAccessToken.empty())
+    {
+        LOG_ERR_S("RelatedDocument request rejected: incomplete body (have AccessToken: "
+                  << !accessToken.empty() << ", RelatedDocument WOPISrc: " << !remoteWopiSrc.empty()
+                  << ", RelatedDocument AccessToken: " << !remoteAccessToken.empty()
+                  << "): " << Anonymizer::anonymizeUrl(request.getURI()));
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
+                                         "missing AccessToken or RelatedDocument");
+        return true;
+    }
+
+    const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+    std::shared_ptr<DocumentBroker> docBroker;
+    {
+        std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
+        const auto it = DocBrokers.find(docKey);
+        if (it != DocBrokers.end())
+            docBroker = it->second;
+    }
+
+    if (!docBroker || !docBroker->isAlive())
+    {
+        LOG_ERR_S("RelatedDocument request rejected: no live document for docKey [" << docKey
+                                                                                    << ']');
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket, "no such document");
+        return true;
+    }
+
+    docBroker->setupTransfer(
+        disposition,
+        [docBroker, accessToken = std::move(accessToken),
+         remoteWopiSrc = std::move(remoteWopiSrc),
+         remoteAccessToken = std::move(remoteAccessToken)](const std::shared_ptr<Socket>& moveSocket)
+        {
+            auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
+
+            // The caller must hold the access token of one of the document's
+            // live sessions.
+            if (!docBroker->isKnownAccessToken(accessToken))
+            {
+                LOG_ERR_S("RelatedDocument request for [" << docBroker->getDocKey()
+                                                          << "] with a mismatching access token");
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
+                                                 "invalid access_token");
+                return;
+            }
+
+            docBroker->setRemoteDocumentToken(remoteWopiSrc, remoteAccessToken);
+
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setContentLength(0);
+            streamSocket->sendAndShutdown(httpResponse);
+        });
+
+    return true;
 }
 
 namespace

@@ -72,6 +72,7 @@
 #include <wsd/ClientRequestDispatcher.hpp>
 #include <wsd/CollabBroker.hpp>
 #include <wsd/DocumentBroker.hpp>
+#include <wsd/RemoteDocumentBroker.hpp>
 #include <wsd/PlatformDesktop.hpp>
 #include <wsd/PlatformMobile.hpp>
 #include <wsd/PlatformUnix.hpp>
@@ -2471,6 +2472,9 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
 
     LOG_TRC("Initialize Admin");
     Admin::initialize();
+
+    LOG_TRC("Initialize RemoteDocumentBroker");
+    RemoteDocumentBroker::initialize();
 #endif
 
     PrisonerPoll = std::make_unique<PrisonPoll>();
@@ -3799,6 +3803,12 @@ void COOLWSDServer::dumpState(std::ostream& os) const
 
     os << '\n';
     COOLWSD::FileRequestHandler->dumpState(os);
+
+    if (RemoteDocumentBroker::isInitialized())
+    {
+        os << '\n';
+        RemoteDocumentBroker::instance().dumpState(os);
+    }
 #endif
 
     {
@@ -4511,6 +4521,8 @@ int COOLWSD::cleanup(int returnValue)
 
         FileRequestHandler.reset();
         JWTAuth::cleanup();
+
+        RemoteDocumentBroker::uninitialize();
 
         Admin::uninitialize();
 

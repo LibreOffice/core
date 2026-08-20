@@ -102,6 +102,12 @@ public:
     /// Returns true iff we are refreshing the token.
     bool isRefreshingToken() const { return _type == Type::TokenRefresh; }
 
+    /// Returns true iff this is a non-empty access_token equal to the given one.
+    bool matchesToken(const std::string& accessToken) const
+    {
+        return _type == Type::Token && !_data.empty() && _data == accessToken;
+    }
+
     /// Returns true if the timeout has elapsed without a refresh.
     bool isTokenRefreshTimedOut(
         const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now()) const

@@ -169,6 +169,28 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
                 << _username << "] will be used until a valid name is specified.");
     }
 
+    // Take the remote documents this document may subscribe to, then redact
+    // their tokens in the response object that is logged below.
+    if (auto relatedDocuments = object->getArray("RelatedDocuments"))
+    {
+        for (std::size_t i = 0; i < relatedDocuments->size(); ++i)
+        {
+            auto entry = relatedDocuments->getObject(i);
+            if (!entry)
+                continue;
+
+            std::string wopiSrc;
+            std::string accessToken;
+            JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
+            JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
+            if (!wopiSrc.empty() && !accessToken.empty())
+                _relatedDocuments.emplace_back(std::move(wopiSrc), std::move(accessToken));
+
+            if (entry->has("AccessToken"))
+                entry->set("AccessToken", "<redacted>");
+        }
+    }
+
     std::ostringstream wopiResponse;
 
     // Anonymize key values.

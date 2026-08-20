@@ -1514,6 +1514,8 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "geta11ycaretposition") ||
              tokens.equals(0, "getpresentationinfo") ||
              tokens.equals(0, "getslidesections") ||
+             tokens.equals(0, "remotedocsubscribe") ||
+             tokens.equals(0, "remotedocunsubscribe") ||
              tokens.equals(0, "slideshowfollow"))
     {
 #if !MOBILEAPP
@@ -2233,6 +2235,20 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         int loadPart = -1;
         parseDocOptions(tokens, loadPart, timestamp);
         overrideDocOption();
+
+#if !MOBILEAPP
+        // A headless session names the docKeys already on its connection
+        // chain, so a subscription that would close a cycle can be refused.
+        for (std::size_t i = 1; i < tokens.size(); ++i)
+        {
+            std::string docKeyChain;
+            if (COOLProtocol::getTokenString(tokens[i], "remotechain", docKeyChain) &&
+                !docKeyChain.empty())
+            {
+                docBroker->addToIncomingDocKeyChain(docKeyChain);
+            }
+        }
+#endif
 
 #if defined(QTAPP) || defined(MACOSAPP)
         // The kit reads SignatureCert/Key/Ca from authorprivateinfo (set at load

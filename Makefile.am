@@ -236,6 +236,7 @@ coolwsd_sources = \
                   wsd/ProxyRequestHandler.cpp \
                   wsd/QuarantineUtil.cpp \
                   wsd/RemoteConfig.cpp \
+                  wsd/RemoteDocumentBroker.cpp \
                   wsd/RequestDetails.cpp \
                   wsd/RequestVettingStation.cpp \
                   wsd/ServerAuditUtil.cpp \
@@ -335,6 +336,7 @@ wsd_headers = \
               wsd/ProxyRequestHandler.hpp \
               wsd/QuarantineUtil.hpp \
               wsd/RemoteConfig.hpp \
+              wsd/RemoteDocumentBroker.hpp \
               wsd/RequestDetails.hpp \
               wsd/RequestVettingStation.hpp \
               wsd/SenderQueue.hpp \

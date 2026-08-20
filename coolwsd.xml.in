@@ -407,6 +407,15 @@
       <controller_monitor_url desc="Which of the monitors.monitor entries is the controller. Documents are handed over to it before this server shuts down. When left empty, a monitor whose address contains the word controller is taken to be the controller." type="string" default=""></controller_monitor_url>
     </indirection_endpoint>
 
+    <remote_documents desc="Live links from open documents to documents open on this or another server">
+      <enable desc="Enable subscriptions to remote documents" type="bool" default="false">false</enable>
+      <server_url desc="Base URL this server dials remote documents through, usually the public proxy in front of the cluster. Empty falls back to server_name, then to this server's own address." type="string" default=""></server_url>
+      <max_remote_docs desc="The maximum number of remote documents this server connects to" type="uint" default="16">16</max_remote_docs>
+      <max_links_per_document desc="The maximum number of remote documents one document may subscribe to" type="uint" default="4">4</max_links_per_document>
+      <max_chain_depth desc="The maximum length of a chain of documents linked to each other" type="uint" default="3">3</max_chain_depth>
+      <reconnect_attempts desc="How many times a lost connection to a remote document is retried" type="uint" default="5">5</reconnect_attempts>
+    </remote_documents>
+
     @HOME_MODE_CONFIGURATION@
 
     @LOCK_CONFIGURATION@

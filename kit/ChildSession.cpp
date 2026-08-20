@@ -625,6 +625,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         return updateBlockingCommandStatus(tokens);
 #endif
     }
+    else if (tokens.equals(0, "remotedocsubscribe") || tokens.equals(0, "remotedocunsubscribe"))
+    {
+        return remoteDocumentSubscribe(tokens);
+    }
     else
     {
         // All other commands are such that they always require a COKitDocument session,
@@ -1665,6 +1669,34 @@ bool ChildSession::downloadAs(const StringVector& tokens)
                   + " port=" + std::to_string(ClientPortNumber) + " id=" + id
                   + " filename=" + filename);
 #endif
+    return true;
+}
+
+bool ChildSession::remoteDocumentSubscribe(const StringVector& tokens)
+{
+    std::string encodedWopiSrc;
+    if (tokens.size() < 2 || !getTokenString(tokens[1], "wopisrc", encodedWopiSrc) ||
+        encodedWopiSrc.empty())
+    {
+        sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=syntax");
+        return false;
+    }
+
+    // Tags are unique per kit process. An unsubscription may name the tag of
+    // one link; tag 0 drops every link of this document to the wopisrc.
+    static std::atomic<unsigned> nextTag(1);
+    const bool subscribe = tokens.equals(0, "remotedocsubscribe");
+    int tag = 0;
+    if (subscribe)
+        tag = nextTag++;
+    else
+        getTokenInteger(tokens, "tag", tag);
+
+    const std::string message = std::string(subscribe ? "remotedocsubscribe:"
+                                                      : "remotedocunsubscribe:") +
+                                " tag=" + std::to_string(tag) + " wopisrc=" + encodedWopiSrc;
+    LOG_DBG("Sending to the DocumentBroker: " << message);
+    _docManager->sendFrame(message);
     return true;
 }
 

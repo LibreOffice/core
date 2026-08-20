@@ -23,6 +23,8 @@
 
 #include <chrono>
 #include <memory>
+#include <utility>
+#include <vector>
 #include <optional>
 #include <string>
 
@@ -60,6 +62,13 @@ public:
         const std::string& getPostMessageOrigin() const { return _postMessageOrigin; }
         const std::string& getHideUserList() const { return _hideUserList; }
         const std::string& getPresentationLeader() const { return _presentationLeader; }
+
+        /// Remote documents this document may subscribe to, as
+        /// (WOPISrc, access token) pairs.
+        const std::vector<std::pair<std::string, std::string>>& getRelatedDocuments() const
+        {
+            return _relatedDocuments;
+        }
 
         bool getUserCanWrite() const { return _userCanWrite; }
         bool getIsAnonymousUser() const { return _isAnonymousUser; }
@@ -200,6 +209,9 @@ public:
         std::string _restrictedCommands;
         /// Used for directly starting follow me presentation
         std::string _presentationLeader;
+
+        /// (WOPISrc, access token) pairs from the RelatedDocuments entries.
+        std::vector<std::pair<std::string, std::string>> _relatedDocuments;
     };
 
     WopiStorage(const Poco::URI& uri, const std::string& localStorePath,

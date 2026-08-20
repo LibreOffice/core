@@ -53,6 +53,7 @@
 #include <wsd/Process.hpp>
 #include <wsd/ProxyProtocol.hpp>
 #include <wsd/QuarantineUtil.hpp>
+#include <wsd/RemoteDocumentBroker.hpp>
 #include <wsd/Storage.hpp>
 #include <wsd/TileCache.hpp>
 #include <wsd/Unzip.hpp>
@@ -986,6 +987,10 @@ DocumentBroker::~DocumentBroker()
 
     LOG_INF("~DocumentBroker [" << _docKey << "] destroyed with " << _sessions.size()
                                 << " sessions left");
+
+#if !MOBILEAPP
+    unsubscribeAllRemoteDocuments();
+#endif
 
     // Do this early - to avoid operating on _childProcess from two threads.
     _poll->joinThread();
@@ -4466,6 +4471,14 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
 
     try
     {
+#if !MOBILEAPP
+        if (wopiFileInfo)
+        {
+            for (const auto& related : wopiFileInfo->getRelatedDocuments())
+                setRemoteDocumentToken(related.first, related.second);
+        }
+#endif
+
         // First, download the document, since this can fail.
         if (!download(session, _childProcess->getJailId(), session->getPublicUri(),
                       session->getAdditionalFilePublicUri(),
@@ -4943,6 +4956,7 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
         // fold this document's audit into the admin console's instance view
         if (!_serverAudit.isDisabled())
             _admin.mergeServerAudit(_serverAudit.getEntries());
+
 #endif
 
         // In case of WOPI, if this session is not set as readonly, it might be set so
@@ -4980,6 +4994,220 @@ void DocumentBroker::addCallback(const SocketPoll::CallbackFn& fn)
 {
     _poll->addCallback(fn);
 }
+
+bool DocumentBroker::sendTextFrameToKit(const std::string& message)
+{
+    ASSERT_CORRECT_THREAD();
+
+    if (!_childProcess)
+    {
+        LOG_DBG("No kit child to send [" << COOLProtocol::getAbbreviatedMessage(message) << "] to");
+        return false;
+    }
+
+    return _childProcess->sendTextFrame(message);
+}
+
+void DocumentBroker::setRemoteDocumentToken(const std::string& wopiSrc,
+                                            const std::string& accessToken)
+{
+    ASSERT_CORRECT_THREAD();
+
+    // Key by the docKey, so encoded and decoded spellings of the same
+    // WOPISrc resolve to one entry.
+    try
+    {
+        _remoteDocumentTokens[RequestDetails::getDocKey(wopiSrc)] = accessToken;
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Ignoring the access token for the invalid remote document WOPISrc ["
+                << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
+    }
+}
+
+bool DocumentBroker::isKnownAccessToken(const std::string& accessToken) const
+{
+    ASSERT_CORRECT_THREAD();
+
+    if (accessToken.empty())
+        return false;
+
+    for (const auto& it : _sessions)
+    {
+        if (it.second->getAuthorization().matchesToken(accessToken))
+            return true;
+    }
+
+    return false;
+}
+
+void DocumentBroker::addToIncomingDocKeyChain(const std::string& docKeyChain)
+{
+    ASSERT_CORRECT_THREAD();
+
+    const StringVector docKeys = StringVector::tokenize(docKeyChain, ',');
+    for (std::size_t i = 0; i < docKeys.size(); ++i)
+    {
+        std::string docKey = docKeys[i];
+        if (!docKey.empty() &&
+            std::find(_incomingDocKeyChain.begin(), _incomingDocKeyChain.end(), docKey) ==
+                _incomingDocKeyChain.end())
+        {
+            LOG_DBG("The docKey [" << docKey << "] is on the connection chain of [" << _docKey
+                                   << ']');
+            _incomingDocKeyChain.push_back(std::move(docKey));
+        }
+    }
+}
+
+#if !MOBILEAPP
+void DocumentBroker::handleRemoteDocumentMessage(const std::shared_ptr<Message>& message,
+                                                 const bool subscribe)
+{
+    ASSERT_CORRECT_THREAD();
+
+    std::string tag;
+    std::string encodedWopiSrc;
+    COOLProtocol::getTokenString((*message)[1], "tag", tag);
+    COOLProtocol::getTokenString((*message)[2], "wopisrc", encodedWopiSrc);
+    if (tag.empty() || encodedWopiSrc.empty())
+    {
+        LOG_ERR("Missing tag or wopisrc in [" << message->abbr() << ']');
+        return;
+    }
+
+    const std::string wopiSrc = Uri::decode(encodedWopiSrc);
+
+    LOG_INF("Remote document " << (subscribe ? "subscribe" : "unsubscribe") << " tag=" << tag
+                               << " to [" << Anonymizer::anonymizeUrl(wopiSrc) << ']');
+
+    if (!RemoteDocumentBroker::isEnabled() || !RemoteDocumentBroker::isInitialized())
+    {
+        LOG_ERR("Remote document subscribe tag=" << tag
+                                                 << " rejected: remote_documents is disabled in "
+                                                    "the configuration");
+        sendRemoteDocumentError(tag, encodedWopiSrc, "disabled");
+        return;
+    }
+
+    // Match subscriptions and tokens on the canonical docKey, so encoded and
+    // decoded spellings of the same WOPISrc refer to one document.
+    std::string remoteDocKey;
+    try
+    {
+        remoteDocKey = RequestDetails::getDocKey(wopiSrc);
+
+        const Poco::URI wopiSrcUri(wopiSrc);
+        if (subscribe && !HostUtil::allowedWopiHost(wopiSrcUri.getHost()))
+        {
+            LOG_WRN("Remote document [" << Anonymizer::anonymizeUrl(wopiSrc)
+                                        << "] is not on an allowed WOPI host");
+            sendRemoteDocumentError(tag, encodedWopiSrc, "hostnotallowed");
+            return;
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Invalid remote document WOPISrc: " << exc.what());
+        sendRemoteDocumentError(tag, encodedWopiSrc, "syntax");
+        return;
+    }
+
+    if (!subscribe)
+    {
+        // Tag 0 drops every link of this document to the given WOPISrc; an
+        // explicit tag drops only that link.
+        for (auto it = _remoteSubscriptions.begin(); it != _remoteSubscriptions.end();)
+        {
+            if (RequestDetails::getDocKey(std::get<0>(*it)) == remoteDocKey &&
+                (tag == "0" || std::get<2>(*it) == tag))
+            {
+                RemoteDocumentBroker::instance().unsubscribeAsync(
+                    std::get<0>(*it), std::get<1>(*it), _docKey, std::get<2>(*it));
+                it = _remoteSubscriptions.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        return;
+    }
+
+    const auto itToken = _remoteDocumentTokens.find(remoteDocKey);
+    if (itToken == _remoteDocumentTokens.end())
+    {
+        std::ostringstream registered;
+        for (const auto& it : _remoteDocumentTokens)
+            registered << " [" << it.first << ']';
+        LOG_ERR("Remote document subscribe tag="
+                << tag << " rejected: no access token registered for [" << remoteDocKey
+                << "], have " << _remoteDocumentTokens.size()
+                << " from RelatedDocuments or POST /cool/relateddocument:" << registered.str());
+        sendRemoteDocumentError(tag, encodedWopiSrc, "notoken");
+        return;
+    }
+
+    const std::string serverUrl = RemoteDocumentBroker::getServerUrl();
+    if (serverUrl.empty())
+    {
+        LOG_ERR("Remote document subscribe tag="
+                << tag
+                << " rejected: no server URL to dial through; set remote_documents.server_url "
+                   "or server_name in the configuration");
+        sendRemoteDocumentError(tag, encodedWopiSrc, "noserver");
+        return;
+    }
+
+    static const size_t maxLinks =
+        ConfigUtil::getConfigValue<int>("remote_documents.max_links_per_document", 4);
+    if (_remoteSubscriptions.size() >= maxLinks)
+    {
+        LOG_ERR("Remote document subscribe tag=" << tag << " rejected: [" << _docKey
+                                                 << "] already holds " << _remoteSubscriptions.size()
+                                                 << " subscriptions of the maximum " << maxLinks);
+        sendRemoteDocumentError(tag, encodedWopiSrc, "limitreached");
+        return;
+    }
+
+    RemoteDocumentRequest request;
+    request.wopiSrc = wopiSrc;
+    request.accessToken = itToken->second;
+    request.tag = tag;
+    request.localDocKey = _docKey;
+    request.docKeyChain = _incomingDocKeyChain;
+    request.serverUrl = serverUrl;
+    request.consumer = shared_from_this();
+
+    _remoteSubscriptions.emplace(wopiSrc, itToken->second, tag);
+    RemoteDocumentBroker::instance().subscribeAsync(std::move(request));
+}
+
+void DocumentBroker::sendRemoteDocumentError(const std::string& tag,
+                                             const std::string& encodedWopiSrc,
+                                             const std::string& kind)
+{
+    sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
+                       " event=error kind=" + kind);
+}
+
+void DocumentBroker::unsubscribeAllRemoteDocuments()
+{
+    if (_remoteSubscriptions.empty() || !RemoteDocumentBroker::isInitialized())
+        return;
+
+    LOG_DBG("Dropping " << _remoteSubscriptions.size() << " remote document subscriptions of ["
+                        << _docKey << ']');
+
+    for (const auto& it : _remoteSubscriptions)
+        RemoteDocumentBroker::instance().unsubscribeAsync(std::get<0>(it), std::get<1>(it),
+                                                          _docKey, std::get<2>(it));
+
+    _remoteSubscriptions.clear();
+}
+#endif // !MOBILEAPP
 
 void DocumentBroker::addSocketToPoll(const std::shared_ptr<StreamSocket>& socket)
 {
@@ -5312,6 +5540,18 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
 
             _registeredDownloadLinks[downloadid] = std::move(url);
         }
+#if !MOBILEAPP
+        else if (message->firstTokenMatches("remotedocsubscribe:"))
+        {
+            LOG_CHECK_RET(message->tokens().size() == 3, false);
+            handleRemoteDocumentMessage(message, /*subscribe=*/true);
+        }
+        else if (message->firstTokenMatches("remotedocunsubscribe:"))
+        {
+            LOG_CHECK_RET(message->tokens().size() == 3, false);
+            handleRemoteDocumentMessage(message, /*subscribe=*/false);
+        }
+#endif
         else if (message->firstTokenMatches("traceevent:"))
         {
             LOG_CHECK_RET(message->tokens().size() == 1, false);
@@ -6683,6 +6923,16 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  doc key: " << _docKey;
     os << "\n  doc id: " << _docId;
     os << "\n  num sessions: " << _sessions.size();
+    os << "\n  remote subscriptions: " << _remoteSubscriptions.size();
+    for (const auto& it : _remoteSubscriptions)
+        os << "\n    " << Anonymizer::anonymizeUrl(std::get<0>(it))
+           << " tag: " << std::get<2>(it);
+    os << "\n  remote document tokens: " << _remoteDocumentTokens.size();
+    for (const auto& it : _remoteDocumentTokens)
+        os << "\n    " << it.first;
+    os << "\n  incoming docKey chain: " << _incomingDocKeyChain.size();
+    for (const std::string& docKey : _incomingDocKeyChain)
+        os << "\n    " << docKey;
     os << "\n  createTime: " << Util::getTimeForLog(now, _createTime);
     os << "\n  stop: " << _stop;
     os << "\n  closeReason: " << _closeReason;

@@ -2871,6 +2871,18 @@ void Document::drainQueue()
             {
                 assert(Util::isFuzzing() && "callbacks cannot now appear on the incoming queue");
             }
+            else if (tokens.equals(0, "remotedocevent"))
+            {
+                // An event about a subscribed remote document. Forward it to
+                // every view until the engine consumes these events itself.
+                const std::string firstLine =
+                    COOLProtocol::getFirstLine(input.data(), input.size());
+                LOG_INF("Remote document event: " << firstLine);
+                const std::string message =
+                    "remotedocevent:" + firstLine.substr(std::string("remotedocevent").size());
+                for (auto const& [id, session] : _sessions)
+                    session->sendTextFrame(message);
+            }
             else
             {
                 LOG_ERR("Unexpected request: [" << COOLProtocol::getAbbreviatedMessage(input) << "].");
