@@ -49,6 +49,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		autoreconf \
 		&& $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-pedantic \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,xmlsec) $(gb_VISIBILITY_FLAGS)" \

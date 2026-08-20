@@ -24,6 +24,7 @@ $(call gb_ExternalProject_get_state_target,expat,configure) :
 			$(if $(filter MACOSX iOS,$(OS)),--with-arc4random_buf) \
 			$(if $(filter EMSCRIPTEN FREEBSD,$(OS)),--with-getentropy) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 	,,expat_configure.log)
 	$(call gb_Trace_EndRange,expat,EXTERNAL)

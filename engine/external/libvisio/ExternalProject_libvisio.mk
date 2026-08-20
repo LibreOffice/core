@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			$(if $(gb_FULLDEPS),,--disable-dependency-tracking) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			CXXFLAGS="$(CXXFLAGS) $(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libvisio)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libvisio)" \

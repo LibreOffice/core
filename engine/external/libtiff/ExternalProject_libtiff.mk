@@ -50,6 +50,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--disable-zstd \
 			--with-pic \
 			--without-x \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff) $(gb_EMSCRIPTEN_CFLAGS)" \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(gb_UnpackedTarball_workdir)/zlib") \

@@ -35,6 +35,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			--disable-werror \
 			$(if $(filter MACOSX,$(OS)), \
 				--prefix=/@.__________________________________________________OOO) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libwpd)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \

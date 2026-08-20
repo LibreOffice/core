@@ -17,6 +17,7 @@ $(call gb_ExternalProject_get_state_target,libexttextcat,build):
 	$(call gb_Trace_StartRange,libexttextcat,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(gb_RUN_CONFIGURE) ./configure --disable-shared --with-pic \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(ENABLE_WERROR),--enable-werror,--disable-werror) \
 			$(gb_CONFIGURE_PLATFORMS) \

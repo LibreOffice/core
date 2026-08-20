@@ -24,6 +24,7 @@ $(call gb_ExternalProject_get_state_target,mythes,build):
 		LDFLAGS="$(call gb_ExternalProject_get_link_flags,mythes)" \
 		LIBS="$(gb_STDLIBS) $(LIBS)" $(gb_RUN_CONFIGURE) ./configure --disable-shared --disable-werror --with-pic \
 		$(gb_CONFIGURE_PLATFORMS) \
+		$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 		$(if $(CROSS_COMPILING),gio_can_sniff=no) \
 		&& $(MAKE) \
 	)

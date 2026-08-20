@@ -43,6 +43,7 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libmspub)" \
 			CPPFLAGS="$(libmspub_CPPFLAGS)" \

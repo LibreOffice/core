@@ -109,6 +109,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 				boost_cv_lib_filesystem=yes \
 			) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 		&& $(if $(verbose),V=1) \
 		   $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\

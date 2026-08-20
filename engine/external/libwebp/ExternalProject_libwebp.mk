@@ -45,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,libwebp,build) :
 			--disable-tiff \
 			--disable-gif \
 			--disable-wic \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libwebp)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \

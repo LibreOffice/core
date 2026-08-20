@@ -34,6 +34,7 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 			--disable-debug \
 			--disable-werror \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libwpg)" \

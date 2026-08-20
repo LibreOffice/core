@@ -37,6 +37,7 @@ $(call gb_ExternalProject_get_state_target,libfreehand,build) :
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libfreehand)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \

@@ -28,6 +28,7 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(call gb_ExternalProject_run,build,\
 		$(gb_RUN_CONFIGURE) ./configure --disable-shared --disable-nls --with-pic \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(hunspell_CPPFLAGS),CPPFLAGS='$(hunspell_CPPFLAGS)') \
 			$(if $(hunspell_CXXFLAGS),CXXFLAGS='$(hunspell_CXXFLAGS)') \
 			$(if $(hunspell_LDFLAGS),LDFLAGS='$(hunspell_LDFLAGS)') \

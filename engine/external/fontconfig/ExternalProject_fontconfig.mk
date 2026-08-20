@@ -42,6 +42,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			--with-expat-includes=$(gb_UnpackedTarball_workdir)/expat/lib \
 			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(filter ANDROID,$(OS)), \
 				--disable-shared \
 			) \

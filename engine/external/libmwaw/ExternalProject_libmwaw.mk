@@ -34,6 +34,7 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			--disable-tools \
 			--disable-zip \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
 			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libmwaw)" \

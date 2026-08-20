@@ -193,6 +193,8 @@ gb_RUN_CONFIGURE :=
 
 gb_CONFIGURE_PLATFORMS := --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) $(if $(CROSS_COMPILING),cross_compiling=yes)
 
+gb_CONFIGURE_DEPENDENCY_TRACKING := $(if $(gb_FULLDEPS),,--disable-dependency-tracking)
+
 # Include platform/cpu/compiler specific config/definitions
 
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk

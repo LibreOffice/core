@@ -41,6 +41,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			--without-www \
 			--without-xslt-config \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(DISABLE_DYNLOADING), \

@@ -24,6 +24,7 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 		$(if $(or $(DISABLE_DYNLOADING),$(filter MSC,$(COM))), \
 			--disable-shared --enable-static --prefix=//usr/local, \
 			--enable-shared --disable-static) \
+		$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \

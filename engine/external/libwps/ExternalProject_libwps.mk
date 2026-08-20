@@ -46,6 +46,7 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			--disable-tools \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(libwps_CXXFLAGS),CXXFLAGS='$(libwps_CXXFLAGS)') \
 			$(if $(libwps_CPPFLAGS),CPPFLAGS='$(libwps_CPPFLAGS)') \

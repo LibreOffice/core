@@ -30,6 +30,7 @@ $(call gb_ExternalProject_get_state_target,libffi,build):
 		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--enable-option-checking=fatal \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(filter LINUX,$(OS)), \
 			    --disable-shared \
 			    CC="$(CC) -fvisibility=hidden" \

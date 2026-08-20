@@ -44,6 +44,7 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			--without-tools \
 			--with-mdds=1.0 \
 			$(if $(filter WNT,$(OS_FOR_BUILD)),MKDIR_P="$(shell cygpath -m /usr/bin/mkdir) -p") \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \

@@ -29,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 	$(call gb_ExternalProject_run,build,\
 		$(gb_RUN_CONFIGURE) ./configure --without-jpeg --without-tiff --with-pic \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 			CPPFLAGS=" $(SOLARINC)" \
 			CFLAGS='$(CFLAGS) $(call gb_ExternalProject_get_build_flags,lcms2)' \

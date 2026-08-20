@@ -52,6 +52,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 		$(gb_RUN_CONFIGURE) ./configure --disable-ipv6 --without-iconv --without-python --without-zlib --with-sax1 \
 			--without-lzma \
 			$(if $(debug),--with-run-debug) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \

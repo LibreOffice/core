@@ -23,6 +23,7 @@ $(call gb_ExternalProject_get_state_target,hyphen,build):
 		$(gb_RUN_CONFIGURE) ./configure --disable-shared \
 			$(if $(filter-out iOS,$(OS)),--with-pic) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(CROSS_COMPILING),gio_can_sniff=no) \
 			CFLAGS=" $(CFLAGS) $(call gb_ExternalProject_get_build_flags,hyphen)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,hyphen)" \
