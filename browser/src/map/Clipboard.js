@@ -645,6 +645,7 @@ window.L.Clipboard = window.L.Class.extend({
 			return true;
 
 		if (this._map.uiManager.isAnyDialogOpen()
+			&& document.activeElement && document.activeElement.closest('.jsdialog')
 			&& !this.isCopyPasteDialogReadyForCopy()
 			&& !this.isPasteSpecialDialogOpen())
 			return true;
