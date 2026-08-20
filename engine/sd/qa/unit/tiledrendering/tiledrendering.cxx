@@ -272,8 +272,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoShells)
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AttributePageSize.Width", cpo::uno::Any(static_cast<sal_Int32>(10000))},
-        {"AttributePageSize.Height", cpo::uno::Any(static_cast<sal_Int32>(10000))},
+        {u"AttributePageSize.Width"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10000))},
+        {u"AttributePageSize.Height"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10000))},
     }));
     dispatchCommand(mxComponent, u".uno:AttributePageSize"_ustr, aPropertyValues);
 
@@ -429,8 +429,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertTable)
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "Rows", cpo::uno::Any(sal_Int32(3)) },
-        { "Columns", cpo::uno::Any(sal_Int32(5)) }
+        { u"Rows"_ustr, cpo::uno::Any(sal_Int32(3)) },
+        { u"Columns"_ustr, cpo::uno::Any(sal_Int32(5)) }
     }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
@@ -454,8 +454,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteTable)
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "Rows", cpo::uno::Any(sal_Int32(3)) },
-        { "Columns", cpo::uno::Any(sal_Int32(5)) }
+        { u"Rows"_ustr, cpo::uno::Any(sal_Int32(3)) },
+        { u"Columns"_ustr, cpo::uno::Any(sal_Int32(5)) }
     }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
@@ -1450,7 +1450,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", cpo::uno::Any(u"Kit User1"_ustr)},
+        {u".uno:Author"_ustr, cpo::uno::Any(u"Kit User1"_ustr)},
     }));
     SdTestViewCallback aView1;
     int nView1 = KitHelper::getCurrentView();
@@ -1458,7 +1458,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     KitHelper::createView();
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        {".uno:Author", cpo::uno::Any(u"Kit User2"_ustr)},
+        {u".uno:Author"_ustr, cpo::uno::Any(u"Kit User2"_ustr)},
     }));
     pXImpressDocument->initializeForTiledRendering(aArgs);
     SdTestViewCallback aView2;
@@ -1469,7 +1469,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", cpo::uno::Any(u"Comment"_ustr)},
+        {u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -1492,8 +1492,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     KitHelper::setView(nView2);
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", cpo::uno::Any(OUString::number(nComment1))},
-        {"Text", cpo::uno::Any(u"Reply to comment"_ustr)},
+        {u"Id"_ustr, cpo::uno::Any(OUString::number(nComment1))},
+        {u"Text"_ustr, cpo::uno::Any(u"Reply to comment"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:ReplyToAnnotation"_ustr, aArgs);
 
@@ -1516,8 +1516,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", cpo::uno::Any(OUString::number(nComment1))},
-        {"Text", cpo::uno::Any(u"Edited comment"_ustr)},
+        {u"Id"_ustr, cpo::uno::Any(OUString::number(nComment1))},
+        {u"Text"_ustr, cpo::uno::Any(u"Edited comment"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
@@ -1534,7 +1534,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     // Delete the comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", cpo::uno::Any(OUString::number(nComment1))},
+        {u"Id"_ustr, cpo::uno::Any(OUString::number(nComment1))},
     });
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aArgs);
 
@@ -1552,7 +1552,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
     // Load the document.
     createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", cpo::uno::Any(u"Kit User1"_ustr)},
+        {u".uno:Author"_ustr, cpo::uno::Any(u"Kit User1"_ustr)},
     }));
 
     SdTestViewCallback aView1;
@@ -1560,7 +1560,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", cpo::uno::Any(u"Comment"_ustr)},
+        {u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -1575,9 +1575,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", cpo::uno::Any(OUString::number(nComment1))},
-        {"PositionX", cpo::uno::Any(sal_Int32(10))},
-        {"PositionY", cpo::uno::Any(sal_Int32(20))}
+        {u"Id"_ustr, cpo::uno::Any(OUString::number(nComment1))},
+        {u"PositionX"_ustr, cpo::uno::Any(sal_Int32(10))},
+        {u"PositionY"_ustr, cpo::uno::Any(sal_Int32(20))}
     });
     dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
@@ -1593,7 +1593,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
     // Load the document.
     createDoc("dummy.odg", comphelper::InitPropertySequence(
     {
-        {".uno:Author", cpo::uno::Any(u"Kit User1"_ustr)},
+        {u".uno:Author"_ustr, cpo::uno::Any(u"Kit User1"_ustr)},
     }));
 
     SdTestViewCallback aView1;
@@ -1601,7 +1601,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", cpo::uno::Any(u"Comment"_ustr)},
+        {u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -1616,9 +1616,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", cpo::uno::Any(OUString::number(nComment1))},
-        {"PositionX", cpo::uno::Any(sal_Int32(10))},
-        {"PositionY", cpo::uno::Any(sal_Int32(20))}
+        {u"Id"_ustr, cpo::uno::Any(OUString::number(nComment1))},
+        {u"PositionX"_ustr, cpo::uno::Any(sal_Int32(10))},
+        {u"PositionY"_ustr, cpo::uno::Any(sal_Int32(20))}
     });
     dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
@@ -1891,7 +1891,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testLanguageAllText)
 
     // Set the language to English for all text.
     cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
-        { "Language", cpo::uno::Any(u"Default_English (USA)"_ustr) },
+        { u"Language"_ustr, cpo::uno::Any(u"Default_English (USA)"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
 
@@ -1983,7 +1983,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115783)
     pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, nShiftRight);
     pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, nShiftRight);
     cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
-        { "FontHeight.Height", cpo::uno::Any(static_cast<float>(12)) },
+        { u"FontHeight.Height"_ustr, cpo::uno::Any(static_cast<float>(12)) },
     });
     dispatchCommand(mxComponent, u".uno:FontHeight"_ustr, aArgs);
 
@@ -2189,7 +2189,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
@@ -2259,7 +2259,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorOnDarkPageI
 
     // Give the document a dark page background
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+        { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
 
@@ -2286,7 +2286,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorUnfilledSha
 
     // Give the document a dark page background
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+        { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
 
@@ -2329,7 +2329,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) },
             }
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
@@ -2344,7 +2344,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
@@ -2360,7 +2360,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) },
             }
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
@@ -2477,7 +2477,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSpellOnlineRenderParameter)
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
-        comphelper::InitPropertySequence({ { ".uno:SpellOnline", cpo::uno::Any(!bSet) } }),
+        comphelper::InitPropertySequence({ { u".uno:SpellOnline"_ustr, cpo::uno::Any(!bSet) } }),
     };
     pXImpressDocument->initializeForTiledRendering(aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(!bSet, pXImpressDocument->GetDoc()->GetOnlineSpell());
@@ -2579,9 +2579,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMoveShapeHandle)
         sal_uInt32 oldY = y;
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", cpo::uno::Any(id)},
-            {"NewPosX", cpo::uno::Any(x+1)},
-            {"NewPosY", cpo::uno::Any(y+1)}
+            {u"HandleNum"_ustr, cpo::uno::Any(id)},
+            {u"NewPosX"_ustr, cpo::uno::Any(x+1)},
+            {u"NewPosY"_ustr, cpo::uno::Any(y+1)}
         }));
         dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());

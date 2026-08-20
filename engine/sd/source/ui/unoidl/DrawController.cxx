@@ -565,49 +565,49 @@ Any SAL_CALL DrawController::getSlideSorterSelection()
 void DrawController::FillPropertyTable (
     ::std::vector<beans::Property>& rProperties)
 {
-    rProperties.emplace_back("VisibleArea",
+    rProperties.emplace_back(u"VisibleArea"_ustr,
             PROPERTY_WORKAREA,
             ::cppu::UnoType< css::awt::Rectangle>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY);
     rProperties.emplace_back(
-            "SubController",
+            u"SubController"_ustr,
             PROPERTY_SUB_CONTROLLER,
             cppu::UnoType<drawing::XDrawSubController>::get(),
             beans::PropertyAttribute::BOUND);
     rProperties.emplace_back(
-            "CurrentPage",
+            u"CurrentPage"_ustr,
             PROPERTY_CURRENTPAGE,
             cppu::UnoType<drawing::XDrawPage>::get(),
             beans::PropertyAttribute::BOUND );
-    rProperties.emplace_back("IsLayerMode",
+    rProperties.emplace_back(u"IsLayerMode"_ustr,
             PROPERTY_LAYERMODE,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND );
-    rProperties.emplace_back("IsMasterPageMode",
+    rProperties.emplace_back(u"IsMasterPageMode"_ustr,
             PROPERTY_MASTERPAGEMODE,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND );
-    rProperties.emplace_back("ActiveLayer",
+    rProperties.emplace_back(u"ActiveLayer"_ustr,
             PROPERTY_ACTIVE_LAYER,
             cppu::UnoType<drawing::XLayer>::get(),
             beans::PropertyAttribute::BOUND );
-    rProperties.emplace_back("ZoomValue",
+    rProperties.emplace_back(u"ZoomValue"_ustr,
             PROPERTY_ZOOMVALUE,
             ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND );
-    rProperties.emplace_back("ZoomType",
+    rProperties.emplace_back(u"ZoomType"_ustr,
             PROPERTY_ZOOMTYPE,
             ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND );
-    rProperties.emplace_back("ViewOffset",
+    rProperties.emplace_back(u"ViewOffset"_ustr,
             PROPERTY_VIEWOFFSET,
             ::cppu::UnoType< css::awt::Point>::get(),
             beans::PropertyAttribute::BOUND );
-    rProperties.emplace_back("DrawViewMode",
+    rProperties.emplace_back(u"DrawViewMode"_ustr,
             PROPERTY_DRAWVIEWMODE,
             ::cppu::UnoType< css::awt::Point>::get(),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID );
-    rProperties.emplace_back( "PageChange",
+    rProperties.emplace_back( u"PageChange"_ustr,
             PROPERTY_PAGE_CHANGE,
             ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND );

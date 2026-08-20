@@ -3008,7 +3008,7 @@ void PowerPointExport::WriteNotesMaster()
     auto const* pDefaultColorSet = svx::ColorSets::getDefault();
     if (pDefaultColorSet)
     {
-        auto pTheme = std::make_shared<model::Theme>("Office Theme");
+        auto pTheme = std::make_shared<model::Theme>(u"Office Theme"_ustr);
         pTheme->setColorSet(std::make_shared<model::ColorSet>(*pDefaultColorSet));
 
         WriteTheme(mnMasterPages - static_cast<int>(mbHasCanvasPage), pTheme.get());

@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         comphelper::SequenceAsHashMap aMediaDescriptor;
         aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
         cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-            comphelper::InitPropertySequence({ { "ExportBookmarks", cpo::uno::Any(true) } }));
+            comphelper::InitPropertySequence({ { u"ExportBookmarks"_ustr, cpo::uno::Any(true) } }));
         aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
@@ -414,7 +414,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     // Dispatch .uno:ResolveComment on Dave (a root, unresolved on import) and check the
     // model flipped.
     cpo::uno::Sequence<beans::PropertyValue> aResolveArgs(comphelper::InitPropertySequence({
-        { "Id", cpo::uno::Any(OUString::number(xDave->GetId())) },
+        { u"Id"_ustr, cpo::uno::Any(OUString::number(xDave->GetId())) },
     }));
     dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr, aResolveArgs);
     CPPUNIT_ASSERT(xDave->IsResolved());
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_pdf_Export"_ustr;
     // ExportNotes defaults to false.
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "ExportNotes", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"ExportNotes"_ustr, cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
@@ -520,9 +520,9 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationAtPosition)
 
     // PositionX/PositionY are in mm/100. 2540 mm/100 = 1 inch; 5080 mm/100 = 2 inches.
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(u"Click-to-place"_ustr) },
-        { "PositionX", cpo::uno::Any(sal_Int32(2540)) },
-        { "PositionY", cpo::uno::Any(sal_Int32(5080)) },
+        { u"Text"_ustr, cpo::uno::Any(u"Click-to-place"_ustr) },
+        { u"PositionX"_ustr, cpo::uno::Any(sal_Int32(2540)) },
+        { u"PositionY"_ustr, cpo::uno::Any(sal_Int32(5080)) },
     }));
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -556,11 +556,11 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationOverArea)
 
     // Position+Size in mm/100. 30 mm anchor, 40x20 mm area.
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(u"Drag-to-area"_ustr) },
-        { "PositionX", cpo::uno::Any(sal_Int32(3000)) },
-        { "PositionY", cpo::uno::Any(sal_Int32(3000)) },
-        { "Width",     cpo::uno::Any(sal_Int32(4000)) },
-        { "Height",    cpo::uno::Any(sal_Int32(2000)) },
+        { u"Text"_ustr, cpo::uno::Any(u"Drag-to-area"_ustr) },
+        { u"PositionX"_ustr, cpo::uno::Any(sal_Int32(3000)) },
+        { u"PositionY"_ustr, cpo::uno::Any(sal_Int32(3000)) },
+        { u"Width"_ustr,     cpo::uno::Any(sal_Int32(4000)) },
+        { u"Height"_ustr,    cpo::uno::Any(sal_Int32(2000)) },
     }));
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 

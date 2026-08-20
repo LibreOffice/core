@@ -1019,7 +1019,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     };
     cpo::uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", cpo::uno::Any(aUserData) },
+        { u"UserData"_ustr, cpo::uno::Any(aUserData) },
     }));
     cpo::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
@@ -1029,8 +1029,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", cpo::uno::Any(xStream) },
-        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
+        { u"InputStream"_ustr, cpo::uno::Any(xStream) },
+        { u"URL"_ustr, cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1064,8 +1064,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", cpo::uno::Any(xStream) },
-        { "InputMode", cpo::uno::Any(true) },
+        { u"InputStream"_ustr, cpo::uno::Any(xStream) },
+        { u"InputMode"_ustr, cpo::uno::Any(true) },
     }));
     xImporter->setTargetDocument(xModel);
 

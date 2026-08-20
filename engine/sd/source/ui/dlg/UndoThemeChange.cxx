@@ -31,7 +31,7 @@ std::shared_ptr<model::Theme> getTheme(SdrPage* pMasterPage)
     auto pTheme = pMasterPage->getSdrPageProperties().getTheme();
     if (!pTheme)
     {
-        pTheme = std::make_shared<model::Theme>("Office");
+        pTheme = std::make_shared<model::Theme>(u"Office"_ustr);
         pMasterPage->getSdrPageProperties().setTheme(pTheme);
     }
     return pTheme;

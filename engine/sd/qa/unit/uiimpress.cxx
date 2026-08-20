@@ -182,9 +182,9 @@ void SdUiImpressTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBack
     SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", cpo::uno::Any(rKey) },
-        { "SearchItem.Backward", cpo::uno::Any(bBackwards) },
-        { "SearchItem.Command", cpo::uno::Any(sal_uInt16(eSearch)) },
+        { u"SearchItem.SearchString"_ustr, cpo::uno::Any(rKey) },
+        { u"SearchItem.Backward"_ustr, cpo::uno::Any(bBackwards) },
+        { u"SearchItem.Command"_ustr, cpo::uno::Any(sal_uInt16(eSearch)) },
     }));
 
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
@@ -1519,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
 
     OUString aImageURL = createFileURL(u"tdf143412.svg");
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "FileName", cpo::uno::Any(aImageURL) },
+        { u"FileName"_ustr, cpo::uno::Any(aImageURL) },
     }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
@@ -1557,7 +1557,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf155211_dashed_line)
 
     OUString aImageURL = createFileURL(u"tdf155211_dashed_line.svg");
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "FileName", cpo::uno::Any(aImageURL) },
+        { u"FileName"_ustr, cpo::uno::Any(aImageURL) },
     }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
@@ -1585,7 +1585,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf169813_prevent_unintended_dashed_li
 
     OUString aImageURL = createFileURL(u"tdf169813_prevent_unintended_dashed_line.svg");
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "FileName", cpo::uno::Any(aImageURL) },
+        { u"FileName"_ustr, cpo::uno::Any(aImageURL) },
     }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
@@ -1613,7 +1613,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
 
     OUString aImageURL = createFileURL(u"tdf162455.svg");
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "FileName", cpo::uno::Any(aImageURL) },
+        { u"FileName"_ustr, cpo::uno::Any(aImageURL) },
     }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
@@ -2785,20 +2785,20 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "PageName", cpo::uno::Any(u"Test 1"_ustr) },
-                                           { "WhatLayout", cpo::uno::Any(sal_Int32(1)) },
-                                           { "IsPageBack", cpo::uno::Any(false) },
-                                           { "IsPageObj", cpo::uno::Any(false) } }));
+        comphelper::InitPropertySequence({ { u"PageName"_ustr, cpo::uno::Any(u"Test 1"_ustr) },
+                                           { u"WhatLayout"_ustr, cpo::uno::Any(sal_Int32(1)) },
+                                           { u"IsPageBack"_ustr, cpo::uno::Any(false) },
+                                           { u"IsPageObj"_ustr, cpo::uno::Any(false) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, aArgs);
     checkCurrentPageNumber(2);
 
     CPPUNIT_ASSERT_EQUAL(u"Test 1"_ustr, pViewShell->GetActualPage()->GetName());
 
-    aArgs = comphelper::InitPropertySequence({ { "PageName", cpo::uno::Any(u"Test 2"_ustr) },
-                                               { "WhatLayout", cpo::uno::Any(sal_Int32(1)) },
-                                               { "IsPageBack", cpo::uno::Any(false) },
-                                               { "IsPageObj", cpo::uno::Any(false) } });
+    aArgs = comphelper::InitPropertySequence({ { u"PageName"_ustr, cpo::uno::Any(u"Test 2"_ustr) },
+                                               { u"WhatLayout"_ustr, cpo::uno::Any(sal_Int32(1)) },
+                                               { u"IsPageBack"_ustr, cpo::uno::Any(false) },
+                                               { u"IsPageObj"_ustr, cpo::uno::Any(false) } });
 
     dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, aArgs);
     checkCurrentPageNumber(3);
@@ -2854,8 +2854,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf68320_hidden_pages_total_slide_coun
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat",
-            cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::STRING)) } });
+        { { u"SelectedFormat"_ustr, cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::STRING)) } });
 
     // Paste as Unformatted text in order to get the field's values
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
@@ -2898,7 +2897,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
     CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nFour\nFive\nsix"_ustr, xShape->getString());
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(sal_Int32(0)) } }));
+        comphelper::InitPropertySequence({ { u"KeyModifier"_ustr, cpo::uno::Any(sal_Int32(0)) } }));
     dispatchCommand(mxComponent, u".uno:OutlineUp"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nFour\nsix\nFive"_ustr, xShape->getString());
@@ -2947,7 +2946,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
+        { { u"Rows"_ustr, cpo::uno::Any(sal_Int32(2)) }, { u"Columns"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -2997,7 +2996,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf164855)
     createSdImpressDoc();
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
+        { { u"Rows"_ustr, cpo::uno::Any(sal_Int32(2)) }, { u"Columns"_ustr, cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -3035,7 +3034,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", cpo::uno::Any(sal_Int32(1)) }, { "Columns", cpo::uno::Any(sal_Int32(1)) } }));
+        { { u"Rows"_ustr, cpo::uno::Any(sal_Int32(1)) }, { u"Columns"_ustr, cpo::uno::Any(sal_Int32(1)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -3092,11 +3091,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     // Set FillPageColor
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "FillPageGradientJSON",
-          cpo::uno::Any(
-              u"{\"style\":\"LINEAR\",\"startcolor\":\"ff0000\",\"endcolor\":\"0000ff\","
-              "\"angle\":\"300\",\"border\":\"0\",\"x\":\"0\",\"y\":\"0\",\"intensstart\":"
-              "\"100\",\"intensend\":\"100\",\"stepcount\":\"0\"}"_ustr) },
+        { u"FillPageGradientJSON"_ustr,
+          cpo::uno::Any(u"{\"style\":\"LINEAR\",\"startcolor\":\"ff0000\",\"endcolor\":\"0000ff\","
+                   "\"angle\":\"300\",\"border\":\"0\",\"x\":\"0\",\"y\":\"0\",\"intensstart\":"
+                   "\"100\",\"intensend\":\"100\",\"stepcount\":\"0\"}"_ustr) },
     }));
 
     dispatchCommand(mxComponent, u".uno:FillPageGradient"_ustr, aPropertyValues);
@@ -3152,12 +3150,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
     bool bSet = pImpressDocument->GetDoc()->GetOnlineSpell();
 
     cpo::uno::Sequence<beans::PropertyValue> params(
-        comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(!bSet) } }));
+        comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(!bSet) } }));
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
-    params = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(!bSet) } });
+    params = comphelper::InitPropertySequence({ { u"Enable"_ustr, cpo::uno::Any(!bSet) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
 }
@@ -3170,7 +3168,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
 
     // Insert shape with ctrl key
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -3202,7 +3200,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDrawPage->getCount());
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1) } }));
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:Edit"_ustr, aArgs);
@@ -3218,7 +3216,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
     CPPUNIT_ASSERT(pImpressDocument);
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:Rect_Unfilled"_ustr, aArgs);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -3541,8 +3539,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
     uno::Reference<beans::XPropertySet> xMasterPage(xMasterPageTarget->getMasterPage(),
                                                     uno::UNO_QUERY);
 
-    auto pTheme = std::make_shared<model::Theme>("mytheme");
-    auto pColorSet = std::make_shared<model::ColorSet>("mycolorscheme");
+    auto pTheme = std::make_shared<model::Theme>(u"mytheme"_ustr);
+    auto pColorSet = std::make_shared<model::ColorSet>(u"mycolorscheme"_ustr);
     pColorSet->add(model::ThemeColorType::Dark1, 0x0);
     pColorSet->add(model::ThemeColorType::Light1, 0x1);
     pColorSet->add(model::ThemeColorType::Dark2, 0x2);

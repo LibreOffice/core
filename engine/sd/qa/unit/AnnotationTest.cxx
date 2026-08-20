@@ -198,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
     auto xAnnotation = pPage->getAnnotations().at(1);
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "Id", cpo::uno::Any(OUString::number(xAnnotation->GetId())) },
+        { u"Id"_ustr, cpo::uno::Any(OUString::number(xAnnotation->GetId())) },
     }));
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aPropertyValues);
 
@@ -270,7 +270,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
     // Insert new annotation
     cpo::uno::Sequence<beans::PropertyValue> aArgs;
     aArgs = comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(u"Comment"_ustr) },
+        { u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -303,9 +303,9 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
 
     // Change the annotation position
     aArgs = comphelper::InitPropertySequence(
-        { { "Id", cpo::uno::Any(OUString::number(nID)) },
-          { "PositionX", cpo::uno::Any(sal_Int32(1440)) }, // 1440 twips = 2540 hmm
-          { "PositionY", cpo::uno::Any(sal_Int32(14400)) } });
+        { { u"Id"_ustr, cpo::uno::Any(OUString::number(nID)) },
+          { u"PositionX"_ustr, cpo::uno::Any(sal_Int32(1440)) }, // 1440 twips = 2540 hmm
+          { u"PositionY"_ustr, cpo::uno::Any(sal_Int32(14400)) } });
 
     dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
@@ -345,7 +345,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePage)
     cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     aArgs = comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(u"Comment"_ustr) },
+        { u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -437,7 +437,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePageAndUndo)
     cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     aArgs = comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(u"Comment"_ustr) },
+        { u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr) },
     });
 
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);

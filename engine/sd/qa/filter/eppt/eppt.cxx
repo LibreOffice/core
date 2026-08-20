@@ -63,8 +63,8 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
             xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
-        auto pTheme = std::make_shared<model::Theme>("mytheme");
-        auto pColorSet = std::make_shared<model::ColorSet>("mycolorscheme");
+        auto pTheme = std::make_shared<model::Theme>(u"mytheme"_ustr);
+        auto pColorSet = std::make_shared<model::ColorSet>(u"mycolorscheme"_ustr);
         pColorSet->add(model::ThemeColorType::Dark1, 0x111111);
         pColorSet->add(model::ThemeColorType::Light1, 0x222222);
         pColorSet->add(model::ThemeColorType::Dark2, 0x333333);

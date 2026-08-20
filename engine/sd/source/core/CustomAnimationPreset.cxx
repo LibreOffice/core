@@ -67,7 +67,7 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
     {
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", cpo::uno::Any(rNodePath)}
+            {u"nodepath"_ustr, cpo::uno::Any(rNodePath)}
         }));
 
         xConfigAccess.set(

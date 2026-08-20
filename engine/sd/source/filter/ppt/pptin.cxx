@@ -384,10 +384,10 @@ bool ImplSdPPTImport::Import()
                                     // if a PPT contains internal links we can get the following SubAddresses
                                     // "-1,-1,NEXT" | "-1,-1,PREV" | "-1,-1,FIRST" | "-1,-1,LAST"
                                     static const std::map<OUString, OUString> aInternalLinks
-                                        = { { "NEXT", "nextslide" },
-                                            { "PREV", "previousslide" },
-                                            { "FIRST", "firstslide" },
-                                            { "LAST", "lastslide" } };
+                                        = { { u"NEXT"_ustr, u"nextslide"_ustr },
+                                            { u"PREV"_ustr, u"previousslide"_ustr },
+                                            { u"FIRST"_ustr, u"firstslide"_ustr },
+                                            { u"LAST"_ustr, u"lastslide"_ustr } };
 
                                     for ( i = 0; i < nPropCount; i++ )
                                     {

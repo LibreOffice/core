@@ -1015,7 +1015,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
             }
         }
         OUString aNewName = aNameDlg->GetName();
-        collectUIInformation({{"OldName", aOldName}, {"NewName", aNewName}}, u"RENAME"_ustr);
+        collectUIInformation({{u"OldName"_ustr, aOldName}, {u"NewName"_ustr, aNewName}}, u"RENAME"_ustr);
         aNameDlg.disposeAndClear();
     }
     // Tell the slide sorter about the name change (necessary for
@@ -1359,7 +1359,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
     mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
     mrSlideSorter.GetController().GetPageSelector().SelectPage(pNewPage);
-    collectUIInformation({{"POS", OUString::number(nInsertionIndex + 2)}}, u"Insert_New_Page_or_Slide"_ustr);
+    collectUIInformation({{u"POS"_ustr, OUString::number(nInsertionIndex + 2)}}, u"Insert_New_Page_or_Slide"_ustr);
 }
 
 void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
@@ -1407,7 +1407,7 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
         rSelector.SelectPage(it);
     }
 
-    collectUIInformation({{"POS", OUString::number(nInsertPosition + 2)}}, u"Duplicate"_ustr);
+    collectUIInformation({{u"POS"_ustr, OUString::number(nInsertPosition + 2)}}, u"Duplicate"_ustr);
 }
 
 void SlotManager::ChangeSlideExclusionState (

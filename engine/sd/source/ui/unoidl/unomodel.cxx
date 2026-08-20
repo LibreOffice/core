@@ -5470,7 +5470,7 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
     {
         cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(sThemeName) }
+            { u"NewTheme"_ustr, cpo::uno::Any(sThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
@@ -5478,7 +5478,7 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
     {
         cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(sBackgroundThemeName) }
+            { u"NewTheme"_ustr, cpo::uno::Any(sBackgroundThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, aPropertyValues);
     }

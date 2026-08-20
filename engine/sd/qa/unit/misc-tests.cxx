@@ -1162,7 +1162,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(0));
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", cpo::uno::Any(createFileURL(u"TestImage1.png")) },
+            { u"FileName"_ustr, cpo::uno::Any(createFileURL(u"TestImage1.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
@@ -1172,7 +1172,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(1));
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", cpo::uno::Any(createFileURL(u"TestImage2.png")) },
+            { u"FileName"_ustr, cpo::uno::Any(createFileURL(u"TestImage2.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
@@ -1182,7 +1182,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(2));
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", cpo::uno::Any(createFileURL(u"TestImage3.png")) },
+            { u"FileName"_ustr, cpo::uno::Any(createFileURL(u"TestImage3.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
@@ -1192,7 +1192,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(3));
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", cpo::uno::Any(createFileURL(u"TestImage4.png")) },
+            { u"FileName"_ustr, cpo::uno::Any(createFileURL(u"TestImage4.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);

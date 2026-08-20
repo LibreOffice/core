@@ -257,7 +257,7 @@ void collectUIInformation(const OUString& aZoom)
 {
     EventDescription aDescription;
     aDescription.aID = u"impress_win"_ustr;
-    aDescription.aParameters = {{"ZOOM", aZoom}};
+    aDescription.aParameters = {{u"ZOOM"_ustr, aZoom}};
     aDescription.aAction = u"SET"_ustr;
     aDescription.aKeyWord = u"ImpressWindowUIObject"_ustr;
     aDescription.aParent = u"MainWindow"_ustr;
