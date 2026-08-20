@@ -4920,7 +4920,8 @@ bool INetURLObject::IsExoticProtocol() const
         isSchemeEqualTo(u"ms-project") ||
         isSchemeEqualTo(u"ms-publisher") ||
         isSchemeEqualTo(u"ms-spd") ||
-        isSchemeEqualTo(u"ms-infopath"))
+        isSchemeEqualTo(u"ms-infopath") ||
+        isSchemeEqualTo(u"search-ms"))
     {
         return true;
     }
