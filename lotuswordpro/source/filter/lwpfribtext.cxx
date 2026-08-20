@@ -108,7 +108,7 @@ void LwpFribText::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
 }
 
 /**
- * @short:   Reading mothed of paranumber frib.
+ * @short:   Reading method of paranumber frib.
  * @param:   pObjStrm wordpro object stream.
  * @param:   len length of the frib
  */
@@ -134,7 +134,7 @@ LwpFribDocVar::~LwpFribDocVar()
 {
 }
 /**
- * @short:   Reading mothed of document variable frib.
+ * @short:   Reading method of document variable frib.
  * @param:   pObjStrm wordpro object stream.
  * @param:   len length of the frib
  */

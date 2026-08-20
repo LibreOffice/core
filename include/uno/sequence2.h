@@ -74,7 +74,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_sequence_assign(
     @param len                number of elements
     @param acquire            function called each time an interface needs to
                               be acquired; defaults (0) to uno
-    @return                   false, if memoray allocation has failed
+    @return                   false, if memory allocation has failed
 */
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence,
@@ -91,7 +91,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_construct(
     @param len                number of elements
     @param acquire            function called each time an interface needs to
                               be acquired; defaults (0) to uno
-    @return                   false, if memoray allocation has failed
+    @return                   false, if memory allocation has failed
 */
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence,
@@ -110,7 +110,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_construct(
                             be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to
                             be released; defaults (0) to uno
-    @return                 false, if memoray allocation has failed
+    @return                 false, if memory allocation has failed
 */
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
@@ -128,7 +128,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_reference2One(
                             be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to
                             be released; defaults (0) to uno
-    @return                 false, if memoray allocation has failed
+    @return                 false, if memory allocation has failed
 */
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
@@ -147,7 +147,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_reference2One(
                             be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to
                             be released; defaults (0) to uno
-    @return                 false, if memoray allocation has failed
+    @return                 false, if memory allocation has failed
 */
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence,
@@ -166,7 +166,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_realloc(
                             be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to
                             be released; defaults (0) to uno
-    @return                 false, if memoray allocation has failed
+    @return                 false, if memory allocation has failed
 */
 CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence,

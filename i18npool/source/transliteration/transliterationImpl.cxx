@@ -631,7 +631,7 @@ TransliterationImpl::loadModuleByName( std::u16string_view implName,
     if (body.is()) {
         body->loadModule(TransliterationModules(0), rLocale); // toUpper/toLoad need rLocale
 
-        // if the module is ignore case/kana/width, load caseignore for equals/compareString mothed
+        // if the module is ignore case/kana/width, load caseignore for equals/compareString method
         for (sal_Int16 i = 0; i < 3; i++) {
             if (o3tl::equalsAscii(implName, TMlist[i].implName)) {
                 if (i == 0) // current module is caseignore
