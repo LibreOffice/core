@@ -40,26 +40,28 @@ class IControlReferenceHandler;
 class ParaWin
 {
 private:
-    Link<ParaWin&, void> aFxLink;
-    Link<ParaWin&, void> aArgModifiedLink;
+    Link<ParaWin&, void> m_aFxLink;
+    Link<ParaWin&, void> m_aArgModifiedLink;
 
-    ::std::vector<sal_uInt16> aVisibleArgMapping;
-    const IFunctionDescription* pFuncDesc;
-    IControlReferenceHandler* pMyParent;
-    sal_uInt16 nArgs; // unsuppressed arguments, may be >= VAR_ARGS to indicate repeating parameters
-    sal_uInt16 nMaxArgs; // max arguments, limited to supported number of arguments
-    vcl::Font aFntBold;
-    vcl::Font aFntLight;
+    ::std::vector<sal_uInt16> m_aVisibleArgMapping;
+    const IFunctionDescription* m_pFuncDesc;
+    IControlReferenceHandler* m_pMyParent;
+    // unsuppressed arguments, may be >= VAR_ARGS to indicate repeating parameters
+    sal_uInt16 m_nArgs;
+    // max arguments, limited to supported number of arguments
+    sal_uInt16 m_nMaxArgs;
+    vcl::Font m_aFntBold;
+    vcl::Font m_aFntLight;
 
     OUString m_sOptional;
     OUString m_sRequired;
 
-    sal_uInt16 nEdFocus;
-    sal_uInt16 nActiveLine;
+    sal_uInt16 m_nEdFocus;
+    sal_uInt16 m_nActiveLine;
 
-    ArgInput aArgInput[4];
-    OUString aDefaultString;
-    ::std::vector<OUString> aParaArray;
+    ArgInput m_aArgInput[4];
+    OUString m_aDefaultString;
+    ::std::vector<OUString> m_aParaArray;
 
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
@@ -122,7 +124,7 @@ public:
     void UpdateParas();
     void ClearAll();
 
-    sal_uInt16 GetActiveLine() const { return nActiveLine; }
+    sal_uInt16 GetActiveLine() const { return m_nActiveLine; }
     void SetActiveLine(sal_uInt16 no);
     RefEdit* GetActiveEdit();
     OUString GetActiveArgName() const;
@@ -135,8 +137,8 @@ public:
     sal_uInt16 GetSliderPos() const;
     void SetSliderPos(sal_uInt16 nSliderPos);
 
-    void SetArgModifiedHdl(const Link<ParaWin&, void>& rLink) { aArgModifiedLink = rLink; }
-    void SetFxHdl(const Link<ParaWin&, void>& rLink) { aFxLink = rLink; }
+    void SetArgModifiedHdl(const Link<ParaWin&, void>& rLink) { m_aArgModifiedLink = rLink; }
+    void SetFxHdl(const Link<ParaWin&, void>& rLink) { m_aFxLink = rLink; }
 
     void SliderMoved();
 

@@ -37,9 +37,9 @@ namespace formula
 constexpr sal_uInt16 kMaxArgCount = 255;
 constexpr sal_uInt16 kMaxArgOffset = kMaxArgCount - 1;
 
-ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
-    : pFuncDesc(nullptr)
-    , pMyParent(_pDlg)
+ParaWin::ParaWin(weld::Container* pParent, IControlReferenceHandler* _pDlg)
+    : m_pFuncDesc(nullptr)
+    , m_pMyParent(_pDlg)
     , m_sOptional(ForResId(STR_OPTIONAL))
     , m_sRequired(ForResId(STR_REQUIRED))
     , m_xBuilder(Application::CreateBuilder(pParent, u"formula/ui/parameter.ui"_ustr))
@@ -88,9 +88,9 @@ ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
     Size aSize(m_xContainer->get_preferred_size());
     m_xContainer->set_size_request(aSize.Width(), aSize.Height());
 
-    aDefaultString = m_xFtEditDesc->get_label();
-    nEdFocus = NOT_FOUND;
-    nActiveLine = 0;
+    m_aDefaultString = m_xFtEditDesc->get_label();
+    m_nEdFocus = NOT_FOUND;
+    m_nActiveLine = 0;
 
     m_xSlider->connect_vadjustment_value_changed(LINK(this, ParaWin, ScrollHdl));
 
@@ -106,10 +106,10 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
     if (nArg == NOT_FOUND)
         return;
 
-    if (nMaxArgs > 4)
+    if (m_nMaxArgs > 4)
         nArg = sal::static_int_cast<sal_uInt16>( nArg + GetSliderPos() );
 
-    if ((nMaxArgs <= 0) || (nArg >= nMaxArgs))
+    if ((m_nMaxArgs <= 0) || (nArg >= m_nMaxArgs))
         return;
 
     OUString  aArgDesc;
@@ -118,50 +118,57 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
     SetArgumentDesc( OUString() );
     SetArgumentText( OUString() );
 
-    if ( nArgs < VAR_ARGS )
+    if (m_nArgs < VAR_ARGS)
     {
-        sal_uInt16 nRealArg = (nArg < aVisibleArgMapping.size()) ? aVisibleArgMapping[nArg] : nArg;
-        aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
-        aArgName  = pFuncDesc->getParameterName(nRealArg) + " " +
-            ((pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired);
+        sal_uInt16 nRealArg
+            = (nArg < m_aVisibleArgMapping.size()) ? m_aVisibleArgMapping[nArg] : nArg;
+        aArgDesc = m_pFuncDesc->getParameterDescription(nRealArg);
+        aArgName = m_pFuncDesc->getParameterName(nRealArg) + " "
+                   + ((m_pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired);
     }
-    else if ( nArgs < PAIRED_VAR_ARGS )
+    else if (m_nArgs < PAIRED_VAR_ARGS)
     {
-        sal_uInt16 nFix = nArgs - VAR_ARGS;
+        sal_uInt16 nFix = m_nArgs - VAR_ARGS;
         sal_uInt16 nPos = std::min( nArg, nFix );
-        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
-                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
-        aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
-        aArgName  = pFuncDesc->getParameterName(nRealArg);
-        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        sal_uInt16 nRealArg = (nPos < m_aVisibleArgMapping.size() ? m_aVisibleArgMapping[nPos]
+                                                                  : m_aVisibleArgMapping.back());
+        aArgDesc = m_pFuncDesc->getParameterDescription(nRealArg);
+        aArgName = m_pFuncDesc->getParameterName(nRealArg);
+        sal_uInt16 nVarArgsStart = m_pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
         {
-            OUString aFuncName = pFuncDesc->getFunctionName();
+            OUString aFuncName = m_pFuncDesc->getFunctionName();
             sal_Int16 nShifted = (aFuncName.equalsIgnoreAsciiCase(u"LAMBDA") ||
                 aFuncName.equalsIgnoreAsciiCase(u"MAP")) ? nPos : 0;
             aArgName += OUString::number( nArg-nVarArgsStart + 1 + nShifted );
         }
-        aArgName += " " + ((nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
+        aArgName += " "
+                    + ((nArg > nFix || m_pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional
+                                                                                   : m_sRequired);
     }
     else
     {
-        sal_uInt16 nFix = nArgs - PAIRED_VAR_ARGS;
+        sal_uInt16 nFix = m_nArgs - PAIRED_VAR_ARGS;
         sal_uInt16 nPos;
         if ( nArg < nFix )
             nPos = nArg;
         else
             nPos = nFix + ( (nArg-nFix) % 2);
-        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
-                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
-        aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
-        aArgName  = pFuncDesc->getParameterName(nRealArg);
-        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        sal_uInt16 nRealArg = (nPos < m_aVisibleArgMapping.size() ? m_aVisibleArgMapping[nPos]
+                                                                  : m_aVisibleArgMapping.back());
+        aArgDesc = m_pFuncDesc->getParameterDescription(nRealArg);
+        aArgName = m_pFuncDesc->getParameterName(nRealArg);
+        sal_uInt16 nVarArgsStart = m_pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
         {
-            sal_Int16 nShifted = pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LET") ? nPos / 2 : 0;
+            sal_Int16 nShifted
+                = m_pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LET") ? nPos / 2 : 0;
             aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 + nShifted );
         }
-        aArgName += " " + ((nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
+        aArgName
+            += " "
+               + ((nArg > (nFix + 1) || m_pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional
+                                                                                    : m_sRequired);
     }
 
     SetArgumentDesc(aArgDesc);
@@ -174,64 +181,64 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
     if (nArg > kMaxArgOffset)
         return;
 
-    if ( nArgs < VAR_ARGS)
+    if (m_nArgs < VAR_ARGS)
     {
-        if (nArg < nMaxArgs)
+        if (nArg < m_nMaxArgs)
         {
-            sal_uInt16 nRealArg = aVisibleArgMapping[nArg];
-            SetArgNameFont  (i,(pFuncDesc->isParameterOptional(nRealArg))
-                                            ? aFntLight : aFntBold );
-            SetArgName      (i,pFuncDesc->getParameterName(nRealArg));
+            sal_uInt16 nRealArg = m_aVisibleArgMapping[nArg];
+            SetArgNameFont(i,
+                           (m_pFuncDesc->isParameterOptional(nRealArg)) ? m_aFntLight : m_aFntBold);
+            SetArgName(i, m_pFuncDesc->getParameterName(nRealArg));
         }
     }
-    else if ( nArgs < PAIRED_VAR_ARGS)
+    else if (m_nArgs < PAIRED_VAR_ARGS)
     {
-        sal_uInt16 nFix = nArgs - VAR_ARGS;
+        sal_uInt16 nFix = m_nArgs - VAR_ARGS;
         sal_uInt16 nPos = std::min( nArg, nFix );
-        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
-                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
-        SetArgNameFont( i,
-                (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ?
-                aFntLight : aFntBold );
-        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        sal_uInt16 nRealArg = (nPos < m_aVisibleArgMapping.size() ? m_aVisibleArgMapping[nPos]
+                                                                  : m_aVisibleArgMapping.back());
+        SetArgNameFont(i, (nArg > nFix || m_pFuncDesc->isParameterOptional(nRealArg)) ? m_aFntLight
+                                                                                      : m_aFntBold);
+        sal_uInt16 nVarArgsStart = m_pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
         {
-            OUString aFuncName = pFuncDesc->getFunctionName();
+            OUString aFuncName = m_pFuncDesc->getFunctionName();
             sal_Int16 nShifted = (aFuncName.equalsIgnoreAsciiCase(u"LAMBDA") ||
                 aFuncName.equalsIgnoreAsciiCase(u"MAP")) ? nPos : 0;
-            OUString aArgName = pFuncDesc->getParameterName(nRealArg) +
-                OUString::number(nArg-nVarArgsStart + 1 + nShifted);
+            OUString aArgName = m_pFuncDesc->getParameterName(nRealArg)
+                                + OUString::number(nArg - nVarArgsStart + 1 + nShifted);
             SetArgName( i, aArgName );
         }
         else
-            SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
+            SetArgName(i, m_pFuncDesc->getParameterName(nRealArg));
     }
     else
     {
-        sal_uInt16 nFix = nArgs - PAIRED_VAR_ARGS;
+        sal_uInt16 nFix = m_nArgs - PAIRED_VAR_ARGS;
         sal_uInt16 nPos;
         if ( nArg < nFix )
             nPos = nArg;
         else
             nPos = nFix + ( (nArg-nFix) % 2);
-        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
-                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
-        SetArgNameFont( i,
-                (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ?
-                aFntLight : aFntBold );
-        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        sal_uInt16 nRealArg = (nPos < m_aVisibleArgMapping.size() ? m_aVisibleArgMapping[nPos]
+                                                                  : m_aVisibleArgMapping.back());
+        SetArgNameFont(i, (nArg > (nFix + 1) || m_pFuncDesc->isParameterOptional(nRealArg))
+                              ? m_aFntLight
+                              : m_aFntBold);
+        sal_uInt16 nVarArgsStart = m_pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
         {
-            sal_Int16 nShifted = pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LET") ? nPos / 2 : 0;
-            OUString aArgName = pFuncDesc->getParameterName(nRealArg) +
-                OUString::number( (nArg-nVarArgsStart)/2 + 1 + nShifted);
+            sal_Int16 nShifted
+                = m_pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LET") ? nPos / 2 : 0;
+            OUString aArgName = m_pFuncDesc->getParameterName(nRealArg)
+                                + OUString::number((nArg - nVarArgsStart) / 2 + 1 + nShifted);
             SetArgName( i, aArgName );
         }
         else
-            SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
+            SetArgName(i, m_pFuncDesc->getParameterName(nRealArg));
     }
-    if (nArg < nMaxArgs)
-        aArgInput[i].SetArgVal(aParaArray[nArg]);
+    if (nArg < m_nMaxArgs)
+        m_aArgInput[i].SetArgVal(m_aParaArray[nArg]);
 }
 
 ParaWin::~ParaWin()
@@ -247,27 +254,27 @@ ParaWin::~ParaWin()
 
 void ParaWin::SetActiveLine(sal_uInt16 no)
 {
-    if (no >= nMaxArgs)
+    if (no >= m_nMaxArgs)
         return;
 
     tools::Long nOffset = GetSliderPos();
-    nActiveLine=no;
-    tools::Long nNewEdPos=static_cast<tools::Long>(nActiveLine)-nOffset;
+    m_nActiveLine = no;
+    tools::Long nNewEdPos = static_cast<tools::Long>(m_nActiveLine) - nOffset;
     if(nNewEdPos<0 || nNewEdPos>3)
     {
         nOffset+=nNewEdPos;
         SetSliderPos(static_cast<sal_uInt16>(nOffset));
         nOffset=GetSliderPos();
     }
-    nEdFocus=no-static_cast<sal_uInt16>(nOffset);
-    UpdateArgDesc( nEdFocus );
+    m_nEdFocus = no - static_cast<sal_uInt16>(nOffset);
+    UpdateArgDesc(m_nEdFocus);
 }
 
 RefEdit* ParaWin::GetActiveEdit()
 {
-    if (nMaxArgs > 0 && nEdFocus != NOT_FOUND)
+    if (m_nMaxArgs > 0 && m_nEdFocus != NOT_FOUND)
     {
-        return aArgInput[nEdFocus].GetArgEdPtr();
+        return m_aArgInput[m_nEdFocus].GetArgEdPtr();
     }
     else
     {
@@ -279,10 +286,10 @@ RefEdit* ParaWin::GetActiveEdit()
 OUString ParaWin::GetArgument(sal_uInt16 no)
 {
     OUString aStr;
-    if(no<aParaArray.size())
+    if (no < m_aParaArray.size())
     {
-        aStr=aParaArray[no];
-        if(no==nActiveLine && aStr.isEmpty())
+        aStr = m_aParaArray[no];
+        if (no == m_nActiveLine && aStr.isEmpty())
             aStr += " ";
     }
     return aStr;
@@ -291,9 +298,9 @@ OUString ParaWin::GetArgument(sal_uInt16 no)
 OUString  ParaWin::GetActiveArgName() const
 {
     OUString aStr;
-    if (nMaxArgs > 0 && nEdFocus != NOT_FOUND)
+    if (m_nMaxArgs > 0 && m_nEdFocus != NOT_FOUND)
     {
-        aStr=aArgInput[nEdFocus].GetArgName();
+        aStr = m_aArgInput[m_nEdFocus].GetArgName();
     }
     return aStr;
 }
@@ -301,42 +308,42 @@ OUString  ParaWin::GetActiveArgName() const
 
 void ParaWin::SetArgument(sal_uInt16 no, std::u16string_view aString)
 {
-    if (no < aParaArray.size())
-        aParaArray[no] = comphelper::string::stripStart(aString, ' ');
+    if (no < m_aParaArray.size())
+        m_aParaArray[no] = comphelper::string::stripStart(aString, ' ');
 }
 
 void ParaWin::SetArgumentFonts(const vcl::Font&aBoldFont,const vcl::Font&aLightFont)
 {
-    aFntBold=aBoldFont;
-    aFntLight=aLightFont;
+    m_aFntBold = aBoldFont;
+    m_aFntLight = aLightFont;
 }
 
 void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
 {
-    pFuncDesc=pFDesc;
+    m_pFuncDesc = pFDesc;
 
     SetArgumentDesc( OUString() );
     SetArgumentText( OUString() );
     SetEditDesc( OUString() );
-    nMaxArgs = nArgs = 0;
-    if ( pFuncDesc!=nullptr)
+    m_nMaxArgs = m_nArgs = 0;
+    if (m_pFuncDesc != nullptr)
     {
-        if ( !pFuncDesc->getDescription().isEmpty() )
+        if (!m_pFuncDesc->getDescription().isEmpty())
         {
-            SetEditDesc(pFuncDesc->getDescription());
+            SetEditDesc(m_pFuncDesc->getDescription());
         }
         else
         {
-            SetEditDesc(aDefaultString);
+            SetEditDesc(m_aDefaultString);
         }
-        nArgs = pFuncDesc->getSuppressedArgumentCount();
-        nMaxArgs = std::min( nArgs, kMaxArgCount);
-        if (sal_uInt16 nVarArgsLimit = pFuncDesc->getVarArgsLimit())
-            nMaxArgs = std::min( nVarArgsLimit, nMaxArgs);
-        pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
+        m_nArgs = m_pFuncDesc->getSuppressedArgumentCount();
+        m_nMaxArgs = std::min(m_nArgs, kMaxArgCount);
+        if (sal_uInt16 nVarArgsLimit = m_pFuncDesc->getVarArgsLimit())
+            m_nMaxArgs = std::min(nVarArgsLimit, m_nMaxArgs);
+        m_pFuncDesc->fillVisibleArgumentMapping(m_aVisibleArgMapping);
         m_xSlider->set_vpolicy(VclPolicyType::NEVER);
         m_xSlider->set_size_request(-1, -1);
-        OUString sHelpId = pFuncDesc->getHelpId();
+        OUString sHelpId = m_pFuncDesc->getHelpId();
         m_xContainer->set_help_id(sHelpId);
         m_xEdArg1->GetWidget()->set_help_id(sHelpId);
         m_xEdArg2->GetWidget()->set_help_id(sHelpId);
@@ -347,7 +354,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
     }
     else
     {
-        nActiveLine=0;
+        m_nActiveLine = 0;
     }
 
 }
@@ -369,38 +376,37 @@ void ParaWin::SetEditDesc(const OUString& aText)
 
 void ParaWin::SetArgName(sal_uInt16 no,const OUString& aText)
 {
-    aArgInput[no].SetArgName(aText);
-    aArgInput[no].UpdateAccessibleNames();
+    m_aArgInput[no].SetArgName(aText);
+    m_aArgInput[no].UpdateAccessibleNames();
 }
 
 void ParaWin::SetArgNameFont(sal_uInt16 no,const vcl::Font& aFont)
 {
-    aArgInput[no].SetArgNameFont(aFont);
+    m_aArgInput[no].SetArgNameFont(aFont);
 }
 
 void ParaWin::SetEdFocus()
 {
     UpdateArgDesc(0);
-    if(!aParaArray.empty())
-        aArgInput[0].GetArgEdPtr()->GrabFocus();
+    if (!m_aParaArray.empty())
+        m_aArgInput[0].GetArgEdPtr()->GrabFocus();
 }
 
 void ParaWin::InitArgInput(sal_uInt16 nPos, weld::Label& rFtArg, weld::Button& rBtnFx,
                            ArgEdit& rEdArg, RefButton& rRefBtn)
 {
+    rRefBtn.SetReferences(m_pMyParent, &rEdArg);
+    rEdArg.SetReferences(m_pMyParent, &rFtArg);
 
-    rRefBtn.SetReferences(pMyParent, &rEdArg);
-    rEdArg.SetReferences(pMyParent, &rFtArg);
+    m_aArgInput[nPos].InitArgInput(rFtArg, rBtnFx, rEdArg, rRefBtn);
 
-    aArgInput[nPos].InitArgInput(rFtArg, rBtnFx, rEdArg, rRefBtn);
+    m_aArgInput[nPos].Hide();
 
-    aArgInput[nPos].Hide();
-
-    aArgInput[nPos].SetFxClickHdl   ( LINK( this, ParaWin, GetFxHdl ) );
-    aArgInput[nPos].SetFxFocusHdl   ( LINK( this, ParaWin, GetFxFocusHdl ) );
-    aArgInput[nPos].SetEdFocusHdl   ( LINK( this, ParaWin, GetEdFocusHdl ) );
-    aArgInput[nPos].SetEdModifyHdl  ( LINK( this, ParaWin, ModifyHdl ) );
-    aArgInput[nPos].UpdateAccessibleNames();
+    m_aArgInput[nPos].SetFxClickHdl(LINK(this, ParaWin, GetFxHdl));
+    m_aArgInput[nPos].SetFxFocusHdl(LINK(this, ParaWin, GetFxFocusHdl));
+    m_aArgInput[nPos].SetEdFocusHdl(LINK(this, ParaWin, GetEdFocusHdl));
+    m_aArgInput[nPos].SetEdModifyHdl(LINK(this, ParaWin, ModifyHdl));
+    m_aArgInput[nPos].UpdateAccessibleNames();
 }
 
 void ParaWin::ClearAll()
@@ -411,33 +417,33 @@ void ParaWin::ClearAll()
 
 void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
 {
-    aParaArray.clear();
+    m_aParaArray.clear();
     m_xSlider->vadjustment_set_value(0);
 
-    aParaArray.resize(nMaxArgs);
+    m_aParaArray.resize(m_nMaxArgs);
 
-    if (nMaxArgs > 0)
+    if (m_nMaxArgs > 0)
     {
-        for ( int i=0; i<4 && i<nMaxArgs; i++ )
+        for (int i = 0; i < 4 && i < m_nMaxArgs; i++)
         {
-            aArgInput[i].SetArgVal(OUString());
-            aArgInput[i].GetArgEdPtr()->Init(
-                (i==0)                  ? nullptr : aArgInput[i-1].GetArgEdPtr(),
-                (i==3 || i==nMaxArgs-1) ? nullptr : aArgInput[i+1].GetArgEdPtr(),
-                                          *m_xSlider, *this, nMaxArgs );
+            m_aArgInput[i].SetArgVal(OUString());
+            m_aArgInput[i].GetArgEdPtr()->Init(
+                (i == 0) ? nullptr : m_aArgInput[i - 1].GetArgEdPtr(),
+                (i == 3 || i == m_nMaxArgs - 1) ? nullptr : m_aArgInput[i + 1].GetArgEdPtr(),
+                *m_xSlider, *this, m_nMaxArgs);
         }
     }
 
     UpdateParas();
 
-    if (nMaxArgs < 5)
+    if (m_nMaxArgs < 5)
     {
         m_xSlider->set_vpolicy(VclPolicyType::NEVER);
         m_xSlider->set_size_request(-1, -1);
     }
     else
     {
-        m_xSlider->vadjustment_configure(nOffset, nMaxArgs, 1, 4, 4);
+        m_xSlider->vadjustment_configure(nOffset, m_nMaxArgs, 1, 4, 4);
         m_xSlider->set_vpolicy(VclPolicyType::ALWAYS);
         Size aPrefSize(m_xGrid->get_preferred_size());
         m_xSlider->set_size_request(aPrefSize.Width(), aPrefSize.Height());
@@ -449,17 +455,17 @@ void ParaWin::UpdateParas()
     sal_uInt16 i;
     sal_uInt16 nOffset = GetSliderPos();
 
-    if ( nMaxArgs > 0 )
+    if (m_nMaxArgs > 0)
     {
-        for ( i=0; (i<nMaxArgs) && (i<4); i++ )
+        for (i = 0; (i < m_nMaxArgs) && (i < 4); i++)
         {
             UpdateArgInput( nOffset, i );
-            aArgInput[i].Show();
+            m_aArgInput[i].Show();
         }
     }
 
-    for ( i=nMaxArgs; i<4; i++ )
-        aArgInput[i].Hide();
+    for (i = m_nMaxArgs; i < 4; i++)
+        m_aArgInput[i].Hide();
 }
 
 
@@ -490,85 +496,82 @@ void ParaWin::SliderMoved()
     {
         UpdateArgInput( nOffset, i );
     }
-    if(nEdFocus!=NOT_FOUND)
+    if (m_nEdFocus != NOT_FOUND)
     {
-        UpdateArgDesc( nEdFocus );
-        aArgInput[nEdFocus].SelectAll();
-        nActiveLine=nEdFocus+nOffset;
+        UpdateArgDesc(m_nEdFocus);
+        m_aArgInput[m_nEdFocus].SelectAll();
+        m_nActiveLine = m_nEdFocus + nOffset;
         ArgumentModified();
-        aArgInput[nEdFocus].SelectAll(); // ensure all is still selected
-        aArgInput[nEdFocus].UpdateAccessibleNames();
+        m_aArgInput[m_nEdFocus].SelectAll(); // ensure all is still selected
+        m_aArgInput[m_nEdFocus].UpdateAccessibleNames();
     }
 }
 
-void ParaWin::ArgumentModified()
-{
-    aArgModifiedLink.Call(*this);
-}
+void ParaWin::ArgumentModified() { m_aArgModifiedLink.Call(*this); }
 
 IMPL_LINK( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
-    nEdFocus=NOT_FOUND;
-    for (size_t nPos=0; nPos < std::size(aArgInput); ++nPos)
+    m_nEdFocus = NOT_FOUND;
+    for (size_t nPos = 0; nPos < std::size(m_aArgInput); ++nPos)
     {
-        if(&rPtr == &aArgInput[nPos])
+        if (&rPtr == &m_aArgInput[nPos])
         {
-            nEdFocus=nPos;
+            m_nEdFocus = nPos;
             break;
         }
     }
 
-    if(nEdFocus!=NOT_FOUND)
+    if (m_nEdFocus != NOT_FOUND)
     {
-        aArgInput[nEdFocus].SelectAll();
-        nActiveLine=nEdFocus+nOffset;
-        aFxLink.Call(*this);
+        m_aArgInput[m_nEdFocus].SelectAll();
+        m_nActiveLine = m_nEdFocus + nOffset;
+        m_aFxLink.Call(*this);
     }
 }
 
 IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
-    nEdFocus=NOT_FOUND;
-    for (size_t nPos=0; nPos < std::size(aArgInput); ++nPos)
+    m_nEdFocus = NOT_FOUND;
+    for (size_t nPos = 0; nPos < std::size(m_aArgInput); ++nPos)
     {
-        if(&rPtr == &aArgInput[nPos])
+        if (&rPtr == &m_aArgInput[nPos])
         {
-            nEdFocus=nPos;
+            m_nEdFocus = nPos;
             break;
         }
     }
 
-    if(nEdFocus!=NOT_FOUND)
+    if (m_nEdFocus != NOT_FOUND)
     {
-        aArgInput[nEdFocus].SelectAll();
-        UpdateArgDesc( nEdFocus );
-        nActiveLine=nEdFocus+nOffset;
+        m_aArgInput[m_nEdFocus].SelectAll();
+        UpdateArgDesc(m_nEdFocus);
+        m_nActiveLine = m_nEdFocus + nOffset;
     }
 }
 
 IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
-    nEdFocus=NOT_FOUND;
-    for (size_t nPos=0; nPos < std::size(aArgInput); ++nPos)
+    m_nEdFocus = NOT_FOUND;
+    for (size_t nPos = 0; nPos < std::size(m_aArgInput); ++nPos)
     {
-        if(&rPtr == &aArgInput[nPos])
+        if (&rPtr == &m_aArgInput[nPos])
         {
-            nEdFocus=nPos;
+            m_nEdFocus = nPos;
             break;
         }
     }
 
-    if(nEdFocus!=NOT_FOUND)
+    if (m_nEdFocus != NOT_FOUND)
     {
-        aArgInput[nEdFocus].SelectAll();
-        UpdateArgDesc( nEdFocus );
-        nActiveLine=nEdFocus+nOffset;
+        m_aArgInput[m_nEdFocus].SelectAll();
+        UpdateArgDesc(m_nEdFocus);
+        m_nActiveLine = m_nEdFocus + nOffset;
         ArgumentModified();
-        aArgInput[nEdFocus].SelectAll(); // ensure all is still selected
-        aArgInput[nEdFocus].UpdateAccessibleNames();
+        m_aArgInput[m_nEdFocus].SelectAll(); // ensure all is still selected
+        m_aArgInput[m_nEdFocus].UpdateAccessibleNames();
     }
 }
 
@@ -580,29 +583,30 @@ IMPL_LINK_NOARG(ParaWin, ScrollHdl, weld::ScrolledWindow&, void)
 IMPL_LINK( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
-    nEdFocus=NOT_FOUND;
-    for (size_t nPos=0; nPos < std::size(aArgInput); ++nPos)
+    m_nEdFocus = NOT_FOUND;
+    for (size_t nPos = 0; nPos < std::size(m_aArgInput); ++nPos)
     {
-        if(&rPtr == &aArgInput[nPos])
+        if (&rPtr == &m_aArgInput[nPos])
         {
-            nEdFocus=nPos;
+            m_nEdFocus = nPos;
             break;
         }
     }
-    if(nEdFocus!=NOT_FOUND)
+    if (m_nEdFocus != NOT_FOUND)
     {
-        size_t nPara = nEdFocus + nOffset;
-        if (nPara < aParaArray.size())
-            aParaArray[nPara] = aArgInput[nEdFocus].GetArgVal();
+        size_t nPara = m_nEdFocus + nOffset;
+        if (nPara < m_aParaArray.size())
+            m_aParaArray[nPara] = m_aArgInput[m_nEdFocus].GetArgVal();
         else
         {
-            SAL_WARN("formula.ui","ParaWin::ModifyHdl - shot in foot: nPara " <<
-                    nPara << " >= aParaArray.size() " << aParaArray.size() <<
-                    " with nEdFocus " << nEdFocus <<
-                    " and aArgInput[nEdFocus].GetArgVal() '" << aArgInput[nEdFocus].GetArgVal() << "'");
+            SAL_WARN("formula.ui", "ParaWin::ModifyHdl - shot in foot: nPara "
+                                       << nPara << " >= aParaArray.size() " << m_aParaArray.size()
+                                       << " with nEdFocus " << m_nEdFocus
+                                       << " and aArgInput[nEdFocus].GetArgVal() '"
+                                       << m_aArgInput[m_nEdFocus].GetArgVal() << "'");
         }
-        UpdateArgDesc( nEdFocus);
-        nActiveLine = static_cast<sal_uInt16>(nPara);
+        UpdateArgDesc(m_nEdFocus);
+        m_nActiveLine = static_cast<sal_uInt16>(nPara);
     }
 
     ArgumentModified();
