@@ -6991,6 +6991,11 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testImplicitIntersectionTakesOperandWhole)
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(A1:INDEX(B1:B10,5))"_ustr,
                          resolveAndPrintAsOoxml(*m_pDoc, u"A1:INDEX(B1:B10;5)"_ustr));
 
+    // An arithmetic operator is above the @ in the grammar, so it ends the operand and the
+    // wrapper closes before it.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(A1:A3)+1"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@A1:A3+1"_ustr));
+
     // Whitespace between a function name and its parenthesis is dropped on save,
     // and the call stays inside the wrapper as if it had never been there.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(SUM(A1:A3))"_ustr,
@@ -7030,13 +7035,26 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testImplicitIntersectionMarkersWrapOneAnother
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeBindsTighterThanSignAndMarker)
 {
-    // The # postfix reads as _xlfn.ANCHORARRAY around the operand it follows, and
-    // binds tighter than the sign or the @ in front of that operand.
+    // The # postfix becomes _xlfn.ANCHORARRAY around the operand before it, and binds
+    // tighter than a sign or an @ in front of that operand. A document from another
+    // application has the same nesting, so these are the forms actually in use.
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // On its own the wrapper encloses just the reference before the #.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1#"_ustr));
+
+    // An already parenthesised operand keeps its parentheses inside the wrapper.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY((A1))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"(A1)#"_ustr));
 
     // The sign stays outside the wrapper.
     CPPUNIT_ASSERT_EQUAL(u"-_xlfn.ANCHORARRAY(A1)"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"-A1#"_ustr));
+
+    // A percent sign after the # ends up after both wrappers.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1))%"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@A1#%"_ustr));
 
     // The @ wrapper goes around the # one, whatever form the operand takes.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1))"_ustr,
@@ -7140,6 +7158,16 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionStaysInsideImplicitIntersectionWrapp
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(_xlfn.ANCHORARRAY((A1,B2)))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1~@B2#"_ustr));
 
+    // An already parenthesised union list fills the wrapper on its own, for either operator.
+    // Both forms show up in documents from another application.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY((A1,B2))"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"(A1~B2)#"_ustr));
+
+    // A percent sign closes the wrapper before it, so the union list that opens after it
+    // starts at the wrapper and the scope's parentheses hold the list.
+    CPPUNIT_ASSERT_EQUAL(u"(_xlfn.SINGLE( A1)%,B2)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"(@ A1%~B2)"_ustr));
+
     m_pDoc->DeleteTab(0);
 }
 
@@ -7156,8 +7184,15 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorsApplyToTheWholeExpression
 
     // The range operator binds tighter still, and a range built with it goes
     // inside the wrapper whole.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1:A3)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1:A3#"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1:INDEX(B1:B10,5))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1:INDEX(B1:B10;5)#"_ustr));
+
+    // A percent sign on one part of a union list keeps that part inside the list, and one
+    // after the list goes after the list's own parentheses. Neither shape comes out of a
+    // parse, which treats a percent sign as being above the union operator.
+    CPPUNIT_ASSERT_EQUAL(u"(A1%,B2)%"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1%~B2%"_ustr));
 
     // A prefix sign on one part of a union list stays outside the wrapper too.
     CPPUNIT_ASSERT_EQUAL(u"(A1,-_xlfn.ANCHORARRAY(B2))"_ustr,
@@ -7189,8 +7224,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
     CPPUNIT_ASSERT_EQUAL(u"($A$1,_xlfn.SINGLE($B$2))"_ustr,
                          printAsOoxml(*m_pDoc, aMarkerInList, ScAddress(1, 0, 0)));
 
-    // A percent sign in front of the union operator, likewise. The sign follows the
-    // first part of the list, so the list still begins in front of that part.
+    // Same for a percent sign before the union operator. The sign comes after the first part
+    // of the list, so the list still starts before that part.
     ScTokenArray aPercentInList(*m_pDoc);
     aPercentInList.AddSingleReference(aFirst);
     aPercentInList.AddOpCode(ocPercentSign);

@@ -1418,6 +1418,31 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleOnSpilledRangeXlsxExport)
                        u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1))");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testParenthesizedSpilledRangeXlsxRoundTrip)
+{
+    // A # on an operand that is already parenthesised keeps those parentheses inside the
+    // wrapper, so _xlfn.ANCHORARRAY((A1)), which is what OOXML uses. The import reads that
+    // back as the postfix (A1)# it came from.
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetFormula(ScAddress(0, 0, 0), u"=SEQUENCE(3)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(1, 0, 0), u"=(A1)#"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f",
+                       u"_xlfn.ANCHORARRAY((A1))");
+
+    saveAndReload(TestFilter::XLSX);
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"=(A1)#"_ustr, pDoc->GetFormula(1, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testReferenceUnionXlsxRoundTrip)
 {
     // OOXML spells the union operator with the same comma that separates
