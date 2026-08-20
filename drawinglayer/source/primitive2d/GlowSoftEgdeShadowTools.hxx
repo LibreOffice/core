@@ -33,6 +33,16 @@ AlphaMask ProcessAndBlurAlphaMask(const AlphaMask& rMask, double fErodeDilateRad
                                   double fBlurRadius, sal_uInt8 nTransparency,
                                   bool bConvertTo1Bit = true);
 
+/* Returns the 8-bit alpha mask of a glow halo around the object in rMask.
+
+   The object is grown by half of fGlowRadius, using a Euclidean distance transform so that the
+   growth is the same in every direction, and the result is blurred over the other half. Corners
+   therefore come out the way a blur makes them: a convex one thinner, a concave one filled in.
+
+   fGlowRadius is the width of the halo in pixels. nTransparency defines minimal transparency level.
+*/
+AlphaMask CreateGlowAlphaMask(const AlphaMask& rMask, double fGlowRadius, sal_uInt8 nTransparency);
+
 drawinglayer::geometry::ViewInformation2D
 expandB2DRangeAtViewInformation2D(const drawinglayer::geometry::ViewInformation2D& rViewInfo,
                                   double nAmount);

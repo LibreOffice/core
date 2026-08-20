@@ -210,6 +210,8 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor3d/zbufferprocessor3d \
     drawinglayer/source/texture/texture3d \
     drawinglayer/source/tools/converters \
+    drawinglayer/source/tools/EuclideanDistanceTransform \
+    drawinglayer/source/tools/GaussianGridBlur \
     drawinglayer/source/tools/emfplushelper \
     drawinglayer/source/tools/emfphelperdata \
     drawinglayer/source/tools/emfpbrush \
