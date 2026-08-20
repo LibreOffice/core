@@ -260,12 +260,23 @@ class Mention extends AutoCompletePopup {
 			return;
 		}
 
-		if (ev.data === '@' && this.partialMention.length === 1) {
+		// A second '@' is never part of a mention: right after the first one it is
+		// simply ignored, later on it means we are typing something else - an
+		// email address for instance - so the mention ends.
+		if (ev.data === '@') {
+			if (this.partialMention.length > 1) this.closeMentionPopup(false);
 			return;
 		}
 
-		const regEx = /^[0-9a-zA-Z ]+$/;
-		if (ev.data && ev.data.match(regEx)) {
+		// Anything the user actually types stays part of the mention: names may
+		// contain punctuation ('*', '.', '-', "'") and non-Latin letters, so a
+		// special character must not dismiss the popup, it only narrows the
+		// search and may end up showing 'No search results found!'.
+		// Only non-textual input (Enter, paste, tabs, other control characters)
+		// ends the mention.
+		// eslint-disable-next-line no-control-regex
+		const regEx = /^[^\u0000-\u001f\u007f]+$/;
+		if (ev.data && regEx.test(ev.data)) {
 			this.partialMention.push(ev.data);
 			this.sendMentionPostMsg(this.getPartialMention());
 		} else {

@@ -1345,6 +1345,27 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 		cy.cGet('#annotation-modify-textarea-new').should('have.focus');
 	});
 
+	it('Special characters should not close the mention popup', function() {
+		desktopHelper.insertComment('some text0', false);
+
+		cy.cGet('.cool-annotation').find('#annotation-modify-textarea-new').type(' @Ale');
+		cy.cGet('#mentionPopup').should('be.visible');
+		cy.cGet('#mentionPopupList .ui-treeview-entry:nth-child(1)').should('exist');
+
+		// the popup covers the comment textarea, so keep typing with force
+		// a special character only narrows the search, it must not dismiss the popup
+		cy.cGet('#annotation-modify-textarea-new').type('*', {force: true});
+		cy.cGet('#mentionPopupfixedtext').should('be.visible').should('have.text', 'No search results found!');
+
+		// ... and further special characters keep it up as well
+		cy.cGet('#annotation-modify-textarea-new').type('#', {force: true});
+		cy.cGet('#mentionPopupfixedtext').should('be.visible');
+
+		// removing them brings the suggestions back
+		cy.cGet('#annotation-modify-textarea-new').type('{backspace}{backspace}', {force: true});
+		cy.cGet('#mentionPopupList .ui-treeview-entry:nth-child(1)').should('exist');
+	});
+
 	it('Unselect comment on scroll', function() {
 		desktopHelper.insertComment('test comment');
 		cy.cGet('#comment-container-1').should('exist');
