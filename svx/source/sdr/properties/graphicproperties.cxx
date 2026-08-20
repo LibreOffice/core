@@ -44,7 +44,7 @@ namespace sdr::properties
 
             if(pStyleSheet)
             {
-                // do not delete hard attributes when setting dsefault Style
+                // do not delete hard attributes when setting default Style
                 SetStyleSheet(pStyleSheet, true, true);
             }
             else

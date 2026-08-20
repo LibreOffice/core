@@ -67,11 +67,11 @@ const char pBuffer_Blank[]  = "";
 // OS dependent/independent definitions/includes
 // we use FILE_PREFIX for URL prefix,
 //        TEST_PLATFORM for test platform initial,
-//        TEST_PLATFORM_ROOT for root dir in comrresponding platform,
-//        TEST_PLATFORM_TEMP for temp dir in comrresponding platform,
-//        PATH_LIST_DELIMITER for separator of path list in comrresponding platform,
-//        PATH_SEPARATOR for separator in URL or system path in comrresponding platform,
-//        PATH_MAX/MAX_PATH for max path length in comrresponding platform,
+//        TEST_PLATFORM_ROOT for root dir in corresponding platform,
+//        TEST_PLATFORM_TEMP for temp dir in corresponding platform,
+//        PATH_LIST_DELIMITER for separator of path list in corresponding platform,
+//        PATH_SEPARATOR for separator in URL or system path in corresponding platform,
+//        PATH_MAX/MAX_PATH for max path length in corresponding platform,
 
 // OS independent const definition
 

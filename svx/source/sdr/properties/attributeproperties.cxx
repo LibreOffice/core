@@ -554,7 +554,7 @@ namespace sdr::properties
             // documents with CustomShape-'Group' and added Text-Frames, see task description)
             if(pDefaultStyleSheet != GetStyleSheet())
             {
-                // do not delete hard attributes when setting dsefault Style
+                // do not delete hard attributes when setting default Style
                 SetStyleSheet(pDefaultStyleSheet, true, true);
             }
         }

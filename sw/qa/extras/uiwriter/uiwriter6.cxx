@@ -2339,7 +2339,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
         aPaM.DeleteMark();
     }
 
-    // save document and verify the bookmark scoup
+    // save document and verify the bookmark scope
     {
         // save document
         save(TestFilter::ODT);

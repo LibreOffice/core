@@ -2568,7 +2568,7 @@ static void extractLineContourFromPrimitive2DSequence(
     // copy line results
     rExtractedHairlines = aExtractor.getExtractedHairlines();
 
-    // copy fill rsults
+    // copy fill results
     rExtractedLineFills = aExtractor.getExtractedLineFills();
 }
 
@@ -2597,7 +2597,7 @@ rtl::Reference<SdrObject> SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                 aMergedHairlinePolyPolygon.append(rExtractedHairline);
             }
 
-            // check for fill rsults
+            // check for fill results
             if (!aExtractedLineFills.empty() && !comphelper::IsFuzzing())
             {
                 // merge to a single tools::PolyPolygon (OR)

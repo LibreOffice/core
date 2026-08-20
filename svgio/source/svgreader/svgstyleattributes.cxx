@@ -813,7 +813,7 @@ namespace svgio::svgreader
                 // process
                 aExtractor.process(aSeq);
 
-                // check for fill rsults
+                // check for fill results
                 const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
 
                 if(!rLineFillVector.empty())
