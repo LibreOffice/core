@@ -401,7 +401,7 @@ void BasicFormatNum(double d, const OUString& rFmt, OUString& rRes)
         sal_Unicode c1000 = rData.getNumThousandSep()[0];
         const OUString& aCurrencyStrg = rData.getCurrSymbol();
 
-        // initialize the Basic-formater help object:
+        // initialize the Basic-formatter help object:
         // get resources for predefined output
         // of the Format()-command, e. g. for "On/Off"
         OUString aOnStrg = BasResId(STR_BASICKEY_FORMAT_ON);

@@ -59,7 +59,7 @@ public class _XAccessibleContext extends MultiMethodTest {
 
     /**
      * Calls the method and stores the number of children. <p>
-     * Has <b> OK </b> status if non-negative number rutrned.
+     * Has <b> OK </b> status if non-negative number returned.
      */
     public void _getAccessibleChildCount() {
         childCount = oObj.getAccessibleChildCount();
@@ -238,7 +238,7 @@ public class _XAccessibleContext extends MultiMethodTest {
     /**
      * Get the accessible role of component. <p>
      *
-     * Has <b> OK </b> status if non-negative number rutrned.
+     * Has <b> OK </b> status if non-negative number returned.
      */
     public void _getAccessibleRole() {
         short role = oObj.getAccessibleRole();

@@ -273,7 +273,7 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
             if (!pData)
                 break;
 
-            // range name found.  Fow now, we only use the first token and
+            // range name found. For now, we only use the first token and
             // ignore the rest.
             ScRange aRange;
             if (!pData->IsReference(aRange))

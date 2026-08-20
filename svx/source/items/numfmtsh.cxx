@@ -485,7 +485,7 @@ void SvxNumberFormatShell::GetInitSettings(sal_uInt16& nCatLbPos, LanguageType& 
                                            std::vector<OUString>& rFmtEntries,
                                            OUString& rPrevString, const Color*& rpPrevColor)
 {
-    // precondition: number formater found
+    // precondition: number formatter found
     DBG_ASSERT(pFormatter != nullptr, "Number formatter not found!");
 
     short nSelPos = SELPOS_NONE;

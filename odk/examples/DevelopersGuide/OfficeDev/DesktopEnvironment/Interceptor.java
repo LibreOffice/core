@@ -578,7 +578,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * @param aSource
      *          must be our internal saved frame, on which we listen for frame action events
      */
-    public /*ONEAY*/ void disposing(/*IN*/ com.sun.star.lang.EventObject aSource)
+    public /*ONE-WAY*/ void disposing(/*IN*/ com.sun.star.lang.EventObject aSource)
     {
         synchronized(this)
         {
