@@ -230,6 +230,15 @@ void HttpWhiteBoxTests::testHeaderFieldWithControlCharacter()
     LOK_ASSERT_EQUAL_STR("one\x80" "two", header.get("X-High"));
     LOK_ASSERT_EQUAL_STR("caf\xc3\xa9", header.get("X-Accented"));
 
+    // A received field whose sender put in a byte a field cannot carry is skipped, and the
+    // rest of the reply is kept.
+    http::Header parsed;
+    const std::string reply = "Host: localhost\r\nX-Bad: one\x01" "two\r\nX-Good: two\r\n\r\n";
+    LOK_ASSERT(parsed.parse(reply.c_str(), reply.size()) > 0);
+    LOK_ASSERT(!parsed.has("X-Bad"));
+    LOK_ASSERT_EQUAL_STR("localhost", parsed.get("Host"));
+    LOK_ASSERT_EQUAL_STR("two", parsed.get("X-Good"));
+
     // The request that goes out on the wire carries no injected field.
     http::Request request;
     LOK_ASSERT(!request.set("X-Sample", "one\r\nIf-Modified-Since: Thu, 01 Jan 1970 00:00:00 GMT"));

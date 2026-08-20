@@ -165,10 +165,19 @@ int64_t Header::parse(const char* p, int64_t len)
             return -1;
         }
 
-        // Copy the header entries over to us.
+        // Copy the header entries over to us. The sender chose these bytes, so a field we
+        // cannot carry is not our own error and is logged quietly.
         for (const auto& pair : msgHeader)
         {
-            set(Util::trimmed(pair.first), Util::trimmed(pair.second));
+            std::string name = Util::trimmed(pair.first);
+            std::string value = Util::trimmed(pair.second);
+            if (!hasOnlyValidFieldBytes(name) || !hasOnlyValidFieldBytes(value))
+            {
+                LOG_DBG("Skipping received header field with a byte a field cannot carry");
+                continue;
+            }
+
+            set(name, std::move(value));
         }
 
         _chunked = getTransferEncoding() == "chunked";
