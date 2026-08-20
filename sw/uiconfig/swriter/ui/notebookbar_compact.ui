@@ -9886,7 +9886,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Splitt">
+                      <object class="VclOptionalBox" id="Table-Section-Split">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>

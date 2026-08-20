@@ -106,13 +106,13 @@ public class _XIndexContainer extends MultiMethodTest {
             result &= oObj.getByIndex(Index) != null ;
             log.println("insertByIndex(\""+Index+"\")...OK");
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("insertByIndex(\""+Index+"\"): " + e + " FLASE");
+            log.println("insertByIndex(\""+Index+"\"): " + e + " FALSE");
             result = false;
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("insertByIndex(\""+Index+"\"): " + e + " FLASE");
+            log.println("insertByIndex(\""+Index+"\"): " + e + " FALSE");
             result = false;
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("insertByIndex(\""+Index+"\"): " + e + " FLASE");
+            log.println("insertByIndex(\""+Index+"\"): " + e + " FALSE");
             result = false;
         }
 

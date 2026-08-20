@@ -782,7 +782,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
             case excel::XlMousePointer::xlIBeam:
             {
                 PointerStyle nPointer( static_cast< PointerStyle >( _cursor ) );
-                //It will set the edit window, toobar and statusbar's mouse pointer.
+                //It will set the edit window, toolbar and statusbar's mouse pointer.
                 setCursorHelper( xModel, nPointer, true );
                 break;
             }

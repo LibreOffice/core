@@ -2340,7 +2340,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, tools::Long nNewSize,
     }
 
     sal_uInt16          n;
-    // now splitt the windows
+    // now split the windows
     if ( nDelta < 0 )
     {
         if ( bGreat )

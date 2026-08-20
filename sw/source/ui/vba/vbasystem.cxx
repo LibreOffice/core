@@ -209,13 +209,13 @@ SwVbaSystem::setCursor( sal_Int32 _cursor )
             }
             case word::WdCursorType::wdCursorWait:
             {
-                //It will set the edit window, toobar and statusbar's mouse pointer.
+                //It will set the edit window, toolbar and statusbar's mouse pointer.
                 setCursorHelper( static_cast<SfxBaseModel*>(getCurrentWordDoc(mxContext).get()), PointerStyle::Wait, true );
                 break;
             }
             case word::WdCursorType::wdCursorIBeam:
             {
-                //It will set the edit window, toobar and statusbar's mouse pointer.
+                //It will set the edit window, toolbar and statusbar's mouse pointer.
                 setCursorHelper( static_cast<SfxBaseModel*>(getCurrentWordDoc( mxContext ).get()), PointerStyle::Text, true );
                 break;
             }

@@ -136,7 +136,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
      * avoid blocking of the current thread and immediately
      * cancels loading. <p>
      *
-     * Has <b> OK </b> status if <code>flase</code> is returned,
+     * Has <b> OK </b> status if <code>false</code> is returned,
      * i.e. loading was not completed.
      */
     public void _cancel() {
