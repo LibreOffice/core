@@ -239,6 +239,7 @@ window.L.TextInput = window.L.Layer.extend({
 		// Needed also after a Ctrl+C.
 		if (ev.type === 'focus') {
 			this._a11yFocusTime = Date.now();
+			this._a11yFocusDescription = this._textArea.getAttribute('aria-description');
 
 			if (!this._isSelectionValid() || this._isCursorAtBeginning()) {
 				if (this.hasAccessibilitySupport()) {
@@ -261,6 +262,11 @@ window.L.TextInput = window.L.Layer.extend({
 		onoff(this._textArea, 'copy cut paste', this._map._handleDOMEvent, this._map);
 
 		app.idleHandler.notifyActive();
+
+		if (ev.type === 'blur') {
+			this._textArea.setAttribute('aria-description', '');
+			this._a11yFocusDescription = '';
+		}
 
 		if (ev.type === 'blur' && this._isComposing) {
 			this._abortComposition(ev);

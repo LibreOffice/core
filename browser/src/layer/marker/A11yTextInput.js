@@ -217,7 +217,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		if (window.L.Browser.mac) {
 			// avoid duplicate cell announcement in Chrome
 			var sinceFocus = Date.now() - (this._a11yFocusTime || 0);
-			if (text && sinceFocus < this.A11Y_FOCUS_ANNOUNCEMENT_MS)
+			if (text && sinceFocus < this.A11Y_FOCUS_ANNOUNCEMENT_MS
+				&& text === this._a11yFocusDescription)
 				return;
 
 			// required on macOS as VoiceOver is not triggered by description change only
