@@ -603,7 +603,11 @@ void ScDocument::FillInfo(
                                 ScBasicCellInfo* pBasicInfo = &pThisRowInfo->basicCellInfo(nCol);
                                 if (pInfo->maBackground)
                                 {
-                                    if (pExplicitBackground)
+                                    // A fully transparent explicit background means "no
+                                    // fill", not a fill of nothing. Treat it as not-explicit
+                                    // so the table-style fill survives, like the border below.
+                                    if (pExplicitBackground
+                                        && !pExplicitBackground->GetColor().IsFullyTransparent())
                                     {
                                         pInfo->maBackground = SfxPoolItemHolder(*pPool, pExplicitBackground);
                                     }
