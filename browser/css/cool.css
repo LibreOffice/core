@@ -1471,20 +1471,24 @@ input, button {
 }
 
 #date_picker .ui-datepicker-next span,
-#datepicker .ui-datepicker-next span {
+#datepicker .ui-datepicker-next span,
+.ui-calendar .ui-datepicker-next span {
 	background-image: url('images/lc_nextrecord.svg');
 }
 
-#datepicker .ui-icon-circle-triangle-e {
+#datepicker .ui-icon-circle-triangle-e,
+.ui-calendar .ui-icon-circle-triangle-e {
 	background-position: 0;
 }
 
 #date_picker .ui-datepicker-prev span,
-#datepicker .ui-datepicker-prev span {
+#datepicker .ui-datepicker-prev span,
+.ui-calendar .ui-datepicker-prev span {
 	background-image: url('images/lc_prevrecord.svg');
 }
 
-#datepicker .ui-icon-circle-triangle-w {
+#datepicker .ui-icon-circle-triangle-w,
+.ui-calendar .ui-icon-circle-triangle-w {
 	background-position: 0;
 }
 
