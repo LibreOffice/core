@@ -154,7 +154,6 @@
  <office:font-face-decls>
   <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
   <style:font-face style:name="Linux Libertine G" svg:font-family="&apos;Linux Libertine G&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
-  <style:font-face style:name="Times New Roman" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="graphic">
@@ -182,7 +181,7 @@
    <style:text-properties fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit"/>
   </style:style>
   <style:style style:name="T1" style:family="text">
-   <style:text-properties style:font-name="Times New Roman"/>
+   <style:text-properties style:font-name="Liberation Sans"/>
   </style:style>
   <style:page-layout style:name="pm1">
    <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="146" style:layout-grid-base-height="0.176cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.423cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
@@ -199,7 +198,7 @@
  </office:master-styles>
  <office:body>
   <office:text>
-   <text:p text:style-name="P1" loext:marker-style-name="T1"><text:span text:style-name="T1">placerat mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.</text:span></text:p>
+   <text:p text:style-name="P1" loext:marker-style-name="T1"><text:span text:style-name="T1">mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.</text:span></text:p>
   </office:text>
  </office:body>
 </office:document>
