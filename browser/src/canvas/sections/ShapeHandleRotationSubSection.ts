@@ -51,6 +51,25 @@ class ShapeHandleRotationSubSection extends ShapeHandleSubSection {
 		app.events.on('TextCursorVisibility', this.onTextCursorVisibility.bind(this));
 	}
 
+	/*
+		Whether core sent this handle. Core gives every handle it sends a number, and the handle
+		this side adds for a single selection has none.
+	*/
+	private isPerObjectHandle(): boolean {
+		return this.sectionProperties.ownInfo.index !== undefined;
+	}
+
+	// Document position in twips of the pointer, from a point measured inside this handle.
+	private getPointerPosition(point: cool.SimplePoint): cool.SimplePoint {
+		const isRTL = app.map._docLayer.isCalcRTL();
+		const pointerPosition = point.clone();
+
+		pointerPosition.pX = isRTL ? this.position[0] - point.pX : this.position[0] + point.pX;
+		pointerPosition.pY = point.pY + this.position[1];
+
+		return pointerPosition;
+	}
+
 	calculateAngle(center: cool.SimplePoint, target: cool.SimplePoint): number {
 		let angle = Math.atan2(target.y - center.y, target.x - center.x);
 
@@ -123,7 +142,19 @@ class ShapeHandleRotationSubSection extends ShapeHandleSubSection {
 
 	onMouseUp(point: cool.SimplePoint, e: MouseEvent): void {
 		if (this.containerObject.isDraggingSomething()) {
-			if (this.sectionProperties.lastDraggingDistance) {
+			if (this.isPerObjectHandle()) {
+				const pointerPosition = this.getPointerPosition(point);
+
+				const commandParameters = {
+					...ShapeHandlesSection.handleParameters(this.sectionProperties.ownInfo),
+					NewPosX: { type: 'long', value: Math.round(pointerPosition.x) },
+					NewPosY: { type: 'long', value: Math.round(pointerPosition.y) }
+				};
+
+				app.map.sendUnoCommand('.uno:MoveShapeHandle', commandParameters);
+				this.sectionProperties.parentHandlerSection.clearShapeDragPreview();
+			}
+			else if (this.sectionProperties.lastDraggingDistance) {
 				Util.ensureValue(GraphicSelection.rectangle);
 				const center = GraphicSelection.rectangle.center;
 
@@ -158,13 +189,22 @@ class ShapeHandleRotationSubSection extends ShapeHandleSubSection {
 		}
 
 		this.sectionProperties.lastDraggingDistance = distance;
+		const parentHandlerSection = this.sectionProperties.parentHandlerSection;
 
-		if (this.sectionProperties.parentHandlerSection.sectionProperties.svg) {
-			this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.opacity = 0.5;
+		if (this.isPerObjectHandle()) {
+			// Core answers with the outline every selected object would get, each turned about
+			// its own center, which is the geometry the drop produces.
+			parentHandlerSection.requestShapeDragPreview(
+				this.sectionProperties.ownInfo, this.getPointerPosition(position));
+			return;
+		}
+
+		if (parentHandlerSection.sectionProperties.svg) {
+			parentHandlerSection.sectionProperties.svg.style.opacity = 0.5;
 			const angleDifference = -this.getAngleDifference() / 100;
-			this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.transform = 'rotate(' + angleDifference + 'deg)';
+			parentHandlerSection.sectionProperties.svg.style.transform = 'rotate(' + angleDifference + 'deg)';
 			this.containerObject.requestReDraw();
-			this.sectionProperties.parentHandlerSection.showSVG();
+			parentHandlerSection.showSVG();
 		}
 	}
 }

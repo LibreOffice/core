@@ -195,8 +195,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			entry.point.y = parseInt(entry.point.y) + offset[1];
 		};
 
-		// Core groups handles into rectangle / poly / custom / anchor / others
-		// (see SdrMarkView in svdmrkv.cxx). Convert positions for every group,
+		// Core groups handles into rectangle, poly, custom, rotate, anchor and
+		// others (see SdrMarkView in svdmrkv.cxx). Convert positions for every group,
 		// not just rectangle, otherwise custom-shape adjustment handles (kind
 		// 22) and others render in print twips while the shape is in tile
 		// twips, leaving them visually detached from the shape.
@@ -437,6 +437,26 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	private getRotationHandle(perObject: Array<Record<string, any>>) {
 		if (GraphicSelection.extraInfo?.isRotatable === false || this.sectionProperties.hasVideo)
 			return;
+
+		// With several objects selected core sends a rotate handle for each of them, above its
+		// own top edge. Dragging any one of them turns every selected object about its own
+		// center, so each object gets a handle of its own here too.
+		const perObjectHandles = this.sectionProperties.info?.handles?.kinds?.rotate?.['24'];
+		if (Array.isArray(perObjectHandles) && perObjectHandles.length > 0) {
+			const halfWidth = app.pixelsToTwips * (this.sectionProperties.rotationHandleWidth * 0.5);
+			const halfHeight = app.pixelsToTwips * (this.sectionProperties.rotationHandleHeight * 0.5);
+
+			for (const handle of perObjectHandles) {
+				// A handle's sub section is picked from its kind, and core sends kind 24 here.
+				handle.kind = 'ShapeRotationHandle';
+				this.sectionProperties.handles.push({
+					info: handle,
+					point: new cool.SimplePoint(handle.point.x - halfWidth, handle.point.y - halfHeight)
+				});
+			}
+
+			return;
+		}
 
 		if (perObject.length > 0) {
 			const rotationInfo = this.getRotationInfo(); // Rotation section will read the information from this (parent) class.

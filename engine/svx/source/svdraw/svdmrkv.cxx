@@ -1351,6 +1351,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                 boost::property_tree::ptree rectangle;
                 boost::property_tree::ptree poly;
                 boost::property_tree::ptree custom;
+                boost::property_tree::ptree rotate;
                 boost::property_tree::ptree nodes;
 
                 // Place of each marked object in the selection, so that every handle can
@@ -1402,6 +1403,10 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                     {
                         selectedNode = &custom;
                     }
+                    else if (kind == static_cast<sal_Int32>(SdrHdlKind::Rotate))
+                    {
+                        selectedNode = &rotate;
+                    }
                     else if (kind == static_cast<sal_Int32>(SdrHdlKind::Anchor) || kind == static_cast<sal_Int32>(SdrHdlKind::Anchor_TR))
                     {
                         if (getSdrModelFromSdrView().IsWriter())
@@ -1428,6 +1433,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                 nodes.add_child("rectangle", rectangle);
                 nodes.add_child("poly", poly);
                 nodes.add_child("custom", custom);
+                nodes.add_child("rotate", rotate);
                 nodes.add_child("anchor", anchor);
                 nodes.add_child("others", others);
                 responseJSON.add_child("kinds", nodes);
@@ -1841,6 +1847,10 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                             new SdrHdl(aRotPos, SdrHdlKind::Rotate));
                         pRotHdl->SetObj(pObj);
                         pRotHdl->SetPageView(pPV);
+                        // The handle numbers 0 to nSiz1 - nSiz0 - 1 belong to the object's own
+                        // handles, so the rotate handle takes the next one. The sort order runs
+                        // by handle number, which keeps the rotate handle behind them.
+                        pRotHdl->SetObjHdlNum(sal_uInt16(nSiz1 - nSiz0));
                         maHdlList.AddHdl(std::move(pRotHdl));
                     }
                 }

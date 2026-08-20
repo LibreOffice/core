@@ -4021,6 +4021,74 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiSelectionHandleIndex)
     CPPUNIT_ASSERT_EQUAL(lcl_doubledAboutTopLeft(aFirstBefore), pFirstObject->GetSnapRect());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiSelectionRotateHandles)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("multi-selection.fodp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrView* pView = pViewShell->GetView();
+
+    SdrObject* pFirstObject = pPage->GetObj(0);
+    SdrObject* pSecondObject = pPage->GetObj(1);
+    CPPUNIT_ASSERT(pFirstObject);
+    CPPUNIT_ASSERT(pSecondObject);
+
+    pView->MarkObj(pFirstObject, pView->GetSdrPageView());
+    pView->MarkObj(pSecondObject, pView->GetSdrPageView(), /*bUnmark=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView.m_ShapeSelection.isEmpty());
+
+    // The rotate handles come in a group of their own, so a client can tell them apart from
+    // the scaling handles and draw one for each selected object.
+    OString aExtraInfo(
+        aView.m_ShapeSelection.subView(aView.m_ShapeSelection.indexOf("{")));
+    std::stringstream aStream((std::string(aExtraInfo)));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    std::vector<size_t> aRotateIndexes;
+    for (const auto& rKind : aTree.get_child("handles").get_child("kinds").get_child("rotate"))
+    {
+        // The group is keyed by the handle kind, and every rotate handle shares one kind.
+        CPPUNIT_ASSERT_EQUAL(std::string("24"), rKind.first);
+        for (const auto& rHandle : rKind.second)
+            aRotateIndexes.push_back(rHandle.second.get_child("index").get_value<size_t>());
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aRotateIndexes.size());
+
+    // Each index names a rotate handle, and the two of them belong to different objects.
+    std::set<const SdrObject*> aObjectsWithHandle;
+    size_t nFirstObjectHandle = 0;
+    for (const size_t nIndex : aRotateIndexes)
+    {
+        const SdrHdl* pHandle = pView->GetHdlList().GetHdl(nIndex);
+        CPPUNIT_ASSERT(pHandle);
+        CPPUNIT_ASSERT_EQUAL(SdrHdlKind::Rotate, pHandle->GetKind());
+        aObjectsWithHandle.insert(pHandle->GetObj());
+        if (pHandle->GetObj() == pFirstObject)
+            nFirstObjectHandle = nIndex;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aObjectsWithHandle.size());
+    CPPUNIT_ASSERT(aObjectsWithHandle.count(pFirstObject));
+    CPPUNIT_ASSERT(aObjectsWithHandle.count(pSecondObject));
+
+    const Point aFirstCenter(pFirstObject->GetSnapRect().Center());
+    const Point aSecondCenter(pSecondObject->GetSnapRect().Center());
+
+    // Dragging the first object's rotate handle a quarter turn about that object's center
+    // turns the second object by the same amount, about its own center.
+    pView->MoveShapeHandle(nFirstObjectHandle,
+                           Point(aFirstCenter.X() + 2000, aFirstCenter.Y()), -1);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(aFirstCenter, pFirstObject->GetSnapRect().Center());
+    CPPUNIT_ASSERT_EQUAL(aSecondCenter, pSecondObject->GetSnapRect().Center());
+    CPPUNIT_ASSERT(pFirstObject->GetRotateAngle() != 0_deg100);
+    CPPUNIT_ASSERT_EQUAL(pFirstObject->GetRotateAngle().get(),
+                         pSecondObject->GetRotateAngle().get());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiSelectionDragPreview)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("multi-selection.fodp");

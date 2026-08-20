@@ -18,9 +18,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Handles of several selecte
 			return helper.processToIdle(win);
 		});
 
-		// With several shapes selected the resize handles are named after their place in
-		// core's handle list.
-		cy.cGet('[id^="test-div-shape-handle-index"]').should('have.length', 16);
+		// With several shapes selected every handle is named after its place in core's handle
+		// list, the rotation handle of each shape included.
+		cy.cGet('[id^="test-div-shape-handle-index"]').should('have.length', 18);
 	}
 
 	// A turning arrow stands over a rotation handle. The pointer then tells the user what a
@@ -28,13 +28,17 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Handles of several selecte
 	it('The pointer over a rotation handle is a turning arrow.', function() {
 		selectBothShapes();
 
-		cy.cGet('#test-div-shape-handle-rotation').then(($handle) => {
-			const rect = $handle[0].getBoundingClientRect();
-			cy.cGet('body').realMouseMove(
-				rect.left + rect.width / 2, rect.top + rect.height / 2);
+		cy.getFrameWindow().then(function(win) {
+			var handleName = getRotationHandles(getHandlesSection(win))[0].name;
 
-			cy.cGet('#document-canvas').should(($canvas) => {
-				expect($canvas[0].style.cursor).to.contain('cursors/rotate.svg');
+			cy.cGet('#test-div-' + handleName).then(($handle) => {
+				const rect = $handle[0].getBoundingClientRect();
+				cy.cGet('body').realMouseMove(
+					rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+				cy.cGet('#document-canvas').should(($canvas) => {
+					expect($canvas[0].style.cursor).to.contain('cursors/rotate.svg');
+				});
 			});
 		});
 	});
@@ -90,6 +94,12 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Handles of several selecte
 					center: candidate.center }
 				: best;
 		}, null);
+	}
+
+	function getRotationHandles(section) {
+		return section.sectionProperties.subSections.filter(function(subSection) {
+			return subSection.sectionProperties.ownInfo.kind === 'ShapeRotationHandle';
+		});
 	}
 
 	function getScalingHandles(section) {
@@ -153,7 +163,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Handles of several selecte
 	it('Dropping the selection leaves no handles behind.', function() {
 		selectBothShapes();
 
-		cy.cGet('[id^="test-div-shape-handle-index"]').should('have.length', 16);
+		cy.cGet('[id^="test-div-shape-handle-index"]').should('have.length', 18);
 
 		impressHelper.removeShapeSelection();
 
@@ -278,4 +288,97 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Handles of several selecte
 		});
 	});
 
+	// Each selected shape gets a rotation handle of its own above it, the way the desktop shows
+	// them. Before, one handle stood for the whole selection and turned it about its center.
+	it('Every selected shape shows its own rotation handle.', function() {
+		selectBothShapes();
+
+		cy.getFrameWindow().then(function(win) {
+			var section = getHandlesSection(win);
+			var rotationHandles = getRotationHandles(section);
+			expect(rotationHandles, 'rotation handles').to.have.length(2);
+
+			// Each one sits above the top edge of the shape it belongs to.
+			var geometries = section.sectionProperties.shapeRectangleProperties;
+			rotationHandles.forEach(function(handle, handleNumber) {
+				var handleCenterX = handle.position[0] + handle.size[0] * 0.5;
+				var handleCenterY = handle.position[1] + handle.size[1] * 0.5;
+				var own = nearestGeometry(geometries, {
+					centerX: handleCenterX, centerY: handleCenterY
+				});
+
+				expect(handleCenterX, 'x of rotation handle ' + handleNumber)
+					.to.be.closeTo(own.center.pX, 4);
+				expect(handleCenterY, 'y of rotation handle ' + handleNumber)
+					.to.be.lessThan(own.center.pY - own.height * 0.5);
+			});
+		});
+	});
+
+	// Dragging one rotation handle turns every selected shape by the same amount, each about
+	// its own center. A shared pivot would swing the other shape away from where it sits.
+	it('Dragging one rotation handle turns every selected shape.', function() {
+		selectBothShapes();
+
+		var handleName = null;
+		var centersBefore = null;
+		var anglesBefore = null;
+		cy.getFrameWindow().then(function(win) {
+			var section = getHandlesSection(win);
+			handleName = getRotationHandles(section)[0].name;
+			centersBefore = section.sectionProperties.shapeRectangleProperties.map(function(own) {
+				return [own.center.pX, own.center.pY];
+			});
+			anglesBefore = section.sectionProperties.shapeRectangleProperties.map(function(own) {
+				return own.angleRadian;
+			});
+		});
+
+		cy.then(function() {
+			cy.cGet('#test-div-' + handleName).then(($handle) => {
+				var rect = $handle[0].getBoundingClientRect();
+				var startX = rect.left + rect.width / 2;
+				var startY = rect.top + rect.height / 2;
+
+				// Swing the handle round to the right of its shape.
+				var endX = startX + 70;
+				var endY = startY + 70;
+
+				cy.cGet('body').realMouseDown({ x: startX, y: startY });
+				cy.cGet('body').realMouseMove(startX + 35, startY + 35);
+				cy.cGet('body').realMouseMove(endX, endY);
+				cy.cGet('body').realMouseUp({ x: endX, y: endY });
+
+				cy.then(() => {
+					return helper.processToIdle(this.win);
+				});
+
+				cy.waitUntil(() => {
+					var geometries = getHandlesSection(this.win)
+						.sectionProperties.shapeRectangleProperties;
+					return geometries.length === 2
+						&& Math.abs(geometries[0].angleRadian - anglesBefore[0]) > 0.05;
+				}, {
+					errorMsg: 'The shapes did not turn.'
+				});
+
+				cy.then(() => {
+					var geometries = getHandlesSection(this.win)
+						.sectionProperties.shapeRectangleProperties;
+
+					// Both shapes turned by the same amount, and both stayed where they were,
+					// so neither was swung about the other.
+					geometries.forEach(function(own, shapeNumber) {
+						expect(own.angleRadian - anglesBefore[shapeNumber],
+							'turn of shape ' + shapeNumber)
+							.to.be.closeTo(geometries[0].angleRadian - anglesBefore[0], 0.02);
+						expect(own.center.pX, 'center x of shape ' + shapeNumber)
+							.to.be.closeTo(centersBefore[shapeNumber][0], 4);
+						expect(own.center.pY, 'center y of shape ' + shapeNumber)
+							.to.be.closeTo(centersBefore[shapeNumber][1], 4);
+					});
+				});
+			});
+		});
+	});
 });
