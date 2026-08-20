@@ -43,6 +43,12 @@ fi
 
 cd / || exit 1
 
+# Refresh fontconfig's cache before copying it below, so fonts installed or
+# volume-mounted since the last cache build (cool#4555) are already in it,
+# instead of only becoming visible in the jail after a separate manual
+# fc-cache run.
+fc-cache 2>/dev/null
+
 (
 # Produce a list of file names, one per line, that will be copied
 # into the template tree of system files for the chroot jails.
