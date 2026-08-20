@@ -589,7 +589,7 @@ protected:
     void DisconnectFromFields();
 
     void implAdjustInSolarThread(bool _bRows);
-        // calls AdjustRows or AdjustDataSource, synchron if the caller is running in the solar thread, else asynchron
+        // calls AdjustRows or AdjustDataSource, synchronous if the caller is running in the solar thread, else asynchronous
 
 protected:
     void ImplInitWindow( const InitWindowFacet _eInitWhat );

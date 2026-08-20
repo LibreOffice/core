@@ -258,7 +258,7 @@ public:
     * Static method used by SvxNumberFormatShell::GetCurrencySymbols<p>
     *
     * @param rList output: labels in the combo box
-    * @param bFlag input: true means that we add the default currency in the combox
+    * @param bFlag input: true means that we add the default currency in the combobox
     * @param rCurrencyList output: list of the currency positions in SvxCurrencyToolBoxControl::CurrencySymbols vector
     * @see SvxNumberFormatShell::GetCurrencySymbols
     **/

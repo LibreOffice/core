@@ -295,7 +295,7 @@ public:
         @return true if both sequences are equal, false otherwise
     */
     inline bool SAL_CALL operator == ( const ByteSequence & rSeq ) const;
-    /** Unequality operator: Compares two sequences.
+    /** Inequality operator: Compares two sequences.
 
         @param rSeq another byte sequence (right side)
         @return false if both sequences are equal, true otherwise

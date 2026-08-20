@@ -64,7 +64,7 @@ public:
         the given index.
 
         @param nIndex
-            This index specifies the relatio to return.
+            This index specifies the relation to return.
 
         @return
             For a valid index, i.e. inside the range 0 to the number of

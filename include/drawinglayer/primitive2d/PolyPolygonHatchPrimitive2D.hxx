@@ -31,7 +31,7 @@ namespace drawinglayer::primitive2d
 /** PolyPolygonHatchPrimitive2D class
 
     This primitive defines a tools::PolyPolygon filled with a hatch. The
-    decomosition will create a MaskPrimitive2D containing a
+    decomposition will create a MaskPrimitive2D containing a
     FillHatchPrimitive2D.
  */
 class DRAWINGLAYER_DLLPUBLIC PolyPolygonHatchPrimitive2D final

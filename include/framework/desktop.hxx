@@ -397,7 +397,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;     /// container for ALL Listener
         rtl::Reference< OFrames >                                       m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
         rtl::Reference< InterceptionHelper >                            m_xDispatchHelper;        /// helper to dispatch something for new tasks, created by "_blank"!
-        ELoadState                                                      m_eLoadState;             /// hold information about state of asynchron loading of component for loadComponentFromURL()!
+        ELoadState                                                      m_eLoadState;             /// hold information about state of asynchronous loading of component for loadComponentFromURL()!
         bool                                                            m_bSuspendQuickstartVeto; /// don't ask quickstart for a veto
         std::unique_ptr<SvtCommandOptions>                              m_xCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
         OUString                                                        m_sName;

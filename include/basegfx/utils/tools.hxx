@@ -55,7 +55,7 @@ namespace basegfx::utils
             infinite lines.
 
             @param io_rLeftTop
-            Left, top edge of the parallelogramm. Note that this need
+            Left, top edge of the parallelogram. Note that this need
             not be the left, top edge geometrically, it's just used
             when determining the extension direction. Thus, it's
             perfectly legal to affine-transform a rectangle, and given
@@ -63,7 +63,7 @@ namespace basegfx::utils
             parameter will contain the adapted output.
 
             @param io_rLeftBottom
-            Left, bottom edge of the parallelogramm. Note that this need
+            Left, bottom edge of the parallelogram. Note that this need
             not be the left, bottom edge geometrically, it's just used
             when determining the extension direction. Thus, it's
             perfectly legal to affine-transform a rectangle, and given
@@ -71,7 +71,7 @@ namespace basegfx::utils
             parameter will contain the adapted output.
 
             @param io_rRightTop
-            Right, top edge of the parallelogramm. Note that this need
+            Right, top edge of the parallelogram. Note that this need
             not be the right, top edge geometrically, it's just used
             when determining the extension direction. Thus, it's
             perfectly legal to affine-transform a rectangle, and given
@@ -79,7 +79,7 @@ namespace basegfx::utils
             parameter will contain the adapted output.
 
             @param io_rRightBottom
-            Right, bottom edge of the parallelogramm. Note that this need
+            Right, bottom edge of the parallelogram. Note that this need
             not be the right, bottom edge geometrically, it's just used
             when determining the extension direction. Thus, it's
             perfectly legal to affine-transform a rectangle, and given

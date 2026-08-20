@@ -306,7 +306,7 @@ public:
     bool MarkNextObj(const Point& rPnt, short nTol, bool bPrev);
 
     // Mark all objects within a rectangular area
-    // Just objects are marked which are inclosed completely
+    // Just objects are marked which are enclosed completely
     void MarkObj(const tools::Rectangle& rRect, bool bUnmark);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark = false, bool bDoNoSetMarkHdl = false,
                  std::vector<basegfx::B2DRectangle> && rSubSelections = std::vector<basegfx::B2DRectangle>());

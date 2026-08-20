@@ -65,7 +65,7 @@ public:
     // OVERLAYMANAGER
     rtl::Reference< sdr::overlay::OverlayManager > const & GetOverlayManager() const;
 
-    // #i72752# allow patcing SdrPaintWindow from SdrPageView::DrawLayer if needed
+    // #i72752# allow patching SdrPaintWindow from SdrPageView::DrawLayer if needed
     [[nodiscard]] SdrPaintWindow* patchPaintWindow(SdrPaintWindow& rPaintWindow);
     void unpatchPaintWindow(SdrPaintWindow* pPreviousPaintWindow);
 

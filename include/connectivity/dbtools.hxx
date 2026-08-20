@@ -547,7 +547,7 @@ namespace dbtools
                     const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
     /** implements <method scope="com.sun.star.sdb">XRowUpdate::updateObject</method>
-        <p>The object which is to be set is analyzed, and in case it is a simlpe scalar type for which there
+        <p>The object which is to be set is analyzed, and in case it is a simple scalar type for which there
         is another updateXXX method, this other method is used.</p>
         @param _rxUpdatedObject
             the interface to forward all updateXXX calls to (except updateObject)
@@ -610,7 +610,7 @@ namespace dbtools
 
 
     /** implements <method scope="com.sun.star.sdb">XParameters::setObject</method>
-        <p>The object which is to be set is analyzed, and in case it is a simlpe scalar type for which there
+        <p>The object which is to be set is analyzed, and in case it is a simple scalar type for which there
         is another setXXX method, this other method is used.</p>
         @param _rxParameters
             the interface to forward all setXXX calls to (except setObject)
@@ -862,7 +862,7 @@ namespace dbase
             else, this is not written to.
         @param  dbf_Stream
             pointer to a SvStream encapsulating the DBase file.
-            The stream will be rewinded and read from.
+            The stream will be rewound and read from.
             No guarantee is made on its position afterwards. Caller must reposition it itself.
         @return
             true if a RTL charset was successfully decoded and written to _out_nCharset

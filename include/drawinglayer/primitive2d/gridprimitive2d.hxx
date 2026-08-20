@@ -60,7 +60,7 @@ namespace drawinglayer::primitive2d
             /// The Bitmap (with transparence) for grid cross points
             Bitmap                                          maCrossMarker;
 
-            /** the last used object to view transformtion and the last Viewport,
+            /** the last used object to view transformation and the last Viewport,
                 used from getDecomposition for decide buffering
              */
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;

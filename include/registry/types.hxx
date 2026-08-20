@@ -228,7 +228,7 @@ union RTConstValueUnion {
 
 /** specifies the mode of a method.
 
-    A method can be synchron or asynchron (oneway).  The const attribute for
+    A method can be synchronous or asynchronous (oneway).  The const attribute for
     methods was removed so that the const values are deprecated.
  */
 enum class RTMethodMode

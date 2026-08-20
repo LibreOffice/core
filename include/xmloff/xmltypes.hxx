@@ -139,7 +139,7 @@
 #define XML_TYPE_NBOOL              0x0000200f          // !true/false
 #define XML_TYPE_COLORTRANSPARENT   0x00002010          // Colors or "transparent"
 #define XML_TYPE_ISTRANSPARENT      0x00002011          // "transparent"
-#define XML_TYPE_BUILDIN_CMP_ONLY   0x00002012          // Only buildin comparison is required, so no handler exists
+#define XML_TYPE_BUILDIN_CMP_ONLY   0x00002012          // Only built-in comparison is required, so no handler exists
 #define XML_TYPE_NUMBER8_NONE       0x00002013          // 123 and "no-limit" for 0
 #define XML_TYPE_NUMBER16_NONE      0x00002014          // 123 and "no-limit" for 0
 #define XML_TYPE_COLOR_MODE         0x00002015

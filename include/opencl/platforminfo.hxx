@@ -17,7 +17,7 @@
 #include <opencl/opencldllapi.h>
 #include <rtl/ustring.hxx>
 
-// Struct that describs an actual instance of an OpenCL device
+// Struct that describes an actual instance of an OpenCL device
 
 struct OpenCLDeviceInfo
 {
@@ -32,7 +32,7 @@ struct OpenCLDeviceInfo
     OpenCLDeviceInfo();
 };
 
-// Struct that describs an actual instance of an OpenCL platform implementation
+// Struct that describes an actual instance of an OpenCL platform implementation
 
 struct OpenCLPlatformInfo
 {

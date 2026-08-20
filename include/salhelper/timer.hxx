@@ -164,7 +164,7 @@ public:
      */
     void        SAL_CALL setRemainingTime( const TTimeValue& Remaining );
 
-    /** Set the time to fire to 'now' + Remaining with repeat interveal
+    /** Set the time to fire to 'now' + Remaining with repeat interval
      * Repeat.
      */
     void        SAL_CALL setRemainingTime( const TTimeValue& Remaining, const TTimeValue& Repeat );
@@ -205,7 +205,7 @@ protected:
      */
     TTimeValue  m_aExpired;
 
-    /** holds the time interveal of successive expirations.
+    /** holds the time interval of successive expirations.
      */
     TTimeValue  m_aRepeatDelta;
 

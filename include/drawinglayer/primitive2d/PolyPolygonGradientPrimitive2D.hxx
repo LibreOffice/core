@@ -30,7 +30,7 @@ namespace drawinglayer::primitive2d
 /** PolyPolygonColorPrimitive2D class
 
     This primitive defines a tools::PolyPolygon filled with a gradient. The
-    decomosition will create a MaskPrimitive2D containing a
+    decomposition will create a MaskPrimitive2D containing a
     FillGradientPrimitive2D.
  */
 class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D final

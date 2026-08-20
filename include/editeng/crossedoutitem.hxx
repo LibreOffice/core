@@ -26,7 +26,7 @@
 // class SvxCrossedOutItem -----------------------------------------------
 
 /*  [Description]
-    This item describes, whether and how it is striked out.
+    This item describes, whether and how it is struck out.
 */
 
 class EDITENG_DLLPUBLIC SvxCrossedOutItem final : public SfxEnumItem<FontStrikeout>

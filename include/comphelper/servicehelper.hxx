@@ -26,7 +26,7 @@
 
 namespace comphelper {
 
-    // Class incapsulating UIDs used as e.g. tunnel IDs for css::lang::XUnoTunnel,
+    // Class encapsulating UIDs used as e.g. tunnel IDs for css::lang::XUnoTunnel,
     // or implementation IDs for css::lang::XTypeProvider
     class UnoIdInit
     {

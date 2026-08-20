@@ -748,7 +748,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFilePos(
 /** Set the file size of an open file.
 
     Sets the file size of an open file. The file can be truncated or enlarged by the function.
-    The position of the file pointer is not affeced by this function.
+    The position of the file pointer is not affected by this function.
 
     @param[in] Handle
     Handle to a file received by a previous call to osl_openFile().
@@ -772,7 +772,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
 /** Get the file size of an open file.
 
     Gets the file size of an open file.
-    The position of the file pointer is not affeced by this function.
+    The position of the file pointer is not affected by this function.
 
     @param[in] Handle
     Handle to a file received by a previous call to osl_openFile().

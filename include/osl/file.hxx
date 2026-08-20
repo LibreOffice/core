@@ -1072,7 +1072,7 @@ public:
     /** Set the file size of an open file.
 
         Sets the file size of an open file. The file can be truncated or enlarged by the function.
-        The position of the file pointer is not affeced by this function.
+        The position of the file pointer is not affected by this function.
 
         @param[in] uSize
         New size in bytes.
@@ -1094,7 +1094,7 @@ public:
     /** Get the file size of an open file.
 
         Gets the file size of an open file.
-        The position of the file pointer is not affeced by this function.
+        The position of the file pointer is not affected by this function.
 
         @param[out] rSize
         Current size in bytes.

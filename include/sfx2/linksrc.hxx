@@ -77,7 +77,7 @@ public:
                                 const OUString & rMimeType,
                                 bool bSynchron = false );
 
-                        // sal_True => waitinmg for data
+                        // sal_True => waiting for data
     virtual bool        IsPending() const;
                         // sal_True => data complete loaded
     virtual bool        IsDataComplete() const;
