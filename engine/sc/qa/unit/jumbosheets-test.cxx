@@ -257,15 +257,9 @@ void ScJumboSheetsTest::testTdf134553()
     CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getOpenWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getOpenHeight());
 
-    if (comphelper::COKit::isActive())
-    {
-        // SdrExchangeView::Paste keeps the coordinates of the pasted model with the Kit
-        CPPUNIT_ASSERT_EQUAL(tools::Long(4574), pOleObj->GetLogicRect().getX());
-        CPPUNIT_ASSERT_EQUAL(tools::Long(437), pOleObj->GetLogicRect().getY());
-        return;
-    }
-
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1700), pOleObj->GetLogicRect().getX());
+    // ScViewData::GetScrPos measures the cell cursor's column its own way with the Kit
+    const tools::Long nExpectedX = comphelper::COKit::isActive() ? 1641 : 1700;
+    CPPUNIT_ASSERT_EQUAL(nExpectedX, pOleObj->GetLogicRect().getX());
     // tdf#147458: Without the fix in place, this test would have failed with
     // - Expected: 2117
     // - Actual  : -7421
