@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+#include <unordered_map>
 #include <mutex>
 #include <set>
 #include <utility>
@@ -373,13 +374,13 @@ public:
     PropertySetMixinImpl::Implements implements;
     css::uno::Sequence< OUString > handleMap;
 
-    typedef std::map< OUString, BoundListenerBag > BoundListenerMap;
+    typedef std::unordered_map< OUString, BoundListenerBag > BoundListenerMap;
 
     typedef
     std::multiset< css::uno::Reference< css::beans::XVetoableChangeListener > >
     VetoListenerBag;
 
-    typedef std::map< OUString, VetoListenerBag > VetoListenerMap;
+    typedef std::unordered_map< OUString, VetoListenerBag > VetoListenerMap;
 
     mutable std::mutex mutex;
     BoundListenerMap boundListeners;
