@@ -147,7 +147,9 @@ define gb_PrecompiledHeader__sum_command
 	$(SHA256SUM) $(1) >$(1).sum
 endef
 else
-# MSVC does not generate the same .pch for the same input, so checksum the (preprocessed) input
+# MSVC does not generate the same .pch for the same input, so checksum the (preprocessed) input.
+# -d1PP keeps the #define directives in the -E output, so a macro that no header tests still
+# changes the checksum.
 # $(call gb_PrecompiledHeader__sum_command,pchfile,pchtarget,source,cxxflags,includes,linktargetmakefilename,compiler)
 define gb_PrecompiledHeader__sum_command
 $(call gb_Helper_abbreviate_dirs,\
@@ -159,7 +161,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
 		$(5) \
-		-E $(3) \
+		-E -d1PP $(3) \
 		2>&1 | $(SHA256SUM) >$(1).sum \
 		)
 endef
