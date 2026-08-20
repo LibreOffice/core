@@ -288,57 +288,57 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties
 {
     //shape property -- chart model object property
     static const tPropertyNameMap s_aShapePropertyMapForCharacterProperties{
-        {"CharColor",                "CharColor"},
-        {"CharComplexColor",         "CharComplexColor"},
-        {"CharContoured",            "CharContoured"},
-        {"CharEmphasis",             "CharEmphasis"},//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
-        {"CharEscapement",           "CharEscapement"},
-        {"CharEscapementHeight",     "CharEscapementHeight"},
-        {"CharFontFamily",           "CharFontFamily"},
-        {"CharFontFamilyAsian",      "CharFontFamilyAsian"},
-        {"CharFontFamilyComplex",    "CharFontFamilyComplex"},
-        {"CharFontCharSet",          "CharFontCharSet"},
-        {"CharFontCharSetAsian",     "CharFontCharSetAsian"},
-        {"CharFontCharSetComplex",   "CharFontCharSetComplex"},
-        {"CharFontName",             "CharFontName"},
-        {"CharFontNameAsian",        "CharFontNameAsian"},
-        {"CharFontNameComplex",      "CharFontNameComplex"},
-        {"CharFontPitch",            "CharFontPitch"},
-        {"CharFontPitchAsian",       "CharFontPitchAsian"},
-        {"CharFontPitchComplex",     "CharFontPitchComplex"},
-        {"CharFontStyleName",        "CharFontStyleName"},
-        {"CharFontStyleNameAsian",   "CharFontStyleNameAsian"},
-        {"CharFontStyleNameComplex", "CharFontStyleNameComplex"},
+        {u"CharColor"_ustr,                u"CharColor"_ustr},
+        {u"CharComplexColor"_ustr,         u"CharComplexColor"_ustr},
+        {u"CharContoured"_ustr,            u"CharContoured"_ustr},
+        {u"CharEmphasis"_ustr,             u"CharEmphasis"_ustr},//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
+        {u"CharEscapement"_ustr,           u"CharEscapement"_ustr},
+        {u"CharEscapementHeight"_ustr,     u"CharEscapementHeight"_ustr},
+        {u"CharFontFamily"_ustr,           u"CharFontFamily"_ustr},
+        {u"CharFontFamilyAsian"_ustr,      u"CharFontFamilyAsian"_ustr},
+        {u"CharFontFamilyComplex"_ustr,    u"CharFontFamilyComplex"_ustr},
+        {u"CharFontCharSet"_ustr,          u"CharFontCharSet"_ustr},
+        {u"CharFontCharSetAsian"_ustr,     u"CharFontCharSetAsian"_ustr},
+        {u"CharFontCharSetComplex"_ustr,   u"CharFontCharSetComplex"_ustr},
+        {u"CharFontName"_ustr,             u"CharFontName"_ustr},
+        {u"CharFontNameAsian"_ustr,        u"CharFontNameAsian"_ustr},
+        {u"CharFontNameComplex"_ustr,      u"CharFontNameComplex"_ustr},
+        {u"CharFontPitch"_ustr,            u"CharFontPitch"_ustr},
+        {u"CharFontPitchAsian"_ustr,       u"CharFontPitchAsian"_ustr},
+        {u"CharFontPitchComplex"_ustr,     u"CharFontPitchComplex"_ustr},
+        {u"CharFontStyleName"_ustr,        u"CharFontStyleName"_ustr},
+        {u"CharFontStyleNameAsian"_ustr,   u"CharFontStyleNameAsian"_ustr},
+        {u"CharFontStyleNameComplex"_ustr, u"CharFontStyleNameComplex"_ustr},
 
-        {"CharHeight",               "CharHeight"},
-        {"CharHeightAsian",          "CharHeightAsian"},
-        {"CharHeightComplex",        "CharHeightComplex"},
-        {"CharKerning",              "CharKerning"},
-        {"CharLocale",               "CharLocale"},
-        {"CharLocaleAsian",          "CharLocaleAsian"},
-        {"CharLocaleComplex",        "CharLocaleComplex"},
-        {"CharPosture",              "CharPosture"},
-        {"CharPostureAsian",         "CharPostureAsian"},
-        {"CharPostureComplex",       "CharPostureComplex"},
-        {"CharRelief",               "CharRelief"},
-        {"CharShadowed",             "CharShadowed"},
-        {"CharStrikeout",            "CharStrikeout"},
-        {"CharUnderline",            "CharUnderline"},
-        {"CharUnderlineColor",       "CharUnderlineColor"},
-        {"CharUnderlineComplexColor", "CharUnderlineComplexColor"},
-        {"CharUnderlineHasColor",    "CharUnderlineHasColor"},
-        {"CharOverline",             "CharOverline"},
-        {"CharOverlineColor",        "CharOverlineColor"},
-        {"CharOverlineComplexColor", "CharOverlineComplexColor"},
-        {"CharOverlineHasColor",     "CharOverlineHasColor"},
-        {"CharWeight",               "CharWeight"},
-        {"CharWeightAsian",          "CharWeightAsian"},
-        {"CharWeightComplex",        "CharWeightComplex"},
-        {"CharWordMode",             "CharWordMode"},
+        {u"CharHeight"_ustr,               u"CharHeight"_ustr},
+        {u"CharHeightAsian"_ustr,          u"CharHeightAsian"_ustr},
+        {u"CharHeightComplex"_ustr,        u"CharHeightComplex"_ustr},
+        {u"CharKerning"_ustr,              u"CharKerning"_ustr},
+        {u"CharLocale"_ustr,               u"CharLocale"_ustr},
+        {u"CharLocaleAsian"_ustr,          u"CharLocaleAsian"_ustr},
+        {u"CharLocaleComplex"_ustr,        u"CharLocaleComplex"_ustr},
+        {u"CharPosture"_ustr,              u"CharPosture"_ustr},
+        {u"CharPostureAsian"_ustr,         u"CharPostureAsian"_ustr},
+        {u"CharPostureComplex"_ustr,       u"CharPostureComplex"_ustr},
+        {u"CharRelief"_ustr,               u"CharRelief"_ustr},
+        {u"CharShadowed"_ustr,             u"CharShadowed"_ustr},
+        {u"CharStrikeout"_ustr,            u"CharStrikeout"_ustr},
+        {u"CharUnderline"_ustr,            u"CharUnderline"_ustr},
+        {u"CharUnderlineColor"_ustr,       u"CharUnderlineColor"_ustr},
+        {u"CharUnderlineComplexColor"_ustr, u"CharUnderlineComplexColor"_ustr},
+        {u"CharUnderlineHasColor"_ustr,    u"CharUnderlineHasColor"_ustr},
+        {u"CharOverline"_ustr,             u"CharOverline"_ustr},
+        {u"CharOverlineColor"_ustr,        u"CharOverlineColor"_ustr},
+        {u"CharOverlineComplexColor"_ustr, u"CharOverlineComplexColor"_ustr},
+        {u"CharOverlineHasColor"_ustr,     u"CharOverlineHasColor"_ustr},
+        {u"CharWeight"_ustr,               u"CharWeight"_ustr},
+        {u"CharWeightAsian"_ustr,          u"CharWeightAsian"_ustr},
+        {u"CharWeightComplex"_ustr,        u"CharWeightComplex"_ustr},
+        {u"CharWordMode"_ustr,             u"CharWordMode"_ustr},
 
-        {"WritingMode",              "WritingMode"},
+        {u"WritingMode"_ustr,              u"WritingMode"_ustr},
 
-        {"ParaIsCharacterDistance",  "ParaIsCharacterDistance"}};
+        {u"ParaIsCharacterDistance"_ustr,  u"ParaIsCharacterDistance"_ustr}};
 
     return s_aShapePropertyMapForCharacterProperties;
 }
@@ -347,13 +347,13 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties
 {
     //shape property -- chart model object property
     static const tPropertyNameMap s_aShapePropertyMapForParagraphProperties{
-        {"ParaAdjust",          "ParaAdjust"},
-        {"ParaBottomMargin",    "ParaBottomMargin"},
-        {"ParaIsHyphenation",   "ParaIsHyphenation"},
-        {"ParaLastLineAdjust",  "ParaLastLineAdjust"},
-        {"ParaLeftMargin",      "ParaLeftMargin"},
-        {"ParaRightMargin",     "ParaRightMargin"},
-        {"ParaTopMargin",       "ParaTopMargin"}};
+        {u"ParaAdjust"_ustr,          u"ParaAdjust"_ustr},
+        {u"ParaBottomMargin"_ustr,    u"ParaBottomMargin"_ustr},
+        {u"ParaIsHyphenation"_ustr,   u"ParaIsHyphenation"_ustr},
+        {u"ParaLastLineAdjust"_ustr,  u"ParaLastLineAdjust"_ustr},
+        {u"ParaLeftMargin"_ustr,      u"ParaLeftMargin"_ustr},
+        {u"ParaRightMargin"_ustr,     u"ParaRightMargin"_ustr},
+        {u"ParaTopMargin"_ustr,       u"ParaTopMargin"_ustr}};
     return s_aShapePropertyMapForParagraphProperties;
 }
 
@@ -361,32 +361,32 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 {
     //shape property -- chart model object property
     static const tPropertyNameMap s_aShapePropertyMapForFillProperties{
-        {"FillBackground",               "FillBackground"},
-        {"FillBitmapName",               "FillBitmapName"},
-        {"FillColor",                    "FillColor"},
-        {"FillComplexColor",             "FillComplexColor"},
-        {"FillGradientName",             "FillGradientName"},
-        {"FillGradientStepCount",        "FillGradientStepCount"},
-        {"FillHatchName",                "FillHatchName"},
-        {"FillStyle",                    "FillStyle"},
-        {"FillTransparence",             "FillTransparence"},
-        {"FillTransparenceGradientName", "FillTransparenceGradientName"},
+        {u"FillBackground"_ustr,               u"FillBackground"_ustr},
+        {u"FillBitmapName"_ustr,               u"FillBitmapName"_ustr},
+        {u"FillColor"_ustr,                    u"FillColor"_ustr},
+        {u"FillComplexColor"_ustr,             u"FillComplexColor"_ustr},
+        {u"FillGradientName"_ustr,             u"FillGradientName"_ustr},
+        {u"FillGradientStepCount"_ustr,        u"FillGradientStepCount"_ustr},
+        {u"FillHatchName"_ustr,                u"FillHatchName"_ustr},
+        {u"FillStyle"_ustr,                    u"FillStyle"_ustr},
+        {u"FillTransparence"_ustr,             u"FillTransparence"_ustr},
+        {u"FillTransparenceGradientName"_ustr, u"FillTransparenceGradientName"_ustr},
 
-        {"GlowEffectColor",              "GlowEffectColor"},
-        {"GlowEffectRadius",             "GlowEffectRadius"},
-        {"GlowEffectTransparency",       "GlowEffectTransparency"},
-        {"SoftEdgeRadius",               "SoftEdgeRadius"},
+        {u"GlowEffectColor"_ustr,              u"GlowEffectColor"_ustr},
+        {u"GlowEffectRadius"_ustr,             u"GlowEffectRadius"_ustr},
+        {u"GlowEffectTransparency"_ustr,       u"GlowEffectTransparency"_ustr},
+        {u"SoftEdgeRadius"_ustr,               u"SoftEdgeRadius"_ustr},
 
         //bitmap properties
-        {"FillBitmapMode",               "FillBitmapMode"},
-        {"FillBitmapSizeX",              "FillBitmapSizeX"},
-        {"FillBitmapSizeY",              "FillBitmapSizeY"},
-        {"FillBitmapLogicalSize",        "FillBitmapLogicalSize"},
-        {"FillBitmapOffsetX",            "FillBitmapOffsetX"},
-        {"FillBitmapOffsetY",            "FillBitmapOffsetY"},
-        {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
-        {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
-        {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"}};
+        {u"FillBitmapMode"_ustr,               u"FillBitmapMode"_ustr},
+        {u"FillBitmapSizeX"_ustr,              u"FillBitmapSizeX"_ustr},
+        {u"FillBitmapSizeY"_ustr,              u"FillBitmapSizeY"_ustr},
+        {u"FillBitmapLogicalSize"_ustr,        u"FillBitmapLogicalSize"_ustr},
+        {u"FillBitmapOffsetX"_ustr,            u"FillBitmapOffsetX"_ustr},
+        {u"FillBitmapOffsetY"_ustr,            u"FillBitmapOffsetY"_ustr},
+        {u"FillBitmapRectanglePoint"_ustr,     u"FillBitmapRectanglePoint"_ustr},
+        {u"FillBitmapPositionOffsetX"_ustr,    u"FillBitmapPositionOffsetX"_ustr},
+        {u"FillBitmapPositionOffsetY"_ustr,    u"FillBitmapPositionOffsetY"_ustr}};
     return s_aShapePropertyMapForFillProperties;
 }
 
@@ -394,14 +394,14 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
 {
     //shape property -- chart model object property
     static const tPropertyNameMap s_aShapePropertyMapForLineProperties{
-        {"LineColor",              "LineColor"},
-        {"LineComplexColor",       "LineComplexColor"},
-        {"LineDashName",           "LineDashName"},
-        {"LineJoint",              "LineJoint"},
-        {"LineStyle",              "LineStyle"},
-        {"LineTransparence",       "LineTransparence"},
-        {"LineWidth",              "LineWidth"},
-        {"LineCap",                "LineCap"}};
+        {u"LineColor"_ustr,              u"LineColor"_ustr},
+        {u"LineComplexColor"_ustr,       u"LineComplexColor"_ustr},
+        {u"LineDashName"_ustr,           u"LineDashName"_ustr},
+        {u"LineJoint"_ustr,              u"LineJoint"_ustr},
+        {u"LineStyle"_ustr,              u"LineStyle"_ustr},
+        {u"LineTransparence"_ustr,       u"LineTransparence"_ustr},
+        {u"LineWidth"_ustr,              u"LineWidth"_ustr},
+        {u"LineCap"_ustr,                u"LineCap"_ustr}};
     return s_aShapePropertyMapForLineProperties;
 }
 
@@ -444,13 +444,13 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPropertie
 {
     //shape property -- chart model object property
     static const tPropertyNameMap s_aShapePropertyMapForLineSeriesProperties{
-        {"LineColor",           "Color"},
-        {"LineComplexColor",    "ComplexColor"},
-        {"LineDashName",        "LineDashName"},
-        {"LineStyle",           "LineStyle"},
-        {"LineTransparence",    "Transparency"},
-        {"LineWidth",           "LineWidth"},
-        {"LineCap",             "LineCap"}};
+        {u"LineColor"_ustr,           u"Color"_ustr},
+        {u"LineComplexColor"_ustr,    u"ComplexColor"_ustr},
+        {u"LineDashName"_ustr,        u"LineDashName"_ustr},
+        {u"LineStyle"_ustr,           u"LineStyle"_ustr},
+        {u"LineTransparence"_ustr,    u"Transparency"_ustr},
+        {u"LineWidth"_ustr,           u"LineWidth"_ustr},
+        {u"LineCap"_ustr,             u"LineCap"_ustr}};
     return s_aShapePropertyMapForLineSeriesProperties;
 }
 
@@ -458,16 +458,16 @@ namespace {
     tPropertyNameMap getPropertyNameMapForTextLabelProperties_() {
         auto map = PropertyMapper::getPropertyNameMapForCharacterProperties();
         map.insert({
-            {"LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE},
-            {"LineWidth", CHART_UNONAME_LABEL_BORDER_WIDTH},
-            {"LineColor", CHART_UNONAME_LABEL_BORDER_COLOR},
-            {"LineComplexColor", CHART_UNONAME_LABEL_BORDER_COMPLEX_COLOR},
-            {"LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS},
-            {"FillStyle", CHART_UNONAME_LABEL_FILL_STYLE},
-            {"FillColor", CHART_UNONAME_LABEL_FILL_COLOR},
-            {"FillComplexColor", CHART_UNONAME_LABEL_FILL_COMPLEX_COLOR},
-            {"FillBackground", CHART_UNONAME_LABEL_FILL_BACKGROUND},
-            {"FillHatchName", CHART_UNONAME_LABEL_FILL_HATCH_NAME}
+            {u"LineStyle"_ustr, CHART_UNONAME_LABEL_BORDER_STYLE},
+            {u"LineWidth"_ustr, CHART_UNONAME_LABEL_BORDER_WIDTH},
+            {u"LineColor"_ustr, CHART_UNONAME_LABEL_BORDER_COLOR},
+            {u"LineComplexColor"_ustr, CHART_UNONAME_LABEL_BORDER_COMPLEX_COLOR},
+            {u"LineTransparence"_ustr, CHART_UNONAME_LABEL_BORDER_TRANS},
+            {u"FillStyle"_ustr, CHART_UNONAME_LABEL_FILL_STYLE},
+            {u"FillColor"_ustr, CHART_UNONAME_LABEL_FILL_COLOR},
+            {u"FillComplexColor"_ustr, CHART_UNONAME_LABEL_FILL_COMPLEX_COLOR},
+            {u"FillBackground"_ustr, CHART_UNONAME_LABEL_FILL_BACKGROUND},
+            {u"FillHatchName"_ustr, CHART_UNONAME_LABEL_FILL_HATCH_NAME}
             });
                 // fix the spelling!
         return map;
@@ -484,40 +484,40 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPropert
 {
     //shape property -- chart model object property
     static const tPropertyNameMap s_aShapePropertyMapForFilledSeriesProperties{
-        {"FillBackground",               "FillBackground"},
-        {"FillBitmapName",               "FillBitmapName"},
-        {"FillColor",                    "Color"},
-        {"FillComplexColor",             "ComplexColor"},
-        {"FillGradientName",             "GradientName"},
-        {"FillGradientStepCount",        "GradientStepCount"},
-        {"FillHatchName",                "HatchName"},
-        {"FillStyle",                    "FillStyle"},
-        {"FillTransparence",             "Transparency"},
-        {"FillTransparenceGradientName", "TransparencyGradientName"},
+        {u"FillBackground"_ustr,               u"FillBackground"_ustr},
+        {u"FillBitmapName"_ustr,               u"FillBitmapName"_ustr},
+        {u"FillColor"_ustr,                    u"Color"_ustr},
+        {u"FillComplexColor"_ustr,             u"ComplexColor"_ustr},
+        {u"FillGradientName"_ustr,             u"GradientName"_ustr},
+        {u"FillGradientStepCount"_ustr,        u"GradientStepCount"_ustr},
+        {u"FillHatchName"_ustr,                u"HatchName"_ustr},
+        {u"FillStyle"_ustr,                    u"FillStyle"_ustr},
+        {u"FillTransparence"_ustr,             u"Transparency"_ustr},
+        {u"FillTransparenceGradientName"_ustr, u"TransparencyGradientName"_ustr},
         //bitmap properties
-        {"FillBitmapMode",               "FillBitmapMode"},
-        {"FillBitmapSizeX",              "FillBitmapSizeX"},
-        {"FillBitmapSizeY",              "FillBitmapSizeY"},
-        {"FillBitmapLogicalSize",        "FillBitmapLogicalSize"},
-        {"FillBitmapOffsetX",            "FillBitmapOffsetX"},
-        {"FillBitmapOffsetY",            "FillBitmapOffsetY"},
-        {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
-        {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
-        {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"},
+        {u"FillBitmapMode"_ustr,               u"FillBitmapMode"_ustr},
+        {u"FillBitmapSizeX"_ustr,              u"FillBitmapSizeX"_ustr},
+        {u"FillBitmapSizeY"_ustr,              u"FillBitmapSizeY"_ustr},
+        {u"FillBitmapLogicalSize"_ustr,        u"FillBitmapLogicalSize"_ustr},
+        {u"FillBitmapOffsetX"_ustr,            u"FillBitmapOffsetX"_ustr},
+        {u"FillBitmapOffsetY"_ustr,            u"FillBitmapOffsetY"_ustr},
+        {u"FillBitmapRectanglePoint"_ustr,     u"FillBitmapRectanglePoint"_ustr},
+        {u"FillBitmapPositionOffsetX"_ustr,    u"FillBitmapPositionOffsetX"_ustr},
+        {u"FillBitmapPositionOffsetY"_ustr,    u"FillBitmapPositionOffsetY"_ustr},
 
-        {"GlowEffectColor",              "GlowEffectColor"},
-        {"GlowEffectRadius",             "GlowEffectRadius"},
-        {"GlowEffectTransparency",       "GlowEffectTransparency"},
-        {"SoftEdgeRadius",               "SoftEdgeRadius"},
+        {u"GlowEffectColor"_ustr,              u"GlowEffectColor"_ustr},
+        {u"GlowEffectRadius"_ustr,             u"GlowEffectRadius"_ustr},
+        {u"GlowEffectTransparency"_ustr,       u"GlowEffectTransparency"_ustr},
+        {u"SoftEdgeRadius"_ustr,               u"SoftEdgeRadius"_ustr},
 
         //line properties
-        {"LineColor",                    "BorderColor"},
-        {"LineComplexColor",             "BorderComplexColor"},
-        {"LineDashName",                 "BorderDashName"},
-        {"LineStyle",                    "BorderStyle"},
-        {"LineTransparence",             "BorderTransparency"},
-        {"LineWidth",                    "BorderWidth"},
-        {"LineCap",                      "LineCap"}};
+        {u"LineColor"_ustr,                    u"BorderColor"_ustr},
+        {u"LineComplexColor"_ustr,             u"BorderComplexColor"_ustr},
+        {u"LineDashName"_ustr,                 u"BorderDashName"_ustr},
+        {u"LineStyle"_ustr,                    u"BorderStyle"_ustr},
+        {u"LineTransparence"_ustr,             u"BorderTransparency"_ustr},
+        {u"LineWidth"_ustr,                    u"BorderWidth"_ustr},
+        {u"LineCap"_ustr,                      u"LineCap"_ustr}};
     return s_aShapePropertyMapForFilledSeriesProperties;
 }
 

@@ -41,12 +41,12 @@ enum
 
 void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
 {
-    rOutProperties.emplace_back("OverlapSequence", PROP_FUNNELCHARTTYPE_OVERLAP_SEQUENCE,
+    rOutProperties.emplace_back(u"OverlapSequence"_ustr, PROP_FUNNELCHARTTYPE_OVERLAP_SEQUENCE,
                                 cppu::UnoType<Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);
 
-    rOutProperties.emplace_back("GapwidthSequence", PROP_FUNNELCHARTTYPE_GAPWIDTH_SEQUENCE,
+    rOutProperties.emplace_back(u"GapwidthSequence"_ustr, PROP_FUNNELCHARTTYPE_GAPWIDTH_SEQUENCE,
                                 cppu::UnoType<Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);

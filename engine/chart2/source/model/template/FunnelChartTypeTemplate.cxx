@@ -39,12 +39,12 @@ enum
 void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
 {
     rOutProperties.emplace_back(
-        "Dimension", PROP_FUNNEL_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
+        u"Dimension"_ustr, PROP_FUNNEL_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
     rOutProperties.emplace_back(
-        "Geometry3D", PROP_FUNNEL_TEMPLATE_GEOMETRY3D, cppu::UnoType<sal_Int32>::get(),
+        u"Geometry3D"_ustr, PROP_FUNNEL_TEMPLATE_GEOMETRY3D, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("GapwidthSequence", PROP_FUNNEL_TEMPLATE_GAPWIDTH_SEQUENCE,
+    rOutProperties.emplace_back(u"GapwidthSequence"_ustr, PROP_FUNNEL_TEMPLATE_GAPWIDTH_SEQUENCE,
                                 cppu::UnoType<Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);

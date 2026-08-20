@@ -36,7 +36,7 @@ enum
 void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
 {
     rOutProperties.emplace_back(
-        "Dimension", PROP_HISTOGRAM_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
+        u"Dimension"_ustr, PROP_HISTOGRAM_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 }
 

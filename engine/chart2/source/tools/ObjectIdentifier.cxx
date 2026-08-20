@@ -105,13 +105,13 @@ const tTitleMap& lcl_getTitleMap()
 {
     //maps the title type to the ParentParticle for that title
     static const tTitleMap s_aTitleMap{
-        {TitleHelper::MAIN_TITLE, ""},
-        {TitleHelper::SUB_TITLE, "D=0"},
-        {TitleHelper::X_AXIS_TITLE, "D=0:CS=0:Axis=0,0"},
-        {TitleHelper::Y_AXIS_TITLE, "D=0:CS=0:Axis=1,0"},
-        {TitleHelper::Z_AXIS_TITLE, "D=0:CS=0:Axis=2,0"},
-        {TitleHelper::SECONDARY_X_AXIS_TITLE, "D=0:CS=0:Axis=0,1"},
-        {TitleHelper::SECONDARY_Y_AXIS_TITLE, "D=0:CS=0:Axis=1,1"}};
+        {TitleHelper::MAIN_TITLE, u""_ustr},
+        {TitleHelper::SUB_TITLE, u"D=0"_ustr},
+        {TitleHelper::X_AXIS_TITLE, u"D=0:CS=0:Axis=0,0"_ustr},
+        {TitleHelper::Y_AXIS_TITLE, u"D=0:CS=0:Axis=1,0"_ustr},
+        {TitleHelper::Z_AXIS_TITLE, u"D=0:CS=0:Axis=2,0"_ustr},
+        {TitleHelper::SECONDARY_X_AXIS_TITLE, u"D=0:CS=0:Axis=0,1"_ustr},
+        {TitleHelper::SECONDARY_Y_AXIS_TITLE, u"D=0:CS=0:Axis=1,1"_ustr}};
     return s_aTitleMap;
 }
 

@@ -178,7 +178,7 @@ cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>>
     lclGetCategories(Reference<chart2::XChartDocument> const & xChartDoc)
 {
     cpo::uno::Sequence<beans::PropertyValue> aArguments( comphelper::InitPropertySequence(
-            {{"CellRangeRepresentation", cpo::uno::Any(u"PT@categories"_ustr)}} ));
+            {{u"CellRangeRepresentation"_ustr, cpo::uno::Any(u"PT@categories"_ustr)}} ));
 
     uno::Reference<chart2::data::XDataProvider> xDataProvider(xChartDoc->getDataProvider(), uno::UNO_SET_THROW);
     return xDataProvider->createDataSource(aArguments)->getDataSequences();

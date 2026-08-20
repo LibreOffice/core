@@ -92,23 +92,23 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "Show",
+    rOutProperties.emplace_back( u"Show"_ustr,
                   PROP_AXIS_SHOW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "CrossoverPosition",
+    rOutProperties.emplace_back( u"CrossoverPosition"_ustr,
                   PROP_AXIS_CROSSOVER_POSITION,
                   cppu::UnoType<css::chart::ChartAxisPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "CrossoverValue",
+    rOutProperties.emplace_back( u"CrossoverValue"_ustr,
                   PROP_AXIS_CROSSOVER_VALUE,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "DisplayLabels",
+    rOutProperties.emplace_back( u"DisplayLabels"_ustr,
                   PROP_AXIS_DISPLAY_LABELS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
@@ -126,73 +126,73 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "LabelPosition",
+    rOutProperties.emplace_back( u"LabelPosition"_ustr,
                   PROP_AXIS_LABEL_POSITION,
                   cppu::UnoType<css::chart::ChartAxisLabelPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TextRotation",
+    rOutProperties.emplace_back( u"TextRotation"_ustr,
                   PROP_AXIS_TEXT_ROTATION,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TextBreak",
+    rOutProperties.emplace_back( u"TextBreak"_ustr,
                   PROP_AXIS_TEXT_BREAK,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TextOverlap",
+    rOutProperties.emplace_back( u"TextOverlap"_ustr,
                   PROP_AXIS_TEXT_OVERLAP,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "StackCharacters",
+    rOutProperties.emplace_back( u"StackCharacters"_ustr,
                   PROP_AXIS_TEXT_STACKED,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ArrangeOrder",
+    rOutProperties.emplace_back( u"ArrangeOrder"_ustr,
                   PROP_AXIS_TEXT_ARRANGE_ORDER,
                   cppu::UnoType<css::chart::ChartAxisArrangeOrderType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ReferencePageSize",
+    rOutProperties.emplace_back( u"ReferencePageSize"_ustr,
                   PROP_AXIS_REFERENCE_DIAGRAM_SIZE,
                   cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "MajorTickmarks",
+    rOutProperties.emplace_back( u"MajorTickmarks"_ustr,
                   PROP_AXIS_MAJOR_TICKMARKS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MinorTickmarks",
+    rOutProperties.emplace_back( u"MinorTickmarks"_ustr,
                   PROP_AXIS_MINOR_TICKMARKS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MarkPosition",
+    rOutProperties.emplace_back( u"MarkPosition"_ustr,
                   PROP_AXIS_MARK_POSITION,
                   cppu::UnoType<css::chart::ChartAxisMarkPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
     //Properties for display units:
-    rOutProperties.emplace_back( "DisplayUnits",
+    rOutProperties.emplace_back( u"DisplayUnits"_ustr,
                   PROP_AXIS_DISPLAY_UNITS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     //Properties for labels:
-    rOutProperties.emplace_back( "BuiltInUnit",
+    rOutProperties.emplace_back( u"BuiltInUnit"_ustr,
                   PROP_AXIS_BUILTINUNIT,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
@@ -200,25 +200,25 @@ void lcl_AddPropertiesToVector(
 
     // Compatibility option: starting from LibreOffice 5.1 the rotated
     // layout is preferred to staggering for axis labels.
-    rOutProperties.emplace_back( "TryStaggeringFirst",
+    rOutProperties.emplace_back( u"TryStaggeringFirst"_ustr,
                   PROP_AXIS_TRY_STAGGERING_FIRST,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MajorOrigin",
+    rOutProperties.emplace_back( u"MajorOrigin"_ustr,
                   PROP_AXIS_MAJOR_ORIGIN,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "HasExplicitSpPr",
+    rOutProperties.emplace_back( u"HasExplicitSpPr"_ustr,
                   PROP_AXIS_HAS_EXPLICIT_SPPR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "HasExplicitTxPr",
+    rOutProperties.emplace_back( u"HasExplicitTxPr"_ustr,
                   PROP_AXIS_HAS_EXPLICIT_TXPR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
@@ -227,12 +227,12 @@ void lcl_AddPropertiesToVector(
     // Chartex only: the cx:axis id attribute value from import, preserved
     // so export can reuse the same id and so series-to-axis links survive
     // round-trip.
-    rOutProperties.emplace_back( "AxisId",
+    rOutProperties.emplace_back( u"AxisId"_ustr,
                   PROP_AXIS_ID,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "CatNotVal",
+    rOutProperties.emplace_back( u"CatNotVal"_ustr,
                   PROP_AXIS_CAT_NOT_VAL,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
@@ -242,22 +242,22 @@ void lcl_AddPropertiesToVector(
     // export does not have to rebuild them from the chart2 ScaleData (where
     // Auto* flags and explicit calc-style defaults can mask the original
     // intent).
-    rOutProperties.emplace_back( "ChartexValMin",
+    rOutProperties.emplace_back( u"ChartexValMin"_ustr,
                   PROP_AXIS_CHARTEX_VAL_MIN,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "ChartexValMax",
+    rOutProperties.emplace_back( u"ChartexValMax"_ustr,
                   PROP_AXIS_CHARTEX_VAL_MAX,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "ChartexMajorUnit",
+    rOutProperties.emplace_back( u"ChartexMajorUnit"_ustr,
                   PROP_AXIS_CHARTEX_MAJOR_UNIT,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "ChartexMinorUnit",
+    rOutProperties.emplace_back( u"ChartexMinorUnit"_ustr,
                   PROP_AXIS_CHARTEX_MINOR_UNIT,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
@@ -267,7 +267,7 @@ void lcl_AddPropertiesToVector(
     // existing BuiltInUnit/DisplayUnits properties because the chartex
     // flat form only uses this single string and we want the same string
     // to come back on export.
-    rOutProperties.emplace_back( "ChartexUnit",
+    rOutProperties.emplace_back( u"ChartexUnit"_ustr,
                   PROP_AXIS_CHARTEX_UNIT,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND

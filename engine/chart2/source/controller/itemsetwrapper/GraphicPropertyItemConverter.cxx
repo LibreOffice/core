@@ -55,24 +55,24 @@ namespace {
 const ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
 {
     static const ItemPropertyMapType aDataPointPropertyFilledMap{
-        {XATTR_FILLSTYLE, {"FillStyle", 0}},
-        {XATTR_FILLCOLOR, {"Color", 0}},
-        {XATTR_LINECOLOR, {"BorderColor", 0}},
-        {XATTR_LINESTYLE, {"BorderStyle", 0}},
-        {XATTR_LINEWIDTH, {"BorderWidth", 0}},
-        {XATTR_FILLBACKGROUND, {"FillBackground", 0}},
-        {XATTR_FILLBMP_POS, {"FillBitmapRectanglePoint", 0}},
-        {XATTR_FILLBMP_SIZEX, {"FillBitmapSizeX", 0}},
-        {XATTR_FILLBMP_SIZEY, {"FillBitmapSizeY", 0}},
-        {XATTR_FILLBMP_SIZELOG, {"FillBitmapLogicalSize", 0}},
-        {XATTR_FILLBMP_TILEOFFSETX, {"FillBitmapOffsetX", 0}},
-        {XATTR_FILLBMP_TILEOFFSETY, {"FillBitmapOffsetY", 0}},
-        {XATTR_FILLBMP_POSOFFSETX, {"FillBitmapPositionOffsetX", 0}},
-        {XATTR_FILLBMP_POSOFFSETY, {"FillBitmapPositionOffsetY", 0}},
-        {SDRATTR_GLOW_COLOR, {"GlowEffectColor", 0}},
-        {SDRATTR_GLOW_RADIUS, {"GlowEffectRadius", 0}},
-        {SDRATTR_GLOW_TRANSPARENCY, {"GlowEffectTransparency", 0}},
-        {SDRATTR_SOFTEDGE_RADIUS, {"SoftEdgeRadius", 0}}
+        {XATTR_FILLSTYLE, {u"FillStyle"_ustr, 0}},
+        {XATTR_FILLCOLOR, {u"Color"_ustr, 0}},
+        {XATTR_LINECOLOR, {u"BorderColor"_ustr, 0}},
+        {XATTR_LINESTYLE, {u"BorderStyle"_ustr, 0}},
+        {XATTR_LINEWIDTH, {u"BorderWidth"_ustr, 0}},
+        {XATTR_FILLBACKGROUND, {u"FillBackground"_ustr, 0}},
+        {XATTR_FILLBMP_POS, {u"FillBitmapRectanglePoint"_ustr, 0}},
+        {XATTR_FILLBMP_SIZEX, {u"FillBitmapSizeX"_ustr, 0}},
+        {XATTR_FILLBMP_SIZEY, {u"FillBitmapSizeY"_ustr, 0}},
+        {XATTR_FILLBMP_SIZELOG, {u"FillBitmapLogicalSize"_ustr, 0}},
+        {XATTR_FILLBMP_TILEOFFSETX, {u"FillBitmapOffsetX"_ustr, 0}},
+        {XATTR_FILLBMP_TILEOFFSETY, {u"FillBitmapOffsetY"_ustr, 0}},
+        {XATTR_FILLBMP_POSOFFSETX, {u"FillBitmapPositionOffsetX"_ustr, 0}},
+        {XATTR_FILLBMP_POSOFFSETY, {u"FillBitmapPositionOffsetY"_ustr, 0}},
+        {SDRATTR_GLOW_COLOR, {u"GlowEffectColor"_ustr, 0}},
+        {SDRATTR_GLOW_RADIUS, {u"GlowEffectRadius"_ustr, 0}},
+        {SDRATTR_GLOW_TRANSPARENCY, {u"GlowEffectTransparency"_ustr, 0}},
+        {SDRATTR_SOFTEDGE_RADIUS, {u"SoftEdgeRadius"_ustr, 0}}
     };
 
     return aDataPointPropertyFilledMap;
@@ -80,36 +80,36 @@ const ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
 const ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
 {
     static const ItemPropertyMapType aDataPointPropertyLineMap{
-        {XATTR_LINECOLOR, {"Color", 0}},
-        {XATTR_LINESTYLE, {"LineStyle", 0}},
-        {XATTR_LINEWIDTH, {"LineWidth", 0}},
-        {XATTR_LINECAP, {"LineCap", 0}}};
+        {XATTR_LINECOLOR, {u"Color"_ustr, 0}},
+        {XATTR_LINESTYLE, {u"LineStyle"_ustr, 0}},
+        {XATTR_LINEWIDTH, {u"LineWidth"_ustr, 0}},
+        {XATTR_LINECAP, {u"LineCap"_ustr, 0}}};
     return aDataPointPropertyLineMap;
 }
 const ItemPropertyMapType & lcl_GetLinePropertyMap()
 {
     static const ItemPropertyMapType aLinePropertyMap{
-        {XATTR_LINESTYLE, {"LineStyle", 0}},
-        {XATTR_LINEWIDTH, {"LineWidth", 0}},
-        {XATTR_LINECOLOR, {"LineColor", 0}},
-        {XATTR_LINEJOINT, {"LineJoint", 0}},
-        {XATTR_LINECAP, {"LineCap", 0}}};
+        {XATTR_LINESTYLE, {u"LineStyle"_ustr, 0}},
+        {XATTR_LINEWIDTH, {u"LineWidth"_ustr, 0}},
+        {XATTR_LINECOLOR, {u"LineColor"_ustr, 0}},
+        {XATTR_LINEJOINT, {u"LineJoint"_ustr, 0}},
+        {XATTR_LINECAP, {u"LineCap"_ustr, 0}}};
     return aLinePropertyMap;
 }
 const ItemPropertyMapType & lcl_GetFillPropertyMap()
 {
     static const ItemPropertyMapType aFillPropertyMap{
-        {XATTR_FILLSTYLE, {"FillStyle", 0}},
-        {XATTR_FILLCOLOR, {"FillColor", 0}},
-        {XATTR_FILLBACKGROUND, {"FillBackground", 0}},
-        {XATTR_FILLBMP_POS, {"FillBitmapRectanglePoint", 0}},
-        {XATTR_FILLBMP_SIZEX, {"FillBitmapSizeX", 0}},
-        {XATTR_FILLBMP_SIZEY, {"FillBitmapSizeY", 0}},
-        {XATTR_FILLBMP_SIZELOG, {"FillBitmapLogicalSize", 0}},
-        {XATTR_FILLBMP_TILEOFFSETX, {"FillBitmapOffsetX", 0}},
-        {XATTR_FILLBMP_TILEOFFSETY, {"FillBitmapOffsetY", 0}},
-        {XATTR_FILLBMP_POSOFFSETX, {"FillBitmapPositionOffsetX", 0}},
-        {XATTR_FILLBMP_POSOFFSETY, {"FillBitmapPositionOffsetY", 0}}};
+        {XATTR_FILLSTYLE, {u"FillStyle"_ustr, 0}},
+        {XATTR_FILLCOLOR, {u"FillColor"_ustr, 0}},
+        {XATTR_FILLBACKGROUND, {u"FillBackground"_ustr, 0}},
+        {XATTR_FILLBMP_POS, {u"FillBitmapRectanglePoint"_ustr, 0}},
+        {XATTR_FILLBMP_SIZEX, {u"FillBitmapSizeX"_ustr, 0}},
+        {XATTR_FILLBMP_SIZEY, {u"FillBitmapSizeY"_ustr, 0}},
+        {XATTR_FILLBMP_SIZELOG, {u"FillBitmapLogicalSize"_ustr, 0}},
+        {XATTR_FILLBMP_TILEOFFSETX, {u"FillBitmapOffsetX"_ustr, 0}},
+        {XATTR_FILLBMP_TILEOFFSETY, {u"FillBitmapOffsetY"_ustr, 0}},
+        {XATTR_FILLBMP_POSOFFSETX, {u"FillBitmapPositionOffsetX"_ustr, 0}},
+        {XATTR_FILLBMP_POSOFFSETY, {u"FillBitmapPositionOffsetY"_ustr, 0}}};
     return aFillPropertyMap;
 }
 

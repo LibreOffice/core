@@ -45,21 +45,21 @@ namespace {
 const ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
 {
     static const ItemPropertyMapType aCharacterPropertyMap{
-        {EE_CHAR_COLOR, {"CharColor", 0}},
-        {EE_CHAR_LANGUAGE, {"CharLocale", MID_LANG_LOCALE}},
-        {EE_CHAR_LANGUAGE_CJK, {"CharLocaleAsian", MID_LANG_LOCALE}},
-        {EE_CHAR_LANGUAGE_CTL, {"CharLocaleComplex", MID_LANG_LOCALE}},
+        {EE_CHAR_COLOR, {u"CharColor"_ustr, 0}},
+        {EE_CHAR_LANGUAGE, {u"CharLocale"_ustr, MID_LANG_LOCALE}},
+        {EE_CHAR_LANGUAGE_CJK, {u"CharLocaleAsian"_ustr, MID_LANG_LOCALE}},
+        {EE_CHAR_LANGUAGE_CTL, {u"CharLocaleComplex"_ustr, MID_LANG_LOCALE}},
 
-        {EE_CHAR_STRIKEOUT, {"CharStrikeout", MID_CROSS_OUT}},
-        {EE_CHAR_WLM, {"CharWordMode", 0}},
-        {EE_CHAR_SHADOW, {"CharShadowed", 0}},
-        {EE_CHAR_RELIEF, {"CharRelief", 0}},
-        {EE_CHAR_OUTLINE, {"CharContoured", 0}},
-        {EE_CHAR_EMPHASISMARK, {"CharEmphasis", 0}},
+        {EE_CHAR_STRIKEOUT, {u"CharStrikeout"_ustr, MID_CROSS_OUT}},
+        {EE_CHAR_WLM, {u"CharWordMode"_ustr, 0}},
+        {EE_CHAR_SHADOW, {u"CharShadowed"_ustr, 0}},
+        {EE_CHAR_RELIEF, {u"CharRelief"_ustr, 0}},
+        {EE_CHAR_OUTLINE, {u"CharContoured"_ustr, 0}},
+        {EE_CHAR_EMPHASISMARK, {u"CharEmphasis"_ustr, 0}},
 
-        {EE_PARA_WRITINGDIR, {"WritingMode", 0}},
+        {EE_PARA_WRITINGDIR, {u"WritingMode"_ustr, 0}},
 
-        {EE_PARA_ASIANCJKSPACING, {"ParaIsCharacterDistance", 0}}};
+        {EE_PARA_ASIANCJKSPACING, {u"ParaIsCharacterDistance"_ustr, 0}}};
 
     return aCharacterPropertyMap;
 }

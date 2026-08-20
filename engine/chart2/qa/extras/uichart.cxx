@@ -329,9 +329,9 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
 
     // Create a copy of the sheet and move to the end
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "DocName", cpo::uno::Any(u"tdf101894"_ustr) },
-                                           { "Index", cpo::uno::Any(sal_uInt16(32767)) },
-                                           { "Copy", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"DocName"_ustr, cpo::uno::Any(u"tdf101894"_ustr) },
+                                           { u"Index"_ustr, cpo::uno::Any(sal_uInt16(32767)) },
+                                           { u"Copy"_ustr, cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:Move"_ustr, aArgs);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
@@ -410,8 +410,9 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", cpo::uno::Any(u"NewTab"_ustr) }, { "Index", cpo::uno::Any(sal_uInt16(2)) } }));
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { u"Name"_ustr, cpo::uno::Any(u"NewTab"_ustr) },
+                                           { u"Index"_ustr, cpo::uno::Any(sal_uInt16(2)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
@@ -488,7 +489,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
 
     // Remove last sheet
     cpo::uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(3)) } }));
+        comphelper::InitPropertySequence({ { u"Index"_ustr, cpo::uno::Any(sal_uInt16(3)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xIA->getCount());

@@ -2184,12 +2184,12 @@ typedef std::map<sal_uInt16, tPropertyNameWithMemberId> ItemPropertyMapType;
 const static ItemPropertyMapType& lcl_GetPropertyMap()
 {
     static const ItemPropertyMapType aCharacterPropertyMap{
-        { EE_CHAR_COLOR, { "CharColor", 0 } },
-        { EE_CHAR_KERNING, { "CharKerning", 0 } },
-        { EE_CHAR_SHADOW, { "CharShadowed", 0 } },
-        { EE_CHAR_RELIEF, { "CharRelief", 0 } },
-        { EE_CHAR_OUTLINE, { "CharContoured", 0 } },
-        { EE_CHAR_EMPHASISMARK, { "CharEmphasis", 0 } },
+        { EE_CHAR_COLOR, { u"CharColor"_ustr, 0 } },
+        { EE_CHAR_KERNING, { u"CharKerning"_ustr, 0 } },
+        { EE_CHAR_SHADOW, { u"CharShadowed"_ustr, 0 } },
+        { EE_CHAR_RELIEF, { u"CharRelief"_ustr, 0 } },
+        { EE_CHAR_OUTLINE, { u"CharContoured"_ustr, 0 } },
+        { EE_CHAR_EMPHASISMARK, { u"CharEmphasis"_ustr, 0 } },
     };
     return aCharacterPropertyMap;
 }

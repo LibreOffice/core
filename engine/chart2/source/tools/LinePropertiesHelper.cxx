@@ -37,56 +37,56 @@ void LinePropertiesHelper::AddPropertiesToVector(
     std::vector<beans::Property> & rOutProperties )
 {
     // Line Properties see service drawing::LineProperties
-    rOutProperties.emplace_back( "LineStyle",
+    rOutProperties.emplace_back( u"LineStyle"_ustr,
                   PROP_LINE_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "LineDash",
+    rOutProperties.emplace_back( u"LineDash"_ustr,
                    PROP_LINE_DASH,
                    cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND
                    | beans::PropertyAttribute::MAYBEVOID );
 
 //not in service description
-    rOutProperties.emplace_back( "LineDashName",
+    rOutProperties.emplace_back( u"LineDashName"_ustr,
                   PROP_LINE_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "LineColor",
+    rOutProperties.emplace_back( u"LineColor"_ustr,
                   PROP_LINE_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back("LineComplexColor",
+    rOutProperties.emplace_back(u"LineComplexColor"_ustr,
                   PROP_LINE_COMPLEX_COLOR,
                   cppu::UnoType<util::XComplexColor>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT | beans::PropertyAttribute::MAYBEVOID);
 
-    rOutProperties.emplace_back( "LineTransparence",
+    rOutProperties.emplace_back( u"LineTransparence"_ustr,
                   PROP_LINE_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "LineWidth",
+    rOutProperties.emplace_back( u"LineWidth"_ustr,
                   PROP_LINE_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "LineJoint",
+    rOutProperties.emplace_back( u"LineJoint"_ustr,
                   PROP_LINE_JOINT,
                   cppu::UnoType<drawing::LineJoint>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "LineCap",
+    rOutProperties.emplace_back( u"LineCap"_ustr,
                   PROP_LINE_CAP,
                   cppu::UnoType<drawing::LineCap>::get(),
                   beans::PropertyAttribute::BOUND

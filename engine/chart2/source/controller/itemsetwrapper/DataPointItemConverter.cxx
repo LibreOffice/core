@@ -69,7 +69,7 @@ namespace {
 const ItemPropertyMapType & lcl_GetDataPointPropertyMap()
 {
     static const ItemPropertyMapType aDataPointPropertyMap{
-        {SCHATTR_STYLE_SHAPE, {"Geometry3D", 0}}};
+        {SCHATTR_STYLE_SHAPE, {u"Geometry3D"_ustr, 0}}};
     return aDataPointPropertyMap;
 };
 

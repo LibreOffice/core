@@ -781,10 +781,10 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
         }
         //create data
         cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "CellRangeRepresentation", cpo::uno::Any( u"all"_ustr ) },
-            { "HasCategories", cpo::uno::Any( true ) },
-            { "FirstCellAsLabel", cpo::uno::Any( true ) },
-            { "DataRowSource", cpo::uno::Any( css::chart::ChartDataRowSource_COLUMNS ) }
+            { u"CellRangeRepresentation"_ustr, cpo::uno::Any( u"all"_ustr ) },
+            { u"HasCategories"_ustr, cpo::uno::Any( true ) },
+            { u"FirstCellAsLabel"_ustr, cpo::uno::Any( true ) },
+            { u"DataRowSource"_ustr, cpo::uno::Any( css::chart::ChartDataRowSource_COLUMNS ) }
             }));
         xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
     }
@@ -1209,13 +1209,13 @@ typedef std::map< OUString, enum eServiceType > tServiceNameMap;
 const tServiceNameMap & lcl_getStaticServiceNameMap()
 {
     static const tServiceNameMap aServiceNameMap{
-        {"com.sun.star.drawing.DashTable",                    SERVICE_DASH_TABLE},
-        {"com.sun.star.drawing.GradientTable",                SERVICE_GRADIENT_TABLE},
-        {"com.sun.star.drawing.HatchTable",                   SERVICE_HATCH_TABLE},
-        {"com.sun.star.drawing.BitmapTable",                  SERVICE_BITMAP_TABLE},
-        {"com.sun.star.drawing.TransparencyGradientTable",    SERVICE_TRANSP_GRADIENT_TABLE},
-        {"com.sun.star.drawing.MarkerTable",                  SERVICE_MARKER_TABLE},
-        {"com.sun.star.xml.NamespaceMap",                     SERVICE_NAMESPACE_MAP}};
+        {u"com.sun.star.drawing.DashTable"_ustr,                    SERVICE_DASH_TABLE},
+        {u"com.sun.star.drawing.GradientTable"_ustr,                SERVICE_GRADIENT_TABLE},
+        {u"com.sun.star.drawing.HatchTable"_ustr,                   SERVICE_HATCH_TABLE},
+        {u"com.sun.star.drawing.BitmapTable"_ustr,                  SERVICE_BITMAP_TABLE},
+        {u"com.sun.star.drawing.TransparencyGradientTable"_ustr,    SERVICE_TRANSP_GRADIENT_TABLE},
+        {u"com.sun.star.drawing.MarkerTable"_ustr,                  SERVICE_MARKER_TABLE},
+        {u"com.sun.star.xml.NamespaceMap"_ustr,                     SERVICE_NAMESPACE_MAP}};
     return aServiceNameMap;
 }
 }

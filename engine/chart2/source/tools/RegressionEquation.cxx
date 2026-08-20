@@ -62,43 +62,43 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "ShowEquation",
+    rOutProperties.emplace_back( u"ShowEquation"_ustr,
                   PROP_EQUATION_SHOW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "XName",
+    rOutProperties.emplace_back( u"XName"_ustr,
                   PROP_EQUATION_XNAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "YName",
+    rOutProperties.emplace_back( u"YName"_ustr,
                   PROP_EQUATION_YNAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ShowCorrelationCoefficient",
+    rOutProperties.emplace_back( u"ShowCorrelationCoefficient"_ustr,
                   PROP_EQUATION_SHOW_CORRELATION_COEFF,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MayHaveCorrelationCoefficient",
+    rOutProperties.emplace_back( u"MayHaveCorrelationCoefficient"_ustr,
                   PROP_EQUATION_MAY_HAVE_CORRELATION_COEFF,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ReferencePageSize",
+    rOutProperties.emplace_back( u"ReferencePageSize"_ustr,
                   PROP_EQUATION_REF_PAGE_SIZE,
                   cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "RelativePosition",
+    rOutProperties.emplace_back( u"RelativePosition"_ustr,
                   PROP_EQUATION_REL_POS,
                   cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND

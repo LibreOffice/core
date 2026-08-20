@@ -40,13 +40,13 @@ void lcl_AddPropertiesToVector(std::vector<beans::Property>& rProps)
     auto const nBound = beans::PropertyAttribute::BOUND;
     auto const nMaybeDefault = beans::PropertyAttribute::MAYBEDEFAULT;
 
-    rProps.emplace_back("HBorder", DataTableProperty_HorizontalBorder, cppu::UnoType<bool>::get(),
+    rProps.emplace_back(u"HBorder"_ustr, DataTableProperty_HorizontalBorder,
+                        cppu::UnoType<bool>::get(), nBound | nMaybeDefault);
+    rProps.emplace_back(u"VBorder"_ustr, DataTableProperty_VerticalBorder,
+                        cppu::UnoType<bool>::get(), nBound | nMaybeDefault);
+    rProps.emplace_back(u"Outline"_ustr, DataTableProperty_Outilne, cppu::UnoType<bool>::get(),
                         nBound | nMaybeDefault);
-    rProps.emplace_back("VBorder", DataTableProperty_VerticalBorder, cppu::UnoType<bool>::get(),
-                        nBound | nMaybeDefault);
-    rProps.emplace_back("Outline", DataTableProperty_Outilne, cppu::UnoType<bool>::get(),
-                        nBound | nMaybeDefault);
-    rProps.emplace_back("Keys", DataTableProperty_Keys, cppu::UnoType<bool>::get(),
+    rProps.emplace_back(u"Keys"_ustr, DataTableProperty_Keys, cppu::UnoType<bool>::get(),
                         nBound | nMaybeDefault);
 }
 

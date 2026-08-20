@@ -44,7 +44,7 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "HasExplicitSpPr",
+    rOutProperties.emplace_back( u"HasExplicitSpPr"_ustr,
                   PROP_WALL_HAS_EXPLICIT_SPPR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

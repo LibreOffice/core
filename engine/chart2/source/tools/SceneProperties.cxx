@@ -37,7 +37,7 @@ void SceneProperties::AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
     // transformation matrix
-    rOutProperties.emplace_back( "D3DTransformMatrix",
+    rOutProperties.emplace_back( u"D3DTransformMatrix"_ustr,
                   PROP_SCENE_TRANSF_MATRIX,
                   cppu::UnoType<drawing::HomogenMatrix>::get(),
                   beans::PropertyAttribute::BOUND
@@ -45,7 +45,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // distance: deprecated ( this is not used by the chart view; it's only here for compatibility with old chart  )
-    rOutProperties.emplace_back( "D3DSceneDistance",
+    rOutProperties.emplace_back( u"D3DSceneDistance"_ustr,
                   PROP_SCENE_DISTANCE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -53,7 +53,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // focalLength: deprecated ( this is not used by the chart view; it's only here for compatibility with old chart  )
-    rOutProperties.emplace_back( "D3DSceneFocalLength",
+    rOutProperties.emplace_back( u"D3DSceneFocalLength"_ustr,
                   PROP_SCENE_FOCAL_LENGTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -61,7 +61,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // shadowSlant
-    rOutProperties.emplace_back( "D3DSceneShadowSlant",
+    rOutProperties.emplace_back( u"D3DSceneShadowSlant"_ustr,
                   PROP_SCENE_SHADOW_SLANT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -69,7 +69,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // shadeMode
-    rOutProperties.emplace_back( "D3DSceneShadeMode",
+    rOutProperties.emplace_back( u"D3DSceneShadeMode"_ustr,
                   PROP_SCENE_SHADE_MODE,
                   cppu::UnoType<drawing::ShadeMode>::get(),
                   beans::PropertyAttribute::BOUND
@@ -77,7 +77,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // ambientColor
-    rOutProperties.emplace_back( "D3DSceneAmbientColor",
+    rOutProperties.emplace_back( u"D3DSceneAmbientColor"_ustr,
                   PROP_SCENE_AMBIENT_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -85,7 +85,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // lightingMode
-    rOutProperties.emplace_back( "D3DSceneTwoSidedLighting",
+    rOutProperties.emplace_back( u"D3DSceneTwoSidedLighting"_ustr,
                   PROP_SCENE_TWO_SIDED_LIGHTING,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
@@ -93,7 +93,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // camera geometry
-    rOutProperties.emplace_back( "D3DCameraGeometry",
+    rOutProperties.emplace_back( u"D3DCameraGeometry"_ustr,
                   PROP_SCENE_CAMERA_GEOMETRY,
                   cppu::UnoType<drawing::CameraGeometry>::get(),
                   beans::PropertyAttribute::BOUND
@@ -101,7 +101,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // perspective
-    rOutProperties.emplace_back( "D3DScenePerspective",
+    rOutProperties.emplace_back( u"D3DScenePerspective"_ustr,
                   PROP_SCENE_PERSPECTIVE,
                   cppu::UnoType<drawing::ProjectionMode>::get(),
                   beans::PropertyAttribute::BOUND
@@ -110,152 +110,152 @@ void SceneProperties::AddPropertiesToVector(
 
     // Light Sources
     // light source 1
-    rOutProperties.emplace_back( "D3DSceneLightColor1",
+    rOutProperties.emplace_back( u"D3DSceneLightColor1"_ustr,
                   PROP_SCENE_LIGHT_COLOR_1,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection1",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection1"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_1,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn1",
+    rOutProperties.emplace_back( u"D3DSceneLightOn1"_ustr,
                   PROP_SCENE_LIGHT_ON_1,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     // light source 2
-    rOutProperties.emplace_back( "D3DSceneLightColor2",
+    rOutProperties.emplace_back( u"D3DSceneLightColor2"_ustr,
                   PROP_SCENE_LIGHT_COLOR_2,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection2",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection2"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_2,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn2",
+    rOutProperties.emplace_back( u"D3DSceneLightOn2"_ustr,
                   PROP_SCENE_LIGHT_ON_2,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     // light source 3
-    rOutProperties.emplace_back( "D3DSceneLightColor3",
+    rOutProperties.emplace_back( u"D3DSceneLightColor3"_ustr,
                   PROP_SCENE_LIGHT_COLOR_3,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection3",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection3"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_3,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn3",
+    rOutProperties.emplace_back( u"D3DSceneLightOn3"_ustr,
                   PROP_SCENE_LIGHT_ON_3,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     // light source 4
-    rOutProperties.emplace_back( "D3DSceneLightColor4",
+    rOutProperties.emplace_back( u"D3DSceneLightColor4"_ustr,
                   PROP_SCENE_LIGHT_COLOR_4,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection4",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection4"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_4,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn4",
+    rOutProperties.emplace_back( u"D3DSceneLightOn4"_ustr,
                   PROP_SCENE_LIGHT_ON_4,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     // light source 5
-    rOutProperties.emplace_back( "D3DSceneLightColor5",
+    rOutProperties.emplace_back( u"D3DSceneLightColor5"_ustr,
                   PROP_SCENE_LIGHT_COLOR_5,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection5",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection5"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_5,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn5",
+    rOutProperties.emplace_back( u"D3DSceneLightOn5"_ustr,
                   PROP_SCENE_LIGHT_ON_5,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     // light source 6
-    rOutProperties.emplace_back( "D3DSceneLightColor6",
+    rOutProperties.emplace_back( u"D3DSceneLightColor6"_ustr,
                   PROP_SCENE_LIGHT_COLOR_6,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection6",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection6"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_6,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn6",
+    rOutProperties.emplace_back( u"D3DSceneLightOn6"_ustr,
                   PROP_SCENE_LIGHT_ON_6,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     // light source 7
-    rOutProperties.emplace_back( "D3DSceneLightColor7",
+    rOutProperties.emplace_back( u"D3DSceneLightColor7"_ustr,
                   PROP_SCENE_LIGHT_COLOR_7,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection7",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection7"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_7,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn7",
+    rOutProperties.emplace_back( u"D3DSceneLightOn7"_ustr,
                   PROP_SCENE_LIGHT_ON_7,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     // light source 8
-    rOutProperties.emplace_back( "D3DSceneLightColor8",
+    rOutProperties.emplace_back( u"D3DSceneLightColor8"_ustr,
                   PROP_SCENE_LIGHT_COLOR_8,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightDirection8",
+    rOutProperties.emplace_back( u"D3DSceneLightDirection8"_ustr,
                   PROP_SCENE_LIGHT_DIRECTION_8,
                   cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "D3DSceneLightOn8",
+    rOutProperties.emplace_back( u"D3DSceneLightOn8"_ustr,
                   PROP_SCENE_LIGHT_ON_8,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

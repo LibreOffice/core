@@ -265,10 +265,10 @@ void ChartController::setPosSize(
         Fraction aScaleXFrac(fScaleX);
         Fraction aScaleYFrac(fScaleY);
         auto aZoomFactors(::comphelper::InitPropertySequence({
-            { "ScaleXNumerator", cpo::uno::Any( aScaleXFrac.GetNumerator() ) },
-            { "ScaleXDenominator", cpo::uno::Any( aScaleXFrac.GetDenominator() ) },
-            { "ScaleYNumerator", cpo::uno::Any( aScaleYFrac.GetNumerator() ) },
-            { "ScaleYDenominator", cpo::uno::Any( aScaleYFrac.GetDenominator() ) }
+            { u"ScaleXNumerator"_ustr, cpo::uno::Any( aScaleXFrac.GetNumerator() ) },
+            { u"ScaleXDenominator"_ustr, cpo::uno::Any( aScaleXFrac.GetDenominator() ) },
+            { u"ScaleYNumerator"_ustr, cpo::uno::Any( aScaleYFrac.GetNumerator() ) },
+            { u"ScaleYDenominator"_ustr, cpo::uno::Any( aScaleYFrac.GetDenominator() ) }
         }));
         m_xChartView->setPropertyValue( u"ZoomFactors"_ustr, cpo::uno::Any( aZoomFactors ));
     }
@@ -2065,9 +2065,9 @@ void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangl
 
     cpo::uno::Sequence<beans::PropertyValue> aCallbackData = comphelper::InitPropertySequence(
     {
-        {"Rectangle",      cpo::uno::Any(xRectangle)},
-        {"DimensionIndex", cpo::uno::Any(sal_Int32(nDimensionIndex))},
-        {"PivotTableName", cpo::uno::Any(sPivotTableName)},
+        {u"Rectangle"_ustr,      cpo::uno::Any(xRectangle)},
+        {u"DimensionIndex"_ustr, cpo::uno::Any(sal_Int32(nDimensionIndex))},
+        {u"PivotTableName"_ustr, cpo::uno::Any(sPivotTableName)},
     });
 
     pPopupRequest->getCallback()->notify(cpo::uno::Any(aCallbackData));

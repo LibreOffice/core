@@ -50,29 +50,29 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "Japanese",
+    rOutProperties.emplace_back( u"Japanese"_ustr,
                   PROP_CANDLESTICKCHARTTYPE_JAPANESE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "WhiteDay",
+    rOutProperties.emplace_back( u"WhiteDay"_ustr,
                   PROP_CANDLESTICKCHARTTYPE_WHITE_DAY,
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "BlackDay",
+    rOutProperties.emplace_back( u"BlackDay"_ustr,
                   PROP_CANDLESTICKCHARTTYPE_BLACK_DAY,
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "ShowFirst",
+    rOutProperties.emplace_back( u"ShowFirst"_ustr,
                   PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "ShowHighLow",
+    rOutProperties.emplace_back( u"ShowHighLow"_ustr,
                   PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

@@ -61,43 +61,46 @@ enum
 void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
 {
     rOutProperties.emplace_back(
-        "BinWidth", PROP_HISTOGRAMCHARTTYPE_BINWIDTH, cppu::UnoType<double>::get(),
+        u"BinWidth"_ustr, PROP_HISTOGRAMCHARTTYPE_BINWIDTH, cppu::UnoType<double>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
     rOutProperties.emplace_back(
-        "BinCount", PROP_HISTOGRAMCHARTTYPE_BINCOUNT, cppu::UnoType<sal_Int32>::get(),
+        u"BinCount"_ustr, PROP_HISTOGRAMCHARTTYPE_BINCOUNT, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
-    rOutProperties.emplace_back(
-        "FrequencyType", PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE, cppu::UnoType<sal_Int32>::get(),
-        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back(u"FrequencyType"_ustr, PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE,
+                                cppu::UnoType<sal_Int32>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEDEFAULT);
 
-    rOutProperties.emplace_back("OverlapSequence", PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE,
+    rOutProperties.emplace_back(u"OverlapSequence"_ustr, PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE,
                                 cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);
 
-    rOutProperties.emplace_back("GapwidthSequence", PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE,
+    rOutProperties.emplace_back(u"GapwidthSequence"_ustr, PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE,
                                 cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);
 
+    rOutProperties.emplace_back(u"UseUnderflowBin"_ustr, PROP_HISTOGRAMCHARTTYPE_USEUNDERFLOWBIN,
+                                cppu::UnoType<bool>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEDEFAULT);
+
     rOutProperties.emplace_back(
-        "UseUnderflowBin", PROP_HISTOGRAMCHARTTYPE_USEUNDERFLOWBIN, cppu::UnoType<bool>::get(),
+        u"UnderflowBinValue"_ustr, PROP_HISTOGRAMCHARTTYPE_UNDERFLOWBINVALUE,
+        cppu::UnoType<double>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
-    rOutProperties.emplace_back("UnderflowBinValue", PROP_HISTOGRAMCHARTTYPE_UNDERFLOWBINVALUE,
+    rOutProperties.emplace_back(
+        u"UseOverflowBin"_ustr, PROP_HISTOGRAMCHARTTYPE_USEOVERFLOWBIN, cppu::UnoType<bool>::get(),
+        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back(u"OverflowBinValue"_ustr, PROP_HISTOGRAMCHARTTYPE_OVERFLOWBINVALUE,
                                 cppu::UnoType<double>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);
-
-    rOutProperties.emplace_back(
-        "UseOverflowBin", PROP_HISTOGRAMCHARTTYPE_USEOVERFLOWBIN, cppu::UnoType<bool>::get(),
-        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-
-    rOutProperties.emplace_back(
-        "OverflowBinValue", PROP_HISTOGRAMCHARTTYPE_OVERFLOWBINVALUE, cppu::UnoType<double>::get(),
-        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 }
 
 ::cppu::OPropertyArrayHelper& StaticHistogramChartTypeInfoHelper()

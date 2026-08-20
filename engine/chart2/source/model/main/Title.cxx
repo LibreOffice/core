@@ -68,79 +68,79 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "ParaAdjust",
+    rOutProperties.emplace_back( u"ParaAdjust"_ustr,
                   PROP_TITLE_PARA_ADJUST,
                   cppu::UnoType<css::style::ParagraphAdjust>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ParaLastLineAdjust",
+    rOutProperties.emplace_back( u"ParaLastLineAdjust"_ustr,
                   PROP_TITLE_PARA_LAST_LINE_ADJUST,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ParaLeftMargin",
+    rOutProperties.emplace_back( u"ParaLeftMargin"_ustr,
                   PROP_TITLE_PARA_LEFT_MARGIN,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ParaRightMargin",
+    rOutProperties.emplace_back( u"ParaRightMargin"_ustr,
                   PROP_TITLE_PARA_RIGHT_MARGIN,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ParaTopMargin",
+    rOutProperties.emplace_back( u"ParaTopMargin"_ustr,
                   PROP_TITLE_PARA_TOP_MARGIN,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ParaBottomMargin",
+    rOutProperties.emplace_back( u"ParaBottomMargin"_ustr,
                   PROP_TITLE_PARA_BOTTOM_MARGIN,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ParaIsHyphenation",
+    rOutProperties.emplace_back( u"ParaIsHyphenation"_ustr,
                   PROP_TITLE_PARA_IS_HYPHENATION,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
 
-    rOutProperties.emplace_back( "Visible",
+    rOutProperties.emplace_back( u"Visible"_ustr,
                   PROP_TITLE_VISIBLE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TextRotation",
+    rOutProperties.emplace_back( u"TextRotation"_ustr,
                   PROP_TITLE_TEXT_ROTATION,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "StackCharacters",
+    rOutProperties.emplace_back( u"StackCharacters"_ustr,
                   PROP_TITLE_TEXT_STACKED,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "RelativePosition",
+    rOutProperties.emplace_back( u"RelativePosition"_ustr,
                   PROP_TITLE_REL_POS,
                   cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "ReferencePageSize",
+    rOutProperties.emplace_back( u"ReferencePageSize"_ustr,
                   PROP_TITLE_REF_PAGE_SIZE,
                   cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "HasExplicitSpPr",
+    rOutProperties.emplace_back( u"HasExplicitSpPr"_ustr,
                   PROP_TITLE_HAS_EXPLICIT_SPPR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

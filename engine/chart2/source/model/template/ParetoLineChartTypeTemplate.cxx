@@ -38,10 +38,10 @@ enum
 void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
 {
     rOutProperties.emplace_back(
-        "Dimension", PROP_PARETOLINE_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
+        u"Dimension"_ustr, PROP_PARETOLINE_TEMPLATE_DIMENSION, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
     rOutProperties.emplace_back(
-        "Geometry3D", PROP_PARETOLINE_TEMPLATE_GEOMETRY3D, cppu::UnoType<sal_Int32>::get(),
+        u"Geometry3D"_ustr, PROP_PARETOLINE_TEMPLATE_GEOMETRY3D, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 }
 

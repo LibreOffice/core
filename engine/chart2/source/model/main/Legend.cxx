@@ -62,49 +62,49 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "AnchorPosition",
+    rOutProperties.emplace_back( u"AnchorPosition"_ustr,
                   PROP_LEGEND_ANCHOR_POSITION,
                   cppu::UnoType<chart2::LegendPosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "Expansion",
+    rOutProperties.emplace_back( u"Expansion"_ustr,
                   PROP_LEGEND_EXPANSION,
                   cppu::UnoType<css::chart::ChartLegendExpansion>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "Show",
+    rOutProperties.emplace_back( u"Show"_ustr,
                   PROP_LEGEND_SHOW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "Overlay",
+    rOutProperties.emplace_back( u"Overlay"_ustr,
                   PROP_LEGEND_OVERLAY,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ReferencePageSize",
+    rOutProperties.emplace_back( u"ReferencePageSize"_ustr,
                   PROP_LEGEND_REF_PAGE_SIZE,
                   cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "RelativePosition",
+    rOutProperties.emplace_back( u"RelativePosition"_ustr,
                   PROP_LEGEND_REL_POS,
                   cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "RelativeSize",
+    rOutProperties.emplace_back( u"RelativeSize"_ustr,
                   PROP_LEGEND_REL_SIZE,
                   cppu::UnoType<chart2::RelativeSize>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "HasExplicitSpPr",
+    rOutProperties.emplace_back( u"HasExplicitSpPr"_ustr,
                   PROP_LEGEND_HAS_EXPLICIT_SPPR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

@@ -56,22 +56,22 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "Volume",
+    rOutProperties.emplace_back( u"Volume"_ustr,
                   PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "Open",
+    rOutProperties.emplace_back( u"Open"_ustr,
                   PROP_STOCKCHARTTYPE_TEMPLATE_OPEN,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "LowHigh",
+    rOutProperties.emplace_back( u"LowHigh"_ustr,
                   PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "Japanese",
+    rOutProperties.emplace_back( u"Japanese"_ustr,
                   PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

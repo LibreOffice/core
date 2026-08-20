@@ -182,30 +182,30 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "String",
+    rOutProperties.emplace_back( u"String"_ustr,
                   PROP_TITLE_STRING,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "FormattedStrings",
+    rOutProperties.emplace_back( u"FormattedStrings"_ustr,
                   PROP_TITLE_FORMATTED_STRINGS,
                   cppu::UnoType< Sequence< Reference< chart2::XFormattedString >>>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "Visible",
+    rOutProperties.emplace_back( u"Visible"_ustr,
                   PROP_TITLE_VISIBLE,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "TextRotation",
+    rOutProperties.emplace_back( u"TextRotation"_ustr,
                   PROP_TITLE_TEXT_ROTATION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "StackedText",
+    rOutProperties.emplace_back( u"StackedText"_ustr,
                   PROP_TITLE_TEXT_STACKED,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

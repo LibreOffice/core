@@ -107,29 +107,29 @@ typedef std::map< OUString, enum eServiceType > tServiceNameMap;
 const tServiceNameMap & lcl_getStaticServiceNameMap()
 {
     static const tServiceNameMap aServiceNameMap {
-        {"com.sun.star.chart.AreaDiagram",                    SERVICE_NAME_AREA_DIAGRAM},
-        {"com.sun.star.chart.BarDiagram",                     SERVICE_NAME_BAR_DIAGRAM},
-        {"com.sun.star.chart.HistogramDiagram",               SERVICE_NAME_HISTOGRAM_DIAGRAM},
-        {"com.sun.star.chart.DonutDiagram",                   SERVICE_NAME_DONUT_DIAGRAM},
-        {"com.sun.star.chart.LineDiagram",                    SERVICE_NAME_LINE_DIAGRAM},
-        {"com.sun.star.chart.NetDiagram",                     SERVICE_NAME_NET_DIAGRAM},
-        {"com.sun.star.chart.FilledNetDiagram",               SERVICE_NAME_FILLED_NET_DIAGRAM},
-        {"com.sun.star.chart.PieDiagram",                     SERVICE_NAME_PIE_DIAGRAM},
-        {"com.sun.star.chart.StockDiagram",                   SERVICE_NAME_STOCK_DIAGRAM},
-        {"com.sun.star.chart.XYDiagram",                      SERVICE_NAME_XY_DIAGRAM},
-        {"com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM},
-        {"com.sun.star.chart.CorrelationCircleDiagram",       SERVICE_NAME_CORRELATION_CIRCLE_DIAGRAM},
+        {u"com.sun.star.chart.AreaDiagram"_ustr,                    SERVICE_NAME_AREA_DIAGRAM},
+        {u"com.sun.star.chart.BarDiagram"_ustr,                     SERVICE_NAME_BAR_DIAGRAM},
+        {u"com.sun.star.chart.HistogramDiagram"_ustr,               SERVICE_NAME_HISTOGRAM_DIAGRAM},
+        {u"com.sun.star.chart.DonutDiagram"_ustr,                   SERVICE_NAME_DONUT_DIAGRAM},
+        {u"com.sun.star.chart.LineDiagram"_ustr,                    SERVICE_NAME_LINE_DIAGRAM},
+        {u"com.sun.star.chart.NetDiagram"_ustr,                     SERVICE_NAME_NET_DIAGRAM},
+        {u"com.sun.star.chart.FilledNetDiagram"_ustr,               SERVICE_NAME_FILLED_NET_DIAGRAM},
+        {u"com.sun.star.chart.PieDiagram"_ustr,                     SERVICE_NAME_PIE_DIAGRAM},
+        {u"com.sun.star.chart.StockDiagram"_ustr,                   SERVICE_NAME_STOCK_DIAGRAM},
+        {u"com.sun.star.chart.XYDiagram"_ustr,                      SERVICE_NAME_XY_DIAGRAM},
+        {u"com.sun.star.chart.BubbleDiagram"_ustr,                  SERVICE_NAME_BUBBLE_DIAGRAM},
+        {u"com.sun.star.chart.CorrelationCircleDiagram"_ustr,       SERVICE_NAME_CORRELATION_CIRCLE_DIAGRAM},
 
-        {"com.sun.star.drawing.DashTable",                    SERVICE_NAME_DASH_TABLE},
-        {"com.sun.star.drawing.GradientTable",                SERVICE_NAME_GRADIENT_TABLE},
-        {"com.sun.star.drawing.HatchTable",                   SERVICE_NAME_HATCH_TABLE},
-        {"com.sun.star.drawing.BitmapTable",                  SERVICE_NAME_BITMAP_TABLE},
-        {"com.sun.star.drawing.TransparencyGradientTable",    SERVICE_NAME_TRANSP_GRADIENT_TABLE},
-        {"com.sun.star.drawing.MarkerTable",                  SERVICE_NAME_MARKER_TABLE},
+        {u"com.sun.star.drawing.DashTable"_ustr,                    SERVICE_NAME_DASH_TABLE},
+        {u"com.sun.star.drawing.GradientTable"_ustr,                SERVICE_NAME_GRADIENT_TABLE},
+        {u"com.sun.star.drawing.HatchTable"_ustr,                   SERVICE_NAME_HATCH_TABLE},
+        {u"com.sun.star.drawing.BitmapTable"_ustr,                  SERVICE_NAME_BITMAP_TABLE},
+        {u"com.sun.star.drawing.TransparencyGradientTable"_ustr,    SERVICE_NAME_TRANSP_GRADIENT_TABLE},
+        {u"com.sun.star.drawing.MarkerTable"_ustr,                  SERVICE_NAME_MARKER_TABLE},
 
-        {"com.sun.star.xml.NamespaceMap",                     SERVICE_NAME_NAMESPACE_MAP},
-        {"com.sun.star.document.ExportGraphicStorageHandler", SERVICE_NAME_EXPORT_GRAPHIC_STORAGE_RESOLVER},
-        {"com.sun.star.document.ImportGraphicStorageHandler", SERVICE_NAME_IMPORT_GRAPHIC_STORAGE_RESOLVER}
+        {u"com.sun.star.xml.NamespaceMap"_ustr,                     SERVICE_NAME_NAMESPACE_MAP},
+        {u"com.sun.star.document.ExportGraphicStorageHandler"_ustr, SERVICE_NAME_EXPORT_GRAPHIC_STORAGE_RESOLVER},
+        {u"com.sun.star.document.ImportGraphicStorageHandler"_ustr, SERVICE_NAME_IMPORT_GRAPHIC_STORAGE_RESOLVER}
     };
 
     return aServiceNameMap;
@@ -155,74 +155,74 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "HasMainTitle",
+    rOutProperties.emplace_back( u"HasMainTitle"_ustr,
                   PROP_DOCUMENT_HAS_MAIN_TITLE,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasSubTitle",
+    rOutProperties.emplace_back( u"HasSubTitle"_ustr,
                   PROP_DOCUMENT_HAS_SUB_TITLE,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasLegend",
+    rOutProperties.emplace_back( u"HasLegend"_ustr,
                   PROP_DOCUMENT_HAS_LEGEND,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
     // really needed?
-    rOutProperties.emplace_back( "DataSourceLabelsInFirstRow",
+    rOutProperties.emplace_back( u"DataSourceLabelsInFirstRow"_ustr,
                   PROP_DOCUMENT_LABELS_IN_FIRST_ROW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DataSourceLabelsInFirstColumn",
+    rOutProperties.emplace_back( u"DataSourceLabelsInFirstColumn"_ustr,
                   PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
     //add-in
-    rOutProperties.emplace_back( "AddIn",
+    rOutProperties.emplace_back( u"AddIn"_ustr,
                   PROP_DOCUMENT_ADDIN,
                   cppu::UnoType<util::XRefreshable>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "BaseDiagram",
+    rOutProperties.emplace_back( u"BaseDiagram"_ustr,
                   PROP_DOCUMENT_BASEDIAGRAM,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "AdditionalShapes",
+    rOutProperties.emplace_back( u"AdditionalShapes"_ustr,
                   PROP_DOCUMENT_ADDITIONAL_SHAPES,
                   cppu::UnoType<drawing::XShapes>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::READONLY );
-    rOutProperties.emplace_back( "RefreshAddInAllowed",
+    rOutProperties.emplace_back( u"RefreshAddInAllowed"_ustr,
                   PROP_DOCUMENT_UPDATE_ADDIN,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::TRANSIENT );
 
     // table:null-date // i99104
-    rOutProperties.emplace_back( "NullDate",
+    rOutProperties.emplace_back( u"NullDate"_ustr,
                   PROP_DOCUMENT_NULL_DATE,
                   ::cppu::UnoType<css::util::DateTime>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "EnableComplexChartTypes",
+    rOutProperties.emplace_back( u"EnableComplexChartTypes"_ustr,
                   PROP_DOCUMENT_ENABLE_COMPLEX_CHARTTYPES,
                   cppu::UnoType<bool>::get(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "EnableDataTableDialog",
+    rOutProperties.emplace_back( u"EnableDataTableDialog"_ustr,
                   PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG,
                   cppu::UnoType<bool>::get(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DisableDataTableDialog",
+    rOutProperties.emplace_back( u"DisableDataTableDialog"_ustr,
                   PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );

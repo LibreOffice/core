@@ -51,49 +51,49 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "PolynomialDegree",
+    rOutProperties.emplace_back( u"PolynomialDegree"_ustr,
                 PROPERTY_DEGREE,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MovingAveragePeriod",
+    rOutProperties.emplace_back( u"MovingAveragePeriod"_ustr,
                 PROPERTY_PERIOD,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MovingAverageType",
+    rOutProperties.emplace_back( u"MovingAverageType"_ustr,
                 PROPERTY_MOVING_AVERAGE_TYPE,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ExtrapolateForward",
+    rOutProperties.emplace_back( u"ExtrapolateForward"_ustr,
                 PROPERTY_EXTRAPOLATE_FORWARD,
                 cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ExtrapolateBackward",
+    rOutProperties.emplace_back( u"ExtrapolateBackward"_ustr,
                 PROPERTY_EXTRAPOLATE_BACKWARD,
                 cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ForceIntercept",
+    rOutProperties.emplace_back( u"ForceIntercept"_ustr,
                   PROPERTY_FORCE_INTERCEPT,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "InterceptValue",
+    rOutProperties.emplace_back( u"InterceptValue"_ustr,
                 PROPERTY_INTERCEPT_VALUE,
                 cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "CurveName",
+    rOutProperties.emplace_back( u"CurveName"_ustr,
                 PROPERTY_CURVE_NAME,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND );

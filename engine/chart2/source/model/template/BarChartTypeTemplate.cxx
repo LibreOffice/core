@@ -49,12 +49,12 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "Dimension",
+    rOutProperties.emplace_back( u"Dimension"_ustr,
                   PROP_BAR_TEMPLATE_DIMENSION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "Geometry3D",
+    rOutProperties.emplace_back( u"Geometry3D"_ustr,
                   PROP_BAR_TEMPLATE_GEOMETRY3D,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND

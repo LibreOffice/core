@@ -33,23 +33,23 @@ namespace chart
 void UserDefinedProperties::AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "ChartUserDefinedAttributes",
+    rOutProperties.emplace_back( u"ChartUserDefinedAttributes"_ustr,
                   PROP_XML_USERDEF_CHART,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "TextUserDefinedAttributes",
+    rOutProperties.emplace_back( u"TextUserDefinedAttributes"_ustr,
                   PROP_XML_USERDEF_TEXT,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "ParaUserDefinedAttributes",
+    rOutProperties.emplace_back( u"ParaUserDefinedAttributes"_ustr,
                   PROP_XML_USERDEF_PARA,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
     // UserDefinedAttributesSupplier
-    rOutProperties.emplace_back( "UserDefinedAttributes",
+    rOutProperties.emplace_back( u"UserDefinedAttributes"_ustr,
                   PROP_XML_USERDEF,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND

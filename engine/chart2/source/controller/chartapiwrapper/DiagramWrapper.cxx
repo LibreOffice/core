@@ -158,103 +158,103 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "AttributedDataPoints",
+    rOutProperties.emplace_back( u"AttributedDataPoints"_ustr,
                   PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS,
                   cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     // see com.sun.star.chart.StackableDiagram
-    rOutProperties.emplace_back( "Percent",
+    rOutProperties.emplace_back( u"Percent"_ustr,
                   PROP_DIAGRAM_PERCENT_STACKED,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "Stacked",
+    rOutProperties.emplace_back( u"Stacked"_ustr,
                   PROP_DIAGRAM_STACKED,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "Dim3D",
+    rOutProperties.emplace_back( u"Dim3D"_ustr,
                   PROP_DIAGRAM_THREE_D,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // see com.sun.star.chart.Chart3DBarProperties
-    rOutProperties.emplace_back( "SolidType",
+    rOutProperties.emplace_back( u"SolidType"_ustr,
                   PROP_DIAGRAM_SOLIDTYPE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // see com.sun.star.chart.BarDiagram
-    rOutProperties.emplace_back( "Deep",
+    rOutProperties.emplace_back( u"Deep"_ustr,
                   PROP_DIAGRAM_DEEP,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "Vertical",
+    rOutProperties.emplace_back( u"Vertical"_ustr,
                   PROP_DIAGRAM_VERTICAL,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "NumberOfLines",
+    rOutProperties.emplace_back( u"NumberOfLines"_ustr,
                   PROP_DIAGRAM_NUMBER_OF_LINES,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "StackedBarsConnected",
+    rOutProperties.emplace_back( u"StackedBarsConnected"_ustr,
                   PROP_DIAGRAM_STACKED_BARS_CONNECTED,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "DataRowSource",
+    rOutProperties.emplace_back( u"DataRowSource"_ustr,
                   PROP_DIAGRAM_DATAROW_SOURCE,
                   cppu::UnoType<css::chart::ChartDataRowSource>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "GroupBarsPerAxis",
+    rOutProperties.emplace_back( u"GroupBarsPerAxis"_ustr,
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "IncludeHiddenCells",
+    rOutProperties.emplace_back( u"IncludeHiddenCells"_ustr,
                   PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // Histogram chart type properties
-    rOutProperties.emplace_back("BinWidth",
+    rOutProperties.emplace_back(u"BinWidth"_ustr,
                   PROP_DIAGRAM_BIN_WIDTH,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("BinCount",
+    rOutProperties.emplace_back(u"BinCount"_ustr,
                   PROP_DIAGRAM_BIN_COUNT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("FrequencyType",
+    rOutProperties.emplace_back(u"FrequencyType"_ustr,
                   PROP_DIAGRAM_FREQUENCY_TYPE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("UseUnderflowBin",
+    rOutProperties.emplace_back(u"UseUnderflowBin"_ustr,
                   PROP_DIAGRAM_USE_UNDERFLOW_BIN,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("UnderflowBinValue",
+    rOutProperties.emplace_back(u"UnderflowBinValue"_ustr,
                   PROP_DIAGRAM_UNDERFLOW_BIN_VALUE,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("UseOverflowBin",
+    rOutProperties.emplace_back(u"UseOverflowBin"_ustr,
                   PROP_DIAGRAM_USE_OVERFLOW_BIN,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("OverflowBinValue",
+    rOutProperties.emplace_back(u"OverflowBinValue"_ustr,
                   PROP_DIAGRAM_OVERFLOW_BIN_VALUE,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
@@ -267,181 +267,181 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     //for pie and donut charts
-    rOutProperties.emplace_back( "StartingAngle",
+    rOutProperties.emplace_back( u"StartingAngle"_ustr,
                   PROP_DIAGRAM_STARTING_ANGLE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "SubPieType",
+    rOutProperties.emplace_back( u"SubPieType"_ustr,
                   PROP_DIAGRAM_OF_PIE_TYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "SplitPos",
+    rOutProperties.emplace_back( u"SplitPos"_ustr,
                   PROP_DIAGRAM_SPLIT_POS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     //new for 3D charts
-    rOutProperties.emplace_back( "RightAngledAxes",
+    rOutProperties.emplace_back( u"RightAngledAxes"_ustr,
                   PROP_DIAGRAM_RIGHT_ANGLED_AXES,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "Perspective",
+    rOutProperties.emplace_back( u"Perspective"_ustr,
                   PROP_DIAGRAM_PERSPECTIVE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "RotationHorizontal",
+    rOutProperties.emplace_back( u"RotationHorizontal"_ustr,
                   PROP_DIAGRAM_ROTATION_HORIZONTAL,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "RotationVertical",
+    rOutProperties.emplace_back( u"RotationVertical"_ustr,
                   PROP_DIAGRAM_ROTATION_VERTICAL,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
 
     // XAxisXSupplier
-    rOutProperties.emplace_back( "HasXAxis",
+    rOutProperties.emplace_back( u"HasXAxis"_ustr,
                   PROP_DIAGRAM_HAS_X_AXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasXAxisDescription",
+    rOutProperties.emplace_back( u"HasXAxisDescription"_ustr,
                   PROP_DIAGRAM_HAS_X_AXIS_DESCR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasXAxisTitle",
+    rOutProperties.emplace_back( u"HasXAxisTitle"_ustr,
                   PROP_DIAGRAM_HAS_X_AXIS_TITLE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasXAxisGrid",
+    rOutProperties.emplace_back( u"HasXAxisGrid"_ustr,
                   PROP_DIAGRAM_HAS_X_AXIS_GRID,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasXAxisHelpGrid",
+    rOutProperties.emplace_back( u"HasXAxisHelpGrid"_ustr,
                   PROP_DIAGRAM_HAS_X_AXIS_HELP_GRID,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // XAxisYSupplier
-    rOutProperties.emplace_back( "HasYAxis",
+    rOutProperties.emplace_back( u"HasYAxis"_ustr,
                   PROP_DIAGRAM_HAS_Y_AXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasYAxisDescription",
+    rOutProperties.emplace_back( u"HasYAxisDescription"_ustr,
                   PROP_DIAGRAM_HAS_Y_AXIS_DESCR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasYAxisTitle",
+    rOutProperties.emplace_back( u"HasYAxisTitle"_ustr,
                   PROP_DIAGRAM_HAS_Y_AXIS_TITLE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasYAxisGrid",
+    rOutProperties.emplace_back( u"HasYAxisGrid"_ustr,
                   PROP_DIAGRAM_HAS_Y_AXIS_GRID,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasYAxisHelpGrid",
+    rOutProperties.emplace_back( u"HasYAxisHelpGrid"_ustr,
                   PROP_DIAGRAM_HAS_Y_AXIS_HELP_GRID,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // XAxisZSupplier
-    rOutProperties.emplace_back( "HasZAxis",
+    rOutProperties.emplace_back( u"HasZAxis"_ustr,
                   PROP_DIAGRAM_HAS_Z_AXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasZAxisDescription",
+    rOutProperties.emplace_back( u"HasZAxisDescription"_ustr,
                   PROP_DIAGRAM_HAS_Z_AXIS_DESCR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasZAxisTitle",
+    rOutProperties.emplace_back( u"HasZAxisTitle"_ustr,
                   PROP_DIAGRAM_HAS_Z_AXIS_TITLE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasZAxisGrid",
+    rOutProperties.emplace_back( u"HasZAxisGrid"_ustr,
                   PROP_DIAGRAM_HAS_Z_AXIS_GRID,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasZAxisHelpGrid",
+    rOutProperties.emplace_back( u"HasZAxisHelpGrid"_ustr,
                   PROP_DIAGRAM_HAS_Z_AXIS_HELP_GRID,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // XTwoAxisXSupplier
-    rOutProperties.emplace_back( "HasSecondaryXAxis",
+    rOutProperties.emplace_back( u"HasSecondaryXAxis"_ustr,
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasSecondaryXAxisDescription",
+    rOutProperties.emplace_back( u"HasSecondaryXAxisDescription"_ustr,
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS_DESCR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // XTwoAxisYSupplier
-    rOutProperties.emplace_back( "HasSecondaryYAxis",
+    rOutProperties.emplace_back( u"HasSecondaryYAxis"_ustr,
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasSecondaryYAxisDescription",
+    rOutProperties.emplace_back( u"HasSecondaryYAxisDescription"_ustr,
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS_DESCR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // XSecondAxisTitleSupplier
-    rOutProperties.emplace_back( "HasSecondaryXAxisTitle",
+    rOutProperties.emplace_back( u"HasSecondaryXAxisTitle"_ustr,
                   PROP_DIAGRAM_HAS_SECOND_X_AXIS_TITLE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "HasSecondaryYAxisTitle",
+    rOutProperties.emplace_back( u"HasSecondaryYAxisTitle"_ustr,
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MissingValueTreatment",
+    rOutProperties.emplace_back( u"MissingValueTreatment"_ustr,
                   PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "AutomaticSize",
+    rOutProperties.emplace_back( u"AutomaticSize"_ustr,
                   PROP_DIAGRAM_AUTOMATIC_SIZE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // chartSpace properties
-    rOutProperties.emplace_back( "ExternalData",
+    rOutProperties.emplace_back( u"ExternalData"_ustr,
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "StyleIndex",
+    rOutProperties.emplace_back( u"StyleIndex"_ustr,
                   PROP_DIAGRAM_STYLE_INDEX,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -593,24 +593,24 @@ typedef std::map< OUString, OUString > tMakeStringStringMap;
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     static const tMakeStringStringMap g_aChartTypeNameMap{
-        {"com.sun.star.chart2.LineChartType", "com.sun.star.chart.LineDiagram"},
-        {"com.sun.star.chart2.AreaChartType", "com.sun.star.chart.AreaDiagram"},
-        {"com.sun.star.chart2.ColumnChartType", "com.sun.star.chart.BarDiagram"},
-        {"com.sun.star.chart2.HistogramChartType", "com.sun.star.chart.HistogramDiagram"},
-        {"com.sun.star.chart2.PieChartType", "com.sun.star.chart.PieDiagram"},
-        {"com.sun.star.chart2.DonutChartType", "com.sun.star.chart.DonutDiagram"},
-        {"com.sun.star.chart2.ScatterChartType", "com.sun.star.chart.XYDiagram"},
-        {"com.sun.star.chart2.FilledNetChartType", "com.sun.star.chart.FilledNetDiagram"},
-        {"com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram"},
-        {"com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram"},
-        {"com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram"},
-        {"com.sun.star.chart2.CorrelationCircleChartType",
-         "com.sun.star.chart.CorrelationCircleDiagram"},
-        {"com.sun.star.chart2.FunnelChartType", "com.sun.star.chart.FunnelDiagram"},
-        {"com.sun.star.chart2.BoxWhiskerChartType", "com.sun.star.chart.BoxWhiskerDiagram"},
-        {"com.sun.star.chart2.ClusteredColumnChartType", "com.sun.star.chart.ClusteredColumnDiagram"},
-        {"com.sun.star.chart2.SunburstChartType", "com.sun.star.chart.SunburstDiagram"},
-        {"com.sun.star.chart2.TreemapChartType", "com.sun.star.chart.TreemapDiagram"}
+        {u"com.sun.star.chart2.LineChartType"_ustr, u"com.sun.star.chart.LineDiagram"_ustr},
+        {u"com.sun.star.chart2.AreaChartType"_ustr, u"com.sun.star.chart.AreaDiagram"_ustr},
+        {u"com.sun.star.chart2.ColumnChartType"_ustr, u"com.sun.star.chart.BarDiagram"_ustr},
+        {u"com.sun.star.chart2.HistogramChartType"_ustr, u"com.sun.star.chart.HistogramDiagram"_ustr},
+        {u"com.sun.star.chart2.PieChartType"_ustr, u"com.sun.star.chart.PieDiagram"_ustr},
+        {u"com.sun.star.chart2.DonutChartType"_ustr, u"com.sun.star.chart.DonutDiagram"_ustr},
+        {u"com.sun.star.chart2.ScatterChartType"_ustr, u"com.sun.star.chart.XYDiagram"_ustr},
+        {u"com.sun.star.chart2.FilledNetChartType"_ustr, u"com.sun.star.chart.FilledNetDiagram"_ustr},
+        {u"com.sun.star.chart2.NetChartType"_ustr, u"com.sun.star.chart.NetDiagram"_ustr},
+        {u"com.sun.star.chart2.CandleStickChartType"_ustr, u"com.sun.star.chart.StockDiagram"_ustr},
+        {u"com.sun.star.chart2.BubbleChartType"_ustr, u"com.sun.star.chart.BubbleDiagram"_ustr},
+        {u"com.sun.star.chart2.CorrelationCircleChartType"_ustr,
+         u"com.sun.star.chart.CorrelationCircleDiagram"_ustr},
+        {u"com.sun.star.chart2.FunnelChartType"_ustr, u"com.sun.star.chart.FunnelDiagram"_ustr},
+        {u"com.sun.star.chart2.BoxWhiskerChartType"_ustr, u"com.sun.star.chart.BoxWhiskerDiagram"_ustr},
+        {u"com.sun.star.chart2.ClusteredColumnChartType"_ustr, u"com.sun.star.chart.ClusteredColumnDiagram"_ustr},
+        {u"com.sun.star.chart2.SunburstChartType"_ustr, u"com.sun.star.chart.SunburstDiagram"_ustr},
+        {u"com.sun.star.chart2.TreemapChartType"_ustr, u"com.sun.star.chart.TreemapDiagram"_ustr}
     };
     return g_aChartTypeNameMap;
 }

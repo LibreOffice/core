@@ -41,7 +41,7 @@ namespace {
 const ItemPropertyMapType & lcl_GetTitlePropertyMap()
 {
     static const ItemPropertyMapType aTitlePropertyMap{
-        {SCHATTR_TEXT_STACKED, {"StackCharacters", 0}}};
+        {SCHATTR_TEXT_STACKED, {u"StackCharacters"_ustr, 0}}};
     return aTitlePropertyMap;
 };
 

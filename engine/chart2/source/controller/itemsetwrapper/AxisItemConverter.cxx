@@ -63,13 +63,13 @@ namespace {
 const ItemPropertyMapType & lcl_GetAxisPropertyMap()
 {
     static const ItemPropertyMapType aAxisPropertyMap{
-        {SCHATTR_AXIS_SHOWDESCR,     {"DisplayLabels",    0}},
-        {SCHATTR_AXIS_TICKS,         {"MajorTickmarks",   0}},
-        {SCHATTR_AXIS_HELPTICKS,     {"MinorTickmarks",   0}},
-        {SCHATTR_AXIS_LABEL_ORDER,   {"ArrangeOrder",     0}},
-        {SCHATTR_TEXT_STACKED,       {"StackCharacters",  0}},
-        {SCHATTR_AXIS_LABEL_BREAK,   {"TextBreak",        0}},
-        {SCHATTR_AXIS_LABEL_OVERLAP, {"TextOverlap",      0}}};
+        {SCHATTR_AXIS_SHOWDESCR,     {u"DisplayLabels"_ustr,    0}},
+        {SCHATTR_AXIS_TICKS,         {u"MajorTickmarks"_ustr,   0}},
+        {SCHATTR_AXIS_HELPTICKS,     {u"MinorTickmarks"_ustr,   0}},
+        {SCHATTR_AXIS_LABEL_ORDER,   {u"ArrangeOrder"_ustr,     0}},
+        {SCHATTR_TEXT_STACKED,       {u"StackCharacters"_ustr,  0}},
+        {SCHATTR_AXIS_LABEL_BREAK,   {u"TextBreak"_ustr,        0}},
+        {SCHATTR_AXIS_LABEL_OVERLAP, {u"TextOverlap"_ustr,      0}}};
     return aAxisPropertyMap;
 };
 

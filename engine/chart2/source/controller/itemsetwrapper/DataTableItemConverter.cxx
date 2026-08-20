@@ -25,10 +25,10 @@ namespace
 const ItemPropertyMapType& lclDataTablePropertyMap()
 {
     static const ItemPropertyMapType aPropertyMap{
-        { SCHATTR_DATA_TABLE_HORIZONTAL_BORDER, { "HBorder", 0 } },
-        { SCHATTR_DATA_TABLE_VERTICAL_BORDER, { "VBorder", 0 } },
-        { SCHATTR_DATA_TABLE_OUTLINE, { "Outline", 0 } },
-        { SCHATTR_DATA_TABLE_KEYS, { "Keys", 0 } },
+        { SCHATTR_DATA_TABLE_HORIZONTAL_BORDER, { u"HBorder"_ustr, 0 } },
+        { SCHATTR_DATA_TABLE_VERTICAL_BORDER, { u"VBorder"_ustr, 0 } },
+        { SCHATTR_DATA_TABLE_OUTLINE, { u"Outline"_ustr, 0 } },
+        { SCHATTR_DATA_TABLE_KEYS, { u"Keys"_ustr, 0 } },
     };
     return aPropertyMap;
 };

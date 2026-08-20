@@ -105,7 +105,7 @@ void lcl_addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& 
 
 void WrappedDataCaptionProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "DataCaption",
+    rOutProperties.emplace_back( u"DataCaption"_ustr,
                   PROP_CHART_DATAPOINT_DATA_CAPTION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND

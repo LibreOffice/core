@@ -107,140 +107,140 @@ void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
     //Properties for scaling:
-    rOutProperties.emplace_back( "Max",
+    rOutProperties.emplace_back( u"Max"_ustr,
                   PROP_AXIS_MAX,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "Min",
+    rOutProperties.emplace_back( u"Min"_ustr,
                   PROP_AXIS_MIN,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "StepMain",
+    rOutProperties.emplace_back( u"StepMain"_ustr,
                   PROP_AXIS_STEPMAIN,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "StepHelpCount",
+    rOutProperties.emplace_back( u"StepHelpCount"_ustr,
                   PROP_AXIS_STEPHELP_COUNT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     //deprecated property use 'StepHelpCount' instead
-    rOutProperties.emplace_back( "StepHelp",
+    rOutProperties.emplace_back( u"StepHelp"_ustr,
                   PROP_AXIS_STEPHELP,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "AutoMax",
+    rOutProperties.emplace_back( u"AutoMax"_ustr,
                   PROP_AXIS_AUTO_MAX,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "AutoMin",
+    rOutProperties.emplace_back( u"AutoMin"_ustr,
                   PROP_AXIS_AUTO_MIN,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "AutoStepMain",
+    rOutProperties.emplace_back( u"AutoStepMain"_ustr,
                   PROP_AXIS_AUTO_STEPMAIN,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "AutoStepHelp",
+    rOutProperties.emplace_back( u"AutoStepHelp"_ustr,
                   PROP_AXIS_AUTO_STEPHELP,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "AxisType",
+    rOutProperties.emplace_back( u"AxisType"_ustr,
                   PROP_AXIS_TYPE,
                   cppu::UnoType<sal_Int32>::get(), //type css::chart::ChartAxisType
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TimeIncrement",
+    rOutProperties.emplace_back( u"TimeIncrement"_ustr,
                   PROP_AXIS_TIME_INCREMENT,
                   cppu::UnoType<css::chart::TimeIncrement>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "ExplicitTimeIncrement",
+    rOutProperties.emplace_back( u"ExplicitTimeIncrement"_ustr,
                   PROP_AXIS_EXPLICIT_TIME_INCREMENT,
                   cppu::UnoType<css::chart::TimeIncrement>::get(),
                   beans::PropertyAttribute::READONLY |
                   beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "Logarithmic",
+    rOutProperties.emplace_back( u"Logarithmic"_ustr,
                   PROP_AXIS_LOGARITHMIC,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ReverseDirection",
+    rOutProperties.emplace_back( u"ReverseDirection"_ustr,
                   PROP_AXIS_REVERSEDIRECTION,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
     //todo: this property is missing in the API
-    rOutProperties.emplace_back( "Visible",
+    rOutProperties.emplace_back( u"Visible"_ustr,
                   PROP_AXIS_VISIBLE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "CrossoverPosition",
+    rOutProperties.emplace_back( u"CrossoverPosition"_ustr,
                   PROP_AXIS_CROSSOVER_POSITION,
                   cppu::UnoType<css::chart::ChartAxisPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "CrossoverValue",
+    rOutProperties.emplace_back( u"CrossoverValue"_ustr,
                   PROP_AXIS_CROSSOVER_VALUE,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "Origin",
+    rOutProperties.emplace_back( u"Origin"_ustr,
                   PROP_AXIS_ORIGIN,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "AutoOrigin",
+    rOutProperties.emplace_back( u"AutoOrigin"_ustr,
                   PROP_AXIS_AUTO_ORIGIN,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
     //Properties for interval marks:
-    rOutProperties.emplace_back( "Marks",
+    rOutProperties.emplace_back( u"Marks"_ustr,
                   PROP_AXIS_MARKS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "HelpMarks",
+    rOutProperties.emplace_back( u"HelpMarks"_ustr,
                   PROP_AXIS_HELPMARKS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MarkPosition",
+    rOutProperties.emplace_back( u"MarkPosition"_ustr,
                   PROP_AXIS_MARK_POSITION,
                   cppu::UnoType<css::chart::ChartAxisMarkPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
     //Properties for labels:
-    rOutProperties.emplace_back( "DisplayLabels",
+    rOutProperties.emplace_back( u"DisplayLabels"_ustr,
                   PROP_AXIS_DISPLAY_LABELS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
@@ -258,63 +258,63 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "LabelPosition",
+    rOutProperties.emplace_back( u"LabelPosition"_ustr,
                   PROP_AXIS_LABEL_POSITION,
                   cppu::UnoType<css::chart::ChartAxisLabelPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TextRotation",
+    rOutProperties.emplace_back( u"TextRotation"_ustr,
                   PROP_AXIS_TEXT_ROTATION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ArrangeOrder",
+    rOutProperties.emplace_back( u"ArrangeOrder"_ustr,
                   PROP_AXIS_ARRANGE_ORDER,
                   cppu::UnoType<css::chart::ChartAxisArrangeOrderType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TextBreak",
+    rOutProperties.emplace_back( u"TextBreak"_ustr,
                   PROP_AXIS_TEXTBREAK,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "TextCanOverlap",
+    rOutProperties.emplace_back( u"TextCanOverlap"_ustr,
                   PROP_AXIS_CAN_OVERLAP,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "StackedText",
+    rOutProperties.emplace_back( u"StackedText"_ustr,
                   PROP_AXIS_STACKEDTEXT,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // Properties related to bar charts:
-    rOutProperties.emplace_back( "Overlap",
+    rOutProperties.emplace_back( u"Overlap"_ustr,
                   PROP_AXIS_OVERLAP,
                   cppu::UnoType<sal_Int32>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "GapWidth",
+    rOutProperties.emplace_back( u"GapWidth"_ustr,
                   PROP_AXIS_GAP_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT );
 
     //Properties for display units:
-    rOutProperties.emplace_back( "DisplayUnits",
+    rOutProperties.emplace_back( u"DisplayUnits"_ustr,
                   PROP_AXIS_DISPLAY_UNITS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     //Properties for labels:
-    rOutProperties.emplace_back( "BuiltInUnit",
+    rOutProperties.emplace_back( u"BuiltInUnit"_ustr,
                   PROP_AXIS_BUILTINUNIT,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
@@ -322,13 +322,13 @@ void lcl_AddPropertiesToVector(
 
     // Compatibility option: starting from LibreOffice 5.1 the rotated
     // layout is preferred to staggering for axis labels.
-    rOutProperties.emplace_back( "TryStaggeringFirst",
+    rOutProperties.emplace_back( u"TryStaggeringFirst"_ustr,
                   PROP_AXIS_TRY_STAGGERING_FIRST,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "MajorOrigin",
+    rOutProperties.emplace_back( u"MajorOrigin"_ustr,
                   PROP_AXIS_MAJOR_ORIGIN,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND

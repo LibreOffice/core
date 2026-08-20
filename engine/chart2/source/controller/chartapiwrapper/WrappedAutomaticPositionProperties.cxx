@@ -106,7 +106,7 @@ enum
 
 void WrappedAutomaticPositionProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "AutomaticPosition",
+    rOutProperties.emplace_back( u"AutomaticPosition"_ustr,
                   PROP_CHART_AUTOMATIC_POSITION,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

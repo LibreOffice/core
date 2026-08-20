@@ -46,7 +46,7 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "Show",
+    rOutProperties.emplace_back( u"Show"_ustr,
                   PROP_GRID_SHOW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
@@ -56,7 +56,7 @@ void lcl_AddPropertiesToVector(
     // cx:minorGridlines carried an explicit <cx:spPr> child. When false or
     // unset, export must not emit a default spPr, since an empty gridlines
     // element means "use default formatting".
-    rOutProperties.emplace_back( "HasExplicitSpPr",
+    rOutProperties.emplace_back( u"HasExplicitSpPr"_ustr,
                   PROP_GRID_HAS_EXPLICIT_SPPR,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

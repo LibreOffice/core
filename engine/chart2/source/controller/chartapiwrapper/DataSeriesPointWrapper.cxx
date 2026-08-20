@@ -98,25 +98,25 @@ void lcl_AddPropertiesToVector_PointProperties(
     std::vector< Property > & rOutProperties )
 {
     //service chart::Chart3DBarProperties
-    rOutProperties.emplace_back( "SolidType",
+    rOutProperties.emplace_back( u"SolidType"_ustr,
                   PROP_SERIES_DATAPOINT_SOLIDTYPE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "SegmentOffset",
+    rOutProperties.emplace_back( u"SegmentOffset"_ustr,
                   PROP_SERIES_DATAPOINT_SEGMENT_OFFSET,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "D3DPercentDiagonal",
+    rOutProperties.emplace_back( u"D3DPercentDiagonal"_ustr,
                   PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "LabelSeparator",
+    rOutProperties.emplace_back( u"LabelSeparator"_ustr,
                   PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
@@ -134,25 +134,25 @@ void lcl_AddPropertiesToVector_PointProperties(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "PercentageNumberFormat",
+    rOutProperties.emplace_back( u"PercentageNumberFormat"_ustr,
                   PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "TextWordWrap",
+    rOutProperties.emplace_back( u"TextWordWrap"_ustr,
                   PROP_SERIES_DATAPOINT_TEXT_WORD_WRAP,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "LabelPlacement",
+    rOutProperties.emplace_back( u"LabelPlacement"_ustr,
                   PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.emplace_back( "TextRotation",
+    rOutProperties.emplace_back( u"TextRotation"_ustr,
                   PROP_SERIES_DATAPOINT_TEXT_ROTATION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -210,13 +210,13 @@ void lcl_AddPropertiesToVector_PointProperties(
 void lcl_AddPropertiesToVector_SeriesOnly(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "Axis",
+    rOutProperties.emplace_back( u"Axis"_ustr,
                   PROP_SERIES_ATTACHED_AXIS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.emplace_back( "ShowCustomLeaderLines",
+    rOutProperties.emplace_back( u"ShowCustomLeaderLines"_ustr,
                   PROP_SERIES_SHOW_CUSTOM_LEADERLINES,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

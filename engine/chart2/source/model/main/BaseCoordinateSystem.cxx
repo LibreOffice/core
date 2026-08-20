@@ -49,7 +49,7 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "SwapXAndYAxis",
+    rOutProperties.emplace_back( u"SwapXAndYAxis"_ustr,
                   PROP_COORDINATESYSTEM_SWAPXANDYAXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND

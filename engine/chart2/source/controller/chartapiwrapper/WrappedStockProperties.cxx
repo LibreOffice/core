@@ -257,13 +257,13 @@ enum
 
 void WrappedStockProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.emplace_back( "Volume",
+    rOutProperties.emplace_back( u"Volume"_ustr,
                   PROP_CHART_STOCK_VOLUME,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "UpDown",
+    rOutProperties.emplace_back( u"UpDown"_ustr,
                   PROP_CHART_STOCK_UPDOWN,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
