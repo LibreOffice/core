@@ -300,6 +300,10 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
 
     // Get the i18n framework numberings and add them to the listbox.
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xNumberFormatBox->get_widget(), std::numeric_limits<sal_uInt16>::max());
+
+    // Hide the “resize all pages” checkbox if the attribute isn’t used. tdf#173170
+    if (!rAttr.HasItem(SID_ATTR_RESIZE_ALL_PAGES))
+        m_xResizeAllPages->set_visible(false);
 }
 
 SvxPageDescPage::~SvxPageDescPage()
