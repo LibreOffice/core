@@ -252,7 +252,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
 
         m_bFootnoteEdn = bOld;
 
-        SAL_WARN_IF(!pWeakFormatFootnote, "sw.ww8", "Footnode deleted during its import");
+        SAL_WARN_IF(!pWeakFormatFootnote, "sw.ww8", "Footnote deleted during its import");
         if (pWeakFormatFootnote)
         {
             bFtEdOk = true;

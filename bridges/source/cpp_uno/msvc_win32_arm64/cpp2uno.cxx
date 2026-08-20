@@ -357,7 +357,7 @@ struct ProxyRtti
 // The following vtable RTTI data is based on how the code at
 // <https://github.com/llvm/llvm-project/blob/main/clang/lib/CodeGen/MicrosoftCXXABI.cpp> computes
 // such data, and on how <https://devblogs.microsoft.com/oldnewthing/20041025-00/?p=37483>
-// "Accessing the current module’s HINSTANCE from a static library" obtians __ImageBase:
+// "Accessing the current module’s HINSTANCE from a static library" obtains __ImageBase:
 
 struct RttiClassHierarchyDescriptor;
 

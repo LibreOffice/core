@@ -62,7 +62,7 @@ namespace uno {
     for each distinct name. For example, if GetType is called multiple times with
     the name "unoidl.test.PolyStruct<System.Boolean>" then the same instance of
     PolymorphicType is returned. This makes it possible to compare the instances
-    by reference, thas is using the operator "==".
+    by reference, that is using the operator "==".
 
     The polymorphic name, which is passed as second argument to PolymorphicType.GetType,
     contains a list of type names. Only type names common

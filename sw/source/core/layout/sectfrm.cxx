@@ -1168,7 +1168,7 @@ static void lcl_ColumnRefresh( SwSectionFrame* pSect, bool bFollow )
 void SwSectionFrame::CollectEndnotes( SwLayouter* pLayouter )
 {
     OSL_ENSURE( IsColLocked(), "CollectEndnotes: You love the risk?" );
-    // i73332: Section in footnode does not have columns!
+    // i73332: Section in footnote does not have columns!
     SwFrame* pLower = Lower();
     OSL_ENSURE( (pLower && pLower->IsColumnFrame()) || GetUpper()->IsFootnoteFrame(), "Where's my column?" );
 

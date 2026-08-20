@@ -623,7 +623,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 #endif
 
         // be careful: a field portion can be both: 0x01 (common field)
-        // or 0x02 (the follow of a footnode)
+        // or 0x02 (the follow of a footnote)
         if ( rInf.GetLast() && rInf.GetLast()->InFieldGrp() &&
              ! rInf.GetLast()->IsFootnotePortion() &&
              rInf.GetIdx() > rInf.GetLineStart() &&

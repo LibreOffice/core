@@ -176,7 +176,7 @@ public:
 
     virtual void ExportGrfBullet(const SwTextNode&) override;
 
-    /// Returns the relationd id
+    /// Returns the relation id
     OString AddRelation( const OUString& rType, std::u16string_view rTarget );
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) override { /* FIXME no-op for docx, most probably should not even be in MSWordExportBase */ }
@@ -208,7 +208,7 @@ public:
 
     virtual sal_uInt64 ReplaceCr( sal_uInt8 nChar ) override;
 
-    /// Returns the relationd id
+    /// Returns the relation id
     OString OutputChart( css::uno::Reference< css::frame::XModel > const & xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer );
     OString WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID);
     std::pair<OString,OString> WriteActiveXObject(const uno::Reference<css::drawing::XShape>& rxShape,

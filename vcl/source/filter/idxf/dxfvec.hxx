@@ -55,7 +55,7 @@ public:
 
     inline DXFVector(double fX=0.0, double fY=0.0, double fZ=0.0);
 
-    // summation/subtraktion:
+    // summation/subtraction:
     DXFVector & operator += (const DXFVector & rV);
     DXFVector   operator +  (const DXFVector & rV) const;
     DXFVector   operator -  (const DXFVector & rV) const;

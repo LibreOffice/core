@@ -542,7 +542,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
     if(rHint.GetId() == SfxHintId::SwPageFootnote)
     {
-        // currently the savest way:
+        // currently the safest way:
         static_cast<SwRootFrame*>(GetUpper())->SetSuperfluous();
         SetMaxFootnoteHeight(m_pDesc->GetFootnoteInfo().GetHeight());
         if(!GetMaxFootnoteHeight())

@@ -1828,7 +1828,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
 
 SwFootnoteFrame *SwFootnoteBossFrame::FindFootnote( const SwContentFrame *pRef, const SwTextFootnote *pAttr )
 {
-    // the easiest and savest way goes via the attribute
+    // the easiest and safest way goes via the attribute
     OSL_ENSURE( pAttr->GetStartNode(), "FootnoteAtr without StartNode." );
     SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
     SwContentNode *pNd = aIdx.GetNode().GetContentNode();
