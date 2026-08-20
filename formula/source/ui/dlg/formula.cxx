@@ -205,7 +205,7 @@ public:
                     bool _bSupportMatrix,
                     IFormulaEditorHelper* _pHelper,
                     const IFunctionManager* _pFunctionMgr,
-                    IControlReferenceHandler* _pDlg);
+                    IControlReferenceHandler& rDlg);
     ~FormulaDlg_Impl();
 };
 
@@ -216,7 +216,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
                                  bool _bSupportMatrix,
                                  IFormulaEditorHelper* _pHelper,
                                  const IFunctionManager* _pFunctionMgr,
-                                 IControlReferenceHandler* _pDlg)
+                                 IControlReferenceHandler& rDlg)
     : m_pHelper(_pHelper)
     , m_rDialog(rDialog)
     , m_bUserMatrixFlag(false)
@@ -269,10 +269,10 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     m_xMEdit->set_size_request(nWidth,
                                m_xMEdit->get_height_rows(5));
 
-    m_xEdRef->SetReferences(_pDlg, m_xFtEditName.get());
-    m_xRefBtn->SetReferences(_pDlg, m_xEdRef.get());
+    m_xEdRef->SetReferences(&rDlg, m_xFtEditName.get());
+    m_xRefBtn->SetReferences(&rDlg, m_xEdRef.get());
 
-    m_xParaWin.reset(new ParaWin(m_xParaWinBox.get(), _pDlg));
+    m_xParaWin.reset(new ParaWin(m_xParaWinBox.get(), &rDlg));
     m_xParaWin->Show();
     m_xParaWinBox->hide();
     m_xFtEditName->hide();
@@ -1793,7 +1793,7 @@ FormulaModalDialog::FormulaModalDialog(weld::Window* pParent,
     : GenericDialogController(pParent, u"formula/ui/formuladialog.ui"_ustr, u"FormulaDialog"_ustr)
     , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, false/*_bSupportFunctionResult*/,
                                   false/*_bSupportResult*/, false/*_bSupportMatrix*/,
-                                  this, _pFunctionMgr, &rDlg))
+                                  this, _pFunctionMgr, rDlg))
 {
     m_xDialog->set_title(m_pImpl->m_aTitle1);
 }
@@ -1848,7 +1848,7 @@ FormulaDlg::FormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, true/*_bSupportFunctionResult*/
                                              , true/*_bSupportResult*/
                                              , true/*_bSupportMatrix*/
-                                             , this, _pFunctionMgr, &rDlg))
+                                             , this, _pFunctionMgr, rDlg))
 {
     m_xDialog->set_title(m_pImpl->m_aTitle1);
 }
