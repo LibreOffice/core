@@ -53,4 +53,5 @@
 /// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />
 /// <reference path="./DocDispatcherExtensions.test.ts" />
+/// <reference path="./ContributedNotebookbarTabs.test.ts" />
 // NOTE: reference new tests here ...

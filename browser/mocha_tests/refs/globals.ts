@@ -149,6 +149,24 @@ globalThis.document = globalThis.window.document;
 
 (globalThis.window as any).L = (globalThis as any).L;
 
+// Old-style Leaflet factory inheritance: `window.L.Control.Foo = window.L.Control.extend({...})`
+// creates a subclass whose prototype is the given methods/properties object. The Handler stub
+// above already has a (no-op) `extend`; Control's stub class doesn't, so give it a real minimal
+// one - some source files (e.g. Control.Notebookbar.js) still use this pattern rather than an ES
+// `class ... extends`. Deliberately minimal: no `options`/`statics`/`includes` merging, since
+// nothing loaded into this test bundle so far uses those.
+(globalThis as any).L.Control.extend = function (this: any, props: any) {
+	const Parent = this;
+	function Sub(this: any, ...args: any[]) {
+		if (this.initialize) this.initialize.apply(this, args);
+	}
+	Sub.prototype = Object.create(Parent.prototype);
+	Object.assign(Sub.prototype, props);
+	Sub.prototype.constructor = Sub;
+	(Sub as any).extend = Parent.extend;
+	return Sub;
+};
+
 globalThis._ = (input: string) => input;
 (globalThis.ResizeObserver as any) = class _ResizeObserver {
 	constructor(firer: () => void) {

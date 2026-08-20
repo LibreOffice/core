@@ -77,7 +77,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 	},
 
 	getTabs: function() {
-		return this._filterExtensionsTab([
+		return this._filterExtensionsTab(this._insertContributedNotebookbarTabs([
 			{
 				'id': 'File-tab-label',
 				'text': _('File'),
@@ -177,11 +177,19 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'name': 'Help',
 				'accessibility': { focusBack: false, combination: 'Y', de: null }
 			}
-		]);
+		], this._getContributedNotebookbarTabNames(), function(tab) {
+			return {
+				'text': tab.name,
+				'id': tab.name + '-tab-label',
+				'name': tab.name,
+				'accessibility': { focusBack: false }
+			};
+		}));
 	},
 
 	getTabsJSON: function () {
-		return this._filterExtensionsTab([
+		var self = this;
+		return this._filterExtensionsTab(this._insertContributedNotebookbarTabs([
 			this.getFileTab(),
 			this.getHomeTab(),
 			this.getInsertTab(),
@@ -200,7 +208,9 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			this.getViewTab(),
 			this.getExtensionsTab(),
 			this.getHelpTab()
-		]);
+		], this._getContributedNotebookbarTabs(), function(tab) {
+			return self.getTabPage(tab.name, tab.items);
+		}, true));
 	},
 
 	getFullJSON: function (selectedId) {

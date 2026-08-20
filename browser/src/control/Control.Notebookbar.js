@@ -20,6 +20,9 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	_RTL: false,
 	_lastContexts: null,
 	_lastSelectedTabName: null,
+	// Counter for synthesizing unique ids for contributed separators/menus that have
+	// no natural id of their own (see _buildContributedItem).
+	_nextContributedId: 0,
 
 	// Contexts that are a modal toggle within whatever was already selected,
 	// not a navigation to a different part of the document: entering or
@@ -274,33 +277,40 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	// tab pages (getTabsJSON) are zipped by index in NotebookbarBuilder, so the
 	// label and its page must be dropped together or every following tab shifts
 	// by one.  Drop the Extensions label when extension support is disabled by
-	// runtime config, or when no extension is installed; the matching page is a
-	// null from getExtensionsTab in those cases and is dropped by the !t guard.
+	// runtime config, or when no extension has a sidebar panel; the matching
+	// page is a null from getExtensionsTab in those cases and is dropped by
+	// the !t guard.
 	_filterExtensionsTab: function(arr) {
-		var noExtensions = Object.keys(app.map._extensions || {}).length === 0;
+		var exts = app.map._extensions || {};
+		var hideExtensionsTab = !window.enableExperimentalFeatures || !Object.keys(exts).some(
+			function(id) { return !!exts[id].options.manifest.entry; });
 		return arr.filter(function(t) {
 			if (!t) return false;
-			if (t.name === 'Extensions' && (!window.enableExperimentalFeatures || noExtensions))
+			if (t.name === 'Extensions' && hideExtensionsTab)
 				return false;
 			return true;
 		});
 	},
 
 	// Shared entry used by each doc-type notebookbar's getTabsJSON to build
-	// the "Extensions" tab: one bigcustomtoolitem per loaded manifest, or a
-	// fixed-text placeholder when discovery hasn't yet populated
-	// app.map._extensions.  Click ids start with "extension-toggle-" so
+	// the "Extensions" tab: one bigcustomtoolitem toggle per loaded manifest
+	// that has a sidebar panel - a commands-only extension (no `entry`) has
+	// nothing for this toggle to open, and reaches the notebookbar solely
+	// through its own contributed tab(s), see getContributedNotebookbarTabs
+	// below.  Click ids start with "extension-toggle-" so
 	// docdispatcher.dispatch routes them to ext.toggle().  Call
 	// notebookbar.refresh() after loadExtensions resolves to rebuild this
 	// tab against the real extension list.
 	getExtensionsTab: function() {
 		var exts = app.map._extensions || {};
-		var ids = Object.keys(exts).sort();
-		// Drop the Extensions tab entirely when no extension is installed:
-		// returning null here lets _filterExtensionsTab strip it.  refresh()
-		// (called once Control.Extension.loadExtensions resolves) rebuilds
-		// the notebookbar, so the tab appears as soon as discovery populates
-		// app.map._extensions.
+		var ids = Object.keys(exts)
+			.filter(function(id) { return !!exts[id].options.manifest.entry; })
+			.sort();
+		// Drop the Extensions tab entirely when no extension has a sidebar
+		// panel: returning null here lets _filterExtensionsTab strip it.
+		// refresh() (called once Control.Extension.loadExtensions resolves)
+		// rebuilds the notebookbar, so the tab appears as soon as discovery
+		// populates app.map._extensions.
 		if (ids.length === 0)
 			return null;
 		var content = [];
@@ -328,6 +338,235 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			'type': 'spacer',
 		});
 		return this.getTabPage('Extensions', content);
+	},
+
+	// Builds one notebookbar item from a contributed group's item descriptor -
+	// button/separator/menu, the only three kinds an extension may declare (see
+	// browser/extensions/README.md).  Returns null (and warns) for an unknown
+	// command id or an item type outside that list, so one bad entry is dropped
+	// rather than breaking the whole tab.
+	_buildContributedItem: function(extId, commands, baseUrl, warnContext, item) {
+		function findCommand(commandId) {
+			var command = commands.filter(function(c) { return c.id === commandId; })[0];
+			if (!command) {
+				console.warn(
+					'extension ' + extId + ': ' + warnContext +
+					' references unknown command "' + commandId + '"');
+			}
+			return command;
+		}
+		if (item.type === 'separator') {
+			return {
+				'id': 'ext:' + extId + ':sep:' + (this._nextContributedId++),
+				'type': 'separator',
+				'orientation': 'vertical',
+			};
+		}
+		if (item.type === 'button') {
+			var command = findCommand(item.command);
+			if (!command) return null;
+			return {
+				// A distinct DOM/model id per occurrence - the same command can be placed
+				// as more than one button (different tabs, or both a button and a menu
+				// entry), so extId+command alone is not unique.  `command` (below) is what
+				// docdispatcher's ext: routing actually reads and stays extId+command.
+				'id': 'ext:' + extId + ':btn:' + (this._nextContributedId++),
+				'type': item.size === 'large' ? 'bigcustomtoolitem' : 'customtoolitem',
+				'text': command.title,
+				'icon': command.icon ? baseUrl + command.icon : undefined,
+				'command': 'ext:' + extId + ':' + item.command,
+			};
+		}
+		if (item.type === 'menu') {
+			var self = this;
+			var menu = (item.items || []).map(function(entry) {
+				var entryCommand = findCommand(entry.command);
+				if (!entryCommand) return null;
+				return {
+					'id': 'ext:' + extId + ':entry:' + (self._nextContributedId++),
+					'text': entryCommand.title,
+					'icon': entryCommand.icon ? baseUrl + entryCommand.icon : undefined,
+					'action': 'ext:' + extId + ':' + entry.command,
+				};
+			}).filter(function(entry) { return !!entry; });
+			return {
+				'id': 'ext:' + extId + ':menu:' + (this._nextContributedId++),
+				'type': 'menubutton',
+				'text': item.title,
+				'icon': item.icon ? baseUrl + item.icon : undefined,
+				'menu': menu,
+			};
+		}
+		console.warn(
+			'extension ' + extId + ': ' + warnContext +
+			' has an item of unknown type "' + item.type + '"');
+		return null;
+	},
+
+	// Builds one overflowgroup from a contributed group descriptor - a labeled
+	// cluster of items, collapsing into a dropdown when the tab is too narrow,
+	// the same as every core notebookbar group.
+	_buildContributedGroup: function(extId, commands, baseUrl, group) {
+		var self = this;
+		var warnContext = 'notebookbar group "' + group.id + '"';
+		var children = (group.items || []).map(function(item) {
+			return self._buildContributedItem(extId, commands, baseUrl, warnContext, item);
+		}).filter(function(item) { return !!item; });
+		return {
+			// group.id (see ExtensionNotebookbarGroup in Control.Extension.ts) is only
+			// ever used in a console warning about one of this group's own items - it
+			// isn't required to be unique, so it can't be used verbatim as the DOM/model
+			// id here.
+			'id': 'ext:' + extId + ':group:' + (this._nextContributedId++),
+			'type': 'overflowgroup',
+			'name': group.label,
+			'children': children,
+		};
+	},
+
+	// Cheap companion to _getContributedNotebookbarTabs below, for getTabs() (the label
+	// strip): that build only ever reads a descriptor's name/insertBefore/insertAfter,
+	// never `items`, so this skips building any group/button/menu tree - and, since it
+	// never touches _nextContributedId, the ids that land in the rendered page (built
+	// separately by _getContributedNotebookbarTabs for getTabsJSON) no longer depend on
+	// whether the label pass or the page pass happens to run first.
+	_getContributedNotebookbarTabNames: function() {
+		if (!window.enableExperimentalFeatures) return [];
+		var exts = app.map._extensions || {};
+		var tabs = [];
+		Object.keys(exts).sort().forEach(function(extId) {
+			var contributed = exts[extId].options.manifest.contributes
+				&& exts[extId].options.manifest.contributes.notebookbar;
+			if (!contributed) return;
+			contributed.forEach(function(tabSpec) {
+				tabs.push({
+					extId: extId,
+					name: tabSpec.tab,
+					insertBefore: tabSpec.insertBefore,
+					insertAfter: tabSpec.insertAfter,
+				});
+			});
+		});
+		return tabs;
+	},
+
+	// Collects every loaded extension's contributes.notebookbar into a flat list of
+	// { extId, name, insertBefore, insertAfter, items } descriptors - one per brand-new
+	// tab an extension asked for.  `items` is a fully-built content array of
+	// overflowgroup/separator entries (a vertical separator is inserted between each
+	// pair of groups automatically, matching the visual rhythm of a core notebookbar
+	// tab), ready to hand to getTabPage.  Only getTabsJSON() needs this - see
+	// _getContributedNotebookbarTabNames above for the cheaper label-only equivalent.
+	// Also the one place a duplicate group.id within one tab gets a console warning -
+	// called exactly once per rebuild (unlike _insertContributedNotebookbarTabs below,
+	// which runs once for the label pass and once for the page pass), so warning here
+	// avoids the double-warning that adding the check there would produce.
+	_getContributedNotebookbarTabs: function() {
+		if (!window.enableExperimentalFeatures) return [];
+		var self = this;
+		var exts = app.map._extensions || {};
+		var tabs = [];
+		Object.keys(exts).sort().forEach(function(extId) {
+			var manifest = exts[extId].options.manifest;
+			var contributed = manifest.contributes && manifest.contributes.notebookbar;
+			if (!contributed) return;
+			var commands = manifest.contributes.commands || [];
+			var baseUrl = exts[extId].options.baseUrl;
+			contributed.forEach(function(tabSpec) {
+				var items = [];
+				var seenGroupIds = {};
+				(tabSpec.groups || []).forEach(function(group, i) {
+					if (group && Object.prototype.hasOwnProperty.call(seenGroupIds, group.id)) {
+						console.warn(
+							'extension ' + extId + ': notebookbar tab "' + tabSpec.tab +
+							'" has more than one group with id "' + group.id + '"');
+					}
+					if (group) seenGroupIds[group.id] = true;
+					if (i > 0) {
+						// Scoped by the shared counter, not by extId+i: the same index i
+						// recurs once per tab, so an extension with more than one
+						// multi-group tab would otherwise produce this same id twice.
+						items.push({
+							'id': 'ext:' + extId + ':groupsep:' + (self._nextContributedId++),
+							'type': 'separator',
+							'orientation': 'vertical',
+						});
+					}
+					items.push(self._buildContributedGroup(extId, commands, baseUrl, group));
+				});
+				tabs.push({
+					extId: extId,
+					name: tabSpec.tab,
+					insertBefore: tabSpec.insertBefore,
+					insertAfter: tabSpec.insertAfter,
+					items: items,
+				});
+			});
+		});
+		return tabs;
+	},
+
+	// Splices `tabs` (either from _getContributedNotebookbarTabNames, for the label
+	// array from a doc type's getTabs(), or from _getContributedNotebookbarTabs, for
+	// the page array from its getTabsJSON()) into arr, positioned by matching
+	// insertBefore/insertAfter against an existing entry's `name` (both label objects
+	// and, since getTabPage now tags its return value with `name` too, tabpage objects
+	// carry one), defaulting to the end of the ribbon when neither is given or the
+	// named anchor isn't found.  buildEntry turns one descriptor into whichever shape
+	// this particular array needs.  The caller decides which of the two tab-list
+	// getters to call - taking the already-built list as a parameter, rather than this
+	// function calling one of them itself, is what lets getTabs() skip building the
+	// (for it, unused) item/group/button tree entirely instead of building and
+	// discarding it.
+	//
+	// `validate`, when true, warns about the manifest-authoring mistakes this function
+	// can actually detect - a contributed tab name colliding with an existing tab, both
+	// insertBefore and insertAfter set on the same tab (insertBefore silently wins), or
+	// either one naming a tab that doesn't exist (silently falls back to the end of the
+	// ribbon).  Pass true from exactly one of the two calls per doc type (getTabsJSON's)
+	// so a misconfigured tab is reported once per rebuild, not twice.
+	_insertContributedNotebookbarTabs: function(arr, tabs, buildEntry, validate) {
+		var builtInNames = null;
+		if (validate) {
+			builtInNames = {};
+			arr.forEach(function(t) { if (t && t.name) builtInNames[t.name] = true; });
+		}
+		tabs.forEach(function(tab) {
+			if (validate) {
+				if (Object.prototype.hasOwnProperty.call(builtInNames, tab.name)) {
+					console.warn(
+						'extension ' + tab.extId + ': notebookbar tab "' + tab.name +
+						'" collides with an existing tab name');
+				}
+				if (tab.insertBefore && tab.insertAfter) {
+					console.warn(
+						'extension ' + tab.extId + ': notebookbar tab "' + tab.name +
+						'" sets both insertBefore and insertAfter; insertBefore wins');
+				}
+			}
+			var idx = arr.length;
+			if (tab.insertBefore) {
+				var before = arr.findIndex(function(t) { return t && t.name === tab.insertBefore; });
+				if (before >= 0) {
+					idx = before;
+				} else if (validate) {
+					console.warn(
+						'extension ' + tab.extId + ': notebookbar tab "' + tab.name +
+						'": insertBefore names unknown tab "' + tab.insertBefore + '"');
+				}
+			} else if (tab.insertAfter) {
+				var after = arr.findIndex(function(t) { return t && t.name === tab.insertAfter; });
+				if (after >= 0) {
+					idx = after + 1;
+				} else if (validate) {
+					console.warn(
+						'extension ' + tab.extId + ': notebookbar tab "' + tab.name +
+						'": insertAfter names unknown tab "' + tab.insertAfter + '"');
+				}
+			}
+			arr.splice(idx, 0, buildEntry(tab));
+		});
+		return arr;
 	},
 
 	// Rebuild the notebookbar from a fresh tabsJSON.  Used by

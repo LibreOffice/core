@@ -98,8 +98,8 @@
 
 /* global app */
 
-// A command an extension registers for use in menu contributions (see
-// ExtensionContributes below).  `script` is a path to a JS file (resolved
+// A command an extension registers for use in menu/notebookbar contributions
+// (see ExtensionContributes below).  `script` is a path to a JS file (resolved
 // the same way `entry`/`icon` are, relative to the manifest) whose top-level
 // binding named `commands` is an object mapping command ids to functions;
 // discovery fetches it once and fills in `source` with the raw text.
@@ -108,21 +108,80 @@
 // cool.callRemote ships a function's source from inside the sidebar iframe.
 // More than one command may name the same `script` file, sharing its
 // `commands` object rather than each getting a one-function file of its own.
+// `icon` is shown on a notebookbar button or dropdown-menu entry that
+// references this command; the classic menu never renders it.
 interface ExtensionCommand {
 	id: string;
 	title: string;
+	icon?: string;
 	script: string;
 	source?: string;
 }
 
-// Places in the classic menu an extension can put its commands into,
-// without needing its sidebar `entry` (if any) to be open.  `menus` maps an
-// existing top-level menu id (the `id` field already used in each doc
-// type's static menu array in Control.Menubar.ts, e.g. 'insert') to the
-// command ids appended to the end of that menu.
+// One notebookbar button, referencing a command declared in
+// contributes.commands.  Its label/icon come from that command, not from
+// this item, so the same command reads the same wherever it's placed.
+// `size` chooses bigcustomtoolitem (icon above label) or customtoolitem
+// (icon inline with label); defaults to 'small'.
+interface ExtensionNotebookbarButton {
+	type: 'button';
+	command: string;
+	size?: 'large' | 'small';
+}
+
+// A vertical divider between items within a notebookbar group.
+interface ExtensionNotebookbarSeparator {
+	type: 'separator';
+}
+
+// A notebookbar dropdown button.  `items` is deliberately flat - one level
+// of commands, no nested menu - there is no submenu-of-a-submenu case to
+// design or validate.
+interface ExtensionNotebookbarMenu {
+	type: 'menu';
+	title: string;
+	icon?: string;
+	items: { command: string }[];
+}
+
+type ExtensionNotebookbarItem =
+	| ExtensionNotebookbarButton
+	| ExtensionNotebookbarSeparator
+	| ExtensionNotebookbarMenu;
+
+// A labeled cluster of notebookbar items, corresponding to one ribbon group
+// (e.g. Writer's "Clipboard" or "Font" group).  `label` is the caption shown
+// under the group; `id` only identifies the group in a console warning about
+// one of its own items (an unknown command or item type) - it does not need
+// to be unique, not even within this one group array.
+interface ExtensionNotebookbarGroup {
+	id: string;
+	label: string;
+	items: ExtensionNotebookbarItem[];
+}
+
+// Places in the classic menu and the notebookbar an extension can put its
+// commands into, without needing its sidebar `entry` (if any) to be open.
+// `menus` maps an existing top-level menu id (the `id` field already used in
+// each doc type's static menu array in Control.Menubar.ts, e.g. 'insert') to
+// the command ids appended to the end of that menu.  `notebookbar` is a list
+// of brand-new tabs the extension adds to the ribbon; each names its own
+// `tab` label, positions itself relative to an existing tab via
+// `insertBefore`/`insertAfter` (mutually exclusive; omitting both appends it
+// at the end), and lays out its own content as `groups` of the three item
+// kinds above - not raw notebookbar item JSON, so an extension can't place
+// arbitrary layout into the ribbon.
+interface ExtensionNotebookbarTab {
+	tab: string;
+	insertBefore?: string;
+	insertAfter?: string;
+	groups: ExtensionNotebookbarGroup[];
+}
+
 interface ExtensionContributes {
 	commands?: ExtensionCommand[];
 	menus?: { [menuId: string]: string[] };
+	notebookbar?: ExtensionNotebookbarTab[];
 }
 
 interface ExtensionManifest {

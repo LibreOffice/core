@@ -21,8 +21,8 @@ of whether the extension also declares commands.
 
 ## contributes
 
-Lets an extension put commands directly into the classic menu, without needing its
-sidebar panel (if it has one) to ever be opened.
+Lets an extension put commands directly into the classic menu and/or the notebookbar
+(ribbon), without needing its sidebar panel (if it has one) to ever be opened.
 `contributes` is a string naming a separate JSON file (relative to the manifest,
 resolved the same way `entry`/`icon` are) holding the object described below -
 kept out of `manifest.json` itself so an extension's UI wiring, however long it
@@ -44,11 +44,26 @@ ui.json:
 ```json
 {
   "commands": [
-    { "id": "insertDate", "title": "Insert Date", "script": "commands/dates.js" }
+    { "id": "insertDate", "title": "Insert Date", "icon": "icon.svg", "script": "commands/dates.js" }
   ],
   "menus": {
     "insert": ["insertDate"]
-  }
+  },
+  "notebookbar": [
+    {
+      "tab": "Commands Demo",
+      "insertAfter": "Home",
+      "groups": [
+        {
+          "id": "dateGroup",
+          "label": "Date",
+          "items": [
+            { "type": "button", "command": "insertDate", "size": "large" }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 
@@ -68,14 +83,73 @@ ui.json:
 
   More than one command may name the same `script` file - add another key to its
   `commands` object rather than giving each command a one-function file of its own.
-  A referenced function runs when its command is chosen from the menu. It only has
-  access to the UNO API shown above - no DOM, no network, no other browser
-  capability - and it runs without ever loading a visible panel, so the command
-  works whether or not the extension has a sidebar UI at all.
+  A referenced function runs when its command is chosen from the menu or
+  notebookbar. It only has access to the UNO API shown above - no DOM, no network,
+  no other browser capability - and it runs without ever loading a visible panel,
+  so the command works whether or not the extension has a sidebar UI at all. `icon`
+  is optional and shown on a notebookbar button or dropdown entry that references
+  this command - the classic menu never renders it.
 
 - `contributes.menus` maps an existing top-level classic-menu id (`file`, `editmenu`,
   `view`, `insert`, `format`, and so on, depending on the document type) to a list of
   command ids appended to the end of that menu.
+
+- `contributes.notebookbar` is a list of brand-new ribbon tabs the extension adds -
+  `{ tab, insertBefore?, insertAfter?, groups }`. `tab` is the new tab's own
+  label and must not collide with an existing tab's name (`Home`, `Insert`, `Format`,
+  ...). `insertBefore`/`insertAfter` (mutually exclusive) name an *existing* tab to
+  position the new one next to; omitting both appends it at the end of the ribbon.
+  There is no way to name an existing tab and land content inside it - an extension
+  only ever gets its own tab(s), never a foothold in Home/Insert/etc. - matching how
+  Microsoft's modern Office Add-ins platform restricts ribbon extensibility to "your
+  own tab, positioned next to a built-in one," rather than the older, more permissive
+  model of injecting straight into a built-in tab's own groups.
+
+  `groups` is a closed, three-node schema for what a tab may contain - not raw
+  notebookbar layout, and not HTML:
+
+  ```json
+  "groups": [
+    {
+      "id": "dateGroup",
+      "label": "Date",
+      "items": [
+        { "type": "button", "command": "insertDate", "size": "large" },
+        { "type": "separator" },
+        { "type": "button", "command": "insertTime" },
+        {
+          "type": "menu",
+          "title": "Formats",
+          "icon": "formats.svg",
+          "items": [
+            { "command": "insertIsoDate" },
+            { "command": "insertLocaleDate" }
+          ]
+        }
+      ]
+    }
+  ]
+  ```
+
+  A **group** (`{ id, label, items }`) is a labeled cluster, like Writer's "Clipboard"
+  or "Font" group - it collapses into a dropdown on its own when the window is too
+  narrow, the same as every built-in group. Each entry in `items` is one of exactly
+  three kinds:
+  - **button** - `{ type: "button", command, size?: "large" | "small" }` (default
+    `"small"`). `size` chooses a tall icon-over-label button or a compact
+    icon-beside-label one. Label and icon come from the referenced command, not from
+    the button itself.
+  - **separator** - `{ type: "separator" }`, a vertical divider between items in the
+    same group. (A separator is also inserted automatically between groups - not
+    something you declare.)
+  - **menu** - `{ type: "menu", title, icon?, items: [{ command }, ...] }`, a dropdown
+    button. `items` is deliberately flat - one level of commands, no nested menu -
+    there is no submenu-of-a-submenu case.
+
+  Nothing else is accepted: no raw containers, comboboxes, checkboxes, or other
+  layout primitives. A `command` that isn't declared in `contributes.commands`, or an
+  item whose `type` isn't one of the three above, is dropped with a console warning
+  rather than breaking the rest of the tab.
 
 Command ids are namespaced internally so two extensions can never collide.
 

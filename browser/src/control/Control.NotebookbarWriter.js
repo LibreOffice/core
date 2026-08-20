@@ -32,7 +32,7 @@ var formulaTabName = 'Formula';
 window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 
 	getTabs: function() {
-		return this._filterExtensionsTab([
+		return this._filterExtensionsTab(this._insertContributedNotebookbarTabs([
 			{
 				'text': _('File'),
 				'id': fileTabName + '-tab-label',
@@ -124,11 +124,19 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'context': 'Math',
 				'accessibility': { focusBack: true, combination: 'V', de: 'Y' }
 			}
-		]);
+		], this._getContributedNotebookbarTabNames(), function(tab) {
+			return {
+				'text': tab.name,
+				'id': tab.name + '-tab-label',
+				'name': tab.name,
+				'accessibility': { focusBack: true }
+			};
+		}));
 	},
 
 	getTabsJSON: function () {
-		return this._filterExtensionsTab([
+		var self = this;
+		return this._filterExtensionsTab(this._insertContributedNotebookbarTabs([
 			this.getFileTab(),
 			this.getHomeTab(),
 			this.getInsertTab(),
@@ -145,7 +153,9 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			this.getExtensionsTab(),
 			this.getHelpTab(),
 			this.getFormulaTab()
-		]);
+		], this._getContributedNotebookbarTabs(), function(tab) {
+			return self.getTabPage(tab.name, tab.items);
+		}, true));
 	},
 
 	getFullJSON: function (selectedId) {
@@ -3418,11 +3428,17 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 		});
 	},
 
+	// `name` is not consumed by the ribbon renderer - it exists so a tabpage returned
+	// here can be found by name later (e.g. by
+	// Control.Notebookbar.js's _insertContributedNotebookbarTabs, positioning a
+	// contributed tab relative to this one) without relying on this array staying
+	// index-aligned with the separate getTabs() labels array.
 	getTabPage: function(tabName, content) {
 		return {
 			'id': '',
 			'type': 'tabpage',
 			'text': '',
+			'name': tabName,
 			'enabled': 'true',
 			'children': [
 				{

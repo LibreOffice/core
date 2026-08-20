@@ -247,6 +247,7 @@
 /// <reference path="../src/control/Control.UserList.ts" />
 /// <reference path="../src/control/Control.SaveState.tsx" />
 /// <reference path="../src/control/Control.NotebookbarBase.ts" />
+/// <reference path="../src/control/Control.Notebookbar.js" />
 /// <reference path="../src/control/jsdialog/Definitions.MenuCommands.ts" />
 /// <reference path="../src/control/jsdialog/Control.ts" />
 /// <reference path="../src/control/jsdialog/Control.ContextMenu.ts" />

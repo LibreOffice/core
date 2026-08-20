@@ -3,10 +3,127 @@
         {
             "id": "insertDate",
             "title": "Insert Date",
+            "icon": "icon.svg",
             "script": "commands/dates.js"
+        },
+        {
+            "id": "insertTime",
+            "title": "Insert Time",
+            "icon": "icon.svg",
+            "script": "commands/dates.js"
+        },
+        {
+            "id": "insertIsoDate",
+            "title": "ISO 8601",
+            "script": "commands/dates.js"
+        },
+        {
+            "id": "insertLocaleDate",
+            "title": "Long Format",
+            "script": "commands/dates.js"
+        },
+        {
+            "id": "makeBold",
+            "title": "Bold",
+            "icon": "icon.svg",
+            "script": "commands/formatting.js"
+        },
+        {
+            "id": "makeItalic",
+            "title": "Italic",
+            "icon": "icon.svg",
+            "script": "commands/formatting.js"
+        },
+        {
+            "id": "makeUnderline",
+            "title": "Underline",
+            "icon": "icon.svg",
+            "script": "commands/formatting.js"
+        },
+        {
+            "id": "heading1",
+            "title": "Heading 1",
+            "script": "commands/headings.js"
+        },
+        {
+            "id": "heading2",
+            "title": "Heading 2",
+            "script": "commands/headings.js"
+        },
+        {
+            "id": "heading3",
+            "title": "Heading 3",
+            "script": "commands/headings.js"
+        },
+        {
+            "id": "clearFormatting",
+            "title": "Clear Formatting",
+            "icon": "icon.svg",
+            "script": "commands/formatting.js"
+        },
+        {
+            "id": "insertWordCount",
+            "title": "Word Count",
+            "icon": "icon.svg",
+            "script": "commands/insertWordCount.js"
         }
     ],
     "menus": {
         "insert": ["insertDate"]
-    }
+    },
+    "notebookbar": [
+        {
+            "tab": "Commands Demo",
+            "insertAfter": "Home",
+            "groups": [
+                {
+                    "id": "dateGroup",
+                    "label": "Date & Time",
+                    "items": [
+                        { "type": "button", "command": "insertDate", "size": "large" },
+                        { "type": "separator" },
+                        { "type": "button", "command": "insertTime" },
+                        {
+                            "type": "menu",
+                            "title": "Formats",
+                            "icon": "icon.svg",
+                            "items": [
+                                { "command": "insertIsoDate" },
+                                { "command": "insertLocaleDate" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "formattingGroup",
+                    "label": "Formatting",
+                    "items": [
+                        { "type": "button", "command": "makeBold" },
+                        { "type": "button", "command": "makeItalic" },
+                        { "type": "button", "command": "makeUnderline" },
+                        { "type": "separator" },
+                        {
+                            "type": "menu",
+                            "title": "Heading",
+                            "icon": "icon.svg",
+                            "items": [
+                                { "command": "heading1" },
+                                { "command": "heading2" },
+                                { "command": "heading3" }
+                            ]
+                        },
+                        { "type": "separator" },
+                        { "type": "button", "command": "clearFormatting" }
+                    ]
+                },
+                {
+                    "id": "infoGroup",
+                    "label": "Info",
+                    "items": [
+                        { "type": "button", "command": "insertWordCount" }
+                    ]
+                }
+            ]
+        }
+    ]
 }
