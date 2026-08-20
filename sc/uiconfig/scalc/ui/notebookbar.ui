@@ -12270,7 +12270,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnPrintPrint">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:Print</property>
                               </object>
                               <packing>
@@ -12296,7 +12295,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnTogglePrintGrid">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:TogglePrintGrid</property>
                               </object>
                               <packing>
@@ -12321,7 +12319,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnTogglePrintColRowHeader">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:TogglePrintColRowHeader</property>
                               </object>
                               <packing>
@@ -12346,7 +12343,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnTogglePrintComment">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:TogglePrintComments</property>
                               </object>
                               <packing>
@@ -12371,7 +12367,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnTogglePrintZeroValues">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:TogglePrintZeroValues</property>
                               </object>
                               <packing>
@@ -12433,7 +12428,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnPrintClosePreview">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:ClosePreview</property>
                               </object>
                               <packing>
@@ -13641,7 +13635,6 @@
                             <child>
                               <object class="GtkToolButton" id="btnToolsAutoCorrectDlg">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="action-name">.uno:AutoCorrectDlg</property>
                               </object>
                               <packing>
