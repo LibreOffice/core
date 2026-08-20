@@ -3,7 +3,7 @@
  <office:body>
   <office:spreadsheet>
    <table:table table:name="Sheet1">
-    <table:table-column table:number-columns-repeated="5"/>
+    <table:table-column table:number-columns-repeated="11"/>
     <table:table-row table:number-rows-repeated="9">
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
@@ -16,6 +16,20 @@
        <text:p>Comment 1</text:p>
       </office:annotation>
       <text:p>Cell 2</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:number-rows-repeated="49">
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell office:value-type="string">
+      <office:annotation svg:width="2.899cm" svg:height="1.799cm" svg:x="24cm" svg:y="30cm">
+       <dc:creator>Unknown Author</dc:creator>
+       <dc:date>2026-08-14T19:50:29</dc:date>
+       <text:p>Comment 2</text:p>
+      </office:annotation>
+      <text:p>Far cell</text:p>
      </table:table-cell>
     </table:table-row>
    </table:table>

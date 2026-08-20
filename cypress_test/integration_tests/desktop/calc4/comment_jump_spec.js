@@ -99,8 +99,9 @@ describe(['tagdesktop'], 'Comment on a cell in the frozen area', function() {
 describe(['tagdesktop'], 'Comment on a cell outside the frozen area', function() {
 
 	beforeEach(function() {
-		// comment_frozen_panes.fods holds one comment, on E10. The test freezes
-		// row 1 and column A, so the comment's cell scrolls with both axes.
+		// comment_frozen_panes.fods holds a comment on E10, the one every test
+		// here jumps to, and a second one far away on K60. Each test freezes the
+		// rows and columns it needs, so E10 scrolls with both axes.
 		helper.setupAndLoadDocument('calc/comment_frozen_panes.fods');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
@@ -112,9 +113,26 @@ describe(['tagdesktop'], 'Comment on a cell outside the frozen area', function()
 	function getCommentCellRectangle(win) {
 		const section = win.app.sectionContainer.getSectionWithName(
 			win.app.CSections.CommentList.name);
-		const comment = section.sectionProperties.commentList[0];
+		const comment = section.sectionProperties.commentList.find(
+			(candidate) => candidate.sectionProperties.data.id === '1');
 		return win.app.map._docLayer._cellRangeToTwipRect(
 			comment.sectionProperties.data.cellRange).toRectangle();
+	}
+
+	// Freezes at the given cell, so the rows above it and the columns left of it
+	// keep their place on screen.
+	function freezeAt(win, address) {
+		helper.typeIntoInputField(helper.addressInputSelector, address);
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:FreezePanes');
+		});
+		helper.waitForMapState('.uno:FreezePanes', 'true');
+		// The split position arrives with its own message, so let it settle.
+		cy.getFrameWindow().should((frameWindow) => {
+			expect(frameWindow.app.calc.splitCoordinate.x, 'frozen columns').to.be.greaterThan(0);
+			expect(frameWindow.app.calc.splitCoordinate.y, 'frozen rows').to.be.greaterThan(0);
+		});
+		cy.then(function() { return helper.processToIdle(win); });
 	}
 
 	// The comment's cell counts as on screen only when it sits inside one of the
@@ -160,18 +178,7 @@ describe(['tagdesktop'], 'Comment on a cell outside the frozen area', function()
 	it('jumping to the comment brings its cell on screen', function() {
 		const win = this.win;
 
-		// The freeze splits at the cursor, so B2 freezes row 1 and column A.
-		helper.typeIntoInputField(helper.addressInputSelector, 'B2');
-		cy.then(function() {
-			win.app.map.sendUnoCommand('.uno:FreezePanes');
-		});
-		helper.waitForMapState('.uno:FreezePanes', 'true');
-		// The split position arrives with its own message, so let it settle.
-		cy.getFrameWindow().should((frameWindow) => {
-			expect(frameWindow.app.calc.splitCoordinate.x, 'frozen columns').to.be.greaterThan(0);
-			expect(frameWindow.app.calc.splitCoordinate.y, 'frozen rows').to.be.greaterThan(0);
-		});
-		cy.then(function() { return helper.processToIdle(win); });
+		freezeAt(win, 'B2');
 
 		// Scrolling has to take the cell away first, or the jump would have
 		// nothing to bring back and the check below would hold either way.
@@ -196,6 +203,48 @@ describe(['tagdesktop'], 'Comment on a cell outside the frozen area', function()
 		cy.cGet('#comment-container-1').should('be.visible');
 		cy.getFrameWindow().should((frameWindow) => {
 			assertCommentCellIsOnScreen(frameWindow);
+		});
+	});
+
+	// Freezing at E10 puts the comment's own cell on both split lines. A cell that
+	// starts exactly where the frozen rows and columns end belongs to the pane that
+	// scrolls, so it goes off screen with it and the jump has to fetch it back.
+	it('jumping to a comment on the first cell after the split brings it on screen',
+		function() {
+			const win = this.win;
+
+			freezeAt(win, 'E10');
+
+			cy.then(function() { return scrollFarAway(win); });
+			cy.getFrameWindow().should((frameWindow) => {
+				assertCommentCellIsOffScreen(frameWindow);
+			});
+			cy.then(function() { return goToComment(win); });
+
+			cy.cGet('#comment-container-1').should('be.visible');
+			cy.getFrameWindow().should((frameWindow) => {
+				assertCommentCellIsOnScreen(frameWindow);
+			});
+		});
+
+	// The document opens with E10 on screen while the second comment, on K60, is
+	// far outside the view. Showing the comments walks the whole list, and no
+	// comment in it may drag the view along.
+	it('jumping to a comment already on screen leaves the view where it is', function() {
+		const win = this.win;
+		let before;
+
+		cy.getFrameWindow().then((frameWindow) => {
+			assertCommentCellIsOnScreen(frameWindow);
+			before = frameWindow.app.activeDocument.activeLayout.viewedRectangle.toArray();
+		});
+
+		cy.then(function() { return goToComment(win); });
+
+		cy.cGet('#comment-container-1').should('be.visible');
+		cy.getFrameWindow().should((frameWindow) => {
+			expect(frameWindow.app.activeDocument.activeLayout.viewedRectangle.toArray(),
+				'viewed rectangle').to.deep.equal(before);
 		});
 	});
 });

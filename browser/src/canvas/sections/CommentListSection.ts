@@ -248,6 +248,7 @@ export class CommentSection extends CanvasSectionObject {
 	static commentWasAutoAdded: boolean = false;
 	static pendingImport: boolean = false;
 	static importingComments: boolean = false; // active during comments insertion, disable scroll
+	static showingEveryComment: boolean = false; // active while every comment is shown or hidden at once, disable scroll
 
 	// To associate comment id with its index in commentList array.
 	private idIndexMap: Map<any, number>;
@@ -1380,7 +1381,8 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	private scrollCommentIntoView (comment: Comment) {
-		if (CommentSection.importingComments || !comment)
+		if (CommentSection.importingComments || CommentSection.showingEveryComment
+			|| !comment)
 			return;
 
 		if (!comment.sectionProperties || !comment.sectionProperties.data) {
@@ -1403,35 +1405,48 @@ export class CommentSection extends CanvasSectionObject {
 
 		const anchorPos = rootComment.sectionProperties.data.anchorSPoint;
 		const isSpreadsheet = app.map._docLayer._docType === 'spreadsheet';
+		const cellRange = isSpreadsheet ? rootComment.sectionProperties.data.cellRange : null;
 
 		let leftTwips: number = anchorPos.toArray()[0];
 		let topTwips: number = anchorPos.toArray()[1];
-		if (isSpreadsheet && rootComment.sectionProperties.data.id !== 'new') {
-			// anchorPos is in display twips but
-			// app.isYVisibleInTheDisplayedArea() expects print-twips.
+		if (cellRange) {
+			// The sheet geometry gives the anchor cell in the same twips that the
+			// viewed rectangle and the split position are measured in, exact down
+			// to the grid line the cell starts on.
+			const cellRectangle = app.map._docLayer._cellRangeToTwipRect(cellRange).toRectangle();
+			leftTwips = cellRectangle[0];
+			topTwips = cellRectangle[1];
+		}
+		else if (isSpreadsheet && rootComment.sectionProperties.data.id !== 'new') {
+			// anchorPos is in display twips but the checks below expect print-twips.
 			const anchorPrintTwips = (app.map._docLayer.sheetGeometry as cool.SheetGeometry)
 				.getPrintTwipsPointFromTile(new cool.Point(leftTwips, topTwips));
 			leftTwips = anchorPrintTwips.x;
 			topTwips = anchorPrintTwips.y;
 		}
-		const topVisible = app.isYVisibleInTheDisplayedArea(topTwips);
-		const commentHeight = this.cssToCorePixels(rootComment.getCommentHeight());
-		const bottomVisible = app.isYVisibleInTheDisplayedArea(
-			topTwips + Math.round(commentHeight * app.pixelsToTwips)
-		);
 
 		const layout = app.activeDocument.activeLayout;
+		const view = layout.viewedRectangle;
 		// Frozen rows and columns hold the top and the left of the view, so the pane
-		// that actually scrolls starts this far into it.
-		const knowsSplit = isSpreadsheet && !!app.calc.splitCoordinate;
-		const splitXPixels = knowsSplit ? app.calc.splitCoordinate.pX : 0;
-		const splitYPixels = knowsSplit ? app.calc.splitCoordinate.pY : 0;
-		let scrollX: number = layout.viewedRectangle.pX1;
-		let scrollY: number = layout.viewedRectangle.pY1;
+		// that actually scrolls starts this far into it. The split line itself is
+		// the first grid line of that pane.
+		const split = isSpreadsheet && app.calc.splitCoordinate
+			? app.calc.splitCoordinate : new cool.SimplePoint(0, 0);
+		const splitXPixels = split.pX;
+		const splitYPixels = split.pY;
 
-		// An anchor in the frozen rows keeps its place on screen, so the vertical
-		// position stays as it is.
-		const pinnedByFrozenRows = this.isTopInFrozenPane(topTwips);
+		const commentHeight = this.cssToCorePixels(rootComment.getCommentHeight());
+		const commentBottomTwips = topTwips + Math.round(commentHeight * app.pixelsToTwips);
+		const topVisible = CommentSection.isInScrollingPane(topTwips, split.y, view.y1, view.y2);
+		const bottomVisible = CommentSection.isInScrollingPane(
+			commentBottomTwips, split.y, view.y1, view.y2);
+
+		let scrollX: number = view.pX1;
+		let scrollY: number = view.pY1;
+
+		// An anchor inside the frozen rows keeps its place on screen, so the
+		// vertical position stays as it is.
+		const pinnedByFrozenRows = topTwips < split.y;
 
 		if (!pinnedByFrozenRows && (!topVisible || !bottomVisible)) {
 			const topPixels = topTwips * app.twipsToPixels;
@@ -1458,14 +1473,17 @@ export class CommentSection extends CanvasSectionObject {
 		// is measured from where the scrolling pane starts, and it puts the anchor
 		// near the left edge of that pane with the same 5% margin. Sheets that run
 		// right to left keep the horizontal position they have.
+		const pinnedByFrozenColumns = leftTwips < split.x;
+		const leftVisible = CommentSection.isInScrollingPane(leftTwips, split.x, view.x1, view.x2);
+
 		if (isSpreadsheet && !app.map._docLayer.isCalcRTL()
-			&& !app.isXVisibleInTheDisplayedArea(leftTwips)) {
-			const paneWidth = layout.viewedRectangle.pWidth - splitXPixels;
+			&& !pinnedByFrozenColumns && !leftVisible) {
+			const paneWidth = view.pWidth - splitXPixels;
 			scrollX = Math.round(
 				leftTwips * app.twipsToPixels - splitXPixels - paneWidth * 0.05);
 		}
 
-		if (scrollX !== layout.viewedRectangle.pX1 || scrollY !== layout.viewedRectangle.pY1) {
+		if (scrollX !== view.pX1 || scrollY !== view.pY1) {
 			layout.scrollTo(scrollX, scrollY);
 
 			if (isSpreadsheet) {
@@ -1475,23 +1493,12 @@ export class CommentSection extends CanvasSectionObject {
 		}
 	}
 
-	// A frozen-row pane sits at the top of the view (its rectangle has pY1 === 0).
-	private isTopInFrozenPane (topTwips: number): boolean {
-		const splitPanesContext = app.map._docLayer._splitPanesContext;
-		if (!splitPanesContext)
-			return false;
-
-		// Without frozen rows the whole view is a single pane, and its rectangle
-		// starts at 0 as well whenever the sheet is scrolled to the very top.
-		if (!app.calc.splitCoordinate || app.calc.splitCoordinate.pY <= 0)
-			return false;
-
-		const rectangles = splitPanesContext.getViewRectangles();
-		for (let i = 0; i < rectangles.length; i++) {
-			if (rectangles[i].pY1 === 0 && rectangles[i].containsY(topTwips))
-				return true;
-		}
-		return false;
+	// Where a document position on one axis sits: the pane that scrolls runs from
+	// the split line, where the frozen rows or columns end, to the far edge of the
+	// view. Positions are in twips.
+	private static isInScrollingPane (position: number, split: number,
+		viewStart: number, viewEnd: number): boolean {
+		return position >= viewStart + split && position <= viewEnd;
 	}
 
 	/// returns canvas top and bottom position in core pixels
@@ -2848,6 +2855,12 @@ export class CommentSection extends CanvasSectionObject {
 		this.sectionProperties.show = state;
 		const commentShouldCollapse = this.shouldCollapse();
 
+		// Showing or hiding the whole list changes what is on screen, not where the
+		// view is, so the view stays where the reader left it. In Calc each comment
+		// shown here becomes the selected one in turn, and selecting a comment is
+		// what moves the view to it.
+		CommentSection.showingEveryComment = true;
+
 		for (var idx = 0; idx < this.sectionProperties.commentList.length; idx++) {
 			if (state == false) {
 				this.sectionProperties.commentList[idx].hide();
@@ -2858,6 +2871,8 @@ export class CommentSection extends CanvasSectionObject {
 				}
 			}
 		}
+
+		CommentSection.showingEveryComment = false;
 		this.update();
 	}
 
