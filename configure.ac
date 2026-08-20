@@ -42,6 +42,11 @@ if test "$enable_androidapp" = "yes"; then
         COOLWSD_VERSION_NANO=`echo $with_android_package_versioncode | awk -F. '{print $4}' | awk -F- '{print $1}'`
 
         ANDROID_PACKAGE_VERSIONCODE=`echo $with_android_package_versioncode | awk -F- '{print $2}'`
+        case "$ANDROID_PACKAGE_VERSIONCODE" in
+            ''|*@<:@!0-9@:>@*)
+                AC_MSG_ERROR([--with-android-package-versioncode should end in a dash followed by a build number, got "$with_android_package_versioncode"])
+                ;;
+        esac
         AC_MSG_RESULT([$ANDROID_PACKAGE_VERSIONCODE])
     fi
 fi
