@@ -579,14 +579,8 @@ class LOUtil {
 			insertcalctable: 'inserttable',
 			removecalctable: 'deletetable',
 			tabletotalrow: 'autosum',
-			// TODO: reusing a similar icon for now; needs a dedicated Resize Table icon
-			resizecalctable: 'tabledesign',
 			renamecalctable: 'renametable',
-			// TODO: reusing a similar icon for now; needs a dedicated Convert to Range icon
-			convertcalctabletorange: 'tabledesign',
-			// TODO: reusing a similar icon for now; needs a dedicated "Handle Duplicate" icon
-			handleduplicaterecords: 'tabledesign',
-			removeduplicates: 'tabledesign',
+			handleduplicaterecords: 'removeduplicates',
 			summarizewithpivot: 'datadatapilotrun',
 			calculatedfieldrun: 'functiondialog',
 			databasesettings: 'tabledesign',
