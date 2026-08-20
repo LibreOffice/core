@@ -1531,7 +1531,7 @@ tr.useritem > td > img {
 }
 
 .menu-entry-checked {
-	background: url('images/lc_listitem-selected.svg') no-repeat 97% center;
+	background: url('images/lc_listitem-selected.svg') no-repeat 97% center / 20px 20px;
 }
 
 .menu-entry-with-icon {
