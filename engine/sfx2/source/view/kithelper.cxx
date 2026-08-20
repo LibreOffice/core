@@ -1609,6 +1609,42 @@ SfxKitLanguageGuard::~SfxKitLanguageGuard()
     comphelper::COKit::setLocale(m_pOldShell->GetKitLocale());
 }
 
+SfxKitTimezoneGuard::SfxKitTimezoneGuard()
+    : m_bSetTimezone(false)
+{
+    if (!comphelper::COKit::isActive())
+    {
+        return;
+    }
+
+    const int nView = KitHelper::getCurrentView();
+    if (nView < 0)
+    {
+        return;
+    }
+
+    // A view whose client never told us its timezone keeps the default one.
+    const auto [bIsTimezoneSet, aTimezone] = KitHelper::getViewTimezone(nView);
+    if (!bIsTimezoneSet || aTimezone.isEmpty())
+    {
+        return;
+    }
+
+    comphelper::COKit::setTimezone(true, aTimezone);
+    m_bSetTimezone = true;
+}
+
+SfxKitTimezoneGuard::~SfxKitTimezoneGuard()
+{
+    if (!m_bSetTimezone)
+    {
+        return;
+    }
+
+    const auto [bIsTimezoneSet, aTimezone] = KitHelper::getDefaultTimezone();
+    comphelper::COKit::setTimezone(bIsTimezoneSet, aTimezone);
+}
+
 KitEditViewHistory::EditViewHistoryMap KitEditViewHistory::maEditViewHistory;
 
 

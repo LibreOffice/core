@@ -30,6 +30,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <vcl/jsdialog/executor.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
 
@@ -1383,6 +1385,95 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testNavigatorContentTreeKeyedToOwning
     pOwningView->GetViewFrame().SetChildWindow(SID_NAVIGATOR, false);
     KitHelper::destroyView(nForeignView);
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeUsesViewTimezone)
+{
+    // A new comment is stamped with the clock of the timezone its author reads, so the client
+    // shows the time the comment was written in the author's own zone.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"word"_ustr);
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    // The server keeps time in UTC and the author reads the clock in Kolkata, which is five and a
+    // half hours ahead of it the whole year round.
+    const std::pair<bool, OUString> aOldDefaultTimezone = KitHelper::getDefaultTimezone();
+    comphelper::ScopeGuard aRestoreTimezone(
+        [aOldDefaultTimezone]()
+        {
+            KitHelper::setDefaultTimezone(aOldDefaultTimezone.first, aOldDefaultTimezone.second);
+            comphelper::COKit::setTimezone(aOldDefaultTimezone.first, aOldDefaultTimezone.second);
+        });
+    KitHelper::setDefaultTimezone(true, u"UTC"_ustr);
+    comphelper::COKit::setTimezone(true, u"UTC"_ustr);
+    KitHelper::setViewTimezone(KitHelper::getCurrentView(), true, u"Asia/Kolkata"_ustr);
+    const tools::Time aAuthorOffset(5, 30);
+
+    // Both readings are in the server's zone, so the comment has to fall between them once the
+    // author's offset is added.
+    const DateTime aBefore(DateTime::SYSTEM);
+    comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { "Text", cpo::uno::Any(u"a comment"_ustr) },
+                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    const DateTime aAfter(DateTime::SYSTEM);
+
+    const DateTime aExpectedFrom = aBefore + aAuthorOffset;
+    const DateTime aExpectedTo = aAfter + aAuthorOffset;
+    // Without the accompanying fix in place, this test would have failed: the comment carried the
+    // server's own reading of the clock, five and a half hours behind the author's.
+    CPPUNIT_ASSERT(
+        getOnlyPostItField(*pPostItMgr)->GetDateTime().IsBetween(aExpectedFrom, aExpectedTo));
+
+    // The client is told the same time. The string carries no zone, so the client reads it as a
+    // plain wall clock in its own zone, which is the author's zone.
+    const OUString aNotifiedDateTime = OUString::createFromAscii(
+        aView.m_aComment.get_child("dateTime").get_value<std::string>());
+    css::util::DateTime aParsed;
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aNotifiedDateTime, aParsed));
+    CPPUNIT_ASSERT(DateTime(aParsed).IsBetween(aExpectedFrom, aExpectedTo));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeWithoutViewTimezone)
+{
+    // A client that never sent a timezone gets comments stamped with the server's clock.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"word"_ustr);
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    const std::pair<bool, OUString> aOldDefaultTimezone = KitHelper::getDefaultTimezone();
+    comphelper::ScopeGuard aRestoreTimezone(
+        [aOldDefaultTimezone]()
+        {
+            KitHelper::setDefaultTimezone(aOldDefaultTimezone.first, aOldDefaultTimezone.second);
+            comphelper::COKit::setTimezone(aOldDefaultTimezone.first, aOldDefaultTimezone.second);
+        });
+    KitHelper::setDefaultTimezone(true, u"Asia/Yerevan"_ustr); // Always UTC+04
+    comphelper::COKit::setTimezone(true, u"Asia/Yerevan"_ustr);
+    // This is what a load without a timezone leaves on the view: marked as set, but empty.
+    KitHelper::setViewTimezone(KitHelper::getCurrentView(), true, OUString());
+
+    const DateTime aBefore(DateTime::SYSTEM);
+    comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { "Text", cpo::uno::Any(u"a comment"_ustr) },
+                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    const DateTime aAfter(DateTime::SYSTEM);
+
+    // Both readings are in the server's zone, and so is the comment.
+    CPPUNIT_ASSERT(getOnlyPostItField(*pPostItMgr)->GetDateTime().IsBetween(aBefore, aAfter));
 }
 }
 

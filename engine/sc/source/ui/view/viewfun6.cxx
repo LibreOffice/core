@@ -50,7 +50,6 @@
 #include <scmod.hxx>
 #include <postit.hxx>
 #include <token.hxx>
-#include <comphelper/scopeguard.hxx>
 
 #include <vector>
 
@@ -288,22 +287,8 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     const SvNumFormatType nCurNumFormatType = (pCurNumFormatEntry ?
             pCurNumFormatEntry->GetMaskedType() : SvNumFormatType::UNDEFINED);
 
-    const int nView(comphelper::COKit::isActive() ? KitHelper::getCurrentView() : -1);
-    if (nView >= 0)
-    {
-        const auto [isTimezoneSet, aTimezone] = KitHelper::getViewTimezone(nView);
-        comphelper::COKit::setTimezone(isTimezoneSet, aTimezone);
-    }
-
-    comphelper::ScopeGuard aAutoUserTimezone(
-        [nView]()
-        {
-            if (nView >= 0)
-            {
-                const auto [isTimezoneSet, aTimezone] = KitHelper::getDefaultTimezone();
-                comphelper::COKit::setTimezone(isTimezoneSet, aTimezone);
-            }
-        });
+    // Stamp the cell with the clock of the timezone the user reads.
+    SfxKitTimezoneGuard aTimezoneGuard;
 
     if (bInputMode)
     {

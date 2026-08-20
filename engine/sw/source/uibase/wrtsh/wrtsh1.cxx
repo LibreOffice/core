@@ -104,6 +104,7 @@
 
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
@@ -2521,7 +2522,11 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         if (oTextPara)
             StartAction();
 
-        rFieldMgr.InsertField( aData );
+        // Stamp the comment with the clock of the timezone its author reads.
+        {
+            SfxKitTimezoneGuard aTimezoneGuard;
+            rFieldMgr.InsertField( aData );
+        }
 
         Push();
         SwCursorShell::Left(1, SwCursorSkipMode::Chars);

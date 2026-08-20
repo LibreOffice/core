@@ -336,6 +336,17 @@ public:
     ~SfxKitLanguageGuard();
 };
 
+/// If Kit is active, switch to the timezone of the current view and back to the default one on
+/// delete. Work done inside the guard reads the clock the way the user of that view reads it.
+class SFX2_DLLPUBLIC SfxKitTimezoneGuard
+{
+    bool m_bSetTimezone;
+
+public:
+    SfxKitTimezoneGuard();
+    ~SfxKitTimezoneGuard();
+};
+
 typedef std::list<SfxViewShell*> ViewShellList;
 
 /// Used to keep track of the last N views that text edited a document through an EditView
