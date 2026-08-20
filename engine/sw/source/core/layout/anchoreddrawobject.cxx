@@ -803,7 +803,13 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             nTargetHeight = nHeight * (*pRelativeHeight);
         }
 
-        if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
+        // GetWidth() counts both edges, so a line with equal edges reports 1 and cannot scale
+        const bool bScaleWidth(nTargetWidth != aCurrObjRect.GetWidth( )
+                               && aCurrObjRect.GetWidth( ) > 1);
+        const bool bScaleHeight(nTargetHeight != aCurrObjRect.GetHeight( )
+                                && aCurrObjRect.GetHeight( ) > 1);
+
+        if ( bScaleWidth || bScaleHeight )
         {
             SwDoc& rDoc = const_cast<SwDoc&>(GetPageFrame()->GetFormat()->GetDoc());
 
@@ -817,8 +823,8 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             std::unique_ptr<SdrObjUserData> pClone(nullptr != pRelWH ? pRelWH->Clone(pObject) : nullptr);
 
             pObject->Resize( aCurrObjRect.TopLeft(),
-                    double( nTargetWidth ) / aCurrObjRect.GetWidth(),
-                    double( nTargetHeight ) / aCurrObjRect.GetHeight());
+                    bScaleWidth ? double( nTargetWidth ) / aCurrObjRect.GetWidth() : 1.0,
+                    bScaleHeight ? double( nTargetHeight ) / aCurrObjRect.GetHeight() : 1.0);
 
             if (pClone)
                 // set the cloned SwRelativeWidthHeight. Transfer of ownership.
