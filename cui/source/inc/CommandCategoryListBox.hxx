@@ -78,8 +78,6 @@ public:
                      CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm,
                      SaveInData* pCurrentSaveInData,
                      std::vector<std::unique_ptr<weld::TreeIter>>& rNodesToExpand);
-
-    void set_visible(bool bVisible) { m_xControl->set_visible(bVisible); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

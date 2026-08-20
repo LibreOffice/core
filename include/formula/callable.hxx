@@ -53,13 +53,7 @@ public:
         if (!osl_atomic_decrement(&mnRefCnt))
             const_cast<FormulaCallable*>(this)->Delete();
     }
-    oslInterlockedCount GetRef() const { return mnRefCnt; }
     void Delete() { delete this; }
-    void DeleteIfZeroRef()
-    {
-        if (mnRefCnt == 0)
-            delete this;
-    }
 
     virtual ~FormulaCallable() {}
     virtual OpCode GetOpCode() const { return ocNone; }

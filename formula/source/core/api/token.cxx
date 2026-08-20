@@ -402,13 +402,6 @@ FormulaToken* FormulaTokenArray::FirstRPNToken() const
     return pRPN[0];
 }
 
-FormulaToken* FormulaTokenArray::LastRPNToken() const
-{
-    if (!pRPN || nRPN == 0)
-        return nullptr;
-    return pRPN[nRPN - 1];
-}
-
 bool FormulaTokenArray::HasReferences() const
 {
     for (auto i: Tokens())
@@ -1636,11 +1629,6 @@ void FormulaTokenIterator::Pop()
     maStack.pop_back();
 }
 
-void FormulaTokenIterator::FrontPop()
-{
-    maStack.erase(maStack.begin());
-}
-
 void FormulaTokenIterator::Lambda(bool bOpt)
 {
     maStack.back().bLambda = bOpt;
@@ -1668,20 +1656,6 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
         {
             FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
             if( t->GetType() == svIndex )
-                return t;
-        }
-    }
-    return nullptr;
-}
-
-FormulaToken* FormulaTokenArrayPlainIterator::GetNextStringNameRPN()
-{
-    if (mpFTA->GetCode())
-    {
-        while (mnIndex < mpFTA->GetCodeLen())
-        {
-            FormulaToken* t = mpFTA->GetCode()[ mnIndex++ ];
-            if (t->GetType() == svStringName)
                 return t;
         }
     }

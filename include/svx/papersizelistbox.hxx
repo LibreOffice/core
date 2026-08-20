@@ -46,7 +46,6 @@ public:
     {
         m_xControl->connect_changed(rLink);
     }
-    int get_active() const { return m_xControl->get_active(); }
     void clear() { m_xControl->clear(); }
     void save_value() { return m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }

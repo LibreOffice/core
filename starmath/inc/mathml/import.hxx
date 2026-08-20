@@ -25,23 +25,6 @@ class SmDocShell;
 class SmMLImport;
 class SmModel;
 
-class SmMLImportWrapper
-{
-    rtl::Reference<SmModel> m_xModel;
-    SmMLImport* m_pMlImport;
-
-public:
-    /** read a component from input stream
-     */
-    ErrCode
-    ReadThroughComponentIS(const css::uno::Reference<css::io::XInputStream>& xInputStream,
-                           const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                           css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                           css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                           const char16_t* pFilterName, bool bEncrypted,
-                           int_fast16_t nSyntaxVersion);
-};
-
 class SmMLImport final : public SvXMLImport
 {
 private:

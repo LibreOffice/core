@@ -58,10 +58,6 @@ public:
     {
         put(pPropName, std::string_view(pPropVal));
     }
-    template <size_t N> void put(std::string_view pPropName, const char (&pPropVal)[N])
-    {
-        put(pPropName, std::string_view(pPropVal, N));
-    }
 
     template <typename N, std::enable_if_t<std::is_arithmetic_v<N>, int> = 0>
     void put(std::string_view pPropName, N n)

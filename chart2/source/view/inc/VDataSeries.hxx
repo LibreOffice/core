@@ -172,8 +172,6 @@ public:
     void setOldTimeBased( VDataSeries* pOldSeries, double nPercent );
     VDataSeries* createCopyForTimeBased() const;
 
-    const VDataSequence& getCalculatedYValues() const { return m_aCalculatedValues_Y; }
-
     // Chart types that calculate the resulting values use this once during addSeries
     // to promote the calculated Y sidecar into the primary Y values, so the rendering
     // path plots the frequencies instead of the raw data.

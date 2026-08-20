@@ -337,16 +337,6 @@ const OUString & PaletteManager::GetSelectedPalettePath()
         return EMPTY_OUSTRING;
 }
 
-tools::Long PaletteManager::GetColorCount() const
-{
-    return mnColorCount;
-}
-
-tools::Long PaletteManager::GetRecentColorCount() const
-{
-    return maRecentColors.size();
-}
-
 void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& rName, bool bFront)
 {
     auto itColor = std::find_if(maRecentColors.begin(),

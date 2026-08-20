@@ -337,7 +337,6 @@ public:
     }
 
     FormulaToken* FirstRPNToken() const;
-    FormulaToken* LastRPNToken() const;
 
     bool HasReferences() const;
 
@@ -589,7 +588,6 @@ public:
     void Jump( short nStart, short nNext, short nStop = SHRT_MAX );
     void Push( const FormulaTokenArray* );
     void Pop();
-    void FrontPop();
     void Lambda( bool bOpt );
     bool IsLambda() const;
 
@@ -660,7 +658,6 @@ public:
     FormulaToken* Next();
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
-    FormulaToken* GetNextStringNameRPN();
     FormulaToken* GetNextDPFieldNameRPN();
     FormulaToken* GetNextReference();
     FormulaToken* GetNextReferenceRPN();

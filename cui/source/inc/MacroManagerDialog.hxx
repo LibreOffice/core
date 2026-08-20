@@ -246,8 +246,6 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
                                               const weld::TreeIter& rEntry);
     void ScriptingFrameworkScriptsPasteEntry(weld::TreeView& rTreeView,
                                              const weld::TreeIter& rEntry);
-    static bool getBoolProperty(css::uno::Reference<css::beans::XPropertySet> const& xProps,
-                                OUString const& propName);
     OUString getListOfChildren(const css::uno::Reference<css::script::browse::XBrowseNode>& node,
                                int depth);
 

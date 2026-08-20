@@ -346,7 +346,6 @@ public:
     SC_DLLPUBLIC double GetValue();
     SC_DLLPUBLIC const svl::SharedString & GetString();
     SC_DLLPUBLIC formula::FormulaCallableRef GetCallable();
-    SC_DLLPUBLIC formula::FormulaConstTokenRef GetResultToken();
     SC_DLLPUBLIC formula::FormulaTokenRef CloneResultToken();
 
     /**

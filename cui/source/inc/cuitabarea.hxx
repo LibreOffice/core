@@ -740,8 +740,6 @@ private:
     DECL_LINK(MetricSpinValueHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifiedHdl_Impl, weld::Entry&, void);
 
-    void UpdateModified();
-
     static sal_Int32 FindInCustomColors( std::u16string_view aColorName );
     sal_Int32 FindInPalette( const Color& rColor );
 

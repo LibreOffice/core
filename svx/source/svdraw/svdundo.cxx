@@ -140,11 +140,6 @@ OUString SdrUndoGroup::GetComment() const
     return m_aComment.replaceAll("%1", m_aObjDescription);
 }
 
-OUString SdrUndoGroup::GetObjDescription() const
-{
-    return m_aObjDescription;
-}
-
 void SdrUndoGroup::SetComment(const OUString& rStr)
 {
     m_aComment=rStr;

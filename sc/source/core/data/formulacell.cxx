@@ -3208,12 +3208,6 @@ formula::FormulaCallableRef ScFormulaCell::GetCallable()
     return GetRawCallable();
 }
 
-formula::FormulaConstTokenRef ScFormulaCell::GetResultToken()
-{
-    MaybeInterpret();
-    return GetRawResultToken();
-}
-
 formula::FormulaTokenRef ScFormulaCell::CloneResultToken()
 {
     MaybeInterpret();
