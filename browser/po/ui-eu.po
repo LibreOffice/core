@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-18 06:36+0000\n"
+"PO-Revision-Date: 2026-08-21 03:03+0000\n"
 "Last-Translator: Alexander Gabilondo <alexgabi@openmailbox.org>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/eu/>\n"
@@ -547,7 +547,7 @@ msgstr "Modu iluna"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Zuzenketa ortografiko automatikoa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -875,7 +875,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:170
 #: src/control/Control.NotebookbarWriter.js:109
 msgid "Extensions"
-msgstr ""
+msgstr "Hedapenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:966
 msgid ""
@@ -906,7 +906,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1273
 #: admin/src/integrator/AdminIntegratorSettings.ts:3270
 msgid "Interface Settings"
-msgstr ""
+msgstr "Interfazearen ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1275
 msgid "Set default interface preferences."
@@ -939,7 +939,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1513
 #: admin/src/integrator/Xcu.ts:438
 msgid "Save Document settings"
-msgstr ""
+msgstr "Gorde dokumentuaren ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1816
 msgid "(Warning: Server accessibility must be enabled to toggle)"
@@ -998,12 +998,12 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2184
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2216
 #: admin/src/integrator/AdminIntegratorSettings.ts:3397
 msgid "Document Signing"
-msgstr ""
+msgstr "Dokumentuen sinadura"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2220
 msgid ""
@@ -1013,7 +1013,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2241
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Dokumentuen sinaduren ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2279
 #: admin/src/integrator/AdminIntegratorSettings.ts:2296
@@ -1038,12 +1038,12 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2384
 msgid "Text Generation"
-msgstr ""
+msgstr "Testu sorkuntza"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2434
 #: admin/src/integrator/AdminIntegratorSettings.ts:2560
 msgid "e.g."
-msgstr ""
+msgstr "adib."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2445
 msgid "Leave empty if your server does not require one"
@@ -1058,7 +1058,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Image Generation"
-msgstr ""
+msgstr "Irudi sorkuntza"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2507
 msgid "Same as Text AI"
@@ -1113,7 +1113,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:3297
 #: admin/src/integrator/Xcu.ts:345
 msgid "Document Settings"
-msgstr ""
+msgstr "Dokumentuen ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3439
 msgid "Upload Xcu"
@@ -1121,11 +1121,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3600
 msgid "Enter {0}"
-msgstr ""
+msgstr "Sartu {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3658
 msgid "Reset"
-msgstr ""
+msgstr "Berrezarri"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3659
 msgid "Reset to default {0}"
