@@ -272,7 +272,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     m_xEdRef->SetReferences(&rDlg, m_xFtEditName.get());
     m_xRefBtn->SetReferences(&rDlg, m_xEdRef.get());
 
-    m_xParaWin.reset(new ParaWin(m_xParaWinBox.get(), &rDlg));
+    m_xParaWin.reset(new ParaWin(m_xParaWinBox.get(), rDlg));
     m_xParaWin->Show();
     m_xParaWinBox->hide();
     m_xFtEditName->hide();

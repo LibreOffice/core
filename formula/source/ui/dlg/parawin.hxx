@@ -45,7 +45,7 @@ private:
 
     ::std::vector<sal_uInt16> m_aVisibleArgMapping;
     const IFunctionDescription* m_pFuncDesc;
-    IControlReferenceHandler* m_pMyParent;
+    IControlReferenceHandler& m_rMyParent;
     // unsuppressed arguments, may be >= VAR_ARGS to indicate repeating parameters
     sal_uInt16 m_nArgs;
     // max arguments, limited to supported number of arguments
@@ -115,7 +115,7 @@ private:
     void UpdateArgInput(sal_uInt16 nOffset, sal_uInt16 i);
 
 public:
-    ParaWin(weld::Container* pParent, IControlReferenceHandler* _pDlg);
+    ParaWin(weld::Container* pParent, IControlReferenceHandler& rDlg);
     ~ParaWin();
 
     void SetFunctionDesc(const IFunctionDescription* pFDesc);

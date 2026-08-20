@@ -37,9 +37,9 @@ namespace formula
 constexpr sal_uInt16 kMaxArgCount = 255;
 constexpr sal_uInt16 kMaxArgOffset = kMaxArgCount - 1;
 
-ParaWin::ParaWin(weld::Container* pParent, IControlReferenceHandler* _pDlg)
+ParaWin::ParaWin(weld::Container* pParent, IControlReferenceHandler& rDlg)
     : m_pFuncDesc(nullptr)
-    , m_pMyParent(_pDlg)
+    , m_rMyParent(rDlg)
     , m_sOptional(ForResId(STR_OPTIONAL))
     , m_sRequired(ForResId(STR_REQUIRED))
     , m_xBuilder(Application::CreateBuilder(pParent, u"formula/ui/parameter.ui"_ustr))
@@ -395,8 +395,8 @@ void ParaWin::SetEdFocus()
 void ParaWin::InitArgInput(sal_uInt16 nPos, weld::Label& rFtArg, weld::Button& rBtnFx,
                            ArgEdit& rEdArg, RefButton& rRefBtn)
 {
-    rRefBtn.SetReferences(m_pMyParent, &rEdArg);
-    rEdArg.SetReferences(m_pMyParent, &rFtArg);
+    rRefBtn.SetReferences(&m_rMyParent, &rEdArg);
+    rEdArg.SetReferences(&m_rMyParent, &rFtArg);
 
     m_aArgInput[nPos].InitArgInput(rFtArg, rBtnFx, rEdArg, rRefBtn);
 
