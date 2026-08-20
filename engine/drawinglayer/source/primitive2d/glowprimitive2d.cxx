@@ -35,13 +35,34 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
+namespace
+{
+// Grows the range by the glow radius, plus two discrete pixels for the rounding of the range and
+// of the blur radius. Each axis is measured on its own, since the view can scale them differently.
+void growToGlowRange(basegfx::B2DRange& rRange, double fGlowRadius,
+                     const geometry::ViewInformation2D& rViewInformation)
+{
+    rRange.grow(fGlowRadius);
+
+    if (rViewInformation.getObjectToViewTransformation().isIdentity())
+        return;
+
+    const basegfx::B2DHomMatrix& rInverse(rViewInformation.getInverseObjectToViewTransformation());
+    const double fMarginX = 2.0 * (rInverse * basegfx::B2DVector(1.0, 0.0)).getLength();
+    const double fMarginY = 2.0 * (rInverse * basegfx::B2DVector(0.0, 1.0)).getLength();
+
+    rRange = basegfx::B2DRange(rRange.getMinX() - fMarginX, rRange.getMinY() - fMarginY,
+                               rRange.getMaxX() + fMarginX, rRange.getMaxY() + fMarginY);
+}
+}
+
 GlowPrimitive2D::GlowPrimitive2D(const Color& rGlowColor, double fRadius,
                                  Primitive2DContainer&& rChildren)
     : BufferedDecompositionGroupPrimitive2D(std::move(rChildren))
     , maGlowColor(rGlowColor)
     , mfGlowRadius(fRadius)
     , mfLastDiscreteGlowRadius(0.0)
-    , maLastClippedRange()
+    , maLastGlowRange()
 {
     // activate callback to flush buffered decomposition content
     activateFlushOnTimer();
@@ -61,9 +82,8 @@ bool GlowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
 }
 
 bool GlowPrimitive2D::prepareValuesAndcheckValidity(
-    basegfx::B2DRange& rGlowRange, basegfx::B2DRange& rClippedRange,
-    basegfx::B2DVector& rDiscreteGlowSize, double& rfDiscreteGlowRadius,
-    const geometry::ViewInformation2D& rViewInformation) const
+    basegfx::B2DRange& rGlowRange, basegfx::B2DVector& rDiscreteGlowSize,
+    double& rfDiscreteGlowRadius, const geometry::ViewInformation2D& rViewInformation) const
 {
     // no GlowRadius defined, done
     if (getGlowRadius() <= 0.0)
@@ -84,11 +104,9 @@ bool GlowPrimitive2D::prepareValuesAndcheckValidity(
     if (rGlowRange.isEmpty())
         return false;
 
-    // extend range by GlowRadius in all directions
-    rGlowRange.grow(getGlowRadius());
-
-    // initialize ClippedRange to full GlowRange -> all is visible
-    rClippedRange = rGlowRange;
+    // The viewport below only decides whether to draw at all, so one bitmap covers the whole glow
+    // and scrolling does not rasterize it again.
+    growToGlowRange(rGlowRange, getGlowRadius(), rViewInformation);
 
     // get Viewport and check if used. If empty, all is visible (see
     // ViewInformation2D definition in viewinformation2d.hxx)
@@ -99,21 +117,16 @@ bool GlowPrimitive2D::prepareValuesAndcheckValidity(
         aVisibleArea.grow(getGlowRadius());
 
         // To do this correctly, it needs to be done in discrete coordinates.
-        // The object may be transformed relative to the original#
+        // The object may be transformed relative to the original
         // ObjectTransformation, e.g. when re-used in shadow
         aVisibleArea.transform(rViewInformation.getViewTransformation());
-        rClippedRange.transform(rViewInformation.getObjectToViewTransformation());
 
-        // calculate ClippedRange
-        rClippedRange.intersect(aVisibleArea);
+        basegfx::B2DRange aGlowRangeInView(rGlowRange);
+        aGlowRangeInView.transform(rViewInformation.getObjectToViewTransformation());
 
-        // if GlowRange is completely outside of VisibleArea, ClippedRange
-        // will be empty and we are done
-        if (rClippedRange.isEmpty())
+        // none of the glow reaches the VisibleArea, we are done
+        if (!aVisibleArea.overlaps(aGlowRangeInView))
             return false;
-
-        // convert result back to object coordinates
-        rClippedRange.transform(rViewInformation.getInverseObjectToViewTransformation());
     }
 
     // calculate discrete pixel size of GlowRange. If it's too small to visualize, we are done
@@ -135,25 +148,21 @@ void GlowPrimitive2D::create2DDecomposition(
     Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
 {
     basegfx::B2DRange aGlowRange;
-    basegfx::B2DRange aClippedRange;
     basegfx::B2DVector aDiscreteGlowSize;
     double fDiscreteGlowRadius(0.0);
 
     // Check various validity details and calculate/prepare values. If false, we are done
-    if (!prepareValuesAndcheckValidity(aGlowRange, aClippedRange, aDiscreteGlowSize,
-                                       fDiscreteGlowRadius, rViewInformation))
+    if (!prepareValuesAndcheckValidity(aGlowRange, aDiscreteGlowSize, fDiscreteGlowRadius,
+                                       rViewInformation))
         return;
 
-    // Create embedding transformation from object to top-left zero-aligned
-    // target pixel geometry (discrete form of ClippedRange)
+    // Create embedding transformation from object to top-left zero-aligned target pixel geometry.
     // First, move to top-left of GlowRange
     const sal_uInt32 nDiscreteGlowWidth(ceil(aDiscreteGlowSize.getX()));
     const sal_uInt32 nDiscreteGlowHeight(ceil(aDiscreteGlowSize.getY()));
-    basegfx::B2DHomMatrix aEmbedding(basegfx::utils::createTranslateB2DHomMatrix(
-        -aClippedRange.getMinX(), -aClippedRange.getMinY()));
+    basegfx::B2DHomMatrix aEmbedding(
+        basegfx::utils::createTranslateB2DHomMatrix(-aGlowRange.getMinX(), -aGlowRange.getMinY()));
     // Second, scale to discrete bitmap size
-    // Even when using the offset from ClippedRange, we need to use the
-    // scaling from the full representation, thus from GlowRange
     aEmbedding.scale(nDiscreteGlowWidth / aGlowRange.getWidth(),
                      nDiscreteGlowHeight / aGlowRange.getHeight());
 
@@ -163,21 +172,17 @@ void GlowPrimitive2D::create2DDecomposition(
     primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
 
     // Create Bitmap using drawinglayer tooling, including a MaximumQuadraticPixel
-    // limitation to be safe and not go runtime/memory havoc. Use a pretty small
-    // limit due to this is glow functionality and will look good with bitmap scaling
-    // anyways. The value of 250.000 square pixels below maybe adapted as needed.
-    const basegfx::B2DVector aDiscreteClippedSize(rViewInformation.getObjectToViewTransformation()
-                                                  * aClippedRange.getRange());
-    const sal_uInt32 nDiscreteClippedWidth(ceil(aDiscreteClippedSize.getX()));
-    const sal_uInt32 nDiscreteClippedHeight(ceil(aDiscreteClippedSize.getY()));
+    // limitation to be safe and not go runtime/memory havoc. This is the only place the glow gives
+    // up resolution, and one budget covers every radius, so a wide halo keeps as much of the
+    // object's outline as a narrow one.
     const geometry::ViewInformation2D aViewInformation2D;
-    const sal_uInt32 nMaximumQuadraticPixels(250000);
+    const sal_uInt32 nMaximumQuadraticPixels = 500000;
 
     // I have now added a helper that just creates the mask without having
     // to render the content, use it, it's faster
-    const AlphaMask aAlpha(::drawinglayer::createAlphaMask(
-        std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
-        nMaximumQuadraticPixels));
+    const AlphaMask aAlpha(::drawinglayer::createAlphaMask(std::move(xEmbedSeq), aViewInformation2D,
+                                                           nDiscreteGlowWidth, nDiscreteGlowHeight,
+                                                           nMaximumQuadraticPixels));
 
     if (aAlpha.IsEmpty())
         return;
@@ -191,27 +196,22 @@ void GlowPrimitive2D::create2DDecomposition(
     // MaximumQuadraticPixel limit was used/triggered
     double fScale(1.0);
 
-    if (static_cast<sal_uInt32>(aBitmapExSizePixel.Width()) != nDiscreteClippedWidth
-        || static_cast<sal_uInt32>(aBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
+    if (sal_uInt32(aBitmapExSizePixel.Width()) != nDiscreteGlowWidth
+        || sal_uInt32(aBitmapExSizePixel.Height()) != nDiscreteGlowHeight)
     {
         // scale in X and Y should be the same (see fReduceFactor in createAlphaMask),
         // so adapt numerically to a single scale value, they are integer rounded values
-        const double fScaleX(static_cast<double>(aBitmapExSizePixel.Width())
-                             / static_cast<double>(nDiscreteClippedWidth));
-        const double fScaleY(static_cast<double>(aBitmapExSizePixel.Height())
-                             / static_cast<double>(nDiscreteClippedHeight));
+        const double fScaleX = double(aBitmapExSizePixel.Width()) / double(nDiscreteGlowWidth);
+        const double fScaleY = double(aBitmapExSizePixel.Height()) / double(nDiscreteGlowHeight);
 
         fScale = (fScaleX + fScaleY) * 0.5;
     }
 
     // fDiscreteGlowRadius is the size of the halo from each side of the object. The halo is the
-    // border of glow color that fades from glow transparency level to fully transparent
-    // When blurring a sharp boundary (our case), it gets 50% of original intensity, and
-    // fades to both sides by the blur radius; thus blur radius is half of glow radius.
-    // Consider glow transparency (initial transparency near the object edge)
-    AlphaMask mask(ProcessAndBlurAlphaMask(aAlpha, fDiscreteGlowRadius * fScale / 2.0,
-                                           fDiscreteGlowRadius * fScale / 2.0,
-                                           255 - getGlowColor().GetAlpha()));
+    // border of glow color that fades from glow transparency level to fully transparent over the
+    // whole radius.
+    AlphaMask mask(
+        CreateGlowAlphaMask(aAlpha, fDiscreteGlowRadius * fScale, 255 - getGlowColor().GetAlpha()));
 
     // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
     Bitmap bmp(aAlpha.GetSizePixel(), vcl::PixelFormat::N24_BPP);
@@ -234,12 +234,11 @@ void GlowPrimitive2D::create2DDecomposition(
 #endif
 
     // Independent from discrete sizes of glow alpha creation, always
-    // map and project glow result to geometry range extended by glow
-    // radius, but to the eventually clipped instance (ClippedRange)
+    // map and project glow result to geometry range extended by glow radius
     const primitive2d::Primitive2DReference xEmbedRefBitmap(
         new BitmapPrimitive2D(result, basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                          aClippedRange.getWidth(), aClippedRange.getHeight(),
-                                          aClippedRange.getMinX(), aClippedRange.getMinY())));
+                                          aGlowRange.getWidth(), aGlowRange.getHeight(),
+                                          aGlowRange.getMinX(), aGlowRange.getMinY())));
 
     rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
 }
@@ -251,30 +250,29 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
                                          const geometry::ViewInformation2D& rViewInformation) const
 {
     basegfx::B2DRange aGlowRange;
-    basegfx::B2DRange aClippedRange;
     basegfx::B2DVector aDiscreteGlowSize;
     double fDiscreteGlowRadius(0.0);
 
     // Check various validity details and calculate/prepare values. If false, we are done
-    if (!prepareValuesAndcheckValidity(aGlowRange, aClippedRange, aDiscreteGlowSize,
-                                       fDiscreteGlowRadius, rViewInformation))
+    if (!prepareValuesAndcheckValidity(aGlowRange, aDiscreteGlowSize, fDiscreteGlowRadius,
+                                       rViewInformation))
         return;
 
     if (hasBuffered2DDecomposition())
     {
         // First check is to detect if the last created decompose is capable
         // to represent the now requested visualization.
-        // ClippedRange is the needed visualizationArea for the current glow
-        // effect, LastClippedRange is the one from the existing/last rendering.
+        // GlowRange is the needed visualizationArea for the current glow
+        // effect, LastGlowRange is the one from the existing/last rendering.
         // Check if last created area is sufficient and can be re-used
-        if (!maLastClippedRange.isEmpty() && !maLastClippedRange.isInside(aClippedRange))
+        if (!maLastGlowRange.isEmpty() && !maLastGlowRange.isInside(aGlowRange))
         {
             // To avoid unnecessary invalidations due to being *very* correct
             // with HairLines (which are view-dependent and thus change the
             // result(s) here slightly when changing zoom), add a slight unsharp
             // component if we have a ViewTransform. The derivation is inside
             // the range of half a pixel (due to one pixel hairline)
-            basegfx::B2DRange aLastClippedRangeAndHairline(maLastClippedRange);
+            basegfx::B2DRange aLastGlowRangeAndHairline(maLastGlowRange);
 
             if (!rViewInformation.getObjectToViewTransformation().isIdentity())
             {
@@ -282,10 +280,10 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
                 const double fHalfPixel((rViewInformation.getInverseObjectToViewTransformation()
                                          * basegfx::B2DVector(0.5, 0))
                                             .getLength());
-                aLastClippedRangeAndHairline.grow(fHalfPixel);
+                aLastGlowRangeAndHairline.grow(fHalfPixel);
             }
 
-            if (!aLastClippedRangeAndHairline.isInside(aClippedRange))
+            if (!aLastGlowRangeAndHairline.isInside(aGlowRange))
             {
                 // Conditions of last local decomposition have changed, delete
                 const_cast<GlowPrimitive2D*>(this)->setBuffered2DDecomposition(
@@ -325,9 +323,9 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
 
     if (!hasBuffered2DDecomposition())
     {
-        // refresh last used DiscreteGlowRadius and ClippedRange to new remembered values
+        // refresh last used DiscreteGlowRadius and GlowRange to new remembered values
         const_cast<GlowPrimitive2D*>(this)->mfLastDiscreteGlowRadius = fDiscreteGlowRadius;
-        const_cast<GlowPrimitive2D*>(this)->maLastClippedRange = aClippedRange;
+        const_cast<GlowPrimitive2D*>(this)->maLastGlowRange = aGlowRange;
     }
 
     // call parent, that will check for empty, call create2DDecomposition and
@@ -344,8 +342,8 @@ GlowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation
     // so simply calculate the exact needed range.
     basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
 
-    // We need additional space for the glow from all sides
-    aRetval.grow(getGlowRadius());
+    // We need additional space for the glow from all sides, and for the margin around it
+    growToGlowRange(aRetval, getGlowRadius(), rViewInformation);
 
     return aRetval;
 }

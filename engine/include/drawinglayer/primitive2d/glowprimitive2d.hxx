@@ -35,13 +35,12 @@ private:
     /// the Glow size, in logical units (100ths of mm)
     double mfGlowRadius;
 
-    /// last used DiscreteGlowRadius and ClippedRange
+    /// last used DiscreteGlowRadius and GlowRange
     double mfLastDiscreteGlowRadius;
-    basegfx::B2DRange maLastClippedRange;
+    basegfx::B2DRange maLastGlowRange;
 
     /// helpers
-    bool prepareValuesAndcheckValidity(basegfx::B2DRange& rRange, basegfx::B2DRange& rClippedRange,
-                                       basegfx::B2DVector& rDiscreteSize,
+    bool prepareValuesAndcheckValidity(basegfx::B2DRange& rRange, basegfx::B2DVector& rDiscreteSize,
                                        double& rfDiscreteGlowRadius,
                                        const geometry::ViewInformation2D& rViewInformation) const;
 
