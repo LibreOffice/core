@@ -105,7 +105,7 @@ public class Pump extends TestCase {
     * which a simple string consists.
     */
     private static class MyInput implements XInputStream  {
-        String str = "Pump tesing string" ;
+        String str = "Pump testing string" ;
 
         public int readBytes(byte[][] bytes, int len)
             throws NotConnectedException{
