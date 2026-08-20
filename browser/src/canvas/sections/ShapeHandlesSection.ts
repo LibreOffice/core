@@ -730,9 +730,30 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		return this.sectionProperties.subSectionPrefix + info.id;
 	}
 
+	/*
+		The sub section already drawing the named handle, as long as it is of the wanted class.
+		A name comes back for a handle of another class when the handle list changes, point
+		handles taking the place of scaling handles for one, so it is dropped and built again.
+	*/
+	private getReusableSubSection(subSectionName: string, wantedClass: any): any {
+		const subSection = app.sectionContainer.getSectionWithName(subSectionName);
+		if (!subSection) return null;
+
+		// An exact match rather than instanceof, so that a sub section of a class derived from
+		// the wanted one counts as the wrong class too.
+		if (subSection.constructor === wantedClass) return subSection;
+
+		this.containerObject.removeSection(subSectionName);
+		this.sectionProperties.subSections = this.sectionProperties.subSections.filter(
+			(candidate: any) => candidate.name !== subSectionName
+		);
+
+		return null;
+	}
+
 	checkAnchorSubSection(handle: any): any {
 		const subSectionName = this.getSubSectionName(handle.info);
-		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
+		let newSubSection = this.getReusableSubSection(subSectionName, ShapeHandleAnchorSubSection);
 
 		if (!newSubSection) {
 			newSubSection = new ShapeHandleAnchorSubSection(
@@ -753,7 +774,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	checkScalingSubSection(handle: any): any {
 		const subSectionName = this.getSubSectionName(handle.info);
-		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
+		let newSubSection = this.getReusableSubSection(subSectionName, ShapeHandleScalingSubSection);
 
 		if (!newSubSection) {
 			newSubSection = new ShapeHandleScalingSubSection(
@@ -778,7 +799,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	checkRotationSubSection(handle: any) {
 		const subSectionName = this.getSubSectionName(handle.info);
-		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
+		let newSubSection = this.getReusableSubSection(
+			subSectionName, app.definitions.shapeHandleRotationSubSection);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleRotationSubSection(
@@ -799,7 +821,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	checkDiagramSubSection(handle: any) {
 		const subSectionName = this.getSubSectionName(handle.info);
-		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
+		let newSubSection = this.getReusableSubSection(
+			subSectionName, app.definitions.shapeHandleDiagramSubSection);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleDiagramSubSection(
@@ -833,7 +856,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	checkCustomSubSection(handle: any): any {
 		const subSectionName = this.getSubSectionName(handle.info);
-		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
+		let newSubSection = this.getReusableSubSection(
+			subSectionName, app.definitions.shapeHandleCustomSubSection);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleCustomSubSection(
@@ -854,7 +878,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	checkPolySubSection(handle: any): any {
 		const subSectionName = this.getSubSectionName(handle.info);
-		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
+		let newSubSection = this.getReusableSubSection(
+			subSectionName, app.definitions.shapeHandlePolySubSection);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandlePolySubSection(
@@ -875,7 +900,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	checkGluePointSubSection(handle: any): any {
 		const subSectionName = this.getSubSectionName(handle.info);
-		let newSubSection = app.sectionContainer.getSectionWithName(subSectionName);
+		let newSubSection = this.getReusableSubSection(
+			subSectionName, app.definitions.shapeHandleGluePointSubSection);
 
 		if (!newSubSection) {
 			newSubSection = new app.definitions.shapeHandleGluePointSubSection(
