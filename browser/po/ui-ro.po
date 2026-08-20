@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2025-08-25 11:46+0000\n"
-"Last-Translator: Ion Silvestru <ion.silvestru@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/ro/>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-08-21 03:03+0000\n"
+"Last-Translator: Năstasie Raul-Ionuț <ion_nastasie@yahoo.com>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/ro/>\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -65,7 +65,7 @@ msgstr "Stare"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Detalii"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -73,7 +73,7 @@ msgstr "Nu s-au găsit probleme"
 
 #: admin/admin.strings.js:26
 msgid "Dashboard"
-msgstr "Pagina principală"
+msgstr "Tablou de bord"
 
 #: admin/admin.strings.js:27
 msgid "Users online"
@@ -425,6 +425,8 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"Filtrarea BPF a apelurilor de sistem (seccomp) potențial riscante este "
+"dezactivată; risc de securitate."
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:95
@@ -450,6 +452,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Anumiți clienți sunt conectați folosind vechiul format al URL-ului "
+"WebSocket, a cărui eliminare este planificată. Asigurați-vă că proxy-ul dvs. "
+"permite trecerea formatului compact."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3786
@@ -459,7 +464,7 @@ msgstr "Eroare"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Aflați mai multe"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -497,14 +502,13 @@ msgstr "Semnătură"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:601
 #: admin/src/integrator/AdminIntegratorSettings.ts:605
-#, fuzzy
 msgid "Provider"
-msgstr "Furnizor:"
+msgstr "Furnizor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:602
 #: admin/src/integrator/AdminIntegratorSettings.ts:606
 msgid "API Key"
-msgstr ""
+msgstr "Cheie API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:603
 #: admin/src/integrator/AdminIntegratorSettings.ts:608
@@ -513,20 +517,21 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:604
 #: admin/src/integrator/AdminIntegratorSettings.ts:607
+#, fuzzy
 msgid "Base URL"
-msgstr ""
+msgstr "URL de bază"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:609
 msgid "Image Size"
-msgstr ""
+msgstr "Dimensiune imagine"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:610
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Timp de expirare a cererii (secunde)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:613
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "Cititor de ecran în cadrul documentului"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:614
 #: src/control/Control.Menubar.ts:183 src/control/Control.Menubar.ts:524
@@ -538,23 +543,23 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:746
 #: src/control/Control.NotebookbarWriter.js:1831
 msgid "Dark Mode"
-msgstr "Mod închis"
+msgstr "Mod întunecat"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Verificare automată a ortografiei"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Zoom Inteligent"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:617
 msgid "Default Zoom"
-msgstr ""
+msgstr "Zoom Implicit"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Derulare lină"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -562,23 +567,23 @@ msgstr "Aspect compact"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:620
 msgid "Show status bar"
-msgstr "Bara de stare"
+msgstr "Afișează bara de stare"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:621
 #: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:520
 msgid "Show Ruler"
-msgstr "Rigla"
+msgstr "Afișează Rigla"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:622
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Afișează marcajele de formatare"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:623
 #: src/control/Control.NotebookbarWriter.js:2315
 #: src/control/Control.NotebookbarWriter.js:2331
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Show Comments"
-msgstr "Afișează comentarii"
+msgstr "Afișează comentariile"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:624
 msgid "Accessibility Checker"
@@ -591,7 +596,7 @@ msgstr "Navigator"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:626
 msgid "Show Sidebar"
-msgstr "Bara laterală"
+msgstr "Afișează Bara laterală"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:627
 msgid "Custom Animation"
@@ -599,7 +604,7 @@ msgstr "Animație personalizată"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:630
 msgid "Style List"
-msgstr "Lista de stiluri"
+msgstr "Listă de stiluri"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:633
 #: src/control/Control.NotebookbarCalc.js:1186
@@ -611,46 +616,43 @@ msgstr "Grilă"
 #: admin/src/integrator/AdminIntegratorSettings.ts:634
 #: src/control/Control.BackstageView.ts:157
 msgid "Print"
-msgstr ""
+msgstr "Imprimare"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:635
 #: src/control/Control.BackstageView.ts:646
 #: src/control/backstage/CloudDialogs.tsx:319
 msgid "Other"
-msgstr ""
+msgstr "Alt"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:636
 #: src/control/Control.NotebookbarImpress.js:726
 msgid "Show Grid"
-msgstr "Afișare grilă"
+msgstr "Afișează Grila"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:637
-#, fuzzy
 msgid "Snap to grid"
-msgstr "Aliniere la grilă"
+msgstr "Aliniază la grilă"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:638
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
-#, fuzzy
 msgid "Size to grid"
-msgstr "Aliniere la grilă"
+msgstr "Ajustare dimensiune la grilă"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:639
 msgid "Synchronize axes"
-msgstr ""
+msgstr "Sincronizează axe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:640
-#, fuzzy
 msgid "Snap grid"
-msgstr "Aliniere la grilă"
+msgstr "Aliniază grila"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:641
 msgid "Empty Pages"
-msgstr ""
+msgstr "Pagini goale"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
 msgid "Force Breaks"
-msgstr ""
+msgstr "Forțează Întreruperi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 #: src/control/Control.Menubar.ts:870 src/control/Control.TopToolbar.js:144
@@ -660,7 +662,7 @@ msgstr "Toate foile"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:645
 msgid "Content"
-msgstr ""
+msgstr "Conținut"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:646
 msgid "Display"
@@ -668,7 +670,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:647
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Afișează limitele"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:648
 #: src/control/Control.BackstageView.ts:824
@@ -684,7 +686,7 @@ msgstr "Pagină"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:650
 msgid "Fit to page"
-msgstr ""
+msgstr "Încadrare în pagină"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:651
 msgid "Tile pages"
@@ -704,7 +706,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:655
 msgid "Page name"
-msgstr ""
+msgstr "Nume pagină"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:656
 #: src/control/Control.NotebookbarCalc.js:817
@@ -720,7 +722,7 @@ msgstr "Timp"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:658
 msgid "Hidden pages"
-msgstr ""
+msgstr "Pagini ascunse"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:659
 msgid "From printer setup"
@@ -763,20 +765,19 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:665
 msgid "Images"
-msgstr ""
+msgstr "Imagini"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:666
-#, fuzzy
 msgid "Tables"
-msgstr "Tabel"
+msgstr "Tabele"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:667
 msgid "Controls"
-msgstr ""
+msgstr "Controale"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:668
 msgid "Background"
-msgstr ""
+msgstr "Fundal"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:669
 msgid "Print Black"
@@ -784,11 +785,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:670
 msgid "Hidden text"
-msgstr ""
+msgstr "Text ascuns"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:671
 msgid "Placeholders"
-msgstr ""
+msgstr "Elemente provizorii"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:672
 msgid "Left pages"
@@ -800,15 +801,15 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:674
 msgid "Brochure"
-msgstr ""
+msgstr "Broșură"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:675
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Broșură de la dreapta la stânga"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:906
 msgid "Invalid JSON file"
-msgstr "Fișier JSON nevalid"
+msgstr "Fișier JSON invalid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:910
 msgid "Error reading file"
@@ -816,7 +817,7 @@ msgstr "Eroare la citirea fișierului"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:922
 msgid "Autotext"
-msgstr "Text Auto"
+msgstr "Autotext"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:924
 msgid ""
@@ -824,7 +825,7 @@ msgid ""
 "type the shortcut for an AutoText entry and press F3."
 msgstr ""
 "Încărcați fragmente de text reutilizabile (.bau). Pentru a insera textul în "
-"document, tastați comanda rapidă pentru o intrare AutoText și apăsați F3."
+"document, tastați scurtătura pentru o intrare Autotext și apăsați F3."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:930
 msgid "Upload Autotext"
@@ -849,7 +850,7 @@ msgstr "Încărcă Wordbook"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:950
 msgid "Document themes"
-msgstr ""
+msgstr "Teme document"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:952
 msgid ""
@@ -914,7 +915,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1463
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Nu există setări disponibile pentru {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1475
 msgid "Select a tab to browser settings."
