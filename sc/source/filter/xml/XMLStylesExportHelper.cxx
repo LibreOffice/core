@@ -705,49 +705,29 @@ bool ScFormatRangeStyles::AddStyleName(OUString const & rString, sal_Int32& rInd
 
 sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(std::u16string_view rString, std::u16string_view rPrefix, bool& bIsAutoStyle)
 {
-    sal_Int32 nPrefixLength(rPrefix.size());
-    std::u16string_view sTemp(rString.substr(nPrefixLength));
-    sal_Int32 nIndex(o3tl::toInt32(sTemp));
-    if (nIndex > 0 && o3tl::make_unsigned(nIndex-1) < aAutoStyleNames.size() && aAutoStyleNames.at(nIndex - 1) == rString)
+    if (std::u16string_view rest; o3tl::starts_with(rString, rPrefix, &rest))
+    {
+        sal_Int32 nIndex(o3tl::toInt32(rest));
+        if (nIndex > 0 && o3tl::make_unsigned(nIndex - 1) < aStyleNames.size() && aStyleNames[nIndex - 1] == rString)
+        {
+            bIsAutoStyle = true;
+            return nIndex - 1;
+        }
+    }
+
+    if (auto i = std::find(aStyleNames.begin(), aStyleNames.end(), rString); i != aStyleNames.end())
+    {
+        bIsAutoStyle = false;
+        return std::distance(aStyleNames.begin(), i);
+    }
+
+    if (auto i = std::find(aAutoStyleNames.begin(), aAutoStyleNames.end(), rString); i != aAutoStyleNames.end())
     {
         bIsAutoStyle = true;
-        return nIndex - 1;
+        return std::distance(aAutoStyleNames.begin(), i);
     }
-    else
-    {
-        sal_Int32 i(0);
-        bool bFound(false);
-        while (!bFound && o3tl::make_unsigned(i) < aStyleNames.size())
-        {
-            if (aStyleNames[i] == rString)
-                bFound = true;
-            else
-                ++i;
-        }
-        if (bFound)
-        {
-            bIsAutoStyle = false;
-            return i;
-        }
-        else
-        {
-            i = 0;
-            while (!bFound && o3tl::make_unsigned(i) < aAutoStyleNames.size())
-            {
-                if (aAutoStyleNames[i] == rString)
-                    bFound = true;
-                else
-                    ++i;
-            }
-            if (bFound)
-            {
-                bIsAutoStyle = true;
-                return i;
-            }
-            else
-                return -1;
-        }
-    }
+
+    return -1;
 }
 
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
