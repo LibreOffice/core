@@ -112,12 +112,11 @@ void SwDocStatPage::Update()
     pSh->EndAction();
 
     SetData(m_aDocStat);
-}
 
-IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, weld::Button&, void)
-{
-    Update();
-    SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current());
+    // The line count needs a full layout pass, so it is not part of SwDocStat.
+    // Compute it here too, so it is shown right away instead of only after the
+    // user presses the Update button.
+    SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current() );
     SwFEShell* pFEShell = pDocShell ? pDocShell->GetFEShell() : nullptr;
     if (pFEShell)
     {
@@ -126,6 +125,11 @@ IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, weld::Button&, void)
         m_xLineNo->set_label(sLineCount);
         m_xLineNo->set_size_request(m_xLineNo->get_approximate_digit_width() * sLineCount.getLength(), -1);
     }
+}
+
+IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, weld::Button&, void)
+{
+    Update();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

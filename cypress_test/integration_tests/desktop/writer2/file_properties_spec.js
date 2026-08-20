@@ -94,16 +94,17 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', { te
 		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
 	});
 
-	it('Statistics tab Update fills in the line count.', function() {
+	it('Statistics tab shows the line count right away.', function() {
 		writerHelper.openFileProperties(this.win);
 
 		// The Writer statistics page must render as a JSDialog for its Update
 		// button to work.
 		cy.cGet('#writerstats').click();
 
-		// The line count is computed on demand, so it is empty until Update is
-		// pressed; pressing it must populate the value.
-		cy.cGet('#nolines').invoke('text').should('not.match', /[0-9]/);
+		// The line count needs a full layout pass, so it used to stay empty
+		// until Update was pressed. It must now be filled in as soon as the
+		// tab opens, and pressing Update must keep it filled in.
+		cy.cGet('#nolines').invoke('text').should('match', /[0-9]/);
 		cy.cGet('#update.ui-pushbutton-wrapper').click();
 		helper.processToIdle(this.win);
 		cy.cGet('#nolines').invoke('text').should('match', /[0-9]/);
