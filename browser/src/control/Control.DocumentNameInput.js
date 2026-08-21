@@ -108,20 +108,10 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 
 		var el = $('#document-name-input');
 
-		try {
-			var fileNameFullPath = new URL(
-				new URLSearchParams(window.location.search).get('WOPISrc')
-			)
-				.pathname
-				.replace('/wopi/files', '');
-
-			var basePath = fileNameFullPath.replace(this.map['wopi'].BaseFileName , '').replace(/\/$/, '');
-			var title = this.map['wopi'].BaseFileName + '\n' + _('Path') + ': ' + basePath;
-
-			el.prop('title', title);
-		} catch (e) {
-			// purposely ignore the error for legacy browsers
-		}
+		// WOPISrc's path segment is an opaque file identifier on a real WOPI
+		// host, not a folder path, so showing it as a "Path" tooltip would just
+		// display technical noise to the user; only the filename is meaningful.
+		el.prop('title', this.map['wopi'].BaseFileName);
 
 		// FIXME: Android app would display a temporary filename, not the actual filename
 		if (window.ThisIsTheAndroidApp) {
