@@ -29,8 +29,8 @@ import pefile
 
 
 sbom_data = {}
-root_gids = set()
 filelistdirs = []
+filelistdirs_sdk = []
 timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 productname = os.environ.get("PRODUCTNAME_WITHOUT_SPACES")
 # suffix is hard-coded in makefile :(
@@ -79,7 +79,7 @@ def get_sha512(abspath):
             digest.update(chunk)
     return digest.hexdigest()
 
-def parse_filelist(filelist):
+def parse_filelist(filelist, filelistdirs):
     for listdir in filelistdirs:
         path = os.path.join(listdir, filelist)
         if os.path.exists(path):
@@ -312,8 +312,8 @@ def resolve_ziplist_inheritance(ziplist):
             for inc in includes:
                 parse_include(variables, os.path.join(SRCDIR, inc))
 
-def init_filelistdirs(ziplist):
-    for path in ziplist[productname]["settings"]["include"].split(","):
+def init_filelistdirs(ziplist, product, filelistdirs):
+    for path in ziplist[product]["settings"]["include"].split(","):
         if path.startswith("{filelistpath}"):
             filelistdirs.append(path.replace("{filelistpath}", os.environ.get("WORKDIR")))
 
@@ -445,7 +445,6 @@ def process_file(file_path):
 
 
 def sbom_skeleton(package, gid, languages):
-    root_gids.add(gid)
     root_spdx_id = make_spdx_id(package, f"SPDXRef-{package}")
     package_spdx_id = package_id(package)
     tool_spdx_id = make_spdx_id(package, "SPDXRef-Tool-CustomScript")
@@ -507,9 +506,11 @@ def sbom_skeleton(package, gid, languages):
     add_license_relationship(package, root_spdx_id, "MPL-2.0")
 
 
-def gen_packages(packinfos, ziplist, languages):
+def gen_packages(packinfos, ziplist, languages, product):
     """Generate one (empty) SBOM per RPM/DEB package."""
-    variables = ziplist[productname]["settings"]["variables"]
+
+    root_gids = set()
+    variables = ziplist[product]["settings"]["variables"]
     pattern = re.compile(r"%([A-Za-z0-9_]+)")
 
     def replace(match):
@@ -517,7 +518,7 @@ def gen_packages(packinfos, ziplist, languages):
         if var == "LANGUAGESTRING":
             return "%" + var # will be replaced later
         if var in ["UNIXPACKAGENAME", "UNIXPRODUCTNAME"]:
-            return productname.lower() # this is hardcoded in installer
+            return product.lower() # this is hardcoded in installer
         if not var in variables:
             raise Exception(f"variable used in packinfos not defined in ziplist: {var}")
         return variables[var]
@@ -525,16 +526,17 @@ def gen_packages(packinfos, ziplist, languages):
     def gen_package(name, gid, languages):
         if sbom_data.get(name):
             raise Exception(f"duplicate package in packinfos: {name}")
+        root_gids.add(gid)
         sbom_skeleton(name, gid, languages)
 
     for package in packinfos:
         gid = package["module"]
         # only Linux gets fully split packages
         if sys.platform == "win32":
-            if gid not in ("gid_Module_Root", "gid_Module_Helppack_Help"):
+            if gid not in ("gid_Module_Root", "gid_Module_Helppack_Help", "gid_Module_Root_SDK"):
                 continue
         if sys.platform == "darwin":
-            if gid not in ("gid_Module_Root", "gid_Module_Langpack_Basis", "gid_Module_Langpack_Brand"):
+            if gid not in ("gid_Module_Root", "gid_Module_Langpack_Basis", "gid_Module_Langpack_Brand", "gid_Module_Root_SDK"):
                 continue
         name_pi = package["packagename"]
         name = pattern.sub(replace, name_pi)
@@ -547,13 +549,15 @@ def gen_packages(packinfos, ziplist, languages):
             else:
                 gen_package(name, gid, "en-US")
 
+    return root_gids
+
 
 def install_script_value_to_array(value):
     if len(value) > 1 and value[0] == "(" and value[-1] == ")":
         value = value[1:-1]
     return [] if value == "" else value.split(",")
 
-def process_install_script(install_script):
+def process_install_script(install_script, root_gids):
     """
     Find all the files in install script, their parent directories, and
     group the files by the root package to get a dictionary of lists,
@@ -700,7 +704,7 @@ class FileFlags(Flag):
     ARCHIVE = auto()
     STRUCTURED = auto()
 
-def locate_files(files_by_package, languages, ziplist):
+def locate_files(files_by_package, languages, ziplist, product, filelistdirs):
     """
     Find actual paths of the files, which depends on language and variables,
     and determine flags.
@@ -716,6 +720,7 @@ def locate_files(files_by_package, languages, ziplist):
             ".py", ".pyi",
             ".xba", ".xdl",
             ".xsl",
+            ".pl",
             ".glsl",
             ".PS" ]
 
@@ -751,12 +756,14 @@ def locate_files(files_by_package, languages, ziplist):
         return (abspath, instpath)
 
     ZIPLIST_VAR = re.compile(r"\$\{(\w+)\}")
-    variables = ziplist[productname]["settings"]["variables"]
+    variables = ziplist[product]["settings"]["variables"]
 
     def subst_ziplist_vars(value):
         return ZIPLIST_VAR.sub(lambda match: variables.get(match.group(1), match.group(0)), value)
 
     def get_dir(dirs, lang):
+        if len(dirs) == 0: # only in SDK
+            return ""
         if len(dirs) == 1:
             assert dirs[0]["ParentID"] == "PREDEFINED_PROGDIR"
             name = dirs[0]["HostName"]
@@ -792,7 +799,7 @@ def locate_files(files_by_package, languages, ziplist):
                 if parent != "":
                     raise Exception(f"unexpected dir {parent} on filelist: {name}")
                 # Package can have empty directory now which has x bit
-                listfiles = [lf for lf in parse_filelist(name) if not os.path.isdir(lf)]
+                listfiles = [lf for lf in parse_filelist(name, filelistdirs) if not os.path.isdir(lf)]
                 result = result.union([check_file(lf) for lf in listfiles])
             else:
                 result.add(find_file(parent + name, parent + instname))
@@ -819,10 +826,10 @@ def filter_files(files_by_package):
         files_by_package[package] = [file for file in files_by_package[package] if bool(file["flags"])]
 
 
-def add_dependencies(files_by_package):
+def add_dependencies(files_by_package, files_by_package_extra_deps):
     """Add required checksum and dependencies to files."""
 
-    def find_dep(dep, instpath=None):
+    def find_dep(files_by_package, dep, instpath=None):
         found = None
         for package in files_by_package:
             for file in files_by_package[package]:
@@ -865,7 +872,7 @@ def add_dependencies(files_by_package):
                 deps = [item for item in headers.get("Class-Path", "").split()
                         if item != "../" and item != ".."]
                 for dep in deps:
-                    if not(find_dep(dep)): # expect all jars to exist
+                    if not(find_dep(files_by_package, dep)): # expect all jars to exist
                         raise Exception(f"cannot find jar dependency: {dep}")
                 return ("JVM", set(deps))
 
@@ -951,6 +958,8 @@ def add_dependencies(files_by_package):
                 return ("Contents/MacOS/soffice", set())
             else:
                 raise Exception("TODO mobile platform")
+        elif ext == ".pl":
+            return ("Perl", set())
         elif ext == ".glsl":
             return ("OpenGL", set())
         elif ext == ".PS":
@@ -993,7 +1002,10 @@ def add_dependencies(files_by_package):
                     else: # bundled interpreters have relative paths
                         deps.append(interpreter)
                 for dep in alldeps:
-                    depfile = find_dep(dep, file["instpath"])
+                    depfile = find_dep(files_by_package, dep, file["instpath"])
+                    if depfile is None:
+                        if files_by_package_extra_deps is not None:
+                            depfile = find_dep(files_by_package_extra_deps, dep, file["instpath"])
                     if depfile is None:
                         sysdeps.append(dep)
                     else:
@@ -1046,9 +1058,30 @@ def add_merge_module(files_by_package, install_script):
             "sha512": get_sha512(abspath), "deps": [], "sysdeps": []})
 
 
+def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
+        externalstaticfile, externalpackagestaticfile, product, filelistdirs,
+        files_extra_deps = None):
+    """Generate SBOM graph for a product."""
+
+    init_filelistdirs(ziplist, product, filelistdirs)
+    root_gids = gen_packages(packinfos, ziplist, languages, product)
+    files_by_package = process_install_script(install_script, root_gids)
+    externalfiles = read_externals(externalsfile)
+    externalstaticlink = read_external_staticlink(externalstaticfile)
+    externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile)
+    assign_externals(files_by_package, externalfiles)
+    files = locate_files(files_by_package, languages, ziplist, product, filelistdirs)
+    filter_files(files)
+    add_dependencies(files, files_extra_deps)
+    add_static_dependencies(files, externalstaticlink, False)
+    add_static_dependencies(files, externalpackagestaticlink, True)
+    add_merge_module(files, install_script)
+    return files
+
+
 if __name__ == "__main__":
-    if len(sys.argv) < 15:
-        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <6 packinfo> <path of install script> <languages> <externals> <externalstatic> <externalpackagestatic>")
+    if len(sys.argv) < 17:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <6 packinfo> <path of install script> <packinfo> <path of install script> <languages> <externals> <externalstatic> <externalpackagestatic>")
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
@@ -1062,23 +1095,22 @@ if __name__ == "__main__":
         packinfos += parse_packinfo(sys.argv[8])
         packinfos += parse_packinfo(sys.argv[9])
         install_script = parse_install_script(sys.argv[10])
-        languages = sys.argv[11].split()
-        externalsfile = sys.argv[12]
-        externalstaticfile = sys.argv[13]
-        externalpackagestaticfile = sys.argv[14]
-        init_filelistdirs(ziplist)
-        gen_packages(packinfos, ziplist, languages)
-        files_by_package = process_install_script(install_script)
-        externalfiles = read_externals(externalsfile)
-        externalstaticlink = read_external_staticlink(externalstaticfile)
-        externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile)
-        assign_externals(files_by_package, externalfiles)
-        files = locate_files(files_by_package, languages, ziplist)
-        filter_files(files)
-        add_dependencies(files)
-        add_static_dependencies(files, externalstaticlink, False)
-        add_static_dependencies(files, externalpackagestaticlink, True)
-        add_merge_module(files, install_script)
+        languages = sys.argv[13].split()
+        externalsfile = sys.argv[14]
+        externalstaticfile = sys.argv[15]
+        externalpackagestaticfile = sys.argv[16]
+
+        files_product = gen_product(ziplist, packinfos, install_script, languages,
+            externalsfile, externalstaticfile, externalpackagestaticfile,
+            productname, filelistdirs)
+
+        if "ODK" in os.environ.get("BUILD_TYPE").split(" "):
+            packinfos_sdk = parse_packinfo(sys.argv[11])
+            install_script_sdk = parse_install_script(sys.argv[12])
+            files_sdk = gen_product(ziplist, packinfos_sdk, install_script_sdk, languages,
+                externalsfile, externalstaticfile, externalpackagestaticfile,
+                productname_sdk, filelistdirs_sdk, files_product)
+
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"

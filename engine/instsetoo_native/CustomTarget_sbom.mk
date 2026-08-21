@@ -27,6 +27,7 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_help.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_lang.txt \
+		$(call gb_Helper_optional,ODK,$(SRCDIR)/setup_native/source/packinfo/packinfo_sdkoo.txt) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
 		$(call gb_InstallScript_get_target,setup_osl) \
 		$(call gb_Helper_optional,ODK,$(call gb_InstallScript_get_target,sdkoo)) \
@@ -55,6 +56,8 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
 		$(call gb_InstallScript_get_target,setup_osl) \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_sdkoo.txt \
+		$(call gb_InstallScript_get_target,sdkoo) \
 		"$(if $(filter en-US,$(gb_WITH_LANG)),,en-US) $(gb_WITH_LANG)" \
 		$${EXTERNALSFILE} \
 		$${EXTERNALSTATICFILE} \
