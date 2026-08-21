@@ -891,7 +891,11 @@ bool Application::KitHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
     aMouseEvent.mnTime = tools::Time::GetSystemTicks();
     aMouseEvent.mnX = pEvent->GetPosPixel().X();
     aMouseEvent.mnY = pEvent->GetPosPixel().Y();
-    aMouseEvent.mnCode = pEvent->GetButtons() | pEvent->GetModifier();
+    // GetModifier() reports only KEY_SHIFT/KEY_MOD1/KEY_MOD2; a kit client can
+    // also send KEY_MOD3 (the browser's stand-in for a remote macOS client's
+    // Command key, distinct from Ctrl there), so fold it in separately here.
+    aMouseEvent.mnCode = pEvent->GetButtons() | pEvent->GetModifier()
+                          | (pEvent->IsMod3() ? KEY_MOD3 : 0);
 
     switch (nEvent)
     {
@@ -909,13 +913,8 @@ bool Application::KitHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
             bSuccess = ImplKitHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONDOWN, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime,
-#ifdef MACOSX
                                                aMouseEvent.mnButton |
                                                (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
-#else
-                                               aMouseEvent.mnButton |
-                                               (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
-#endif
                                                ImplGetMouseButtonMode(&aMouseEvent),
                                                pEvent->GetClicks());
             break;
@@ -925,13 +924,8 @@ bool Application::KitHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
             bSuccess = ImplKitHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONUP, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime,
-#ifdef MACOSX
                                                aMouseEvent.mnButton |
                                                (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
-#else
-                                               aMouseEvent.mnButton |
-                                               (aMouseEvent.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
-#endif
                                                ImplGetMouseButtonMode(&aMouseEvent),
                                                pEvent->GetClicks());
             break;

@@ -1227,12 +1227,29 @@ bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
 
     // #i3875# *Hack*
     bool bMod1Locked = (aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1) != 0;
-    aViewData.SetSelCtrlMouseClick( rMEvt.IsMod1() || bMod1Locked );
+    // IsMod3() is the Command key on macOS, sent as a separate modifier from Ctrl
+    // (KEY_MOD1) since the two are distinct physical keys there; treat it the same
+    // as Ctrl so Command-click extends the selection the way Ctrl-click does elsewhere.
+    aViewData.SetSelCtrlMouseClick( rMEvt.IsMod1() || rMEvt.IsMod3() || bMod1Locked );
 
     if ( pSelEngine )
     {
         bMoveIsShift = rMEvt.IsShift();
-        bRet = pSelEngine->SelMouseButtonDown( rMEvt );
+        // MouseEvent::GetModifier() only reports KEY_SHIFT/KEY_MOD1/KEY_MOD2, so
+        // the generic SelectionEngine below never sees KEY_MOD3 (Command) at all
+        // and treats the click as unmodified. Fold it into KEY_MOD1 here, at the
+        // Calc-specific call site, rather than widening what GetModifier() itself
+        // reports for every other KEY_MOD3 consumer.
+        if ( rMEvt.IsMod3() && !rMEvt.IsMod1() )
+        {
+            MouseEvent aCtrlEquivEvt( rMEvt.GetPosPixel(), rMEvt.GetClicks(), rMEvt.GetMode(),
+                                      rMEvt.GetButtons(), rMEvt.GetModifier() | KEY_MOD1 );
+            if ( rMEvt.getLogicPosition() )
+                aCtrlEquivEvt.setLogicPosition( *rMEvt.getLogicPosition() );
+            bRet = pSelEngine->SelMouseButtonDown( aCtrlEquivEvt );
+        }
+        else
+            bRet = pSelEngine->SelMouseButtonDown( rMEvt );
         bMoveIsShift = false;
     }
 

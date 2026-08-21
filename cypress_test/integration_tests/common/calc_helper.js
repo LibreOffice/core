@@ -97,7 +97,7 @@ function clickOnFirstCell(firstClick = true, dblClick = false, expectedCell = 'A
 	* Row and column width / height values are the same.
 	* Indexes are 1-based.
 */
-function clickOnACell(currentColumnIndex, currentRowIndex, clickColumnIndex, clickRowIndex) {
+function clickOnACell(currentColumnIndex, currentRowIndex, clickColumnIndex, clickRowIndex, modifiers = {}) {
 	cy.log('>> clickOnACell - start');
 	cy.log('Param - clickColumnIndex: ' + clickColumnIndex);
 	cy.log('Param - clickRowIndex: ' + clickRowIndex);
@@ -112,7 +112,12 @@ function clickOnACell(currentColumnIndex, currentRowIndex, clickColumnIndex, cli
 			const currentY = clientRect.top + parseInt(clientRect.height * 0.5);
 			const clickX = currentX + clientRect.width * (clickColumnIndex - currentColumnIndex);
 			const clickY = currentY + clientRect.height * (clickRowIndex - currentRowIndex);
-			cy.cGet('body').click(clickX, clickY);
+			// realClick dispatches actual OS-level input (via CDP) rather than a
+			// synthetic DOM event, which matters for modifiers: a plain
+			// .click(x, y, {ctrlKey: true}) does not reliably reach the browser's
+			// own notion of which keys are held, so a Ctrl/Cmd-click here would
+			// not read back as one.
+			cy.cGet('body').realClick(Object.assign({ x: clickX, y: clickY }, modifiers));
 		});
 
 	cy.log('>> clickOnACell - end');
