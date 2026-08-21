@@ -80,6 +80,8 @@ private:
                 return u"_xlfn.ANCHORARRAY"_ustr;
             case ocOffset:
                 return u"OFFSET"_ustr;
+            case ocPercentSign:
+                return u"%"_ustr;
             case ocMissing:
                 return u"missing"_ustr;
             case ocBad:
@@ -238,6 +240,21 @@ CPPUNIT_TEST_FIXTURE(OOXMLRewriterTest, testAnAtWithNothingToEncloseIsDropped)
 
     CPPUNIT_ASSERT(pMissing);
     CPPUNIT_ASSERT_EQUAL(u"missing"_ustr, describe(*pMissing));
+}
+
+CPPUNIT_TEST_FIXTURE(OOXMLRewriterTest, testASpillWithNoFactorBeforeItIsDropped)
+{
+    // A percent sign ends the factor, so the # that follows has nothing to enclose. The pair
+    // would span no tokens at all, so it goes and the # with it.
+    FormulaTokenArray aTokens;
+    addOperand(aTokens);
+    aTokens.AddOpCode(ocPercentSign);
+    aTokens.AddOpCode(ocSpill);
+
+    const std::unique_ptr<FormulaTokenArray> pRewritten = rewrite(aTokens);
+
+    CPPUNIT_ASSERT(pRewritten);
+    CPPUNIT_ASSERT_EQUAL(u"operand %"_ustr, describe(*pRewritten));
 }
 
 CPPUNIT_TEST_FIXTURE(OOXMLRewriterTest, testTextThatDidNotParseTakesNoWrapper)

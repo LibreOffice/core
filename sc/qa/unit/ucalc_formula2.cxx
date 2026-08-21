@@ -6877,6 +6877,32 @@ compileInNativeGrammar(ScDocument& rDocument, const OUString& rFormula, const Sc
     return pCode;
 }
 
+// Compile a formula in native grammar down to RPN and return the parse error.
+// FormulaError::NONE means the whole formula parsed as one expression.
+FormulaError parseErrorInNativeGrammar(ScDocument& rDocument, const OUString& rFormula)
+{
+    const ScAddress aPosition(1, 0, 0);
+    std::unique_ptr<ScTokenArray> pCode = compileInNativeGrammar(rDocument, rFormula, aPosition);
+    ScCompiler aCompiler(rDocument, aPosition, *pCode, formula::FormulaGrammar::GRAM_NATIVE);
+    aCompiler.CompileTokenArray();
+    return pCode->GetCodeError();
+}
+
+// Compile a formula in a grammar where a blank is the intersection operator and print it as
+// OOXML. Calc A1 uses an exclamation mark for that operator instead.
+OUString compileInXlA1SyntaxAndPrintAsOoxml(ScDocument& rDocument, const OUString& rFormula)
+{
+    const ScAddress aPosition(1, 0, 0);
+    ScCompiler aCompiler(rDocument, aPosition, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1, true,
+                         false);
+    std::unique_ptr<ScTokenArray> pCode = aCompiler.CompileString(rFormula);
+    CPPUNIT_ASSERT(pCode);
+    ScCompiler aRpnCompiler(rDocument, aPosition, *pCode,
+                            formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    aRpnCompiler.CompileTokenArray();
+    return printAsOoxml(rDocument, *pCode, aPosition);
+}
+
 // Compile a formula in native grammar and print it as OOXML.
 OUString compileAndPrintAsOoxml(ScDocument& rDocument, const OUString& rFormula)
 {
@@ -7079,17 +7105,55 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeBindsTighterThanSignAndMarker
     m_pDoc->DeleteTab(0);
 }
 
-CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeTakesTheWrapperThePercentSignClosed)
+CPPUNIT_TEST_FIXTURE(TestFormula2, testIntersectionNextToASpilledRangeSurvives)
 {
-    // The percent sign ends an @ operand, so a # behind it takes the @ wrapper too.
+    // A # on either operand leaves the intersection operator between them alone, because the
+    // spill range the # yields is a reference like any other operand.
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(_xlfn.SINGLE(A1)%)"_ustr,
-                         compileAndPrintAsOoxml(*m_pDoc, u"@A1%#"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(_xlfn.SINGLE(-A1)%)"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"A1:A5 _xlfn.ANCHORARRAY(C1)"_ustr,
+                         compileInXlA1SyntaxAndPrintAsOoxml(*m_pDoc, u"=A1:A5 C1#"_ustr));
+
+    // Same with the # on the operand before the blank.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1) C1"_ustr,
+                         compileInXlA1SyntaxAndPrintAsOoxml(*m_pDoc, u"=A1# C1"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorWithoutAFactorIsNoFormula)
+{
+    // The # binds to the factor before it and a percent sign ends that factor, so a # or a
+    // union operator after one has nothing to bind to and the formula doesn't parse. OOXML
+    // has no spelling for either shape.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(FormulaError::OperatorExpected,
+                         parseErrorInNativeGrammar(*m_pDoc, u"=A1%#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::OperatorExpected,
+                         parseErrorInNativeGrammar(*m_pDoc, u"=A1%~B2%"_ustr));
+
+    // The same operators parse fine when there is a factor in front of them.
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, parseErrorInNativeGrammar(*m_pDoc, u"=A1#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, parseErrorInNativeGrammar(*m_pDoc, u"=A1#%"_ustr));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, parseErrorInNativeGrammar(*m_pDoc, u"=A1~B2%"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeDroppedWithNoFactorInFrontOfIt)
+{
+    // A percent sign ends the factor before it, so a # after one has nothing to enclose and
+    // is dropped. OOXML has no spelling for that shape either, and no parse produces one.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"A1%"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1%#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(A1)%"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"@A1%#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(-A1)%"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"@-A1%#"_ustr));
 
-    // A union list that follows such a wrapper begins in front of it as well.
+    // A union list that comes after an @ wrapper closed by the percent sign starts before
+    // that wrapper.
     CPPUNIT_ASSERT_EQUAL(u"(_xlfn.SINGLE(-A1)%,B2)"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"@-A1%~B2"_ustr));
 
@@ -7154,8 +7218,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionStaysInsideImplicitIntersectionWrapp
     CPPUNIT_ASSERT_EQUAL(u"(_xlfn.SINGLE( (A1,B2)))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"(@ A1~B2)"_ustr));
 
-    // A # takes the whole list, so an @ on one part of it wraps the list's wrapper.
-    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(_xlfn.ANCHORARRAY((A1,B2)))"_ustr,
+    // A # takes the list part before it, and an @ in front of that part wraps around the #.
+    CPPUNIT_ASSERT_EQUAL(u"(A1,_xlfn.SINGLE(_xlfn.ANCHORARRAY(B2)))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1~@B2#"_ustr));
 
     // An already parenthesised union list fills the wrapper on its own, for either operator.
@@ -7171,30 +7235,40 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionStaysInsideImplicitIntersectionWrapp
     m_pDoc->DeleteTab(0);
 }
 
-CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorsApplyToTheWholeExpression)
+CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorsBindWhereTheGrammarPutsThem)
 {
-    // The # and the % follow every operator that binds tighter than they do, so
-    // each takes the whole expression in front of it as its operand rather than
-    // the last part of it.
+    // The # takes the factor before it and nothing wider. The % is above every reference
+    // operator, so it takes the whole expression in front of it instead. A document from
+    // another application draws the same line.
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY((A1,B2))"_ustr,
+    // One part of a union list is a factor, so the # takes that part and the % the list.
+    CPPUNIT_ASSERT_EQUAL(u"(A1,_xlfn.ANCHORARRAY(B2))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1~B2#"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"(A1,B2)%"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1~B2%"_ustr));
 
-    // The range operator binds tighter still, and a range built with it goes
-    // inside the wrapper whole.
+    // The first part of the list is a factor too, so a # there takes only that part and the
+    // list's own parentheses end up outside the wrapper.
+    CPPUNIT_ASSERT_EQUAL(u"(_xlfn.ANCHORARRAY(A1),B2)"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1#~B2"_ustr));
+
+    // A range reference is a single factor and goes inside the wrapper as a whole. A range
+    // built with the range operator has a factor on either side, and the # takes only the
+    // one before it.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1:A3)"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1:A3#"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1:INDEX(B1:B10,5))"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"A1:_xlfn.ANCHORARRAY(INDEX(B1:B10,5))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1:INDEX(B1:B10;5)#"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.ANCHORARRAY(A1):C1"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"A1#:C1"_ustr));
 
-    // A percent sign on one part of a union list keeps that part inside the list, and one
-    // after the list goes after the list's own parentheses. Neither shape comes out of a
-    // parse, which treats a percent sign as being above the union operator.
+    // A percent sign is above the union operator, so the one after the list goes after the
+    // list's own parentheses. The producing application only takes a percent sign in that
+    // trailing place, never on a part of the list, and no parse puts one there either, so
+    // the one on the first part stays where it is.
     CPPUNIT_ASSERT_EQUAL(u"(A1%,B2)%"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1%~B2%"_ustr));
 
-    // A prefix sign on one part of a union list stays outside the wrapper too.
+    // A prefix sign is above the # too, so it stays outside the wrapper.
     CPPUNIT_ASSERT_EQUAL(u"(A1,-_xlfn.ANCHORARRAY(B2))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"A1~-B2#"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"SUM((A1,-_xlfn.ANCHORARRAY(B2)))"_ustr,
@@ -7224,8 +7298,10 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
     CPPUNIT_ASSERT_EQUAL(u"($A$1,_xlfn.SINGLE($B$2))"_ustr,
                          printAsOoxml(*m_pDoc, aMarkerInList, ScAddress(1, 0, 0)));
 
-    // Same for a percent sign before the union operator. The sign comes after the first part
-    // of the list, so the list still starts before that part.
+    // Same for a percent sign before the union operator. The sign comes after the first
+    // part of the list, so the list still starts before that part. OOXML has no spelling
+    // for a percent sign there either, which is another reason no parse produces this
+    // shape.
     ScTokenArray aPercentInList(*m_pDoc);
     aPercentInList.AddSingleReference(aFirst);
     aPercentInList.AddOpCode(ocPercentSign);

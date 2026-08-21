@@ -1443,6 +1443,30 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testParenthesizedSpilledRangeXlsxRoundTrip)
     CPPUNIT_ASSERT_EQUAL(u"=(A1)#"_ustr, pDoc->GetFormula(1, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testIntersectedSpilledRangeXlsxRoundTrip)
+{
+    // OOXML writes the intersection operator as a blank and the # before its operand, so the
+    // two end up next to each other as "A1:A5 _xlfn.ANCHORARRAY(C1)". To read the blank back
+    // as the operator the import has to know that what follows yields a reference.
+    createScDoc();
+    ScDocument* pDocument = getScDoc();
+
+    pDocument->SetFormula(ScAddress(1, 0, 0), u"=A1:A5!C1#"_ustr,
+                          formula::FormulaGrammar::GRAM_NATIVE);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f",
+                       u"A1:A5 _xlfn.ANCHORARRAY(C1)");
+
+    saveAndReload(TestFilter::XLSX);
+    pDocument = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"=A1:A5!C1#"_ustr, pDocument->GetFormula(1, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testReferenceUnionXlsxRoundTrip)
 {
     // OOXML spells the union operator with the same comma that separates

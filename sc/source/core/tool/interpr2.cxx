@@ -2408,8 +2408,8 @@ void ScInterpreter::ScMod()
 
 void ScInterpreter::ScIntersect()
 {
-    formula::FormulaConstTokenRef p2nd = PopToken();
-    formula::FormulaConstTokenRef p1st = PopToken();
+    formula::FormulaConstTokenRef p2nd = PopReferenceOperand();
+    formula::FormulaConstTokenRef p1st = PopReferenceOperand();
 
     if (nGlobalError != FormulaError::NONE || !p2nd || !p1st)
     {
@@ -2551,8 +2551,8 @@ void ScInterpreter::ScIntersect()
 
 void ScInterpreter::ScRangeFunc()
 {
-    formula::FormulaConstTokenRef x2 = PopToken();
-    formula::FormulaConstTokenRef x1 = PopToken();
+    formula::FormulaConstTokenRef x2 = PopReferenceOperand();
+    formula::FormulaConstTokenRef x1 = PopReferenceOperand();
 
     if (nGlobalError != FormulaError::NONE || !x2 || !x1)
     {
@@ -2571,8 +2571,8 @@ void ScInterpreter::ScRangeFunc()
 
 void ScInterpreter::ScUnionFunc()
 {
-    formula::FormulaConstTokenRef p2nd = PopToken();
-    formula::FormulaConstTokenRef p1st = PopToken();
+    formula::FormulaConstTokenRef p2nd = PopReferenceOperand();
+    formula::FormulaConstTokenRef p1st = PopReferenceOperand();
 
     if (nGlobalError != FormulaError::NONE || !p2nd || !p1st)
     {
