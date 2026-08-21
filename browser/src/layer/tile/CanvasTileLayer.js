@@ -2813,22 +2813,40 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			// Cmd+UpArrow -> Ctrl+Home
 			if (unoKeyCode == UNOKey.UP + app.UNOModifier.CTRL)
 				unoKeyCode = UNOKey.HOME + app.UNOModifier.CTRL;
+			// Cmd+Shift+UpArrow -> Ctrl+Shift+Home (select to start of document)
+			else if (unoKeyCode == UNOKey.UP + app.UNOModifier.CTRL + app.UNOModifier.SHIFT)
+				unoKeyCode = UNOKey.HOME + app.UNOModifier.CTRL + app.UNOModifier.SHIFT;
 			// Cmd+DownArrow -> Ctrl+End
 			else if (unoKeyCode == UNOKey.DOWN + app.UNOModifier.CTRL)
 				unoKeyCode = UNOKey.END + app.UNOModifier.CTRL;
+			// Cmd+Shift+DownArrow -> Ctrl+Shift+End (select to end of document)
+			else if (unoKeyCode == UNOKey.DOWN + app.UNOModifier.CTRL + app.UNOModifier.SHIFT)
+				unoKeyCode = UNOKey.END + app.UNOModifier.CTRL + app.UNOModifier.SHIFT;
 			// Cmd+LeftArrow -> Home
 			else if (unoKeyCode == UNOKey.LEFT + app.UNOModifier.CTRL)
 				unoKeyCode = UNOKey.HOME;
+			// Cmd+Shift+LeftArrow -> Shift+Home (select to start of line, not word by word)
+			else if (unoKeyCode == UNOKey.LEFT + app.UNOModifier.CTRL + app.UNOModifier.SHIFT)
+				unoKeyCode = UNOKey.HOME + app.UNOModifier.SHIFT;
 			// Cmd+RightArrow -> End
 			else if (unoKeyCode == UNOKey.RIGHT + app.UNOModifier.CTRL)
 				unoKeyCode = UNOKey.END;
+			// Cmd+Shift+RightArrow -> Shift+End (select to end of line, not word by word)
+			else if (unoKeyCode == UNOKey.RIGHT + app.UNOModifier.CTRL + app.UNOModifier.SHIFT)
+				unoKeyCode = UNOKey.END + app.UNOModifier.SHIFT;
 			// Option+LeftArrow -> Ctrl+LeftArrow
 			else if (unoKeyCode == UNOKey.LEFT + app.UNOModifier.ALT)
 				unoKeyCode = UNOKey.LEFT + app.UNOModifier.CTRL;
+			// Option+Shift+LeftArrow -> Ctrl+Shift+LeftArrow (select the previous word)
+			else if (unoKeyCode == UNOKey.LEFT + app.UNOModifier.ALT + app.UNOModifier.SHIFT)
+				unoKeyCode = UNOKey.LEFT + app.UNOModifier.CTRL + app.UNOModifier.SHIFT;
 			// Option+RightArrow -> Ctrl+RightArrow (Not entirely equivalent, should go
 			// to end of word (or next), LO goes to beginning of next word.)
 			else if (unoKeyCode == UNOKey.RIGHT + app.UNOModifier.ALT)
 				unoKeyCode = UNOKey.RIGHT + app.UNOModifier.CTRL;
+			// Option+Shift+RightArrow -> Ctrl+Shift+RightArrow (select the next word)
+			else if (unoKeyCode == UNOKey.RIGHT + app.UNOModifier.ALT + app.UNOModifier.SHIFT)
+				unoKeyCode = UNOKey.RIGHT + app.UNOModifier.CTRL + app.UNOModifier.SHIFT;
 		}
 
 		// Ctrl+Home asks to see the top of the whole sheet, so remember to scroll the
