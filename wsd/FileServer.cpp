@@ -2104,6 +2104,13 @@ void FileServerRequestHandler::fetchWopiSettingConfigs(const Poco::Net::HTTPRequ
 
 namespace
 {
+// The largest body fetch-settings-file accepts from the storage server, in bytes. The files it
+// relays are settings JSON, xcu configuration and wordbook dictionaries. The biggest of those in
+// practice is a wordbook, and a whole-language spelling dictionary, the ceiling for one, is about
+// 4.5 MB, so 20 MB leaves generous headroom while bounding what one request can hold in memory
+// on the thread that serves every client.
+constexpr int64_t MaxSettingFileSizeBytes = 20 * 1024 * 1024;
+
 // Return the setting-file name a settings request refers to, taken from the
 // last path segment of the WOPI file URL (query stripped). Used to single out
 // viewsetting.json, the only settings file that carries user secrets.
@@ -2279,6 +2286,15 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
         }
 
         const auto httpResponse = wopiSession->response();
+        if (httpResponse->state() != http::Response::State::Complete)
+        {
+            LOG_ERR("Failed to fetch setting file from [" << uriAnonym
+                    << "]: the transfer did not complete");
+            sendError(http::StatusCode::BadGateway, requestPath, destSocket, shortMessage,
+                      "The transfer did not complete");
+            return;
+        }
+
         if (httpResponse->statusLine().statusCode() != http::StatusCode::OK)
         {
             LOG_ERR("Failed to fetch setting file from [" << uriAnonym
@@ -2303,7 +2319,12 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
     LOG_DBG("Fetching setting file from [" << uriAnonym << ']');
     auto httpSession = StorageConnectionManager::getHttpSession(dicUrl);
     httpSession->setFinishedHandler(std::move(finishedCallback));
-    httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
+    if (!httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll()))
+        return;
+
+    // asyncRequest has created the response object, and no body is read until this function
+    // returns, so the limit is in place before the first byte arrives.
+    httpSession->response()->setBodySizeLimit(MaxSettingFileSizeBytes);
 }
 
 void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request,
