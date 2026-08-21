@@ -243,6 +243,10 @@ public:
 
     void readDirToHash(const std::string& basePath, const std::string& path);
 
+    void readAdminTemplates(const std::string& basePath);
+
+    const std::string& getAdminTemplate(const std::string& name);
+
     void synthesizeBuiltinExtensionsIndex();
 
     const std::string *getCompressedFile(const std::string &path);
@@ -273,6 +277,9 @@ public:
 private:
     using FileHashMap_t = Util::UnorderedStringMap<std::pair<std::string, std::string>>;
     FileHashMap_t FileHash;
+    /// The admin page templates, keyed by file name, each holding the text with its placeholders
+    /// still in place.
+    Util::UnorderedStringMap<std::string> AdminTemplates;
     static void sendError(http::StatusCode errorCode, const std::string& requestPath,
                           const std::shared_ptr<StreamSocket>& socket,
                           const std::string& shortMessage, const std::string& longMessage,
