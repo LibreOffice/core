@@ -1496,7 +1496,7 @@ OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  )
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )
 {
     SQLUINTEGER nValue;
-    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
+    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem to be any equivalent.
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
     SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
                 "connectivity.odbc",
@@ -1507,7 +1507,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  )
 {
     SQLUINTEGER nValue;
-    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
+    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem to be any equivalent.
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
     SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
                 "connectivity.odbc",
@@ -1518,7 +1518,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  )
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  )
 {
     SQLUINTEGER nValue;
-    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
+    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem to be any equivalent.
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
     SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
                 "connectivity.odbc",

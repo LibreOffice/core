@@ -118,7 +118,7 @@ IMPL_LINK_NOARG(ColorSchemeDialog, OptionHdl, weld::Toggleable&, void)
     if (m_xUseScheme->get_active())
     {
         m_xSchemeList->set_sensitive(true);
-        // Always select a item to avoid having nothing selected
+        // Always select an item to avoid having nothing selected
         if (m_sSelectedSchemeId == DEFAULT_SCHEME)
         {
             // If the default color scheme was selected, then choose first entry in the list

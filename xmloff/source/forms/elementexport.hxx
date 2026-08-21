@@ -204,7 +204,7 @@ namespace xmloff
         */
         void getSequenceInt16PropertyAsSet(const OUString& _rPropertyName, Int16Set& _rOut);
 
-        /** exports the attribute which descrives a cell value binding of a control
+        /** exports the attribute which describes a cell value binding of a control
             in a spreadsheet document
         */
         void exportCellBindingAttributes( bool _bIncludeListLinkageType );
@@ -219,7 +219,7 @@ namespace xmloff
         /** exports the attribute(s) for an XForms submission */
         void exportXFormsSubmissionAttributes();
 
-        /** exports the attribute which descrives a cell range which acts as list source for
+        /** exports the attribute which describes a cell range which acts as list source for
             a list-like control
         */
         void exportCellListSourceRange( );

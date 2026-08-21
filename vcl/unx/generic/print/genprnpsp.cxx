@@ -306,7 +306,7 @@ void SalGenericInstance::GetPrinterQueueInfo(ImplPrnQueueList& rList)
     static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
     if( ! pNoSyncDetection || ! *pNoSyncDetection )
     {
-        // #i62663# synchronize possible asynchronouse printer detection now
+        // #i62663# synchronize possible asynchronous printer detection now
         rManager.checkPrintersChanged( true );
     }
 

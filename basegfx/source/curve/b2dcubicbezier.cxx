@@ -378,7 +378,7 @@ namespace basegfx
         const B2DVector aEdge(maEndPoint - maStartPoint);
 
         // controls parallel to edge can be trivial. No edge -> not parallel -> control can
-        // still not be trivial (e.g. ballon loop)
+        // still not be trivial (e.g. balloon loop)
         if(aEdge.equalZero())
             return;
 

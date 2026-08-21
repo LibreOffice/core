@@ -189,7 +189,7 @@ public:
         }
         if (dc.Operator(OO_EqualEqual)
                 .Namespace("rtl")
-                .GlobalNamespace()) //TODO: more precicse check
+                .GlobalNamespace()) //TODO: more precise check
         {
             assert(fn->getNumParams() == 2);
             assert(expr->getNumArgs() == 2);
@@ -199,7 +199,7 @@ public:
         }
         if (dc.Operator(OO_ExclaimEqual)
                 .Namespace("rtl")
-                .GlobalNamespace()) //TODO: more precicse check
+                .GlobalNamespace()) //TODO: more precise check
         {
             assert(fn->getNumParams() == 2);
             assert(expr->getNumArgs() == 2);
@@ -207,7 +207,7 @@ public:
             check(expr->getArg(1));
             return true;
         }
-        if (dc.Operator(OO_Less).Namespace("rtl").GlobalNamespace()) //TODO: more precicse check
+        if (dc.Operator(OO_Less).Namespace("rtl").GlobalNamespace()) //TODO: more precise check
         {
             assert(fn->getNumParams() == 2);
             assert(expr->getNumArgs() == 2);
@@ -217,7 +217,7 @@ public:
         }
         if (dc.Operator(OO_LessEqual)
                 .Namespace("rtl")
-                .GlobalNamespace()) //TODO: more precicse check
+                .GlobalNamespace()) //TODO: more precise check
         {
             assert(fn->getNumParams() == 2);
             assert(expr->getNumArgs() == 2);
@@ -225,7 +225,7 @@ public:
             check(expr->getArg(1));
             return true;
         }
-        if (dc.Operator(OO_Greater).Namespace("rtl").GlobalNamespace()) //TODO: more precicse check
+        if (dc.Operator(OO_Greater).Namespace("rtl").GlobalNamespace()) //TODO: more precise check
         {
             assert(fn->getNumParams() == 2);
             assert(expr->getNumArgs() == 2);
@@ -235,7 +235,7 @@ public:
         }
         if (dc.Operator(OO_GreaterEqual)
                 .Namespace("rtl")
-                .GlobalNamespace()) //TODO: more precicse check
+                .GlobalNamespace()) //TODO: more precise check
         {
             assert(fn->getNumParams() == 2);
             assert(expr->getNumArgs() == 2);
@@ -288,7 +288,7 @@ public:
             return true;
         }
         if (dc.Operator(OO_Plus).Namespace("rtl").GlobalNamespace()
-            && fn->getNumParams() == 2) //TODO: more precicse check
+            && fn->getNumParams() == 2) //TODO: more precise check
         {
             assert(expr->getNumArgs() == 2);
             check(expr->getArg(0));
