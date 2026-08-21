@@ -1707,6 +1707,10 @@ void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
         m_StreamStateStack.top().nLineBreaksDeferred++;
         break;
     case COLUMN_BREAK:
+        // See SwWW8ImplReader::ReadChar(): column breaks should be ignored inside tables.
+        if (m_StreamStateStack.top().nTableDepth && !IsRTFImport())
+            return;
+
         m_StreamStateStack.top().bIsColumnBreakDeferred = true;
     break;
     case PAGE_BREAK:
