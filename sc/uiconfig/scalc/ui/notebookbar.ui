@@ -1515,7 +1515,7 @@
       <object class="GtkMenuItem" id="MenuPage-PageFormatDialog">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="action-name">.uno:PageFormatDialog</property>
+        <property name="action-name">.uno:RenameTable</property>
       </object>
     </child>
   </object>
@@ -5356,7 +5356,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxLayoutRenameTable">
+                          <object class="sfxlo-NotebookbarToolBox" id="bxLayoutToggleRTL">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="valign">center</property>
@@ -5364,9 +5364,9 @@
                             <property name="toolbar-style">both-horiz</property>
                             <property name="show-arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="btnLayoutRenameTable">
+                              <object class="GtkToolButton" id="btnLayoutToggleRTL">
                                 <property name="visible">True</property>
-                                <property name="action-name">.uno:RenameTable</property>
+                                <property name="action-name">.uno:SheetRightToLeft</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
