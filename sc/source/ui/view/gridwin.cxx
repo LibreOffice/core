@@ -4071,7 +4071,7 @@ void ScGridWindow::DropScroll( const Point& rMousePos )
 
 static bool lcl_TestScenarioRedliningDrop( const ScDocument* pDoc, const ScRange& aDragRange)
 {
-    //  Test, if a scenario is affected by a drop when turing on RedLining,
+    //  Test, if a scenario is affected by a drop when turning on RedLining,
     bool bReturn = false;
     SCTAB nTab = aDragRange.aStart.Tab();
     SCTAB nTabCount = pDoc->GetTableCount();

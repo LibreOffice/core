@@ -1348,7 +1348,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternStroke)
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
-    // ensure the stroke color is this redish color, and not gray which is what it
+    // ensure the stroke color is this reddish color, and not gray which is what it
     // defaults to if the stroke pattern isn't taken into account.
     assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='gr1']/"
                          "style:graphic-properties[@svg:stroke-color='#ed1b2d']");
@@ -1372,7 +1372,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
-    // ensure the stroke color is this redish color, and not gray which is what it
+    // ensure the stroke color is this reddish color, and not gray which is what it
     // defaults to if the stroke pattern isn't taken into account.
     assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='gr1']/"
                          "style:graphic-properties[@style:repeat='repeat' and "

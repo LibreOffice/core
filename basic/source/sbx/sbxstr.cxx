@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <memory>
 
-// The conversion of an item onto String was handled via the Put-Methods
+// The conversion of an item to a String was handled via the Put-Methods
 // of the several data types to avoid duplicated code.
 
 OUString ImpGetString( const SbxValues* p )

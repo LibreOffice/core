@@ -44,7 +44,7 @@ class CellDropDownItems(UITestCase):
 
                 #Close the dialog
 
-            #Launch the Select Menu to view the list ans select first item in the list
+            #Launch the Select Menu to view the list and select first item in the list
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "2", "ROW": "9"}))
 
@@ -56,7 +56,7 @@ class CellDropDownItems(UITestCase):
             xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
             self.assertEqual(get_cell_by_position(document, 0, 2, 9).getString(), "Item1")
 
-            #Launch the Select Menu to view the list ans select Third item in the list
+            #Launch the Select Menu to view the list and select Third item in the list
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "2", "ROW": "9"}))
 
@@ -68,7 +68,7 @@ class CellDropDownItems(UITestCase):
             xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
             self.assertEqual(get_cell_by_position(document, 0, 2, 9).getString(), "Item3")
 
-            #Launch the Select Menu to view the list ans select Fifth item in the list
+            #Launch the Select Menu to view the list and select Fifth item in the list
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "2", "ROW": "9"}))
 

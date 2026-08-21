@@ -44,7 +44,7 @@ ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 
 ScSortDlg::~ScSortDlg()
 {
-    // tdf#153852 - Make of sort dialog resizable (and remember size)
+    // tdf#153852 - Make the sort dialog resizable (and remember size)
     SvtViewOptions aDlgOpt(EViewType::Dialog, u"SortDialog"_ustr);
     aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::PosSize));
 }

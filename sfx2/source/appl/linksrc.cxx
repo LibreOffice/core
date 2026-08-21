@@ -387,7 +387,7 @@ bool SvLinkSource::HasDataLinks() const
     return bRet;
 }
 
-// sal_True => waitinmg for data
+// sal_True => waiting for data
 bool SvLinkSource::IsPending() const
 {
     return false;

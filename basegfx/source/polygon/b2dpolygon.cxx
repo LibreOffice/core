@@ -538,7 +538,7 @@ public:
                                     // inside the current range without control points. Expand current range by
                                     // subdividing the bezier segment.
                                     // Ideal here is a subdivision at the extreme values, so use
-                                    // getAllExtremumPositions to get all extremas in one run
+                                    // getAllExtremumPositions to get all extrema in one run
                                     std::vector< double > aExtremas;
 
                                     aExtremas.reserve(4);
@@ -576,7 +576,7 @@ private:
     // count of members.
     CoordinateDataArray2D                         maPoints;
 
-    // The control point vectors. This vectors are created on demand
+    // The control point vectors. These vectors are created on demand
     // and may be zero.
     std::optional< ControlVectorArray2D >         moControlVector;
 

@@ -9349,7 +9349,7 @@ void ScInterpreter::ScExpand()
     if (!MustHaveParamCount(nParamCount, 2, 4))
         return;
 
-    // 4rd argument optional - pad_with
+    // 4th argument optional - pad_with
     std::optional<bool> bDouble;
     double fNumber(0.0);
     svl::SharedString aString;
@@ -9599,7 +9599,7 @@ void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
             Pop();
     }
 
-    // 4rd argument optional - match_mode
+    // 4th argument optional - match_mode
     bool bMatchMode = false;
     if (nParamCount >= 4)
     {
@@ -9611,7 +9611,7 @@ void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
             Pop();
     }
 
-    // 3nd argument optional - instance_num
+    // 3rd argument optional - instance_num
     sal_Int32 nInstanceNum(1);
     if (nParamCount >= 3)
     {
@@ -9823,7 +9823,7 @@ void ScInterpreter::ScTextSplit()
             Pop();
     }
 
-    // 4rd argument optional - ignore_empty
+    // 4th argument optional - ignore_empty
     bool bIgnoreEmpty = false;
     if (nParamCount >= 4)
     {

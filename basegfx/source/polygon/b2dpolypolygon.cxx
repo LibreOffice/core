@@ -353,7 +353,7 @@ public:
 
     bool B2DPolyPolygon::isClosed() const
     {
-        // PolyPOlygon is closed when all contained Polygons are closed or
+        // PolyPolygon is closed when all contained Polygons are closed or
         // no Polygon exists.
         for(sal_uInt32 a(0); a < count(); a++)
         {

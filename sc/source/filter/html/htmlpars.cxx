@@ -1379,7 +1379,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                     if ( nRowsPerRow2 > 1 )
                     {   // Inner
                         if ( !pTab2 )
-                        {   // nRowsPerRow2 could be've been incremented
+                        {   // nRowsPerRow2 could have been incremented
                             pTab2 = new InnerMap;
                             (*pTables)[ nTable ].reset(pTab2);
                         }

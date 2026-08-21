@@ -34,7 +34,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b3dhommatrix);
     CPPUNIT_TEST(EmptyMethod);
@@ -53,7 +53,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b3dpoint);
     CPPUNIT_TEST(EmptyMethod);
@@ -68,7 +68,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b3drange);
     CPPUNIT_TEST(EmptyMethod);
@@ -87,7 +87,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b3dtuple);
     CPPUNIT_TEST(EmptyMethod);
@@ -102,7 +102,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b3dvector);
     CPPUNIT_TEST(EmptyMethod);
@@ -116,8 +116,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dtuple);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dvector);
 } // namespace basegfx3d
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+// this macro creates an empty function, which will be called by the RegisterAllFunctions()
+// to allow the user the possibility to also register some functions by hand.
 // NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -829,7 +829,7 @@ void OGLTransitionerImpl::impl_createTexture(
 
         if (epoxy_has_gl_extension("GL_EXT_texture_filter_anisotropic"))
         {
-            //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
+            //anisotropic filtering (to make texturing not suck when looking at polygons from oblique angles)
             GLfloat largest_supported_anisotropy;
             glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy);
@@ -844,7 +844,7 @@ void OGLTransitionerImpl::impl_createTexture(
 
             if (epoxy_has_gl_extension("GL_EXT_texture_filter_anisotropic"))
             {
-                //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
+                //anisotropic filtering (to make texturing not suck when looking at polygons from oblique angles)
                 GLfloat largest_supported_anisotropy;
                 glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy );
                 glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy );

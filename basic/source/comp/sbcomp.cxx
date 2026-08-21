@@ -60,7 +60,7 @@ bool SbModule::Compile()
     {
         if( dynamic_cast<const SbObjModule*>( this) == nullptr )
             pBasic->ClearAllModuleVars();
-        RemoveVars(); // remove 'this' Modules variables
+        RemoveVars(); // remove 'this' Module's variables
         // clear all method statics
         for (sal_uInt32 i = 0; i < pMethods->Count(); i++)
         {

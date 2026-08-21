@@ -220,7 +220,7 @@ static void cpp_call(
     static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
-    // indices of values this have to be converted (interface conversion cpp<=>uno)
+    // indices of values that have to be converted (interface conversion cpp<=>uno)
     sal_Int32 * pTempIndices = (sal_Int32 *)(pCppArgs + nParams);
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));

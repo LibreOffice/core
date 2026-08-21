@@ -880,7 +880,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf62603)
     // Insert 4th string 'who' with default 12 pt font height
     xCursorProps->setPropertyValue("CharHeight", uno::Any(float(12.0)));
     xText->insertString(xCursor, "who", false);
-    xCursor->goLeft(3, true); // selects 4rd string
+    xCursor->goLeft(3, true); // selects 4th string
     CPPUNIT_ASSERT_EQUAL(float(12.0), getProperty<float>(xCursorProps, "CharHeight"));
     xCursor->collapseToEnd();
 
