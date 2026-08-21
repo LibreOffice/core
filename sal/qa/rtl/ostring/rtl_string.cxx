@@ -52,7 +52,7 @@ namespace rtl_string
             }
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(getLength);
         CPPUNIT_TEST(getLength_000);
@@ -84,7 +84,7 @@ namespace rtl_string
             }
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(newFromString);
         // CPPUNIT_TEST(newFromString_000);
@@ -146,7 +146,7 @@ namespace rtl_string
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(convertUStringToString);
         CPPUNIT_TEST(convertUStringToString_001);

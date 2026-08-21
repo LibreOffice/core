@@ -135,7 +135,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(test);
     CPPUNIT_TEST(rtl_crc32_001);

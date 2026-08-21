@@ -166,7 +166,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(valueOf);
     CPPUNIT_TEST(valueOf_float_test_001);
@@ -309,7 +309,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(toDouble);
     CPPUNIT_TEST(toDouble_selftest);

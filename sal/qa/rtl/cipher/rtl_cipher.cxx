@@ -87,7 +87,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(create);
     CPPUNIT_TEST(create_001);
@@ -139,7 +139,7 @@ public:
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(createBF);
     CPPUNIT_TEST(createBF_001);
@@ -284,7 +284,7 @@ public:
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(decode);
     CPPUNIT_TEST(decode_001);
@@ -301,7 +301,7 @@ public:
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(decodeBF);
     CPPUNIT_TEST(decodeBF_001);
@@ -324,7 +324,7 @@ public:
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(destroy);
     CPPUNIT_TEST(destroy_001);
@@ -349,7 +349,7 @@ public:
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(destroyBF);
     CPPUNIT_TEST(destroyBF_001);
@@ -421,7 +421,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(encode);
     CPPUNIT_TEST(encode_001);
@@ -437,7 +437,7 @@ public:
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(encodeBF);
     CPPUNIT_TEST(encodeBF_001);
@@ -555,7 +555,7 @@ public:
         }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(init);
     CPPUNIT_TEST(init_001);
@@ -576,7 +576,7 @@ public:
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(initBF);
     CPPUNIT_TEST(initBF_001);

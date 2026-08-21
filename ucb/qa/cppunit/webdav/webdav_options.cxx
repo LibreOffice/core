@@ -34,7 +34,7 @@ namespace
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE( webdav_opts_test );
         CPPUNIT_TEST( DAVTypesTest );

@@ -58,7 +58,7 @@ namespace rtl_str
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(compare);
     CPPUNIT_TEST(compare_001);
@@ -107,7 +107,7 @@ namespace rtl_str
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(compareIgnoreAsciiCase);
     CPPUNIT_TEST(compare_001);
@@ -184,7 +184,7 @@ namespace rtl_str
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    // because these macros are needed by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(shortenedCompareIgnoreAsciiCase_WithLength);
     CPPUNIT_TEST(compare_000);
@@ -231,7 +231,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(hashCode);
         CPPUNIT_TEST(hashCode_001);
@@ -276,7 +276,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfChar);
         CPPUNIT_TEST(indexOfChar_000);
@@ -321,7 +321,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfChar);
         CPPUNIT_TEST(lastIndexOfChar_000);
@@ -367,7 +367,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfStr);
         CPPUNIT_TEST(indexOfStr_000);
@@ -423,7 +423,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfStr);
         CPPUNIT_TEST(lastIndexOfStr_000);
@@ -452,7 +452,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(replaceChar);
         CPPUNIT_TEST(replaceChar_001);
@@ -483,7 +483,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(replaceChar_WithLength);
         CPPUNIT_TEST(replaceChar_WithLength_000);
@@ -510,7 +510,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase);
         CPPUNIT_TEST(toAsciiLowerCase_001);
@@ -542,7 +542,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase_WithLength);
         CPPUNIT_TEST(toAsciiLowerCase_WithLength_000);
@@ -569,7 +569,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase);
         CPPUNIT_TEST(toAsciiUpperCase_001);
@@ -601,7 +601,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase_WithLength);
         CPPUNIT_TEST(toAsciiUpperCase_WithLength_000);
@@ -665,7 +665,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(trim_WithLength);
         CPPUNIT_TEST(trim_WithLength_000);
@@ -690,7 +690,7 @@ namespace rtl_str
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        // because these macros are needed by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(valueOfChar);
         CPPUNIT_TEST(valueOfChar_001);
