@@ -3223,15 +3223,6 @@ static void lo_installClipboardProvider(COKit* pThis, const COKitClipboardProvid
 static bool lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes, size_t* pOutCount,
                                   char*** pOutMimeTypes, size_t** pOutSizes, char*** pOutStreams);
 
-static void lo_executeScript(
-    char const * script, std::string_view source, int line, char ** result, char ** error,
-    void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData,
-    bool * usedLegacyUnoApi);
-static void lo_deliverProxyResult(char const * callId, char const * jsonValue);
-static void lo_cancelProxyCalls();
-static bool lo_isExpectedReentry();
-static bool lo_takeLegacyUnoApiUseFlag();
-
 COKitImpl::COKitImpl()
     : maThread(nullptr)
     , mpCallback(nullptr)
@@ -3367,35 +3358,6 @@ int COKitImpl::getDocsCount()
 void COKitImpl::registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback)
 {
     lo_registerFileSaveDialogCallback(this, pCallback);
-}
-
-void COKitImpl::executeScript(char const * script, std::string_view source, int line,
-                              char ** result, char ** error,
-                               void (*proxyCallback) (void * data, char const * payload),
-                               void * proxyCallbackData, bool * usedLegacyUnoApi)
-{
-    lo_executeScript(
-        script, source, line, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
-}
-
-void COKitImpl::deliverProxyResult(char const * callId, char const * jsonValue)
-{
-    lo_deliverProxyResult(callId, jsonValue);
-}
-
-void COKitImpl::cancelProxyCalls()
-{
-    lo_cancelProxyCalls();
-}
-
-bool COKitImpl::isExpectedReentry()
-{
-    return lo_isExpectedReentry();
-}
-
-bool COKitImpl::takeLegacyUnoApiUseFlag()
-{
-    return lo_takeLegacyUnoApiUseFlag();
 }
 
 void COKitImpl::registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
@@ -9048,7 +9010,7 @@ static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER COKitDocument* /*pThis
     KitHelper::setColorPreviewState(nId, bEnabled);
 }
 
-static void lo_executeScript(
+void COKitImpl::executeScript(
     char const * script, std::string_view source, int line, char ** result, char ** error,
     void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData,
     bool * usedLegacyUnoApi)
@@ -9109,7 +9071,7 @@ static void lo_executeScript(
 #endif
 }
 
-static void lo_deliverProxyResult(char const * callId, char const * jsonValue)
+void COKitImpl::deliverProxyResult(char const * callId, char const * jsonValue)
 {
     comphelper::ProfileZone zone("lo_deliverProxyResult");
     SolarMutexGuard guard;
@@ -9122,7 +9084,7 @@ static void lo_deliverProxyResult(char const * callId, char const * jsonValue)
 #endif
 }
 
-static void lo_cancelProxyCalls()
+void COKitImpl::cancelProxyCalls()
 {
     comphelper::ProfileZone zone("lo_cancelProxyCalls");
     // jsuno owns its own locks for the call hook and pending-results map, so no SolarMutex:
@@ -9131,12 +9093,12 @@ static void lo_cancelProxyCalls()
 #endif
 }
 
-static bool lo_isExpectedReentry()
+bool COKitImpl::isExpectedReentry()
 {
     return vcl::kit::isExpectedReentry();
 }
 
-static bool lo_takeLegacyUnoApiUseFlag()
+bool COKitImpl::takeLegacyUnoApiUseFlag()
 {
     return comphelper::takeLegacyUnoApiUseFlag();
 }
