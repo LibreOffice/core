@@ -26,7 +26,6 @@ sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkComboBoxText[@id='masters
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='masterlabel'] orphan-label
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='customlabel'] orphan-label
 sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnFileNewDoc'] button-no-label
-sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnFileSaveAsTemplate'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnFileOpen'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnFileSave'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnFileExportTo'] button-no-label

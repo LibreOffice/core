@@ -2365,8 +2365,11 @@
                           <object class="sfxlo-NotebookbarToolBox" id="bxFileSearchDialog">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="toolbar-style">both-horiz</property>
+                            <property name="toolbar-style">both</property>
                             <property name="show-arrow">False</property>
+                            <property name="icon_size">3</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkToolButton" id="btnFileNewDoc">
                                 <property name="visible">True</property>
@@ -2382,29 +2385,7 @@
                           <packing>
                             <property name="left-attach">1</property>
                             <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxFileSaveAsTemplate">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="toolbar-style">both-horiz</property>
-                            <property name="show-arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="btnFileSaveAsTemplate">
-                                <property name="visible">True</property>
-                                <property name="action-name">.uno:SaveAsTemplate</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
+                            <property name="height">2</property>
                           </packing>
                         </child>
                         <child>
@@ -2446,7 +2427,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelFileFile">File</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelFileFile">Document</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>

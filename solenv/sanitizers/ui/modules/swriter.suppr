@@ -167,7 +167,6 @@ sw/uiconfig/swriter/ui/wordcount.ui://GtkLabel[@id='selectstandardizedpages'] or
 sw/uiconfig/swriter/ui/wordcount.ui://GtkLabel[@id='docstandardizedpages'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuToolButton[@id='btnFileAddDirect'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='btnFileNewDoc'] button-no-label
-sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='btnFileSaveAsTemplate'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='btnFileOpen'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='btnFileSave'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='btnFileExportTo'] button-no-label

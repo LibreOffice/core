@@ -395,7 +395,6 @@ sc/uiconfig/scalc/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuHome-ParaRightTo
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuView-PagebreakMode'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuView-NormalViewMode'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnFileNewDoc'] button-no-label
-sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnFileSaveAsTemplate'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnFileOpen'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnFileSave'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnFileExportTo'] button-no-label

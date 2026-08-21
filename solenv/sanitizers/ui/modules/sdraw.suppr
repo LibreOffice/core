@@ -260,7 +260,6 @@ sd/uiconfig/sdraw/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuView-MasterPage'
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuView-OutputQualityColor'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuView-OutputQualityGrayscale'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnFileNewDoc'] button-no-label
-sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnFileSaveAsTemplate'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnFileOpen'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnFileSave'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnFileExportTo'] button-no-label
