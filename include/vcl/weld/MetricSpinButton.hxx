@@ -41,6 +41,11 @@ public:
 
     void set_unit(FieldUnit eUnit);
 
+    void select_region(int nStartPos, int nEndPos)
+    {
+        m_xSpinButton->select_region(nStartPos, nEndPos);
+    }
+
     sal_Int64 convert_value_to(sal_Int64 nValue, FieldUnit eValueUnit) const
     {
         return ConvertValue(nValue, m_eSrcUnit, eValueUnit);
