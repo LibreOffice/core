@@ -6928,6 +6928,50 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf117941RtlStrikeoutChars)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(565.2, aRect.at(7).getMaxX(), /*delta*/ 1.0);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testDropCapPaint)
+{
+    loadFromFile(u"drop_fly_paint.fodt");
+    save(TestFilter::PDF_WRITER);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+    GetPdfPageTextObjectsAndBounds(parsePDFExport(), /*nPage*/ 0, aText, aRect);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(7), aText.size());
+
+    // Rest of the drop-capped paragraph's 3 forced lines.
+    CPPUNIT_ASSERT_EQUAL(u"rop Cap Painting Test Document."_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u"Second forced line of the drop cap paragraph."_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u"Third forced line of the drop cap paragraph."_ustr, aText.at(2).trim());
+
+    // The drop cap glyph itself must be non-whitespace.
+    CPPUNIT_ASSERT_EQUAL(u"D"_ustr, aText.at(3).trim());
+
+    // Must be noticeably taller than a body line (spans 3 lines), not
+    // just present-but-same-height.
+    double nDropCapHeight = aRect.at(3).getMaxY() - aRect.at(3).getMinY();
+    double nBodyLineHeight = aRect.at(2).getMaxY() - aRect.at(2).getMinY();
+    CPPUNIT_ASSERT(nDropCapHeight > nBodyLineHeight * 2.5);
+
+    // Sits left of the wrapped text beside it, not overlapping/underneath.
+    CPPUNIT_ASSERT(aRect.at(3).getMaxX() < aRect.at(0).getMinX());
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(61.33, aRect.at(3).getMinX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(94.00, aRect.at(3).getMaxX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(696.45, aRect.at(3).getMinY(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(734.43, aRect.at(3).getMaxY(), /*delta*/ 2.0);
+
+    // Second paragraph: text wrapping around the anchored fly frame.
+    CPPUNIT_ASSERT_EQUAL(u"Fly frame paragraph line one."_ustr, aText.at(4).trim());
+    CPPUNIT_ASSERT_EQUAL(u"Fly frame paragraph line two."_ustr, aText.at(5).trim());
+    CPPUNIT_ASSERT_EQUAL(u"Fly frame paragraph line three."_ustr, aText.at(6).trim());
+
+    // Every line starts well to the right of the drop-cap paragraph's own
+    // margin, confirming wrap="parallel" is actually pushing text aside.
+    CPPUNIT_ASSERT(aRect.at(4).getMinX() > aRect.at(0).getMinX() + 10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(114.53, aRect.at(4).getMinX(), /*delta*/ 2.0);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
