@@ -1762,12 +1762,12 @@ static const GdkRGBA& getDarkColor(int nViewId, KitDocumentViewPrivate& priv)
 
     if (priv->m_eDocumentType == COKitDocumentType::TEXT)
     {
-        char* pValues = priv->m_pDocument->getCommandValues(".uno:TrackedChangeAuthors");
+        std::string sValues = priv->m_pDocument->getCommandValues(".uno:TrackedChangeAuthors");
         std::stringstream aInfo;
-        aInfo << "COKitDocument::getCommandValues('.uno:TrackedChangeAuthors') returned '" << pValues << "'" << std::endl;
+        aInfo << "COKitDocument::getCommandValues('.uno:TrackedChangeAuthors') returned '" << sValues << "'" << std::endl;
         g_info("%s", aInfo.str().c_str());
 
-        std::stringstream aStream(pValues);
+        std::stringstream aStream(sValues);
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         for (const auto& rValue : aTree.get_child("authors"))
@@ -3951,7 +3951,7 @@ kit_doc_view_get_command_values (KitDocumentView* pDocView,
     if (!pDocument)
         return nullptr;
 
-    return pDocument->getCommandValues(pCommand);
+    return g_strdup(pDocument->getCommandValues(pCommand).c_str());
 }
 
 SAL_DLLPUBLIC_EXPORT void
