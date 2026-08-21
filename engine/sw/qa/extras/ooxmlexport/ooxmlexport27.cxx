@@ -540,6 +540,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168607_tabstopZero)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163178_columnbreakInTable)
+{
+    // Given a 1 page document, where a page break is defined inside of a table run
+
+    createSwDoc("tdf163178_columnbreakInTable.docx");
+    // CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:br", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
