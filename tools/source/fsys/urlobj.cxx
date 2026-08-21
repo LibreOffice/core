@@ -4868,32 +4868,36 @@ bool isExoticNestedProtocol(const OUString& rURL, sal_Int32 nStart)
 
 bool INetURLObject::IsExoticProtocol() const
 {
-    if (m_eScheme == INetProtocol::Slot ||
-        m_eScheme == INetProtocol::Macro ||
-        m_eScheme == INetProtocol::Uno ||
-        m_eScheme == INetProtocol::VndSunStarExpand ||
-        isSchemeEqualTo(u"vnd.sun.star.script") ||
-        isSchemeEqualTo(u"service") ||
-        // Follina, Microsoft Support Diagnostic Tool
-        isSchemeEqualTo(u"ms-msdt") ||
-        // https://learn.microsoft.com/en-us/office/client-developer/office-uri-schemes
-        isSchemeEqualTo(u"ms-word") ||
-        isSchemeEqualTo(u"ms-powerpoint") ||
-        isSchemeEqualTo(u"ms-excel") ||
-        isSchemeEqualTo(u"ms-visio") ||
-        isSchemeEqualTo(u"ms-access") ||
-        isSchemeEqualTo(u"ms-project") ||
-        isSchemeEqualTo(u"ms-publisher") ||
-        isSchemeEqualTo(u"ms-spd") ||
-        isSchemeEqualTo(u"ms-infopath") ||
-        isSchemeEqualTo(u"search-ms"))
+    // We take a default-deny approach, and check if the protocol is outside
+    // of the acceptable ones.
+
+    if (m_eScheme == INetProtocol::NotValid
+        || m_eScheme == INetProtocol::Ftp
+        || m_eScheme == INetProtocol::Http
+        || m_eScheme == INetProtocol::File
+        || m_eScheme == INetProtocol::Mailto
+        || m_eScheme == INetProtocol::VndSunStarWebdav
+        || m_eScheme == INetProtocol::PrivSoffice
+        || m_eScheme == INetProtocol::VndSunStarHelp
+        || m_eScheme == INetProtocol::Https
+        || m_eScheme == INetProtocol::Javascript
+        || m_eScheme == INetProtocol::Data
+        || m_eScheme == INetProtocol::Cid
+        || m_eScheme == INetProtocol::VndSunStarHier
+        || m_eScheme == INetProtocol::Component
+        || m_eScheme == INetProtocol::Ldap
+        || m_eScheme == INetProtocol::Db
+        || m_eScheme == INetProtocol::VndSunStarCmd
+        || m_eScheme == INetProtocol::Telnet
+        || m_eScheme == INetProtocol::VndSunStarTdoc
+        || m_eScheme == INetProtocol::Smb
+        || m_eScheme == INetProtocol::Hid
+        || m_eScheme == INetProtocol::Sftp
+        || m_eScheme == INetProtocol::Cmis)
+            return false;
+
+    if (m_eScheme == INetProtocol::VndSunStarPkg)
     {
-        SAL_INFO_IF(
-            m_eScheme == INetProtocol::VndSunStarExpand, "tools.urlobj",
-            "<" << m_aAbsURIRef.toString() << "> considered exotic");
-        return true;
-    }
-    if (m_eScheme == INetProtocol::VndSunStarPkg) {
         // The package content provider (ucb/source/ucp/package/pkguri.cxx)
         // treats the whole authority between "://" and the next '/' as the
         // nested package url. GetHost() returns only the part after any '@',
@@ -4905,15 +4909,33 @@ bool INetURLObject::IsExoticProtocol() const
         }
         return isExoticNestedProtocol(sPayloadURL, nStart + 3);
     }
-    if (isSchemeEqualTo(u"vnd.sun.star.zip"))
+
+    if (m_eScheme == INetProtocol::Generic)
     {
-        OUString sPayloadURL = GetURLPath(INetURLObject::DecodeMechanism::NONE);
-        if (!sPayloadURL.startsWith(u"//")) {
-            return false;
+        // Various things parse to INetProtocol::Generic, of which only some are known-good.
+        if (isSchemeEqualTo(u"vnd.sun.star.zip"))
+        {
+            OUString sPayloadURL = GetURLPath(INetURLObject::DecodeMechanism::NONE);
+            if (!sPayloadURL.startsWith(u"//")) {
+                return false;
+            }
+            return isExoticNestedProtocol(sPayloadURL, 2);
         }
-        return isExoticNestedProtocol(sPayloadURL, 2);
+        else if (isSchemeEqualTo(u"vnd.sun.star.webdavs"))
+            return false;
+        else if (isSchemeEqualTo(u"webdav"))
+            return false;
+        else if (isSchemeEqualTo(u"webdavs"))
+            return false;
+        else if (isSchemeEqualTo(u"vnd.libreoffice.image"))
+            return false;
+        else if (isSchemeEqualTo(u"vnd.sun.star.extension"))
+            return false;
     }
-    return false;
+
+    // anything else is exotic
+    SAL_INFO("tools.urlobj", "<" << m_aAbsURIRef.toString() << "> considered exotic");
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
