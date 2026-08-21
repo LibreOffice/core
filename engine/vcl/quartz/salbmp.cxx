@@ -156,7 +156,7 @@ bool QuartzSalBitmap::CreateContext()
 
     // default to RGBA color space
     CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-    CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+    CGBitmapInfo aCGBmpInfo = kCGImageAlphaPremultipliedFirst;
 
     // convert data into something accepted by CGBitmapContextCreate()
     size_t bitsPerComponent = 8;
