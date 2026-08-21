@@ -538,6 +538,14 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				app.socket.sendMessage('uno .uno:Undo');
 				ev.preventDefault();
 			}
+			else if (!ev.ctrlKey && !ev.altKey && !ev.shiftKey && !ev.metaKey
+				&& ev.keyCode === this.keyCodes.enter && ev.type === 'keydown') {
+				if (this._map.isEditMode() && !app.file.fileBasedView &&
+					this._map.jsdialog && !this._map.jsdialog.hasDialogOpened()) {
+					this._map.insertPage();
+				}
+				ev.preventDefault();
+			}
 			else if (!ev.ctrlKey && !ev.shiftKey) {
 				if (ev.key === 'Meta' || ev.key === 'Alt' ||
 				    ev.key === 'AltGraph' || ev.key === 'CapsLock' ||
