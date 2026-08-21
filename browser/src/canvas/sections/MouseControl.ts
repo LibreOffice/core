@@ -636,16 +636,29 @@ class MouseControl extends CanvasSectionObject {
 		);
 	}
 
-	// The middle button opens a hyperlink under the pointer, the same as
-	// Ctrl+Click. Send a single left-button click carrying the platform's
-	// link modifier so core reports the hyperlink. On macOS the link
-	// modifier is the command key; elsewhere it is the control key.
-	public onMiddleClick(point: cool.SimplePoint, e: MouseEvent): void {
+	// Over a hyperlink, the middle button opens it, the same as Ctrl+Click:
+	// send a single left-button click carrying the platform's link modifier
+	// so core reports the hyperlink. On macOS the link modifier is the
+	// command key; elsewhere it is the control key.
+	//
+	// Elsewhere, the middle button pastes the primary selection, the
+	// browser's own default action for the press. Send a plain left click
+	// with no modifier first, so the cell or text cursor moves to the
+	// pointer before that paste happens, the same as a left click would
+	// move it, instead of the paste landing wherever the cursor was left
+	// before.
+	public onMiddleClick(
+		point: cool.SimplePoint,
+		e: MouseEvent,
+		openHyperlink: boolean,
+	): void {
 		this.refreshPosition(point);
 
-		const modifier = window.L.Browser.mac
-			? app.UNOModifier.CTRLMAC
-			: app.UNOModifier.CTRL;
+		const modifier = openHyperlink
+			? window.L.Browser.mac
+				? app.UNOModifier.CTRLMAC
+				: app.UNOModifier.CTRL
+			: 0;
 
 		this.sendClick(
 			{
