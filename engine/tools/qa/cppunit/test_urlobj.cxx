@@ -400,6 +400,17 @@ namespace tools_urlobj
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, url.GetProtocol());
                 CPPUNIT_ASSERT(!url.IsExoticProtocol());
             }
+
+            // Follina, Microsoft Support Diagnostic Tool
+            CPPUNIT_ASSERT(INetURLObject(u"ms-msdt://http%3A%2F%2Fexample.net").IsExoticProtocol());
+
+            CPPUNIT_ASSERT(!INetURLObject(u"vnd.sun.star.webdav://example.org").IsExoticProtocol());
+            CPPUNIT_ASSERT(!INetURLObject(u"vnd.sun.star.webdavs://example.org").IsExoticProtocol());
+            CPPUNIT_ASSERT(!INetURLObject(u"webdav://example.org").IsExoticProtocol());
+            CPPUNIT_ASSERT(!INetURLObject(u"webdavs://example.org").IsExoticProtocol());
+            CPPUNIT_ASSERT(!INetURLObject(u"ftp://example.org").IsExoticProtocol());
+            CPPUNIT_ASSERT(!INetURLObject(u"vnd.libreoffice.image://example.org").IsExoticProtocol());
+            CPPUNIT_ASSERT(!INetURLObject(u"vnd.sun.star.extension://example.org").IsExoticProtocol());
         }
 
         // Change the following lines only, if you add, remove or rename
