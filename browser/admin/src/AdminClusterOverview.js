@@ -401,7 +401,7 @@ var AdminClusterOverview = AdminSocketBase.extend({
         var anchor = document.createElement('a');
         anchor.className = 'list-item';
         anchor.id = 'anchor' + server.serverId;
-        anchor.href = server.ingressUrl + '/browser/dist/admin/admin.html?RouteToken=' + server.routeToken;
+        anchor.href = server.ingressUrl + '/browser/dist/admin/admin.html?RouteToken=' + encodeURIComponent(server.routeToken);
         anchor.setAttribute('target', '_blank');
         if (server.podname) {
             anchor.textContent = server.podname;
@@ -416,7 +416,7 @@ var AdminClusterOverview = AdminSocketBase.extend({
     updateAnchor: function (server) {
         var anchor = document.getElementById('anchor' + server.serverId);
         anchor.id = 'anchor' + server.serverId;
-        anchor.href = server.ingressUrl + '/browser/dist/admin/admin.html?RouteToken=' + server.routeToken;
+        anchor.href = server.ingressUrl + '/browser/dist/admin/admin.html?RouteToken=' + encodeURIComponent(server.routeToken);
     },
 
     onSocketMessage: function (e) {

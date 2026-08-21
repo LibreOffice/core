@@ -3,7 +3,7 @@
     document.title = l10nstrings.strProductName + ' - ' + l10nstrings.strAdminConsole;
     var host = (window.location.protocol === 'https:' ? 'wss://': 'ws://') + window.location.host + '%SERVICE_ROOT%/cool/adminws';
     if (routeToken) {
-        host += '?RouteToken=' + routeToken
+        host += '?RouteToken=' + encodeURIComponent(routeToken)
     }
 </script>
 
@@ -65,7 +65,7 @@
 
         for (var i = 0; i < anchors.length; i++) {
             var href = anchors[i].getAttribute('href');
-            var updatedHref = href + '?RouteToken=' + routeToken;
+            var updatedHref = href + '?RouteToken=' + encodeURIComponent(routeToken);
             anchors[i].setAttribute('href', updatedHref);
         }
     }

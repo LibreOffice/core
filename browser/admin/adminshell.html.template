@@ -16,7 +16,7 @@
         var routeToken = params.get('RouteToken');
         var adminBundleSrc = '%SERVICE_ROOT%/browser/%VERSION%/admin-bundle.js';
         if (routeToken) {
-            adminBundleSrc += '?RouteToken=' + routeToken
+            adminBundleSrc += '?RouteToken=' + encodeURIComponent(routeToken)
         }
         document.write('<script src="' + adminBundleSrc + '"><\/script>');
     </script>
