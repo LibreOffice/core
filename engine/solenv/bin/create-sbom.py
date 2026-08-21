@@ -69,6 +69,15 @@ def extract_version_for_dictionary(dict):
         return version_element.attrib['value']
     return None
 
+def get_sha512(abspath):
+    digest = hashlib.sha512()
+    with open(abspath, "rb") as f:
+        while True:
+            chunk = f.read(1<<20)
+            if not chunk:
+                break
+            digest.update(chunk)
+    return digest.hexdigest()
 
 def parse_filelist(filelist):
     for listdir in filelistdirs:
@@ -86,7 +95,7 @@ def parse_filelist(filelist):
                 return result
     raise Exception(f"cannot find filelist: {filelist}")
 
-SCP2TYPES = {"Directory", "File", "Profile", "Module", "WindowsCustomAction", "MergeModule"}
+SCP2TYPES = {"Directory", "File", "Profile", "Module", "MergeModule"}
 
 def parse_install_script(filename):
     """Parse the install script that is produced in scp2."""
@@ -174,6 +183,7 @@ def parse_install_script(filename):
 
         i += 1  # skip End line
         item['ismultilingual'] = 1 if ismultilang else 0
+        item['gid'] = gid
         result[item_type][gid] = item
 
     return result
@@ -519,13 +529,23 @@ def gen_packages(packinfos, ziplist, languages):
 
     for package in packinfos:
         gid = package["module"]
+        # only Linux gets fully split packages
+        if sys.platform == "win32":
+            if gid not in ("gid_Module_Root", "gid_Module_Helppack_Help"):
+                continue
+        if sys.platform == "darwin":
+            if gid not in ("gid_Module_Root", "gid_Module_Langpack_Basis", "gid_Module_Langpack_Brand"):
+                continue
         name_pi = package["packagename"]
         name = pattern.sub(replace, name_pi)
         if "%LANGUAGESTRING" in name:
             for lang in languages:
                 gen_package(name.replace("%LANGUAGESTRING", lang), gid + "_" + lang.replace("-", "_"), lang)
         else:
-            gen_package(name, gid, "en-US")
+            if sys.platform == "win32" and gid == "gid_Module_Root":
+                gen_package(name, gid, languages)
+            else:
+                gen_package(name, gid, "en-US")
 
 
 def install_script_value_to_array(value):
@@ -710,7 +730,7 @@ def locate_files(files_by_package, languages, ziplist):
         # there are both shell scripts and ELF executables without suffix
         elif ext in executables or perms == "755" \
             or ("FILELIST" in styles and "USE_INTERNAL_RIGHTS" in styles \
-                and os.access(abspath, os.X_OK)) \
+                and sys.platform != "win32" and os.access(abspath, os.X_OK)) \
             or os.path.splitext(basename)[1] in (".so", ".dylib"): # .so.N
                 return FileFlags.EXECUTABLE
         elif ext in archives:
@@ -739,7 +759,11 @@ def locate_files(files_by_package, languages, ziplist):
     def get_dir(dirs, lang):
         if len(dirs) == 1:
             assert dirs[0]["ParentID"] == "PREDEFINED_PROGDIR"
-            return ""
+            name = dirs[0]["HostName"]
+            # gid_Dir_Sdkoo_Root gid_Dir_Brand_Root have path that doesn't exist
+            # in instdir on WNT and unclear if it should be included in output
+            gid = dirs[0]["gid"]
+            return "" if gid in ("gid_Dir_Brand_Root", "gid_Dir_Sdkoo_Root") else name + "/"
         if dirs[0]["ismultilingual"] == 1 and f"HostName ({lang})" in dirs[0]:
             name = dirs[0][f"HostName ({lang})"]
         else:
@@ -797,16 +821,6 @@ def filter_files(files_by_package):
 
 def add_dependencies(files_by_package):
     """Add required checksum and dependencies to files."""
-
-    def get_sha512(abspath):
-        digest = hashlib.sha512()
-        with open(abspath, "rb") as f:
-            while True:
-                chunk = f.read(1<<20)
-                if not chunk:
-                    break
-                digest.update(chunk)
-        return digest.hexdigest()
 
     def find_dep(dep, instpath=None):
         found = None
@@ -1019,6 +1033,19 @@ def add_static_dependencies(files_by_package, externalstaticlink, with_path):
                     file["externaldeps"] = externalstaticlink[filename]
 
 
+def add_merge_module(files_by_package, install_script):
+    """Add any MSI merge modules as dummy files to root package."""
+
+    for msm in install_script["MergeModule"]:
+        msm_file = install_script["MergeModule"][msm]["Name"]
+        abspath = os.environ["MSM_PATH"] + msm_file
+        files_by_package["gid_Module_Root"].append({
+            "flags": FileFlags.ARCHIVE | FileFlags.STRUCTURED,
+            "instpath": msm_file, "abspath": abspath,
+            "external": "visual_c\\+\\+_redistributable",
+            "sha512": get_sha512(abspath), "deps": [], "sysdeps": []})
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 15:
         print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <6 packinfo> <path of install script> <languages> <externals> <externalstatic> <externalpackagestatic>")
@@ -1051,6 +1078,7 @@ if __name__ == "__main__":
         add_dependencies(files)
         add_static_dependencies(files, externalstaticlink, False)
         add_static_dependencies(files, externalpackagestaticlink, True)
+        add_merge_module(files, install_script)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
