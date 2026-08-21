@@ -301,6 +301,7 @@ bool SvpSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScale
     assert(pSurfaceTarget);
     cairo_t* cr = cairo_create(pSurfaceTarget);
     cairo_scale(cr, rScaleX, rScaleY);
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     cairo_set_source_surface(cr, pSurfaceSource, 0.0, 0.0);
     cairo_pattern_set_filter(cairo_get_source(cr),
         nScaleFlag == BmpScaleFlag::Fast ? CAIRO_FILTER_FAST : CAIRO_FILTER_GOOD);
