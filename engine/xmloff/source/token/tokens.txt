@@ -3369,4 +3369,5 @@ layout
 colors
 quickstyle
 horizontal-rule
+guid
 TOKEN_END_DUMMY

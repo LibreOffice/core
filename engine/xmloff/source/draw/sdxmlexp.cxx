@@ -1713,6 +1713,8 @@ void SdXMLExport::ExportContent_()
             if( !sNavigationOrder.isEmpty() )
                 AddAttribute ( XML_NAMESPACE_DRAW, XML_NAV_ORDER, sNavigationOrder );
 
+            ImpWritePageGuidAttribute( xDrawPage );
+
             rtl::Reference< xmloff::AnimationsExporter >  xAnimationsExporter;
             uno::Reference< css::animations::XAnimationNodeSupplier > xAnimNodeSupplier;
 
@@ -1785,6 +1787,8 @@ void SdXMLExport::ExportContent_()
                             AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawNotesPagesStyleNames[nPageInd]);
 
                         ImplExportHeaderFooterDeclAttributes( maDrawNotesPagesHeaderFooterSettings[nPageInd] );
+
+                        ImpWritePageGuidAttribute( xNotesPage );
 
                         // write presentation notes
                         SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
@@ -2317,6 +2321,8 @@ void SdXMLExport::ExportMasterStyles_()
 
                 ImplExportHeaderFooterDeclAttributes( maHandoutPageHeaderFooterSettings );
 
+                ImpWritePageGuidAttribute( xHandoutPage );
+
                 // write masterpage
                 SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_HANDOUT_MASTER, true, true);
 
@@ -2359,6 +2365,8 @@ void SdXMLExport::ExportMasterStyles_()
                 AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                         maMasterPagesStyleNames[nMPageId]);
 
+            ImpWritePageGuidAttribute( xMasterPage );
+
             // write masterpage
             SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_MASTER_PAGE, true, true);
 
@@ -2388,6 +2396,8 @@ void SdXMLExport::ExportMasterStyles_()
                             AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, sString);
                         }
 
+                        ImpWritePageGuidAttribute( xNotesPage );
+
                         // write presentation notes
                         SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
 
@@ -2401,6 +2411,33 @@ void SdXMLExport::ExportMasterStyles_()
             }
             exportAnnotations( xMasterPage );
         }
+    }
+}
+
+void SdXMLExport::ImpWritePageGuidAttribute( const Reference< XDrawPage >& xPage )
+{
+    // The identifier is a Collabora extension of the format, so it only lands in extended ODF.
+    if( (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0 )
+        return;
+
+    try
+    {
+        Reference< beans::XPropertySet > xProps( xPage, UNO_QUERY );
+        if( !xProps.is() )
+            return;
+
+        Reference< beans::XPropertySetInfo > xInfo( xProps->getPropertySetInfo() );
+        if( !xInfo.is() || !xInfo->hasPropertyByName( u"Guid"_ustr ) )
+            return;
+
+        OUString sGuid;
+        xProps->getPropertyValue( u"Guid"_ustr ) >>= sGuid;
+        if( !sGuid.isEmpty() )
+            AddAttribute( XML_NAMESPACE_CO_EXT, XML_GUID, sGuid );
+    }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "while exporting the globally unique identifier of the page");
     }
 }
 

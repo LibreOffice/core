@@ -86,6 +86,92 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testAutomaticTextColorFollowsPageBackgr
     assertXPath(pXmlMaster, "//a:defRPr/a:solidFill/a:srgbClr[@val='FFFFFF']", 0);
 }
 
+// The pages of a Draw document keep their identity across sessions the same way the slides of
+// a presentation do.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODG)
+{
+    createSdDrawDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const OUString sPageGuid = pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+    const OUString sMasterGuid
+        = pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+
+    saveAndReload(TestFilter::ODG);
+
+    xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
+    assertXPath(pContentXml, "/office:document-content/office:body/office:drawing/draw:page[1]",
+                "guid", sPageGuid);
+    xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
+    assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page[1]",
+                "guid", sMasterGuid);
+
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_EQUAL(sPageGuid,
+                         pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(sMasterGuid,
+                         pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+}
+
+// The globally unique identifier of every page is written to ODF and read back, so a page keeps
+// its identity across sessions.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODP)
+{
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const OUString sSlideGuid = pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+    const OUString sNotesGuid = pDoc->GetSdPage(0, PageKind::Notes)->GetGuid().getOUString();
+    const OUString sMasterGuid
+        = pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+    const OUString sNotesMasterGuid
+        = pDoc->GetMasterSdPage(0, PageKind::Notes)->GetGuid().getOUString();
+    const OUString sHandoutMasterGuid
+        = pDoc->GetMasterSdPage(0, PageKind::Handout)->GetGuid().getOUString();
+
+    saveAndReload(TestFilter::ODP);
+
+    xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
+    static constexpr OString sPagePath
+        = "/office:document-content/office:body/office:presentation/draw:page[1]"_ostr;
+    assertXPath(pContentXml, sPagePath, "guid", sSlideGuid);
+    assertXPath(pContentXml, sPagePath + "/presentation:notes", "guid", sNotesGuid);
+
+    xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
+    static constexpr OString sMasterStylesPath
+        = "/office:document-styles/office:master-styles"_ostr;
+    assertXPath(pStylesXml, sMasterStylesPath + "/style:master-page[1]", "guid", sMasterGuid);
+    assertXPath(pStylesXml, sMasterStylesPath + "/style:master-page[1]/presentation:notes", "guid",
+                sNotesMasterGuid);
+    assertXPath(pStylesXml, sMasterStylesPath + "/style:handout-master", "guid",
+                sHandoutMasterGuid);
+
+    // The reloaded document holds the same identifiers.
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_EQUAL(sSlideGuid,
+                         pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(sNotesGuid,
+                         pDoc->GetSdPage(0, PageKind::Notes)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(sMasterGuid,
+                         pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(sNotesMasterGuid,
+                         pDoc->GetMasterSdPage(0, PageKind::Notes)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(sHandoutMasterGuid,
+                         pDoc->GetMasterSdPage(0, PageKind::Handout)->GetGuid().getOUString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

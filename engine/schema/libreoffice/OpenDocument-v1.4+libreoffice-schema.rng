@@ -2513,6 +2513,40 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:attribute>
     </rng:optional>
   </rng:define>
+  <!-- Globally unique identifier of a page, as a braced GUID string. -->
+  <rng:define name="coext-guid-value">
+    <rng:data type="string">
+      <rng:param name="pattern">\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}</rng:param>
+    </rng:data>
+  </rng:define>
+  <rng:define name="draw-page-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:guid">
+        <rng:ref name="coext-guid-value"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="presentation-notes-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:guid">
+        <rng:ref name="coext-guid-value"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="style-master-page-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:guid">
+        <rng:ref name="coext-guid-value"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="style-handout-master-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:guid">
+        <rng:ref name="coext-guid-value"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <rng:define name="loext-columns-and-groups">
     <rng:oneOrMore>
       <rng:choice>

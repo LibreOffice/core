@@ -3632,6 +3632,8 @@ namespace xmloff::token {
 
         XML_HORIZONTAL_RULE,
 
+        XML_GUID,
+
         XML_TOKEN_END
     };
 

@@ -141,6 +141,7 @@ class SdXMLExport : public SvXMLExport
     void ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSettingsImpl& aSettings );
 
     void exportFormsElement( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
+    void ImpWritePageGuidAttribute( const css::uno::Reference< css::drawing::XDrawPage >& xPage );
     void exportTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
     void exportPresentationSettings();
     void exportSections();

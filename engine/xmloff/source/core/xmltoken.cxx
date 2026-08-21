@@ -3634,6 +3634,8 @@ namespace xmloff::token {
 
         TOKEN( "horizontal-rule",                 XML_HORIZONTAL_RULE ),
 
+        TOKEN( "guid",                            XML_GUID ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else

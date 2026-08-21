@@ -222,10 +222,14 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        if( aIter.getToken() == XML_ELEMENT(DRAW, XML_NAV_ORDER) )
+        switch( aIter.getToken() )
         {
-            msNavOrder = aIter.toString();
-            break;
+            case XML_ELEMENT(DRAW, XML_NAV_ORDER):
+                msNavOrder = aIter.toString();
+                break;
+            case XML_ELEMENT(CO_EXT, XML_GUID):
+                msGuid = aIter.toString();
+                break;
         }
     }
 }
@@ -233,16 +237,8 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
     const Reference< xml::sax::XFastAttributeList>& xAttrList)
-: SvXMLImportContext( rImport )
+: SdXMLGenericPageContext( rImport, xAttrList, Reference< drawing::XShapes >() )
 {
-    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
-    {
-        if( aIter.getToken() == XML_ELEMENT(DRAW, XML_NAV_ORDER) )
-        {
-            msNavOrder = aIter.toString();
-            break;
-        }
-    }
 }
 
 void SdXMLGenericPageContext::SetShapes(Reference< drawing::XShapes > const & rShapes)
@@ -366,6 +362,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
     }
 
     SetNavigationOrder();
+    SetGuid();
 }
 
 void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
@@ -616,6 +613,28 @@ void SdXMLGenericPageContext::SetNavigationOrder()
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw",
                              "unexpected exception caught while importing shape navigation order!");
+    }
+}
+
+void SdXMLGenericPageContext::SetGuid()
+{
+    if( msGuid.isEmpty() )
+        return;
+
+    try
+    {
+        Reference< beans::XPropertySet > xSet( mxShapes, UNO_QUERY );
+        if( !xSet.is() )
+            return;
+
+        static constexpr OUString aGuidProp( u"Guid"_ustr );
+        Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
+        if( xInfo.is() && xInfo->hasPropertyByName( aGuidProp ) )
+            xSet->setPropertyValue( aGuidProp, Any( msGuid ) );
+    }
+    catch(const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "while importing the globally unique identifier of the page");
     }
 }
 

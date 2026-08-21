@@ -38,6 +38,7 @@ protected:
     OUString               maUseFooterDeclName;
     OUString               maUseDateTimeDeclName;
     OUString               msNavOrder;
+    OUString               msGuid;
 
     /** sets the page style on this page */
     void SetStyle( OUString const & rStyleName );
@@ -55,6 +56,9 @@ protected:
     void SetPageMaster( OUString const & rsPageMasterName );
 
     void SetNavigationOrder();
+
+    /** sets the globally unique identifier the element carried on this context's page */
+    void SetGuid();
 
     void SetShapes(css::uno::Reference< css::drawing::XShapes > const & rShapes);
 
