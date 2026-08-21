@@ -3172,7 +3172,7 @@ static bool lo_signDocument(COKit* pThis,
                                    const unsigned char* pPrivateKeyBinary,
                                    const int nPrivateKeyBinarySize);
 
-static char* lo_extractRequest(COKit* pThis,
+static std::string lo_extractRequest(COKit* pThis,
                                    const char* pFilePath);
 
 static void lo_trimMemory(COKit* pThis, int nTarget);
@@ -3301,7 +3301,7 @@ void COKitImpl::dumpState(const char* pOptions, char** pState)
     lo_dumpState(this, pOptions, pState);
 }
 
-char* COKitImpl::extractRequest(const char* pFilePath)
+std::string COKitImpl::extractRequest(const char* pFilePath)
 {
     return lo_extractRequest(this, pFilePath);
 }
@@ -3921,7 +3921,7 @@ static bool lo_signDocument(COKit* /*pThis*/,
 }
 
 
-static char* lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
+static std::string lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
 {
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
@@ -3959,13 +3959,13 @@ static char* lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
                         auto aNode = aJson.startNode("Targets");
                         extractLinks(xLTS->getLinks(), false, aJson);
                     }
-                    return convertOString(aJson.finishAndGetAsOString());
+                    return aJson.finishAndGetAsStdString();
                 }
                 xComp->dispose();
             }
         }
     }
-    return strdup("{ }");
+    return "{ }";
 }
 
 static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pFilePath,

@@ -364,10 +364,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         }
         if (json.empty())
         {
-            LOKitHelper::ScopedString data(
+            std::string data(
                 _docManager->getLOKit()->extractRequest(getJailedFilePath().c_str()));
-            if (data)
-                json = data.get();
+            if (!data.empty())
+                json = std::move(data);
         }
         if (json.empty())
         {

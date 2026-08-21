@@ -1596,7 +1596,7 @@ struct COKit
      */
     virtual void dumpState(const char* pOptions, char** pState) = 0;
 
-    virtual char* extractRequest(const char* pFilePath) = 0;
+    virtual std::string extractRequest(const char* pFilePath) = 0;
 
     /**
      * Trim memory usage.
