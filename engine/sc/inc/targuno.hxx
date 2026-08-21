@@ -31,12 +31,13 @@ class ScDocShell;
 #define SC_LINKTARGETTYPE_SHEET     0
 #define SC_LINKTARGETTYPE_RANGENAME 1
 #define SC_LINKTARGETTYPE_DBAREA    2
+#define SC_LINKTARGETTYPE_OLEOBJECT 3
 
-#define SC_LINKTARGETTYPE_COUNT     3
+#define SC_LINKTARGETTYPE_COUNT     4
 
 inline constexpr OUString SCLINKTARGET_SERVICE = u"com.sun.star.document.LinkTarget"_ustr;
 
-//! Graphic / OleObject (need separate collections!)
+//! Graphic (needs its own collection too, see ScOleObjectsObj for the pattern)
 
 class ScLinkTargetTypesObj final : public ::cppu::WeakImplHelper<
                                 css::container::XNameAccess,
@@ -134,6 +135,72 @@ public:
     virtual OUString SAL_CALL            getImplementationName() override;
     virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
     virtual cpo::uno::Sequence< OUString> SAL_CALL      getSupportedServiceNames() override;
+};
+
+// Names of the OLE objects (for example charts) drawn on any sheet, exposed as link
+// targets so the Navigator and the Insert Hyperlink dialog can jump to them, and so
+// they show up in the .uno:ExtractLinkTargets output next to sheets and named ranges.
+class ScOleObjectsObj final : public ::cppu::WeakImplHelper<
+                            css::container::XNameAccess,
+                            css::lang::XServiceInfo >,
+                        public SfxListener
+{
+private:
+    ScDocShell*             pDocShell;
+
+public:
+                            ScOleObjectsObj(ScDocShell* pDocSh);
+    virtual                 ~ScOleObjectsObj() override;
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+
+                            // css::container::XNameAccess
+    virtual cpo::uno::Any SAL_CALL     getByName(const OUString& aName) override;
+    virtual cpo::uno::Sequence< OUString> SAL_CALL      getElementNames() override;
+    virtual bool SAL_CALL           hasByName(const OUString& aName) override;
+
+                            // css::container::XElementAccess
+    virtual cpo::uno::Type SAL_CALL        getElementType() override;
+    virtual bool SAL_CALL           hasElements() override;
+
+                            // css::lang::XServiceInfo
+    virtual OUString SAL_CALL            getImplementationName() override;
+    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString> SAL_CALL      getSupportedServiceNames() override;
+};
+
+// A single named OLE object, as a leaf link target. It carries only the display
+// name and icon that document::LinkTarget requires - it has no properties of its
+// own the way a sheet or a database range object does.
+class ScOleObjectLinkTargetObj final : public ::cppu::WeakImplHelper<
+                            css::beans::XPropertySet,
+                            css::lang::XServiceInfo >
+{
+private:
+    OUString                aName;
+
+public:
+                            ScOleObjectLinkTargetObj( OUString aObjectName );
+    virtual                 ~ScOleObjectLinkTargetObj() override;
+
+                            // css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL  getPropertySetInfo() override;
+    virtual void SAL_CALL   setPropertyValue(const OUString& aPropertyName,
+                                    const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL     getPropertyValue(const OUString& PropertyName) override;
+    virtual void SAL_CALL           addPropertyChangeListener(const OUString& aPropertyName,
+                                    const css::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
+    virtual void SAL_CALL           removePropertyChangeListener(const OUString& aPropertyName,
+                                    const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
+    virtual void SAL_CALL           addVetoableChangeListener(const OUString& PropertyName,
+                                    const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual void SAL_CALL           removeVetoableChangeListener(const OUString& PropertyName,
+                                    const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+
+                            // css::lang::XServiceInfo
+    virtual OUString SAL_CALL            getImplementationName() override;
+    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
