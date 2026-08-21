@@ -451,7 +451,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 							'command': 'closetablet',
 						} : {},
 					{
-						'id': 'view-fullscreen',
+						'id': 'fullscreen',
 						'type': 'bigtoolitem',
 						'text': _UNO('.uno:FullScreen'),
 						'command': '.uno:FullScreen',
