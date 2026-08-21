@@ -1031,7 +1031,7 @@ sub run {
                 # every package gets an SBOM
                 {
                     my %sbomfile;
-                    $sbomfile{'sourcepath'}  = $pathvariableshashref->{"customtargetpath"} . "/readlicense_oo/license/" . $packagename . "-sbom.spdx.json";
+                    $sbomfile{'sourcepath'}  = $pathvariableshashref->{"customtargetpath"} . "/instsetoo_native/sbom/" . $packagename . "-sbom.spdx.json";
                     my $infoline = "\nAutomatically adding SBOM: $sbomfile{'sourcepath'}\n";
                     push(@installer::globals::logfileinfo, $infoline);
                     $sbomfile{'destination'} = $packagerootpath .

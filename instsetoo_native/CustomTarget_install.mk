@@ -116,6 +116,7 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
                 bin/find-requires-x11.sh) \
         ,instsetoo_msi_templates) \
         $(call gb_Postprocess_get_target,AllModulesButInstsetNative) \
+		instsetoo_SBOM \
         | instsetoo_wipe $(if $(filter msi,$(PKGFORMAT)),$(gb_Make_JobLimiter))
 	$(call gb_Output_announce,$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@),$(true),INS,1)
 	$(if $(filter %msi‧nostrip,$@),$(gb_Make_JobLimiter) grab)
