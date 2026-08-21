@@ -107,6 +107,13 @@ constexpr auto MaxFileSizeToCacheInBytes = 1024 * 1024 *
 #else
     50;
 #endif
+// The largest body the settings fetch endpoints accept from a remote server, in bytes. The files
+// they relay are settings JSON, xcu configuration, wordbook dictionaries and AI model lists. The
+// biggest of those in practice is a wordbook, and a whole-language spelling dictionary, the
+// ceiling for one, is about 4.5 MB, so 20 MB leaves generous headroom while bounding what one
+// request can hold in memory on the thread that serves every client.
+constexpr int64_t MaxSettingsFetchSizeBytes = 20 * 1024 * 1024;
+
 constexpr std::string_view MetaViewPort =
     R"(<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, interactive-widget=resizes-content">)";
 
@@ -2113,6 +2120,15 @@ void FileServerRequestHandler::fetchWopiSettingConfigs(const Poco::Net::HTTPRequ
         }
 
         const std::shared_ptr<const http::Response> httpResponse = wopiSession->response();
+        if (httpResponse->state() != http::Response::State::Complete)
+        {
+            LOG_ERR("Failed to fetch wopi settings config from WopiHost["
+                    << uriAnonym << "]: the transfer did not complete");
+            sendError(http::StatusCode::BadGateway, requestPath, destSocket, shortMessage,
+                      "The transfer did not complete");
+            return;
+        }
+
         const http::StatusLine statusLine = httpResponse->statusLine();
         const http::StatusCode statusCode = statusLine.statusCode();
         if (statusCode != http::StatusCode::OK && statusCode != http::StatusCode::NoContent)
@@ -2141,18 +2157,13 @@ void FileServerRequestHandler::fetchWopiSettingConfigs(const Poco::Net::HTTPRequ
     LOG_DBG("Fetching wopi setting config from WopiHost[" << uriAnonym << ']');
     auto httpSession = StorageConnectionManager::getHttpSession(sharedUri);
     httpSession->setFinishedHandler(std::move(finishedCallback));
-    httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
+    if (!httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll()))
+        return;
+    httpSession->response()->setBodySizeLimit(MaxSettingsFetchSizeBytes);
 }
 
 namespace
 {
-// The largest body fetch-settings-file accepts from the storage server, in bytes. The files it
-// relays are settings JSON, xcu configuration and wordbook dictionaries. The biggest of those in
-// practice is a wordbook, and a whole-language spelling dictionary, the ceiling for one, is about
-// 4.5 MB, so 20 MB leaves generous headroom while bounding what one request can hold in memory
-// on the thread that serves every client.
-constexpr int64_t MaxSettingFileSizeBytes = 20 * 1024 * 1024;
-
 // Return the setting-file name a settings request refers to, taken from the
 // last path segment of the WOPI file URL (query stripped). Used to single out
 // viewsetting.json, the only settings file that carries user secrets.
@@ -2366,7 +2377,7 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
 
     // asyncRequest has created the response object, and no body is read until this function
     // returns, so the limit is in place before the first byte arrives.
-    httpSession->response()->setBodySizeLimit(MaxSettingFileSizeBytes);
+    httpSession->response()->setBodySizeLimit(MaxSettingsFetchSizeBytes);
 }
 
 void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request,
@@ -2475,6 +2486,15 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
             }
 
             const auto httpResponse = httpSession->response();
+            if (httpResponse->state() != http::Response::State::Complete)
+            {
+                LOG_ERR("Failed to fetch models from [" << uriAnonym
+                        << "]: the transfer did not complete");
+                sendError(http::StatusCode::BadGateway, requestPath, destSocket, shortMessage,
+                          "The transfer did not complete");
+                return;
+            }
+
             if (httpResponse->statusLine().statusCode() != http::StatusCode::OK)
             {
                 LOG_ERR("Failed to fetch models from [" << uriAnonym
@@ -2497,7 +2517,9 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         LOG_DBG("Fetching models from [" << uriAnonym << ']');
         auto httpSession = StorageConnectionManager::getHttpSession(uri);
         httpSession->setFinishedHandler(std::move(finishedCallback));
-        httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
+        if (!httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll()))
+            return;
+        httpSession->response()->setBodySizeLimit(MaxSettingsFetchSizeBytes);
     };
 
     if (!useStoredKey)
@@ -2557,6 +2579,15 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         }
 
         const auto httpResponse = wopiSession->response();
+        if (httpResponse->state() != http::Response::State::Complete)
+        {
+            LOG_ERR("Failed to read stored viewsetting.json from [" << storedUriAnonym
+                    << "]: the transfer did not complete");
+            sendError(http::StatusCode::BadGateway, requestPath, destSocket, shortMessage,
+                      "The transfer did not complete");
+            return;
+        }
+
         if (httpResponse->statusLine().statusCode() != http::StatusCode::OK)
         {
             LOG_ERR("Failed to read stored viewsetting.json from [" << storedUriAnonym
@@ -2577,7 +2608,9 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
             << "] to list AI models");
     auto storedSession = StorageConnectionManager::getHttpSession(storedUri);
     storedSession->setFinishedHandler(std::move(storedCallback));
-    storedSession->asyncRequest(storedRequest, COOLWSD::getWebServerPoll());
+    if (!storedSession->asyncRequest(storedRequest, COOLWSD::getWebServerPoll()))
+        return;
+    storedSession->response()->setBodySizeLimit(MaxSettingsFetchSizeBytes);
 }
 
 void FileServerRequestHandler::deleteWopiSettingConfigs(const Poco::Net::HTTPRequest& request,
@@ -2918,6 +2951,17 @@ void FileServerRequestHandler::handleViewSettingUpload(
         }
 
         const auto httpResponse = wopiSession->response();
+        if (httpResponse->state() != http::Response::State::Complete)
+        {
+            // Do not write back: merging a partial file would drop the secret we
+            // were asked to keep.
+            LOG_ERR("Failed to read stored viewsetting.json from [" << storedUriAnonym
+                    << "]: the transfer did not complete");
+            sendError(http::StatusCode::BadGateway, requestPath, destSocket, shortMessage,
+                      "The transfer did not complete");
+            return;
+        }
+
         if (httpResponse->statusLine().statusCode() != http::StatusCode::OK)
         {
             // Do not write back: that would drop the secret we were asked to keep.
@@ -2935,7 +2979,9 @@ void FileServerRequestHandler::handleViewSettingUpload(
             << "] to keep a saved secret");
     auto storedSession = StorageConnectionManager::getHttpSession(storedUri);
     storedSession->setFinishedHandler(std::move(storedCallback));
-    storedSession->asyncRequest(storedRequest, COOLWSD::getWebServerPoll());
+    if (!storedSession->asyncRequest(storedRequest, COOLWSD::getWebServerPoll()))
+        return;
+    storedSession->response()->setBodySizeLimit(MaxSettingsFetchSizeBytes);
 }
 
 void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& request,
