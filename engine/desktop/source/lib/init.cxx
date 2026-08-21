@@ -1338,7 +1338,7 @@ static std::string doc_getA11yFocusedParagraph(COKitDocument* pThis);
 
 static int doc_getA11yCaretPosition(COKitDocument* pThis);
 
-static char* doc_getPresentationInfo(COKitDocument* pThis);
+static std::string doc_getPresentationInfo(COKitDocument* pThis);
 
 static bool doc_createSlideRenderer(
     COKitDocument* pThis,
@@ -1884,7 +1884,7 @@ void COKitDocumentImpl::setAllowChangeComments(int nId, const bool allow)
     doc_setAllowChangeComments(this, nId, allow);
 }
 
-char* COKitDocumentImpl::getPresentationInfo()
+std::string COKitDocumentImpl::getPresentationInfo()
 {
     return doc_getPresentationInfo(this);
 }
@@ -6847,7 +6847,7 @@ static void doc_setWindowTextSelection(COKitDocument* /*pThis*/, unsigned nKitWi
     Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aCursorEvent);
 }
 
-static char* doc_getPresentationInfo(COKitDocument* pThis)
+static std::string doc_getPresentationInfo(COKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -6856,7 +6856,7 @@ static char* doc_getPresentationInfo(COKitDocument* pThis)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
     bool bAllyState = false;
@@ -6868,7 +6868,7 @@ static char* doc_getPresentationInfo(COKitDocument* pThis)
         bAllyState = pViewShell->GetKitAccessibilityState();
     }
 
-    return convertOString(pDoc->getPresentationInfo(bAllyState));
+    return pDoc->getPresentationInfo(bAllyState);
 }
 
 static bool doc_createSlideRenderer(

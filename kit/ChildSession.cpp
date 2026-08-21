@@ -3592,8 +3592,7 @@ bool ChildSession::getPresentationInfo()
 {
     getLOKitDocument()->setView(_viewId);
 
-    LOKitHelper::ScopedString info(getLOKitDocument()->getPresentationInfo());
-    std::string data(info.get());
+    std::string data(getLOKitDocument()->getPresentationInfo());
     sendTextFrame("presentationinfo: " + data);
     return true;
 }
@@ -3707,14 +3706,12 @@ bool ChildSession::getSlideSections()
 {
     getLOKitDocument()->setView(_viewId);
 
-    LOKitHelper::ScopedString info(getLOKitDocument()->getPresentationInfo());
-    if (!info)
+    std::string data(getLOKitDocument()->getPresentationInfo());
+    if (data.empty())
     {
         sendTextFrame("slidesections: []");
         return true;
     }
-
-    std::string data(info.get());
 
     // Extract just the "sections" array from the full presentation info
     try

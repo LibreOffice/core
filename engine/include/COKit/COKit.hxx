@@ -2429,7 +2429,7 @@ struct COKitDocument
     virtual void setAllowChangeComments(int nId, const bool allow) = 0;
 
     /// Get the information about the current presentation (Impress only).
-    virtual char* getPresentationInfo() = 0;
+    virtual std::string getPresentationInfo() = 0;
 
     /// Create a slide renderer in engine for the input slide.
     virtual bool createSlideRenderer(const char* pSlideHash, int nSlideNumber,

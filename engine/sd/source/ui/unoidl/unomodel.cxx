@@ -5907,7 +5907,7 @@ OUString SdXImpressDocument::getOrCreateAnimatedGifUrl(const SdrGrafObj& rGraphi
     return aTempFileUrl;
 }
 
-OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
+std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 {
     ::tools::JsonWriter aJsonWriter;
 
@@ -6255,7 +6255,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
     {
         TOOLS_WARN_EXCEPTION("sd", "SdXImpressDocument::getSlideShowInfo ... maybe some property can't be retrieved");
     }
-    return aJsonWriter.finishAndGetAsOString();
+    return aJsonWriter.finishAndGetAsStdString();
 }
 
 namespace

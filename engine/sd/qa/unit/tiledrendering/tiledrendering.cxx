@@ -3032,10 +3032,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
 
-    OString aString = pXImpressDocument->getPresentationInfo();
+    std::string aString = pXImpressDocument->getPresentationInfo();
 
     boost::property_tree::ptree aTree;
-    std::stringstream aStream((std::string(aString)));
+    std::stringstream aStream(aString);
     boost::property_tree::read_json(aStream, aTree);
 
     CPPUNIT_ASSERT_EQUAL(15875, aTree.get_child("docWidth").get_value<int>());
@@ -3124,10 +3124,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesParagraphs)
 
     Scheduler::ProcessEventsToIdle();
 
-    OString aString = pXImpressDocument->getPresentationInfo();
+    std::string aString = pXImpressDocument->getPresentationInfo();
 
     boost::property_tree::ptree aTree;
-    std::stringstream aStream((std::string(aString)));
+    std::stringstream aStream(aString);
     boost::property_tree::read_json(aStream, aTree);
 
     const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
@@ -3149,10 +3149,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesHtml)
 
     Scheduler::ProcessEventsToIdle();
 
-    OString aString = pXImpressDocument->getPresentationInfo();
+    std::string aString = pXImpressDocument->getPresentationInfo();
 
     boost::property_tree::ptree aTree;
-    std::stringstream aStream((std::string(aString)));
+    std::stringstream aStream(aString);
     boost::property_tree::read_json(aStream, aTree);
 
     const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
@@ -3221,10 +3221,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)
 
     Scheduler::ProcessEventsToIdle();
 
-    OString aPresentInfo = pXImpressDocument->getPresentationInfo(true);
+    std::string aPresentInfo = pXImpressDocument->getPresentationInfo(true);
 
     boost::property_tree::ptree aTree;
-    std::stringstream aStream((std::string(aPresentInfo)));
+    std::stringstream aStream(aPresentInfo);
     boost::property_tree::read_json(aStream, aTree);
 
     CPPUNIT_ASSERT_EQUAL(size_t(5),  aTree.get_child("slides").size());

@@ -398,7 +398,7 @@ namespace desktop {
         int getA11yCaretPosition() override;
         void setViewReadOnly(int nId, const bool readOnly) override;
         void setAllowChangeComments(int nId, const bool allow) override;
-        char* getPresentationInfo() override;
+        std::string getPresentationInfo() override;
         bool createSlideRenderer(const char* pSlideHash, int nSlideNumber, unsigned* nViewWidth,
                                  unsigned* nViewHeight, bool bRenderBackground,
                                  bool bRenderMasterPage) override;
