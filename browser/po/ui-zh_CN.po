@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-19 17:51+0000\n"
-"Last-Translator: AlexYang <a012-alex@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-08-22 08:51+0000\n"
+"Last-Translator: reducedradius "
+"<137701630+flytothehighest@users.noreply.github.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -531,7 +532,7 @@ msgstr "显示侧边栏"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "自动拼写检查"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -543,7 +544,7 @@ msgstr "预设缩放"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "平滑滚动"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -1913,27 +1914,27 @@ msgstr "AI 助手"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
+msgstr[0] "插入%n张幻灯片"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
+msgstr[0] "删除%n个幻灯片"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
+msgstr[0] "复制%n 个幻灯片"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
+msgstr[0] "移动%n张幻灯片"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
+msgstr[0] "重命名%n张幻灯片"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
@@ -1972,7 +1973,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "这将会：%1。"
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
