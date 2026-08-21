@@ -846,6 +846,20 @@ FormulaConstTokenRef ScInterpreter::PopTokenImpl()
     return nullptr;
 }
 
+FormulaConstTokenRef ScInterpreter::PopReferenceOperand()
+{
+    FormulaConstTokenRef xToken = PopToken();
+    if (!xToken || xToken->GetType() != svMatrix
+        || !static_cast<const ScMatrixToken*>(xToken.get())->IsMatrixRangeToken())
+    {
+        return xToken;
+    }
+
+    const ScComplexRefData& rReference
+        = static_cast<const ScMatrixRangeToken*>(xToken.get())->GetDoubleRef();
+    return FormulaConstTokenRef(new ScDoubleRefToken(mrDoc.GetSheetLimits(), rReference));
+}
+
 double ScInterpreter::PopDouble()
 {
     nCurFmtType = SvNumFormatType::NUMBER;

@@ -383,6 +383,59 @@ CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorInExpression)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeAsReferenceOperatorOperand)
+{
+    // The reference operators take a # spilled range as the range it stands for. They pop it
+    // as a matrix that carries the range, and since they work on ranges they use the range
+    // and leave the values alone.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(4, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(4, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(4, 2, 0), 30.0);
+
+    // Master at A1 spills =E1:E3 into A1:A3.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 2, aMark, u"=E1:E3"_ustr);
+
+    // B2 and C1 sit outside the spill range, so each operator's result is a distinct sum.
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 7.0);
+    m_pDoc->SetValue(ScAddress(2, 0, 0), 5.0);
+
+    // The intersection of A1:C2 with the spill range A1:A3 is A1:A2, whichever side the
+    // spill range is on.
+    m_pDoc->SetString(ScAddress(6, 0, 0), u"=SUM(A1:C2!A1#)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
+    // The parentheses keep the # away from the intersection operator, because a # directly
+    // before an exclamation mark lexes as the start of an error constant.
+    m_pDoc->SetString(ScAddress(7, 0, 0), u"=SUM((A1#)!A1:C2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(7, 0, 0)));
+
+    // The range operator spans the spill range and C1, which is A1:C3, so B2 comes in.
+    m_pDoc->SetString(ScAddress(6, 1, 0), u"=SUM(A1#:C1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(72.0, m_pDoc->GetValue(ScAddress(6, 1, 0)));
+    // The parentheses keep the left operand apart from the spill range, because C1:A1 on its
+    // own lexes as a single reference instead of two operands of the range operator.
+    m_pDoc->SetString(ScAddress(7, 1, 0), u"=SUM((C1):A1#)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(ScAddress(7, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(72.0, m_pDoc->GetValue(ScAddress(7, 1, 0)));
+
+    // The union operator keeps the parts apart, so B2 stays out.
+    m_pDoc->SetString(ScAddress(6, 2, 0), u"=SUM(A1#~C1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(ScAddress(6, 2, 0)));
+    m_pDoc->SetString(ScAddress(7, 2, 0), u"=SUM(C1~A1#)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(ScAddress(7, 2, 0)));
+
+    // With a third part the union operator extends a list it already built, which is a
+    // separate code path, so check that the spill range gets there too.
+    m_pDoc->SetString(ScAddress(6, 3, 0), u"=SUM(C1~B2~A1#)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(72.0, m_pDoc->GetValue(ScAddress(6, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorFormulaStringRoundtrip)
 {
     // The # operator round-trips through GetFormula across several

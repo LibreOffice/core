@@ -377,6 +377,7 @@ protected:
     void PutCode( FormulaTokenRef& );
     void Factor();
     void RangeLine();
+    void SpillOperator();
     void UnionLine();
     void IntersectionLine();
     void CallLine();

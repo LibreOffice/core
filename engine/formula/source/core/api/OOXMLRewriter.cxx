@@ -111,6 +111,8 @@ private:
         sal_uInt16 mnContentStart;
         // Start of the union-level expression we are reading.
         sal_uInt16 mnExpressionStart;
+        // Start of the current factor: an operand plus its parentheses and arguments.
+        sal_uInt16 mnFactorStart;
         // Start of an open union list, NO_POSITION if there is none.
         sal_uInt16 mnListStart;
         // The scope is a grouping parenthesis, not a call's argument list.
@@ -232,6 +234,8 @@ void RewriteCollector::movePastToken(Scope& rScope, sal_uInt16 nPosition)
         rScope.mnContentStart = sal_uInt16(nPosition + 1);
     if (rScope.mnExpressionStart == nPosition)
         rScope.mnExpressionStart = sal_uInt16(nPosition + 1);
+    if (rScope.mnFactorStart == nPosition)
+        rScope.mnFactorStart = sal_uInt16(nPosition + 1);
 }
 
 // Mark pending operands as filled. A mark is never cleared, so walking from the back can
@@ -295,7 +299,7 @@ void RewriteCollector::closeUnionList(sal_uInt16 nEnd, bool bMayTakeScopeParenth
 void RewriteCollector::collect()
 {
     const sal_uInt16 nLength = mrTokens.GetLen();
-    maScopes.push_back({ 0, 0, NO_POSITION, false });
+    maScopes.push_back({ 0, 0, 0, NO_POSITION, false });
     // The next token is where an operand starts, so a plus or minus there is the unary form.
     bool bOperandPosition = true;
     // The current factor is raw text that never parsed - we cannot put wrapper parentheses
@@ -315,29 +319,23 @@ void RewriteCollector::collect()
         if (eOp == ocSingleValue)
         {
             Scope& rScope = maScopes.back();
-            // Any start sitting on the @ moves on to the operand after it.
+            // Any start sitting on the @ moves on to the operand after it, and so does the
+            // factor it begins.
             movePastToken(rScope, nPosition);
+            rScope.mnFactorStart = sal_uInt16(nPosition + 1);
             maPendingSingles.push_back({ maScopes.size(), sal_uInt16(nPosition + 1), false });
             continue;
         }
 
-        // The # is written as a call around the whole expression under it, so the union list
-        // closes first. Text that never parsed takes no parentheses, so drop a # after one.
+        // The # is written as a call around the factor before it and binds tighter than any
+        // operator that can come before that factor. Raw text that never parsed takes no
+        // parentheses, so drop a # after one, and drop a # with no factor before it at all.
         if (eOp == ocSpill)
         {
             if (!bBadFactor)
             {
-                closeUnionList(nPosition, false);
-                const sal_uInt16 nBegin = maScopes.back().mnExpressionStart;
-                mrWrappers.push_back({ nBegin, nPosition, ocAnchorArray, true });
-                // The # binds tighter than an @ before it, so an @ that starts inside the
-                // wrapper takes all of it as its operand. An @ on one part of a union list
-                // is such a case.
-                for (PendingSingleValue& rSingle : maPendingSingles)
-                {
-                    if (rSingle.mnBegin > nBegin)
-                        rSingle.mnBegin = nBegin;
-                }
+                mrWrappers.push_back(
+                    { maScopes.back().mnFactorStart, nPosition, ocAnchorArray, true });
                 markPendingOperand();
             }
             bOperandPosition = false;
@@ -361,7 +359,8 @@ void RewriteCollector::collect()
             markPendingOperand();
             // A grouping parenthesis is where an operand starts, a call's parenthesis comes
             // after the function name.
-            maScopes.push_back({ sal_uInt16(nPosition + 1), sal_uInt16(nPosition + 1), NO_POSITION,
+            maScopes.push_back({ sal_uInt16(nPosition + 1), sal_uInt16(nPosition + 1),
+                                 sal_uInt16(nPosition + 1), NO_POSITION,
                                  eOp == ocOpen && bOperandPosition });
             bOperandPosition = true;
             bBadFactor = false;
@@ -403,7 +402,7 @@ void RewriteCollector::collect()
         }
 
         Scope& rScope = maScopes.back();
-        // Whitespace before a scope or an expression is not part of it.
+        // Whitespace before a scope, expression or factor is not part of it.
         if (bWhitespace)
             movePastToken(rScope, nPosition);
         if (!bPrefix && !bWhitespace && !lclWritesNoText(eOp))
@@ -418,6 +417,12 @@ void RewriteCollector::collect()
             // A prefix sign or an infix operator starts a new expression after it. A postfix
             // one does not, it belongs to the operand before it.
             rScope.mnExpressionStart = sal_uInt16(nPosition + 1);
+        }
+        if (bPrefix || bSeparator || bEndsOperand)
+        {
+            // Every operator and separator ends the factor before it, so the next factor
+            // starts after. A function name does not.
+            rScope.mnFactorStart = sal_uInt16(nPosition + 1);
         }
         if (bSeparator)
             bBadFactor = false;

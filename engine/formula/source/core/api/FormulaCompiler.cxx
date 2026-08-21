@@ -338,6 +338,9 @@ bool isPotentialRangeLeftOp( OpCode eOp )
     switch (eOp)
     {
         case ocClose:
+        // The # comes after its operand, so it is the last opcode of a sub-expression that
+        // yields a reference.
+        case ocSpill:
             return true;
         default:
             return false;
@@ -350,6 +353,9 @@ bool isRangeResultFunction( OpCode eOp )
     {
         case ocIndirect:
         case ocOffset:
+        // In OOXML the # is written before its operand, so there it is the first opcode of a
+        // sub-expression that yields a reference.
+        case ocSpill:
             return true;
         default:
             return false;
@@ -365,6 +371,9 @@ bool isRangeResultOpCode( OpCode eOp )
         case ocIntersect:
         case ocIndirect:
         case ocOffset:
+        // The # postfix operator gives the spill range of the master cell before it, which
+        // is a reference just like the operators above.
+        case ocSpill:
             return true;
         default:
             return false;
@@ -2304,15 +2313,32 @@ void FormulaCompiler::Factor()
     }
 }
 
+void FormulaCompiler::SpillOperator()
+{
+    while (mpToken->GetOpCode() == ocSpill)
+    {   // this operator _follows_ the reference it takes the spill range of, and binds
+        // to that reference alone
+        if (mbComputeII)
+        {
+            FormulaToken** pArg = mpCode - 1;
+            HandleIIOpCode(mpToken.get(), &pArg, 1);
+        }
+        PutCode(mpToken);
+        NextToken();
+    }
+}
+
 void FormulaCompiler::RangeLine()
 {
     Factor();
+    SpillOperator();
     while (mpToken->GetOpCode() == ocRange)
     {
         FormulaToken** pCode1 = mpCode - 1;
         FormulaTokenRef p = mpToken;
         NextToken();
         Factor();
+        SpillOperator();
         FormulaToken** pCode2 = mpCode - 1;
         if (!MergeRangeReference( pCode1, pCode2))
             PutCode(p);
@@ -2527,8 +2553,8 @@ void FormulaCompiler::UnaryLine()
 void FormulaCompiler::PostOpLine()
 {
     UnaryLine();
-    while (mpToken->GetOpCode() == ocPercentSign || mpToken->GetOpCode() == ocSpill)
-    {   // these operators _follow_ their operand
+    while (mpToken->GetOpCode() == ocPercentSign)
+    {   // this operator _follows_ its operand
         if (mbComputeII)
         {
             FormulaToken** pArg = mpCode - 1;

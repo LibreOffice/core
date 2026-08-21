@@ -391,6 +391,13 @@ private:
         assert(!p || dynamic_cast<const T*>(p.get()));
         return static_cast<const T*>(p.get());
     }
+    /** Pop the operand of a reference operator.
+
+        A spilled range arrives as a matrix that carries the range it was read from. These
+        operators work on ranges, so such a matrix comes back as the matching double
+        reference. Everything else comes back unchanged.
+     */
+    formula::FormulaConstTokenRef PopReferenceOperand();
     void Pop();
     void PopError();
     double PopDouble();
