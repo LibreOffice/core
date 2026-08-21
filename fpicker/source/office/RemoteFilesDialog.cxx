@@ -1065,8 +1065,8 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
     {
         //WebDAV folders path ends in '/', so strip it
         OUString aFolderName = rFolder.maURL;
-        if( rFolder.mbIsFolder && ( ( aFolderName.lastIndexOf( '/' ) + 1 ) == aFolderName.getLength() ) )
-            aFolderName = aFolderName.copy( 0, aFolderName.getLength() - 1 );
+        if ( rFolder.mbIsFolder )
+            aFolderName.endsWith('/', &aFolderName);
 
         int nTitleStart = aFolderName.lastIndexOf( '/' );
         if( nTitleStart != -1 )

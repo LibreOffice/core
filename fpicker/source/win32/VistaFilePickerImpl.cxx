@@ -895,8 +895,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(Request& rRequest)
             if (m_sFilename.getLength())
             {
                 OUString aFileURL(m_sDirectory);
-                sal_Int32 nIndex = aFileURL.lastIndexOf('/');
-                if (nIndex != aFileURL.getLength()-1)
+                if (!aFileURL.endsWith('/'))
                     aFileURL += "/";
                 aFileURL += m_sFilename;
 
