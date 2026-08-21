@@ -30,10 +30,6 @@
 #include <systools/win32/uwinapi.h>
 #include <tools/pathutils.hxx>
 
-#include <fstream>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-
 // For PathCchCanonicalizeEx
 #include <pathcch.h>
 #pragma comment(lib, "Pathcch.lib")
@@ -217,38 +213,6 @@ int officeloader_impl(bool bAllowConsole)
     bool fSuccess = false;
     bool bFirst = true;
 
-    // read limit values from fundamental.override.ini
-    unsigned int nMaxMemoryInMB = 0;
-    bool bExcludeChildProcesses = true;
-
-    try
-    {
-        boost::property_tree::ptree pt;
-        std::ifstream aFile(szIniDirectory + L"\\fundamental.override.ini");
-        boost::property_tree::ini_parser::read_ini(aFile, pt);
-        nMaxMemoryInMB = pt.get("Bootstrap.LimitMaximumMemoryInMB", nMaxMemoryInMB);
-        bExcludeChildProcesses = pt.get("Bootstrap.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
-    }
-    catch (...)
-    {
-        nMaxMemoryInMB = 0;
-    }
-
-    // create a Windows JobObject with a memory limit
-    HANDLE hJobObject = nullptr;
-    if (nMaxMemoryInMB > 0)
-    {
-        JOBOBJECT_EXTENDED_LIMIT_INFORMATION aJobLimit;
-        aJobLimit.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_JOB_MEMORY;
-        if (bExcludeChildProcesses)
-            aJobLimit.BasicLimitInformation.LimitFlags |= JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK;
-        aJobLimit.JobMemoryLimit = nMaxMemoryInMB * 1024 * 1024;
-        hJobObject = CreateJobObjectW(nullptr, nullptr);
-        if (hJobObject != nullptr)
-            SetInformationJobObject(hJobObject, JobObjectExtendedLimitInformation, &aJobLimit,
-                                    sizeof(JOBOBJECT_EXTENDED_LIMIT_INFORMATION));
-    }
-
     std::vector<std::wstring> aEscapedArgs;
     bool bHeadlessMode = false;
     const size_t nPathSize = 32 * 1024;
@@ -337,9 +301,6 @@ int officeloader_impl(bool bAllowConsole)
         {
             DWORD dwWaitResult;
 
-            if (hJobObject)
-                AssignProcessToJobObject(hJobObject, aProcessInfo.hProcess);
-
             do
             {
                 // On Windows XP it seems as the desktop calls WaitForInputIdle after "OpenWith" so
@@ -365,9 +326,6 @@ int officeloader_impl(bool bAllowConsole)
     } while (fSuccess
              && (EXITHELPER_CRASH_WITH_RESTART == dwExitCode
                  || EXITHELPER_NORMAL_RESTART == dwExitCode));
-
-    if (hJobObject)
-        CloseHandle(hJobObject);
 
     delete[] lpCommandLine;
 
