@@ -915,11 +915,17 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps,
 
     if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pParentWidget))
     {
-        pButtonBox->addButton(&rButton, QDialogButtonBox::NoRole);
-
         // for message boxes, avoid implicit standard buttons in addition to those explicitly added
+        // and add button via QMessageBox API instead of via the button box
         if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pParentWidget->window()))
+        {
             pMessageBox->setStandardButtons(QMessageBox::NoButton);
+            pMessageBox->addButton(&rButton, QMessageBox::ButtonRole::NoRole);
+        }
+        else
+        {
+            pButtonBox->addButton(&rButton, QDialogButtonBox::NoRole);
+        }
     }
 }
 
