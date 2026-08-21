@@ -114,5 +114,9 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, 
 		desktopHelper.getDropdown('stylesview').should('not.exist');
 
 		cy.cGet('#StyleListDeck').should('exist').should('be.visible');
+
+		// The panel container is laid out by the stylesheet as a flex column,
+		// not forced into a grid by an inline style.
+		cy.cGet('#TemplatePanel').should('have.css', 'display', 'flex');
 	});
 });

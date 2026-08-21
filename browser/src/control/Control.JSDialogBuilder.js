@@ -503,14 +503,16 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		return rows + 1;
 	},
 
-	// Turns a container into a CSS grid and applies spacing and homogeneous
-	// sizing along its main axis (columns for a horizontal container, rows
-	// for a vertical one), so both container orientations support both
-	// properties the same way.
+	// Applies spacing and homogeneous sizing along a container's main axis
+	// (columns for a horizontal container, rows for a vertical one). A
+	// horizontal container always needs a CSS grid to lay its cells out in a
+	// row. A vertical container only switches to grid for homogeneous sizing;
+	// with spacing alone the row gap works in its existing layout, so its
+	// display is left to CSS.
 	_applyGridLayout: function(table, childData, isVertical) {
-		$(table).css('display', 'grid');
-
 		if (!isVertical) {
+			$(table).css('display', 'grid');
+
 			var rows = this._getGridRows(childData.children);
 			var cols = this._getGridColumns(childData.children);
 			var trackSize = childData.homogeneous ? '1fr' : 'auto';
@@ -527,8 +529,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			if (childData.spacing)
 				table.style.columnGap = childData.spacing + 'px';
 		} else {
-			if (childData.homogeneous)
+			if (childData.homogeneous) {
+				$(table).css('display', 'grid');
 				table.style.gridAutoRows = '1fr';
+			}
 
 			if (childData.spacing)
 				table.style.rowGap = childData.spacing + 'px';
