@@ -18,6 +18,27 @@ describe(['tagdesktop'], 'Sidebar tests', function() {
 		cy.cGet('#sidebar-dock-wrapper').compareSnapshot('sidebar_writer', 0.07);
 	});
 
+	it('Sidebar reopens after a round trip through viewing mode', function() {
+		cy.cGet('#sidebar-dock-wrapper').should('have.class', 'visible');
+
+		// Switching to viewing mode closes the sidebar.
+		cy.cGet('#viewModeDropdownButton-button').click();
+		cy.cGet('#viewModeDropdownButton-entry-0').click();
+		cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Viewing');
+		cy.cGet('#sidebar-dock-wrapper').should('not.have.class', 'visible');
+
+		// Switching back to editing mode keeps the sidebar closed.
+		cy.cGet('#viewModeDropdownButton-button').click();
+		cy.cGet('#viewModeDropdownButton-entry-1').click();
+		cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Editing');
+		cy.cGet('#sidebar-dock-wrapper').should('not.have.class', 'visible');
+
+		// The sidebar button opens the sidebar again.
+		desktopHelper.sidebarToggle();
+		cy.cGet('#sidebar-dock-wrapper').should('have.class', 'visible');
+		cy.cGet('#PropertyDeck').should('be.visible');
+	});
+
 	it('Show table panel multiple times', function() {
 		cy.cGet('.TableEditPanel').should('not.exist');
 

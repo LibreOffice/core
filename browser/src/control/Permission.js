@@ -612,23 +612,23 @@ window.L.Map.include({
 		}
 	},
 
-	// Tell core whether this view is read-only, and update the client-side
-	// comment and redline edit flags to match. This applies only to a session
-	// that is editing-capable but currently viewing, so toggling between view
-	// and edit must flip the flags. A session whose document is genuinely
-	// read-only is skipped: core already set it read-only at session start,
-	// and its comment and redline flags already reflect the real document
-	// state (for example comments allowed on an otherwise read-only PDF), so
-	// they must not be overwritten here. app.isReadOnly() carries the real
-	// document permission for every host, online or desktop, and the view
-	// and edit toggle does not change it, so it is the right gate to use.
-	_applyViewReadOnly: function (readOnly) {
+	// Update the client-side comment and redline edit flags for the view
+	// and edit toggle. A genuinely read-only session is skipped: its flags
+	// were set at session start from the real document state (for example
+	// comments allowed on an otherwise read-only PDF).
+	_setViewReadOnlyFlags: function (readOnly) {
+		if (app.isReadOnly())
+			return;
+		app.file.editComment = !readOnly;
+		app.file.allowManageRedlines = !readOnly;
+	},
+
+	// Tell core whether this view is read-only. Same gate as above.
+	_sendViewReadOnly: function (readOnly) {
 		if (app.isReadOnly())
 			return;
 		if (app.socket)
 			app.socket.sendMessage('setviewreadonly value=' + readOnly);
-		app.file.editComment = !readOnly;
-		app.file.allowManageRedlines = !readOnly;
 	},
 
 	_enterEditMode: function (perm) {
@@ -641,10 +641,10 @@ window.L.Map.include({
 		if (app.map['stateChangeHandler'].getItemValue('EditDoc') === 'false')
 			app.map.sendUnoCommand('.uno:EditDoc?Editable:bool=true');
 
-		// Re-enable direct-canvas interactions (shape drag, arrow-key
-		// shape move) that the matching _enterReadOnlyMode branch
-		// disabled.
-		this._applyViewReadOnly(false);
+		// Make the view editable in core before the listeners run, so the
+		// commands they send are accepted.
+		this._sendViewReadOnly(false);
+		this._setViewReadOnlyFlags(false);
 
 		app.events.fire('updatepermission', {perm : perm});
 
@@ -668,14 +668,18 @@ window.L.Map.include({
 			this._docLayer._clearSelections();
 		}
 
-		// Block direct-canvas interactions (shape drag, arrow-key shape
-		// move) server-side and hide per-comment edit/redline controls
-		// in the UI.
-		this._applyViewReadOnly(true);
+		this._setViewReadOnlyFlags(true);
 
 		app.events.fire('updatepermission', {perm : perm});
 		this.fire('closemobilewizard');
 		this.fire('closealldialogs');
+
+		// Mark the view read-only in core only after the listeners above
+		// have sent their cleanup commands. The kit accepts sidebar show
+		// and hide only for an editable view, so the sidebar hide sent on
+		// updatepermission must arrive while the view is still editable,
+		// or core keeps its sidebar open and it cannot be reopened later.
+		this._sendViewReadOnly(true);
 
 		if (window.ThisIsTheAndroidApp)
 			window.postMobileMessage('EDITMODE off');
