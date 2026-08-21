@@ -653,7 +653,7 @@ CPPUNIT_TEST_FIXTURE(Chart2DumpTest, testAxisPercentStackedColumnChart)
      testAxisLabel(u"percent_stacked_column_chart.odp"_ustr);
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2DumpTest, testTdf118150)
+CPPUNIT_TEST_FIXTURE(Chart2DumpTest, testTdf118150ChartWidthXlsx)
 {
      testAxisLabel(u"tdf118150.xlsx"_ustr);
 }
