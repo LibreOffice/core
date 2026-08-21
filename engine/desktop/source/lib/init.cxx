@@ -1334,7 +1334,7 @@ static void doc_setAllowManageRedlines(COKitDocument* pThis, int nId, bool allow
 
 static void doc_setAccessibilityState(COKitDocument* pThis, int nId, bool bEnabled);
 
-static char* doc_getA11yFocusedParagraph(COKitDocument* pThis);
+static std::string doc_getA11yFocusedParagraph(COKitDocument* pThis);
 
 static int doc_getA11yCaretPosition(COKitDocument* pThis);
 
@@ -1864,7 +1864,7 @@ void COKitDocumentImpl::setAccessibilityState(int nId, bool nEnabled)
     doc_setAccessibilityState(this, nId, nEnabled);
 }
 
-char* COKitDocumentImpl::getA11yFocusedParagraph()
+std::string COKitDocumentImpl::getA11yFocusedParagraph()
 {
     return doc_getA11yFocusedParagraph(this);
 }
@@ -4902,7 +4902,7 @@ std::string COKitDocumentImpl::getWriterPageRectangles()
     return pDoc->getWriterPageRectangles();
 }
 
-static char* doc_getA11yFocusedParagraph(COKitDocument* pThis)
+static std::string doc_getA11yFocusedParagraph(COKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4911,15 +4911,15 @@ static char* doc_getA11yFocusedParagraph(COKitDocument* pThis)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
     {
-        return convertOUString(pViewShell->getA11yFocusedParagraph());
+        return pViewShell->getA11yFocusedParagraph();
 
     }
-    return nullptr;
+    return {};
 }
 
 static int  doc_getA11yCaretPosition(COKitDocument* pThis)

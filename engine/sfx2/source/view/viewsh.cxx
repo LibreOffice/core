@@ -827,7 +827,7 @@ public:
     void notifyFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList, sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan);
     void notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj, const OUString& sAction);
 
-    OUString getFocusedParagraph() const;
+    std::string getFocusedParagraph() const;
     int getCaretPosition() const;
 
 private:
@@ -881,7 +881,7 @@ void KitDocumentFocusListener::paragraphPropertiesToJson(std::string& aPayload, 
     aPayload = aStream.str();
 }
 
-OUString KitDocumentFocusListener::getFocusedParagraph() const
+std::string KitDocumentFocusListener::getFocusedParagraph() const
 {
     aboutView("KitDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
     aboutParagraph("KitDocumentFocusListener::getFocusedParagraph",
@@ -890,8 +890,7 @@ OUString KitDocumentFocusListener::getFocusedParagraph() const
 
     std::string aPayload;
     paragraphPropertiesToJson(aPayload);
-    OUString sRet = OUString::fromUtf8(aPayload);
-    return sRet;
+    return aPayload;
 }
 
 int KitDocumentFocusListener::getCaretPosition() const
@@ -2808,7 +2807,7 @@ SfxViewShell::~SfxViewShell()
         pFrameWin->ReleaseKitNotifier();
 }
 
-OUString SfxViewShell::getA11yFocusedParagraph() const
+std::string SfxViewShell::getA11yFocusedParagraph() const
 {
     const KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
     return rDocFocusListener.getFocusedParagraph();

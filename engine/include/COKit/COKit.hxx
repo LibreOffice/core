@@ -2409,7 +2409,7 @@ struct COKitDocument
      *      "end": selection end
      *  }
      */
-    virtual char* getA11yFocusedParagraph() = 0;
+    virtual std::string getA11yFocusedParagraph() = 0;
 
     /// Get the current text cursor position.
     virtual int getA11yCaretPosition() = 0;

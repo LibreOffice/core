@@ -3575,8 +3575,7 @@ bool ChildSession::getA11yFocusedParagraph()
 {
     getLOKitDocument()->setView(_viewId);
 
-    LOKitHelper::ScopedString paragraphContent(getLOKitDocument()->getA11yFocusedParagraph());
-    std::string paragraph(paragraphContent.get());
+    std::string paragraph(getLOKitDocument()->getA11yFocusedParagraph());
     sendTextFrame("a11yfocusedparagraph: " + paragraph);
     return true;
 }
