@@ -245,6 +245,7 @@
         <ca_file_path desc="Path to the ca file" type="path" relative="false">@COOLWSD_CONFIGDIR@/ca-chain.cert.pem</ca_file_path>
         <ssl_verification desc="Enable or disable SSL verification of hosts remote to coolwsd. If true SSL verification will be strict, otherwise certs of hosts will not be verified. You may have to disable it in test environments with self-signed certificates." type="string" default="@SSL_VERIFY@">@SSL_VERIFY@</ssl_verification>
         <cipher_list desc="List of OpenSSL ciphers to accept" type="string" default="ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"></cipher_list>
+        <min_protocol_version desc="The lowest TLS protocol version coolwsd will accept from clients. One of TLSv1, TLSv1.1, TLSv1.2, TLSv1.3." type="string" default="TLSv1.2">TLSv1.2</min_protocol_version>
         <hpkp desc="Enable HTTP Public key pinning" enable="false" report_only="false">
             <max_age desc="HPKP's max-age directive - time in seconds browser should remember the pins" enable="true" type="uint" default="1000">1000</max_age>
             <report_uri desc="HPKP's report-uri directive - pin validation failure are reported at this URL" enable="false" type="string"></report_uri>

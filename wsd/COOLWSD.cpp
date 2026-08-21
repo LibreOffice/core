@@ -2618,9 +2618,14 @@ void COOLWSD::initializeSSL()
             ssl_cipher_list = DEFAULT_CIPHER_SET;
     LOG_INF("SSL Cipher list: " << ssl_cipher_list);
 
+    const std::string ssl_min_protocol_version =
+        config().getString("ssl.min_protocol_version", "TLSv1.2");
+    LOG_INF("SSL minimum protocol version: " << ssl_min_protocol_version);
+
     // Initialize the non-blocking server socket SSL context.
     ssl::Manager::initializeServerContext(ssl_cert_file_path, ssl_key_file_path, ssl_ca_file_path,
-                                          ssl_cipher_list, ssl::CertificateVerification::Disabled);
+                                          ssl_cipher_list, ssl::CertificateVerification::Disabled,
+                                          ssl_min_protocol_version);
 
     if (!ssl::Manager::isServerContextInitialized())
         LOG_ERR("Failed to initialize Server SSL.");

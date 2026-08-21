@@ -43,7 +43,8 @@ class SslContext final
 public:
     SslContext(const std::string& certFilePath, const std::string& keyFilePath,
                const std::string& caFilePath, const std::string& cipherList,
-               ssl::CertificateVerification verification);
+               ssl::CertificateVerification verification,
+               const std::string& minProtocolVersion = "TLSv1.2");
 
     /// Returns a new SSL Context to be used with raw API.
     SSL* newSsl() { return SSL_new(_ctx); }
@@ -51,6 +52,10 @@ public:
     ~SslContext();
 
     ssl::CertificateVerification verification() const { return _verification; }
+
+    /// Maps a config value such as "TLSv1.2" to the matching OpenSSL TLS1_x_VERSION
+    /// constant. Unrecognized values fall back to TLS1_2_VERSION, with a warning logged.
+    static int parseMinProtocolVersion(const std::string& minProtocolVersion);
 
 private:
     void initDH();
@@ -73,12 +78,13 @@ public:
                                         const std::string& keyFilePath,
                                         const std::string& caFilePath,
                                         const std::string& cipherList,
-                                        ssl::CertificateVerification verification)
+                                        ssl::CertificateVerification verification,
+                                        const std::string& minProtocolVersion = "TLSv1.2")
     {
         assert(!isServerContextInitialized() &&
                "Cannot initialize the server context more than once");
         ServerInstance = std::make_unique<SslContext>(certFilePath, keyFilePath, caFilePath,
-                                                      cipherList, verification);
+                                                      cipherList, verification, minProtocolVersion);
     }
 
     static void uninitializeServerContext() { ServerInstance.reset(); }

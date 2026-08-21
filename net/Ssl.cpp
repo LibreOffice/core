@@ -55,9 +55,26 @@ static const char* getCABundleFile()
     return nullptr;
 }
 
+int SslContext::parseMinProtocolVersion(const std::string& minProtocolVersion)
+{
+    if (minProtocolVersion == "TLSv1")
+        return TLS1_VERSION;
+    if (minProtocolVersion == "TLSv1.1")
+        return TLS1_1_VERSION;
+    if (minProtocolVersion == "TLSv1.2")
+        return TLS1_2_VERSION;
+    if (minProtocolVersion == "TLSv1.3")
+        return TLS1_3_VERSION;
+
+    LOG_WRN("Unknown ssl.min_protocol_version [" << minProtocolVersion
+                                                  << "], falling back to TLSv1.2");
+    return TLS1_2_VERSION;
+}
+
 SslContext::SslContext(const std::string& certFilePath, const std::string& keyFilePath,
                        const std::string& caFilePath, const std::string& cipherList,
-                       ssl::CertificateVerification verification)
+                       ssl::CertificateVerification verification,
+                       const std::string& minProtocolVersion)
     : _ctx(nullptr)
     , _verification(verification)
 {
@@ -71,7 +88,7 @@ SslContext::SslContext(const std::string& certFilePath, const std::string& keyFi
     // Create the Context. We only have one,
     // as we don't expect/support different servers in same process.
     _ctx = SSL_CTX_new(TLS_method());
-    SSL_CTX_set_min_proto_version(_ctx, TLS1_2_VERSION); // TLS v1.2 is the minimum.
+    SSL_CTX_set_min_proto_version(_ctx, parseMinProtocolVersion(minProtocolVersion));
 
     // SSL_CTX_set_default_passwd_cb(_ctx, &privateKeyPassphraseCallback);
     ERR_clear_error();

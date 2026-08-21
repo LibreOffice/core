@@ -289,6 +289,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "ssl.hpkp[@enable]", "false" },
     { "ssl.hpkp[@report_only]", "false" },
     { "ssl.key_file_path", COOLWSD_CONFIGDIR "/key.pem" },
+    { "ssl.min_protocol_version", "TLSv1.2" },
 #if !MOBILEAPP
     { "ssl.ssl_verification", SSL_VERIFY },
 #endif
