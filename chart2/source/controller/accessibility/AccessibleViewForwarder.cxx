@@ -39,7 +39,7 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 {
 }
 
-// ________ IAccessibleViewforwarder ________
+// ________ IAccessibleViewForwarder ________
 
 tools::Rectangle AccessibleViewForwarder::GetVisibleArea() const
 {

@@ -361,7 +361,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
             SwContentNode* pBackNd = aBackPos.GetNode( ).GetContentNode( );
             if ( pBackNd && bConsiderBackground)
             {
-                // FIXME There are still cases were we don't have the proper node here.
+                // FIXME There are still cases where we don't have the proper node here.
                 SwContentFrame* pBackFrame = pBackNd->getLayoutFrame( getRootFrame( ) );
                 if (pBackFrame)
                 {

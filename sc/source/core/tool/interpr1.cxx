@@ -9587,7 +9587,7 @@ void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
     if (nParamCount == 6)
         aIfNotFound = GetString();
 
-    // 5rd argument optional - match_end
+    // 5th argument optional - match_end
     bool bMatchEnd = false;
     if (nParamCount >= 5)
     {
@@ -9811,7 +9811,7 @@ void ScInterpreter::ScTextSplit()
     if (nParamCount == 6)
         aPadWith = GetString();
 
-    // 5rd argument optional - match_mode
+    // 5th argument optional - match_mode
     bool bMatchMode = false;
     if (nParamCount >= 5)
     {

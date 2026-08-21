@@ -49,7 +49,7 @@ SchAxisDlg::SchAxisDlg(weld::Window* pWindow,
 {
     if (bAxisDlg)
     {
-        //todo: remove if secondary z axis are possible somewhere
+        //todo: remove if secondary z axis is possible somewhere
         m_xCbSecondaryZ->hide();
     }
 

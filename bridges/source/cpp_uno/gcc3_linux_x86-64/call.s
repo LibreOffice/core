@@ -50,7 +50,7 @@ privateSnippetExecutor:
 	movsd	%xmm7, -8(%rbp)
 
 	leaq	-144(%rbp), %r9			# 6th param: sal_uInt64 * pRegisterReturn
-	leaq	16(%rbp), %r8			# 5rd param: void ** ovrflw
+	leaq	16(%rbp), %r8			# 5th param: void ** ovrflw
 	leaq	-64(%rbp), %rcx			# 4th param: void ** fpreg
 	leaq	-112(%rbp), %rdx		# 3rd param: void ** gpreg
 	movl	-148(%rbp), %esi		# 2nd param: sal_int32 nVtableOffset

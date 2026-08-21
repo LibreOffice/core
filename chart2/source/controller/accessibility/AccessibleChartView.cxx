@@ -241,7 +241,7 @@ void AccessibleChartView::initialize( ChartController& rNewChartController,
 
     {
         //before notification we prepare for creation of new context
-        //the old context will be deleted after notification than
+        //the old context will be deleted after notification then
         MutexGuard aGuard( m_aMutex);
         if( xChartModel.is())
             m_spObjectHierarchy =
@@ -328,7 +328,7 @@ void AccessibleChartView::initialize()
 
     {
         //before notification we prepare for creation of new context
-        //the old context will be deleted after notification than
+        //the old context will be deleted after notification then
         MutexGuard aGuard( m_aMutex);
         if( xChartModel.is())
             m_spObjectHierarchy =

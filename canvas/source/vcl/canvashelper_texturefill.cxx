@@ -863,7 +863,7 @@ namespace vclcanvas
                     // (extended, because shrinking might leave some
                     // inner polygon areas unfilled).
                     // Finally, the bound rect is transformed back to
-                    // device coordinate space, were we determine the
+                    // device coordinate space, where we determine the
                     // start point from it.
                     ::basegfx::B2DRectangle aTextureSpacePolygonRect = ::canvastools::calcTransformedRectBounds(
                                                                 vcl::unotools::b2DRectangleFromRectangle(aPolygonDeviceRect),
