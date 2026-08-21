@@ -160,8 +160,7 @@ rtl::Reference<Content> Content::create(
     {
         // resource exists
 
-        sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
-        if ( ( nLastSlash + 1 ) == aURL.getLength() )
+        if ( aURL.endsWith('/') )
         {
             // Client explicitly requested a folder!
             if ( !aProps.bIsFolder )
@@ -179,8 +178,7 @@ rtl::Reference<Content> Content::create(
         bool bFolder = false;
 
         // Guess type according to URI.
-        sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
-        if ( ( nLastSlash + 1 ) == aURL.getLength() )
+        if ( aURL.endsWith('/') )
             bFolder = true;
 
         uno::Reference< ucb::XContentIdentifier > xId
@@ -1504,7 +1502,7 @@ void Content::insert(
     }
 
     OUString aNewURL = m_aUri.getParentUri();
-    if (1 + aNewURL.lastIndexOf('/') != aNewURL.getLength())
+    if (!aNewURL.endsWith('/'))
         aNewURL += "/";
     aNewURL += ::ucb_impl::urihelper::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
@@ -2015,7 +2013,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     OUString aURL = m_xIdentifier->getContentIdentifier();
 
-    OSL_ENSURE( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ),
+    OSL_ENSURE( !aURL.endsWith('/'),
                 "Content::queryChildren - Invalid URL!" );
 
     aURL += "/";
