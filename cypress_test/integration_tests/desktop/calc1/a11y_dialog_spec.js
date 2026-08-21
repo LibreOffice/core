@@ -344,6 +344,29 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         a11yHelper.handleDialog(win, 1, ".uno:MergeCells");
     });
 
+    it('Comment Change dialog', function () {
+        helper.typeIntoInputField(helper.addressInputSelector, 'A1');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:TraceChangeMode', { TraceChangeMode: { type: 'boolean', value: true } });
+        });
+
+        helper.typeIntoDocument('tracked change{enter}');
+        helper.typeIntoInputField(helper.addressInputSelector, 'A1');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:CommentChange');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:CommentChange');
+
+        // Undo the tracked cell edit rather than accepting or rejecting it
+        // through the Manage Changes dialog, then stop recording again.
+        helper.typeIntoDocument('{ctrl}z');
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:TraceChangeMode', { TraceChangeMode: { type: 'boolean', value: false } });
+        });
+    });
+
     it('Select Source Dialog', function () {
         helper.typeIntoInputField(helper.addressInputSelector, 'A1:A3')
         cy.then(() => {

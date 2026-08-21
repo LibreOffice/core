@@ -586,6 +586,8 @@ class LOUtil {
 			calculatedfieldrun: 'functiondialog',
 			databasesettings: 'tabledesign',
 			tracechangemode: 'trackchanges',
+			showchanges: 'showtrackedchanges',
+			commentchange: 'editannotation',
 			deleteallannotation: 'deleteallnotes',
 			tableeditpanel: 'tabledesign',
 			tableautofitmenu: 'columnwidth',

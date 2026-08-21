@@ -93,6 +93,11 @@
                     <property name="valign">center</property>
                     <property name="image">image2</property>
                     <property name="always-show-image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="previous-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="comment|previous-atkobject">Previous Change</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -108,6 +113,11 @@
                     <property name="valign">center</property>
                     <property name="image">image3</property>
                     <property name="always-show-image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="next-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="comment|next-atkobject">Next Change</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

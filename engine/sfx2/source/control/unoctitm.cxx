@@ -1363,6 +1363,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"SplitCell", { PayloadType::EnabledPayload, true } },
         { u"DeleteNote", { PayloadType::EnabledPayload, true } },
         { u"AcceptChanges", { PayloadType::EnabledPayload, true } },
+        { u"CommentChange", { PayloadType::EnabledPayload, true } },
         { u"SetDefault", { PayloadType::EnabledPayload, true } },
         { u"ParaspaceIncrease", { PayloadType::EnabledPayload, true } },
         { u"ParaspaceDecrease", { PayloadType::EnabledPayload, true } },

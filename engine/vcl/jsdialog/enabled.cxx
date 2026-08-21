@@ -68,6 +68,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/charnamepage.ui" },
         { u"cui/ui/colorpage.ui" },
         { u"cui/ui/colorpickerdialog.ui" },
+        { u"cui/ui/comment.ui" },
         { u"cui/ui/croppage.ui" },
         { u"cui/ui/diagramdialog.ui" },
         { u"cui/ui/effectspage.ui" },
@@ -1009,6 +1010,10 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 {
                     continue;
                 }
+                // Impress and Draw have no change tracking, so there is no way to
+                // reach the dialog for commenting on a tracked change.
+                if (entry == u"cui/ui/comment.ui")
+                    continue;
                 // .uno:StyleNewByExample doesn't seem to be enabled for impress
                 if (entry == u"sfx/ui/managestylepage.ui" ||
                     entry == u"sfx/ui/newstyle.ui")

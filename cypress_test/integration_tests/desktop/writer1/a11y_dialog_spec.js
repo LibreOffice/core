@@ -503,6 +503,27 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
         a11yHelper.handleDialog(win, 1, '.uno:GraphicDialog');
     });
 
+    it('Comment Change Tracking dialog', function () {
+        helper.clearAllText();
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:TrackChanges', { TrackChanges: { type: 'boolean', value: true } });
+        });
+
+        helper.typeIntoDocument('tracked change');
+        helper.selectAllText();
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:CommentChangeTracking');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:CommentChangeTracking');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:RejectAllTrackedChanges');
+            win.app.map.sendUnoCommand('.uno:TrackChanges', { TrackChanges: { type: 'boolean', value: false } });
+        });
+    });
+
     it('Rename bookmark', function () {
         helper.clearAllText();
 

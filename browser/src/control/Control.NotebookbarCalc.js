@@ -2661,7 +2661,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 	},
 
 	getReviewTab: function() {
-		// Note: when adding track changes elements, consider this._map['wopi'].HideChangeTrackingControls
+		var hideChangeTrackingControls = this._map['wopi'].HideChangeTrackingControls;
 		var content = [
 			{
 				'type': 'overflowgroup',
@@ -2773,6 +2773,59 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				]
 			},
 			{ type: 'separator', id: 'review-deletenote-break', orientation: 'vertical' },
+			hideChangeTrackingControls ? {} : {
+				'type': 'overflowgroup',
+				'id': 'review-tracking',
+				'name': _('Tracking'),
+				'accessibility': { focusBack: true, combination: 'TR', de: null },
+				'children' : [
+					{
+						'id': 'review-track-changes',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:TraceChangeMode', 'spreadsheet'),
+						'command': '.uno:TraceChangeMode',
+						'accessibility': { focusBack: true, combination: 'RC', de: null }
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-show-changes',
+										'type': 'toolitem',
+										'text': _UNO('.uno:ShowChanges', 'spreadsheet'),
+										'command': '.uno:ShowChanges',
+										'accessibility': { focusBack: true, combination: 'VC', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-manage-changes',
+										'type': 'toolitem',
+										'text': _UNO('.uno:AcceptChanges', 'spreadsheet'),
+										'command': '.uno:AcceptChanges',
+										'accessibility': { focusBack: true, combination: 'MC', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+					{
+						'id': 'review-comment-change',
+						'type': 'toolitem',
+						'text': _('Comment on Change'),
+						'command': '.uno:CommentChange',
+						'accessibility': { focusBack: true, combination: 'CH', de: null }
+					},
+				]
+			},
+			hideChangeTrackingControls ? {} : { type: 'separator', id: 'review-tracking-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
 				'id': 'review-protect',
@@ -2788,6 +2841,13 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'text': _UNO('.uno:Protect', 'spreadsheet'),
 								'command': '.uno:Protect',
 								'accessibility': { focusBack: true,	combination: 'DP', de: null }
+							},
+							hideChangeTrackingControls ? {} : {
+								'id': 'review-protect-changes',
+								'type': 'bigtoolitem',
+								'text': _UNO('.uno:ProtectTraceChangeMode', 'spreadsheet'),
+								'command': '.uno:ProtectTraceChangeMode',
+								'accessibility': { focusBack: true, combination: 'PC', de: null }
 							}
 						]
 					},

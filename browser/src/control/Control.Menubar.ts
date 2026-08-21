@@ -884,7 +884,17 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SelectAll', 'text'), uno: '.uno:SelectAll'},
 				{type: 'separator'},
 				{uno: '.uno:SearchDialog', id: 'searchreplace'},
-				{name: _('Find'), id: 'find', type: 'action', shortcut: 'home-search'}
+				{name: _('Find'), id: 'find', type: 'action', shortcut: 'home-search'},
+				{type: 'separator'},
+				{name: _UNO('.uno:ChangesMenu', 'spreadsheet'), id: 'changesmenu', type: 'menu', menu: [
+					{uno: '.uno:TraceChangeMode'},
+					{uno: '.uno:ShowChanges'},
+					{type: 'separator'},
+					{uno: '.uno:AcceptChanges'},
+					{type: 'separator'},
+					{uno: '.uno:CommentChange'},
+					{uno: '.uno:ProtectTraceChangeMode'}
+				]}
 			]},
 			{name: _UNO('.uno:ViewMenu', 'spreadsheet'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
@@ -3394,6 +3404,8 @@ class Menubar extends window.L.Control {
 			}
 		} else if (item.uno === '.uno:TrackChanges' ||
 			item.uno === '.uno:ShowTrackedChanges' ||
+			item.uno === '.uno:TraceChangeMode' ||
+			item.uno === '.uno:ShowChanges' ||
 			item.uno === '.uno:ControlCodes' ||
 			item.uno === '.uno:SpellOnline' ||
 			item.uno === '.uno:ShowResolvedAnnotations' ||
