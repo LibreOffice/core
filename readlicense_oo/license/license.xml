@@ -261,6 +261,7 @@
 
     <h2>dtoa</h2>
     <p>The following software may be included in this product: dtoa.</p>
+    <!-- Name: dtoa, Vendor:, Source: DTOA_TARBALL, URL: https://www.netlib.org/fp/, Declared: MIT, Concluded: MPL-2.0 -->
     <p>dtoa code is covered by the MIT license:</p>
     <blockquote>
     <p> The author of this software is David M. Gay.</p>
@@ -2166,6 +2167,7 @@
         the copyright holder.</p>
     </div>
     <h2>UnixODBC</h2>
+    <!-- Name: unixodbc, Vendor: unixodbc, Source: external/unixODBC/inc, URL: http://www.unixodbc.org/, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
     <p>The following software may be included in this product: unixODBC. Use of any of this software is governed by the
     terms of the license below:</p>
     <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
