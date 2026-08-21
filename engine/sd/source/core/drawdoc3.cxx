@@ -2095,7 +2095,14 @@ void SdDrawDocument::Merge(SdrModel& rSourceModel,
     for( sal_uInt16 nMaster = nMasterPageCount; nMaster < GetMasterPageCount(); nMaster++ )
     {
         SdPage* pPage = static_cast< SdPage* >( GetMasterPage( nMaster ) );
-        if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PageKind::Standard) )
+        if( !pPage )
+            continue;
+
+        // SdrModel::Merge inserts the cloned master pages directly into the page list, so
+        // the identifier uniqueness check runs here.
+        EnsureUniquePageGuid(*pPage);
+
+        if( pPage->IsMasterPage() && (pPage->GetPageKind() == PageKind::Standard) )
         {
             // new master page created, add its style family
             SdStyleSheetPool* pStylePool = static_cast<SdStyleSheetPool*>( GetStyleSheetPool() );

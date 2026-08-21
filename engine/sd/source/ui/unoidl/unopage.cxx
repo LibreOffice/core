@@ -110,7 +110,7 @@ enum WID_PAGE
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
     WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
     WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_THEME, WID_PAGE_THEME_UNO_REPRESENTATION,
-    WID_PAGE_SLIDE_LAYOUT
+    WID_PAGE_SLIDE_LAYOUT, WID_PAGE_GUID
 };
 
 }
@@ -163,6 +163,7 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"" UNO_NAME_PAGE_TRANSITION_DURATION ""_ustr, WID_TRANSITION_DURATION, ::cppu::UnoType<double>::get(),          0,  0},
         { u"LoopSound"_ustr,                    WID_LOOP_SOUND, cppu::UnoType<bool>::get(),                    0, 0},
         { u"NavigationOrder"_ustr,              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},
+        { u"Guid"_ustr,                         WID_PAGE_GUID, ::cppu::UnoType<OUString>::get(),             0,  0},
     };
 
 #define DRAW_PAGE_NOTES_PROPERTIES \
@@ -188,7 +189,8 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"IsDateTimeFixed"_ustr,         WID_PAGE_DATETIMEFIXED, cppu::UnoType<bool>::get(),                    0, 0},                                                                 \
         { u"DateTimeText"_ustr,            WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},                                                            \
         { u"DateTimeFormat"_ustr,          WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},                                                            \
-        { u"NavigationOrder"_ustr,         WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0}
+        { u"NavigationOrder"_ustr,         WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                                            \
+        { u"Guid"_ustr,                    WID_PAGE_GUID, ::cppu::UnoType<OUString>::get(),             0,  0}
 
     static const SfxItemPropertyMapEntry aDrawPageNotesHandoutPropertyMap_Impl[] =
     {
@@ -218,7 +220,8 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},                          \
         { sUNO_Prop_BookmarkURL,          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},                                                                             \
         { u"IsBackgroundDark"_ustr,        WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},                                             \
-        { u"NavigationOrder"_ustr,         WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0}
+        { u"NavigationOrder"_ustr,         WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                             \
+        { u"Guid"_ustr,                    WID_PAGE_GUID, ::cppu::UnoType<OUString>::get(),             0,  0}
 
     static const SfxItemPropertyMapEntry aGraphicPagePropertyMap_Impl[] =
     {
@@ -292,7 +295,8 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { sUNO_Prop_Theme, WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), 0,  0},
         // backwards compatible view of the theme for use in tests
         { u"ThemeUnoRepresentation"_ustr, WID_PAGE_THEME_UNO_REPRESENTATION, cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get(), 0,  0},
-        { u"SlideLayout"_ustr,            WID_PAGE_SLIDE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0}
+        { u"SlideLayout"_ustr,            WID_PAGE_SLIDE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},
+        { u"Guid"_ustr,                   WID_PAGE_GUID,      ::cppu::UnoType<OUString>::get(),             0,  0}
     };
 
     static const SfxItemPropertyMapEntry aHandoutMasterPagePropertyMap_Impl[] =
@@ -316,7 +320,8 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"IsDateTimeVisible"_ustr,            WID_PAGE_DATETIMEVISIBLE, cppu::UnoType<bool>::get(),                  0, 0},
         { u"IsDateTimeFixed"_ustr,              WID_PAGE_DATETIMEFIXED, cppu::UnoType<bool>::get(),                    0, 0},
         { u"DateTimeText"_ustr,                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},
-        { u"DateTimeFormat"_ustr,               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0}
+        { u"DateTimeFormat"_ustr,               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},
+        { u"Guid"_ustr,                         WID_PAGE_GUID,      ::cppu::UnoType<OUString>::get(),             0,  0}
     };
 
     const SvxItemPropertySet* pRet = nullptr;
@@ -1022,6 +1027,31 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             GetPage()->getSdrPageProperties().setTheme(model::Theme::FromAny(aValue));
             break;
 
+        case WID_PAGE_GUID:
+        {
+            OUString sGuid;
+            if (!(aValue >>= sGuid))
+                throw lang::IllegalArgumentException();
+
+            tools::Guid aGuid(OUStringToOString(sGuid, RTL_TEXTENCODING_ASCII_US));
+            if (aGuid.isEmpty())
+                throw lang::IllegalArgumentException();
+
+            // A value another page of the document already holds leaves this page's own
+            // identifier standing, so the identifiers of a document stay unique even when a
+            // file carries the same one twice.
+            SdDrawDocument& rDoc
+                = static_cast<SdDrawDocument&>(GetPage()->getSdrModelFromSdrPage());
+            SdPage* pHolder = rDoc.GetPageByGuid(aGuid);
+            if (!pHolder)
+                GetPage()->SetGuid(aGuid);
+            else if (pHolder != GetPage())
+                SAL_INFO("sd", "page identifier " << sGuid
+                                                  << " not taken over: another page of the "
+                                                     "document holds it");
+            break;
+        }
+
         default:
             throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
@@ -1277,6 +1307,11 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_ISDARK:
     {
         aAny <<= GetPage()->GetPageBackgroundColor().IsDark();
+        break;
+    }
+    case WID_PAGE_GUID:
+    {
+        aAny <<= GetPage()->GetGuid().getOUString();
         break;
     }
     case WID_PAGE_HEADERVISIBLE:

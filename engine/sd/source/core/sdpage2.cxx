@@ -362,6 +362,8 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     mnPaperBin = rSrcPage.mnPaperBin;
     mpPageLink = nullptr;    // is set when inserting via ConnectLink()
     mbIsPrecious = false;
+    // A copy of a page starts out holding the identifier of its source page.
+    maGuid = rSrcPage.maGuid;
 
     // use shape list directly to preserve constness of rSrcPage
     const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
@@ -649,6 +651,8 @@ void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (pPageKind)
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mePageKind"), BAD_CAST(pPageKind));
 
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maGuid"),
+                                      BAD_CAST(maGuid.getString().getStr()));
 
     FmFormPage::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);

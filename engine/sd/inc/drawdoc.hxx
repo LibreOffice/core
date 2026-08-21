@@ -803,6 +803,14 @@ public:
     SdPage*GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const;
     sal_uInt16 GetSdPageCount(PageKind ePgKind) const;
 
+    /** returns the page or master page holding the given globally unique identifier, or
+        nullptr when no page of this document holds it */
+    SdPage* GetPageByGuid(const tools::Guid& rGuid);
+
+    /** gives the page a freshly generated globally unique identifier when another page of
+        this document already holds the page's current one */
+    SAL_DLLPRIVATE void EnsureUniquePageGuid(SdPage& rPage);
+
     SAL_DLLPRIVATE void                SetSelected(SdPage* pPage, bool bSelect);
     SAL_DLLPRIVATE void                UnselectAllPages();
     SAL_DLLPRIVATE bool                MoveSelectedPages(sal_uInt16 nTargetPage);

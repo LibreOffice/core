@@ -230,6 +230,35 @@ SdPage* SdDrawDocument::GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const
     return mpDrawPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));
 }
 
+SdPage* SdDrawDocument::GetPageByGuid(const tools::Guid& rGuid)
+{
+    for (sal_uInt16 nPage = 0, nCount = GetPageCount(); nPage < nCount; ++nPage)
+    {
+        SdPage* pPage = static_cast<SdPage*>(GetPage(nPage));
+        if (pPage->GetGuid() == rGuid)
+            return pPage;
+    }
+
+    for (sal_uInt16 nPage = 0, nCount = GetMasterPageCount(); nPage < nCount; ++nPage)
+    {
+        SdPage* pPage = static_cast<SdPage*>(GetMasterPage(nPage));
+        if (pPage->GetGuid() == rGuid)
+            return pPage;
+    }
+
+    return nullptr;
+}
+
+void SdDrawDocument::EnsureUniquePageGuid(SdPage& rPage)
+{
+    // A copy of a page starts out holding the identifier of its source, so it gets a fresh
+    // one when the source is part of the same document. That keeps the identifiers of a
+    // document unique.
+    SdPage* pHolder = GetPageByGuid(rPage.GetGuid());
+    if (pHolder && pHolder != &rPage)
+        rPage.SetGuid(tools::Guid(tools::Guid::Generate));
+}
+
 sal_uInt16 SdDrawDocument::GetSdPageCount(PageKind ePgKind) const
 {
     return static_cast<sal_uInt16>(mpDrawPageListWatcher->GetSdPageCount(ePgKind));
@@ -673,9 +702,12 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
     bool bLast = (nPos == GetPageCount());
 
+    SdPage* pSdPage = static_cast<SdPage*>(pPage);
+
+    EnsureUniquePageGuid(*pSdPage);
+
     FmFormModel::InsertPage(pPage, nPos);
 
-    SdPage* pSdPage = static_cast<SdPage*>(pPage);
     pSdPage->ConnectLink();
 
     UpdatePageObjectsInNotes(nPos);
@@ -797,6 +829,10 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 // you also have to modify code in SdDrawDocument::Merge!
 void SdDrawDocument::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos )
 {
+    SdPage* pSdPage = static_cast<SdPage*>(pPage);
+
+    EnsureUniquePageGuid(*pSdPage);
+
     FmFormModel::InsertMasterPage( pPage, nPos );
     if( pPage->IsMasterPage() && (static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard) )
     {

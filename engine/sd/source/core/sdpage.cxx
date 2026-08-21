@@ -132,6 +132,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 ,   mfTransitionDuration(2.0)
 ,   mbIsPrecious(true)
 ,   mnPageId(mnLastPageId++)
+,   maGuid(tools::Guid::Generate)
 {
     // The name of the layout of the page is used by SVDRAW to determine the
     // presentation template of the outline objects. Therefore, it already

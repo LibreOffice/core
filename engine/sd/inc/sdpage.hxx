@@ -38,6 +38,7 @@
 #include "shapelist.hxx"
 #include "misc/scopelock.hxx"
 #include "sddllapi.h"
+#include <tools/Guid.hxx>
 #include <tools/json_writer.hxx>
 
 namespace com::sun::star::animations {
@@ -415,6 +416,9 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     sal_uInt16 getPageId() const { return mnPageId; }
 
+    const tools::Guid& GetGuid() const { return maGuid; }
+    void SetGuid(const tools::Guid& rGuid) { maGuid = rGuid; }
+
     /**
      Returns graphics objects from the page that can be prefetched before it's painted.
      The pointers are temporary and should not be kept.
@@ -437,6 +441,10 @@ private:
 
     // page id of this page
     sal_uInt16 mnPageId;
+
+    // Globally unique identifier of the page. It is never empty, and no two pages of one
+    // document hold the same value.
+    tools::Guid maGuid;
 
     /** clone the animations from this and set them to rTargetPage
      *  TTTT: Order is strange, should be the other way around by

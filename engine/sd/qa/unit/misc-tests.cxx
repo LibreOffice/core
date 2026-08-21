@@ -24,8 +24,11 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+
+#include <set>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -104,6 +107,9 @@ public:
     void testCanvasSlideExportODP();
     void testDuplicateAndMove();
     void testEmptyPresObjSetOnObjectWithoutText();
+    void testPageGuids();
+    void testPageGuidCutPaste();
+    void testPageGuidMergedMasters();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -135,6 +141,9 @@ public:
     CPPUNIT_TEST(testCanvasSlideExportODP);
     CPPUNIT_TEST(testDuplicateAndMove);
     CPPUNIT_TEST(testEmptyPresObjSetOnObjectWithoutText);
+    CPPUNIT_TEST(testPageGuids);
+    CPPUNIT_TEST(testPageGuidCutPaste);
+    CPPUNIT_TEST(testPageGuidMergedMasters);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1340,6 +1349,147 @@ void SdMiscTest::testEmptyPresObjSetOnObjectWithoutText()
 
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bEmpty);
     CPPUNIT_ASSERT(bEmpty);
+}
+
+void SdMiscTest::testPageGuids()
+{
+    // Every page of a document holds a globally unique identifier, and a page copied next to
+    // its source gets one of its own.
+    createSdImpressDoc("slide_with_text.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // The file stores no identifier, so loading it generated a distinct one for every page and
+    // every master page, and each of them can be looked up by it.
+    std::set<OUString> aSeenGuids;
+    for (sal_uInt16 nPage = 0; nPage < pDoc->GetPageCount(); ++nPage)
+    {
+        SdPage* pPage = static_cast<SdPage*>(pDoc->GetPage(nPage));
+        CPPUNIT_ASSERT(!pPage->GetGuid().isEmpty());
+        CPPUNIT_ASSERT(aSeenGuids.insert(pPage->GetGuid().getOUString()).second);
+        CPPUNIT_ASSERT_EQUAL(pPage, pDoc->GetPageByGuid(pPage->GetGuid()));
+    }
+    for (sal_uInt16 nPage = 0; nPage < pDoc->GetMasterPageCount(); ++nPage)
+    {
+        SdPage* pPage = static_cast<SdPage*>(pDoc->GetMasterPage(nPage));
+        CPPUNIT_ASSERT(!pPage->GetGuid().isEmpty());
+        CPPUNIT_ASSERT(aSeenGuids.insert(pPage->GetGuid().getOUString()).second);
+        CPPUNIT_ASSERT_EQUAL(pPage, pDoc->GetPageByGuid(pPage->GetGuid()));
+    }
+
+    // A duplicated slide keeps the content of its source but gets an identifier of its own.
+    SdPage* pFirstPage = pDoc->GetSdPage(0, PageKind::Standard);
+    const OUString sFirstGuid = pFirstPage->GetGuid().getOUString();
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    SdPage* pSecondPage = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sFirstGuid, pFirstPage->GetGuid().getOUString());
+    CPPUNIT_ASSERT(!pSecondPage->GetGuid().isEmpty());
+    CPPUNIT_ASSERT(pSecondPage->GetGuid() != pFirstPage->GetGuid());
+
+    // The identifier is readable over the page's property set.
+    uno::Reference<beans::XPropertySet> xSecondPage(getPage(1), uno::UNO_QUERY_THROW);
+    OUString sSecondGuid;
+    CPPUNIT_ASSERT(xSecondPage->getPropertyValue(u"Guid"_ustr) >>= sSecondGuid);
+    CPPUNIT_ASSERT_EQUAL(pSecondPage->GetGuid().getOUString(), sSecondGuid);
+
+    // Writing an identifier another page of the document holds leaves the page as it is.
+    xSecondPage->setPropertyValue(u"Guid"_ustr, cpo::uno::Any(sFirstGuid));
+    CPPUNIT_ASSERT_EQUAL(sSecondGuid, pSecondPage->GetGuid().getOUString());
+
+    // A value that is not a GUID is refused.
+    bool bCaught = false;
+    try
+    {
+        xSecondPage->setPropertyValue(u"Guid"_ustr, cpo::uno::Any(u"not-a-guid"_ustr));
+    }
+    catch (const lang::IllegalArgumentException&)
+    {
+        bCaught = true;
+    }
+    CPPUNIT_ASSERT(bCaught);
+    CPPUNIT_ASSERT_EQUAL(sSecondGuid, pSecondPage->GetGuid().getOUString());
+
+    // A fresh valid value is taken over.
+    tools::Guid aFreshGuid(tools::Guid::Generate);
+    xSecondPage->setPropertyValue(u"Guid"_ustr, cpo::uno::Any(aFreshGuid.getOUString()));
+    CPPUNIT_ASSERT_EQUAL(aFreshGuid.getOUString(), pSecondPage->GetGuid().getOUString());
+}
+
+void SdMiscTest::testPageGuidCutPaste()
+{
+    // A slide moved through the clipboard keeps its identifier: the copy is taken while the
+    // page is still in the document, and it is inserted only after the page was deleted.
+    createSdImpressDoc("slide_with_text.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // A second slide, so the document keeps a slide while the moved one is out of it.
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    SdPage* pSecondPage = pDoc->GetSdPage(1, PageKind::Standard);
+    const OUString sGuid = pSecondPage->GetGuid().getOUString();
+    const sal_uInt16 nPagePosition = pSecondPage->GetPageNum();
+
+    SdrPage& rSecondPage = *pSecondPage;
+    rtl::Reference<SdrPage> xClipboardPage = rSecondPage.CloneSdrPage(*pDoc);
+    CPPUNIT_ASSERT_EQUAL(sGuid,
+                         static_cast<SdPage*>(xClipboardPage.get())->GetGuid().getOUString());
+
+    SdrModel& rModel = *pDoc;
+    rtl::Reference<SdrPage> xRemovedPage = rModel.RemovePage(nPagePosition);
+    rModel.InsertPage(xClipboardPage.get(), nPagePosition);
+
+    SdPage* pPastedPage = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sGuid, pPastedPage->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(pPastedPage, pDoc->GetPageByGuid(pPastedPage->GetGuid()));
+}
+
+void SdMiscTest::testPageGuidMergedMasters()
+{
+    // Master pages arrive through a model merge without passing the insert methods, and a
+    // merged master holding the identifier of an existing master gets one of its own.
+    createSdImpressDoc("slide_with_text.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    const OUString sMasterGuid
+        = pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+
+    // A saved copy of the document holds the same identifiers the document does.
+    save(TestFilter::ODP);
+    uno::Reference<lang::XComponent> xSourceComponent = loadFromDesktop(maTempFile.GetURL());
+    auto* pSourceXImpressDocument = dynamic_cast<SdXImpressDocument*>(xSourceComponent.get());
+    CPPUNIT_ASSERT(pSourceXImpressDocument);
+    SdDrawDocument* pSourceDoc = pSourceXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pSourceDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        sMasterGuid, pSourceDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+
+    // Merge the master pages of the copy, and none of the pages.
+    const sal_uInt16 nMastersBefore = pDoc->GetMasterPageCount();
+    SdrModel& rModel = *pDoc;
+    rModel.Merge(*pSourceDoc, SDRPAGE_NOTFOUND, SDRPAGE_NOTFOUND, pDoc->GetPageCount(),
+                 /*bMergeMasterPages=*/true, /*bAllMasterPages=*/true,
+                 /*bUndo=*/false, /*bTreadSourceAsConst=*/true);
+    CPPUNIT_ASSERT(pDoc->GetMasterPageCount() > nMastersBefore);
+
+    // Every master of the document holds an identifier of its own, and the document's own
+    // master kept the one it had.
+    std::set<OUString> aSeenGuids;
+    for (sal_uInt16 nPage = 0; nPage < pDoc->GetMasterPageCount(); ++nPage)
+    {
+        SdPage* pPage = static_cast<SdPage*>(pDoc->GetMasterPage(nPage));
+        CPPUNIT_ASSERT(aSeenGuids.insert(pPage->GetGuid().getOUString()).second);
+    }
+    CPPUNIT_ASSERT_EQUAL(sMasterGuid,
+                         pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+
+    xSourceComponent->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
