@@ -14,7 +14,7 @@
  * window.L.Control.JSDialog - class which creates and updates dialogs, popups, snackbar
  */
 
-/* global JSDialog Hammer app _ cool AutoCompleteDialogId GraphicSelection */
+/* global JSDialog JSDialogModelState Hammer app _ cool AutoCompleteDialogId GraphicSelection */
 window.L.Control.JSDialog = window.L.Control.extend({
 	options: {},
 	dialogs: {},
@@ -1274,6 +1274,13 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				}
 			});
 
+			// Keep a model of the built content next to the instance. It holds
+			// the JSON for the whole dialog and stays in sync with later widget
+			// updates and actions, so old values can be read from it without
+			// touching the DOM.
+			instance.model = new JSDialogModelState('dialog-' + instance.id);
+			instance.model.fullUpdate(instance);
+
 			this.dialogs[instance.id] = instance;
 
 			if (instance.isSnackbar && instance.snackbarTimeout > 0) {
@@ -1291,6 +1298,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		var dialog = this.dialogs[data.id] ? this.dialogs[data.id].container : null;
 		if (!dialog)
 			return;
+
+		if (this.dialogs[data.id].model)
+			this.dialogs[data.id].model.applyUpdate(data);
 
 		var builder = new window.L.control.jsDialogBuilder({windowId: data.id,
 			mobileWizard: this,
@@ -1335,6 +1345,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		var dialog = this.dialogs[data.id];
 		if (!dialog)
 			return;
+
+		if (dialog.model)
+			dialog.model.widgetAction(data);
 
 		var builder = dialog.builder;
 		if (!builder)
