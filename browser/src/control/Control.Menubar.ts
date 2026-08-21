@@ -2111,8 +2111,9 @@ class Menubar extends window.L.Control {
        * @param e - The event data.
        * @param menu - The clicked menu element.
        */
-	private _onClicked(e: any, menu: any): void {
-		if ($(menu).hasClass('highlighted')) {
+	private _onClicked(e: any, menu: any): boolean | void {
+		var wasOpen = $(menu).hasClass('highlighted');
+		if (wasOpen) {
 			$('#main-menu').smartmenus('menuHideAll');
 		}
 
@@ -2123,6 +2124,13 @@ class Menubar extends window.L.Control {
 
 		if (menu?.parentElement?.id === 'menu-file' && window.mode.isCODesktop() && app.map.backstageView)
 			app.map.backstageView.toggle();
+
+		// SmartMenus fires this handler before itemClick re-checks the submenu's
+		// visibility. Returning false here makes itemClick see it as a click on an
+		// already-open menu and stop, instead of reopening the menu we just hid.
+		if (wasOpen) {
+			return false;
+		}
 	}
 
 	/**
