@@ -2636,6 +2636,11 @@ bool Document::forwardToChild(const std::string_view prefix, const std::vector<c
     if (!backgroundTheme.empty())
         renderOptsObj->set(".uno:InvertBackground", makePropertyValue("string", backgroundTheme));
 
+    // Flat page appearance: no native drop shadow or outline drawn around the
+    // page/slide, consistent across document types.
+    if (!renderOptsObj->has(".uno:ShowBorderShadow"))
+        renderOptsObj->set(".uno:ShowBorderShadow", makePropertyValue("boolean", false));
+
     if (renderOptsObj)
     {
         std::ostringstream ossRenderOpts;
