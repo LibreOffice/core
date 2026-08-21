@@ -838,10 +838,12 @@ sub run {
                 next;   # next package, end of loop !
             }
 
-            # every package gets an SBOM
+            # every package gets an SBOM - except in a simple install
+            # (ooinstall), which does not build the SBOM custom target
+            if ( ! $installer::globals::simple )
             {
                 my %sbomfile;
-                $sbomfile{'sourcepath'}  = $pathvariableshashref->{"customtargetpath"} . "/readlicense_oo/license/" . $packagename . "-sbom.spdx.json";
+                $sbomfile{'sourcepath'}  = $pathvariableshashref->{"customtargetpath"} . "/instsetoo_native/sbom/" . $packagename . "-sbom.spdx.json";
                 my $infoline = "\nAutomatically adding SBOM: $sbomfile{'sourcepath'}\n";
                 push(@installer::globals::logfileinfo, $infoline);
                 $sbomfile{'destination'} = $packagerootpath .

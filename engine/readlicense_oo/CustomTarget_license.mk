@@ -11,16 +11,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,readlicense_oo/license))
 
 readlicense_oo_DIR := $(gb_CustomTarget_workdir)/readlicense_oo/license
 readlicense_oo_LICENSE_xml := $(SRCDIR)/readlicense_oo/license/license.xml
-create_SBOM := $(SRCDIR)/solenv/bin/create-sbom.py
-
-ifneq ($(OS),MACOSX)
-SBOM_DIR := $(INSTDIR)/sbom/
-else
-SBOM_DIR := $(INSTDIR)/Resources/sbom/
-endif
 
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/LICENSE.html
-$(call gb_CustomTarget_get_target,readlicense_oo/license) : SBOM
 
 ifeq ($(OS),WNT)
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/license.txt
@@ -79,49 +71,5 @@ $(readlicense_oo_DIR)/license.txt : \
 	)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),AWK)
 endif
-
-SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
-		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_help.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_lang.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
-		$(call gb_InstallScript_get_target,setup_osl) \
-		$(call gb_Helper_optional,ODK,$(call gb_InstallScript_get_target,sdkoo)) \
-		$(call gb_ExternalExecutable_get_dependencies,python) \
-		| $(call gb_Postprocess_get_target,AllLibraries) \
-		  $(call gb_Postprocess_get_target,AllExecutables) \
-		  $(call gb_Postprocess_get_target,AllPackages)
-	$(if $(gb_External_StaticLink),,$(error can only be invoked on top-level))
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PY )
-	$(foreach v, \
-		$(filter PRODUCTNAME_WITHOUT_SPACES LIBO_VERSION% %TARBALL, $(.VARIABLES)), \
-		$(eval export $(v)=$($v)) \
-	)
-	EXTERNALSFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Externals)) \
-	EXTERNALSTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_External_StaticLink)) \
-	EXTERNALPACKAGESTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_ExternalPackage_StaticLink)) \
-	&& $(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
-		$(readlicense_oo_DIR) \
-		$(readlicense_oo_DIR)/LICENSE.html \
-		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_help.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_lang.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
-		$(call gb_InstallScript_get_target,setup_osl) \
-		"$(if $(filter en-US,$(gb_WITH_LANG)),,en-US) $(gb_WITH_LANG)" \
-		$${EXTERNALSFILE} \
-		$${EXTERNALSTATICFILE} \
-		$${EXTERNALPACKAGESTATICFILE} \
-	&& rm -f $${EXTERNALSFILE} $${EXTERNALSTATICFILE} $${EXTERNALPACKAGESTATICFILE}
-	mkdir -p $(SBOM_DIR)
-	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

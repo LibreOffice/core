@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,instsetoo_native, \
 else
 $(eval $(call gb_Module_add_targets,instsetoo_native,\
 	CustomTarget_install \
+	CustomTarget_sbom \
 ))
 endif
 

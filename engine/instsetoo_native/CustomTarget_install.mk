@@ -59,6 +59,7 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
             bin/find-requires-gnome.sh \
             bin/find-requires-x11.sh) \
         $(call gb_Postprocess_get_target,AllModulesButInstsetNative) \
+		instsetoo_SBOM \
         $(call gb_Package_get_target,instsetoo_native_setup) \
         $(call gb_Package_get_target,instsetoo_native_setup_ure) \
         $(if $(ENABLE_OOENV),$(call gb_Package_get_target,instsetoo_native_ooenv)) \
