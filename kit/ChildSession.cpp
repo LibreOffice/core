@@ -1986,6 +1986,15 @@ bool ChildSession::paste(const char* buffer, int length, const StringVector& tok
     data = dec.data();
     size = dec.size();
 #endif
+
+    // Core registers no image/gif clipboard format (FormatArray_Impl in
+    // sot/source/base/exchange.cxx), so pasting one inserts nothing, and the
+    // paste paths that do take an image flatten it to a Bitmap, dropping the
+    // animation. .uno:InsertGraphic reads the file through GraphicFilter,
+    // which keeps it.
+    if (size > 0 && mimeType == "image/gif")
+        return insertPastedGif(data, size);
+
     bool success = false;
     std::string result = "pasteresult: ";
     if (size > 0)
@@ -2007,6 +2016,114 @@ bool ChildSession::paste(const char* buffer, int length, const StringVector& tok
     else
         result += "fallback";
     sendTextFrame(result);
+
+    return true;
+}
+
+std::string ChildSession::writeFileToJail(const std::string& path, const char* data,
+                                          std::size_t size)
+{
+    std::ofstream stream(path, std::ios::out | std::ios::binary);
+    stream.write(data, size);
+    stream.close();
+    if (!stream)
+    {
+        LOG_ERR("Failed to write " << size << " bytes to [" << path << ']');
+        return std::string();
+    }
+
+    return Poco::URI(Poco::Path(path)).toString();
+}
+
+void ChildSession::postInsertCommand(const std::string& type, const std::string& url,
+                                     int multimedia_width, int multimedia_height)
+{
+    std::string command;
+    std::string arguments;
+    if (type == "multimedia" || type == "multimediaurl") {
+        command = ".uno:InsertAVMedia";
+        arguments = "{"
+            "\"URL\":{"
+                "\"type\":\"string\","
+                "\"value\":\"" + url + "\""
+            "},"
+            "\"IsLink\":{"
+                "\"type\":\"boolean\","
+                "\"value\":\"false\""
+            "},"
+            "\"Size\":{"
+                "\"type\":\"any\","
+                "\"value\":{"
+                    "\"type\":\"com.sun.star.awt.Size\","
+                    "\"value\":{"
+                        // Core can't calculate the size for us due to a lack of gstreamer,
+                        // but for multimedia (not multimediaurl) we can do it in online with a <video> element
+                        "\"Width\":{"
+                            "\"type\":\"long\","
+                            "\"value\":" + std::to_string(multimedia_width) +
+                        "},"
+                        "\"Height\":{"
+                            "\"type\":\"long\","
+                            "\"value\":" + std::to_string(multimedia_height) +
+                        "}"
+                    "}"
+                "}"
+            "}"
+        "}";
+    }
+    else if (type == "comparedocuments" || type == "comparedocumentsurl")
+    {
+        command = ".uno:CompareDocuments";
+        arguments = "{"
+            "\"URL\":{"
+                "\"type\":\"string\","
+                "\"value\":\"" + url + "\""
+            "}}";
+    } else {
+        command = (type == "selectbackground" ? ".uno:SelectBackground" : ".uno:InsertGraphic");
+        arguments = "{"
+            "\"FileName\":{"
+                "\"type\":\"string\","
+                "\"value\":\"" + url + "\""
+            "}}";
+    }
+
+    getLOKitDocument()->setView(_viewId);
+
+    LOG_TRC("Inserting " << type << ": " << command << ' ' << arguments.c_str());
+
+    // Inserting a remote multimedia URL downloads the file here and can
+    // block for a while, so ask to be told when the command finishes.
+    const bool notifyWhenFinished = (type == "multimediaurl");
+    getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), notifyWhenFinished);
+}
+
+bool ChildSession::insertPastedGif(const char* data, int size)
+{
+    // .uno:InsertGraphic takes a URL, so the bytes become a file in the same
+    // jail directory the /insertfile upload writes to.
+    const std::string dir = getJailDocRoot() + "insertfile";
+    FileUtil::createDirectories(dir);
+
+    // The name is a hash of the bytes, so the same image reuses one file and a retry rewrites it.
+    SpookyHash hash;
+    hash.Init(0, 0);
+    hash.Update(data, size);
+    uint64_t hash1;
+    uint64_t hash2;
+    hash.Final(&hash1, &hash2);
+
+    const std::string url =
+        writeFileToJail(dir + "/paste-" + HexUtil::encodeId(hash1, 16) + ".gif", data, size);
+    if (url.empty())
+    {
+        sendTextFrame("pasteresult: fallback");
+        return false;
+    }
+
+    postInsertCommand("graphic", url, 0, 0);
+
+    sendTextFrame("pasteresult: success");
 
     return true;
 }
@@ -2098,72 +2215,11 @@ bool ChildSession::insertFile(const StringVector& tokens)
             assert(type == "graphic" || type == "multimedia");
             std::string binaryData;
             macaron::Base64::Decode(data, binaryData);
-            const std::string tempFile = FileUtil::createRandomTmpDir() + '/' + name;
-            std::ofstream fileStream;
-            fileStream.open(tempFile, std::ios::out | std::ios::binary);
-            fileStream.write(binaryData.data(), binaryData.size());
-            fileStream.close();
-            url = Poco::URI(Poco::Path(tempFile)).toString();
+            url = writeFileToJail(FileUtil::createRandomTmpDir() + '/' + name, binaryData.data(),
+                                  binaryData.size());
         }
 
-        std::string command;
-        std::string arguments;
-        if (type == "multimedia" || type == "multimediaurl") {
-            command = ".uno:InsertAVMedia";
-            arguments = "{"
-                "\"URL\":{"
-                    "\"type\":\"string\","
-                    "\"value\":\"" + url + "\""
-                "},"
-                "\"IsLink\":{"
-                    "\"type\":\"boolean\","
-                    "\"value\":\"false\""
-                "},"
-                "\"Size\":{"
-                    "\"type\":\"any\","
-                    "\"value\":{"
-                        "\"type\":\"com.sun.star.awt.Size\","
-                        "\"value\":{"
-                            // Core can't calculate the size for us due to a lack of gstreamer,
-                            // but for multimedia (not multimediaurl) we can do it in online with a <video> element
-                            "\"Width\":{"
-                                "\"type\":\"long\","
-                                "\"value\":" + std::to_string(multimedia_width) +
-                            "},"
-                            "\"Height\":{"
-                                "\"type\":\"long\","
-                                "\"value\":" + std::to_string(multimedia_height) +
-                            "}"
-                        "}"
-                    "}"
-                "}"
-            "}";
-        }
-        else if (type == "comparedocuments" || type == "comparedocumentsurl")
-        {
-            command = ".uno:CompareDocuments";
-            arguments = "{"
-                "\"URL\":{"
-                    "\"type\":\"string\","
-                    "\"value\":\"" + url + "\""
-                "}}";
-        } else {
-            command = (type == "selectbackground" ? ".uno:SelectBackground" : ".uno:InsertGraphic");
-            arguments = "{"
-                "\"FileName\":{"
-                    "\"type\":\"string\","
-                    "\"value\":\"" + url + "\""
-                "}}";
-        }
-
-        getLOKitDocument()->setView(_viewId);
-
-        LOG_TRC("Inserting " << type << ": " << command << ' ' << arguments.c_str());
-
-        // Inserting a remote multimedia URL downloads the file here and can
-        // block for a while, so ask to be told when the command finishes.
-        const bool notifyWhenFinished = (type == "multimediaurl");
-        getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), notifyWhenFinished);
+        postInsertCommand(type, url, multimedia_width, multimedia_height);
     }
 
     return true;
