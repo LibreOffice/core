@@ -19,6 +19,7 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
+#include <vcl/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <uno/current_context.hxx>
 #include <unotools/filteroptions_settings.hxx>
@@ -43,6 +44,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -192,7 +194,14 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         // The "ShowFilterDialog" flag is passed from SfxApplication::OpenDocExec_Impl
         if (!(cpo::uno::getCurrentContext()->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow))
             bShow = utl::isShowFilterOptionsDialog(aFilterString);
-        const bool bOk = !bShow || pDlg->Execute() == RET_OK;
+        bool bOk = !bShow;
+        if (!bOk)
+        {
+            // this runs during the load, so the kitPoll re-entry it causes is expected
+            vcl::kit::pushExpectedReentry();
+            comphelper::ScopeGuard aPopReentry([] { vcl::kit::popExpectedReentry(); });
+            bOk = pDlg->Execute() == RET_OK;
+        }
 
         if (bOk)
         {
