@@ -47,7 +47,7 @@ published service HierarchyDataReadWriteAccess
 
         <p>com::sun::star::lang::XSingleServiceFactory::createInstance()
         will create a new empty hierarchy data node. After it was created
-        it's data members can be filled. Last, the node can be inserted as child
+        its data members can be filled. Last, the node can be inserted as child
         of another node using
         com::sun::star::container::XNameContainer::insertByName().
 

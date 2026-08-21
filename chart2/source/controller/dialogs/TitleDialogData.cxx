@@ -53,7 +53,7 @@ void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& 
 
     sal_Bool* pExistenceList = aExistenceList.getArray();
     auto pTextList = aTextList.getArray();
-    //find out which title exists and get their text
+    //find out which title exists and get its text
     //main title:
     for( auto nTitleIndex = +TitleHelper::TITLE_BEGIN;
          nTitleIndex < +TitleHelper::NORMAL_TITLE_END;

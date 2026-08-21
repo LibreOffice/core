@@ -52,7 +52,7 @@ namespace svt
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         /** if you use this ctor, the dialog
-            <ul><li>will not store it's data in the configuration (nor initially retrieve it from there)</li>
+            <ul><li>will not store its data in the configuration (nor initially retrieve it from there)</li>
                 <li>will not allow to change the data source name</li>
                 <li>will not allow to change the table name</li>
                 <li>will not allow to call the data source administration dialog</li>

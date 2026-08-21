@@ -36,7 +36,7 @@
 published interface XSubmitListener: com::sun::star::lang::XEventListener
 {
 
-    /** is invoked when a component is about to submit it's data.
+    /** is invoked when a component is about to submit its data.
 
         @param Event
             the event happened

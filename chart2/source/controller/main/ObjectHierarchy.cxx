@@ -136,14 +136,14 @@ void ObjectHierarchy::createTree( const rtl::Reference<::chart::ChartModel>& xCh
 
     if( xDiagram.is())
     {
-        // Sub Title.  Note: This is interpreted of being top level
+        // Sub Title.  Note: This is interpreted as being top level
         Reference< XTitle > xSubTitle( xDiagram->getTitleObject());
         if( xSubTitle.is())
             aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForObject( xSubTitle, xChartDocument ) );
 
         if( !m_bOrderingForElementSelector )
         {
-            // Axis Titles. Note: These are interpreted of being top level
+            // Axis Titles. Note: These are interpreted as being top level
             const std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
             for( rtl::Reference< Axis > const & axis : aAxes )
                 lcl_addAxisTitle( axis, aTopLevelContainer, xChartDocument );

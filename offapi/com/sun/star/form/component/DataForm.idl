@@ -108,7 +108,7 @@ published service DataForm
         <p> These columns are typically the foreign key fields of the parent form.
         The values of these columns are used to identify the data for the subform.
         Each time the parent form changes its current row, the subform requeries
-        it's data based on the values of the master fields.</p>
+        its data based on the values of the master fields.</p>
 
         <p>If the form is no sub form (e.g. its parent is not a form itself), this
         property is not evaluated.</p>

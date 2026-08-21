@@ -57,7 +57,7 @@ interface XDatabaseDataProvider
     <p> These columns are typically the foreign key fields of the parent report.
     The values of these columns are used to identify the data for the subreport.
     Each time the parent report changes its current row, the subreport requeries
-    it's data based on the values of the master fields.</p>
+    its data based on the values of the master fields.</p>
     <p>If the report is no sub report (e.g. its parent is not a report itself), this
     property is not evaluated.</p>
 

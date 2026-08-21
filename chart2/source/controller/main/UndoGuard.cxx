@@ -58,7 +58,7 @@ void UndoGuard::commit()
         try
         {
             const Reference< document::XUndoAction > xAction( new impl::UndoElement( m_aUndoString, m_xChartModel, m_pDocumentSnapshot ) );
-            m_pDocumentSnapshot.reset();    // don't dispose, it's data went over to the UndoElement
+            m_pDocumentSnapshot.reset();    // don't dispose, its data went over to the UndoElement
             m_xUndoManager->addUndoAction( xAction );
         }
         catch( const uno::Exception& )

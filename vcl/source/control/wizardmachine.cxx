@@ -277,8 +277,8 @@ namespace vcl
     bool WizardMachine::leaveState(WizardTypes::WizardState)
     {
         // no need to ask the page here.
-        // If we reach this point, we already gave the current page the chance to commit it's data,
-        // and it was allowed to commit it's data
+        // If we reach this point, we already gave the current page the chance to commit its data,
+        // and it was allowed to commit its data
 
         return true;
     }

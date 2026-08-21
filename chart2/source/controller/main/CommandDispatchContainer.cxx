@@ -54,7 +54,7 @@ CommandDispatchContainer::~CommandDispatchContainer() = default;
 void CommandDispatchContainer::setModel(
     const rtl::Reference<::chart::ChartModel> & xModel )
 {
-    // remove all existing dispatcher that base on the old model
+    // remove all existing dispatchers that are based on the old model
     m_aCachedDispatches.clear();
     DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
     m_aToBeDisposedDispatches.clear();
@@ -65,7 +65,7 @@ void CommandDispatchContainer::setChartDispatch(
     const rtl::Reference< ControllerCommandDispatch >& rChartDispatch,
     const o3tl::sorted_vector< std::u16string_view > & rChartCommands )
 {
-    OSL_ENSURE(rChartDispatch.is(),"Invalid fall back dispatcher!");
+    OSL_ENSURE(rChartDispatch.is(),"Invalid fallback dispatcher!");
     m_xChartDispatcher = rChartDispatch;
     m_aAdditionalChartCommands = rChartCommands;
     m_aToBeDisposedDispatches.push_back( m_xChartDispatcher );
@@ -127,7 +127,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
 
     // #i12587# support for shapes in chart
     // Note, that the chart dispatcher must be queried first, because
-    // the chart dispatcher is the default dispatcher for all context
+    // the chart dispatcher is the default dispatcher for all contexts
     // sensitive commands.
     if (m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported(rURL.Complete))
         return cacheIt(m_pDrawCommandDispatch);

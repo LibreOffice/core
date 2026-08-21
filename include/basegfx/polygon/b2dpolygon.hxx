@@ -123,7 +123,7 @@ namespace basegfx
             Index of the addressed edge's start point
 
             @param rTarget
-            The B2DCubicBezier to be filled. It's data WILL be changed.
+            The B2DCubicBezier to be filled. Its data WILL be changed.
         */
         void getBezierSegment(sal_uInt32 nIndex, B2DCubicBezier& rTarget) const;
 
