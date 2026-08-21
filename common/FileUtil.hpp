@@ -15,6 +15,7 @@
 
 #include <Poco/Path.h>
 
+#include <algorithm>
 #include <cerrno>
 #include <chrono>
 #include <fcntl.h>
@@ -246,16 +247,47 @@ namespace FileUtil
         }
 
         const std::size_t originalSize = data.size();
-        const auto remainingSize = (st.st_size > 0 ? st.st_size : maxSize);
-        data.resize(originalSize + remainingSize);
+        if (st.st_size > 0)
+        {
+            data.resize(originalSize + st.st_size);
 
-        const ssize_t n = read(fd, &data[originalSize], remainingSize);
+            const ssize_t n = read(fd, &data[originalSize], st.st_size);
+            closeFD(fd);
+
+            data.resize(originalSize + (n <= 0 ? 0 : n));
+            data.shrink_to_fit();
+
+            return n;
+        }
+
+        // Size unknown, as the files in /proc report, so read a page at a time and double.
+        constexpr std::size_t firstStep = 4 * 1024;
+        const std::size_t limit = static_cast<std::size_t>(maxSize);
+        std::size_t got = 0;
+        for (std::size_t step = firstStep; got < limit; step *= 2)
+        {
+            const std::size_t room = std::min(step, limit - got);
+            data.resize(originalSize + got + room);
+
+            const ssize_t n = read(fd, &data[originalSize + got], room);
+            if (n < 0)
+            {
+                closeFD(fd);
+                data.resize(originalSize);
+                data.shrink_to_fit();
+                return n;
+            }
+
+            got += n;
+            if (static_cast<std::size_t>(n) < room)
+                break;
+        }
         closeFD(fd);
 
-        data.resize(originalSize + (n <= 0 ? 0 : n));
+        data.resize(originalSize + got);
         data.shrink_to_fit();
 
-        return n;
+        return static_cast<ssize_t>(got);
     }
 
     /// Reads the whole file to memory. Only for small files.

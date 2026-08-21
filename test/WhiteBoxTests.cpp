@@ -35,6 +35,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <algorithm>
 #include <chrono>
 #include <cstddef>
 #include <cstdlib>
@@ -66,6 +67,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testJson);
     CPPUNIT_TEST(testAnonymization);
     CPPUNIT_TEST(testStat);
+    CPPUNIT_TEST(testReadFile);
     CPPUNIT_TEST(testStringCompare);
     CPPUNIT_TEST(testJsonUtilEscapeJSONValue);
     CPPUNIT_TEST(testStateEnum);
@@ -93,6 +95,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testJson();
     void testAnonymization();
     void testStat();
+    void testReadFile();
     void testStringCompare();
     void testJsonUtilEscapeJSONValue();
     void testStateEnum();
@@ -842,6 +845,78 @@ void WhiteBoxTests::testStat()
 
     ofs.close();
     FileUtil::removeFile(tmpFile);
+}
+
+namespace
+{
+/// The largest single block PeakAllocator has been asked for, so a test can say what a read
+/// reserved and not only what it returned.
+std::size_t gPeakAllocation = 0;
+
+/// Stateless on purpose. A string constructed from an allocator default-constructs one of its own
+/// to compare against, which a copy-on-write string library does even for an empty string, so an
+/// allocator that carries a pointer cannot be used here.
+template <typename T> struct PeakAllocator
+{
+    using value_type = T;
+
+    PeakAllocator() = default;
+
+    template <typename U> PeakAllocator(const PeakAllocator<U>&) {}
+
+    T* allocate(std::size_t n)
+    {
+        gPeakAllocation = std::max(gPeakAllocation, n * sizeof(T));
+        return static_cast<T*>(::operator new(n * sizeof(T)));
+    }
+
+    void deallocate(T* p, std::size_t) { ::operator delete(p); }
+
+    bool operator==(const PeakAllocator&) const { return true; }
+    bool operator!=(const PeakAllocator&) const { return false; }
+};
+
+using CountedString = std::basic_string<char, std::char_traits<char>, PeakAllocator<char>>;
+}
+
+void WhiteBoxTests::testReadFile()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string tmpFile = FileUtil::getSysTempDirectoryPath() + "/test_read_file";
+
+    // A file whose size the filesystem knows is read in one go.
+    {
+        std::ofstream ofs(tmpFile);
+        ofs << "hello";
+    }
+    std::string data;
+    LOK_ASSERT_EQUAL(static_cast<ssize_t>(5), FileUtil::readFile(tmpFile, data));
+    LOK_ASSERT_EQUAL(std::string("hello"), data);
+
+    // An empty file reads as empty, and asks for a block of its own size rather than one of
+    // the size limit it was allowed to grow to.
+    {
+        std::ofstream ofs(tmpFile, std::ios::trunc);
+    }
+    constexpr int hugeLimit = 500 * 1024 * 1024;
+    gPeakAllocation = 0;
+    CountedString contents;
+    LOK_ASSERT_EQUAL(static_cast<ssize_t>(0), FileUtil::readFile(tmpFile, contents, hugeLimit));
+    LOK_ASSERT(contents.empty());
+    LOK_ASSERT(gPeakAllocation < 1024 * 1024);
+
+    FileUtil::removeFile(tmpFile);
+
+#if defined(__linux__)
+    // A file in /proc reports a size of zero and still has content, which is the case the
+    // step-by-step read exists for.
+    std::string status;
+    const ssize_t size = FileUtil::readFile("/proc/self/status", status);
+    LOK_ASSERT(size > 0);
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(size), status.size());
+    LOK_ASSERT(status.starts_with("Name:"));
+#endif
 }
 
 void WhiteBoxTests::testStringCompare()
