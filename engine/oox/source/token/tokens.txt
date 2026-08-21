@@ -1298,6 +1298,7 @@ code
 codeName
 codePage
 coerce
+coext
 coherent3DOff
 col
 colBreaks
@@ -3976,6 +3977,7 @@ pageField
 pageFieldLabels
 pageFieldValues
 pageFields
+pageGuid
 pageItem
 pageLayout
 pageMargins

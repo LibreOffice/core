@@ -135,6 +135,27 @@ SlideFragmentHandler::~SlideFragmentHandler()
     }
     case PPT_TOKEN( notesMaster ):      // CT_NotesMaster
         return this;
+    case OOX_TOKEN( coext, pageGuid ):  // globally unique identifier of the page
+        // A notes master fragment is parsed with the SlidePersist of the notes page it was
+        // reached through, so its identifier has no page of its own to land on.
+        if (mpSlidePersistPtr->isMasterPage() && mpSlidePersistPtr->isNotesPage())
+            return this;
+        try
+        {
+            OUString sGuid = rAttribs.getStringDefaulted(XML_val);
+            Reference< css::beans::XPropertySet > xSet(mpSlidePersistPtr->getPage(), UNO_QUERY);
+            if (!sGuid.isEmpty() && xSet.is())
+            {
+                Reference< css::beans::XPropertySetInfo > xInfo(xSet->getPropertySetInfo());
+                if (xInfo.is() && xInfo->hasPropertyByName(u"Guid"_ustr))
+                    xSet->setPropertyValue(u"Guid"_ustr, Any(sGuid));
+            }
+        }
+        catch (const cpo::uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("oox", "while importing the globally unique identifier of the page");
+        }
+        return this;
     case PPT_TOKEN( cSld ):             // CT_CommonSlideData
         maSlideName = rAttribs.getStringDefaulted(XML_name);
         return this;

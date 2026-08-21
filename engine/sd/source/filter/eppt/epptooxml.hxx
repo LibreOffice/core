@@ -104,6 +104,8 @@ private:
     virtual bool ImplCreateMainNotes() override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     void WriteNotesMaster();
+    void WritePageGuidExtLst( const FSHelperPtr& pFS,
+                              const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
     bool WriteComments( sal_uInt32 nPageNum );
     void ImplWriteBackground( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::beans::XPropertySet >& aXBackgroundPropSet );

@@ -172,6 +172,39 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODP)
                          pDoc->GetMasterSdPage(0, PageKind::Handout)->GetGuid().getOUString());
 }
 
+// The identifier is also written to OOXML, in an extension list entry of the slide and of the
+// slide master.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidPPTX)
+{
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const OUString sSlideGuid = pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+    const OUString sMasterGuid
+        = pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+
+    saveAndReload(TestFilter::PPTX);
+
+    xmlDocUniquePtr pSlideXml = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pSlideXml, "/p:sld/p:extLst/p:ext/coextml:pageGuid", "val", sSlideGuid);
+
+    xmlDocUniquePtr pMasterXml = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMasterXml, "/p:sldMaster/p:extLst/p:ext/coextml:pageGuid", "val", sMasterGuid);
+
+    // The reloaded slide and master hold the identifiers they were saved with.
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_EQUAL(sSlideGuid,
+                         pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(sMasterGuid,
+                         pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

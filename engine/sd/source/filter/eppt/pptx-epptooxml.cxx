@@ -2131,6 +2131,8 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     WriteTransition(pFS);
     WriteAnimations(pFS, mXDrawPage, *this);
 
+    WritePageGuidExtLst(pFS, mXPagePropSet);
+
     pFS->endElementNS(XML_p, XML_sld);
 
     // add implicit relation to slide layout
@@ -2169,6 +2171,8 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
     WriteShapeTree(pFS, NOTICE, false);
 
     pFS->endElementNS(XML_p, XML_cSld);
+
+    WritePageGuidExtLst(pFS, mXPagePropSet);
 
     pFS->endElementNS(XML_p, XML_notes);
 
@@ -2430,6 +2434,10 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
         pTheme = pMasterPage->getSdrPageProperties().getTheme().get();
     }
 
+    // The property set of the master page, kept in a local because writing the layouts
+    // below repoints mXPagePropSet at temporary slides.
+    Reference< XPropertySet > xMasterPagePropSet( mXDrawPage, UNO_QUERY );
+
     // write theme per master
     WriteTheme(mnThemeIdMax, pTheme);
 
@@ -2598,6 +2606,9 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     }
 
     pFS->endElementNS(XML_p, XML_sldLayoutIdLst);
+
+    // p:extLst is the last child of p:sldMaster.
+    WritePageGuidExtLst(pFS, xMasterPagePropSet);
 
     pFS->endElementNS(XML_p, XML_sldMaster);
 
@@ -3366,11 +3377,49 @@ void PowerPointExport::WriteNotesMaster()
                          XML_hlink, "hlink",
                          XML_folHlink, "folHlink");
 
+    // mXDrawPage holds the notes master at this point, so its property set is queried
+    // directly. p:extLst is the last child of p:notesMaster.
+    WritePageGuidExtLst(pFS, Reference< XPropertySet >(mXDrawPage, UNO_QUERY));
+
     pFS->endElementNS(XML_p, XML_notesMaster);
 
     SAL_INFO("sd.eppt", "----------------");
 
     pFS->endDocument();
+}
+
+// The globally unique identifier of a page is stored in an extension list entry of its own,
+// with the coext namespace as the identifier of the extension. It is the same value ODF
+// stores in the coext:guid attribute of the page.
+void PowerPointExport::WritePageGuidExtLst(const FSHelperPtr& pFS,
+                                           const Reference< XPropertySet >& rXPropSet)
+{
+    if (!rXPropSet.is())
+        return;
+
+    try
+    {
+        cpo::uno::Any aAny;
+        if (!GetPropertyValue(aAny, rXPropSet, u"Guid"_ustr, /*bTestPropertyAvailability*/ true))
+            return;
+
+        OUString sGuid;
+        aAny >>= sGuid;
+        if (sGuid.isEmpty())
+            return;
+
+        const OUString sCoextNamespace = getNamespaceURL(OOX_NS(coext));
+        pFS->startElementNS(XML_p, XML_extLst);
+        pFS->startElementNS(XML_p, XML_ext, XML_uri, sCoextNamespace);
+        pFS->singleElement(FSNS(XML_coext, XML_pageGuid), FSNS(XML_xmlns, XML_coext),
+                           sCoextNamespace, XML_val, sGuid);
+        pFS->endElementNS(XML_p, XML_ext);
+        pFS->endElementNS(XML_p, XML_extLst);
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sd.eppt", "while exporting the globally unique identifier of the page");
+    }
 }
 
 void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& sUrl, OUString& sRelId, OUString& sName)

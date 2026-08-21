@@ -553,6 +553,9 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.openxmlformats.org/presentationml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("p14"),
                        BAD_CAST("http://schemas.microsoft.com/office/powerpoint/2010/main"));
+    xmlXPathRegisterNs(
+        pXmlXpathCtx, BAD_CAST("coextml"),
+        BAD_CAST("urn:com:collaboraoffice:names:experimental:ooxml:xmlns:coext:1.0"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dgm"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/diagram"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c15"),
