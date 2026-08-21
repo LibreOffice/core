@@ -3213,7 +3213,7 @@ static void lo_setOption(COKit* pThis, const char* pOption, const char* pValue);
 
 static void lo_dumpState(COKit* pThis, const char* pOptions, char** pState);
 
-static char* lo_extractDocumentStructureRequest(COKit* pThis, const char* pFilePath,
+static std::string lo_extractDocumentStructureRequest(COKit* pThis, const char* pFilePath,
                                                 const char* pFilter);
 
 static int lo_getDocsCount(COKit* pThis);
@@ -3340,7 +3340,7 @@ void COKitImpl::setForkedChild(bool bIsChild)
     lo_setForkedChild(this, bIsChild);
 }
 
-char* COKitImpl::extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
+std::string COKitImpl::extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
 {
     return lo_extractDocumentStructureRequest(this, pFilePath, pFilter);
 }
@@ -3968,7 +3968,7 @@ static std::string lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
     return "{ }";
 }
 
-static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pFilePath,
+static std::string lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pFilePath,
                                                 const char* pFilter)
 {
     SolarMutexGuard aGuard;
@@ -4002,15 +4002,15 @@ static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pF
             {
                 ITiledRenderable* pDoc = dynamic_cast<ITiledRenderable*>(xComp.get());
                 if (!pDoc)
-                    return nullptr;
+                    return {};
 
                 auto pBaseModel = dynamic_cast<SfxBaseModel*>(xComp.get());
                 if (!pBaseModel)
-                    return nullptr;
+                    return {};
 
                 SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
                 if (!pObjectShell)
-                    return nullptr;
+                    return {};
 
                 //if it is a writer document..
                 uno::Reference<lang::XServiceInfo> xDocument(xComp, uno::UNO_QUERY_THROW);
@@ -4029,14 +4029,14 @@ static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pF
 
                         pDoc->getCommandValues(aJson, aCommand);
                     }
-                    return convertOString(aJson.finishAndGetAsOString());
+                    return aJson.finishAndGetAsStdString();
                 }
 
                 xComp->dispose();
             }
         }
     }
-    return strdup("{ }");
+    return "{ }";
 }
 
 namespace {

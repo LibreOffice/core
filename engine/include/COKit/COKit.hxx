@@ -1652,7 +1652,7 @@ struct COKit
      */
     virtual void setForkedChild(bool bIsChild) = 0;
 
-    virtual char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) = 0;
+    virtual std::string extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) = 0;
 
     /**
      * Registers a callback that can determine if there are any pending input events.

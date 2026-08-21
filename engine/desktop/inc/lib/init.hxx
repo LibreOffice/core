@@ -459,7 +459,7 @@ namespace desktop {
         bool joinThreads() override;
         void startThreads() override;
         void setForkedChild(bool bIsChild) override;
-        char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) override;
+        std::string extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) override;
         void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) override;
         int getDocsCount() override;
         void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) override;
