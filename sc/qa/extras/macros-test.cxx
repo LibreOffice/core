@@ -470,6 +470,46 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf128218)
     CPPUNIT_ASSERT_EQUAL(u"Double"_ustr, aReturnValue);
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf102381_missing_optional_parameter)
+{
+    createScDoc("tdf102381_missing_optional_parameter.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Function TestOptionalParameter(a, Optional b, Optional c) As String
+    // returns the concatenated parameters
+    pDoc->SetFormula(ScAddress(0, 0, 0), u"=TestOptionalParameter(1;2;3)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(0, 1, 0), u"=TestOptionalParameter(1;;3)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(0, 2, 0), u"=TestOptionalParameter(1;2)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(0, 3, 0), u"=TestOptionalParameter(1;;)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+
+    CPPUNIT_ASSERT_EQUAL(u"123"_ustr, pDoc->GetString(0, 0, 0));
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 13
+    // - Actual  : Err:504
+    // i.e. an omitted parameter did not reach the Basic function as a missing one
+    CPPUNIT_ASSERT_EQUAL(u"13"_ustr, pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"12"_ustr, pDoc->GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(0, 3, 0));
+
+    // Function TestOptionalDefault(a, Optional b As String = "def") As String
+    // returns the concatenated parameters
+    pDoc->SetFormula(ScAddress(0, 4, 0), u"=TestOptionalDefault(1;)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(0, 5, 0), u"=TestOptionalDefault(1)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1def
+    // - Actual  : Err:504
+    // i.e. the default value of an omitted parameter was not applied
+    CPPUNIT_ASSERT_EQUAL(u"1def"_ustr, pDoc->GetString(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1def"_ustr, pDoc->GetString(0, 5, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf71271)
 {
     createScDoc();

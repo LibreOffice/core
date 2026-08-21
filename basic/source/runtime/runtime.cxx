@@ -628,6 +628,15 @@ void SbiRuntime::SetIsMissing( SbxVariable* pVar )
     pVar->SetInfo( pInfo );
 }
 
+// tdf#102381 - turns a variable into the representation of a missing argument
+void SbxSetMissingParameter(SbxVariable& rVar)
+{
+    // #57915 The semantics of a missing argument is represented by the value 448
+    // (ERRCODE_BASIC_NAMED_NOT_FOUND) of the type error in VB.
+    rVar.PutErr(448);
+    SbiRuntime::SetIsMissing(&rVar);
+}
+
 // tdf#79426, tdf#125180 - checks if a variable contains the information about a missing parameter
 bool SbiRuntime::IsMissing( SbxVariable* pVar, sal_uInt16 nIdx )
 {
@@ -2788,13 +2797,10 @@ void SbiRuntime::StepRESTART()
 void SbiRuntime::StepEMPTY()
 {
     // #57915 The semantics of StepEMPTY() is the representation of a missing argument.
-    // This is represented by the value 448 (ERRCODE_BASIC_NAMED_NOT_FOUND) of the type error
-    // in VB. StepEmpty should now rather be named StepMISSING() but the name is kept
-    // to simplify matters.
+    // StepEmpty should now rather be named StepMISSING() but the name is kept to simplify matters.
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-    xVar->PutErr( 448 );
     // tdf#79426, tdf#125180 - add additional information about a missing parameter
-    SetIsMissing( xVar.get() );
+    SbxSetMissingParameter(*xVar);
     PushVar( xVar.get() );
 }
 
@@ -3938,8 +3944,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                             // Same as in SbiRuntime::StepEMPTY(), because the compiler does not
                             // generate a StepEMPTY for StepPARAM when there is no COMMA token
                             xVar = new SbxVariable(SbxVARIANT);
-                            xVar->PutErr(448);
-                            SetIsMissing(xVar.get());
+                            SbxSetMissingParameter(*xVar);
                         }
                         pArg->Put(xVar.get(), j);
                     }
@@ -4242,9 +4247,8 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         while( iLoop >= nParamCount )
         {
             pVar = new SbxVariable();
-            pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
             // tdf#79426, tdf#125180 - add additional information about a missing parameter
-            SetIsMissing( pVar );
+            SbxSetMissingParameter(*pVar);
             refParams->Put(pVar, iLoop);
             iLoop--;
         }

@@ -80,6 +80,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sbxvar.hxx>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -10788,6 +10789,10 @@ bool ScInterpreter::GetMacroArg( formula::FormulaConstTokenRef pArgIn, SbxVariab
             auto pToken = static_cast<const FormulaStringToken*>(pArgIn.get());
             pArgOut->PutString( pToken->GetString().getString() );
         }
+        break;
+        case svMissing:
+            // tdf#102381 - add additional information about a missing parameter
+            SbxSetMissingParameter(*pArgOut);
         break;
         case svCallable: // TODO
         {
