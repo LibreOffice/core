@@ -3008,6 +3008,27 @@ void FileServerRequestHandler::preprocessAdminFile(const HTTPRequest& request,
     Poco::replaceInPlace(templateFile, std::string("%VERSION%"), std::string(COOLWSD_VERSION_HASH));
     Poco::replaceInPlace(templateFile, std::string("%SERVICE_ROOT%"), responseRoot);
 
+    ContentSecurityPolicy csp;
+    csp.appendDirective("default-src", "'none'");
+    // The pages carry inline script blocks and inline event handlers, so script-src has to allow
+    // inline code. What the policy still pins down is where a script may be loaded from and where
+    // the page may send data.
+    csp.appendDirective("script-src", "'self'");
+    csp.appendDirective("script-src", "'unsafe-inline'");
+    csp.appendDirective("style-src", "'self'");
+    csp.appendDirective("style-src", "'unsafe-inline'");
+    csp.appendDirective("font-src", "'self'");
+    csp.appendDirective("img-src", "'self'");
+    csp.appendDirective("img-src", "data:");
+    csp.appendDirective("connect-src", "'self'");
+    csp.appendDirectiveUrl("connect-src", cnxDetails.getWebSocketUrl());
+    csp.appendDirective("base-uri", "'self'");
+    csp.appendDirective("form-action", "'self'");
+    csp.appendDirective("frame-ancestors", "'none'");
+
+    csp.merge(ConfigUtil::getString("net.content_security_policy", ""));
+
+    response.add("Content-Security-Policy", csp.generate());
     // Ask UAs to block if they detect any XSS attempt
     response.add("X-XSS-Protection", "1; mode=block");
     // No referrer-policy
