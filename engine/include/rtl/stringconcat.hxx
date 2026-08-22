@@ -377,7 +377,7 @@ using OUStringConcatMarker = StringConcatMarker<sal_Unicode>;
 
 template<typename C> constexpr bool allowStringConcat<C, StringConcatMarker<C>> = true;
 
-#if defined __GNUC__ && !defined __clang__
+#if defined __GNUC__ && !defined __clang__ && !(defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024)
 template <typename C, typename T2>
 struct StringConcat<C, StringConcatMarker<C>, T2>
 #else
