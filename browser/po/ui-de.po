@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-06-28 21:01+0000\n"
-"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
+"PO-Revision-Date: 2026-08-23 07:18+0000\n"
+"Last-Translator: Tom Haelbich <haelbito@outlook.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
-"Language: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -552,7 +552,7 @@ msgstr "Dunkler Modus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automatische Rechtschreibprüfung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -892,7 +892,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1061
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Einstellungen sind nur für angemeldete Benutzer verfügbar."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1070
 msgid "Something went wrong. Please try to refresh the page."
@@ -1596,7 +1596,7 @@ msgstr "Die wichtigsten Punkte dieses Textes zusammenfassen"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Summarize this text"
-msgstr ""
+msgstr "Fasse diesen Text zusammen"
 
 #: src/control/Control.AIChatSidebar.ts:144
 msgid "Expand and add more detail to this text"
