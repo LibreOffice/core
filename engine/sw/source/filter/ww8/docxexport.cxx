@@ -957,25 +957,68 @@ void DocxExport::WritePostitFields()
     pPostitFS->endElementNS( XML_w, XML_comments );
     pPostitFS->endDocument();
 
-    if (eHasProperties != DocxAttributeOutput::hasProperties::yes)
+    if (eHasProperties == DocxAttributeOutput::hasProperties::yes)
+    {
+        m_rFilter.addRelation(m_pDocumentFS->getOutputStream(),
+                              oox::getRelationship(Relationship::COMMENTSEXTENDED),
+                              u"commentsExtended.xml");
+
+        pPostitFS = m_rFilter.openFragmentStreamWithSerializer(
+            u"word/commentsExtended.xml"_ustr,
+            u"application/vnd.openxmlformats-officedocument.wordprocessingml.commentsExtended+xml"_ustr);
+
+        pPostitFS->startElementNS(XML_w15, XML_commentsEx, // Add namespaces manually now
+                                  FSNS(XML_xmlns, XML_mc), m_rFilter.getNamespaceURL(OOX_NS(mce)),
+                                  FSNS(XML_xmlns, XML_w15), m_rFilter.getNamespaceURL(OOX_NS(w15)),
+                                  FSNS(XML_mc, XML_Ignorable), "w15");
+        m_pAttrOutput->SetSerializer(pPostitFS);
+        m_pAttrOutput->WritePostItFieldsResolved();
+        m_pAttrOutput->SetSerializer(m_pDocumentFS);
+        pPostitFS->endElementNS(XML_w15, XML_commentsEx);
+        pPostitFS->endDocument();
+    }
+
+    // The moment each comment was written goes in its own part, tied to the comment by a durable
+    // id that a second part maps to the comment's paragraph id. The w:date in comments.xml is the
+    // author's wall clock, which cannot say which moment it was. A comment has a moment whether or
+    // not it is resolved or a reply, so this does not depend on the part above.
+    if (!m_pAttrOutput->HasPostitFieldsWithDateUTC())
         return;
 
     m_rFilter.addRelation(m_pDocumentFS->getOutputStream(),
-                          oox::getRelationship(Relationship::COMMENTSEXTENDED),
-                          u"commentsExtended.xml");
+                          oox::getRelationship(Relationship::COMMENTSIDS),
+                          u"commentsIds.xml");
 
     pPostitFS = m_rFilter.openFragmentStreamWithSerializer(
-        u"word/commentsExtended.xml"_ustr,
-        u"application/vnd.openxmlformats-officedocument.wordprocessingml.commentsExtended+xml"_ustr);
+        u"word/commentsIds.xml"_ustr,
+        u"application/vnd.openxmlformats-officedocument.wordprocessingml.commentsIds+xml"_ustr);
 
-    pPostitFS->startElementNS(XML_w15, XML_commentsEx, // Add namespaces manually now
+    pPostitFS->startElementNS(XML_w16cid, XML_commentsIds,
                               FSNS(XML_xmlns, XML_mc), m_rFilter.getNamespaceURL(OOX_NS(mce)),
-                              FSNS(XML_xmlns, XML_w15), m_rFilter.getNamespaceURL(OOX_NS(w15)),
-                              FSNS(XML_mc, XML_Ignorable), "w15");
+                              FSNS(XML_xmlns, XML_w16cid), m_rFilter.getNamespaceURL(OOX_NS(w16cid)),
+                              FSNS(XML_mc, XML_Ignorable), "w16cid");
     m_pAttrOutput->SetSerializer(pPostitFS);
-    m_pAttrOutput->WritePostItFieldsResolved();
+    m_pAttrOutput->WritePostItFieldsIds();
     m_pAttrOutput->SetSerializer(m_pDocumentFS);
-    pPostitFS->endElementNS(XML_w15, XML_commentsEx);
+    pPostitFS->endElementNS(XML_w16cid, XML_commentsIds);
+    pPostitFS->endDocument();
+
+    m_rFilter.addRelation(m_pDocumentFS->getOutputStream(),
+                          oox::getRelationship(Relationship::COMMENTSEXTENSIBLE),
+                          u"commentsExtensible.xml");
+
+    pPostitFS = m_rFilter.openFragmentStreamWithSerializer(
+        u"word/commentsExtensible.xml"_ustr,
+        u"application/vnd.openxmlformats-officedocument.wordprocessingml.commentsExtensible+xml"_ustr);
+
+    pPostitFS->startElementNS(XML_w16cex, XML_commentsExtensible,
+                              FSNS(XML_xmlns, XML_mc), m_rFilter.getNamespaceURL(OOX_NS(mce)),
+                              FSNS(XML_xmlns, XML_w16cex), m_rFilter.getNamespaceURL(OOX_NS(w16cex)),
+                              FSNS(XML_mc, XML_Ignorable), "w16cex");
+    m_pAttrOutput->SetSerializer(pPostitFS);
+    m_pAttrOutput->WritePostItFieldsExtensible();
+    m_pAttrOutput->SetSerializer(m_pDocumentFS);
+    pPostitFS->endElementNS(XML_w16cex, XML_commentsExtensible);
     pPostitFS->endDocument();
 }
 

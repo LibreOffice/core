@@ -5437,6 +5437,78 @@
     <resource name="ST_LongHexNumber" resource="String"/>
     <resource name="ST_OnOff" resource="Boolean"/>
   </namespace>
+  <namespace name="w16cid">
+    <start name="commentsIds"/>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2016/wordml/cid" attributeFormDefault="qualified">
+      <define name="commentsIds">
+        <element name="commentsIds">
+          <ref name="CT_CommentsIds"/>
+        </element>
+      </define>
+      <define name="CT_CommentsIds">
+        <element name="commentId">
+          <ref name="CT_CommentId"/>
+        </element>
+      </define>
+      <define name="CT_CommentId">
+        <attribute name="paraId">
+          <ref name="ST_LongHexNumber"/>
+        </attribute>
+        <attribute name="durableId">
+          <ref name="ST_LongHexNumber"/>
+        </attribute>
+      </define>
+      <define name="ST_LongHexNumber">
+        <data type="hexBinary"/>
+      </define>
+    </grammar>
+    <resource name="CT_CommentsIds" resource="Stream">
+      <element name="commentId" tokenid="ooxml:CT_CommentsIds_commentId"/>
+    </resource>
+    <resource name="CT_CommentId" resource="CommentId">
+      <attribute name="paraId" tokenid="ooxml:CT_CommentId_paraId" action="att_paraId"/>
+      <attribute name="durableId" tokenid="ooxml:CT_CommentId_durableId" action="att_durableId"/>
+    </resource>
+    <resource name="ST_LongHexNumber" resource="String"/>
+  </namespace>
+  <namespace name="w16cex">
+    <start name="commentsExtensible"/>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2018/wordml/cex" attributeFormDefault="qualified">
+      <define name="commentsExtensible">
+        <element name="commentsExtensible">
+          <ref name="CT_CommentsExtensible"/>
+        </element>
+      </define>
+      <define name="CT_CommentsExtensible">
+        <element name="commentExtensible">
+          <ref name="CT_CommentExtensible"/>
+        </element>
+      </define>
+      <define name="CT_CommentExtensible">
+        <attribute name="durableId">
+          <ref name="ST_LongHexNumber"/>
+        </attribute>
+        <attribute name="dateUtc">
+          <ref name="ST_DateTime"/>
+        </attribute>
+      </define>
+      <define name="ST_LongHexNumber">
+        <data type="hexBinary"/>
+      </define>
+      <define name="ST_DateTime">
+        <data type="dateTime"/>
+      </define>
+    </grammar>
+    <resource name="CT_CommentsExtensible" resource="Stream">
+      <element name="commentExtensible" tokenid="ooxml:CT_CommentsExtensible_commentExtensible"/>
+    </resource>
+    <resource name="CT_CommentExtensible" resource="CommentExtensible">
+      <attribute name="durableId" tokenid="ooxml:CT_CommentExtensible_durableId" action="att_durableId"/>
+      <attribute name="dateUtc" tokenid="ooxml:CT_CommentExtensible_dateUtc" action="att_dateUtc"/>
+    </resource>
+    <resource name="ST_LongHexNumber" resource="String"/>
+    <resource name="ST_DateTime" resource="String"/>
+  </namespace>
   <namespace name="a14">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawing/2010/main">
       <!-- Simple types -->

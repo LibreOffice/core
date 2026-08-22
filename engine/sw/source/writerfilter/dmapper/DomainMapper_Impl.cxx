@@ -93,6 +93,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <comphelper/indexedpropertyvalues.hxx>
+#include <sax/tools/converter.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/unotext.hxx>
 #include <o3tl/deleter.hxx>
@@ -3321,6 +3322,19 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                 m_bAnnotationResolved = item->second.bDone;
                 m_sAnnotationParent = item->second.sParaIdParent;
             }
+            // The moment is held against the comment's durable id, which a third part ties to
+            // this paragraph id.
+            if (const auto durableId = m_aCommentDurableIds.find(sParaId);
+                durableId != m_aCommentDurableIds.end())
+            {
+                if (const auto dateUtc = m_aCommentDatesUtc.find(durableId->second);
+                    dateUtc != m_aCommentDatesUtc.end())
+                {
+                    css::util::DateTime aDateUtc;
+                    if (::sax::Converter::parseDateTime(aDateUtc, dateUtc->second))
+                        m_oAnnotationDateUtc = aDateUtc;
+                }
+            }
             m_sAnnotationImportedParaId = sParaId;
         }
     }
@@ -4875,6 +4889,12 @@ void DomainMapper_Impl::PopAnnotation()
         m_xAnnotationField->setPropertyValue(u"ParaIdParent"_ustr, cpo::uno::Any(m_sAnnotationParent));
         m_xAnnotationField->setPropertyValue(u"ParaId"_ustr, cpo::uno::Any(m_sAnnotationImportedParaId));
 
+        if (m_oAnnotationDateUtc)
+        {
+            m_xAnnotationField->setPropertyValue(u"DateTimeUTC"_ustr,
+                                                 cpo::uno::Any(*m_oAnnotationDateUtc));
+        }
+
         // See if the annotation will be a single position or a range.
         if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
         {
@@ -4952,6 +4972,7 @@ void DomainMapper_Impl::PopAnnotation()
     m_xAnnotationField.clear();
     m_sAnnotationParent.clear();
     m_sAnnotationImportedParaId.clear();
+    m_oAnnotationDateUtc.reset();
     m_nAnnotationId = -1;
     m_bAnnotationResolved = false;
 }
@@ -10470,6 +10491,16 @@ void DomainMapper_Impl::substream(Id rName,
 void DomainMapper_Impl::commentProps(const OUString& sId, const CommentProperties& rProps)
 {
     m_aCommentProps[sId] = rProps;
+}
+
+void DomainMapper_Impl::commentDurableId(const OUString& sParaId, const OUString& sDurableId)
+{
+    m_aCommentDurableIds[sParaId] = sDurableId;
+}
+
+void DomainMapper_Impl::commentDateUtc(const OUString& sDurableId, const OUString& sDateUtc)
+{
+    m_aCommentDatesUtc[sDurableId] = sDateUtc;
 }
 
 

@@ -332,12 +332,26 @@ void OOXMLDocument::resolveCommentsExtendedStream(Stream& rStream)
     resolveFastSubStream(rStream, OOXMLStream::StreamType_t::COMMENTS_EXTENDED);
 }
 
+void OOXMLDocument::resolveCommentsIdsStream(Stream& rStream)
+{
+    resolveFastSubStream(rStream, OOXMLStream::StreamType_t::COMMENTS_IDS);
+}
+
+void OOXMLDocument::resolveCommentsExtensibleStream(Stream& rStream)
+{
+    resolveFastSubStream(rStream, OOXMLStream::StreamType_t::COMMENTS_EXTENSIBLE);
+}
+
 void OOXMLDocument::resolveComment(Stream & rStream,
                                        const sal_Int32 nId)
 {
     if (!mbCommentsExtendedResolved)
     {
         resolveCommentsExtendedStream(rStream);
+        // The durable ids these two streams share are what ties a comment to the moment it was
+        // written, so both have to be read before the first comment.
+        resolveCommentsIdsStream(rStream);
+        resolveCommentsExtensibleStream(rStream);
         mbCommentsExtendedResolved = true;
     }
 

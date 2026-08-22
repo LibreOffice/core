@@ -42,6 +42,8 @@ writerfilter_OOXMLNAMESPACES= \
 	wp14 \
 	w14 \
 	w15 \
+	w16cid \
+	w16cex \
 	a14 \
 	wml
 

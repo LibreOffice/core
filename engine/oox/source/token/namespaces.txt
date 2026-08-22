@@ -86,6 +86,8 @@ wpc                     http://schemas.microsoft.com/office/word/2010/wordproces
 # MSO 2012/2013 extensions ---------------------------------------------------------
 
 w15                     http://schemas.microsoft.com/office/word/2012/wordml
+w16cid                  http://schemas.microsoft.com/office/word/2016/wordml/cid
+w16cex                  http://schemas.microsoft.com/office/word/2018/wordml/cex
 p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
 p188                    http://schemas.microsoft.com/office/powerpoint/2018/8/main
 x12ac                   http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac

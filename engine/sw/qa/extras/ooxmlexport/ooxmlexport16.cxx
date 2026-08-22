@@ -958,6 +958,80 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDone)
     assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "done", u"1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCommentDateUtc)
+{
+    // The moment each comment was written comes in from its own part and goes back out to it.
+    // The w:date beside it is the author's wall clock, three hours ahead of the moment here.
+    createSwDoc("CommentDone.docx");
+
+    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent,
+                                                                           css::uno::UNO_QUERY);
+    auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
+    css::uno::Reference<css::beans::XPropertySet> xComment(xFields->nextElement(),
+                                                          css::uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed: the part was not read,
+    // so the moment was lost and only the zoneless wall clock remained.
+    util::DateTime aDateUtc = getProperty<util::DateTime>(xComment, u"DateTimeUTC"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2021), aDateUtc.Year);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), aDateUtc.Hours);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aDateUtc.Minutes);
+    // The wall clock the author saw is the same moment read three hours further on.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(23),
+                         getProperty<util::DateTime>(xComment, u"DateTimeValue"_ustr).Hours);
+
+    save(TestFilter::DOCX);
+
+    // The moment goes out against a durable id, which a second part ties to the paragraph id of
+    // the comment's last paragraph.
+    xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
+    OUString aParaId = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
+
+    xmlDocUniquePtr pXmlIds = parseExport(u"word/commentsIds.xml"_ustr);
+    assertXPath(pXmlIds, "/w16cid:commentsIds", "Ignorable", u"w16cid");
+    OUString aDurableId
+        = getXPath(pXmlIds, "/w16cid:commentsIds/w16cid:commentId[1]", "durableId");
+    CPPUNIT_ASSERT_EQUAL(aParaId,
+                         getXPath(pXmlIds, "/w16cid:commentsIds/w16cid:commentId[1]", "paraId"));
+
+    xmlDocUniquePtr pXmlExt = parseExport(u"word/commentsExtensible.xml"_ustr);
+    assertXPath(pXmlExt, "/w16cex:commentsExtensible", "Ignorable", u"w16cex");
+    assertXPath(pXmlExt, "/w16cex:commentsExtensible/w16cex:commentExtensible[1]", "durableId",
+                aDurableId);
+    assertXPath(pXmlExt, "/w16cex:commentsExtensible/w16cex:commentExtensible[1]", "dateUtc",
+                u"2021-04-12T20:02:00Z");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPlainCommentDateUtc)
+{
+    // A comment that is neither resolved nor a reply has nothing to say in the part that holds
+    // those two, but its moment still has to reach the part that holds moments.
+    createSwDoc();
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xFields(
+        xTextFieldsSupplier->getTextFields()->createEnumeration());
+    uno::Reference<beans::XPropertySet> xComment(xFields->nextElement(), uno::UNO_QUERY);
+    xComment->setPropertyValue(u"DateTimeUTC"_ustr,
+                               cpo::uno::Any(util::DateTime(0, 0, 2, 20, 12, 4, 2021, true)));
+
+    save(TestFilter::DOCX);
+
+    // Without the accompanying fix in place, this test would have failed: the part with the
+    // moments was only written along with the one for resolved comments and replies, which this
+    // document has no need of.
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/commentsExtended.xml"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"word/commentsIds.xml"_ustr));
+
+    xmlDocUniquePtr pXmlExt = parseExport(u"word/commentsExtensible.xml"_ustr);
+    assertXPath(pXmlExt, "/w16cex:commentsExtensible/w16cex:commentExtensible", 1);
+    assertXPath(pXmlExt, "/w16cex:commentsExtensible/w16cex:commentExtensible[1]", "dateUtc",
+                u"2021-04-12T20:02:00Z");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTableWidth, "frame_size_export.docx")
 {
     // after exporting: table width was overwritten in the doc model

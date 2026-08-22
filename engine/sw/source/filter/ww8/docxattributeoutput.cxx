@@ -8909,9 +8909,13 @@ DocxAttributeOutput::hasProperties DocxAttributeOutput::WritePostitFields()
         m_pSerializer->startElementNS( XML_w, XML_comment, pAttributeList );
 
         // Make sure to give parent/child fields a paraId
-        const bool bNeedParaId = f->GetResolved() || data.parentStatus != ParentStatus::None;
-        if (bNeedParaId)
+        const bool bNeedParaIdForExtended
+            = f->GetResolved() || data.parentStatus != ParentStatus::None;
+        if (bNeedParaIdForExtended)
             eResult = hasProperties::yes;
+        // The part carrying the moment the comment was written refers to it by paragraph id as
+        // well, so a comment with a moment needs one even when it is neither resolved nor a reply.
+        const bool bNeedParaId = bNeedParaIdForExtended || f->GetDateTimeUTC().has_value();
 
         if (f->GetTextObject() != nullptr)
         {
@@ -8972,6 +8976,41 @@ void DocxAttributeOutput::WritePostItFieldsResolved()
             FSNS(XML_w15, XML_paraId), idstr,
             FSNS(XML_w15, XML_done), sDone,
             FSNS(XML_w15, XML_paraIdParent), sParentId);
+    }
+}
+
+bool DocxAttributeOutput::HasPostitFieldsWithDateUTC() const
+{
+    return std::any_of(m_postitFields.begin(), m_postitFields.end(),
+                       [](const auto& rPair) { return bool(rPair.first->GetDateTimeUTC()); });
+}
+
+void DocxAttributeOutput::WritePostItFieldsIds()
+{
+    for (auto& [f, data] : m_postitFields)
+    {
+        if (!f->GetDateTimeUTC())
+            continue;
+        // The paragraph id is already unique per comment, so it serves as the durable id too.
+        // The two parts only have to agree with each other.
+        OUString idstr = NumberToHexBinary(data.lastParaId);
+        m_pSerializer->singleElementNS(XML_w16cid, XML_commentId,
+            FSNS(XML_w16cid, XML_paraId), idstr,
+            FSNS(XML_w16cid, XML_durableId), idstr);
+    }
+}
+
+void DocxAttributeOutput::WritePostItFieldsExtensible()
+{
+    for (auto& [f, data] : m_postitFields)
+    {
+        const std::optional<DateTime>& oDateTimeUTC = f->GetDateTimeUTC();
+        if (!oDateTimeUTC)
+            continue;
+        // The value is already in UTC, which is what DateTimeToOString marks it as.
+        m_pSerializer->singleElementNS(XML_w16cex, XML_commentExtensible,
+            FSNS(XML_w16cex, XML_durableId), NumberToHexBinary(data.lastParaId),
+            FSNS(XML_w16cex, XML_dateUtc), DateTimeToOString(*oDateTimeUTC));
     }
 }
 

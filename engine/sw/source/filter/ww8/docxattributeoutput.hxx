@@ -1147,6 +1147,9 @@ public:
     enum class hasProperties { no, yes };
     hasProperties WritePostitFields();
     void WritePostItFieldsResolved();
+    bool HasPostitFieldsWithDateUTC() const;
+    void WritePostItFieldsIds();
+    void WritePostItFieldsExtensible();
 
     /// VMLTextExport
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) override;

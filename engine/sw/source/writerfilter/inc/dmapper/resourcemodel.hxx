@@ -319,6 +319,12 @@ public:
 
     virtual void commentProps(const OUString& /*sId*/, const CommentProperties& /*rProps*/) {}
 
+    /// Ties the paragraph id of a comment's last paragraph to the comment's durable id.
+    virtual void commentDurableId(const OUString& /*sParaId*/, const OUString& /*sDurableId*/) {}
+
+    /// The moment a comment was written, in UTC, against the comment's durable id.
+    virtual void commentDateUtc(const OUString& /*sDurableId*/, const OUString& /*sDateUtc*/) {}
+
 protected:
     ~Stream() override {}
 };

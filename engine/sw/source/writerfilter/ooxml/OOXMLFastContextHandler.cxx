@@ -2585,6 +2585,48 @@ void OOXMLFastContextHandlerCommentEx::att_paraIdParent(const OOXMLValue& pValue
     m_sParentId = pValue.getString();
 }
 
+OOXMLFastContextHandlerCommentId::OOXMLFastContextHandlerCommentId(
+    OOXMLFastContextHandler* pContext)
+    : OOXMLFastContextHandler(pContext)
+{
+}
+
+void OOXMLFastContextHandlerCommentId::lcl_endFastElement(Token_t /*Element*/)
+{
+    mpStream->commentDurableId(m_sParaId, m_sDurableId);
+}
+
+void OOXMLFastContextHandlerCommentId::att_paraId(const OOXMLValue& pValue)
+{
+    m_sParaId = pValue.getString();
+}
+
+void OOXMLFastContextHandlerCommentId::att_durableId(const OOXMLValue& pValue)
+{
+    m_sDurableId = pValue.getString();
+}
+
+OOXMLFastContextHandlerCommentExtensible::OOXMLFastContextHandlerCommentExtensible(
+    OOXMLFastContextHandler* pContext)
+    : OOXMLFastContextHandler(pContext)
+{
+}
+
+void OOXMLFastContextHandlerCommentExtensible::lcl_endFastElement(Token_t /*Element*/)
+{
+    mpStream->commentDateUtc(m_sDurableId, m_sDateUtc);
+}
+
+void OOXMLFastContextHandlerCommentExtensible::att_durableId(const OOXMLValue& pValue)
+{
+    m_sDurableId = pValue.getString();
+}
+
+void OOXMLFastContextHandlerCommentExtensible::att_dateUtc(const OOXMLValue& pValue)
+{
+    m_sDateUtc = pValue.getString();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

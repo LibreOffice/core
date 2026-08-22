@@ -502,6 +502,10 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordml"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w15"),
                        BAD_CAST("http://schemas.microsoft.com/office/word/2012/wordml"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w16cid"),
+                       BAD_CAST("http://schemas.microsoft.com/office/word/2016/wordml/cid"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w16cex"),
+                       BAD_CAST("http://schemas.microsoft.com/office/word/2018/wordml/cex"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("m"),
                        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/math"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ContentType"),

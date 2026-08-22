@@ -701,6 +701,8 @@ private:
     bool m_bAnnotationResolved = false;
     OUString m_sAnnotationParent;
     OUString m_sAnnotationImportedParaId;
+    /// The moment the comment being read was written, when the file records one.
+    std::optional<css::util::DateTime> m_oAnnotationDateUtc;
     std::unordered_map< sal_Int32, AnnotationPosition > m_aAnnotationPositions;
 
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
@@ -1290,6 +1292,8 @@ public:
     void HandleLineBreak(const PropertyMapPtr& pPropertyMap);
 
     void commentProps(const OUString& sId, const CommentProperties& rProps);
+    void commentDurableId(const OUString& sParaId, const OUString& sDurableId);
+    void commentDateUtc(const OUString& sDurableId, const OUString& sDateUtc);
 
     OUString ConvertTOCStyleName(OUString const&);
 
@@ -1304,6 +1308,10 @@ private:
     bool m_bSaxError;
 
     std::unordered_map<OUString, CommentProperties> m_aCommentProps;
+    /// Durable id of a comment, by the paragraph id of its last paragraph.
+    std::unordered_map<OUString, OUString> m_aCommentDurableIds;
+    /// The moment a comment was written, as an ISO 8601 string in UTC, by durable id.
+    std::unordered_map<OUString, OUString> m_aCommentDatesUtc;
 };
 
 } //namespace writerfilter::dmapper

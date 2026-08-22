@@ -140,6 +140,8 @@ public:
     void HandleRedline( Sprm& rSprm );
 
     virtual void commentProps(const OUString& sId, const CommentProperties& rProps) override;
+    virtual void commentDurableId(const OUString& sParaId, const OUString& sDurableId) override;
+    virtual void commentDateUtc(const OUString& sDurableId, const OUString& sDateUtc) override;
 
     rtl::Reference<SwXStyleFamily> const & GetCharacterStyles();
     OUString GetUnusedCharacterStyleName();

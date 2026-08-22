@@ -5460,6 +5460,16 @@ void DomainMapper::commentProps(const OUString& sId, const CommentProperties& rP
     m_pImpl->commentProps(sId, rProps);
 }
 
+void DomainMapper::commentDurableId(const OUString& sParaId, const OUString& sDurableId)
+{
+    m_pImpl->commentDurableId(sParaId, sDurableId);
+}
+
+void DomainMapper::commentDateUtc(const OUString& sDurableId, const OUString& sDateUtc)
+{
+    m_pImpl->commentDateUtc(sDurableId, sDateUtc);
+}
+
 rtl::Reference<SwXStyleFamily> const & DomainMapper::GetCharacterStyles()
 {
     return m_pImpl->GetCharacterStyles();
