@@ -1889,7 +1889,7 @@ Reference<XInterface> UnoConversionUtilities<T>::createAdapter(const Sequence<Ty
     return xIntAdapted;
 }
 // "convertValueObject" converts a JScriptValue object contained in "var" into
-// an any. The type contained in the any is stipulated by a "type value" thas
+// an any. The type contained in the any is stipulated by a "type value" that
 // was set within the JScript script on the value object ( see JScriptValue).
 template<class T>
 bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, Any& any)

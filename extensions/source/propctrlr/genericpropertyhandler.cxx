@@ -73,7 +73,7 @@ namespace pcr
         EnumRepresentation(const EnumRepresentation&) = delete;
         EnumRepresentation& operator=(const EnumRepresentation&) = delete;
 
-        // IPropertyEnumRepresentation implementqation
+        // IPropertyEnumRepresentation implementation
         virtual std::vector< OUString >
                                     getDescriptions() const override;
         virtual void                getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
