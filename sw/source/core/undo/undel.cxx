@@ -457,7 +457,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStart, const SwPosition* pEnd
     {
         bool bOneNode = m_nSttNode == m_nEndNode;
         SwRegHistory aRHst( *pSttTextNd, m_pHistory.get() );
-        // always save all text atttibutes because of possibly overlapping
+        // always save all text attributes because of possibly overlapping
         // areas of on/off
         m_pHistory->CopyAttr( pSttTextNd->GetpSwpHints(), nNdIdx,
                             0, pSttTextNd->GetText().getLength(), true );
@@ -497,7 +497,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStart, const SwPosition* pEnd
         nNdIdx = pEnd->GetNodeIndex();
         SwRegHistory aRHst( *pEndTextNd, m_pHistory.get() );
 
-        // always save all text atttibutes because of possibly overlapping
+        // always save all text attributes because of possibly overlapping
         // areas of on/off
         m_pHistory->CopyAttr( pEndTextNd->GetpSwpHints(), nNdIdx, 0,
                             pEndTextNd->GetText().getLength(), true );

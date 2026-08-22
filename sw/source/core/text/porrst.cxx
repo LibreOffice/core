@@ -691,7 +691,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     // editing the line doesn't update the place between the lines immediately,
     // i.e. top and bottom parts of the higher glyphs aren't moved with the
     // scrolled text;
-    // 2) enlarged brackets of the different height neighborous annotated
+    // 2) enlarged brackets of the different height neighbouring annotated
     // text portions can overlap more seriously.)
     auto const nOrigAscent(rFont.GetAscent(rTextPaintInfo.GetVsh(), *rTextPaintInfo.GetOut()));
     rFont.SetName(u"OpenSymbol"_ustr, rFont.GetActual());

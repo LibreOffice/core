@@ -571,7 +571,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
         // consider only pages, which have to be painted.
         if ( nCurrCol < mnPaintStartCol )
         {
-            // calculate data of unvisible page needed for accessibility
+            // calculate data of not visible page needed for accessibility
             std::unique_ptr<PreviewPage> pPreviewPage(new PreviewPage);
             Point aCurrAccOffset = aCurrPaintOffset -
                            Point( (mnPaintStartCol-nCurrCol) * mnColWidth, 0 );
@@ -608,7 +608,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
         }
         else
         {
-            // calculate data of unvisible page needed for accessibility
+            // calculate data of not visible page needed for accessibility
             std::unique_ptr<PreviewPage> pPreviewPage(new PreviewPage);
             CalcPreviewDataForPage( *pPage, aCurrPaintOffset, pPreviewPage.get() );
             pPreviewPage->bVisible = false;

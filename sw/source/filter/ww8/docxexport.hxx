@@ -152,7 +152,7 @@ public:
     /// Access to the derived attribute output class.
     DocxAttributeOutput& DocxAttrOutput() const;
 
-    /// Access to the sections/headers/footres.
+    /// Access to the sections/headers/footers.
     virtual MSWordSections& Sections() const override;
 
     virtual bool FieldsQuoted() const override { return true; }
