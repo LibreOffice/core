@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testProtectedFieldsCopyHyperlinkLocation)
 {
-    // Given a test document document that contains:
+    // Given a test document that contains:
     //      - generic url
     //      - empty line
     //      - bibliography mark

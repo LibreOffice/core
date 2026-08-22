@@ -224,7 +224,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
                     aBox.Overlaps( rOldVisArea ) ||
                     aBox.Overlaps( rNewVisArea ) ) )
         {
-            // There are no unaccessible SdrObjects that need to be notified
+            // There are no inaccessible SdrObjects that need to be notified
             ChildrenScrolled( rLower.GetSwFrame(), rOldVisArea );
         }
     }

@@ -1798,7 +1798,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
 
     // Move the cursor to the tracked insertion, after the first redline to activate the
-    // acception of the whole table row insertion with a single "Accept Change"
+    // acceptance of the whole table row insertion with a single "Accept Change"
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);

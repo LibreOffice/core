@@ -2774,7 +2774,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
     createSwDoc("tdf133589.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    // translitere words to Old Hungarian
+    // transliterate words to Old Hungarian
     emulateTyping(u"székely ");
     OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 "_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());

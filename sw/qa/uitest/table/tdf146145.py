@@ -56,7 +56,7 @@ class tdf146145(UITestCase):
                 time.sleep(0.1)
             self.assertFalse(self.is_enabled_Accept_Track_Change())
 
-            # check the fix again to avoid of the asynchron state changes
+            # check the fix again to avoid of the asynchronous state changes
             self.xUITest.executeCommand(".uno:GoUp")
             xToolkit.processEventsToIdle()
             while not self.is_enabled_Accept_Track_Change():
@@ -191,7 +191,7 @@ class tdf146145(UITestCase):
 #                time.sleep(0.1)
 #            self.assertFalse(self.is_enabled_Accept_Track_Change())
 
-            # check the fix again to avoid of the asynchron state changes
+            # check the fix again to avoid of the asynchronous state changes
             self.xUITest.executeCommand(".uno:GoLeft")
             xToolkit.processEventsToIdle()
             while not self.is_enabled_Accept_Track_Change():
@@ -230,7 +230,7 @@ class tdf146145(UITestCase):
 #
 #            self.assertEqual(len(tables[0].getColumns()), 5)
 
-            # check the fix again to avoid of the asynchron state changes
+            # check the fix again to avoid of the asynchronous state changes
             self.xUITest.executeCommand(".uno:GoLeft")
             xToolkit.processEventsToIdle()
             while not self.is_enabled_Accept_Track_Change():
