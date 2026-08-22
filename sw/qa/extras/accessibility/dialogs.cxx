@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFrameDialog)
 }
 
 /* Verify that UI elements in the spell check dialog have the accessible IDs
- * set that that Orca screen reader's logic to identify them depends on,
+ * set that Orca screen reader's logic to identify them depends on,
  * see tdf#155447 and following Orca commits:
  *
  * https://gitlab.gnome.org/GNOME/orca/-/commit/6221f4ecf542646a80e47ee7236380360f0e1a85

@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165642_glossaryFootnote)
 {
     createSwDoc("tdf165642_glossaryFootnote.docx");
     save(TestFilter::DOCX);
-    // round-trip'ing the settings.xml file as is, it contains footnote/endnote references
+    // round-tripping the settings.xml file as is, it contains footnote/endnote references
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/glossary/settings.xml"_ustr);
     assertXPath(pXmlSettings, "//w:endnotePr", 1);
     assertXPath(pXmlSettings, "//w:footnotePr", 1);

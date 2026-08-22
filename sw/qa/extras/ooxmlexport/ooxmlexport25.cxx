@@ -545,7 +545,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167657_sectPr_bottomSpacing, "tdf167657_sectPr_b
 
     auto pXmlDoc = parseLayoutDump();
 
-    // Since there is no page break, the prior paragraph's belowSpacing should not be zero'd out.
+    // Since there is no page break, the prior paragraph's belowSpacing should not be zeroed out.
     // NOTE: apparently layout assigns the belowSpacing to the following section, not body/txt[1],
     sal_Int32 nHeight = getXPath(pXmlDoc, "//section/infos/bounds", "height").toInt32();
     // Without the fix, the section's height (showing no bottom margin for the 1st para) was 309
@@ -802,7 +802,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148294_crossReferences)
     assertXPath(pXmlDoc, "//w:bookmarkStart", 4);
     assertXPath(pXmlDoc, "//w:bookmarkEnd", 4);
 
-    // The second bookmark should be stradling the text 'DOCX'
+    // The second bookmark should be straddling the text 'DOCX'
     assertXPathContent(pXmlDoc, "//w:p[3]/w:r/w:t", u"DOCX");
     int n = countXPathNodes(pXmlDoc, "//w:p[3]/w:bookmarkStart/preceding::w:t");
     CPPUNIT_ASSERT_EQUAL(n + 1, countXPathNodes(pXmlDoc, "//w:p[3]/w:bookmarkEnd/preceding::w:t"));

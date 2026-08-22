@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153042_noTab)
 
     // export does not keep the tabstop when exporting non-numbering. (Probably a good thing...)
     xmlDocUniquePtr pLayout = parseLayoutDump();
-    // Ensure a miniscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
+    // Ensure a minuscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion", "width", u"10");
 }
 
