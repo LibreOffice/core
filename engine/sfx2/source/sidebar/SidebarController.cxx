@@ -645,7 +645,7 @@ void collectUIInformation(const OUString& rDeckId)
     EventDescription aDescription;
     aDescription.aAction = u"SIDEBAR"_ustr;
     aDescription.aParent = u"MainWindow"_ustr;
-    aDescription.aParameters = {{"PANEL", rDeckId}};
+    aDescription.aParameters = {{u"PANEL"_ustr, rDeckId}};
     aDescription.aKeyWord = u"CurrentApp"_ustr;
 
     UITestLogger::getInstance().logEvent(aDescription);

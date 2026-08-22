@@ -211,8 +211,8 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, weld::ComboBox&, rCateg
 
         const OUString& aType = getCategoryType();
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-            {"Name", cpo::uno::Any(aEntry)},
-            {"Type", cpo::uno::Any(aType)},
+            {u"Name"_ustr, cpo::uno::Any(aEntry)},
+            {u"Type"_ustr, cpo::uno::Any(aType)},
         }));
         comphelper::dispatchCommand(u".uno:ClassificationApply"_ustr, aPropertyValues);
     }

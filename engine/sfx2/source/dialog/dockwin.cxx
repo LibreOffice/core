@@ -143,8 +143,8 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     OUString aResourceURL =  "private:resource/dockingwindow/" + OUString::number(nId);
     cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
     {
-        {"Frame", cpo::uno::Any(xFrame)},
-        {"ResourceURL", cpo::uno::Any(aResourceURL)},
+        {u"Frame"_ustr, cpo::uno::Any(xFrame)},
+        {u"ResourceURL"_ustr, cpo::uno::Any(aResourceURL)},
     }));
 
     uno::Reference< awt::XWindow > xWindow;

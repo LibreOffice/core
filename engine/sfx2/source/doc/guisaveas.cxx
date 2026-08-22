@@ -570,7 +570,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
                 {
                     cpo::uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                     {
-                        {"ParentWindow", cpo::uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
+                        {u"ParentWindow"_ustr, cpo::uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
                     }));
 
                     uno::Reference< beans::XPropertyAccess > xFilterProperties;

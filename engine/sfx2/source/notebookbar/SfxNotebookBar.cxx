@@ -505,7 +505,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
                 comphelper::COKit::setLocale(pViewShell->GetKitLocale());
 
-                pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, "NotebookBar", aBuf, xFrame, std::move(pNotebookBarAddonsItem));
+                pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, u"NotebookBar"_ustr, aBuf, xFrame, std::move(pNotebookBarAddonsItem));
                 rViewData.m_pNotebookBar = pNotebookBar;
                 assert(pNotebookBar->IsWelded());
 

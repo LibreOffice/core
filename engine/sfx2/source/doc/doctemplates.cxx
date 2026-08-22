@@ -626,8 +626,8 @@ bool SfxDocTplService::setTitleForURL( const OUString& rURL, const OUString& aTi
                     rURL, embed::ElementModes::READWRITE);
 
             cpo::uno::Sequence<beans::PropertyValue> medium( comphelper::InitPropertySequence({
-                    { "DocumentBaseURL", Any(rURL) },
-                    { "URL", Any(rURL) }
+                    { u"DocumentBaseURL"_ustr, Any(rURL) },
+                    { u"URL"_ustr, Any(rURL) }
                 }));
 
             m_xDocProps->storeToStorage(xStorage, medium);
@@ -1720,7 +1720,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
 
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", cpo::uno::Any(u"/org.openoffice.Setup/Office/Factories/"_ustr)}
+            {u"nodepath"_ustr, cpo::uno::Any(u"/org.openoffice.Setup/Office/Factories/"_ustr)}
         }));
         uno::Reference< container::XNameAccess > xSOFConfig(
             xConfigProvider->createInstanceWithArguments(

@@ -1872,7 +1872,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
             aArgs.realloc(3); // ??? this may re-write the data added above for pRepairItem
             pArgs = aArgs.getArray();
             cpo::uno::Sequence<beans::PropertyValue> aProperties(
-                comphelper::InitPropertySequence({ { "NoFileSync", cpo::uno::Any(true) } }));
+                comphelper::InitPropertySequence({ { u"NoFileSync"_ustr, cpo::uno::Any(true) } }));
             pArgs[2] <<= aProperties;
         }
     }

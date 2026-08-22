@@ -264,8 +264,8 @@ static void showDocument( const char* pBaseName )
     try {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         auto args(::comphelper::InitPropertySequence({
-            {"ViewOnly",    Any(true)},
-            {"ReadOnly",    Any(true)}
+            {u"ViewOnly"_ustr,    Any(true)},
+            {u"ReadOnly"_ustr,    Any(true)}
         }));
 
         OUString aURL;

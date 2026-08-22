@@ -501,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
     cpo::uno::Sequence<beans::PropertyValue> aProperties(
-        comphelper::InitPropertySequence({ { "NoThumbnail", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"NoThumbnail"_ustr, cpo::uno::Any(true) } }));
     osl::File::remove(maTempFile.GetURL());
     xStorable->storeToURL(maTempFile.GetURL(), aProperties);
     uno::Reference<packages::zip::XZipFileAccess2> xZipFile
@@ -616,13 +616,13 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
     // explicitly overwrite the file using the Overwrite option
     CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(
         maTempFile.GetURL(),
-        comphelper::InitPropertySequence({ { "Overwrite", cpo::uno::Any(true) } })));
+        comphelper::InitPropertySequence({ { u"Overwrite"_ustr, cpo::uno::Any(true) } })));
 
     try
     {
         // overwrite an existing file with the Overwrite flag set to false
         xStorable->storeToURL(maTempFile.GetURL(), comphelper::InitPropertySequence(
-                                                      { { "Overwrite", cpo::uno::Any(false) } }));
+                                                      { { u"Overwrite"_ustr, cpo::uno::Any(false) } }));
         CPPUNIT_ASSERT_MESSAGE("We expect an exception on overwriting an existing file", false);
     }
     catch (const cpo::uno::Exception&)

@@ -199,7 +199,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
             if(!pData->GetModifier() && (pData->GetMode() == CommandWheelMode::SCROLL))
             {
                 auto pItem = std::find_if(maItems.begin(), maItems.end(),
-                    [] (const auto& item) { return item->mxButton->get_item_active("toggle"); });
+                    [] (const auto& item) { return item->mxButton->get_item_active(u"toggle"_ustr); });
                 if(pItem == maItems.end())
                     return true;
                 if(pData->GetNotchDelta()<0)

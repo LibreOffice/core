@@ -293,7 +293,7 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
                 css::uno::Reference<css::awt::XWindow> xDialogParent
                     = VCLUnoHelper::GetInterface(pViewShell->GetWindow());
                 cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
-                    { { "ParentWindow", cpo::uno::Any(xDialogParent) } }));
+                    { { u"ParentWindow"_ustr, cpo::uno::Any(xDialogParent) } }));
                 xInit->initialize(aSeq);
             }
         }

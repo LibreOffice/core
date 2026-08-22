@@ -48,8 +48,8 @@ void ClassificationTest::testClassification()
 {
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"Name", cpo::uno::Any(u"Non-Business"_ustr)},
-        {"Type", cpo::uno::Any(u"urn:bails:ExportControl:"_ustr)},
+        {u"Name"_ustr, cpo::uno::Any(u"Non-Business"_ustr)},
+        {u"Type"_ustr, cpo::uno::Any(u"urn:bails:ExportControl:"_ustr)},
     }));
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
 
@@ -62,8 +62,8 @@ void ClassificationTest::testClassification()
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", cpo::uno::Any(u"Confidential"_ustr)},
-        {"Type", cpo::uno::Any(u"urn:bails:NationalSecurity:"_ustr)},
+        {u"Name"_ustr, cpo::uno::Any(u"Confidential"_ustr)},
+        {u"Type"_ustr, cpo::uno::Any(u"urn:bails:NationalSecurity:"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
     aAny = xPropertySet->getPropertyValue(u"urn:bails:NationalSecurity:BusinessAuthorizationCategory:Identifier"_ustr);
@@ -71,8 +71,8 @@ void ClassificationTest::testClassification()
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", cpo::uno::Any(u"Internal Only"_ustr)},
-        {"Type", cpo::uno::Any(u"urn:bails:IntellectualProperty:"_ustr)},
+        {u"Name"_ustr, cpo::uno::Any(u"Internal Only"_ustr)},
+        {u"Type"_ustr, cpo::uno::Any(u"urn:bails:IntellectualProperty:"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
     aAny = xPropertySet->getPropertyValue(u"urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"_ustr);

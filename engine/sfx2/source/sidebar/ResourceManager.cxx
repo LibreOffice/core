@@ -506,7 +506,7 @@ void ResourceManager::ReadLastActive()
 void ResourceManager::SetupOverrides()
 {
     maApplicationDeckOverrides = {
-        { vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::Formula), "ElementsDeck" }
+        { vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::Formula), u"ElementsDeck"_ustr }
     };
 }
 
