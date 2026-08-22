@@ -85,7 +85,8 @@ class OOXMLStream : public virtual SvRefBase
 {
 public:
     enum class StreamType_t { UNKNOWN, DOCUMENT, STYLES, WEBSETTINGS, FONTTABLE, NUMBERING,
-        FOOTNOTES, ENDNOTES, COMMENTS, COMMENTS_EXTENDED, THEME, CUSTOMXML, CUSTOMXMLPROPS, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER, VBADATA };
+        FOOTNOTES, ENDNOTES, COMMENTS, COMMENTS_EXTENDED, COMMENTS_IDS,
+        COMMENTS_EXTENSIBLE, THEME, CUSTOMXML, CUSTOMXMLPROPS, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER, VBADATA };
     typedef tools::SvRef<OOXMLStream> Pointer_t;
 
     /**
@@ -185,6 +186,8 @@ private:
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
     void resolveCommentsExtendedStream(Stream & rStream);
+    void resolveCommentsIdsStream(Stream & rStream);
+    void resolveCommentsExtensibleStream(Stream & rStream);
 
 public:
     OOXMLDocument(OOXMLStream::Pointer_t pStream,

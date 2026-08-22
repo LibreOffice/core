@@ -166,6 +166,8 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static constexpr OUStringLiteral sFootersTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer";
     static constexpr OUStringLiteral sHeaderTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/header";
     static constexpr OUStringLiteral sOleObjectTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject";
+    static constexpr OUString sCommentsIdsType = u"http://schemas.microsoft.com/office/2016/09/relationships/commentsIds"_ustr;
+    static constexpr OUString sCommentsExtensibleType = u"http://schemas.microsoft.com/office/2018/08/relationships/commentsExtensible"_ustr;
     static constexpr OUString sVBAProjectType = u"http://schemas.microsoft.com/office/2006/relationships/vbaProject"_ustr;
     static constexpr OUString sVBADataType = u"http://schemas.microsoft.com/office/2006/relationships/wordVbaData"_ustr;
 
@@ -253,6 +255,14 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
         case StreamType_t::COMMENTS_EXTENDED:
             sStreamType = sCommentsExtendedType;
             sStreamTypeStrict = sCommentsExtendedType;
+            break;
+        case StreamType_t::COMMENTS_IDS:
+            sStreamType = sCommentsIdsType;
+            sStreamTypeStrict = sCommentsIdsType;
+            break;
+        case StreamType_t::COMMENTS_EXTENSIBLE:
+            sStreamType = sCommentsExtensibleType;
+            sStreamTypeStrict = sCommentsExtensibleType;
             break;
         default:
             break;

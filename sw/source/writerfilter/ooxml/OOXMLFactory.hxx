@@ -52,6 +52,8 @@ enum class ResourceType {
     HpsMeasure,
     MeasurementOrPercent,
     CommentEx,
+    CommentId,
+    CommentExtensible,
     Theme,
 };
 

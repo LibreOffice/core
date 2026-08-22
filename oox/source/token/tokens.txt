@@ -1358,6 +1358,8 @@ command
 commandType
 comment
 commentEx
+commentExtensible
+commentId
 commentList
 commentPr
 commentRangeEnd
@@ -1365,6 +1367,8 @@ commentRangeStart
 commentReference
 comments
 commentsEx
+commentsExtensible
+commentsIds
 comp
 compact
 compactData
@@ -1741,6 +1745,7 @@ dateOlderThan
 dateOlderThanOrEqual
 dateTime
 dateTimeGrouping
+dateUtc
 day
 dayLong
 dayShort
@@ -2060,6 +2065,7 @@ dtr
 duotone
 duplicateValues
 dur
+durableId
 duration
 dvAspect
 dx
@@ -5897,6 +5903,8 @@ w
 w10
 w14
 w15
+w16cex
+w16cid
 wAfter
 wArH
 wBefore
