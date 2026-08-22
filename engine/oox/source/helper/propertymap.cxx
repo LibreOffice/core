@@ -94,18 +94,18 @@ public:
     explicit            GenericPropertySet( const PropertyMap& rPropMap );
 
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
+    virtual Reference< XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties() override;
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual Sequence< Property > getProperties() override;
+    virtual Property getPropertyByName( const OUString& aName ) override;
+    virtual bool hasPropertyByName( const OUString& Name ) override;
 
 private:
     std::mutex mMutex;
@@ -117,18 +117,18 @@ GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
     rPropMap.fillPropertyNameMap(maPropMap);
 }
 
-Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo()
+Reference< XPropertySetInfo > GenericPropertySet::getPropertySetInfo()
 {
     return this;
 }
 
-void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     std::scoped_lock aGuard( mMutex );
     maPropMap[ rPropertyName ] = rValue;
 }
 
-Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName )
+Any GenericPropertySet::getPropertyValue( const OUString& rPropertyName )
 {
     PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
     if( aIt == maPropMap.end() )
@@ -137,13 +137,13 @@ Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName
 }
 
 // listeners are not supported by this implementation
-void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >& ) {}
-void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) {}
-void SAL_CALL GenericPropertySet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
-void SAL_CALL GenericPropertySet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
+void GenericPropertySet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >& ) {}
+void GenericPropertySet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) {}
+void GenericPropertySet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
+void GenericPropertySet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
 
 // XPropertySetInfo
-Sequence< Property > SAL_CALL GenericPropertySet::getProperties()
+Sequence< Property > GenericPropertySet::getProperties()
 {
     Sequence< Property > aSeq( static_cast< sal_Int32 >( maPropMap.size() ) );
     Property* pProperty = aSeq.getArray();
@@ -158,7 +158,7 @@ Sequence< Property > SAL_CALL GenericPropertySet::getProperties()
     return aSeq;
 }
 
-Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rPropertyName )
+Property GenericPropertySet::getPropertyByName( const OUString& rPropertyName )
 {
     PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
     if( aIt == maPropMap.end() )
@@ -171,7 +171,7 @@ Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rProper
     return aProperty;
 }
 
-bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rPropertyName )
+bool GenericPropertySet::hasPropertyByName( const OUString& rPropertyName )
 {
     return maPropMap.contains(rPropertyName);
 }

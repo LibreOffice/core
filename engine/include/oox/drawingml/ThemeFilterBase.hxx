@@ -47,7 +47,7 @@ public:
     virtual bool exportDocument() override { return false; }
 
 private:
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     oox::drawingml::ThemePtr mpTheme;
 };

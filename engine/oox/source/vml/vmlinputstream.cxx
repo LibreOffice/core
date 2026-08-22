@@ -282,7 +282,7 @@ InputStream::~InputStream()
 {
 }
 
-sal_Int32 SAL_CALL InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+sal_Int32 InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
 {
     if( nBytesToRead < 0 )
         throw IOException();
@@ -307,12 +307,12 @@ sal_Int32 SAL_CALL InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int3
     return nRet;
 }
 
-sal_Int32 SAL_CALL InputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+sal_Int32 InputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
 {
     return readBytes( rData, nMaxBytesToRead );
 }
 
-void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
+void InputStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if( nBytesToSkip < 0 )
         throw IOException();
@@ -326,13 +326,13 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
     }
 }
 
-sal_Int32 SAL_CALL InputStream::available()
+sal_Int32 InputStream::available()
 {
     updateBuffer();
     return maBuffer.getLength() - mnBufferPos;
 }
 
-void SAL_CALL InputStream::closeInput()
+void InputStream::closeInput()
 {
     mxTextStrm->closeInput();
 }

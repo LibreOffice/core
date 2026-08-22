@@ -31,17 +31,17 @@ using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
 
 // XServiceInfo
-OUString SAL_CALL FastTokenHandler::getImplementationName()
+OUString FastTokenHandler::getImplementationName()
 {
     return u"com.sun.star.comp.oox.core.FastTokenHandler"_ustr;
 }
 
-bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName )
+bool FastTokenHandler::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FastTokenHandler::getSupportedServiceNames()
+Sequence< OUString > FastTokenHandler::getSupportedServiceNames()
 {
     Sequence<OUString> aServiceNames { u"com.sun.star.xml.sax.FastTokenHandler"_ustr };
     return aServiceNames;

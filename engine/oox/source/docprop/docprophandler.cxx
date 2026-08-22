@@ -263,11 +263,11 @@ void OOXMLDocPropHandler::UpdateDocStatistic( std::u16string_view aChars )
 
 // com.sun.star.xml.sax.XFastDocumentHandler
 
-void SAL_CALL OOXMLDocPropHandler::startDocument()
+void OOXMLDocPropHandler::startDocument()
 {
 }
 
-void SAL_CALL OOXMLDocPropHandler::endDocument()
+void OOXMLDocPropHandler::endDocument()
 {
     InitNew();
 }
@@ -276,13 +276,13 @@ void OOXMLDocPropHandler::processingInstruction( const OUString& /*rTarget*/, co
 {
 }
 
-void SAL_CALL OOXMLDocPropHandler::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& )
+void OOXMLDocPropHandler::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& )
 {
 }
 
 // com.sun.star.xml.sax.XFastContextHandler
 
-void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
+void OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
 {
     if ( !m_nInBlock && !m_nState )
     {
@@ -332,7 +332,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
     m_nInBlock++;
 }
 
-void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespace, const OUString& aName, const uno::Reference< xml::sax::XFastAttributeList >& )
+void OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespace, const OUString& aName, const uno::Reference< xml::sax::XFastAttributeList >& )
 {
     SAL_WARN("oox", "Unknown element " << aNamespace << ":" << aName);
 
@@ -342,7 +342,7 @@ void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespa
     m_nInBlock++;
 }
 
-void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
+void OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
 {
     if ( !m_nInBlock )
         return;
@@ -382,24 +382,24 @@ void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
     }
 }
 
-void SAL_CALL OOXMLDocPropHandler::endUnknownElement( const OUString&, const OUString& )
+void OOXMLDocPropHandler::endUnknownElement( const OUString&, const OUString& )
 {
     if ( m_nInBlock )
         m_nInBlock--;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createFastChildContext( ::sal_Int32, const uno::Reference< xml::sax::XFastAttributeList >& )
+uno::Reference< xml::sax::XFastContextHandler > OOXMLDocPropHandler::createFastChildContext( ::sal_Int32, const uno::Reference< xml::sax::XFastAttributeList >& )
 {
     // Should the arguments be parsed?
     return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createUnknownChildContext( const OUString&, const OUString&, const uno::Reference< xml::sax::XFastAttributeList >& )
+uno::Reference< xml::sax::XFastContextHandler > OOXMLDocPropHandler::createUnknownChildContext( const OUString&, const OUString&, const uno::Reference< xml::sax::XFastAttributeList >& )
 {
     return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
 }
 
-void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
+void OOXMLDocPropHandler::characters( const OUString& aChars )
 {
     try
     {

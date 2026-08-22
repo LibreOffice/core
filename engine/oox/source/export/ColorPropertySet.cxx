@@ -41,9 +41,9 @@ public:
 
 protected:
     // ____ XPropertySetInfo ____
-    virtual Sequence< Property > SAL_CALL getProperties() override;
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual Sequence< Property > getProperties() override;
+    virtual Property getPropertyByName( const OUString& aName ) override;
+    virtual bool hasPropertyByName( const OUString& Name ) override;
 
 private:
     OUString m_aColorPropName;
@@ -57,20 +57,20 @@ lcl_ColorPropertySetInfo::lcl_ColorPropertySetInfo( bool bFillColor ) :
                       cppu::UnoType<sal_Int32>::get(), 0)
 {}
 
-Sequence< Property > SAL_CALL lcl_ColorPropertySetInfo::getProperties()
+Sequence< Property > lcl_ColorPropertySetInfo::getProperties()
 {
 
     return Sequence< Property >( & m_aColorProp, 1 );
 }
 
-Property SAL_CALL lcl_ColorPropertySetInfo::getPropertyByName( const OUString& aName )
+Property lcl_ColorPropertySetInfo::getPropertyByName( const OUString& aName )
 {
     if( aName == m_aColorPropName )
         return m_aColorProp;
     throw UnknownPropertyException( m_aColorPropName, getXWeak());
 }
 
-bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
+bool lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
 {
     return Name == m_aColorPropName;
 }
@@ -93,7 +93,7 @@ ColorPropertySet::~ColorPropertySet()
 
 // ____ XPropertySet ____
 
-Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
+Reference< XPropertySetInfo > ColorPropertySet::getPropertySetInfo()
 {
     if( ! m_xInfo.is())
         m_xInfo.set( new lcl_ColorPropertySetInfo( m_bIsFillColor ));
@@ -101,7 +101,7 @@ Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
     return m_xInfo;
 }
 
-void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue )
+void ColorPropertySet::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue )
 {
     if (rPropertyName != m_aColorPropName)
     {
@@ -113,7 +113,7 @@ void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& rPropertyName,
     aValue >>= m_nColor;
 }
 
-cpo::uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ColorPropertySet::getPropertyValue( const OUString& aPropertyName )
 {
     if( aPropertyName == "FillStyle" && m_bIsFillColor )
     {
@@ -125,46 +125,46 @@ cpo::uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aProp
     throw UnknownPropertyException(aPropertyName);
 }
 
-void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
+void ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
 {
     OSL_FAIL( "Not Implemented" );
 }
 
-void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* aListener */ )
+void ColorPropertySet::removePropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* aListener */ )
 {
     OSL_FAIL( "Not Implemented" );
 }
 
-void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
+void ColorPropertySet::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL( "Not Implemented" );
 }
 
-void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
+void ColorPropertySet::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL( "Not Implemented" );
 }
 
 // ____ XPropertyState ____
 
-PropertyState SAL_CALL ColorPropertySet::getPropertyState( const OUString& /* PropertyName */ )
+PropertyState ColorPropertySet::getPropertyState( const OUString& /* PropertyName */ )
 {
     return PropertyState_DIRECT_VALUE;
 }
 
-Sequence< PropertyState > SAL_CALL ColorPropertySet::getPropertyStates( const Sequence< OUString >& /* aPropertyName */ )
+Sequence< PropertyState > ColorPropertySet::getPropertyStates( const Sequence< OUString >& /* aPropertyName */ )
 {
     PropertyState aState = PropertyState_DIRECT_VALUE;
     return Sequence<PropertyState>(&aState, 1);
 }
 
-void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyName )
+void ColorPropertySet::setPropertyToDefault( const OUString& PropertyName )
 {
     if( PropertyName == m_aColorPropName )
         m_nColor = m_nDefaultColor;
 }
 
-cpo::uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
     if( aPropertyName == m_aColorPropName )
         return cpo::uno::Any( m_nDefaultColor );

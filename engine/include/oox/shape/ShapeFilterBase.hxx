@@ -76,7 +76,7 @@ public:
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
     virtual GraphicHelper* implCreateGraphicHelper() const override;
 
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;

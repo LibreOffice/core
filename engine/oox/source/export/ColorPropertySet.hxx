@@ -42,33 +42,33 @@ public:
 
 protected:
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue(
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue(
         const OUString& aPropertyName,
         const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
         const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
         const OUString& PropertyName,
         const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
         const OUString& PropertyName,
         const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // ____ XPropertyState ____
-    virtual css::beans::PropertyState SAL_CALL getPropertyState(
+    virtual css::beans::PropertyState getPropertyState(
         const OUString& PropertyName ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates(
+    virtual cpo::uno::Sequence< css::beans::PropertyState > getPropertyStates(
         const cpo::uno::Sequence< OUString >& aPropertyName ) override;
-    virtual void SAL_CALL setPropertyToDefault(
+    virtual void setPropertyToDefault(
         const OUString& PropertyName ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyDefault(
+    virtual cpo::uno::Any getPropertyDefault(
         const OUString& aPropertyName ) override;
 
 private:

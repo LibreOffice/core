@@ -76,8 +76,8 @@ public:
     virtual             ~ContextHandler2Helper();
 
     // allow instances to be stored in ::rtl::Reference
-    virtual void SAL_CALL acquire() noexcept = 0;
-    virtual void SAL_CALL release() noexcept = 0;
+    virtual void acquire() noexcept = 0;
+    virtual void release() noexcept = 0;
 
     // interface --------------------------------------------------------------
 
@@ -245,23 +245,23 @@ public:
     ContextHandler2 & operator =(ContextHandler2 &&) = delete; // due to ContextHandler
 
     // resolve ambiguity from base classes
-    virtual void SAL_CALL acquire() noexcept override { ContextHandler::acquire(); }
-    virtual void SAL_CALL release() noexcept override { ContextHandler::release(); }
+    virtual void acquire() noexcept override { ContextHandler::acquire(); }
+    virtual void release() noexcept override { ContextHandler::release(); }
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
                         createFastChildContext(
                             sal_Int32 nElement,
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
                             sal_Int32 nElement,
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) final override;
+    virtual void characters( const OUString& rChars ) final override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) final override;
+    virtual void endFastElement( sal_Int32 nElement ) final override;
 
     // oox.core.ContextHandler interface --------------------------------------
 

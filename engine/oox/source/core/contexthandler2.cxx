@@ -190,7 +190,7 @@ ContextHandler2::~ContextHandler2()
 
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------
 
-Reference< XFastContextHandler > SAL_CALL ContextHandler2::createFastChildContext(
+Reference< XFastContextHandler > ContextHandler2::createFastChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
     if( getNamespace( nElement ) == NMSP_mce ) // TODO for checking 'Ignorable'
@@ -203,18 +203,18 @@ Reference< XFastContextHandler > SAL_CALL ContextHandler2::createFastChildContex
     return implCreateChildContext( nElement, rxAttribs );
 }
 
-void SAL_CALL ContextHandler2::startFastElement(
+void ContextHandler2::startFastElement(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
     implStartElement( nElement, rxAttribs );
 }
 
-void SAL_CALL ContextHandler2::characters( const OUString& rChars )
+void ContextHandler2::characters( const OUString& rChars )
 {
     implCharacters( rChars );
 }
 
-void SAL_CALL ContextHandler2::endFastElement( sal_Int32 nElement )
+void ContextHandler2::endFastElement( sal_Int32 nElement )
 {
     implEndElement( nElement );
 }

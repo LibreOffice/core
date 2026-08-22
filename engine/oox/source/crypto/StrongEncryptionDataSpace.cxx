@@ -176,17 +176,17 @@ StrongEncryptionDataSpace::encrypt(const Reference<XInputStream>& rxInputStream)
     return aStreams.getAsConstNamedValueList();
 }
 
-OUString SAL_CALL StrongEncryptionDataSpace::getImplementationName()
+OUString StrongEncryptionDataSpace::getImplementationName()
 {
     return u"com.sun.star.comp.oox.crypto.StrongEncryptionDataSpace"_ustr;
 }
 
-bool SAL_CALL StrongEncryptionDataSpace::supportsService(const OUString& rServiceName)
+bool StrongEncryptionDataSpace::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL StrongEncryptionDataSpace::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> StrongEncryptionDataSpace::getSupportedServiceNames()
 {
     Sequence<OUString> aServices{ u"com.sun.star.packages.PackageEncryption"_ustr };
     return aServices;

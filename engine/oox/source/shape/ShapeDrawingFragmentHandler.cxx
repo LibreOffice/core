@@ -27,7 +27,7 @@ ShapeDrawingFragmentHandler::~ShapeDrawingFragmentHandler() noexcept
 {
 }
 
-void SAL_CALL ShapeDrawingFragmentHandler::endDocument()
+void ShapeDrawingFragmentHandler::endDocument()
 {
 }
 

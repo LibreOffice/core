@@ -47,29 +47,29 @@ public:
     FragmentHandler2 & operator =(FragmentHandler2 &&) = delete; // due to FragmentHandler
 
     // resolve ambiguity from base classes
-    virtual void SAL_CALL acquire() noexcept override { FragmentHandler::acquire(); }
-    virtual void SAL_CALL release() noexcept override { FragmentHandler::release(); }
+    virtual void acquire() noexcept override { FragmentHandler::acquire(); }
+    virtual void release() noexcept override { FragmentHandler::release(); }
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
                         createFastChildContext(
                             sal_Int32 nElement,
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
                             sal_Int32 nElement,
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) final override;
+    virtual void characters( const OUString& rChars ) final override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) final override;
+    virtual void endFastElement( sal_Int32 nElement ) final override;
 
     // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------
 
-    virtual void SAL_CALL startDocument() override;
+    virtual void startDocument() override;
 
-    virtual void SAL_CALL endDocument() override;
+    virtual void endDocument() override;
 
     // oox.core.ContextHandler interface --------------------------------------
 

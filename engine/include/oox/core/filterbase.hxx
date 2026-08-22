@@ -194,10 +194,10 @@ public:
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
-    virtual bool SAL_CALL
+    virtual bool
                         supportsService( const OUString& rServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
                         getSupportedServiceNames() override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
@@ -212,25 +212,25 @@ public:
             sequence of com.sun.star.beans.NamedValue objects. The different
             filter implementations may support different arguments.
      */
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
                             const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // com.sun.star.document.XImporter interface ------------------------------
 
-    virtual void SAL_CALL setTargetDocument(
+    virtual void setTargetDocument(
                             const css::uno::Reference< css::lang::XComponent >& rxDocument ) override;
 
     // com.sun.star.document.XExporter interface ------------------------------
 
-    virtual void SAL_CALL setSourceDocument(
+    virtual void setSourceDocument(
                             const css::uno::Reference< css::lang::XComponent >& rxDocument ) override;
 
     // com.sun.star.document.XFilter interface --------------------------------
 
-    virtual bool SAL_CALL filter(
+    virtual bool filter(
                             const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
 
-    virtual void SAL_CALL cancel() override;
+    virtual void cancel() override;
 
     bool exportVBA() const;
 

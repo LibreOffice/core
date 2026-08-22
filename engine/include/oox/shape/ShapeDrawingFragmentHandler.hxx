@@ -21,7 +21,7 @@ class OOX_DLLPUBLIC ShapeDrawingFragmentHandler final : public oox::core::Fragme
 public:
     ShapeDrawingFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, oox::drawingml::ShapePtr pGroupShapePtr);
     virtual ~ShapeDrawingFragmentHandler() noexcept override;
-    virtual void SAL_CALL endDocument() override;
+    virtual void endDocument() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const AttributeList& rAttribs ) override;
 
 private:

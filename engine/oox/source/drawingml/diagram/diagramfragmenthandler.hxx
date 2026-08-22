@@ -32,7 +32,7 @@ public:
     DiagramDataFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, OoxDiagramDataPtr xDataPtr);
     virtual ~DiagramDataFragmentHandler() noexcept override;
 
-    virtual void SAL_CALL endDocument() override;
+    virtual void endDocument() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
@@ -46,7 +46,7 @@ public:
     DiagramLayoutFragmentHandler(SmartArtDiagram& rDgm, oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, DiagramLayoutPtr xDataPtr);
     virtual ~DiagramLayoutFragmentHandler() noexcept override;
 
-    virtual void SAL_CALL endDocument() override;
+    virtual void endDocument() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:

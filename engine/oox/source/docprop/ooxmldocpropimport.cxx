@@ -128,24 +128,24 @@ DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentC
 }
 
 // XServiceInfo
-OUString SAL_CALL DocumentPropertiesImport::getImplementationName()
+OUString DocumentPropertiesImport::getImplementationName()
 {
     return u"com.sun.star.comp.oox.docprop.DocumentPropertiesImporter"_ustr;
 }
 
-bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName )
+bool DocumentPropertiesImport::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames()
+Sequence< OUString > DocumentPropertiesImport::getSupportedServiceNames()
 {
     Sequence<OUString> aServices { u"com.sun.star.document.OOXMLDocumentPropertiesImporter"_ustr };
     return aServices;
 }
 
 // XOOXMLDocumentPropertiesImporter
-void SAL_CALL DocumentPropertiesImport::importProperties(
+void DocumentPropertiesImport::importProperties(
         const Reference< XStorage >& rxSource, const Reference< XDocumentProperties >& rxDocumentProperties )
 {
     if( !mxContext.is() )
@@ -183,7 +183,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         aParser.parseStream( rCustomStream, true );
 }
 
-Reference < css::io::XInputStream > SAL_CALL DocumentPropertiesImport::getCorePropertiesStream(
+Reference < css::io::XInputStream > DocumentPropertiesImport::getCorePropertiesStream(
     const Reference< XStorage >& rxSource)
 {
     Sequence< InputSource > aCoreStreams = lclGetCoreStreams(rxSource);
@@ -193,7 +193,7 @@ Reference < css::io::XInputStream > SAL_CALL DocumentPropertiesImport::getCorePr
     return aCoreStreams[0].aInputStream;
 }
 
-Reference < css::io::XInputStream > SAL_CALL DocumentPropertiesImport::getExtendedPropertiesStream(
+Reference < css::io::XInputStream > DocumentPropertiesImport::getExtendedPropertiesStream(
     const Reference< XStorage >& rxSource)
 {
     Sequence< InputSource > aExtStreams = lclGetExtStreams(rxSource);
@@ -203,7 +203,7 @@ Reference < css::io::XInputStream > SAL_CALL DocumentPropertiesImport::getExtend
     return aExtStreams[0].aInputStream;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > SAL_CALL DocumentPropertiesImport::getCustomPropertiesStreams(
+cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > DocumentPropertiesImport::getCustomPropertiesStreams(
     const Reference< XStorage >& rxSource)
 {
     Sequence <InputSource> aExtStreams = lclGetCustomStreams(rxSource);

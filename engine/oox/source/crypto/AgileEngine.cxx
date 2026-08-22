@@ -59,12 +59,12 @@ std::u16string_view stripNamespacePrefix(std::u16string_view rsInputName)
 class AgileTokenHandler : public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8(const Sequence< sal_Int8 >& /*nIdentifier*/) override
+    virtual sal_Int32 getTokenFromUTF8(const Sequence< sal_Int8 >& /*nIdentifier*/) override
     {
         return FastToken::DONTKNOW;
     }
 
-    virtual Sequence<sal_Int8> SAL_CALL getUTF8Identifier(sal_Int32 /*nToken*/) override
+    virtual Sequence<sal_Int8> getUTF8Identifier(sal_Int32 /*nToken*/) override
     {
         return Sequence<sal_Int8>();
     }
@@ -84,13 +84,13 @@ public:
         mInfo(rInfo)
     {}
 
-    void SAL_CALL startDocument() override {}
-    void SAL_CALL endDocument() override {}
-    void SAL_CALL processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ ) override {}
-    void SAL_CALL setDocumentLocator( const Reference< XLocator >& /*xLocator*/ ) override {}
-    void SAL_CALL startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ ) override {}
+    void startDocument() override {}
+    void endDocument() override {}
+    void processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ ) override {}
+    void setDocumentLocator( const Reference< XLocator >& /*xLocator*/ ) override {}
+    void startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ ) override {}
 
-    void SAL_CALL startUnknownElement( const OUString& /*aNamespace*/, const OUString& rName, const Reference< XFastAttributeList >& aAttributeList ) override
+    void startUnknownElement( const OUString& /*aNamespace*/, const OUString& rName, const Reference< XFastAttributeList >& aAttributeList ) override
     {
         std::u16string_view rLocalName = stripNamespacePrefix(rName);
 
@@ -173,22 +173,22 @@ public:
         }
     }
 
-    void SAL_CALL endFastElement( sal_Int32 /*aElement*/ ) override
+    void endFastElement( sal_Int32 /*aElement*/ ) override
     {}
-    void SAL_CALL endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ ) override
+    void endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ ) override
     {}
 
-    Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ ) override
+    Reference< XFastContextHandler > createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ ) override
     {
         return nullptr;
     }
 
-    Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ ) override
+    Reference< XFastContextHandler > createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ ) override
     {
         return this;
     }
 
-    void SAL_CALL characters( const OUString& /*aChars*/ ) override
+    void characters( const OUString& /*aChars*/ ) override
     {}
 };
 

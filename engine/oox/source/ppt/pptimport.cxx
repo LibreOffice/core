@@ -211,7 +211,7 @@ std::shared_ptr<::oox::drawingml::Theme> PowerPointImport::getCurrentThemePtr() 
     return mpActualSlidePersist ? mpActualSlidePersist->getTheme() : std::shared_ptr<::oox::drawingml::Theme>();
 }
 
-bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDescriptor )
+bool PowerPointImport::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     if( XmlFilterBase::filter( rDescriptor ) )
         return true;

@@ -41,10 +41,10 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual void SAL_CALL startFastElement(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs) override;
-    virtual void SAL_CALL endFastElement(::sal_Int32 Element) override;
-    virtual uno::Reference< xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList >& xAttribs) override;
-    virtual void SAL_CALL characters(const OUString& rChars) override;
+    virtual void startFastElement(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs) override;
+    virtual void endFastElement(::sal_Int32 Element) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler> createFastChildContext(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList >& xAttribs) override;
+    virtual void characters(const OUString& rChars) override;
 
 };
 
@@ -57,7 +57,7 @@ LazyMathBufferingContext::LazyMathBufferingContext(
 {
 }
 
-void SAL_CALL LazyMathBufferingContext::startFastElement(
+void LazyMathBufferingContext::startFastElement(
         sal_Int32 const nElement,
         uno::Reference<xml::sax::XFastAttributeList> const& xAttrs)
 {
@@ -71,7 +71,7 @@ void SAL_CALL LazyMathBufferingContext::startFastElement(
     m_OpenElements.push_back(nElement);
 }
 
-void SAL_CALL LazyMathBufferingContext::endFastElement(sal_Int32 const nElement)
+void LazyMathBufferingContext::endFastElement(sal_Int32 const nElement)
 {
     m_OpenElements.pop_back();
     if (0 < m_OpenElements.size()) // ignore a14:m
@@ -83,14 +83,14 @@ void SAL_CALL LazyMathBufferingContext::endFastElement(sal_Int32 const nElement)
     }
 }
 
-uno::Reference<xml::sax::XFastContextHandler> SAL_CALL
+uno::Reference<xml::sax::XFastContextHandler>
 LazyMathBufferingContext::createFastChildContext(sal_Int32 const,
         uno::Reference<xml::sax::XFastAttributeList> const&)
 {
     return this;
 }
 
-void SAL_CALL LazyMathBufferingContext::characters(OUString const& rChars)
+void LazyMathBufferingContext::characters(OUString const& rChars)
 {
     if (0 < m_OpenElements.size()) // ignore a14:m
     {

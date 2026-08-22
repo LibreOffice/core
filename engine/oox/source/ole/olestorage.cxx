@@ -59,13 +59,13 @@ public:
                             const Reference< XNameContainer >& rxStorage,
                             OUString aElementName );
 
-    virtual void SAL_CALL seek( sal_Int64 nPos ) override;
-    virtual sal_Int64 SAL_CALL getPosition() override;
-    virtual sal_Int64 SAL_CALL getLength() override;
+    virtual void seek( sal_Int64 nPos ) override;
+    virtual sal_Int64 getPosition() override;
+    virtual sal_Int64 getLength() override;
 
-    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& rData ) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL closeOutput() override;
+    virtual void writeBytes( const Sequence< sal_Int8 >& rData ) override;
+    virtual void flush() override;
+    virtual void closeOutput() override;
 
 private:
     /// @throws IOException
@@ -97,37 +97,37 @@ OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContex
     }
 }
 
-void SAL_CALL OleOutputStream::seek( sal_Int64 nPos )
+void OleOutputStream::seek( sal_Int64 nPos )
 {
     ensureSeekable();
     mxSeekable->seek( nPos );
 }
 
-sal_Int64 SAL_CALL OleOutputStream::getPosition()
+sal_Int64 OleOutputStream::getPosition()
 {
     ensureSeekable();
     return mxSeekable->getPosition();
 }
 
-sal_Int64 SAL_CALL OleOutputStream::getLength()
+sal_Int64 OleOutputStream::getLength()
 {
     ensureSeekable();
     return mxSeekable->getLength();
 }
 
-void SAL_CALL OleOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
+void OleOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
 {
     ensureConnected();
     mxOutStrm->writeBytes( rData );
 }
 
-void SAL_CALL OleOutputStream::flush()
+void OleOutputStream::flush()
 {
     ensureConnected();
     mxOutStrm->flush();
 }
 
-void SAL_CALL OleOutputStream::closeOutput()
+void OleOutputStream::closeOutput()
 {
     ensureConnected();
     ensureSeekable();

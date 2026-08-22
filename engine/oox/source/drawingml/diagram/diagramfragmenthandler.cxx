@@ -43,7 +43,7 @@ DiagramDataFragmentHandler::~DiagramDataFragmentHandler( ) noexcept
 
 }
 
-void SAL_CALL DiagramDataFragmentHandler::endDocument()
+void DiagramDataFragmentHandler::endDocument()
 {
 
 }
@@ -78,7 +78,7 @@ DiagramLayoutFragmentHandler::~DiagramLayoutFragmentHandler( ) noexcept
 
 }
 
-void SAL_CALL DiagramLayoutFragmentHandler::endDocument()
+void DiagramLayoutFragmentHandler::endDocument()
 {
 
 }

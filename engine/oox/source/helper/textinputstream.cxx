@@ -42,11 +42,11 @@ class UnoBinaryInputStream : public ::cppu::WeakImplHelper< XInputStream >
 public:
     explicit            UnoBinaryInputStream( BinaryInputStream& rInStrm );
 
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
-    virtual sal_Int32 SAL_CALL available() override;
-    virtual void SAL_CALL closeInput() override;
+    virtual sal_Int32 readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead ) override;
+    virtual void skipBytes( sal_Int32 nBytesToSkip ) override;
+    virtual sal_Int32 available() override;
+    virtual void closeInput() override;
 
 private:
     /// @throws NotConnectedException
@@ -61,31 +61,31 @@ UnoBinaryInputStream::UnoBinaryInputStream( BinaryInputStream& rInStrm ) :
 {
 }
 
-sal_Int32 SAL_CALL UnoBinaryInputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+sal_Int32 UnoBinaryInputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
 {
     ensureConnected();
     return mpInStrm->readData( rData, nBytesToRead );
 }
 
-sal_Int32 SAL_CALL UnoBinaryInputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+sal_Int32 UnoBinaryInputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
 {
     ensureConnected();
     return mpInStrm->readData( rData, nMaxBytesToRead );
 }
 
-void SAL_CALL UnoBinaryInputStream::skipBytes( sal_Int32 nBytesToSkip )
+void UnoBinaryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     ensureConnected();
     mpInStrm->skip( nBytesToSkip );
 }
 
-sal_Int32 SAL_CALL UnoBinaryInputStream::available()
+sal_Int32 UnoBinaryInputStream::available()
 {
     ensureConnected();
     throw RuntimeException( u"Functionality not supported"_ustr, Reference< XInputStream >() );
 }
 
-void SAL_CALL UnoBinaryInputStream::closeInput()
+void UnoBinaryInputStream::closeInput()
 {
     ensureConnected();
     mpInStrm->close();

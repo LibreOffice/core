@@ -41,13 +41,13 @@ public:
     explicit            FastTokenHandler() = default;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& rServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XFastTokenHandler
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getUTF8Identifier( sal_Int32 nToken ) override;
+    virtual sal_Int32 getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
 
     // Much faster direct C++ shortcut to the method that matters
     virtual sal_Int32 getTokenDirect(std::string_view token) const override;

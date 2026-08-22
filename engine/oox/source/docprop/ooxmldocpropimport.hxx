@@ -37,19 +37,19 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& rServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XOOXMLDocumentPropertiesImporter
-    virtual void SAL_CALL importProperties(
+    virtual void importProperties(
                             const css::uno::Reference< css::embed::XStorage >& rxSource,
                             const css::uno::Reference< css::document::XDocumentProperties >& rxDocumentProperties ) override;
-    virtual css::uno::Reference < css::io::XInputStream > SAL_CALL getCorePropertiesStream(
+    virtual css::uno::Reference < css::io::XInputStream > getCorePropertiesStream(
         const css::uno::Reference< css::embed::XStorage >& rxSource) override;
-    virtual css::uno::Reference < css::io::XInputStream > SAL_CALL getExtendedPropertiesStream(
+    virtual css::uno::Reference < css::io::XInputStream > getExtendedPropertiesStream(
         const css::uno::Reference< css::embed::XStorage >& rxSource) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > SAL_CALL getCustomPropertiesStreams(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > getCustomPropertiesStreams(
         const css::uno::Reference< css::embed::XStorage >& rxSource) override;
 
 private:

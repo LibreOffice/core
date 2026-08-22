@@ -68,23 +68,23 @@ FilterDetectDocHandler::~FilterDetectDocHandler()
 {
 }
 
-void SAL_CALL FilterDetectDocHandler::startDocument()
+void FilterDetectDocHandler::startDocument()
 {
 }
 
-void SAL_CALL FilterDetectDocHandler::endDocument()
+void FilterDetectDocHandler::endDocument()
 {
 }
 
-void SAL_CALL FilterDetectDocHandler::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
+void FilterDetectDocHandler::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
 {
 }
 
-void SAL_CALL FilterDetectDocHandler::setDocumentLocator( const Reference<XLocator>& /*xLocator*/ )
+void FilterDetectDocHandler::setDocumentLocator( const Reference<XLocator>& /*xLocator*/ )
 {
 }
 
-void SAL_CALL FilterDetectDocHandler::startFastElement(
+void FilterDetectDocHandler::startFastElement(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rAttribs )
 {
     AttributeList aAttribs( rAttribs );
@@ -130,34 +130,34 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
     maContextStack.push_back( nElement );
 }
 
-void SAL_CALL FilterDetectDocHandler::startUnknownElement(
+void FilterDetectDocHandler::startUnknownElement(
     const OUString& /*Namespace*/, const OUString& /*Name*/, const Reference<XFastAttributeList>& /*Attribs*/ )
 {
 }
 
-void SAL_CALL FilterDetectDocHandler::endFastElement( sal_Int32 /*nElement*/ )
+void FilterDetectDocHandler::endFastElement( sal_Int32 /*nElement*/ )
 {
     maContextStack.pop_back();
 }
 
-void SAL_CALL FilterDetectDocHandler::endUnknownElement(
+void FilterDetectDocHandler::endUnknownElement(
     const OUString& /*Namespace*/, const OUString& /*Name*/ )
 {
 }
 
-Reference<XFastContextHandler> SAL_CALL FilterDetectDocHandler::createFastChildContext(
+Reference<XFastContextHandler> FilterDetectDocHandler::createFastChildContext(
     sal_Int32 /*Element*/, const Reference<XFastAttributeList>& /*Attribs*/ )
 {
     return this;
 }
 
-Reference<XFastContextHandler> SAL_CALL FilterDetectDocHandler::createUnknownChildContext(
+Reference<XFastContextHandler> FilterDetectDocHandler::createUnknownChildContext(
     const OUString& /*Namespace*/, const OUString& /*Name*/, const Reference<XFastAttributeList>& /*Attribs*/)
 {
     return this;
 }
 
-void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
+void FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 {
 }
 
@@ -473,24 +473,24 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( comphelper::S
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 
-OUString SAL_CALL FilterDetect::getImplementationName()
+OUString FilterDetect::getImplementationName()
 {
     return u"com.sun.star.comp.oox.FormatDetector"_ustr;
 }
 
-bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
+bool FilterDetect::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames()
+Sequence< OUString > FilterDetect::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
 // com.sun.star.document.XExtendedFilterDetection interface -------------------
 
-OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq )
+OUString FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq )
 {
     OUString aFilterName;
     comphelper::SequenceAsHashMap aMediaDescriptor(rMediaDescSeq);

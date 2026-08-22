@@ -35,7 +35,7 @@ public:
                             XmlFilterBase& rFilter,
                             const RelationsRef& xRelations );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
                         createFastChildContext(
                             sal_Int32 nElement,
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) override;

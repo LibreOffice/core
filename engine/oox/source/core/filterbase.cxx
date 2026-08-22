@@ -399,19 +399,19 @@ bool FilterBase::importBinaryData( StreamDataSequence & orDataSeq, const OUStrin
 
 // com.sun.star.lang.XServiceInfo interface
 
-bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName )
+bool FilterBase::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames()
+Sequence< OUString > FilterBase::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr, u"com.sun.star.document.ExportFilter"_ustr };
 }
 
 // com.sun.star.lang.XInitialization interface
 
-void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
+void FilterBase::initialize( const Sequence< Any >& rArgs )
 {
     if( rArgs.getLength() >= 2 ) try
     {
@@ -447,7 +447,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
 
 // com.sun.star.document.XImporter interface
 
-void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument )
+void FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument )
 {
     mxImpl->setDocumentModel( rxDocument );
     mxImpl->meDirection = FILTERDIRECTION_IMPORT;
@@ -455,7 +455,7 @@ void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDo
 
 // com.sun.star.document.XExporter interface
 
-void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument )
+void FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument )
 {
     mxImpl->setDocumentModel( rxDocument );
     mxImpl->meDirection = FILTERDIRECTION_EXPORT;
@@ -463,7 +463,7 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
 
 // com.sun.star.document.XFilter interface
 
-bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq )
+bool FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq )
 {
     if( !mxImpl->mxModel.is() || !mxImpl->mxModelFactory.is() || (mxImpl->meDirection == FILTERDIRECTION_UNKNOWN) )
         throw RuntimeException();
@@ -505,7 +505,7 @@ bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq
     return bRet;
 }
 
-void SAL_CALL FilterBase::cancel()
+void FilterBase::cancel()
 {
 }
 

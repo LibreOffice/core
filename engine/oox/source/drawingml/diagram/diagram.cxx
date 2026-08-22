@@ -391,7 +391,7 @@ void SmartArtDiagram::writeDiagramReducedOOXData(css::uno::Reference<css::io::XO
         virtual bool exportDocument() override { return true; }
 
     private:
-        virtual OUString SAL_CALL getImplementationName() override { return EMPTY_OUSTRING; }
+        virtual OUString getImplementationName() override { return EMPTY_OUSTRING; }
         oox::drawingml::ThemePtr mpTheme;
     };
 

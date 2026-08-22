@@ -49,10 +49,10 @@ public:
 
     // com.sun.star.sax.XLocator interface
 
-    virtual sal_Int32 SAL_CALL getColumnNumber() override;
-    virtual sal_Int32 SAL_CALL getLineNumber() override;
-    virtual OUString SAL_CALL getPublicId() override;
-    virtual OUString SAL_CALL getSystemId() override;
+    virtual sal_Int32 getColumnNumber() override;
+    virtual sal_Int32 getLineNumber() override;
+    virtual OUString getPublicId() override;
+    virtual OUString getSystemId() override;
 
 private:
     RecordParser*           mpParser;
@@ -69,23 +69,23 @@ void Locator::checkDispose()
         throw DisposedException();
 }
 
-sal_Int32 SAL_CALL Locator::getColumnNumber()
+sal_Int32 Locator::getColumnNumber()
 {
     return -1;
 }
 
-sal_Int32 SAL_CALL Locator::getLineNumber()
+sal_Int32 Locator::getLineNumber()
 {
     return -1;
 }
 
-OUString SAL_CALL Locator::getPublicId()
+OUString Locator::getPublicId()
 {
     checkDispose();
     return OUString();
 }
 
-OUString SAL_CALL Locator::getSystemId()
+OUString Locator::getSystemId()
 {
     checkDispose();
     return mpParser->getInputSource().maSystemId;
