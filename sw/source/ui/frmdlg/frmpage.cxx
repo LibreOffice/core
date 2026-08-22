@@ -102,9 +102,9 @@ namespace {
 enum class LB {
     NONE                = 0x00000000L,
     Frame               = 0x00000001L,  // text region of the paragraph
-    PrintArea           = 0x00000002L,  // text region of the paragraph + indentions
+    PrintArea           = 0x00000002L,  // text region of the paragraph + indents
     VertFrame           = 0x00000004L,  // vertical text region of the paragraph
-    VertPrintArea       = 0x00000008L,  // vertical text region of the paragraph + indentions
+    VertPrintArea       = 0x00000008L,  // vertical text region of the paragraph + indents
     RelFrameLeft        = 0x00000010L,  // left paragraph edge
     RelFrameRight       = 0x00000020L,  // right paragraph edge
 

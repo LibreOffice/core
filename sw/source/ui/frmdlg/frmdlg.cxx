@@ -184,7 +184,7 @@ void SwFrameDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
         rPage.PageCreated(aSet);
     }
     // inits for Area and Transparency TabPages
-    // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+    // The selection attribute lists (XPropertyList subclasses, e.g. XColorList for
     // the color table) need to be added as items (e.g. SvxColorListItem) to make
     // these pages find the needed attributes for fill style suggestions.
     // These are set in preparation to trigger this dialog (FN_FORMAT_FRAME_DLG and

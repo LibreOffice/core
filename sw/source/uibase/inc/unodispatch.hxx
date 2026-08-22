@@ -50,7 +50,7 @@ class SwXDispatchProviderInterceptor final : public cppu::WeakImplHelper
 
 //    ::osl::Mutex                     m_aMutex;#102295# solar mutex has to be used currently
 
-    // the component which's dispatches we're intercepting
+    // the component whose dispatches we're intercepting
     css::uno::Reference< css::frame::XDispatchProviderInterception>   m_xIntercepted;
 
     // chaining

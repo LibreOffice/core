@@ -177,7 +177,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     }
 
     auto lclSizePixelToLogic = [this](Size szs) {
-        // In LOK without tiled annotations, SwAnnotationWin desn't have the
+        // In LOK without tiled annotations, SwAnnotationWin doesn't have the
         // right conversion when printing to PDF but mxSidebarTextControl does
         if (comphelper::LibreOfficeKit::isActive()
             && !comphelper::LibreOfficeKit::isTiledAnnotations())
@@ -187,7 +187,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     };
 
     auto lclPointPixelToLogic = [this](Point pnt) {
-        // In LOK without tiled annotations, SwAnnotationWin desn't have the
+        // In LOK without tiled annotations, SwAnnotationWin doesn't have the
         // right conversion when printing to PDF but mxSidebarTextControl does
         if (comphelper::LibreOfficeKit::isActive()
             && !comphelper::LibreOfficeKit::isTiledAnnotations())

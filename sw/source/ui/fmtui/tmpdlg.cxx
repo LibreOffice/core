@@ -293,7 +293,7 @@ void SwTemplateDlgController::RefreshInputSet()
 
 void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage )
 {
-    // set style's and metric's names
+    // set style and metric names
     UIName sNumCharFormat, sBulletCharFormat;
     SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_NUM_LEVEL, sNumCharFormat);
     SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_BULLET_LEVEL, sBulletCharFormat);
@@ -435,7 +435,7 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
         rPage.PageCreated(aSet);
     }
     // inits for Area and Transparency TabPages
-    // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+    // The selection attribute lists (XPropertyList subclasses, e.g. XColorList for
     // the color table) need to be added as items (e.g. SvxColorTableItem) to make
     // these pages find the needed attributes for fill style suggestions.
     // These are added in SwDocStyleSheet::GetItemSet() for the SfxStyleFamily::Para on
