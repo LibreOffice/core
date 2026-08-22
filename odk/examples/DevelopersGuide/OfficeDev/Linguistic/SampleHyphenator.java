@@ -214,7 +214,7 @@ public class SampleHyphenator extends ComponentBase implements
             return null;
 
         // linguistic is currently not allowed to throw exceptions
-        // thus we return null fwhich means 'word cannot be hyphenated'
+        // thus we return null which means 'word cannot be hyphenated'
         if (!hasLocale( aLocale ))
             return null;
 

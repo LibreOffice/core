@@ -58,7 +58,7 @@ import java.net.*;
  *
  * There exist some other helper functionality too, which
  * doesn't use or demonstrate the office api:
- *      (a) getting file names by using a file chosser
+ *      (a) getting file names by using a file chooser
  */
 public class FunctionHelper
 {
@@ -881,7 +881,7 @@ public class FunctionHelper
         int           nDecision = JFileChooser.CANCEL_OPTION;
         JFileChooser  aChooser  = null;
 
-        // set last visited directory on new file chosser
+        // set last visited directory on new file chooser
         // (if this information is available)
         if( maLastDir==null )
             aChooser = new JFileChooser();

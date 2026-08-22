@@ -252,7 +252,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
                 }
             }
 
-            // create new URL to address the combox box
+            // create a new URL to address the combobox
             URL aCmdURL;
             aCmdURL.Path = "ComboboxCmd";
             aCmdURL.Protocol = "vnd.demo.complextoolbarcontrols.demoaddon:";

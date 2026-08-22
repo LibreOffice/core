@@ -259,7 +259,7 @@ public class HelloTextTableShape {
 
     protected void useDraw() throws java.lang.Exception {
         try {
-            //create new draw document and insert ractangle shape
+            //create new draw document and insert rectangle shape
             XComponent xDrawComponent = newDocComponent("sdraw");
             XDrawPagesSupplier xDrawPagesSupplier =
                 UnoRuntime.queryInterface(

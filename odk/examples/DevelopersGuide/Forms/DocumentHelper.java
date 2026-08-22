@@ -157,7 +157,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** creates a form which is a sibling of the given form
         @param aForm
-            A sinbling of the to be created form.
+            A sibling of the to be created form.
 
         @param sInitialName
             The initial name of the form. May be null, in this case the default (which

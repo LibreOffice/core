@@ -349,7 +349,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * These functions are used to build a list of interceptor objects
      * connected in both ways.
      * Searching for a right interceptor is made by forwarding any request
-     * from toppest master to lowest slave of this hierarchy.
+     * from topmost master to lowest slave of this hierarchy.
      * If an interceptor wish to handle the request he can break that
      * and return himself as a dispatcher.
      */

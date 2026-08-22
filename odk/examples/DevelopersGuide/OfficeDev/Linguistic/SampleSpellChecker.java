@@ -315,7 +315,7 @@ public class SampleSpellChecker extends ComponentBase implements
             return null;
 
         // linguistic is currently not allowed to throw exceptions
-        // thus we return null fwhich means 'word cannot be spelled'
+        // thus we return null which means 'word cannot be spelled'
         if (!hasLocale( aLocale ))
             return null;
 

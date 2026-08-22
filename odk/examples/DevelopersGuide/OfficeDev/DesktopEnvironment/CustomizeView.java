@@ -121,7 +121,7 @@ public class CustomizeView extends    JPanel
 
     /**
      * set new frame for this view
-     * We start listening for frame action/status and click events instandly.
+     * We start listening for frame action/status and click events instantly.
      * If an event occurs, we use it to synchronize our controls
      * with states of a (maybe) new document view of this frame.
      *

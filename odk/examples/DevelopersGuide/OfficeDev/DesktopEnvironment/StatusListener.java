@@ -55,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
  *
  * Further we are frame action listener too.
  * So we can update our status listener connections and
- * internal holded dispatch object automatically.
+ * internal held dispatch object automatically.
  *
  * Another reason for such extra class for listening:
  * Most listener callbacks are asynchronous [one-way] requests.

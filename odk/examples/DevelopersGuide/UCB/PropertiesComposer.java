@@ -83,7 +83,7 @@ public class PropertiesComposer {
      * See Constructor.
      *
      *@return Object[]  Returns null or instance object of com.sun.star.uno.Any
-     *                  if values successfully seted, properties otherwise
+     *                  if values successfully set, properties otherwise
      */
     public Object[] setProperties()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
@@ -96,7 +96,7 @@ public class PropertiesComposer {
      *  Set values of the properties.
      *
      *@return Object[]  Returns null or instance object of com.sun.star.uno.Any
-     *                  if values successfully seted, properties otherwise
+     *                  if values successfully set, properties otherwise
      */
     public Object[] setProperties( ArrayList<String> properties, ArrayList<String> propertiesValues )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {

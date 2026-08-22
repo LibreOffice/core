@@ -179,7 +179,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         com.sun.star.beans.NamedValue aDispatchResult = null;
         com.sun.star.beans.NamedValue aSaveRequest    = null;
 
-        // SaveArguments will be made everytimes!
+        // SaveArguments will be made every time!
         c = 1;
 
         if (lJobConfig==null)

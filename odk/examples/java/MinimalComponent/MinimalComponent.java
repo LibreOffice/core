@@ -57,7 +57,7 @@ public class MinimalComponent {
         private static final String __serviceName =
         "org.openoffice.MinimalComponent";
 
-        /** The initial component contextr, that gives access to
+        /** The initial component context, that gives access to
          * the service manager, supported singletons, ...
          * It's often later used
          */

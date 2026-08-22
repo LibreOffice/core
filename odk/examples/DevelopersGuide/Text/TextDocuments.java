@@ -856,7 +856,7 @@ public class TextDocuments {
                 // We want the background to be light blue
                 xTableProps.setPropertyValue( "BackColor", Integer.valueOf(13421823));
 
-                // Inser the table into the document
+                // Insert the table into the document
                 mxDocText.insertTextContent( mxDocCursor, xTable, false);
 
                 // Get an XIndexAccess to all table rows
