@@ -494,14 +494,13 @@ KitProviderTransferable::KitProviderTransferable(const COKitClipboardProvider& r
     : m_aProvider(rProvider)
 {
     std::vector<datatransfer::DataFlavor> aFlavors;
-    char** ppMimeTypes = m_aProvider.getMimeTypes ? m_aProvider.getMimeTypes() : nullptr;
-    if (ppMimeTypes)
+    if (m_aProvider.getMimeTypes)
     {
-        for (size_t i = 0; ppMimeTypes[i]; ++i)
+        std::vector<std::string> aMimeTypes = m_aProvider.getMimeTypes();
+        for (size_t i = 0; i < aMimeTypes.size(); ++i)
         {
             datatransfer::DataFlavor aFlavor;
-            KitTransferable::initFlavourFromMime(aFlavor, OUString::fromUtf8(ppMimeTypes[i]));
-            free(ppMimeTypes[i]);
+            KitTransferable::initFlavourFromMime(aFlavor, OUString::fromUtf8(aMimeTypes[i]));
 
             // Several platform types can map to one flavor (the plain-text
             // variants); keep the first.
@@ -511,7 +510,6 @@ KitProviderTransferable::KitProviderTransferable(const COKitClipboardProvider& r
             if (!bSeen)
                 aFlavors.push_back(aFlavor);
         }
-        free(ppMimeTypes);
     }
     m_aFlavors = comphelper::containerToSequence(aFlavors);
 }
@@ -538,22 +536,20 @@ cpo::uno::Any KitProviderTransferable::getTransferData(const datatransfer::DataF
     // on its own view.
     const int nSavedView = KitHelper::getCurrentView();
 
-    char* pData = nullptr;
-    size_t nSize = 0;
-    const bool bOk = m_aProvider.getDataForMimeType(aWireMime.getStr(), &pData, &nSize);
+    std::vector<char> aData;
+    const bool bOk = m_aProvider.getDataForMimeType(aWireMime.getStr(), &aData);
 
     if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
         KitHelper::setView(nSavedView);
 
     cpo::uno::Any aRet;
-    if (bOk && pData)
+    if (bOk)
     {
         if (bText)
-            aRet <<= OUString(pData, nSize, RTL_TEXTENCODING_UTF8);
+            aRet <<= OUString(aData.data(), aData.size(), RTL_TEXTENCODING_UTF8);
         else
-            aRet <<= cpo::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(pData), nSize);
+            aRet <<= cpo::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aData.data()), aData.size());
     }
-    free(pData);
 
     m_aCache.emplace(rFlavor.MimeType, aRet);
     return aRet;

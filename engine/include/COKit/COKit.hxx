@@ -54,18 +54,17 @@ struct COKitClipboardProvider
     bool (*ownsClipboard)(void);
 
     /**
-     * Paste: return a nullptr-terminated, malloc'd array of malloc'd mime-type
-     * strings the platform clipboard currently offers. No bytes are read. The
-     * engine takes ownership and frees each string and the array.
+     * Paste: return a vector of mime-type
+     * strings the platform clipboard currently offers. No bytes are read.
      */
-    char** (*getMimeTypes)(void);
+    std::vector<std::string> (*getMimeTypes)(void);
 
     /**
      * Paste: fetch the bytes for one mime type. On success set *pOutData to a
-     * malloc'd buffer and *pOutSize to its length and return true; on failure
-     * return false. The engine frees *pOutData.
+     * vector of data and return true; on failure
+     * return false.
      */
-    bool (*getDataForMimeType)(const char* pMimeType, char** pOutData, size_t* pOutSize);
+    bool (*getDataForMimeType)(const char* pMimeType, std::vector<char>* pOutData);
 };
 
 // getDocumentType is part of the API whether or not the unstable half is asked for, so the

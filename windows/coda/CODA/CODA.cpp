@@ -3069,25 +3069,25 @@ static bool clipboardProviderOwns()
     return weOwnTheClipboard;
 }
 
-static char** clipboardProviderGetMimeTypes()
+static std::vector<std::string> clipboardProviderGetMimeTypes()
 {
     // Reading needs no owner window, so open the clipboard for the current "task".
     //
     // (Task is an 16-bit Windows term still used in documentation for the clipboard API that is
     // basically unchanged since then. In current Windows, it means thread, more or less.)
     if (!try_open_clipboard(NULL))
-        return NULL;
+        return {};
 
     UINT format = 0;
 
-    std::vector<char*> mimeTypes;
+    std::vector<std::string> mimeTypes;
     std::set<std::string> doneMimeTypes;
 
     while ((format = EnumClipboardFormats(format)) != 0)
     {
         if (format == CF_UNICODETEXT)
         {
-            mimeTypes.push_back(_strdup("text/plain;charset=utf-8"));
+            mimeTypes.push_back("text/plain;charset=utf-8");
             doneMimeTypes.insert("text/plain;charset=utf-8");
         }
         else
@@ -3097,26 +3097,17 @@ static char** clipboardProviderGetMimeTypes()
             if (mimeType != "" && doneMimeTypes.count(mimeType) == 0)
             {
                 doneMimeTypes.insert(mimeType);
-                mimeTypes.push_back(_strdup(mimeType.c_str()));
+                mimeTypes.push_back(mimeType);
             }
         }
     }
 
     CloseClipboard();
 
-    char** result = (char**)std::malloc(sizeof(char*) * (mimeTypes.size() + 1));
-
-    for (int i = 0; i < mimeTypes.size(); i++)
-    {
-        result[i] = mimeTypes[i];
-        mimeTypes[i] = nullptr;
-    }
-    result[mimeTypes.size()] = nullptr;
-
-    return result;
+    return mimeTypes;
 }
 
-static bool clipboardProviderGetData(const char* pMimeType, char** pOutData, size_t* pOutSize)
+static bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* pOutData)
 {
     auto formats = clipboard_formats_for_MIME_type(pMimeType);
 
@@ -3141,9 +3132,8 @@ static bool clipboardProviderGetData(const char* pMimeType, char** pOutData, siz
 
             std::string text = Util::wide_string_to_string(std::wstring(wtext));
             GlobalUnlock(handle);
-            *pOutData = (char*)std::malloc(text.length());
-            *pOutSize = text.length();
-            std::memcpy(*pOutData, text.c_str(), text.length());
+            (*pOutData).resize(text.length());
+            std::memcpy((*pOutData).data(), text.c_str(), text.length());
 
             CloseClipboard();
 
@@ -3164,9 +3154,8 @@ static bool clipboardProviderGetData(const char* pMimeType, char** pOutData, siz
             source = fragment.c_str();
             size = std::strlen(source);
         }
-        *pOutData = (char*)std::malloc(size);
-        *pOutSize = size;
-        std::memcpy(*pOutData, source, size);
+        (*pOutData).resize(size);
+        std::memcpy((*pOutData).data(), source, size);
         GlobalUnlock(handle);
         CloseClipboard();
 
