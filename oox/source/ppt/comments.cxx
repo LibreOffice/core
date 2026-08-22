@@ -16,6 +16,26 @@
 
 namespace oox::ppt
 {
+OUString ModernCommentAuthorList::getName(std::u16string_view rAuthorId) const
+{
+    for (auto const& rAuthor : maAuthors)
+    {
+        if (rAuthor.maId == rAuthorId)
+            return rAuthor.maName;
+    }
+    return OUString();
+}
+
+OUString ModernCommentAuthorList::getInitials(std::u16string_view rAuthorId) const
+{
+    for (auto const& rAuthor : maAuthors)
+    {
+        if (rAuthor.maId == rAuthorId)
+            return rAuthor.maInitials;
+    }
+    return OUString();
+}
+
 void CommentAuthorList::setValues(const CommentAuthorList& list)
 {
     for (auto const& author : list.cmAuthorLst)

@@ -85,6 +85,8 @@ private:
 
     CommentAuthorList           maAuthorList;
     bool                        mbCommentAuthorsRead; // read commentAuthors.xml only once
+    ModernCommentAuthorList maModernAuthorList;
+    bool mbModernCommentAuthorsRead = false; // read authors.xml only once
 
     bool mbEmbedTrueTypeFonts = false;
     bool mbInSectionExtension = false;

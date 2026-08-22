@@ -706,6 +706,7 @@ audioCd
 audioFile
 author
 authorId
+authorLst
 authors
 auto
 autoAdjust
@@ -4470,6 +4471,8 @@ repeat
 repeatCount
 repeatDur
 repl
+reply
+replyLst
 resId
 reservationPassword
 resizeGraphics
