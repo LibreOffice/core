@@ -28,6 +28,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include "itemholder1.hxx"
 
@@ -111,30 +112,39 @@ public:
 
 constexpr OUStringLiteral ROOTNODE_SYSLOCALE = u"Setup/L10N";
 
-constexpr OUString PROPERTYNAME_LOCALE = u"ooSetupSystemLocale"_ustr;
-constexpr OUString PROPERTYNAME_UILOCALE = u"ooLocale"_ustr;
-constexpr OUString PROPERTYNAME_CURRENCY = u"ooSetupCurrency"_ustr;
-constexpr OUString PROPERTYNAME_DECIMALSEPARATOR = u"DecimalSeparatorAsLocale"_ustr;
-constexpr OUString PROPERTYNAME_DATEPATTERNS = u"DateAcceptancePatterns"_ustr;
-constexpr OUString PROPERTYNAME_IGNORELANGCHANGE = u"IgnoreLanguageChange"_ustr;
+namespace {
+    enum class PropertyHandle {
+        Locale,
+        UILocale,
+        Currency,
+        DecimalSeparator,
+        DatePatterns,
+        IgnoreLangChange,
+        LAST = IgnoreLangChange
+    };
+}
 
-#define PROPERTYHANDLE_LOCALE           0
-#define PROPERTYHANDLE_UILOCALE         1
-#define PROPERTYHANDLE_CURRENCY         2
-#define PROPERTYHANDLE_DECIMALSEPARATOR 3
-#define PROPERTYHANDLE_DATEPATTERNS     4
-#define PROPERTYHANDLE_IGNORELANGCHANGE 5
+
+constexpr o3tl::enumarray<PropertyHandle, OUString> PropertyNames =
+{
+    u"ooSetupSystemLocale"_ustr,
+    u"ooLocale"_ustr,
+    u"ooSetupCurrency"_ustr,
+    u"DecimalSeparatorAsLocale"_ustr,
+    u"DateAcceptancePatterns"_ustr,
+    u"IgnoreLanguageChange"_ustr
+};
 
 Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
     return Sequence< OUString >
     {
-        PROPERTYNAME_LOCALE,
-        PROPERTYNAME_UILOCALE,
-        PROPERTYNAME_CURRENCY,
-        PROPERTYNAME_DECIMALSEPARATOR,
-        PROPERTYNAME_DATEPATTERNS,
-        PROPERTYNAME_IGNORELANGCHANGE
+        PropertyNames[PropertyHandle::Locale],
+        PropertyNames[PropertyHandle::UILocale],
+        PropertyNames[PropertyHandle::Currency],
+        PropertyNames[PropertyHandle::DecimalSeparator],
+        PropertyNames[PropertyHandle::DatePatterns],
+        PropertyNames[PropertyHandle::IgnoreLangChange]
     };
 }
 
@@ -165,9 +175,9 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
         {
             if ( pValues[nProp].hasValue() )
             {
-                switch ( nProp )
+                switch ( static_cast<PropertyHandle>(nProp) )
                 {
-                case PROPERTYHANDLE_LOCALE :
+                case PropertyHandle::Locale :
                     {
                         OUString aStr;
                         if ( pValues[nProp] >>= aStr )
@@ -179,7 +189,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         m_bROLocale = pROStates[nProp];
                     }
                     break;
-                case PROPERTYHANDLE_UILOCALE :
+                case PropertyHandle::UILocale :
                     {
                         OUString aStr;
                         if ( pValues[nProp] >>= aStr )
@@ -191,7 +201,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         m_bROUILocale = pROStates[nProp];
                     }
                     break;
-                case PROPERTYHANDLE_CURRENCY :
+                case PropertyHandle::Currency :
                     {
                         OUString aStr;
                         if ( pValues[nProp] >>= aStr )
@@ -203,7 +213,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         m_bROCurrency = pROStates[nProp];
                     }
                     break;
-                case  PROPERTYHANDLE_DECIMALSEPARATOR:
+                case  PropertyHandle::DecimalSeparator :
                     {
                         bool bValue = false;
                         if ( pValues[nProp] >>= bValue )
@@ -215,7 +225,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         m_bRODecimalSeparator = pROStates[nProp];
                         }
                     break;
-                case PROPERTYHANDLE_DATEPATTERNS :
+                case PropertyHandle::DatePatterns :
                     {
                         OUString aStr;
                         if ( pValues[nProp] >>= aStr )
@@ -227,7 +237,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         m_bRODatePatterns = pROStates[nProp];
                     }
                     break;
-                case PROPERTYHANDLE_IGNORELANGCHANGE :
+                case PropertyHandle::IgnoreLangChange :
                     {
                         bool bValue = false;
                         if ( pValues[nProp] >>= bValue )
@@ -330,9 +340,9 @@ void SvtSysLocaleOptions_Impl::ImplCommit()
 
     for ( sal_Int32 nProp = 0; nProp < nOrgCount; nProp++ )
     {
-        switch ( nProp )
+        switch ( static_cast<PropertyHandle>(nProp) )
         {
-            case PROPERTYHANDLE_LOCALE :
+            case PropertyHandle::Locale :
                 {
                     if (!m_bROLocale)
                     {
@@ -342,7 +352,7 @@ void SvtSysLocaleOptions_Impl::ImplCommit()
                     }
                 }
                 break;
-            case PROPERTYHANDLE_UILOCALE :
+            case PropertyHandle::UILocale :
                 {
                     if (!m_bROUILocale)
                     {
@@ -352,7 +362,7 @@ void SvtSysLocaleOptions_Impl::ImplCommit()
                     }
                 }
                 break;
-            case PROPERTYHANDLE_CURRENCY :
+            case PropertyHandle::Currency :
                 {
                     if (!m_bROCurrency)
                     {
@@ -362,7 +372,7 @@ void SvtSysLocaleOptions_Impl::ImplCommit()
                     }
                 }
                 break;
-            case PROPERTYHANDLE_DECIMALSEPARATOR:
+            case PropertyHandle::DecimalSeparator :
                 if( !m_bRODecimalSeparator )
                 {
                     pNames[nRealCount] = aOrgNames[nProp];
@@ -370,7 +380,7 @@ void SvtSysLocaleOptions_Impl::ImplCommit()
                     ++nRealCount;
                 }
             break;
-            case PROPERTYHANDLE_DATEPATTERNS :
+            case PropertyHandle::DatePatterns :
                 if (!m_bRODatePatterns)
                 {
                     pNames[nRealCount] = aOrgNames[nProp];
@@ -378,7 +388,7 @@ void SvtSysLocaleOptions_Impl::ImplCommit()
                     ++nRealCount;
                 }
                 break;
-            case PROPERTYHANDLE_IGNORELANGCHANGE :
+            case PropertyHandle::IgnoreLangChange :
                 if (!m_bROIgnoreLanguageChange)
                 {
                     pNames[nRealCount] = aOrgNames[nProp];
@@ -495,7 +505,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
     sal_Int32 nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProp = 0; nProp < nCount; ++nProp )
     {
-        if( seqPropertyNames[nProp] == PROPERTYNAME_LOCALE )
+        if(seqPropertyNames[nProp] == PropertyNames[PropertyHandle::Locale])
         {
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Locale property type" );
             seqValues[nProp] >>= m_aLocaleString;
@@ -505,7 +515,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
                 nHint |= ConfigurationHints::Currency;
             MakeRealLocale();
         }
-        if( seqPropertyNames[nProp] == PROPERTYNAME_UILOCALE )
+        if(seqPropertyNames[nProp] == PropertyNames[PropertyHandle::UILocale])
         {
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Locale property type" );
             seqValues[nProp] >>= m_aUILocaleString;
@@ -513,24 +523,24 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
             nHint |= ConfigurationHints::UiLocale;
             MakeRealUILocale();
         }
-        else if( seqPropertyNames[nProp] == PROPERTYNAME_CURRENCY )
+        else if(seqPropertyNames[nProp] == PropertyNames[PropertyHandle::Currency])
         {
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Currency property type" );
             seqValues[nProp] >>= m_aCurrencyString;
             m_bROCurrency = seqROStates[nProp];
             nHint |= ConfigurationHints::Currency;
         }
-        else if( seqPropertyNames[nProp] == PROPERTYNAME_DECIMALSEPARATOR )
+        else if(seqPropertyNames[nProp] == PropertyNames[PropertyHandle::DecimalSeparator])
         {
             seqValues[nProp] >>= m_bDecimalSeparator;
             m_bRODecimalSeparator = seqROStates[nProp];
         }
-        else if( seqPropertyNames[nProp] == PROPERTYNAME_IGNORELANGCHANGE )
+        else if(seqPropertyNames[nProp] == PropertyNames[PropertyHandle::IgnoreLangChange] )
         {
             seqValues[nProp] >>= m_bIgnoreLanguageChange;
             m_bROIgnoreLanguageChange = seqROStates[nProp];
         }
-        else if( seqPropertyNames[nProp] == PROPERTYNAME_DATEPATTERNS )
+        else if(seqPropertyNames[nProp] == PropertyNames[PropertyHandle::DatePatterns])
         {
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "DatePatterns property type" );
             seqValues[nProp] >>= m_aDatePatternsString;
