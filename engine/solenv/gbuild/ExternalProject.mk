@@ -214,10 +214,9 @@ gb_ExternalProject_get_build_flags = $(call gb_LinkTarget__get_debugflags,Extern
 # gb_ExternalProject_get_link_flags project
 gb_ExternalProject_get_link_flags = $(LDFLAGS) $(USE_LD) $(gb_GCOV_LDFLAGS) $(call gb_LinkTarget__get_debugldflags,ExternalProject_$(1))
 
-# Passes the load-average limit of the running make on to a meson compile step.
-# It reads the -l value out of MAKEFLAGS and turns it into a meson option.
-# It expands to nothing when make runs without a -l limit.
-gb_MESON_LOAD_AVERAGE = $(if $(filter -l%,$(MAKEFLAGS)),--load-average $(patsubst -l%,%,$(filter -l%,$(MAKEFLAGS))))
+# Passes the configured load-average limit on to a meson compile step.
+# It expands to nothing when the build runs without a load limit.
+gb_MESON_LOAD_AVERAGE = $(if $(LOADLIMIT),--load-average $(LOADLIMIT))
 
 # Run a target command
 #

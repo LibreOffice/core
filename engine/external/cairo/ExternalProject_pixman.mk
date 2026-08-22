@@ -44,7 +44,7 @@ endef
 $(call gb_ExternalProject_get_state_target,pixman,build) :
 	$(call gb_Trace_StartRange,pixman,EXTERNAL)
 	$(file >$(gb_UnpackedTarball_workdir)/pixman/cross-file.txt,$(gb_pixman_cross_compile))
-	$(call gb_ExternalProject_run,build,\
+	+$(call gb_ExternalProject_run,build,\
 		export PIXMAP_CFLAGS="\
 			  $(if $(call gb_Module__symbols_enabled,pixman),$(gb_DEBUGINFO_FLAGS) ) \
 			  $(if $(filter EMSCRIPTEN,$(OS)),-O3 -pthread -msimd128 ) \
@@ -63,6 +63,7 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir \
+			$(gb_MESON_LOAD_AVERAGE) \
 			$(if $(verbose),--verbose) \
 			$(if $(filter MACOSX,$(OS)), \
 				&& install_name_tool -id @__________________________________________________OOO/libpixman-1.0.dylib \

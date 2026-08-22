@@ -77,7 +77,7 @@ endef
 $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(call gb_Trace_StartRange,cairo,EXTERNAL)
 	$(file >$(gb_UnpackedTarball_workdir)/cairo/cross-file.txt,$(gb_cairo_cross_compile))
-	$(call gb_ExternalProject_run,build,\
+	+$(call gb_ExternalProject_run,build,\
 		PYTHONWARNINGS= \
 		PKG_CONFIG_TOP_BUILD_DIR= \
 		PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:$(gb_UnpackedTarball_workdir)/pixman/builddir/meson-uninstalled" \
@@ -111,6 +111,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 			$(if $(filter LINUX FREEBSD,$(OS)),--prefix=$(gb_UnpackedTarball_workdir)/cairo/inst --libdir=lib) \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir \
+			$(gb_MESON_LOAD_AVERAGE) \
 			$(if $(verbose),--verbose) \
 			$(if $(filter LINUX FREEBSD,$(OS)), && $(MESON) install -C builddir) \
 			$(if $(filter MACOSX,$(OS)), \
