@@ -681,7 +681,7 @@ public:
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const = 0;
 
-    /// Access to the sections/headers/footres.
+    /// Access to the sections/headers/footers.
     virtual MSWordSections& Sections() const = 0;
 
     /// Determines if the import filter already quoted fields or not.
@@ -1038,7 +1038,7 @@ public:
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const override;
 
-    /// Access to the sections/headers/footres.
+    /// Access to the sections/headers/footers.
     virtual MSWordSections& Sections() const override;
 
     virtual bool PreferPageBreakBefore() const override { return true; }

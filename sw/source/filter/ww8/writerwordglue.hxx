@@ -60,7 +60,7 @@ namespace sw
             There are a number of places where the writer types are larger than
             the winword equivalents requiring a cast to silence warnings.  To
             avoid throwing away this useful information writer_cast is used to
-            identify where word's types are smaller than writers's.
+            identify where word's types are smaller than Writer's.
 
             Based on needed_cast it will compile time assert if the cast
             becomes unnecessary at any time in the future.

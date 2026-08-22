@@ -58,7 +58,7 @@ public:
                                const SvXMLUnitConverter& rUnitConverter,
                                const SvXMLNamespaceMap& rNamespaceMap );
 
-    /** This method is called when all attributes have benn processed. It
+    /** This method is called when all attributes have been processed. It
       * may be used to remove items that are incomplete */
     virtual void finished(SfxItemSet & rSet,
                           SvXMLUnitConverter const& rUnitConverter) const;

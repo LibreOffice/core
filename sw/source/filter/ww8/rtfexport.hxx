@@ -50,7 +50,7 @@ public:
     /// Access to the attribute output class.
     AttributeOutputBase& AttrOutput() const override;
 
-    /// Access to the sections/headers/footres.
+    /// Access to the sections/headers/footers.
     MSWordSections& Sections() const override;
 
     /// Access to the Rtf Sdr exporter.
