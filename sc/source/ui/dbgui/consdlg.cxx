@@ -228,7 +228,7 @@ void ScConsolidateDlg::FillAreaLists()
 }
 
 // Handover of a range within a table that has been selected by the mouse.
-// This range is then shown in the reference window as new selection.
+// This range is then shown in the reference window as the new selection.
 
 void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 {

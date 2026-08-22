@@ -106,11 +106,11 @@ void ScCsvGrid::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     weld::SetPointFont(rRefDevice, maHeaderFont);
     maHeaderFont = rRefDevice.GetFont();
 
-    // Because this is an always LeftToRight layout widget the initial size of
-    // this widget needs to be smaller than the size of the parent scrolling
-    // window (ScCsvTableBox ctor) because in RTL mode the alignment is against
-    // the right edge of the parent, and if larger than the scrolling window
-    // the left edge will be lost. If this widget is smaller than the scrolling
+    // Because this widget always uses a LeftToRight layout, its initial size
+    // needs to be smaller than the size of the parent scrolling window
+    // (ScCsvTableBox ctor) because in RTL mode the alignment is against the
+    // right edge of the parent, and if larger than the scrolling window the
+    // left edge will be lost. If this widget is smaller than the scrolling
     // window it is stretched to fit the parent and the problem doesn't arise.
     Size aInitialSize(10, 10);
     if (comphelper::LibreOfficeKit::isActive())

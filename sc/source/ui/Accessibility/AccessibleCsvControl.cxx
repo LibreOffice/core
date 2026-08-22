@@ -727,13 +727,13 @@ css::uno::Reference<css::accessibility::XAccessible> SAL_CALL ScAccessibleCsvRul
 
 // Grid =======================================================================
 
-/** Converts a grid columnm index to an API column index. */
+/** Converts a grid column index to an API column index. */
 static sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
 {
     return (nGridColumn != CSV_COLUMN_HEADER) ? static_cast< sal_Int32 >( nGridColumn + 1 ) : 0;
 }
 
-/** Converts an API columnm index to a ScCsvGrid column index. */
+/** Converts an API column index to a ScCsvGrid column index. */
 static sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 {
     return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : CSV_COLUMN_HEADER;

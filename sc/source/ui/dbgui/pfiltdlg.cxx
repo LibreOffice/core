@@ -479,8 +479,8 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, weld::ComboBox&, rEd, void )
     if ( &rEd == m_xEdVal2.get() ) pLb = m_xLbCond2.get();
     else if ( &rEd == m_xEdVal3.get() ) pLb = m_xLbCond3.get();
 
-    // if cond of the special values "empty"/"non-empty" was chosen only the
-    // =-operand makes sense:
+    // if the condition of the special values "empty"/"non-empty" was chosen,
+    // only the =-operand makes sense:
 
     if ( aStrEmpty == aStrVal || aStrNotEmpty == aStrVal )
     {
