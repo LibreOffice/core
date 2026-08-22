@@ -126,7 +126,7 @@ typedef struct _oslDateTime
 /** Get the current system time as TimeValue.
     @retval false if any error occurs.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_getSystemTime(
+SAL_DLLPUBLIC bool osl_getSystemTime(
         TimeValue* pTimeVal );
 
 
@@ -136,7 +136,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_getSystemTime(
 
     @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_getDateTimeFromTimeValue(
+SAL_DLLPUBLIC bool osl_getDateTimeFromTimeValue(
         const TimeValue* pTimeVal, oslDateTime* pDateTime );
 
 
@@ -146,7 +146,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_getDateTimeFromTimeValue(
 
     @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_getTimeValueFromDateTime(
+SAL_DLLPUBLIC bool osl_getTimeValueFromDateTime(
         const oslDateTime* pDateTime, TimeValue* pTimeVal );
 
 
@@ -156,7 +156,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_getTimeValueFromDateTime(
 
     @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_getLocalTimeFromSystemTime(
+SAL_DLLPUBLIC bool osl_getLocalTimeFromSystemTime(
         const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal );
 
 
@@ -166,7 +166,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_getLocalTimeFromSystemTime(
 
     @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_getSystemTimeFromLocalTime(
+SAL_DLLPUBLIC bool osl_getSystemTimeFromLocalTime(
         const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
 
 /** Set the timezone used by osl_getLocalTimeFromSystemTime and
@@ -175,18 +175,18 @@ SAL_DLLPUBLIC bool SAL_CALL osl_getSystemTimeFromLocalTime(
 
     @param[in] pTimezone IANA timezone ID (null-terminated ASCII string).
 */
-SAL_DLLPUBLIC void SAL_CALL osl_setTimezone(const char* pTimezone);
+SAL_DLLPUBLIC void osl_setTimezone(const char* pTimezone);
 
 /** Reset the timezone to the system default.
     Unsets the $TZ environment variable.
 */
-SAL_DLLPUBLIC void SAL_CALL osl_resetTimezone(void);
+SAL_DLLPUBLIC void osl_resetTimezone(void);
 
 /** Get the value of the global timer
     @return current timer value in milliseconds
  */
 
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
+SAL_DLLPUBLIC sal_uInt32 osl_getGlobalTimer(void);
 
 #ifdef __cplusplus
 }

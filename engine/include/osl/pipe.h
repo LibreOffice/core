@@ -65,7 +65,7 @@ typedef struct oslPipeImpl * oslPipe;
 
     @see osl_closePipe
 */
-SAL_DLLPUBLIC oslPipe SAL_CALL osl_createPipe(
+SAL_DLLPUBLIC oslPipe osl_createPipe(
         rtl_uString *strPipeName, oslPipeOptions Options, oslSecurity Security);
 
 /** Decreases the refcount of the pipe.
@@ -76,7 +76,7 @@ SAL_DLLPUBLIC oslPipe SAL_CALL osl_createPipe(
 
     @see osl_acquirePipe
  */
-SAL_DLLPUBLIC void    SAL_CALL osl_releasePipe(oslPipe Pipe);
+SAL_DLLPUBLIC void    osl_releasePipe(oslPipe Pipe);
 
 /** Increases the refcount of the pipe.
 
@@ -84,7 +84,7 @@ SAL_DLLPUBLIC void    SAL_CALL osl_releasePipe(oslPipe Pipe);
 
     @see osl_releasePipe
  */
-SAL_DLLPUBLIC void    SAL_CALL osl_acquirePipe(oslPipe Pipe);
+SAL_DLLPUBLIC void    osl_acquirePipe(oslPipe Pipe);
 
 /** Close the pipe.
 
@@ -94,25 +94,25 @@ SAL_DLLPUBLIC void    SAL_CALL osl_acquirePipe(oslPipe Pipe);
 
     @see osl_createPipe
  */
-SAL_DLLPUBLIC void    SAL_CALL osl_closePipe(oslPipe Pipe);
+SAL_DLLPUBLIC void    osl_closePipe(oslPipe Pipe);
 
 
-SAL_DLLPUBLIC oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe);
+SAL_DLLPUBLIC oslPipe osl_acceptPipe(oslPipe Pipe);
 
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe, const void* pBuffer, sal_Int32 BufferSize);
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe, void* pBuffer, sal_Int32 BufferSize);
+SAL_DLLPUBLIC sal_Int32 osl_sendPipe(oslPipe Pipe, const void* pBuffer, sal_Int32 BufferSize);
+SAL_DLLPUBLIC sal_Int32 osl_receivePipe(oslPipe Pipe, void* pBuffer, sal_Int32 BufferSize);
 
 /** Reads blocking from the pipe.
     @return Number of read bytes. If less than BufferSize, the pipe was closed.
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readPipe( oslPipe Pipe, void *pBuffer, sal_Int32 BufferSize );
+SAL_DLLPUBLIC sal_Int32 osl_readPipe( oslPipe Pipe, void *pBuffer, sal_Int32 BufferSize );
 
 /** Writes blocking onto the pipe.
     @return Number of written bytes. If less than BufferSize, the pipe was closed.
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writePipe( oslPipe Pipe, const void *pBuffer, sal_Int32 BufferSize );
+SAL_DLLPUBLIC sal_Int32 osl_writePipe( oslPipe Pipe, const void *pBuffer, sal_Int32 BufferSize );
 
-SAL_DLLPUBLIC oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
+SAL_DLLPUBLIC oslPipeError osl_getLastPipeError(oslPipe Pipe);
 
 #ifdef __cplusplus
 }

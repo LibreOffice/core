@@ -74,15 +74,15 @@ typedef struct
 
 /** The function-ptr representing the signal handler-function.
 */
-typedef oslSignalAction (SAL_CALL *oslSignalHandlerFunction)(void* pData, oslSignalInfo* pInfo);
+typedef oslSignalAction (*oslSignalHandlerFunction)(void* pData, oslSignalInfo* pInfo);
 
-SAL_DLLPUBLIC oslSignalHandler SAL_CALL osl_addSignalHandler(
+SAL_DLLPUBLIC oslSignalHandler osl_addSignalHandler(
         oslSignalHandlerFunction Handler, void* pData);
 
-SAL_DLLPUBLIC bool SAL_CALL osl_removeSignalHandler(
+SAL_DLLPUBLIC bool osl_removeSignalHandler(
         oslSignalHandler hHandler);
 
-SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
+SAL_DLLPUBLIC oslSignalAction osl_raiseSignal(
         sal_Int32 UserSignal, void* UserData);
 
 /** Enables or disables error reporting
@@ -95,7 +95,7 @@ SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
     @retval false if previous state of error reporting was disabled
 */
 
-SAL_DLLPUBLIC bool SAL_CALL osl_setErrorReporting(
+SAL_DLLPUBLIC bool osl_setErrorReporting(
         bool bEnable );
 
 #ifdef __cplusplus

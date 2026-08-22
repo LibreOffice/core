@@ -146,7 +146,7 @@ typedef void* oslProcess;
     @see osl_freeProcessHandle
     @see osl_loginUser
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
+SAL_DLLPUBLIC oslProcessError osl_executeProcess(
     rtl_uString* ustrImageName,
     rtl_uString* ustrArguments[],
     sal_uInt32  nArguments,
@@ -225,7 +225,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     @see osl_loginUser
     @see osl_closeFile
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
+SAL_DLLPUBLIC oslProcessError osl_executeProcess_WithRedirectedIO(
     rtl_uString* strImageName,
     rtl_uString* ustrArguments[],
     sal_uInt32 nArguments,
@@ -247,7 +247,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     @see osl_getProcess
     @see osl_joinProcess
  */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_terminateProcess(
+SAL_DLLPUBLIC oslProcessError osl_terminateProcess(
         oslProcess Process);
 
 
@@ -259,7 +259,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_terminateProcess(
 
     @return the process handle on success, NULL in all other cases
  */
-SAL_DLLPUBLIC oslProcess SAL_CALL osl_getProcess(
+SAL_DLLPUBLIC oslProcess osl_getProcess(
         oslProcessIdentifier Ident) SAL_COLD;
 
 
@@ -267,7 +267,7 @@ SAL_DLLPUBLIC oslProcess SAL_CALL osl_getProcess(
 
     @param[in] Process
 */
-SAL_DLLPUBLIC void SAL_CALL osl_freeProcessHandle(
+SAL_DLLPUBLIC void osl_freeProcessHandle(
         oslProcess Process);
 
 
@@ -278,7 +278,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_freeProcessHandle(
 
     @see osl_executeProcess
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcess(
+SAL_DLLPUBLIC oslProcessError osl_joinProcess(
         oslProcess Process);
 
 /** Wait with a timeout for the completion of the specified child
@@ -294,7 +294,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcess(
 
     @see osl_executeProcess
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
+SAL_DLLPUBLIC oslProcessError osl_joinProcessWithTimeout(
         oslProcess Process, const TimeValue* pTimeout);
 
 /** Retrieves information about a Process
@@ -313,7 +313,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
     @retval osl_Process_E_None on success
     @retval osl_Process_E_Unknown on failure
  */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessInfo(
+SAL_DLLPUBLIC oslProcessError osl_getProcessInfo(
         oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo);
 
 /** Get the filename of the executable.
@@ -327,14 +327,14 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessInfo(
     either as a file URL, or as such in case it doesn't look like an
     absolute pathname.
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getExecutableFile(
+SAL_DLLPUBLIC oslProcessError osl_getExecutableFile(
         rtl_uString **strFile);
 
 /** @return the number of commandline arguments passed to the main-function of
     this process
     @see osl_getCommandArg
 */
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
+SAL_DLLPUBLIC sal_uInt32 osl_getCommandArgCount(void);
 
 /** Get the nArg-th command-line argument passed to the main-function of this process.
     @param[in] nArg  The number of the argument to return.
@@ -342,7 +342,7 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
     @return osl_Process_E_None or does not return.
     @see osl_executeProcess
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
+SAL_DLLPUBLIC oslProcessError osl_getCommandArg(
         sal_uInt32 nArg, rtl_uString **strCommandArg);
 
 /** Set the command-line arguments as passed to the main-function of this process.
@@ -358,26 +358,26 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
     @see osl_getCommandArgCount
     @see osl_getCommandArg
 */
-SAL_DLLPUBLIC void SAL_CALL osl_setCommandArgs (int argc, char **argv);
+SAL_DLLPUBLIC void osl_setCommandArgs (int argc, char **argv);
 
 /** Get the value of one environment variable.
     @param[in] strVar  denotes the name of the variable to get.
     @param[out] strValue string that receives the value of environment variable.
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getEnvironment(
+SAL_DLLPUBLIC oslProcessError osl_getEnvironment(
         rtl_uString *strVar, rtl_uString **strValue);
 
 /** Set the value of one environment variable.
     @param[in] strVar  denotes the name of the variable to set.
     @param[in] strValue  string of the new value of environment variable.
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setEnvironment(
+SAL_DLLPUBLIC oslProcessError osl_setEnvironment(
         rtl_uString *strVar, rtl_uString *strValue);
 
 /** Unsets the value of one environment variable.
     @param[in] strVar  denotes the name of the variable to unset.
 */
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_clearEnvironment(
+SAL_DLLPUBLIC oslProcessError osl_clearEnvironment(
         rtl_uString *strVar);
 
 /** Get the working directory of the current process as a file URL.
@@ -386,7 +386,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_clearEnvironment(
     @param[out] pustrWorkingDir string that receives the working directory file URL.
 */
 
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessWorkingDir(
+SAL_DLLPUBLIC oslProcessError osl_getProcessWorkingDir(
         rtl_uString **pustrWorkingDir );
 
 /** Get the locale the process is currently running in.
@@ -394,7 +394,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessWorkingDir(
     @param[out] ppLocale a pointer that receives the currently selected locale structure
 */
 
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessLocale(
+SAL_DLLPUBLIC oslProcessError osl_getProcessLocale(
         rtl_Locale ** ppLocale );
 
 /** Change the locale of the process.
@@ -405,7 +405,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessLocale(
         not have good use for it either.  It may eventually be removed.
 */
 
-SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setProcessLocale(
+SAL_DLLPUBLIC oslProcessError osl_setProcessLocale(
         rtl_Locale * pLocale );
 
 #ifdef __cplusplus

@@ -95,7 +95,7 @@ namespace osl
 
             @see osl_getHostnameOfSocketAddr
         */
-        inline ::rtl::OUString SAL_CALL getHostname(oslSocketResult *pResult = NULL) const;
+        inline ::rtl::OUString getHostname(oslSocketResult *pResult = NULL) const;
 
         /** Sets the IP address or hostname of the SocketAddress
 
@@ -104,13 +104,13 @@ namespace osl
            @retval true     success
            @retval false    failure
          */
-        inline bool SAL_CALL setHostname(const ::rtl::OUString &sDottedIpOrHostname);
+        inline bool setHostname(const ::rtl::OUString &sDottedIpOrHostname);
 
         /** Returns the port number of the address.
 
             @return the port in host-byte order or OSL_INVALID_PORT on errors.
         */
-        inline sal_Int32 SAL_CALL getPort() const;
+        inline sal_Int32 getPort() const;
 
         /** Sets the port number of the address.
 
@@ -119,24 +119,24 @@ namespace osl
            @retval true     success
            @retval false    failure
          */
-        inline bool SAL_CALL setPort(sal_Int32 nPort);
+        inline bool setPort(sal_Int32 nPort);
 
         /** Sets the address of the underlying socket address struct in network byte order.
 
            @retval true     success
            @retval false    failure
          */
-        inline bool SAL_CALL setAddr(const ::rtl::ByteSequence & address);
+        inline bool setAddr(const ::rtl::ByteSequence & address);
 
         /** Returns the address of the underlying socket in network byte order
           */
-        inline ::rtl::ByteSequence SAL_CALL getAddr(oslSocketResult *pResult = NULL) const;
+        inline ::rtl::ByteSequence getAddr(oslSocketResult *pResult = NULL) const;
 
         /** assign the handle to this reference. The previous handle is released.
         */
-        inline SocketAddr & SAL_CALL operator= (oslSocketAddr Addr);
+        inline SocketAddr & operator= (oslSocketAddr Addr);
 
-        inline SocketAddr & SAL_CALL operator= (const SocketAddr& Addr);
+        inline SocketAddr & operator= (const SocketAddr& Addr);
 
         inline SocketAddr & operator =(SocketAddr && other) noexcept;
 
@@ -144,26 +144,26 @@ namespace osl
             @param Addr the socket address.
             @param nocopy use SAL_NO_COPY
           */
-        inline SocketAddr & SAL_CALL assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy );
+        inline SocketAddr & assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy );
 
         /** Returns true if the underlying handle is identical to the Addr handle.
          */
-        inline bool SAL_CALL operator== (oslSocketAddr Addr) const;
+        inline bool operator== (oslSocketAddr Addr) const;
 
         /** Returns true if the underlying handle is identical to the Addr handle.
          */
-        inline bool SAL_CALL operator== (const SocketAddr & Addr) const;
+        inline bool operator== (const SocketAddr & Addr) const;
 
         /** Returns the underlying SocketAddr handle without copyconstructing it.
          */
-        inline oslSocketAddr SAL_CALL getHandle() const;
+        inline oslSocketAddr getHandle() const;
 
         /** Get the hostname for the local interface.
             @param pResult after the call *pResult contains osl_Socket_Ok on success or
                    an error on failure.
             @return the hostname
         */
-        static inline ::rtl::OUString SAL_CALL getLocalHostname( oslSocketResult *pResult = NULL);
+        static inline ::rtl::OUString getLocalHostname( oslSocketResult *pResult = NULL);
 
         /** Tries to find an address for a host.
 
@@ -171,7 +171,7 @@ namespace osl
             @param strHostName hostname
             @param Addr A newly created socket-address or 0 if the name could not be found.
         */
-        static inline void SAL_CALL resolveHostname(
+        static inline void resolveHostname(
             const ::rtl::OUString & strHostName , SocketAddr & Addr );
 
         /**
@@ -180,7 +180,7 @@ namespace osl
            @return the port number in host-byte order or <code>OSL_INVALID_PORT</code>
            if no service/protocol pair could be found.
         */
-        static inline sal_Int32 SAL_CALL getServicePort(
+        static inline sal_Int32 getServicePort(
             const ::rtl::OUString& strServiceName,
             const ::rtl::OUString & strProtocolName= ::rtl::OUString("tcp") );
     };
@@ -220,75 +220,75 @@ namespace osl
         /** Assignment operator. If socket was already created, the old one will
             be discarded.
         */
-        inline Socket& SAL_CALL operator= ( oslSocket socketHandle);
+        inline Socket& operator= ( oslSocket socketHandle);
 
         /** Assignment operator. If socket was already created, the old one will
             be discarded.
         */
-        inline Socket& SAL_CALL operator= (const Socket& sock);
+        inline Socket& operator= (const Socket& sock);
 
         /**
            @return <code>true</code>, when the underlying handle of both
                          Socket instances are identical, <code>false</code> otherwise.
          */
-        inline bool SAL_CALL operator==( const Socket& rSocket ) const ;
+        inline bool operator==( const Socket& rSocket ) const ;
 
         /**
            @return <code>true</code>, when the underlying handle of both
                          Socket instances are identical, <code>false</code> otherwise.
          */
-        inline bool SAL_CALL operator==( const oslSocket socketHandle ) const;
+        inline bool operator==( const oslSocket socketHandle ) const;
 
         /** Closes a definite or both directions of the bidirectional stream.
 
            @param Direction
            @see osl_shutdownSocket()
          */
-        inline void SAL_CALL shutdown( oslSocketDirection Direction = osl_Socket_DirReadWrite );
+        inline void shutdown( oslSocketDirection Direction = osl_Socket_DirReadWrite );
 
         /** Closes a socket.
             Note that closing a socket is identical to shutdown( osl_Socket_DirReadWrite ),
             as the operating system distinguish both cases, both functions or offered in this API.
             @see osl_closeSocket()
          */
-        inline void SAL_CALL close();
+        inline void close();
 
         /** Retrieves the address of the local interface of this socket.
             @param Addr [out] receives the address.
             @see osl_getLocalAddrOfSocket()
         */
-        inline void SAL_CALL getLocalAddr( SocketAddr &Addr ) const;
+        inline void getLocalAddr( SocketAddr &Addr ) const;
 
         /** Get the local port of the socket. Usually used after bind().
             @return the port number or OSL_INVALID_PORT on errors.
         */
-        inline sal_Int32    SAL_CALL getLocalPort() const;
+        inline sal_Int32    getLocalPort() const;
 
         /** Get the hostname for the local interface.
             @return the hostname or an empty string ("").
         */
-        inline ::rtl::OUString SAL_CALL getLocalHost() const;
+        inline ::rtl::OUString getLocalHost() const;
 
         /** Retrieves the address of the remote host of this socket.
             @param Addr [out] receives the address.
         */
-        inline void SAL_CALL getPeerAddr( SocketAddr & Addr) const;
+        inline void getPeerAddr( SocketAddr & Addr) const;
 
         /** Get the remote port of the socket.
             @return the port number or OSL_INVALID_PORT on errors.
         */
-        inline sal_Int32    SAL_CALL getPeerPort() const;
+        inline sal_Int32    getPeerPort() const;
 
         /** Get the hostname for the remote interface.
             @return the hostname or an empty string ("").
         */
-        inline ::rtl::OUString SAL_CALL getPeerHost() const;
+        inline ::rtl::OUString getPeerHost() const;
 
         /** Binds the socket to the specified (local) interface.
             @param LocalInterface Address of the Interface
             @return True if bind was successful.
         */
-        inline bool SAL_CALL bind(const SocketAddr& LocalInterface);
+        inline bool bind(const SocketAddr& LocalInterface);
 
         /** Checks if read operations will block.
 
@@ -300,7 +300,7 @@ namespace osl
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amount of time.
         */
-        inline bool SAL_CALL isRecvReady(const TimeValue *pTimeout = NULL) const;
+        inline bool isRecvReady(const TimeValue *pTimeout = NULL) const;
 
         /** Checks if send operations will block.
 
@@ -312,7 +312,7 @@ namespace osl
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amount of time.
         */
-        inline bool SAL_CALL isSendReady(const TimeValue *pTimeout = NULL) const;
+        inline bool isSendReady(const TimeValue *pTimeout = NULL) const;
 
 
         /** Checks if a request for out-of-band data will block.
@@ -327,7 +327,7 @@ namespace osl
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amount of time.
         */
-        inline bool SAL_CALL isExceptionPending(const TimeValue *pTimeout = NULL) const;
+        inline bool isExceptionPending(const TimeValue *pTimeout = NULL) const;
 
 
         /** Queries the socket for its type.
@@ -339,7 +339,7 @@ namespace osl
             @retval osl_Socket_TypeSeqPacket
             @retval osl_invalid_SocketType if an error occurred
         */
-        inline oslSocketType    SAL_CALL getType() const;
+        inline oslSocketType    getType() const;
 
         /** Retrieves option-attributes associated with the socket.
             @param Option The attribute to query.
@@ -422,7 +422,7 @@ namespace osl
             @return The size of the attribute copied into pBuffer or -1 if an error
             occurred.
         */
-        inline sal_Int32 SAL_CALL getOption(
+        inline sal_Int32 getOption(
             oslSocketOption Option,
             void* pBuffer,
             sal_uInt32 BufferLen,
@@ -469,7 +469,7 @@ namespace osl
 
             @return True if the option could be changed.
         */
-        inline bool SAL_CALL setOption( oslSocketOption Option,
+        inline bool setOption( oslSocketOption Option,
                                             void* pBuffer,
                                             sal_uInt32 BufferLen,
                                             oslSocketOptionLevel Level= osl_Socket_LevelSocket ) const;
@@ -490,17 +490,17 @@ namespace osl
                    socket (which is the default behaviour of a socket).
             @return <code>true</code> if mode could be set.
         */
-        inline bool SAL_CALL enableNonBlockingMode( bool bNonBlockingMode);
+        inline bool enableNonBlockingMode( bool bNonBlockingMode);
 
         /** Query blocking mode of the socket.
             @return <code>true</code> if non-blocking mode is set.
         */
-        inline bool SAL_CALL isNonBlockingMode() const;
+        inline bool isNonBlockingMode() const;
 
 
         /** clears the error status
         */
-        inline void SAL_CALL clearError() const;
+        inline void clearError() const;
 
         /** returns a constant describing the last error for the socket system.
 
@@ -549,7 +549,7 @@ namespace osl
             @return the number of read bytes. The number will only be smaller than
             n if an exceptional condition (e.g. connection closed) occurs.
         */
-        inline sal_Int32 SAL_CALL read(void* pBuffer, sal_uInt32 n);
+        inline sal_Int32 read(void* pBuffer, sal_uInt32 n);
 
         /** Writes n bytes from pBuffer to the stream. The method avoids
             incomplete writes due to packet boundaries and is thus blocking.
@@ -558,7 +558,7 @@ namespace osl
             @return the number of written bytes. The number will only be smaller than
             n if an exceptional condition (e.g. connection closed) occurs.
         */
-        inline sal_Int32 SAL_CALL write(const void* pBuffer, sal_uInt32 n);
+        inline sal_Int32 write(const void* pBuffer, sal_uInt32 n);
 
 
         /** Tries to receive BytesToRead data from the connected socket,
@@ -577,7 +577,7 @@ namespace osl
             </ul>
             @return the number of received bytes, which may be less than BytesToRead.
         */
-        inline sal_Int32 SAL_CALL recv(void* pBuffer,
+        inline sal_Int32 recv(void* pBuffer,
                                        sal_uInt32 BytesToRead,
                                        oslSocketMsgFlag flags= osl_Socket_MsgNormal);
 
@@ -597,7 +597,7 @@ namespace osl
 
             @return the number of transferred bytes. It may be less than BytesToSend.
         */
-        sal_Int32 SAL_CALL send(const void* pBuffer,
+        sal_Int32 send(const void* pBuffer,
                                 sal_uInt32 BytesToSend,
                                 oslSocketMsgFlag= osl_Socket_MsgNormal);
     };
@@ -627,7 +627,7 @@ namespace osl
             <code>osl_Socket_Interrupted</code> if unblocked forcefully (by osl::Socket::close()),
             <code>osl_Socket_Error</code> if connect failed.
         */
-        oslSocketResult SAL_CALL connect(const SocketAddr& TargetHost, const TimeValue* pTimeout = NULL);
+        oslSocketResult connect(const SocketAddr& TargetHost, const TimeValue* pTimeout = NULL);
     };
 
     /** Allows to accept socket connections.
@@ -646,7 +646,7 @@ namespace osl
             -1, a system default value is used.
             @return <code>true</code> if call was successful.
         */
-        inline bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
+        inline bool listen(sal_Int32 MaxPendingConnections= -1);
 
         /** Accepts incoming connections on the socket. You must
             precede this call with osl::Socket::bind() and listen().
@@ -655,7 +655,7 @@ namespace osl
             <code>osl_Socket_TimedOut</code>, if m_RecvTimeout milliseconds passed without connect,
             <code>osl_Socket_Error</code> on errors.
         */
-        inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection);
+        inline oslSocketResult acceptConnection( StreamSocket& Connection);
 
         /** Accepts incoming connections on the socket. You must
             precede this call with osl::Socket::bind() and listen().
@@ -666,7 +666,7 @@ namespace osl
             <code>osl_Socket_TimedOut</code>, if m_RecvTimeout milliseconds passed without connect,
             <code>osl_Socket_Error</code> on errors.
         */
-        inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection, SocketAddr & PeerAddr);
+        inline oslSocketResult acceptConnection( StreamSocket& Connection, SocketAddr & PeerAddr);
     };
 
 
@@ -704,7 +704,7 @@ namespace osl
 
             @return the number of received bytes.
         */
-        inline sal_Int32 SAL_CALL recvFrom(void*  pBuffer,
+        inline sal_Int32 recvFrom(void*  pBuffer,
                                            sal_uInt32 BufferSize,
                                            SocketAddr* pSenderAddr= NULL,
                                            oslSocketMsgFlag Flag= osl_Socket_MsgNormal);
@@ -731,7 +731,7 @@ namespace osl
 
             @return the number of transferred bytes.
         */
-        inline sal_Int32    SAL_CALL sendTo( const SocketAddr& ReceiverAddr,
+        inline sal_Int32    sendTo( const SocketAddr& ReceiverAddr,
                                              const void* pBuffer,
                                              sal_uInt32 BufferSize,
                                              oslSocketMsgFlag Flag= osl_Socket_MsgNormal);

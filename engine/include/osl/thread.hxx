@@ -36,7 +36,7 @@ namespace osl
     matches the one of oslWorkerFunction which is declared in
     osl/thread.h
 */
-extern "C" inline void SAL_CALL threadFunc( void* param);
+extern "C" inline void threadFunc( void* param);
 
 /**
    A thread abstraction.
@@ -57,7 +57,7 @@ public:
         osl_destroyThread( m_hThread);
     }
 
-    bool SAL_CALL create()
+    bool create()
     {
         assert(m_hThread == NULL); // only one running thread per instance
         m_hThread = osl_createSuspendedThread( threadFunc, static_cast<void*>(this));
@@ -69,7 +69,7 @@ public:
         return true;
     }
 
-    bool SAL_CALL createSuspended()
+    bool createSuspended()
     {
         assert(m_hThread == NULL); // only one running thread per instance
         if( m_hThread)
@@ -79,61 +79,61 @@ public:
         return m_hThread != NULL;
     }
 
-    virtual void SAL_CALL suspend()
+    virtual void suspend()
     {
         if( m_hThread )
             osl_suspendThread(m_hThread);
     }
 
-    virtual void SAL_CALL resume()
+    virtual void resume()
     {
         if( m_hThread )
             osl_resumeThread(m_hThread);
     }
 
-    virtual void SAL_CALL terminate()
+    virtual void terminate()
     {
         if( m_hThread )
             osl_terminateThread(m_hThread);
     }
 
-    virtual void SAL_CALL join()
+    virtual void join()
     {
         osl_joinWithThread(m_hThread);
     }
 
-    bool SAL_CALL isRunning() const
+    bool isRunning() const
     {
         return osl_isThreadRunning(m_hThread);
     }
 
-    void SAL_CALL setPriority( oslThreadPriority Priority)
+    void setPriority( oslThreadPriority Priority)
     {
         if( m_hThread )
             osl_setThreadPriority(m_hThread, Priority);
     }
 
-    oslThreadPriority SAL_CALL getPriority() const
+    oslThreadPriority getPriority() const
     {
         return m_hThread ? osl_getThreadPriority(m_hThread) : osl_Thread_PriorityUnknown;
     }
 
-    oslThreadIdentifier SAL_CALL getIdentifier() const
+    oslThreadIdentifier getIdentifier() const
     {
         return osl_getThreadIdentifier(m_hThread);
     }
 
-    static oslThreadIdentifier SAL_CALL getCurrentIdentifier()
+    static oslThreadIdentifier getCurrentIdentifier()
     {
         return osl_getThreadIdentifier(NULL);
     }
 
-    static void SAL_CALL wait(const TimeValue& Delay)
+    static void wait(const TimeValue& Delay)
     {
         osl_waitThread(&Delay);
     }
 
-    static void SAL_CALL yield()
+    static void yield()
     {
         osl_yieldThread();
     }
@@ -142,12 +142,12 @@ public:
         osl_setThreadName(name);
     }
 
-    virtual bool SAL_CALL schedule()
+    virtual bool schedule()
     {
         return m_hThread && osl_scheduleThread(m_hThread);
     }
 
-    SAL_CALL operator oslThread() const
+    operator oslThread() const
     {
         return m_hThread;
     }
@@ -157,11 +157,11 @@ protected:
     /** The thread functions calls the protected functions
         run and onTerminated.
     */
-    friend void SAL_CALL threadFunc( void* param);
+    friend void threadFunc( void* param);
 
-    virtual void SAL_CALL run() = 0;
+    virtual void run() = 0;
 
-    virtual void SAL_CALL onTerminated()
+    virtual void onTerminated()
     {
     }
 
@@ -169,7 +169,7 @@ private:
     oslThread m_hThread;
 };
 
-extern "C" inline void SAL_CALL threadFunc( void* param)
+extern "C" inline void threadFunc( void* param)
 {
         Thread* pObj= static_cast<Thread*>(param);
         pObj->run();
@@ -196,7 +196,7 @@ public:
     /** Set the data associated with the data key.
         @returns True if operation was successful
     */
-    bool SAL_CALL setData(void *pData)
+    bool setData(void *pData)
     {
            return osl_setThreadKeyData(m_hKey, pData);
     }
@@ -205,7 +205,7 @@ public:
         @returns The data associated with the data key or
         NULL if no data was set
     */
-    void* SAL_CALL getData()
+    void* getData()
     {
            return osl_getThreadKeyData(m_hKey);
     }

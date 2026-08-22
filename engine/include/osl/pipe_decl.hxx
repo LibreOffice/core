@@ -73,7 +73,7 @@ public:
     */
     inline ~Pipe();
 
-    inline bool SAL_CALL is() const;
+    inline bool is() const;
 
     /** Creates an insecure pipe that is accessible for all users
         with the given attributes.
@@ -98,43 +98,43 @@ public:
 
     /** releases the underlying handle
      */
-    inline void SAL_CALL clear();
+    inline void clear();
 
     /** Assignment operator. If pipe was already created, the old one will
         be discarded.
     */
-    inline Pipe& SAL_CALL operator=(const Pipe& pipe);
+    inline Pipe& operator=(const Pipe& pipe);
 
     inline Pipe& operator=(Pipe&& other) noexcept;
 
     /** Assignment operator. If pipe was already created, the old one will
         be discarded.
     */
-    inline Pipe& SAL_CALL operator=(const oslPipe pipe);
+    inline Pipe& operator=(const oslPipe pipe);
 
     /** Checks if the pipe is valid.
         @return True if the object represents a valid pipe.
     */
-    inline bool SAL_CALL isValid() const;
+    inline bool isValid() const;
 
-    inline bool SAL_CALL operator==(const Pipe& rPipe) const;
+    inline bool operator==(const Pipe& rPipe) const;
 
     /** Closes the pipe.
     */
-    inline void SAL_CALL close();
+    inline void close();
 
     /** Accept connection on an existing pipe
     */
-    inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
+    inline oslPipeError accept(StreamPipe& Connection);
 
     /** Delivers a constant describing the last error for the pipe system.
         @return ENONE if no error occurred, invalid_PipeError if
         an unknown (unmapped) error occurred, otherwise an enum describing the
         error.
     */
-    inline oslPipeError SAL_CALL getError() const;
+    inline oslPipeError getError() const;
 
-    inline oslPipe SAL_CALL getHandle() const;
+    inline oslPipe getHandle() const;
 };
 
 /** A pipe to send or receive a stream of data.
@@ -179,11 +179,11 @@ public:
 
         @param[in] Pipe    Pipe to attach to this object
     */
-    inline StreamPipe& SAL_CALL operator=(oslPipe Pipe);
+    inline StreamPipe& operator=(oslPipe Pipe);
 
     /** Assignment operator
     */
-    inline StreamPipe& SAL_CALL operator=(const Pipe& pipe);
+    inline StreamPipe& operator=(const Pipe& pipe);
 
     /** Tries to receives BytesToRead data from the connected pipe,
 
@@ -194,7 +194,7 @@ public:
 
         @return the number of received bytes.
     */
-    inline sal_Int32 SAL_CALL recv(void* pBuffer, sal_Int32 BytesToRead) const;
+    inline sal_Int32 recv(void* pBuffer, sal_Int32 BytesToRead) const;
 
     /** Tries to sends BytesToSend data from the connected pipe.
 
@@ -204,7 +204,7 @@ public:
 
         @return the number of transferred bytes.
     */
-    inline sal_Int32 SAL_CALL send(const void* pBuffer, sal_Int32 BytesToSend) const;
+    inline sal_Int32 send(const void* pBuffer, sal_Int32 BytesToSend) const;
 
     /** Retrieves n bytes from the stream and copies them into pBuffer.
         The method avoids incomplete reads due to packet boundaries.
@@ -216,7 +216,7 @@ public:
         @return the number of read bytes. The number will only be smaller than
             n if an exceptional condition (e.g. connection closed) occurs.
     */
-    inline sal_Int32 SAL_CALL read(void* pBuffer, sal_Int32 n) const;
+    inline sal_Int32 read(void* pBuffer, sal_Int32 n) const;
 
     /** Writes n bytes from pBuffer to the stream. The method avoids
         incomplete writes due to packet boundaries.
@@ -227,7 +227,7 @@ public:
         @return the number of written bytes. The number will only be smaller than
             n if an exceptional condition (e.g. connection closed) occurs.
     */
-    sal_Int32 SAL_CALL write(const void* pBuffer, sal_Int32 n) const;
+    sal_Int32 write(const void* pBuffer, sal_Int32 n) const;
 };
 }
 #endif

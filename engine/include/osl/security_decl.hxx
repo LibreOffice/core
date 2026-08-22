@@ -49,7 +49,7 @@ public:
         @retval True, if the specified user is known by the underlying operating system
         @retval False unknown user
     */
-    inline bool SAL_CALL logonUser(const rtl::OUString& strName,
+    inline bool logonUser(const rtl::OUString& strName,
                                        const rtl::OUString& strPasswd);
 
     /** get the security information for one user.
@@ -69,7 +69,7 @@ public:
             could be connected
         @retval False if the user is not known by the file server
     */
-    inline bool SAL_CALL logonUser(const rtl::OUString & strName,
+    inline bool logonUser(const rtl::OUString & strName,
                                        const rtl::OUString & strPasswd,
                                        const rtl::OUString & strFileServer);
 
@@ -80,7 +80,7 @@ public:
         @retval True if any user is successfully logged in
         @retval False no user logged in
     */
-    inline bool  SAL_CALL getUserIdent( rtl::OUString& strIdent) const;
+    inline bool  getUserIdent( rtl::OUString& strIdent) const;
 
     /** get the name of the logged in user.
 
@@ -91,7 +91,7 @@ public:
         @retval True if any user is successfully logged in
         @retval False if no user is logged in
     */
-    inline bool SAL_CALL getUserName( rtl::OUString& strName, bool bIncludeDomain=true ) const;
+    inline bool getUserName( rtl::OUString& strName, bool bIncludeDomain=true ) const;
 
     /** get the home directory of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
@@ -99,7 +99,7 @@ public:
         @retval True if any user is successfully logged in
         @retval False if user is not logged in
     */
-    inline bool SAL_CALL getHomeDir( rtl::OUString& strDirectory) const;
+    inline bool getHomeDir( rtl::OUString& strDirectory) const;
 
     /** get the directory for configuration data of the logged in user.
 
@@ -108,14 +108,14 @@ public:
         @retval True if any user is successfully logged in
         @retval False if user is not logged in
     */
-    inline bool SAL_CALL getConfigDir( rtl::OUString & strDirectory) const;
+    inline bool getConfigDir( rtl::OUString & strDirectory) const;
 
     /** Query if the user who is logged in has administrator rights.
 
         @retval True if the user has administrator rights
         @retval False if the user does not have admin rights
     */
-    inline bool SAL_CALL isAdministrator() const;
+    inline bool isAdministrator() const;
 
     /** Returns the underlying oslSecurity handle
      */

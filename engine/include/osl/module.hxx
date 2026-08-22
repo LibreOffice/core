@@ -77,7 +77,7 @@ public:
 
 #ifndef DISABLE_DYNLOADING
 
-    bool SAL_CALL load( const ::rtl::OUString& strModuleName,
+    bool load( const ::rtl::OUString& strModuleName,
         sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     {
         unload();
@@ -85,7 +85,7 @@ public:
         return is();
     }
 
-    bool SAL_CALL loadRelative(
+    bool loadRelative(
         ::oslGenericFunction baseModule, ::rtl::OUString const & relativePath,
         ::sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
     {
@@ -94,7 +94,7 @@ public:
         return is();
     }
 
-    bool SAL_CALL loadRelative(
+    bool loadRelative(
         oslGenericFunction baseModule, char const * relativePath,
         sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
     {
@@ -103,7 +103,7 @@ public:
         return is();
     }
 
-    void SAL_CALL unload()
+    void unload()
     {
         if (m_Module)
         {
@@ -114,12 +114,12 @@ public:
 
 #endif
 
-    bool SAL_CALL is() const
+    bool is() const
     {
            return m_Module != NULL;
     }
 
-    void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
+    void* getSymbol( const ::rtl::OUString& strSymbolName)
     {
         return osl_getSymbol( m_Module, strSymbolName.pData );
     }
@@ -136,12 +136,12 @@ public:
 
         @see getSymbol
     */
-    oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName ) const
+    oslGenericFunction getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName ) const
     {
         return osl_getFunctionSymbol( m_Module, ustrFunctionSymbolName.pData );
     }
 
-    oslGenericFunction SAL_CALL getFunctionSymbol(char const * name) const {
+    oslGenericFunction getFunctionSymbol(char const * name) const {
         return osl_getAsciiFunctionSymbol(m_Module, name);
     }
 

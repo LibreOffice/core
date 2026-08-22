@@ -89,31 +89,31 @@ namespace osl
     }
 
 
-    inline sal_Int32 SAL_CALL SocketAddr::getPort() const
+    inline sal_Int32 SocketAddr::getPort() const
     {
         return osl_getInetPortOfSocketAddr(m_handle);
     }
 
 
-    inline bool SAL_CALL SocketAddr::setPort( sal_Int32 nPort )
+    inline bool SocketAddr::setPort( sal_Int32 nPort )
     {
         return osl_setInetPortOfSocketAddr(m_handle, nPort );
     }
 
-    inline bool SAL_CALL SocketAddr::setHostname( const ::rtl::OUString &sDottedIpOrHostname )
+    inline bool SocketAddr::setHostname( const ::rtl::OUString &sDottedIpOrHostname )
     {
         *this = SocketAddr( sDottedIpOrHostname , getPort() );
         return is();
     }
 
 
-    inline bool SAL_CALL SocketAddr::setAddr( const ::rtl::ByteSequence & address )
+    inline bool SocketAddr::setAddr( const ::rtl::ByteSequence & address )
     {
         return osl_setAddrOfSocketAddr( m_handle, address.getHandle() )
             == osl_Socket_Ok;
     }
 
-    inline ::rtl::ByteSequence SAL_CALL SocketAddr::getAddr( oslSocketResult *pResult ) const
+    inline ::rtl::ByteSequence SocketAddr::getAddr( oslSocketResult *pResult ) const
     {
         ::rtl::ByteSequence sequence;
         oslSocketResult result = osl_getAddrOfSocketAddr( m_handle, reinterpret_cast<sal_Sequence **>(&sequence) );
@@ -123,7 +123,7 @@ namespace osl
     }
 
 
-    inline SocketAddr & SAL_CALL SocketAddr::operator= (oslSocketAddr Addr)
+    inline SocketAddr & SocketAddr::operator= (oslSocketAddr Addr)
     {
         oslSocketAddr pNewAddr = osl_copySocketAddr( Addr );
         if( m_handle )
@@ -133,7 +133,7 @@ namespace osl
     }
 
 
-    inline SocketAddr & SAL_CALL SocketAddr::operator= (const SocketAddr& Addr)
+    inline SocketAddr & SocketAddr::operator= (const SocketAddr& Addr)
     {
         *this = Addr.getHandle();
         return *this;
@@ -148,7 +148,7 @@ namespace osl
         return *this;
     }
 
-    inline SocketAddr & SAL_CALL SocketAddr::assign( oslSocketAddr Addr, __osl_socket_NoCopy )
+    inline SocketAddr & SocketAddr::assign( oslSocketAddr Addr, __osl_socket_NoCopy )
     {
         if( m_handle )
             osl_destroySocketAddr( m_handle );
@@ -157,7 +157,7 @@ namespace osl
     }
 
 
-    inline bool SAL_CALL SocketAddr::operator== (oslSocketAddr Addr) const
+    inline bool SocketAddr::operator== (oslSocketAddr Addr) const
     {
         return osl_isEqualSocketAddr( m_handle, Addr );
     }
@@ -173,7 +173,7 @@ namespace osl
         return m_handle != NULL;
     }
 
-    inline ::rtl::OUString SAL_CALL SocketAddr::getLocalHostname( oslSocketResult *pResult )
+    inline ::rtl::OUString SocketAddr::getLocalHostname( oslSocketResult *pResult )
     {
         ::rtl::OUString hostname;
         oslSocketResult result = osl_getLocalHostname( &(hostname.pData) );
@@ -182,13 +182,13 @@ namespace osl
         return hostname;
     }
 
-    inline void SAL_CALL SocketAddr::resolveHostname(
+    inline void SocketAddr::resolveHostname(
         const ::rtl::OUString & strHostName, SocketAddr &Addr)
     {
         Addr = SocketAddr( osl_resolveHostname( strHostName.pData ) , SAL_NO_COPY );
     }
 
-    inline sal_Int32 SAL_CALL SocketAddr::getServicePort(
+    inline sal_Int32 SocketAddr::getServicePort(
             const ::rtl::OUString& strServiceName,
             const ::rtl::OUString & strProtocolName )
     {
@@ -387,7 +387,7 @@ namespace osl
     }
 
 
-    inline void SAL_CALL Socket::clearError() const
+    inline void Socket::clearError() const
     {
         sal_Int32 err = 0;
         getOption(osl_Socket_OptionError, &err, sizeof(err));

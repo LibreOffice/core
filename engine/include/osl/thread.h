@@ -38,7 +38,7 @@ typedef void* oslThread;
 
 /** the function-ptr. representing the threads worker-function.
 */
-typedef void (SAL_CALL *oslWorkerFunction)(void*);
+typedef void (*oslWorkerFunction)(void*);
 
 /** levels of thread-priority
     Note that oslThreadPriorityUnknown might be returned
@@ -72,7 +72,7 @@ typedef void* oslThreadKey;
 
     @return 0 if creation failed, otherwise a handle to the thread
 */
-SAL_DLLPUBLIC oslThread SAL_CALL osl_createThread(oslWorkerFunction pWorker, void* pThreadData);
+SAL_DLLPUBLIC oslThread osl_createThread(oslWorkerFunction pWorker, void* pThreadData);
 
 /** Create the thread, using the function-ptr pWorker as
     its main (worker) function. This function receives in
@@ -85,7 +85,7 @@ SAL_DLLPUBLIC oslThread SAL_CALL osl_createThread(oslWorkerFunction pWorker, voi
 
     @return 0 if creation failed, otherwise a handle to the thread
 */
-SAL_DLLPUBLIC oslThread SAL_CALL osl_createSuspendedThread(oslWorkerFunction pWorker, void* pThreadData);
+SAL_DLLPUBLIC oslThread osl_createSuspendedThread(oslWorkerFunction pWorker, void* pThreadData);
 
 /** Get the identifier for the specified thread or if parameter
     Thread is NULL of the current active thread.
@@ -94,7 +94,7 @@ SAL_DLLPUBLIC oslThread SAL_CALL osl_createSuspendedThread(oslWorkerFunction pWo
 
     @return identifier of the thread
 */
-SAL_DLLPUBLIC oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread);
+SAL_DLLPUBLIC oslThreadIdentifier osl_getThreadIdentifier(oslThread Thread);
 
 /** Release the thread handle.
     If Thread is NULL, the function won't do anything.
@@ -103,21 +103,21 @@ SAL_DLLPUBLIC oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thr
 
     @param Thread       Handle to thread to release
 */
-SAL_DLLPUBLIC void SAL_CALL osl_destroyThread(oslThread Thread);
+SAL_DLLPUBLIC void osl_destroyThread(oslThread Thread);
 
 /** Wake-up a thread that was suspended with suspend() or
     createSuspended(). The oslThread must be valid!
 
     @param Thread       Handle to thread to resume
 */
-SAL_DLLPUBLIC void SAL_CALL osl_resumeThread(oslThread Thread);
+SAL_DLLPUBLIC void osl_resumeThread(oslThread Thread);
 
 /** Suspend the execution of the thread. If you want the thread
     to continue, call resume(). The oslThread must be valid!
 
     @param Thread       Handle to thread to suspend
 */
-SAL_DLLPUBLIC void SAL_CALL osl_suspendThread(oslThread Thread);
+SAL_DLLPUBLIC void osl_suspendThread(oslThread Thread);
 
 /** Changes the threads priority.
     The oslThread must be valid!
@@ -125,7 +125,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_suspendThread(oslThread Thread);
     @param Thread       Handle to thread to which to change priority
     @param Priority     Thread priority
 */
-SAL_DLLPUBLIC void SAL_CALL osl_setThreadPriority(oslThread Thread, oslThreadPriority Priority);
+SAL_DLLPUBLIC void osl_setThreadPriority(oslThread Thread, oslThreadPriority Priority);
 
 /** Retrieves the threads priority.
     Returns oslThreadPriorityUnknown for invalid Thread-argument or
@@ -133,7 +133,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_setThreadPriority(oslThread Thread, oslThreadPri
 
     @param Thread       Handle to thread for which the priority is retrieved
 */
-SAL_DLLPUBLIC oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread);
+SAL_DLLPUBLIC oslThreadPriority osl_getThreadPriority(const oslThread Thread);
 
 /** Returns True if the thread was created and has not terminated yet.
     Note that according to this definition a "running" thread might be
@@ -141,28 +141,28 @@ SAL_DLLPUBLIC oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread T
 
     @param Thread       Handle to thread
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_isThreadRunning(const oslThread Thread);
+SAL_DLLPUBLIC bool osl_isThreadRunning(const oslThread Thread);
 
 /** Blocks the calling thread until Thread has terminated.
     Returns immediately if Thread is NULL.
 
     @param Thread       Handle to thread to join
 */
-SAL_DLLPUBLIC void SAL_CALL osl_joinWithThread(oslThread Thread);
+SAL_DLLPUBLIC void osl_joinWithThread(oslThread Thread);
 
 /** Suspends the execution of the calling thread for at least the given
     time.
 
     @param pDelay       Timeout value to wait
 */
-SAL_DLLPUBLIC void SAL_CALL osl_waitThread(const TimeValue* pDelay);
+SAL_DLLPUBLIC void osl_waitThread(const TimeValue* pDelay);
 
 /** The requested thread will get terminate the next time
     scheduleThread() is called.
 
     @param Thread       Handle to thread to terminate
 */
-SAL_DLLPUBLIC void SAL_CALL osl_terminateThread(oslThread Thread);
+SAL_DLLPUBLIC void osl_terminateThread(oslThread Thread);
 
 /** Schedules in thread to wait till after time slice of specified
     thread. scheduleThread() should be called in the working loop
@@ -172,7 +172,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_terminateThread(oslThread Thread);
 
     @param Thread       Handle to thread to schedule in after
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_scheduleThread(oslThread Thread);
+SAL_DLLPUBLIC bool osl_scheduleThread(oslThread Thread);
 
 /** Offers the rest of the threads time-slice to the OS.
     Under POSIX you _need_ to yield(), otherwise, since the
@@ -181,7 +181,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_scheduleThread(oslThread Thread);
     only given to another thread if the current thread blocks
     or uses yield().
 */
-SAL_DLLPUBLIC void SAL_CALL osl_yieldThread(void);
+SAL_DLLPUBLIC void osl_yieldThread(void);
 
 /** Attempts to set the name of the current thread.
 
@@ -193,31 +193,31 @@ SAL_DLLPUBLIC void SAL_CALL osl_yieldThread(void);
     @param name  the name of the thread; must not be null; on Linux, only the
     first 16 characters are used
 */
-SAL_DLLPUBLIC void SAL_CALL osl_setThreadName(char const * name);
+SAL_DLLPUBLIC void osl_setThreadName(char const * name);
 
 /* Callback when data stored in a thread key is no longer needed */
 
-typedef void (SAL_CALL *oslThreadKeyCallbackFunction)(void *);
+typedef void (*oslThreadKeyCallbackFunction)(void *);
 
 /** Create a key to an associated thread local storage pointer. */
-SAL_DLLPUBLIC oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback);
+SAL_DLLPUBLIC oslThreadKey osl_createThreadKey(oslThreadKeyCallbackFunction pCallback);
 
 /** Destroy a key to an associated thread local storage pointer. */
-SAL_DLLPUBLIC void SAL_CALL osl_destroyThreadKey(oslThreadKey Key);
+SAL_DLLPUBLIC void osl_destroyThreadKey(oslThreadKey Key);
 
 /** Get to key associated thread specific data. */
-SAL_DLLPUBLIC void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key);
+SAL_DLLPUBLIC void* osl_getThreadKeyData(oslThreadKey Key);
 
 /** Set to key associated thread specific data. */
-SAL_DLLPUBLIC bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData);
+SAL_DLLPUBLIC bool osl_setThreadKeyData(oslThreadKey Key, void *pData);
 
 /** Get the current thread local text encoding. */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void);
+SAL_DLLPUBLIC rtl_TextEncoding osl_getThreadTextEncoding(void);
 
 /** Set the thread local text encoding.
     @return the old text encoding.
 */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
+SAL_DLLPUBLIC rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
 
 #ifdef __cplusplus
 }

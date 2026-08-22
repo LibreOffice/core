@@ -1609,7 +1609,7 @@ public:
 
 // This just an internal helper function for
 // private use.
-extern "C" inline void SAL_CALL onDirectoryCreated(void* pData, rtl_uString* aDirectoryUrl)
+extern "C" inline void onDirectoryCreated(void* pData, rtl_uString* aDirectoryUrl)
 {
     static_cast<DirectoryCreationObserver*>(pData)->DirectoryCreated(aDirectoryUrl);
 }

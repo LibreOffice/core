@@ -42,7 +42,7 @@ extern "C" {
     description or RTL_TEXTENCODING_DONTKNOW if no mapping is available.
 */
 
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale(
+SAL_DLLPUBLIC rtl_TextEncoding osl_getTextEncodingFromLocale(
         rtl_Locale * pLocale );
 
 

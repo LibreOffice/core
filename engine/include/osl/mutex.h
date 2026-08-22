@@ -36,19 +36,19 @@ typedef struct _oslMutexImpl * oslMutex;
 
     @return 0 if the mutex could not be created, otherwise a handle to the mutex.
 */
-SAL_DLLPUBLIC oslMutex SAL_CALL osl_createMutex(void);
+SAL_DLLPUBLIC oslMutex osl_createMutex(void);
 
 /** Release the OS-structures and free mutex data-structure.
 
     @param Mutex the mutex-handle
 */
-SAL_DLLPUBLIC void SAL_CALL osl_destroyMutex(oslMutex Mutex);
+SAL_DLLPUBLIC void osl_destroyMutex(oslMutex Mutex);
 
 /** Acquire the mutex, block if already acquired by another thread.
     @param Mutex handle to a created mutex.
     @retval False if system-call fails.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_acquireMutex(oslMutex Mutex);
+SAL_DLLPUBLIC bool osl_acquireMutex(oslMutex Mutex);
 
 /** Try to acquire the mutex without blocking.
 
@@ -56,20 +56,20 @@ SAL_DLLPUBLIC bool SAL_CALL osl_acquireMutex(oslMutex Mutex);
 
     @retval False if it could not be acquired.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex);
+SAL_DLLPUBLIC bool osl_tryToAcquireMutex(oslMutex Mutex);
 
 /** Release the mutex.
 
     @param Mutex handle to a created mutex.
     @retval False if system-call fails.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_releaseMutex(oslMutex Mutex);
+SAL_DLLPUBLIC bool osl_releaseMutex(oslMutex Mutex);
 
 /** Returns a unique and global mutex.
 
     @return the global mutex.
 */
-SAL_DLLPUBLIC oslMutex * SAL_CALL osl_getGlobalMutex(void);
+SAL_DLLPUBLIC oslMutex * osl_getGlobalMutex(void);
 
 #ifdef __cplusplus
 }

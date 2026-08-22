@@ -47,13 +47,13 @@ typedef enum {
 
     @retval osl_cond_result_error Condition could not be created.
 */
-SAL_DLLPUBLIC oslCondition SAL_CALL osl_createCondition(void);
+SAL_DLLPUBLIC oslCondition osl_createCondition(void);
 
 /** Free the memory used by the condition.
 
     @param Condition the condition handle.
 */
-SAL_DLLPUBLIC void SAL_CALL osl_destroyCondition(oslCondition Condition);
+SAL_DLLPUBLIC void osl_destroyCondition(oslCondition Condition);
 
 /** Sets condition to True => wait() will not block, check() returns True.
 
@@ -62,14 +62,14 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroyCondition(oslCondition Condition);
     @param Condition handle to a created condition.
     @retval False if system-call failed.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_setCondition(oslCondition Condition);
+SAL_DLLPUBLIC bool osl_setCondition(oslCondition Condition);
 
 /** Sets condition to False => wait() will block, check() returns False
 
     @param Condition handle to a created condition.
     @retval False if system-call failed.
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_resetCondition(oslCondition Condition);
+SAL_DLLPUBLIC bool osl_resetCondition(oslCondition Condition);
 
 /** Blocks if condition is not set.
 
@@ -77,7 +77,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_resetCondition(oslCondition Condition);
     @param pTimeout Timeout value or NULL for infinite waiting
     @retval False Condition has been destroyed prematurely or system call has failed.
 */
-SAL_DLLPUBLIC oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout);
+SAL_DLLPUBLIC oslConditionResult osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout);
 
 /** Queries the state of the condition without blocking.
 
@@ -86,7 +86,7 @@ SAL_DLLPUBLIC oslConditionResult SAL_CALL osl_waitCondition(oslCondition Conditi
     @retval True condition is set
     @retval False condition is not set
 */
-SAL_DLLPUBLIC bool SAL_CALL osl_checkCondition(oslCondition Condition);
+SAL_DLLPUBLIC bool osl_checkCondition(oslCondition Condition);
 
 #ifdef __cplusplus
 }

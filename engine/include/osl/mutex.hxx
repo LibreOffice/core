@@ -92,7 +92,7 @@ namespace osl
         oslMutex mutex;
 
         // access to the oslMutex
-        friend oslMutex* SAL_CALL ::osl_getGlobalMutex();
+        friend oslMutex* ::osl_getGlobalMutex();
 
         /** The underlying oslMutex has no reference count.
 

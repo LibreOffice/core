@@ -45,19 +45,19 @@ struct ObjectRegistryData;
 
 extern "C" {
 
-SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses(
+SAL_DLLPUBLIC bool osl_detail_ObjectRegistry_storeAddresses(
         char const* pName )
     SAL_THROW_EXTERN_C();
 
-SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
+SAL_DLLPUBLIC bool osl_detail_ObjectRegistry_checkObjectCount(
     ::osl::detail::ObjectRegistryData const& rData, ::std::size_t nExpected )
     SAL_THROW_EXTERN_C();
 
-SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_registerObject(
+SAL_DLLPUBLIC void osl_detail_ObjectRegistry_registerObject(
     ::osl::detail::ObjectRegistryData & rData, void const* pObj )
     SAL_THROW_EXTERN_C();
 
-SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
+SAL_DLLPUBLIC void osl_detail_ObjectRegistry_revokeObject(
     ::osl::detail::ObjectRegistryData & rData, void const* pObj )
     SAL_THROW_EXTERN_C();
 
@@ -68,7 +68,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
 
-SAL_DLLPUBLIC ::osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
+SAL_DLLPUBLIC ::osl::Mutex & osl_detail_ObjectRegistry_getMutex()
     SAL_THROW_EXTERN_C();
 
 #ifdef __clang__
