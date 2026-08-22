@@ -87,7 +87,7 @@ private:
 
     sal_Unicode             nCellPercentFormatDecSep;   // 0:= no percent format, else which decimal separator
 
-    sal_uInt16              nAutoPar;                   // autom.parentheses than can be overwritten
+    sal_uInt16              nAutoPar;                   // automatic parentheses that can be overwritten
 
     ScAddress               aCursorPos;
     ScInputMode             eMode;

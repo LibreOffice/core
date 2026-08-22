@@ -121,7 +121,7 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
         else if( nMuster & M_ALT(0) )
         { // alternative Bytes
             sal_uInt8 nCntAlt = static_cast<sal_uInt8>(nMuster);
-            bSync = false;          // first unsynchron
+            bSync = false;          // first unsynchronized
             while( nCntAlt > 0 )
             {
                 pSearch++;

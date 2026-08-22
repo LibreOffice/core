@@ -384,12 +384,12 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     // 2) copy paste of 2 CJK lines in Calc from another application
     //    sc/source/ui/view/viewfun5.cxx ScViewFunc::PasteDataFormatFormattedText,
     //    part "nFormatId == SotClipboardFormatId::STRING || nFormatId == SotClipboardFormatId::STRING_TSVC..."
-    //    (eg: tdf#172587). In this part, we use ScImportStringStream which sets explicitely the encoding to RTL_TEXTENCODING_UNICODE
+    //    (eg: tdf#172587). In this part, we use ScImportStringStream which sets explicitly the encoding to RTL_TEXTENCODING_UNICODE
     //    => we don't need to call DetectEncoding
     //
     // 3) use of Text to Columns function (in Calc/Data)
     //    sc/source/ui/view/cellsh2.cxx ScCellShell::ExecuteDB, part SID_TEXT_TO_COLUMNS
-    //    (eg: tdf#166299). In this part, we use a SvMemoryStream and we already sets the encoding to RTL_TEXTENCODING_UNICODE
+    //    (eg: tdf#166299). In this part, we use a SvMemoryStream and we already set the encoding to RTL_TEXTENCODING_UNICODE
     //    => we don't need to call DetectEncoding
 
     // Retrieve encoding, first time from the stream
@@ -502,7 +502,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     if (nFromRow != 1)
     {
         mxNfRow->set_value(nFromRow);
-        // tdf#163638 - show visual indicator for from rows
+        // tdf#163638 - show visual indicator for the "From Row" value
         mxTableBox->GetGrid().Execute(CSVCMD_SETFIRSTIMPORTLINE, nFromRow - 1);
     }
     mxNfRow->connect_value_changed(LINK(this, ScImportAsciiDlg, FirstRowHdl));
@@ -563,7 +563,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& r
     if (!mpRowPosArray)
         mpRowPosArray.reset( new sal_uLong[ASCIIDLG_MAXROWS + 2] );
 
-    if (!mnRowPosCount) // complete re-fresh
+    if (!mnRowPosCount) // complete refresh
     {
         memset( mpRowPosArray.get(), 0, sizeof(mpRowPosArray[0]) * (ASCIIDLG_MAXROWS+2));
 
@@ -604,10 +604,10 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& r
         mnStreamPos = mpDatStream->Tell();
     }
 
-    //  If the file content isn't unicode, ReadUniStringLine
+    //  If the file content isn't Unicode, ReadUniStringLine
     //  may try to seek beyond the file's end and cause a CANTSEEK error
     //  (depending on the stream type). The error code has to be cleared,
-    //  or further read operations (including non-unicode) will fail.
+    //  or further read operations (including non-Unicode) will fail.
     if ( mpDatStream->GetError() == ERRCODE_IO_CANTSEEK )
         mpDatStream->ResetError();
 
@@ -879,7 +879,7 @@ void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
     OUString aOldFldSeps( maFieldSeparators);
     sal_Unicode cOldSep = mcTextSep;
     mcTextSep = lcl_CharFromCombo( *mxCbTextSep, SCSTR_TEXTSEP );
-    // Any separator changed may result in completely different lines due to
+    // Any separator change may result in completely different lines due to
     // embedded line breaks.
     if (cOldSep != mcTextSep)
     {

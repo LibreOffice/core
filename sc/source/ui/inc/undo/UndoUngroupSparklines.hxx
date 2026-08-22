@@ -16,7 +16,7 @@
 
 namespace sc
 {
-/** Previous sparkline group data, which is restored at undo ungroupping */
+/** Previous sparkline group data, which is restored at undo ungrouping */
 struct SparklineUndoData
 {
     SparklineUndoData(ScAddress const& rAddress, ScRangeList aDataRangeList,
