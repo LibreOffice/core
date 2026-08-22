@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <ostream>
 #include <string>
+#include <vector>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -1769,9 +1770,9 @@ struct COKit
      * because the shared clipboard is process-global. The distinct name marks
      * that it reads one global clipboard, not a per-view one.
      */
-    virtual bool getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                    char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                    char      ***pOutStreams) = 0;
+    virtual bool getGlobalClipboard(const char **pMimeTypes,
+                                    std::vector<std::string>& rOutMimeTypes,
+                                    std::vector<std::vector<char>>& rOutStreams) = 0;
 };
 
 struct COKitDocument
@@ -2220,16 +2221,14 @@ struct COKitDocument
      * NB. returns a complete set of possible selection types if nullptr is passed for pMimeTypes.
      *
      * @param pMimeTypes passes in a nullptr terminated list of mime types to fetch
-     * @param pOutCount     returns the size of the other @pOut arrays
-     * @param pOutMimeTypes returns an array of mime types
-     * @param pOutSizes     returns the size of each pOutStream
-     * @param pOutStreams   the content of each mime-type, of length in @pOutSizes
+     * @param rOutMimeTypes returns an array of mime types
+     * @param rOutStreams   the content of each mime-type
      *
      * @returns: true on success, false on error.
      */
-    virtual bool getClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                              char      ***pOutMimeTypes, size_t     **pOutSizes,
-                              char      ***pOutStreams) = 0;
+    virtual bool getClipboard(const char **pMimeTypes,
+                              std::vector<std::string>& rOutMimTypes,
+                              std::vector<std::vector<char>>& rOutStreams) = 0;
 
     /**
      * Populates the clipboard for this view with multiple types of content.

@@ -915,33 +915,24 @@ void DesktopKitTest::testClipboardMarkdownFlavor()
     CPPUNIT_ASSERT(pDocument->setClipboard(1, pInMimeTypes, pInSizes, pInStreams));
 
     // When getting the clipboard content:
-    size_t nOutCount = 0;
-    char** pOutMimeTypes = nullptr;
-    size_t* pOutSizes = nullptr;
-    char** pOutStreams = nullptr;
-    CPPUNIT_ASSERT(pDocument->getClipboard(nullptr, &nOutCount, &pOutMimeTypes, &pOutSizes,
-                                           &pOutStreams));
+    std::vector<std::string> aOutMimeTypes;
+    std::vector<std::vector<char>> aOutStreams;
+    CPPUNIT_ASSERT(pDocument->getClipboard(nullptr, aOutMimeTypes, aOutStreams));
 
     // Then make sure the plain text data is also advertised as markdown:
     bool bHasPlain = false;
     bool bHasMarkdown = false;
     OString aMarkdownContent;
-    for (size_t i = 0; i < nOutCount; ++i)
+    for (size_t i = 0; i < aOutMimeTypes.size(); ++i)
     {
-        OString aMime(pOutMimeTypes[i]);
-        if (aMime == "text/plain;charset=utf-8")
+        if (aOutMimeTypes[i] == "text/plain;charset=utf-8")
             bHasPlain = true;
-        else if (aMime == "text/markdown")
+        else if (aOutMimeTypes[i] == "text/markdown")
         {
             bHasMarkdown = true;
-            aMarkdownContent = OString(pOutStreams[i], pOutSizes[i]);
+            aMarkdownContent = OString(aOutStreams[i].data(), aOutStreams[i].size());
         }
-        free(pOutMimeTypes[i]);
-        free(pOutStreams[i]);
     }
-    free(pOutMimeTypes);
-    free(pOutStreams);
-    free(pOutSizes);
     CPPUNIT_ASSERT(bHasPlain);
     // Without the accompanying fix in place, this test would have failed, there was no markdown
     // advertised when listing available formats.

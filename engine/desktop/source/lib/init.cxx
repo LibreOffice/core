@@ -1235,10 +1235,8 @@ static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis,
                                                       char** pUsedMimeType);
 static bool doc_getClipboard (COKitDocument* pThis,
                               const char **pMimeTypes,
-                              size_t      *pOutCount,
-                              char      ***pOutMimeTypes,
-                              size_t     **pOutSizes,
-                              char      ***pOutStreams);
+                              std::vector<std::string>& rOutMimeTypes,
+                              std::vector<std::vector<char>>& rOutStreams);
 static bool doc_setClipboard (COKitDocument* pThis,
                               const size_t   nInCount,
                               const char   **pInMimeTypes,
@@ -1768,11 +1766,11 @@ void COKitDocumentImpl::resizeWindow(unsigned nWindowId, const int width, const 
     doc_resizeWindow(this, nWindowId, width, height);
 }
 
-bool COKitDocumentImpl::getClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                      char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                      char      ***pOutStreams)
+bool COKitDocumentImpl::getClipboard(const char **pMimeTypes,
+                                      std::vector<std::string>& rOutMimeTypes,
+                                      std::vector<std::vector<char>>& rOutStreams)
 {
-    return doc_getClipboard(this, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+    return doc_getClipboard(this, pMimeTypes, rOutMimeTypes, rOutStreams);
 }
 
 bool COKitDocumentImpl::setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
@@ -3220,8 +3218,8 @@ static int lo_getDocsCount(COKit* pThis);
 
 static void lo_installClipboardProvider(COKit* pThis, const COKitClipboardProvider* pProvider);
 
-static bool lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes, size_t* pOutCount,
-                                  char*** pOutMimeTypes, size_t** pOutSizes, char*** pOutStreams);
+static bool lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes,
+                                  std::vector<std::string>& rOutMimeTypes, std::vector<std::vector<char>>& rOutStreams);
 
 COKitImpl::COKitImpl()
     : maThread(nullptr)
@@ -3370,12 +3368,11 @@ void COKitImpl::installClipboardProvider(const COKitClipboardProvider* pProvider
     lo_installClipboardProvider(this, pProvider);
 }
 
-bool COKitImpl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                    char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                    char      ***pOutStreams)
+bool COKitImpl::getGlobalClipboard(const char **pMimeTypes,
+                                    std::vector<std::string>& rOutMimeTypes,
+                                    std::vector<std::vector<char>>& rOutStreams)
 {
-    return lo_getGlobalClipboard(this, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes,
-                                 pOutStreams);
+    return lo_getGlobalClipboard(this, pMimeTypes, rOutMimeTypes, rOutStreams);
 }
 
 COKitImpl::~COKitImpl()
@@ -6968,11 +6965,11 @@ static void doc_setViewOption(COKitDocument* pThis, const char* pOption, const c
 
 static bool getFromTransferable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
-    const OString &aInMimeType, OString &aRet);
+    std::string_view aInMimeType, OString &aRet);
 
 static bool encodeImageAsHTML(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
-    const OString &aMimeType, OString &aRet)
+    std::string_view aMimeType, OString &aRet)
 {
     if (!getFromTransferable(xTransferable, aMimeType, aRet))
         return false;
@@ -6998,7 +6995,7 @@ static bool encodeImageAsHTML(
 
 static bool encodeTextAsHTML(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
-    const OString &aMimeType, OString &aRet)
+    std::string_view aMimeType, OString &aRet)
 {
     if (!getFromTransferable(xTransferable, aMimeType, aRet))
         return false;
@@ -7016,7 +7013,7 @@ static bool encodeTextAsHTML(
 
 static bool getFromTransferable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
-    const OString &aInMimeType, OString &aRet)
+    std::string_view aInMimeType, OString &aRet)
 {
     OString aMimeType(aInMimeType);
 
@@ -7240,10 +7237,8 @@ static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, cons
 // the collaborative server, or the single shared one in the desktop app.
 // Returns true on success, false when there is nothing on the clipboard.
 static bool fetchClipboardContents(const char **pMimeTypes,
-                                   size_t      *pOutCount,
-                                   char      ***pOutMimeTypes,
-                                   size_t     **pOutSizes,
-                                   char      ***pOutStreams)
+                                   std::vector<std::string>& rOutMimeTypes,
+                                   std::vector<std::vector<char>>& rOutStreams)
 {
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
 
@@ -7273,31 +7268,24 @@ static bool fetchClipboardContents(const char **pMimeTypes,
             aMimeTypes.push_back(OString(pMimeTypes[i]));
     }
 
-    *pOutCount = aMimeTypes.size();
-    *pOutSizes = static_cast<size_t *>(malloc(*pOutCount * sizeof(size_t)));
-    assert(*pOutSizes && "Don't handle OOM conditions");
-    *pOutMimeTypes = static_cast<char **>(malloc(*pOutCount * sizeof(char *)));
-    assert(*pOutMimeTypes && "Don't handle OOM conditions");
-    *pOutStreams = static_cast<char **>(malloc(*pOutCount * sizeof(char *)));
-    assert(*pOutStreams && "Don't handle OOM conditions");
+    rOutMimeTypes.resize(aMimeTypes.size());
+    rOutStreams.resize(aMimeTypes.size());
     for (size_t i = 0; i < aMimeTypes.size(); ++i)
     {
         if (aMimeTypes[i] == "text/plain;charset=utf-16")
-            (*pOutMimeTypes)[i] = strdup("text/plain;charset=utf-8");
+            rOutMimeTypes[i] = "text/plain;charset=utf-8";
         else
-            (*pOutMimeTypes)[i] = convertOString(aMimeTypes[i]);
+            rOutMimeTypes[i] = aMimeTypes[i];
 
         OString aRet;
-        bool bSuccess = getFromTransferable(xTransferable, OString((*pOutMimeTypes)[i]), aRet);
+        bool bSuccess = getFromTransferable(xTransferable, rOutMimeTypes[i], aRet);
         if (!bSuccess || aRet.getLength() < 1)
         {
-            (*pOutSizes)[i] = 0;
-            (*pOutStreams)[i] = nullptr;
+            rOutStreams[i].clear();
         }
         else
         {
-            (*pOutSizes)[i] = aRet.getLength();
-            (*pOutStreams)[i] = convertOString(aRet);
+            rOutStreams[i] = std::vector<char>(aRet.getStr(), aRet.getStr() + aRet.getLength());
         }
     }
 
@@ -7306,25 +7294,13 @@ static bool fetchClipboardContents(const char **pMimeTypes,
 
 static bool doc_getClipboard(COKitDocument* pThis,
                              const char **pMimeTypes,
-                             size_t      *pOutCount,
-                             char      ***pOutMimeTypes,
-                             size_t     **pOutSizes,
-                             char      ***pOutStreams)
+                             std::vector<std::string>& rOutMimeTypes,
+                             std::vector<std::vector<char>>& rOutStreams)
 {
     comphelper::ProfileZone aZone("doc_getClipboard");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
-
-    assert (pOutCount);
-    assert (pOutMimeTypes);
-    assert (pOutSizes);
-    assert (pOutStreams);
-
-    *pOutCount = 0;
-    *pOutMimeTypes = nullptr;
-    *pOutSizes = nullptr;
-    *pOutStreams = nullptr;
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -7333,7 +7309,7 @@ static bool doc_getClipboard(COKitDocument* pThis,
         return false;
     }
 
-    return fetchClipboardContents(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+    return fetchClipboardContents(pMimeTypes, rOutMimeTypes, rOutStreams);
 }
 
 // Office-level clipboard read for the desktop app's one shared clipboard. It
@@ -7342,27 +7318,15 @@ static bool doc_getClipboard(COKitDocument* pThis,
 // clipboard is per view.
 static bool lo_getGlobalClipboard(COKit* /*pThis*/,
                                   const char **pMimeTypes,
-                                  size_t      *pOutCount,
-                                  char      ***pOutMimeTypes,
-                                  size_t     **pOutSizes,
-                                  char      ***pOutStreams)
+                                  std::vector<std::string>& rOutMimeTypes,
+                                  std::vector<std::vector<char>>& rOutStreams)
 {
     comphelper::ProfileZone aZone("lo_getGlobalClipboard");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    assert (pOutCount);
-    assert (pOutMimeTypes);
-    assert (pOutSizes);
-    assert (pOutStreams);
-
-    *pOutCount = 0;
-    *pOutMimeTypes = nullptr;
-    *pOutSizes = nullptr;
-    *pOutStreams = nullptr;
-
-    return fetchClipboardContents(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+    return fetchClipboardContents(pMimeTypes, rOutMimeTypes, rOutStreams);
 }
 
 static bool doc_setClipboard(COKitDocument* pThis,

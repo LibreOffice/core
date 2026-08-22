@@ -355,10 +355,8 @@ JNIEXPORT jboolean JNICALL
 Java_org_libreoffice_androidlib_LOActivity_getClipboardContent(JNIEnv *env, jobject, jobject lokClipboardData)
 {
     const char** mimeTypes = nullptr;
-    size_t outCount = 0;
-    char  **outMimeTypes = nullptr;
-    size_t *outSizes = nullptr;
-    char  **outStreams = nullptr;
+    std::vector<std::string> outMimeTypes;
+    std::vector<std::vector<char>> outStreams;
     bool bResult = false;
 
     jclass jclazz = env->FindClass("java/util/ArrayList");
@@ -372,28 +370,26 @@ Java_org_libreoffice_androidlib_LOActivity_getClipboardContent(JNIEnv *env, jobj
     jclass class_LokClipboardData = env->GetObjectClass(lokClipboardData);
     jfieldID fieldId_LokClipboardData_clipboardEntries = env->GetFieldID(class_LokClipboardData , "clipboardEntries", "Ljava/util/ArrayList;");
 
-    if (getLOKDocumentForAndroidOnly()->getClipboard(mimeTypes,
-                                                     &outCount, &outMimeTypes,
-                                                     &outSizes, &outStreams))
+    if (getLOKDocumentForAndroidOnly()->getClipboard(mimeTypes, outMimeTypes, outStreams))
     {
         // return early
-        if (outCount == 0)
+        if (outMimeTypes.size() == 0)
             return bResult;
 
-        for (size_t i = 0; i < outCount; ++i)
+        for (size_t i = 0; i < outMimeTypes.size(); ++i)
         {
             // Create new LokClipboardEntry instance
             jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
 
-            jstring mimeType = tojstringAndFree(env, outMimeTypes[i]);
+            jstring mimeType = env->NewStringUTF(outMimeTypes[i].c_str());
             // clipboardEntry.mime= mimeType
             env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
             env->DeleteLocalRef(mimeType);
 
-            size_t aByteArraySize = outSizes[i];
+            size_t aByteArraySize = outStreams[i].size();
             jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
             // Copy char* to bytearray
-            env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) outStreams[i]);
+            env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) outStreams[i].data());
             // clipboardEntry.data = aByteArray
             env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
 
@@ -410,28 +406,26 @@ Java_org_libreoffice_androidlib_LOActivity_getClipboardContent(JNIEnv *env, jobj
 
     const char* mimeTypesHTML[] = { "text/plain;charset=utf-8", "text/html", nullptr };
 
-    if (getLOKDocumentForAndroidOnly()->getClipboard(mimeTypesHTML,
-                                                     &outCount, &outMimeTypes,
-                                                     &outSizes, &outStreams))
+    if (getLOKDocumentForAndroidOnly()->getClipboard(mimeTypesHTML, outMimeTypes, outStreams))
     {
         // return early
-        if (outCount == 0)
+        if (outMimeTypes.size() == 0)
             return bResult;
 
-        for (size_t i = 0; i < outCount; ++i)
+        for (size_t i = 0; i < outMimeTypes.size(); ++i)
         {
             // Create new LokClipboardEntry instance
             jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
 
-            jstring mimeType = tojstringAndFree(env, outMimeTypes[i]);
+            jstring mimeType = env->NewStringUTF(outMimeTypes[i].c_str());
             // clipboardEntry.mime= mimeType
             env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
             env->DeleteLocalRef(mimeType);
 
-            size_t aByteArraySize = outSizes[i];
+            size_t aByteArraySize = outStreams[i].size();
             jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
             // Copy char* to bytearray
-            env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) outStreams[i]);
+            env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) outStreams[i].data());
             // clipboardEntry.data = aByteArray
             env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
 

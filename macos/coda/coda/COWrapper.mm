@@ -142,24 +142,15 @@ static NSData *_Nullable copyEngineClipboardData(const char *mime)
         return nil;
 
     const char *filter[] = { mime, nullptr };
-    size_t outCount = 0;
-    char **outMimeTypes = nullptr;
-    size_t *outSizes = nullptr;
-    char **outStreams = nullptr;
-    if (!sOffice->getGlobalClipboard(filter, &outCount, &outMimeTypes, &outSizes, &outStreams)
-        || outCount == 0)
+    std::vector<std::string> outMimeTypes;
+    std::vector<std::vector<char>> outStreams;
+    if (!sOffice->getGlobalClipboard(filter, outMimeTypes, outStreams)
+        || outStreams.size() == 0)
         return nil;
 
     NSData *data = nil;
-    if (outStreams[0] && outSizes[0] > 0)
-        data = [NSData dataWithBytes:outStreams[0] length:outSizes[0]];
-    for (size_t i = 0; i < outCount; ++i) {
-        free(outMimeTypes[i]);
-        free(outStreams[i]);
-    }
-    free(outMimeTypes);
-    free(outSizes);
-    free(outStreams);
+    if (outStreams[0].size() > 0)
+        data = [NSData dataWithBytes:outStreams[0].data() length:outStreams[0].size()];
     return data;
 }
 

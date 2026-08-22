@@ -75,27 +75,20 @@ std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId,
     if (!loKitDoc || !selectDocViewAsCurrent(loKitDoc))
         return nullptr;
 
-    size_t outCount = 0;
-    char** outMimeTypes = nullptr;
-    size_t* outSizes = nullptr;
-    char** outStreams = nullptr;
+    std::vector<std::string> outMimeTypes;
+    std::vector<std::vector<char>> outStreams;
 
-    if (!loKitDoc->getClipboard(pMimeTypes, &outCount, &outMimeTypes, &outSizes, &outStreams)
-        || outCount == 0)
+    if (!loKitDoc->getClipboard(pMimeTypes, outMimeTypes, outStreams)
+        || outMimeTypes.size() == 0)
         return nullptr;
 
     auto mimeData = std::make_unique<QMimeData>();
-    for (size_t i = 0; i < outCount; ++i)
+    for (size_t i = 0; i < outMimeTypes.size(); ++i)
     {
-        if (outStreams[i] && outSizes[i] > 0)
-            mimeData->setData(QString::fromUtf8(outMimeTypes[i]),
-                              QByteArray(outStreams[i], static_cast<int>(outSizes[i])));
-        free(outMimeTypes[i]);
-        free(outStreams[i]);
+        if (outStreams[i].size() > 0)
+            mimeData->setData(QString::fromUtf8(outMimeTypes[i].c_str()),
+                              QByteArray(outStreams[i].data(), static_cast<int>(outStreams[i].size())));
     }
-    free(outMimeTypes);
-    free(outSizes);
-    free(outStreams);
 
     return mimeData;
 }

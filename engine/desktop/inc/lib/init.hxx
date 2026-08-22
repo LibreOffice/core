@@ -367,9 +367,9 @@ namespace desktop {
         void selectPart(int nPart, int nSelect) override;
         void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) override;
         void resizeWindow(unsigned nWindowId, const int width, const int height) override;
-        bool getClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                          char      ***pOutMimeTypes, size_t     **pOutSizes,
-                          char      ***pOutStreams) override;
+        bool getClipboard(const char **pMimeTypes,
+                          std::vector<std::string>& rOutMimeTypes,
+                          std::vector<std::vector<char>>& rOutStreams) override;
         bool setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
                           const size_t  *pInSizes, const char   **pInStreams) override;
         COKitSelectionType getSelectionType() override;
@@ -474,9 +474,9 @@ namespace desktop {
         void
         registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) override;
         void installClipboardProvider(const COKitClipboardProvider* pProvider) override;
-        bool getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
-                                char      ***pOutMimeTypes, size_t     **pOutSizes,
-                                char      ***pOutStreams) override;
+        bool getGlobalClipboard(const char **pMimeTypes,
+                                std::vector<std::string>& rOutMimeTypes,
+                                std::vector<std::vector<char>>& rOutStreams) override;
     };
 
     /// Helper function to extract the value from parameters delimited by

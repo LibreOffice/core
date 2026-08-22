@@ -312,38 +312,41 @@ static unsigned sOwnedClipboardDocId = 0;
 // This is the same method as Java_org_libreoffice_androidlib_LOActivity_getClipboardContent, with minimal editing to work with objective C
 - (bool)getClipboardContent:(out NSMutableDictionary *)content {
     const char** mimeTypes = nullptr;
-    size_t outCount = 0;
-    char  **outMimeTypes = nullptr;
-    size_t *outSizes = nullptr;
-    char  **outStreams = nullptr;
+    std::vector<std::string> outMimeTypes;
+    std::vector<std::vector<char>> outStreams;
     bool bResult = false;
 
     if (DocumentData::get(self.document->appDocId).loKitDocument->getClipboard(mimeTypes,
-                                                     &outCount, &outMimeTypes,
-                                                     &outSizes, &outStreams))
+                                                     outMimeTypes,
+                                                     outStreams))
     {
         // return early
-        if (outCount == 0)
+        if (outMimeTypes.size() == 0)
             return bResult;
 
-        for (size_t i = 0; i < outCount; ++i)
+        for (size_t i = 0; i < outMimeTypes.size(); ++i)
         {
-            NSString * identifier = [NSString stringWithUTF8String:outMimeTypes[i]];
+            NSString * identifier = [NSString stringWithUTF8String:outMimeTypes[i].c_str()];
 
             // For interop with other apps, if this mime-type is known we can export it
             UTType * uti = [UTType typeWithMIMEType:identifier];
             if (uti != nil && !uti.dynamic) {
                 if ([uti conformsToType:UTTypePlainText]) {
-                    [content setValue:outStreams[i] == NULL ? @"" : [NSString stringWithUTF8String:outStreams[i]] forKey:uti.identifier];
+                    [content setValue:outStreams[i].size() == 0
+                                       ? @""
+                                       : [[NSString alloc] initWithBytes:outStreams[i].data()
+                                                           length:outStreams[i].size()
+                                                           encoding:NSUTF8StringEncoding]
+                             forKey:uti.identifier];
                 } else if (uti != nil && [uti conformsToType:UTTypeImage]) {
-                    [content setValue:[UIImage imageWithData:[NSData dataWithBytes:outStreams[i] length:outSizes[i]]] forKey:uti.identifier];
+                    [content setValue:[UIImage imageWithData:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()]] forKey:uti.identifier];
                 } else {
-                    [content setValue:[NSData dataWithBytes:outStreams[i] length:outSizes[i]] forKey:uti.identifier];
+                    [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:uti.identifier];
                 }
             }
             
             // But to preserve the data we need, we'll always also export the raw, unaltered bytes
-            [content setValue:[NSData dataWithBytes:outStreams[i] length:outSizes[i]] forKey:identifier];
+            [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:identifier];
         }
         bResult = true;
     }
@@ -353,31 +356,36 @@ static unsigned sOwnedClipboardDocId = 0;
     const char* mimeTypesHTML[] = { "text/plain;charset=utf-8", "text/html", nullptr };
 
     if (DocumentData::get(self.document->appDocId).loKitDocument->getClipboard(mimeTypesHTML,
-                                                     &outCount, &outMimeTypes,
-                                                     &outSizes, &outStreams))
+                                                     outMimeTypes,
+                                                     outStreams))
     {
         // return early
-        if (outCount == 0)
+        if (outMimeTypes.size() == 0)
             return bResult;
 
-        for (size_t i = 0; i < outCount; ++i)
+        for (size_t i = 0; i < outMimeTypes.size(); ++i)
         {
-            NSString * identifier = [NSString stringWithUTF8String:outMimeTypes[i]];
+            NSString * identifier = [NSString stringWithUTF8String:outMimeTypes[i].c_str()];
 
             // For interop with other apps, if this mime-type is known we can export it
             UTType * uti = [UTType typeWithMIMEType:identifier];
             if (uti != nil && !uti.dynamic) {
                 if ([uti conformsToType:UTTypePlainText]) {
-                    [content setValue:outStreams[i] == NULL ? @"" : [NSString stringWithUTF8String:outStreams[i]] forKey:uti.identifier];
+                    [content setValue:outStreams[i].size() == 0
+                                      ? @""
+                                      : [[NSString alloc] initWithBytes:outStreams[i].data()
+                                                           length:outStreams[i].size()
+                                                           encoding:NSUTF8StringEncoding]
+                             forKey:uti.identifier];
                 } else if (uti != nil && [uti conformsToType:UTTypeImage]) {
-                    [content setValue:[UIImage imageWithData:[NSData dataWithBytes:outStreams[i] length:outSizes[i]]] forKey:uti.identifier];
+                    [content setValue:[UIImage imageWithData:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()]] forKey:uti.identifier];
                 } else {
-                    [content setValue:[NSData dataWithBytes:outStreams[i] length:outSizes[i]] forKey:uti.identifier];
+                    [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:uti.identifier];
                 }
             }
             
             // But to preserve the data we need, we'll always also export the raw, unaltered bytes
-            [content setValue:[NSData dataWithBytes:outStreams[i] length:outSizes[i]] forKey:identifier];
+            [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:identifier];
         }
         bResult = true;
     }
