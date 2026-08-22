@@ -1135,7 +1135,7 @@ IMPL_LINK(FmFilterNavigator, EditedEntryHdl, const weld::TreeView::IterColText&,
     OUString aText(comphelper::string::strip(rNewText, ' '));
     if (aText.isEmpty())
     {
-        // deleting the entry asynchron
+        // deleting the entry asynchronously
         m_nAsyncRemoveEvent = Application::PostUserEvent(LINK(this, FmFilterNavigator, OnRemove), pData);
     }
     else

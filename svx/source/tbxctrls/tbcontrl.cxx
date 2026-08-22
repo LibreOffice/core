@@ -1763,7 +1763,7 @@ bool SvxFontNameBox_Base::CheckFontIsAvailable(std::u16string_view fontname)
 
 void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
 {
-    if (mbCheckingUnknownFont) //tdf#117537 block rentry
+    if (mbCheckingUnknownFont) //tdf#117537 block reentry
         return;
     mbCheckingUnknownFont = true;
     OUString fontname = m_xWidget->get_active_text();

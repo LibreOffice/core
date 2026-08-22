@@ -68,7 +68,7 @@ void createSubPrimitive3DVector(
                     bTestSelectedVisibility);
             }
 
-            // create transform primitive for the created content combining content and transformtion
+            // create transform primitive for the created content combining content and transformation
             const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::TransformPrimitive3D(
                 pViewContactOfE3dScene->GetE3dScene().GetTransform(),
                 aNewAllTarget));

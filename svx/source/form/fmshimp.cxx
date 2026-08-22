@@ -789,7 +789,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt)
         }
         else
         {
-            // with the following the slot is invalidated asynchron
+            // with the following the slot is invalidated asynchronously
             LockSlotInvalidation_Lock(true);
             InvalidateSlot_Lock(SID_FM_RECORD_TOTAL, false);
             LockSlotInvalidation_Lock(false);
@@ -2778,7 +2778,7 @@ void FmXFormShell::SetDesignMode_Lock(bool bDesign)
     {
         // The UIFeatureChanged performs an update (a check of the available features) asynchronously.
         // So we can't call ShowSelectionProperties directly as the according feature isn't enabled yet.
-        // That's why we use an asynchron execution on the dispatcher.
+        // That's why we use an asynchronous execution on the dispatcher.
         // (And that's why this has to be done AFTER the UIFeatureChanged.)
         m_pShell->GetViewShell()->GetViewFrame().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
     }

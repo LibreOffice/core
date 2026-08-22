@@ -48,7 +48,7 @@ struct SdrPageWindow::Impl
     SdrPageView& mrPageView;
 
     // the PaintWindow to paint on. Here is access to OutDev etc.
-    // #i72752# change to pointer to allow patcing it in DrawLayer() if necessary
+    // #i72752# change to pointer to allow patching it in DrawLayer() if necessary
     SdrPaintWindow* mpPaintWindow;
     SdrPaintWindow* mpOriginalPaintWindow;
 

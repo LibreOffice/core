@@ -181,7 +181,7 @@ ViewObjectContact::~ViewObjectContact()
     // which (depending of its implementation) may destroy other OCs. This
     // can trigger the deletion of the helper OC of a page visualising object
     // which IS the OC of this object. Eventually StopGettingViewed() needs
-    // to get asynchron later
+    // to get asynchronously later
     GetObjectContact().RemoveViewObjectContact(*this);
 
     // take care of remembered ViewContact

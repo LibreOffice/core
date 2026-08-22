@@ -869,7 +869,7 @@ void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&)
 }
 
 // callback from the active EditView, forward to evtl. existing instances of the
-// TextEditOverlayObject(s). This cvall *only* updates the selection visualization
+// TextEditOverlayObject(s). This call *only* updates the selection visualization
 // which is e.g. used when only the selection is changed, but not the text
 void SdrObjEditView::EditViewSelectionChange()
 {
