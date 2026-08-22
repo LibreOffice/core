@@ -208,7 +208,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
 
                     // in tables, fix lost position, when the selected image was
                     // anchored as character at beginning of the table row:
-                    // in this case, the text cursor was positionated after the
+                    // in this case, the text cursor was positioned after the
                     // floating table, and not before the image, as in other positions
                     // in the table row (and if the table wasn't a floating one,
                     // the text cursor lost completely)

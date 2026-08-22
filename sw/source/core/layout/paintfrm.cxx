@@ -425,7 +425,7 @@ public:
 
 SwSavePaintStatics::SwSavePaintStatics()
 {
-    // Saving globales
+    // Saving globals
     bSFlyMetafile = gProp.bSFlyMetafile;
     pSGlobalShell = gProp.pSGlobalShell;
     pSFlyMetafileOut = gProp.pSFlyMetafileOut;
@@ -447,7 +447,7 @@ SwSavePaintStatics::SwSavePaintStatics()
     aSScaleX = gProp.aSScaleX;
     aSScaleY = gProp.aSScaleY;
 
-    // Restoring globales to default
+    // Restoring globals to default
     gProp.bSFlyMetafile = false;
     gProp.pSFlyMetafileOut = nullptr;
     gProp.pSRetoucheFly  = nullptr;
@@ -461,7 +461,7 @@ SwSavePaintStatics::SwSavePaintStatics()
 
 SwSavePaintStatics::~SwSavePaintStatics()
 {
-    // Restoring globales to saved one
+    // Restoring globals to saved one
     gProp.pSGlobalShell       = pSGlobalShell;
     gProp.bSFlyMetafile       = bSFlyMetafile;
     gProp.pSFlyMetafileOut    = pSFlyMetafileOut;
@@ -1478,12 +1478,12 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
             // have not to be subtracted from given region.
             // But, if method is called for a fly frame and
             // <pFly> is a direct lower of this fly frame and
-            // <pFly> inherites its transparent background brush from its parent,
+            // <pFly> inherits from its transparent background brush from its parent,
             // then <pFly> frame area have to be subtracted from given region.
             // NOTE: Because in Status Quo transparent backgrounds can only be
             //     assigned to fly frames, the handle of this special case
             //     avoids drawing of transparent areas more than once, if
-            //     a fly frame inherites a transparent background from its
+            //     a fly frame inherits from a transparent background from its
             //     parent fly frame.
             if (pFrame->IsFlyFrame() &&
                 (pFly->GetAnchorFrame()->FindFlyFrame() == pFrame) &&

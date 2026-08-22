@@ -1129,7 +1129,7 @@ bool SwFrame::IsCollapseUpper() const
     const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
     if (!rIDSA.get(DocumentSettingId::TAB_OVER_SPACING) || rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN))
     {
-        // Writer or Word Word <= 2010 style: upper margin is never ignored.
+        // Writer or Word <= 2010 style: upper margin is never ignored.
         return false;
     }
 

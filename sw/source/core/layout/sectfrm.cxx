@@ -2456,7 +2456,7 @@ SwTwips SwSectionFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool b
         // #i28701# - Due to the new object positioning
         // the frame on the next page/column can flow backward (e.g. it
         // was moved forward due to the positioning of its objects ).
-        // Thus, invalivate this next frame, if document compatibility
+        // Thus, invalidate this next frame, if document compatibility
         // option 'Consider wrapping style influence on object positioning' is ON.
         else if ( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {

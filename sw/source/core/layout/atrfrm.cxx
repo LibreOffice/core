@@ -3395,7 +3395,7 @@ bool SwFlyFrameFormat::IsBackgroundTransparent() const
     }
 
     // NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
-    //     and there is no background graphic, it "inherites" the background
+    //     and there is no background graphic, it "inherits" from the background
     //     from its anchor.
     std::unique_ptr<SvxBrushItem> aBackground(makeBackgroundBrushItem());
     if ( aBackground->GetColor().IsTransparent() &&

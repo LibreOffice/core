@@ -2280,7 +2280,7 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
     // visible ones or all of them.
     const SwViewShell& rViewShell = m_pImp->GetShell();
 
-    // Check if job ius enabled and can run
+    // Check if job is enabled and can run
     if (!isJobEnabled(eJob, &rViewShell))
         return false;
 
