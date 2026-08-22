@@ -354,7 +354,7 @@ void SheetDataBuffer::addColXfStyles()
         std::sort( s.begin(), s.end(), StyleRowRangeComp());
         s.erase( std::unique( s.begin(), s.end(),
                     [](const RowRangeStyle& lhs, const RowRangeStyle& rhs)
-                        // Synthetize operator== from operator < . Do not create an actual operator==
+                        // Synthesize operator== from operator < . Do not create an actual operator==
                         // as operator< is somewhat specific (see StyleRowRangeComp).
                         { return !StyleRowRangeComp()(lhs,rhs) && !StyleRowRangeComp()(rhs,lhs); } ),
             s.end());

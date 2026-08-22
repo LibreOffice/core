@@ -885,7 +885,7 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
 }
 
 /* Solve a LUP decomposed equation Ax=b. LU is a combined matrix of L and U
- * triangulars and P the permutation vector as obtained from
+ * triangular matrices and P the permutation vector as obtained from
  * lcl_LUP_decompose(). B is the right-hand side input vector, X is used to
  * return the solution vector.
  */

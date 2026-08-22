@@ -219,7 +219,7 @@ void ScRangeData::Dump() const
 
 void ScRangeData::GuessPosition()
 {
-    // set a position that allows "absoluting" of all relative references
+    // set a position that allows "absolutizing" of all relative references
     // in CalcAbsIfRel without errors
 
     OSL_ENSURE(aPos == ScAddress(), "position will go lost now");

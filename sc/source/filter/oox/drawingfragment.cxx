@@ -347,7 +347,7 @@ void DrawingFragment::onEndElement()
                     // diagram shapes at all. Here the size has been determined from the anchor and
                     // thus repeating the import of diagram.xml gives the diagram shapes.
                     //
-                    // I have checked that mpDiagramHelper at mxShape is *not* resetted here
+                    // I have checked that mpDiagramHelper at mxShape is *not* reset here
                     // which is crucial to keep that stuff working. Also added a isDiagram
                     // method to avoid indirect test for Diagram using former getDiagramDoms()
                     if (nullptr != mxShape->getDiagramHelper()

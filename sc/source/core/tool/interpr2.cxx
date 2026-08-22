@@ -1100,7 +1100,7 @@ void ScInterpreter::ScRoundSignificant()
 /** tdf69552 ODFF1.2 function CEILING and Excel function CEILING.MATH
     In essence, the difference between the two is that ODFF-CEILING needs to
     have arguments value and significance of the same sign and with
-    CEILING.MATH the sign of argument significance is irrevelevant.
+    CEILING.MATH the sign of argument significance is irrelevant.
     This is why ODFF-CEILING is exported to Excel as CEILING.MATH and
     CEILING.MATH is imported in Calc as CEILING.MATH
  */
@@ -1188,7 +1188,7 @@ void ScInterpreter::ScCeil_Precise()
 /** tdf69552 ODFF1.2 function FLOOR and Excel function FLOOR.MATH
     In essence, the difference between the two is that ODFF-FLOOR needs to
     have arguments value and significance of the same sign and with
-    FLOOR.MATH the sign of argument significance is irrevelevant.
+    FLOOR.MATH the sign of argument significance is irrelevant.
     This is why ODFF-FLOOR is exported to Excel as FLOOR.MATH and
     FLOOR.MATH is imported in Calc as FLOOR.MATH
  */
@@ -2805,7 +2805,7 @@ void ScInterpreter::ScDde()
         //decision
         if (!mrDoc.HasLinkFormulaNeedingCheck())
         {
-                                //TODO: evaluate asynchron ???
+                                //TODO: evaluate asynchronously ???
             pLink->TryUpdate(); //  TryUpdate doesn't call Update multiple times
         }
 
