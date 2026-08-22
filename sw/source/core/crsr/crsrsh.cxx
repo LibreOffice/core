@@ -3310,7 +3310,7 @@ void SwCursorShell::YrsSetCursor(OString const& rId, ::std::optional<SwPosition>
         *it->second->m_pCurrentCursor->GetMark() = *roMark;
     }
 
-    // TODO check if pos is valid? just call UC? add cursor parameter so it doesnt check all of them?
+    // TODO check if pos is valid? just call UC? add cursor parameter so it doesn't check all of them?
     UpdateCursor();
 }
 

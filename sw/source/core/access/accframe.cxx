@@ -57,7 +57,7 @@ sal_Int32 SwAccessibleFrame::GetChildCount( SwAccessibleMap& rAccMap,
         }
         else if( rLower.GetSwFrame() )
         {
-            // There are no unaccessible SdrObjects that count
+            // There are no inaccessible SdrObjects that count
             nCount += GetChildCount( rAccMap,
                                      rVisArea, rLower.GetSwFrame(),
                                      bInPagePreview );
@@ -96,7 +96,7 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
                 }
                 else if( rLower.GetSwFrame() )
                 {
-                    // There are no unaccessible SdrObjects that count
+                    // There are no inaccessible SdrObjects that count
                     aRet = GetChild( rAccMap,
                                      rVisArea, *(rLower.GetSwFrame()), rPos,
                                      bInPagePreview );
@@ -122,7 +122,7 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
                 }
                 else if( rLower.GetSwFrame() )
                 {
-                    // There are no unaccessible SdrObjects that count
+                    // There are no inaccessible SdrObjects that count
                     aRet = GetChild( rAccMap,
                                      rVisArea, *(rLower.GetSwFrame()), rPos,
                                      bInPagePreview );
@@ -162,7 +162,7 @@ bool SwAccessibleFrame::GetChildIndex(
             }
             else if( rLower.GetSwFrame() )
             {
-                // There are no unaccessible SdrObjects that count
+                // There are no inaccessible SdrObjects that count
                 bFound = GetChildIndex( rAccMap,
                                         rVisArea, *(rLower.GetSwFrame()), rChild,
                                         rPos, bInPagePreview );
@@ -189,7 +189,7 @@ bool SwAccessibleFrame::GetChildIndex(
             }
             else if( rLower.GetSwFrame() )
             {
-                // There are no unaccessible SdrObjects that count
+                // There are no inaccessible SdrObjects that count
                 bFound = GetChildIndex( rAccMap,
                                         rVisArea, *(rLower.GetSwFrame()), rChild,
                                         rPos, bInPagePreview );
@@ -232,7 +232,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
             }
             else if( rLower.GetSwFrame() )
             {
-                // There are no unaccessible SdrObjects that count
+                // There are no inaccessible SdrObjects that count
                 aRet = GetChildAtPixel( rVisArea, *(rLower.GetSwFrame()), rPixPos,
                                         bInPagePreview, rAccMap );
             }
@@ -263,7 +263,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
             }
             else if( rLower.GetSwFrame() )
             {
-                // There are no unaccessible SdrObjects that count
+                // There are no inaccessible SdrObjects that count
                 aRet = GetChildAtPixel( rVisArea, *(rLower.GetSwFrame()), rPixPos,
                                    bInPagePreview, rAccMap );
             }
@@ -294,7 +294,7 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
             }
             else if( rLower.GetSwFrame() )
             {
-                // There are no unaccessible SdrObjects that count
+                // There are no inaccessible SdrObjects that count
                 GetChildren( rAccMap, rVisArea, *(rLower.GetSwFrame()),
                              rChildren, bInPagePreview );
             }
@@ -316,7 +316,7 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
             }
             else if( rLower.GetSwFrame() )
             {
-                // There are no unaccessible SdrObjects that count
+                // There are no inaccessible SdrObjects that count
                 GetChildren( rAccMap, rVisArea, *(rLower.GetSwFrame()),
                              rChildren, bInPagePreview );
             }

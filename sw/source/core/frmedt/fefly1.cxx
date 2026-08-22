@@ -387,7 +387,7 @@ void SwFEShell::UnfloatFlyFrame()
     SwNodeIndex aInsertPos(*pAnchor);
     rIDCO.MoveNodeRange(aRange, aInsertPos.GetNode(), SwMoveFlags::CREATEUNDOOBJ);
 
-    // Remove the fly frame frame.
+    // Remove the fly frame.
     IDocumentLayoutAccess& rIDLA = pFlyFormat->getIDocumentLayoutAccess();
     rIDLA.DelLayoutFormat(pFlyFormat);
 }

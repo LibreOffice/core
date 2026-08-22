@@ -1561,7 +1561,7 @@ sal_Int64 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount()
         }
         else if( rLower.GetSwFrame() )
         {
-            // There are no unaccessible SdrObjects that count
+            // There are no inaccessible SdrObjects that count
             if ( !rLower.GetSwFrame()->IsRowFrame() ||
                  pTabFrame->IsInHeadline( *(rLower.GetSwFrame()) ) )
             {

@@ -948,7 +948,7 @@ namespace
         case RedlineType::FmtColl:
         case RedlineType::ParagraphFormat:
             {
-                // tdf#52391 instead of hidden acception at the requested
+                // tdf#52391 instead of hidden acceptance at the requested
                 // rejection, remove direct text formatting to get the potential
                 // original state of the text (FIXME if the original text
                 // has already contained direct text formatting: unfortunately
