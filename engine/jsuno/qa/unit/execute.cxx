@@ -18,6 +18,8 @@
 #include <jsuno/jsuno.hxx>
 #include <rtl/ustring.hxx>
 
+#include "testexec.hxx"
+
 namespace
 {
 class Execute : public CppUnit::TestFixture
@@ -25,25 +27,24 @@ class Execute : public CppUnit::TestFixture
 public:
     void testReturnValue()
     {
-        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, jsuno::execute(u"42"_ustr, u"<input>"_ustr, 1));
-        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, jsuno::execute(u"true"_ustr, u"<input>"_ustr, 1));
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, testexec(u"42"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, testexec(u"true"_ustr));
         CPPUNIT_ASSERT_EQUAL(
-            u"\"hello\""_ustr, jsuno::execute(u"'hello'"_ustr, u"<input>"_ustr, 1));
-        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, jsuno::execute(u"null"_ustr, u"<input>"_ustr, 1));
+            u"\"hello\""_ustr, testexec(u"'hello'"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, testexec(u"null"_ustr));
         CPPUNIT_ASSERT_EQUAL(
-            u"[1,2,3]"_ustr, jsuno::execute(u"[1, 2, 3]"_ustr, u"<input>"_ustr, 1));
+            u"[1,2,3]"_ustr, testexec(u"[1, 2, 3]"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"{\"a\":1,\"b\":\"two\"}"_ustr,
-                             jsuno::execute(u"({a: 1, b: 'two'})"_ustr, u"<input>"_ustr, 1));
-        CPPUNIT_ASSERT_EQUAL(u""_ustr, jsuno::execute(u"undefined"_ustr, u"<input>"_ustr, 1));
+                             testexec(u"({a: 1, b: 'two'})"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, testexec(u"undefined"_ustr));
         CPPUNIT_ASSERT_EQUAL(
-            u""_ustr, jsuno::execute(u"(function () {})"_ustr, u"<input>"_ustr, 1));
+            u""_ustr, testexec(u"(function () {})"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"42"_ustr,
-                             jsuno::execute(
-                                 u"(function () { return 42; }).apply(null, [])"_ustr, u"<input>"_ustr,
-                                 1));
+                             testexec(
+                                 u"(function () { return 42; }).apply(null, [])"_ustr));
         try
         {
-            jsuno::execute(u"1n"_ustr, u"<input>"_ustr, 1);
+            testexec(u"1n"_ustr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
@@ -56,7 +57,7 @@ public:
     {
         try
         {
-            jsuno::execute(u"throw new Error('boom')"_ustr, u"<input>"_ustr, 1);
+            testexec(u"throw new Error('boom')"_ustr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
@@ -71,7 +72,7 @@ public:
         }
         try
         {
-            jsuno::execute(u"throw new TypeError('bad type')"_ustr, u"<input>"_ustr, 1);
+            testexec(u"throw new TypeError('bad type')"_ustr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
@@ -81,7 +82,7 @@ public:
         }
         try
         {
-            jsuno::execute(u"@@@ not valid JS"_ustr, u"<input>"_ustr, 1);
+            testexec(u"@@@ not valid JS"_ustr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
@@ -90,7 +91,7 @@ public:
         }
         try
         {
-            jsuno::execute(u"throw 'plain string'"_ustr, u"<input>"_ustr, 1);
+            testexec(u"throw 'plain string'"_ustr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)

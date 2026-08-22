@@ -13,8 +13,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <jsuno/jsuno.hxx>
 #include <rtl/ustring.hxx>
+
+#include "testexec.hxx"
 
 namespace
 {
@@ -25,7 +26,7 @@ public:
     {
         // The string literal needs to be cut into multiple parts to avoid MSVC "error C2026: string
         // too big, trailing characters truncated":
-        jsuno::execute(uR"(
+        testexec(uR"(
 console.assert(uno.type.void.toString() == 'void');
 console.assert(uno.type.boolean.toString() == 'boolean');
 console.assert(uno.type.byte.toString() == 'byte');
@@ -852,7 +853,7 @@ console.assert(test.StringAttribute === 'foo');
     console.assert(v[2][2] === uno.idl.com.sun.star.testuno.Enum.E_10);
 }
 
-)"_ustr, u"<input>"_ustr, 1);
+)"_ustr);
     }
 
     CPPUNIT_TEST_SUITE(TestUno);

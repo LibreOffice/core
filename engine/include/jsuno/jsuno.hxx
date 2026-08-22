@@ -57,8 +57,8 @@ struct LO_DLLPUBLIC_JSUNO Exception {
 //
 // @throws jsuno::Exception
 LO_DLLPUBLIC_JSUNO OUString execute(OUString const& script, OUString const & source, int line,
-                                    std::function<void(OUString const&)> proxyCallHook = {},
-                                    bool* usedLegacyUnoApi = nullptr);
+                                    std::function<void(OUString const&)> proxyCallHook,
+                                    bool* usedLegacyUnoApi);
 
 // Deliver an iframe-side `jsonValue` to a `ProxyInvocation::invoke` blocked in Application::
 // Yield on `callId`; spurious callIds are silently ignored:
