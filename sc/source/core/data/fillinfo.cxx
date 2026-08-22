@@ -381,7 +381,7 @@ void ScDocument::FillInfo(
     SCROW nYExtra = nRow2+1;
     initRowInfo(this, pRowInfo, rTabInfo.mnArrCapacity, fRowScale, nRow1,
             nTab, nYExtra, nArrRow, nRow2, aRowLookup);
-    nArrCount = nArrRow;                                      // incl. Dummys
+    nArrCount = nArrRow;                                      // incl. Dummies
 
     // Rotated text...
 

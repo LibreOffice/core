@@ -203,13 +203,13 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aComplexColor.getFinalColor());
     pPattern = pDoc->GetPattern(1,1,1);
     pPattern->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be struck out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
     //some tests on sheet2 only for ods
     if (sFormat == u"calc8")
     {
         pPattern = pDoc->GetPattern(1,2,1);
         pPattern->fillFontOnly(aFont);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a double line", STRIKEOUT_DOUBLE, aFont.GetStrikeout());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be struck out with a double line", STRIKEOUT_DOUBLE, aFont.GetStrikeout());
         pPattern = pDoc->GetPattern(1,3,1);
         pPattern->fillFontOnly(aFont);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", LINESTYLE_DOTTED, aFont.GetUnderline());

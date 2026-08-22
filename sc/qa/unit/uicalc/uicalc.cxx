@@ -916,7 +916,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
     pPattern->fillFontOnly(aFont);
 
     // Without the fix in place, this test would have failed here
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out", STRIKEOUT_SINGLE,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be struck out", STRIKEOUT_SINGLE,
                                  aFont.GetStrikeout());
 }
 
