@@ -776,7 +776,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
     SCCOL startCol = 0, endCol = 4;
     SCROW startRow = 0, endRow = 12;
 
-    // Check autoformat has benn applied
+    // Check autoformat has been applied
     for (SCCOL col = startCol; col <= endCol; ++col)
     {
         for (SCROW row = startRow; row <= endRow; ++row)

@@ -161,11 +161,11 @@ public class _XDataPilotDescriptor {
 
     /**
     * Test calls the method , checks returned value, compares
-    * number of fields goten from returned value and obtained by object
+    * number of fields gotten from returned value and obtained by object
     * relation <code>'FIELDSAMOUNT'</code> and set property
     * <code>Orientation</code> to one of DataPilotFieldOrientation values. <p>
     * Has <b> OK </b> status if returned value isn't null, number of fields
-    * goten from returned value is less than number of fields obtained by relation
+    * gotten from returned value is less than number of fields obtained by relation
     * and no exceptions were thrown. <p>
      */
     public boolean _getDataPilotFields(){
@@ -180,7 +180,7 @@ public class _XDataPilotDescriptor {
 
         int fieldsAmount = IA.getCount();
         if (fieldsAmount < tEnvFieldsAmount) {
-            System.out.println("Number of fields is less than number goten by relation.");
+            System.out.println("Number of fields is less than number gotten by relation.");
             return false;
         } else {System.out.println("count of returned fields -- OK");}
 

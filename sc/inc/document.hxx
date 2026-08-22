@@ -1447,7 +1447,7 @@ public:
      */
     sc::MultiDataCellState HasMultipleDataCells( const ScRange& rRange ) const;
 
-    // Spaklines
+    // Sparklines
     /** Returns sparkline at the address if it exists */
     SC_DLLPUBLIC std::shared_ptr<sc::Sparkline> GetSparkline(ScAddress const & rPosition);
     SC_DLLPUBLIC bool HasSparkline(ScAddress const & rPosition);
@@ -2540,7 +2540,7 @@ public:
      *
      * Specifically, it goes through all sheet views and overwrites the
      * content of the sheet view table with the content of default view table,
-     * then reapplies the sheet views's sorting and filtering for the auto-filter.
+     * then reapplies the sheet views' sorting and filtering for the auto-filter.
      */
     void SyncSheetViews(SCTAB nDefaultViewTable);
 

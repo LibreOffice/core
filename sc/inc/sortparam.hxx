@@ -55,7 +55,7 @@ enum class ScColorSortMode {
  * A range of values can be sorted in multiple way, each column a different way.
  *
  * For example: sort column A ascending and if the column when there are same values, define that those should be
- * sorted descending usign the column C.
+ * sorted descending using the column C.
  **/
 struct ScSortKeyState
 {

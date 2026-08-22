@@ -119,7 +119,7 @@ public:
     }
 
     /**
-      * Substracts a value to the sum using Kahan summation.
+      * Subtracts a value from the sum using Kahan summation.
       * @param fSum
       */
     inline void subtract(const KahanSum& fSum) { add(-fSum); }
