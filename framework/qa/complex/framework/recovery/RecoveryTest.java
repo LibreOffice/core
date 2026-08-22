@@ -77,7 +77,7 @@ public class RecoveryTest extends ComplexTestCase {
      *
      * @todo: hidden documents
      * @todo: running presentation
-     * @todo: modular dialogs like Hpyerlink-Dialog
+     * @todo: modular dialogs like Hyperlink-Dialog
      * @todo: second view of a document
      * @todo: remove recovery data before start test
      * @todo: after a second start after the crash there should no documents recovered anymore
@@ -362,7 +362,7 @@ public class RecoveryTest extends ComplexTestCase {
                        oButton = oUITools.getButton("Next >");
                     } catch (NullPointerException e){
                         // no fault: The title "Start Recovery" switches to "Next"
-                        // while all documents are recoverd
+                        // while all documents are recovered
                     }
                     util.utils.shortWait();
                     counter++;

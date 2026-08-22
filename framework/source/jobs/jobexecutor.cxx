@@ -219,7 +219,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
         /*Attention!
             Jobs implements interfaces and dies by ref count!
             And freeing of such uno object is done by uno itself.
-            So we have to use dynamic memory everytimes.
+            So we have to use dynamic memory every time.
          */
         rtl::Reference<Job> pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
         pJob->setJobData(aCfg);
@@ -295,7 +295,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
         /*Attention!
             Jobs implements interfaces and dies by ref count!
             And freeing of such uno object is done by uno itself.
-            So we have to use dynamic memory everytimes.
+            So we have to use dynamic memory every time.
          */
         css::uno::Reference< css::frame::XModel > xModel(aEvent.Source, css::uno::UNO_QUERY);
         pJob = new Job(m_xContext, xModel);

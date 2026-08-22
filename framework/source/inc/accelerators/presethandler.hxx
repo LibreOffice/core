@@ -168,10 +168,10 @@ class PresetHandler
                     the specified child storage and return it.
 
             @param  xChild
-                    the child storage where a paranet storage should be searched for.
+                    the child storage where a parent storage should be searched for.
 
             @return css::embed::XStorage
-                    A valid storage if a paranet exists. NULL otherwise.
+                    A valid storage if a parent exists. NULL otherwise.
          */
         css::uno::Reference< css::embed::XStorage > getParentStorageShare();
         css::uno::Reference< css::embed::XStorage > getParentStorageUser ();
@@ -276,7 +276,7 @@ class PresetHandler
 
             @descr  We have to call commit on all cached sub storages on the
                     path from the root storage upside down to the working storage
-                    (which are not really used, but required to be holded alive!).
+                    (which are not really used, but required to be held alive!).
          */
         void commitUserChanges();
 

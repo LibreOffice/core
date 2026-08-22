@@ -196,7 +196,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // But we can't execute synchronously :-)
     // May we are called from a generic key-input handler,
     // which isn't aware that this call kill its own environment...
-    // Do it asynchronous everytimes!
+    // Do it asynchronous every time!
 
     // But don't forget to hold ourselves alive.
     // We are called back from an environment, which doesn't know a uno reference.
@@ -248,7 +248,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     try
     {
 
-    // Allow calling of XController->suspend() everytimes.
+    // Allow calling of XController->suspend() every time.
     // Dispatch is an UI functionality. We implement such dispatch object here.
     // And further XController->suspend() was designed to bring an UI ...
     bool bControllerSuspended = false;
@@ -350,7 +350,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 
             else
             // c3) there is no other (visible) frame open ...
-            //     The help module will be ignored everytimes!
+            //     The help module will be ignored every time!
             //     But we have to decide if we must terminate the
             //     application or establish the backing mode now.
             //     And that depends from the dispatched URL ...

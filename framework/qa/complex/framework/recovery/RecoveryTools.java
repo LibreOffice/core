@@ -89,7 +89,7 @@ public class RecoveryTools {
     public XDialog getActiveDialogAfterStartup(XMultiServiceFactory xMSF){
         // while the office starts it takes some time to get the dialog.
 
-        // the dialog is accessible AFTER the office has recoverd all documents.
+        // the dialog is accessible AFTER the office has recovered all documents.
         // This could consumes more time then the TimeOut allow.
         int counter = 0;
         int multi = 5;

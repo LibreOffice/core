@@ -371,7 +371,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
     /*Attention!
         Jobs implements interfaces and dies by ref count!
         And freeing of such uno object is done by uno itself.
-        So we have to use dynamic memory everytimes.
+        So we have to use dynamic memory every time.
      */
     rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
     pJob->setJobData(aCfg);

@@ -75,7 +75,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
             // patterns above)
         }
         // c) No registered interceptor => use our direct slave.
-        //    This helper exist by design and must be valid everytimes ...
+        //    This helper exist by design and must be valid every time ...
         //    But to be more feature proof - we should check that .-)
         if (!xInterceptor.is() && m_xSlave.is())
             xInterceptor = m_xSlave;

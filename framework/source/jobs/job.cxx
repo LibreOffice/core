@@ -673,7 +673,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
             If the internal wrapped job is still in progress, we disagree with that by throwing the
             right veto exception. If not - we agree. But then we must be aware, that another event
             notifyTermination() can follow. Then we have no chance to do the same. Then we have to
-            accept that and stop our work instandly.
+            accept that and stop our work instantly.
 
     @param  aEvent
                 describes the broadcaster and must be the desktop instance
@@ -729,7 +729,7 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& )
             If the internal wrapped job is still in progress, we disagree with that by throwing the
             right veto exception. If not - we agree. But then we must be aware, that another event
             notifyClosing() can follow. Then we have no chance to do the same. Then we have to
-            accept that and stop our work instandly.
+            accept that and stop our work instantly.
 
     @param  aEvent
                 describes the broadcaster and must be the frame instance

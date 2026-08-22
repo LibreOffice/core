@@ -32,7 +32,7 @@
 /** @short  enable/disable special features
             of a load request.
 
-    @desrc  Such features must outcome without
+    @descr  Such features must outcome without
             any special parameters.
             To make enabling/disabling of
             features very easy (e.g. at the ctor of

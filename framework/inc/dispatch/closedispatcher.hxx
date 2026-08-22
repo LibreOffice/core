@@ -91,7 +91,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
         /** @short  for asynchronous operations we must hold us self alive! */
         css::uno::Reference< css::uno::XInterface > m_xSelfHold;
 
-        /** @short  holded alive for internally asynchronous operations! */
+        /** @short  held alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 
         VclPtr<SystemWindow> m_pSysWindow;

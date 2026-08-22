@@ -70,7 +70,7 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
 
     {
         SolarMutexGuard g;
-        // hold the frame as weak reference(!) so it can die everytimes :-)
+        // hold the frame as weak reference(!) so it can die every time :-)
         m_xFrame = xFrame;
     }
 
@@ -251,7 +251,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     }
 
     // c) if b) failed ... identify the used module and retrieve set icon from module config.
-    //    Tirck :-) Module was already specified outside and aInfo contains all needed information.
+    //    Trick :-) Module was already specified outside and aInfo contains all needed information.
     if ( nIcon == INVALID_ICON_ID )
     {
         TModuleInfo aInfo;
