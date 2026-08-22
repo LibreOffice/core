@@ -63,10 +63,15 @@
 #include <oox/ppt/presentationfragmenthandler.hxx>
 #include <oox/ppt/slidefragmenthandler.hxx>
 #include <oox/ppt/layoutfragmenthandler.hxx>
+#include <oox/ppt/moderncommentsfragmenthandler.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>
 #include <sax/fastattribs.hxx>
+#include <sax/tools/converter.hxx>
+#include <svx/annotation/Annotation.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
@@ -179,6 +184,50 @@ std::vector<OUString> getLayoutFragmentPaths(XmlFilterBase& rFilter,
     }
 
     return aPaths;
+}
+
+/** Turns the threaded comments of one slide into annotations on that slide.
+
+    Each entry becomes one annotation, and a reply is linked to the root it
+    hangs off. The time an entry carries is stored as the file has it.
+ */
+void lcl_insertModernComments(const std::vector<ModernComment>& rComments,
+                              const ModernCommentAuthorList& rAuthors,
+                              const uno::Reference<drawing::XDrawPage>& xSlide)
+{
+    uno::Reference<office::XAnnotationAccess> xAnnotationAccess(xSlide, uno::UNO_QUERY);
+    if (!xAnnotationAccess.is())
+        return;
+
+    std::vector<rtl::Reference<sdr::annotation::Annotation>> aInserted;
+    aInserted.reserve(rComments.size());
+    for (auto const& rComment : rComments)
+    {
+        uno::Reference<office::XAnnotation> xAnnotation(
+            xAnnotationAccess->createAndInsertAnnotation());
+        xAnnotation->setAuthor(rAuthors.getName(rComment.maAuthorId));
+        xAnnotation->setInitials(rAuthors.getInitials(rComment.maAuthorId));
+        util::DateTime aDateTime;
+        if (::sax::Converter::parseDateTime(aDateTime, rComment.maCreated))
+            xAnnotation->setDateTime(aDateTime);
+        uno::Reference<text::XText> xText(xAnnotation->getTextRange());
+        xText->setString(rComment.maText);
+
+        rtl::Reference<sdr::annotation::Annotation> xInserted(
+            dynamic_cast<sdr::annotation::Annotation*>(xAnnotation.get()));
+        if (xInserted.is())
+        {
+            // Every one of these comments can be replied to and resolved.
+            xInserted->SetThreaded(true);
+            if (rComment.mnParentIndex >= 0
+                && o3tl::make_unsigned(rComment.mnParentIndex) < aInserted.size()
+                && aInserted[rComment.mnParentIndex].is())
+            {
+                xInserted->SetParentId(aInserted[rComment.mnParentIndex]->GetId());
+            }
+        }
+        aInserted.push_back(xInserted);
+    }
 }
 } // end anonymous ns
 
@@ -792,6 +841,29 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
                         xText->setString( aComment.get_text());
                     } catch( css::lang::IllegalArgumentException& ) {}
                 }
+            }
+
+            OUString aModernCommentPath = xSlideFragmentHandler->getFragmentPathFromFirstType(
+                getRelationship(Relationship::MODERNCOMMENTS));
+            if (!aModernCommentPath.isEmpty())
+            {
+                if (!mbModernCommentAuthorsRead)
+                {
+                    mbModernCommentAuthorsRead = true;
+                    OUString aAuthorsPath = getFragmentPathFromFirstType(
+                        getRelationship(Relationship::MODERNCOMMENTAUTHORS));
+                    if (!aAuthorsPath.isEmpty())
+                    {
+                        getFilter().importFragment(new ModernCommentAuthorsFragmentHandler(
+                            getFilter(), aAuthorsPath, maModernAuthorList));
+                    }
+                }
+
+                rtl::Reference<ModernCommentsFragmentHandler> xModernCommentsHandler(
+                    new ModernCommentsFragmentHandler(getFilter(), aModernCommentPath));
+                getFilter().importFragment(xModernCommentsHandler);
+                lcl_insertModernComments(xModernCommentsHandler->getComments(), maModernAuthorList,
+                                         xSlide);
             }
         }
     }

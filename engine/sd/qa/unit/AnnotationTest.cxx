@@ -657,6 +657,49 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationThreadedFields)
     CPPUNIT_ASSERT_EQUAL(3, nVerified);
 }
 
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testModernCommentImport)
+{
+    // A presentation whose comments are held in the newer comment part keeps them on load, as
+    // one thread with the replies hanging off its root.
+    createSdImpressDoc("pptx/modern-comments.pptx");
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+
+    // Without the accompanying fix in place, this test would have failed with an expected 3 but
+    // an actual 0: the part was not read at all, so every comment was dropped on load.
+    auto const& rAnnotations = pPage->getAnnotations();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rAnnotations.size());
+
+    // The author comes from the separate author list the entries refer to by id.
+    for (auto const& xAnnotation : rAnnotations)
+    {
+        CPPUNIT_ASSERT_EQUAL(u"Comment Author"_ustr, xAnnotation->getAuthor());
+        CPPUNIT_ASSERT_EQUAL(u"CA"_ustr, xAnnotation->getInitials());
+        CPPUNIT_ASSERT(xAnnotation->IsThreaded());
+    }
+
+    // The thread root comes first, then its two replies in the order the file lists them.
+    CPPUNIT_ASSERT_EQUAL(u"Make this colorful"_ustr, rAnnotations[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Nice and big"_ustr, rAnnotations[1]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Faster"_ustr, rAnnotations[2]->GetText());
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), rAnnotations[0]->GetParentId());
+    CPPUNIT_ASSERT_EQUAL(rAnnotations[0]->GetId(), rAnnotations[1]->GetParentId());
+    CPPUNIT_ASSERT_EQUAL(rAnnotations[0]->GetId(), rAnnotations[2]->GetParentId());
+
+    // The time each entry carries is kept as the file has it.
+    util::DateTime aDateTime = rAnnotations[0]->getDateTime();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2026), aDateTime.Year);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), aDateTime.Month);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(21), aDateTime.Day);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(16), aDateTime.Hours);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), aDateTime.Minutes);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), aDateTime.Seconds);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

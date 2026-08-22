@@ -11,6 +11,7 @@
 #ifndef INCLUDED_OOX_PPT_COMMENTS_HXX
 #define INCLUDED_OOX_PPT_COMMENTS_HXX
 
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/util/DateTime.hpp>
@@ -18,6 +19,44 @@
 #include <sal/types.h>
 
 namespace oox::ppt {
+
+/** One author of a threaded comment, from the modern comment author list.
+
+    The id is a brace-wrapped identifier that the comment entries refer to. It
+    is not the small integer the older comment author list uses.
+ */
+struct ModernCommentAuthor
+{
+    OUString maId;
+    OUString maName;
+    OUString maInitials;
+};
+
+/** The root of a threaded comment, or one reply to such a root.
+
+    maCreated holds the time the entry was written, as an ISO 8601 date-time in
+    UTC written without a marker. mnParentIndex is the position of the thread
+    root in the list the entry belongs to, and is -1 for a root.
+ */
+struct ModernComment
+{
+    OUString maAuthorId;
+    OUString maCreated;
+    OUString maText;
+    sal_Int32 mnParentIndex = -1;
+};
+
+/** The authors of the threaded comments of one presentation. */
+class ModernCommentAuthorList
+{
+public:
+    std::vector<ModernCommentAuthor> maAuthors;
+
+    /// The display name the id names, or an empty string when the id is unknown.
+    OUString getName(std::u16string_view rAuthorId) const;
+    /// The initials the id names, or an empty string when the id is unknown.
+    OUString getInitials(std::u16string_view rAuthorId) const;
+};
 
 struct CommentAuthor
 {

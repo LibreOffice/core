@@ -7,6 +7,8 @@
 {Relationship::COMMENTS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"},
 {Relationship::COMMENTAUTHORS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors"},
 {Relationship::COMMENTSEXTENDED, u"http://schemas.microsoft.com/office/2011/relationships/commentsExtended"},
+{Relationship::MODERNCOMMENTS, u"http://schemas.microsoft.com/office/2018/10/relationships/comments"},
+{Relationship::MODERNCOMMENTAUTHORS, u"http://schemas.microsoft.com/office/2018/10/relationships/authors"},
 {Relationship::CONNECTIONS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/connections"},
 {Relationship::CONTROL, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/control"},
 {Relationship::CTRLPROP, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp"},
