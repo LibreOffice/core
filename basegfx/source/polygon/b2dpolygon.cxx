@@ -1544,7 +1544,7 @@ namespace basegfx
         mpPolygon->addOrReplaceSystemDependentData(rData);
     }
 
-    SystemDependentData_SharedPtr B2DPolygon::getSystemDependantDataInternal(SDD_Type aType) const
+    SystemDependentData_SharedPtr B2DPolygon::getSystemDependentDataInternal(SDD_Type aType) const
     {
         return mpPolygon->getSystemDependentData(aType);
     }

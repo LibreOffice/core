@@ -436,7 +436,7 @@ public:
         mpPolyPolygon->addOrReplaceSystemDependentData(rData);
     }
 
-    SystemDependentData_SharedPtr B2DPolyPolygon::getSystemDependantDataInternal(SDD_Type aType) const
+    SystemDependentData_SharedPtr B2DPolyPolygon::getSystemDependentDataInternal(SDD_Type aType) const
     {
         return mpPolyPolygon->getSystemDependentData(aType);
     }

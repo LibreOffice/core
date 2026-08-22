@@ -10916,7 +10916,7 @@ basegfx::B2DHomMatrix::scale(basegfx::B2DTuple const&)
 basegfx::B2DHomMatrix::set3x2(double, double, double, double, double, double)
 basegfx::B2DPolyPolygon::addOrReplaceSystemDependentDataInternal(std::shared_ptr<basegfx::SystemDependentData>&) const
 basegfx::B2DPolyPolygon::getDefaultAdaptiveSubdivision() const
-basegfx::B2DPolyPolygon::getSystemDependantDataInternal(unsigned long) const
+basegfx::B2DPolyPolygon::getSystemDependentDataInternal(unsigned long) const
 basegfx::B2DPolyPolygon::hasDoublePoints() const
 basegfx::B2DPolyPolygon::makeUnique()
 basegfx::B2DPolyRange::B2DPolyRange(basegfx::B2DPolyRange const&)
@@ -10925,7 +10925,7 @@ basegfx::B2DPolyRange::transform(basegfx::B2DHomMatrix const&)
 basegfx::B2DPolygon::addOrReplaceSystemDependentDataInternal(std::shared_ptr<basegfx::SystemDependentData>&) const
 basegfx::B2DPolygon::getNextControlVector(unsigned int) const
 basegfx::B2DPolygon::getPrevControlVector(unsigned int) const
-basegfx::B2DPolygon::getSystemDependantDataInternal(unsigned long) const
+basegfx::B2DPolygon::getSystemDependentDataInternal(unsigned long) const
 basegfx::B2DPolygon::hasDoublePoints() const
 basegfx::B2DPolygon::makeUnique()
 basegfx::B2DRange::getUnitB2DRange()

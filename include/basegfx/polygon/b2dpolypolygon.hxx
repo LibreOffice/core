@@ -132,7 +132,7 @@ namespace basegfx
         template<class T>
         std::shared_ptr<T> getSystemDependentData(basegfx::SDD_Type aType) const
         {
-            return std::static_pointer_cast<T>(getSystemDependantDataInternal(aType));
+            return std::static_pointer_cast<T>(getSystemDependentDataInternal(aType));
         }
 
         template<class T, class... Args>
@@ -152,7 +152,7 @@ namespace basegfx
 
     private:
         void addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const;
-        SystemDependentData_SharedPtr getSystemDependantDataInternal(basegfx::SDD_Type aType) const;
+        SystemDependentData_SharedPtr getSystemDependentDataInternal(basegfx::SDD_Type aType) const;
     };
 
     // typedef for a vector of B2DPolyPolygons
