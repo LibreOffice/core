@@ -38,7 +38,7 @@ extern "C" {
     @param  value   the initial value of the string.
     @param  count    the length of value.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength(
+SAL_DLLPUBLIC void rtl_uStringbuffer_newFromStr_WithLength(
                                                       rtl_uString ** newStr,
                                                       const sal_Unicode * value,
                                                       sal_Int32 count );
@@ -58,7 +58,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength(
     @param  oldStr       the initial value of the string.
     @return the new capacity of the string buffer
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer(
+SAL_DLLPUBLIC sal_Int32 rtl_uStringbuffer_newFromStringBuffer(
                                                           rtl_uString ** newStr,
                                                           sal_Int32 capacity,
                                                           rtl_uString * oldStr );
@@ -81,7 +81,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer(
     @param[in,out]   capacity          in: old capacity, out: new capacity.
     @param[in]       minimumCapacity   the minimum desired capacity.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_ensureCapacity(
+SAL_DLLPUBLIC void rtl_uStringbuffer_ensureCapacity(
                                                 rtl_uString ** This,
                                                 sal_Int32* capacity,
                                                 sal_Int32 minimumCapacity);
@@ -103,7 +103,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_ensureCapacity(
                          left uninitialized.
     @param   len         the number of characters to append.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insert(
+SAL_DLLPUBLIC void rtl_uStringbuffer_insert(
                                         /*inout*/rtl_uString ** This,
                                         /*inout*/sal_Int32 * capacity,
                                         sal_Int32 offset,
@@ -127,7 +127,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insert(
    <code>0</code>&ndash;<code>0x10FFFF</code>, but excluding
    <code>0xD800</code>&ndash;<code>0xDFFF</code>)
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insertUtf32(
+SAL_DLLPUBLIC void rtl_uStringbuffer_insertUtf32(
     rtl_uString ** pThis, sal_Int32 * capacity, sal_Int32 offset, sal_uInt32 c)
     SAL_THROW_EXTERN_C();
 
@@ -151,7 +151,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insertUtf32(
     @param   str         a character array.
     @param   len         the number of characters to append.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insert_ascii(
+SAL_DLLPUBLIC void rtl_uStringbuffer_insert_ascii(
                                                 /*inout*/rtl_uString ** This,
                                                 /*inout*/sal_Int32 * capacity,
                                                 sal_Int32 offset,
@@ -170,7 +170,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insert_ascii(
     @param[in]      start   The beginning index, inclusive
     @param[in]      len     The substring length
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_remove(
+SAL_DLLPUBLIC void rtl_uStringbuffer_remove(
                                        rtl_uString ** This,
                                        sal_Int32 start,
                                        sal_Int32 len );
@@ -184,7 +184,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_remove(
     @param  ppThis      The string, on that the operation should take place
     @param  nCapacity   pointer to the capacity of the string buffer
  */
-SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear(
+SAL_DLLPUBLIC rtl_uString * rtl_uStringBuffer_makeStringAndClear(
                                         /*inout*/ rtl_uString ** ppThis,
                                         sal_Int32 *nCapacity ) SAL_RETURNS_NONNULL;
 
@@ -197,7 +197,7 @@ SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear(
 
     @param  pThis      The string, on that the operation should take place
  */
-SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString *pThis );
+SAL_DLLPUBLIC rtl_uString * rtl_uStringBuffer_refReturn( rtl_uString *pThis );
 
 #ifdef __cplusplus
 }

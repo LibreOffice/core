@@ -112,7 +112,7 @@ extern "C" {
 
     @param pFileUri URL of the inifile with path but WITHOUT suffix (.ini or rc)
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pFileUri );
+SAL_DLLPUBLIC void rtl_bootstrap_setIniFileName( rtl_uString *pFileUri );
 
 /**
    @param pName
@@ -131,7 +131,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pFileUri 
    @retval false when none of the 4 methods gave a value.
            <code>ppValue</code> then contains an empty string.
 */
-SAL_DLLPUBLIC bool SAL_CALL rtl_bootstrap_get(
+SAL_DLLPUBLIC bool rtl_bootstrap_get(
         rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault );
 
 /** Sets a bootstrap parameter.
@@ -141,7 +141,7 @@ SAL_DLLPUBLIC bool SAL_CALL rtl_bootstrap_get(
    @param pValue
           value of bootstrap parameter
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_set(
+SAL_DLLPUBLIC void rtl_bootstrap_set(
         rtl_uString * pName, rtl_uString * pValue );
 
 
@@ -153,13 +153,13 @@ typedef void * rtlBootstrapHandle;
                           to the executables name
    @return                Handle for a bootstrap argument container
 */
-SAL_DLLPUBLIC rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName);
+SAL_DLLPUBLIC rtlBootstrapHandle rtl_bootstrap_args_open(rtl_uString * pIniName);
 
 /**
    Closes a bootstrap argument container.
    @param[in] handle      The handle got by rtl_bootstrap_args_open()
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
+SAL_DLLPUBLIC void rtl_bootstrap_args_close(rtlBootstrapHandle handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -170,7 +170,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
 
    @return                  The status of the retrieval, <code>true</code> on success.
 */
-SAL_DLLPUBLIC bool SAL_CALL rtl_bootstrap_get_from_handle(
+SAL_DLLPUBLIC bool rtl_bootstrap_get_from_handle(
         rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault);
 
 
@@ -179,7 +179,7 @@ SAL_DLLPUBLIC bool SAL_CALL rtl_bootstrap_get_from_handle(
    @param[in]  handle       The handle got by rtl_bootstrap_args_open()
    @param[out] ppIniName    contains after the call the name of the ini-filename.
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_get_iniName_from_handle(
+SAL_DLLPUBLIC void rtl_bootstrap_get_iniName_from_handle(
         rtlBootstrapHandle handle, rtl_uString ** ppIniName);
 
 /** Expands a macro using bootstrap variables.
@@ -187,14 +187,14 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_get_iniName_from_handle(
     @param[in]     handle   The handle got by rtl_bootstrap_args_open()
     @param[in,out] macro    The macro to be expanded
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
+SAL_DLLPUBLIC void rtl_bootstrap_expandMacros_from_handle(
     rtlBootstrapHandle handle, rtl_uString ** macro );
 
 /** Expands a macro using default bootstrap variables.
 
     @param[in,out] macro    The macro to be expanded
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros(
+SAL_DLLPUBLIC void rtl_bootstrap_expandMacros(
     rtl_uString ** macro);
 
 /** Escapes special characters ("$" and "\").
@@ -205,7 +205,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros(
     @param[out] encoded
     the given value with all occurrences of special characters ("$" and "\") escaped
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_encode(
+SAL_DLLPUBLIC void rtl_bootstrap_encode(
     rtl_uString const * value, rtl_uString ** encoded );
 
 #ifdef __cplusplus

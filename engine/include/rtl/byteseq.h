@@ -34,7 +34,7 @@ extern "C"
 
     @param ppSequence sequence
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_reference2One(
+SAL_DLLPUBLIC void rtl_byte_sequence_reference2One(
     sal_Sequence ** ppSequence )
     SAL_THROW_EXTERN_C();
 
@@ -43,7 +43,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_reference2One(
     @param ppSequence sequence
     @param nSize new size of sequence
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_realloc(
+SAL_DLLPUBLIC void rtl_byte_sequence_realloc(
     sal_Sequence ** ppSequence, sal_Int32 nSize )
     SAL_THROW_EXTERN_C();
 
@@ -51,7 +51,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_realloc(
 
     @param pSequence sequence, that is to be acquired
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_acquire(
+SAL_DLLPUBLIC void rtl_byte_sequence_acquire(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
@@ -59,7 +59,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_acquire(
 
     @param pSequence sequence, that is to be released; invalid after call
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_release(
+SAL_DLLPUBLIC void rtl_byte_sequence_release(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
@@ -69,7 +69,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_release(
                       after the call, *ppSequence contains the newly constructed sequence
     @param nLength    length of new sequence
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_construct(
+SAL_DLLPUBLIC void rtl_byte_sequence_construct(
     sal_Sequence **ppSequence , sal_Int32 nLength )
     SAL_THROW_EXTERN_C();
 
@@ -79,7 +79,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_construct(
                       after the call, *ppSequence contains the newly constructed sequence
     @param nLength    length of new sequence
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_constructNoDefault(
+SAL_DLLPUBLIC void rtl_byte_sequence_constructNoDefault(
     sal_Sequence **ppSequence , sal_Int32 nLength )
     SAL_THROW_EXTERN_C();
 
@@ -90,7 +90,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_constructNoDefault(
     @param pData      initial data
     @param nLength    length of new sequence
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_constructFromArray(
+SAL_DLLPUBLIC void rtl_byte_sequence_constructFromArray(
     sal_Sequence **ppSequence, const sal_Int8 *pData , sal_Int32 nLength )
     SAL_THROW_EXTERN_C();
 
@@ -100,7 +100,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_constructFromArray(
                       after the call, *ppSequence references pSequence
     @param pSequence  the source sequence
 */
-SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_assign(
+SAL_DLLPUBLIC void rtl_byte_sequence_assign(
     sal_Sequence **ppSequence , sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
@@ -108,7 +108,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_assign(
 
     @return true, if the data within the sequences are identical; false otherwise
 */
-SAL_DLLPUBLIC bool SAL_CALL rtl_byte_sequence_equals(
+SAL_DLLPUBLIC bool rtl_byte_sequence_equals(
     sal_Sequence *pSequence1 , sal_Sequence *pSequence2 )
     SAL_THROW_EXTERN_C();
 
@@ -118,7 +118,7 @@ SAL_DLLPUBLIC bool SAL_CALL rtl_byte_sequence_equals(
             has been called before, the pointer may be casted to a non const pointer and
             the sequence may be modified
 */
-SAL_DLLPUBLIC const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray(
+SAL_DLLPUBLIC const sal_Int8 *rtl_byte_sequence_getConstArray(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
@@ -127,7 +127,7 @@ SAL_DLLPUBLIC const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray(
     @param pSequence sequence handle
     @return length of the sequence
 */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_byte_sequence_getLength(
+SAL_DLLPUBLIC sal_Int32 rtl_byte_sequence_getLength(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
@@ -219,14 +219,14 @@ public:
         @param rSeq another byte sequence
         @return this sequence
     */
-    inline ByteSequence & SAL_CALL operator = ( const ByteSequence & rSeq );
+    inline ByteSequence & operator = ( const ByteSequence & rSeq );
     inline ByteSequence & operator = ( ByteSequence && rSeq ) noexcept;
 
     /** Gets the length of sequence.
 
         @return length of sequence
     */
-    sal_Int32 SAL_CALL getLength() const
+    sal_Int32 getLength() const
         { return _pSequence->nElements; }
 
     /** Gets a pointer to byte array for READING. If the sequence has a length of 0, then the
@@ -234,7 +234,7 @@ public:
 
         @return pointer to byte array
     */
-    const sal_Int8 * SAL_CALL getConstArray() const
+    const sal_Int8 * getConstArray() const
         { return reinterpret_cast<sal_Int8 *>(_pSequence->elements); }
     /** Gets a pointer to elements array for READING AND WRITING. In general if the sequence
         has a handle acquired by other sequences (reference count > 1), then a new sequence is
@@ -243,7 +243,7 @@ public:
 
         @return pointer to elements array
     */
-    inline sal_Int8 * SAL_CALL getArray();
+    inline sal_Int8 * getArray();
 
     /** Non-const index operator:
         Obtains a reference to byte indexed at given position.
@@ -257,7 +257,7 @@ public:
         @param nIndex index
         @return non-const C++ reference to element at index nIndex
     */
-    inline sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex );
+    inline sal_Int8 & operator [] ( sal_Int32 nIndex );
 
     /** Const index operator: Obtains a reference to byte indexed at given position.
                               The implementation does NOT check for array bounds!
@@ -265,7 +265,7 @@ public:
         @param nIndex index
         @return const C++ reference to byte at element of index nIndex
     */
-    const sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) const
+    const sal_Int8 & operator [] ( sal_Int32 nIndex ) const
         { return getConstArray()[ nIndex ]; }
 
     /** Equality operator: Compares two sequences.
@@ -273,13 +273,13 @@ public:
         @param rSeq another byte sequence (right side)
         @return true if both sequences are equal, false otherwise
     */
-    inline bool SAL_CALL operator == ( const ByteSequence & rSeq ) const;
+    inline bool operator == ( const ByteSequence & rSeq ) const;
     /** Unequality operator: Compares two sequences.
 
         @param rSeq another byte sequence (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline bool SAL_CALL operator != ( const ByteSequence & rSeq ) const;
+    inline bool operator != ( const ByteSequence & rSeq ) const;
 
     /** Reallocates sequence to new length. If the sequence has a handle acquired by other sequences
         (reference count > 1), then the remaining elements are copied to a new sequence handle to
@@ -287,19 +287,19 @@ public:
 
         @param nSize new size of sequence
     */
-    inline void SAL_CALL realloc( sal_Int32 nSize );
+    inline void realloc( sal_Int32 nSize );
 
     /** Returns the UNacquired C handle of the sequence
 
         @return UNacquired handle of the sequence
     */
-    sal_Sequence * SAL_CALL getHandle() const
+    sal_Sequence * getHandle() const
         { return _pSequence; }
     /** Returns the UNacquired C handle of the sequence (for compatibility reasons)
 
         @return UNacquired handle of the sequence
     */
-    sal_Sequence * SAL_CALL get() const
+    sal_Sequence * get() const
         { return _pSequence; }
 };
 

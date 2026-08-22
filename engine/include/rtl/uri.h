@@ -222,7 +222,7 @@ rtl_UriDecodeMechanism;
     @return
     An array of 128 booleans, to be used in calls to rtl_uriEncode().
  */
-SAL_DLLPUBLIC bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
+SAL_DLLPUBLIC bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     SAL_THROW_EXTERN_C();
 
 /** Encode a text as (part of) a URI.
@@ -259,7 +259,7 @@ SAL_DLLPUBLIC bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharCl
     converted to eCharset because it contains unmappable characters (which
     implies that pText is not empty), then an empty string is returned.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uriEncode(
+SAL_DLLPUBLIC void rtl_uriEncode(
                             rtl_uString * pText,
                             bool const * pCharClass,
                             rtl_UriEncodeMechanism eMechanism,
@@ -297,7 +297,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriEncode(
     characters (which implies that pText is not empty), then an empty string is
     returned.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode(
+SAL_DLLPUBLIC void rtl_uriDecode(
                             rtl_uString * pText,
                             rtl_UriDecodeMechanism eMechanism,
                             rtl_TextEncoding eCharset,
@@ -334,7 +334,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode(
     @return
     True if no exception is signalled, otherwise false.
  */
-SAL_DLLPUBLIC bool SAL_CALL rtl_uriConvertRelToAbs(
+SAL_DLLPUBLIC bool rtl_uriConvertRelToAbs(
                                          rtl_uString * pBaseUriRef,
                                          rtl_uString * pRelUriRef,
                                          rtl_uString ** pResult,

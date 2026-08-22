@@ -118,7 +118,7 @@ public:
          Similar to assignment.
      */
     Reference<reference_type> &
-    SAL_CALL set (reference_type * pBody)
+    set (reference_type * pBody)
     {
         if (pBody)
             pBody->acquire();
@@ -134,7 +134,7 @@ public:
          bind it to the body represented by the handle.
      */
     Reference<reference_type> &
-    SAL_CALL operator= (const Reference<reference_type> & handle)
+    operator= (const Reference<reference_type> & handle)
     {
         return set( handle.m_pBody );
     }
@@ -158,7 +158,7 @@ public:
     /** Assignment...
      */
     Reference<reference_type> &
-    SAL_CALL operator= (reference_type * pBody)
+    operator= (reference_type * pBody)
     {
         return set( pBody );
     }
@@ -170,7 +170,7 @@ public:
          since in the second case two large objects exist in memory
          (the old body and the new body).
      */
-    Reference<reference_type> & SAL_CALL clear()
+    Reference<reference_type> & clear()
     {
         if (m_pBody)
         {
@@ -186,7 +186,7 @@ public:
          I.e. handle->someBodyOp() and handle.get()->someBodyOp()
          are the same.
      */
-    reference_type * SAL_CALL get() const
+    reference_type * get() const
     {
         return m_pBody;
     }
@@ -194,7 +194,7 @@ public:
 
     /** Probably most common used: handle->someBodyOp().
      */
-    reference_type * SAL_CALL operator->() const
+    reference_type * operator->() const
     {
         assert(m_pBody != NULL);
         return m_pBody;
@@ -203,7 +203,7 @@ public:
 
     /** Allows (*handle).someBodyOp().
     */
-    reference_type & SAL_CALL operator*() const
+    reference_type & operator*() const
     {
         assert(m_pBody != NULL);
         return *m_pBody;
@@ -212,7 +212,7 @@ public:
 
     /** Returns True if the handle does point to a valid body.
      */
-    bool SAL_CALL is() const
+    bool is() const
     {
         return (m_pBody != NULL);
     }
@@ -226,7 +226,7 @@ public:
 
     /** Returns True if this points to pBody.
      */
-    bool SAL_CALL operator== (const reference_type * pBody) const
+    bool operator== (const reference_type * pBody) const
     {
         return (m_pBody == pBody);
     }
@@ -235,7 +235,7 @@ public:
     /** Returns True if handle points to the same body.
      */
     bool
-    SAL_CALL operator== (const Reference<reference_type> & handle) const
+    operator== (const Reference<reference_type> & handle) const
     {
         return (m_pBody == handle.m_pBody);
     }
@@ -244,7 +244,7 @@ public:
     /** Needed to place References into STL collection.
      */
     bool
-    SAL_CALL operator!= (const Reference<reference_type> & handle) const
+    operator!= (const Reference<reference_type> & handle) const
     {
         return (m_pBody != handle.m_pBody);
     }
@@ -253,7 +253,7 @@ public:
     /** Needed to place References into STL collection.
      */
     bool
-    SAL_CALL operator< (const Reference<reference_type> & handle) const
+    operator< (const Reference<reference_type> & handle) const
     {
         return (m_pBody < handle.m_pBody);
     }
@@ -262,7 +262,7 @@ public:
     /** Needed to place References into STL collection.
      */
     bool
-    SAL_CALL operator> (const Reference<reference_type> & handle) const
+    operator> (const Reference<reference_type> & handle) const
     {
         return (m_pBody > handle.m_pBody);
     }

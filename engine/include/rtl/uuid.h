@@ -56,7 +56,7 @@ extern "C" {
     @param bUseEthernetAddress  ignored (was used when this function returned
                                 Version 1 instead of Version 4 UUIDs).
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_createUuid(
+SAL_DLLPUBLIC void rtl_createUuid(
                               sal_uInt8 *pTargetUUID,
                               const sal_uInt8 *pPredecessorUUID,
                               bool bUseEthernetAddress );
@@ -76,7 +76,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createUuid(
     </ul>
 
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_compareUuid(
+SAL_DLLPUBLIC sal_Int32 rtl_compareUuid(
         const sal_uInt8 *pUUID1 , const sal_uInt8 *pUUID2 );
 
 /*

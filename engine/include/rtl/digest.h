@@ -72,7 +72,7 @@ typedef enum __rtl_DigestError rtlDigestError;
     @param[in] Algorithm digest algorithm.
     @return Digest handle, or 0 upon failure.
  */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_create  (
+SAL_DLLPUBLIC rtlDigest rtl_digest_create  (
     rtlDigestAlgorithm Algorithm
 ) SAL_THROW_EXTERN_C();
 
@@ -81,7 +81,7 @@ SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_create  (
     @post Digest handle destroyed and invalid.
     @param[in] Digest digest handle to be destroyed.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroy (
+SAL_DLLPUBLIC void rtl_digest_destroy (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -90,7 +90,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroy (
     @param[in] Digest digest handle.
     @return digest algorithm, or <code>rtl_Digest_AlgorithmInvalid</code> upon failure.
  */
-SAL_DLLPUBLIC rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
+SAL_DLLPUBLIC rtlDigestAlgorithm rtl_digest_queryAlgorithm (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -99,7 +99,7 @@ SAL_DLLPUBLIC rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
     @param[in] Digest digest handle.
     @return digest length, or 0 upon failure.
  */
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_digest_queryLength (
+SAL_DLLPUBLIC sal_uInt32 rtl_digest_queryLength (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -111,7 +111,7 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_digest_queryLength (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_init (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_init (
     rtlDigest Digest,
     const sal_uInt8 *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -124,7 +124,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_init (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_update (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_update (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -142,7 +142,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_update (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_get (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -162,7 +162,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5_MSOffice (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_MD5_MSOffice (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -185,7 +185,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5_MSOffice (
 
     @see rtl_digest_create()
  */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA1_StarOfficeBug (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest rtl_digest_createSHA1_StarOfficeBug (void) SAL_THROW_EXTERN_C();
 
 /** Destroy a SHA1 digest handle.
 
@@ -194,7 +194,7 @@ SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA1_StarOfficeBug (void) SAL_
 
     @see rtl_digest_destroy()
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA1 (
+SAL_DLLPUBLIC void rtl_digest_destroySHA1 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -205,7 +205,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA1 (
 
     @see rtl_digest_update()
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_updateSHA1 (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -217,7 +217,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
 
     @see rtl_digest_get()
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_getSHA1 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -240,7 +240,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_SHA1_StarOfficeBug (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -266,7 +266,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug (
 
     @retval rtl_Digest_E_None upon success.
 */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
+SAL_DLLPUBLIC rtlDigestError rtl_digest_PBKDF2 (
     sal_uInt8       *pKeyData , sal_uInt32 nKeyLen,
     const sal_uInt8 *pPassData, sal_uInt32 nPassLen,
     const sal_uInt8 *pSaltData, sal_uInt32 nSaltLen,

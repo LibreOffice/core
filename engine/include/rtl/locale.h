@@ -67,7 +67,7 @@ typedef struct _rtl_Locale
     @param country uppercase two-letter ISO-3166 code. May be null.
     @param variant vendor and browser specific code. May be null.
  */
-SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_register(
+SAL_DLLPUBLIC rtl_Locale * rtl_locale_register(
         const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant );
 
 /**
@@ -76,7 +76,7 @@ SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_register(
     @deprecated  LibreOffice itself does not use this anymore, and client code
     should not have good use for it either.  It may eventually be removed.
  */
-SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_getDefault(void);
+SAL_DLLPUBLIC rtl_Locale * rtl_locale_getDefault(void);
 
 /**
     Sets the default.
@@ -90,7 +90,7 @@ SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_getDefault(void);
     @deprecated  LibreOffice itself does not use this anymore, and client code
     should not have good use for it either.  It may eventually be removed.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_locale_setDefault(
+SAL_DLLPUBLIC void rtl_locale_setDefault(
         const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant );
 
 /**
@@ -98,30 +98,30 @@ SAL_DLLPUBLIC void SAL_CALL rtl_locale_setDefault(
     a lowercase two-letter ISO 639-1 or three-letter ISO 639-3 code.
     @see getDisplayLanguage
  */
-SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getLanguage( rtl_Locale * This );
+SAL_DLLPUBLIC rtl_uString * rtl_locale_getLanguage( rtl_Locale * This );
 
 /**
     Getter for programmatic name of field,
     an uppercased two-letter ISO-3166 code.
     @see getDisplayCountry
  */
-SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getCountry( rtl_Locale * This );
+SAL_DLLPUBLIC rtl_uString * rtl_locale_getCountry( rtl_Locale * This );
 
 /**
     Getter for programmatic name of field.
     @see getDisplayVariant
  */
-SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getVariant( rtl_Locale * This );
+SAL_DLLPUBLIC rtl_uString * rtl_locale_getVariant( rtl_Locale * This );
 
 /**
     Returns the hash code of the locale This.
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_locale_hashCode( rtl_Locale * This );
+SAL_DLLPUBLIC sal_Int32 rtl_locale_hashCode( rtl_Locale * This );
 
 /**
     Returns true if the locals are equal, otherwise false.
  */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_locale_equals( rtl_Locale * This, rtl_Locale * obj  );
+SAL_DLLPUBLIC sal_Int32 rtl_locale_equals( rtl_Locale * This, rtl_Locale * obj  );
 
 #ifdef __cplusplus
 }

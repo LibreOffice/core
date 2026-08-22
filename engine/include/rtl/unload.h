@@ -40,8 +40,8 @@ extern "C"
 */
 typedef struct SAL_DLLPUBLIC_RTTI _rtl_ModuleCount
 {
-    void ( SAL_CALL * acquire ) ( struct _rtl_ModuleCount * that );
-    void ( SAL_CALL * release ) ( struct _rtl_ModuleCount * that );
+    void ( * acquire ) ( struct _rtl_ModuleCount * that );
+    void ( * release ) ( struct _rtl_ModuleCount * that );
 }rtl_ModuleCount;
 
 /** Backwards-compatibility remainder of a removed library unloading feature.

@@ -142,7 +142,7 @@ typedef struct _rtl_TextEncodingInfo
     True if the given encoding uses single octets as basic units of
     information, false otherwise.
  */
-SAL_DLLPUBLIC bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
+SAL_DLLPUBLIC bool rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
 
 /** Return information about a text encoding.
 
@@ -157,7 +157,7 @@ SAL_DLLPUBLIC bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
     True if information about the given encoding is available, false
     otherwise.
  */
-SAL_DLLPUBLIC bool SAL_CALL rtl_getTextEncodingInfo(
+SAL_DLLPUBLIC bool rtl_getTextEncodingInfo(
         rtl_TextEncoding eTextEncoding, rtl_TextEncodingInfo* pEncInfo );
 
 /** Map from a numeric Windows charset to a text encoding.
@@ -171,7 +171,7 @@ SAL_DLLPUBLIC bool SAL_CALL rtl_getTextEncodingInfo(
     If nWinCharset is 255 (OEM_CHARSET), then return value is RTL_TEXTENCODING_IBM_850,
     regardless of current locale.
  */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
+SAL_DLLPUBLIC rtl_TextEncoding rtl_getTextEncodingFromWindowsCharset(
         sal_uInt8 nWinCharset );
 
 /** Map from a MIME charset to a text encoding.
@@ -183,7 +183,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
     The corresponding rtl_TextEncoding value, or RTL_TEXTENCODING_DONTKNOW if
     no mapping is applicable.
  */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset(
+SAL_DLLPUBLIC rtl_TextEncoding rtl_getTextEncodingFromMimeCharset(
         const char* pMimeCharset );
 
 /** Map from a Unix charset to a text encoding.
@@ -195,7 +195,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset(
     The corresponding rtl_TextEncoding value, or RTL_TEXTENCODING_DONTKNOW if
     no mapping is applicable.
  */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset(
+SAL_DLLPUBLIC rtl_TextEncoding rtl_getTextEncodingFromUnixCharset(
         const char* pUnixCharset );
 
 /** Map from a text encoding to the best matching numeric Windows charset.
@@ -206,7 +206,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset(
     @return
     The best matching numeric Windows charset, or 1 if none matches.
  */
-SAL_DLLPUBLIC sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding(
+SAL_DLLPUBLIC sal_uInt8 rtl_getBestWindowsCharsetFromTextEncoding(
         rtl_TextEncoding eTextEncoding );
 
 /** Map from a text encoding to a corresponding MIME charset name, if
@@ -219,7 +219,7 @@ SAL_DLLPUBLIC sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding(
     The (preferred) MIME charset name corresponding to the given encoding, or
     NULL if none is available.
  */
-SAL_DLLPUBLIC char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(
+SAL_DLLPUBLIC char const * rtl_getMimeCharsetFromTextEncoding(
         rtl_TextEncoding nEncoding );
 
 /** Map from a text encoding to the best matching MIME charset.
@@ -230,7 +230,7 @@ SAL_DLLPUBLIC char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(
     @return
     The best matching MIME charset string, or null if none matches.
  */
-SAL_DLLPUBLIC const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding(
+SAL_DLLPUBLIC const char* rtl_getBestMimeCharsetFromTextEncoding(
         rtl_TextEncoding eTextEncoding );
 
 /** Map from a text encoding to the best matching Unix charset.
@@ -241,7 +241,7 @@ SAL_DLLPUBLIC const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding(
     @return
     The best matching Unix charset string, or null if none matches.
  */
-SAL_DLLPUBLIC const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding(
+SAL_DLLPUBLIC const char* rtl_getBestUnixCharsetFromTextEncoding(
         rtl_TextEncoding eTextEncoding  );
 
 /** Map from a Windows code page to a text encoding.
@@ -254,7 +254,7 @@ SAL_DLLPUBLIC const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding(
     encoding, see rtl_isOctetTextEncoding), or RTL_TEXTENCODING_DONTKNOW if no
     mapping is applicable.
  */
-SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL
+SAL_DLLPUBLIC rtl_TextEncoding
 rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage);
 
 /** Map from a text encoding to a Windows code page.
@@ -266,7 +266,7 @@ rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage);
     The corresponding Windows code page number, or 0 if no mapping is
     applicable.
  */
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL
+SAL_DLLPUBLIC sal_uInt32
 rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding);
 
 #ifdef __cplusplus
