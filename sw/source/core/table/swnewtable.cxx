@@ -57,7 +57,7 @@
 /** SwBoxSelection is a small helperclass (structure) to handle selections
     of cells (boxes) between table functions
 
-    It contains an "array" of table boxes, a rectangulare selection of table boxes.
+    It contains an "array" of table boxes, a rectangular selection of table boxes.
     To be more specific, it contains a vector of box selections,
     every box selection (SwSelBoxes) contains the selected boxes inside one row.
     The member mnMergeWidth contains the width of the selected boxes
@@ -324,7 +324,7 @@ static void lcl_ChangeRowSpan( const SwTable& rTable, const tools::Long nDiff,
     } while( bGoOn );
 }
 
-/** CollectBoxSelection(..) create a rectangulare selection based on the given SwPaM
+/** CollectBoxSelection(..) create a rectangular selection based on the given SwPaM
     and prepares the selected cells for merging
 */
 
@@ -2137,7 +2137,7 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
 /**
   This is kind of similar to InsertSpannedRow()/InsertRow() but that one would
   recursively copy subtables, which would kind of defeat the purpose;
-  this function directly moves the subtable rows's cells into the newly
+  this function directly moves the subtable rows' cells into the newly
   created rows.  For the non-subtable boxes, covered-cells are created.
 
   Outer row heights are adjusted to match the inner row heights, and the

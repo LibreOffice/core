@@ -779,7 +779,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const tools::Long nRealWidth,
     if ( GetTextFrame()->IsVertical() )
         GetTextFrame()->SwitchVerticalToHorizontal( aFlyRect );
 
-    // If a Frame overlapps we open a Portion
+    // If a Frame overlaps we open a Portion
     if( aFlyRect.HasArea() )
     {
         // aLocal is frame-local

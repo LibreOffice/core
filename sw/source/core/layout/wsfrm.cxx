@@ -2200,7 +2200,7 @@ SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bo
             }
             // #i28701# - Due to the new object positioning the
             // frame on the next page/column can flow backward (e.g. it was moved forward
-            // due to the positioning of its objects ). Thus, invalivate this next frame,
+            // due to the positioning of its objects ). Thus, invalidate this next frame,
             // if document compatibility option 'Consider wrapping style influence on
             // object positioning' is ON.
             else if ( GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
@@ -2275,7 +2275,7 @@ SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bo
 
     // #i28701# - Due to the new object positioning the
     // frame on the next page/column can flow backward (e.g. it was moved forward
-    // due to the positioning of its objects ). Thus, invalivate this next frame,
+    // due to the positioning of its objects ). Thus, invalidate this next frame,
     // if document compatibility option 'Consider wrapping style influence on
     // object positioning' is ON.
     if ( !bTst )

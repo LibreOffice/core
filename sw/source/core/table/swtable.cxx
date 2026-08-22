@@ -3254,7 +3254,7 @@ void SwTableBox::RegisterToFormat( SwFormat& rFormat )
     rFormat.Add(*this);
 }
 
-// free's any remaining child objects
+// frees any remaining child objects
 SwTableLines::~SwTableLines()
 {
     for ( const_iterator it = begin(); it != end(); ++it )
