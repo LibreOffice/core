@@ -75,7 +75,7 @@ enum class SwUndoId
     PASTE_CLIPBOARD,                   // 40
     TYPING,                            // 41
     NUMRULE_CREATE,                    // 42
-    REPEAT_END = 46,
+        REPEAT_END = 46,
 
     MOVE = REPEAT_END,                 // 46
     INSGLOSSARY,                       // 47
@@ -129,7 +129,8 @@ enum class SwUndoId
     FRMFMT_CREATE,                     // 99
     FRMFMT_DELETE,                     // 100
     FRMFMT_RENAME,                     // 101
-    NUMRULE_DELETE,                    // 103
+
+    NUMRULE_DELETE = 103,              // 103
     NUMRULE_RENAME,                    // 104
     BOOKMARK_RENAME,                   // 105
     INDEX_ENTRY_INSERT,                // 106
