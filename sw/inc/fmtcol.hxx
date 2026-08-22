@@ -110,7 +110,7 @@ public:
     void DeleteAssignmentToListLevelOfOutlineStyle();
 
     /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
-     the paragragh style at the corresponding <SwNumRule> instance. */
+     the paragraph style at the corresponding <SwNumRule> instance. */
     virtual bool SetFormatAttr( const SfxPoolItem& rAttr ) override;
     virtual bool SetFormatAttr( const SfxItemSet& rSet ) override;
     virtual bool ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) override;

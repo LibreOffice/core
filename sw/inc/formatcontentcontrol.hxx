@@ -159,13 +159,13 @@ class SW_DLLPUBLIC SwContentControl final : public sw::BroadcastingModify
     /// The placeholder's doc part: just remembered.
     OUString m_aPlaceholderDocPart;
 
-    /// The data bindings's prefix mappings: just remembered.
+    /// The data bindings' prefix mappings: just remembered.
     OUString m_aDataBindingPrefixMappings;
 
-    /// The data bindings's XPath: just remembered.
+    /// The data bindings' XPath: just remembered.
     OUString m_aDataBindingXpath;
 
-    /// The data bindings's store item ID: just remembered.
+    /// The data bindings' store item ID: just remembered.
     OUString m_aDataBindingStoreItemID;
 
     /// The color: just remembered.

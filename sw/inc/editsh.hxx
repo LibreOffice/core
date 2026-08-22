@@ -692,7 +692,7 @@ public:
     const SwFlyFrameFormat* FindFlyByName( const UIName& rName ) const;
 
     /** @return a ClientObject, if CurrentCursor->Point() points to a SwOLENode
-     (and mark is neither set not pointint to same ClientObject)
+     (and mark is neither set not pointing to same ClientObject)
      else give rap on the knuckles. */
     SW_DLLPUBLIC svt::EmbeddedObjectRef& GetOLEObject() const;
 

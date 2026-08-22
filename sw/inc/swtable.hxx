@@ -68,7 +68,7 @@ public:
     typedef std::vector<SwTableLine*>::iterator iterator;
     typedef std::vector<SwTableLine*>::const_iterator const_iterator;
 
-    // free's any remaining child objects
+    // frees any remaining child objects
     ~SwTableLines();
 
     bool empty() const { return m_vLines.empty(); }

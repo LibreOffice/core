@@ -470,7 +470,7 @@ public:
     /// Get information from Client.
     virtual bool GetInfo( SwFindNearestNode& ) const override;
 
-    /// SS for PoolItems: hard attributation.
+    /// SS for PoolItems: hard attribution.
 
     /// If bInParent is FALSE search for attribute only in this node.
     const SfxPoolItem& GetAttr( sal_uInt16 nWhich, bool bInParent=true ) const;
