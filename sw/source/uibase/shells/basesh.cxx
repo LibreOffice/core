@@ -2705,7 +2705,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
             {
                 // if this was intended to have a independent copy of the Item to be set
                 // this is not needed due to the ItemSet/Pool cloning Items which get set anyways.
-                // Keeping code as reference - it may have had other reasons I do notz see (?!?)
+                // Keeping code as reference - it may have had other reasons I do not see (?!?)
                 // std::unique_ptr<SfxPoolItem> pNewItem(aBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)));
                 rSet.Put(*aBrushItem);
                 break;

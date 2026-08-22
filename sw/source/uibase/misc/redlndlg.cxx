@@ -554,7 +554,7 @@ void SwRedlineAcceptDlg::Activate()
                         return;
                     }
 
-                    // here was a continue; targetted to the outer loop
+                    // here was a continue; targeted to the outer loop
                     // now a break will do, as there is nothing after it in the outer loop
                     break;
                 }

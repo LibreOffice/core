@@ -2888,7 +2888,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             m_pRenderData->GetPagesToPrint().size() - 1;
     }
     // since SwSrcView::PrintSource is a poor implementation to get the number of pages to print
-    // we obmit checking of the upper bound in this case.
+    // we omit checking of the upper bound in this case.
     if (!bIsSwSrcView && m_pRenderData && nRenderer > nMaxRenderer)
         return uno::Sequence< beans::PropertyValue >();
 
@@ -3197,7 +3197,7 @@ void SAL_CALL SwXTextDocument::render(
                 m_pRenderData->GetPagesToPrint().size() - 1;
         }
         // since SwSrcView::PrintSource is a poor implementation to get the number of pages to print
-        // we obmit checking of the upper bound in this case.
+        // we omit checking of the upper bound in this case.
         if (bIsSwSrcView || nRenderer <= nMaxRenderer)
         {
             if (bIsSwSrcView)

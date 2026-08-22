@@ -45,7 +45,7 @@ com_sun_star_comp_Writer_WriterModule_get_implementation(uno::XComponentContext*
     // XNotifyingDispatch
 void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs, const uno::Reference< frame::XDispatchResultListener >& xListener )
 {
-    // there is no guarantee, that we are holded alive during this method!
+    // there is no guarantee, that we are held alive during this method!
     // May the outside dispatch container will be updated by a CONTEXT_CHANGED
     // asynchronous ...
     uno::Reference< uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));

@@ -495,7 +495,7 @@ bool SwView::SearchAndWrap(bool bApi)
     // constructed to fix search key not found when a forward search (Find Next) results in a
     // unique find selection to the end of the document followed by a backward search (Find
     // Previous) or when a backward search results in a unique find selection to the start of the
-    // document followed by a forward search search. Unique find selection meaning the document
+    // document followed by a forward search. Unique find selection meaning the document
     // contains only one match of the search key.
 
     // fdo#65014 : Ensure that the point of the cursor is at the extremity of the
