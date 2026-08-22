@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 ))
 
 # Hide HarfBuzz symbols.
-harfbuzz_cpp_args = $(if $(filter-out MSC,$(COM)),-fvisibility=hidden) \
+harfbuzz_cpp_args = $(CXXFLAGS) $(if $(filter-out MSC,$(COM)),-fvisibility=hidden) \
 	$(if $(ENABLE_DBGUTIL)$(ENABLE_DEBUG),,$(if $(call gb_Module__symbols_enabled,harfbuzz),$(gb_DEBUGINFO_FLAGS)))
 
 # We cannot use environment vars inside the meson cross-build file,
