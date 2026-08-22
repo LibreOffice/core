@@ -24,6 +24,21 @@
 
 #include <systemdatetime.hxx>
 
+DateTime DateTime::CreateSystemUTC()
+{
+    DateTime aDateTime(DateTime::EMPTY);
+    sal_Int32 nDate = 0;
+    sal_Int64 nTime = 0;
+    if (GetSystemDateTimeUTC(&nDate, &nTime))
+    {
+        aDateTime.Date::operator=(Date(nDate));
+        aDateTime.SetTime(nTime);
+    }
+    else
+        aDateTime.Date::operator=(Date(1, 1, 1900));
+    return aDateTime;
+}
+
 DateTime::DateTime(DateTimeInitSystem)
     : Date( Date::EMPTY )
     , Time( Time::EMPTY )

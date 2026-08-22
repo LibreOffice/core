@@ -3184,6 +3184,8 @@ void XMLAnnotationImportContext::ProcessAttribute(
         aResolved = OUString::fromUtf8(sAttrValue);
     else if (nAttrToken == XML_ELEMENT(LO_EXT, XML_PARENT_NAME))
         aParentName = OUString::fromUtf8(sAttrValue);
+    else if (nAttrToken == XML_ELEMENT(LO_EXT, XML_DATE_UTC))
+        aDateUTC = OUString::fromUtf8(sAttrValue);
     else
         XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
@@ -3333,6 +3335,13 @@ void XMLAnnotationImportContext::PrepareField(
     bool bTmp(false);
     (void)::sax::Converter::convertBool(bTmp, aResolved);
     xPropertySet->setPropertyValue(u"Resolved"_ustr, Any(bTmp));
+
+    util::DateTime aDateTimeUTC;
+    if (!aDateUTC.isEmpty() && ::sax::Converter::parseDateTime(aDateTimeUTC, aDateUTC))
+    {
+        xPropertySet->setPropertyValue(u"DateTimeUTC"_ustr, Any(aDateTimeUTC));
+    }
+    aDateUTC.clear();
 
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, aDateBuffer))

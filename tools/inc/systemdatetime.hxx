@@ -19,4 +19,10 @@ constexpr sal_Int64 HOUR_MASK = SAL_CONST_INT64(10000000000000);
  */
 bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime);
 
+/** Get the current timestamp in UTC.
+    Both pDate and pTime can be null.
+    Returns true if succeeded, false otherwise.
+ */
+bool GetSystemDateTimeUTC(sal_Int32* pDate, sal_Int64* pTime);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

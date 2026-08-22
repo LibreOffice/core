@@ -3650,6 +3650,8 @@ namespace xmloff::token {
 
         XML_AIRPLANE,
 
+        XML_DATE_UTC,
+
         XML_TOKEN_END
     };
 

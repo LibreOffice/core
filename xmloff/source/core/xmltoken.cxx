@@ -3651,6 +3651,8 @@ namespace xmloff::token {
 
         TOKEN( "airplane",                        XML_AIRPLANE ),
 
+        TOKEN("date-utc", XML_DATE_UTC),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else

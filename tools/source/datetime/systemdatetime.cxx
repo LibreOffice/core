@@ -35,20 +35,19 @@ constexpr sal_Int64 ConvertHMSnToInt(sal_Int64 nHour, sal_Int64 nMin, sal_Int64 
 {
     return (nHour * HOUR_MASK) + (nMin * MIN_MASK) + (nSec * SEC_MASK) + nNanoSec;
 }
-}
 
-bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime)
+bool getSystemDateTime(bool bLocal, sal_Int32* pDate, sal_Int64* pTime)
 {
     TimeValue utcTv;
     if (!osl_getSystemTime(&utcTv))
         return false;
 
-    TimeValue localTv;
-    if (!osl_getLocalTimeFromSystemTime(&utcTv, &localTv))
+    TimeValue aTv = utcTv;
+    if (bLocal && !osl_getLocalTimeFromSystemTime(&utcTv, &aTv))
         return false;
 
     oslDateTime dt;
-    if (!osl_getDateTimeFromTimeValue(&localTv, &dt))
+    if (!osl_getDateTimeFromTimeValue(&aTv, &dt))
         return false;
 
     if (pDate)
@@ -57,6 +56,17 @@ bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime)
         *pTime = ConvertHMSnToInt(dt.Hours, dt.Minutes, dt.Seconds, dt.NanoSeconds);
 
     return true;
+}
+}
+
+bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime)
+{
+    return getSystemDateTime(true, pDate, pTime);
+}
+
+bool GetSystemDateTimeUTC(sal_Int32* pDate, sal_Int64* pTime)
+{
+    return getSystemDateTime(false, pDate, pTime);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

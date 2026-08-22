@@ -52,5 +52,6 @@
 #define FIELD_PROP_PAR7             37
 
 #define FIELD_PROP_USHORT3          38
+#define FIELD_PROP_DATE_TIME2       39
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

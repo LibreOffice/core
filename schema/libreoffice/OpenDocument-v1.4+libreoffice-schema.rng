@@ -1029,6 +1029,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:ref name="string"/>
           </rng:attribute>
         </rng:optional>
+        <!-- The moment the comment was written. dc:date carries the author's wall clock with
+             no zone, so this is what pins the comment to a point in time. -->
+        <rng:optional>
+          <rng:attribute name="loext:date-utc">
+            <rng:ref name="dateTime"/>
+          </rng:attribute>
+        </rng:optional>
       </rng:interleave>
     </rng:define>
 
