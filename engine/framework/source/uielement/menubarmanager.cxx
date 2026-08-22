@@ -907,10 +907,10 @@ bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandle
         return false;
 
     auto aSeq( comphelper::InitAnyPropertySequence( {
-        { "DispatchProvider", Any(rDispatchProvider) },
-        { "ModuleIdentifier", Any(rModuleIdentifier) },
-        { "Frame", Any(m_xFrame) },
-        { "InToolbar", Any(!m_bHasMenuBar) }
+        { u"DispatchProvider"_ustr, Any(rDispatchProvider) },
+        { u"ModuleIdentifier"_ustr, Any(rModuleIdentifier) },
+        { u"Frame"_ustr, Any(m_xFrame) },
+        { u"InToolbar"_ustr, Any(!m_bHasMenuBar) }
     } ) );
 
     Reference< XPopupMenuController > xPopupMenuController(

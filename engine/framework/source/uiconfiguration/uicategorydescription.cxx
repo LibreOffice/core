@@ -285,7 +285,7 @@ void ConfigurationAccess_UICategory::initializeConfigAccess()
     {
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(m_aConfigCategoryAccess)}
+            {u"nodepath"_ustr, Any(m_aConfigCategoryAccess)}
         }));
 
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(

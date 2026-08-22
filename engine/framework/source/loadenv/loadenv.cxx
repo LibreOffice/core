@@ -1129,7 +1129,7 @@ bool LoadEnv::impl_loadContent()
             css::uno::Reference<css::awt::XWindow> xWindow = xTargetFrame->getContainerWindow();
             cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {"Parent", cpo::uno::Any(xWindow)}
+                {u"Parent"_ustr, cpo::uno::Any(xWindow)}
             }));
             xHandler->initialize(aArguments);
             //show the frame as early as possible to make it the parent of any message dialogs

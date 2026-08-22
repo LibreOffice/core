@@ -266,7 +266,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
     {
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(m_sRoot)}
+            {u"nodepath"_ustr, Any(m_sRoot)}
         }));
 
         try

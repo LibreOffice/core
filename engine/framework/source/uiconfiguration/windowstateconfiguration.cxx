@@ -1203,7 +1203,7 @@ void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     {
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(m_aConfigWindowAccess)}
+            {u"nodepath"_ustr, Any(m_aConfigWindowAccess)}
         }));
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aArgs ), UNO_QUERY );

@@ -1128,8 +1128,8 @@ Reference< XInterface > UIConfigurationManager::getImageManager()
 
         Sequence<Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
-            {"UserConfigStorage", Any(m_xDocConfigStorage)},
-            {"ModuleIdentifier", Any(OUString())},
+            {u"UserConfigStorage"_ustr, Any(m_xDocConfigStorage)},
+            {u"ModuleIdentifier"_ustr, Any(OUString())},
         }));
 
         m_xImageManager->initialize( aPropSeq );

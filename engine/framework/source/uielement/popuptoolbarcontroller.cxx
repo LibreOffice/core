@@ -394,7 +394,7 @@ private:
 } // namespace
 
 SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    : ImplInheritanceHelper( rxContext, ".uno:SaveAsMenu" )
+    : ImplInheritanceHelper( rxContext, u".uno:SaveAsMenu"_ustr )
     , m_bReadOnly( false )
     , m_bModified( false )
 {

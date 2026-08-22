@@ -1405,9 +1405,9 @@ Reference< XInterface > ModuleUIConfigurationManager::getImageManager()
 
         cpo::uno::Sequence<cpo::uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
-            {"UserConfigStorage", cpo::uno::Any(m_xUserConfigStorage)},
-            {"ModuleIdentifier", cpo::uno::Any(m_aModuleIdentifier)},
-            {"UserRootCommit", cpo::uno::Any(m_xUserRootCommit)},
+            {u"UserConfigStorage"_ustr, cpo::uno::Any(m_xUserConfigStorage)},
+            {u"ModuleIdentifier"_ustr, cpo::uno::Any(m_aModuleIdentifier)},
+            {u"UserRootCommit"_ustr, cpo::uno::Any(m_xUserRootCommit)},
         }));
         m_xModuleImageManager->initialize( aPropSeq );
     }

@@ -476,7 +476,7 @@ void ConfigurationAccess_UICommand::initializeConfigAccess()
     {
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(m_aConfigCmdAccess)}
+            {u"nodepath"_ustr, Any(m_aConfigCmdAccess)}
         }));
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs ),UNO_QUERY );
@@ -493,7 +493,7 @@ void ConfigurationAccess_UICommand::initializeConfigAccess()
 
         Sequence<Any> aArgs2(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(m_aConfigPopupAccess)}
+            {u"nodepath"_ustr, Any(m_aConfigPopupAccess)}
         }));
         m_xConfigAccessPopups.set( m_xConfigProvider->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs2 ),UNO_QUERY );

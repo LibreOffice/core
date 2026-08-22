@@ -105,7 +105,7 @@ SubToolBarController::SubToolBarController(
 )   : ToolBarBase(
         rxContext,
         rtl::Reference< css::frame::XFrame >(),
-        ""
+        u""_ustr
     )
 {
     for ( cpo::uno::Any const & arg : rxArgs )
@@ -200,7 +200,7 @@ void SubToolBarController::execute( sal_Int16 nKeyModifier )
     if ( !m_aLastCommand.isEmpty() )
     {
         auto aArgs( comphelper::InitPropertySequence( {
-            { "KeyModifier", cpo::uno::Any( nKeyModifier ) }
+            { u"KeyModifier"_ustr, cpo::uno::Any( nKeyModifier ) }
         } ) );
         dispatchCommand( m_aLastCommand, aArgs );
     }
@@ -261,10 +261,10 @@ std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
     css::uno::Reference< css::awt::XWindow > xParent = new weld::TransportAsXWindow(pPopup->GetContainer());
 
     auto aPropSeq( comphelper::InitPropertySequence( {
-        { "Frame", cpo::uno::Any( xFrame ) },
-        { "ParentWindow", cpo::uno::Any( xParent ) },
-        { "Persistent", cpo::uno::Any( false ) },
-        { "PopupMode", cpo::uno::Any( true ) }
+        { u"Frame"_ustr, cpo::uno::Any( xFrame ) },
+        { u"ParentWindow"_ustr, cpo::uno::Any( xParent ) },
+        { u"Persistent"_ustr, cpo::uno::Any( false ) },
+        { u"PopupMode"_ustr, cpo::uno::Any( true ) }
     } ) );
 
     try
@@ -300,10 +300,10 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
         }
 
         auto aPropSeq( comphelper::InitPropertySequence( {
-            { "Frame", cpo::uno::Any( xFrame ) },
-            { "ParentWindow", cpo::uno::Any( m_xParentWindow ) },
-            { "Persistent", cpo::uno::Any( false ) },
-            { "PopupMode", cpo::uno::Any( true ) }
+            { u"Frame"_ustr, cpo::uno::Any( xFrame ) },
+            { u"ParentWindow"_ustr, cpo::uno::Any( m_xParentWindow ) },
+            { u"Persistent"_ustr, cpo::uno::Any( false ) },
+            { u"PopupMode"_ustr, cpo::uno::Any( true ) }
         } ) );
 
         try

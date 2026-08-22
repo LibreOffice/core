@@ -197,7 +197,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", cpo::uno::Any(m_sRoot)}
+            {u"nodepath"_ustr, cpo::uno::Any(m_sRoot)}
         }));
         try
         {

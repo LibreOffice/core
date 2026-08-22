@@ -1071,11 +1071,11 @@ void ToolBarManager::CreateControllers()
         {
             Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
             Sequence< Any > aArgs( comphelper::InitAnyPropertySequence( {
-                { "ModuleIdentifier", Any(m_aModuleIdentifier) },
-                { "Frame", Any(m_xFrame) },
-                { "ServiceManager", Any(xMSF) },
-                { "ParentWindow", Any(xToolbarWindow) },
-                { "Identifier", Any(sal_uInt16(nId)) },
+                { u"ModuleIdentifier"_ustr, Any(m_aModuleIdentifier) },
+                { u"Frame"_ustr, Any(m_xFrame) },
+                { u"ServiceManager"_ustr, Any(xMSF) },
+                { u"ParentWindow"_ustr, Any(xToolbarWindow) },
+                { u"Identifier"_ustr, Any(sal_uInt16(nId)) },
             } ));
             xController.set( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext( aCommandURL, aArgs, m_xContext ),
                              UNO_QUERY );
@@ -1163,12 +1163,12 @@ void ToolBarManager::CreateControllers()
             {
                 Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
                 Sequence< Any > aArgs( comphelper::InitAnyPropertySequence( {
-                    { "Frame", Any(m_xFrame) },
-                    { "CommandURL", Any(aCommandURL) },
-                    { "ServiceManager", Any(xMSF) },
-                    { "ParentWindow", Any(xToolbarWindow) },
-                    { "ModuleIdentifier", Any(m_aModuleIdentifier) },
-                    { "Identifier", Any(sal_uInt16(nId)) },
+                    { u"Frame"_ustr, Any(m_xFrame) },
+                    { u"CommandURL"_ustr, Any(aCommandURL) },
+                    { u"ServiceManager"_ustr, Any(xMSF) },
+                    { u"ParentWindow"_ustr, Any(xToolbarWindow) },
+                    { u"ModuleIdentifier"_ustr, Any(m_aModuleIdentifier) },
+                    { u"Identifier"_ustr, Any(sal_uInt16(nId)) },
                 } ));
 
                 xInit->initialize( aArgs );

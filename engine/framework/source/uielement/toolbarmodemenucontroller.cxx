@@ -213,7 +213,7 @@ void ToolbarModeMenuController::statusChanged( const FeatureStateEvent& Event )
 // XMenuListener
 void ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
-    auto aArgs(comphelper::InitPropertySequence({{"Mode", Any(m_xPopupMenu->getCommand(rEvent.MenuId))}}));
+    auto aArgs(comphelper::InitPropertySequence({{u"Mode"_ustr, Any(m_xPopupMenu->getCommand(rEvent.MenuId))}}));
     dispatchCommand(m_aCommandURL, aArgs);
 }
 
