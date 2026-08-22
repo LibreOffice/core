@@ -397,7 +397,7 @@ public:
         sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
         bool bRenderBackground, bool bRenderMasterPage) override;
     /// @see vcl::ITiledRenderable::renderNextSlideLayer().
-    SD_DLLPUBLIC bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, OUString& rJsonMsg) override;
+    SD_DLLPUBLIC bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, std::string& rJsonMsg) override;
 
     SD_DLLPUBLIC rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
 

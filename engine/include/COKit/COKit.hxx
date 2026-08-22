@@ -2440,7 +2440,7 @@ struct COKitDocument
 
     /// Render the slide layer
     virtual bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale,
-                                      char** pJsonMessage) = 0;
+                                      std::string* pJsonMessage) = 0;
 
     /// Set named view options
     virtual void setViewOption(const char* pOption, const char* pValue) = 0;

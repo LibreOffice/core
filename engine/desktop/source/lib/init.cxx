@@ -1347,7 +1347,7 @@ static bool doc_createSlideRenderer(
 static void doc_postSlideshowCleanup(COKitDocument* pThis);
 
 static bool doc_renderNextSlideLayer(
-    COKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMsg);
+    COKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, std::string* pJsonMsg);
 
 static void doc_setViewOption(COKitDocument* pDoc, const char* pOption, const char* pValue);
 
@@ -1901,7 +1901,7 @@ void COKitDocumentImpl::postSlideshowCleanup()
 }
 
 bool COKitDocumentImpl::renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer,
-                                              double* pScale, char** pJsonMessage)
+                                              double* pScale, std::string* pJsonMessage)
 {
     return doc_renderNextSlideLayer(this, pBuffer, bIsBitmapLayer, pScale, pJsonMessage);
 }
@@ -6912,7 +6912,7 @@ static void doc_postSlideshowCleanup(COKitDocument* pThis)
 }
 
 static bool doc_renderNextSlideLayer(
-    COKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, double* pScale, char** pJsonMessage)
+    COKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, double* pScale, std::string* pJsonMessage)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -6923,12 +6923,12 @@ static bool doc_renderNextSlideLayer(
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return true;
     }
-    OUString sJsonMesssage;
+    std::string sJsonMesssage;
     bool bIsBitmapLayer = false;
     bool bDone = pDoc->renderNextSlideLayer(pBuffer, bIsBitmapLayer, *pScale, sJsonMesssage);
 
     if (pJsonMessage)
-        *pJsonMessage = convertOUString(sJsonMesssage);
+        *pJsonMessage = std::move(sJsonMesssage);
     *pIsBitmapLayer = bIsBitmapLayer;
 
     return bDone;

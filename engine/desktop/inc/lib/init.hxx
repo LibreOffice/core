@@ -404,7 +404,7 @@ namespace desktop {
                                  bool bRenderMasterPage) override;
         void postSlideshowCleanup() override;
         bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale,
-                                  char** pJsonMessage) override;
+                                  std::string* pJsonMessage) override;
         void setViewOption(const char* pOption, const char* pValue) override;
         void setColorPreviewState(int nId, bool nEnabled) override;
         void setAllowManageRedlines(int nId, bool allow) override;

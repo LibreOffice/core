@@ -2702,10 +2702,8 @@ bool ChildSession::renderNextSlideLayer(SlideCompressor& scomp, const unsigned w
     // FIXME: we need a multi-user / view cache somewhere here (?)
     auto pixmap = std::make_shared<std::vector<unsigned char>>(static_cast<size_t>(4) * width * height);
     bool isBitmapLayer = false;
-    char* msg = nullptr;
-    done = getLOKitDocument()->renderNextSlideLayer(pixmap->data(), &isBitmapLayer, &devicePixelRatio, &msg);
-    std::string jsonMsg(msg != nullptr ? msg : "");
-    free(msg);
+    std::string jsonMsg;
+    done = getLOKitDocument()->renderNextSlideLayer(pixmap->data(), &isBitmapLayer, &devicePixelRatio, &jsonMsg);
 
     if (jsonMsg.empty())
         return true;

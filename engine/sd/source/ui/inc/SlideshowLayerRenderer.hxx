@@ -154,8 +154,8 @@ private:
 
     void createViewAndDraw(const RenderContext& rRenderContext,
                            sdr::contact::ViewObjectContactRedirector* pRedirector);
-    void writeBackgroundJSON(OString& rJsonMsg);
-    void writeJSON(OString& rJsonMsg, RenderPass const& rRenderPass);
+    void writeBackgroundJSON(std::string& rJsonMsg);
+    void writeJSON(std::string& rJsonMsg, RenderPass const& rRenderPass);
 
     void setupAnimations();
     void setupMasterPageFields();
@@ -181,7 +181,7 @@ public:
      * The properties of the layer are written to the input string in JSON format.
      *
      * @returns false, if nothing was rendered and rendering is done */
-    bool render(unsigned char* pBuffer, bool& bIsBitmapLayer, double& scale, OString& rJsonMsg);
+    bool render(unsigned char* pBuffer, bool& bIsBitmapLayer, double& scale, std::string& rJsonMsg);
 };
 
 } // end of namespace sd

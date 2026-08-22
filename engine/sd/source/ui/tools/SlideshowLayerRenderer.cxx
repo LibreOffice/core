@@ -968,7 +968,7 @@ void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& r
 
 } // end anonymous namespace
 
-void SlideshowLayerRenderer::writeBackgroundJSON(OString& rJsonMsg)
+void SlideshowLayerRenderer::writeBackgroundJSON(std::string& rJsonMsg)
 {
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", maRenderState.stageString());
@@ -976,11 +976,11 @@ void SlideshowLayerRenderer::writeBackgroundJSON(OString& rJsonMsg)
     aJsonWriter.put("slideHash", msSlideHash);
     aJsonWriter.put("type", "bitmap");
     writeContentNode(aJsonWriter);
-    rJsonMsg = aJsonWriter.finishAndGetAsOString();
+    rJsonMsg = aJsonWriter.finishAndGetAsStdString();
     maRenderState.incrementIndex();
 }
 
-void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRenderPass)
+void SlideshowLayerRenderer::writeJSON(std::string& rJsonMsg, RenderPass const& rRenderPass)
 {
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", maRenderState.stageString());
@@ -1051,7 +1051,7 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRen
 }
 
 bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale,
-                                    OString& rJsonMsg)
+                                    std::string& rJsonMsg)
 {
     // We want to render one pass (one iteration through objects)
 
