@@ -4858,8 +4858,8 @@ namespace {
 /// @throws uno::RuntimeException
 sal_Unicode lclGetPrefixChar( const uno::Reference< table::XCell >& rxCell )
 {
-    /*  TODO/FIXME: We need an apostroph-prefix property at the cell to
-        implement this correctly. For now, return an apostroph for every text
+    /*  TODO/FIXME: We need an apostrophe-prefix property at the cell to
+        implement this correctly. For now, return an apostrophe for every text
         cell.
 
         TODO/FIXME: When Application.TransitionNavigKeys is supported and true,
@@ -4925,17 +4925,17 @@ uno::Any lclGetPrefixVariant( sal_Unicode cPrefixChar )
 uno::Any SAL_CALL ScVbaRange::getPrefixCharacter()
 {
     /*  (1) If Application.TransitionNavigKeys is false, this function returns
-        an apostroph character if the text cell begins with an apostroph
+        an apostrophe character if the text cell begins with an apostrophe
         character (formula return values are not taken into account); otherwise
         an empty string.
 
         (2) If Application.TransitionNavigKeys is true, this function returns
-        an apostroph character, if the cell is left-aligned; a double-quote
+        an apostrophe character, if the cell is left-aligned; a double-quote
         character, if the cell is right-aligned; a circumflex character, if the
         cell is centered; a backslash character, if the cell is set to filled;
         or an empty string, if nothing of the above.
 
-        If a range or a list of ranges contains texts with leading apostroph
+        If a range or a list of ranges contains texts with leading apostrophe
         character as well as other cells, this function returns an empty
         string.
      */

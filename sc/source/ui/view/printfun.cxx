@@ -714,7 +714,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
         bool bForcedChangeRow = false;
 
         // #i53558# Crop entire column of old row limit to real print area with
-        // some fuzzyness.
+        // some fuzziness.
         if (!bChangeRow && nStartRow == 0)
         {
             SCROW nPAEndRow;

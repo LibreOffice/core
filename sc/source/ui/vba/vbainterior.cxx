@@ -141,7 +141,7 @@ ScVbaInterior::setColorIndex( const css::uno::Any& _colorindex )
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
 
-    // hackly for excel::XlColorIndex::xlColorIndexNone
+    // hacky for excel::XlColorIndex::xlColorIndexNone
     if( nIndex == excel::XlColorIndex::xlColorIndexNone )
     {
         m_xProps->setPropertyValue( BACKCOLOR, uno::Any( sal_Int32( -1 ) ) );
@@ -190,7 +190,7 @@ uno::Any SAL_CALL
 ScVbaInterior::getColorIndex()
 {
     sal_Int32 nColor = 0;
-    // hackly for excel::XlColorIndex::xlColorIndexNone
+    // hacky for excel::XlColorIndex::xlColorIndexNone
     uno::Any aColor = m_xProps->getPropertyValue( BACKCOLOR );
     if( ( aColor >>= nColor ) && ( nColor == -1 ) )
     {

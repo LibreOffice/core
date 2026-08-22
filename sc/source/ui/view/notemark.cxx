@@ -112,9 +112,9 @@ const drawinglayer::primitive2d::Primitive2DContainer& ScNoteOverlay::getOrCreat
 
 tools::Rectangle ScNoteOverlay::calculateVisibleRectangle()
 {
-    // to not change anything for now in positioning/object
-    // creation sticked together from previous versions. This
-    // can (should) be converted to transformation stuff
+    // For now, don’t change anything in the positioning/object creation
+    // that was kept from previous versions...
+    // This can (should) be converted to transformation stuff
     // later. In principle it calculates the size of the
     // merged WindowSpace (all SplitWindows) and transforms
     // that range to logical coordinates in one of the
@@ -352,7 +352,7 @@ ScNoteOverlay::~ScNoteOverlay()
 
     // destruct temporary SdrObject. It *needs* to be kept alive
     // during visualization due to it being used for decompose
-    // of the TextPrimitive. That is an old compromize in the
+    // of the TextPrimitive. That is an old compromise in the
     // primitives: the text primitive is not self-contained in
     // the sense that it needs the SdrTextObj for decompose.
     // Would be hard to correct, but would be good for the future

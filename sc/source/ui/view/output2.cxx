@@ -4956,7 +4956,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     // tdf#143377 new strategy: instead of using zero for nSin, which
                                     // would be the *correct* value, continue with the corrected maximum
                                     // allowed value which is then *not* zero. This is similar to
-                                    // the behaviour before where (just due to numerical unprecisions)
+                                    // the behaviour before where (just due to numerical imprecisions)
                                     // nSin was also not zero (pure coincidence), but very close to it.
                                     // I checked and tried to make safe all places below that use
                                     // nSin and divide by it, but there is too much going on and that
@@ -4975,7 +4975,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 {
                                     //! the correct paper size for break depends on the number
                                     //! of rows, as long as the rows can not be outputted individually
-                                    //! offsetted -> therefore unlimited, so no wrapping.
+                                    //! offset -> therefore unlimited, so no wrapping.
                                     //! With offset rows the following would be correct:
                                     aPaperSize.setWidth( static_cast<tools::Long>(nOutHeight / fabs(nSin)) );
                                 }

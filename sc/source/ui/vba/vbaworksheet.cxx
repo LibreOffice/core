@@ -672,7 +672,7 @@ ScVbaWorksheet::getSheetRange()
     return uno::Reference< excel::XRange >( new ScVbaRange( this, mxContext, xRange ) );
 }
 
-// These are hacks - we prolly (somehow) need to inherit
+// These are hacks - we probably (somehow) need to inherit
 // the vbarange functionality here ...
 uno::Reference< excel::XRange >
 ScVbaWorksheet::Cells( const ::uno::Any &nRow, const ::uno::Any &nCol )
