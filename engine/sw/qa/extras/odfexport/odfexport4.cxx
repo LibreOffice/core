@@ -23,6 +23,7 @@
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/configuration.hxx>
@@ -1759,6 +1760,47 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyInDeleteRedline)
     auto pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:frame", 1);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentDateUTC)
+{
+    // A comment records the moment it was written beside the author's wall clock, and that
+    // moment survives a save and reload.
+    createSwDoc();
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xFields(
+        xTextFieldsSupplier->getTextFields()->createEnumeration());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    // Inserting a comment records a moment, so the year is a real one rather than the zero that
+    // stands for "nothing recorded".
+    CPPUNIT_ASSERT(getProperty<util::DateTime>(xField, u"DateTimeUTC"_ustr).Year != 0);
+
+    // A known moment, so the exported attribute can be compared against it.
+    util::DateTime aDateTimeUTC(0, 3, 2, 1, 15, 6, 2026, true);
+    xField->setPropertyValue(u"DateTimeUTC"_ustr, cpo::uno::Any(aDateTimeUTC));
+
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed: nothing carried the
+    // moment, so ODF kept only the wall clock and the zone it was read in was lost.
+    assertXPath(pXmlDoc, "//office:annotation", "date-utc", u"2026-06-15T01:02:03Z");
+
+    saveAndReload(TestFilter::ODT);
+    uno::Reference<text::XTextFieldsSupplier> xReloadedSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xReloadedFields(
+        xReloadedSupplier->getTextFields()->createEnumeration());
+    uno::Reference<beans::XPropertySet> xReloadedField(xReloadedFields->nextElement(),
+                                                      uno::UNO_QUERY);
+    util::DateTime aReloaded = getProperty<util::DateTime>(xReloadedField, u"DateTimeUTC"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2026), aReloaded.Year);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), aReloaded.Month);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(15), aReloaded.Day);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aReloaded.Hours);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aReloaded.Minutes);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), aReloaded.Seconds);
 }
 
 } // end of anonymous namespace

@@ -22,6 +22,7 @@
 
 #include <config_collab.h>
 
+#include <optional>
 #include <string_view>
 
 #include <editeng/outlobj.hxx>
@@ -502,6 +503,9 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     OUString m_sInitials; ///< Initials of the author.
     SwMarkName m_sName;     ///< Name of the comment.
     DateTime    m_aDateTime;
+    /// The same moment in UTC, when it is known. m_aDateTime alone is a wall clock with no zone,
+    /// so this is what pins the comment to a point in time.
+    std::optional<DateTime> m_oDateTimeUTC;
     bool     m_bResolved;
     std::optional<OutlinerParaObject> mpText;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
@@ -542,6 +546,8 @@ public:
     virtual std::unique_ptr<SwField> Copy() const override;
 
     const DateTime&         GetDateTime() const             { return m_aDateTime; }
+    const std::optional<DateTime>& GetDateTimeUTC() const   { return m_oDateTimeUTC; }
+    void SetDateTimeUTC(const std::optional<DateTime>& oDateTime) { m_oDateTimeUTC = oDateTime; }
     Date       GetDate() const                 { return Date(m_aDateTime); }
     tools::Time GetTime() const                 { return tools::Time(m_aDateTime); }
     sal_uInt32 GetPostItId() const             { return m_nPostItId; }

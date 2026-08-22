@@ -322,6 +322,7 @@ constexpr OUString gsPropertyDataCommandType(u"DataCommandType"_ustr);
 constexpr OUString gsPropertyDataTableName(u"DataTableName"_ustr);
 constexpr OUString gsPropertyDateTime(u"DateTime"_ustr);
 constexpr OUString gsPropertyDateTimeValue(u"DateTimeValue"_ustr);
+constexpr OUString gsPropertyDateTimeUTC(u"DateTimeUTC"_ustr);
 constexpr OUString gsPropertyFileFormat(u"FileFormat"_ustr);
 constexpr OUString gsPropertyHint(u"Hint"_ustr);
 constexpr OUString gsPropertyIsDataBaseFormat(u"DataBaseFormat"_ustr);
@@ -1779,6 +1780,19 @@ void XMLTextFieldExport::ExportFieldHelper(
             aResolvedText = aResolvedTextBuffer.makeStringAndClear();
 
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_RESOLVED, aResolvedText);
+
+            // The moment the comment was written, when it is known. dc:date below carries the
+            // author's wall clock with no zone, so this is what pins the comment to a point in
+            // time. A year of zero means no moment was recorded.
+            util::DateTime aDateUTC(GetDateTimeProperty(gsPropertyDateTimeUTC, rPropSet));
+            if (!bRemovePersonalInfo && aDateUTC.Year != 0)
+            {
+                OUStringBuffer aUTCBuffer;
+                aDateUTC.IsUTC = true;
+                ::sax::Converter::convertDateTime(aUTCBuffer, aDateUTC, nullptr, true);
+                GetExport().AddAttribute(XML_NAMESPACE_CO_EXT, XML_DATE_UTC,
+                                         aUTCBuffer.makeStringAndClear());
+            }
         }
         SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
                                  XML_ANNOTATION, false, true);

@@ -1050,6 +1050,8 @@ struct SwFieldProperties_Impl
     cpo::uno::Sequence<beans::PropertyValue> aPropSeq;
     cpo::uno::Sequence<OUString> aStrings;
     std::unique_ptr<util::DateTime> pDateTime;
+    /// The moment the comment was written, when the caller gave one.
+    std::optional<util::DateTime> oDateTimeUTC;
 
     sal_Int32       nSubType;
     sal_Int32       nFormat;
@@ -1396,6 +1398,8 @@ void SAL_CALL SwXTextField::attach(
                         0, // PostIt Parent ID.
                         SwMarkName(m_pImpl->m_pProps->sPar7)
                     );
+                    if (m_pImpl->m_pProps->oDateTimeUTC)
+                        pPostItField->SetDateTimeUTC(DateTime(*m_pImpl->m_pProps->oDateTimeUTC));
                     if ( m_pImpl->m_xTextObject.is() )
                     {
                         pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
@@ -2308,6 +2312,19 @@ SwXTextField::setPropertyValue(
                 m_pImpl->m_pProps->pDateTime.reset( new util::DateTime );
             rValue >>= *m_pImpl->m_pProps->pDateTime;
             break;
+        case FIELD_PROP_DATE_TIME2 :
+        {
+            util::DateTime aDateTimeUTC;
+            if (rValue >>= aDateTimeUTC)
+            {
+                // A year of zero stands for "no moment recorded".
+                if (aDateTimeUTC.Year == 0)
+                    m_pImpl->m_pProps->oDateTimeUTC.reset();
+                else
+                    m_pImpl->m_pProps->oDateTimeUTC = aDateTimeUTC;
+            }
+            break;
+        }
         case FIELD_PROP_PROP_SEQ:
             rValue >>= m_pImpl->m_pProps->aPropSeq;
             break;
@@ -2503,6 +2520,10 @@ cpo::uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyN
             case FIELD_PROP_DATE_TIME :
                 if (m_pImpl->m_pProps->pDateTime)
                     aRet <<= *m_pImpl->m_pProps->pDateTime;
+                break;
+            case FIELD_PROP_DATE_TIME2:
+                if (m_pImpl->m_pProps->oDateTimeUTC)
+                    aRet <<= *m_pImpl->m_pProps->oDateTimeUTC;
                 break;
             case FIELD_PROP_PROP_SEQ:
                 aRet <<= m_pImpl->m_pProps->aPropSeq;

@@ -962,6 +962,9 @@ class XMLAnnotationImportContext final : public XMLTextFieldImportContext
     OUString aParentName;
     OUStringBuffer aTextBuffer;
     OUStringBuffer aDateBuffer;
+    /// The moment the comment was written, from the coext extension attribute. Empty when the
+    /// file does not carry one.
+    OUString aDateUTC;
     OUString aResolved;
 
     css::uno::Reference < css::beans::XPropertySet > mxField;

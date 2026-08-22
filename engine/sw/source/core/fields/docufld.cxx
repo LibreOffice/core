@@ -37,6 +37,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/datetime.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1882,6 +1883,7 @@ std::unique_ptr<SwField> SwPostItField::Copy() const
 {
     std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
                                                            m_aDateTime, m_bResolved, m_nPostItId, m_nParentId, m_nParaId, m_nParentPostItId, m_sParentName));
+    pRet->SetDateTimeUTC(m_oDateTimeUTC);
     if (mpText)
         pRet->SetTextObject( *mpText );
 
@@ -2017,6 +2019,12 @@ bool SwPostItField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
             rAny <<= m_aDateTime.GetUNODateTime();
         }
         break;
+    case FIELD_PROP_DATE_TIME2:
+        {
+            // A year of zero stands for "no moment recorded".
+            rAny <<= m_oDateTimeUTC ? m_oDateTimeUTC->GetUNODateTime() : util::DateTime();
+        }
+        break;
     case FIELD_PROP_PAR5:
         {
             rAny <<= OUString(OUString::number(m_nParentId, 16).toAsciiUpperCase());
@@ -2084,6 +2092,17 @@ bool SwPostItField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
         m_aDateTime = DateTime(aDateTimeValue);
     }
     break;
+    case FIELD_PROP_DATE_TIME2:
+    {
+        util::DateTime aDateTimeValue;
+        if(!(rAny >>= aDateTimeValue))
+            return false;
+        if (aDateTimeValue.Year == 0)
+            m_oDateTimeUTC.reset();
+        else
+            m_oDateTimeUTC = DateTime(aDateTimeValue);
+    }
+    break;
     case FIELD_PROP_PAR5:
     {
         OUString sTemp;
@@ -2110,6 +2129,13 @@ void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toString().toUtf8().getStr()));
 
     SwField::dumpAsXml(pWriter);
+
+    if (m_oDateTimeUTC)
+    {
+        (void)xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("date-time-utc"),
+            BAD_CAST(utl::toISO8601(m_oDateTimeUTC->GetUNODateTime()).toUtf8().getStr()));
+    }
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mpText"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText ? &*mpText : nullptr);

@@ -3633,6 +3633,7 @@ namespace xmloff::token {
         XML_HORIZONTAL_RULE,
 
         XML_GUID,
+        XML_DATE_UTC,
 
         XML_TOKEN_END
     };

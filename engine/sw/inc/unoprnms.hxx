@@ -586,6 +586,7 @@ inline constexpr OUString UNO_NAME_IS_SORT_ASCENDING = u"IsSortAscending"_ustr;
 inline constexpr OUString UNO_NAME_SORT_KEY = u"SortKey"_ustr;
 inline constexpr OUString UNO_NAME_FIELDS = u"Fields"_ustr;
 inline constexpr OUString UNO_NAME_DATE_TIME_VALUE = u"DateTimeValue"_ustr;
+inline constexpr OUString UNO_NAME_DATE_TIME_UTC = u"DateTimeUTC"_ustr;
 inline constexpr OUString UNO_NAME_IS_ON = u"IsOn"_ustr;
 inline constexpr OUString UNO_NAME_Z_ORDER = u"ZOrder"_ustr;
 inline constexpr OUString UNO_NAME_CONTENT_SECTION = u"ContentSection"_ustr;
