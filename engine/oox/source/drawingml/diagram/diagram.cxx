@@ -149,7 +149,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
         removeUnneededGroupShapes(pParentShape);
     }
 
-    ShapePtr pBackground = std::make_shared<Shape>("com.sun.star.drawing.CustomShape");
+    ShapePtr pBackground = std::make_shared<Shape>(u"com.sun.star.drawing.CustomShape"_ustr);
     pBackground->setSubType(XML_rect);
     pBackground->getCustomShapeProperties()->setShapePresetType(XML_rect);
     pBackground->setSize(pParentShape->getSize());

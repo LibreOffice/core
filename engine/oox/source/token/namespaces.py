@@ -74,8 +74,8 @@ i = 1
 for token in sorted(namespaces.keys()):
     idfile.write("const sal_Int32 NMSP_{} = {} << NMSP_SHIFT;\n".format(token, i))
     cur_id = i << shift
-    namefile.write("{{ {}, \"{}\" }},\n".format(cur_id, namespaces[token]))
-    namefile_strict.write("{{ {}, \"{}\" }},\n".format(cur_id, namespaces_strict[token]))
+    namefile.write("{{ {}, u\"{}\"_ustr }},\n".format(cur_id, namespaces[token]))
+    namefile_strict.write("{{ {}, u\"{}\"_ustr }},\n".format(cur_id, namespaces_strict[token]))
     txtfile.write("{} {} {}\n".format(cur_id, token, namespaces[token]))
     txtfile.write("{} {} {}\n".format(cur_id, token, namespaces_strict[token]))
     i += 1

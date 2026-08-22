@@ -41,7 +41,7 @@ namefile = open(name_out_name, 'w')
 i = 0
 for token in sorted(props.keys()):
     idfile.write("const sal_Int32 {}  = {};\n".format(props[token], i))
-    namefile.write("/* {} */ \"{}\",\n".format(i, token))
+    namefile.write("/* {} */ u\"{}\"_ustr,\n".format(i, token))
     i += 1
 
 idfile.write("const sal_Int32 PROP_COUNT = {};\n".format(i))

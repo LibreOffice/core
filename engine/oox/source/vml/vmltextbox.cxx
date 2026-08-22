@@ -94,11 +94,11 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             aPropVec.push_back(aPropertyValue);
 
             aPropertyValue.Name = u"CharFontNameAsian"_ustr;
-            aPropertyValue.Value <<= rFont.moNameAsian.value_or("");
+            aPropertyValue.Value <<= rFont.moNameAsian.value_or(u""_ustr);
             aPropVec.push_back(aPropertyValue);
 
             aPropertyValue.Name = u"CharFontNameComplex"_ustr;
-            aPropertyValue.Value <<= rFont.moNameComplex.value_or("");
+            aPropertyValue.Value <<= rFont.moNameComplex.value_or(u""_ustr);
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.mobBold.has_value())

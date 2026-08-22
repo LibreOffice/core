@@ -168,9 +168,9 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     // Set the data label separator to "new line" if the value is shown as percentage with a category name,
     // just like in MS-Office. In any other case the default separator will be a semicolon.
     if( bShowPercent && !bShowValue && ( bDataSeriesLabel || rDataLabel.moaSeparator.has_value() ) )
-        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.value_or( "\n" ) );
+        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.value_or( u"\n"_ustr ) );
     else if( bDataSeriesLabel || rDataLabel.moaSeparator.has_value() )
-        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.value_or( "; " ) );
+        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.value_or( u"; "_ustr ) );
 
     // data label placement (do not overwrite series placement, if no explicit point placement is present)
     if( !(bDataSeriesLabel || rDataLabel.monLabelPos.has_value()) )
@@ -405,7 +405,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                         if (eType == DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE && oaCellRange.has_value())
                         {
                             xCustomLabel->setCellRange( oaCellRange.value() );
-                            xCustomLabel->setString( oaLabelText.value_or("") );
+                            xCustomLabel->setString( oaLabelText.value_or(u""_ustr) );
                             xCustomLabel->setDataLabelsRange( true );
                         }
                         else

@@ -154,22 +154,22 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
             switch( nElement )
             {
                 case CDR_TOKEN( sp ):
-                    mxShape = std::make_shared<Shape>( "com.sun.star.drawing.CustomShape" );
+                    mxShape = std::make_shared<Shape>( u"com.sun.star.drawing.CustomShape"_ustr );
                     return new ShapeContext( *this, ShapePtr(), mxShape );
                 case CDR_TOKEN( cxnSp ):
-                    mxShape = std::make_shared<Shape>( "com.sun.star.drawing.ConnectorShape" );
+                    mxShape = std::make_shared<Shape>( u"com.sun.star.drawing.ConnectorShape"_ustr );
                     return new ConnectorShapeContext(*this, ShapePtr(), mxShape,
                                                      mxShape->getConnectorShapeProperties());
                 case CDR_TOKEN( pic ):
-                    mxShape = std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" );
+                    mxShape = std::make_shared<Shape>( u"com.sun.star.drawing.GraphicObjectShape"_ustr );
                     return new GraphicShapeContext( *this, ShapePtr(), mxShape );
                 case CDR_TOKEN( graphicFrame ):
                     if( !mbOleSupport )
                         return nullptr;
-                    mxShape = std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" );
+                    mxShape = std::make_shared<Shape>( u"com.sun.star.drawing.GraphicObjectShape"_ustr );
                     return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape, true );
                 case CDR_TOKEN( grpSp ):
-                    mxShape = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
+                    mxShape = std::make_shared<Shape>( u"com.sun.star.drawing.GroupShape"_ustr );
                     return new ShapeGroupContext( *this, ShapePtr(), mxShape );
 
                 case CDR_TOKEN( from ):

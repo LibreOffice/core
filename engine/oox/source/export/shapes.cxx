@@ -268,8 +268,8 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     // fragment stream, an error during export means we'd have to delete it
     rtl::Reference< comphelper::UNOMemoryStream > xTempStream = new comphelper::UNOMemoryStream();
     cpo::uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
-            { "OutputStream", Any(xTempStream->getOutputStream()) },
-            { "FilterName", Any(OUString::createFromAscii(pFilterName)) }
+            { u"OutputStream"_ustr, Any(xTempStream->getOutputStream()) },
+            { u"FilterName"_ustr, Any(OUString::createFromAscii(pFilterName)) }
         }));
     uno::Reference<frame::XStorable> xStorable(xObj->getComponent(), uno::UNO_QUERY);
     try

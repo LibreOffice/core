@@ -127,7 +127,8 @@ void DiagramHelper_oox::reLayout()
     // create temporary oox::Shape as target. No longer needed is to keep/remember
     // the original oox::Shape to do that. Use local model data from Diagram root
     // shape to get the same layout(s)
-    oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>("com.sun.star.drawing.GroupShape");
+    oox::drawingml::ShapePtr pShapePtr
+        = std::make_shared<Shape>(u"com.sun.star.drawing.GroupShape"_ustr);
     pShapePtr->setDiagramType();
 
     // set the Size, this is important to let the layout mechanism work

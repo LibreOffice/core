@@ -229,7 +229,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
 
         if( rAttribs.hasAttribute( XML_type ) )
         {
-            pShape = std::make_shared<Shape>("com.sun.star.drawing.CustomShape");
+            pShape = std::make_shared<Shape>(u"com.sun.star.drawing.CustomShape"_ustr);
             if (!rAttribs.getBool(XML_hideGeom, false))
             {
                 const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
@@ -239,7 +239,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         }
         else
         {
-            pShape = std::make_shared<Shape>("com.sun.star.drawing.GroupShape");
+            pShape = std::make_shared<Shape>(u"com.sun.star.drawing.GroupShape"_ustr);
         }
 
         pShape->setDiagramRotation(rAttribs.getInteger(XML_rot, 0) * PER_DEGREE);

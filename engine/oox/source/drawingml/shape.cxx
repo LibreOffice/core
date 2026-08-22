@@ -1715,14 +1715,14 @@ Reference< XShape > const & Shape::createAndInsert(
                 // Store style-related properties to InteropGrabBag to be able to export them back
                 cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
-                    {"SchemeClr", cpo::uno::Any(pLineRef->maPhClr.getSchemeColorName())},
-                    {"Idx", cpo::uno::Any(pLineRef->mnThemedIdx)},
-                    {"Color", cpo::uno::Any(nLinePhClr)},
-                    {"LineStyle", cpo::uno::Any(aLineProperties.getLineStyle())},
-                    {"LineCap", cpo::uno::Any(aLineProperties.getLineCap())},
-                    {"LineJoint", cpo::uno::Any(aLineProperties.getLineJoint())},
-                    {"LineWidth", cpo::uno::Any(aLineProperties.getLineWidth())},
-                    {"Transformations", cpo::uno::Any(pLineRef->maPhClr.getTransformations())}
+                    {u"SchemeClr"_ustr, cpo::uno::Any(pLineRef->maPhClr.getSchemeColorName())},
+                    {u"Idx"_ustr, cpo::uno::Any(pLineRef->mnThemedIdx)},
+                    {u"Color"_ustr, cpo::uno::Any(nLinePhClr)},
+                    {u"LineStyle"_ustr, cpo::uno::Any(aLineProperties.getLineStyle())},
+                    {u"LineCap"_ustr, cpo::uno::Any(aLineProperties.getLineCap())},
+                    {u"LineJoint"_ustr, cpo::uno::Any(aLineProperties.getLineJoint())},
+                    {u"LineWidth"_ustr, cpo::uno::Any(aLineProperties.getLineWidth())},
+                    {u"Transformations"_ustr, cpo::uno::Any(pLineRef->maPhClr.getTransformations())}
                 });
                 putPropertyToGrabBag( u"StyleLnRef"_ustr, Any( aProperties ) );
             }
@@ -1739,10 +1739,10 @@ Reference< XShape > const & Shape::createAndInsert(
                 {
                     cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                     {
-                        {"SchemeClr", cpo::uno::Any(sColorScheme)},
-                        {"Idx", cpo::uno::Any(pFillRef->mnThemedIdx)},
-                        {"Color", cpo::uno::Any(nFillPhClr)},
-                        {"Transformations", cpo::uno::Any(pFillRef->maPhClr.getTransformations())}
+                        {u"SchemeClr"_ustr, cpo::uno::Any(sColorScheme)},
+                        {u"Idx"_ustr, cpo::uno::Any(pFillRef->mnThemedIdx)},
+                        {u"Color"_ustr, cpo::uno::Any(nFillPhClr)},
+                        {u"Transformations"_ustr, cpo::uno::Any(pFillRef->maPhClr.getTransformations())}
                     });
 
                     putPropertyToGrabBag( u"StyleFillRef"_ustr, Any( aProperties ) );
@@ -1756,9 +1756,9 @@ Reference< XShape > const & Shape::createAndInsert(
                 // Store style-related properties to InteropGrabBag to be able to export them back
                 cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
-                    {"SchemeClr", cpo::uno::Any(pEffectRef->maPhClr.getSchemeColorName())},
-                    {"Idx", cpo::uno::Any(pEffectRef->mnThemedIdx)},
-                    {"Transformations", cpo::uno::Any(pEffectRef->maPhClr.getTransformations())}
+                    {u"SchemeClr"_ustr, cpo::uno::Any(pEffectRef->maPhClr.getSchemeColorName())},
+                    {u"Idx"_ustr, cpo::uno::Any(pEffectRef->mnThemedIdx)},
+                    {u"Transformations"_ustr, cpo::uno::Any(pEffectRef->maPhClr.getTransformations())}
                 });
                 putPropertyToGrabBag( u"StyleEffectRef"_ustr, Any( aProperties ) );
             }
@@ -2254,9 +2254,9 @@ Reference< XShape > const & Shape::createAndInsert(
             {
                 cpo::uno::Sequence<beans::PropertyValue> a3DEffectsGrabBag = comphelper::InitPropertySequence(
                 {
-                    {"Camera", cpo::uno::Any(aCamera3DEffects)},
-                    {"LightRig", cpo::uno::Any(aLightRig3DEffects)},
-                    {"Shape3D", cpo::uno::Any(aShape3DEffects)}
+                    {u"Camera"_ustr, cpo::uno::Any(aCamera3DEffects)},
+                    {u"LightRig"_ustr, cpo::uno::Any(aLightRig3DEffects)},
+                    {u"Shape3D"_ustr, cpo::uno::Any(aShape3DEffects)}
                 });
                 putPropertyToGrabBag( u"3DEffectProperties"_ustr, Any( a3DEffectsGrabBag ) );
             }
@@ -2271,9 +2271,9 @@ Reference< XShape > const & Shape::createAndInsert(
                 {
                     cpo::uno::Sequence<beans::PropertyValue> aText3DEffectsGrabBag = comphelper::InitPropertySequence(
                     {
-                        {"Camera", cpo::uno::Any(aTextCamera3DEffects)},
-                        {"LightRig", cpo::uno::Any(aTextLightRig3DEffects)},
-                        {"Shape3D", cpo::uno::Any(aTextShape3DEffects)}
+                        {u"Camera"_ustr, cpo::uno::Any(aTextCamera3DEffects)},
+                        {u"LightRig"_ustr, cpo::uno::Any(aTextLightRig3DEffects)},
+                        {u"Shape3D"_ustr, cpo::uno::Any(aTextShape3DEffects)}
                     });
                     putPropertyToGrabBag( u"Text3DEffectProperties"_ustr, Any( aText3DEffectsGrabBag ) );
                 }

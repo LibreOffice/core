@@ -4366,7 +4366,7 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
 
     if (!sVertOverflow && GetProperty(rXPropSet, u"TextClipVerticalOverflow"_ustr) && mAny.get<bool>())
     {
-        sVertOverflow = "clip";
+        sVertOverflow = u"clip"_ustr;
     }
 
     // tdf#151134 When writing placeholder shapes, inset must be explicitly specified

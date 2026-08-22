@@ -635,11 +635,11 @@ void PPTShape::addShape(
                     cpo::uno::Sequence<beans::PropertyValue> aProperties;
 
                     static const std::map<OUString, css::presentation::ClickAction> ActionMap = {
-                        { "#action?jump=nextslide", ClickAction_NEXTPAGE },
-                        { "#action?jump=previousslide", ClickAction_PREVPAGE },
-                        { "#action?jump=firstslide", ClickAction_FIRSTPAGE },
-                        { "#action?jump=lastslide", ClickAction_LASTPAGE },
-                        { "#action?jump=endshow", ClickAction_STOPPRESENTATION },
+                        { u"#action?jump=nextslide"_ustr, ClickAction_NEXTPAGE },
+                        { u"#action?jump=previousslide"_ustr, ClickAction_PREVPAGE },
+                        { u"#action?jump=firstslide"_ustr, ClickAction_FIRSTPAGE },
+                        { u"#action?jump=lastslide"_ustr, ClickAction_LASTPAGE },
+                        { u"#action?jump=endshow"_ustr, ClickAction_STOPPRESENTATION },
                     };
 
                     sURL = URLShape.first;

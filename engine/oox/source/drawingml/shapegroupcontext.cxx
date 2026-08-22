@@ -90,14 +90,14 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
 */
     case XML_cxnSp:         // connector shape
         {
-            ShapePtr pShape = std::make_shared<Shape>("com.sun.star.drawing.ConnectorShape");
+            ShapePtr pShape = std::make_shared<Shape>(u"com.sun.star.drawing.ConnectorShape"_ustr);
             pShape->setLockedCanvas(mpGroupShapePtr->getLockedCanvas());
             pShape->setWordprocessingCanvas(mpGroupShapePtr->isInWordprocessingCanvas());
             return new ConnectorShapeContext(*this, mpGroupShapePtr, pShape,
                                              pShape->getConnectorShapeProperties());
         }
     case XML_grpSp:         // group shape
-        return new ShapeGroupContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" ) );
+        return new ShapeGroupContext( *this, mpGroupShapePtr, std::make_shared<Shape>( u"com.sun.star.drawing.GroupShape"_ustr ) );
     case XML_sp:            // shape
     case XML_wsp:
     {
@@ -105,7 +105,7 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
         // own way to set the default, and if we don't set it here, editing
         // properly inherits it.
 
-        auto pShape = std::make_shared<Shape>( "com.sun.star.drawing.CustomShape", getBaseToken(aElementToken) == XML_sp );
+        auto pShape = std::make_shared<Shape>( u"com.sun.star.drawing.CustomShape"_ustr, getBaseToken(aElementToken) == XML_sp );
         const OUString aModelID(rAttribs.getStringDefaulted( XML_modelId ));
 
         // not sure if this is needed in Writer import, it *is* used in Impress import
@@ -119,9 +119,9 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
         return new ShapeContext( *this, mpGroupShapePtr, pShape );
     }
     case XML_pic:           // CT_Picture
-        return new GraphicShapeContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" ) );
+        return new GraphicShapeContext( *this, mpGroupShapePtr, std::make_shared<Shape>( u"com.sun.star.drawing.GraphicObjectShape"_ustr ) );
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        return new GraphicalObjectFrameContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" ), true );
+        return new GraphicalObjectFrameContext( *this, mpGroupShapePtr, std::make_shared<Shape>( u"com.sun.star.drawing.GraphicObjectShape"_ustr ), true );
     case XML_cNvGrpSpPr:
         break;
     case XML_grpSpLocks:

@@ -968,10 +968,10 @@ TextpathModel::TextpathModel()
 static beans::PropertyValue lcl_createTextpathProps()
 {
     cpo::uno::Sequence<beans::PropertyValue> aTextpathPropSeq( comphelper::InitPropertySequence({
-            { "TextPath", cpo::uno::Any(true) },
-            { "TextPathMode", cpo::uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
-            { "ScaleX", cpo::uno::Any(false) },
-            { "SameLetterHeights", cpo::uno::Any(false) }
+            { u"TextPath"_ustr, cpo::uno::Any(true) },
+            { u"TextPathMode"_ustr, cpo::uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
+            { u"ScaleX"_ustr, cpo::uno::Any(false) },
+            { u"SameLetterHeights"_ustr, cpo::uno::Any(false) }
         }));
 
     beans::PropertyValue aRet;
@@ -1042,7 +1042,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
     if (moTrim.has_value() && moTrim.value())
         return;
 
-    OUString sText = moString.value_or("");
+    OUString sText = moString.value_or(u""_ustr);
     ScopedVclPtrInstance<VirtualDevice> pDevice;
     vcl::Font aFont = pDevice->GetFont();
     aFont.SetFamilyName(sFont);
