@@ -48,7 +48,7 @@ bool osl_get_system_random_data(char* buffer, size_t desired_len)
             desired_len -= 4;
         }
     }
-    /* deal with the partial int reminder to fill */
+    /* deal with the partial int remainder to fill */
     if (desired_len)
     {
         if (rand_s(&val))

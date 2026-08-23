@@ -3791,12 +3791,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3814,12 +3814,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3837,12 +3837,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3860,12 +3860,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3975,12 +3975,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3998,12 +3998,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4021,12 +4021,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4044,12 +4044,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4251,12 +4251,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4274,12 +4274,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4297,12 +4297,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4320,12 +4320,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4435,12 +4435,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4458,12 +4458,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4481,12 +4481,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4504,12 +4504,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4711,12 +4711,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4734,12 +4734,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4757,12 +4757,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4780,12 +4780,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4895,12 +4895,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4918,12 +4918,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4941,12 +4941,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -4964,12 +4964,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5171,12 +5171,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5194,12 +5194,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5217,12 +5217,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5240,12 +5240,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5355,12 +5355,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5378,12 +5378,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5401,12 +5401,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5424,12 +5424,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5631,12 +5631,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5654,12 +5654,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5677,12 +5677,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5700,12 +5700,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5815,12 +5815,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5838,12 +5838,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5861,12 +5861,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -5884,12 +5884,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7377,12 +7377,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7401,12 +7401,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7425,12 +7425,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7449,12 +7449,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7567,12 +7567,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7591,12 +7591,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7615,12 +7615,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7639,12 +7639,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7852,12 +7852,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7876,12 +7876,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7900,12 +7900,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -7924,12 +7924,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8042,12 +8042,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8066,12 +8066,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8090,12 +8090,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8114,12 +8114,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8327,12 +8327,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8351,12 +8351,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8375,12 +8375,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8399,12 +8399,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8517,12 +8517,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8541,12 +8541,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8565,12 +8565,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8589,12 +8589,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8802,12 +8802,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8826,12 +8826,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8850,12 +8850,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8874,12 +8874,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -8992,12 +8992,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9016,12 +9016,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9040,12 +9040,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9064,12 +9064,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9277,12 +9277,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9301,12 +9301,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9325,12 +9325,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9349,12 +9349,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9467,12 +9467,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9491,12 +9491,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9515,12 +9515,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -9539,12 +9539,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10481,12 +10481,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10504,12 +10504,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10527,12 +10527,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10550,12 +10550,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10665,12 +10665,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10688,12 +10688,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10711,12 +10711,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10734,12 +10734,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10941,12 +10941,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10964,12 +10964,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -10987,12 +10987,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11010,12 +11010,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11125,12 +11125,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11148,12 +11148,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11171,12 +11171,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11194,12 +11194,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11401,12 +11401,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11424,12 +11424,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11447,12 +11447,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11470,12 +11470,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11585,12 +11585,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11608,12 +11608,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11631,12 +11631,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11654,12 +11654,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11861,12 +11861,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11884,12 +11884,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11907,12 +11907,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -11930,12 +11930,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12045,12 +12045,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12068,12 +12068,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12091,12 +12091,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12114,12 +12114,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12321,12 +12321,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12344,12 +12344,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12367,12 +12367,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12390,12 +12390,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12505,12 +12505,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12528,12 +12528,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12551,12 +12551,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -12574,12 +12574,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14067,12 +14067,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14091,12 +14091,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14115,12 +14115,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14139,12 +14139,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14257,12 +14257,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14281,12 +14281,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14305,12 +14305,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14329,12 +14329,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14542,12 +14542,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14566,12 +14566,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14590,12 +14590,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14614,12 +14614,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14732,12 +14732,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14756,12 +14756,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14780,12 +14780,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -14804,12 +14804,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15017,12 +15017,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15041,12 +15041,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15065,12 +15065,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15089,12 +15089,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15207,12 +15207,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15231,12 +15231,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15255,12 +15255,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15279,12 +15279,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15492,12 +15492,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15516,12 +15516,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15540,12 +15540,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15564,12 +15564,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15682,12 +15682,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15706,12 +15706,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15730,12 +15730,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15754,12 +15754,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15967,12 +15967,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -15991,12 +15991,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -16015,12 +16015,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -16039,12 +16039,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -16157,12 +16157,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -16181,12 +16181,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -16205,12 +16205,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -16229,12 +16229,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexadecimal for arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
