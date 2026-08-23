@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+#include <vector>
+
 #include <sal/log.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -67,6 +70,47 @@ OUString GetObjectName(const SdrObject* pObject)
     return pObject->TakeObjNameSingul();
 }
 
+// A screen reader announces the slide in the order the objects are exported, so they have to be
+// exported in visual reading order: top to bottom, and left to right for objects sharing a row.
+// The order the objects have in the page is the z-order, which often differs from what the user
+// sees - e.g. a text box at the bottom of the slide can be created before the content placeholder
+// above it.
+std::vector<SdrObject*> GetObjectsInReadingOrder(SdPage* pPage)
+{
+    std::vector<SdrObject*> aObjects;
+    aObjects.reserve(pPage->GetObjCount());
+    for (const rtl::Reference<SdrObject>& pObject : *pPage)
+        aObjects.push_back(pObject.get());
+
+    std::stable_sort(aObjects.begin(), aObjects.end(),
+                     [](const SdrObject* pA, const SdrObject* pB) {
+                         return pA->GetSnapRect().Top() < pB->GetSnapRect().Top();
+                     });
+
+    // Objects that overlap vertically belong to the same row, which is ordered left to right. A
+    // row ends at the highest bottom edge in it, so that a tall object does not pull in every
+    // object next to it.
+    auto aRowStart = aObjects.begin();
+    while (aRowStart != aObjects.end())
+    {
+        tools::Long nRowBottom = (*aRowStart)->GetSnapRect().Bottom();
+        auto aRowEnd = aRowStart + 1;
+        for (; aRowEnd != aObjects.end(); ++aRowEnd)
+        {
+            const tools::Rectangle& rRect = (*aRowEnd)->GetSnapRect();
+            if (rRect.Top() >= nRowBottom)
+                break;
+            nRowBottom = std::min(nRowBottom, rRect.Bottom());
+        }
+        std::stable_sort(aRowStart, aRowEnd, [](const SdrObject* pA, const SdrObject* pB) {
+            return pA->GetSnapRect().Left() < pB->GetSnapRect().Left();
+        });
+        aRowStart = aRowEnd;
+    }
+
+    return aObjects;
+}
+
 void CreateTitleDescription(const SdrObject* pObject, OUStringBuffer& rHtml, bool bWithName)
 {
     if (bWithName)
@@ -95,12 +139,12 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
 
     rHtml.append("<h1>" + sTitleText + "</h1>\r\n");
 
-    for (const rtl::Reference<SdrObject>& pObject : *pPage)
+    for (SdrObject* pObject : GetObjectsInReadingOrder(pPage))
     {
         if (pObject->IsDecorative())
             continue;
 
-        PresObjKind eKind = pPage->GetPresObjKind(pObject.get());
+        PresObjKind eKind = pPage->GetPresObjKind(pObject);
 
         switch (eKind)
         {
@@ -108,12 +152,12 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
             {
                 if (pObject->GetObjIdentifier() == SdrObjKind::Group)
                 {
-                    SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject.get());
+                    SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject);
                     HtmlExport::WriteObjectGroup(rHtml, pObjectGroup, pOutliner, false);
                 }
                 else if (pObject->GetObjIdentifier() == SdrObjKind::Table)
                 {
-                    SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
+                    SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
                     HtmlExport::WriteTable(rHtml, pTableObject, pOutliner);
                 }
                 else
@@ -125,7 +169,7 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
                     }
                     else
                     {
-                        CreateTitleDescription(pObject.get(), rHtml, true);
+                        CreateTitleDescription(pObject, rHtml, true);
                     }
                 }
             }
@@ -133,7 +177,7 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
 
             case PresObjKind::Table:
             {
-                SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
+                SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
                 HtmlExport::WriteTable(rHtml, pTableObject, pOutliner);
             }
             break;
@@ -141,7 +185,7 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
             case PresObjKind::Text:
             case PresObjKind::Outline:
             {
-                SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject.get());
+                SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject);
                 if (pTextObject->IsEmptyPresObj())
                     continue;
                 HtmlExport::WriteOutlinerParagraph(rHtml, pOutliner,
@@ -150,7 +194,7 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
             break;
 
             default:
-                CreateTitleDescription(pObject.get(), rHtml, false);
+                CreateTitleDescription(pObject, rHtml, false);
                 break;
         }
     }
