@@ -2329,6 +2329,12 @@ double ScInterpreter::GetDouble()
                 nVal = 0.0;
         }
         break;
+        case svRefList:
+            // A list of ranges has no single value, which is what #VALUE! says.
+            PopError();
+            SetError( FormulaError::NoValue);
+            nVal = 0.0;
+        break;
         case svExternalSingleRef:
         {
             ScExternalRefCache::TokenRef pToken;
@@ -2601,6 +2607,11 @@ svl::SharedString ScInterpreter::GetString()
             else
                 return svl::SharedString::getEmptyString();
         }
+        case svRefList:
+            // A list of ranges has no single value, same as when a number is asked for.
+            PopError();
+            SetError( FormulaError::NoValue);
+            return svl::SharedString::getEmptyString();
         case svExternalSingleRef:
         {
             ScExternalRefCache::TokenRef pToken;
