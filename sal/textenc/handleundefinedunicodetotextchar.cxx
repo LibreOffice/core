@@ -98,14 +98,14 @@ bool sal::detail::textenc::handleUndefinedUnicodeToTextChar(
         }
     }
 
-    /* Should this character ignored (Private, Non Spacing, Control) */
+    /* Should this character be ignored (Private, Non Spacing, Control) */
     if ( ImplIsUnicodeIgnoreChar( c, nFlags ) )
     {
         (*ppSrcBuf)++;
         return true;
     }
 
-    /* Surrogates Characters should result in */
+    /* Surrogate Characters should result in */
     /* one replacement character */
     if (rtl::isHighSurrogate(c))
     {

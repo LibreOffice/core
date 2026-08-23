@@ -126,7 +126,7 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
             goto bad_input;
         }
         assert(rtl::isUnicodeScalarValue(c));
-        // Linearly searching through the ranges if probably fastest, assuming
+        // Linearly searching through the ranges is probably fastest, assuming
         // that most converted characters belong to the ASCII subset:
         for (std::size_t i = 0; i < entries; ++i) {
             if (c < ranges[i].unicode) {
