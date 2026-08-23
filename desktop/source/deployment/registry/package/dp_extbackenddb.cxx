@@ -64,7 +64,7 @@ OUString ExtensionBackendDb::getKeyElementName()
 void ExtensionBackendDb::addEntry(OUString const & url, Data const & data)
 {
     try{
-        //reactive revoked entry if possible.
+        //reactivate revoked entry if possible.
         if (!activateEntry(url))
         {
             Reference<css::xml::dom::XNode> extensionNodeNode = writeKeyElement(url);

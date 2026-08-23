@@ -45,7 +45,7 @@ public class LocationTest {
         private static final String __serviceName =
         "com.sun.star.comp.smoketest.LocationTest";
 
-        /** The initial component contextr, that gives access to
+        /** The initial component context, that gives access to
          * the service manager, supported singletons, ...
          * It's often later used
          */

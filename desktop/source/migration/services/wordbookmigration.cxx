@@ -66,7 +66,7 @@ namespace migration
                 }
             }
 
-            // iterate recursive over subfolders
+            // iterate recursively over subfolders
             for (auto const& subDir : aSubDirs)
             {
                 TStringVectorPtr aSubResult = getFiles(subDir);
