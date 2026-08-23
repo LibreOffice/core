@@ -87,26 +87,36 @@ namespace
 }
 
 
-static bool lcl_GetPassword(
+/* Asks for a password and hands it to rDone once the dialog closes. rDone gets
+   an empty string if the dialog was cancelled or no password was entered. */
+static void lcl_GetPasswordAsync(
     weld::Window *pParent,
     bool bProtect,
-    /*out*/OUString &rPassword )
+    const std::function<void (const OUString &)> &rDone )
 {
-    bool bRes = false;
-    SfxPasswordDialog aPasswdDlg(pParent);
-    aPasswdDlg.SetMinLen(1);
+    std::shared_ptr<SfxPasswordDialog> xPasswdDlg = std::make_shared<SfxPasswordDialog>(pParent);
+    xPasswdDlg->SetMinLen(1);
     if (bProtect)
-        aPasswdDlg.ShowExtras( SfxShowExtras::CONFIRM );
-    if (RET_OK == aPasswdDlg.run() && !aPasswdDlg.GetPassword().isEmpty())
+        xPasswdDlg->ShowExtras( SfxShowExtras::CONFIRM );
+    /* run() would do this for us, runAsync() does not */
+    xPasswdDlg->PreRun();
+    weld::DialogController::runAsync(xPasswdDlg, [xPasswdDlg, rDone](sal_Int32 nResult)
     {
-        rPassword = aPasswdDlg.GetPassword();
-        bRes = true;
-    }
-    return bRes;
+        rDone(RET_OK == nResult ? xPasswdDlg->GetPassword() : OUString());
+    });
 }
 
 
-static bool lcl_IsPasswordCorrect(weld::Window *pParent, std::u16string_view rPassword)
+static void lcl_ShowIncorrectPassword(weld::Window *pParent)
+{
+    std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
+    xInfoBox->runAsync(xInfoBox, [xInfoBox](sal_Int32) {});
+}
+
+
+static bool lcl_IsPasswordCorrect(std::u16string_view rPassword)
 {
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
     if (!pCurDocShell)
@@ -138,14 +148,6 @@ static bool lcl_IsPasswordCorrect(weld::Window *pParent, std::u16string_view rPa
         bRes = SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword );
     }
 
-    if ( !bRes )
-    {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
-        xInfoBox->run();
-    }
-
     return bRes;
 }
 
@@ -170,7 +172,17 @@ struct SfxSecurityPage_Impl
     DECL_LINK(RecordChangesCBToggleHdl, weld::Toggleable&, void);
     DECL_LINK(ChangeProtectionPBHdl, weld::Button&, void);
 
+    /* The password and warning dialogs run asynchronously, so the tab page can
+       be gone by the time they close; the callbacks check this first. */
+    std::shared_ptr<bool> m_xAlive;
+
+    void    ConfirmRecordChangesOff();
+    void    AcceptRecordChangesOff();
+    void    RestoreRecordChanges();
+    void    ApplyChangeProtection( bool bNewProtection, const OUString &rPassword );
+
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg );
+    ~SfxSecurityPage_Impl();
 
     bool    FillItemSet_Impl();
     void    Reset_Impl();
@@ -187,6 +199,7 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl(SfxSecurityPage &rTabPage)
     , m_xRecordChangesCB(rTabPage.GetBuilder().weld_check_button(u"recordchanges"_ustr))
     , m_xProtectPB(rTabPage.GetBuilder().weld_button(u"protect"_ustr))
     , m_xUnProtectPB(rTabPage.GetBuilder().weld_button(u"unprotect"_ustr))
+    , m_xAlive(std::make_shared<bool>(true))
 {
     m_xProtectPB->show();
     m_xUnProtectPB->hide();
@@ -194,6 +207,11 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl(SfxSecurityPage &rTabPage)
     m_xRecordChangesCB->connect_toggled(LINK(this, SfxSecurityPage_Impl, RecordChangesCBToggleHdl));
     m_xProtectPB->connect_clicked(LINK(this, SfxSecurityPage_Impl, ChangeProtectionPBHdl));
     m_xUnProtectPB->connect_clicked(LINK(this, SfxSecurityPage_Impl, ChangeProtectionPBHdl));
+}
+
+SfxSecurityPage_Impl::~SfxSecurityPage_Impl()
+{
+    *m_xAlive = false;
 }
 
 bool SfxSecurityPage_Impl::FillItemSet_Impl()
@@ -339,47 +357,78 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, weld::Toggleable
     if (m_xRecordChangesCB->get_active())    // the new check state is already present, thus the '!'
         return;
 
-    bool bAlreadyDone = false;
-    if (!m_bEndRedliningWarningDone)
+    if (m_bEndRedliningWarningDone)
     {
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetFrameWeld(),
+        ConfirmRecordChangesOff();
+        return;
+    }
+
+    std::shared_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(
+                                                   m_rMyTabPage.GetFrameWeld(),
                                                    VclMessageType::Warning, VclButtonsType::YesNo,
                                                    m_aEndRedliningWarning));
-        xWarn->set_default_response(RET_NO);
-        if (xWarn->run() != RET_YES)
-            bAlreadyDone = true;
-        else
-            m_bEndRedliningWarningDone = true;
+    xWarn->set_default_response(RET_NO);
+    std::shared_ptr<bool> xAlive = m_xAlive;
+    xWarn->runAsync(xWarn, [this, xWarn, xAlive](sal_Int32 nResult)
+    {
+        if (!*xAlive)
+            return;
+        if (RET_YES != nResult)
+        {
+            RestoreRecordChanges();
+            return;
+        }
+        m_bEndRedliningWarningDone = true;
+        ConfirmRecordChangesOff();
+    });
+}
+
+void SfxSecurityPage_Impl::ConfirmRecordChangesOff()
+{
+    // tdf#128230 Require password if the Unprotect button is visible
+    const bool bNeedPassword = !m_bOrigPasswordIsConfirmed && m_xUnProtectPB->get_visible();
+    if (!bNeedPassword)
+    {
+        AcceptRecordChangesOff();
+        return;
     }
 
-    const bool bNeedPassword = !m_bOrigPasswordIsConfirmed
-            && m_xUnProtectPB->get_visible(); // tdf#128230 Require password if the Unprotect button is visible
-    if (!bAlreadyDone && bNeedPassword)
+    std::shared_ptr<bool> xAlive = m_xAlive;
+    lcl_GetPasswordAsync(m_rMyTabPage.GetFrameWeld(), false,
+        [this, xAlive](const OUString &rPassword)
     {
-        OUString aPasswordText;
-
+        if (!*xAlive)
+            return;
         // dialog canceled or no password provided
-        if (!lcl_GetPassword( m_rMyTabPage.GetFrameWeld(), false, aPasswordText ))
-            bAlreadyDone = true;
+        if (rPassword.isEmpty())
+        {
+            RestoreRecordChanges();
+            return;
+        }
+        if (!lcl_IsPasswordCorrect(rPassword))
+        {
+            lcl_ShowIncorrectPassword(m_rMyTabPage.GetFrameWeld());
+            RestoreRecordChanges();
+            return;
+        }
+        m_bOrigPasswordIsConfirmed = true;
+        AcceptRecordChangesOff();
+    });
+}
 
-        // ask for password and if dialog is canceled or no password provided return
-        if (lcl_IsPasswordCorrect(m_rMyTabPage.GetFrameWeld(), aPasswordText))
-            m_bOrigPasswordIsConfirmed = true;
-        else
-            bAlreadyDone = true;
-    }
+void SfxSecurityPage_Impl::RestoreRecordChanges()
+{
+    m_xRecordChangesCB->set_active(true);     // restore original state
+}
 
-    if (bAlreadyDone)
-        m_xRecordChangesCB->set_active(true);     // restore original state
-    else
-    {
-        // remember required values to change protection and change recording in
-        // FillItemSet_Impl later on if password was correct.
-        m_bNewPasswordIsValid = true;
-        m_aNewPassword.clear();
-        m_xProtectPB->show();
-        m_xUnProtectPB->hide();
-    }
+void SfxSecurityPage_Impl::AcceptRecordChangesOff()
+{
+    // remember required values to change protection and change recording in
+    // FillItemSet_Impl later on if password was correct.
+    m_bNewPasswordIsValid = true;
+    m_aNewPassword.clear();
+    m_xProtectPB->show();
+    m_xUnProtectPB->hide();
 }
 
 IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void)
@@ -390,31 +439,47 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
     // the push button text is always the opposite of the current state. Thus:
     const bool bCurrentProtection = m_xUnProtectPB->get_visible();
 
-    // ask user for password (if still necessary)
-    OUString aPasswordText;
-    bool bNewProtection = !bCurrentProtection;
+    const bool bNewProtection = !bCurrentProtection;
     const bool bNeedPassword = bNewProtection || !m_bOrigPasswordIsConfirmed;
-    if (bNeedPassword)
+    if (!bNeedPassword)
     {
-        // ask for password and if dialog is canceled or no password provided return
-        if (!lcl_GetPassword(m_rMyTabPage.GetFrameWeld(), bNewProtection, aPasswordText))
+        ApplyChangeProtection( bNewProtection, OUString() );
+        return;
+    }
+
+    // ask user for password
+    std::shared_ptr<bool> xAlive = m_xAlive;
+    lcl_GetPasswordAsync(m_rMyTabPage.GetFrameWeld(), bNewProtection,
+        [this, xAlive, bNewProtection](const OUString &rPassword)
+    {
+        if (!*xAlive)
+            return;
+        // dialog canceled or no password provided
+        if (rPassword.isEmpty())
             return;
 
         // provided password still needs to be checked?
         if (!bNewProtection && !m_bOrigPasswordIsConfirmed)
         {
-            if (lcl_IsPasswordCorrect(m_rMyTabPage.GetFrameWeld(), aPasswordText))
-                m_bOrigPasswordIsConfirmed = true;
-            else
+            if (!lcl_IsPasswordCorrect(rPassword))
+            {
+                lcl_ShowIncorrectPassword(m_rMyTabPage.GetFrameWeld());
                 return;
+            }
+            m_bOrigPasswordIsConfirmed = true;
         }
-    }
+        ApplyChangeProtection( bNewProtection, rPassword );
+    });
+}
+
+void SfxSecurityPage_Impl::ApplyChangeProtection( bool bNewProtection, const OUString &rPassword )
+{
     DBG_ASSERT( m_bOrigPasswordIsConfirmed, "ooops... this should not have happened!" );
 
     // remember required values to change protection and change recording in
     // FillItemSet_Impl later on if password was correct.
     m_bNewPasswordIsValid = true;
-    m_aNewPassword = bNewProtection? aPasswordText : OUString();
+    m_aNewPassword = bNewProtection? rPassword : OUString();
 
     m_xRecordChangesCB->set_active(bNewProtection);
 

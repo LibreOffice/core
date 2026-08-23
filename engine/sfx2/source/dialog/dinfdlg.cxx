@@ -1420,10 +1420,8 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     if (rInfoItem.isCmisDocument())
         AddTabPage(u"cmisprops"_ustr, TabResId(RID_TAB_CMIS.aLabel),
                    SfxCmisPropertiesPage::Create, RID_L + RID_TAB_CMIS.sIconName);
-    // Disable security page for online as not fully asynced yet
-    if (!comphelper::COKit::isActive())
-        AddTabPage(u"security"_ustr, TabResId(RID_TAB_SECURITY.aLabel), SfxSecurityPage::Create,
-                   RID_L + RID_TAB_SECURITY.sIconName);
+    AddTabPage(u"security"_ustr, TabResId(RID_TAB_SECURITY.aLabel), SfxSecurityPage::Create,
+               RID_L + RID_TAB_SECURITY.sIconName);
 }
 
 void SfxDocumentInfoDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)

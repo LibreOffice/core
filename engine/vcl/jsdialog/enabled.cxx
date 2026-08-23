@@ -149,7 +149,8 @@ constexpr auto SfxDialogList
         { u"sfx/ui/linefragment.ui" },
         { u"sfx/ui/managestylepage.ui" },
         { u"sfx/ui/newstyle.ui" },
-        { u"sfx/ui/password.ui" }
+        { u"sfx/ui/password.ui" },
+        { u"sfx/ui/securityinfopage.ui" }
     });
 
 constexpr auto ScalcDialogList
