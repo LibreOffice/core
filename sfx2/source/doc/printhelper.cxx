@@ -742,7 +742,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     // Now we have to check if we can move the file (if necessary) via UCB to its right location.
     // Cases:
     //  a) printing finished                        => move the file directly and forget the watcher thread
-    //  b) printing is asynchron and runs currently => start watcher thread and exit this method
+    //  b) printing is asynchronous and runs currently => start watcher thread and exit this method
     //                                                 This thread make all necessary things by itself.
     if (!pUCBPrintTempFile)
         return;

@@ -1022,7 +1022,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
         SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
 
         // we need to know which properties are supported by the transformer
-        // hopefully it is a temporary solution, I guess nonconvertable properties
+        // hopefully it is a temporary solution, I guess nonconvertible properties
         // should not be supported so then there will be only ItemSet from medium
 
         comphelper::SequenceAsHashMap seqArgsNew = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());

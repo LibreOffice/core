@@ -452,7 +452,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // if the document seems not to need to be reloaded
             //     and the physical name is different to the logical one,
             // then on file system it can be checked that the copy is still newer than the original and no document reload is required.
-            // Did some semplification to enhance readability of the 'if' expression
+            // Did some simplification to enhance readability of the 'if' expression
             //
             // when the 'http/https' protocol is active, the bool bPhysObjIsYounger relies upon the getlastmodified Property of a WebDAV resource.
             // Said property should be implemented, but sometimes it's not.
