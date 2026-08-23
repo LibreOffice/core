@@ -74,6 +74,9 @@ bool bind(const std::string& source, const std::string& target);
 /// Remount a bound mount point as readonly.
 bool remountReadonly(const std::string& source, const std::string& target);
 
+/// Unmount a bind mount point.
+bool unmount(const std::string& target, bool silent = false);
+
 /// Marks a jail as having been copied instead of mounted.
 void markJailCopied(const std::string& root);
 

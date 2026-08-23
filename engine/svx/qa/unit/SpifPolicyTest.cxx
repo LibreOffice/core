@@ -385,6 +385,17 @@ void SpifPolicyTest::testPolicySet()
     // An OID none of the policies declare is foreign.
     aLabel.aPolicyId = u"urn:oid:9.9.9"_ustr;
     CPPUNIT_ASSERT(!aSet.findByLabel(aLabel));
+
+    // A later file declaring an already-loaded OID replaces that policy in place
+    // instead of listing it twice. loadProvisioned relies on this: it scans the
+    // system tree and then the user tree, so the user's copy of an org policy wins
+    // while the listing order stays put.
+    writeFile(u"c.xml"_ustr, makeSpif("Policy A (user)", "1.2.3"));
+    svx::seclabel::SpifPolicySet aReloaded;
+    aReloaded.loadFromDir(sDir);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aReloaded.aPolicies.size());
+    CPPUNIT_ASSERT_EQUAL(u"Policy A (user)"_ustr, aReloaded.aPolicies[0].aName);
+    CPPUNIT_ASSERT_EQUAL(u"Policy B"_ustr, aReloaded.aPolicies[1].aName);
 }
 
 void SpifPolicyTest::testWantsWatermark()

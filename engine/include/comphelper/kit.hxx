@@ -85,6 +85,13 @@ COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
 COMPHELPER_DLLPUBLIC void setUserConfigDir(const OUString& rUrl);
 COMPHELPER_DLLPUBLIC OUString getUserConfigDir();
 
+/// Directory URL (file://...) of the read-only, admin-provisioned system config
+/// tree; empty when the client did not provide one. Sibling of the per-user tree
+/// above: COOL mounts the WOPI host's shared presets there, so a group lives at
+/// <systemConfigDir>/<group>/ just as the per-user one does.
+COMPHELPER_DLLPUBLIC void setSystemConfigDir(const OUString& rUrl);
+COMPHELPER_DLLPUBLIC OUString getSystemConfigDir();
+
 /// Used by SlideshowLayerRenderer for signaling that a slide rendering is occurring.
 COMPHELPER_DLLPUBLIC void setSlideshowRendering(bool bSlideshowRendering);
 COMPHELPER_DLLPUBLIC bool isSlideshowRendering();

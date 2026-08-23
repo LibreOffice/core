@@ -3945,6 +3945,7 @@ void lokit_main(
     // Where this kit finds the shared presets of its configuration once the jail is ready. It
     // stays empty when the jail holds a copy of the engine installation with the presets in it.
     std::string presetsPathInKit;
+    std::string systemconfig_url;
     int ProcSMapsFile = -1;
 
     // lokit's destroy typically throws from
@@ -3999,6 +4000,18 @@ void lokit_main(
 
             const std::string sharedPresets = Poco::Path(childRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
             const std::string configIdPresets = Poco::Path(sharedPresets, Uri::encode(configId)).toString();
+
+            // Unlike the three presets above, the SPIF security-label policies have no
+            // engine share dir to overlay: the engine dir-scans them at label time. So
+            // they get their own tree in the jail, mirroring the host's systemconfig/
+            // naming, and the engine is told where it is via "addsystemconfig". It goes
+            // under /tmp (the one writable place in the jail) but deliberately outside
+            // /tmp/user/user, which is the LO user profile that wsd writes the *per-user*
+            // presets into and that jail teardown deletes with prejudice.
+            const std::string sharedSpif = Poco::Path(configIdPresets, "spif").toString();
+            const std::string jailSystemConfigDir = Poco::Path(jailTmpDir, "systemconfig").toString();
+            const std::string jailSystemConfigSpif = Poco::Path(jailSystemConfigDir, "spif").toString();
+            bool haveSystemConfig = false;
 
             const std::string sysTemplateSubDir = Poco::Path(tempRoot, "systemplate-" + jailId).toString();
             const std::string jailEtcDir = Poco::Path(jailPath, "etc").toString();
@@ -4123,6 +4136,36 @@ void lokit_main(
                     return false;
                 }
 
+                // The shared SPIF policies. This has to come after the /tmp mount
+                // above, which would otherwise hide it. Read-only is not just about the
+                // engine: jail teardown deletes the contents of /tmp with prejudice, and
+                // the remount is what stops that recursion from reaching through into the
+                // host's shared presets. Best-effort like the other presets - failing
+                // here must not fail the whole jail mount and push every document in the
+                // forkit onto the slow copy path.
+                if (!configId.empty() && !FileUtil::isEmptyDirectory(sharedSpif))
+                {
+                    Poco::File(jailSystemConfigDir).createDirectories();
+                    if (!JailUtil::bind(sharedSpif, jailSystemConfigSpif))
+                    {
+                        LOG_WRN("Failed to mount shared preset [" << sharedSpif << "] -> ["
+                                << jailSystemConfigSpif << "], skipping.");
+                    }
+                    else if (!JailUtil::remountReadonly(sharedSpif, jailSystemConfigSpif))
+                    {
+                        // Leaving it writable would be worse than not having it: the
+                        // teardown recursion described above would reach through the
+                        // mount and delete the host's policies. Drop the mount.
+                        LOG_WRN("Failed to remount read-only [" << jailSystemConfigSpif
+                                << "], unmounting it; skipping shared presets.");
+                        JailUtil::unmount(jailSystemConfigSpif);
+                    }
+                    else
+                    {
+                        haveSystemConfig = true;
+                    }
+                }
+
                 return true;
             };
 
@@ -4215,6 +4258,16 @@ void lokit_main(
                     // source would just make the overlayfs probe stat a
                     // not-yet-created target and log spuriously.
                     linkOrCopySharedPresets(configIdPresets, loJailDestPath, linkablePath);
+
+                    if (!FileUtil::isEmptyDirectory(sharedSpif))
+                    {
+                        // Not a SharedPresetGroups member: no engine dir to overlay
+                        // here either, so create the target.
+                        Poco::File(jailSystemConfigSpif).createDirectories();
+                        linkOrCopy(sharedSpif, jailSystemConfigSpif + "/", linkablePath,
+                                   LinkOrCopyType::All);
+                        haveSystemConfig = true;
+                    }
                 }
 
 #if CODE_COVERAGE
@@ -4245,6 +4298,12 @@ void lokit_main(
                     }
                 }
             }
+
+            // The in-jail location of the system config tree, for "addsystemconfig"
+            // below. Only set when we actually got the tree in, so the engine never
+            // scans a path that isn't there.
+            if (haveSystemConfig)
+                systemconfig_url = "file:///tmp/systemconfig";
 
             // Setup /tmp and set TMPDIR.
             FileUtil::setSysTempDirectoryPath("/tmp");
@@ -4423,6 +4482,16 @@ void lokit_main(
                 LOG_FTL("COKit initialization failed. Exiting.");
                 Util::forcedExit(EX_SOFTWARE);
             }
+        }
+
+        // The admin-provisioned config tree we mounted during jail setup. Unlike the
+        // per-session "addconfig" (the per-user tree, sent by wsd once the host's user
+        // presets are installed) this one is static for the life of the kit, so set it
+        // here rather than plumbing it through a session message.
+        if (!systemconfig_url.empty())
+        {
+            LOG_DBG("Registering system config tree [" << systemconfig_url << "].");
+            coKit->setOption("addsystemconfig", systemconfig_url.c_str());
         }
 
         bool hasSeccomp = false;

@@ -47,6 +47,9 @@ static std::atomic<bool> g_bUserSettingsPersistenceAvailable(true);
 static std::mutex g_aUserConfigDirMutex;
 static OUString g_aUserConfigDir;
 
+static std::mutex g_aSystemConfigDirMutex;
+static OUString g_aSystemConfigDir;
+
 static ViewShellDocId g_nTiledPaintingDocId(NoDocId);
 
 static bool g_bIdleLayouting(false);
@@ -191,6 +194,18 @@ OUString getUserConfigDir()
 {
     std::lock_guard<std::mutex> aGuard(g_aUserConfigDirMutex);
     return g_aUserConfigDir;
+}
+
+void setSystemConfigDir(const OUString& rUrl)
+{
+    std::lock_guard<std::mutex> aGuard(g_aSystemConfigDirMutex);
+    g_aSystemConfigDir = rUrl;
+}
+
+OUString getSystemConfigDir()
+{
+    std::lock_guard<std::mutex> aGuard(g_aSystemConfigDirMutex);
+    return g_aSystemConfigDir;
 }
 
 bool isTiledPainting()

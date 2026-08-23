@@ -189,8 +189,9 @@ class SVXCORE_DLLPUBLIC SpifPolicySet
 public:
     std::vector<SpifPolicy> aPolicies;
 
-    /// Parse rFileUrl as a SPIF policy and append it on success. Returns false if
-    /// it is unreadable or not a SPIF document.
+    /// Parse rFileUrl as a SPIF policy and append it on success, replacing an
+    /// already-loaded policy that declares the same OID. Returns false if it is
+    /// unreadable or not a SPIF document.
     bool loadFile(const OUString& rFileUrl);
 
     /// Parse every *.xml directly under rDirUrl as a SPIF policy, appending those
@@ -198,9 +199,12 @@ public:
     void loadFromDir(const OUString& rDirUrl);
 
     /// Load the policies provisioned for this session: every *.xml the WOPI host synced
-    /// into the jail's user config dir under spif/ ($(userurl)/spif), falling back to the
-    /// dev stopgap policy shipped in the installation. The single provisioning
-    /// source shared by the dialog and the on-load banner.
+    /// into the system config tree the client mounted for us (COKit::getSystemConfigDir()
+    /// + /spif, the administrator's org-wide set) and into the jail's user config dir
+    /// under spif/ ($(userurl)/spif, this user's own set), the latter winning on a
+    /// repeated policy OID. Falls back to the dev stopgap policy shipped in the
+    /// installation when neither yields anything. The single provisioning source
+    /// shared by the dialog and the on-load banner.
     void loadProvisioned();
 
     /// The provisioned policy rLabel was created under (first OID match), or nullptr.

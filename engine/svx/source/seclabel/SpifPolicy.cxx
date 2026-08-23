@@ -11,6 +11,7 @@
 
 #include <config_folders.h>
 
+#include <comphelper/kit.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
@@ -623,6 +624,23 @@ bool SpifPolicySet::loadFile(const OUString& rFileUrl)
     SpifPolicy aPolicy;
     if (!aPolicy.parse(aStream))
         return false;
+
+    // Two files declaring the same policy OID are the same policy: the later load
+    // replaces the earlier one rather than listing it twice. Load order is what gives
+    // the per-user tree precedence over the system one (see loadProvisioned), and
+    // replacing in place keeps the listing order stable while it does so.
+    if (!aPolicy.aId.isEmpty())
+    {
+        auto it = std::find_if(aPolicies.begin(), aPolicies.end(),
+                               [&aPolicy](const SpifPolicy& rExisting)
+                               { return rExisting.aId == aPolicy.aId; });
+        if (it != aPolicies.end())
+        {
+            *it = std::move(aPolicy);
+            return true;
+        }
+    }
+
     aPolicies.push_back(std::move(aPolicy));
     return true;
 }
@@ -656,9 +674,22 @@ void SpifPolicySet::loadFromDir(const OUString& rDirUrl)
 
 void SpifPolicySet::loadProvisioned()
 {
-    // The provisioned policies: every *.xml the WOPI host synced into the jail's
-    // user config dir under spif/. $(userurl) resolves to that config root.
+    // Both provisioned sets, in increasing precedence (a repeated OID replaces, see
+    // loadFile). The system set first: every *.xml the host's administrator published
+    // org-wide, which the client made readable inside the sandbox (in COOL the kit
+    // mounts the WOPI host's shared presets there; the group dir is <system>/spif).
+    OUString aSystemDir = comphelper::COKit::getSystemConfigDir();
+    if (!aSystemDir.isEmpty())
+    {
+        if (!aSystemDir.endsWith("/"))
+            aSystemDir += "/";
+        loadFromDir(aSystemDir + "spif");
+    }
+
+    // Then this user's own set, from the jail's user config dir under spif/.
+    // $(userurl) resolves to that config root.
     loadFromDir(SvtPathOptions().SubstituteVariable(u"$(userurl)/spif"_ustr));
+
     if (!empty())
         return;
 

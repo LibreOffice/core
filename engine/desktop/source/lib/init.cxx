@@ -6335,6 +6335,16 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
         const OUString aPresetsUrl(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
         addSharedPresetPaths(aPresetsUrl);
     }
+    else if (strcmp(pOption, "addsystemconfig") == 0)
+    {
+        // The read-only, admin-provisioned counterpart of "addconfig": the client
+        // (COOL: the kit, from the WOPI host's shared presets) has made this tree
+        // readable inside the sandbox. Nothing to apply eagerly - unlike the xcu
+        // layers above, its consumers dir-scan the group they care about - so just
+        // record where it is. An empty value clears it.
+        comphelper::COKit::setSystemConfigDir(
+            pValue ? OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8) : OUString());
+    }
     else if (strcmp(pOption, "userpersistence") == 0)
     {
         // Wire contract: exactly "true" or "false"; anything else (including
