@@ -143,6 +143,8 @@ public:
                                             const OUString& rName, sal_Int16 nDefault );
     static sal_Int32        GetLongProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName );
+    static double GetDoubleProperty(const css::uno::Reference<css::beans::XPropertySet>& xProp,
+                                    const OUString& rName, double fDefault = 0.0);
     template<typename EnumT>
     static EnumT            GetEnumProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, EnumT nDefault )

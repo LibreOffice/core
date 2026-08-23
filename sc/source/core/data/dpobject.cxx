@@ -1211,6 +1211,11 @@ bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, std::vector<ScDPLa
 
             aMem.maLayoutName = ScUnoHelpFunctions::GetStringProperty(
                 xMemProp, SC_UNO_DP_LAYOUTNAME, OUString());
+            aMem.mbHasValue
+                = ScUnoHelpFunctions::GetBoolProperty(xMemProp, SC_UNO_DP_MEMBER_HAS_VALUE);
+            if (aMem.mbHasValue)
+                aMem.mfValue
+                    = ScUnoHelpFunctions::GetDoubleProperty(xMemProp, SC_UNO_DP_MEMBER_VALUE);
         }
 
         aMembers.push_back(aMem);
@@ -2621,6 +2626,10 @@ void ScDPObject::FillLabelDataForDimension(
     lcl_FillLabelData(rLabelData, xDimProp);
     rLabelData.mnFlags = ScUnoHelpFunctions::GetLongProperty(
         xDimProp, SC_UNO_DP_FLAGS );
+
+    // tdf#132518 - group pivot date field values in dropdown filter
+    ScDPTableData* pTableData = GetTableData();
+    rLabelData.mbIsDateDimension = pTableData && pTableData->IsDateDimension(nDim);
 }
 
 void ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)

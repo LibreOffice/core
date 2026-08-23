@@ -644,6 +644,8 @@ inline constexpr OUString SC_UNO_DP_LAYOUTNAME           = u"LayoutName"_ustr;
 inline constexpr OUString SC_UNO_DP_FIELD_SUBTOTALNAME   = u"FieldSubtotalName"_ustr;
 inline constexpr OUString SC_UNO_DP_GRANDTOTAL_NAME      = u"GrandTotalName"_ustr;
 inline constexpr OUString SC_UNO_DP_HAS_HIDDEN_MEMBER    = u"HasHiddenMember"_ustr;
+inline constexpr OUString SC_UNO_DP_MEMBER_VALUE         = u"MemberValue"_ustr;
+inline constexpr OUString SC_UNO_DP_MEMBER_HAS_VALUE     = u"MemberHasValue"_ustr;
 #define SC_UNO_DP_CALCULATEDFIELD      SC_UNONAME_CALCULATEDFIELD
 #define SC_UNO_DP_CALCULATION          SC_UNONAME_CALCULATION
 inline constexpr OUString SC_UNO_DP_FLAGS                = u"Flags"_ustr;

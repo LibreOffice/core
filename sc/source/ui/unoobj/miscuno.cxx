@@ -88,6 +88,24 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
+double ScUnoHelpFunctions::GetDoubleProperty(const uno::Reference<beans::XPropertySet>& xProp,
+                                             const OUString& rName, double fDefault)
+{
+    double fRet = fDefault;
+    if (xProp.is())
+    {
+        try
+        {
+            xProp->getPropertyValue(rName) >>= fRet;
+        }
+        catch (uno::Exception&)
+        {
+            // keep default
+        }
+    }
+    return fRet;
+}
+
 sal_Int32 ScUnoHelpFunctions::GetEnumPropertyImpl( const uno::Reference<beans::XPropertySet>& xProp,
                                             const OUString& rName, sal_Int32 nDefault )
 {

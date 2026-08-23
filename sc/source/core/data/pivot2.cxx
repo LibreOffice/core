@@ -33,7 +33,9 @@ ScDPName::ScDPName(OUString aName, OUString aLayoutName, sal_uInt8 nDupCount) :
 
 ScDPLabelData::Member::Member() :
     mbVisible(true),
-    mbShowDetails(true)
+    mbShowDetails(true),
+    mfValue(0.0),
+    mbHasValue(false)
 {}
 
 OUString const & ScDPLabelData::Member::getDisplayName() const
@@ -55,7 +57,8 @@ ScDPLabelData::ScDPLabelData() :
     mbIsValue(false),
     mbDataLayout(false),
     mbRepeatItemLabels(false),
-    mbCalculatedField(false)
+    mbCalculatedField(false),
+    mbIsDateDimension(false)
 {}
 
 OUString const & ScDPLabelData::getDisplayName() const

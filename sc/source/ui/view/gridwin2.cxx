@@ -651,8 +651,11 @@ void ScGridWindow::DPPopulateFieldMembers(const ScDPLabelData& rLabelData)
         if (aName.isEmpty())
             // Use special string for an empty name.
             mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), 0.0, rMem.mbVisible, false);
+        else if (rLabelData.mbIsDateDimension && rMem.mbHasValue)
+            // tdf#132518 - group pivot date field values in dropdown filter
+            mpDPFieldPopup->addDateMember(aName, rMem.mfValue, rMem.mbVisible, false);
         else
-            mpDPFieldPopup->addMember(rMem.getDisplayName(), 0.0, rMem.mbVisible, false);
+            mpDPFieldPopup->addMember(aName, 0.0, rMem.mbVisible, false);
     }
 }
 
@@ -732,8 +735,9 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
     mpDPFieldPopup.reset();
 
     weld::Window* pPopupParent = GetFrameWeld();
+    // tdf#132518 - group pivot date field values in dropdown filter
     mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, mrViewData,
-                                                    false, -1));
+                                                    pDPData->maLabels.mbIsDateDimension, -1));
 
     DPSetupFieldPopup(std::move(pDPData), bDimOrientNotPage, pDPObj);
 

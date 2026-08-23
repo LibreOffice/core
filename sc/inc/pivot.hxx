@@ -84,6 +84,7 @@ struct ScDPLabelData
     bool       mbDataLayout:1;
     bool       mbRepeatItemLabels:1;
     bool       mbCalculatedField:1;
+    bool       mbIsDateDimension:1; ///< true = Source values are dates/times.
 
     struct Member
     {
@@ -91,6 +92,8 @@ struct ScDPLabelData
         OUString maLayoutName;
         bool mbVisible;
         bool mbShowDetails;
+        double mfValue;    ///< raw value (e.g. date serial), only meaningful when mbHasValue is true.
+        bool mbHasValue;
 
         Member();
 
