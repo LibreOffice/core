@@ -1112,7 +1112,7 @@ void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::C
 
 void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& )
 {
-    // clipboard is being disposed. Hmm. Okay, become disfunctional myself.
+    // clipboard is being disposed. Hmm. Okay, become dysfunctional myself.
     dispose();
 }
 

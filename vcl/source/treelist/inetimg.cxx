@@ -99,7 +99,7 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             sal_uInt64 nFilePos;
 
             nFilePos = rIStm.Tell();
-            // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
+            // skip over iSize (int), bIsMap ( sal_Bool ) alignment of 4 !!!!
             rIStm.SeekRel( 8 );
             rIStm.ReadInt32( nVal );  aSizePixel.setWidth( nVal );
             rIStm.ReadInt32( nVal );  aSizePixel.setHeight( nVal );

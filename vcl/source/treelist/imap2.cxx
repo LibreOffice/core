@@ -503,7 +503,7 @@ IMapFormat ImageMap::ImpDetectFormat( SvStream& rIStm )
 
     rIStm.ReadBytes(cMagic, sizeof(cMagic));
 
-    // if we do not have an internal formats
+    // if we do not have an internal format
     // we check the format
     if ( memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
