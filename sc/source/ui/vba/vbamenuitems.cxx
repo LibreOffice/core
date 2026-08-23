@@ -37,7 +37,7 @@ public:
     }
     virtual uno::Any SAL_CALL nextElement() override
     {
-        // FIXME: should be add menu
+        // FIXME: should add menu
         if( !hasMoreElements() )
             throw container::NoSuchElementException();
 
