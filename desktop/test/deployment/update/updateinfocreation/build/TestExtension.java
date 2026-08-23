@@ -45,7 +45,7 @@ public class TestExtension {
         private static final String __serviceName =
         "com.sun.star.comp.smoketest.TestExtension";
 
-        /** The initial component contextr, that gives access to
+        /** The initial component context, that gives access to
          * the service manager, supported singletons, ...
          * It's often later used
          */
