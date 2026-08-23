@@ -286,7 +286,7 @@ bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple ) const
 
 bool ScMarkData::IsColumnMarked( SCCOL nCol ) const
 {
-    //  bMarkIsNeg meanwhile also for columns heads
+    //  bMarkIsNeg meanwhile also for column heads
     //TODO: GetMarkColumnRanges for completely marked column
 
     if ( bMarked && !bMarkIsNeg &&

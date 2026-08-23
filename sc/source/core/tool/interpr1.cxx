@@ -2679,7 +2679,7 @@ void ScInterpreter::ScCellExternal()
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
-    aRef.SetAbsTab(0); // external ref has a tab index of -1, which SingleRefToVars() don't like.
+    aRef.SetAbsTab(0); // external ref has a tab index of -1, which SingleRefToVars() doesn't like.
     SingleRefToVars(aRef, nCol, nRow, nTab);
     if (nGlobalError != FormulaError::NONE)
     {

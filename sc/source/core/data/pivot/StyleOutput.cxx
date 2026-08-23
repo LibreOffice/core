@@ -191,7 +191,7 @@ public:
                 OutputBlockFrame(mnCols[nCol], mnRows.front(), mnCols[nCol + 1] - 1,
                                  mnRows.back() - 1, bAllRows);
         }
-        //out put rows area outer framer
+        //output rows area outer frame
         if (mnTabStartCol != mnDataStartCol)
         {
             if (mnTabStartRow != mnDataStartRow)
@@ -199,7 +199,7 @@ public:
                                  mnDataStartRow - 1);
             OutputBlockFrame(mnTabStartCol, mnDataStartRow, mnDataStartCol - 1, mnTabEndRow);
         }
-        //out put cols area outer framer
+        //output cols area outer frame
         OutputBlockFrame(mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow - 1);
     }
 };
