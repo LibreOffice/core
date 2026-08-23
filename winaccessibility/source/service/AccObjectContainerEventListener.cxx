@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// AccObjectContainerEventListener.cpp: implementation of the AccContainerEventListener class.
+// AccObjectContainerEventListener.cxx: implementation of the AccObjectContainerEventListener class.
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

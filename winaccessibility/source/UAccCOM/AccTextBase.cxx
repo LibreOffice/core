@@ -752,7 +752,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nCharacters(long* nCharacter
     }
 }
 
-// added by qiuhd, 2006/07/03, for direver 07/11
+// added by qiuhd, 2006/07/03, for driver 07/11
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_newText(IA2TextSegment*) { return E_NOTIMPL; }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_oldText(IA2TextSegment*) { return E_NOTIMPL; }

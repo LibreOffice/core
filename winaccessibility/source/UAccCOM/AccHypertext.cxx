@@ -95,7 +95,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nSelections(long* nSelectio
 /**
    * Get offset of some special point.
    * @param x X position of one point.
-   * @param x Y position of one point.
+   * @param y Y position of one point.
    * @param coordType Type.
    * @param offset Variant to accept offset.
    * @return Result.
@@ -109,7 +109,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_offsetAtPoint(long x, long 
 
 /**
    * Get selection range.
-   * @param selection selection count.
+   * @param selection Selection count.
    * @param startOffset Variant to accept the start offset of special selection.
    * @param endOffset Variant to accept the end offset of special selection.
    * @return Result.
@@ -237,7 +237,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_oldText(IA2TextSegment* old
 }
 
 /**
-   * Scroll to special sub-string .
+   * Scroll to special sub-string.
    * @param startIndex Start index of sub string.
    * @param endIndex   End index of sub string.
    * @return Result.

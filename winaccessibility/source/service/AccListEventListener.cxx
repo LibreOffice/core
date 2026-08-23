@@ -54,7 +54,7 @@ void  AccListEventListener::notifyEvent( const css::accessibility::AccessibleEve
         HandleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-        // Since List items a transient a child events are mostly used
+        // Since List items are transient, child events are mostly used
         // to attach/detach listeners, it is safe to ignore it here
         //TODO: investigate again
         break;
@@ -82,7 +82,7 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
         {
             XAccessible* pAcc = xChild.get();
 
-            // Valueset has cache the child item xacc,Update state if no insert obj
+            // Valueset has cached the child item xacc; update state if no insert obj
             bool bHasCache = m_rObjManager.InsertAccObj(pAcc, m_xAccessible.get());
             if (!bHasCache)
             {
