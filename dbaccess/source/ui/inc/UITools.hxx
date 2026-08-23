@@ -79,7 +79,7 @@ namespace dbaui
         @param  _rxContext              the UNO component context
         @param  _rEvtLst                the eventlistener which will be added to the new created connection
         @param  _rOUTConnection         this parameter will be filled with the new created connection
-        @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
+        @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they arise else .isValid() will return false
     */
     ::dbtools::SQLExceptionInfo createConnection(
                                     const OUString& _rsDataSourceName,
@@ -92,7 +92,7 @@ namespace dbaui
         @param  _rxContext              the UNO component context
         @param  _rEvtLst                the eventlistener which will be added to the new created connection
         @param  _rOUTConnection         this parameter will be filled with the new created connection
-        @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
+        @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they arise else .isValid() will return false
     */
     ::dbtools::SQLExceptionInfo createConnection(
                                     const css::uno::Reference< css::beans::XPropertySet >& _xDataSource,
@@ -192,7 +192,7 @@ namespace dbaui
         @param  rName          the name which should be appended
         @param  rxContext      needed to check if datasource is available
         @param  pParent        needed when an error must be shown
-        @return false when datsource is not available otherwise true
+        @return false when the datasource is not available otherwise true
     */
     bool appendToFilter(const css::uno::Reference< css::sdbc::XConnection>& xConnection,
                         const OUString& rName,

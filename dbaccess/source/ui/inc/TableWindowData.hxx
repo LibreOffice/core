@@ -60,7 +60,7 @@ namespace dbaui
         *
         * \param _xConnection
         * \param _bAllowQueries when true, queries are allowed
-        * \return false if the table was unaccessible otherwise true
+        * \return false if the table was inaccessible otherwise true
         */
         bool init(const css::uno::Reference< css::sdbc::XConnection  >& _xConnection
                  ,bool _bAllowQueries);

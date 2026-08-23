@@ -258,7 +258,7 @@ namespace dbaui
             // this method and don't call the base class' method
 
         virtual void LoadFinished(bool bWasSynch);
-            // called if the loading (the _complete_ loading process) is done (no matter if synchron or asynchron).
+            // called if the loading (the _complete_ loading process) is done (no matter if synchronously or asynchronously).
 
         virtual void criticalFail();
             // called whenever a reload operation on the rowset failed
