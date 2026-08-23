@@ -731,7 +731,7 @@ std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const Bitmap& 
         // mechanism since there is no real need to hold MipMapped data.
         // The key here is to balance the effort for that against evtl. needed (!)
         // Mip-Mapping, and that depends on the Bitmap's size (in square pixels).
-        // Thus, add a shortcut here - but ONLY for small enough Bitmpaps that
+        // Thus, add a shortcut here - but ONLY for small enough Bitmaps that
         // do not cost too much to be painted in cairo with good quality. Remember
         // that cairo *is* a software-renderer after all (!). This value may be adapted as
         // needed. Note that below there is also 'isTrivial' used which already uses
@@ -1449,7 +1449,7 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const Bitmap& rBitmap,
     cairo_matrix_scale(&aMatrix, cairo_image_surface_get_width(pTarget.get()),
                        cairo_image_surface_get_height(pTarget.get()));
 
-    // The alternative wpuld be: resize/scale it SLIGHTLY to force
+    // The alternative would be: resize/scale it SLIGHTLY to force
     // that half pixel overlap to be inside the unit range.
     // That makes the error disappear, so no clip needed, but
     // SLIGHTLY smaller. Keeping this code if someone might have
@@ -2865,7 +2865,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
         aBColorStopsAlpha = rFillGradientPrimitive2D.getAlphaGradient().getColorStops();
     const bool bAxial(css::awt::GradientStyle_AXIAL == rFillGradient.getStyle());
 
-    // get and apply border - create soace at start in gradient
+    // get and apply border - create space at start in gradient
     const double fBorder(std::max(std::min(rFillGradient.getBorder(), 1.0), 0.0));
     if (!basegfx::fTools::equalZero(fBorder))
     {
@@ -3055,7 +3055,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_square_rect(
         aBColorStops.tryToApplyBColorModifierStack(maBColorModifierStack);
     }
 
-    // get and apply border - create soace at start in gradient
+    // get and apply border - create space at start in gradient
     const double fBorder(std::max(std::min(rFillGradient.getBorder(), 1.0), 0.0));
     if (!basegfx::fTools::equalZero(fBorder))
     {
@@ -3289,7 +3289,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_radial_elliptical(
     if (bHasAlpha)
         aBColorStopsAlpha = rFillGradientPrimitive2D.getAlphaGradient().getColorStops();
 
-    // get and apply border - create soace at start in gradient
+    // get and apply border - create space at start in gradient
     const double fBorder(std::max(std::min(rFillGradient.getBorder(), 1.0), 0.0));
     if (!basegfx::fTools::equalZero(fBorder))
     {

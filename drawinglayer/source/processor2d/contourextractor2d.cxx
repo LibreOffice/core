@@ -163,7 +163,7 @@ namespace drawinglayer::processor2d
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
-                    // primitives who's BoundRect will be added in world coordinates
+                    // primitives whose BoundRect will be added in world coordinates
                     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
                     if (!aRange.isEmpty())
                     {
