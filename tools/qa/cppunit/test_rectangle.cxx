@@ -130,7 +130,7 @@ void RectangleTest::testUnitConvesion()
         static_assert(!aRectMm100.IsEmpty());
         // Make sure that we use coordinates for conversion, not width/height:
         // the latter is ambiguous, and e.g. GetWidth(aRectTwip) gives 1, which
-        // would had been converted to 2, resulting in different LR coordinates
+        // would have been converted to 2, resulting in different LR coordinates
         static_assert(aRectMm100.Left() == aRectMm100.Right());
         static_assert(aRectMm100.Top() == aRectMm100.Bottom());
     }

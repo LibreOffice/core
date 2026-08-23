@@ -88,7 +88,7 @@ public:
     }
 
     void testCreateFromDoubleIn32BitsPlatform() {
-        // This pass in 64 bits but fail in 32 bits
+        // This passes in 64 bits but fails in 32 bits
         Fraction f(0.960945);
         CPPUNIT_ASSERT_EQUAL(true, f.IsValid());
     }

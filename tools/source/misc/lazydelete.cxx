@@ -33,7 +33,7 @@ void DeleteOnDeinitBase::addDeinitContainer(DeleteOnDeinitBase* i_pContainer)
 {
     if (gShutdown)
     {
-        SAL_WARN("tools", "DeleteOnDeinit added after DeiInitVCL !");
+        SAL_WARN("tools", "DeleteOnDeinit added after DeInitVCL !");
         return;
     }
 

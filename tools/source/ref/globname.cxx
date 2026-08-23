@@ -135,7 +135,7 @@ OUString SvGlobalName::GetHexName() const
 css::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
 {
     // platform independent representation of a "GlobalName"
-    // maybe transported remotely
+    // may be transported remotely
     return comphelper::MimeConfigurationHelper::GetSequenceClassID(
         m_aData.Data1, m_aData.Data2, m_aData.Data3,
         m_aData.Data4[0], m_aData.Data4[1], m_aData.Data4[2], m_aData.Data4[3],
