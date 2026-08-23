@@ -242,7 +242,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 aValue.fill(nPos,aTypes[nPos],xRow);
                 m_pTypeInfo->nNumPrecRadix  = aValue.getInt32();
 
-                // check if values are less than zero like it happens in a oracle jdbc driver
+                // check if values are less than zero like it happens in an Oracle JDBC driver
                 if( m_pTypeInfo->nPrecision < 0)
                     m_pTypeInfo->nPrecision = 0;
                 if( m_pTypeInfo->nMinimumScale < 0)
@@ -820,7 +820,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatement( const 
     aValues[aValues.getLength()-1] = ')';
 
     aSql.append(aValues);
-    // now create,fill and execute the prepared statement
+    // now create, fill and execute the prepared statement
     return _xMetaData->getConnection()->prepareStatement(aSql.makeStringAndClear());
 }
 
