@@ -9,6 +9,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # invocation for coverity to collect c/c++ and javascript
+# The analysis models live in coverity-model.cpp beside this script.
 
 set -e
 cd "$(dirname "$0")/.."
