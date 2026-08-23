@@ -325,8 +325,11 @@ void TransformParameters( sal_uInt16 nSlotId, const cpo::uno::Sequence<beans::Pr
                     ++nFoundArgs;
 #endif
                     if( pItem->PutValue( rProp.Value, 0 ) )
+                    {
                         // only use successfully converted items
                         rSet.Put( std::move(pItem) );
+                        break;
+                    }
                     else
                     {
                         SAL_WARN( "sfx", "Property not convertible: " << rArg.aName );
