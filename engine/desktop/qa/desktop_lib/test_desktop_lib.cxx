@@ -3962,7 +3962,7 @@ void DesktopKitTest::testComplexSelection()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
                          static_cast<int>(pDocument->getSelectionType()));
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
-                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr, nullptr)));
+                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr)));
 
     // Paste text.
     CPPUNIT_ASSERT(pDocument->paste("text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
@@ -3971,7 +3971,7 @@ void DesktopKitTest::testComplexSelection()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
                          static_cast<int>(pDocument->getSelectionType()));
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
-                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr, nullptr)));
+                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr)));
 
     // Paste an image.
     OUString aFileURL = createFileURL(u"paste.jpg");
@@ -4002,7 +4002,7 @@ void DesktopKitTest::testComplexSelection()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::COMPLEX),
                          static_cast<int>(pDocument->getSelectionType()));
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::COMPLEX),
-                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr, nullptr)));
+                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr)));
 }
 
 void DesktopKitTest::testCalcSaveAs()

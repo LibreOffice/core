@@ -388,8 +388,7 @@ namespace desktop {
         bool renderSearchResult(const char* pSearchResult, std::vector<unsigned char>* pBitmapBuffer,
                                 int* pWidth, int* pHeight) override;
         void sendContentControlEvent(const char* pArguments) override;
-        COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
-                                                   char** pUsedMimeType) override;
+        COKitSelectionType getSelectionTypeAndText(const char* pMimeType, std::string* pText) override;
         void getDataArea(long nPart, long* pCol, long* pRow) override;
         int getEditMode() override;
         void setViewTimezone(int nId, const char* pTimezone) override;

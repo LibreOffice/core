@@ -1231,8 +1231,7 @@ static std::string doc_getTextSelection(COKitDocument* pThis,
 static COKitSelectionType doc_getSelectionType(COKitDocument* pThis);
 static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis,
                                                       const char* pMimeType,
-                                                      char** pText,
-                                                      char** pUsedMimeType);
+                                                      std::string* pText);
 static bool doc_getClipboard (COKitDocument* pThis,
                               const char **pMimeTypes,
                               std::vector<std::string>& rOutMimeTypes,
@@ -1841,10 +1840,9 @@ void COKitDocumentImpl::sendContentControlEvent(const char* pArguments)
     doc_sendContentControlEvent(this, pArguments);
 }
 
-COKitSelectionType COKitDocumentImpl::getSelectionTypeAndText(const char* pMimeType, char** pText,
-                                                               char** pUsedMimeType)
+COKitSelectionType COKitDocumentImpl::getSelectionTypeAndText(const char* pMimeType, std::string* pText)
 {
-    return doc_getSelectionTypeAndText(this, pMimeType, pText, pUsedMimeType);
+    return doc_getSelectionTypeAndText(this, pMimeType, pText);
 }
 
 void COKitDocumentImpl::getDataArea(long nPart, long* pCol, long* pRow)
@@ -7169,7 +7167,7 @@ static COKitSelectionType doc_getSelectionType(COKitDocument* pThis)
 }
 
 static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType,
-                                                      char** pText, char** pUsedMimeType)
+                                                      std::string* pText)
 {
     // The purpose of this function is to avoid double call to pDoc->getSelection(),
     // which may be expensive.
@@ -7211,15 +7209,7 @@ static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, cons
         return COKitSelectionType::NONE;
 
     if (pText)
-        *pText = convertOString(aRet);
-
-    if (pUsedMimeType) // legacy
-    {
-        if (pMimeType)
-            *pUsedMimeType = strdup(pMimeType);
-        else
-            *pUsedMimeType = nullptr;
-    }
+        *pText = aRet;
 
     return COKitSelectionType::TEXT;
 }

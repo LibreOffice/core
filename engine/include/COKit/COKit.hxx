@@ -2366,15 +2366,13 @@ struct COKitDocument
      * This function is a more efficient combination of getSelectionType() and getTextSelection().
      * It returns the same as getSelectionType(), and additionally if the return value is
      * COKitSelectionType::TEXT then it also returns the same as getTextSelection(), otherwise
-     * pText and pUsedMimeType are unchanged.
+     * pText is unchanged.
      *
      * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
      * @param pText the currently selected text
-     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
      * @return what kind of selection the document holds.
      */
-    virtual COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
-                                                       char** pUsedMimeType) = 0;
+    virtual COKitSelectionType getSelectionTypeAndText(const char* pMimeType, std::string* pText) = 0;
 
     /// Get the data area (in Calc last row and column).
     virtual void getDataArea(long nPart, long* pCol, long* pRow) = 0;

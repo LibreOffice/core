@@ -1717,14 +1717,9 @@ bool ChildSession::getTextSelection(const StringVector& tokens)
     Poco::JSON::Object selectionObject;
     for (const auto& type : mimeTypes)
     {
-        char* textSelection = nullptr;
-        char* usedMimeType = nullptr;
+        std::string selection;
         const COKitSelectionType selectionType
-            = getLOKitDocument()->getSelectionTypeAndText(type.c_str(),
-                                                          &textSelection, &usedMimeType);
-        std::string selection(textSelection ? textSelection : "");
-        free(textSelection);
-        free(usedMimeType);
+            = getLOKitDocument()->getSelectionTypeAndText(type.c_str(), &selection);
         if (selectionType == COKitSelectionType::COMPLEX)
         {
             // Flag complex data so the client will download async.
