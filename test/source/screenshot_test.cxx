@@ -277,7 +277,7 @@ void ScreenshotTest::processDialogBatchFile(std::u16string_view rFile)
             {
                 // unknown dialog, try fallback to generic created
                 // Builder-generated instance. Keep in mind that Dialogs
-                // using this mechanism will probably not be layouted well
+                // using this mechanism will probably not be laid out well
                 // since the setup/initialization part is missing. Thus,
                 // only use for fallback when only the UI file is available.
                 dumpDialogToPath(aNextUIFile);

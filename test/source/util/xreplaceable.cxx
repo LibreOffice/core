@@ -46,7 +46,7 @@ void XReplaceable::testReplaceAll()
     uno::Reference<uno::XInterface> xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 
-    //check that there is none object with the replace string
+    //check that there is no object with the replace string
     xSearchDescr->setSearchString(maReplaceString);
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(!xElement.is());
@@ -78,7 +78,7 @@ void XReplaceable::testReplaceAll()
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 
-    //check that there is none object with the replace string
+    //check that there is no object with the replace string
     xSearchDescr->setSearchString(maReplaceString);
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(!xElement.is());

@@ -99,7 +99,7 @@ bool XAccessibleEventBroadcasterTester::isTransient(
 void XAccessibleEventBroadcasterTester::fireEvent() { m_aFireEventFunc(); }
 
 /**
- * @brief Adds a listener and fires events by mean of object relation.
+ * @brief Adds a listener and fires events by means of object relation.
  *
  * Asserts that the listener was properly called.
  */
