@@ -211,15 +211,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/numberingnamedialog \
 	sw/uiconfig/swriter/ui/numberinput \
 	sw/uiconfig/swriter/ui/objectdialog \
-	sw/uiconfig/swriter/ui/optcomparison \
-	sw/uiconfig/swriter/ui/optcompatpage \
 	sw/uiconfig/swriter/ui/optcaptionpage \
-	sw/uiconfig/swriter/ui/optfonttabpage \
-	sw/uiconfig/swriter/ui/optformataidspage \
-	sw/uiconfig/swriter/ui/optgeneralpage \
-	sw/uiconfig/swriter/ui/optredlinepage \
-	sw/uiconfig/swriter/ui/opttablepage \
-	sw/uiconfig/swriter/ui/opttestpage \
 	sw/uiconfig/swriter/ui/outlinebutton \
 	sw/uiconfig/swriter/ui/outlinenumbering \
 	sw/uiconfig/swriter/ui/outlinenumberingpage \
@@ -227,7 +219,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/pbmenubutton \
 	sw/uiconfig/swriter/ui/querycontinuebegindialog \
 	sw/uiconfig/swriter/ui/querycontinueenddialog \
-	sw/uiconfig/swriter/ui/querydefaultcompatdialog \
 	sw/uiconfig/swriter/ui/querysavelabeldialog \
 	sw/uiconfig/swriter/ui/mailmerge \
 	sw/uiconfig/swriter/ui/managechangessidebar \
@@ -326,7 +317,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/toxentrywidget \
 	sw/uiconfig/swriter/ui/toxbuttonwidget \
 	sw/uiconfig/swriter/ui/unfloatbutton \
-	sw/uiconfig/swriter/ui/viewoptionspage \
 	sw/uiconfig/swriter/ui/warndatasourcedialog \
 	sw/uiconfig/swriter/ui/warnemaildialog \
 	sw/uiconfig/swriter/ui/warnhiddensectiondialog \

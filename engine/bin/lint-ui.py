@@ -162,10 +162,6 @@ def check_title_labels(root):
                     pass
                 elif sys.argv[1] == "sw/uiconfig/swriter/ui/testmailsettings.ui" and context == "testmailsettings|label8":
                     pass
-                elif sys.argv[1] == "sw/uiconfig/swriter/ui/optcomparison.ui" and context == "optcomparison|setting":
-                    pass
-                elif sys.argv[1] == "sw/uiconfig/swriter/ui/optcompatpage.ui" and context == "optcompatpage|label11":
-                    pass
                 elif sys.argv[1] == "sw/uiconfig/swriter/ui/optcaptionpage.ui" and context == "optcaptionpage|label1":
                     pass
                 elif sys.argv[1] == "sw/uiconfig/swriter/ui/mmresultemaildialog.ui" and context == "mmresultemaildialog|attachft":

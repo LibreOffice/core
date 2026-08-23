@@ -143,14 +143,6 @@ modules/swriter/ui/notebookbar.ui
 modules/swriter/ui/numberingnamedialog.ui
 modules/swriter/ui/numparapage.ui
 modules/swriter/ui/optcaptionpage.ui
-modules/swriter/ui/optcomparison.ui
-modules/swriter/ui/optcompatpage.ui
-modules/swriter/ui/optfonttabpage.ui
-modules/swriter/ui/optformataidspage.ui
-modules/swriter/ui/optgeneralpage.ui
-modules/swriter/ui/optredlinepage.ui
-modules/swriter/ui/opttablepage.ui
-modules/swriter/ui/opttestpage.ui
 modules/swriter/ui/outlinenumbering.ui
 modules/swriter/ui/outlinepositionpage.ui
 modules/swriter/ui/paradialog.ui
@@ -162,7 +154,6 @@ modules/swriter/ui/printoptionspage.ui
 modules/swriter/ui/privateuserpage.ui
 modules/swriter/ui/querycontinuebegindialog.ui
 modules/swriter/ui/querycontinueenddialog.ui
-modules/swriter/ui/querydefaultcompatdialog.ui
 modules/swriter/ui/querysavelabeldialog.ui
 modules/swriter/ui/renameautotextdialog.ui
 modules/swriter/ui/renameentrydialog.ui
@@ -196,7 +187,6 @@ modules/swriter/ui/tocentriespage.ui
 modules/swriter/ui/tocindexpage.ui
 modules/swriter/ui/tocstylespage.ui
 modules/swriter/ui/tokenwidget.ui
-modules/swriter/ui/viewoptionspage.ui
 modules/swriter/ui/warndatasourcedialog.ui
 modules/swriter/ui/warnemaildialog.ui
 modules/swriter/ui/warnhiddensectiondialog.ui

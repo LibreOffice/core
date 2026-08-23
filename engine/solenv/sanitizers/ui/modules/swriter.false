@@ -724,4 +724,3 @@ sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='Tools-OpenReadOnly'] 
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='Tools-AutoControlFocus'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkToolButton[@id='Tools-OptionsTreeDialog'] button-no-label
 
-sw/uiconfig/swriter/ui/optfonttabpage.ui://GtkLabel[@id='font_label'] orphan-label

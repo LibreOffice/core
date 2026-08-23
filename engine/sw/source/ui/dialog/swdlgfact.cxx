@@ -83,7 +83,6 @@
 #include <cnttab.hxx>
 #include <swuicnttab.hxx>
 #include <regionsw.hxx>
-#include <optcomp.hxx>
 #include <optload.hxx>
 #include <optpage.hxx>
 #include <swuiidxmrk.hxx>
@@ -1254,52 +1253,16 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     CreateTabPage pRet = nullptr;
     switch ( nId )
     {
-        case RID_SW_TP_OPTCOMPATIBILITY_PAGE :
-            pRet = SwCompatibilityOptPage::Create;
-            break;
-        case RID_SW_TP_OPTLOAD_PAGE :
-            pRet = SwLoadOptPage::Create;
-            break;
         case RID_SW_TP_OPTCAPTION_PAGE:
             return SwCaptionOptPage::Create;
-        case RID_SW_TP_CONTENT_OPT:
-        case RID_SW_TP_HTML_CONTENT_OPT:
-            pRet = SwContentOptPage::Create;
-            break;
-        case RID_SW_TP_OPTSHDWCRSR:
-        case RID_SW_TP_HTML_OPTSHDWCRSR:
-            pRet = SwShdwCursorOptionsTabPage::Create;
-            break;
-        case RID_SW_TP_REDLINE_OPT :
-            pRet = SwRedlineOptionsTabPage::Create;
-            break;
-        case RID_SW_TP_OPTTEST_PAGE :
-#ifdef DBG_UTIL
-            pRet = SwTestTabPage::Create;
-#endif
-            break;
         case TP_OPTPRINT_PAGE :
-        case RID_SW_TP_HTML_OPTPRINT_PAGE:
-        case RID_SW_TP_OPTPRINT_PAGE:
             pRet = SwAddPrinterTabPage::Create;
-            break;
-        case RID_SW_TP_STD_FONT:
-        case RID_SW_TP_STD_FONT_CJK:
-        case RID_SW_TP_STD_FONT_CTL:
-            pRet = SwStdFontTabPage::Create;
-            break;
-        case RID_SW_TP_HTML_OPTTABLE_PAGE:
-        case RID_SW_TP_OPTTABLE_PAGE:
-            pRet = SwTableOptionsTabPage::Create;
             break;
         case RID_SW_TP_DOC_STAT :
             pRet = SwDocStatPage::Create;
             break;
         case RID_SW_TP_MAILCONFIG:
             pRet = SwMailConfigPage::Create;
-        break;
-        case RID_SW_TP_COMPARISON_OPT :
-            pRet = SwCompareOptionsTabPage::Create;
         break;
     }
 

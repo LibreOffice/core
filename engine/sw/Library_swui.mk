@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/chrdlg/swuiccoll \
     sw/source/ui/chrdlg/tblnumfm \
     sw/source/ui/config/mailconfigpage \
-    sw/source/ui/config/optcomp \
     sw/source/ui/config/optload \
     sw/source/ui/config/optpage \
     sw/source/ui/dialog/abstract \
