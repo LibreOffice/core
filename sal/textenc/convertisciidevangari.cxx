@@ -367,7 +367,7 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
             goto done;
         }
 
-        // Linearly searching through the ranges if probably fastest, assuming
+        // Linearly searching through the ranges is probably fastest, assuming
         // that most converted characters belong to the ASCII subset:
         for (size_t i = 0; i < entries; ++i)
         {

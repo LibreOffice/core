@@ -33,10 +33,10 @@ namespace
         {
             const char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding(eIn);
             rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromMimeCharset(pCharSet);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getBestMimeCharsetFromTextEncoding && rtl_getTextEncodingFromMimeCharset differdiffer", eOut, eTextEnc );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getBestMimeCharsetFromTextEncoding && rtl_getTextEncodingFromMimeCharset differ", eOut, eTextEnc );
         }
 
-        // the defines for the follows test could be found in file inc/rtl/textenc.h
+        // the defines for the following test could be found in file inc/rtl/textenc.h
 
         void MimeCharsetFromTextEncoding_MS_1252()
         {

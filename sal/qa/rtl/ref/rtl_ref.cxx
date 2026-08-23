@@ -35,7 +35,7 @@ public:
             m_bIncFlag = false;
         }
         else
-            CPPUNIT_FAIL("RC was incremented when in should not have been");
+            CPPUNIT_FAIL("RC was incremented when it should not have been");
     }
 
     void release() { --m_nRef; }
