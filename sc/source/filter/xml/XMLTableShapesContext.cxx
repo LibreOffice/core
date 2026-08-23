@@ -26,7 +26,7 @@ using namespace com::sun::star;
 ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )
 {
-    // here are no attributes
+    // Here, there are no attributes
 }
 
 ScXMLTableShapesContext::~ScXMLTableShapesContext()

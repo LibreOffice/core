@@ -1719,7 +1719,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     //SetLoading hack because the document properties will be re-initted
     //by the xml filter and during the init, while it's considered uninitialized,
     //setting a property will inform the document it's modified, which attempts
-    //to update the properties, which throws cause the properties are uninitialized
+    //to update the properties, which throws because the properties are uninitialized
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
     bool ret = xFilter->filter(aArgs);
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
@@ -1772,7 +1772,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
     //SetLoading hack because the document properties will be re-initted
     //by the xml filter and during the init, while it's considered uninitialized,
     //setting a property will inform the document it's modified, which attempts
-    //to update the properties, which throws cause the properties are uninitialized
+    //to update the properties, which throws because the properties are uninitialized
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
     bool ret = xFilter->filter(aArgs);
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
@@ -1827,7 +1827,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLSX(SvStream &rStream)
     //SetLoading hack because the document properties will be re-initted
     //by the xml filter and during the init, while it's considered uninitialized,
     //setting a property will inform the document it's modified, which attempts
-    //to update the properties, which throws cause the properties are uninitialized
+    //to update the properties, which throws because the properties are uninitialized
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
     bool ret = false;
     try

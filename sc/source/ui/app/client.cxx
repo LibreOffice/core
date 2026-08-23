@@ -177,7 +177,7 @@ void ScClient::ViewChanged()
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
         // the iconified object seems not to need such a scaling handling
-        // since the replacement image and the size a completely controlled by the container
+        // since the replacement image and the size are completely controlled by the container
         // TODO/LATER: when the icon exchange is implemented the scaling handling might be required again here
 
         return;
