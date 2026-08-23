@@ -40,7 +40,7 @@
 namespace PictReaderInternal {
   namespace {
 
-  //! utilitary class to store a pattern, ...
+  //! utility class to store a pattern, ...
   class Pattern {
   public:
     //! constructor

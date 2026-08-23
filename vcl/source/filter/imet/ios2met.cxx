@@ -187,8 +187,8 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 #define GOrdPChXtr 0x57   /* 1 Push and set character extra */
 #define GOrdSChShr 0x35   /* 1 Set character shear          */
 #define GOrdPChShr 0x75   /* 1 Push and set character shear */
-#define GOrdSTxAlg 0x36   /* 0 2 Set text allingment          */
-#define GOrdPTxAlg 0x76   /* 0 2 Push and set text allingment */
+#define GOrdSTxAlg 0x36   /* 0 2 Set text alignment          */
+#define GOrdPTxAlg 0x76   /* 0 2 Push and set text alignment */
 
 #define GOrdSMkPrc 0x3B   /* 0 1 Set marker precision          */
 #define GOrdPMkPrc 0x7B   /* 0 1 Push and set marker precision */
