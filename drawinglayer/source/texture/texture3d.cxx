@@ -156,7 +156,7 @@ namespace drawinglayer::texture
                 }
                 else
                 {
-                    // this texture is a color bitmap used as transparence map
+                    // this texture is a color bitmap used as transparency map
                     const Color aColor(aBMCol.GetRed(), aBMCol.GetGreen(), aBMCol.GetBlue());
 
                     rfOpacity = (static_cast<double>(0xff - aColor.GetLuminance()) * (1.0 / 255.0));

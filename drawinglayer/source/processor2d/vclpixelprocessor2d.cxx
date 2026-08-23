@@ -979,7 +979,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
             // To handle a primitive that needs paint, either use decompose, or - when you
             // do not want that for any reason, e.g. extra primitives created - implement
             // a direct handling in your primitive renderer. This is always possible
-            // since primitives by definition are self-contained what means they have all
+            // since primitives by definition are self-contained which means they have all
             // needed data locally available to do so.
             // The question is the complexity to invest - the implemented decompose
             // is always a good hint of what is needed to do this. In this case I decided
