@@ -403,7 +403,7 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
     if (rNewText.isEmpty())
         return;
 
-    if (pOffsets && pESelection)  // try to keep as much attributation as possible ?
+    if (pOffsets && pESelection)  // try to keep as much attribution as possible ?
     {
         pESelection->Adjust();
 

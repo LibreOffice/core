@@ -2892,7 +2892,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                 // in the to be appended data, otherwise already existing
                 // characters would have to be moved and PaM to be updated.
                 // Restrict to 2*42, if not found by then assume other data or
-                // language-script uses only letters or idiographs.
+                // language-script uses only letters or ideographs.
                 sal_Int32 nPos = nMaxNewChars;
                 while (nPos-- > 0 && (nMaxNewChars - nPos) <= 84)
                 {

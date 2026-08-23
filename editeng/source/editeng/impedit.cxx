@@ -1609,7 +1609,7 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
     if ( aNewVisArea.Left() < 0 )
         aNewVisArea.Move( -aNewVisArea.Left(), 0 );
 
-    // The difference must be alignt on pixel (due to scroll!)
+    // The difference must be aligned on pixel (due to scroll!)
     tools::Long nDiffX = !IsVertical() ? ( GetVisDocLeft() - aNewVisArea.Left() ) : (IsTopToBottom() ? -( GetVisDocTop() - aNewVisArea.Top() ) : (GetVisDocTop() - aNewVisArea.Top()));
     tools::Long nDiffY = !IsVertical() ? ( GetVisDocTop() - aNewVisArea.Top() ) : (IsTopToBottom() ? (GetVisDocLeft() - aNewVisArea.Left()) : -(GetVisDocTop() - aNewVisArea.Top()));
 
