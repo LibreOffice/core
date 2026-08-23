@@ -121,10 +121,18 @@ aichatcancel: <requestId>
     Cancel an in-progress AI chat request. <requestId> is the identifier
     from the original 'aichat' message.
 
-executescript <callId> <script>
+executescript <callId> <startLine> <source>
+<script>
 
     Run <script> as a JavaScript snippet in the kit's JS UNO and reply via 'executescriptresult:'
-    tagged with the same <callId>.
+    tagged with the same <callId>.  <script> occupies everything after the first newline; the header
+    line carries only <callId>, <startLine> and <source>.
+
+    <startLine> (1-based) and <source> are the coordinates QuickJS attributes to any stack frame the
+    script produces, so an exception thrown from inside <script> at its own (1-based) line N reports
+    as <source>:<startLine>+N-1:<column>.  <source> is typically the URL of the .js file the caller
+    took the code from; <startLine> compensates for any lines the caller prepends before <script>
+    (e.g. cool.callRemote wraps the function's own source in an outer expression).
 
     Used by the iframe-extension framework (browser/extensions/cool.js's cool.callRemote helper) to
     call into the kit from extension iframes.  <callId> is an opaque string the client picks for
@@ -767,11 +775,26 @@ executescriptresult: <json>
 
     Reply to an 'executescript' message.  The JSON payload has the shape
 
-        { "id": <callId> [, "ok": <jsonValue>] [, "err": <string>] }
+        { "id": <callId> [, "ok": <jsonValue>] [, "err": <error>] [, "legacyUnoApi": true] }
 
     Exactly one of "ok" or "err" is set, except when the script's result value was something
     JSON.stringify drops (undefined, a function, a symbol), in which case neither key is present,
     which the client-side helper surfaces as a Promise resolving to JavaScript undefined.
+
+    "err" is either a plain string (for engine-level failures without structured context, e.g.
+    QuickJS not enabled in this build) or a structured object
+
+        { "message": <string>, "name": <string>, "stack": [<frame>, ...] }
+
+    where each <frame> is
+
+        { "source": <string>, "line": <string>, "column": <string>, "functionName": <string> }
+
+    naming the (1-based) JS coordinates QuickJS attributed to the throw site (i.e. relative to the
+    <startLine>/<source> that were passed on the corresponding 'executescript').
+
+    "legacyUnoApi" is present and true iff the script touched the legacy com.sun.star UNO API, used
+    by the client to flash a one-time deprecation snackbar.
 
 proxycall: <json>
 
