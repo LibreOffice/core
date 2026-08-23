@@ -73,7 +73,7 @@ OUString extractMacroName( std::u16string_view rMacroUrl )
 
 static std::u16string_view trimMacroName( std::u16string_view rMacroName )
 {
-    // the name may contain whitespaces and may be enclosed in apostrophs
+    // the name may contain whitespaces and may be enclosed in apostrophes
     std::u16string_view aMacroName = o3tl::trim(rMacroName);
     size_t nMacroLen = aMacroName.size();
     if( (nMacroLen >= 2) && (aMacroName[ 0 ] == '\'') && (aMacroName[ nMacroLen - 1 ] == '\'') )
@@ -316,7 +316,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
     if( !pShell )
         return MacroResolvedInfo();
 
-    // the name may be enclosed in apostrophs
+    // the name may be enclosed in apostrophes
     std::u16string_view aMacroName = trimMacroName( MacroName );
 
     // parse the macro name
@@ -579,7 +579,7 @@ OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& 
     if( !mpObjShell )
         throw uno::RuntimeException();
 
-    // the name may be enclosed in apostrophs
+    // the name may be enclosed in apostrophes
     OUString aMacroName( trimMacroName( rVBAMacroName ) );
     if( aMacroName.isEmpty() )
         throw lang::IllegalArgumentException();

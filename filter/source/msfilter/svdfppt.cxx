@@ -2627,7 +2627,7 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, SvxMSDffClientData* pClien
                 if ( pPageList && ( nMasterNum < pPageList->size() ) )
                 {
                     assert( !pPageList->is_null( nMasterNum ) );
-                    const PptSlidePersistEntry& rPersist = (*pPageList)[ nMasterNum ];    // get the masterpage's persistentry
+                    const PptSlidePersistEntry& rPersist = (*pPageList)[ nMasterNum ];    // get the masterpage's persist entry
                     if ( rPersist.pPresentationObjects )
                     {
                         sal_uInt32 nCurrent(0);
