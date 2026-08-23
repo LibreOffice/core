@@ -240,7 +240,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     if (pDoc->MoveSelectedPages(nPageNum))
                     {
                         // 3. Switch to the copy that has been moved to its
-                        // final destination.  Use an asynchron slot call to
+                        // final destination.  Use an asynchronous slot call to
                         // be executed after the still pending ones.
                         if (nPageNumOfCopy >= nPageNum || (nPageNum == sal_uInt16(-1)))
                             nPageNum += 1;
