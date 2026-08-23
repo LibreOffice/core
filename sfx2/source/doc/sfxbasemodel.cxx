@@ -1684,7 +1684,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         nSlotId = SID_CHECKIN;
         sal_Int32 nLength = aSeqArgs.getLength( );
         aArgs = Sequence< beans::PropertyValue >( nLength - 1 );
-        std::copy_if(aSeqArgs.begin(), aSeqArgs.end(), aArgs.getArray(),
+        std::ranges::copy_if(aSeqArgs, aArgs.getArray(),
             [](const beans::PropertyValue& rProp) { return rProp.Name != "CheckIn"; });
     }
 
