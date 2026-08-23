@@ -24,6 +24,9 @@
 #include <userlist.hxx>
 #include <formula/opcode.hxx>
 #include <miscuno.hxx>
+#include <scmod.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <vector>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
@@ -317,7 +320,15 @@ void ScAppCfg::ReadLayoutCfg()
     sal_uInt32 nStatusBarFuncMulti = 0;
 
     if (sal_Int32 nIntVal; aValues[SCLAYOUTOPT_MEASURE] >>= nIntVal)
+    {
         SetAppMetric(static_cast<FieldUnit>(nIntVal));
+        /* The metric controls take their unit from the module item pool, see
+           SfxModule::GetFieldUnit. Keep the pool in step with the
+           configuration, so the unit is right in a fresh session and follows a
+           configuration change whatever its source. */
+        if (ScModule* pScMod = ScModule::get())
+            pScMod->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(nIntVal)));
+    }
     if (sal_uInt32 nUIntVal; aValues[SCLAYOUTOPT_STATUSBAR] >>= nUIntVal)
         nStatusBarFuncSingle = nUIntVal;
     if (sal_uInt32 nUIntVal; aValues[SCLAYOUTOPT_STATUSBARMULTI] >>= nUIntVal)
