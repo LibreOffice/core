@@ -88,7 +88,7 @@ void ManagedMenuButton::PrepareExecute()
                 aCommand, aArgs, xContext), css::uno::UNO_QUERY);
     }
 
-    // No registered controller found, use one the can handle arbitrary menus (e.g. defined in .ui file).
+    // No registered controller found, use one that can handle arbitrary menus (e.g. defined in .ui file).
     if (!m_xPopupController.is())
         m_xPopupController.set(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), css::uno::UNO_QUERY);

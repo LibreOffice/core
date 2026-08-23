@@ -20,7 +20,7 @@ Bitmap BitmapSmoothenFilter::execute(Bitmap const& rBitmap) const
 
     if (mfRadius > 0.0) // Blur for positive values of mnRadius
         bRet = BitmapFilter::Filter(aBitmap, BitmapGaussianSeparableBlurFilter(mfRadius));
-    else if (mfRadius < 0.0) // Unsharpen mask for negative values of mnRadius
+    else if (mfRadius < 0.0) // Unsharp mask for negative values of mnRadius
         bRet = BitmapFilter::Filter(aBitmap, BitmapSeparableUnsharpenFilter(mfRadius));
 
     if (bRet)

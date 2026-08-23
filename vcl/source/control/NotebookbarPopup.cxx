@@ -48,7 +48,7 @@ void NotebookbarPopup::PopupModeEnd()
 
 void NotebookbarPopup::hideSeparators(bool bHide)
 {
-    // separator on the beginning
+    // separator at the beginning
     vcl::Window* pWindow = m_pBox->GetChild(0);
     while (pWindow && pWindow->GetType() == WindowType::CONTAINER)
     {
@@ -62,7 +62,7 @@ void NotebookbarPopup::hideSeparators(bool bHide)
             pWindow->Show();
     }
 
-    // separator on the end
+    // separator at the end
     pWindow = m_pBox->GetChild(m_pBox->GetChildCount() - 1);
     while (pWindow && pWindow->GetType() == WindowType::CONTAINER)
     {
