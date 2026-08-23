@@ -77,10 +77,10 @@ void CellMarginHandler::createGrabBag(const OUString& aName)
     OUString sType;
     switch (m_nType)
     {
-        case NS_ooxml::LN_Value_ST_TblWidth_nil: sType = "nil"; break;
-        case NS_ooxml::LN_Value_ST_TblWidth_pct: sType = "pct"; break;
-        case NS_ooxml::LN_Value_ST_TblWidth_dxa: sType = "dxa"; break;
-        case NS_ooxml::LN_Value_ST_TblWidth_auto: sType = "auto"; break;
+        case NS_ooxml::LN_Value_ST_TblWidth_nil: sType = u"nil"_ustr; break;
+        case NS_ooxml::LN_Value_ST_TblWidth_pct: sType = u"pct"_ustr; break;
+        case NS_ooxml::LN_Value_ST_TblWidth_dxa: sType = u"dxa"_ustr; break;
+        case NS_ooxml::LN_Value_ST_TblWidth_auto: sType = u"auto"_ustr; break;
     }
     uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
         { "w", uno::Any(m_nWidth) },
