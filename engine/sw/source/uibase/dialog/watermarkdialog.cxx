@@ -25,8 +25,6 @@
 
 static bool isKitMobilePhone()
 {
-    if (!comphelper::COKit::isActive())
-        return false;
     SfxViewShell* pCurrent = SfxViewShell::Current();
     return pCurrent && pCurrent->isKitMobilePhone();
 }

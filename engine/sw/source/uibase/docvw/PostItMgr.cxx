@@ -637,12 +637,8 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     this->Broadcast(rHint);
                     RemoveItem(pField);
 
-                    // Emit annotation callbacks for COKit
-                    if (comphelper::COKit::isActive())
-                    {
-                        SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
-                        lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
-                    }
+                    SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
+                    lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
                 }
                 break;
             }

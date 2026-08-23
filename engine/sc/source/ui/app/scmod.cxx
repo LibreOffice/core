@@ -521,16 +521,8 @@ void ScModule::Execute( SfxRequest& rReq )
             break;
 
         case FID_FOCUS_POSWND:
-            {
-                ScInputHandler* pHdl = GetInputHdl();
-                if (pHdl)
-                {
-                    ScInputWindow* pWin = pHdl->GetInputWindow();
-                    if (pWin)
-                        pWin->PosGrabFocus();
-                }
-                rReq.Done();
-            }
+            // The Name Box is not part of the toolbar, so there is nothing to focus.
+            rReq.Done();
             break;
 
         case SID_OPEN_XML_FILTERSETTINGS:

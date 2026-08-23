@@ -387,7 +387,6 @@ public:
     bool HasValidSignatures() const;
     SignatureState              GetDocumentSignatureState();
     void SignDocumentContent(weld::Window* pDialogParent, const std::function<void(bool)>& rCallback);
-    void AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogParent);
     cpo::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformation(
         bool bScriptingContent,
         const css::uno::Reference<css::security::XDocumentDigitalSignatures>& xSigner

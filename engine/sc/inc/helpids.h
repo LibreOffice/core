@@ -21,13 +21,10 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUString HID_INSWIN_POS = u"SC_HID_INSWIN_POS"_ustr;
-inline constexpr OUString HID_INSWIN_CALC = u"SC_HID_INSWIN_CALC"_ustr;
 inline constexpr OUString HID_INSWIN_CANCEL = u"SC_HID_INSWIN_CANCEL"_ustr;
 inline constexpr OUString HID_INSWIN_OK = u"SC_HID_INSWIN_OK"_ustr;
 inline constexpr OUString HID_INSWIN_SUMME = u"SC_HID_INSWIN_SUMME"_ustr;
 inline constexpr OUString HID_INSWIN_FUNC = u"SC_HID_INSWIN_FUNC"_ustr;
-inline constexpr OUString HID_INSWIN_INPUT = u"SC_HID_INSWIN_INPUT"_ustr;
 
 // Help IDs for document window ----------------------------------------------
 inline constexpr OUString HID_SC_WIN_GRIDWIN = u"SC_HID_SC_WIN_GRIDWIN"_ustr;

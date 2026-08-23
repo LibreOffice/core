@@ -115,8 +115,6 @@ private:
      */
     bool bInContextMenuOperation;
 
-    OUString sLastItemIdent;
-
     /** Fill the icon view with the layouts that are applicable to the
         current main view shell.
     */
@@ -157,7 +155,7 @@ private:
     // internal ctor
     void implConstruct(DrawDocShell& rDocumentShell);
 
-    void MenuSelect(const OUString& rIdent);
+    void MenuSelect(std::u16string_view rIdent);
 
     /** When clicked then set the current page of the view in the center pane.
     */
@@ -166,7 +164,6 @@ private:
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
-    DECL_LINK(MenuSelectAsyncHdl, void*, void);
     DECL_LINK(OnPopupEnd, const OUString&, void);
 
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);

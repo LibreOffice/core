@@ -972,12 +972,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
         rtl::Reference< VCLXPopupMenu > xPopupMenu = new VCLXPopupMenu();
 
-        Point aPos( rCEvt.GetMousePosPixel() );
-        if( !rCEvt.IsMouseEvent() )
-        {
-            aPos = pChartWindow->GetPointerState().maPos;
-        }
-
         OUString aMenuName;
         if ( isShapeContext() )
             // #i12587# support for shapes in chart
@@ -1246,7 +1240,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
         xPopupController->setPopupMenu( xPopupMenu );
 
-        if (comphelper::COKit::isActive())
         {
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
@@ -1275,12 +1268,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 boost::property_tree::write_json(aStream, aRoot, true);
                 pViewShell->viewCallback(COKitCallbackType::CONTEXT_MENU, OString(aStream.str()));
             }
-        }
-        else
-        {
-            xPopupMenu->execute( css::uno::Reference< css::awt::XWindowPeer >( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY ),
-                                 css::awt::Rectangle( aPos.X(), aPos.Y(), 0, 0 ),
-                                 css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
         }
 
         css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );

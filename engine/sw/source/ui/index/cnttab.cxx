@@ -2925,9 +2925,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
     // JSDialog full update (sent by the fragment builder's weld_container)
     // fired before they existed.  Force a new full update so the browser
     // receives the complete widget tree including all token children.
-    if (comphelper::COKit::isActive())
-        jsdialog::SendFullUpdate(*m_xContainer);
-
+    jsdialog::SendFullUpdate(*m_xContainer);
     AdjustScrolling();
 }
 
@@ -3326,14 +3324,8 @@ void SwTokenWindow::AdjustScrolling()
         m_xLeftScrollWin->set_sensitive(nLeft > 0);
         m_xRightScrollWin->set_sensitive(nLeft + nSpace < nWidth);
     }
-    else if (!comphelper::COKit::isActive())
-    {
-        //if the control fits into the space then the first control must be at position 0
-        m_xRightScrollWin->set_sensitive(false);
-        m_xLeftScrollWin->set_sensitive(false);
-    }
-    // In COKit mode, VCL layout dimensions may not match browser layout,
-    // so don't disable scroll buttons - the browser determines overflow.
+    // VCL layout dimensions may not match browser layout, so don't disable the
+    // scroll buttons - the browser determines overflow.
 }
 
 IMPL_LINK(SwTokenWindow, ScrollBtnHdl, weld::Button&, rBtn, void)

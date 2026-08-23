@@ -467,11 +467,8 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_bGlobalMode(false)
 {
     InitContentFunctionsToolbar();
-    if (comphelper::COKit::isActive())
-    {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(lcl_GetNavigatorViewShell(_pBindings));
-        jsdialog::SendNavigatorForView(nShellId);
-    }
+    sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(lcl_GetNavigatorViewShell(_pBindings));
+    jsdialog::SendNavigatorForView(nShellId);
 
     m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
 

@@ -284,10 +284,7 @@ void ScCheckListMenuControl::queueLaunchSubMenu(size_t nPos, ScListSubMenuContro
 
     maOpenTimer.mpSubMenu = pMenu;
     maOpenTimer.mnMenuPos = nPos;
-    if (comphelper::COKit::isActive())
-        maOpenTimer.maTimer.Invoke();
-    else
-        maOpenTimer.maTimer.Start();
+    maOpenTimer.maTimer.Invoke();
 }
 
 void ScCheckListMenuControl::queueCloseSubMenu()
@@ -310,10 +307,7 @@ void ScCheckListMenuControl::queueCloseSubMenu()
     maOpenTimer.mpSubMenu = nullptr;
     maOpenTimer.mnMenuPos = MENU_NOT_SELECTED;
 
-    if (comphelper::COKit::isActive())
-        maCloseTimer.maTimer.Invoke();
-    else
-        maCloseTimer.maTimer.Start();
+    maCloseTimer.maTimer.Invoke();
 }
 
 tools::Rectangle ScCheckListMenuControl::GetSubMenuParentRect()

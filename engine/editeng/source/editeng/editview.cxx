@@ -1012,9 +1012,6 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
 static void KitSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLangWord,
                                   LanguageType nGuessLangPara, sal_uInt16 nSuggestions)
 {
-    if (!comphelper::COKit::isActive())
-        return;
-
     // Generate the menu structure and send it to the client code.
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
@@ -1083,8 +1080,8 @@ static void KitSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
 }
 
 bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
-                                 const Link<SpellCallbackInfo&, void>& rCallBack,
-                                 bool bAddOtherOption)
+                                 const Link<SpellCallbackInfo&, void>& /*rCallBack*/,
+                                 bool /*bAddOtherOption*/)
 {
     if (IsSelectionAtPoint(rPosPixel))
         return false;
@@ -1094,7 +1091,6 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
     aPos = getImpl().GetDocPos( aPos );
     EditPaM aPaM = getEditEngine().GetPaM(aPos, false);
     Reference< linguistic2::XSpellChecker >  xSpeller(getImpEditEngine().GetSpeller());
-    ESelection aOldSel = GetSelection();
     if ( !(xSpeller.is() && getImpl().IsWrongSpelledWord( aPaM, true )) )
         return false;
 
@@ -1260,129 +1256,10 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
         xPopupMenu->remove(u"insert"_ustr);
     }
 
-    //tdf#106123 store and restore the EditPaM around the menu Execute
-    //because the loss of focus in the current editeng causes writer
-    //annotations to save their contents, making the pContent of the
-    //current EditPams invalid
-    EPaM aP = getImpEditEngine().CreateEPaM(aPaM);
-    EPaM aP2 = getImpEditEngine().CreateEPaM(aPaM2);
+    xPopupMenu->remove(u"autocorrect"_ustr);
+    xPopupMenu->remove(u"autocorrectdlg"_ustr);
 
-    if (comphelper::COKit::isActive())
-    {
-        xPopupMenu->remove(u"autocorrect"_ustr);
-        xPopupMenu->remove(u"autocorrectdlg"_ustr);
-
-        KitSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
-        return true;
-    }
-
-    if (bAddOtherOption)
-    {
-        xPopupMenu->append_separator(u"separator3"_ustr);
-        xPopupMenu->append(u"other"_ustr, EditResId(RID_STR_OTHER));
-    }
-
-    OUString sId = xPopupMenu->popup_at_rect(pPopupParent, aTempRect);
-
-    aPaM2 = getImpEditEngine().CreateEditPaM(aP2);
-    aPaM = getImpEditEngine().CreateEditPaM(aP);
-
-    if (sId == "other")
-    {
-        return false;
-    }
-    else if (sId == "ignore")
-    {
-        OUString aWord = getImpl().SpellIgnoreWord();
-        SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
-        rCallBack.Call(aInf);
-        SetSelection( aOldSel );
-    }
-    else if (sId == "wordlanguage" || sId == "paralanguage")
-    {
-        LanguageType nLangToUse = (sId == "wordlanguage") ? nGuessLangWord : nGuessLangPara;
-        SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
-
-        SfxItemSet aAttrs = getEditEngine().GetEmptyItemSet();
-        if (nScriptType == SvtScriptType::LATIN)
-            aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
-        if (nScriptType == SvtScriptType::COMPLEX)
-            aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CTL ) );
-        if (nScriptType == SvtScriptType::ASIAN)
-            aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CJK ) );
-        if (sId == "paralanguage")
-        {
-            ESelection aSel = GetSelection();
-            aSel.start.nIndex = 0;
-            aSel.end.nIndex = EE_TEXTPOS_MAX;
-            SetSelection( aSel );
-        }
-        SetAttribs( aAttrs );
-        getImpEditEngine().StartOnlineSpellTimer();
-
-        SpellCallbackInfo aInf((sId == "wordlanguage") ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE);
-        rCallBack.Call(aInf);
-        SetSelection( aOldSel );
-    }
-    else if (sId == "check")
-    {
-        SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
-        rCallBack.Call(aInf);
-    }
-    else if (sId == "autocorrectdlg")
-    {
-        SpellCallbackInfo aInf( SpellCallbackCommand::AUTOCORRECT_OPTIONS, OUString() );
-        rCallBack.Call(aInf);
-    }
-    else if ( sId.toInt32() >= MN_DICTSTART || sId == "add")
-    {
-        OUString aDicName;
-        if (sId.toInt32() >= MN_DICTSTART)
-        {
-            assert(xInsertMenu && "this case only occurs when xInsertMenu exists");
-            // strip_mnemonic is necessary to retrieve the correct dictionary name
-            aDicName = pPopupParent->strip_mnemonic(xInsertMenu->get_label(sId));
-        }
-        else
-            aDicName = getImpl().maDicNameSingle;
-
-        uno::Reference< linguistic2::XDictionary >      xDic;
-        if (xDicList.is())
-            xDic = xDicList->getDictionaryByName( aDicName );
-
-        if (xDic.is())
-            xDic->add( aSelected, false, OUString() );
-        // save modified user-dictionary if it is persistent
-        Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
-        if (xSavDic.is())
-            xSavDic->store();
-
-        aPaM.GetNode()->GetWrongList()->ResetInvalidRange(0, aPaM.GetNode()->Len());
-        getImpEditEngine().StartOnlineSpellTimer();
-
-        SpellCallbackInfo aInf( SpellCallbackCommand::ADDTODICTIONARY, aSelected );
-        rCallBack.Call(aInf);
-        SetSelection( aOldSel );
-    }
-    else if ( sId.toInt32() >= MN_AUTOSTART )
-    {
-        DBG_ASSERT(sId.toInt32() - MN_AUTOSTART < aAlt.getLength(), "index out of range");
-        OUString aWord = aAlt[sId.toInt32() - MN_AUTOSTART];
-        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-        if ( pAutoCorrect )
-            pAutoCorrect->PutText( aSelected, aWord, getImpEditEngine().GetLanguage( aPaM2 ).nLang );
-        InsertText( aWord );
-    }
-    else if ( sId.toInt32() >= MN_ALTSTART )  // Replace
-    {
-        DBG_ASSERT(sId.toInt32() - MN_ALTSTART < aAlt.getLength(), "index out of range");
-        OUString aWord = aAlt[sId.toInt32() - MN_ALTSTART];
-        InsertText( aWord );
-    }
-    else
-    {
-        SetSelection( aOldSel );
-    }
+    KitSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
     return true;
 }
 

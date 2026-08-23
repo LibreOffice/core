@@ -1999,7 +1999,7 @@ const SfxStyleFamilyItem& StyleList::GetFamilyItemByIndex(size_t i) const
 IMPL_STATIC_LINK(StyleList, CustomGetSizeHdl, weld::TreeView::get_size_args, aPayload, Size)
 {
     vcl::RenderContext& rRenderContext = aPayload.first;
-    return Size(comphelper::COKit::isActive() ? 200 : 42, 32 * rRenderContext.GetDPIScaleFactor());
+    return Size(200, 32 * rRenderContext.GetDPIScaleFactor());
 }
 
 IMPL_LINK(StyleList, PopupFlatMenuHdl, const CommandEvent&, rCEvt, bool)

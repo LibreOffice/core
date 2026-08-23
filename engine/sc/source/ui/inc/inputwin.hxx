@@ -319,7 +319,6 @@ public:
     void            TextInvalidate();
     void            SwitchToTextWin();
 
-    void            PosGrabFocus();
 
     // For function autopilots
     void            MakeDialogEditView();

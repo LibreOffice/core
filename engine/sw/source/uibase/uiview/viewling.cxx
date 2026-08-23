@@ -738,30 +738,20 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
                     }
                     else
                     {
-                        if (comphelper::COKit::isActive())
+                        if (SfxViewShell* pViewShell = SfxViewShell::Current())
                         {
-                            if (SfxViewShell* pViewShell = SfxViewShell::Current())
-                            {
-                                boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(xMenuInterface);
-                                boost::property_tree::ptree aRoot;
-                                aRoot.add_child("menu", aMenu);
-                                aRoot.put("mouse", bIsMouseEvent);
+                            boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(xMenuInterface);
+                            boost::property_tree::ptree aRoot;
+                            aRoot.add_child("menu", aMenu);
+                            aRoot.put("mouse", bIsMouseEvent);
 
-                                std::stringstream aStream;
-                                boost::property_tree::write_json(aStream, aRoot, true);
-                                pViewShell->viewCallback(COKitCallbackType::CONTEXT_MENU, OString(aStream.str()));
-                            }
-                        }
-                        else
-                        {
-                            xPopup->Execute(aToFill.SVRect(), m_pEditWin);
+                            std::stringstream aStream;
+                            boost::property_tree::write_json(aStream, aRoot, true);
+                            pViewShell->viewCallback(COKitCallbackType::CONTEXT_MENU, OString(aStream.str()));
                         }
                     }
                 }
             }
-
-            if (!comphelper::COKit::isActive())
-                m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             m_pWrtShell->LockView( bOldViewLock );
         }
     }

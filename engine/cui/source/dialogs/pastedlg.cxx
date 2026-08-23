@@ -316,10 +316,10 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
 
 void SvPasteObjectDialog::SetSourceLabel(OUString aTypeName, OUString aSourceName)
 {
-    // In the app and online the document is edited through a temporary working
-    // copy, so the source is a long temporary path that means nothing to the
-    // user. Show just the file name of the source in that case.
-    if (comphelper::COKit::isActive() && !aSourceName.isEmpty())
+    // The document is edited through a temporary working copy, so the source is
+    // a long temporary path that means nothing to the user. Show just the file
+    // name of the source.
+    if (!aSourceName.isEmpty())
     {
         INetURLObject aSourceUrl(aSourceName);
         if (!aSourceUrl.HasError())

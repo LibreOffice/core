@@ -514,22 +514,6 @@ void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
 }
 }
 
-void SfxObjectShell::AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogParent)
-{
-    if (comphelper::COKit::isActive())
-    {
-        // COKit signing certificates are per-view, don't store them in the model.
-        return;
-    }
-
-    if ( bHaveWeSigned && HasValidSignatures() )
-    {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog( pDialogParent,
-                    VclMessageType::Question, VclButtonsType::YesNo, SfxResId(STR_QUERY_REMEMBERSIGNATURE)));
-        SetRememberCurrentSignature(xBox->run() == RET_YES);
-    }
-}
-
 namespace
 {
 /// Updates the UI so it doesn't try to modify an already finalized signature line shape.
@@ -559,8 +543,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     sal_uInt16 nId = rReq.GetSlot();
 
-    bool bHaveWeSigned = false;
-
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
         weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
@@ -577,7 +559,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 svl::crypto::SigningContext aSigningContext;
                 aSigningContext.m_xCertificate = std::move(xCertificate);
-                bHaveWeSigned |= SignDocumentContentUsingCertificate(aSigningContext);
+                SignDocumentContentUsingCertificate(aSigningContext);
 
                 // Reset the picked certificate for PDF signing, then recheck signatures to show how
                 // the PDF actually looks like after signing.  Also change the "finish signing" on
@@ -645,23 +627,16 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     pViewShell->SetSigningCertificate(aCertificateOrName);
                 }
 
-                // Async, all code before return has to go into the callback.
-                SignDocumentContent(pDialogParent, [this, pDialogParent] (bool bSigned) {
-                    AfterSignContent(bSigned, pDialogParent);
-                });
+                SignDocumentContent(pDialogParent, [](bool) {});
                 return;
             }
         }
         else
         {
-            // Async, all code before return has to go into the callback.
-            SignScriptingContent(pDialogParent, [this, pDialogParent] (bool bSigned) {
-                AfterSignContent(bSigned, pDialogParent);
-            });
+            SignScriptingContent(pDialogParent, [](bool) {});
             return;
         }
 
-        AfterSignContent(bHaveWeSigned, pDialogParent);
 
         return;
     }

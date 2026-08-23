@@ -159,12 +159,9 @@ void FormShellManager::RegisterAtCenterPane()
     mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
     mrBase.GetViewShellManager()->ActivateSubShell(*pShell, ToolbarId::FormLayer_Toolbox);
 
-    if (comphelper::COKit::isActive())
-    {
-        SfxViewShell* sfxViewShell = pShell->GetViewShell();
-        if (sfxViewShell)
-            pShell->GetViewShell()->viewInvalidateTilesCallback(nullptr, sfxViewShell->getPart(), sfxViewShell->getEditMode());
-    }
+    SfxViewShell* sfxViewShell = pShell->GetViewShell();
+    if (sfxViewShell)
+        pShell->GetViewShell()->viewInvalidateTilesCallback(nullptr, sfxViewShell->getPart(), sfxViewShell->getEditMode());
 }
 
 void FormShellManager::UnregisterAtCenterPane()

@@ -887,8 +887,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     m_xSetDefaultBtn->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, SetDefaultHdl));
     // Anonymous COOL sessions: commit() works but nothing round-trips.
     // Disable rather than silently no-op.
-    if (comphelper::COKit::isActive()
-        && !comphelper::COKit::isUserSettingsPersistenceAvailable())
+    if (!comphelper::COKit::isUserSettingsPersistenceAvailable())
     {
         m_xSetDefaultBtn->set_sensitive(false);
         m_xSetDefaultBtn->set_tooltip_text(

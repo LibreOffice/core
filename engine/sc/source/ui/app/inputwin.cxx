@@ -183,14 +183,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
 
     mpViewShell = pViewSh;
 
-    // Position window, 3 buttons, input window
-    if (!comphelper::COKit::isActive())
-    {
-        InsertWindow    (ToolBoxItemId(1), aWndPos.get(), ToolBoxItemBits::NONE, 0);
-        InsertSeparator (1);
-        InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
-    }
-
     const bool bIsKitMobilePhone = mpViewShell && mpViewShell->isKitMobilePhone();
 
     // sigma and equal buttons
@@ -205,19 +197,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     InsertWindow    (ToolBoxItemId(7), mxTextWindow.get(), ToolBoxItemBits::NONE, 7);
     SetDropdownClickHdl( LINK( this, ScInputWindow, DropdownClickHdl ));
 
-    if (!comphelper::COKit::isActive())
-    {
-        aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
-        aWndPos   ->SetHelpId       (HID_INSWIN_POS);
-
-        mxTextWindow->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
-        mxTextWindow->SetHelpId       (HID_INSWIN_INPUT);
-
-        // No SetHelpText: the helptexts come from the Help
-        SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
-        SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
-    }
-
     // sigma and equal buttons
     if (!bIsKitMobilePhone)
     {
@@ -225,14 +204,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
         SetHelpId   (SID_INPUT_CANCEL, HID_INSWIN_CANCEL);
         SetHelpId   (SID_INPUT_OK, HID_INSWIN_OK);
-
-        if (!comphelper::COKit::isActive())
-        {
-            SetItemText ( SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
-            SetItemText ( SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
-            SetItemText ( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
-            SetItemText ( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
-        }
 
         EnableItem( SID_INPUT_CANCEL, false );
         EnableItem( SID_INPUT_OK, false );
@@ -244,9 +215,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     }
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
-
-    if (!comphelper::COKit::isActive())
-        aWndPos   ->Show();
     mxTextWindow->Show();
 
     pInputHdl = ScModule::get()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
@@ -271,9 +239,8 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     }
     else if (pViewSh)
     {
-        // Don't stop editing in COKit a remote user might be editing.
-        const bool bStopEditing = !comphelper::COKit::isActive();
-        pViewSh->UpdateInputHandler(true, bStopEditing); // Absolutely necessary update
+        // Don't stop editing - a remote user might be editing.
+        pViewSh->UpdateInputHandler(true, /*bStopEditing*/false); // Absolutely necessary update
     }
 
     SetToolbarLayoutMode( ToolBoxLayoutMode::Locked );
@@ -678,12 +645,6 @@ void ScInputWindow::SwitchToTextWin()
     }
 }
 
-void ScInputWindow::PosGrabFocus()
-{
-    if (!comphelper::COKit::isActive())
-        aWndPos->GrabFocus();
-}
-
 void ScInputWindow::EnableButtons( bool bEnable )
 {
     //  when enabling buttons, always also enable the input window itself
@@ -880,7 +841,7 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
 
     // disable the multiline toggle on the mobile phones
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (!comphelper::COKit::isActive() || !(pViewShell && pViewShell->isKitMobilePhone()))
+    if (!(pViewShell && pViewShell->isKitMobilePhone()))
         mxButtonDown->show();
 
     // tdf#154042 Use an initial height of one row so the Toolbar positions

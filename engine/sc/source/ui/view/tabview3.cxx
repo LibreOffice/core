@@ -3161,8 +3161,7 @@ void ScTabView::DoDPFieldPopup(std::u16string_view rPivotTableName, sal_Int32 nD
     pDPObject->BuildAllDimensionMembers();
 
     Point aPos = pWin->LogicToPixel(aPoint);
-    bool bLOK = comphelper::COKit::isActive();
-    Point aScreenPoint = bLOK ? aPos : pWin->OutputToScreenPixel(aPos);
+    Point aScreenPoint = aPos;
     Size aScreenSize = pWin->LogicToPixel(aSize);
 
     pWin->DPLaunchFieldPopupMenu(aScreenPoint, aScreenSize, nDimensionIndex, pDPObject,

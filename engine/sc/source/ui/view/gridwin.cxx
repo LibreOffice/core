@@ -974,7 +974,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     SCTAB nTab = mrViewData.CurrentTabForData();
     ScDocument& rDoc = mrViewData.GetDocument();
-    bool bLOKActive = comphelper::COKit::isActive();
 
     mpAutoFilterPopup.reset();
 
@@ -1030,20 +1029,17 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     tools::Long nSizeX  = 0;
     tools::Long nSizeY  = 0;
     mrViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
-    if (bLOKActive)
-    {
-        // Reverse the zoom factor from aPos and nSize[X|Y]
-        // before letting the autofilter window convert the to twips
-        // with no zoom information.
-        double fZoomX(mrViewData.GetZoomX());
-        double fZoomY(mrViewData.GetZoomY());
-        aPos.setX(aPos.getX() / fZoomX);
-        aPos.setY(aPos.getY() / fZoomY);
-        nSizeX = nSizeX / fZoomX;
-        nSizeY = nSizeY / fZoomY;
-        SendAutofilterPopupPosition(nCol, nRow); // Send the position of the autofilter popup.
-    }
-    tools::Rectangle aCellRect(bLOKActive ? aPos : OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
+    // Reverse the zoom factor from aPos and nSize[X|Y] before letting the
+    // autofilter window convert them to twips with no zoom information.
+    double fZoomX(mrViewData.GetZoomX());
+    double fZoomY(mrViewData.GetZoomY());
+    aPos.setX(aPos.getX() / fZoomX);
+    aPos.setY(aPos.getY() / fZoomY);
+    nSizeX = nSizeX / fZoomX;
+    nSizeY = nSizeY / fZoomY;
+    SendAutofilterPopupPosition(nCol, nRow); // Send the position of the autofilter popup.
+
+    tools::Rectangle aCellRect(aPos, Size(nSizeX, nSizeY));
 
     ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
     if (!pDBData)
@@ -1377,8 +1373,7 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
     Point aScrPos;
     Size aScrSize;
     getCellGeometry(aScrPos, aScrSize, mrViewData, nCol, nRow, eWhich);
-    bool bLOK = comphelper::COKit::isActive();
-    DPLaunchFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol-1, nRow, nTab), pDPObj);
+    DPLaunchFieldPopupMenu(aScrPos, aScrSize, ScAddress(nCol-1, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
@@ -1391,8 +1386,7 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
     Point aScrPos;
     Size aScrSize;
     getCellGeometry(aScrPos, aScrSize, mrViewData, nCol, nRow, eWhich);
-    bool bLOK = comphelper::COKit::isActive();
-    DPLaunchFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
+    DPLaunchFieldPopupMenu(aScrPos, aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::ShowFilterMenu(weld::Window* pParent, const tools::Rectangle& rCellRect, bool bLayoutRTL)
@@ -2176,7 +2170,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                 if (!bWasMouseCaptured && IsMouseCaptured())
                     ReleaseMouse();
 
-                const bool kitReadOnly = comphelper::COKit::isActive() && pViewSh->IsKitReadOnlyView();
+                const bool kitReadOnly = pViewSh->IsKitReadOnlyView();
                 if (kitReadOnly)
                     return; // Return as if the action was performed, so the flow is not affected.
 
@@ -2470,35 +2464,32 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             mrViewData.GetDispatcher().Execute( FID_FILL_AUTO, SfxCallMode::SLOT | SfxCallMode::RECORD );
 
-            if (comphelper::COKit::isActive())
-            {
-                // prepare AutoFill menu items for "Copy Cells" and "Fill Series"
-                ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-                boost::property_tree::ptree aMenu;
-                boost::property_tree::ptree aItemTree;
+            // prepare AutoFill menu items for "Copy Cells" and "Fill Series"
+            ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+            boost::property_tree::ptree aMenu;
+            boost::property_tree::ptree aItemTree;
 
-                aItemTree.put("text", "~Copy Cells");
-                aItemTree.put("type", "command");
-                aItemTree.put("command", ".uno:AutoFill?Copy:bool=true");
-                aItemTree.put("enabled", "true");
-                aMenu.push_back(std::make_pair("", aItemTree));
+            aItemTree.put("text", "~Copy Cells");
+            aItemTree.put("type", "command");
+            aItemTree.put("command", ".uno:AutoFill?Copy:bool=true");
+            aItemTree.put("enabled", "true");
+            aMenu.push_back(std::make_pair("", aItemTree));
 
-                aItemTree.put("text", "~Fill Series");
-                aItemTree.put("type", "command");
-                aItemTree.put("command", ".uno:AutoFill?Copy:bool=false");
-                aItemTree.put("enabled", "true");
-                aMenu.push_back(std::make_pair("", aItemTree));
-                aItemTree.clear();
+            aItemTree.put("text", "~Fill Series");
+            aItemTree.put("type", "command");
+            aItemTree.put("command", ".uno:AutoFill?Copy:bool=false");
+            aItemTree.put("enabled", "true");
+            aMenu.push_back(std::make_pair("", aItemTree));
+            aItemTree.clear();
 
-                boost::property_tree::ptree aRoot;
-                aRoot.add_child("menu", aMenu);
+            boost::property_tree::ptree aRoot;
+            aRoot.add_child("menu", aMenu);
 
-                std::stringstream aStream;
-                boost::property_tree::write_json(aStream, aRoot, true);
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aRoot, true);
 
-                pViewShell->viewCallback(COKitCallbackType::CONTEXT_MENU,
-                                                       OString(aStream.str()));
-            }
+            pViewShell->viewCallback(COKitCallbackType::CONTEXT_MENU,
+                                                   OString(aStream.str()));
         }
     }
     else if (mrViewData.GetFillMode() == ScFillMode::MATRIX)

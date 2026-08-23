@@ -9,17 +9,12 @@
 
 #pragma once
 
-inline constexpr OUString RID_SVXBMP_CELL_NONE = u"svx/res/pr01.png"_ustr;
 inline constexpr OUString RID_SVXBMP_CELL_NONE_32 = u"svx/res/border_cell_none_32.png"_ustr;
-inline constexpr OUString RID_SVXBMP_CELL_ALL = u"svx/res/pr02.png"_ustr;
 inline constexpr OUString RID_SVXBMP_CELL_ALL_32 = u"svx/res/border_cell_all_32.png"_ustr;
 inline constexpr OUString RID_SVXBMP_CELL_LR = u"svx/res/pr03.png"_ustr;
 inline constexpr OUString RID_SVXBMP_CELL_LR_32 = u"svx/res/border_cell_lr_32.png"_ustr;
-inline constexpr OUString RID_SVXBMP_CELL_TB = u"svx/res/pr04.png"_ustr;
 inline constexpr OUString RID_SVXBMP_CELL_TB_32 = u"svx/res/border_cell_tb_32.png"_ustr;
-inline constexpr OUString RID_SVXBMP_CELL_L  = u"svx/res/pr05.png"_ustr;
 inline constexpr OUString RID_SVXBMP_CELL_L_32 = u"svx/res/border_cell_l_32.png"_ustr;
-inline constexpr OUString RID_SVXBMP_CELL_DIAG = u"svx/res/pr06.png"_ustr;
 inline constexpr OUString RID_SVXBMP_CELL_DIAG_32 = u"svx/res/border_cell_diag_32.png"_ustr;
 inline constexpr OUString RID_SVXBMP_HOR_NONE = u"svx/res/pr07.png"_ustr;
 inline constexpr OUString RID_SVXBMP_HOR_OUTER = u"svx/res/pr08.png"_ustr;
@@ -37,15 +32,11 @@ inline constexpr OUString RID_SVXBMP_TABLE_OUTERH = u"svx/res/pr019.png"_ustr;
 inline constexpr OUString RID_SVXBMP_TABLE_ALL = u"svx/res/pr020.png"_ustr;
 inline constexpr OUString RID_SVXBMP_TABLE_OUTER2 = u"svx/res/pr021.png"_ustr;
 
-inline constexpr OUString RID_SVXBMP_SHADOWNONE = u"svx/res/sh01.png"_ustr;
 inline constexpr OUString RID_SVXBMP_SHADOWNONE_32 = u"svx/res/shadow_none_32.png"_ustr;
-inline constexpr OUString RID_SVXBMP_SHADOW_BOT_RIGHT = u"svx/res/sh02.png"_ustr;
 inline constexpr OUString RID_SVXBMP_SHADOW_BOT_RIGHT_32 = u"svx/res/shadow_bottom_right_32.png"_ustr;
 inline constexpr OUString RID_SVXBMP_SHADOW_BOT_LEFT = u"svx/res/sh03.png"_ustr;
 inline constexpr OUString RID_SVXBMP_SHADOW_BOT_LEFT_32 = u"svx/res/shadow_bottom_left_32.png"_ustr;
-inline constexpr OUString RID_SVXBMP_SHADOW_TOP_RIGHT = u"svx/res/sh04.png"_ustr;
 inline constexpr OUString RID_SVXBMP_SHADOW_TOP_RIGHT_32 = u"svx/res/shadow_top_right_32.png"_ustr;
-inline constexpr OUString RID_SVXBMP_SHADOW_TOP_LEFT = u"svx/res/sh05.png"_ustr;
 inline constexpr OUString RID_SVXBMP_SHADOW_TOP_LEFT_32 = u"svx/res/shadow_top_left_32.png"_ustr;
 
 inline constexpr OUString RID_SVXBMP_BOTTOMLOCK = u"svx/res/lo01.png"_ustr;

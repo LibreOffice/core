@@ -1314,7 +1314,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
         int nValue = SvxNumberingTypeTable::GetValue(i);
-        if (comphelper::COKit::isActive() && (nValue & SVX_NUM_BITMAP)) continue;
+        if (nValue & SVX_NUM_BITMAP) continue;
         m_xFmtLB->append(OUString::number(nValue), SvxNumberingTypeTable::GetString(i));
     }
 

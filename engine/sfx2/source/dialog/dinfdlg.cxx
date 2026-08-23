@@ -1182,7 +1182,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_sFileURL.clear();
     m_sRevealURL.clear();
     // determine location
-    if (comphelper::COKit::isActive() && !comphelper::COKit::canRevealInFileManager())
+    if (!comphelper::COKit::canRevealInFileManager())
     {
         // Online (and mobile): the path is a jail path that's meaningless to the
         // user, and the file name is already shown elsewhere in the dialog, so

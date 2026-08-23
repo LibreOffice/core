@@ -567,16 +567,12 @@ void LayoutMenu::ShowContextMenu(const Point& pPos)
     mxMenu->popup_at_rect(mxLayoutIconView.get(), aRect);
 }
 
-void LayoutMenu::MenuSelect(const OUString& rIdent)
+void LayoutMenu::MenuSelect(std::u16string_view rIdent)
 {
-    sLastItemIdent = rIdent;
-    if (sLastItemIdent.isEmpty())
+    if (rIdent.empty())
         return;
 
-    if (comphelper::COKit::isActive())
-        HandleMenuSelect(sLastItemIdent);
-    else
-        Application::PostUserEvent(LINK(this, LayoutMenu, MenuSelectAsyncHdl));
+    HandleMenuSelect(rIdent);
 }
 
 IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
@@ -584,11 +580,6 @@ IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
     if (bInContextMenuOperation)
         return;
     InvalidateContent();
-}
-
-IMPL_LINK_NOARG(LayoutMenu, MenuSelectAsyncHdl, void*, void)
-{
-    HandleMenuSelect(sLastItemIdent);
 }
 
 void LayoutMenu::HandleMenuSelect(std::u16string_view rIdent)

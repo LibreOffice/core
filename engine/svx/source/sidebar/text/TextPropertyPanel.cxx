@@ -68,8 +68,7 @@ TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const css::uno::Refe
 {
     bool isMobilePhone = false;
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::COKit::isActive() &&
-            pViewShell && pViewShell->isKitMobilePhone())
+    if (pViewShell && pViewShell->isKitMobilePhone())
         isMobilePhone = true;
     mxSpacingBar->set_visible(!isMobilePhone);
 }

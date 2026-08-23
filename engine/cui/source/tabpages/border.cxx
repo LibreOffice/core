@@ -338,28 +338,14 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
 
     if (aBorderImageIds.empty())
     {
-        if (comphelper::COKit::isActive())
-        {
-            aBorderImageIds.insert(aBorderImageIds.end(), {
-                RID_SVXBMP_CELL_NONE_32,
-                RID_SVXBMP_CELL_ALL_32,
-                RID_SVXBMP_CELL_LR_32,
-                RID_SVXBMP_CELL_TB_32,
-                RID_SVXBMP_CELL_L_32,
-                RID_SVXBMP_CELL_DIAG_32
-            });
-        }
-        else
-        {
-            aBorderImageIds.insert(aBorderImageIds.end(), {
-                RID_SVXBMP_CELL_NONE,
-                RID_SVXBMP_CELL_ALL,
-                RID_SVXBMP_CELL_LR,
-                RID_SVXBMP_CELL_TB,
-                RID_SVXBMP_CELL_L,
-                RID_SVXBMP_CELL_DIAG
-            });
-        }
+        aBorderImageIds.insert(aBorderImageIds.end(), {
+            RID_SVXBMP_CELL_NONE_32,
+            RID_SVXBMP_CELL_ALL_32,
+            RID_SVXBMP_CELL_LR_32,
+            RID_SVXBMP_CELL_TB_32,
+            RID_SVXBMP_CELL_L_32,
+            RID_SVXBMP_CELL_DIAG_32
+        });
         aBorderImageIds.insert(aBorderImageIds.end(), {
             RID_SVXBMP_HOR_NONE,
             RID_SVXBMP_HOR_OUTER,
@@ -385,26 +371,13 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     static std::vector<OUString> aShadowImageIds;
     if (aShadowImageIds.empty())
     {
-        if (comphelper::COKit::isActive())
-        {
-            aShadowImageIds.insert(aShadowImageIds.end(), {
-                RID_SVXBMP_SHADOWNONE_32,
-                RID_SVXBMP_SHADOW_BOT_RIGHT_32,
-                RID_SVXBMP_SHADOW_TOP_RIGHT_32,
-                RID_SVXBMP_SHADOW_BOT_LEFT_32,
-                RID_SVXBMP_SHADOW_TOP_LEFT_32
-            });
-        }
-        else
-        {
-            aShadowImageIds.insert(aShadowImageIds.end(), {
-                RID_SVXBMP_SHADOWNONE,
-                RID_SVXBMP_SHADOW_BOT_RIGHT,
-                RID_SVXBMP_SHADOW_TOP_RIGHT,
-                RID_SVXBMP_SHADOW_BOT_LEFT,
-                RID_SVXBMP_SHADOW_TOP_LEFT
-            });
-        }
+        aShadowImageIds.insert(aShadowImageIds.end(), {
+            RID_SVXBMP_SHADOWNONE_32,
+            RID_SVXBMP_SHADOW_BOT_RIGHT_32,
+            RID_SVXBMP_SHADOW_TOP_RIGHT_32,
+            RID_SVXBMP_SHADOW_BOT_LEFT_32,
+            RID_SVXBMP_SHADOW_TOP_LEFT_32
+        });
     }
 
     for (auto const & rImageId : aShadowImageIds)
