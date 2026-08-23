@@ -22,4 +22,9 @@
     <string name="storage_permission_required">Vajalik on andmeruumi kasutamise õigus</string>
     <string name="file_chromeos_read_only">Seda faili ei saa antud asukohta salvestada ja avame ta vaid lugemisõigustega. Salvestamiseks tõsta ta kausta, kus sul on vastavad õigused.</string>
     <string name="convert_odf_message">Selles dokumendis tundub leiduma vormindust või sisu, mida ei saa salvestada hetkel valitud tekstivormingus.</string>
+    <string name="all_files_access_title">Avatud ainult lugemisõigustega vaates</string>
+    <string name="all_files_access_grant">Luba ligipääs</string>
+    <string name="do_not_ask_again">Ära küsi enam uuesti</string>
+    <string name="failed_to_save_file">Muudatuste salvestamine faili ei õnnestunud</string>
+    <string name="all_files_access_message">Rakendus, mis seda faili jaga, ei lubanud sellesse muudatusi teha.\n\nAnna sellele rakendusele „Ligipääs kõikidele failidele“ ning sul on võimalik muuta faile nende algsetes asukohates.</string>
 </resources>
