@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Header style,exist in page-master object.
+ * Header style, exist in page-master object.
  ************************************************************************/
 #include <xfilter/xfheaderstyle.hxx>
 #include <xfilter/xfbgimage.hxx>

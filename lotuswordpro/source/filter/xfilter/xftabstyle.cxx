@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Tab style for paragraph.include tab offset and tab char properties.
+ * Tab style for paragraph. Include tab offset and tab char properties.
  ************************************************************************/
 #include "xftabstyle.hxx"
 #include <xfilter/ixfattrlist.hxx>

@@ -549,7 +549,7 @@ bool LwpPara::operator< (LwpPara const & Other)
 }
 
 /**
-* @descr:  If the two layouts in the same para, compare which layout is earlied according to frib order
+* @descr:  If the two layouts are in the same para, compare which layout is earlier according to frib order
 *
 */
 bool LwpPara::ComparePagePosition(LwpVirtualLayout const * pPreLayout, LwpVirtualLayout const * pNextLayout)
