@@ -917,7 +917,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
                                                                 bool                       bAllowDeep    ,
                                                                 OUString&               rLastChance   )
 {
-    // reset it everytimes, so the outside code can distinguish between
+    // reset it every time, so the outside code can distinguish between
     // a set and a not set value.
     rLastChance.clear();
 

@@ -821,7 +821,7 @@ class FilterCache : public cppu::BaseMutex
 
         /** @short  specify, which save operation is necessary for the specified item.
 
-            @desrc  If an item of this cache will be added/removed or modified it will
+            @descr  If an item of this cache will be added/removed or modified it will
                     be changed inside memory only first. But we save its name inside a special
                     list of changed items. If at least the method flush() is called, we use
                     this list to check if the item was changed/added or removed. This method
