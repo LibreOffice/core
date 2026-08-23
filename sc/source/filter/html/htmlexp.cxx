@@ -1223,7 +1223,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
 
         //create the element holding the contents
         //this is a bit naive, since it doesn't separate
-        //lines into html breaklines yet
+        //lines into html line breaks yet
         TAG_ON(OOO_STRING_SVTOOLS_HTML_comment2);
         OUT_STR( pNote->GetText() );
         TAG_OFF(OOO_STRING_SVTOOLS_HTML_comment2);

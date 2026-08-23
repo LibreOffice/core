@@ -106,28 +106,28 @@ ConnectionModel::ConnectionModel() :
 
 WebPrModel& ConnectionModel::createWebPr()
 {
-    OSL_ENSURE( !mxWebPr, "ConnectionModel::createWebPr - multiple call" );
+    OSL_ENSURE( !mxWebPr, "ConnectionModel::createWebPr - multiple calls" );
     mxWebPr.reset( new WebPrModel );
     return *mxWebPr;
 }
 
 TextPrModel& ConnectionModel::createTextPr()
 {
-    OSL_ENSURE(!mxTextPr, "ConnectionModel::createTextPr - multiple call");
+    OSL_ENSURE(!mxTextPr, "ConnectionModel::createTextPr - multiple calls");
     mxTextPr.reset(new TextPrModel);
     return *mxTextPr;
 }
 
 ParametersModel& ConnectionModel::createParameters()
 {
-    OSL_ENSURE(!mxParameters, "ConnectionModel::createParameters - multiple call");
+    OSL_ENSURE(!mxParameters, "ConnectionModel::createParameters - multiple calls");
     mxParameters.reset(new ParametersModel);
     return *mxParameters;
 }
 
 ExtensionListModel& ConnectionModel::createExtensionList()
 {
-    OSL_ENSURE(!mxExtensionList, "ConnectionModel::createExtensionList - multiple call");
+    OSL_ENSURE(!mxExtensionList, "ConnectionModel::createExtensionList - multiple calls");
     mxExtensionList.reset(new ExtensionListModel);
     return *mxExtensionList;
 }
@@ -472,7 +472,7 @@ void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection
     sal_Int32 nConnId = rxConnection->getConnectionId();
     if( nConnId > 0 )
     {
-        OSL_ENSURE( !maConnectionsById.has( nConnId ), "ConnectionsBuffer::insertConnectionToMap - multiple connection identifier" );
+        OSL_ENSURE( !maConnectionsById.has( nConnId ), "ConnectionsBuffer::insertConnectionToMap - multiple connection identifiers" );
         maConnectionsById[ nConnId ] = rxConnection;
         mnUnusedId = ::std::max< sal_Int32 >( mnUnusedId, nConnId + 1 );
     }

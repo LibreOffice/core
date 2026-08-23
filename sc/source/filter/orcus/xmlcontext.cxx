@@ -91,7 +91,7 @@ void populateTree(weld::TreeView& rTreeCtrl, orcus::xml_structure_tree::walker& 
 
     if (bRepeat)
     {
-        // Recurring elements use different icon.
+        // Recurring elements use different icons.
         rTreeCtrl.set_image(*xEntry, rParam.maImgElementRepeat, -1);
     }
 
