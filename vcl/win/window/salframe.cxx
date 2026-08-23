@@ -3602,7 +3602,7 @@ static bool HandleAltNumPadCode(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             if (state.wait_WM_CHAR && MapVirtualKeyW(LOBYTE(keyFlags), MAPVK_VSC_TO_VK) == VK_MENU)
             {
                 state.clear();
-                // Ignore it - it is synthetized (incorrect, truncated) character from system
+                // Ignore it - it is synthesized (incorrect, truncated) character from system
                 return true;
             }
 

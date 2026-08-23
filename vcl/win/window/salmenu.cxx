@@ -120,7 +120,7 @@ bool WinSalMenu::VisibleMenuBar()
     // The Win32 implementation never shows a native
     // menubar. Thus, native menus are only visible
     // when the menu is merged with an OLE container.
-    // The reason are missing tooltips, ownerdraw
+    // The reasons are missing tooltips, ownerdraw
     // issues and accessibility which are better supported
     // by VCL menus.
     // Nevertheless, the native menus are always created
