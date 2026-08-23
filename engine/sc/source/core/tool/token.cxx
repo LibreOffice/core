@@ -693,10 +693,12 @@ bool ScMatrixToken::operator==( const FormulaToken& r ) const
         && pMatrix == static_cast<const ScMatrixToken&>(r).GetMatrix();
 }
 
-ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
-    ScMatrixToken(rMat.mpMat)
+ScMatrixRangeToken::ScMatrixRangeToken(sc::RangeMatrix const& rMatrix, bool bReference)
+    : ScMatrixToken(rMatrix.mpMat)
+    , mbReference(bReference)
 {
-    maRef.InitRange(rMat.mnCol1, rMat.mnRow1, rMat.mnTab1, rMat.mnCol2, rMat.mnRow2, rMat.mnTab2);
+    maRef.InitRange(rMatrix.mnCol1, rMatrix.mnRow1, rMatrix.mnTab1, rMatrix.mnCol2,
+                    rMatrix.mnRow2, rMatrix.mnTab2);
 }
 
 ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRangeToken& ) = default;

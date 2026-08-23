@@ -428,6 +428,50 @@ CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorInExpression)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeKeepsItsPlaceThroughAnOperator)
+{
+    // An operator over a # spilled range gives one value per cell, so the result sits at
+    // that range.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(4, 0, 0), 100.0);
+    m_pDoc->SetValue(ScAddress(4, 1, 0), 200.0);
+    m_pDoc->SetValue(ScAddress(4, 2, 0), 400.0);
+
+    // Master at A1 spills =E1:E3 into A1:A3.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 2, aMark, u"=E1:E3"_ustr);
+
+    // Each cell takes the percent of the spilled value in its own row.
+    m_pDoc->SetString(ScAddress(6, 0, 0), u"=A1#%"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
+    m_pDoc->SetString(ScAddress(6, 1, 0), u"=A1#%"_ustr);
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(6, 1, 0)));
+
+    // One row past the spill range there is no value to line up with.
+    m_pDoc->SetString(ScAddress(6, 3, 0), u"=A1#%"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(6, 3, 0)));
+
+    // SUM takes an array, so it gets all the percents, not just one.
+    m_pDoc->SetString(ScAddress(7, 0, 0), u"=SUM(A1#%)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(7, 0, 0)));
+
+    // An explicit @ takes the first percent, not the row's, as they are not the cells' own values.
+    m_pDoc->SetString(ScAddress(9, 1, 0), u"=@(A1#%)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(9, 1, 0)));
+
+    // The spill range references its cells. The percents are the operator's own values, so
+    // they sit at that range without referencing it.
+    m_pDoc->SetString(ScAddress(8, 0, 0), u"=ISREF(A1#)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(8, 0, 0)));
+    m_pDoc->SetString(ScAddress(8, 1, 0), u"=ISREF(A1#%)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(8, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeAsReferenceOperatorOperand)
 {
     // The reference operators take a # spilled range as the range it stands for. They pop it
