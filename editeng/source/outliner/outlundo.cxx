@@ -124,7 +124,7 @@ void OutlinerUndoCheckPara::Redo()
 OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
     : EditUndo( _nId, nullptr ), pOutliner(pOut), nCount(0)
 {
-    DBG_ASSERT(pOut,"Undo:No Outliner");
+    DBG_ASSERT(pOut,"Undo: No Outliner");
 }
 
 OLUndoExpand::~OLUndoExpand()
@@ -133,7 +133,7 @@ OLUndoExpand::~OLUndoExpand()
 
 void OLUndoExpand::Restore( bool bUndo )
 {
-    assert(pOutliner && "Undo:No Outliner");
+    assert(pOutliner && "Undo: No Outliner");
     DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
     Paragraph* pPara;
 
