@@ -31,7 +31,7 @@ TryLaterQueryBox::TryLaterQueryBox(weld::Window* pParent, const std::locale& rRe
     m_xQueryBox->set_title(Translate::get(STR_TRYLATER_TITLE, rResLocale));
 
     // Currently we don't have the retry/save-as functionality implemented for cases when file is locked.
-    // So threat them mutually exclusive with overwrite here. TODO/LATER: just add the overwrite option
+    // So treat them mutually exclusive with overwrite here. TODO/LATER: just add the overwrite option
     // as third option when retrying and saving with another name would be possible along with overwriting
     if (bEnableOverride)
     {

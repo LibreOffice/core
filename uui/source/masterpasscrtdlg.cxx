@@ -57,7 +57,7 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl, weld::Button&, void)
         return;
     }
 
-    // compare both passwords and show message box if there are not equal!!
+    // compare both passwords and show message box if they are not equal!!
     if (m_xEDMasterPasswordCrt->get_text() == m_xEDMasterPasswordRepeat->get_text())
         m_xDialog->response(RET_OK);
     else
