@@ -407,7 +407,7 @@ PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(basegfx::B2DPolygon aPolygon,
     , maStrokeAttribute(std::move(aStrokeAttribute))
     , maBufferedRange()
 {
-    // MM01: keep these - these are no curve-decompposers but just checks
+    // MM01: keep these - these are no curve-decomposers but just checks
     // simplify curve segments: moved here to not need to use it
     // at VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect
     maPolygon = basegfx::utils::simplifyCurveSegments(maPolygon);
@@ -419,7 +419,7 @@ PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(basegfx::B2DPolygon aPolygon,
     , maLineAttribute(rLineAttribute)
     , maBufferedRange()
 {
-    // MM01: keep these - these are no curve-decompposers but just checks
+    // MM01: keep these - these are no curve-decomposers but just checks
     // simplify curve segments: moved here to not need to use it
     // at VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect
     maPolygon = basegfx::utils::simplifyCurveSegments(maPolygon);

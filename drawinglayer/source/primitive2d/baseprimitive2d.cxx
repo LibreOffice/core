@@ -40,7 +40,7 @@ bool BasePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
 
 namespace
 {
-// Visitor class to get the B2D range from a tree of Primitive2DReference's
+// Visitor class to get the B2D range from a tree of Primitive2DReferences
 //
 class B2DRangeVisitor : public Primitive2DDecompositionVisitor
 {
