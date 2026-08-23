@@ -2861,9 +2861,12 @@ export class CommentSection extends CanvasSectionObject {
 	public setViewResolved (state: boolean): void {
 		this.sectionProperties.showResolved = state;
 
+		// A resolved comment is shown only while comments as a whole are shown.
+		const showResolvedComments = state && this.sectionProperties.show !== false;
+
 		for (var idx = 0; idx < this.sectionProperties.commentList.length;idx++) {
 			if (this.sectionProperties.commentList[idx].sectionProperties.data.resolved === 'true') {
-				if (state==false) {
+				if (!showResolvedComments) {
 					if (this.sectionProperties.selectedComment == this.sectionProperties.commentList[idx]) {
 						this.unselect();
 					}
