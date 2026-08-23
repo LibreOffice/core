@@ -417,10 +417,8 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     }
 
     public static showPopUpForView(viewId: number) {
-        if (OtherViewCellCursorSection.doesViewCursorExist(viewId)) {
-            const section = OtherViewCellCursorSection.getViewCursorSection(viewId);
-            section.showUsernamePopUp();
-        }
+        const section = OtherViewCellCursorSection.getViewCursorSection(viewId);
+        if (section) section.showUsernamePopUp();
     }
 
     public static checkHover(canvasPosition: Array<number>) {
