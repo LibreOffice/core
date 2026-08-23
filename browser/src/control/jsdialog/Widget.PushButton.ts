@@ -186,7 +186,8 @@ JSDialog.pushButton = function (
 		builder,
 	);
 
-	const tooltipText = (data.aria && data.aria.label) || data.text;
+	const tooltipText =
+		data.tooltip || (data.aria && data.aria.label) || data.text;
 	if (!pushbuttonText && tooltipText) {
 		pushbutton.setAttribute('data-cooltip', builder._cleanText(tooltipText));
 		window.L.control.attachTooltipEventListener(pushbutton, builder.map);
