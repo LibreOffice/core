@@ -36,7 +36,7 @@ Bitmap BitmapSeparableUnsharpenFilter::execute(Bitmap const& rBitmap) const
 
     BitmapColor aColor, aColorBlur;
 
-    // For all pixels in original image subtract pixels values from blurred image
+    // For all pixels in original image subtract pixel values from blurred image
     for (sal_Int32 y = 0; y < nHeight; y++)
     {
         Scanline pScanline = pWriteAcc->GetScanline(y);

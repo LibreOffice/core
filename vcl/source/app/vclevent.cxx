@@ -40,7 +40,7 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
         while ( aIter != aEnd && (!xWin || xWin->mpWindowImpl) )
         {
             Link<VclSimpleEvent&,void> &rLink = *aIter;
-            // check this hasn't been removed in some re-enterancy scenario fdo#47368
+            // check this hasn't been removed in some re-entrancy scenario fdo#47368
             // But only check if the list actually has been changed.
             if( !m_updated || std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( rEvent );

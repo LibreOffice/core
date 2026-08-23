@@ -517,7 +517,7 @@ static void ImplShowHelpWindow(vcl::Window* pParent, HelpWinStyle eHelpWinStyle,
                 if( pHelpWin->IsVisible() )
                     pHelpWin->Invalidate();
             }
-            pHelpWin->ResetHideTimer(); // It is shown anew, so prolongate the hide timeout
+            pHelpWin->ResetHideTimer(); // It is shown anew, so prolong the hide timeout
             return;
         }
 
