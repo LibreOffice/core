@@ -154,9 +154,7 @@ def check_title_labels(root):
             if len(word) and word[0].islower() and (word not in IGNORED_WORDS) and not first:
                 context = title.attrib['context']
                 # exclude a couple of whole sentences
-                if sys.argv[1] == "cui/uiconfig/ui/optpathspage.ui" and context == "optpathspage|label1":
-                    pass
-                elif sys.argv[1] == "dbaccess/uiconfig/ui/password.ui" and context == "password|label1":
+                if sys.argv[1] == "dbaccess/uiconfig/ui/password.ui" and context == "password|label1":
                     pass
                 elif sys.argv[1] == "sc/uiconfig/scalc/ui/datastreams.ui" and context == "datastreams|label4":
                     pass

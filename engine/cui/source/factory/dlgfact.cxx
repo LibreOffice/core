@@ -60,7 +60,6 @@
 #include <connect.hxx>
 #include <dbregister.hxx>
 #include <cuioptgenrl.hxx>
-#include <optasian.hxx>
 #include <insdlg.hxx>
 #include <pastedlg.hxx>
 #include <linkdlg.hxx>
@@ -1256,8 +1255,6 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
             return SvxNumberFormatTabPage::GetRanges;
         case RID_SVXPAGE_PAGE :
             return SvxPageDescPage::GetRanges;
-        case RID_SVXPAGE_ASIAN_LAYOUT:
-            return SvxAsianLayoutPage::GetRanges;
         case RID_SVXPAGE_TEXTCOLUMNS:
             return SvxTextColumnsPage::GetRanges;
         default:

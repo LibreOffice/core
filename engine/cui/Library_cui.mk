@@ -157,39 +157,18 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/factory/cuiresmgr \
     cui/source/factory/dlgfact \
     cui/source/factory/init \
-    cui/source/options/certpath \
-    cui/source/options/cfgchart \
-    cui/source/options/connpoolconfig \
-    cui/source/options/connpooloptions \
     cui/source/options/connpoolsettings \
     cui/source/options/cuisrchdlg \
     cui/source/options/dbregister \
     cui/source/options/dbregisterednamesconfig \
     cui/source/options/dbregistersettings \
     cui/source/options/doclinkdialog \
-    cui/source/options/fontsubs \
-    cui/source/options/optaccessibility \
-    cui/source/options/optasian \
-    $(call gb_Helper_optional,SCRIPTING, \
-        cui/source/options/optbasic) \
-    cui/source/options/optchart \
-    cui/source/options/optctl \
     cui/source/options/optdict \
-    cui/source/options/optfltr \
-    cui/source/options/optgdlg \
     cui/source/options/optgenrl \
-    cui/source/options/opthtml \
-    cui/source/options/optlanguagetool \
-    cui/source/options/optdeepl \
-    cui/source/options/optinet2 \
     cui/source/options/optjsearch \
     cui/source/options/optlingu \
-    cui/source/options/optpath \
-    cui/source/options/appearance \
-    cui/source/options/sdbcdriverenum \
     cui/source/options/securityoptions \
     cui/source/options/tsaurls \
-    cui/source/options/webconninfo \
     cui/source/tabpages/align \
     cui/source/tabpages/autocdlg \
     cui/source/tabpages/backgrnd \

@@ -166,8 +166,6 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
             .GlobalNamespace())
         || (fdc.Function("RemoveDdeTopic").Class("SfxApplication")
             .GlobalNamespace())
-        || (fdc.Function("UpdateSkiaStatus").Class("OfaViewTabPage")
-            .GlobalNamespace())
         || (fdc.Function("ReleaseData").Class("ScannerManager")
             .GlobalNamespace()))
     {
