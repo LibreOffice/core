@@ -653,7 +653,6 @@ void collectUIInformation(const OUString& rDeckId)
 
 }
 
-bool SidebarController::IsDocked() const { return !mpParentWindow->IsFloatingMode(); }
 
 void SidebarController::OpenThenToggleDeck (
     const OUString& rsDeckId)
@@ -1144,17 +1143,7 @@ void SidebarController::ConnectMenuActivateHandlers(weld::Menu& rMainMenu, weld:
 
 IMPL_LINK(SidebarController, OnMenuItemSelected, const OUString&, rCurItemId, void)
 {
-    if (rCurItemId == "unlocktaskpanel")
-    {
-        mpParentWindow->SetFloatingMode(true);
-        if (mpParentWindow->IsFloatingMode())
-            mpParentWindow->ToTop(ToTopFlags::GrabFocusOnly);
-    }
-    else if (rCurItemId == "locktaskpanel")
-    {
-        mpParentWindow->SetFloatingMode(false);
-    }
-    else if (rCurItemId == "hidesidebar")
+    if (rCurItemId == "hidesidebar")
     {
         if (!comphelper::COKit::isActive())
         {

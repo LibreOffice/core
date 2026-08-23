@@ -374,20 +374,6 @@ void TabBar::UpdateMenus()
         ++nIndex;
     }
 
-    bool bHideLock = true;
-    bool bHideUnLock = true;
-    // COKit doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
-    if (!comphelper::COKit::isActive())
-    {
-        // Add entry for docking or un-docking the tool panel.
-        if (!mrParentSidebarController.IsDocked())
-            bHideLock = false;
-        else
-            bHideUnLock = false;
-    }
-    mxMainMenu->set_visible(u"locktaskpanel"_ustr, !bHideLock);
-    mxMainMenu->set_visible(u"unlocktaskpanel"_ustr, !bHideUnLock);
-
     // No Restore or Customize options for LoKit.
     mxMainMenu->set_visible(u"customization"_ustr, !comphelper::COKit::isActive());
 }

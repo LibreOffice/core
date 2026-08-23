@@ -18,24 +18,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="locktaskpanel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="tabbar|locktaskpanel">Dock</property>
-        <property name="use-underline">True</property>
-        <accelerator key="F10" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="unlocktaskpanel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="tabbar|unlocktaskpanel">Undock</property>
-        <property name="use-underline">True</property>
-        <accelerator key="F10" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="hidesidebar">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
