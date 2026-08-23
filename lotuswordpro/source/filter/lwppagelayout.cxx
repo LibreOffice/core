@@ -720,7 +720,7 @@ bool LwpPageLayout::operator<(LwpPageLayout& Other)
     {
         if (pThisPara == pOtherPara)
         {
-            //If the two layouts in the same para, compare which layout is earlied according to frib order
+            //If the two layouts in the same para, compare which layout is earlier according to frib order
             return pThisPara->ComparePagePosition(this, &Other);
         }
         else

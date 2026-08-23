@@ -131,7 +131,7 @@ void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
 }
 
 /**
- * @descr  Get foonote object
+ * @descr  Get footnote object
  */
 LwpFootnote* LwpFribFootnote::GetFootnote()
 {
@@ -148,7 +148,7 @@ LwpFootnote::LwpFootnote(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
 LwpFootnote::~LwpFootnote() {}
 
 /**
- * @descr  Read foonote object
+ * @descr  Read footnote object
  */
 void LwpFootnote::Read()
 {
