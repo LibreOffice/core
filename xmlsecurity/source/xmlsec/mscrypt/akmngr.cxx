@@ -107,7 +107,7 @@ xmlSecKeysMngrPtr MSCryptoAppliedKeysMngrCreate()
      * Set certificate database to X509 key data store
      */
     /*-
-     * At present, MS Crypto engine do not provide a way to setup a cert store.
+     * At present, MS Crypto engine does not provide a way to set up a cert store.
      */
 
     /*-

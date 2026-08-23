@@ -921,7 +921,7 @@ void XSecController::UpdateSignatureInformation(sal_Int32 const nSecurityId,
     std::vector<SignatureInformation::X509Data> && rDatas)
 {
     int const nIndex = findSignatureInfor(nSecurityId);
-    assert(nIndex != -1); // nothing should touch this between parsing and verify
+    assert(nIndex != -1); // nothing should touch this between parsing and verification
     m_vInternalSignatureInformations[nIndex].signatureInfor.X509Datas = std::move(rDatas);
 }
 

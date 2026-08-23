@@ -38,7 +38,7 @@ void SignatureVerifierImpl::notifyResultListener() const
 /****** SignatureVerifierImpl/notifyResultListener ***************************
  *
  *   NAME
- *  notifyResultListener -- notifies the listener about the verify result.
+ *  notifyResultListener -- notifies the listener about the verification result.
  ******************************************************************************/
 {
     css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >
