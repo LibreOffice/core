@@ -5351,23 +5351,6 @@ SfxVoidItem AutoCorrectDlg SID_AUTO_CORRECT_DLG
     GroupId = SfxGroupId::Options;
 ]
 
-SfxVoidItem OptionsTreeDialog SID_OPTIONS_TREEDIALOG
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
 SfxVoidItem TerminateInplaceActivation SID_TERMINATE_INPLACEACTIVATION
 ()
 [

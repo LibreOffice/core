@@ -1012,15 +1012,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             //!! SwTextShell got destroyed meanwhile.)
             SfxViewFrame& rViewFrame = GetView().GetViewFrame();
 
-            if (aNewLangText == "*")
-            {
-                // open the dialog "Tools/Options/Languages and Locales - General"
-                // to set the documents default language
-                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(GetView().GetFrameWeld(), SID_LANGUAGE_OPTIONS));
-                pDlg->Execute();
-            }
-            else
             {
                 //!! We have to use StartAction / EndAction bracketing in
                 //!! order to prevent possible destruction of the SwTextShell

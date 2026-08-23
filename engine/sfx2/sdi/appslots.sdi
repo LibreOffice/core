@@ -310,10 +310,6 @@ shell SfxApplication
         ExecMethod = OfaExec_Impl ;
         StateMethod = OfaState_Impl;
     ]
-    SID_OPTIONS_TREEDIALOG
-    [
-        ExecMethod = OfaExec_Impl ;
-    ]
     SID_MORE_DICTIONARIES
     [
         ExecMethod = OfaExec_Impl ;

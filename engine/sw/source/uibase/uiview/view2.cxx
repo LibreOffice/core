@@ -3146,17 +3146,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                 std::unique_ptr<weld::MessageDialog> xWarning(xBuilder->weld_message_dialog(u"WarnDataSourceDialog"_ustr));
                 OUString sTmp(xWarning->get_primary_text());
                 xWarning->set_primary_text(sTmp.replaceFirst("%1", sSource));
-                if (RET_OK == xWarning->run())
-                {
-                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    VclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_OPTIONS_DATABASES ));
-                    pDlg->StartExecuteAsync(
-                        [pDlg] (sal_Int32 /*nResult*/)->void
-                        {
-                            pDlg->disposeOnce();
-                        }
-                    );
-                }
+                xWarning->run();
                 return ;
             }
         }

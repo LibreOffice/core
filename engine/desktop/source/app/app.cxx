@@ -2040,34 +2040,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 pD->doShutdown();
         }
         break;
-    case ApplicationEvent::Type::ShowDialog:
-        // This is only used on macOS, and only for About or Preferences.
-        // Ignore all errors here. It's clicking a menu entry only ...
-        // The user will try it again, in case nothing happens .-)
-        try
-        {
-            const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-
-            Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
-
-            Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
-            css::util::URL aCommand;
-            if( rAppEvent.GetStringData() == "PREFERENCES" )
-                aCommand.Complete = u".uno:OptionsTreeDialog"_ustr;
-            if( !aCommand.Complete.isEmpty() )
-            {
-                xParser->parseStrict(aCommand);
-
-                css::uno::Reference< css::frame::XDispatch > xDispatch = xDesktop->queryDispatch(aCommand, OUString(), 0);
-                if (xDispatch.is())
-                    xDispatch->dispatch(aCommand, cpo::uno::Sequence< css::beans::PropertyValue >());
-            }
-        }
-        catch(const cpo::uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("desktop.app", "exception thrown by dialog");
-        }
-        break;
     case ApplicationEvent::Type::Unaccept:
         // try to remove corresponding acceptor
         destroyAcceptor(rAppEvent.GetStringData());

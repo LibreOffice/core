@@ -246,11 +246,16 @@ void AccessibilityIssue::gotoIssue() const
 
 bool AccessibilityIssue::canQuickFixIssue() const
 {
+    // A document wide missing language can only be set in the application
+    // settings, which the quick fix cannot reach; a missing language on a
+    // paragraph style is still fixable through the style dialog.
+    if (m_eIssueObject == IssueObject::LANGUAGE_NOT_SET)
+        return !m_sObjectID.isEmpty();
+
     return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE
            || m_eIssueObject == IssueObject::SHAPE || m_eIssueObject == IssueObject::FORM
            || m_eIssueObject == IssueObject::DOCUMENT_TITLE
            || m_eIssueObject == IssueObject::DOCUMENT_BACKGROUND
-           || m_eIssueObject == IssueObject::LANGUAGE_NOT_SET
            || m_eIssueObject == IssueObject::HYPERLINKFLY
            || m_eIssueObject == IssueObject::HYPERLINKTEXT;
 }
@@ -438,25 +443,13 @@ void AccessibilityIssue::quickFixIssue() const
         {
             uno::Reference<frame::XModel> xModel(pShell->GetModel(), uno::UNO_QUERY_THROW);
 
-            if (TempIssueObject.m_sObjectID.isEmpty())
-            {
-                // open the dialog "Tools/Options/Languages and Locales - General"
-                cpo::uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-                    u"Language"_ustr, u"*"_ustr) };
+            cpo::uno::Sequence<beans::PropertyValue> aArgs{
+                comphelper::makePropertyValue(u"Param"_ustr, TempIssueObject.m_sObjectID),
+                comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
+            };
 
-                comphelper::dispatchCommand(u".uno:LanguageStatus"_ustr,
-                                            xModel->getCurrentController()->getFrame(), aArgs);
-            }
-            else
-            {
-                cpo::uno::Sequence<beans::PropertyValue> aArgs{
-                    comphelper::makePropertyValue(u"Param"_ustr, TempIssueObject.m_sObjectID),
-                    comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
-                };
-
-                comphelper::dispatchCommand(u".uno:EditStyleFont"_ustr,
-                                            xModel->getCurrentController()->getFrame(), aArgs);
-            }
+            comphelper::dispatchCommand(u".uno:EditStyleFont"_ustr,
+                                        xModel->getCurrentController()->getFrame(), aArgs);
         }
         break;
         default:

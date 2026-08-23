@@ -206,35 +206,6 @@ namespace
             TOOLS_INFO_EXCEPTION( "sfx.appl", "trying to load bibliography database");
         }
     }
-    void lcl_disableActiveEmbeddedObjects(const SfxObjectShell* pObjSh)
-    {
-        if (!pObjSh)
-            return;
-
-        comphelper::EmbeddedObjectContainer& rContainer = pObjSh->getEmbeddedObjectContainer();
-        if (!rContainer.HasEmbeddedObjects())
-            return;
-
-        const cpo::uno::Sequence<OUString> aNames = rContainer.GetObjectNames();
-        for (const auto& rName : aNames)
-        {
-            uno::Reference<embed::XEmbeddedObject> xEmbeddedObj
-                = rContainer.GetEmbeddedObject(rName);
-            if (!xEmbeddedObj.is())
-                continue;
-
-            try
-            {
-                if (xEmbeddedObj->getCurrentState() != embed::EmbedStates::LOADED)
-                {
-                    xEmbeddedObj->changeState(embed::EmbedStates::LOADED);
-                }
-            }
-            catch (const cpo::uno::Exception&)
-            {
-            }
-        }
-    }
 }
 /// Find the correct location of the document (CREDITS.fodt, etc.), and return
 /// it in rURL if found.
@@ -1554,49 +1525,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
     {
-        case SID_OPTIONS_TREEDIALOG:
-        {
-            OUString sPageURL;
-            const SfxStringItem* pURLItem = rReq.GetArg(SID_OPTIONS_PAGEURL);
-            if ( pURLItem )
-                sPageURL = pURLItem->GetValue();
-
-            sal_uInt16 nPageID = 0;
-            const SfxUInt16Item* pIDItem = rReq.GetArg(SID_OPTIONS_PAGEID);
-            if (pIDItem)
-                nPageID = pIDItem->GetValue();
-
-            Reference <XFrame> xFrame(GetRequestFrame(rReq));
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            VclPtr<VclAbstractDialog> pDlg =
-                pFact->CreateFrameDialog(rReq.GetFrameWeld(), xFrame, rReq.GetSlot(), nPageID, sPageURL);
-            short nRet = pDlg->Execute();
-            pDlg.disposeAndClear();
-            SfxViewFrame* pView = SfxViewFrame::GetFirst();
-            bool bDisableActiveContent
-                    = officecfg::Office::Common::Security::Scripting::DisableActiveContent::get();
-
-            while ( pView )
-            {
-                if (nRet == RET_OK)
-                {
-                    SfxObjectShell* pObjSh = pView->GetObjectShell();
-                    if (pObjSh)
-                    {
-                        pObjSh->SetConfigOptionsChecked(false);
-
-                        // when active content is disabled via options dialog,
-                        // disable all current active embedded objects
-                        if (bDisableActiveContent)
-                            lcl_disableActiveEmbeddedObjects(pObjSh);
-                    }
-                }
-                pView->GetBindings().InvalidateAll(false);
-                pView = SfxViewFrame::GetNext( *pView );
-            }
-            break;
-        }
-
         case SID_OPTIONS_SECURITY:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

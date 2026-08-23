@@ -104,7 +104,6 @@ public:
     virtual ~A11yCheckIssuesPanel() override;
 
 private:
-    std::unique_ptr<weld::Button> m_xOptionsButton;
     std::array<std::unique_ptr<weld::Expander>, 2> m_xLevelExpanders;
     std::array<std::unique_ptr<weld::Box>, 2> mxAccessibilityBox;
     std::array<std::unique_ptr<AccessibilityCheckLevel>, 2> m_aLevelEntries;
@@ -116,7 +115,6 @@ private:
     void removeAllEntries();
     void populateIssues();
 
-    DECL_LINK(OptionsButtonClicked, weld::Button&, void);
     DECL_LINK(ExpandHdl, weld::Expander&, void);
     DECL_LINK(UpdateLinkButtonClicked, weld::LinkButton&, bool);
     DECL_LINK(PopulateIssuesHdl, void*, void);

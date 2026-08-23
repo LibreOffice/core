@@ -84,7 +84,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/dispatch/interceptionhelper \
     framework/source/dispatch/loaddispatcher \
     framework/source/dispatch/startmoduledispatcher \
-    framework/source/dispatch/windowcommanddispatch \
     framework/source/dispatch/dispatchdisabler \
     framework/source/dispatch/mailtodispatcher \
     framework/source/dispatch/popupmenudispatcher \

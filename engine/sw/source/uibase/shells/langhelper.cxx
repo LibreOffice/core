@@ -110,14 +110,6 @@ namespace SwLangHelper
         //!! SwTextShell got destroyed meanwhile.)
         SfxViewFrame& rViewFrame = rView.GetViewFrame();
 
-        if (aNewLangText == "*" )
-        {
-            // open the dialog "Tools/Options/Languages and Locales - General"
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( rView.GetFrameWeld(), SID_LANGUAGE_OPTIONS ));
-            pDlg->Execute();
-        }
-        else
         {
             // setting the new language...
             if (!aNewLangText.isEmpty())

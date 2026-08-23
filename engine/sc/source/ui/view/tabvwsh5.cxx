@@ -499,42 +499,6 @@ void ScTabViewShell::NotifyExpandRefsSkipped()
         ScResId(STR_REF_EXPAND_MSG),
         InfobarType::INFO,
         true);
-
-    if (pInfoBar)
-    {
-        weld::Button& rBtn = pInfoBar->addButton();
-        rBtn.set_label(ScResId(STR_REF_EXPAND_SETTINGS));
-        rBtn.connect_clicked(LINK(this, ScTabViewShell, InfoBarSettingsHandler));
-    }
 }
-
-IMPL_LINK_NOARG(ScTabViewShell, InfoBarSettingsHandler, weld::Button&, void)
-{
-    SfxDispatcher* pDisp = GetViewFrame().GetDispatcher();
-    if (!pDisp)
-        return;
-
-    // Open the options dialog at Calc - General. Run it synchronously so we
-    // can react once the user has confirmed or cancelled it. 10024 is the
-    // page id of that options page.
-    SfxStringItem aItem(SID_OPTIONS_TREEDIALOG, u"10024"_ustr);
-    pDisp->ExecuteList(SID_OPTIONS_TREEDIALOG, SfxCallMode::SYNCHRON, { &aItem });
-
-    ScModule* pScMod = ScModule::get();
-
-    // Only when the user actually turned automatic range extension on do we
-    // replay the insertion so the formula grows. Undo reverts the original
-    // insertion and redo reapplies it with the setting now active. This
-    // assumes the insertion that raised the warning is still the most recent
-    // undo action.
-    if (pScMod && pScMod->GetInputOptions().GetExpandRefs())
-    {
-        pDisp->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
-        pDisp->Execute(SID_REDO, SfxCallMode::SYNCHRON);
-    }
-
-    GetViewFrame().RemoveInfoBar(u"expand_refs_skipped");
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

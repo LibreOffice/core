@@ -23,7 +23,6 @@
 
 #include <dispatch/dispatchprovider.hxx>
 #include <dispatch/interceptionhelper.hxx>
-#include <dispatch/windowcommanddispatch.hxx>
 #include <loadenv/loadenv.hxx>
 #include <helper/oframes.hxx>
 #include <framework/framecontainer.hxx>
@@ -414,7 +413,6 @@ private:
     rtl::Reference< DispatchInformationProvider >                           m_xDispatchInfoHelper;
     rtl::Reference< TitleHelper >                                           m_xTitleHelper;
 
-    std::unique_ptr<WindowCommandDispatch>                                  m_pWindowCommandDispatch;
 
     typedef std::unordered_map<OUString, css::beans::Property> TPropInfoHash;
     TPropInfoHash m_lProps;
@@ -813,7 +811,6 @@ void XFrameImpl::initialize( const css::uno::Reference< css::awt::XWindow >& xWi
     // So superfluous messages are filtered to NULL :-)
     implts_startWindowListening();
 
-    m_pWindowCommandDispatch.reset(new WindowCommandDispatch(m_xContext, this));
 
     // Initialize title functionality
     m_xTitleHelper = new TitleHelper( m_xContext, xThis, nullptr );
@@ -2095,13 +2092,6 @@ void XFrameImpl::disposing()
     if (layoutMgr.is()) {
         disableLayoutManager(layoutMgr);
     }
-
-    std::unique_ptr<WindowCommandDispatch> disp;
-    {
-        SolarMutexGuard g;
-        std::swap(disp, m_pWindowCommandDispatch);
-    }
-    disp.reset();
 
     // Send message to all listeners and forget their references.
     css::lang::EventObject aEvent( xThis );

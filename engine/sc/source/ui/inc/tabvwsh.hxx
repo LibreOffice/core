@@ -231,7 +231,6 @@ private:
     DECL_LINK( FormControlActivated, LinkParamNone*, void );
     DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
     DECL_LINK( GoToRefErrorHdl, weld::Button&, void );
-    DECL_LINK( InfoBarSettingsHandler, weld::Button&, void );
 
 protected:
     virtual void    Activate(bool bMDI) override;
