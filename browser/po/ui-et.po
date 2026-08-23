@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-19 17:51+0000\n"
+"PO-Revision-Date: 2026-08-23 18:57+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/et/>\n"
@@ -531,7 +531,7 @@ msgstr "Tume kujundus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automaatne õigekirjakontroll"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -543,7 +543,7 @@ msgstr "Vaikimisi suum"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Sujuv kerimine"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -1217,7 +1217,7 @@ msgstr ""
 
 #: js/global.js:1956
 msgid "The document is being migrated to a new server. Retrying shortly..."
-msgstr ""
+msgstr "Dokument on tõstetud uude serverisse. Proovin õige pea uuesti…"
 
 #: js/global.js:1958
 msgid "Failed to get RouteToken from controller"
@@ -1225,11 +1225,11 @@ msgstr ""
 
 #: src/app/Debug.ts:163
 msgid "Debug Tools"
-msgstr ""
+msgstr "Silumis- ja veaotsingutarvikud"
 
 #: src/app/Debug.ts:168
 msgid "Ctrl+Shift+Alt+D to exit"
-msgstr ""
+msgstr "Väljumiseks klõpsa Ctrl+Shift+Alt+D"
 
 #: src/app/Debug.ts:1615
 msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
@@ -1395,27 +1395,27 @@ msgstr "Salvestatud"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Viimane muutja: %1, %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:199
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: algne versioon"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:203
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: praegune versioon"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:210
 msgid "Initial Version"
-msgstr ""
+msgstr "Algne versioon"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:214
 msgid "Current Version"
-msgstr ""
+msgstr "Praegune versioon"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "Veel %n"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Abiteave selle vea puhul"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
@@ -1484,7 +1484,7 @@ msgstr "Automaatne värvivalik"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:831
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(avaneb uuel vahekaardil)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -5130,9 +5130,8 @@ msgid "{0}, protected"
 msgstr ""
 
 #: src/control/Control.Tabs.js:674
-#, fuzzy
 msgid "Are you sure you want to delete sheet, {sheet}?"
-msgstr "Kas sa oled kindel, et soovid selle slaidi kustutada?"
+msgstr "Kas sa oled kindel, et soovid selle „{sheet}“ lehe kustutada?"
 
 #: src/control/Control.Tabs.js:685
 msgid "Rename sheet"
