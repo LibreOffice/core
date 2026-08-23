@@ -50,7 +50,7 @@ private:
     double mfDirection;
     TextEffectStyle2D meTextEffectStyle2D;
 
-    /** the last used object to view transformtion used from getDecomposition
+    /** the last used object to view transformation used from getDecomposition
         for decide buffering
      */
     basegfx::B2DHomMatrix maLastObjectToViewTransformation;

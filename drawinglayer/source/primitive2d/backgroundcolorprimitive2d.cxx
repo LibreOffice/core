@@ -41,7 +41,7 @@ namespace drawinglayer::primitive2d
             if(rViewInformation.getViewport().isEmpty())
                 return nullptr;
 
-            // create decompose geometry
+            // create decomposition geometry
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rViewInformation.getViewport()));
 
             if (getTransparency() <= 0.0)

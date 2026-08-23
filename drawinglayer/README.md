@@ -34,7 +34,7 @@ A stripped down version with extended comments:
      pProcessor2D->process(aSequence);
      pProcessor2D.reset();
 
-     // Obtain the bitmap that was rendered from the virtual device, to re-use
+     // Obtain the bitmap that was rendered from the virtual device, to reuse
      // it in the widget.
      aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
 
