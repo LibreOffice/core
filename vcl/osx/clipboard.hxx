@@ -112,7 +112,7 @@ public:
   virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
   virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-  /* Get a reference to the used pastboard.
+  /* Get a reference to the used pasteboard.
    */
   NSPasteboard* getPasteboard() const;
 
