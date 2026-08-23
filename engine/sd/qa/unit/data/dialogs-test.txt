@@ -66,9 +66,6 @@ modules/simpress/ui/customanimationproperties.ui
 modules/simpress/ui/customanimationeffecttab.ui
 modules/simpress/ui/customanimationtimingtab.ui
 modules/simpress/ui/customanimationtexttab.ui
-modules/simpress/ui/sdviewpage.ui
-modules/simpress/ui/prntopts.ui
-modules/simpress/ui/optimpressgeneralpage.ui
 modules/simpress/ui/interactionpage.ui
 modules/simpress/ui/definecustomslideshow.ui
 modules/simpress/ui/insertslides.ui

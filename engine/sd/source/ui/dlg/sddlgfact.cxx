@@ -37,8 +37,6 @@
 #include <tabtempl.hxx>
 #include <tpaction.hxx>
 #include <vectdlg.hxx>
-#include <tpoption.hxx>
-#include <prntopts.hxx>
 #include <masterlayoutdlg.hxx>
 #include <headerfooterdlg.hxx>
 #include "PhotoAlbumDialog.hxx"
@@ -373,27 +371,6 @@ public:
 VclPtr<AbstractSdVectorizeDlg>  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
 {
     return VclPtr<AbstractSdVectorizeDlg_Impl>::Create(pParent, rBmp, pDocShell);
-}
-
-// Factories for TabPages
-CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsContentsTabPageCreatorFunc()
-{
-    return SdTpOptionsContents::Create;
-}
-
-CreateTabPage SdAbstractDialogFactory_Impl::GetSdPrintOptionsTabPageCreatorFunc()
-{
-    return SdPrintOptions::Create;
-}
-
-CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsMiscTabPageCreatorFunc()
-{
-    return SdTpOptionsMisc::Create;
-}
-
-CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsSnapTabPageCreatorFunc()
-{
-    return SdTpOptionsSnap::Create;
 }
 
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument& rDoc, SdPage* pCurrentPage)

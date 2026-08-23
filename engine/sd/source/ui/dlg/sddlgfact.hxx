@@ -58,10 +58,6 @@ public:
                                                                         SdPage* pCurrentPage) override;
 
     // For TabPage
-    virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc() override;
-    virtual CreateTabPage               GetSdPrintOptionsTabPageCreatorFunc() override;
-    virtual CreateTabPage               GetSdOptionsMiscTabPageCreatorFunc() override;
-    virtual CreateTabPage               GetSdOptionsSnapTabPageCreatorFunc() override;
 
 };
 

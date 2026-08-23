@@ -153,7 +153,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/notebookbar_online \
 	sd/uiconfig/simpress/ui/noteschildwindow \
 	sd/uiconfig/simpress/ui/notespanelcontextmenu \
-	sd/uiconfig/simpress/ui/optimpressgeneralpage \
 	sd/uiconfig/simpress/ui/pagesfieldbox \
 	sd/uiconfig/simpress/ui/photoalbum \
 	sd/uiconfig/simpress/ui/pmimagespage \
@@ -163,11 +162,9 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/pmslidespage \
 	sd/uiconfig/simpress/ui/pmsummarypage \
 	sd/uiconfig/simpress/ui/presentationdialog \
-	sd/uiconfig/simpress/ui/prntopts \
 	sd/uiconfig/simpress/ui/remotedialog \
 	sd/uiconfig/simpress/ui/rotatemenu \
 	sd/uiconfig/simpress/ui/scalemenu \
-	sd/uiconfig/simpress/ui/sdviewpage \
 	sd/uiconfig/simpress/ui/sidebarslidebackground \
 	sd/uiconfig/simpress/ui/slidecontextmenu \
 	sd/uiconfig/simpress/ui/slidedesigndialog \

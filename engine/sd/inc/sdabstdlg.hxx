@@ -186,10 +186,6 @@ public:
                                                                         SdDrawDocument& rDoc,
                                                                         SdPage* pCurrentPage) = 0;
 
-    virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc() = 0;
-    virtual CreateTabPage               GetSdPrintOptionsTabPageCreatorFunc() = 0;
-    virtual CreateTabPage               GetSdOptionsMiscTabPageCreatorFunc() = 0;
-    virtual CreateTabPage               GetSdOptionsSnapTabPageCreatorFunc() = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument& rDoc) = 0;
 
