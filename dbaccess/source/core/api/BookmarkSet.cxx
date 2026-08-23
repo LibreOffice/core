@@ -85,7 +85,7 @@ void OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::
             updateColumn(i,xUpdRow,*aIter);
         }
         xUpd->insertRow();
-        // We must go away from the insert row when the insert is finish
+        // We must go away from the insert row when the insert is finished
         xUpd->moveToCurrentRow();
         (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
     }

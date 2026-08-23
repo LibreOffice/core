@@ -168,7 +168,7 @@ void OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQ
     aValues[aValues.getLength() - 1] = ')';
 
     aSql.append(aValues);
-    // now create end execute the prepared statement
+    // now create and execute the prepared statement
     {
         Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
         Reference< XParameters > xParameter(xPrep,UNO_QUERY);
@@ -288,7 +288,7 @@ void OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOri
         ::dbtools::throwSQLException(
             DBA_RES( RID_STR_NO_UPDATE_MISSING_CONDITION ), StandardSQLState::GENERAL_ERROR, *this );
 
-    // now create end execute the prepared statement
+    // now create and execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;

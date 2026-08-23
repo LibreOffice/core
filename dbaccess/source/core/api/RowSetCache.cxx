@@ -1390,7 +1390,7 @@ void ORowSetCache::moveToInsertRow(  )
     if(!m_aInsertRow->is())
         *m_aInsertRow = new ORowSetValueVector(m_xMetaData->getColumnCount());
 
-    // we don't unbound the bookmark column
+    // we don't unbind the bookmark column
     ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->begin()+1;
     ORowSetValueVector::Vector::const_iterator aEnd = (*m_aInsertRow)->end();
     for(sal_Int32 i = 1;aIter != aEnd;++aIter,++i)
@@ -1476,7 +1476,7 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
         *m_aInsertRow = new ORowSetValueVector(m_xMetaData->getColumnCount());
 
     (*(*m_aInsertRow)) = *(*_rOriginalRow);
-    // we don't unbound the bookmark column
+    // we don't unbind the bookmark column
     for(auto& rItem : **m_aInsertRow)
         rItem.setModified(false);
 }
@@ -1554,7 +1554,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
         OSL_ENSURE(pTableRefCommalist,"NO tables why!?");
         if(pTableRefCommalist && pTableRefCommalist->count() == 1)
         {
-            // we found only one element so it must some kind of join here
+            // we found only one element so it must be some kind of join here
             OSQLParseNode* pJoin = pTableRefCommalist->getByRule(::connectivity::OSQLParseNode::qualified_join);
             if(pJoin)
             { // we are only interested in qualified joins like RIGHT or LEFT
@@ -1601,7 +1601,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
 
 void ORowSetCache::clearInsertRow()
 {
-    // we don't unbound the bookmark column
+    // we don't unbind the bookmark column
     if ( m_aInsertRow != m_pInsertMatrix->end() && m_aInsertRow->is() )
     {
         ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->begin()+1;
