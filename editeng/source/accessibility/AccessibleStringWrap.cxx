@@ -43,7 +43,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangl
 
     mrFont.SetPhysFont(mrDev);
 
-    // #108900# Handle virtual position one-past-the end of the string
+    // #108900# Handle virtual position one-past-the-end of the string
     if( nIndex >= maText.getLength() )
     {
         // create a caret bounding rect that has the height of the

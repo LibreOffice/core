@@ -227,7 +227,7 @@ void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
 
     if( !mpEditSource )
     {
-        // going defunc
+        // going defunct
         UnSetState( AccessibleStateType::SHOWING );
         UnSetState( AccessibleStateType::VISIBLE );
         SetState( AccessibleStateType::INVALID );

@@ -33,7 +33,7 @@ bool isValidOUString(const OUString& rString)
 // candidate strings consisting of valid UTF-16 strings.
 // Underlying logic is implemented in i18npool and gets used in class HangulHanjaConversion in editeng.
 // Test is done in editeng (and not i18npool) tests to have access to a component context
-// that supplies the required service com.sun.star.linguistic2.ConversionDictionaryList .
+// that supplies the required service com.sun.star.linguistic2.ConversionDictionaryList.
 CPPUNIT_TEST_FIXTURE(CharacterConversionTest, testKoreanHangulHanjaCharacterConversion)
 {
     css::lang::Locale aKoreanLocale;
@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(CharacterConversionTest, testKoreanHangulHanjaCharacterConv
         css::i18n::TextConversionOption::CHARACTER_BY_CHARACTER
             | css::i18n::TextConversionOption::IGNORE_POST_POSITIONAL_WORD);
 
-    CPPUNIT_ASSERT_MESSAGE("Converter must returns character conversion candidates",
+    CPPUNIT_ASSERT_MESSAGE("Converter must return character conversion candidates",
                            aResult.Candidates.size() > 0);
 
     for (const OUString& rCandidate : aResult.Candidates)
