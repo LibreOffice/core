@@ -94,7 +94,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
         return nullptr;
 
     //iterate through the model to find the given xSeries
-    //the found parent indicates the charttype
+    //the found parent indicates the chart type
 
     //iterate through all coordinate systems
     uno::Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );

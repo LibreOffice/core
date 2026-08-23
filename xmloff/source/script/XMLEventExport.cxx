@@ -198,7 +198,7 @@ void XMLEventExport::ExportEvent(
     {
         if (! rExported)
         {
-            // OK, we have't yet exported the enclosing
+            // OK, we haven't yet exported the enclosing
             // element. So we do that now.
             rExported = true;
             StartElement(bUseWhitespace);

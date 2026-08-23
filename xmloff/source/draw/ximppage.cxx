@@ -187,7 +187,7 @@ void DrawAnnotationContext::endFastElement(sal_Int32)
 {
     if(mxCursor.is())
     {
-        // delete addition newline
+        // delete additional newline
         mxCursor->gotoEnd( false );
         mxCursor->goLeft( 1, true );
         mxCursor->setString( u""_ustr );
