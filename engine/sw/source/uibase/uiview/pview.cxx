@@ -162,6 +162,7 @@ public:
 SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView )
     : Window(pParent, WinBits(WB_CLIPCHILDREN))
     , mpViewShell(nullptr)
+    , mfScale(1.0)
     , mrView(rPView)
     , mbCalcScaleForPreviewLayout(true)
     , maPaintedPreviewDocRect(tools::Rectangle(0,0,0,0))
