@@ -201,7 +201,7 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
         xPropSet->setPropertyValue( gsIsAutoUpdate, Any(bTmp) );
     }
 
-    // tell the style about it's events (if applicable)
+    // tell the style about its events (if applicable)
     if( m_xEventContext.is() )
     {
         // set event supplier and release reference to context

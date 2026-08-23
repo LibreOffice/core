@@ -306,7 +306,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         XML_NOTES_CONFIGURATION,
         true, true);
 
-    // two element for footnote content
+    // two elements for footnote content
     if (bIsEndnote)
         return;
 

@@ -2221,7 +2221,7 @@ void XMLTextImportHelper::ConnectFrameChains(
     {
         if((*j) == rFrmName)
         {
-            // The previous frame must exist, because it existing than
+            // The previous frame must exist, because it existed when
             // inserting the entry
             rFrmPropSet->setPropertyValue(u"ChainPrevName"_ustr, Any(*i));
 
