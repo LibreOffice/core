@@ -170,7 +170,7 @@ public class OQueryDesign extends TestCase {
     } // finish method getTestEnvironment
 
     private XInitialization getUninitializedObj(TestParameters Param) throws Exception {
-        // creating an object which ist not initialized
+        // creating an object which is not initialized
 
         // get a model of a DataSource
         Object oDBC = null;

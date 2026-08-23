@@ -85,7 +85,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
 
     /**
      * Calls the method with the wrong indexes and with the correct indexes.
-     * Stores cutted text in the variable <code>pasteText</code>.
+     * Stores cut text in the variable <code>pasteText</code>.
      * Has OK status if exceptions were thrown for the wrong indexes,
      * if exception wasn't thrown for the correct indexes.
      */
@@ -145,7 +145,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
     /**
      * Calls the method with the wrong indexes and with the correct indexes.
      * Has OK status if exceptions were thrown for the wrong indexes,
-     * if exception wasn't thrown for the correct indexes and if cutted text was
+     * if exception wasn't thrown for the correct indexes and if cut text was
      * pasted.
      * The following method tests are to be executed before:
      * <ul>
