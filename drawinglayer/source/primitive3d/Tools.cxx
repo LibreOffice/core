@@ -62,6 +62,6 @@ OUString idToString(sal_uInt32 nId)
     }
 }
 
-} // end of namespace drawinglayer::primitive2d
+} // end of namespace drawinglayer::primitive3d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -487,7 +487,7 @@ namespace drawinglayer::primitive3d
                     std::unique_lock aGuard( m_aMutex );
 
                     // conditions of last local decomposition with reduced lines have changed. Remember
-                    // new one and clear current decompositiopn
+                    // new one and clear current decomposition
                     SdrExtrudePrimitive3D* pThat = const_cast< SdrExtrudePrimitive3D* >(this);
                     pThat->setBuffered3DDecomposition(Primitive3DContainer());
                     pThat->mpLastRLGViewInformation = rViewInformation;
