@@ -6,7 +6,7 @@
 #
 
 from libreoffice.uno.propertyvalue import convert_property_values_to_dict, mkPropertyValues
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack
 import org.libreoffice.unotest
 import pathlib
 
@@ -29,40 +29,37 @@ def select_text(ui_object, from_pos, to):
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
+# FieldUnit, see include/tools/fldunit.hxx
+MEASUREMENT_UNITS = {
+    'Millimeter': 1,
+    'Centimeter': 2,
+    'Point': 6,
+    'Pica': 7,
+    'Inch': 8,
+}
+
+# Writer keeps a single value; the others keep a metric and a non metric one and
+# choose between them by locale, so both are set. The configuration items are
+# notified of the change, so the running module picks it up.
+MEASUREMENT_UNIT_PATHS = (
+    '/org.openoffice.Office.Writer/Layout/Other/MeasureUnit',
+    '/org.openoffice.Office.WriterWeb/Layout/Other/MeasureUnit',
+    '/org.openoffice.Office.Calc/Layout/Other/MeasureUnit/Metric',
+    '/org.openoffice.Office.Calc/Layout/Other/MeasureUnit/NonMetric',
+    '/org.openoffice.Office.Impress/Layout/Other/MeasureUnit/Metric',
+    '/org.openoffice.Office.Impress/Layout/Other/MeasureUnit/NonMetric',
+    '/org.openoffice.Office.Draw/Layout/Other/MeasureUnit/Metric',
+    '/org.openoffice.Office.Draw/Layout/Other/MeasureUnit/NonMetric',
+)
+
+# Sets the measurement unit through the configuration and puts the old values
+# back afterwards.
 @contextmanager
 def change_measurement_unit(UITestCase, unit):
-    try:
-        launch_option_dialog(UITestCase, unit)
+    value = MEASUREMENT_UNITS[unit]
+    with ExitStack() as stack:
+        for path in MEASUREMENT_UNIT_PATHS:
+            stack.enter_context(UITestCase.ui_test.set_config(path, value))
         yield
-    finally:
-        # change to default value
-        launch_option_dialog(UITestCase, 'Inch')
-
-def launch_option_dialog(UITestCase, unit):
-    with UITestCase.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
-        xPages = xDialogOpt.getChild("pages")
-        xAppEntry = xPages.getChild('3')
-        xAppEntry.executeAction("EXPAND", tuple())
-        xGeneralEntry = xAppEntry.getChild('0')
-        xGeneralEntry.executeAction("SELECT", tuple())
-
-        # Calc
-        if 'unitlb' in xDialogOpt.getChildren():
-            xUnit = xDialogOpt.getChild("unitlb")
-
-        # Writer
-        elif 'metric' in xDialogOpt.getChildren():
-            xUnit = xDialogOpt.getChild("metric")
-
-        # Impress
-        elif 'units' in xDialogOpt.getChildren():
-            xUnit = xDialogOpt.getChild("units")
-
-        select_by_text(xUnit, unit)
-
-        # tdf#137930: Check apply button doesn't reset the value
-        xApplyBtn = xDialogOpt.getChild("apply")
-        xApplyBtn.executeAction("CLICK", tuple())
-        UITestCase.assertEqual(unit, get_state_as_dict(xUnit)['SelectEntryText'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
