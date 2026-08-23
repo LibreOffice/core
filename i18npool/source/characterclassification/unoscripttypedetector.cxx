@@ -29,7 +29,7 @@ UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos,
     return ScriptTypeDetector::getScriptDirection(Text, nPos, defaultScriptDirection);
 }
 
-// return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
+// return value '-1' means either the direction of nPos is not the same as scriptDirection or nPos is out of range.
 sal_Int32 SAL_CALL
 UnoScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {

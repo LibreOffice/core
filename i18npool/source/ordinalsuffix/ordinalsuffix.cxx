@@ -65,7 +65,7 @@ namespace
 
 /*
  * For this method to properly return the ordinal suffix for other locales
- * than english ones, ICU 4.2+ has to be used.
+ * than English ones, ICU 4.2+ has to be used.
  */
 uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_Int32 nNumber,
         const lang::Locale &rLocale )

@@ -55,7 +55,7 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
     if (language)
         return getInputSequenceChecker(language)->checkInputSequence(Text, nStartPos, inputChar, inputCheckMode);
     else
-        return true; // not a checkable languages.
+        return true; // not a checkable language.
 }
 
 sal_Int32 SAL_CALL

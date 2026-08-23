@@ -72,7 +72,7 @@ static MappingType lcl_getMappingTypeForToggleCase( MappingType nMappingType, sa
     MappingType nRes = nMappingType;
 
     // take care of TOGGLE_CASE transliteration:
-    // nMappingType should not be a combination of flags, thuse we decide now
+    // nMappingType should not be a combination of flags, thus we decide now
     // which one to use.
     if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
     {
@@ -250,7 +250,7 @@ static OUString transliterate_titlecase_Impl(
         // because xCharClassImpl.toTitle does not handle ligatures or Beta but will raise
         // an exception we need to handle the first chara manually...
 
-        // we don't want to change surrogates by accident, thuse we use proper code point iteration
+        // we don't want to change surrogates by accident, thus we use proper code point iteration
         sal_uInt32 cFirstChar = aText.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
         OUString aResolvedLigature( &cFirstChar, 1 );
         // toUpper can be used to properly resolve ligatures and characters like Beta

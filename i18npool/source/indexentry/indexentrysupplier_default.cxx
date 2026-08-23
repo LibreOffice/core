@@ -225,7 +225,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, std::u16string_view algor
                     sal_Int16 end = i+1;
                     for (; end < len && keyStr[end] != close; end++) ;
 
-                    if (end >= len) // no found
+                    if (end >= len) // not found
                         throw RuntimeException(u"Index::makeIndexKeys: Closing bracket not found"_ustr);
                     if (close == ')')
                         keys[key_count-1].desc = keyStr.copy(i+1, end-i-1);

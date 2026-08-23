@@ -20,8 +20,8 @@
 #include <stdio.h>
 #include "LocaleNode.hxx"
 
-// The document handler, which is needed for the saxparser
-// The Documenthandler for reading sax
+// The document handler, which is needed for the SAX parser
+// The DocumentHandler for reading SAX
 
 OFileWriter::OFileWriter(const char *pcFile, const char *locale ): theLocale(locale) {
 
