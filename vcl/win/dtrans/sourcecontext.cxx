@@ -67,7 +67,7 @@ void SAL_CALL SourceContext::transferablesFlavorsChanged(  )
 {
 }
 
-// non -interface functions
+// non-interface functions
 // Fires XDragSourceListener::dragDropEnd events.
 void SourceContext::fire_dragDropEnd( bool success, sal_Int8 effect)
 {

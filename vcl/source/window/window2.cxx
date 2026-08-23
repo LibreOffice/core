@@ -59,7 +59,7 @@ void Window::ShowFocus( const tools::Rectangle& rRect )
 
     ImplWinData* pWinData = ImplGetWinData();
 
-    // native themeing suggest not to use focus rects
+    // native theming suggest not to use focus rects
     if( ! ( mpWindowImpl->mbUseNativeFocus &&
             IsNativeWidgetEnabled() ) )
     {
@@ -100,7 +100,7 @@ void Window::HideFocus()
         return;
     mpWindowImpl->mbInHideFocus = true;
 
-    // native themeing can suggest not to use focus rects
+    // native theming can suggest not to use focus rects
     if( ! ( mpWindowImpl->mbUseNativeFocus &&
             IsNativeWidgetEnabled() ) )
     {
