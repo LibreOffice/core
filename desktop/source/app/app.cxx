@@ -2651,7 +2651,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     Reference< XController > xStartModule = StartModule::createWithParentWindow( xContext, xContainerWindow);
     // Attention: You MUST(!) call setComponent() before you call attachFrame().
     // Because the backing component set the property "IsBackingMode" of the frame
-    // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+    // to true inside attachFrame(). But setComponent() resets this state every time ...
     xBackingFrame->setComponent(Reference< XWindow >(xStartModule, UNO_QUERY), xStartModule);
     if (progress != nullptr)
     {

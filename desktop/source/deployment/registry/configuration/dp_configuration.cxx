@@ -503,7 +503,7 @@ bool BackendImpl::removeFromConfigmgrIni(
     auto i(std::find(rSet.begin(), rSet.end(), rcterm));
     if (i == rSet.end() && !isSchema)
     {
-        //in case the xcu contained %origin% then the configmr.ini contains the
+        //in case the xcu contained %origin% then the configmgr.ini contains the
         //url to the file in the user installation (e.g. $BUNDLED_EXTENSIONS_USER)
         //However, m_url (getURL()) contains the URL for the file in the actual
         //extension installation.
@@ -766,7 +766,7 @@ void BackendImpl::PackageImpl::processPackage_(
 #endif
         ::std::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
         //If an xcu file was life deployed then always a data entry is written.
-        //If the xcu file was already in the configmr.ini then there is also
+        //If the xcu file was already in the configmgr.ini then there is also
         //a data entry
         if (!m_isSchema && data)
         {

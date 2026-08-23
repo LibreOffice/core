@@ -487,7 +487,7 @@ short UpdateDialog::run() {
 
 IMPL_LINK(UpdateDialog, entryToggled, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    // error's can't be enabled
+    // errors can't be enabled
     const UpdateDialog::Index* p = weld::fromId<UpdateDialog::Index const *>(m_xUpdates->get_id(rRowCol.first));
     if (p->m_eKind == SPECIFIC_ERROR)
         m_xUpdates->set_toggle(rRowCol.first, TRISTATE_FALSE);
@@ -960,7 +960,7 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler, weld::Button&, void)
     {
         OSL_ASSERT(enableUpdate.aInstalledPackage.is());
         //If the user has no write access to the shared folder then the update
-        //for a shared extension is disable, that is it cannot be in m_enabledUpdates
+        //for a shared extension is disabled, that is it cannot be in m_enabledUpdates
     }
 
 
