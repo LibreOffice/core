@@ -79,7 +79,7 @@ EmphasisMark::EmphasisMark(FontEmphasisMark eEmphasis, tools::Long nHeight, sal_
                 tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 maPolyPoly.Insert( aPoly );
             }
-            mnYOff = ((nHeight*250)/1000)/2; // Center to the another EmphasisMarks
+            mnYOff = ((nHeight*250)/1000)/2; // Center to the other EmphasisMarks
             mnWidth = nDotSize;
             break;
 

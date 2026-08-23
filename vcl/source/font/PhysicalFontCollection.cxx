@@ -1225,7 +1225,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     if (!rFSD.maSearchName.isEmpty() && !comphelper::IsFuzzing())
     {
         // get fallback info using FontSubstConfiguration and
-        // the target name, it's shortened name and family name in that order
+        // the target name, its shortened name and family name in that order
         const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
         pFontAttr = rFontSubst.getSubstInfo(rFSD.maSearchName);
         if (!pFontAttr && (aSearchShortName != rFSD.maSearchName))
@@ -1285,7 +1285,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         {
             // use a font name from font fallback list to determine font attributes
             // get fallback info using FontSubstConfiguration and
-            // the target name, it's shortened name and family name in that order
+            // the target name, its shortened name and family name in that order
             const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
             pTempFontAttr = rFontSubst.getSubstInfo(rFSD.maSearchName);
 
