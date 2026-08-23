@@ -7296,6 +7296,42 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorsBindWhereTheGrammarPutsTh
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAnOperatorOnAUnionListHasNoValue)
+{
+    // A union list holds several ranges, so there is no single value for an operator to work
+    // on and the formula gives #VALUE!. The producing application does the same.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 100.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 400.0);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 200.0);
+
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"=(A1~B1)%"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 0, 0)));
+
+    // A percent sign written on the last part of the list is the same, because it is above
+    // the union operator wherever it is put.
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"=(A1~B1%)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 1, 0)));
+
+    // SUM takes the list as a whole, so the one that fails is the operator after it.
+    m_pDoc->SetString(ScAddress(3, 2, 0), u"=SUM((A1~B1)%)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 2, 0)));
+
+    // A list isn't a string either.
+    m_pDoc->SetString(ScAddress(3, 3, 0), u"=(A1~B1)&\"x\""_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 3, 0)));
+
+    // On its own the list is still a reference list that SUM adds up, written either way.
+    m_pDoc->SetString(ScAddress(3, 5, 0), u"=SUM((A1~B1))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 5, 0)));
+    m_pDoc->SetString(ScAddress(3, 6, 0), u"=SUM((A1;B1))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 6, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
 {
     // The list's opening parenthesis moves the text behind it along, and a wrapper

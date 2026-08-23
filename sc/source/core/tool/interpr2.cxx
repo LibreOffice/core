@@ -2585,7 +2585,9 @@ void ScInterpreter::ScUnionFunc()
     if ((sv1 != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList) ||
         (sv2 != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList))
     {
-        PushIllegalArgument();
+        // A union joins references, so a value part like A1% leaves
+        // nothing to join and gives #VALUE!.
+        PushError( FormulaError::NoValue);
         return;
     }
 
