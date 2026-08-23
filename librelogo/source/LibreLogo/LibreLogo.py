@@ -1415,7 +1415,7 @@ def __get_HTML_format__(orig_st):
                   if bit > 5 and (tag in extra_data):
                       if bit == 9 and len(m.group(2)) > 0:
                           # create a new list to keep the extra data of the previous characters,
-                          # and remove the last occurance of the feature
+                          # and remove the last occurrence of the feature
                           z = list(extra_data[tag])
                           for j in reversed(range(len(z))):
                               if z[j].startswith(m.group(2)):
