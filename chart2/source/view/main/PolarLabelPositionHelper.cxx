@@ -81,7 +81,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 
     if(m_nDimensionCount==3 && nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
     {
-        //check whether the upper or the downer edge is more distant from the center
+        //check whether the upper or the lower edge is more distant from the center
         //take the farthest point to put the label to
 
         awt::Point aP0( transformSceneToScreenPosition(
