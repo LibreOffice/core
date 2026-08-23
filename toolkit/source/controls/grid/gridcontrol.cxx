@@ -134,7 +134,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         std::unique_lock aGuard(m_aMutex);
         UnoControlModel::setFastPropertyValue_NoBroadcast( aGuard, BASEPROPERTY_GRID_DATAMODEL, Any( xDataModel ) );
             // do *not* use setFastPropertyValue here: The UnoControlModel ctor made a simple copy of all property values,
-            // so before this call here, we share our data model with the own of the clone source. setFastPropertyValue,
+            // so before this call here, we share our data model with the owner of the clone source. setFastPropertyValue,
             // then, disposes the old data model - which means the data model which in fact belongs to the clone source.
             // so, call the UnoControlModel's impl-method for setting the value.
 

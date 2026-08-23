@@ -146,7 +146,7 @@ namespace svt::table
             nChangedAttributes |= ColumnAttributeGroup::WIDTH;
 
         OSL_ENSURE( nChangedAttributes != ColumnAttributeGroup::NONE,
-            "ColumnChangeMultiplexer::columnChanged: unknown column attributed changed!" );
+            "ColumnChangeMultiplexer::columnChanged: unknown column attribute changed!" );
 
         SolarMutexGuard aGuard;
         if ( m_pColumnImplementation != nullptr )

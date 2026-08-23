@@ -230,7 +230,7 @@ static bool lcl_ImplIsParent( vcl::Window const * pParentWindow, vcl::Window* pP
 
 void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 {
-    // their still might be some children created with css::loader::Java
+    // there still might be some children created with css::loader::Java
     // that would otherwise not be destroyed until the garbage collector cleans up
     VclPtr< vcl::Window > pChild = pWindow->GetWindow( GetWindowType::FirstChild );
     while ( pChild )

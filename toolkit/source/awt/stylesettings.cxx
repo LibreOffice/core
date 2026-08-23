@@ -238,7 +238,7 @@ namespace toolkit
         StyleMethodGuard aGuard( pOwningWindow );
         ImplSetStyleColor( &StyleSettings::SetButtonTextColor, _buttontextcolor );
         // Also need to set ActionButtonTextColor and DefaultActionButtonTextColor
-        // as this two settings can't be set through the UNO interface otherwise.
+        // as these two settings can't be set through the UNO interface otherwise.
         // Previously this setting was used to set colors for all three scenarios,
         // but action button setting was added to differentiate the buttons from
         // "normal" buttons in some themes.
