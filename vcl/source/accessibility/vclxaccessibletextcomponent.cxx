@@ -205,7 +205,7 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
                 aFont.SetWeight( aDefaultVCLFont.GetWeight() );
             }
 
-            //if nColor is -1, it may indicate that the default color black is using.
+            //if nColor is -1, it may indicate that the default color black is used.
             if ( nColor == -1)
             {
                 nColor = aDefaultVCLFont.GetColor().GetColor();

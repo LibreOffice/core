@@ -89,7 +89,7 @@ void AccessibleTabListBoxTable::ProcessWindowEvent( const VclWindowEvent& rVclWi
         {
             // First send an event that tells the listeners of a
             // modified selection.  The active descendant event is
-            // send after that so that the receiving AT has time to
+            // sent after that so that the receiving AT has time to
             // read the text or name of the active child.
             commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
             if ( m_pTabListBox && m_pTabListBox->HasFocus() )
