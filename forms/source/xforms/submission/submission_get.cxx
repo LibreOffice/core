@@ -41,7 +41,7 @@ CSubmissionGet::CSubmissionGet(std::u16string_view aURL, const css::uno::Referen
 
 CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
-    // GET always uses application/x-www-formurlencoded
+    // GET always uses application/x-www-form-urlencoded
     CSerializationURLEncoded aSerialization;
     aSerialization.setSource(m_aFragment);
     aSerialization.serialize();

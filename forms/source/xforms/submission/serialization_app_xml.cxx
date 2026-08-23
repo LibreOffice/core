@@ -58,7 +58,7 @@ CSerializationAppXML::CSerializationAppXML()
 Reference< css::io::XInputStream >
 CSerializationAppXML::getInputStream()
 {
-    // The pipes output is provided through it's
+    // The pipe's output is provided through its
     // XOutputStream interface aspect
     return m_xBuffer;
 }

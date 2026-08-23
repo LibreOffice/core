@@ -491,7 +491,7 @@ namespace frm
     Any FontControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aReturn;
-        // some defaults which are the same, not matter if we have toolkit-compatible
+        // some defaults which are the same, no matter if we have toolkit-compatible
         // defaults or not
         bool bHandled = false;
         switch( _nHandle )

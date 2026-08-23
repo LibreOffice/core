@@ -116,7 +116,7 @@ namespace frm
 
             // ask for its successor
             Reference< XDispatchProvider > xSlave = xInterceptor->getSlaveDispatchProvider();
-            // and give it the new (means no) successoert
+            // and give it the new (means no) successor
             xInterceptor->setSlaveDispatchProvider( nullptr );
 
             // start over with the next chain element
