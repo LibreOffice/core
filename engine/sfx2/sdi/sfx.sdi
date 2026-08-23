@@ -5183,24 +5183,6 @@ SfxVoidItem ShowCredits SID_SHOW_CREDITS
 ]
 
 
-SfxVoidItem InternetDialog SID_INET_DLG
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
 SfxVoidItem CheckPLZ SID_OFFICE_CHECK_PLZ
 (SfxStringItem PLZ SID_OFFICE_CHECK_PLZ)
 [

@@ -27,40 +27,17 @@
 
 // ResId's ------------------------------------------------------------------
 
-#define RID_SFXPAGE_SAVE            (RID_OPTIONS_START +  0)
 #define RID_SFXPAGE_GENERAL         (RID_OPTIONS_START +  1)
-#define RID_SFXPAGE_PATH            (RID_OPTIONS_START +  6)
-#define RID_SFXPAGE_LINGU           (RID_OPTIONS_START +  7)
 
-#define RID_SFXPAGE_PRINTOPTIONS    (RID_OPTIONS_START + 12)
 
 // treeopt
 #define RID_SVXPAGE_COLOR                   (RID_SVX_START +  60)
-#define OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE      ( RID_OFA_START + 256 )
 
 // options
-#define RID_SVXPAGE_INET_SECURITY           (RID_SVX_START + 200)
-#define RID_SVXPAGE_INET_PROXY              (RID_SVX_START + 157)
-#define RID_SVXPAGE_INET_MAIL               (RID_SVX_START + 155)
-#define RID_OFAPAGE_HTMLOPT             (RID_OFA_START + 100)
-#define OFA_TP_LANGUAGES                (RID_OFA_START + 205)
-#define OFA_TP_MISC                     (RID_OFA_START + 200)
-#define OFA_TP_VIEW                     (RID_OFA_START + 202)
-#define RID_OFAPAGE_MSFILTEROPT2        (RID_OFA_START + 121)
-#define RID_SVXPAGE_OPTIONS_CTL             (RID_SVX_START + 252)
-#define RID_SVXPAGE_OPTIONS_JAVA            (RID_SVX_START + 253)
-#define RID_SVXPAGE_ACCESSIBILITYCONFIG     (RID_SVX_START + 250)
-#define RID_OPTPAGE_CHART_DEFCOLORS         (RID_SVX_START + 299)
-#define RID_SVXPAGE_APPEARANCE              (RID_SVX_START + 247)
-#define RID_SVXPAGE_BASICIDE_OPTIONS        (RID_SVX_START + 209)
-#define RID_SVXPAGE_LANGTOOL_OPTIONS        (RID_SVX_START + 210)
-#define RID_SVXPAGE_DEEPL_OPTIONS           (RID_SVX_START + 211)
 
 // Resource-Id's ------------------------------------------------------------
 
 // options
-#define RID_SVXPAGE_JSEARCH_OPTIONS         (RID_SVX_START +  840)
-#define RID_SVX_FONT_SUBSTITUTION           (RID_SVX_START + 18)
 
 #endif
 

@@ -466,8 +466,6 @@ class XFillGradientItem;
 // FREE                                                 ( SID_SVX_START + 344 )
 // FREE                                                 ( SID_SVX_START + 345 )
 
-#define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
-#define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
 #define SID_BMPMASK                                     ( SID_SVX_START + 350 )
 #define SID_BMPMASK_PIPETTE                             TypedWhichId<SfxBoolItem>( SID_SVX_START + 351 )
 #define SID_BMPMASK_EXEC                                TypedWhichId<SfxBoolItem>( SID_SVX_START + 353 )
@@ -476,7 +474,6 @@ class XFillGradientItem;
 
 #define SID_ATTR_TEXT_FITTOSIZE                         ( SID_SVX_START + 367 )
 #define SID_ATTR_BRUSH_ROW                              TypedWhichId<SvxBrushItem>( SID_SVX_START + 368 )
-#define SID_OPTFILTER_MSOFFICE                          ( SID_SVX_START + 369 )
 #define SID_IMAP                                        ( SID_SVX_START + 371 )
 #define SID_IMAP_EXEC                                   TypedWhichId<SfxBoolItem>( SID_SVX_START + 374 )
 #define SID_DRAW_RECT_NOFILL                            ( SID_SVX_START + 378 )
@@ -527,22 +524,12 @@ class XFillGradientItem;
 #define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )
 #define SID_TABLE_PARAM_INSERT_AFTER                    TypedWhichId<SfxBoolItem>( SID_SVX_START + 428 )
 
-#define SID_GENERAL_OPTIONS                             ( SID_SVX_START + 432 )
-#define SID_SW_EDITOPTIONS                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 433 )
-#define SID_SD_EDITOPTIONS                              ( SID_SVX_START + 434 )
-#define SID_SC_EDITOPTIONS                              ( SID_SVX_START + 435 )
-#define SID_SM_EDITOPTIONS                              ( SID_SVX_START + 436 )
-#define SID_SCH_EDITOPTIONS                             TypedWhichId<SvxChartColorTableItem>( SID_SVX_START + 437 )
-#define SID_SW_ONLINEOPTIONS                            ( SID_SVX_START + 439 )
 #define SID_GET_COLORLIST                               TypedWhichId<OfaXColorListItem>( SID_SVX_START + 441 )
 #define SID_OUTLINE_TO_IMPRESS                          ( SID_SVX_START + 443 )
 #define SID_SPELLCHECKER_CHANGED                        ( SID_SVX_START + 446 )
-#define SID_SD_GRAPHIC_OPTIONS                          ( SID_SVX_START + 447 )
 #define SID_SM_TP_PRINTOPTIONS                          ( SID_SVX_START + 448 )
 #define SID_EDIT_DIAGRAM                                ( SID_SVX_START + 449 )
-#define SID_SB_STARBASEOPTIONS                          ( SID_SVX_START + 450 )
 #define SID_SWREGISTER_COLLECTION                       TypedWhichId<SfxStringItem>( SID_SVX_START + 451 )
-#define SID_FILTER_DLG                                  ( SID_SVX_START + 452 )
 #define SID_ATTR_BRUSH_TABLE                            TypedWhichId<SvxBrushItem>( SID_SVX_START + 453 )
 #define SID_GROUP                                       ( SID_SVX_START + 454 )
 #define SID_UNGROUP                                     ( SID_SVX_START + 455 )
@@ -760,7 +747,6 @@ class XFillGradientItem;
 
 // CAUTION! Range <919 .. 920> used by EditEngine (!)
 
-#define SID_LANGUAGE_OPTIONS                            ( SID_SVX_START + 921 )
 #define SID_GETUNDOSTRINGS                              TypedWhichId<SfxStringListItem>( SID_SVX_START + 923 )
 #define SID_GETREDOSTRINGS                              TypedWhichId<SfxStringListItem>( SID_SVX_START + 924 )
 

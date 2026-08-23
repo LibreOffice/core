@@ -42,7 +42,6 @@ svx/ui/datanavigator.ui
 svx/ui/redlineviewpage.ui
 svx/ui/redlinefilterpage.ui
 svx/ui/headfootformatpage.ui
-svx/ui/optgridpage.ui
 svx/ui/xformspage.ui
 svx/ui/compressgraphicdialog.ui
 svx/ui/compressgraphicdialog.ui

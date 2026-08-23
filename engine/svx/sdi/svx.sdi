@@ -5164,24 +5164,6 @@ SfxVoidItem InsertTextFrame SID_INSERT_FRAME
 ]
 
 
-SfxVoidItem InternetDialog SID_INET_DLG
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
 SfxVoidItem Intersect SID_POLY_INTERSECT
 ()
 [
@@ -7653,78 +7635,6 @@ SfxVoidItem Scan SID_SCAN
 ]
 
 
-SfxVoidItem ScEditOptions SID_SC_EDITOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem SchEditOptions SID_SCH_EDITOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem SdEditOptions SID_SD_EDITOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem SdGraphicOptions SID_SD_GRAPHIC_OPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
 SfxVoidItem SearchOff FID_SEARCH_OFF
 (SvxSearchItem SearchItem SID_SEARCH_ITEM)
 [
@@ -8227,24 +8137,6 @@ SvxSizeItem Size SID_ATTR_SIZE
 ]
 
 
-SfxVoidItem SmEditOptions SID_SM_EDITOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
 SfxVoidItem SortDown SID_FM_SORTDOWN
 ()
 [
@@ -8617,24 +8509,6 @@ SfxBoolItem SmallCaps SID_SET_SMALL_CAPS
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Format;
 ]
-
-SfxVoidItem SwEditOptions SID_SW_EDITOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
 
 SfxBoolItem TabDialog SID_FM_TAB_DIALOG
 
