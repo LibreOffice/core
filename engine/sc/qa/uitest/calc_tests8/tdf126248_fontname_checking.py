@@ -12,7 +12,6 @@ from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import select_by_text
 
 class tdf126248(UITestCase):
 
@@ -31,25 +30,11 @@ class tdf126248(UITestCase):
         #Close the sidebar
         self.xUITest.executeCommand(".uno:Sidebar")
 
-    def changeLocalSetting(self, language):
-        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
-            xPages = xDialog.getChild("pages")
-            xLanguageEntry = xPages.getChild('2')
-            xLanguageEntry.executeAction("EXPAND", tuple())
-            xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
-            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())
-
-            localeSetting = xDialog.getChild("localesetting")
-            select_by_text(localeSetting, language)
-            self.ui_test.wait_until_property_is_updated(localeSetting, 'SelectEntryText', language)
-            self.assertEqual(language, get_state_as_dict(localeSetting)['SelectEntryText'])
-
     def test_tdf126248(self):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            try:
-                self.changeLocalSetting("Chinese (traditional)")
+            with self.ui_test.set_config('/org.openoffice.Setup/L10N/ooSetupSystemLocale', 'zh-TW'):
 
                 with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
@@ -71,8 +56,7 @@ class tdf126248(UITestCase):
 
                 self.assertFontName(gridwin, eastFontName)
 
-            finally:
-                self.changeLocalSetting("English (USA)")
+            with self.ui_test.set_config('/org.openoffice.Setup/L10N/ooSetupSystemLocale', 'en-US'):
 
                 enter_text_to_cell(gridwin, "C1", "Test")
 

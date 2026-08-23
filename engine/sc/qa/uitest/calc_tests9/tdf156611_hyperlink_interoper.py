@@ -28,97 +28,86 @@ class tdf156611(UITestCase):
             # 1. run, we want hyperlink insertion work like in MS excel (only 1 hyperlink/cell is allowed)
             # 2. run, we want hyperlink insertion work as it did in calc (more hyperlinks can be in 1 cell)
             for i in range(2):
-                xCalcDoc = self.xUITest.getTopFocusWindow()
-                xGridWindow = xCalcDoc.getChild("grid_window")
+                # the setting this test is about, on for the first run and
+                # off for the second one
+                with self.ui_test.set_config(
+                        '/org.openoffice.Office.Calc/Compatibility/Links', i == 0):
+                    xCalcDoc = self.xUITest.getTopFocusWindow()
+                    xGridWindow = xCalcDoc.getChild("grid_window")
 
-                #Change hyperlink interoperability setting
-                #Go to Tools -> Options -> LibreofficeDev Calc -> Compatibility
-                with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog", close_button="cancel") as xDialogOpt:
+                    enter_text_to_cell(xGridWindow, "A1", "aaa bbb")
 
-                    xPages = xDialogOpt.getChild("pages")
-                    xChartEntry = xPages.getChild('3')                 # LibreofficeDev Calc
-                    xChartEntry.executeAction("EXPAND", tuple())
-                    xChartGeneralEntry = xChartEntry.getChild('7')
-                    xChartGeneralEntry.executeAction("SELECT", tuple())          #Compatibility
+                    # Select last word of the cell text: "bbb"
+                    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+                    xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F2"}))
+                    xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+CTRL+LEFT"}))
 
-                    xLinks = xDialogOpt.getChild("cellLinkCB")
-                    xLinks.executeAction("CLICK", tuple())
-                    xApply = xDialogOpt.getChild("apply")
-                    xApply.executeAction("CLICK", tuple())
+                    # Insert hyperlink
+                    with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog:
+                        xTab = xDialog.getChild("tabcontrol")
+                        select_pos(xTab, "0")
 
-                enter_text_to_cell(xGridWindow, "A1", "aaa bbb")
+                        xTarget = xDialog.getChild("target")
+                        self.assertEqual(get_state_as_dict(xTarget)["Text"], "")
+                        xIndication = xDialog.getChild("indication")
+                        self.assertEqual(get_state_as_dict(xIndication)["Text"], texts[0][i])
+                        # 1. run "aaa bbb" The whole cell text
+                        # 2. run "bbb" Only the selected text
 
-                # Select last word of the cell text: "bbb"
-                xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-                xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F2"}))
-                xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+CTRL+LEFT"}))
+                        # Insert a sample hyperlink, and change text
+                        xTarget.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                        xTarget.executeAction("TYPE", mkPropertyValues({"TEXT": "https://www.documentfoundation.org/"}))
+                        xIndication.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                        xIndication.executeAction("TYPE", mkPropertyValues({"TEXT": "cccc"}))
 
-                # Insert hyperlink
-                with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog:
-                    xTab = xDialog.getChild("tabcontrol")
-                    select_pos(xTab, "0")
+                    # Edit cell text: insert " ddd" in the end
+                    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+                    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+                    xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F2"}))
+                    xGridWindow.executeAction("TYPE", mkPropertyValues({"TEXT": " ddd"}))
+                    xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-                    xTarget = xDialog.getChild("target")
-                    self.assertEqual(get_state_as_dict(xTarget)["Text"], "")
-                    xIndication = xDialog.getChild("indication")
-                    self.assertEqual(get_state_as_dict(xIndication)["Text"], texts[0][i])
-                    # 1. run "aaa bbb" The whole cell text
-                    # 2. run "bbb" Only the selected text
+                    # Select the last word of cell text: "ddd"
+                    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+                    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+                    xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F2"}))
+                    xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+CTRL+LEFT"}))
 
-                    # Insert a sample hyperlink, and change text
-                    xTarget.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    xTarget.executeAction("TYPE", mkPropertyValues({"TEXT": "https://www.documentfoundation.org/"}))
-                    xIndication.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    xIndication.executeAction("TYPE", mkPropertyValues({"TEXT": "cccc"}))
+                    # Insert hyperlink
+                    with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog2:
+                        xTab = xDialog2.getChild("tabcontrol")
+                        select_pos(xTab, "0")
 
-                # Edit cell text: insert " ddd" in the end
-                xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-                xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-                xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F2"}))
-                xGridWindow.executeAction("TYPE", mkPropertyValues({"TEXT": " ddd"}))
-                xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+                        xTarget = xDialog2.getChild("target")
+                        self.assertEqual(get_state_as_dict(xTarget)["Text"], urls[1][i])
+                        # 1. run: "https://www.documentfoundation.org/" the cell already have this url.
+                        # 2. run: "" The selected text is not a hyperlink yet.
+                        xIndication = xDialog2.getChild("indication")
+                        self.assertEqual(get_state_as_dict(xIndication)["Text"], texts[1][i])
+                        # 1. run: "cccc ddd" The whole cell text
+                        # 2. run: "ddd" Only the selected text
 
-                # Select the last word of cell text: "ddd"
-                xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-                xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-                xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F2"}))
-                xGridWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+CTRL+LEFT"}))
+                        # Insert a sample hyperlink, and change text
+                        xTarget.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                        xTarget.executeAction("TYPE", mkPropertyValues({"TEXT": "https://aWrongLink/"}))
+                        xIndication.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                        xIndication.executeAction("TYPE", mkPropertyValues({"TEXT": "eeee"}))
 
-                # Insert hyperlink
-                with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog2:
-                    xTab = xDialog2.getChild("tabcontrol")
-                    select_pos(xTab, "0")
+                    # Move focus to ensure cell is not in edit mode
+                    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+                    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-                    xTarget = xDialog2.getChild("target")
-                    self.assertEqual(get_state_as_dict(xTarget)["Text"], urls[1][i])
-                    # 1. run: "https://www.documentfoundation.org/" the cell already have this url.
-                    # 2. run: "" The selected text is not a hyperlink yet.
-                    xIndication = xDialog2.getChild("indication")
-                    self.assertEqual(get_state_as_dict(xIndication)["Text"], texts[1][i])
-                    # 1. run: "cccc ddd" The whole cell text
-                    # 2. run: "ddd" Only the selected text
-
-                    # Insert a sample hyperlink, and change text
-                    xTarget.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    xTarget.executeAction("TYPE", mkPropertyValues({"TEXT": "https://aWrongLink/"}))
-                    xIndication.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    xIndication.executeAction("TYPE", mkPropertyValues({"TEXT": "eeee"}))
-
-                # Move focus to ensure cell is not in edit mode
-                xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-                xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-
-                # Check contents of the cell
-                xCell = get_cell_by_position(document, 0, 0, 0)
-                self.assertEqual(xCell.getString(), texts[2][i])
-                # 1. run: "eeee" last hyperlink insertion overwritten the whole cell text with "eeee"
-                # 2. run: "aaa cccc eeee" as every hyperlink insertion only overwritten the actually selected text
-                xTextFields = xCell.getTextFields()
-                self.assertEqual(len(xTextFields), i+1)
-                self.assertEqual(xTextFields[i].URL, "https://aWrongLink/")
-                if (i==1):
-                    self.assertEqual(xTextFields[0].URL, "https://www.documentfoundation.org/")
-                # 1. run: only the last inserted hyperlink will remain: "https://aWrongLink/"
-                # 2. run: both links will be in the cell
+                    # Check contents of the cell
+                    xCell = get_cell_by_position(document, 0, 0, 0)
+                    self.assertEqual(xCell.getString(), texts[2][i])
+                    # 1. run: "eeee" last hyperlink insertion overwritten the whole cell text with "eeee"
+                    # 2. run: "aaa cccc eeee" as every hyperlink insertion only overwritten the actually selected text
+                    xTextFields = xCell.getTextFields()
+                    self.assertEqual(len(xTextFields), i+1)
+                    self.assertEqual(xTextFields[i].URL, "https://aWrongLink/")
+                    if (i==1):
+                        self.assertEqual(xTextFields[0].URL, "https://www.documentfoundation.org/")
+                    # 1. run: only the last inserted hyperlink will remain: "https://aWrongLink/"
+                    # 2. run: both links will be in the cell
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

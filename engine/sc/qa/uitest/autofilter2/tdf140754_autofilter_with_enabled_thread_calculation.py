@@ -15,20 +15,11 @@ class tdf140754(UITestCase):
 
     def test_tdf140754(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf140754.ods")) as calc_doc:
-
-            #Make sure 'multi-threaded calculation' is enabled
-            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
-
-                xPages = xDialogOpt.getChild("pages")
-                xCalcEntry = xPages.getChild('3')
-                xCalcEntry.executeAction("EXPAND", tuple())
-                xCalcCalculateEntry = xCalcEntry.getChild('3')
-                xCalcCalculateEntry.executeAction("SELECT", tuple())
-
-                self.assertEqual('true', get_state_as_dict(xDialogOpt.getChild('threadingenabled'))["Selected"])
-
-
+        # this needs multi-threaded calculation, which is the default
+        with self.ui_test.set_config(
+                '/org.openoffice.Office.Calc/Formula/Calculation/'
+                'UseThreadedCalculationForFormulaGroups', True), \
+                self.ui_test.load_file(get_url_for_data_file("tdf140754.ods")) as calc_doc:
 
             self.assertEqual(0, get_cell_by_position(calc_doc, 0, 0, 30).getValue())
             self.assertEqual(0, get_cell_by_position(calc_doc, 0, 0, 82).getValue())
