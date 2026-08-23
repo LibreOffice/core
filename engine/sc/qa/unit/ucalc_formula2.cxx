@@ -7788,9 +7788,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorsBindWhereTheGrammarPutsTh
                          compileAndPrintAsOoxml(*m_pDoc, u"A1#:C1"_ustr));
 
     // A percent sign is above the union operator, so the one after the list goes after the
-    // list's own parentheses. The producing application only takes a percent sign in that
-    // trailing place, never on a part of the list, and no parse puts one there either, so
-    // the one on the first part stays where it is.
+    // list's own parentheses, while the one on the first part stays where it is.
     CPPUNIT_ASSERT_EQUAL(u"(A1%,B2)%"_ustr, compileAndPrintAsOoxml(*m_pDoc, u"A1%~B2%"_ustr));
 
     // A prefix sign is above the # too, so it stays outside the wrapper.
@@ -7838,6 +7836,115 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAnOperatorOnAUnionListHasNoValue)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAValueAmongTheUnionListPartsHasNoValue)
+{
+    // A union joins references, so a part that turned its reference into a value leaves
+    // nothing to join and the list gives #VALUE!. The producing application agrees.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 100.0);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 200.0);
+
+    // The percent sign sits on a reference, so the part joins and the calculation complains.
+    m_pDoc->SetFormula(ScAddress(3, 0, 0), u"=(A1, B1%)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 0, 0)));
+
+    // A chain of percent signs is the same.
+    m_pDoc->SetFormula(ScAddress(3, 1, 0), u"=(A1, B1%%)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 1, 0)));
+
+    // Same on a middle part, which no file has: the producing application allows a percent
+    // sign only on the last one.
+    m_pDoc->SetFormula(ScAddress(3, 5, 0), u"=(A1, B1%, A1)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 5, 0)));
+
+    // An arithmetic operator after the reference makes a value of it too.
+    m_pDoc->SetFormula(ScAddress(3, 2, 0), u"=(A1, B1+A1)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 2, 0)));
+
+    // Written out, the union joins anything beside it, so a plain number or string errors too.
+    m_pDoc->SetString(ScAddress(3, 3, 0), u"=(A1~5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 3, 0)));
+    m_pDoc->SetString(ScAddress(3, 4, 0), u"=(A1~\"x\")"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 4, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAUnionListPartJoinsWhenItBeginsWithAReference)
+{
+    // The separator joins two parts into a union if the left returns a reference and the
+    // right starts with one, or with a function that returns one.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 100.0);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 200.0);
+
+    // A nested list works on either side of the separator, and a cell in both counts twice.
+    m_pDoc->SetFormula(ScAddress(3, 0, 0), u"=SUM((A1, (A1,B1)))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(400.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    m_pDoc->SetFormula(ScAddress(3, 1, 0), u"=SUM(((A1,B1), B1))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(500.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+
+    // IF, CHOOSE and INDEX return a reference, so a part can start with any of them.
+    m_pDoc->SetFormula(ScAddress(3, 2, 0), u"=SUM((A1, IF(TRUE,B1)))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+    m_pDoc->SetFormula(ScAddress(3, 3, 0), u"=SUM((A1, CHOOSE(1,B1)))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+    m_pDoc->SetFormula(ScAddress(3, 4, 0), u"=SUM((B1, INDEX(A1:B1,1,1)))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 4, 0)));
+
+    // In a longer list every separator joins in turn, onto the union built so far.
+    m_pDoc->SetFormula(ScAddress(3, 5, 0), u"=SUM((A1, B1, A1))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(400.0, m_pDoc->GetValue(ScAddress(3, 5, 0)));
+
+    // IFS, SWITCH and XLOOKUP return a reference too.
+    m_pDoc->SetFormula(ScAddress(3, 11, 0), u"=SUM((A1, _xlfn.IFS(TRUE, B1)))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 11, 0)));
+    m_pDoc->SetFormula(ScAddress(3, 12, 0), u"=SUM((A1, _xlfn.SWITCH(1,1,B1)))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 12, 0)));
+    m_pDoc->SetFormula(ScAddress(3, 13, 0), u"=SUM((A1, _xlfn.XLOOKUP(200, B1:B1, B1:B1)))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 13, 0)));
+
+    // An @ part sits on the reference after it, and a bare list has no value anyway.
+    m_pDoc->SetFormula(ScAddress(3, 15, 0), u"=(A1, _xlfn.SINGLE(B1))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 15, 0)));
+
+    // Shapes the producing application refuses, so no file has them. A part not starting
+    // with a reference stays out of the list, leaving two expressions that do not parse.
+    const std::vector<OUString> aRefusedShapes = {
+        u"=(A1%, B1)"_ustr, u"=(A1, -B1)"_ustr, u"=(A1, 5)"_ustr,
+        u"=(A1, \"x\")"_ustr, u"=(A1, SUM(A1:B1))"_ustr,
+    };
+    SCROW nRow = 6;
+    for (const OUString& rShape : aRefusedShapes)
+    {
+        m_pDoc->SetFormula(ScAddress(3, nRow, 0), rShape, formula::FormulaGrammar::GRAM_OOXML);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(rShape, RTL_TEXTENCODING_UTF8).getStr(),
+                                     FormulaError::OperatorExpected,
+                                     m_pDoc->GetErrCode(ScAddress(3, nRow, 0)));
+        ++nRow;
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
 {
     // The list's opening parenthesis moves the text behind it along, and a wrapper
@@ -7859,10 +7966,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
     CPPUNIT_ASSERT_EQUAL(u"($A$1,_xlfn.SINGLE($B$2))"_ustr,
                          printAsOoxml(*m_pDoc, aMarkerInList, ScAddress(1, 0, 0)));
 
-    // Same for a percent sign before the union operator. The sign comes after the first
-    // part of the list, so the list still starts before that part. OOXML has no spelling
-    // for a percent sign there either, which is another reason no parse produces this
-    // shape.
+    // Same for a percent sign before the union operator. The sign comes after the first part
+    // of the list, so the list still starts before that part.
     ScTokenArray aPercentInList(*m_pDoc);
     aPercentInList.AddSingleReference(aFirst);
     aPercentInList.AddOpCode(ocPercentSign);
@@ -8005,6 +8110,24 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testLongImplicitIntersectionChainSavesComplet
 
     const OUString aFormula = printAsOoxml(*m_pDoc, aCode, ScAddress(1, 0, 0));
     CPPUNIT_ASSERT(!aFormula.isEmpty());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAReferenceListTakesAFunctionResult)
+{
+    // A reference list is built from the parts of a parenthesised expression, and a part can
+    // be the result of a function that returns a reference. INDEX is one of those, so SUM
+    // adds the cell it picked to the rest of the list.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 100.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 400.0);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 200.0);
+
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"=SUM((INDEX(A1:A2;2);B1))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(600.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }

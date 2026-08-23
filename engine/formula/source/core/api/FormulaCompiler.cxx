@@ -371,6 +371,7 @@ bool isRangeResultOpCode( OpCode eOp )
         case ocIntersect:
         case ocIndirect:
         case ocOffset:
+        case ocIndex:
         // The # postfix operator gives the spill range of the master cell before it, which
         // is a reference just like the operators above.
         case ocSpill:
@@ -416,6 +417,46 @@ bool isPotentialRangeType( FormulaToken const * pToken, bool bRPN, bool bRight )
             // Separators are not part of RPN and right opcodes need to be
             // other StackVar types or functions and thus svByte.
             return !bRPN && !bRight && isPotentialRangeLeftOp( pToken->GetOpCode());
+    }
+}
+
+/** Whether a token can start a part of a parenthesised range list: a reference, or a
+    function that returns one. Only the start matters, what the rest of the part makes of
+    it is the calculation's business. Anything else leaves the separator a separator.
+ */
+bool isRangeListPartStart( const FormulaToken& rToken )
+{
+    switch (rToken.GetType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        case svExternalName:
+        case svIndex:
+        // An error constant is a part too, and its error becomes the union's result.
+        case svError:
+            return true;
+        default:
+            break;
+    }
+    switch (rToken.GetOpCode())
+    {
+        // A parenthesised part, for example a nested list.
+        case ocOpen:
+        // IF and CHOOSE return the reference of the branch they take, IFS and SWITCH the
+        // reference of the result they pick, and a lookup a piece of the range it searched.
+        case ocIf:
+        case ocChoose:
+        case ocIfs_MS:
+        case ocSwitch_MS:
+        case ocIndex:
+        case ocXLookup:
+        // The @ operator comes before a reference it reads one value from.
+        case ocSingleValue:
+            return true;
+        default:
+            return isRangeResultFunction( rToken.GetOpCode());
     }
 }
 
@@ -1731,23 +1772,24 @@ void FormulaCompiler::Factor()
             pFacToken = mpToken;
             NextToken();
             CheckSetForceArrayParameter( mpToken, 0);
+            // What the part starts with decides whether it can join the list.
+            const FormulaTokenRef pPartFirst = mpToken;
+            const sal_uInt16 nPartStart = mnPC;
             eOp = Expression();
             // Do not ignore error here, regardless of mbStopOnError, to not
             // change the formula expression in case of an unexpected state.
-            if (mpArr->GetCodeError() == FormulaError::NONE && mnPC >= 2)
+            if (mpArr->GetCodeError() == FormulaError::NONE && nPartStart >= 1 && mnPC > nPartStart)
             {
-                // Left and right operands must be reference or function
-                // returning reference to form a range list.
-                const FormulaToken* p = mpCode[-2];
-                if (p && isPotentialRangeType( p, true, false))
+                // The left operand has to be a reference or a function that returns one.
+                // The right part joins if it starts with one. What the part does with it
+                // from there is up to the calculation.
+                const FormulaToken* pLeft = mpCode[-static_cast<sal_Int32>(mnPC - nPartStart) - 1];
+                if (pLeft && isPotentialRangeType(pLeft, true, false)
+                    && pPartFirst && isRangeListPartStart(*pPartFirst))
                 {
-                    p = mpCode[-1];
-                    if (p && isPotentialRangeType( p, true, true))
-                    {
-                        pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
-                        // XXX NOTE: the token's eType is still svSep here!
-                        PutCode( pFacToken);
-                    }
+                    pFacToken->NewOpCode(ocUnion, FormulaToken::PrivateAccess());
+                    // XXX NOTE: the token's eType is still svSep here!
+                    PutCode(pFacToken);
                 }
             }
         }
