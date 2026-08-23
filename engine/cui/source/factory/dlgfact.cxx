@@ -40,7 +40,6 @@
 #include <srchxtra.hxx>
 #include <textanim.hxx>
 #include <autocdlg.hxx>
-#include <treeopt.hxx>
 #include <labdlg.hxx>
 #include <hangulhanjadlg.hxx>
 #include <showcols.hxx>

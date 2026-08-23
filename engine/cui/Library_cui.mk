@@ -168,7 +168,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/dbregistersettings \
     cui/source/options/doclinkdialog \
     cui/source/options/fontsubs \
-	cui/source/options/optaboutconfig \
     cui/source/options/optaccessibility \
     cui/source/options/optasian \
     $(call gb_Helper_optional,SCRIPTING, \
@@ -183,16 +182,12 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optlanguagetool \
     cui/source/options/optdeepl \
     cui/source/options/optinet2 \
-    cui/source/options/optjava \
     cui/source/options/optjsearch \
     cui/source/options/optlingu \
     cui/source/options/optpath \
-    cui/source/options/optsave \
     cui/source/options/appearance \
     cui/source/options/sdbcdriverenum \
     cui/source/options/securityoptions \
-    cui/source/options/treeopt \
-    cui/source/options/treeopthelper \
     cui/source/options/tsaurls \
     cui/source/options/webconninfo \
     cui/source/tabpages/align \

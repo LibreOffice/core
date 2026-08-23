@@ -16,7 +16,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 endif
 
 $(eval $(call gb_UIConfig_add_uifiles,cui,\
-	cui/uiconfig/ui/aboutconfigdialog\
 	cui/uiconfig/ui/accelconfigpage \
 	cui/uiconfig/ui/additionsdialog \
 	cui/uiconfig/ui/additionsfragment \
@@ -99,8 +98,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/insertfloatingframe \
 	cui/uiconfig/ui/insertoleobject \
 	cui/uiconfig/ui/insertrowcolumn \
-	cui/uiconfig/ui/javaclasspathdialog \
-	cui/uiconfig/ui/javastartparametersdialog \
 	cui/uiconfig/ui/jsearchoptionsdialog \
 	cui/uiconfig/ui/linedialog \
 	cui/uiconfig/ui/linetabpage \
@@ -126,7 +123,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/objectnamedialog \
 	cui/uiconfig/ui/objecttitledescdialog \
 	cui/uiconfig/ui/optaccessibilitypage \
-	cui/uiconfig/ui/optadvancedpage \
 	cui/uiconfig/ui/optasianpage \
 	cui/uiconfig/ui/optbasicidepage \
 	cui/uiconfig/ui/optctlpage \
@@ -139,14 +135,12 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optgeneralpage \
 	cui/uiconfig/ui/opthtmlpage \
 	cui/uiconfig/ui/langtoolconfigpage \
-	cui/uiconfig/ui/optionsdialog \
 	cui/uiconfig/ui/optjsearchpage \
 	cui/uiconfig/ui/optlanguagespage \
 	cui/uiconfig/ui/optlingupage \
 	cui/uiconfig/ui/optnewdictionarydialog \
 	cui/uiconfig/ui/optpathspage \
 	cui/uiconfig/ui/optproxypage \
-	cui/uiconfig/ui/optsavepage \
 	cui/uiconfig/ui/optsecuritypage \
 	cui/uiconfig/ui/optuserpage \
 	cui/uiconfig/ui/optviewpage \

@@ -39,8 +39,6 @@ cui/ui/iconselectordialog.ui
 cui/ui/insertfloatingframe.ui
 cui/ui/insertoleobject.ui
 cui/ui/insertrowcolumn.ui
-cui/ui/javaclasspathdialog.ui
-cui/ui/javastartparametersdialog.ui
 cui/ui/linedialog.ui
 cui/ui/lineendstabpage.ui
 cui/ui/linestyletabpage.ui

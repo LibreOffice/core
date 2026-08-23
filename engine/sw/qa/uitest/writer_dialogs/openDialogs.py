@@ -111,7 +111,6 @@ dialogs = [
     {"command": ".uno:OpenXMLFilterSettings", "closeButton": "close"},
     # {"command": ".uno:ConfigureDialog", "closeButton": "cancel"},
         # tested in uitest/writer_tests/customizeDialog.py
-    #{"command": ".uno:OptionsTreeDialog", "closeButton": "cancel"},
         # used in various places
     {"command": ".uno:ShowLicense", "closeButton": "close", "skipTestOK": True},
     # {"command": ".uno:About", "closeButton": "close"},

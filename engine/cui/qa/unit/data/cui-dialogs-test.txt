@@ -52,7 +52,6 @@ cui/ui/textdialog.ui
 # covering a to e
 
 
-cui/ui/aboutconfigdialog.ui
 cui/ui/accelconfigpage.ui
 cui/ui/acorexceptpage.ui
 cui/ui/acoroptionspage.ui
