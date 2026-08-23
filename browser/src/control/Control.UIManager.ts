@@ -1039,7 +1039,7 @@ class UIManager extends window.L.Control {
 	 * whether the sidebar is shown.
 	 */
 	initializeNavigator(): void {
-		if (!window.mode.isDesktop() || window.ThisIsAMobileApp) return;
+		if (!window.mode.isDesktop()) return;
 
 		// .uno:Navigator toggles the panel, and it starts closed, so send it
 		// only when the saved state wants the navigator open.
@@ -1052,7 +1052,7 @@ class UIManager extends window.L.Control {
 	 */
 	initializeSidebar(): void {
 		// Hide the sidebar on start if saved state or UIDefault is set.
-		if (window.mode.isDesktop() && !window.ThisIsAMobileApp) {
+		if (window.mode.isDesktop()) {
 			var showSidebar = this.getBooleanDocTypePref('ShowSidebar', true);
 
 			if (showSidebar && this.getBooleanDocTypePref('PropertyDeck', true)) {
