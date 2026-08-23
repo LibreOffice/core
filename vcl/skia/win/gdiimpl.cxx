@@ -320,7 +320,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
                                                     kBGRA_8888_SkColorType, kPremul_SkAlphaType),
                                   maRects.mnSrcWidth * 4))
         abort();
-    // Native widgets are drawn twice on black/white background to synthetize alpha
+    // Native widgets are drawn twice on black/white background to synthesize alpha
     // (commit c6b66646870cb2bffaa73565affcf80bf74e0b5c). The problem is that
     // most widgets when drawn on transparent background are drawn properly (and the result
     // is in premultiplied alpha format), some such as "Edit" (used by ControlType::Editbox)
