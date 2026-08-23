@@ -107,12 +107,18 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
     , m_xEditBox(m_xBuilder->weld_widget(u"editbox"_ustr))
     , m_xPolicy(m_xBuilder->weld_combo_box(u"policy"_ustr))
     , m_xClassification(m_xBuilder->weld_combo_box(u"classification"_ustr))
+    , m_xCategoriesWin(m_xBuilder->weld_scrolled_window(u"categorieswin"_ustr))
     , m_xPreview(m_xBuilder->weld_label(u"preview"_ustr))
     , m_xWarning(m_xBuilder->weld_label(u"seclabelwarning"_ustr))
     , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xRelabelBtn(m_xBuilder->weld_button(u"relabel"_ustr))
     , m_xRemoveBtn(m_xBuilder->weld_button(u"remove"_ustr))
 {
+    // Cap the category area's height so it (and only it) scrolls. This bounds the
+    // desktop weld rendering; in online the dialog is laid out by the browser, where
+    // the cap comes from jsdialogs.css (#SecurityLabelDialog #categorieswin) instead.
+    m_xCategoriesWin->set_size_request(-1, m_xCategoriesWin->get_text_height() * 16);
+
     // Weld the static category pool (group boxes, header labels, checkboxes) and hide
     // it all; PopulateCategories shows and labels what the active policy needs.
     for (int i = 0; i < MAX_GROUPS; ++i)

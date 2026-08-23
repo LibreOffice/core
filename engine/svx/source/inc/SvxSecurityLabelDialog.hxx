@@ -74,6 +74,9 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::Widget> m_xEditBox;
     std::unique_ptr<weld::ComboBox> m_xPolicy;
     std::unique_ptr<weld::ComboBox> m_xClassification;
+    // The scrolled viewport around the category pool; height-capped so only it scrolls
+    // (never the whole dialog).
+    std::unique_ptr<weld::ScrolledWindow> m_xCategoriesWin;
     // The static category pool: MAX_GROUPS group boxes, each with a header label and
     // MAX_CATS checkboxes (m_xChecks[group][cat]).
     std::vector<std::unique_ptr<weld::Widget>> m_xGroupBoxes;
