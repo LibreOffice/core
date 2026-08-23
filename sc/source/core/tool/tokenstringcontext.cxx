@@ -72,7 +72,7 @@ TokenStringContext::TokenStringContext( const ScDocument& rDoc, formula::Formula
         }
     }
 
-    // Fetch all named database ranges names.
+    // Fetch all named database range names.
     const ScDBCollection* pDBs = rDoc.GetDBCollection();
     if (pDBs)
     {

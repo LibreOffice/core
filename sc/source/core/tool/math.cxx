@@ -52,7 +52,7 @@ double power(const double& fVal1, const double& fVal2)
     {
         fPow = err_pow(fVal1, fVal2);
     }
-    // The pow() call must had been the most recent call to check errno or exception.
+    // The pow() call must have been the most recent call to check errno or exception.
     if ((((math_errhandling & MATH_ERRNO) != 0) && (errno == EDOM || errno == ERANGE))
 // emscripten is currently broken by https://github.com/emscripten-core/emscripten/pull/11087
 // While the removal is correct for C99, it's not for C++11 (see http://www.cplusplus.com/reference/cfenv/FE_INEXACT/)
