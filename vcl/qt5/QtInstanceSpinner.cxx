@@ -17,11 +17,11 @@ QtInstanceSpinner::QtInstanceSpinner(QProgressBar* pProgressBar)
 {
     assert(pProgressBar);
 
-    // This implementation relies on using a QProgressBar in undeterminate state,
+    // This implementation relies on using a QProgressBar in indeterminate state,
     // i.e. with range [0, 0] and only shows/hides that progress bar
     // to make the animation (in)visible.
     assert(pProgressBar->minimum() == 0 && pProgressBar->maximum() == 0
-           && "Progressbar is not in undeterminate state");
+           && "Progress bar is not in indeterminate state");
 }
 
 void QtInstanceSpinner::start() { show(); }

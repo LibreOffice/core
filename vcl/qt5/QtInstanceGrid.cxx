@@ -24,8 +24,7 @@ void QtInstanceGrid::set_child_left_attach(weld::Widget& rWidget, int nAttach)
 
     GetQtInstance().RunInMainThread([&] {
         QWidget* pWidget = dynamic_cast<QtInstanceWidget&>(rWidget).getQWidget();
-        assert(pWidget && pWidget->parentWidget() == getQWidget()
-               && "widget it is not a grid child");
+        assert(pWidget && pWidget->parentWidget() == getQWidget() && "widget is not a grid child");
         int nRow = 0;
         int nCol = 0;
         int nRowSpan = 0;
@@ -44,8 +43,7 @@ int QtInstanceGrid::get_child_left_attach(weld::Widget& rWidget) const
     int nCol = 0;
     GetQtInstance().RunInMainThread([&] {
         QWidget* pWidget = dynamic_cast<QtInstanceWidget&>(rWidget).getQWidget();
-        assert(pWidget && pWidget->parentWidget() == getQWidget()
-               && "widget it is not a grid child");
+        assert(pWidget && pWidget->parentWidget() == getQWidget() && "widget is not a grid child");
         int nRow = 0;
         int nRowSpan = 0;
         int nColSpan = 0;
@@ -61,8 +59,7 @@ void QtInstanceGrid::set_child_column_span(weld::Widget& rWidget, int nCols)
 
     GetQtInstance().RunInMainThread([&] {
         QWidget* pWidget = dynamic_cast<QtInstanceWidget&>(rWidget).getQWidget();
-        assert(pWidget && pWidget->parentWidget() == getQWidget()
-               && "widget it is not a grid child");
+        assert(pWidget && pWidget->parentWidget() == getQWidget() && "widget is not a grid child");
         int nRow = 0;
         int nCol = 0;
         int nRowSpan = 0;
@@ -80,8 +77,7 @@ void QtInstanceGrid::set_child_top_attach(weld::Widget& rWidget, int nAttach)
 
     GetQtInstance().RunInMainThread([&] {
         QWidget* pWidget = dynamic_cast<QtInstanceWidget&>(rWidget).getQWidget();
-        assert(pWidget && pWidget->parentWidget() == getQWidget()
-               && "widget it is not a grid child");
+        assert(pWidget && pWidget->parentWidget() == getQWidget() && "widget is not a grid child");
         int nRow = 0;
         int nCol = 0;
         int nRowSpan = 0;
@@ -100,8 +96,7 @@ int QtInstanceGrid::get_child_top_attach(weld::Widget& rWidget) const
     int nRow = 0;
     GetQtInstance().RunInMainThread([&] {
         QWidget* pWidget = dynamic_cast<QtInstanceWidget&>(rWidget).getQWidget();
-        assert(pWidget && pWidget->parentWidget() == getQWidget()
-               && "widget it is not a grid child");
+        assert(pWidget && pWidget->parentWidget() == getQWidget() && "widget is not a grid child");
         int nCol = 0;
         int nRowSpan = 0;
         int nColSpan = 0;
