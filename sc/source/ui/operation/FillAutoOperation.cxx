@@ -131,7 +131,7 @@ bool FillAutoOperation::runImplementation()
         return false;
     }
 
-    // FID_FILL_... slots should already had been disabled, check here for API
+    // FID_FILL_... slots should already have been disabled, check here for API
     // calls, no message.
     if (ScViewData::SelectionFillDOOM(aDestArea))
         return false;

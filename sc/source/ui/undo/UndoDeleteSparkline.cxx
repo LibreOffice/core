@@ -56,7 +56,7 @@ void UndoDeleteSparkline::Redo()
     }
     else
     {
-        SAL_WARN("sc", "Can't delete a sparkline that donesn't exist.");
+        SAL_WARN("sc", "Can't delete a sparkline that doesn't exist.");
     }
 
     rDocShell.PostPaintCell(maSparklinePosition);

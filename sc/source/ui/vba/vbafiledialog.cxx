@@ -52,7 +52,7 @@ void ScVbaFileDialog::setInitialFileName( const css::uno::Any& rName )
         sal_Int32 eSuccess = osl::FileBase::getFileURLFromSystemPath(
                 sDefaultPath, sDefaultURL ) ;
         if( eSuccess == osl::FileBase::RC::E_INVAL )
-            m_sInitialFileName = sDefaultPath; // the user may gave it in URL form
+            m_sInitialFileName = sDefaultPath; // the user may have given it in URL form
         else
             m_sInitialFileName = sDefaultURL;
     }
