@@ -44,7 +44,7 @@ TableStylesBox::TableStylesBox(vcl::Window* pParent)
 
     m_xCmbStyle->connect_changed(LINK(this, TableStylesBox, SelectHdl));
     m_xCmbStyle->connect_key_press(LINK(this, TableStylesBox, KeyInputHdl));
-    // to have enough space for the entries since we have two row of entries
+    // to have enough space for the entries since we have two rows of entries
     SetSizePixel(pParent->get_preferred_size() * 2);
     // TODO: no Table tab page for core
 }

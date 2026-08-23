@@ -192,7 +192,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
     OUStringBuffer aBuffer(getTextForType(eType) + " ");
     if(eType == CONDITION)
     {
-        // workaround missing FORMULA option in the conditions case
+        // work around missing FORMULA option in the conditions case
         // FORMULA is handled later
         if(nIndex > 9)
             ++nIndex;
