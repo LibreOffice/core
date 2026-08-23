@@ -2169,10 +2169,9 @@ struct COKitDocument
 
     /**
      * Gets an image of the selected shapes.
-     * @param pOutput contains the result; use free to deallocate.
-     * @return the size of *pOutput in bytes.
+     * @return the result
      */
-    virtual size_t renderShapeSelection(char** pOutput) = 0;
+    virtual std::vector<char> renderShapeSelection() = 0;
 
     /**
      * Posts a gesture event to the window with given id.

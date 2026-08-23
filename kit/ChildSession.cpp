@@ -3515,16 +3515,14 @@ bool ChildSession::renderShapeSelection(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    char* output = nullptr;
-    const std::size_t outputSize = getLOKitDocument()->renderShapeSelection(&output);
-    if (output != nullptr && outputSize > 0)
+    std::vector<char> output = getLOKitDocument()->renderShapeSelection();
+    if (output.size() > 0)
     {
         static constexpr std::string_view header = "shapeselectioncontent:\n";
-        const size_t responseSize = header.size() + outputSize;
+        const size_t responseSize = header.size() + output.size();
         std::unique_ptr<char[]> response(new char[responseSize]);
         std::memcpy(response.get(), header.data(), header.size());
-        std::memcpy(response.get() + header.size(), output, outputSize);
-        free(output);
+        std::memcpy(response.get() + header.size(), output.data(), output.size());
 
         LOG_TRC("Sending response (" << responseSize << " bytes) for shapeselectioncontent on view #" << _viewId);
         sendBinaryFrame(response.get(), responseSize);

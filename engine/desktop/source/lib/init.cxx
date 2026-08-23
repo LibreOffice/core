@@ -1305,7 +1305,7 @@ static bool doc_addCertificate(COKitDocument* pThis,
 
 static int doc_getSignatureState(COKitDocument* pThis);
 
-static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput);
+static std::vector<char> doc_renderShapeSelection(COKitDocument* pThis);
 
 static void doc_resizeWindow(COKitDocument* pThis, unsigned nKitWindowId,
                              const int nWidth, const int nHeight);
@@ -1745,9 +1745,9 @@ int COKitDocumentImpl::getSignatureState()
     return doc_getSignatureState(this);
 }
 
-size_t COKitDocumentImpl::renderShapeSelection(char** pOutput)
+std::vector<char> COKitDocumentImpl::renderShapeSelection()
 {
-    return doc_renderShapeSelection(this, pOutput);
+    return doc_renderShapeSelection(this);
 }
 
 void COKitDocumentImpl::postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX,
@@ -5878,7 +5878,7 @@ static bool doc_hasShapeSelection(const css::uno::Reference<css::lang::XComponen
     return xSelection && xSelection->getImplementationName() != "ScCellObj";
 }
 
-static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
+static std::vector<char> doc_renderShapeSelection(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_renderShapeSelection");
 
@@ -5897,7 +5897,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
     {
         KitChartHelper aChartHelper(SfxViewShell::Current());
         if (aChartHelper.GetWindow())
-            return 0;
+            return {};
     }
 
     try
@@ -5905,7 +5905,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
         COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
 
         if (!doc_hasShapeSelection(pDocument->mxComponent))
-            return 0;
+            return {};
 
         uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
 
@@ -5957,16 +5957,9 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
 
         xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
 
-        if (pOutput)
-        {
-            const size_t nOutputSize = aOutStream.GetEndOfData();
-            *pOutput = static_cast<char*>(malloc(nOutputSize));
-            if (*pOutput)
-            {
-                std::memcpy(*pOutput, aOutStream.GetData(), nOutputSize);
-                return nOutputSize;
-            }
-        }
+        const size_t nOutputSize = aOutStream.GetEndOfData();
+        const char* pSrc = static_cast<const char*>(aOutStream.GetData());
+        return std::vector<char>(pSrc, pSrc + nOutputSize);
     }
     catch (const cpo::uno::Exception& exception)
     {
@@ -5975,7 +5968,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
         SAL_WARN("kit", "Failed to render shape selection: " << exceptionToString(exAny));
     }
 
-    return 0;
+    return {};
 }
 
 namespace {

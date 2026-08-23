@@ -360,7 +360,7 @@ namespace desktop {
         bool addCertificate(const unsigned char* pCertificateBinary,
                             const int nCertificateBinarySize) override;
         int getSignatureState() override;
-        size_t renderShapeSelection(char** pOutput) override;
+        std::vector<char> renderShapeSelection() override;
         void postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX, int nY,
                                     int nOffset) override;
         int createViewWithOptions(const char* pOptions) override;
