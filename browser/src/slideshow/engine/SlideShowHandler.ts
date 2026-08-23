@@ -90,6 +90,9 @@ class SlideShowHandler {
 	private static readonly A11Y_TRANSITION_DELAY: number = 1000;
 	private static readonly A11Y_SLIDE_CONTENT_DELAY: number = 2000;
 	private aPendingA11yTimeouts: number[] = [];
+	// The content of the slide we are on, until it has been announced.
+	private sPendingA11ySlideContent: string = null;
+	private nPendingA11ySlideContentTimeout: number = null;
 	private transitionsWithMipMapEnabled = new Set([
 		TransitionSubType.CORNERSOUT,
 		TransitionSubType.TOPTOBOTTOM,
@@ -261,11 +264,43 @@ class SlideShowHandler {
 		this.aPendingA11yTimeouts.push(nTimeout);
 	}
 
+	/** The content of a slide is announced once, when moving to the slide,
+	 * cancelling all other announcements
+	 */
+	addA11ySlideContent(a11yString: string) {
+		this.clearPendingA11ySlideContent();
+		this.sPendingA11ySlideContent = a11yString;
+		this.scheduleA11ySlideContent();
+	}
+
+	private scheduleA11ySlideContent() {
+		if (this.sPendingA11ySlideContent === null) return;
+		this.nPendingA11ySlideContentTimeout = window.setTimeout(() => {
+			const a11yString = this.sPendingA11ySlideContent;
+			this.clearPendingA11ySlideContent();
+			this.writeA11yString(a11yString);
+		}, SlideShowHandler.A11Y_SLIDE_CONTENT_DELAY);
+	}
+
+	clearPendingA11ySlideContent() {
+		if (this.nPendingA11ySlideContentTimeout !== null) {
+			clearTimeout(this.nPendingA11ySlideContentTimeout);
+			this.nPendingA11ySlideContentTimeout = null;
+		}
+		this.sPendingA11ySlideContent = null;
+	}
+
 	clearPendingA11yStrings() {
 		this.aPendingA11yTimeouts.forEach((nTimeout: number) =>
 			clearTimeout(nTimeout),
 		);
 		this.aPendingA11yTimeouts = [];
+
+		// put the slide content off, it is still to be announced
+		if (this.nPendingA11ySlideContentTimeout !== null) {
+			clearTimeout(this.nPendingA11ySlideContentTimeout);
+			this.scheduleA11ySlideContent();
+		}
 	}
 
 	private writeA11yString(a11yString: string) {
@@ -498,8 +533,14 @@ class SlideShowHandler {
 		this.slideCompositor.notifyTransitionStart();
 		this.presenter._map.fire('transitionstart', { slide: nNewSlideIndex });
 
+		// The transition of a slide is the one played to get onto it, so it is
+		// announced when we get there moving forward only
+		const bMovingForward =
+			nOldSlideIndex === undefined
+				? this.isStarting
+				: nNewSlideIndex > nOldSlideIndex;
 		const slideInfo = this.getSlideInfo(nNewSlideIndex);
-		if (slideInfo.transitionLabel) {
+		if (bMovingForward && slideInfo.transitionLabel) {
 			this.addA11yStringDelayed(
 				_('Transition: {0}').replace('{0}', slideInfo.transitionLabel),
 				SlideShowHandler.A11Y_TRANSITION_DELAY,
@@ -967,6 +1008,8 @@ class SlideShowHandler {
 			this.exitSlideShow();
 		}
 
+		// the slide we are leaving is not to be announced any more
+		this.clearPendingA11ySlideContent();
 		this.clearPendingA11yStrings();
 		if (this.theMetaPres.numberOfSlides - 1 == nNewSlide) {
 			this.addA11yString(this._labelMap['lastPage']);
@@ -1037,6 +1080,7 @@ class SlideShowHandler {
 
 	exitSlideShow() {
 		// TODO: implement it;
+		this.clearPendingA11ySlideContent();
 		this.addA11yString(this._labelMap['quit']);
 		this.automaticAdvanceTimeout = null;
 		this.bIsAutomaticAdvancePaused = false;
@@ -1150,10 +1194,7 @@ class SlideShowHandler {
 	private presentSlide(nSlideIndex: number) {
 		const slideInfo = this.getSlideInfo(nSlideIndex);
 		if (slideInfo.a11y) {
-			this.addA11yStringDelayed(
-				slideInfo.a11y,
-				SlideShowHandler.A11Y_SLIDE_CONTENT_DELAY,
-			);
+			this.addA11ySlideContent(slideInfo.a11y);
 		}
 
 		let slideTexture = this.enteringSlideTexture;
