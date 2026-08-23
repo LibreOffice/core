@@ -328,7 +328,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rArray.GetRange( nStart, nEnd );
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
-    // this is a temporarily workaround
+    // this is a temporary workaround
     if (!comphelper::LibreOfficeKit::isActive() && bRecord )
     {
         std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
@@ -449,7 +449,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         SCCOLROW i;
 
         // TODO undo can mess things up when another view is editing a cell in the range of group entry
-        // this is a temporarily workaround
+        // this is a temporary workaround
         if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
         {
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
@@ -575,7 +575,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
         rRowArray.ExtendBlock( nRowLevel, nEffStartRow, nEffEndRow );
 
         // TODO undo can mess things up when another view is editing a cell in the range of group entry
-        // this is a temporarily workaround
+        // this is a temporary workaround
         if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
         {
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
@@ -649,7 +649,7 @@ void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     SCCOLROW nEnd   = pEntry->GetEnd();
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
-    // this is a temporarily workaround
+    // this is a temporary workaround
     if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
     {
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
@@ -743,7 +743,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         return false;
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
-    // this is a temporarily workaround
+    // this is a temporary workaround
     if ( !comphelper::LibreOfficeKit::isActive() &&  bRecord )
     {
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));

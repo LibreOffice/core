@@ -132,7 +132,7 @@ void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEnt
     m_xTreeView->set_text(nRow, rLine.aName, 0);
     m_xTreeView->set_text(nRow, rLine.aExpression, 1);
     m_xTreeView->set_text(nRow, rLine.aScope, 2);
-    // just unique to track which one has been cached by maCalculatedFormulaEntries
+    // just used to track which one has been cached by maCalculatedFormulaEntries
     m_xTreeView->set_id(nRow, OUString::number(m_nId++));
     if (bSetCurEntry)
         m_xTreeView->set_cursor(nRow);
