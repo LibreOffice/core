@@ -624,7 +624,7 @@ bool FuDraw::SetPointer(const SdrObject* pObj, const Point& rPos)
 }
 
 /**
- * Response of doubleclick
+ * Response of double-click
  */
 void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 {

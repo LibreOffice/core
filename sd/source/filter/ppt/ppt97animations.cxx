@@ -629,7 +629,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         pEffect->setTargetSubItem( presentation::ShapeAnimationSubType::AS_WHOLE );
     }
 
-    //3. ------ put the created effect to the model and do some last changes fro paragraph effects ------
+    //3. ------ put the created effect to the model and do some last changes for paragraph effects ------
     pMainSequence->append( pEffect );
     if( HasParagraphEffect() )
     {

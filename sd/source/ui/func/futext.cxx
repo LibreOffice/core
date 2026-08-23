@@ -241,7 +241,7 @@ void FuText::DoExecute( SfxRequest& )
 
         && pArgs->Get(SID_TEXTEDIT).GetValue() == 2)
     {
-        // Selection by doubleclick -> don't allow QuickDrag
+        // Selection by double-click -> don't allow QuickDrag
         bQuickDrag = false;
     }
 
