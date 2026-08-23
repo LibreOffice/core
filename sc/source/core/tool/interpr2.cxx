@@ -2576,7 +2576,10 @@ void ScInterpreter::ScUnionFunc()
 
     if (nGlobalError != FormulaError::NONE || !p2nd || !p1st)
     {
-        PushIllegalArgument();
+        // An error in one of the parts, for example an error constant written into
+        // the list, becomes the result of the whole list.
+        PushError(nGlobalError != FormulaError::NONE ? nGlobalError
+                                                     : FormulaError::IllegalArgument);
         return;
     }
 
