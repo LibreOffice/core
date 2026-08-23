@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/request.hxx>
-
-#include <sfx2/viewfrm.hxx>
-#include <unotools/moduleoptions.hxx>
-
 #include <hlmailtp.hxx>
 
 #include <comphelper/kit.hxx>
@@ -36,7 +31,6 @@ using namespace ::com::sun::star;
 SvxHyperlinkMailTp::SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
     : SvxHyperlinkTabPageBase(pParent, pDlg, u"cui/ui/hyperlinkmailpage.ui"_ustr, u"HyperlinkMailPage"_ustr, pItemSet)
     , m_xCbbReceiver(new SvxHyperURLBox(xBuilder->weld_combo_box(u"receiver"_ustr)))
-    , m_xBtAdrBook(xBuilder->weld_button(u"addressbook"_ustr))
     , m_xEdSubject(xBuilder->weld_entry(u"subject"_ustr))
 {
     m_xCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
@@ -48,11 +42,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* p
     SetExchangeSupport ();
 
     // set handlers
-    m_xBtAdrBook->connect_clicked( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
     m_xCbbReceiver->connect_changed( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
-
-    if (!SvtModuleOptions().IsDataBaseInstalled() || comphelper::COKit::isActive())
-        m_xBtAdrBook->hide();
 }
 
 SvxHyperlinkMailTp::~SvxHyperlinkMailTp()
@@ -166,7 +156,6 @@ void SvxHyperlinkMailTp::SetScheme(std::u16string_view rScheme)
     m_xCbbReceiver->SetSmartProtocol( INetProtocol::Mailto );
 
     //show/hide  special fields for MAIL:
-    m_xBtAdrBook->set_sensitive(true);
     m_xEdSubject->set_sensitive(true);
 }
 
@@ -199,21 +188,6 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, weld::ComboBox&, v
     OUString aScheme = GetSchemeFromURL( m_xCbbReceiver->get_active_text() );
     if(!aScheme.isEmpty())
         SetScheme( aScheme );
-}
-
-/*************************************************************************
-|*
-|* Click on imagebutton : addressbook
-|*
-|************************************************************************/
-IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, weld::Button&, void)
-{
-    if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
-    {
-        SfxItemPool &rPool = pViewFrame->GetPool();
-        SfxRequest aReq(SID_VIEW_DATA_SOURCE_BROWSER, SfxCallMode::SLOT, rPool);
-        pViewFrame->ExecuteSlot( aReq, true );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
