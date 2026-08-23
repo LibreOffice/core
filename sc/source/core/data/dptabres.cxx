@@ -3905,7 +3905,7 @@ void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData)
 }
 
 // Called by an ScDPResultMemberSlim which has already been promoted
-// but something calls one of it's member functions
+// but something calls one of its member functions
 ScDPResultMember* ScDPResultDimension::GetPromote(SCROW nOrder) const
 {
     // Find the existing slim entry

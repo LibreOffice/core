@@ -133,7 +133,7 @@ static ItemInfoPackage& getItemInfoPackageScDocument()
             { ATTR_ROTATE_MODE, new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE ), SID_ATTR_ALIGN_LOCKPOS, SFX_ITEMINFOFLAG_NONE },
             { ATTR_VERTICAL_ASIAN, new SfxBoolItem( ATTR_VERTICAL_ASIAN ), SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEMINFOFLAG_NONE },
 
-            //  The default for the ATTR_WRITINGDIR cell attribute must by SvxFrameDirection::Environment,
+            //  The default for the ATTR_WRITINGDIR cell attribute must be SvxFrameDirection::Environment,
             //  so that value is returned when asking for a default cell's attributes.
             //  The value from the page style is set as DefaultHorizontalTextDirection for the EditEngine.
             { ATTR_WRITINGDIR, new SvxFrameDirectionItem( SvxFrameDirection::Environment, ATTR_WRITINGDIR ), SID_ATTR_FRAMEDIRECTION, SFX_ITEMINFOFLAG_NONE },

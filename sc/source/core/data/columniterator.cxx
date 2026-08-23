@@ -50,7 +50,7 @@ void ScColumnTextWidthIterator::next()
     {
         if (miBlockCur->type != sc::element_type_celltextattr)
         {
-            // We don't iterator over this block.
+            // We don't iterate over this block.
             mnCurPos += miBlockCur->size;
             continue;
         }
