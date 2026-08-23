@@ -2463,20 +2463,17 @@ bool ChildSession::renderSearchResult(const char* buffer, int length, const Stri
 
     const auto tileMode = getLOKitDocument()->getTileMode();
 
-    unsigned char* bitmapBuffer = nullptr;
-
+    std::vector<unsigned char> bitmapBuffer;
     int width = 0;
     int height = 0;
-    size_t byteSize = 0;
+    bool success = getLOKitDocument()->renderSearchResult(arguments.c_str(), &bitmapBuffer, &width, &height);
 
-    bool success = getLOKitDocument()->renderSearchResult(arguments.c_str(), &bitmapBuffer, &width, &height, &byteSize);
-
-    if (success && byteSize > 0)
+    if (success && bitmapBuffer.size() > 0)
     {
         std::vector<char> output;
-        output.reserve(byteSize * 3 / 4); // reserve 75% of original size
+        output.reserve(bitmapBuffer.size() * 3 / 4); // reserve 75% of original size
 
-        if (Png::encodeBufferToPNG(bitmapBuffer, width, height, output, tileMode))
+        if (Png::encodeBufferToPNG(bitmapBuffer.data(), width, height, output, tileMode))
         {
             static constexpr std::string_view header = "rendersearchresult:\n";
             const size_t responseSize = header.size() + output.size();
@@ -2494,8 +2491,6 @@ bool ChildSession::renderSearchResult(const char* buffer, int length, const Stri
     {
         sendTextFrameAndLogError("error: cmd=rendersearchresult kind=failure");
     }
-
-    free(bitmapBuffer);
 
     return true;
 }

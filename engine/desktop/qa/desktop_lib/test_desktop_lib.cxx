@@ -4251,7 +4251,7 @@ void DesktopKitTest::testRenderSearchResult_WriterNode()
 
     Scheduler::ProcessEventsToIdle();
 
-    unsigned char* pBuffer = nullptr;
+    std::vector<unsigned char> aBuffer;
     OString aPayload =
     "<indexing>"
         "<paragraph node_type=\"writer\" index=\"19\">ABC</paragraph>"
@@ -4259,20 +4259,18 @@ void DesktopKitTest::testRenderSearchResult_WriterNode()
 
     int nWidth = 0;
     int nHeight = 0;
-    size_t nByteSize = 0;
 
-    bool bResult = pDocument->renderSearchResult(aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
+    bool bResult = pDocument->renderSearchResult(aPayload.getStr(), &aBuffer, &nWidth, &nHeight);
 
     CPPUNIT_ASSERT(bResult);
-    CPPUNIT_ASSERT(pBuffer);
 
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(642, nWidth);
     CPPUNIT_ASSERT_EQUAL(561, nHeight);
-    CPPUNIT_ASSERT_EQUAL(size_t(1440648), nByteSize);
+    CPPUNIT_ASSERT_EQUAL(size_t(1440648), aBuffer.size());
 
-    const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(pBuffer);
+    const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(aBuffer.data());
     Bitmap aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, /*nBitsPerPixel*/32, true, true);
 
     if (bDumpBitmap)
@@ -4283,8 +4281,6 @@ void DesktopKitTest::testRenderSearchResult_WriterNode()
     }
     CPPUNIT_ASSERT_EQUAL(tools::Long(642), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(561), aBitmap.GetSizePixel().Height());
-
-    std::free(pBuffer);
 }
 
 void DesktopKitTest::testRenderSearchResult_CommonNode()
@@ -4296,7 +4292,7 @@ void DesktopKitTest::testRenderSearchResult_CommonNode()
 
     Scheduler::ProcessEventsToIdle();
 
-    unsigned char* pBuffer = nullptr;
+    std::vector<unsigned char> aBuffer;
     OString aPayload =
     "<indexing>"
         "<paragraph node_type=\"common\" index=\"0\" object_name=\"Shape 1\" />"
@@ -4304,20 +4300,18 @@ void DesktopKitTest::testRenderSearchResult_CommonNode()
 
     int nWidth = 0;
     int nHeight = 0;
-    size_t nByteSize = 0;
 
-    bool bResult = pDocument->renderSearchResult(aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
+    bool bResult = pDocument->renderSearchResult(aPayload.getStr(), &aBuffer, &nWidth, &nHeight);
 
     CPPUNIT_ASSERT(bResult);
-    CPPUNIT_ASSERT(pBuffer);
 
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(192, nWidth);
     CPPUNIT_ASSERT_EQUAL(96, nHeight);
-    CPPUNIT_ASSERT_EQUAL(size_t(73728), nByteSize);
+    CPPUNIT_ASSERT_EQUAL(size_t(73728), aBuffer.size());
 
-    const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(pBuffer);
+    const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(aBuffer.data());
     Bitmap aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, /*nBitsPerPixel*/32, true, true);
 
     if (bDumpBitmap)
@@ -4328,8 +4322,6 @@ void DesktopKitTest::testRenderSearchResult_CommonNode()
     }
     CPPUNIT_ASSERT_EQUAL(tools::Long(192), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(96), aBitmap.GetSizePixel().Height());
-
-    std::free(pBuffer);
 }
 
 static void lcl_repeatKeyStroke(COKitDocumentImpl *pDocument, int nCharCode, int nKeyCode, size_t nCount)

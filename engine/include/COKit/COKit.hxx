@@ -2326,14 +2326,13 @@ struct COKitDocument
      * Render input search result to a bitmap buffer.
      *
      * @param pSearchResult payload containing the search result data
-     * @param pBitmapBuffer contains the bitmap; use free to deallocate.
+     * @param pBitmapBuffer contains the bitmap
      * @param pWidth output bitmap width
      * @param pHeight output bitmap height
-     * @param pByteSize output bitmap byte size
      * @return true if successful
      */
-    virtual bool renderSearchResult(const char* pSearchResult, unsigned char** pBitmapBuffer,
-                                    int* pWidth, int* pHeight, size_t* pByteSize) = 0;
+    virtual bool renderSearchResult(const char* pSearchResult, std::vector<unsigned char>* pBitmapBuffer,
+                                    int* pWidth, int* pHeight) = 0;
 
     /**
      * Posts an event for the content control at the cursor position.

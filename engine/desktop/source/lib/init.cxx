@@ -1317,8 +1317,8 @@ static void doc_sendFormFieldEvent(COKitDocument* pThis,
                                    const char* pArguments);
 
 static bool doc_renderSearchResult(COKitDocument* pThis,
-                                 const char* pSearchResult, unsigned char** pBitmapBuffer,
-                                 int* pWidth, int* pHeight, size_t* pByteSize);
+                                 const char* pSearchResult, std::vector<unsigned char>* pBitmapBuffer,
+                                 int* pWidth, int* pHeight);
 
 static void doc_sendContentControlEvent(COKitDocument* pThis, const char* pArguments);
 
@@ -1830,10 +1830,10 @@ void COKitDocumentImpl::setBlockedCommandList(int nViewId, const char* blockedCo
 }
 
 bool COKitDocumentImpl::renderSearchResult(const char* pSearchResult,
-                                            unsigned char** pBitmapBuffer, int* pWidth,
-                                            int* pHeight, size_t* pByteSize)
+                                            std::vector<unsigned char>* pBitmapBuffer, int* pWidth,
+                                            int* pHeight)
 {
-    return doc_renderSearchResult(this, pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
+    return doc_renderSearchResult(this, pSearchResult, pBitmapBuffer, pWidth, pHeight);
 }
 
 void COKitDocumentImpl::sendContentControlEvent(const char* pArguments)
@@ -8822,8 +8822,8 @@ static void doc_sendFormFieldEvent(COKitDocument* pThis, const char* pArguments)
 }
 
 static bool doc_renderSearchResult(COKitDocument* pThis,
-                                     const char* pSearchResult, unsigned char** pBitmapBuffer,
-                                     int* pWidth, int* pHeight, size_t* pByteSize)
+                                     const char* pSearchResult, std::vector<unsigned char>* pBitmapBuffer,
+                                     int* pWidth, int* pHeight)
 {
     if (doc_getDocumentType(pThis) != COKitDocumentType::TEXT)
         return false;
@@ -8857,16 +8857,13 @@ static bool doc_renderSearchResult(COKitDocument* pThis,
 
     *pWidth = aPixelWidth;
     *pHeight = aPixelHeight;
-    *pByteSize = nByteSize;
 
-    auto* pBuffer = static_cast<unsigned char*>(std::malloc(nByteSize));
+    pBitmapBuffer->resize(nByteSize);
 
-    doc_paintTile(pThis, pBuffer,
+    doc_paintTile(pThis, pBitmapBuffer->data(),
         aPixelWidth, aPixelHeight,
         aRangeUnion.getMinX(), aRangeUnion.getMinY(),
         aRangeUnion.getWidth(), aRangeUnion.getHeight());
-
-    *pBitmapBuffer = pBuffer;
 
     return true;
 }
