@@ -57,7 +57,7 @@ oslMutex SAL_CALL osl_createMutex()
         nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
     if ( nRet != 0 )
     {
-        SAL_WARN("sal.osl.mutex", "pthread_muxex_init failed: " << UnixErrnoString(nRet));
+        SAL_WARN("sal.osl.mutex", "pthread_mutex_init failed: " << UnixErrnoString(nRet));
 
         free(pMutex);
         pMutex = nullptr;

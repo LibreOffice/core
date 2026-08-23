@@ -148,7 +148,7 @@ int macxp_resolveAlias(char *path, int buflen)
 
 #endif /* NO_PTHREAD_RTL */
 
-//might be useful on other platforms, but doesn't compiler under MACOSX anyway
+//might be useful on other platforms, but doesn't compile under MACOSX anyway
 #if defined(__GNUC__) && defined(LINUX)
 //force the __data_start symbol to exist in any executables that link against
 //libuno_sal so that dlopening of the libgcj provided libjvm.so on some
