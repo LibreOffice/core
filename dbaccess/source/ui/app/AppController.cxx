@@ -2392,7 +2392,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     {
         m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
 
-        // asynchron because we some dialogs and we aren't allowed to show them while in D&D
+        // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
         m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
         return DND_ACTION_COPY;
     }
@@ -2439,7 +2439,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         if ( nAction != DND_ACTION_NONE )
         {
             m_aAsyncDrop.nAction = nAction;
-            // asynchron because we some dialogs and we aren't allowed to show them while in D&D
+            // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
         }
         else
@@ -2451,7 +2451,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         SharedConnection xConnection( ensureConnection() );
         if ( xConnection.is() && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xConnection ) )
         {
-            // asynchron because we some dialogs and we aren't allowed to show them while in D&D
+            // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
             return DND_ACTION_COPY;
         }
