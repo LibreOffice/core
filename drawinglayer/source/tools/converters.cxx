@@ -200,7 +200,7 @@ Bitmap convertToBitmap(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
     //   COL_WHITE in the 1st layer of targets (not in buffers below)
     //   but is kind of a 'hack' doing so
     // - Other renderers (system-dependent PrimitiveRenderers, other
-    //   than the VCL-based ones) will probably not support splitted
+    //   than the VCL-based ones) will probably not support split
     //   VDevs for content/alpha, so require a method that works with
     //   RGB targeting (for now)
     // - Less resource usage, better speed (no 2 VDevs, no merge of
