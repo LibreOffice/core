@@ -56,16 +56,9 @@
 #include <textdlgs.hxx>
 #include <sortdlg.hxx>
 #include <textimportoptions.hxx>
-#include <opredlin.hxx>
-#include <tpcalc.hxx>
 #include <tpprint.hxx>
 #include <tpstat.hxx>
-#include <tpusrlst.hxx>
-#include <tpview.hxx>
-#include <tpformula.hxx>
 #include <datafdlg.hxx>
-#include <tpcompatibility.hxx>
-#include <tpdefaults.hxx>
 #include <condformatmgr.hxx>
 #include <scres.hrc>
 #include <svx/dialogs.hrc>
@@ -973,26 +966,10 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
 {
     switch (nId)
     {
-        case SID_SC_TP_CHANGES:
-            return ScRedlineOptionsTabPage::Create;
-        case SID_SC_TP_CALC:
-            return ScTpCalcOptions::Create;
-        case SID_SC_TP_FORMULA:
-            return ScTpFormulaOptions::Create;
-        case SID_SC_TP_COMPATIBILITY:
-            return ScTpCompatOptions::Create;
-        case RID_SC_TP_DEFAULTS:
-            return ScTpDefaultsOptions::Create;
         case RID_SC_TP_PRINT:
             return ScTpPrintOptions::Create;
         case SID_SC_TP_STAT:
             return ScDocStatPage::Create;
-        case SID_SC_TP_USERLISTS:
-             return ScTpUserLists::Create;
-        case SID_SC_TP_CONTENT:
-            return ScTpContentOptions::Create;
-        case SID_SC_TP_LAYOUT:
-            return ScTpLayoutOptions::Create;
         default:
             break;
     }

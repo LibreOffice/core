@@ -1130,7 +1130,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/floatinglinestyle.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/footerdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/formatcellsdialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/formulacalculationoptions.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/fourieranalysisdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/functionpanel.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/goalseekdlg.ui \
@@ -1168,15 +1167,9 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/notebookbar_online.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/numberbox.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/numbertransformationentry.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optcalculatepage.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optchangespage.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optcompatibilitypage.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optdefaultpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optdlg.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optformula.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optimalcolwidthdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optimalrowheightdialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/optsortlists.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/pagelistmenu.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/pagetemplatedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/paradialog.ui \
@@ -1204,7 +1197,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/samplingdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/scenariodialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/scenariomenu.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/scgeneralpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/searchresults.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/selectdatasource.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/selectrange.ui \
@@ -1249,7 +1241,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/textimportcsv.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/textimportoptions.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/texttransformationentry.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/tpviewpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/ttestdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/ungroupdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/validationcriteriapage.ui \

@@ -158,8 +158,6 @@ def check_title_labels(root):
                     pass
                 elif sys.argv[1] == "sc/uiconfig/scalc/ui/datastreams.ui" and context == "datastreams|label4":
                     pass
-                elif sys.argv[1] == "sc/uiconfig/scalc/ui/scgeneralpage.ui" and context == "scgeneralpage|label6":
-                    pass
                 elif sys.argv[1] == "sfx2/uiconfig/ui/documentfontspage.ui" and context == "documentfontspage|fontScriptFrameLabel":
                     pass
                 elif sys.argv[1] == "sw/uiconfig/swriter/ui/testmailsettings.ui" and context == "testmailsettings|label8":

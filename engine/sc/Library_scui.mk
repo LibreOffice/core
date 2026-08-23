@@ -114,15 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/miscdlgs/tabbgcolordlg \
     sc/source/ui/miscdlgs/textdlgs \
     sc/source/ui/namedlg/namepast \
-    sc/source/ui/optdlg/calcoptionsdlg \
-    sc/source/ui/optdlg/opredlin \
-    sc/source/ui/optdlg/tpcalc \
-    sc/source/ui/optdlg/tpcompatibility \
-    sc/source/ui/optdlg/tpformula \
-    sc/source/ui/optdlg/tpdefaults \
     sc/source/ui/optdlg/tpprint \
-    sc/source/ui/optdlg/tpusrlst \
-    sc/source/ui/optdlg/tpview \
     sc/source/ui/pagedlg/hfedtdlg \
     sc/source/ui/pagedlg/scuitphfedit \
     sc/source/ui/pagedlg/tphf \

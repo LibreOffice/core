@@ -142,7 +142,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/filtersubdropdown \
 	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
-	sc/uiconfig/scalc/ui/formulacalculationoptions \
 	sc/uiconfig/scalc/ui/fourieranalysisdialog \
 	sc/uiconfig/scalc/ui/floatingborderstyle \
 	sc/uiconfig/scalc/ui/floatinglinestyle \
@@ -191,15 +190,9 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/navigatorpanel \
 	sc/uiconfig/scalc/ui/nosolutiondialog \
 	sc/uiconfig/scalc/ui/onlyactivesheetsaveddialog \
-	sc/uiconfig/scalc/ui/optcalculatepage \
-	sc/uiconfig/scalc/ui/optchangespage \
-	sc/uiconfig/scalc/ui/optcompatibilitypage \
-	sc/uiconfig/scalc/ui/optdefaultpage \
 	sc/uiconfig/scalc/ui/optdlg \
-	sc/uiconfig/scalc/ui/optformula \
 	sc/uiconfig/scalc/ui/optimalcolwidthdialog \
 	sc/uiconfig/scalc/ui/optimalrowheightdialog \
-	sc/uiconfig/scalc/ui/optsortlists \
 	sc/uiconfig/scalc/ui/pagelistmenu \
 	sc/uiconfig/scalc/ui/pagetemplatedialog \
 	sc/uiconfig/scalc/ui/pastespecial \
@@ -228,7 +221,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/standardfilterdialog \
 	sc/uiconfig/scalc/ui/scenariodialog \
 	sc/uiconfig/scalc/ui/scenariomenu \
-	sc/uiconfig/scalc/ui/scgeneralpage \
 	sc/uiconfig/scalc/ui/searchresults \
 	sc/uiconfig/scalc/ui/selectdatasource \
 	sc/uiconfig/scalc/ui/selectrange \
@@ -271,7 +263,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/tabcolordialog \
 	sc/uiconfig/scalc/ui/textimportoptions \
 	sc/uiconfig/scalc/ui/textimportcsv \
-	sc/uiconfig/scalc/ui/tpviewpage \
 	sc/uiconfig/scalc/ui/ttestdialog \
 	sc/uiconfig/scalc/ui/ungroupdialog \
 	sc/uiconfig/scalc/ui/validationdialog \
