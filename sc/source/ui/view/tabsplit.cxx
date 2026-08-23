@@ -75,7 +75,7 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
                 const tools::Long xc = rRect.Right() + rRect.Left();
                 const tools::Long h4 = rRect.GetHeight() / 4;
                 // First xc fraction is truncated, second one is rounded. This will draw a centered line
-                // in handlers with odd width and a centered rectangle in those with even width.
+                // in handles with odd width and a centered rectangle in those with even width.
                 rRenderContext.DrawRect(tools::Rectangle(Point(xc / 2, rRect.Top() + h4),
                                                   Point((xc + 1) / 2, rRect.Bottom() - h4)));
                 break;
@@ -106,7 +106,7 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
                 const tools::Long yc = rRect.Top() + rRect.Bottom();
                 const tools::Long w4 = rRect.GetWidth() / 4;
                 // First yc fraction is truncated, second one is rounded. This will draw a centered line
-                // in handlers with odd height and a centered rectangle in those with even height.
+                // in handles with odd height and a centered rectangle in those with even height.
                 GetOutDev()->DrawRect(tools::Rectangle(Point(rRect.Left() + w4, yc / 2),
                                    Point(rRect.Right() - w4, (yc + 1) / 2)));
                 break;

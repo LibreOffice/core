@@ -2345,7 +2345,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             else
                 Query( aQueryParam, nullptr, false );
 
-            // if not inplace the sheet may have changed
+            // if not in-place the sheet may have changed
             if ( !aQueryParam.bInplace && aQueryParam.nDestTab != nTab )
                 SetTabNo( nTab );
         }
@@ -2391,7 +2391,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
             PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
     }
-    else        // "no not execute any operations"
+    else        // "do not execute any operations"
         ErrorMessage(STR_MSSG_REPEATDB_0);
 }
 

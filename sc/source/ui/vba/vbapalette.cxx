@@ -34,7 +34,7 @@ using namespace ::ooo::vba;
 /** Standard EGA colors, bright. */
 #define EXC_PALETTE_EGA_COLORS_LIGHT \
             Color(0x000000), Color(0xFFFFFF), Color(0xFF0000), Color(0x00FF00), Color(0x0000FF), Color(0xFFFF00), Color(0xFF00FF), Color(0x00FFFF)
-/** Standard EGA colors), dark. */
+/** Standard EGA colors (dark). */
 #define EXC_PALETTE_EGA_COLORS_DARK \
             Color(0x800000), Color(0x008000), Color(0x000080), Color(0x808000), Color(0x800080), Color(0x008080), Color(0xC0C0C0), Color(0x808080)
 
