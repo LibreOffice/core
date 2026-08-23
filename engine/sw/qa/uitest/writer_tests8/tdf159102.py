@@ -30,52 +30,31 @@ class tdf159102(UITestCase):
             # we found the correct combination
             return True
 
+    # Extend the list of ignored words with the hyphenations the test needs,
+    # so it does not depend on the installed hyphenation patterns. This is what
+    # the edit dictionary dialog did, see SvxEditDictionaryDialog::NewDelHdl.
     def set_custom_hyphenation(self):
-        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
+        xDicList = self.xContext.ServiceManager.createInstanceWithContext(
+            'com.sun.star.linguistic2.DictionaryList', self.xContext)
 
-            xPages = xDialog.getChild("pages")
-            xLanguageEntry = xPages.getChild('2')                 # Language Settings
-            xLanguageEntry.executeAction("EXPAND", tuple())
-            xxLanguageEntryWritingAidsEntry = xLanguageEntry.getChild('1')
-            xxLanguageEntryWritingAidsEntry.executeAction("SELECT", tuple())          # Writing Aids
-
-            # add hyphenation "cur=sus" and "ege=stas" to the custom dictionary
-            # to solve the non-accessible hyphenation patterns for the test
-
-            # Select an editable dictionary (list of Ignored words)
-            dictionaries = xDialog.getChild("lingudicts")
-            hasEditableDictionary = False
-            for i in dictionaries.getChildren():
-                entry = dictionaries.getChild(i)
-                entry_label = get_state_as_dict(entry)["Text"]
-                if entry_label == "List of Ignored Words [All]":
-                    hasEditableDictionary = True
-                    entry.executeAction("SELECT", tuple())          # an editable user dictionary
-                    break
-
-            self.assertEqual(True, hasEditableDictionary)
-
-            # open Edit dialog window
-            edit = xDialog.getChild("lingudictsedit")
-            with self.ui_test.execute_blocking_action(edit.executeAction, args=('CLICK', ()), close_button="close") as xEdit:
-                # write cur=sus into the input box
-                inputbox = xEdit.getChild("word")
-                inputbox.executeAction("TYPE", mkPropertyValues({"TEXT": "cur=sus"}))
-                add = xEdit.getChild("newreplace")
-                add.executeAction("CLICK", tuple())
-                inputbox.executeAction("TYPE", mkPropertyValues({"TEXT": "ege=stas"}))
-                add.executeAction("CLICK", tuple())
+        # STR_DESCRIPTION_IGNOREALLLIST, the name GetIgnoreAllList looks up
+        xDic = xDicList.getDictionaryByName('List of Ignored Words')
+        self.assertIsNotNone(xDic)
+        xDic.setActive(True)
+        xDic.add(u'cur=sus', False, u'')
+        xDic.add(u'ege=stas', False, u'')
 
     def test_tdf159102_smart_justify_with_automatic_hyphenation(self):
         supported_locale = self.is_supported_locale("en", "US")
         if not supported_locale:
             self.skipTest("no hyphenation patterns for en_US available")
 
+        # we must not depend on the installed hyphenation patterns,
+        # so extend the list of ignored words with the hyphenation cur=sus and ege=stas
+        self.set_custom_hyphenation()
+
         xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
         with self.ui_test.load_file(get_url_for_data_file("tdf159102.fodt")) as writer_doc:
-            # we must not depend on the installed hyphenation patterns,
-            # so extend user dictionary temporarily with the hyphenation cur=sus and ege=stas
-            self.set_custom_hyphenation()
             xToolkit.processEventsToIdle()
             # delete the text of the first line
             self.xUITest.executeCommand(".uno:GoToEndOfLine")

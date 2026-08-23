@@ -20,25 +20,17 @@ import os.path
 class tdf90401(UITestCase):
 
     def change_security_option(self, enabled):
-        with self.ui_test.execute_dialog_through_command('.uno:OptionsTreeDialog') as xDialog:
-            xPages = xDialog.getChild('pages')
-            xGenEntry = xPages.getChild('0')
-            xSecurityPage = xGenEntry.getChild('6')
-            xSecurityPage.executeAction('SELECT', tuple())
-            # Click Button Options...
-            xOptions = xDialog.getChild('options')
+        with self.ui_test.execute_dialog_through_command('.uno:OptionsSecurityDialog', close_button="") as dialog:
+            xRemovePersonal = dialog.getChild('removepersonal')
+            if get_state_as_dict(xRemovePersonal)['Selected'] != enabled:
+                xRemovePersonal.executeAction('CLICK', tuple())
+            self.ui_test.wait_until_property_is_updated(xRemovePersonal, "Selected", enabled)
+            self.assertEqual(get_state_as_dict(xRemovePersonal)["Selected"], enabled)
 
-            with self.ui_test.execute_blocking_action(xOptions.executeAction, args=('CLICK', ()), close_button="") as dialog:
-                xRemovePersonal = dialog.getChild('removepersonal')
-                if get_state_as_dict(xRemovePersonal)['Selected'] != enabled:
-                    xRemovePersonal.executeAction('CLICK', tuple())
-                self.ui_test.wait_until_property_is_updated(xRemovePersonal, "Selected", enabled)
-                self.assertEqual(get_state_as_dict(xRemovePersonal)["Selected"], enabled)
-
-                xOkBtn = dialog.getChild('ok')
-                # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
-                # event DialogClosed after closing
-                xOkBtn.executeAction('CLICK', tuple())
+            xOkBtn = dialog.getChild('ok')
+            # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
+            # event DialogClosed after closing
+            xOkBtn.executeAction('CLICK', tuple())
 
     def test_tdf90401_remove_personal_info(self):
         # load a test document with a tracked change, and add a comment

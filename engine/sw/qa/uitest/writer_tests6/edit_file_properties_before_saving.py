@@ -17,27 +17,16 @@ import os.path
 
 class edit_file_properties_before_saving(UITestCase):
 
-    def change_doc_info_setting(self, enabled):
-        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
-            xPages = xDialog.getChild("pages")
-            xLoadSaveEntry = xPages.getChild('1')
-            xLoadSaveEntry.executeAction("EXPAND", tuple())
-            xGeneralEntry = xLoadSaveEntry.getChild('0')
-            xGeneralEntry.executeAction("SELECT", tuple())
-
-            xDocInfo = xDialog.getChild("docinfo")
-            if get_state_as_dict(xDocInfo)['Selected'] != enabled:
-                xDocInfo.executeAction("CLICK", tuple())
-            self.assertEqual(enabled, get_state_as_dict(xDocInfo)['Selected'])
+    # "Edit document properties before saving", read at save time in
+    # SfxStoringHelper, see sfx2/source/doc/guisaveas.cxx
+    EDIT_PROPERTY = '/org.openoffice.Office.Common/Save/Document/EditProperty'
 
     def test_tdf117895(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf117895-temp.odt")
 
-            try:
-                self.change_doc_info_setting("true")
-
+            with self.ui_test.set_config(self.EDIT_PROPERTY, True):
                 with self.ui_test.create_doc_in_start_center("writer"):
 
                     # Save Copy as
@@ -56,18 +45,13 @@ class edit_file_properties_before_saving(UITestCase):
                 with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
                     # Without the fix in place, this test would have failed here
                     self.assertTrue(doc2.isReadonly())
-            finally:
-                # Put this setting back to false, otherwise it might affect other tests
-                self.change_doc_info_setting("false")
 
     def test_tdf119206(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf119206-temp.odt")
 
-            try:
-                self.change_doc_info_setting("true")
-
+            with self.ui_test.set_config(self.EDIT_PROPERTY, True):
                 with self.ui_test.create_doc_in_start_center("writer"):
 
                     xWriterDoc = self.xUITest.getTopFocusWindow()
@@ -93,9 +77,5 @@ class edit_file_properties_before_saving(UITestCase):
 
                 with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
                     self.assertTrue(doc2.isReadonly())
-
-            finally:
-                # Put this setting back to false, otherwise it might affect other tests
-                self.change_doc_info_setting("false")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

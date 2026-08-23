@@ -11,29 +11,18 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf133348(UITestCase):
 
-    def change_author_name(self, name):
-        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
-            xPages = xDialogOpt.getChild("pages")
-            xEntry = xPages.getChild('0')
-            xEntry.executeAction("EXPAND", tuple())
-            xGeneralEntry = xEntry.getChild('0')
-            xGeneralEntry.executeAction("SELECT", tuple())
-            xFirstName = xDialogOpt.getChild("firstname")
-            props = {"TEXT": name}
-            actionProps = mkPropertyValues(props)
-            xFirstName.executeAction("TYPE", actionProps)
+    # The comment author comes from the user name, see SvtUserOptions
+    GIVEN_NAME = '/org.openoffice.UserProfile/Data/givenname'
 
     def test_tdf133348(self):
 
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            try:
-                self.xUITest.executeCommand(".uno:SelectAll")
-                xArgs = mkPropertyValues({"Text": "C1"})
-                self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
+            self.xUITest.executeCommand(".uno:SelectAll")
+            xArgs = mkPropertyValues({"Text": "C1"})
+            self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
 
-                self.change_author_name("Known Author")
-
+            with self.ui_test.set_config(self.GIVEN_NAME, "Known Author"):
                 xArgs = mkPropertyValues({"Text": "C2"})
                 self.xUITest.executeCommandWithParameters(".uno:ReplyComment", xArgs)
 
@@ -54,7 +43,5 @@ class tdf133348(UITestCase):
 
                 # all comments have been deleted
                 self.assertFalse(document.TextFields.createEnumeration().hasMoreElements())
-            finally:
-                self.change_author_name("")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
