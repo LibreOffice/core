@@ -228,4 +228,65 @@ describe(['tagmultiuser'], 'Keep the view fixed while another view edits', funct
 			});
 		});
 	});
+
+	it('Leave a multi-page view still while another view edits above it', function() {
+		// Two pages fit side by side at this width.
+		cy.viewport(1920, 1080);
+
+		// Scroll offset and caret position carried between the queued command
+		// callbacks below.
+		const before = {};
+
+		// The first view keeps its caret at the very start.
+		cy.cSetActiveFrame('#iframe1');
+		helper.typeIntoDocument('{ctrl}{home}');
+
+		// The second view sends its caret to the very end and then switches to
+		// the multi-page view, which starts at the first page.
+		cy.cSetActiveFrame('#iframe2');
+		helper.typeIntoDocument('{ctrl}{end}');
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('multipageview');
+		});
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().then(function(win) {
+			expect(win.app.activeDocument.activeLayout.type).to.equal('ViewLayoutMultiPage');
+			before.secondViewY = win.app.activeDocument.activeLayout.scrollProperties.viewY;
+			before.secondViewCaretY = win.app.file.textCursor.rectangle.pY1;
+		});
+
+		// The first view inserts several paragraphs at the very start. That
+		// reflow pushes the second view's caret, at the end, further down the
+		// document.
+		cy.cSetActiveFrame('#iframe1');
+		for (let i = 0; i < 8; i++)
+			helper.typeIntoDocument('{enter}');
+
+		cy.cSetActiveFrame('#iframe2');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		// Wait for the reflow to reach the second view: its own caret is the
+		// thing that moves down.
+		cy.getFrameWindow().then(function(win) {
+			cy.wrap(null).should(function() {
+				expect(win.app.file.textCursor.rectangle.pY1,
+					'the edit above moved the second view caret down')
+					.to.be.greaterThan(before.secondViewCaretY);
+			});
+		});
+
+		// The pages keep their slots on screen, so the multi-page view shows
+		// the same pages at the same place as before the edit.
+		cy.getFrameWindow().then(function(win) {
+			cy.wrap(null).should(function() {
+				expect(win.app.activeDocument.activeLayout.scrollProperties.viewY,
+					'multi-page view stays put while another view edits above it')
+					.to.equal(before.secondViewY);
+			});
+		});
+	});
 });

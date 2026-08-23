@@ -1781,10 +1781,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		// If modifier view is different than the current view
 		// we'll keep the caret position at the same point relative to screen.
+		// In the multi-page layout the pages sit in fixed screen slots, so the
+		// view stays where it is.
 		this._onUpdateCursor(
 			/* scroll */ updateCursor && weAreModifier,
 			/* zoom */ undefined,
-			/* keepCaretPositionRelativeToScreen */ !weAreModifier);
+			/* keepCaretPositionRelativeToScreen */ !weAreModifier && !this._isMultiPageView());
 
 		// Only for reference equality comparison.
 		this._lastVisibleCursorRef = app.file.textCursor.rectangle.clone();
