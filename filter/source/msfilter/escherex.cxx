@@ -2871,7 +2871,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         double fExtrusionShininess = 0;
                         if ( rrProp.Value >>= fExtrusionShininess )
                         {
-                            // ODF to MS Office conversion invers to msdffimp.cxx
+                            // ODF to MS Office conversion inverse to msdffimp.cxx
                             fExtrusionShininess = std::round(fExtrusionShininess / 10.0);
                             AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>(fExtrusionShininess) );
                         }

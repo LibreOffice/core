@@ -4379,7 +4379,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
             /*  After CWS aw033 has been integrated, an empty group object
                 cannot store its resulting bounding rectangle anymore. We have
                 to return this rectangle via rClientRect now, but only, if
-                caller has not passed an own bounding ractangle. */
+                caller has not passed an own bounding rectangle. */
             if ( rClientRect.IsEmpty() )
                  rClientRect = aObjData.aBoundRect;
             nGroupShapeFlags = aObjData.nSpFlags;

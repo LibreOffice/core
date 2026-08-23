@@ -99,7 +99,7 @@ const uno::Reference< container::XIndexContainer >&
                 xFormsSupplier->getForms();
 
             // The form gets a new name like "WW-Standard[n]" and will
-            // created new in any case.
+            // be created anew in any case.
             OUString sName( sWW8_form );
             sal_uInt16 n = 0;
 
