@@ -91,7 +91,7 @@ public class SOReportJobFactory
                 "org.libreoffice.report.pentaho.SOReportJobFactory";
         private final PropertySetMixin m_prophlp;
         /**
-         * The initial component contextr, that gives access to the service manager, supported singletons, ... It's
+         * The initial component context, that gives access to the service manager, supported singletons, ... It's
          * often later used
          */
         private final XComponentContext m_cmpCtx;

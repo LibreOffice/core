@@ -932,7 +932,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 if (addKeepWithNext)
                 {
                     tableProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_WITH_NEXT, ALWAYS);
-                    // A keep-with-next does not work, if the may-break-betweek rows is not set to false ..
+                    // A keep-with-next does not work, if the may-break-between rows is not set to false ..
                 }
             }
             attrs.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, style.getStyleName());
@@ -957,7 +957,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
                         final OfficeStyle style = deriveStyle(OfficeToken.TABLE, styleName);
                         final Element tableProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, TABLE_PROPERTIES);
-                        // A keep-with-next does not work, if the may-break-betweek rows is not set to false ..
+                        // A keep-with-next does not work, if the may-break-between rows is not set to false ..
                         tableProps.setAttribute(OfficeNamespaces.STYLE_NS, MAY_BREAK_BETWEEN_ROWS, OfficeToken.FALSE);
                         final String hasGroupFooter = (String) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "has-group-footer");
                         if (hasGroupFooter != null && hasGroupFooter.equals(OfficeToken.TRUE))
