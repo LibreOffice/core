@@ -1768,7 +1768,7 @@ void CairoCommon::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap, C
     /** creates an image from the given rectangle, replacing all black pixels
      *  with nMaskColor and make all other full transparent */
     // MM02 here decided *against* using buffered BitmapHelper
-    // because the data gets somehow 'unmuliplied'. This may also be
+    // because the data gets somehow 'unmultiplied'. This may also be
     // done just once, but I am not sure if this is safe to do.
     // So for now dispense re-using data here.
     BitmapHelper aSurface(rSalBitmap, true); // The mask is argb32

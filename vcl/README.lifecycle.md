@@ -30,7 +30,7 @@ various `shared_ptr` wrappers were used, the lifecycle was far less than
 obvious. Where controls were wrapped by other ref-counted classes -
 such as UNO interfaces, which were also used by native Window
 pointers, the lifecycle became extremely opaque. In addition VCL had
-significant issues with re-enterancy and event emission - adding
+significant issues with re-entrancy and event emission - adding
 various means such as DogTags to try to detect destruction of a window
 between calls:
 
