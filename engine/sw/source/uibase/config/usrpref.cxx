@@ -26,6 +26,9 @@
 #include <unotools/syslocale.hxx>
 
 #include <usrpref.hxx>
+#include <swmodule.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -451,6 +454,14 @@ void SwLayoutViewConfig::Load()
             }
         }
     }
+
+    /* The metric controls take the unit from the module item pool, see
+       SfxModule::GetFieldUnit, and only the options dialog ever put it there.
+       Keep the two in step, so the unit is right in a fresh session and follows
+       a configuration change whatever its source. */
+    if (!m_bWeb)
+        SwModule::get()->PutItem(
+            SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(m_rParent.GetMetric())));
 }
 
 void SwLayoutViewConfig::Notify(const cpo::uno::Sequence<OUString>&)
