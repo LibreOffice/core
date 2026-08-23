@@ -309,7 +309,7 @@ public class Map
             /* ContainerEvent    */ new Integer[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
             /* any               */ new Integer[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
         };
-        // several asects are checked with this compatibility matrix:
+        // several aspects are checked with this compatibility matrix:
         // - if a map's value type is a scalar type, or a string, then nothing but this
         //   type should be accepted
         // - if a map's value type is an interface type, then values should be accepted if

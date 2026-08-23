@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testValueRestorationGuard)
     }
     CPPUNIT_ASSERT_EQUAL(199, value);
 
-    // set value, manually setto another value and restore after scope ends
+    // set value, manually set to another value and restore after scope ends
     {
         CPPUNIT_ASSERT_EQUAL(199, value);
         comphelper::ValueRestorationGuard aGuard(value, 100);

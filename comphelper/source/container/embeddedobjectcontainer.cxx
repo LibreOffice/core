@@ -1355,8 +1355,8 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                         //xPersist->storeOwn(); //commented, i120168
 
                         // begin:all charts will be persisted as xml format on disk when saving, which is time consuming.
-                        // '_bObjectsOnly' mean we are storing to alien formats.
-                        //  'isStorageElement' mean current object is NOT a MS OLE format. (may also include in future), i120168
+                        // '_bObjectsOnly' means we are storing to alien formats.
+                        //  'isStorageElement' means current object is NOT an MS OLE format. (may also include in future), i120168
                         if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)
                             && (pImpl->mxStorage->isStorageElement(name)))
                         {
@@ -1370,7 +1370,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                                 //do nothing. Embedded model is not modified, no need to persist.
                             }
                         }
-                        else //the embedded object is in active status, always store back it.
+                        else //the embedded object is in active status, always store it back.
                         {
                             xPersist->storeOwn();
                         }

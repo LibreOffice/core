@@ -38,7 +38,7 @@ PropertySetInfo::PropertySetInfo( std::span<const PropertyMapEntry> pMap ) noexc
         // check for duplicates
         assert(!maPropertyMap.contains(rEntry.maName));
         // Make sure there are no accidental empty entries left at the end of the array from
-        // when this method used to take a empty-terminated array.
+        // when this method used to take an empty-terminated array.
         assert(!rEntry.maName.isEmpty());
 
         maPropertyMap.emplace(rEntry.maName, &rEntry);
@@ -57,7 +57,7 @@ void PropertySetInfo::add( std::span<PropertyMapEntry const> pMap ) noexcept
         // check for duplicates
         assert(!maPropertyMap.contains(rEntry.maName));
         // Make sure there are no accidental empty entries left at the end of the array from
-        // when this method used to take a empty-terminated array.
+        // when this method used to take an empty-terminated array.
         assert(!rEntry.maName.isEmpty());
 
         maPropertyMap.emplace(rEntry.maName, &rEntry);
