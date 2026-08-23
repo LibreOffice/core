@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, paragraphProperties)
     xPropertySet3->getPropertyValue(u"CharUnderline"_ustr) >>= nCharUnderline;
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, nCharUnderline);
 
-    // striked through
+    // struck through
     uno::Reference<text::XTextRange> const xParagraph4(xParaEnum->nextElement(),
                                                        uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet4(xParagraph4, uno::UNO_QUERY);

@@ -248,7 +248,7 @@ sal_Int32 Decompression::explode()
             continue;
         }
         // if the bit is 1 we have here a length/distance pair:
-        // -decode a number with Hufmman Tree #1; variable bit length, result is 0x00 .. 0x0F -> L1
+        // -decode a number with Huffman Tree #1; variable bit length, result is 0x00 .. 0x0F -> L1
         sal_uInt32 L1 = Decode(m_Tree1.get());
         sal_uInt32 Length;
         if (L1 <= 7)
@@ -273,7 +273,7 @@ sal_Int32 Decompression::explode()
             break;
         }
 
-        // - decode another number with Hufmann Tree #2 giving result 0x00..0x3F -> D1
+        // - decode another number with Huffman Tree #2 giving result 0x00..0x3F -> D1
         sal_uInt32 D1 = Decode(m_Tree2.get());
         sal_uInt32 D2;
         if (Length == 2)

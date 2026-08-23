@@ -89,7 +89,7 @@ class XFBGImage;
 
 /**
  * @brief
- * Style object for aragraph.
+ * Style object for paragraph.
  */
 class XFParaStyle : public XFStyle
 {
