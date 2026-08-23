@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImportTifCrop)
     // Without the accompanying fix in place, this failed with:
     // - Expected: 3928
     // - Actual  : 24553
-    // i.e. lazy-loading lead to some unexpected crop rectangle, the image was not readable.
+    // i.e. lazy-loading led to some unexpected crop rectangle, the image was not readable.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3928), aCrop.Top);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6660), aCrop.Bottom);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1732), aCrop.Left);

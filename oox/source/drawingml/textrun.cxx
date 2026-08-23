@@ -81,7 +81,7 @@ sal_Int32 TextRun::insertAt(
         if ( aTextCharacterProps.moHeight.has_value() )
             nCharHeight = aTextCharacterProps.moHeight.value();
         else
-            // UNO API has the character height as float, DML has it as int, but in hundreds.
+            // UNO API has the character height as float, DML has it as int, but in hundredths.
             aTextCharacterProps.moHeight = static_cast<sal_Int32>(nDefaultCharHeight * 100);
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 

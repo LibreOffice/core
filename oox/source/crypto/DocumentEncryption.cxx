@@ -73,7 +73,7 @@ bool DocumentEncryption::encrypt()
     if (!xSeekable.is())
         return false;
 
-    xSeekable->seek(0); // seek to begin of the document stream
+    xSeekable->seek(0); // seek to the beginning of the document stream
 
     if (!mrOleStorage.isStorage())
         return false;

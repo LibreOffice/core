@@ -45,7 +45,7 @@ sal_Int32 convertThemeColorTypeToExcelThemeNumber(model::ThemeColorType eType)
     if (eType == model::ThemeColorType::Unknown)
         return -1;
 
-    // Change position of text1 and text2 and background1 and background2 - needed because of an bug in excel, where
+    // Change position of text1 and text2 and background1 and background2 - needed because of a bug in Excel, where
     // the text and background index positions are switched.
     // 0 -> 1, 1 -> 0
     // 2 -> 3, 3 -> 2
