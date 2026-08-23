@@ -1273,7 +1273,7 @@ void OutlineView::FillOutliner()
         pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Text));
         const bool bSubTitle = pTO != nullptr;
 
-        if (!pTO) // if no subtile found, try outline
+        if (!pTO) // if no subtitle found, try outline
             pTO = GetOutlineTextObject(pPage);
 
         if(pTO && !(pTO->IsEmptyPresObj())) // found some text

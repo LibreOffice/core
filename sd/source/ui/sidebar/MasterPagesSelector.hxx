@@ -91,7 +91,7 @@ public:
 
     /** Mark the preview that belongs to the given index as not up-to-date
         anymore with respect to page content or preview size.
-        The implementation of this method will either sunchronously or
+        The implementation of this method will either synchronously or
         asynchronously call UpdatePreview().
         @param nIndex
             Index into the value set control that is used for displaying the
