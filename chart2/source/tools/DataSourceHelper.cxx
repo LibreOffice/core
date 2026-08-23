@@ -230,7 +230,7 @@ rtl::Reference< DataSource > DataSourceHelper::pressUsedDataIntoRectangularForma
         DataSeriesHelper::getDataSource( aSeriesVector );
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xSeriesSource->getDataSequences() );
 
-    //the first x-values is always the next sequence //todo ... other x-values get lost for old format
+    //the first x-values are always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
         DataSeriesHelper::getDataSequenceByRole( xSeriesSource, u"values-x"_ustr ) );
     if( xXValues.is() )

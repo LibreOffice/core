@@ -52,7 +52,7 @@ enum
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_LINECHARTTYPE_CURVE_STYLE, ::chart2::CurveStyle_LINES );
             ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_LINECHARTTYPE_CURVE_RESOLUTION, 20 );
 
-            // todo: check whether order 3 means polygons of order 3 or 2. (see
+            // todo: check whether order 3 means polynomials of order 3 or 2. (see
             // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
             ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_LINECHARTTYPE_SPLINE_ORDER, 3 );
             return aOutMap;

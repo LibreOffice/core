@@ -132,7 +132,7 @@ void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
         m_aColumnLabels.resize( m_nColumnCount );
 
     m_aData.resize( m_nRowCount * m_nColumnCount );
-    // set all values to Nan
+    // set all values to NaN
     m_aData = std::numeric_limits<double>::quiet_NaN();
 
     for( sal_Int32 nRow=0; nRow<m_nRowCount; ++nRow )
