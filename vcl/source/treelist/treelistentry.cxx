@@ -125,7 +125,7 @@ void SvTreeListEntry::ReplaceItem(std::unique_ptr<SvLBoxItem> pNewItem, size_t c
     DBG_ASSERT(pNewItem,"ReplaceItem:No Item");
     if (nPos >= m_Items.size())
     {
-        // Out of bound. Bail out.
+        // Out of bounds. Bail out.
         pNewItem.reset();
         return;
     }
