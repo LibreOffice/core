@@ -29,4 +29,14 @@ namespace CppUnit {
     };
 }
 
+namespace __gnu_cxx {
+    /* libstdc++ throws from these when a pthread mutex call fails. Terminating is the acceptable
+     * response, so model them as paths that do not return.
+     */
+    void __throw_concurrence_lock_error() { __coverity_panic__(); }
+    void __throw_concurrence_unlock_error() { __coverity_panic__(); }
+    void __throw_concurrence_broadcast_error() { __coverity_panic__(); }
+    void __throw_concurrence_wait_error() { __coverity_panic__(); }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
