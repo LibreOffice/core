@@ -67,6 +67,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <zlib.h>
 #include <zstd.h>
@@ -3620,6 +3621,11 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     // attached and ChildSession outlives that:
     _docManager->getLOKit()->executeScript(
         script.c_str(), source, line, &result, &error,
+        [](void * data, std::string_view level, std::string_view message) {
+            static_cast<ChildSession *>(data)->sendTextFrame(
+                std::string("consolemsg ").append(level).append("\n").append(message));
+        },
+        this,
         [](void * data, char const * payload) {
             static_cast<ChildSession *>(data)->sendTextFrame(
                 "proxycall: " + std::string(payload));

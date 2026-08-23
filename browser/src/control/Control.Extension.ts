@@ -216,7 +216,19 @@ window.L.Control.Extension = window.L.Control.extend({
 		window.addEventListener('message', this._onPostMessage.bind(this));
 		map.on('executescriptresult', this._onScriptResult, this);
 		map.on('proxycall', this._onProxyCall, this);
+		map.on('consolemsg', this._onConsoleMsg, this);
 		map.on('comment', this._onComment, this);
+	},
+
+	_onConsoleMsg: function (e: { level: string; message: string }) {
+		const fn = (console as any)[e.level];
+		if (e.level === 'assert') {
+			console.assert(false, e.message);
+		} else if (typeof fn === 'function') {
+			fn.call(console, e.message);
+		} else {
+			console.log('unkown level: ' + e.level + ', message: ' + e.message);
+		}
 	},
 
 	// The extension iframe is our own content from the COOL origin.  The mobile and desktop

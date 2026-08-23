@@ -1288,6 +1288,14 @@ class Socket {
 				app.console.error('Failed to parse proxycall: ' + ex);
 			}
 			return;
+		} else if (textMsg.startsWith('consolemsg ')) {
+			let newline = textMsg.indexOf('\n');
+			if (newline === -1) newline = textMsg.length;
+			this._map.fire('consolemsg', {
+				level: textMsg.substring('consolemsg '.length, newline),
+				message: textMsg.substring(newline + 1),
+			});
+			return;
 		} else if (textMsg.startsWith('legacyunoapinotice:')) {
 			this._map.fire('legacyunoapinotice');
 			return;

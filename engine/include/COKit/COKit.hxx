@@ -12,6 +12,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -1681,6 +1682,14 @@ struct COKit
      * The @c script, @c *result and @c *error strings are NUL-terminated C strings, thus cannot
      * contain embedded NUL characters.
      *
+     * @c consoleCallback receives every call the script makes on the global @c console object.
+     * jsuno registers the WHATWG Console API methods @c log, @c info, @c warn, @c error, @c debug,
+     * @c trace, and @c assert on that object; each dispatches to this callback with @c level set to
+     * the method name and @c message set to the stringified-and-space-joined arguments (both UTF-8
+     * strings, valid only for the duration of the callback).  @c assert only fires on failed
+     * assertions.  @c warn, @c error, @c trace, and @c assert prepend the JS stack to @c message.
+     * The callback runs synchronously on the JS thread and must not call back into jsuno.
+     *
      * @c proxyCallback, if non-null, is captured by every JS-UNO proxy listener stub created
      * during this call, and fires when the stub later receives a UNO call.  It is called
      * with the @c proxyCallbackData pointer and a NUL-terminated JSON payload describing the
@@ -1694,6 +1703,8 @@ struct COKit
      * @param line (1-based) used for any exception stack frames that are reported back.
      * @param result out-param for the result.
      * @param error out-param for the error message.
+     * @param consoleCallback hook for console.* method calls.
+     * @param consoleCallbackData opaque pointer passed to @c consoleCallback on each call.
      * @param proxyCallback hook for proxy listener fires; may be null.
      * @param proxyCallbackData opaque pointer passed to @c proxyCallback on each call.
      * @param usedLegacyUnoApi must be non-null; set to true if the script touched the legacy
@@ -1701,6 +1712,10 @@ struct COKit
      */
     virtual void executeScript(char const * script, std::string_view source, int line,
                                char ** result, char ** error,
+                               std::function<void(
+                                   void * data, std::string_view level, std::string_view message)>
+                                   consoleCallback,
+                               void * consoleCallbackData,
                                void (*proxyCallback) (void * data, char const * payload),
                                void * proxyCallbackData, bool * usedLegacyUnoApi) = 0;
 

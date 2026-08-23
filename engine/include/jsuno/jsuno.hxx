@@ -43,6 +43,13 @@ struct LO_DLLPUBLIC_JSUNO Exception {
 //
 // `source` and (1-based) `line` are used for any exception stack frames that are reported back.
 //
+// `consoleHook` receives every call the script makes on the global `console` object.  jsuno
+// registers the WHATWG Console API methods `log`, `info`, `warn`, `error`, `debug`, `trace`,
+// and `assert` on that object; each dispatches to the hook with `level` set to the method name
+// and `message` set to the stringified-and-space-joined arguments.  `assert` only fires on
+// failed assertion.  `warn`, `error`, `trace`, and `assert` prepend the JS stack to the message.
+//The hook is called synchronously on the JS thread; it must not itself call back into jsuno.
+//
 // `proxyCallHook`, if non-empty, is captured by every JS-UNO proxy listener stub created
 // during this call and fires (from any thread, possibly after execute() has returned) when
 // the wrapped C++ stub later receives a UNO call, with a JSON payload of the form
@@ -57,6 +64,8 @@ struct LO_DLLPUBLIC_JSUNO Exception {
 //
 // @throws jsuno::Exception
 LO_DLLPUBLIC_JSUNO OUString execute(OUString const& script, OUString const & source, int line,
+                                    std::function<void(OUString const &, OUString const &)>
+                                        consoleHook,
                                     std::function<void(OUString const&)> proxyCallHook,
                                     bool* usedLegacyUnoApi);
 

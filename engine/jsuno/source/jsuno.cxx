@@ -251,8 +251,12 @@ private:
 
 struct RuntimeData
 {
-    RuntimeData(JSRuntime* rt, std::function<void(OUString const&)> proxyCallHook_)
-        : proxyCallHook(std::move(proxyCallHook_))
+    RuntimeData(
+        JSRuntime* rt,
+        std::function<void(OUString const& level, OUString const& message)> consoleHook_,
+        std::function<void(OUString const&)> proxyCallHook_)
+        : consoleHook(std::move(consoleHook_))
+        , proxyCallHook(std::move(proxyCallHook_))
         , symbolIteratorAtom(rt)
     {
     }
@@ -271,6 +275,8 @@ struct RuntimeData
     JSClassID ctorClassId = 0;
     JSClassID singletonClassId = 0;
     JSClassID moduleClassId = 0;
+
+    std::function<void(OUString const& level, OUString const& message)> consoleHook;
 
     // Hook captured by every ProxyInvocation created during this execute() call:
     std::function<void(OUString const&)> proxyCallHook;
@@ -326,53 +332,103 @@ template <typename F> JSValue callFromJs(JSContext* ctx, F&& f)
     }
 }
 
-// A stripped-down and modified version of <https://console.spec.whatwg.org/#assert> (which only
-// takes a single argument and aborts when the assertion is not met), just enough for using it in
-// jsunit/qa/unit/testuno.cxx:
-JSValue consoleAssert(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
-{
-    assert(argc >= 1);
-    return callFromJs(ctx, [ctx, argv] {
-        auto const ok = JS_ToBool(ctx, argv[0]);
-        if (ok == -1)
-        {
+OUString joinConsoleArgs(JSContext * ctx, int argc, JSValueConst * argv) {
+    OUStringBuffer buf;
+    for (int i = 0; i != argc; ++i) {
+        std::size_t n;
+        UniqueCString16 const s(ctx, JS_ToCStringLenUTF16(ctx, &n, argv[i]));
+        if (s.get() == nullptr) {
             throw JsException();
         }
-        if (ok == 0)
-        {
-            ValueRef const errorCtor(ctx, JS_GetPropertyStr(ctx, JS_GetGlobalObject(ctx), "Error"));
-            assert(!JS_IsException(errorCtor));
-            ValueRef const err(ctx, JS_CallConstructor(ctx, errorCtor, 0, nullptr));
-            assert(!JS_IsException(err));
-            ValueRef const stack(ctx, JS_GetPropertyStr(ctx, err, "stack"));
-            assert(!JS_IsException(stack));
-            UniqueCString8 const s(ctx, JS_ToCString(ctx, stack));
-            assert(s.get() != nullptr);
-            std::cerr << "console.assert at: " << s.get() << "\n";
-            std::abort();
+        if (i != 0) {
+            buf.append(' ');
         }
+        buf.append(std::u16string_view(s.get(), n));
+    }
+    return buf.makeStringAndClear();
+}
+
+OUString appendConsoleStack(JSContext * ctx, OUString const & text) {
+    JS_ThrowTypeError(ctx, "");
+    ValueRef const tmp(ctx, JS_GetException(ctx));
+    ValueRef const stack(ctx, JS_GetPropertyStr(ctx, tmp, "stack"));
+    std::size_t n = 0;
+    UniqueCString16 const s(ctx, JS_ToCStringLenUTF16(ctx, &n, stack));
+    if (s.get() == nullptr) {
+        return text;
+    }
+    // Drop the topmost synthetic "at error (native)" frame for the TypeError we invoked:
+    OUString bottom(s.get(), n);
+    if (auto const i = bottom.indexOf('\n');
+        i != -1 && bottom.subView(0, i).find(u"(native)") != std::u16string_view::npos)
+    {
+        bottom = bottom.copy(i + 1);
+    }
+    if (bottom.isEmpty()) {
+        return text;
+    }
+    return text + (text.isEmpty() ? u"" : u"\n") + bottom;
+}
+
+JSValue consoleAssert(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
+    return callFromJs(ctx, [ctx, argc, argv] {
+        if (argc == 0) {
+            return JS_UNDEFINED;
+        }
+        auto const ok = JS_ToBool(ctx, argv[0]);
+        if (ok == -1) {
+            throw JsException();
+        }
+        if (ok != 0) {
+            return JS_UNDEFINED;
+        }
+        getRuntimeData(ctx)->consoleHook(
+            u"assert"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc - 1, argv + 1)));
         return JS_UNDEFINED;
     });
 }
 
-// A stripped-down version of <https://console.spec.whatwg.org/#log> (which simply prints all its
-// arguments, not using the <https://console.spec.whatwg.org/#formatter> logic):
-JSValue consoleLog(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
-{
+JSValue consoleDebug(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
     return callFromJs(ctx, [ctx, argc, argv] {
-        OUStringBuffer buf("console.log:");
-        for (int i = 0; i != argc; ++i)
-        {
-            std::size_t n;
-            UniqueCString16 const s(ctx, JS_ToCStringLenUTF16(ctx, &n, argv[i]));
-            if (s.get() == nullptr)
-            {
-                throw JsException();
-            }
-            buf.append(OUString::Concat(" ") + std::u16string_view(s.get(), n));
-        }
-        buf.append('\n');
-        std::cout << buf.makeStringAndClear() << std::flush;
+        getRuntimeData(ctx)->consoleHook(u"debug"_ustr, joinConsoleArgs(ctx, argc, argv));
+        return JS_UNDEFINED;
+    });
+}
+
+JSValue consoleError(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
+    return callFromJs(ctx, [ctx, argc, argv] {
+        getRuntimeData(ctx)->consoleHook(
+            u"error"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
+        return JS_UNDEFINED;
+    });
+}
+
+JSValue consoleInfo(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
+    return callFromJs(ctx, [ctx, argc, argv] {
+        getRuntimeData(ctx)->consoleHook(u"info"_ustr, joinConsoleArgs(ctx, argc, argv));
+        return JS_UNDEFINED;
+    });
+}
+
+JSValue consoleLog(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
+    return callFromJs(ctx, [ctx, argc, argv] {
+        getRuntimeData(ctx)->consoleHook(u"log"_ustr, joinConsoleArgs(ctx, argc, argv));
+        return JS_UNDEFINED;
+    });
+}
+
+JSValue consoleTrace(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
+    return callFromJs(ctx, [ctx, argc, argv] {
+        getRuntimeData(ctx)->consoleHook(
+            u"trace"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
+        return JS_UNDEFINED;
+    });
+}
+
+JSValue consoleWarn(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
+    return callFromJs(ctx, [ctx, argc, argv] {
+        getRuntimeData(ctx)->consoleHook(
+            u"warn"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
         return JS_UNDEFINED;
     });
 }
@@ -2861,11 +2917,14 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
 jsuno::Exception::~Exception() = default;
 
 OUString jsuno::execute(OUString const& script, OUString const & source, int line,
+                        std::function<void(OUString const& level, OUString const& message)>
+                            consoleHook,
                         std::function<void(OUString const&)> proxyCallHook,
                         bool* usedLegacyUnoApi)
 {
     auto const rt = JS_NewRuntime();
-    JS_SetRuntimeOpaque(rt, new RuntimeData(rt, std::move(proxyCallHook)));
+    JS_SetRuntimeOpaque(
+        rt, new RuntimeData(rt, std::move(consoleHook), std::move(proxyCallHook)));
     JS_NewClassID(rt, &getRuntimeData(rt)->pointerClassId);
     JSClassDef pointerClass{ "InternalPointer", pointerFinalizer, nullptr, nullptr, nullptr };
     [[maybe_unused]] auto e = JS_NewClass(rt, getRuntimeData(rt)->pointerClassId, &pointerClass);
@@ -2954,8 +3013,13 @@ OUString jsuno::execute(OUString const& script, OUString const & source, int lin
                                    ctx, ValueRef(ctx, JS_GetPropertyStr(ctx, global, "Symbol")),
                                    "iterator")));
         ValueRef console(ctx, JS_NewObject(ctx));
-        JS_SetPropertyStr(ctx, console, "assert", JS_NewCFunction(ctx, consoleAssert, "assert", 1));
+        JS_SetPropertyStr(ctx, console, "assert", JS_NewCFunction(ctx, consoleAssert, "assert", 0));
+        JS_SetPropertyStr(ctx, console, "debug", JS_NewCFunction(ctx, consoleDebug, "debug", 0));
+        JS_SetPropertyStr(ctx, console, "error", JS_NewCFunction(ctx, consoleError, "error", 0));
+        JS_SetPropertyStr(ctx, console, "info", JS_NewCFunction(ctx, consoleInfo, "info", 0));
         JS_SetPropertyStr(ctx, console, "log", JS_NewCFunction(ctx, consoleLog, "log", 0));
+        JS_SetPropertyStr(ctx, console, "trace", JS_NewCFunction(ctx, consoleTrace, "trace", 0));
+        JS_SetPropertyStr(ctx, console, "warn", JS_NewCFunction(ctx, consoleWarn, "warn", 0));
         JS_SetPropertyStr(ctx, global, "console", console.release());
         ValueRef uno(ctx, JS_NewObject(ctx));
         ValueRef type(ctx, JS_NewObject(ctx));

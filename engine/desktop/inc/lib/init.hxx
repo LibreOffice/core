@@ -464,6 +464,10 @@ namespace desktop {
         void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) override;
         void executeScript(char const * script, std::string_view source, int line,
                            char ** result, char ** error,
+                           std::function<void(
+                               void * data, std::string_view level, std::string_view message)>
+                               consoleCallback,
+                           void * consoleCallbackData,
                            void (*proxyCallback) (void * data, char const * payload),
                            void * proxyCallbackData, bool * usedLegacyUnoApi) override;
         void deliverProxyResult(char const * callId, char const * jsonValue) override;

@@ -807,6 +807,19 @@ proxycall: <json>
     'proxyreturn' (i.e. the listener method has a non-void return type; for void return types the
     call is fire-and-forget).
 
+consolemsg <level>
+<message>
+
+    Notification that a script running under an 'executescript' called one of the WHATWG Console API
+    methods jsuno registers on the global `console` object: log, info, warn, error, debug, trace or
+    assert.  <level> is that method name; <message> occupies everything after the first newline and
+    is the stringified-and-space-joined args the script passed.  For "trace" and "assert" the JS
+    stack at the call site is appended to <message> (as extra "    at ..." lines); "warn" and
+    "error" carry the JS stack the same way, so that browser-side rendering of the message names the
+    kit-side call chain and not the client-side postMessage plumbing that delivered it.  "assert"
+    only fires when the assertion failed; the other methods fire on every call.  The client-side
+    helper routes each event to console[<level>] in the browser.
+
 tile: part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<ypos> tilewidth=<tileWidth> tileheight=<tileHeight> [timestamp=<time>] [wid=<wireId>]
 <binaryPngImage>
 
