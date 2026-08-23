@@ -52,7 +52,7 @@ void PlotterBase::setScales( std::vector< ExplicitScaleData >&& rScales, bool bS
     if (!m_pPosHelper)
         return;
 
-    OSL_PRECOND(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    OSL_PRECOND(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit the dimension of given scale sequence");
     m_pPosHelper->setScales( std::move(rScales), bSwapXAndYAxis );
 }
 
@@ -78,7 +78,7 @@ rtl::Reference<SvxShapeGroupAnyD> PlotterBase::createGroupShape(
     }
     else
     {
-        //create and added to target
+        //create and add to target
         return ShapeFactory::createGroup3D( xTarget, rName );
     }
 }
