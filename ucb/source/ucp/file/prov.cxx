@@ -154,7 +154,7 @@ FileProvider::compareContentIds(
         {
             iComp = aStatus1.getFileURL().compareTo( aStatus2.getFileURL() );
 
-// Quick hack for Windows to threat all file systems as case insensitive
+// Quick hack for Windows to treat all file systems as case insensitive
 #ifdef _WIN32
             if ( 0 != iComp )
             {

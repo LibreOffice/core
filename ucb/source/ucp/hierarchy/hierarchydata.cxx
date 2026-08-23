@@ -181,7 +181,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
             }
 
             // TargetURL property may contain a reference to the Office
-            // installation directory. To ensure a reloctable office
+            // installation directory. To ensure a relocatable office
             // installation, the path to the office installation directory must
             // never be stored directly. A placeholder is used instead. Replace
             // it by actual installation directory.
@@ -379,7 +379,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                     // Set TargetURL value.
 
                     // TargetURL property may contain a reference to the Office
-                    // installation directory. To ensure a reloctable office
+                    // installation directory. To ensure a relocatable office
                     // installation, the path to the office installation
                     // directory must never be stored directly. Use a
                     // placeholder instead.
@@ -677,7 +677,7 @@ bool HierarchyEntry::move(
             uno::Any( rData.getTitle() ) );
 
         // TargetURL property may contain a reference to the Office
-        // installation directory. To ensure a reloctable office
+        // installation directory. To ensure a relocatable office
         // installation, the path to the office installation
         // directory must never be stored directly. Use a placeholder
         // instead.
@@ -1044,7 +1044,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*()
             dir->getByHierarchicalName( aTargetURL ) >>= aValue;
 
             // TargetURL property may contain a reference to the Office
-            // installation directory. To ensure a reloctable office
+            // installation directory. To ensure a relocatable office
             // installation, the path to the office installation directory must
             // never be stored directly. A placeholder is used instead. Replace
             // it by actual installation directory.
