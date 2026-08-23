@@ -27,6 +27,6 @@
   <implementation name="com.sun.star.help.TreeViewImpl"
     constructor="com_sun_star_help_TreeViewImpl_get_implementation">
     <service name="com.sun.star.help.TreeView"/>
-    <service name="com.sun.star.ucb.HiearchyDataSource"/>
+    <service name="com.sun.star.ucb.HierarchyDataSource"/>
   </implementation>
 </component>

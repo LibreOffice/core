@@ -59,7 +59,7 @@ sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames()
 {
-    return { u"com.sun.star.help.TreeView"_ustr, u"com.sun.star.ucb.HiearchyDataSource"_ustr };
+    return { u"com.sun.star.help.TreeView"_ustr, u"com.sun.star.ucb.HierarchyDataSource"_ustr };
 }
 
 // XMultiServiceFactory

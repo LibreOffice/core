@@ -628,7 +628,7 @@ ConfigData TVChildTarget::init()
     }
     url += ret;
 
-    // first of all, try do determine whether there are any *.tree files present
+    // first of all, try to determine whether there are any *.tree files present
 
     // Start with extensions to set them at the end of the list
     TreeFileIterator aTreeIt(configData.locale);
