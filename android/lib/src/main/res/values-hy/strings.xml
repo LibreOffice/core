@@ -22,4 +22,9 @@
     <string name="use_odf">Օգտագործեք ODF ձևաչափը</string>
     <string name="ask_for_convert_odf">Հաստատեք նիշքի ձևաչափը</string>
     <string name="convert_odf_message">Այս փաստաթուղթը կարող է պարունակել ձևաչափում կամ բովանդակություն, որը չի կարող պահպանվել ներկայումս ընտրված «Տեքստ» նիշքի ձևաչափով։</string>
+    <string name="all_files_access_title">Բացվել է միայն ընթերցման ռեժիմում</string>
+    <string name="all_files_access_message">Այս նիշքը կիսող հավելվածը թույլ չի տվել, որ փոփոխությունները պահպանվեն դրանում։\n\nՏրամադրեք «Հասանելիությունբոլոր նիշքերին»՝ այս հավելվածին թույլ տալու համար գրել նիշքը այնտեղ, որտեղ այն պահվում է, որպեսզի դուք կարողանաք այն խմբագրել այստեղ։</string>
+    <string name="all_files_access_grant">Թույլատրել հասանելիությունը</string>
+    <string name="do_not_ask_again">Այլևս մի հարցրեք</string>
+    <string name="failed_to_save_file">Հնարավոր չէ պահպանել փոփոխությունները նիշքում</string>
 </resources>
