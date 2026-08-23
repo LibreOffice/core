@@ -390,7 +390,8 @@ interface TextWidget extends WidgetJSON {
 interface PushButtonWidget extends WidgetJSON {
 	symbol?: string;
 	text?: string;
-	image?: string;
+	icon?: string; // icon theme link name, resolved to one of our own SVGs
+	image?: string; // base64 bitmap, the fallback when we ship no such icon
 	isToggle?: boolean;
 	checked?: boolean;
 	command?: string;

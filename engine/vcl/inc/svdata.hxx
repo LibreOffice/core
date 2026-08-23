@@ -457,4 +457,31 @@ inline SalData* GetSalData() { return ImplGetSVData()->mpSalData; }
 inline void SetSalData(SalData* pData) { ImplGetSVData()->mpSalData = pData; }
 inline SalInstance* GetSalInstance() { return ImplGetSVData()->mpDefInst; }
 
+/* Turns an icon theme path, e.g. "cmd/sc_paste.png" or "res/showpass.png",
+   into the canonical "lc_paste.svg" / "lc_showpass.svg" name that the COKit
+   client resolves against its own icon set. Sending the name rather than the
+   bitmap lets the client pick its light or dark variant and stay crisp at any
+   DPI. Returns an empty string if there is no name to send. */
+inline OUString ImplGetKitSvgIconName(std::u16string_view rIconPath)
+{
+    if (rIconPath.empty())
+        return OUString();
+
+    const size_t nSlash = rIconPath.rfind(u'/');
+    std::u16string_view aFileName
+        = (nSlash != std::u16string_view::npos) ? rIconPath.substr(nSlash + 1) : rIconPath;
+
+    OUString aName(aFileName);
+    if (aName.endsWith(".png"))
+        aName = OUString::Concat(aName.subView(0, aName.getLength() - 4)) + ".svg";
+    else if (aName.indexOf('.') < 0)
+        aName += ".svg";
+
+    // Drop the size prefix before adding the canonical one the client expects.
+    if (aName.startsWith("sc_") || aName.startsWith("lc_"))
+        aName = aName.copy(3);
+
+    return "lc_" + aName;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

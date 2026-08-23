@@ -67,8 +67,36 @@ JSDialog.pushButton = function (
 			? _customPushButtonTextForId(data.id)
 			: builder._cleanText(data.text ? data.text : '');
 
+	// An icon name lets us use our own SVG, which is crisp at any DPI and has a
+	// dark variant; the base64 image the engine sends alongside is the fallback
+	// for icons we do not ship.
+	const iconName = data.icon ? app.LOUtil.getIconNameOfIcon(data.icon) : '';
+
 	let image;
-	if (data.image && pushbuttonText !== '') {
+	if (iconName) {
+		window.L.DomUtil.addClass(
+			pushbutton,
+			'has-img d-flex align-content-center justify-content-center align-items-center',
+		);
+		image = window.L.DomUtil.create('img', '', pushbutton);
+		app.LOUtil.setImage(image, iconName, builder.map);
+		// Fall back to the base64 image if we do not ship that SVG after all.
+		// checkIfImageExists sets display:none on error, so restore it when
+		// substituting the fallback.
+		if (data.image) {
+			const fallbackImage = image;
+			fallbackImage.onerror = function () {
+				fallbackImage.onerror = null;
+				fallbackImage.src = data.image;
+				fallbackImage.style.display = '';
+			};
+		}
+		if (pushbuttonText !== '') {
+			const text = window.L.DomUtil.create('span', '', pushbutton);
+			text.innerText = pushbuttonText;
+			builder._stressAccessKey(text, pushbutton.accessKey);
+		}
+	} else if (data.image && pushbuttonText !== '') {
 		window.L.DomUtil.addClass(
 			pushbutton,
 			'has-img d-flex align-content-center justify-content-center align-items-center',

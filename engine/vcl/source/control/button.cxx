@@ -616,6 +616,12 @@ void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("text", GetText());
     if (HasImage())
     {
+        // Emit the icon name first so COOL can resolve it as a local SVG; the
+        // base64 bitmap below is the fallback when it ships no such icon.
+        const OUString sIconName = ImplGetKitSvgIconName(GetModeImage().GetStock());
+        if (!sIconName.isEmpty())
+            rJsonWriter.put("icon", sIconName);
+
         SvMemoryStream aOStm(6535, 6535);
         if(GraphicConverter::Export(aOStm, GetModeImage().GetBitmap(), ConvertDataFormat::PNG) == ERRCODE_NONE)
         {
