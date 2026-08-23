@@ -5200,7 +5200,8 @@ void DocumentBroker::uploadPresetsToWopiHost()
             // These run on the web server poll, which outlives this broker, so they hold
             // a copy of everything they report.
             httpSession->setFinishedHandler(
-                [reportResult](const std::shared_ptr<http::Session>& session)
+                [reportResult = std::move(reportResult)](
+                    const std::shared_ptr<http::Session>& session)
                 { reportResult(session->response()->statusLine()); });
 
             httpSession->setConnectFailHandler(

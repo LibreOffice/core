@@ -442,7 +442,7 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
     return std::string();
 }
 
-void pushCommand(Poco::JSON::Array::Ptr cmds, const std::string& key,
+void pushCommand(Poco::JSON::Array::Ptr& cmds, const std::string& key,
                  const std::string& value)
 {
     Poco::JSON::Object::Ptr cmd = new Poco::JSON::Object();
@@ -450,7 +450,7 @@ void pushCommand(Poco::JSON::Array::Ptr cmds, const std::string& key,
     cmds->add(cmd);
 }
 
-void pushCommand(Poco::JSON::Array::Ptr cmds, const std::string& key, int value)
+void pushCommand(Poco::JSON::Array::Ptr& cmds, const std::string& key, int value)
 {
     Poco::JSON::Object::Ptr cmd = new Poco::JSON::Object();
     cmd->set(key, value);
@@ -459,7 +459,7 @@ void pushCommand(Poco::JSON::Array::Ptr cmds, const std::string& key, int value)
 
 /// Push an EditTextObject command that selects all text in placeholder slot and
 /// applies one UNO formatting command to it.
-void pushEditTextObject(Poco::JSON::Array::Ptr cmds, int slot, const std::string& unoCommand)
+void pushEditTextObject(Poco::JSON::Array::Ptr& cmds, int slot, const std::string& unoCommand)
 {
     Poco::JSON::Array::Ptr sub = new Poco::JSON::Array();
 
@@ -480,7 +480,7 @@ void pushEditTextObject(Poco::JSON::Array::Ptr cmds, int slot, const std::string
 /// Push an EditTextObject command that applies the paragraph-level emphasis runs
 /// to placeholder slot: each run selects its text and toggles bold and/or italic.
 /// Emits nothing when there are no runs.
-void pushEmphasis(Poco::JSON::Array::Ptr cmds, int slot, const std::vector<SlotRange>& ranges)
+void pushEmphasis(Poco::JSON::Array::Ptr& cmds, int slot, const std::vector<SlotRange>& ranges)
 {
     if (ranges.empty())
         return;
@@ -534,7 +534,7 @@ std::string transformString(const Poco::JSON::Array::Ptr& cmds)
 /// whole-deck and the per-slide compiler: set the layout, the title, one SetText
 /// per content block, a GenerateImage for an image slide, the house-style
 /// formatting when no template is in use, and the slide's part and intent.
-void emitSlideCommands(Poco::JSON::Array::Ptr cmds, const Poco::JSON::Object::Ptr& slide,
+void emitSlideCommands(Poco::JSON::Array::Ptr& cmds, const Poco::JSON::Object::Ptr& slide,
                        bool reuseCurrentSlide, const DeckSpec::CompileOptions& options)
 {
     const std::string intent = getString(slide, "intent");

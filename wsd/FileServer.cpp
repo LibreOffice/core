@@ -2502,7 +2502,7 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     storedRequest.set("Content-Type", "text/plain");
 
     http::Session::FinishedCallback storedCallback =
-        [fetchWithKey, secretField, socketWeak, storedUriAnonym,
+        [fetchWithKey = std::move(fetchWithKey), secretField, socketWeak, storedUriAnonym,
          requestPath = getRequestPath(request),
          shortMessage](const std::shared_ptr<http::Session>& wopiSession)
     {
