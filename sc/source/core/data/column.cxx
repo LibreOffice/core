@@ -2849,7 +2849,7 @@ struct CalcAllHandler
         if (pCell->GetCode()->IsRecalcModeNormal())
             nNewVal = pCell->GetValue();
         else
-            nNewVal = nOldVal;  // random(), jetzt() etc.
+            nNewVal = nOldVal;  // random(), now() etc.
 
         assert(nOldVal == nNewVal);
 #endif

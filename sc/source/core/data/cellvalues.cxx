@@ -295,10 +295,10 @@ struct TableValues::Impl
     CellValues* getCellValues( SCTAB nTab, SCCOL nCol )
     {
         if (nTab < maRange.aStart.Tab() || maRange.aEnd.Tab() < nTab)
-            // sheet index out of bound.
+            // sheet index out of bounds.
             return nullptr;
         if (nCol < maRange.aStart.Col() || maRange.aEnd.Col() < nCol)
-            // column index out of bound.
+            // column index out of bounds.
             return nullptr;
         size_t nTabOffset = nTab - maRange.aStart.Tab();
         if (nTabOffset >= m_Tables.size())
