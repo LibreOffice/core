@@ -170,11 +170,6 @@ abstract class SidebarBase extends JSDialogComponent {
 
 		return false;
 	}
-
-	protected get reservedContainerHeight(): number {
-		return 0;
-	}
-
 	onResize() {
 		if (this.resizeTaskId)
 			app.layoutingService.cancelLayoutingTask(this.resizeTaskId);
@@ -184,9 +179,7 @@ abstract class SidebarBase extends JSDialogComponent {
 				this.documentContainer.getBoundingClientRect().height + 'px';
 			if (this.container) {
 				(this.container as HTMLElement).style.height =
-					this.documentContainer.getBoundingClientRect().height -
-					this.reservedContainerHeight +
-					'px';
+					this.documentContainer.getBoundingClientRect().height + 'px';
 			}
 			this.resizeTaskId = null;
 		});

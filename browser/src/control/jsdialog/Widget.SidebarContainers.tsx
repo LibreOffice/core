@@ -36,31 +36,41 @@ JSDialog.deck = function (
   return false;
 };
 
-// Builds the single section of an overlay deck without the expander framework: the content
-// is always visible, so the header is a plain heading with a close button at the trailing
-// edge that sends the panel's closeCommand. The header is laid out like the navigation
-// header: the header row carries the padding, so the close button needs no margin.
-function buildPanelWithHeaderAction(
-  parentContainer: Element,
-  data: PanelWidgetJSON,
-  builder: JSBuilder,
-) {
+interface OverlaySidebarPanelOptions {
+  id: string;
+  title: string;
+  cssClass: string;
+  map: any;
+  onClose: () => void;
+}
+
+interface OverlaySidebarPanelParts {
+  container: HTMLElement;
+  header: HTMLElement;
+  closeWrapper: HTMLElement;
+  content: HTMLElement;
+}
+
+// builds the frame an overlay sidebar deck is made of
+JSDialog.buildOverlaySidebarPanel = function (
+  options: OverlaySidebarPanelOptions,
+): OverlaySidebarPanelParts {
   const closeText = _('Close');
-  const labelId = data.id + '-label';
+  const labelId = options.id + '-label';
   let content: HTMLElement;
   let header: HTMLElement;
   let closeWrapper: HTMLElement;
 
   const container = (
-    <div class={'ui-panel-container ' + builder.options.cssClass} id={data.id}>
+    <div class={'ui-panel-container ' + options.cssClass} id={options.id}>
       <div
-        class={'ui-panel-header ' + builder.options.cssClass}
+        class={'ui-panel-header ' + options.cssClass}
         ref={(el: HTMLElement) => {
           header = el;
         }}
       >
-        <h2 class={'ui-panel-title ' + builder.options.cssClass} id={labelId}>
-          {builder._cleanText(data.text)}
+        <h2 class={'ui-panel-title ' + options.cssClass} id={labelId}>
+          {options.title}
         </h2>
         <div
           class="close-navigation-wrapper"
@@ -70,19 +80,19 @@ function buildPanelWithHeaderAction(
         >
           <button
             class="close-navigation-button ui-panel-close-button"
-            id={data.id + '-close-button'}
+            id={options.id + '-close-button'}
             aria-label={closeText}
             data-cooltip={closeText}
-            onClick={() => builder.map.sendUnoCommand(data.closeCommand)}
+            onClick={() => options.onClose()}
             ref={(el: HTMLElement) =>
-              window.L.control.attachTooltipEventListener(el, builder.map)
+              window.L.control.attachTooltipEventListener(el, options.map)
             }
           ></button>
         </div>
       </div>
       <div
-        class={'ui-panel-content ' + builder.options.cssClass}
-        id={data.id + '-children'}
+        class={'ui-panel-content ' + options.cssClass}
+        id={options.id + '-children'}
         role="region"
         aria-labelledby={labelId}
         ref={(el: HTMLElement) => {
@@ -91,6 +101,24 @@ function buildPanelWithHeaderAction(
       ></div>
     </div>
   );
+
+  return { container, header, closeWrapper, content };
+};
+
+// builds the single section of an overlay deck
+function buildPanelWithHeaderAction(
+  parentContainer: Element,
+  data: PanelWidgetJSON,
+  builder: JSBuilder,
+) {
+  const { container, header, closeWrapper, content } =
+    JSDialog.buildOverlaySidebarPanel({
+      id: data.id,
+      title: builder._cleanText(data.text),
+      cssClass: builder.options.cssClass,
+      map: builder.map,
+      onClose: () => builder.map.sendUnoCommand(data.closeCommand),
+    });
 
   // The panel keeps its options menu next to the close button, at the leading
   // side of the close button so the close button stays at the trailing edge.

@@ -9,119 +9,38 @@
  */
 
 /*
- * An extension's iframe is rendered as a foldable panel inside the sidebar's
- * Extensions tab (#sidebar-extensions-tabpanel), styled to match the
- * Properties sections.  Folding hides the iframe via CSS only so the iframe
- * stays in the DOM and keeps its listeners attached.  Clicking the remove
- * button tears the iframe down (Extension_Teardown handshake) and removes the
- * panel, deactivating the extension.
+ * An extension is rendered as an overlay deck: its own panel with a title and a close
+ * button, built from the same shell as the core overlay decks (Styles, Accessibility
+ * check) so it looks like one of them. Clicking close tears the
+ * iframe down (Extension_Teardown handshake) and closes the sidebar with it.
  */
+
+#sidebar-panel.extension-deck-shown > #sidebar-container {
+	display: none;
+}
 
 .extension-panel {
 	display: flex;
 	flex-direction: column;
-	border-bottom: 1px solid var(--color-border-lighter);
-}
-
-.extension-panel-header {
-	display: flex;
-	align-items: center;
-	height: var(--sidebar-header-height, 34px);
-	padding-inline: 8px;
-	cursor: pointer;
-	user-select: none;
-	flex-shrink: 0;
-	color: var(--color-main-text);
-	font-family: var(--cool-font);
-}
-
-.extension-panel-disclosure {
-	margin-inline-end: 8px;
-	display: inline-block;
-	width: 0;
-	height: 0;
-	border-inline-start: 5px solid transparent;
-	border-inline-end: 5px solid transparent;
-	border-top: 6px solid currentColor;
-	transition: transform var(--duration-fast) ease-out;
-}
-
-.extension-panel.folded .extension-panel-disclosure {
-	transform: rotate(-90deg);
-}
-
-.extension-panel-title {
-	flex: 1;
-	color: var(--color-main-text);
-	font-family: var(--cool-font);
-	font-size: var(--header-font-size);
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.extension-panel-title::before {
-	content: 'V';
-	color: transparent;
-	display: inline-block;
-	margin-inline-end: 7px;
-	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
-	filter: brightness(0.5);
-	transform: rotate(90deg);
-}
-
-.extension-panel.folded .extension-panel-title::before {
-	transform: none;
-	background-position: center right;
-}
-
-[data-theme='dark'] .extension-panel-title::before {
-	filter: brightness(1);
-}
-
-.extension-panel-remove {
-	flex-shrink: 0;
+	height: 100%;
 	box-sizing: border-box;
-	width: var(--btn-size);
-	height: var(--btn-size);
-	padding: var(--btn-padding);
-	border: none;
-	border-radius: var(--border-radius);
-	background-color: transparent;
-	cursor: pointer;
-	margin-inline-start: 4px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	opacity: 0.75;
 }
 
-.extension-panel-remove:hover {
-	background-color: var(--color-background-darker);
-	opacity: 1;
-}
-
-.extension-panel-remove img {
-	width: var(--btn-img-size);
-	height: var(--btn-img-size);
-}
-
-.extension-panel-body {
-	overflow: hidden;
-}
-
-.extension-panel.folded .extension-panel-body {
+.extension-panel.closing {
 	display: none;
 }
 
-/* The iframe's actual height is driven from the iframe side: cool.js
- * watches its document with a ResizeObserver and posts the body's
- * scrollHeight back to Control.Extension as Extension_Resize, which then
- * sets iframe.style.height.  Until the first message arrives the iframe
- * sits at its element-default height (~150px) so the user sees something
- * sensible during load. */
+.extension-panel > .sidebar.ui-panel-content.extension-panel-body {
+	width: auto;
+	padding-inline: 0;
+	flex: 1;
+	min-height: 0;
+	overflow: auto;
+}
+
 .extension-panel-body > iframe {
 	border: none;
 	width: 100%;
+	height: 100%;
 	display: block;
 }
