@@ -257,6 +257,9 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocSmall,           {{ Reference, Value                                     }, 0, Value }},
     { ocSort,            {{ ReferenceOrRefArray, ForceArray, ForceArray, Value   }, 0, ForceArrayReturn }},
     { ocSortBy,          {{ ReferenceOrRefArray, ReferenceOrRefArray, Value,     }, 2, ForceArrayReturn }},
+    // The # refers to the master cell before it, so the operand is taken as one whole
+    // reference, in an array formula too.
+    { ocSpill,           {{ Reference                                            }, 0, Reference }},
     { ocStDev,           {{ Reference                                            }, 1, Value }},
     { ocStDevA,          {{ Reference                                            }, 1, Value }},
     { ocStDevP,          {{ Reference                                            }, 1, Value }},

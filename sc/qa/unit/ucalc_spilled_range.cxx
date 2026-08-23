@@ -110,6 +110,51 @@ CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorOnNonMasterFormul
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeNeedsOneCellToNameAMaster)
+{
+    // The # refers to the master cell before it, so an operand wider than one cell has no
+    // master and gives #REF!. A union list is used because a plain range before a # is
+    // reduced to the cell it lines up with during the parse and never arrives as a range.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(4, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(4, 1, 0), 20.0);
+
+    // Master at A1 spills =E1:E2 into A1:A2.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 1, aMark, u"=E1:E2"_ustr);
+
+    m_pDoc->SetString(ScAddress(6, 0, 0), u"=(A1~E1)#"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(6, 0, 0)));
+
+    // The list gets there the same way with the spill range as its second part.
+    m_pDoc->SetString(ScAddress(6, 1, 0), u"=(E1~A1)#"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(6, 1, 0)));
+
+    // A matrix formula and a dynamic-array master parse without working out implicit
+    // intersections, so a range before the # arrives whole in those too.
+    m_pDoc->InsertMatrixFormula(6, 2, 6, 2, aMark, u"=(E1:E2)#"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(6, 2, 0)));
+
+    // The range is one operand of the #, not a matrix walked cell by cell, so the master
+    // gives one error and spills nothing. The value below it would force #SPILL! if it did.
+    m_pDoc->SetValue(ScAddress(7, 1, 0), 5.0);
+    m_pDoc->InsertMatrixFormula(7, 0, 7, 0, aMark, u"=(E1:E2)#"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
+                                /*bDynamicArrayMaster=*/true);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(7, 0, 0)));
+
+    m_pDoc->SetValue(ScAddress(8, 1, 0), 5.0);
+    m_pDoc->InsertMatrixFormula(8, 0, 8, 0, aMark, u"=E1:E2#"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
+                                /*bDynamicArrayMaster=*/true);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(8, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorImplicitIntersection)
 {
     // A # reference in a cell that does not promote to a dynamic-array

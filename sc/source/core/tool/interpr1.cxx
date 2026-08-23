@@ -1645,6 +1645,18 @@ void ScInterpreter::ScSpilledRange()
     // value. An empty cell, a number, a string, or a non-master
     // spill slot yields #REF!, since none of them is a dynamic-array
     // master.
+    //
+    // The operator refers to a single cell, so an operand wider than
+    // that has no master. A range, a reference list and a computed
+    // matrix all give #REF!.
+    const StackVar eOperandType = GetStackType();
+    if (eOperandType != svSingleRef && eOperandType != svError)
+    {
+        Pop();
+        PushError(FormulaError::NoRef);
+        return;
+    }
+
     ScAddress aAddress;
     PopSingleRef(aAddress);
     if (nGlobalError != FormulaError::NONE)

@@ -7141,6 +7141,25 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testPostfixOperatorWithoutAFactorIsNoFormula)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeOperatorNextToAnExclamationMark)
+{
+    // A # before an exclamation mark lexes as the start of an error constant and swallows
+    // the mark, so the intersection operator is gone and the formula doesn't parse.
+    // Parentheses keep them apart, the only way to write such an intersection.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    const FormulaError eRunTogether = parseErrorInNativeGrammar(*m_pDoc, u"=A1#!C1"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("=A1#!C1 should not read as a formula",
+                           FormulaError::NONE != eRunTogether);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, parseErrorInNativeGrammar(*m_pDoc, u"=(A1#)!C1"_ustr));
+
+    // An exclamation mark before the # is fine, nothing runs the two together in that order.
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE,
+                         parseErrorInNativeGrammar(*m_pDoc, u"=A1:C2!A1#"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeDroppedWithNoFactorInFrontOfIt)
 {
     // A percent sign ends the factor before it, so a # after one has nothing to enclose and
