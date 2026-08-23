@@ -132,6 +132,8 @@ struct PamFunctions
     int (*start)(const char*, const char*, const struct pam_conv*, pam_handle_t**) = nullptr;
     int (*authenticate)(pam_handle_t*, int) = nullptr;
     int (*end)(pam_handle_t*, int) = nullptr;
+    /// The dlopen handle, or null when the library was never loaded. It is never closed.
+    void* handle = nullptr;
     bool loaded() const { return start && authenticate && end; }
 };
 
@@ -148,6 +150,7 @@ const PamFunctions& getPamFunctions()
             return fns;
         }
 
+        fns.handle = lib;
         fns.start = reinterpret_cast<decltype(fns.start)>(dlsym(lib, "pam_start"));
         fns.authenticate = reinterpret_cast<decltype(fns.authenticate)>(dlsym(lib, "pam_authenticate"));
         fns.end = reinterpret_cast<decltype(fns.end)>(dlsym(lib, "pam_end"));
