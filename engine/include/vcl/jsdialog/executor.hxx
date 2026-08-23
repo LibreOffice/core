@@ -141,9 +141,10 @@ public:
 
     static void trigger_closed(weld::Popover& rPopover) { rPopover.popdown(); }
 
-    static void trigger_key_press(const weld::Widget& rWidget, const KeyEvent& rEvent)
+    /// returns true when the widget's owner handled the key
+    static bool trigger_key_press(const weld::Widget& rWidget, const KeyEvent& rEvent)
     {
-        rWidget.m_aKeyPressHdl.Call(rEvent);
+        return rWidget.m_aKeyPressHdl.Call(rEvent);
     }
 
     static void trigger_key_release(const weld::Widget& rWidget, const KeyEvent& rEvent)

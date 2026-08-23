@@ -112,12 +112,10 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft())
     {
-        if (!(rMEvt.GetClicks() % 2) && maHasInsert)
-        {
-            InsertCharToDoc();
-        }
-
-        maMouseClickHdl.Call(this);
+        if (rMEvt.GetClicks() == 2)
+            Activate();
+        else
+            maMouseClickHdl.Call(this);
         return true;
     }
 
@@ -126,17 +124,27 @@ bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool SvxCharView::KeyInput(const KeyEvent& rKEvt)
 {
-    bool bRet = false;
-    vcl::KeyCode aCode = rKEvt.GetKeyCode();
-    switch (aCode.GetCode())
+    switch (rKEvt.GetKeyCode().GetCode())
     {
         case KEY_SPACE:
+            Activate();
+            return true;
         case KEY_RETURN:
-            InsertCharToDoc();
-            bRet = true;
-            break;
+            if (maReturnHdl.IsSet())
+                maReturnHdl.Call(this);
+            else
+                Activate();
+            return true;
     }
-    return bRet;
+    return false;
+}
+
+void SvxCharView::Activate()
+{
+    if (maHasInsert)
+        InsertCharToDoc();
+    else
+        maMouseClickHdl.Call(this);
 }
 
 bool SvxCharView::Command(const CommandEvent& rCommandEvent)
@@ -156,6 +164,12 @@ void SvxCharView::InsertCharToDoc()
 {
     if (GetText().isEmpty())
         return;
+
+    if (maInsertHdl.IsSet())
+    {
+        maInsertHdl.Call(this);
+        return;
+    }
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"Symbols"_ustr, GetText()),
@@ -280,6 +294,10 @@ void SvxCharView::setMouseClickHdl(const Link<SvxCharView*, void>& rLink)
 {
     maMouseClickHdl = rLink;
 }
+
+void SvxCharView::setInsertHdl(const Link<SvxCharView*, void>& rLink) { maInsertHdl = rLink; }
+
+void SvxCharView::setReturnHdl(const Link<SvxCharView*, void>& rLink) { maReturnHdl = rLink; }
 
 void SvxCharView::setClearClickHdl(const Link<SvxCharView*, void>& rLink)
 {

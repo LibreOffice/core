@@ -37,6 +37,8 @@ private:
 
     Link<SvxCharView*, void> maFocusInHdl;
     Link<SvxCharView*, void> maMouseClickHdl;
+    Link<SvxCharView*, void> maInsertHdl;
+    Link<SvxCharView*, void> maReturnHdl;
     Link<SvxCharView*, void> maClearClickHdl;
     Link<SvxCharView*, void> maClearAllClickHdl;
 
@@ -61,6 +63,7 @@ public:
     OUString GetCharInfoText();
     void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
+    void            Activate();
 
     void            createContextMenu(const Point& rPosition);
 
@@ -68,6 +71,8 @@ public:
 
     void setFocusInHdl(const Link<SvxCharView*,void> &rLink);
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
+    void setInsertHdl(const Link<SvxCharView*,void> &rLink);
+    void setReturnHdl(const Link<SvxCharView*,void> &rLink);
     void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
 
@@ -129,6 +134,13 @@ public:
     bool            FavCharListIsFull() const;
 
     void            GrabFocusToFirstFavorite();
+
+    /// moves focus to the first tile of the recent characters
+    void            GrabFocusToFirstRecent();
+    bool            isRecentCharView(const SvxCharView* pView) const;
+
+    void            setInsertHdl(const Link<SvxCharView*,void> &rLink);
+    void            setReturnHdl(const Link<SvxCharView*,void> &rLink);
 
 private:
     std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>

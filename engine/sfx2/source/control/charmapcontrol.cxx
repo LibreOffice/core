@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <charmapcontrol.hxx>
@@ -253,6 +254,32 @@ void SfxCharmapCtrl::GrabFocus()
 void SfxCharmapContainer::GrabFocusToFirstFavorite()
 {
     m_aFavCharView[0].GrabFocus();
+}
+
+void SfxCharmapContainer::GrabFocusToFirstRecent() { m_aRecentCharView[0].GrabFocus(); }
+
+bool SfxCharmapContainer::isRecentCharView(const SvxCharView* pView) const
+{
+    return std::any_of(std::begin(m_aRecentCharView), std::end(m_aRecentCharView),
+                       [pView](const SvxCharView& rView) { return &rView == pView; });
+}
+
+void SfxCharmapContainer::setInsertHdl(const Link<SvxCharView*, void>& rLink)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        m_aRecentCharView[i].setInsertHdl(rLink);
+        m_aFavCharView[i].setInsertHdl(rLink);
+    }
+}
+
+void SfxCharmapContainer::setReturnHdl(const Link<SvxCharView*, void>& rLink)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        m_aRecentCharView[i].setReturnHdl(rLink);
+        m_aFavCharView[i].setReturnHdl(rLink);
+    }
 }
 
 static std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>

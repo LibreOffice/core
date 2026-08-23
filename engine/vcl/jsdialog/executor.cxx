@@ -139,6 +139,15 @@ void SendAction(weld::TreeView& rTreeView, std::unique_ptr<ActionDataMap> pData)
         pJSWidget->sendAction(std::move(pData));
 }
 
+/// A handler may have closed the dialog and destroyed its widgets, so check
+/// that a widget is still registered before touching it again.
+static bool isWidgetAlive(const OUString& nWindowId, const OUString& rWidget,
+                          const weld::Widget* pWidget)
+{
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+    return aWidgetMap && aWidgetMap->Find(rWidget) == pWidget;
+}
+
 bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const StringMap& rData)
 {
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
@@ -389,8 +398,10 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 else if (sAction == "keypress")
                 {
                     sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
-                    KitTrigger::trigger_key_press(*pArea, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
-                    KitTrigger::trigger_key_release(*pArea, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    const KeyEvent aKeyEvent(nKeyNo, vcl::KeyCode(nKeyNo));
+                    KitTrigger::trigger_key_press(*pArea, aKeyEvent);
+                    if (isWidgetAlive(nWindowId, rWidget, pWidget))
+                        KitTrigger::trigger_key_release(*pArea, aKeyEvent);
                     return true;
                 }
                 else if (sAction == "textselection")
@@ -787,8 +798,13 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 if (sAction == "keypress")
                 {
                     sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
-                    KitTrigger::trigger_key_press(*pIconView,
-                                                  KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    const KeyEvent aKeyEvent(nKeyNo, vcl::KeyCode(nKeyNo));
+                    // the dialog gets the first chance to handle the key
+                    if (KitTrigger::trigger_key_press(*pIconView, aKeyEvent))
+                        return true;
+                    if (aKeyEvent.GetKeyCode().GetCode() == KEY_RETURN
+                        && isWidgetAlive(nWindowId, rWidget, pWidget))
+                        KitTrigger::trigger_item_activated(*pIconView);
                     return true;
                 }
                 else if (sAction == "keyrelease")

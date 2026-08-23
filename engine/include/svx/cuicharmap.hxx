@@ -146,8 +146,8 @@ private:
         hexadecimal = 16
     };
 
-    // inserts the character that is currently selected in the given IconView
-    void insertSelectedCharacter(weld::IconView& rIconView);
+    // inserts the character the dialog currently shows, and remembers it
+    void insertCurrentCharacter();
 
     static void fillAllSubsets(weld::ComboBox& rListBox);
 
@@ -175,6 +175,8 @@ private:
     DECL_DLLPRIVATE_LINK(DecimalCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(HexCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(CharClickHdl, SvxCharView*, void);
+    DECL_DLLPRIVATE_LINK(CharViewInsertHdl, SvxCharView*, void);
+    DECL_DLLPRIVATE_LINK(CharViewReturnHdl, SvxCharView*, void);
     DECL_DLLPRIVATE_LINK(InsertClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(FavSelectHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SearchUpdateHdl, weld::Entry&, void);

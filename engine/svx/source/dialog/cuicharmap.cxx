@@ -277,10 +277,12 @@ void SvxCharacterMap::init()
         m_xOKBtn->set_sensitive(true);
     }
 
-    m_aCharmapContents.init(m_xFrame.is(),
+    m_aCharmapContents.init(true,
                             LINK(this, SvxCharacterMap, CharClickHdl),
                             LINK(this, SvxCharacterMap, UpdateFavHdl),
                             LINK(this, SvxCharacterMap, UpdateRecentHdl));
+    m_aCharmapContents.setInsertHdl(LINK(this, SvxCharacterMap, CharViewInsertHdl));
+    m_aCharmapContents.setReturnHdl(LINK(this, SvxCharacterMap, CharViewReturnHdl));
 
     setCharName(90);
 
@@ -967,38 +969,62 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
     m_xOKBtn->set_sensitive(true);
 }
 
-void SvxCharacterMap::insertSelectedCharacter(weld::IconView& rIconView)
+IMPL_LINK(SvxCharacterMap, CharViewInsertHdl, SvxCharView*, pView, void)
 {
-    auto aSelectedId = rIconView.get_selected_id();
-    if (!aSelectedId.isEmpty()) {
-        sal_UCS4 cChar = getCharacterFromId(aSelectedId);
-        m_cSelectedChar = cChar;
-        OUString aOUStr( &cChar, 1 );
-        setFavButtonState(aOUStr, m_aFont.GetFamilyName());
-        insertCharToDoc(aOUStr);
-    }
+    CharClickHdl(pView);
+
+    const bool bFromRecent = m_aCharmapContents.isRecentCharView(pView);
+    insertCurrentCharacter();
+
+    // inserting moves the character to the front of the recent list, so follow
+    // it with the selection and the focus instead of leaving them on a tile
+    // that now holds a different character
+    if (bFromRecent)
+        m_aCharmapContents.GrabFocusToFirstRecent();
 }
 
-IMPL_LINK(SvxCharacterMap, CharDoubleClickHdl, weld::IconView&, rIconView, bool)
+IMPL_LINK(SvxCharacterMap, CharViewReturnHdl, SvxCharView*, pView, void)
 {
-    insertSelectedCharacter(rIconView);
+    CharClickHdl(pView);
+    InsertClickHdl(*m_xOKBtn);
+}
+
+void SvxCharacterMap::insertCurrentCharacter()
+{
+    const OUString sChar = m_aShowChar.GetText();
+    if (sChar.isEmpty())
+        return;
+
+    insertCharToDoc(sChar);
+    if (!m_xFrame.is())
+        m_aCharmapContents.updateRecentCharacterList(sChar, m_aFont.GetFamilyName());
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, weld::IconView&, bool)
+{
+    insertCurrentCharacter();
     return true;
 }
 
 IMPL_LINK(SvxCharacterMap, CharKeyPressHdl, const KeyEvent&, rKEvt, bool)
 {
     const vcl::KeyCode& rKey = rKEvt.GetKeyCode();
+    if (rKey.GetModifier())
+        return false;
 
-    if (rKey.GetCode() == KEY_RETURN && !rKey.GetModifier())
+    // Space inserts the selected character and leaves the dialog open, Return
+    // hands over to the insert button, which inserts and closes
+    if (rKey.GetCode() == KEY_SPACE)
     {
-        weld::IconView* pIconView = m_isSearchMode ? m_xSearchSet.get() : m_xShowSet.get();
-        auto aSelectedId = pIconView->get_selected_id();
-        insertSelectedCharacter(*pIconView);
-        if (!aSelectedId.isEmpty())
-        {
-            m_xDialog->response(RET_OK);
-            return true;
-        }
+        insertCurrentCharacter();
+        return true;
+    }
+
+    if (rKey.GetCode() == KEY_RETURN)
+    {
+        if (m_xOKBtn->get_sensitive())
+            InsertClickHdl(*m_xOKBtn);
+        return true;
     }
 
     return false;
@@ -1179,11 +1205,7 @@ IMPL_LINK(SvxCharacterMap, SearchCharQueryTooltipHdl, const weld::TreeIter&, ite
 
 IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
 {
-    OUString sChar = m_aShowChar.GetText();
-    insertCharToDoc(sChar);
-    // Need to update recent character list, when OK button does not insert
-    if(!m_xFrame.is())
-        m_aCharmapContents.updateRecentCharacterList(sChar, m_aFont.GetFamilyName());
+    insertCurrentCharacter();
     m_xDialog->response(RET_OK);
 }
 

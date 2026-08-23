@@ -36,11 +36,29 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			return container;
 		}
 	};
+
+	container.onFocus = function () {
+		var focusable = container.querySelector('[tabindex]');
+		if (focusable)
+			focusable.focus();
+	};
+
 	if (!data.image)
 		return;
 
 	var isTextbox = data.aria && data.aria.role === 'textbox';
 	var imageId = data.id + '-img';
+
+	var hadFocus = document.getElementById(imageId) === document.activeElement;
+	if (hadFocus) {
+		app.layoutingService.appendLayoutingTask(function () {
+			if (document.activeElement && document.activeElement !== document.body)
+				return;
+			var current = document.getElementById(imageId);
+			if (current)
+				current.focus();
+		});
+	}
 
 	if (isTextbox) {
 		// Editable drawing areas (e.g. spell check sentence box) use a
@@ -150,6 +168,7 @@ function _drawingAreaControl (parentContainer, data, builder) {
 		const isFocusableImg = data.enabled && data.canFocus;
 		if (isFocusableImg) {
 			image.tabIndex = 0;
+			image.addEventListener('mousedown', function () { image.focus(); });
 			JSDialog.AddAltAttrOnFocusableImg(image, data, builder);
 			if (data.aria && data.aria.role) {
 				image.setAttribute('role', data.aria.role);
@@ -341,7 +360,7 @@ function _setupDrawingAreaKeyboardEvents (focusElement, container, builder) {
 		} else if (event.key === 'Delete') {
 			builder.callback('drawingarea', 'keypress', container.getCurrent(), UNOKey.DELETE | modifier, builder);
 			event.preventDefault();
-		} else if (event.key === 'Space') {
+		} else if (event.key === ' ' || event.code === 'Space') {
 			builder.callback('drawingarea', 'keypress', container.getCurrent(), UNOKey.SPACE | modifier, builder);
 			event.preventDefault();
 		} else if (event.key === 'Tab') {
@@ -387,7 +406,8 @@ function _setupDrawingAreaKeyboardEvents (focusElement, container, builder) {
 			event.key === 'End' ||
 			event.key === 'Backspace' ||
 			event.key === 'Delete' ||
-			event.key === 'Space' ||
+			event.key === ' ' ||
+			event.code === 'Space' ||
 			event.key === 'Tab') {
 			// skip
 		} else {
