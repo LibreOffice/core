@@ -1080,8 +1080,6 @@ cygwin*|wsl*)
 
     DLLPOST=".dll"
     LINKFLAGSNOUNDEFS=
-    # bypass check for ninja, it is not in default path, but it can be used nevertheless by default
-    NINJA="assumed to be available from Visual Studio"
 
     if test "$host_cpu" = "aarch64"; then
         build_skia=yes
@@ -4312,6 +4310,17 @@ if test "$_os" = "WINNT"; then
     PathFormat "$VC_PRODUCT_DIR/../Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe"
     CMAKE="$formatted_path"
 
+    # Find the ninja that ships with Visual Studio, beside that cmake.
+    PathFormat "$VC_PRODUCT_DIR/../Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe"
+    NINJA="$formatted_path"
+
+    # The Visual Studio install root, one level up from the VC directory.
+    PathFormat "$VC_PRODUCT_DIR/.."
+    VS_INSTALL_DIR="$formatted_path"
+
+    # The Visual Studio release year, for example 2022 or 2026.
+    VS_YEAR="$vcyear"
+
     # Find the version of devenv.exe
     PathFormat "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
     DEVENV="$formatted_path"
@@ -4416,6 +4425,8 @@ fi
 AC_SUBST(VCVER)
 AC_SUBST(VCTOOLSET)
 AC_SUBST(CMAKE)
+AC_SUBST(VS_INSTALL_DIR)
+AC_SUBST(VS_YEAR)
 AC_SUBST(DEVENV)
 AC_SUBST(MSVC_CXX)
 
@@ -12751,7 +12762,7 @@ if test "$need_meson" = "yes"; then
     fi
 fi
 
-if test -z "$NINJA" || test "$NINJA" = 'assumed to be available from Visual Studio'; then
+if test -z "$NINJA"; then
     x_NINJA=[\#]
 else
     x_NINJA=

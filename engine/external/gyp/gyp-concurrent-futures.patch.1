@@ -1,0 +1,129 @@
+Run the worker pools through concurrent.futures.
+
+A multiprocessing pool cannot be shut down once one of its workers has died. A
+worker waiting for its next task holds the task queue's read lock, a POSIX
+semaphore, so a worker killed there leaves that lock held for good. Every other
+worker then waits for the lock, and both close() and terminate() wait for those
+workers, with no timeout. The underlying problem is
+https://github.com/python/cpython/issues/66587, open since 2014.
+
+concurrent.futures reports a worker that died instead of waiting for it, so gyp
+fails and says why:
+
+ Exception: A process in the process pool was terminated abruptly while the
+ future was running or pending.
+
+It also starts a worker per submitted task rather than the full set up front, so
+a machine reporting 384 cores no longer gets 384 processes to read 73 files.
+
+--- a/pylib/gyp/input.py
++++ b/pylib/gyp/input.py
+@@ -4,6 +4,7 @@
+ 
+ 
+ import ast
++import concurrent.futures
+ import multiprocessing
+ import os.path
+ import re
+@@ -583,6 +584,19 @@
+         # Flag to indicate if there was an error in a child process.
+         self.error = False
+ 
++    def LoadTargetBuildFileFuture(self, future):
++        """Handle a finished LoadTargetBuildFile call.
++
++        A worker that died leaves the future with an exception rather than a
++        result. Report that as a failed load, which stops the main loop.
++        """
++        try:
++            result = future.result()
++        except BaseException as e:
++            print("Exception:", e, file=sys.stderr)
++            result = None
++        self.LoadTargetBuildFileCallback(result)
++
+     def LoadTargetBuildFileCallback(self, result):
+         """Handle the results of running LoadTargetBuildFile in another process."""
+         self.condition.acquire()
+@@ -633,28 +647,27 @@
+             }
+ 
+             if not parallel_state.pool:
+-                parallel_state.pool = multiprocessing.Pool(multiprocessing.cpu_count())
+-            parallel_state.pool.apply_async(
++                parallel_state.pool = concurrent.futures.ProcessPoolExecutor(
++                    multiprocessing.cpu_count()
++                )
++            future = parallel_state.pool.submit(
+                 CallLoadTargetBuildFile,
+-                args=(
+-                    global_flags,
+-                    dependency,
+-                    variables,
+-                    includes,
+-                    depth,
+-                    check,
+-                    generator_input_info,
+-                ),
+-                callback=parallel_state.LoadTargetBuildFileCallback,
++                global_flags,
++                dependency,
++                variables,
++                includes,
++                depth,
++                check,
++                generator_input_info,
+             )
++            future.add_done_callback(parallel_state.LoadTargetBuildFileFuture)
+     except KeyboardInterrupt as e:
+-        parallel_state.pool.terminate()
++        parallel_state.pool.shutdown(wait=False, cancel_futures=True)
+         raise e
+ 
+     parallel_state.condition.release()
+ 
+-    parallel_state.pool.close()
+-    parallel_state.pool.join()
++    parallel_state.pool.shutdown()
+     parallel_state.pool = None
+ 
+     if parallel_state.error:
+--- a/pylib/gyp/generator/ninja.py
++++ b/pylib/gyp/generator/ninja.py
+@@ -4,11 +4,11 @@
+ 
+ 
+ import collections
++import concurrent.futures
+ import copy
+ import ctypes
+ import hashlib
+ import json
+-import multiprocessing
+ import os.path
+ import re
+ import shutil
+@@ -2939,17 +2939,11 @@
+     else:
+         config_names = target_dicts[target_list[0]]["configurations"]
+         if params["parallel"]:
+-            try:
+-                pool = multiprocessing.Pool(len(config_names))
+-                arglists = []
+-                for config_name in config_names:
+-                    arglists.append(
+-                        (target_list, target_dicts, data, params, config_name)
+-                    )
+-                pool.map(CallGenerateOutputForConfig, arglists)
+-            except KeyboardInterrupt as e:
+-                pool.terminate()
+-                raise e
++            arglists = []
++            for config_name in config_names:
++                arglists.append((target_list, target_dicts, data, params, config_name))
++            with concurrent.futures.ProcessPoolExecutor(len(config_names)) as pool:
++                list(pool.map(CallGenerateOutputForConfig, arglists))
+         else:
+             for config_name in config_names:
+                 GenerateOutputForConfig(

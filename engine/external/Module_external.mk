@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,FROZEN,frozen) \
 	$(call gb_Helper_optional,GLM,glm) \
 	$(call gb_Helper_optional,GRAPHITE,graphite) \
+	$(call gb_Helper_optional,NSS,gyp) \
 	$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
 	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	$(call gb_Helper_optional,HYPHEN,hyphen) \

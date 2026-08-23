@@ -1,0 +1,20 @@
+#!/bin/bash
+# Run gyp with a chosen python and gyp's own pylib. build.sh runs gyp by name, so
+# this sits on PATH as "gyp". GYPDIR names the unpacked gyp directory. PYEXE names
+# the python to use and defaults to python3. When cygpath is present the paths are
+# converted to native Windows form, so a native python can read them.
+
+set -e
+
+main="$GYPDIR/gyp_main.py"
+pylib="$GYPDIR/pylib"
+py="${PYEXE:-python3}"
+
+if command -v cygpath >/dev/null 2>&1; then
+    main=$(cygpath -m "$main")
+    pylib=$(cygpath -m "$pylib")
+    py=$(cygpath -m "$py")
+fi
+
+export PYTHONPATH="$pylib${PYTHONPATH:+:$PYTHONPATH}"
+exec "$py" "$main" "$@"

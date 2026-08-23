@@ -1,0 +1,16 @@
+Let build.sh pass a load-average limit on to ninja.
+
+build.sh already turns its own -j option into a ninja -j argument. Add the same
+handling for -l, so a caller can cap the ninja load average as well as the job
+count.
+
+--- nss/nss/build.sh
++++ nss/nss/build.sh
+@@ -90,6 +90,7 @@
+         -cc) clean_only=1 ;;
+         -v) ninja_params+=(-v); verbose=1 ;;
+         -j) ninja_params+=(-j "$2"); shift ;;
++        -l) ninja_params+=(-l "$2"); shift ;;
+         --gyp|-g) rebuild_gyp=1 ;;
+         --opt|-o) opt_build=1 ;;
+         -m32|--m32) target_arch=ia32; echo 'Warning: use -t instead of -m32' 1>&2 ;;

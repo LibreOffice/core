@@ -32,7 +32,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nspr-win95-target.patch \
     $(if $(filter LINUX,$(OS)), \
         external/nss/nss.disablefsync.patch \
-        external/nss/nss.getrandom.patch) \
+        external/nss/nss.getrandom.patch \
+        external/nss/nss-gyp-rpath.patch.1) \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
     $(if $(filter ANDROID,$(OS)), \
@@ -40,9 +41,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     $(if $(filter WNT,$(OS)), \
         external/nss/nss.windows.patch \
         external/nss/nss.nowerror.patch \
-        external/nss/nss.utf8bom.patch.1) \
+        external/nss/nss.utf8bom.patch.1 \
+        external/nss/nss-gyp-windows.patch.1) \
     external/nss/outofbounds.patch.0 \
     external/nss/nss-skip-command-line-tools.patch.1 \
+    external/nss/nss-gyp-load-average.patch.1 \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)

@@ -19,7 +19,21 @@ $(eval $(call gb_ExternalProject_use_externals,nss,\
 	zlib \
 ))
 
+nss_PYTHON := $(if $(PYTHON_FOR_BUILD),$(PYTHON_FOR_BUILD),$(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER)/python)
+
+ifneq ($(filter LINUX WNT,$(OS)),)
+$(call gb_ExternalProject_use_unpacked,nss,gyp)
+endif
+
+# Both gyp branches below ask for libpkix, which the gyp defaults leave out and
+# coreconf built. Without it CERT_PKIXVerifyCert is a stub that always fails, so
+# no certificate chain ever validates.
+
 ifeq ($(OS),WNT)
+# Windows builds nspr with coreconf's build_nspr target, because nss's build.sh
+# cannot build nspr in this environment. It then compiles nss on top with gyp
+# and ninja, run inline below. gyp comes from the gyp-next tarball unpacked
+# beside nss.
 $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
 		$(SRCDIR)/external/nss/nsinstall.py
@@ -37,18 +51,62 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		LIB="$(ILIB)" \
 		XCFLAGS="$(SOLARINC) $(ZLIB_CFLAGS)" \
 		NSPR_CONFIGURE_OPTS="$(gb_CONFIGURE_PLATFORMS)" \
+		COMMA=$(COMMA) \
 		$(if $(CROSS_COMPILING),\
 			CROSS_COMPILE=1 \
 			$(if $(filter AARCH64,$(CPUNAME)),CPU_ARCH=aarch64)) \
-		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
+		$(MAKE) build_nspr RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 			NSS_DISABLE_GTESTS=1 \
 			NSS_DISABLE_CMD_TOOLS=1 \
 			CCC="$(CXX)" \
+		&& export PYEXE='$(gb_UnpackedTarball_workdir)/python3/PCbuild/amd64/python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe' \
+		&& root=$$(cygpath -u "$$("$$PYEXE" -c 'import os,sys;sys.stdout.write(os.path.realpath(sys.argv[1]))' "$$(cygpath -m ..)")") \
+		&& cd "$$root/nss" \
+		&& PATH="$(shell cygpath -u '$(SRCDIR)/external/gyp/bin'):$(shell cygpath -u '$(dir $(NINJA))'):$$PATH" \
+			GYPDIR='$(gb_UnpackedTarball_workdir)/gyp' \
+			VSPATH='$(VS_INSTALL_DIR)' \
+			GYP_MSVS_OVERRIDE_PATH='$(VS_INSTALL_DIR)' \
+			GYP_MSVS_VERSION='$(VS_YEAR)' \
+			bash ./build.sh --msvc $(if $(MSVC_USE_DEBUG_RUNTIME),,-o) -t x64 -Ddisable_dbm=0 -Ddisable_libpkix=0 -Dsign_libs=0 -Ddisable_werror=1 \
+				--disable-tests \
+				--with-nspr="$$(cygpath -m "$$root/dist/out")/include:$$(cygpath -m "$$root/dist/out")/lib" \
+				--python="$$(cygpath -m "$$PYEXE")" \
+		&& cp -f "$$root/dist/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/lib"/*.dll ../dist/out/lib/ \
+		&& for l in nss3 smime3 ssl3 nssutil3; do \
+			cp -f "$$root/dist/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/lib/$$l.dll.lib" "../dist/out/lib/$$l.lib"; \
+		done \
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
-else # OS!=WNT
+else ifeq ($(OS),LINUX)
+# Linux builds nss with gyp and ninja through build.sh instead of coreconf.
+# build.sh also builds nspr. It writes dist/Release, or dist/Debug for a debug
+# build, with the nspr headers in a nspr subdirectory, so the recipe copies the
+# tree to dist/out and lifts those headers up a level.
+$(call gb_ExternalProject_get_state_target,nss,build): \
+		$(call gb_ExternalExecutable_get_dependencies,python) \
+		$(SRCDIR)/external/nss/nsinstall.py
+	$(call gb_Trace_StartRange,nss,EXTERNAL)
+	+$(call gb_ExternalProject_run,build,\
+		PATH="$(SRCDIR)/external/gyp/bin:$$PATH" \
+		GYPDIR="$(gb_UnpackedTarball_workdir)/gyp" \
+		PYEXE="$(nss_PYTHON)" \
+		COMMA=$(COMMA) \
+		CC="$(CC) $(gb_DEBUGINFO_FLAGS) $(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function)" \
+		CXX="$(CXX) $(gb_DEBUGINFO_FLAGS)" \
+		bash ./build.sh $(if $(LOADLIMIT),-l $(LOADLIMIT)) --disable-tests --enable-legacy-db --enable-libpkix -Ddisable_werror=1 $(if $(ENABLE_DBGUTIL),,--opt) \
+			--python="$(nss_PYTHON)" \
+			$(if $(and $(filter TRUE,$(COM_IS_CLANG)),$(filter -fsanitize=%,$(CC)),$(if $(filter -shared-libsan,$(CC) $(LDFLAGS)),,x)),--no-zdefs) \
+		&& rm -rf ../dist/out \
+		&& cp -a ../dist/$(if $(ENABLE_DBGUTIL),Debug,Release) ../dist/out \
+		&& if [ -d ../dist/out/include/nspr ]; then \
+			cp -a ../dist/out/include/nspr/. ../dist/out/include/; fi \
+		&& rm -f ../dist/out/lib/*.a \
+	,nss)
+	$(call gb_Trace_EndRange,nss,EXTERNAL)
+
+else # OS!=WNT and OS!=LINUX
 # make sure to specify NSPR_CONFIGURE_OPTS as env (before make command), so nss can append it's own defaults
 # OTOH specify e.g. CC and NSINSTALL as arguments (after make command), so they will overrule nss makefile values
 $(call gb_ExternalProject_get_state_target,nss,build): \

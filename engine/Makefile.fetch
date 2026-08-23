@@ -122,6 +122,7 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,FROZEN,FROZEN_TARBALL) \
 	$(call fetch_Optional,GLM,GLM_TARBALL) \
 	$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
+	$(call fetch_Optional,NSS,GYP_TARBALL) \
 	$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 	$(call fetch_Optional,HUNSPELL,HUNSPELL_TARBALL) \
 	$(call fetch_Optional,HYPHEN,HYPHEN_TARBALL) \

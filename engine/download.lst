@@ -517,6 +517,11 @@ MYTHES_TARBALL := mythes-1.2.6.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+GYP_SHA256SUM := eec4d9ca36028a28bffa6313fb7db51d664f06f49387cb734369777a55730d4d
+GYP_TARBALL := gyp-next-0.22.2.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 NSS_SHA256SUM := c95a4cf93d6939000642254422d71dffccb5c017d0f40733d3e2be18aa93f1be
 NSS_TARBALL := nss-3.126-with-nspr-4.39.tar.gz
 # three static lines

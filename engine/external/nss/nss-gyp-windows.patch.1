@@ -1,0 +1,93 @@
+Make the gyp and ninja build usable on Windows under cygwin.
+
+Convert the working directory and the dist directory to native Windows paths
+when cygpath is present, so gyp and ninja can read them. Split set_nspr_path's
+include:lib argument on the separator between two drive-letter paths, since a
+Windows drive letter also contains a colon. Both are no-ops off Windows.
+
+Link nspr as nspr4.lib, plc4.lib, plds4.lib. We build nspr with the WIN95
+target, which names its import libraries without the lib prefix. The coreconf
+build already consumes those unprefixed names, so make the gyp build match
+instead of asking for the lib-prefixed names a WINNT nspr would produce.
+
+Link the Debug configuration against the debug C runtime (/MDd). A build with
+the debug runtime enabled drives the Debug configuration, and nspr and the rest
+of the build already use the debug runtime there, so nss has to match.
+
+Let msvc.sh trust an already configured environment. When the caller has set
+VSPATH, return before the vswhere and registry lookups. The gbuild build already
+supplies the compiler environment, so the lookups only add a requirement for
+vswhere on PATH that we would otherwise have to satisfy by hand.
+
+--- nss/nss/build.sh
++++ nss/nss/build.sh
+@@ -12,7 +12,7 @@
+
+ set -e
+
+-cwd=$(cd $(dirname $0); pwd -P)
++cwd=$(cd $(dirname $0); pwd -P); if hash cygpath 2>/dev/null; then cwd=$(cygpath -m "$cwd"); fi
+ dist_dir="$cwd/../dist"
+ argsfile="$dist_dir/build_args"
+ source "$cwd/coreconf/nspr.sh"
+@@ -206,7 +206,7 @@
+ # Setup build paths.
+ target_dir="$cwd/out/$target"
+ mkdir -p "$target_dir"
+-dist_dir=$(mkdir -p "$dist_dir"; cd "$dist_dir"; pwd -P)
++dist_dir=$(mkdir -p "$dist_dir"; cd "$dist_dir"; pwd -P); if hash cygpath 2>/dev/null; then dist_dir=$(cygpath -m "$dist_dir"); fi
+ gyp_params+=(-Dnss_dist_dir="$dist_dir")
+
+ # This saves a canonical representation of arguments that we are passing to gyp
+--- nss/nss/coreconf/nspr.sh
++++ nss/nss/coreconf/nspr.sh
+@@ -81,8 +81,14 @@
+
+ set_nspr_path()
+ {
+-    local include=$(echo "$1" | cut -d: -f1)
+-    local lib=$(echo "$1" | cut -d: -f2)
++    local include lib
++    if [[ "$1" =~ ^([A-Za-z]:[^:]*):([A-Za-z]:.*)$ ]]; then
++        include="${BASH_REMATCH[1]}"
++        lib="${BASH_REMATCH[2]}"
++    else
++        include=$(echo "$1" | cut -d: -f1)
++        lib=$(echo "$1" | cut -d: -f2)
++    fi
+     gyp_params+=(-Dnspr_include_dir="$include")
+     gyp_params+=(-Dnspr_lib_dir="$lib")
+ }
+--- nss/nss/coreconf/config.gypi
++++ nss/nss/coreconf/config.gypi
+@@ -44,7 +44,7 @@
+         }],
+         ['OS=="win"', {
+           'use_system_zlib%': 0,
+-          'nspr_libs%': ['libnspr4.lib', 'libplc4.lib', 'libplds4.lib'],
++          'nspr_libs%': ['nspr4.lib', 'plc4.lib', 'plds4.lib'],
+           'zlib_libs%': [],
+           #TODO
+           'moz_debug_flags%': '',
+@@ -663,7 +663,7 @@
+           'VCCLCompilerTool': {
+             'Optimization': '<(debug_optimization_level)',
+             'BasicRuntimeChecks': '3',
+-            'RuntimeLibrary': '2', # /MD
++            'RuntimeLibrary': '3', # /MDd
+             'DebugInformationFormat': '3',
+           },
+           'VCLinkerTool': {
+--- nss/nss/coreconf/msvc.sh
++++ nss/nss/coreconf/msvc.sh
+@@ -5,3 +5,10 @@
++# If the caller already set up the compiler environment and set VSPATH, trust it
++# and skip the vswhere and registry based derivation below.
++if [ -n "$VSPATH" ]; then
++    echo "Assuming env setup is already done, VSPATH=$VSPATH"
++    return 0
++fi
++
+ if ! hash vswhere 2>/dev/null; then
+     echo "Can't find vswhere on the path, aborting" 1>&2
+     exit 1

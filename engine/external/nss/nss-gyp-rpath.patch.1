@@ -1,0 +1,19 @@
+Give the gyp-built shared libraries a $ORIGIN runpath.
+
+The coreconf build added -Wl,-z,origin -Wl,-rpath,$ORIGIN through DSO_LDOPTS so
+each nss library finds its siblings in the same directory. The gyp build never
+reads the coreconf makefiles, so add the same link flags to the shared library
+settings in config.gypi. The \$$ORIGIN spelling is how gyp's own ninja
+generator escapes a literal $ORIGIN. The flags apply only where GNU ld is used.
+
+--- nss/nss/coreconf/config.gypi
++++ nss/nss/coreconf/config.gypi
+@@ -329,6 +329,8 @@
+           [ 'cc_use_gnu_ld==1', {
+             'ldflags': [
+               '-Wl,--gc-sections',
++              '-Wl,-z,origin',
++              '-Wl,-rpath=\\$$ORIGIN',
+             ],
+             'conditions': [
+               ['no_zdefs==0', {
