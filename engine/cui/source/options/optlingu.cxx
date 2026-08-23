@@ -30,7 +30,9 @@
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
 #include <sfx2/AdditionsDialogHelper.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -38,6 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
@@ -56,6 +59,7 @@
 #include <sal/log.hxx>
 
 #include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/optitems.hxx>
 #include <optlingu.hxx>
 #include <dialmgr.hxx>
@@ -1522,6 +1526,70 @@ IMPL_LINK(SvxLinguTabPage, SelectHdl_Impl, weld::TreeView&, rBox, void)
     else
     {
         SAL_WARN("cui.options", "rBtn unexpected value");
+    }
+}
+
+void SvxLinguTabPage::ApplyLanguageOptions(const SfxItemSet& rSet)
+{
+    bool bSaveSpellCheck = false;
+    const SfxPoolItem* pItem = nullptr;
+
+    const Reference< XComponentContext >&  xContext( ::comphelper::getProcessComponentContext() );
+    Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
+    if ( const SfxHyphenRegionItem* pHyphenItem = rSet.GetItemIfSet(SID_ATTR_HYPHENREGION, false ) )
+    {
+        xProp->setHyphMinLeading( static_cast<sal_Int16>(pHyphenItem->GetMinLead()) );
+        xProp->setHyphMinTrailing( static_cast<sal_Int16>(pHyphenItem->GetMinTrail()) );
+        bSaveSpellCheck = true;
+    }
+
+    SfxViewFrame *pViewFrame = SfxViewFrame::Current();
+    if ( pViewFrame )
+    {
+        SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
+        pItem = nullptr;
+        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
+        {
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
+            bSaveSpellCheck = true;
+        }
+        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem ))
+        {
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
+            bSaveSpellCheck = true;
+        }
+        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ))
+        {
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
+            bSaveSpellCheck = true;
+        }
+
+        if( SfxItemState::SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
+        {
+            bool bOnlineSpelling = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            pDispatch->ExecuteList(SID_AUTOSPELL_CHECK,
+                SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, { pItem });
+
+            xProp->setIsSpellAuto( bOnlineSpelling );
+        }
+
+        if( bSaveSpellCheck )
+        {
+            //! the config item has changed since we modified the
+            //! property set it uses
+            pDispatch->Execute(SID_SPELLCHECKER_CHANGED, SfxCallMode::ASYNCHRON);
+        }
+    }
+
+    if( SfxItemState::SET == rSet.GetItemState(SID_OPT_LOCALE_CHANGED, false, &pItem ))
+    {
+        SfxViewFrame* _pViewFrame = SfxViewFrame::GetFirst();
+        while ( _pViewFrame )
+        {
+            _pViewFrame->GetDispatcher()->ExecuteList(pItem->Which(),
+                    SfxCallMode::ASYNCHRON, { pItem });
+            _pViewFrame = SfxViewFrame::GetNext( *_pViewFrame );
+        }
     }
 }
 

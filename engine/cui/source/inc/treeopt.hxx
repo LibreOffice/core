@@ -226,7 +226,6 @@ public:
     void initializeAllDialogs();
 
     // helper functions to call the Languages and Locales TabPage from the SpellDialog
-    static void         ApplyLanguageOptions(const SfxItemSet& rSet);
     static OUString     getCurrentFactory_Impl( const css::uno::Reference< css::frame::XFrame >& _xFrame );
 
     void                SetNeedsRestart( svtools::RestartReason eReason );

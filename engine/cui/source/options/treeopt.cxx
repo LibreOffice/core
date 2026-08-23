@@ -1564,7 +1564,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         break;
         case SID_LANGUAGE_OPTIONS :
         {
-            OfaTreeOptionsDialog::ApplyLanguageOptions(rSet);
+            SvxLinguTabPage::ApplyLanguageOptions(rSet);
         }
         break;
         case SID_INET_DLG :
@@ -1589,70 +1589,6 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
     }
 
 }
-void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
-{
-    bool bSaveSpellCheck = false;
-    const SfxPoolItem* pItem = nullptr;
-
-    const Reference< XComponentContext >&  xContext( ::comphelper::getProcessComponentContext() );
-    Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
-    if ( const SfxHyphenRegionItem* pHyphenItem = rSet.GetItemIfSet(SID_ATTR_HYPHENREGION, false ) )
-    {
-        xProp->setHyphMinLeading( static_cast<sal_Int16>(pHyphenItem->GetMinLead()) );
-        xProp->setHyphMinTrailing( static_cast<sal_Int16>(pHyphenItem->GetMinTrail()) );
-        bSaveSpellCheck = true;
-    }
-
-    SfxViewFrame *pViewFrame = SfxViewFrame::Current();
-    if ( pViewFrame )
-    {
-        SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-        pItem = nullptr;
-        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
-        {
-            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
-            bSaveSpellCheck = true;
-        }
-        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem ))
-        {
-            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
-            bSaveSpellCheck = true;
-        }
-        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ))
-        {
-            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
-            bSaveSpellCheck = true;
-        }
-
-        if( SfxItemState::SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
-        {
-            bool bOnlineSpelling = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-            pDispatch->ExecuteList(SID_AUTOSPELL_CHECK,
-                SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, { pItem });
-
-            xProp->setIsSpellAuto( bOnlineSpelling );
-        }
-
-        if( bSaveSpellCheck )
-        {
-            //! the config item has changed since we modified the
-            //! property set it uses
-            pDispatch->Execute(SID_SPELLCHECKER_CHANGED, SfxCallMode::ASYNCHRON);
-        }
-    }
-
-    if( SfxItemState::SET == rSet.GetItemState(SID_OPT_LOCALE_CHANGED, false, &pItem ))
-    {
-        SfxViewFrame* _pViewFrame = SfxViewFrame::GetFirst();
-        while ( _pViewFrame )
-        {
-            _pViewFrame->GetDispatcher()->ExecuteList(pItem->Which(),
-                    SfxCallMode::ASYNCHRON, { pItem });
-            _pViewFrame = SfxViewFrame::GetNext( *_pViewFrame );
-        }
-    }
-}
-
 OUString OfaTreeOptionsDialog::getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
     OUString sIdentifier;

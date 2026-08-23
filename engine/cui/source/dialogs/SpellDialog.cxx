@@ -48,7 +48,6 @@
 #include <svx/SpellDialogChildWindow.hxx>
 #include <SpellDialog.hxx>
 #include <optlingu.hxx>
-#include <treeopt.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langtab.hxx>
 #include <sal/log.hxx>
@@ -521,7 +520,7 @@ void SpellDialog::StartSpellOptDlg_Impl()
             InitUserDicts();
             const SfxItemSet* pOutSet = m_xOptionsDlg->GetOutputItemSet();
             if(pOutSet)
-                OfaTreeOptionsDialog::ApplyLanguageOptions(*pOutSet);
+                SvxLinguTabPage::ApplyLanguageOptions(*pOutSet);
         }
     });
 }

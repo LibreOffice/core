@@ -142,6 +142,9 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
     void                HideModulesGroup();
+
+    // hands what FillItemSet collected to the places that keep it
+    static void         ApplyLanguageOptions(const SfxItemSet& rSet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
