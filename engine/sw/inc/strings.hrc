@@ -656,9 +656,6 @@
 #define STR_STYLE_FAMILY_TABLE                  NC_("STR_STYLE_FAMILY_TABLE", "Table")
 #define STR_STYLE_FAMILY_CELL                   NC_("STR_STYLE_FAMILY_CELL", "Cell")
 
-#define ST_SCRIPT_ASIAN                         NC_("ST_SCRIPT_ASIAN", "Asian")
-#define ST_SCRIPT_CTL                           NC_("ST_SCRIPT_CTL", "CTL")
-#define ST_SCRIPT_WESTERN                       NC_("ST_SCRIPT_WESTERN", "Western")
 #define STR_PRINTOPTUI_PRODUCTNAME              NC_("STR_PRINTOPTUI_PRODUCTNAME", "%PRODUCTNAME %s")
 #define STR_PRINTOPTUI_CONTENTS                 NC_("STR_PRINTOPTUI_CONTENTS", "Contents")
 #define STR_PRINTOPTUI_PAGE_BACKGROUND          NC_("STR_PRINTOPTUI_PAGE_BACKGROUND", "Page ba~ckground")
@@ -1473,9 +1470,6 @@
 
 #define STR_MAILCONFIG_DLG_TITLE                NC_("STR_MAILCONFIG_DLG_TITLE", "Email settings")
 
-#define STR_OPT_PREVIEW_INSERTED                NC_("optredlinepage|insertedpreview", "Insert")
-#define STR_OPT_PREVIEW_DELETED                 NC_("optredlinepage|deletedpreview", "Delete")
-#define STR_OPT_PREVIEW_CHANGED                 NC_("optredlinepage|changedpreview", "Attributes")
 
 #define STR_AUTOMARK_SEARCHTERM                 NC_("createautomarkdialog|searchterm", "Search term")
 #define STR_AUTOMARK_ALTERNATIVE                NC_("createautomarkdialog|alternative", "Alternative entry")
@@ -1508,36 +1502,6 @@
 #define STR_PARAGRAPH_DIRECT_FORMATTING         NC_("STR_PARAGRAPH_DIRECT_FORMATTING", "Paragraph Direct Formatting")
 #define STR_CHARACTER_DIRECT_FORMATTING         NC_("STR_CHARACTER_DIRECT_FORMATTING", "Character Direct Formatting")
 #define STR_CHARACTER_DIRECT_FORMATTING_TAG     NC_("STR_CHARACTER_DIRECT_FORMATTING_TAG", "df")
-
-/*--------------------------------------------------------------------
-    Description: Description of compatibility options in
-    Options->Writer->Compatibility dialog (sw/uiconfig/swriter/ui/optcompatpage.ui)
- --------------------------------------------------------------------*/
-#define STR_COMPAT_OPT_ADDSPACING               NC_("STR_COMPAT_OPT_ADDSPACING", "Add spacing between paragraphs and tables")
-#define STR_COMPAT_OPT_ADDSPACINGATPAGES        NC_("STR_COMPAT_OPT_ADDSPACINGATPAGES", "Add paragraph and table spacing at top of first page and page breaks")
-#define STR_COMPAT_OPT_USEOURTABSTOPFORMAT      NC_("STR_COMPAT_OPT_USEOURTABSTOPFORMAT", "Use OpenOffice.org 1.1 tabstop formatting")
-#define STR_COMPAT_OPT_NOEXTERNALLEADING        NC_("STR_COMPAT_OPT_NOEXTERNALLEADING", "Do not add leading (extra space) between lines of text")
-#define STR_COMPAT_OPT_ADDTABLESPACING          NC_("STR_COMPAT_OPT_ADDTABLESPACING", "Add paragraph and table spacing at bottom of table cells")
-#define STR_COMPAT_OPT_USEOBJECTPOSITIONING     NC_("STR_COMPAT_OPT_USEOBJECTPOSITIONING", "Use OpenOffice.org 1.1 object positioning")
-#define STR_COMPAT_OPT_USEOURTEXTWRAPPING       NC_("STR_COMPAT_OPT_USEOURTEXTWRAPPING", "Use OpenOffice.org 1.1 text wrapping around objects")
-#define STR_COMPAT_OPT_CONSIDERWRAPPINGSTYLE    NC_("STR_COMPAT_OPT_CONSIDERWRAPPINGSTYLE", "Consider wrapping style when positioning objects")
-#define STR_COMPAT_OPT_EXPANDWORDSPACE          NC_("STR_COMPAT_OPT_EXPANDWORDSPACE", "Justify lines with a manual line break in justified paragraphs")
-#define STR_COMPAT_OPT_PROTECTFORM              NC_("STR_COMPAT_OPT_PROTECTFORM", "Protect form (no longer protects whole document. Insert write protected section instead)")
-#define STR_COMPAT_OPT_MSWORDCOMPTRAILINGBLANKS NC_("STR_COMPAT_OPT_MSWORDCOMPTRAILINGBLANKS", "Word-compatible trailing blanks")
-#define STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS NC_("STR_COMPAT_OPT_SUBTRACTFLYSANCHOREDATFLYS", "Tolerate white lines that may appear in PDF page backgrounds")
-#define STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA    NC_("STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA", "Hide paragraphs of mail merge fields with empty value when generating merged documents")
-#define STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP     NC_("STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP", "Render non-breaking spaces (NBSP) as standard-space-width (off for fixed size)")
-#define STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER     NC_("STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER", "Do not add an extra space after number in footnotes / endnotes with hanging first line")
-#define STR_COMPAT_OPT_TABSRELATIVETOINDENT     NC_("STR_COMPAT_OPT_TABSRELATIVETOINDENT", "Set tabstops relative to indent of paragraph")
-#define STR_COMPAT_OPT_TABOVERMARGIN            NC_("STR_COMPAT_OPT_TABOVERMARGIN", "Allow tabs to extend beyond the right margin")
-#define STR_COMPAT_OPT_DO_NOT_MIRROR_RTL_DRAW_OBJS NC_("STR_COMPAT_OPT_DO_NOT_MIRROR_RTL_DRAW_OBJS", "Do not mirror drawing objects anchored in paragraphs with an RTL writing direction")
-#define STR_COMPAT_OPT_CONTINUOUS_ENDNOTES NC_("STR_COMPAT_OPT_CONTINUOUS_ENDNOTES", "Render endnotes at the end of document inline, rather than on a separate page")
-#define STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS NC_("STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS", "Use Word-compatible font metrics for text grid and Asian text")
-#define STR_COMPAT_OPT_IGNORETABSANDBLANKSFORLINECALCULATION NC_("STR_COMPAT_OPT_IGNORETABSANDBLANKSFORLINECALCULATION", "Make whitespace character height not affect line height")
-#define STR_COMPAT_OPT_LINESPACINGASGAPBELOW NC_("STR_COMPAT_OPT_LINESPACINGASGAPBELOW", "Use better line spacing")
-#define STR_COMPAT_OPT_UNDERLINETRAILINGSPACE NC_("STR_COMPAT_OPT_UNDERLINETRAILINGSPACE", "Underline Word-compatible trailing blanks")
-#define STR_COMPAT_OPT_BALANCESPACESANDIDEOGRAPHICSPACES NC_("STR_COMPAT_OPT_BALANCESPACESANDIDEOGRAPHICSPACES", "Adjust spaces to half the width of ideographic spaces, using Word-compatible rules")
-#define STR_COMPAT_OPT_ADJUSTTABLELINEHEIGHTSTOGRIDHEIGHT NC_("STR_COMPAT_OPT_ADJUSTTABLELINEHEIGHTSTOGRIDHEIGHT", "Adjust line heights to grid height in table")
 
 #define STR_TABLE_PANEL_ALIGN_AUTO              NC_("sidebartableedit|alignautolabel", "Automatic")
 #define STR_TABLE_PANEL_ALIGN_LEFT              NC_("sidebartableedit|alignleftlabel", "Left")

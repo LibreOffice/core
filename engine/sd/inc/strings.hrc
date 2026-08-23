@@ -134,7 +134,6 @@
 #define STR_PLAY                                        NC_("STR_PLAY", "~Play")
 #define STR_STOP                                        NC_("STR_STOP", "Sto~p")
 #define STR_UNDO_ORIGINALSIZE                           NC_("STR_UNDO_ORIGINALSIZE", "Original Size")
-#define STR_WARN_SCALE_FAIL                             NC_("STR_WARN_SCALE_FAIL", "The specified scale is invalid.\nDo you want to enter a new one?")
 #define STR_CLICK_ACTION_NONE                           NC_("STR_CLICK_ACTION_NONE", "No action")
 #define STR_CLICK_ACTION_PREVPAGE                       NC_("STR_CLICK_ACTION_PREVPAGE", "Go to previous slide")
 #define STR_CLICK_ACTION_NEXTPAGE                       NC_("STR_CLICK_ACTION_NEXTPAGE", "Go to next slide")
