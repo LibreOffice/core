@@ -193,11 +193,6 @@ SfxChildWinFactory* SfxModule::GetChildWinFactoryById(sal_uInt16 nId) const
     return nullptr;
 }
 
-std::unique_ptr<SfxTabPage> SfxModule::CreateTabPage(sal_uInt16, weld::Container*, weld::DialogController*, const SfxItemSet&)
-{
-    return nullptr;
-}
-
 void SfxModule::Invalidate( sal_uInt16 nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )

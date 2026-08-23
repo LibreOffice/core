@@ -226,9 +226,6 @@ public:
     sal_uInt16          GetCurRefDlgId() const                  { return m_nCurRefDlgId; }
 
     // virtual methods for the options dialog
-    virtual std::optional<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
-    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
-    virtual std::unique_ptr<SfxTabPage> CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet ) override;
     virtual SfxStyleFamilies CreateStyleFamilies() override;
 
     void                SetInSharedDocLoading( bool bNew )  { m_bIsInSharedDocLoading = bNew; }

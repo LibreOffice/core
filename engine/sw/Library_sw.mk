@@ -612,7 +612,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/app/appenv \
     sw/source/uibase/app/apphdl \
     sw/source/uibase/app/applab \
-    sw/source/uibase/app/appopt \
     sw/source/uibase/app/docsh \
     sw/source/uibase/app/docsh2 \
     sw/source/uibase/app/docshdrw \

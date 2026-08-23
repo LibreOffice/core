@@ -701,15 +701,6 @@ SfxDisableFlags SfxShell::GetDisableFlags() const
     return pImpl->nDisableFlags;
 }
 
-std::optional<SfxItemSet> SfxShell::CreateItemSet( sal_uInt16 )
-{
-    return {};
-}
-
-void SfxShell::ApplyItemSet( sal_uInt16, const SfxItemSet& )
-{
-}
-
 void SfxShell::SetContextName (const OUString& rsContextName)
 {
     pImpl->maContextChangeBroadcaster.Initialize(rsContextName);

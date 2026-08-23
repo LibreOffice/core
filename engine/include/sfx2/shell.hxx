@@ -439,8 +439,6 @@ public:
     void                        SetDisableFlags( SfxDisableFlags nFlags );
     SfxDisableFlags             GetDisableFlags() const;
 
-    virtual std::optional<SfxItemSet> CreateItemSet( sal_uInt16 nId );
-    virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
 
     /** Set the name of the sidebar context that is broadcast on calls
         to Activation().

@@ -186,38 +186,4 @@ void SmModule::GetState(SfxItemSet &rSet)
         }
 }
 
-std::optional<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
-{
-    std::optional<SfxItemSet> pRet;
-    if(nId == SID_SM_EDITOPTIONS)
-    {
-        pRet.emplace(
-            GetPool(),
-            svl::Items< //TP_SMPRINT
-                SID_PRINTTITLE, SID_PRINTZOOM,
-                SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
-                SID_AUTO_CLOSE_BRACKETS, SID_SMEDITWINDOWZOOM,
-                SID_INLINE_EDIT_ENABLE, SID_INLINE_EDIT_ENABLE>);
-
-        GetConfig()->ConfigToItemSet(*pRet);
-    }
-    return pRet;
-}
-
-void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
-{
-    if(nId == SID_SM_EDITOPTIONS)
-    {
-        GetConfig()->ItemSetToConfig(rSet);
-    }
-}
-
-std::unique_ptr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )
-{
-    std::unique_ptr<SfxTabPage> xRet;
-    if (nId == SID_SM_TP_PRINTOPTIONS)
-        xRet = SmPrintOptionsTabPage::Create(pPage, pController, rSet);
-    return xRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
