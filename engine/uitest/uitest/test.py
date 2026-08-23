@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import uno
 import time
 import threading
 import tempfile
@@ -106,18 +107,27 @@ class UITest(object):
         finally:
             self.close_doc()
 
+    def get_config(self, path):
+        xAccess = self._xContext.ServiceManager.createInstanceWithArgumentsAndContext('com.sun.star.configuration.ReadWriteAccess', ("",), self._xContext)
+        return xAccess.getByHierarchicalName(path)
+
+    # Name the uno type of the items pyuno cannot infer, a sequence for instance.
+    def set_config_value(self, path, new_value, uno_type=None):
+        xChanges = self._xContext.ServiceManager.createInstanceWithArgumentsAndContext('com.sun.star.configuration.ReadWriteAccess', ("",), self._xContext)
+        if uno_type is not None:
+            new_value = uno.Any(uno_type, new_value)
+        xChanges.replaceByHierarchicalName(path, new_value)
+        xChanges.commitChanges()
+
     # Resets the setting to the old value at exit
     @contextmanager
-    def set_config(self, path, new_value):
-        xChanges = self._xContext.ServiceManager.createInstanceWithArgumentsAndContext('com.sun.star.configuration.ReadWriteAccess', ("",), self._xContext)
+    def set_config(self, path, new_value, uno_type=None):
+        old_value = self.get_config(path)
+        self.set_config_value(path, new_value, uno_type)
         try:
-            old_value = xChanges.getByHierarchicalName(path)
-            xChanges.replaceByHierarchicalName(path, new_value)
-            xChanges.commitChanges()
             yield
         finally:
-            xChanges.replaceByHierarchicalName(path, old_value)
-            xChanges.commitChanges()
+            self.set_config_value(path, old_value, uno_type)
 
     # Calls UITest.close_doc at exit
     @contextmanager

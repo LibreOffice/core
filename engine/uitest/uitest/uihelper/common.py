@@ -6,7 +6,7 @@
 #
 
 from libreoffice.uno.propertyvalue import convert_property_values_to_dict, mkPropertyValues
-from contextlib import contextmanager, ExitStack
+from contextlib import contextmanager
 import org.libreoffice.unotest
 import pathlib
 
@@ -52,14 +52,36 @@ MEASUREMENT_UNIT_PATHS = (
     '/org.openoffice.Office.Draw/Layout/Other/MeasureUnit/NonMetric',
 )
 
-# Sets the measurement unit through the configuration and puts the old values
-# back afterwards.
+# Impress and Draw do not follow the configuration, the unit reaches their
+# module item pool only through a dispatch, see SdModule::Execute. The value to
+# dispatch is the one of the Impress item.
+IMPRESS_MEASUREMENT_UNIT_PATH = '/org.openoffice.Office.Impress/Layout/Other/MeasureUnit/Metric'
+
+def set_measurement_unit(UITestCase, values):
+    # Dispatch first: the applications that do follow the configuration are
+    # notified afterwards and so have the last word on their own item.
+    UITestCase.xUITest.executeCommandWithParameters(
+        ".uno:MetricUnit",
+        mkPropertyValues({"MetricUnit": values[IMPRESS_MEASUREMENT_UNIT_PATH]}))
+    for path, value in values.items():
+        UITestCase.ui_test.set_config_value(path, value)
+
+# Sets the measurement unit and puts the old values back afterwards.
 @contextmanager
 def change_measurement_unit(UITestCase, unit):
-    value = MEASUREMENT_UNITS[unit]
-    with ExitStack() as stack:
-        for path in MEASUREMENT_UNIT_PATHS:
-            stack.enter_context(UITestCase.ui_test.set_config(path, value))
+    old_values = {}
+    for path in MEASUREMENT_UNIT_PATHS:
+        value = UITestCase.ui_test.get_config(path)
+        # Writer keeps no default, and an item without a value leaves the last
+        # one in place, so go back to the inch SfxModule::GetFieldUnit falls
+        # back to.
+        old_values[path] = MEASUREMENT_UNITS['Inch'] if value is None else value
+
+    set_measurement_unit(
+        UITestCase, dict.fromkeys(MEASUREMENT_UNIT_PATHS, MEASUREMENT_UNITS[unit]))
+    try:
         yield
+    finally:
+        set_measurement_unit(UITestCase, old_values)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
