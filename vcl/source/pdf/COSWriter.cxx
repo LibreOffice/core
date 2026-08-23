@@ -145,7 +145,7 @@ void COSWriter::appendUnicodeTextString(const OUString& rString, OStringBuffer& 
 void COSWriter::appendName(std::u16string_view rStr, OStringBuffer& rBuffer)
 {
     // FIXME i59651 add a check for max length of 127 chars? Per PDF spec 1.4, appendix C.1
-    // I guess than when reading the #xx sequence it will count for a single character.
+    // I guess that when reading the #xx sequence it will count for a single character.
     OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
     int nLen = aStr.getLength();
     for (int i = 0; i < nLen; i++)

@@ -180,7 +180,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
 
     //const sal_uInt8 cIndexFrom = aBmpColorFrom.GetIndex();
 
-    //TODO This code convert GdiMetafile(vector graphic) to Bitmap, which cause to information lost
+    //TODO This code converts GdiMetafile(vector graphic) to Bitmap, which causes information loss
     if (aGraphic.GetType() == GraphicType::Bitmap ||
         aGraphic.GetType() == GraphicType::GdiMetafile)
     {

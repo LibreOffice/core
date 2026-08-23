@@ -568,7 +568,7 @@ void ImplRegionBand::XOr( tools::Long nXLeft, tools::Long nXRight )
     // In general, we can distinguish 11 cases of intersection
     // (details below). The old implementation explicitly handled 7
     // cases (numbered in the order of appearance, use CVS to get your
-    // hands on the old version), therefore, I've sticked to that
+    // hands on the old version), therefore, I've stuck to that
     // order, and added four more cases. The code below references
     // those numbers via #1, #2, etc.
 
