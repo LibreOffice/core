@@ -149,7 +149,7 @@ namespace utl
         {
 #if OSL_DEBUG_LEVEL > 0
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            OSL_ENSURE( getListenerAdminData().bAlreadyTerminated, "OObserverImpl::disposing: disposing without terminated?" );
+            OSL_ENSURE( getListenerAdminData().bAlreadyTerminated, "OObserverImpl::disposing: disposing without being terminated?" );
 #endif
             // not interested in
         }

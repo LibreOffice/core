@@ -523,7 +523,7 @@ static void MoveItemToUnpinned(const uno::Reference<container::XNameAccess>& xCf
 {
     uno::Reference<beans::XPropertySet> xSet;
     const sal_Int32 nLength = xOrderList->getElementNames().getLength();
-    // Search for item in the ordered list list
+    // Search for item in the ordered list
     for (sal_Int32 i = 0; i < nLength; i++)
     {
         OUString aItem;
