@@ -81,7 +81,7 @@ int main(int argc, char **argv)
             break;
         case '{':
         case '}':
-        case '\\': fprintf(stderr, "sp2vb: file URL contains invalid characters!\n");
+        case '\\': fprintf(stderr, "sp2bv: file URL contains invalid characters!\n");
             return -1;
         default:
             rtl_uStringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, pCur, 1);

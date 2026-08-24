@@ -151,7 +151,7 @@ OUString SvxConfigPageHelper::generateCustomMenuURL(SvxEntries* entries, sal_Int
     if (!entries)
         return url;
 
-    // now check is there is an already existing entry with this url
+    // now check if there is an already existing entry with this url
     bool bFoundEntry = false;
     for (auto const& entry : *entries)
     {
@@ -182,7 +182,7 @@ OUString SvxConfigPageHelper::generateCustomURL(SvxEntries* entries)
                    // use a random number to minimize possible clash with existing custom toolbars
                    OUString::number(generateRandomValue(), 16);
 
-    // now check is there is an already existing entry with this url
+    // now check if there is an already existing entry with this url
     bool bFoundEntry = false;
     for (auto const& entry : *entries)
     {

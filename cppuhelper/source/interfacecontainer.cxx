@@ -93,7 +93,7 @@ XInterface * OInterfaceIteratorHelper::next()
     {
         nRemain--;
         if( bIsList )
-            // typecase to const,so the getArray method is faster
+            // typecast to const,so the getArray method is faster
             return (*aData.pAsVector)[nRemain].get();
         if( aData.pAsInterface )
             return aData.pAsInterface;

@@ -797,8 +797,8 @@ namespace cppcanvas::internal
             }
 
             // #i52608# apply map mode scale also to font matrix - an
-            // anisotrophic mapmode must be reflected in an
-            // anisotrophic font matrix scale.
+            // anisotropic mapmode must be reflected in an
+            // anisotropic font matrix scale.
             const OutDevState& rState( rParms.mrStates.getState() );
             if( !::basegfx::fTools::equal(
                     rState.mapModeTransform.get(0,0),
