@@ -45,13 +45,18 @@ extra_params=--o:security.enable_macros_execution=true
 
 The default runtime base (ZenDiS) is published for amd64 and arm64 only. For
 other platforms, e.g. ppc64le, override the runtime base with an image that
-supports them, such as debian:stable-slim (the same distribution the builder
-stage uses; note it is not distroless - it ships a shell and a package
-manager):
+supports them. Google's distroless base is a good choice: like ZenDiS it
+contains only glibc, openssl, ca-certificates and timezone data - no shell,
+no package manager - and it is published for ppc64le, s390x and riscv64 too.
+Pick the Debian release matching the builder stage (debian:stable-slim):
 
    cd from-packages
    docker build --no-cache --platform linux/ppc64le \
-       --build-arg runtime_base=debian:stable-slim -t mydomain/code .
+       --build-arg runtime_base=gcr.io/distroless/base-debian13:latest \
+       -t mydomain/code .
+
+Plain debian:stable-slim also works as runtime_base, but it is not
+distroless: it ships a shell and a package manager.
 
 5. Build Collabora Online
 

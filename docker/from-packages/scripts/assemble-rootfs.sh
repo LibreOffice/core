@@ -52,12 +52,45 @@ BUILD_ONLY="libcap2-bin ca-certificates adduser fontconfig cpio locales"
 # reads /etc/fonts at runtime, and systemplate copies it into the jail.
 BUNDLED_OR_UNUSED="libfontconfig1 libfreetype6 libpng16-16t64 libexpat1 libbrotli1 openssl libpam-cap fonts-dejavu-core fonts-dejavu-mono"
 
-# Shared-library sonames the base image provides (from its
-# /usr/lib/x86_64-linux-gnu). A needed library whose soname matches is covered
-# even if we do not ship it; anything else we must ship (e.g. libstdc++,
-# libcap). Keep this in sync with the base image. This checks only that a
-# library is present, not that it is glibc-ABI-compatible with the base.
-BASE_PROVIDES_RE='^(ld-linux-x86-64|libc|libc_malloc_debug|libm|libmvec|libdl|libpthread|librt|libresolv|libutil|libnsl|libnss_[a-z]+|libanl|libBrokenLocale|libthread_db|libssl|libcrypto|libz|libgcc_s|libzstd)\.so'
+# Shared-library sonames that are part of glibc itself, which every glibc
+# base image provides. These are never shipped: the runtime must use the
+# base's own libc. Everything else - libssl, zlib, libstdc++, ... - is decided
+# by looking at the actual base image files in base_has(), so the list adapts
+# to whatever base is used. The loader's name varies by architecture
+# (ld-linux-x86-64.so.2, ld-linux-aarch64.so.1, ld64.so.2, ...). This checks
+# only that a library is present, not that it is glibc-ABI-compatible with the
+# base.
+BASE_PROVIDES_RE='^(ld[0-9]*(-linux[a-z0-9-]*)?|libc|libc_malloc_debug|libm|libmvec|libdl|libpthread|librt|libresolv|libutil|libnsl|libnss_[a-z]+|libanl|libBrokenLocale|libthread_db)\.so'
+
+# Debian multiarch triple of the architecture being built (x86_64-linux-gnu,
+# powerpc64le-linux-gnu, ...), taken from where the builder keeps its own
+# libc: uname -m does not always match the triple (ppc64le vs powerpc64le).
+triple=
+for d in /usr/lib/*-linux-gnu*; do
+    if [ -e "$d/libc.so.6" ]; then triple=${d##*/}; break; fi
+done
+if [ -z "$triple" ]; then
+    echo "FATAL: cannot determine the multiarch triple of this build" >&2
+    exit 1
+fi
+
+# Print the real file HARDENED_ROOT holds for base-relative path $1, or
+# nothing if it does not resolve to a regular file. The base's FHS paths may
+# be symlinks (absolute ones into e.g. /nix/store), so follow the chain within
+# HARDENED_ROOT, treating absolute link targets as rooted there.
+resolve_in_target() {
+    p="$1"; i=0
+    while [ -L "$HARDENED_ROOT$p" ] && [ "$i" -lt 40 ]; do
+        t=$(readlink "$HARDENED_ROOT$p")
+        case "$t" in
+            /*) p="$t" ;;
+            *)  p="$(dirname "$p")/$t" ;;
+        esac
+        i=$((i + 1))
+    done
+    [ -f "$HARDENED_ROOT$p" ] && printf '%s\n' "$HARDENED_ROOT$p"
+    return 0
+}
 
 echo "=== Working out which packages the Collabora install added ==="
 dpkg-query -W -f '${Package}\n' | sort > /tmp/pkgs.after
@@ -133,13 +166,16 @@ echo "=== Resolving the runtime library closure ==="
 # (copied to HARDENED_ROOT), with the glibc/openssl soname regex as a floor, so
 # this adapts to whatever base image is used.
 
-# Is soname $1 provided by the base image?
+# Is soname $1 provided by the base image? The regex floor covers glibc's own
+# sonames; everything else must actually resolve to a file in the base image,
+# wherever its layout keeps libraries.
 base_has() {
     printf '%s\n' "$1" | grep -Eq "$BASE_PROVIDES_RE" && return 0
     [ -n "${HARDENED_ROOT:-}" ] || return 1
-    [ -e "$HARDENED_ROOT/usr/lib/x86_64-linux-gnu/$1" ] ||
-        [ -e "$HARDENED_ROOT/lib/x86_64-linux-gnu/$1" ] ||
-        [ -e "$HARDENED_ROOT/usr/lib/$1" ]
+    for _dir in "/usr/lib/$triple" "/lib/$triple" /usr/lib /lib /usr/lib64 /lib64; do
+        [ -n "$(resolve_in_target "$_dir/$1")" ] && return 0
+    done
+    return 1
 }
 
 # Resolved shared libraries needed by the shipped ELF binaries. ldd exits
@@ -257,26 +293,6 @@ if [ -n "${HARDENED_ROOT:-}" ]; then
     echo "=== Overlaying jail glibc/CA from the target image ($HARDENED_ROOT) ==="
     syst="$ROOTFS/opt/cool/systemplate"
 
-    # Print the real file HARDENED_ROOT holds for base-relative path $1, or
-    # nothing if it does not resolve to a regular file.
-    resolve_in_target() {
-        p="$1"; i=0
-        while [ -L "$HARDENED_ROOT$p" ] && [ "$i" -lt 40 ]; do
-            t=$(readlink "$HARDENED_ROOT$p")
-            case "$t" in
-                /*) p="$t" ;;
-                *)  p="$(dirname "$p")/$t" ;;
-            esac
-            i=$((i + 1))
-        done
-        [ -f "$HARDENED_ROOT$p" ] && printf '%s\n' "$HARDENED_ROOT$p"
-        return 0
-    }
-
-    # Multiarch triple of the image being built (x86_64-linux-gnu,
-    # aarch64-linux-gnu, ...), so the overlay works on every architecture.
-    triple="$(uname -m)-linux-gnu"
-
     overlay_from_target() {  # $1 = file in the template to replace
         _b=$(basename "$1")
         _src=$(resolve_in_target "/usr/lib/$triple/$_b")
@@ -290,7 +306,8 @@ if [ -n "${HARDENED_ROOT:-}" ]; then
         fi
     }
 
-    find "$syst" \( -name 'ld-*' -o -name 'libnss_*.so*' -o -name 'libresolv.so*' \) \
+    find "$syst" \( -name 'ld-*' -o -name 'ld64.so*' -o -name 'libnss_*.so*' \
+                    -o -name 'libresolv.so*' \) \
         -type f 2>/dev/null | while read -r f; do
         overlay_from_target "$f"
     done

@@ -13,8 +13,10 @@
 #
 # The ZenDiS base is published for amd64 and arm64 only. To build for another
 # platform (e.g. linux/ppc64le), override this with a base image that supports
-# it, e.g. debian:stable-slim - the same distribution the builder stage uses,
-# though not distroless: it ships a shell and a package manager.
+# it: gcr.io/distroless/base-debian13 is equally distroless (glibc, openssl,
+# ca-certificates, tzdata; no shell, no package manager) and covers ppc64le,
+# s390x and riscv64 - keep its Debian release in step with the builder stage
+# below. Plain debian:stable-slim also works, but is not distroless.
 ARG runtime_base="registry.opencode.de/oci-community/images/zendis/base:1.0.0-rc.6-minimal"
 
 # Metadata, applied to the final image (see the runtime stage below).
