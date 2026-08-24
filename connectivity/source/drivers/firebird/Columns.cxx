@@ -23,7 +23,7 @@ Columns::Columns(Table& rTable,
                  Mutex& rMutex,
                  const ::std::vector< OUString>& rVector):
     OColumnsHelper(rTable,
-                   true, // TODO: is this case sensitivity?
+                   true, // TODO: is this case sensitive?
                    rMutex,
                    rVector,
                    /*bUseHardRef*/true)

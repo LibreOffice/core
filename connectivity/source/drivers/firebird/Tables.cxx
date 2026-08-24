@@ -84,7 +84,7 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
     const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
     OUStringBuffer aSql(::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
 
-    // check if the user enter a specific string to create autoincrement values
+    // check if the user enters a specific string to create autoincrement values
     OUString sAutoIncrementValue;
     Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
 
@@ -93,7 +93,7 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
 
     aSql.append(" "
         + dbtools::createStandardTypePart(xColProp, _xConnection));
-    // Add character set for (VAR)BINARY (fix) types:
+    // Add character set for (VAR)BINARY (fixed) types:
     // (VAR) BINARY is distinguished from other CHAR types by its character set.
     // Octets is a special character set for binary data.
     if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(

@@ -49,7 +49,7 @@ sal_Int64 SAL_CALL Clob::length()
         return m_nCharCount;
     m_nCharCount = 0;
 
-    // Read each segment, and calculate it's size by interpreting it as a
+    // Read each segment, and calculate its size by interpreting it as a
     // character stream. Assume that no characters are split by the segments.
     bool bLastSegmRead = false;
     std::vector<char> aSegmentBytes;

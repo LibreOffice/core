@@ -245,7 +245,7 @@ namespace connectivity::hsqldb
         catch( const Exception& )
         {
             // that's a serious error in impl_getTableContainer_throw, or hasByName, however, we're only
-            // allowed to throw an IllegalArgumentException ourself
+            // allowed to throw an IllegalArgumentException ourselves
             DBG_UNHANDLED_EXCEPTION("connectivity.hsqldb");
         }
 
