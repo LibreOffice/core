@@ -49,8 +49,8 @@ typedef sal_Int32 oslInterlockedCount;
 */
 SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount);
 
-/** Decrement the count variable addressed by pCount.
-    @param pCount Address of count variable
+/** Decrements the count variable addressed by pCount.
+    @param pCount Address of count variable.
     @return The adjusted value of the count variable.
 */
 SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount);

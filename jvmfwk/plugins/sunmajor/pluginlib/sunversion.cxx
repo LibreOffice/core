@@ -57,7 +57,7 @@ bool SunVersion::init(const char *szVersion)
     int nPartPos = 0;
     char buf[128];
 
-    //char must me a number 0 - 999 and no leading
+    //char must be a number 0 - 999 and no leading
     while (true)
     {
         if (pCur < pEnd && rtl::isAsciiDigit(static_cast<unsigned char>(*pCur)))

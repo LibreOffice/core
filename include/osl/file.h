@@ -44,7 +44,7 @@ system.
 
 There are a few main goals:
 
-1. The path specifications always has to be absolute. Any usage of relative
+1. The path specifications always have to be absolute. Any usage of relative
 path specifications is forbidden. Exceptions are osl_getSystemPathFromFileURL,
 osl_getFileURLFromSystemPath and osl_getAbsoluteFileURL. Most operating
 systems provide a "Current Directory" per process. This is the reason why
@@ -52,8 +52,8 @@ relative path specifications can cause problems in multithreading
 environments.
 
 2. Proprietary notations of file paths are not supported. Every path notation
-must the file URL specification. File URLs must be encoded in UTF8 and after
-that escaped. Although the URL parameter is a unicode string, the must
+must follow the file URL specification. File URLs must be encoded in UTF8 and after
+that escaped. Although the URL parameter is a unicode string, it must
 contain only ASCII characters.
 
 3. The caller cannot get any information whether a file system is case
@@ -129,7 +129,7 @@ typedef enum {
     osl_File_E_ILSEQ,           /*!< invalid or incomplete byte sequence of multibyte char found */
     osl_File_E_NOLINK,          /*!< link has been severed                                       */
     osl_File_E_MULTIHOP,        /*!< remote resource is not directly available                   */
-    osl_File_E_USERS,           /*!< file quote system is confused as there are too many users   */
+    osl_File_E_USERS,           /*!< file quota system is confused as there are too many users   */
     osl_File_E_OVERFLOW,        /*!< value too large for defined data type                       */
     osl_File_E_NOTREADY,        /*!< device not ready                                            */
     osl_File_E_invalidError,    /*!< unmapped error: always last entry in enum!                  */
@@ -298,7 +298,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireDirectoryItem(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
         oslDirectoryItem Item );
 
-/** Determine if two directory items point the same underlying file
+/** Determine if two directory items point to the same underlying file
 
     The comparison is done first by URL, and then by resolving links to
     find the target, and finally by comparing inodes on unix.
@@ -509,7 +509,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireVolumeDeviceHandle(
     @retval osl_File_E_NODEV no such device
     @retval osl_File_E_NOENT no such file or directory
     @retval osl_File_E_FAULT bad address
-    @retval osl_FilE_E_INTR function call was interrupted
+    @retval osl_File_E_INTR function call was interrupted
     @retval osl_File_E_IO on I/O errors
     @retval osl_File_E_MULTIHOP multihop attempted
     @retval osl_File_E_NOLINK link has been severed
@@ -612,7 +612,7 @@ typedef struct _oslVolumeInfo {
     @retval osl_File_E_NOENT no such file or directory
     @retval osl_File_E_ACCES permission denied
     @retval osl_File_E_LOOP too many symbolic links encountered
-    @retval ols_File_E_FAULT Bad address
+    @retval osl_File_E_FAULT Bad address
     @retval osl_File_E_IO on I/O errors
     @retval osl_File_E_NOSYS function not implemented
     @retval osl_File_E_MULTIHOP multihop attempted
@@ -676,7 +676,7 @@ typedef void *oslFileHandle;
     @retval osl_File_E_NFILE too many open files in the system
     @retval osl_File_E_DQUOT quota exceeded
     @retval osl_File_E_EXIST file exists
-    @retval osl_FilE_E_INTR function call was interrupted
+    @retval osl_File_E_INTR function call was interrupted
     @retval osl_File_E_IO on I/O errors
     @retval osl_File_E_MULTIHOP multihop attempted
     @retval osl_File_E_NOLINK link has been severed
@@ -1121,7 +1121,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readLine(
       @retval osl_File_E_INVAL The value of the input parameter is invalid
       @retval osl_File_E_BADF The file associated with the given file handle is not open for writing
       @retval osl_File_E_IO An I/O error occurred
-      @retval osl_File_E_NOSPC There is no enough space on the target device
+      @retval osl_File_E_NOSPC There is not enough space on the target device
       @retval osl_File_E_ROFS The file associated with the given file handle is located on a read only file system
       @retval osl_File_E_TIMEDOUT A remote connection timed out. This may happen when a file is on a remote location
 
@@ -1165,7 +1165,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
     @retval osl_File_E_DQUOT quota exceeded
     @retval osl_File_E_LOOP too many symbolic links encountered
     @retval osl_File_E_FAULT bad address
-    @retval osl_FileE_IO on I/O errors
+    @retval osl_File_E_IO on I/O errors
     @retval osl_File_E_MLINK too many links
     @retval osl_File_E_MULTIHOP multihop attempted
     @retval osl_File_E_NOLINK link has been severed
@@ -1262,9 +1262,9 @@ typedef void (SAL_CALL *oslDirectoryCreationCallbackFunc)(void* pData, rtl_uStri
     @retval osl_File_E_None On success
     @retval osl_File_E_INVAL The format of the parameters was not valid
     @retval osl_File_E_ACCES Permission denied
-    @retval osl_File_E_EXIST The final node of the specified directory path already exist
+    @retval osl_File_E_EXIST The final node of the specified directory path already exists
     @retval osl_File_E_NAMETOOLONG The name of the specified directory path exceeds the maximum allowed length
-    @retval osl_File_E_NOTDIR A component of the specified directory path already exist as file in any part of the directory path
+    @retval osl_File_E_NOTDIR A component of the specified directory path already exists as a file in any part of the directory path
     @retval osl_File_E_ROFS Read-only file system
     @retval osl_File_E_NOSPC No space left on device
     @retval osl_File_E_DQUOT Quota exceeded
@@ -1349,7 +1349,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_copyFile(
     Full qualified URL of the source file.
 
     @param[in] pustrDestFileURL
-    Full qualified URL of the destination file. An existing directory is NOT a valid destination !
+    Full qualified URL of the destination file. An existing directory is NOT a valid destination!
 
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
@@ -1389,9 +1389,9 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_moveFile(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getCanonicalName(
         rtl_uString *pustrRequestedURL, rtl_uString **ppustrValidURL);
 
-/** Convert a path relative to a given directory into an full qualified file URL.
+/** Convert a path relative to a given directory into a fully qualified file URL.
 
-    Convert a path relative to a given directory into an full qualified file URL.
+    Convert a path relative to a given directory into a fully qualified file URL.
     The function resolves symbolic links if possible and path ellipses, so on success
     the resulting absolute path is fully resolved.
 
@@ -1404,7 +1404,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getCanonicalName(
     If pustrRelativeFileURL denotes an absolute path pustrBaseDirectoryURL will be ignored.
 
     @param[out] ppustrAbsoluteFileURL
-    On success it receives the full qualified absolute file URL.
+    On success it receives the fully qualified absolute file URL.
 
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
@@ -1595,12 +1595,12 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getTempDirURL(
     responsible for removing the file on success.
 
     Description of the different pHandle, ppustrTempFileURL parameter combinations.
-    pHandle is 0 and ppustrTempDirURL is 0 - this combination is invalid
-    pHandle is not 0 and ppustrTempDirURL is 0 - a handle to the open file
+    pHandle is 0 and ppustrTempFileURL is 0 - this combination is invalid
+    pHandle is not 0 and ppustrTempFileURL is 0 - a handle to the open file
     will be returned on success and the file will be automatically removed on close.
-    pHandle is 0 and ppustrTempDirURL is not 0 - the name of the file will be returned,
+    pHandle is 0 and ppustrTempFileURL is not 0 - the name of the file will be returned,
     the caller is responsible for opening, closing and removing the file.
-    pHandle is not 0 and ppustrTempDirURL is not 0 - a handle to the open file as well as
+    pHandle is not 0 and ppustrTempFileURL is not 0 - a handle to the open file as well as
     the file name will be returned, the caller is responsible for closing and removing
     the file.
 
@@ -1639,7 +1639,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createTempFile(
 
 /** Move a file to a new destination or rename it, taking old file's identity (if exists).
 
-    Moves or renames a file, replacing an existing file if exist. If the old file existed,
+    Moves or renames a file, replacing an existing file if it exists. If the old file existed,
     moved file's metadata, e.g. creation time (on FSes which keep files' creation time) or
     ACLs, are set to old one's (to keep the old file's identity) - currently this is only
     implemented fully on Windows; on other platforms, this is mostly equivalent to osl_moveFile.
