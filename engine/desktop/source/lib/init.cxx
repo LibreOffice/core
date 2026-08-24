@@ -1266,7 +1266,7 @@ static void doc_destroyView(COKitDocument* pThis, int nId);
 static void doc_setView(COKitDocument* pThis, int nId);
 static int doc_getView(COKitDocument* pThis);
 static int doc_getViewsCount(COKitDocument* pThis);
-static bool doc_getViewIds(COKitDocument* pThis, int* pArray, size_t nSize);
+static bool doc_getViewIds(COKitDocument* pThis, std::vector<int>& rIds);
 static void doc_setViewLanguage(COKitDocument* pThis, int nId, const char* language);
 static unsigned char* doc_renderFontOrientation(COKitDocument* pThis,
                           const char *pFontName,
@@ -1671,9 +1671,9 @@ void COKitDocumentImpl::paintPartTile(unsigned char* pBuffer, const int nPart, c
                       nTilePosY, nTileWidth, nTileHeight, bIsPreview);
 }
 
-bool COKitDocumentImpl::getViewIds(int* pArray, size_t nSize)
+bool COKitDocumentImpl::getViewIds(std::vector<int>& rIds)
 {
-    return doc_getViewIds(this, pArray, nSize);
+    return doc_getViewIds(this, rIds);
 }
 
 void COKitDocumentImpl::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
@@ -5166,8 +5166,8 @@ inline static int getFirstViewIdAsFallback(COKitDocument* pThis)
 
     if (viewCount == 0) return -1;
 
-    std::vector<int> viewIds(viewCount);
-    doc_getViewIds(pThis, viewIds.data(), viewCount);
+    std::vector<int> viewIds;
+    doc_getViewIds(pThis, viewIds);
 
     int result = viewIds[0];
     doc_setView(pThis, result);
@@ -8387,7 +8387,7 @@ static int doc_getViewsCount(SAL_UNUSED_PARAMETER COKitDocument* pThis)
     return KitHelper::getViewsCount(pDocument->mnDocumentId);
 }
 
-static bool doc_getViewIds(SAL_UNUSED_PARAMETER COKitDocument* pThis, int* pArray, size_t nSize)
+static bool doc_getViewIds(SAL_UNUSED_PARAMETER COKitDocument* pThis, std::vector<int>& rIds)
 {
     comphelper::ProfileZone aZone("doc_getViewsIds");
 
@@ -8395,7 +8395,7 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER COKitDocument* pThis, int* pArra
     SetLastExceptionMsg();
 
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
-    return KitHelper::getViewIds(pDocument->mnDocumentId, pArray, nSize);
+    return KitHelper::getViewIds(pDocument->mnDocumentId, rIds);
 }
 
 static void doc_setViewLanguage(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, const char* language)

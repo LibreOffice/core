@@ -2079,12 +2079,10 @@ struct COKitDocument
      * viewIDs are not the same as the index of the view in the view array over
      * time. Use getViewsCount() to know the minimal nSize that's large enough.
      *
-     * @param pArray the array to write the viewIDs into
-     * @param nSize the size of pArray
-     * @returns true if pArray was large enough and result is written, false
-     * otherwise.
+     * @param rIds the array to write the viewIDs into
+     * @returns true if result was written, false otherwise.
      */
-    virtual bool getViewIds(int* pArray, size_t nSize) = 0;
+    virtual bool getViewIds(std::vector<int>& rIds) = 0;
 
     /**
      * Show/Hide a single row/column header outline for Calc documents.

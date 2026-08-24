@@ -122,7 +122,7 @@ public:
     /// Get the most recently active viewId of the DocId.
     static int getViewId(int nDocId);
     /// Get viewIds of views of the DocId.
-    static bool getViewIds(int nDocId, int* pArray, size_t nSize);
+    static bool getViewIds(int nDocId, std::vector<int>& rIds);
     /// Set View Blocked for some uno commands
     static void setBlockedCommandList(int nViewId, const char* blockedCommandList);
     /// Get the document id for a view

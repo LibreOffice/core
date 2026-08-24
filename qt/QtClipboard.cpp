@@ -46,10 +46,10 @@ namespace
 /// a multi-view document would need the specific copying view instead.
 int firstViewId(COKitDocument* loKitDoc)
 {
-    int nViewId = -1;
-    if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
+    std::vector<int> aViewIds;
+    if (!loKitDoc->getViewIds(aViewIds) || aViewIds.empty() || aViewIds[0] < 0)
         return -1;
-    return nViewId;
+    return aViewIds[0];
 }
 
 /// doc_getClipboard and doc_setClipboard both route by the kit's current view.

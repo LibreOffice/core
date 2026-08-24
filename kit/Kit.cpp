@@ -1530,9 +1530,8 @@ void Document::handleSaveMessage(const std::string &)
         LOG_TRC("BgSave completed");
 
         // unregister the view callbacks
-        const int viewCount = getLOKitDocument()->getViewsCount();
-        std::vector<int> viewIds(viewCount);
-        getLOKitDocument()->getViewIds(viewIds.data(), viewCount);
+        std::vector<int> viewIds;
+        getLOKitDocument()->getViewIds(viewIds);
         for (const auto viewId : viewIds)
         {
             _loKitDocument->setView(viewId);
@@ -1812,9 +1811,8 @@ void replaceKeysWithPlaceholder(std::string& json, std::initializer_list<std::st
 void Document::notifyViewInfo()
 {
     // Get the list of view ids from the core
-    const int viewCount = getLOKitDocument()->getViewsCount();
-    std::vector<int> viewIds(viewCount);
-    getLOKitDocument()->getViewIds(viewIds.data(), viewCount);
+    std::vector<int> viewIds;
+    getLOKitDocument()->getViewIds(viewIds);
 
     const std::map<int, UserInfo> viewInfoMap = getViewInfo();
 
@@ -1892,7 +1890,7 @@ void Document::notifyViewInfo()
             oss << "},";
         }
 
-        if (viewCount > 0)
+        if (viewIds.size() > 0)
             oss.seekp(-1, std::ios_base::cur); // Remove last comma.
 
         oss << ']';

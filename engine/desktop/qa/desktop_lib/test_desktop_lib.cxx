@@ -587,8 +587,8 @@ void DesktopKitTest::testCreateView()
     CPPUNIT_ASSERT_EQUAL(2, pDocument->getViewsCount());
 
     // Test getViewIds().
-    std::vector<int> aViewIds(2);
-    CPPUNIT_ASSERT(pDocument->getViewIds(aViewIds.data(), aViewIds.size()));
+    std::vector<int> aViewIds;
+    CPPUNIT_ASSERT(pDocument->getViewIds(aViewIds));
     // The expectation is that the most recently used shell is at the start
     CPPUNIT_ASSERT_EQUAL(nId1, aViewIds[0]);
     CPPUNIT_ASSERT_EQUAL(nId0, aViewIds[1]);
@@ -4102,8 +4102,8 @@ void DesktopKitTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(2, pDocument1->getViewsCount());
 
         // Validate the views of document 1.
-        std::vector<int> aViewIdsDoc1(2);
-        CPPUNIT_ASSERT(pDocument1->getViewIds(aViewIdsDoc1.data(), aViewIdsDoc1.size()));
+        std::vector<int> aViewIdsDoc1;
+        CPPUNIT_ASSERT(pDocument1->getViewIds(aViewIdsDoc1));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
@@ -4132,8 +4132,8 @@ void DesktopKitTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(2, pDocument2->getViewsCount());
 
         // Validate the views of document 2.
-        std::vector<int> aViewIdsDoc2(2);
-        CPPUNIT_ASSERT(pDocument2->getViewIds(aViewIdsDoc2.data(), aViewIdsDoc2.size()));
+        std::vector<int> aViewIdsDoc2;
+        CPPUNIT_ASSERT(pDocument2->getViewIds(aViewIdsDoc2));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);
@@ -4149,7 +4149,7 @@ void DesktopKitTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(2, pDocument2->getViewsCount());
 
         // The views of document1 should be unchanged.
-        CPPUNIT_ASSERT(pDocument1->getViewIds(aViewIdsDoc1.data(), aViewIdsDoc1.size()));
+        CPPUNIT_ASSERT(pDocument1->getViewIds(aViewIdsDoc1));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
@@ -4162,7 +4162,7 @@ void DesktopKitTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(1, pDocument1->getViewsCount());
 
         // The views of document2 should be unchanged.
-        CPPUNIT_ASSERT(pDocument2->getViewIds(aViewIdsDoc2.data(), aViewIdsDoc2.size()));
+        CPPUNIT_ASSERT(pDocument2->getViewIds(aViewIdsDoc2));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);

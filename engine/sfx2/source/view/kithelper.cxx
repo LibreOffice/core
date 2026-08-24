@@ -342,26 +342,23 @@ std::size_t KitHelper::getDocsCount()
     return aDocs.size();
 }
 
-bool KitHelper::getViewIds(int nDocId, int* pArray, size_t nSize)
+bool KitHelper::getViewIds(int nDocId, std::vector<int>& rIds)
 {
     assert(nDocId != -1 && "Cannot getViewsIds for invalid DocId -1");
+
+    rIds.clear();
 
     SfxApplication* pApp = SfxApplication::Get();
     if (!pApp)
         return false;
 
     const ViewShellDocId nCurrentDocId(nDocId);
-    std::size_t n = 0;
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         if (pViewShell->GetDocId() == nCurrentDocId)
         {
-            if (n == nSize)
-                return false;
-
-            pArray[n] = static_cast<sal_Int32>(pViewShell->GetViewShellId());
-            n++;
+            rIds.push_back(static_cast<sal_Int32>(pViewShell->GetViewShellId()));
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
