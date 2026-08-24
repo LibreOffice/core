@@ -9,6 +9,8 @@
 
 #include "helper/qahelper.hxx"
 #include <clipparam.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
 #include <scopetools.hxx>
 #include <formulacell.hxx>
 #include <global.hxx>
@@ -7457,6 +7459,47 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAFunctionCallMayFollowTheRangeOperator)
     // The display grammar reads the symbol the same way.
     m_pDoc->SetString(ScAddress(3, 1, 0), u"=SUM(A1:IF(TRUE();A2))"_ustr);
     CPPUNIT_ASSERT_EQUAL(140.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAUnionListMeetsTheIntersectionOperator)
+{
+    // A parenthesised union list is a reference like any other, so the whitespace
+    // intersection operator takes it as the left operand. The whitespace is an operator only
+    // under the OOXML grammar, the way a formula arrives from a file, so compile it that way.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 100.0);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 200.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 40.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 300.0);
+
+    auto setOoxmlFormula = [this](const ScAddress& rPosition, const OUString& rFormula) {
+        ScCompiler aCompiler(*m_pDoc, rPosition, formula::FormulaGrammar::GRAM_OOXML);
+        std::unique_ptr<ScTokenArray> pArray = aCompiler.CompileString(rFormula);
+        aCompiler.CompileTokenArray();
+        m_pDoc->SetFormula(rPosition, *pArray);
+    };
+
+    setOoxmlFormula(ScAddress(3, 0, 0), u"=SUM((A1:B1, A2:B2) A1:A2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(140.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    // A parenthesised expression works on the right of the operator the same way. The blank
+    // before the parenthesis keeps it a group instead of a call.
+    setOoxmlFormula(ScAddress(3, 1, 0), u"=SUM(A1:B1 (A1:B1))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+    setOoxmlFormula(ScAddress(3, 2, 0), u"=SUM((A1:B1, A2:B2) (A1:B1, A2:B2))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(640.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+
+    // A union list can be the right operand as well as the left one.
+    setOoxmlFormula(ScAddress(3, 4, 0), u"=SUM(A1:A2 (A1:B1, A2:B2))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(140.0, m_pDoc->GetValue(ScAddress(3, 4, 0)));
+
+    // Ranges that share no cell intersect to nothing, which is the #NULL! error.
+    setOoxmlFormula(ScAddress(3, 3, 0), u"=A1:B1 (A2:B2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoCode, m_pDoc->GetErrCode(ScAddress(3, 3, 0)));
 
     m_pDoc->DeleteTab(0);
 }

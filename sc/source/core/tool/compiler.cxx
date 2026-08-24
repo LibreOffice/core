@@ -5272,16 +5272,27 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                     || meLastOp == ocArrayClose
                     || meLastOp == ocTableRef )
                 {
-                    // We're trying to call a function, it seems; inject ocCall so that
-                    // the compiler can see what's going on.
-                    ScRawToken aToken;
-                    aToken.SetOpCode( ocCall );
-                    FormulaToken* pNewToken = static_cast<ScTokenArray*>(mpArr)->Add(
-                        aToken.CreateToken(rDoc.GetSheetLimits()));
-                    if (!pNewToken)
+                    // Where the intersection operator is a blank, a blank before the
+                    // parenthesis is that operator and opens a group, not an argument list.
+                    const sal_uInt16 nArrayLength = mpArr->GetLen();
+                    const bool bIntersectingBlank
+                        = (meLastOp == ocPush || meLastOp == ocClose)
+                          && FormulaGrammar::isExcelSyntax( meGrammar)
+                          && nArrayLength > 0
+                          && mpArr->TokenAt(nArrayLength - 1)->GetOpCode() == ocSpaces;
+                    if (!bIntersectingBlank)
                     {
-                        SetError(FormulaError::CodeOverflow);
-                        goto OutsideLoop;
+                        // We're trying to call a function, it seems. Inject ocCall so the
+                        // compiler can see what's going on.
+                        ScRawToken aToken;
+                        aToken.SetOpCode( ocCall );
+                        FormulaToken* pNewToken = static_cast<ScTokenArray*>(mpArr)->Add(
+                            aToken.CreateToken(rDoc.GetSheetLimits()));
+                        if (!pNewToken)
+                        {
+                            SetError(FormulaError::CodeOverflow);
+                            goto OutsideLoop;
+                        }
                     }
                 }
 
