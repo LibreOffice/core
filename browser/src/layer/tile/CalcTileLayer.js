@@ -1051,7 +1051,14 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._splitPanesContext.setSplitRow(newSplitIndex);
 
 		if (changed) {
+			// newSplitIndex just came from core, so it is already authoritative. Converting
+			// it to a pixel position and back to an index (as setSplitPosFromCell() does) can
+			// round to a different index at an exact span boundary (e.g. right after a run of
+			// hidden columns), and re-sending that rounded index would overwrite the correct
+			// one core just told us about.
+			this.dontSendSplitPosToCore = true;
 			this.setSplitPosFromCell();
+			this.dontSendSplitPosToCore = false;
 		}
 	},
 
