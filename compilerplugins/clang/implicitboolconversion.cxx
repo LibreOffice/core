@@ -241,7 +241,15 @@ public:
         FilteringPlugin(data) {}
 
     virtual void run() override
-    { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    {
+        std::string fn(handler.getMainFileName());
+        loplugin::normalizeDotDotInFilePath(fn);
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/soltools/cpp")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/soltools/mkdepend"))
+            return;
+
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 
     bool TraverseCallExpr(CallExpr * expr);
 
