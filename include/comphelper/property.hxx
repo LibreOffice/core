@@ -45,7 +45,7 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<css::beans::Property
 
 /** within the given property sequence, modify attributes of a special property
     @param  _rProps         the sequence of properties to search in
-    @param  _sPropName      the name of the property which's attributes should be modified
+    @param  _sPropName      the name of the property whose attributes should be modified
     @param  _nAddAttrib     the attributes which should be added
     @param  _nRemoveAttrib  the attributes which should be removed
 */

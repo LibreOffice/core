@@ -51,13 +51,13 @@ public:
     {
     }
     // only for the export - copy or delete the saved VBA-macro-storage
-    // form the ObjectShell
-    // - returns a warning code if a modified basic exist, in all other
+    // from the ObjectShell
+    // - returns a warning code if a modified basic exists, in all other
     //   cases return ERRCODE_NONE.
     ErrCode SaveOrDelMSVBAStorage(bool bSaveInto, const OUString& rStorageName);
 
-    // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
-    // If it exist, then return the WarningId for losing the information.
+    // check if the MS-VBA-Storage exists in the RootStorage of the DocShell.
+    // If it exists, then return the WarningId for losing the information.
     static ErrCode GetSaveWarningOfMSVBAStorage(SfxObjectShell& rDocS);
 
     static OUString GetMSBasicStorageName();

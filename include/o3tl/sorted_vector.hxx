@@ -289,7 +289,7 @@ public:
 
 private:
     static bool compare_equal( const Value& v1, const Value& v2 )
-    {   // Synthetize == check from < check for std::unique asserts above.
+    {   // Synthesize == check from < check for std::unique asserts above.
         return !Compare()( v1, v2 ) && !Compare()( v2, v1 );
     }
 

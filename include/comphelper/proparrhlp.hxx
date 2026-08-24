@@ -76,7 +76,7 @@ protected:
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const = 0;
 
-    /** creates an OPropertyArrayAggregationHelper filled with properties for which's initialization
+    /** creates an OPropertyArrayAggregationHelper filled with properties for whose initialization
         fillProperties is called. getInfoService and getFirstAggregateId may be overwritten to determine
         the additional parameters of the OPropertyArrayAggregationHelper.
     */
