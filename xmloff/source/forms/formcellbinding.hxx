@@ -209,7 +209,7 @@ namespace xmloff
                             const OUString& _rService
                         );
 
-        /** uses the document (it's factory interface, respectively) to create a component instance
+        /** uses the document (its factory interface, respectively) to create a component instance
             @param _rService
                 the service name
             @param _rArgumentName

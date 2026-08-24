@@ -283,7 +283,7 @@ namespace xmloff
         static OUString getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
         static xmloff::token::XMLTokenEnum getOfficeFormsAttributeToken(OfficeFormsAttributes _eAttrib);
 
-        /** calculates the xml namedspace key of an attribute of the office:forms element
+        /** calculates the xml namespace key of an attribute of the office:forms element
             @param _nId
                 the id of the attribute
         */
@@ -297,14 +297,14 @@ namespace xmloff
     /** some kind of opposite to the OAttributeMetaData class. Able to translate
         attributes into property names/types
 
-        <p>The construction of this class is rather expensive (or at least it's initialization from outside),
+        <p>The construction of this class is rather expensive (or at least its initialization from outside),
         so it should be shared</p>
     */
     class OAttribute2Property final
     {
     public:
         // TODO: maybe the following struct should be used for exports, too. In this case we would not need to
-        // store it's instances in a map, but in a vector for faster access.
+        // store its instances in a map, but in a vector for faster access.
         struct AttributeAssignment
         {
             OUString                 sPropertyName;          // the property name

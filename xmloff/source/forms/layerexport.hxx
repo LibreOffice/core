@@ -188,7 +188,7 @@ namespace xmloff
             you collected previously will be lost</p>
 
             @param _rxDrawPage
-                the draw page which's forms collection should be examined
+                the draw page whose forms collection should be examined
 
             @see getControlId
             @see exportControl
@@ -260,7 +260,7 @@ namespace xmloff
 
         /** ensures that the number format of the given control exist in our own formats supplier.
 
-            <p>The given control is examined for its format (i.e. it's FormatKey/FormatsSupplier properties),
+            <p>The given control is examined for its format (i.e. its FormatKey/FormatsSupplier properties),
             and the format is added (if necessary) to m_xControlNumberFormats</p>.
 
             @return
