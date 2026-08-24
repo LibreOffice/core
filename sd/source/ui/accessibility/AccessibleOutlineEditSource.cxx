@@ -168,7 +168,7 @@ namespace accessibility
                 const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
                 if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
                 {
-                    // model is dying under us, going defunc
+                    // model is dying under us, going defunct
                     bDispose = true;
                 }
             }

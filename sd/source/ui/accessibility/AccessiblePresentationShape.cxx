@@ -46,7 +46,7 @@ OUString SAL_CALL AccessiblePresentationShape::getImplementationName()
     return u"AccessiblePresentationShape"_ustr;
 }
 
-/// Set this object's name if is different to the current name.
+/// Set this object's name if it is different to the current name.
 OUString AccessiblePresentationShape::CreateAccessibleBaseName()
 {
     OUString sName;

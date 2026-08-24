@@ -39,7 +39,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument& rTheDoc,
     : SdUndoAction(rTheDoc),
       mrStyleSheet(rTheStyleSheet)
 {
-    // Create ItemSets; Attention, it is possible that the new one is from a,
+    // Create ItemSets; Attention, it is possible that the new one is from a
     // different pool. Therefore we clone it with its items.
     mpNewSet = std::make_unique<SfxItemSet>(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pTheNewItemSet->GetRanges());
     SdrModel::MigrateItemSet( pTheNewItemSet, mpNewSet.get(), rTheDoc );
