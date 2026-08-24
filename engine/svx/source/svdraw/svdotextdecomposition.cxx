@@ -383,12 +383,18 @@ bool SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
 
 // Same background setSuitableOutlinerBg() would pick, for callers that want the
 // color instead of an Outliner to set it on.
-std::optional<Color> SdrObject::getSuitableOutlinerBgColor() const
+std::optional<Color> SdrObject::getSuitableOutlinerBgColor(std::optional<Color> oBehind) const
 {
     const SfxItemSet* pBackgroundFillSet = getBackgroundFillSet();
     if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
         return {};
-    return GetDraftFillColor(*pBackgroundFillSet);
+
+    // A fill that belongs to the page or to its master page is already part of the color the
+    // caller has for the page, so it adds nothing here.
+    if (pBackgroundFillSet != &GetObjectItemSet())
+        return {};
+
+    return GetDraftFillColor(*pBackgroundFillSet, oBehind);
 }
 
 const SfxItemSet* SdrObject::getBackgroundFillSet() const

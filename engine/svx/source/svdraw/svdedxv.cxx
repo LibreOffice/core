@@ -981,7 +981,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow,
         std::optional<Color> oFillColor
             = pTextObj->GetActiveTextBackgroundColor(pTextObj->getActiveText());
         if (!oFillColor)
-            oFillColor = pTextObj->getSuitableOutlinerBgColor();
+            oFillColor = pTextObj->getSuitableOutlinerBgColor(aBackground);
         if (oFillColor)
             aBackground = *oFillColor;
     }

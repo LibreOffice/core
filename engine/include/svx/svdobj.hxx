@@ -915,8 +915,9 @@ public:
 
     // return true if a bg was set, false otherwise
     bool setSuitableOutlinerBg(Outliner& rOutliner) const;
-    // the background setSuitableOutlinerBg() would set, empty if there is none
-    std::optional<Color> getSuitableOutlinerBgColor() const;
+    // the background setSuitableOutlinerBg() would set, empty if there is none or if it is
+    // already part of oBehind, the color behind the fill
+    std::optional<Color> getSuitableOutlinerBgColor(std::optional<Color> oBehind = std::nullopt) const;
     // If fillstyle is drawing::FillStyle_BITMAP, returns the graphic.
     const Graphic* getFillGraphic() const;
 
