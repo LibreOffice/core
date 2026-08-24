@@ -79,7 +79,6 @@
 #endif /* Def __sun */
 
 #include <assert.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -109,13 +108,6 @@
 #define FILE_O_BINARY     0
 #define PATHNCMP strncmp
 #endif /* not windaube */
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-#ifndef FALSE
-#define FALSE 0
-#endif
 
 static bool internal_boost = false;
 static char* base_dir;
@@ -166,7 +158,7 @@ struct pool
 #define POOL_ALIGN_INCREMENT 8 /**< alignment, must be a power of 2 and of size > to sizeof(void*) */
 
 
-static void* pool_take_extent(struct pool* pool, int allocate)
+static void* pool_take_extent(struct pool* pool, bool allocate)
 {
     unsigned int size = 0;
     void* extent;
@@ -229,7 +221,7 @@ static struct pool* pool_create(int size_elem, int primary, int secondary)
 
     pool->primary = (size_elem * primary) + POOL_ALIGN_INCREMENT;
     pool->secondary = secondary > 0 ? (size_elem * secondary) + POOL_ALIGN_INCREMENT : 0;
-    pool_take_extent(pool, FALSE);
+    pool_take_extent(pool, false);
 
     return pool;
 
@@ -270,7 +262,7 @@ static void* pool_alloc(struct pool* pool)
         else
         {
             /* allocate a new extent */
-            data = pool_take_extent(pool, TRUE);
+            data = pool_take_extent(pool, true);
         }
     }
     else
@@ -536,9 +528,9 @@ static int compare_key(struct hash const * hash, const char* a, const char* b, i
 }
 
 /* a customized hash_store function that just store the key and return
- * TRUE if the key was effectively stored, or FALSE if the key was already there
+ * true if the key was effectively stored, or false if the key was already there
  */
-static int hash_store(struct hash* hash, const char* key, int key_len)
+static bool hash_store(struct hash* hash, const char* key, int key_len)
 {
     unsigned int hashed;
     struct hash_elem* hash_elem;
@@ -578,9 +570,9 @@ static int hash_store(struct hash* hash, const char* key, int key_len)
                 hash_resize(hash);
             }
         }
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 static int file_stat(const char* name, struct stat* buffer_stat, int* rc)
