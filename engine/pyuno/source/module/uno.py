@@ -345,6 +345,30 @@ def invoke(object, methodname, argTuple):
 # -----------------------------------------------------------------------------
 _builtin_import = __import__
 
+def _uno_try_import(name, class_name):
+    RuntimeException = pyuno.getClass("com.sun.star.uno.RuntimeException")
+
+    # check for structs, exceptions, interfaces, services or singletons
+    try:
+        return pyuno.getClass(name + "." + class_name)
+    except RuntimeException:
+        pass
+    # check for enums
+    try:
+        return Enum(name, class_name)
+    except RuntimeException:
+        pass
+    # check for constants
+    try:
+        return getConstantByName(name + "." + class_name)
+    except RuntimeException:
+        pass
+    # check for constant group
+    try:
+        return _impl_getConstantGroupByName(name, class_name)
+    except ValueError:
+        pass
+    return None
 
 def _uno_import(name, *optargs, **kwargs):
     """Overrides built-in import to allow directly importing LibreOffice classes."""
@@ -377,31 +401,19 @@ def _uno_import(name, *optargs, **kwargs):
 
         d = mod.__dict__
 
-    RuntimeException = pyuno.getClass("com.sun.star.uno.RuntimeException")
-
     for class_name in fromlist:
         if class_name not in d:
-            failed = False
+            clazz = _uno_try_import(name, class_name)
+            # Since we moved most of the UNO types from com::sun::star to cpo,
+            # attempt to allow importing using the old names.
+            if clazz is None:
+                if name.startswith("com.sun.star"):
+                    compat_name = "cpo" + name[12:]
+                    clazz = _uno_try_import(compat_name, class_name)
 
-            try:
-                # check for structs, exceptions, interfaces, services or singletons
-                d[class_name] = pyuno.getClass(name + "." + class_name)
-            except RuntimeException:
-                # check for enums
-                try:
-                    d[class_name] = Enum(name, class_name)
-                except RuntimeException:
-                    # check for constants
-                    try:
-                        d[class_name] = getConstantByName(name + "." + class_name)
-                    except RuntimeException:
-                        # check for constant group
-                        try:
-                            d[class_name] = _impl_getConstantGroupByName(name, class_name)
-                        except ValueError:
-                            failed = True
-
-            if failed:
+            if clazz is not None:
+                d[class_name] = clazz;
+            else:
                 # We have an import failure, but cannot distinguish between
                 # uno and non-uno errors as uno lookups are attempted for all
                 # "from xxx import yyy" imports following a python failure.

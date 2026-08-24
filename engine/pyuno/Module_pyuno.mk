@@ -54,6 +54,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,pyuno, \
     PythonTest_pyuno_pytests_testcollections \
     PythonTest_pyuno_pytests_insertremovecells \
     PythonTest_pyuno_pytests_testuno \
+    PythonTest_pyuno_pytests_compat \
 ))
 
 endif # DISABLE_PYTHON
