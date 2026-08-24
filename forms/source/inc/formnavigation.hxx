@@ -114,14 +114,14 @@ namespace frm
             @param _nFeatureId
                 the id of the feature
             @param _bEnabled
-                determines if the features is enabled or disabled
+                determines if the feature is enabled or disabled
             @see getBooleanState
         */
         virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled );
 
         /** notification for (potential) changes in the state of all features
             <p>The base class implementation does nothing. Derived classes could force
-            their peer to update it's state, depending on the result of calls to
+            their peer to update its state, depending on the result of calls to
             <member>IFeatureDispatcher::isEnabled</member>.</p>
         */
         virtual void    allFeatureStatesChanged( );

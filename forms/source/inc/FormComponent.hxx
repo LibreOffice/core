@@ -616,7 +616,7 @@ protected:
     /** initializes the part of the class which is related to the control value.
 
         <p>Kind of late ctor, to be called for derivees which have a dedicated value property.<br/>
-        The value property is the property which's value is synced with either the database
+        The value property is the property whose value is synced with either the database
         column the object is bound to, or with the external value binding, if present.<br/>
         E.g. for a text control model, this property will most probably be "Text".</p>
 
@@ -629,7 +629,7 @@ protected:
         aggregate then.</p>
 
         @precond
-            The method has not be called before during the life time of the object.
+            The method has not been called before during the life time of the object.
 
         @param _rValuePropertyName
             the name of the value property

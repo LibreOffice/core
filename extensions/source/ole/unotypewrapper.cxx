@@ -33,7 +33,7 @@ bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
         pObj->AddRef();
         pVar->vt= VT_DISPATCH;
         pVar->pdispVal= CComQIPtr<IDispatch>(pObj->GetUnknown());
-        //now set the value, e.i. the name of the type
+        //now set the value, i.e. the name of the type
         CComQIPtr<IUnoTypeWrapper> spType(pVar->pdispVal);
         OSL_ASSERT(spType);
         if (SUCCEEDED(spType->put_Name(sTypeName)))

@@ -60,7 +60,7 @@ namespace frm
         /// clean up resources associated with this instance
         void    dispose();
 
-        // invalidate the feature, re-retrieve it's state, and broadcast changes, if necessary
+        // invalidate the feature, re-retrieve its state, and broadcast changes, if necessary
         void    invalidate();
 
     protected:
@@ -68,7 +68,7 @@ namespace frm
         virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify );
         virtual void    invalidateFeatureState_Broadcast();
 
-        // to be overridden, and filled with the info special do your derived class
+        // to be overridden, and filled with the info special to your derived class
         virtual css::frame::FeatureStateEvent
                         buildStatusEvent() const;
 
