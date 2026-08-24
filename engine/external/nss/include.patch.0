@@ -1,0 +1,10 @@
+--- nss/nss-tool/common/util.h
++++ nss/nss-tool/common/util.h
+@@ -3,6 +3,7 @@
+ #include "nss_scoped_ptrs.h"
+ 
+ #include <secmodt.h>
++#include <iosfwd>
+ #include <string>
+ #include <vector>
+ 
