@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <Python.h>
+
 #include <sal/config.h>
 
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
