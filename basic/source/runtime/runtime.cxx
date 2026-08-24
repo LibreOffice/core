@@ -717,7 +717,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 }
                 SbxVariable* v2 = new SbxVariable( t );
                 v2->SetFlag( SbxFlagBits::ReadWrite );
-                // tdf#79426, tdf#125180 - if parameter was missing, readd additional information about a missing parameter
+                // tdf#79426, tdf#125180 - if parameter was missing, re-add additional information about a missing parameter
                 if ( IsMissing( v, 1 ) )
                 {
                     SetIsMissing( v2 );

@@ -787,7 +787,7 @@ public class OOoBean
 
     /** Stores a document to the given URL.
         <p>
-        Due due a bug (50651) calling this method may cause the office to crash,
+        Due to a bug (50651) calling this method may cause the office to crash,
         when at the same time the office writes a backup of the document. This bug
         also affects {@link #storeToByteArray storeToByteArray} and
         {@link #storeToStream storeToStream}. The workaround
