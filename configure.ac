@@ -782,7 +782,6 @@ if test "$enable_experimental" = "yes" ; then
   ENABLE_EXPERIMENTAL=true
   experimental_msg="enabled by default"
   SSL_VERIFY="false"
-  ENABLE_EXOTIC_FILE_FORMATS="2"
 fi
 AC_SUBST(ENABLE_EXPERIMENTAL)
 
