@@ -71,6 +71,11 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // The document already carries a label (matching or foreign); enables Remove.
     bool m_bHasLabel = false;
 
+    // The label read from the document (valid when m_bHasLabel). Re-applied whenever
+    // its own policy becomes active again, so switching policy away and back does not
+    // lose the stored classification and selections.
+    svx::seclabel::StanagLabel m_aLabel;
+
     std::unique_ptr<weld::Widget> m_xEditBox;
     std::unique_ptr<weld::ComboBox> m_xPolicy;
     std::unique_ptr<weld::ComboBox> m_xClassification;
@@ -109,6 +114,9 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // Pre-select policy, classification and categories from a label already in the
     // document, or enter the read-only foreign-policy view if its policy is not ours.
     void initFromExistingLabel();
+    // Set the classification and category checks from m_aLabel (the active policy must
+    // be the label's). Rebuilds the categories, so callers need not populate first.
+    void restoreFromLabel();
     // Show rLabel read-only and offer re-labeling (foreign/un-provisioned policy).
     void enterForeignMode(const svx::seclabel::StanagLabel& rLabel);
 

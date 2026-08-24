@@ -192,6 +192,15 @@ void SvxSecurityLabelDialog::setActivePolicy(int nIndex)
     }
     m_pPolicy = &m_aPolicySet.aPolicies[nIndex];
     PopulateClassifications();
+
+    // Returning to the label's own policy restores its stored classification and
+    // selections (the cross-policy check-preservation in PopulateCategories cannot,
+    // since the other policy's categories never matched).
+    if (m_bHasLabel && !m_bForeignPolicy && m_pPolicy->matchesLabel(m_aLabel))
+    {
+        restoreFromLabel();
+        return;
+    }
     PopulateCategories();
 }
 
@@ -299,33 +308,36 @@ void SvxSecurityLabelDialog::initFromExistingLabel()
     if (!xModel.is())
         return;
 
-    svx::seclabel::StanagLabel aLabel;
-    if (!svx::seclabel::readLabel(xModel, aLabel))
+    if (!svx::seclabel::readLabel(xModel, m_aLabel))
         return;
 
     m_bHasLabel = true;
 
     // A label written under a policy we don't have can't be edited structurally;
     // show it read-only and offer re-labeling under an available policy.
-    const svx::seclabel::SpifPolicy* pMatch = m_aPolicySet.findByLabel(aLabel);
+    const svx::seclabel::SpifPolicy* pMatch = m_aPolicySet.findByLabel(m_aLabel);
     if (!pMatch)
     {
-        enterForeignMode(aLabel);
+        enterForeignMode(m_aLabel);
         return;
     }
 
-    // Make the matching policy active in the selector and rebuild the editor for it.
+    // Make the matching policy active in the selector; setActivePolicy restores the
+    // stored classification and selections (now that m_bHasLabel/m_aLabel are set).
     const int nIndex = static_cast<int>(pMatch - m_aPolicySet.aPolicies.data());
     m_xPolicy->set_active(nIndex);
     setActivePolicy(nIndex);
+}
 
-    // Select the stored classification. An obsolete value is hidden for new
-    // labels but must render when editing one that uses it, so append it.
-    int nPos = m_xClassification->find_text(aLabel.aClassification);
+void SvxSecurityLabelDialog::restoreFromLabel()
+{
+    // Select the stored classification. An obsolete value is hidden for new labels but
+    // must render when editing one that uses it, so append it.
+    int nPos = m_xClassification->find_text(m_aLabel.aClassification);
     if (nPos == -1)
     {
-        m_xClassification->append_text(aLabel.aClassification);
-        nPos = m_xClassification->find_text(aLabel.aClassification);
+        m_xClassification->append_text(m_aLabel.aClassification);
+        nPos = m_xClassification->find_text(m_aLabel.aClassification);
     }
     if (nPos != -1)
         m_xClassification->set_active(nPos);
@@ -334,7 +346,7 @@ void SvxSecurityLabelDialog::initFromExistingLabel()
 
     // Check the boxes whose category name (label) is among the label's values.
     std::set<OUString> aValues;
-    for (const auto& rCategory : aLabel.aCategories)
+    for (const auto& rCategory : m_aLabel.aCategories)
     {
         for (const auto& rValue : rCategory.aValues)
             aValues.insert(rValue);
