@@ -49,7 +49,7 @@ void SwListShell::InitInterface_Impl()
 // #i35572# Functionality of Numbering/Bullet toolbar
 // for outline numbered paragraphs should match the functions for outlines
 // available in the navigator. Therefore the code in the following
-// function is quite similar the code in SwContentTree::ExecCommand.
+// function is quite similar to the code in SwContentTree::ExecCommand.
 static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
 {
     const SwOutlineNodes::size_type nActPos = rSh.GetOutlinePos();

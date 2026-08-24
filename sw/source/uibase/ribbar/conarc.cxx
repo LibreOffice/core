@@ -56,7 +56,7 @@ bool ConstArc::MouseButtonUp(const MouseEvent& rMEvt)
         {
             m_nButtonUpCount++;
 
-            if (m_nButtonUpCount == 3) // Generating of circular arc finished
+            if (m_nButtonUpCount == 3) // Generation of circular arc finished
             {
                 SwDrawBase::MouseButtonUp(rMEvt);
                 m_nButtonUpCount = 0;

@@ -478,7 +478,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
             if( SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ) &&
                 1 < (nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
             {
-                // then we make by ourself.
+                // then we make it by ourselves.
                 SfxUndoManager* pUndoManager = GetUndoManager();
                 if( pUndoManager )
                 {

@@ -433,7 +433,7 @@ void SwZoomBox_Impl::Select()
 
         if (bNonNumeric)
         {
-            // put old value back, in case its effectively the same
+            // put old value back, in case it's effectively the same
             // as the picked option and no update to number comes
             // back from writer
             m_xWidget->set_entry_text(m_xWidget->get_saved_value());
@@ -473,7 +473,7 @@ IMPL_LINK(SwZoomBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 IMPL_LINK_NOARG(SwZoomBox_Impl, FocusOutHdl, weld::Widget&, void)
 {
-    if (!m_xWidget->has_focus()) // a combobox can be comprised of different subwidget so double-check if none of those has focus
+    if (!m_xWidget->has_focus()) // a combobox can be comprised of different subwidgets so double-check if none of those has focus
         m_xWidget->set_entry_text(m_xWidget->get_saved_value());
 }
 
