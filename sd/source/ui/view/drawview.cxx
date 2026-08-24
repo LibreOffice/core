@@ -93,7 +93,7 @@ void DrawView::ModelHasChanged()
 {
     ::sd::View::ModelHasChanged();
 
-    // force framer to rerender
+    // force frame to rerender
     SfxStyleSheetBasePool* pSSPool = mrDoc.GetStyleSheetPool();
     pSSPool->Broadcast(SfxStyleSheetPoolHint());
 

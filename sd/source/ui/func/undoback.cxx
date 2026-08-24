@@ -58,7 +58,7 @@ void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
     mpItemSet = std::move(pNew);
     saveFillBitmap(*mpItemSet);
 
-    // tell the page that it's visualization has changed
+    // tell the page that its visualization has changed
     mrPage.ActionChanged();
 }
 
