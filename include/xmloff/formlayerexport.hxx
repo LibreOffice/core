@@ -78,7 +78,7 @@ namespace xmloff
             <p>The page the control belongs to must have been examined and sought to.</p>
 
             @param _rxControl
-                the control which's id should be retrieved. Must not be <NULL/>.
+                the control whose id should be retrieved. Must not be <NULL/>.
 
             @see examineForms
             @see seekPage
@@ -93,7 +93,7 @@ namespace xmloff
             do not have a number style. In this case, an empty string is returned.</p>
 
             @param _rxControl
-                the control which's id should be retrieved. Must not be <NULL/>.
+                the control whose number style should be retrieved. Must not be <NULL/>.
 
             @see examineForms
             @see seekPage

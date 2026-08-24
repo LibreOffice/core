@@ -928,7 +928,7 @@ protected:
 
     virtual void CellModified(); // called whenever a cell has been modified
     virtual bool
-    SaveModified(); // called whenever a cell should be left, and it's content should be saved
+    SaveModified(); // called whenever a cell should be left, and its content should be saved
         // return sal_False prevents leaving the cell
     virtual bool SaveRow(); // commit the current row
 

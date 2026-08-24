@@ -77,7 +77,7 @@ namespace svx
         /** construct the transferable from a DatabaseForm component and a field name
 
             @param _rxForm
-                the form which is bound to the data source which's field is to be dragged
+                the form which is bound to the data source whose field is to be dragged
 
             @param _rFieldName
                 the name of the field to be dragged

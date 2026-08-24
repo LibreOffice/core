@@ -90,14 +90,14 @@ class AccessibleTextHelper_Impl;
     events. Generally, be prepared that when sending any of these
     events via SvxEditSource::GetBroadcaster() broadcaster, the
     AccessibleTextHelper will call the SvxEditSource and their
-    forwarder to update it's state. Avoid being inconsistent in
+    forwarder to update its state. Avoid being inconsistent in
     the facts you tell in the events, e.g. when sending a
     SfxHintId::TextParaInserted event, the
     SvxEditSource::GetTextForwarder().GetParagraphCount() should
     already include the newly inserted paragraph.
 
     @attention All public methods must not be called with any
-    mutex hold, except when calling from the main thread (with
+    mutex held, except when calling from the main thread (which
     holds the solar mutex), unless stated otherwise. This is
     because they themselves might need the solar mutex in addition
     to the object mutex, and the ordering of the locking must be:
