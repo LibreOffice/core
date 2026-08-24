@@ -62,7 +62,7 @@ published struct ComplexTypes : SimpleTypes
     </ul>
     The interface is divided into three sections:
     <ul>
-    <li>measuring asynchron/ synchron calls</li>
+    <li>measuring asynchronous/ synchronous calls</li>
     <li>complex data calls with/out return value; in/out parameters</li>
     <li>single data types like long, float, string etc.</li>
     <li>method calls versa attribute calls</li>

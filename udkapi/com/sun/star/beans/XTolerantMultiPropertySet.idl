@@ -23,7 +23,7 @@
 module com {  module sun {  module star {  module beans {
 
 
-/** provides access to multiple iformation of
+/** provides access to multiple information of
     a set of properties with a single call.
 
     <p>The speciality of this interface is that none of the functions

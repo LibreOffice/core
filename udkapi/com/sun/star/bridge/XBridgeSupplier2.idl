@@ -41,7 +41,7 @@
     the XBridgeSupplier2 interface remotely. Assuming one wants to bridge an
     OLE Automation object to UNO by calling createBridge on a proxy, then the UNO remote
     bridge would not recognise that the Any argument contains an IDispatch interface.
-    Therefore it cannot marshal it as COM requires it and the bridgeing would fail.
+    Therefore it cannot marshal it as COM requires it and the bridging would fail.
     To prevent this, implementations of this interface should be aware of this scenario and
     if necessary take the appropriate steps. The process ID argument to the createBridge
     function represents the calling process and may be used by the implementation to determine
