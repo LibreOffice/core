@@ -50,5 +50,7 @@ trap ' ' INT
 perf record -F50 --call-graph dwarf,32768 --pid $kitpid
 # note b) perf version 5.14.21 is agonizingly slow without --no-inline, while 6.2.6 seems ok
 # merge all the background saves together as kitdbgsv
-perf script --no-inline | stackcollapse-perf.pl | sed -E -s "s/^kitbgsv[^;]+/kitbgsv/" | flamegraph.pl > perf-$kitpid.svg
+# perf writes the path of an unlinked mapping with a " (deleted)" suffix. The extra
+# " (" lands inside the symbol stackcollapse-perf.pl reads, so cut the suffix first.
+perf script --no-inline | sed 's/ (deleted))$/)/' | stackcollapse-perf.pl | sed -E -s "s/^kitbgsv[^;]+/kitbgsv/" | flamegraph.pl > perf-$kitpid.svg
 echo generated flamegraph output svg: perf-$kitpid.svg

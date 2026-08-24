@@ -25,7 +25,10 @@ if ! which flamegraph.pl > /dev/null 2>&1; then
     exit 1
 fi
 perf record -o perf.data.watchdog -e syscalls:sys_enter_futimesat --call-graph dwarf,32768 -a sleep $1
-perf script -i perf.data.watchdog --no-inline | stackcollapse-perf.pl | \
+# perf writes the path of an unlinked mapping with a " (deleted)" suffix. The extra
+# " (" lands inside the symbol stackcollapse-perf.pl reads, so cut the suffix first.
+perf script -i perf.data.watchdog --no-inline | sed 's/ (deleted))$/)/' | \
+    stackcollapse-perf.pl | \
     sed -E -s "s/^kitbroker[^;]+/kitbroker/" | \
     sed -E -s "s/^docbroker[^;]+/docbroker/" | \
     sed -E -s "s/^kit_spare[^;]+/kit_spare/" | \

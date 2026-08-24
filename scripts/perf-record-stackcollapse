@@ -53,6 +53,16 @@ if ! which stackcollapse-perf.pl > /dev/null 2>&1; then
     exit 1
 fi
 
+# The kernel writes the path of a mapping whose file has been unlinked with a
+# " (deleted)" suffix, so perf prints lines like:
+#     7f01 [unknown] (/opt/lib/libmergedlo.so (deleted))
+# The extra " (" lands inside the symbol that stackcollapse-perf.pl reads, and the
+# graph then carries frames named "[unknown] " with a trailing space. Cut the suffix
+# so the module name reaches the graph instead.
+strip_deleted_suffix() {
+    sed 's/ (deleted))$/)/'
+}
+
 PERF="${PERF:-perf}"
 
 set -e
@@ -71,7 +81,7 @@ echo spooling profiling to "$WORK_DIR" 1>&2
             rm "$WORK_DIR/inotifywait.pid"
         fi
         if [[ "$file" == perf.data.* ]]; then
-            $PERF script --no-inline -i "$file" | stackcollapse-perf.pl
+            $PERF script --no-inline -i "$file" | strip_deleted_suffix | stackcollapse-perf.pl
             rm "$file"
         fi
     done; } &
