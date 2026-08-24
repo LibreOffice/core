@@ -82,7 +82,7 @@ class DLLEXPORT HWPPara
         unsigned char     scflag;
 
 /**
- * If the value is 0, all character of paragraph have same style given cshape
+ * If the value is 0, all characters of paragraph have same style given cshape
  */
         unsigned char     contain_cshape;         /* if it's 0, all the characters are representing with representative shape */
         unsigned char     etcflag;

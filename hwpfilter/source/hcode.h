@@ -31,7 +31,7 @@
  */
 enum { KSSM, KS, UNICODE };
 /**
- *   Transfer combination-code for internal using of hwp to ascii
+ *   Transfer combination-code for internal use of hwp to ASCII
  */
 DLLEXPORT int hcharconv(hchar ch, hchar *dest, int codeType) ;
 

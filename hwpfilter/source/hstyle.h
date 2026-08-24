@@ -28,7 +28,7 @@
 namespace hwpfilter { struct StyleData; }
 
 /**
- * @short Using for global style object like "Standard"
+ * @short Used for global style objects like "Standard"
  */
 class DLLEXPORT HWPStyle
 {
