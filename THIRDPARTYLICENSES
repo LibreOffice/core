@@ -267,6 +267,10 @@ Macaron – C++ single header base64 decode/encoder for C++ 11 and above.
 Copyright (c) 2016-2024 tomykaira
 MIT License
 
+SpookyHash V2 – a 128-bit noncryptographic hash function.
+By Bob Jenkins
+Public domain
+
 Collabora Online client side JavaScript code uses the following 3rd party modules.
 
 Autolinker.js
