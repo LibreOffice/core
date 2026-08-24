@@ -275,6 +275,14 @@ void CppunitAssertEquals::checkExpr(
         }
         return;
     }
+    if (auto const e = dyn_cast<CXXRewrittenBinaryOperator>(expr)) {
+        auto const form = e->getDecomposedForm();
+        if ((!negated && form.Opcode == BO_EQ) || (negated && form.Opcode == BO_NE))
+        {
+            reportEquals(range, name, form.Opcode == BO_NE, form.LHS, form.RHS);
+        }
+        return;
+    }
 }
 
 void CppunitAssertEquals::reportEquals(
