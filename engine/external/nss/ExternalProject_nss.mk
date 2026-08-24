@@ -100,7 +100,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		COMMA=$(COMMA) \
 		CC="$(CC) $(gb_DEBUGINFO_FLAGS) $(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function)" \
 		CXX="$(CXX) $(gb_DEBUGINFO_FLAGS)" \
-		bash ./build.sh $(if $(LOADLIMIT),-l $(LOADLIMIT)) --disable-tests --enable-legacy-db --enable-libpkix -Ddisable_werror=1 $(if $(ENABLE_DBGUTIL),,--opt) \
+		bash ./build.sh $(if $(LOADLIMIT),-l $(LOADLIMIT)) --disable-tests --enable-legacy-db --enable-libpkix -Dsign_libs=0 -Ddisable_werror=1 $(if $(ENABLE_DBGUTIL),,--opt) \
 			--python="$(nss_PYTHON)" \
 			$(if $(and $(filter TRUE,$(COM_IS_CLANG)),$(filter -fsanitize=%,$(CC)),$(if $(filter -shared-libsan,$(CC) $(LDFLAGS)),,x)),--no-zdefs) \
 		&& rm -rf ../dist/out \
