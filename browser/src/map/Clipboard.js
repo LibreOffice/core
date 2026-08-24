@@ -390,13 +390,11 @@ window.L.Clipboard = window.L.Class.extend({
 					/*keepPopupAlive=*/true,
 				);
 
-				if (this._checkAndDisablePasteSpecial()) {
-					window.app.console.log('up-load done, now .uno:PasteSpecial');
-					app.socket.sendMessage('uno .uno:PasteSpecial');
-				} else {
-					window.app.console.log('up-load done, now .uno:Paste');
-					await this._sendCommandAndWaitForCompletion('.uno:Paste');
-				}
+				const pasteCommand = this._checkAndDisablePasteSpecial()
+					? '.uno:PasteSpecial'
+					: '.uno:Paste';
+				window.app.console.log('up-load done, now ' + pasteCommand);
+				await this._sendCommandAndWaitForCompletion(pasteCommand);
 			} catch (_error) {
 				window.app.console.error('Clipboard: failed to download - error');
 				const uploadErrorMessage = _('Failed to upload the clipboard');
@@ -886,7 +884,7 @@ window.L.Clipboard = window.L.Class.extend({
 
 	// Gets status of a copy/paste command from the remote Kit
     _onCommandResult: function(e) {
-        if (e.commandName === '.uno:Copy' || e.commandName === '.uno:Cut' || e.commandName === '.uno:CopyHyperlinkLocation' || e.commandName === '.uno:CopySlide' || e.commandName === '.uno:Paste') {
+        if (e.commandName === '.uno:Copy' || e.commandName === '.uno:Cut' || e.commandName === '.uno:CopyHyperlinkLocation' || e.commandName === '.uno:CopySlide' || e.commandName === '.uno:Paste' || e.commandName === '.uno:PasteSpecial') {
 			window.app.console.log('Resolve clipboard command promise ' + e.commandName
 				+ ' with queue length: ' + this._commandCompletion.length);
 			while (this._commandCompletion.length > 0)
@@ -898,7 +896,7 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	_sendCommandAndWaitForCompletion: function(command, params) {
-		if (command !== '.uno:Copy' && command !== '.uno:Cut' && command !== '.uno:CopyHyperlinkLocation' && command !== '.uno:CopySlide' && command !== '.uno:Paste') {
+		if (command !== '.uno:Copy' && command !== '.uno:Cut' && command !== '.uno:CopyHyperlinkLocation' && command !== '.uno:CopySlide' && command !== '.uno:Paste' && command !== '.uno:PasteSpecial') {
 			console.error(`_sendCommandAndWaitForCompletion was called with '${command}', but anything except Copy/Cut/Paste will never complete`);
 			return null;
 		}
