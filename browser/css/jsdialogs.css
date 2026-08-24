@@ -3386,7 +3386,6 @@ button.has-img img {
 	grid-column: 1;
 	grid-row: 1;
 	white-space: pre-wrap;
-	white-space: wrap;
 }
 
 .ui-custom-textarea-cursor-layer {
