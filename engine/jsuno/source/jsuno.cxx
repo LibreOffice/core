@@ -2851,6 +2851,10 @@ void parseStackTrace(
             OUString::fromUtf8((*i)[2].str()), OUString::fromUtf8((*i)[3].str()),
             OUString::fromUtf8((*i)[4].str()), OUString::fromUtf8((*i)[1].str()));
     }
+    // Drop a QuickJS synthetic <eval> frame at the bottom of the stack:
+    if (stack.size() >= 2 && stack.back().functionName == u"<eval>") {
+        stack.pop_back();
+    }
 }
 
 jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)

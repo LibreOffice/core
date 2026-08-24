@@ -668,12 +668,12 @@ window.L.Control.Extension = window.L.Control.extend({
 					'executescript ' +
 						msg.callId +
 						' ' +
-						msg.line +
+						(msg.line - 1) +
 						' ' +
 						msg.source.replace(/\n/g, '') +
-						'\n(' +
+						'\n(\n' +
 						msg.fn +
-						').apply(null, ' +
+						'\n).apply(null, ' +
 						JSON.stringify(msg.args || []) +
 						');',
 				);
