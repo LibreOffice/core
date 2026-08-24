@@ -31,43 +31,43 @@ extern "C" {
 */
 struct Registry_Api
 {
-    void        (REGISTRY_CALLTYPE *acquire)            (RegHandle);
-    void        (REGISTRY_CALLTYPE *release)            (RegHandle);
-    bool    (REGISTRY_CALLTYPE *isReadOnly)         (RegHandle);
-    RegError    (REGISTRY_CALLTYPE *openRootKey)        (RegHandle, RegKeyHandle*);
-    RegError    (REGISTRY_CALLTYPE *getName)            (RegHandle, rtl_uString**);
-    RegError    (REGISTRY_CALLTYPE *createRegistry)     (rtl_uString*, RegHandle*);
-    RegError    (REGISTRY_CALLTYPE *openRegistry)       (rtl_uString*, RegHandle*, RegAccessMode);
-    RegError    (REGISTRY_CALLTYPE *closeRegistry)      (RegHandle);
-    RegError    (REGISTRY_CALLTYPE *destroyRegistry)    (RegHandle, rtl_uString*);
-    void        (REGISTRY_CALLTYPE *acquireKey)         (RegKeyHandle);
-    void        (REGISTRY_CALLTYPE *releaseKey)         (RegKeyHandle);
-    bool    (REGISTRY_CALLTYPE *isKeyReadOnly)      (RegKeyHandle);
-    RegError    (REGISTRY_CALLTYPE *getKeyName)         (RegKeyHandle, rtl_uString**);
-    RegError    (REGISTRY_CALLTYPE *createKey)          (RegKeyHandle, rtl_uString*, RegKeyHandle*);
-    RegError    (REGISTRY_CALLTYPE *openKey)            (RegKeyHandle, rtl_uString*, RegKeyHandle*);
-    RegError    (REGISTRY_CALLTYPE *openSubKeys)        (RegKeyHandle, rtl_uString*, RegKeyHandle**, sal_uInt32*);
-    RegError    (REGISTRY_CALLTYPE *closeSubKeys)       (RegKeyHandle*, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *deleteKey)          (RegKeyHandle, rtl_uString*);
-    RegError    (REGISTRY_CALLTYPE *closeKey)           (RegKeyHandle);
-    RegError    (REGISTRY_CALLTYPE *setValue)           (RegKeyHandle, rtl_uString*, RegValueType, RegValue, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *setLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32 const *, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *setStringListValue) (RegKeyHandle, rtl_uString*, char**, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *setUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode**, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *getValueInfo)       (RegKeyHandle, rtl_uString*, RegValueType*, sal_uInt32*);
-    RegError    (REGISTRY_CALLTYPE *getValue)           (RegKeyHandle, rtl_uString*, RegValue);
-    RegError    (REGISTRY_CALLTYPE *getLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32**, sal_uInt32*);
-    RegError    (REGISTRY_CALLTYPE *getStringListValue) (RegKeyHandle, rtl_uString*, char***, sal_uInt32*);
-    RegError    (REGISTRY_CALLTYPE *getUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
-    RegError    (REGISTRY_CALLTYPE *freeValueList)      (RegValueType, RegValue, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *getResolvedKeyName) (RegKeyHandle, rtl_uString*, bool, rtl_uString**);
-    RegError    (REGISTRY_CALLTYPE *getKeyNames)        (RegKeyHandle, rtl_uString*, rtl_uString***, sal_uInt32*);
-    RegError    (REGISTRY_CALLTYPE *freeKeyNames)       (rtl_uString**, sal_uInt32);
+    void        (*acquire)            (RegHandle);
+    void        (*release)            (RegHandle);
+    bool    (*isReadOnly)         (RegHandle);
+    RegError    (*openRootKey)        (RegHandle, RegKeyHandle*);
+    RegError    (*getName)            (RegHandle, rtl_uString**);
+    RegError    (*createRegistry)     (rtl_uString*, RegHandle*);
+    RegError    (*openRegistry)       (rtl_uString*, RegHandle*, RegAccessMode);
+    RegError    (*closeRegistry)      (RegHandle);
+    RegError    (*destroyRegistry)    (RegHandle, rtl_uString*);
+    void        (*acquireKey)         (RegKeyHandle);
+    void        (*releaseKey)         (RegKeyHandle);
+    bool    (*isKeyReadOnly)      (RegKeyHandle);
+    RegError    (*getKeyName)         (RegKeyHandle, rtl_uString**);
+    RegError    (*createKey)          (RegKeyHandle, rtl_uString*, RegKeyHandle*);
+    RegError    (*openKey)            (RegKeyHandle, rtl_uString*, RegKeyHandle*);
+    RegError    (*openSubKeys)        (RegKeyHandle, rtl_uString*, RegKeyHandle**, sal_uInt32*);
+    RegError    (*closeSubKeys)       (RegKeyHandle*, sal_uInt32);
+    RegError    (*deleteKey)          (RegKeyHandle, rtl_uString*);
+    RegError    (*closeKey)           (RegKeyHandle);
+    RegError    (*setValue)           (RegKeyHandle, rtl_uString*, RegValueType, RegValue, sal_uInt32);
+    RegError    (*setLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32 const *, sal_uInt32);
+    RegError    (*setStringListValue) (RegKeyHandle, rtl_uString*, char**, sal_uInt32);
+    RegError    (*setUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode**, sal_uInt32);
+    RegError    (*getValueInfo)       (RegKeyHandle, rtl_uString*, RegValueType*, sal_uInt32*);
+    RegError    (*getValue)           (RegKeyHandle, rtl_uString*, RegValue);
+    RegError    (*getLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32**, sal_uInt32*);
+    RegError    (*getStringListValue) (RegKeyHandle, rtl_uString*, char***, sal_uInt32*);
+    RegError    (*getUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
+    RegError    (*freeValueList)      (RegValueType, RegValue, sal_uInt32);
+    RegError    (*getResolvedKeyName) (RegKeyHandle, rtl_uString*, bool, rtl_uString**);
+    RegError    (*getKeyNames)        (RegKeyHandle, rtl_uString*, rtl_uString***, sal_uInt32*);
+    RegError    (*freeKeyNames)       (rtl_uString**, sal_uInt32);
 };
 
 /** the API initialization function.
 */
-REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api();
+REG_DLLPUBLIC Registry_Api* initRegistry_Api();
 
 }
 

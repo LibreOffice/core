@@ -30,7 +30,7 @@
 
 extern "C" {
 
-static void REGISTRY_CALLTYPE acquire(RegHandle hReg)
+static void acquire(RegHandle hReg)
 {
     ORegistry* pReg = static_cast<ORegistry*>(hReg);
 
@@ -38,7 +38,7 @@ static void REGISTRY_CALLTYPE acquire(RegHandle hReg)
         pReg->acquire();
 }
 
-static void REGISTRY_CALLTYPE release(RegHandle hReg)
+static void release(RegHandle hReg)
 {
     ORegistry* pReg = static_cast<ORegistry*>(hReg);
 
@@ -49,7 +49,7 @@ static void REGISTRY_CALLTYPE release(RegHandle hReg)
     }
 }
 
-static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
+static RegError getName(RegHandle hReg, rtl_uString** pName)
 {
     if (hReg)
     {
@@ -69,7 +69,7 @@ static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
     return RegError::INVALID_REGISTRY;
 }
 
-static bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
+static bool isReadOnly(RegHandle hReg)
 {
     if (hReg)
         return static_cast<ORegistry*>(hReg)->isReadOnly();
@@ -77,7 +77,7 @@ static bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
         return false;
 }
 
-static RegError REGISTRY_CALLTYPE createRegistry(rtl_uString* registryName,
+static RegError createRegistry(rtl_uString* registryName,
                                                  RegHandle* phRegistry)
 {
     RegError ret;
@@ -95,7 +95,7 @@ static RegError REGISTRY_CALLTYPE createRegistry(rtl_uString* registryName,
     return RegError::NO_ERROR;
 }
 
-static RegError REGISTRY_CALLTYPE openRootKey(RegHandle hReg,
+static RegError openRootKey(RegHandle hReg,
                                               RegKeyHandle* phRootKey)
 {
     ORegistry* pReg;
@@ -116,7 +116,7 @@ static RegError REGISTRY_CALLTYPE openRootKey(RegHandle hReg,
     return RegError::NO_ERROR;
 }
 
-static RegError REGISTRY_CALLTYPE openRegistry(rtl_uString* registryName,
+static RegError openRegistry(rtl_uString* registryName,
                                                RegHandle* phRegistry,
                                                RegAccessMode accessMode)
 {
@@ -136,7 +136,7 @@ static RegError REGISTRY_CALLTYPE openRegistry(rtl_uString* registryName,
     return RegError::NO_ERROR;
 }
 
-static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
+static RegError closeRegistry(RegHandle hReg)
 {
     if (hReg)
     {
@@ -160,7 +160,7 @@ static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
     }
 }
 
-static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
+static RegError destroyRegistry(RegHandle hReg,
                                                   rtl_uString* registryName)
 {
     if (hReg)
@@ -188,7 +188,7 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
 
 //  dumpRegistry
 
-static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
+static RegError dumpRegistry(RegHandle hReg,
                                                RegKeyHandle hKey)
 {
     ORegistry* pReg = static_cast< ORegistry* >(hReg);
@@ -208,7 +208,7 @@ static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
     return pReg->dumpRegistry(hKey);
 }
 
-Registry_Api* REGISTRY_CALLTYPE initRegistry_Api()
+Registry_Api* initRegistry_Api()
 {
     static Registry_Api aApi= {&acquire,
                                &release,
@@ -248,13 +248,13 @@ Registry_Api* REGISTRY_CALLTYPE initRegistry_Api()
 
 }
 
-RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
+RegError reg_openRootKey(RegHandle hRegistry,
                                           RegKeyHandle* phRootKey)
 {
     return openRootKey(hRegistry, phRootKey);
 }
 
-RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
+RegError reg_openRegistry(rtl_uString* registryName,
                                             RegHandle* phRegistry)
 {
     RegError _ret;
@@ -272,7 +272,7 @@ RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
     return RegError::NO_ERROR;
 }
 
-RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
+RegError reg_closeRegistry(RegHandle hRegistry)
 {
     if (hRegistry)
     {
@@ -285,7 +285,7 @@ RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
     }
 }
 
-RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey)
+RegError reg_dumpRegistry(RegKeyHandle hKey)
 {
     ORegKey *pKey;
 

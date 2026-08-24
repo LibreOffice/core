@@ -43,7 +43,4 @@ public:
     }
 };
 
-/// specifies the calling convention for type reader/writer api
-#define TYPEREG_CALLTYPE SAL_CALL
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

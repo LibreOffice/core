@@ -33,7 +33,7 @@
                      reg_closeKey. If the function fails, phNewKey is NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
+REG_DLLPUBLIC RegError reg_openKey(RegKeyHandle hKey,
                                          rtl_uString* keyName,
                                          RegKeyHandle* phOpenKey);
 
@@ -44,7 +44,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
                  The memory of the variable specifying the key will be freed.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
+REG_DLLPUBLIC RegError reg_closeKey(RegKeyHandle hKey);
 
 
 /** This function opens the root key of a registry.
@@ -53,7 +53,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
     @param  phRootKey points to a handle of the open root key if the function succeeds otherwise NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
+REG_DLLPUBLIC RegError reg_openRootKey(RegHandle hRegistry,
                                              RegKeyHandle* phRootKey);
 
 
@@ -63,7 +63,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
     @param  phRegistry points to a handle of the opened registry if the function succeeds otherwise NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
+REG_DLLPUBLIC RegError reg_openRegistry(rtl_uString* registryName,
                                                RegHandle* phRegistry);
 
 
@@ -72,7 +72,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryN
     @param  hRegistry identifies a currently open registry which should be closed.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry);
+REG_DLLPUBLIC RegError reg_closeRegistry(RegHandle hRegistry);
 
 
 /** This function reports the complete registry information of a key and all of its subkeys.
@@ -82,6 +82,6 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry);
     @param  hKey identifies a currently open key which content will be reported.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey);
+REG_DLLPUBLIC RegError reg_dumpRegistry(RegKeyHandle hKey);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
