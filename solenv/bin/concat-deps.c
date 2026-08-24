@@ -447,7 +447,7 @@ static struct hash* hash_create(unsigned int size)
         size += (size >> 2) + 1; /* ~ 75% load factor */
         if(size >= 15)
         {
-            hash->size = (((unsigned int)0xFFFFFFFF) >> clz((unsigned int)size));
+            hash->size = (((unsigned int)0xFFFFFFFF) >> clz(size));
         }
         else
         {
