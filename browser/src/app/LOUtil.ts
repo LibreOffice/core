@@ -696,6 +696,7 @@ class LOUtil {
 			open: 'formularesfapopen',
 			'exportas-pdf': 'exportpdf',
 			'exportas-epub': 'exportepub',
+			'exportas-md': 'downloadas-md',
 			'fullscreen-drawing': 'presentation',
 			endnotedialog: 'footnotedialog',
 			updateallindexes: 'insertmultiindex',
