@@ -1,6 +1,6 @@
 /* -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*****************************************************************************
- * RemoteControlWrapper.h
+ * AppleRemote.h
  * RemoteControlWrapper
  *
  * Created by Martin Kahr on 11.03.06 under a MIT-style license.
