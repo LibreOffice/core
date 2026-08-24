@@ -69,8 +69,8 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURL(
 
 /** appends a relative path to a url.
 
-    This is the same as makeURL, but the relative Path must me a segment
-    of an system path.
+    This is the same as makeURL, but the relative Path must be a segment
+    of a system path.
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURLAppendSysPathSegment(
     std::u16string_view baseURL, OUString const & relPath );

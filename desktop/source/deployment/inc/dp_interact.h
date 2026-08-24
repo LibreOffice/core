@@ -92,7 +92,7 @@ inline void ProgressLevel::update( css::uno::Any const & status ) const
 
 
 
-/** @return true if ia handler is present and any selection has been chosen
+/** @return true if an interaction handler is present and any selection has been chosen
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool interactContinuation(
     css::uno::Any const & request,

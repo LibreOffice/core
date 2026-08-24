@@ -25,7 +25,7 @@ bool EApiInit();
 
 G_BEGIN_DECLS
 
-// This header defined all the API methods as
+// This header defines all the API methods as
 // function pointers instead of real functions
 // this will all evaporate as it is compiled generating
 // no symbol lookups or relocations, but giving code
