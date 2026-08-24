@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// stdafx1.cpp : source file that includes just the standard includes
-//  stdafx1.pch will be the pre-compiled header
-//  stdafx1.obj will contain the pre-compiled type information
+// StdAfx2.cxx : source file that includes just the standard includes
+// StdAfx2.pch will be the pre-compiled header
+// StdAfx2.obj will contain the pre-compiled type information
 
 #include "StdAfx2.h"
 

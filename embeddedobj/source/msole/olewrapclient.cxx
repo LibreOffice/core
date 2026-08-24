@@ -22,7 +22,7 @@
 #include "olewrapclient.hxx"
 #include "olecomponent.hxx"
 
-// TODO: May be a mutex must be introduced
+// TODO: Maybe a mutex must be introduced
 
 OleWrapperClientSite::OleWrapperClientSite( OleComponent* pOleComp )
 : m_nRefCount( 0 )
@@ -70,7 +70,7 @@ STDMETHODIMP_(ULONG) OleWrapperClientSite::Release()
 
 void OleWrapperClientSite::disconnectOleComponent()
 {
-    // must not be called from the descructor of OleComponent!!!
+    // must not be called from the destructor of OleComponent!!!
     osl::MutexGuard aGuard( m_aMutex );
     m_pOleComp = nullptr;
 }

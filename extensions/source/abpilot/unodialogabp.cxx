@@ -94,8 +94,8 @@ namespace abp
         // -> call the execute method of the XExecutableDialog
         static_cast< XExecutableDialog* >( this )->execute();
 
-        // result interest not really ...
-        // We show this dialog one times only!
+        // result is not really interesting ...
+        // We show this dialog once only!
         // User has one chance to accept it or not.
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
