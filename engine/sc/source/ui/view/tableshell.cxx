@@ -91,92 +91,6 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
 
     const ScDBData* pDBData = GetTableDBDataAtCursor();
 
-    if (rReq.GetSlot() == SID_NEW_TABLE_STYLE)
-    {
-        // The command is reached only from the Table Design context, so a
-        // table is at the cursor. The dialog builds the style and hands it
-        // back; here we register it with the document and apply it to that
-        // table as one step. The dialog runs asynchronously, as the online
-        // client requires.
-        ScDocShell* pDocSh = rViewData.GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
-        if (pDBData && IsTableEditable(*pDBData) && rDoc.GetTableStyles())
-        {
-            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            VclPtr<AbstractScTableStyleDlg> pDlg(
-                pFact->CreateScTableStyleDlg(pTabViewShell->GetFrameWeld(), rDoc));
-            pDlg->StartExecuteAsync([pDlg, pDocSh](sal_Int32 nResult) {
-                if (nResult == RET_OK)
-                {
-                    if (std::unique_ptr<ScTableStyle> pStyle = pDlg->TakeStyle())
-                    {
-                        ScDocument& rCbDoc = pDocSh->GetDocument();
-                        if (ScTableStyles* pStyles = rCbDoc.GetTableStyles())
-                        {
-                            const OUString aStyleName = pStyle->GetName();
-                            pStyles->AddTableStyle(std::move(pStyle));
-                            pDocSh->SetDocumentModified();
-
-                            // Re-resolve the view rather than capturing it: apply
-                            // the new style only if the same document is still
-                            // shown and a table is at the cursor.
-                            ScTabViewShell* pView = ScTabViewShell::GetActiveViewShell();
-                            if (pView && pView->GetViewData().GetDocShell() == pDocSh)
-                            {
-                                ScViewData& rCbData = pView->GetViewData();
-                                const ScAddress aPos = rCbData.GetCurPos();
-                                const ScDBData* pTableData = rCbDoc.GetTableDBAtCursor(
-                                    aPos.Col(), aPos.Row(), aPos.Tab(), ScDBDataPortion::AREA);
-                                if (pTableData)
-                                {
-                                    ScDBData aNewDBData(*pTableData);
-                                    ScTableStyleParam aParam
-                                        = pTableData->GetTableStyleInfo()
-                                              ? *pTableData->GetTableStyleInfo()
-                                              : ScTableStyleParam();
-                                    aParam.maStyleID = aStyleName;
-                                    aNewDBData.SetTableStyleInfo(aParam);
-                                    ScDBDocFunc aFunc(*pDocSh);
-                                    aFunc.ModifyDBData(aNewDBData);
-                                }
-                            }
-                        }
-                    }
-                }
-                pDlg->disposeOnce();
-            });
-        }
-        return;
-    }
-
-    if (rReq.GetSlot() == SID_DUPLICATE_TABLE_STYLE)
-    {
-        // Copying a style registers a new document-level style and leaves every table
-        // as it is, so this works whether or not the cursor sits on a table.
-        if (!pSet)
-            return;
-        const SfxPoolItem* pItem = nullptr;
-        if (pSet->GetItemState(SID_DUPLICATE_TABLE_STYLE, true, &pItem) != SfxItemState::SET)
-            return;
-        const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
-        if (!pStrItem)
-            return;
-
-        ScDocShell* pDocSh = rViewData.GetDocShell();
-        ScTableStyles* pStyles = pDocSh->GetDocument().GetTableStyles();
-        if (!pStyles)
-            return;
-        const ScTableStyle* pSource = pStyles->GetTableStyle(pStrItem->GetValue());
-        if (!pSource)
-            return;
-
-        const OUString aUIName
-            = ScResId(STR_TABLE_STYLE_COPY_OF).replaceFirst("%1", pSource->GetUIName());
-        if (!pStyles->DuplicateTableStyle(pStrItem->GetValue(), aUIName).isEmpty())
-            pDocSh->SetDocumentModified();
-        return;
-    }
-
     if (pDBData && IsTableEditable(*pDBData))
     {
         switch (rReq.GetSlot())
@@ -210,6 +124,94 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
 
                 ScDBDocFunc aFunc(*rViewData.GetDocShell());
                 aFunc.ModifyDBData(aNewDBData);
+            }
+            break;
+            case SID_NEW_TABLE_STYLE:
+            {
+                // The dialog builds the style and hands it back; here we register it
+                // with the document and apply it to the table at the cursor as one
+                // step. The dialog runs asynchronously, as the online client requires.
+                ScDocShell* pDocSh = rViewData.GetDocShell();
+                ScDocument& rDoc = pDocSh->GetDocument();
+                if (rDoc.GetTableStyles())
+                {
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    VclPtr<AbstractScTableStyleDlg> pDlg(
+                        pFact->CreateScTableStyleDlg(pTabViewShell->GetFrameWeld(), rDoc));
+                    pDlg->StartExecuteAsync([pDlg, pDocSh](sal_Int32 nResult) {
+                        if (nResult == RET_OK)
+                        {
+                            if (std::unique_ptr<ScTableStyle> pStyle = pDlg->TakeStyle())
+                            {
+                                ScDocument& rCbDoc = pDocSh->GetDocument();
+                                if (ScTableStyles* pStyles = rCbDoc.GetTableStyles())
+                                {
+                                    const OUString aStyleName = pStyle->GetName();
+                                    pStyles->AddTableStyle(std::move(pStyle));
+                                    pDocSh->SetDocumentModified();
+
+                                    // Re-resolve the view rather than capturing it: apply
+                                    // the new style only if the same document is still
+                                    // shown and a table is at the cursor.
+                                    ScTabViewShell* pView = ScTabViewShell::GetActiveViewShell();
+                                    if (pView && pView->GetViewData().GetDocShell() == pDocSh)
+                                    {
+                                        ScViewData& rCbData = pView->GetViewData();
+                                        const ScAddress aPos = rCbData.GetCurPos();
+                                        const ScDBData* pTableData = rCbDoc.GetTableDBAtCursor(
+                                            aPos.Col(), aPos.Row(), aPos.Tab(),
+                                            ScDBDataPortion::AREA);
+                                        if (pTableData)
+                                        {
+                                            ScDBData aNewDBData(*pTableData);
+                                            ScTableStyleParam aParam
+                                                = pTableData->GetTableStyleInfo()
+                                                      ? *pTableData->GetTableStyleInfo()
+                                                      : ScTableStyleParam();
+                                            aParam.maStyleID = aStyleName;
+                                            aNewDBData.SetTableStyleInfo(aParam);
+                                            ScDBDocFunc aFunc(*pDocSh);
+                                            aFunc.ModifyDBData(aNewDBData);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        pDlg->disposeOnce();
+                    });
+                }
+                return;
+            }
+            case SID_DUPLICATE_TABLE_STYLE:
+            {
+                // Copying a style registers a new document-level style and leaves every
+                // table as it is. The command is only reachable from the table context.
+                // TODO: MSO offers copying a style from the Home gallery, with no
+                // table at the cursor. Move this and SID_SET_DEFAULT_TABLE_STYLE to a
+                // shell that is always active, as SID_INSERT_CALCTABLE is on
+                // ScCellShell, once the gallery is offered outside the table context.
+                if (!pSet)
+                    break;
+                const SfxPoolItem* pItem = nullptr;
+                if (pSet->GetItemState(SID_DUPLICATE_TABLE_STYLE, true, &pItem)
+                    != SfxItemState::SET)
+                    break;
+                const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
+                if (!pStrItem)
+                    break;
+
+                ScDocShell* pDocSh = rViewData.GetDocShell();
+                ScTableStyles* pStyles = pDocSh->GetDocument().GetTableStyles();
+                if (!pStyles)
+                    break;
+                const ScTableStyle* pSource = pStyles->GetTableStyle(pStrItem->GetValue());
+                if (!pSource)
+                    break;
+
+                const OUString aUIName
+                    = ScResId(STR_TABLE_STYLE_COPY_OF).replaceFirst("%1", pSource->GetUIName());
+                if (!pStyles->DuplicateTableStyle(pStrItem->GetValue(), aUIName).isEmpty())
+                    pDocSh->SetDocumentModified();
             }
             break;
             case SID_CLEAR_TABLE_STYLE:
@@ -400,20 +402,12 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                     rSet.Put(SfxStringItem(nWhich, pStyles->GetDefaultStyleName()));
             }
             break;
-            case SID_DUPLICATE_TABLE_STYLE:
-            {
-                // Copying a style only adds a document-level style, so it needs no
-                // table at the cursor, only somewhere to copy from.
-                ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
-                if (!rDoc.GetTableStyles())
-                    rSet.DisableItem(nWhich);
-            }
-            break;
             case SID_NEW_TABLE_STYLE:
             case SID_CLEAR_TABLE_STYLE:
+            case SID_DUPLICATE_TABLE_STYLE:
             {
-                // Creating or clearing a style acts on the table at the cursor,
-                // so both need an editable table to be there.
+                // Every one of these is only offered from the table context, so all
+                // three need an editable table to be at the cursor.
                 ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
                 if (!pDBData || bProtected || !rDoc.GetTableStyles())
                     rSet.DisableItem(nWhich);
