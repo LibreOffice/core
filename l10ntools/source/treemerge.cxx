@@ -25,7 +25,7 @@
 
 namespace
 {
-    // Extract strings from nodes on all level recursively
+    // Extract strings from nodes on all levels recursively
     void lcl_ExtractLevel(
         const xmlDocPtr pSource, const xmlNodePtr pRoot,
         const xmlChar* pNodeName, PoOfstream& rPOStream )
@@ -87,7 +87,7 @@ namespace
             OString::Concat(rXhpRoot) +
             sID.subView(sID.indexOf('/', nAfterSlash));
         xmlDocPtr pXhpFile = xmlParseFile( sXhpPath.getStr() );
-        // if xhpfile is missing than put this topic into comment
+        // if xhpfile is missing then put this topic into comment
         if ( !pXhpFile )
         {
             xmlNodePtr pTemp = pReturn;
@@ -235,7 +235,7 @@ void TreeParser::Extract( const OString& rPOFile )
     if( !aPOStream.isOpen() )
     {
         std::cerr
-            << "Treex error: Cannot open po file for extract: "
+            << "Treex error: Cannot open po file for extraction: "
             << rPOFile << std::endl;
         return;
     }

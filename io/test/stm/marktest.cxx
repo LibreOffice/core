@@ -235,7 +235,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
         rOutput->writeBytes( seqWrite );
     }
 
-    ERROR_ASSERT( 0 == rInput->available() , "bytes available though mark is holded" );
+    ERROR_ASSERT( 0 == rInput->available() , "bytes available though mark is held" );
 
     ERROR_ASSERT( nMax*seqWrite.getLength() == rMarkable->offsetToMark( nMark ) ,
                                              "offsetToMark failure" );

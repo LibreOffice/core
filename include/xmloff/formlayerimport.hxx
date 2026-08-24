@@ -106,7 +106,7 @@ namespace xmloff
 
         /** sets the given number style on the given control
             @param _rxControlModel
-                the control model which's style is to be set
+                the control model whose style is to be set
             @param _rControlNumberStyleName
                 the style name for the control's number style
         */
@@ -118,7 +118,7 @@ namespace xmloff
         /** to be called when the document has been completely imported
 
             <p>For some documents (currently: only some spreadsheet documents) it's necessary
-            do to a post processing, since not all information from the file can be processed
+            to do post processing, since not all information from the file can be processed
             if the document is not completed, yet.</p>
         */
         SAL_DLLPRIVATE void documentDone( );
