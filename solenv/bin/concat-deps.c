@@ -543,7 +543,7 @@ static int hash_store(struct hash* hash, const char* key, int key_len)
 #ifdef HASH_STAT
     hash->stored += 1;
 #endif
-    hash_elem = (struct hash_elem*)hash->array[hashed];
+    hash_elem = hash->array[hashed];
     while(hash_elem && (hash_elem->key_len != key_len || compare_key(hash, hash_elem->key, key, key_len, &cost)))
     {
         hash_elem = hash_elem->next;
