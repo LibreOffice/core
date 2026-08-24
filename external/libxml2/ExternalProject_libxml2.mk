@@ -14,11 +14,11 @@ $(eval $(call gb_ExternalProject_register_targets,libxml2,\
 ))
 
 ifeq ($(OS),EMSCRIPTEN)
-$(call gb_ExternalProject_use_external_project,libxml2,icu)
+$(eval $(call gb_ExternalProject_use_external_project,libxml2,icu))
 endif
 
 ifeq ($(OS),WNT)
-$(call gb_ExternalProject_use_external_project,libxml2,icu)
+$(eval $(call gb_ExternalProject_use_external_project,libxml2,icu))
 
 $(eval $(call gb_ExternalProject_use_nmake,libxml2,build))
 
