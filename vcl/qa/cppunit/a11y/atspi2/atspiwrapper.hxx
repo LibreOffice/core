@@ -35,7 +35,7 @@
  *           one of the others below.
  *      - @c AtspiWrapperBase::invokeThrow(): like @c GObjectWrapperBase::invoke(), but for C calls
  *           that take a @c GError argument for throwing exceptions.  @c invokeThrow() will
- *           transform any C exception into a a C++ exception (@c css::uno::RuntimeException)
+ *           transform any C exception into a C++ exception (@c css::uno::RuntimeException)
  *      - @c AtspiWrapperBase::strInvoke(): like @c AtspiWrapperBase::invokeThrow(), but manages a
  *           C string (@c char*) return value as an @c std::string.  Use this for C calls returning
  *           a C string.
@@ -117,7 +117,7 @@ protected:
      * @brief Retrieves the string representation of an enumeration value
      * @param gt The @c GType for the enumeration
      * @param value The enumeration value for which to get the name for
-     * @param fallback Fallback value in case @p values falls outside the enumeration
+     * @param fallback Fallback value in case @p value falls outside the enumeration
      * @returns A string representing @p value
      */
     static std::string glibEnumValueName(GType gt, gint value,

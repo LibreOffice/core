@@ -105,7 +105,7 @@ namespace xmloff
 
             <p>You need at least two pre-requisites from outside: The control to be exported needs to have a class id
             assigned, and you need the list control-ids of all the controls referring to this one as LabelControl.<br/>
-            This information can't be collected when known only the control itself and not it's complete context.</p>
+            This information can't be collected when known only the control itself and not its complete context.</p>
 
             @param _rControlId
                 the control id to use when exporting the control

@@ -390,11 +390,11 @@ private:
         css::uno::Reference< css::beans::XPropertySet> & xField);
 
 
-    /// get field ID from XTextField (and it's Property-Set)
+    /// get field ID from XTextField (and its Property-Set)
     static enum FieldIdEnum GetFieldID(const css::uno::Reference < css::text::XTextField > & rTextField,
                           const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
-    /// get field ID from XTextField service name (and it's PropertySet)
+    /// get field ID from XTextField service name (and its PropertySet)
     static enum FieldIdEnum MapFieldName(std::u16string_view sFieldName,
                             const css::uno::Reference < css::beans::XPropertySet> & xPropSet);
 
