@@ -83,7 +83,7 @@ typedef enum
     LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1ULL << 1),
 
     /**
-     * Request to have the part number as an 5th value in the
+     * Request to have the part number as a 5th value in the
      * LOK_CALLBACK_INVALIDATE_TILES payload.
      */
     LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1ULL << 2),
@@ -269,7 +269,7 @@ typedef enum
      * having to do an explicit lok::Document::getDocumentSize() call.
      *
      * A size change is always preceded by a series of
-     * LOK_CALLBACK_INVALIDATE_TILES events invalidating any areas
+     * LOK_CALLBACK_INVALIDATE_TILES events invalidating any areas that
      * need re-rendering to adapt.
      */
     LOK_CALLBACK_DOCUMENT_SIZE_CHANGED = 13,
@@ -594,7 +594,7 @@ typedef enum
      *      "unit": "..."
      *  }
      *
-     * Here all aproperties are same as described in svxruler.
+     * Here all properties are the same as described in svxruler.
      */
     LOK_CALLBACK_RULER_UPDATE = 35,
     /**
@@ -904,10 +904,10 @@ typedef enum
     /**
      * Some attribute of this view has changed, that will cause it
      * to completely re-render, eg. non-printing characters or
-     * or dark mode was toggled, and then distinct from other views.
+     * dark mode was toggled, and then distinct from other views.
      *
      * Payload is an opaque string that matches this set of states.
-     * this will be emitted after creating a new view.
+     * This will be emitted after creating a new view.
      */
     LOK_CALLBACK_VIEW_RENDER_STATE = 60,
 
@@ -1018,7 +1018,7 @@ typedef enum
 
     /**
      * Forwarding logs from core to client can be useful
-     * for keep track of the real core/client event sequence
+     * to keep track of the real core/client event sequence
      *
      * Payload is the log to be sent
      */
@@ -1054,7 +1054,7 @@ typedef enum
      *      "unit": "..."
      *  }
      *
-     * Here all aproperties are same as described in svxruler.
+     * Here all properties are the same as described in svxruler.
      */
     LOK_CALLBACK_VERTICAL_RULER_UPDATE = 73
 
@@ -1276,7 +1276,7 @@ typedef enum
     LOK_SETGRAPHICSELECTION_START,
     /**
      * A move or resize action stops. It is assumed that this is always used
-     * only after a LOK_SETTEXTSELECTION_START. The supplied coordinates are
+     * only after a LOK_SETGRAPHICSELECTION_START. The supplied coordinates are
      * the ones where the user released the screen.
      */
     LOK_SETGRAPHICSELECTION_END
