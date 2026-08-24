@@ -32,7 +32,7 @@ using namespace css;
 
 ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(
     weld::Window* pParent, cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& rData,
-    ScViewData& rViewData, ScRange& rRange)
+    ScViewData& rViewData, ScRange& rRange, std::optional<bool> oTableHasHeader)
     : weld::GenericDialogController(pParent, u"modules/scalc/ui/duplicaterecordsdlg.ui"_ustr,
                                     u"DuplicateRecordsDialog"_ustr)
     , m_xIncludesHeaders(m_xBuilder->weld_check_button(u"includesheaders"_ustr))
@@ -49,7 +49,7 @@ ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(
 {
     m_xCheckList->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xCheckList->connect_toggled(LINK(this, ScDuplicateRecordsDlg, RecordsChkHdl));
-    Init();
+    Init(oTableHasHeader);
 }
 
 void ScDuplicateRecordsDlg::ImplDestroy()
@@ -139,7 +139,7 @@ void ScDuplicateRecordsDlg::InsertEntry(const OUString& rTxt, bool bToggle)
     m_xCheckList->set_text(nRow, rTxt, 0);
 }
 
-void ScDuplicateRecordsDlg::Init()
+void ScDuplicateRecordsDlg::Init(std::optional<bool> oTableHasHeader)
 {
     m_xIncludesHeaders->connect_toggled(LINK(this, ScDuplicateRecordsDlg, HeaderCkbHdl));
     m_xRadioRow->connect_toggled(LINK(this, ScDuplicateRecordsDlg, OrientationHdl));
@@ -153,7 +153,13 @@ void ScDuplicateRecordsDlg::Init()
 
     ScDBCollection* pDBColl = rDoc.GetDBCollection();
     const SCTAB nCurTab = mrViewData.CurrentTabForData();
-    if (pDBColl)
+    if (oTableHasHeader)
+    {
+        // A styled table resolved by the caller. Its range has the totals row
+        // trimmed off, so the exact-area lookup below cannot match it.
+        bIncludeHeaders = *oTableHasHeader;
+    }
+    else if (pDBColl)
     {
         ScDBData* pDBData
             = pDBColl->GetDBAtArea(nCurTab, mrRange.aStart.Col(), mrRange.aStart.Row(),

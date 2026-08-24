@@ -20,6 +20,7 @@
 #pragma once
 
 #include "viewdata.hxx"
+#include <optional>
 #include <vcl/weld.hxx>
 
 struct DuplicatesResponse
@@ -42,13 +43,14 @@ public:
     ScDuplicateRecordsDlg() = delete;
     explicit ScDuplicateRecordsDlg(weld::Window* pParent,
                                    cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& rData,
-                                   ScViewData& rViewData, ScRange& aRange);
+                                   ScViewData& rViewData, ScRange& aRange,
+                                   std::optional<bool> oTableHasHeader = std::nullopt);
     virtual ~ScDuplicateRecordsDlg() override;
 
     const DuplicatesResponse& GetDialogData() { return maResponse; };
 
 private:
-    void Init();
+    void Init(std::optional<bool> oTableHasHeader);
     void SetDialogData(bool bToggle);
     void SetDialogLabels();
     std::unique_ptr<weld::CheckButton> m_xIncludesHeaders;

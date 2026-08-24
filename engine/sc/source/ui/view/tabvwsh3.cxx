@@ -978,7 +978,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                                 xCellRangeData->getDataArray());
 
                         auto pDlg = std::make_shared<ScDuplicateRecordsDlg>(
-                                GetFrameWeld(), *pDataArray, GetViewData(), *pRange);
+                                GetFrameWeld(), *pDataArray, GetViewData(), *pRange,
+                                pTableDBData ? std::optional<bool>(pTableDBData->HasHeader())
+                                             : std::nullopt);
 
                         const bool bWasTable = pTableDBData != nullptr;
 
