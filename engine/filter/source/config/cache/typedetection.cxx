@@ -44,6 +44,8 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <utility>
 
 #define DEBUG_TYPE_DETECTION 0
@@ -751,6 +753,23 @@ void TypeDetection::impl_getPreselectionForDocumentService(
     }
 }
 
+bool TypeDetection::impl_isExoticFilter(std::unique_lock<std::mutex>& /*rGuard*/, const OUString& rFilterName)
+{
+    CacheItem aFilter;
+    try
+    {
+        aFilter = GetTheFilterCache().getItem(FilterCache::E_FILTER, rFilterName);
+    }
+    catch (const container::NoSuchElementException&)
+    {
+        return false;
+    }
+
+    sal_Int32 nFlags = 0;
+    aFilter[PROPNAME_FLAGS] >>= nFlags;
+    return bool(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::EXOTIC);
+}
+
 OUString TypeDetection::impl_getTypeFromFilter(std::unique_lock<std::mutex>& /*rGuard*/, const OUString& rFilterName)
 {
     CacheItem aFilter;
@@ -787,9 +806,18 @@ void TypeDetection::impl_getAllFormatTypes(
         return;
     }
 
+    // With LoadExoticFileFormats at 0 an exotic format never loads, so the content of a file
+    // decides nothing about it. A file name that carries its extension still reaches it, through
+    // the types collected from the URL below.
+    const bool bSkipExotic
+        = officecfg::Office::Common::Security::LoadExoticFileFormats::get() == 0;
+
     // Retrieve the default type for each of these filters, and store them.
     for (auto const& filterName : aFilterNames)
     {
+        if (bSkipExotic && impl_isExoticFilter(rGuard, filterName))
+            continue;
+
         OUString aType = impl_getTypeFromFilter(rGuard, filterName);
 
         if (aType.isEmpty())

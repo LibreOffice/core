@@ -78,6 +78,8 @@ private:
         std::unique_lock<std::mutex>& rGuard,
         const OUString& sPreSelDocumentService, const css::util::URL& aParsedURL, FlatDetection& rFlatTypes);
 
+    static bool impl_isExoticFilter(std::unique_lock<std::mutex>& rGuard, const OUString& rFilterName);
+
     static OUString impl_getTypeFromFilter(std::unique_lock<std::mutex>& rGuard, const OUString& rFilterName);
 
     /**

@@ -249,6 +249,22 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf163295)
     CPPUNIT_ASSERT_EQUAL(u"generic_Text"_ustr, detection);
 }
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testExoticFormatsOffKeepsTextAsText)
+{
+    // A text file whose name carries no known extension opens as text when the exotic formats are
+    // switched off. Its em dashes are two 0xE2 bytes, which the WordPerfect 4.2 guess reads as a
+    // pair of function groups.
+    ScopedConfigValue<officecfg::Office::Common::Security::LoadExoticFileFormats> aCfg(sal_Int32(0));
+
+    auto xDetection(comphelper::getProcessServiceFactory()
+                        ->createInstance(u"com.sun.star.document.TypeDetection"_ustr)
+                        .queryThrow<document::XTypeDetection>());
+    OUString url = createFileURL(u"text_with_em_dashes.tpl");
+    cpo::uno::Sequence mediaDescriptor{ comphelper::makePropertyValue(u"URL"_ustr, url) };
+    OUString detection = xDetection->queryTypeByDescriptor(mediaDescriptor, true);
+    CPPUNIT_ASSERT_EQUAL(u"generic_Text"_ustr, detection);
+}
+
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testMarkdownDetect)
 {
     uno::Reference<document::XExtendedFilterDetection> xDetect(
