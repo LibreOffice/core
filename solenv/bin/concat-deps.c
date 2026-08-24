@@ -914,7 +914,6 @@ static int process(struct hash* dep_hash, const char* fn)
     char* cursor;
     char* cursor_out;
     char* base;
-    char* created_line = NULL;
     const char* src_relative;
     int continuation = 0;
     char last_ns = 0;
@@ -1039,6 +1038,7 @@ static int process(struct hash* dep_hash, const char* fn)
         {
             if(strncmp(fn+work_dir_len, "/Dep/", 5) == 0)
             {
+                char* created_line = NULL;
                 src_relative = fn+work_dir_len+5;
                 // cases ordered by frequency
                 if(strncmp(src_relative, "CxxObject/", 10) == 0)
@@ -1115,10 +1115,11 @@ static int process(struct hash* dep_hash, const char* fn)
                 {
                     fprintf(stderr, "no magic for %s(%s) in %s\n", fn, src_relative, work_dir);
                 }
-            }
-            if(!rc)
-            {
-                puts(created_line);
+
+                if (!rc)
+                {
+                    puts(created_line);
+                }
             }
         }
     }
