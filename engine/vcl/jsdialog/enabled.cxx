@@ -213,6 +213,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/samplingdialog.ui" },
         { u"modules/scalc/ui/selectsource.ui" },
         { u"modules/scalc/ui/sheetprintpage.ui" },
+        { u"modules/scalc/ui/showchangesdialog.ui" },
         { u"modules/scalc/ui/simplerefdialog.ui" },
         { u"modules/scalc/ui/solverdlg.ui" },
         { u"modules/scalc/ui/solveroptionsdialog.ui" },

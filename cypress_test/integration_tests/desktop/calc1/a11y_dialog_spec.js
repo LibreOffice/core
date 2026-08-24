@@ -232,6 +232,20 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         cy.cGet('#spreadsheet-tab0').click();
     });
 
+    it('Show Changes dialog', function () {
+        // .uno:ShowChanges is disabled until change tracking has recorded at
+        // least one change, so turn recording on first.
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:TraceChangeMode?TraceChangeMode:bool=true');
+        });
+
+        a11yHelper.testDialog(win, '.uno:ShowChanges');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:TraceChangeMode?TraceChangeMode:bool=false');
+        });
+    });
+
     it('Hatch Add name dialog and duplicate warning', function () {
         // The shared traverseTabs lbhatch handler covers this for writer but
         // doesn't fire here, so trigger the cui/ui/namedialog.ui +
