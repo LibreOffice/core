@@ -1508,14 +1508,11 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xM
 
     if (!comphelper::COKit::isActive() && !( m_nStoreMode & EXPORT_REQUESTED ) && SfxViewShell::Current() )
     {
-        SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
-
         // if it is no export, warn user that the signature will be removed
-        if (  !pDocShell->IsRememberingSignature()
-           && (SignatureState::OK == nDocumentSignatureState
+        if (   SignatureState::OK == nDocumentSignatureState
            || SignatureState::INVALID == nDocumentSignatureState
            || SignatureState::NOTVALIDATED == nDocumentSignatureState
-           || SignatureState::PARTIAL_OK == nDocumentSignatureState) )
+           || SignatureState::PARTIAL_OK == nDocumentSignatureState)
         {
             std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(SfxStoringHelper::GetModelWindow(xModel),
                                                              VclMessageType::Question, VclButtonsType::YesNo, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE)));

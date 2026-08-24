@@ -1290,9 +1290,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
             }
 
-            if (nId == SID_SAVEDOC && bRememberSignature && rSignatureInfosRemembered.hasElements())
-                ResignDocument(rSignatureInfosRemembered);
-
             rReq.SetReturnValue( SfxBoolItem(0, nErrorCode == ERRCODE_NONE ) );
 
             ResetError();
@@ -1610,10 +1607,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         aInfobarType = InfobarType::DANGER;
                         break;
                     case SignatureState::INVALID:
-                        // If we are remembering the certificates, it should be kept as valid
-                        sMessage = SfxResId(bRememberSignature ? STR_SIGNATURE_OK : STR_SIGNATURE_INVALID);
+                        sMessage = SfxResId(STR_SIGNATURE_INVALID);
                         // Warning only, I've tried Danger and it looked too scary
-                        aInfobarType = ( bRememberSignature ? InfobarType::INFO : InfobarType::WARNING );
+                        aInfobarType = InfobarType::WARNING;
                         break;
                     case SignatureState::NOTVALIDATED:
                         sMessage = SfxResId(STR_SIGNATURE_NOTVALIDATED);
@@ -1997,20 +1993,6 @@ cpo::uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::Get
     return aResult;
 }
 
-void SfxObjectShell::SetRememberCurrentSignature(bool bRemember)
-{
-    if (bRemember)
-    {
-        rSignatureInfosRemembered = GetDocumentSignatureInformation(false);
-        bRememberSignature = true;
-    }
-    else
-    {
-        rSignatureInfosRemembered = cpo::uno::Sequence<security::DocumentSignatureInformation>();
-        bRememberSignature = false;
-    }
-}
-
 SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
 {
     SignatureState* pState = bScriptingContent ? &pImpl->nScriptingSignatureState : &pImpl->nDocumentSignatureState;
@@ -2062,15 +2044,11 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
         if (nVersion >= SvtSaveOptions::ODFSVER_012)
         {
             OUString sQuestion(bHasSign ? SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN) : SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN));
-            std::unique_ptr<weld::MessageDialog> xQuestion;
+            std::unique_ptr<weld::MessageDialog> xQuestion(
+                Application::CreateMessageDialog(pDialogParent,
+                    VclMessageType::Question, VclButtonsType::YesNo, sQuestion));
 
-            if (!bRememberSignature)
-            {
-                xQuestion = Application::CreateMessageDialog(pDialogParent,
-                                                           VclMessageType::Question, VclButtonsType::YesNo, sQuestion);
-            }
-
-            if ( bRememberSignature || ( xQuestion != nullptr && xQuestion->run() == RET_YES ) )
+            if ( xQuestion->run() == RET_YES )
             {
                 sal_uInt16 nId = SID_SAVEDOC;
                 if ( !GetMedium() || GetMedium()->GetName().isEmpty() )
@@ -2117,12 +2095,8 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
     }
 
     // the document is not modified currently, so it can not become modified after signing
-    pImpl->m_bAllowModifiedBackAfterSigning = false;
-    if ( IsEnableSetModified() || /*bRememberSignature == */true )
-    {
-        EnableSetModified( false );
-        pImpl->m_bAllowModifiedBackAfterSigning = true;
-    }
+    EnableSetModified( false );
+    pImpl->m_bAllowModifiedBackAfterSigning = true;
 
     // we have to store to the original document, the original medium should be closed for this time
     if ( ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
@@ -2154,8 +2128,7 @@ void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
     if ( bSignSuccess )
         RecheckSignature(bSignScriptingContent);
 
-    if ( pImpl->m_bAllowModifiedBackAfterSigning || /* bRememberSignature ==*/ true )
-        EnableSetModified();
+    EnableSetModified();
 }
 
 bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent, weld::Window* pDialogParent)
@@ -2248,25 +2221,6 @@ void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent, const std:
 
             rCallback(bSignSuccess);
     });
-}
-
-bool SfxObjectShell::ResignDocument(cpo::uno::Sequence< security::DocumentSignatureInformation >& rSignaturesInfo)
-{
-    bool bSignSuccess = true;
-
-    // This should be at most one element, automatic iteration to avoid pointing issues in case no signs
-    for (auto & rInfo : rSignaturesInfo)
-    {
-        auto xCert = rInfo.Signer;
-        if (xCert.is())
-        {
-            svl::crypto::SigningContext aSigningContext;
-            aSigningContext.m_xCertificate = std::move(xCert);
-            bSignSuccess &= SignDocumentContentUsingCertificate(aSigningContext);
-        }
-    }
-
-    return bSignSuccess;
 }
 
 bool SfxObjectShell::SignDocumentContentUsingCertificate(svl::crypto::SigningContext& rSigningContext)

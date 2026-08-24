@@ -197,7 +197,6 @@ private:
                                                   // false := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
-    bool                        bRememberSignature; // Do we want to remember the signature.
     bool                        bPendingLinkUpdateInfobar;
     std::vector<std::pair<cpo::uno::WeakReference<css::beans::XPropertySet>, OUString>>
                                 maDeferredFormControlImages;
@@ -209,8 +208,6 @@ private:
 
     SAL_DLLPRIVATE void UpdateTime_Impl(const css::uno::Reference<
         css::document::XDocumentProperties> & i_xDocProps);
-
-    cpo::uno::Sequence< css::security::DocumentSignatureInformation > rSignatureInfosRemembered;
 
     SAL_DLLPRIVATE bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
@@ -393,7 +390,6 @@ public:
         = css::uno::Reference<css::security::XDocumentDigitalSignatures>());
 
     bool SignDocumentContentUsingCertificate(svl::crypto::SigningContext& rSigningContext);
-    bool ResignDocument(cpo::uno::Sequence< css::security::DocumentSignatureInformation >& rSignaturesInfo);
 
     void SignSignatureLine(weld::Window* pDialogParent, const OUString& aSignatureLineId,
                            const css::uno::Reference<css::security::XCertificate>& xCert,
@@ -502,9 +498,6 @@ public:
 
     /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
     bool                        IsAvoidRecentDocs() const { return mbAvoidRecentDocs; }
-
-    bool                        IsRememberingSignature() const { return bRememberSignature; }
-    void                        SetRememberCurrentSignature(bool bRemember);
 
     /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
     void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }
