@@ -59,7 +59,7 @@ public:
 
     /**
        Registers a UNO object as being mapped by this bridge. The resulting
-       cli object is represents all interfaces of the UNO object. Therefore the
+       cli object represents all interfaces of the UNO object. Therefore the
        object can be registered only with its OID; a type is not necessary.
     */
     Object ^ registerInterface(Object ^ obj, System::String ^ oid);

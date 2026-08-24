@@ -68,7 +68,7 @@ public ref class  UnoInterfaceProxy: public srrp::RealProxy,
         to the number of elements in m_listIfaces.
     */
     int m_numUnoIfaces;
-    /** The list is filled with additional UnoInterfaceProxy object due
+    /** The list is filled with additional UnoInterfaceProxy objects due
         to aggregation via bridges.  Though the latter is strongly
         discouraged, this has to be supported.
     */
@@ -242,7 +242,7 @@ struct CliProxy: public uno_Interface
                                  typelib_TypeDescription const * TD,
                                  OUString const & usOid );
 
-    /** Prepares an array (m_arMethoInfos) containing MethodInfo object of the
+    /** Prepares an array (m_arMethodInfos) containing MethodInfo objects of the
         interface and all inherited interfaces. At index null is the first
         method of the base interface and at the last position is the last method
         of the furthest derived interface.
@@ -256,7 +256,7 @@ struct CliProxy: public uno_Interface
 
     /**Obtains a MethodInfo which can be used to invoke the cli object.
        Internally it maps nUnoFunctionPos to an index that is used to get the
-       corresponding MethodInfo object from m_arMethoInfos. The mapping table
+       corresponding MethodInfo object from m_arMethodInfos. The mapping table
        is dynamically initialized. If the cli interface has no base interface
        or exactly one then the mapping table is initialized in one go at the
        first call. In all ensuing calls the MethodInfo object is immediately
