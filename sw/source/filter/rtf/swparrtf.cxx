@@ -236,7 +236,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream& rStream)
         uno::Reference<io::XOutputStream> xOutputStream(
             new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
 
-        // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generate timeouts trying
+        // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generates timeouts trying
         // to export thousands of pages from minimal input size
         uno::Sequence<beans::PropertyValue> aFilterData(
             comphelper::InitPropertySequence({ { "PageRange", uno::Any(u"1-100"_ustr) } }));

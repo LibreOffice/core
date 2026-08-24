@@ -45,7 +45,7 @@ SwTwips SwIsoToxPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible
     SwIsoToxPortion* pThis = const_cast<SwIsoToxPortion*>(this);
-    // nViewWidth need to be calculated
+    // nViewWidth needs to be calculated
     if( !Width() && rInf.OnWin() &&
         !rInf.GetOpt().IsPagePreview() &&
             !rInf.GetOpt().IsReadonly() && rInf.GetOpt().IsFieldShadings()   )

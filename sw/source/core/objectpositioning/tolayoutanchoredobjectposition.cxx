@@ -64,7 +64,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
     // calculate 'vertical' position
     SwFormatVertOrient aVert( rFrameFormat.GetVertOrient() );
     {
-        // to-frame anchored objects are *only* vertical positioned centered or
+        // to-frame anchored objects are *only* vertically positioned centered or
         // bottom, if its wrap mode is 'through' and its anchor frame has fixed
         // size. Otherwise, it's positioned top.
         sal_Int16 eVertOrient = aVert.GetVertOrient();
@@ -218,7 +218,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         }
     } // end of determination of horizontal position
 
-    // keep calculate relative position
+    // keep calculated relative position
     maRelPos = aRelPos;
 }
 

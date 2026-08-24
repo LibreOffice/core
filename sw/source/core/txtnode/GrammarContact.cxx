@@ -112,7 +112,7 @@ SwGrammarMarkUp* GrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool bC
     }
     else
     {
-        pRet = rTextNode.GetGrammarCheck(); // do you have already a list?
+        pRet = rTextNode.GetGrammarCheck(); // do you already have a list?
         if( bCreate && !pRet ) // do you want to create a list?
         {
             pRet = new SwGrammarMarkUp();
@@ -137,7 +137,7 @@ void GrammarContact::finishGrammarCheck( const SwTextNode& rTextNode )
             m_aTimer.Start(); // will replace old list and repaint with delay
         }
         else if( m_pTextNode->GetGrammarCheck() )
-        {   // all grammar problems seems to be gone, no delay needed
+        {   // all grammar problems seem to be gone, no delay needed
             m_pTextNode->ClearGrammarCheck();
             SwTextFrame::repaintTextFrames( *m_pTextNode );
         }
