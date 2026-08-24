@@ -1007,6 +1007,10 @@ void ScTableStyles::ClearOOXMLDefaultStyles()
 
 void ScTableStyles::InvalidateBindings()
 {
+    // The style set just changed, so the gathered display names are stale and
+    // the next request for a free name gathers them again.
+    mbUINamesInUseValid = false;
+
     if (!mpDoc)
         return;
     // The style list belongs to the document, so every view of it is told, not just
@@ -1211,16 +1215,19 @@ OUString ScTableStyles::GetUnusedCustomStyleName() const
 
 OUString ScTableStyles::GetUnusedUIName(const OUString& rBaseName) const
 {
-    auto bIsTaken = [this](const OUString& rName) {
-        for (const ScTableStyle* pStyle : GetSortedTableStyles())
-        {
-            if (pStyle->GetUIName() == rName)
-                return true;
-        }
-        return false;
-    };
+    // Whether a name is free is a question of membership, not of order, so the names
+    // in use are gathered rather than sorted, and they are kept until the style set
+    // changes so repeated asking costs one lookup each.
+    if (!mbUINamesInUseValid)
+    {
+        maUINamesInUse.clear();
+        maUINamesInUse.reserve(maTableStyles.size());
+        for (const auto & [ rStyleName, pStyle ] : maTableStyles)
+            maUINamesInUse.insert(pStyle->GetUIName());
+        mbUINamesInUseValid = true;
+    }
 
-    if (!bIsTaken(rBaseName))
+    if (!maUINamesInUse.contains(rBaseName))
         return rBaseName;
 
     for (sal_Int32 nCandidate = 2;; ++nCandidate)
@@ -1230,7 +1237,7 @@ OUString ScTableStyles::GetUnusedUIName(const OUString& rBaseName) const
         OUString aName = ScResId(STR_TABLE_STYLE_NAME_NUMBERED)
                              .replaceFirst("%2", OUString::number(nCandidate))
                              .replaceFirst("%1", rBaseName);
-        if (!bIsTaken(aName))
+        if (!maUINamesInUse.contains(aName))
             return aName;
     }
 }

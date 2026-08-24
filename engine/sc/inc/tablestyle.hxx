@@ -10,6 +10,7 @@
 #pragma once
 
 #include <memory>
+#include <unordered_set>
 
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -137,6 +138,10 @@ private:
     void operator=(ScTableStyles&&) = delete;
 
     std::unordered_map<OUString, std::unique_ptr<ScTableStyle>> maTableStyles;
+    // The display names the styles answer to; a lazily filled cache. The valid flag
+    // is cleared whenever maTableStyles changes so the names are gathered again.
+    mutable std::unordered_set<OUString> maUINamesInUse;
+    mutable bool mbUINamesInUseValid = false;
 
     // Name of the style applied to newly inserted tables in this document.
     OUString maDefaultStyleName;
