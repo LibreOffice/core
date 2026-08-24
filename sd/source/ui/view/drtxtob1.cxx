@@ -237,7 +237,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 // the following code could be enabled, if I get a correct
                 // DontCare status from JOE.
 
-                // gets enabled, through it doesn't really work (see above)
+                // gets enabled, though it doesn't really work (see above)
                 SfxItemSet aEditAttr( mpView->GetDoc().GetPool() );
                 mpView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SfxItemState::DEFAULT )

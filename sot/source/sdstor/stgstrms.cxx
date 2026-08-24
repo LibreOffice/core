@@ -912,7 +912,7 @@ void* StgDataStrm::GetPtr( sal_Int32 Pos, bool bDirty )
 }
 
 // This could easily be adapted to a better algorithm by determining
-// the amount of consecutable blocks before doing a read. The result
+// the amount of consecutive blocks before doing a read. The result
 // is the number of bytes read. No error is generated on EOF.
 
 sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
@@ -1064,7 +1064,7 @@ void StgSmallStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 }
 
 // This could easily be adapted to a better algorithm by determining
-// the amount of consecutable blocks before doing a read. The result
+// the amount of consecutive blocks before doing a read. The result
 // is the number of bytes read. No error is generated on EOF.
 
 sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )

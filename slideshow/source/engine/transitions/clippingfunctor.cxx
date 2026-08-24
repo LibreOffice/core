@@ -42,11 +42,11 @@ namespace slideshow::internal
             ENSURE_OR_THROW( rPolygon,
                               "ClippingFunctor::ClippingFunctor(): Invalid parametric polygon" );
 
-            // maBackgroundRect serves as the minuent when
+            // maBackgroundRect serves as the minuend when
             // subtracting a given clip polygon from the
             // background. To speed up the clipper algo, avoid
             // actual intersections of the generated
-            // poly-polygon with the minuent - i.e. choose the
+            // poly-polygon with the minuend - i.e. choose the
             // polygon to subtract from sufficiently large.
 
             // blow up unit rect to (-1,-1),(2,2)

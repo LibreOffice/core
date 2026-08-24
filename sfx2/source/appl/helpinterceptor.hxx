@@ -41,7 +41,7 @@ private:
 friend class HelpDispatch_Impl;
 friend class SfxHelpWindow_Impl;
 
-    // the component which's dispatches we're intercepting
+    // the component whose dispatches we're intercepting
     css::uno::Reference< css::frame::XDispatchProviderInterception > m_xIntercepted;
 
     // chaining
