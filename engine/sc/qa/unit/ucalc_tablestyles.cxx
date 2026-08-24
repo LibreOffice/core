@@ -1742,6 +1742,43 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateHeader)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testCreateTableReusesDBRangeWithTotals)
+{
+    m_pDoc->InsertTab(0, u"Promote"_ustr);
+
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"Sales"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"Profit"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"d1"_ustr);
+    m_pDoc->SetString(ScAddress(0, 4, 0), u"Total"_ustr);
+
+    // A plain named range A1:B5 with a totals row and no table style.
+    ScDBData* pPlain = new ScDBData(u"MyRange"_ustr, 0, 0, 0, 1, 4,
+                                    /*bByRow*/ true, /*bHasHeader*/ true, /*bTotals*/ true);
+    CPPUNIT_ASSERT(
+        m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pPlain)));
+    const size_t nBefore = m_pDoc->GetDBCollection()->getNamedDBs().size();
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 1, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("reused, not a second range", nBefore,
+                                 m_pDoc->GetDBCollection()->getNamedDBs().size());
+
+    // The very same range object was promoted: still named MyRange, now styled,
+    // same extent, totals row intact.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the existing range was promoted", u"MyRange"_ustr,
+                                 pPlain->GetName());
+    CPPUNIT_ASSERT(pPlain->GetTableStyleInfo());
+    ScRange aArea;
+    pPlain->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 1, 4, 0), aArea);
+    CPPUNIT_ASSERT(pPlain->HasTotals());
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Creating a table whose header row holds a duplicate renames the duplicate in
 // place (Excel-style "A | B | A" -> "A | B | A2"); no row is inserted and the
 // data below is left exactly where it was.

@@ -72,6 +72,8 @@ public:
 
                     // DB range from Cursor
     SAL_RET_MAYBENULL ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = ScGetDBSelection::Keep);
+
+    void            MarkDBDataArea( const ScDBData& rData, bool bSetCursor = false );
     ScDBData*       GetAnonymousDBData();
 
     void            Consolidate( const ScConsolidateParam& rParam );

@@ -1219,9 +1219,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         }
         case AutoFilterMode::Custom:
         {
-            ScRange aRange;
-            pDBData->GetArea(aRange);
-            mrViewData.GetView()->MarkRange(aRange);
+            mrViewData.GetViewShell()->MarkDBDataArea(*pDBData);
             mrViewData.GetView()->SetCursor(rPos.Col(), rPos.Row());
             mrViewData.GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT | SfxCallMode::RECORD);
             return;

@@ -145,12 +145,18 @@ ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection e
         return nullptr;
 
     if (bMark)
-    {
-        ScRange aFound;
-        pData->GetArea(aFound);
-        MarkRange( aFound, false );
-    }
+        MarkDBDataArea( *pData );
     return pData;
+}
+
+void ScDBFunc::MarkDBDataArea( const ScDBData& rData, bool bSetCursor )
+{
+    ScRange aArea;
+    rData.GetArea(aArea);
+    // A totals row is a summary, not data: keep it out of the marked area.
+    if (rData.HasTotals() && aArea.aEnd.Row() > aArea.aStart.Row())
+        aArea.aEnd.IncRow(-1);
+    MarkRange( aArea, bSetCursor );
 }
 
 ScDBData* ScDBFunc::GetAnonymousDBData()

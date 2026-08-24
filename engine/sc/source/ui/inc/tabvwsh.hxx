@@ -284,6 +284,8 @@ public:
     SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
 
+    void MarkWholeDBRangeAtCursor();
+
     void HandleDuplicateRecordsHighlight(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
                                 const css::table::CellRangeAddress& aRange,
                                 bool bIncludesHeaders, bool bDuplicateRows,

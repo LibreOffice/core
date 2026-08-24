@@ -121,6 +121,16 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
    }
 }
 
+void ScTabViewShell::MarkWholeDBRangeAtCursor()
+{
+    if (const ScDBData* pData = GetDBData(false, SC_DB_OLD))
+    {
+        ScRange aArea;
+        pData->GetArea(aArea);
+        MarkRange(aArea, false);
+    }
+}
+
 std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogController(
                                 SfxBindings* pB, SfxChildWindow* pCW,
                                 SfxChildWinInfo* pInfo,
@@ -266,13 +276,13 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_DEFINE_DBNAME:
         {
             // when called for an existing range, then mark
-            GetDBData( true, SC_DB_OLD );
+            MarkWholeDBRangeAtCursor();
             xResult = std::make_shared<ScDbNameDlg>(pB, pCW, pParent, GetViewData());
             break;
         }
         case SID_INSERT_CALCTABLE:
         {
-            GetDBData(true, SC_DB_OLD);
+            MarkWholeDBRangeAtCursor();
             const ScMarkData& rMark = GetViewData().GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                 MarkDataArea( false );
@@ -360,9 +370,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 pDBData->ExtendDataArea(rDoc);
                 pDBData->GetQueryParam( aQueryParam );
 
-                ScRange aArea;
-                pDBData->GetArea(aArea);
-                MarkRange(aArea, false);
+                MarkDBDataArea(*pDBData);
 
                 aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &aQueryParam ) );
 
@@ -384,9 +392,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 pDBData->ExtendDataArea(rDoc);
                 pDBData->GetQueryParam( aQueryParam );
 
-                ScRange aArea;
-                pDBData->GetArea(aArea);
-                MarkRange(aArea, false);
+                MarkDBDataArea(*pDBData);
 
                 ScQueryItem aItem( SCITEM_QUERYDATA, &aQueryParam );
                 ScRange aAdvSource;
