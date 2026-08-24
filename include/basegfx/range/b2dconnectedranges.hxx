@@ -166,7 +166,7 @@ namespace basegfx
                                 aCurrAggregate->maComponentList );
 
                             // remove and delete aCurrAggregate entry
-                            // from list (we've gutted it's content
+                            // from list (we've gutted its content
                             // above). list::erase() will update our
                             // iterator with the predecessor here.
                             aCurrAggregate = maDisjunctAggregatesList.erase( aCurrAggregate );

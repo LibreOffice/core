@@ -1208,12 +1208,12 @@ public:
     }
 
     /**
-     * Start a UNO acceptor using the function pointers provides to read and write data to/from the acceptor.
+     * Start a UNO acceptor using the function pointers provided to read and write data to/from the acceptor.
      *
-     * @param pReceiveURPFromLOContext A pointer that will be passed to your fnRecieveURPFromLO function
+     * @param pReceiveURPFromLOContext A pointer that will be passed to your fnReceiveURPFromLO function
      * @param pSendURPToLOContext A pointer that will be passed to your fnSendURPToLO function
      * @param fnReceiveURPFromLO A function pointer that LO should use to pass URP back to the caller
-     * @param fnSendURPToLO A function pointer pointer that the caller should use to pass URP to LO
+     * @param fnSendURPToLO A function pointer that the caller should use to pass URP to LO
      */
     void* startURP(void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
                    int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),

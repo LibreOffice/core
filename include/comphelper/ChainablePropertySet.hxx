@@ -40,7 +40,7 @@ namespace comphelper
  *
  * 1. It implements both the PropertySet and MultiPropertySet interfaces.
  * 2. It can be 'included' in a MasterPropertySet to seamlessly appear as if
- *    if it's properties were in the master.
+ *    its properties were in the master.
  *
  * To be used as a base class for PropertySets, the subclass must implement
  * the 6 protected pure virtual functions. If a mutex is passed to the
