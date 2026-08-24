@@ -16,6 +16,7 @@ mocha_tests/workdir/
 duplication.log
 
 _site
+/admin-templates/
 dist/*.js
 dist/*.map
 dist/branding.css

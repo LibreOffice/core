@@ -1672,6 +1672,7 @@ clean-local:
 	@rm -rf $(DIST_FOLDER)
 	@rm -rf $(INTERMEDIATE_DIR)
 	@rm -rf $(TYPESCRIPT_JS_DIR)
+	@rm -rf $(ADMIN_TEMPLATE_FOLDER)
 	@rm -rf node_modules
 	@rm -f package-lock.json
 	@rm -f $(abs_srcdir)/jsconfig.json
