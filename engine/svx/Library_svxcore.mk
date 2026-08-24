@@ -424,6 +424,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/table/tablemodel \
     svx/source/table/tablerow \
     svx/source/table/tablerows \
+    svx/source/table/TableStylePreviewPaint \
     svx/source/table/tableundo \
     svx/source/table/viewcontactoftableobj \
     svx/source/theme/ThemeColorChangerCommon \
