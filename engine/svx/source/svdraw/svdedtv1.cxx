@@ -73,6 +73,8 @@
 #include <osl/diagnose.h>
 #include <sfx2/objsh.hxx>
 #include <svl/cryptosign.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 
 // EditView
 
@@ -1326,6 +1328,52 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         if (bAdaptStartEndWidths)
         {
             nOldLineWidth = pObj->GetMergedItem(XATTR_LINEWIDTH).GetValue();
+        }
+
+        if (const XLineColorItem* pLineColor = rAttr.GetItemIfSet(XATTR_LINECOLOR))
+        {
+            // If the XATTR_LINECOLOR is changed we need to erase the evtl.
+            // existing InteropGrabBag Item 'OriginalLnSolidFillClr'. If it just
+            // stays, the Color is changed for the runtime, but the still existing
+            // GrabBag entry gets exported if oox is the target.
+
+            // will be changed?
+            if (!SfxPoolItem::areSame(*pLineColor, pObj->GetMergedItem(XATTR_LINECOLOR)))
+            {
+                css::uno::Reference<css::beans::XPropertySet> xProps(pObj->getUnoShape(), css::uno::UNO_QUERY);
+
+                // do we have XPropertySet from target object?
+                if (xProps)
+                {
+                    cpo::uno::Sequence<css::beans::PropertyValue> aGrabBag(0);
+                    xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
+                    // does it have that GrabBag entry?
+                    bool bHit(false);
+
+                    if (aGrabBag.hasElements())
+                    {
+                        for (const auto& rProp : aGrabBag)
+                        {
+                            if (rProp.Name == u"OriginalLnSolidFillClr"_ustr)
+                            {
+                                bHit = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (bHit)
+                    {
+
+                        comphelper::SequenceAsHashMap aGrabBagSeq(aGrabBag);
+
+                        // try to delete and if that did something, write GrabBag back
+                        if (aGrabBagSeq.erase(u"OriginalLnSolidFillClr"_ustr))
+                            xProps->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBagSeq.getAsConstPropertyValueList()));
+                    }
+                }
+            }
         }
 
         // set attributes at object

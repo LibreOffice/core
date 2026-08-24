@@ -163,6 +163,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
             uno::Reference<drawing::XShape> xAssociatedShape(getXShapeByModelID(rPoint.msModelId));
             uno::Reference<beans::XPropertySet> xProps;
             bool bWriteFill(false);
+            bool bWriteLine(false);
             bool bWriteText(false);
 
             if (rPoint.mnXMLType == TypeConstant::XML_doc)
@@ -203,14 +204,22 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
                     // and the fill is added here, *not* at the XShape/Model node
                     xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
                     bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
+
+                    // check for line.
+                    bWriteLine = xProps->getPropertyValue(u"LineStyle"_ustr) != drawing::LineStyle_NONE;
                 }
             }
 
-            // <spPr> element is before <t> element
-            if (bWriteFill)
+            // write <spPr> element if bWriteFill or bWriteLine, it's before <t> element
+            if (bWriteFill || bWriteLine)
             {
                 rTarget->startElementNS(XML_dgm, XML_spPr);
-                aShapeExport->WriteFill( xProps, xAssociatedShape->getSize());
+
+                if (bWriteFill)
+                    aShapeExport->WriteFill( xProps, xAssociatedShape->getSize());
+
+                if (bWriteLine)
+                    aShapeExport->WriteOutline( xProps );
 
                 rTarget->endElementNS(XML_dgm, XML_spPr);
             }
