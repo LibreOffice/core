@@ -24,7 +24,7 @@
 namespace framework{
 
 /**
-    Own hash functions used for stl-structures ... e.g. hash tables/maps ...
+    Own hash functions used for STL structures ... e.g. hash tables/maps ...
 */
 
 struct KeyEventHashCode

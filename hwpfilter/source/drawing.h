@@ -373,7 +373,7 @@ static std::unique_ptr<HWPDrawingObject> LoadDrawingObject(HWPFile& hwpf)
     return head;
 
 error:
-// drawing object can be list.
+// drawing object can be a list.
 // hdo = current item, head = list;
 
     if (hdo->type < 0 || hdo->type >= HWPDO_NITEMS)

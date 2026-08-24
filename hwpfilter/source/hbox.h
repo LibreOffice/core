@@ -33,9 +33,9 @@
 #include "hpara.h"
 
 /**
- * The HBox class is the base class for all date classes in hwp document.
+ * The HBox class is the base class for all data classes in hwp document.
  * For example, there are special character, table, image, etc.
- * It has one character. The ascii code value of special characters are smaller than 32. General character is greater than 32.
+ * It has one character. The ASCII code values of special characters are smaller than 32. General character is greater than 32.
  *
  * @short Base class for characters
  */
@@ -207,7 +207,7 @@ struct CellLine
  * @li ypos -  distance between top border of cell and top border of table
  * @li width -  distance between left border of cell and right border of cell
  * @li height -  distance between top border of cell and bottom border of table
- * This is differ from the format of other office in fact cell has two properties
+ * This is different from the format of other office in fact cell has two properties
  * - rowindex and column index.
  *
  * @short Cell object
@@ -867,7 +867,7 @@ struct TocMark: public HBox
 // index mark(26)
 /**
  * IndexMark marks the table of search.
- * If you set IndexMark at current position, hwp make it as search index.
+ * If you set IndexMark at current position, hwp makes it as search index.
  * @short Table of search
  */
 struct IndexMark: public HBox
