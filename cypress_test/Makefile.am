@@ -296,6 +296,7 @@ define start_coolwsd_instance
 			--o:accessibility.enable=$(A11Y_ENABLE) \
 			--o:security.enable_macros_execution=true \
 			$(if $(CAPABILITIES),--o:security.capabilities=$(CAPABILITIES)) \
+			$(if $(MOUNT_JAIL_TREE),--o:mount_jail_tree=$(MOUNT_JAIL_TREE)) \
 			--o:ai.enabled=true --o:ai.allow_user_settings=true \
 			--o:ai.api_url="" --o:ai.api_key="" --o:ai.model="" \
 			$(if $(SHORT_IDLE),--o:per_view.out_of_focus_timeout_secs=1) \

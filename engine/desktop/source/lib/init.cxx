@@ -6207,7 +6207,21 @@ static void addOrganizationPath(const OUString& rPathName, const OUString& rDire
     }
 }
 
-static void updateConfig(const OUString& rConfigPath, bool bSharedConfig)
+/// Registers the preset groups of one configuration as organization paths. The directory is the
+/// one the presets are readable at now, which is not always where they are staged.
+static void addSharedPresetPaths(std::u16string_view rPresetsUrl)
+{
+    addOrganizationPath(u"AutoText"_ustr, OUString::Concat(rPresetsUrl) + "/autotext");
+    addOrganizationPath(u"Dictionary"_ustr, OUString::Concat(rPresetsUrl) + "/wordbook");
+    // The templates sit in a group subdirectory of this directory, so this is the root.
+    addOrganizationPath(u"Template"_ustr, OUString::Concat(rPresetsUrl) + "/template");
+
+    // The dictionary list is a scan of the Dictionary path, so it has to be taken again now
+    // that the path has one more root.
+    reInitDictionaryList();
+}
+
+static void updateConfig(const OUString& rConfigPath)
 {
     osl::Directory aScanRootDir(rConfigPath);
     if (aScanRootDir.open() != osl::Directory::E_None)
@@ -6278,22 +6292,9 @@ static void updateConfig(const OUString& rConfigPath, bool bSharedConfig)
                 xUpdate->insertModificationXcuFile(xcustat.getFileURL(), aAllowedSubset, {});
             }
         }
-        else if (sFileName == "autotext")
-        {
-            if (bSharedConfig)
-                addOrganizationPath(u"AutoText"_ustr, stat.getFileURL());
-        }
         else if (sFileName == "wordbook")
         {
-            if (bSharedConfig)
-                addOrganizationPath(u"Dictionary"_ustr, stat.getFileURL());
             reInitDictionaryList();
-        }
-        else if (sFileName == "template")
-        {
-            // The templates sit in a group subdirectory of this directory, so this is the root.
-            if (bSharedConfig)
-                addOrganizationPath(u"Template"_ustr, stat.getFileURL());
         }
     }
 }
@@ -6334,12 +6335,17 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
         if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
             pDocSh->AllowLinkUpdate();
     }
-    else if (strcmp(pOption, "addconfig") == 0 || strcmp(pOption, "addsharedconfig") == 0)
+    else if (strcmp(pOption, "addconfig") == 0)
     {
         const OUString aConfigPath(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
-        updateConfig(aConfigPath, strcmp(pOption, "addsharedconfig") == 0);
+        updateConfig(aConfigPath);
         // The per-session call (the per-user tree) arrives last and wins.
         comphelper::COKit::setUserConfigDir(aConfigPath);
+    }
+    else if (strcmp(pOption, "addsharedpresetpaths") == 0)
+    {
+        const OUString aPresetsUrl(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
+        addSharedPresetPaths(aPresetsUrl);
     }
     else if (strcmp(pOption, "userpersistence") == 0)
     {

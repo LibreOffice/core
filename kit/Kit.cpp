@@ -650,9 +650,9 @@ namespace
         }
     }
 
-    /// One group of shared configuration presets: the path of its staging directory below the
-    /// presets of a configuration, and the engine installation directory that holds the same kind
-    /// of file.
+    /// One group of shared configuration presets, for the jails that hold a copy of the engine
+    /// installation: the path of its staging directory below the presets of a configuration, and
+    /// the engine installation directory that holds the same kind of file.
     struct SharedPresetGroup
     {
         std::string_view stagingPath;
@@ -665,17 +665,6 @@ namespace
         { "template/presnt", "share/template/common/presnt" },
     };
 
-    std::string sharedPresetSource(const std::string& configIdPresets, std::string_view stagingPath)
-    {
-        return Poco::Path(configIdPresets, std::string(stagingPath)).toString();
-    }
-
-    std::string sharedPresetDestination(const std::string& loJailDestPath,
-                                        std::string_view sharePath)
-    {
-        return Poco::Path(loJailDestPath, std::string(sharePath)).toString();
-    }
-
     /// Copies the presets of a configuration into an engine installation.
     void linkOrCopySharedPresets(const std::string& configIdPresets,
                                  const std::string& loJailDestPath,
@@ -683,12 +672,13 @@ namespace
     {
         for (const auto& group : SharedPresetGroups)
         {
-            const std::string source = sharedPresetSource(configIdPresets, group.stagingPath);
+            const std::string source
+                = Poco::Path(configIdPresets, std::string(group.stagingPath)).toString();
             if (FileUtil::isEmptyDirectory(source))
                 continue;
 
             const std::string destination
-                = sharedPresetDestination(loJailDestPath, group.sharePath);
+                = Poco::Path(loJailDestPath, std::string(group.sharePath)).toString();
             linkOrCopy(source, destination + "/", linkablePath, LinkOrCopyType::All);
         }
     }
@@ -3899,6 +3889,9 @@ void lokit_main(
 
     std::string userdir_url;
     std::string instdir_path;
+    // Where this kit finds the shared presets of its configuration once the jail is ready. It
+    // stays empty when the jail holds a copy of the engine installation with the presets in it.
+    std::string presetsPathInKit;
     int ProcSMapsFile = -1;
 
     // lokit's destroy typically throws from
@@ -4045,68 +4038,25 @@ void lokit_main(
 
                 if (!configId.empty())
                 {
-                    // Overlay the WOPI host's shared presets onto the engine's
-                    // preset dirs. This is best-effort: a preset the host did not
-                    // configure (empty source - the common case, the host merely
-                    // sets a configId), or one whose target dir the engine does
-                    // not ship (e.g. presnt after --without-templates), is
-                    // skipped. It must never fail the whole jail mount: that
-                    // disables bind-mounting for the entire forkit and pushes
-                    // every document onto the slow copy path.
-
-                    // The shared wordbook is overlaid onto the engine's own
-                    // share/wordbook, whose bundled dictionaries a bind mount
-                    // would hide - unlike the copy path, which merges into the
-                    // already-populated dir. Seed the shared wordbook with the
-                    // bundled dictionaries first so the overlay stays additive
-                    // and both jail-setup modes behave the same. A name the
-                    // host already provides is left untouched.
-                    const std::string sharedWordbook =
-                        sharedPresetSource(configIdPresets, "wordbook");
-                    if (!FileUtil::isEmptyDirectory(sharedWordbook))
+                    // Mount the shared presets of this configuration into the jail under one
+                    // name, so the engine reads every group from below it. This is
+                    // best-effort: a failure must never fail the whole jail mount, because
+                    // that disables bind-mounting for the entire forkit and pushes every
+                    // document onto the slow copy path.
+                    const std::string jailPresets =
+                        Poco::Path(jailPath, JailUtil::PRESETS_JAIL_SUBPATH).toString();
+                    if (!FileUtil::Stat(configIdPresets).exists())
+                        LOG_DBG("Configuration [" << configId << "] staged no presets at ["
+                                                  << configIdPresets << "].");
+                    else if (!JailUtil::bind(configIdPresets, jailPresets) ||
+                             !JailUtil::remountReadonly(configIdPresets, jailPresets))
+                        LOG_WRN("Failed to mount shared presets [" << configIdPresets
+                                << "] -> [" << jailPresets << "], skipping.");
+                    else
                     {
-                        const std::string bundledWordbook =
-                            Poco::Path(loTemplate, "share/wordbook").toString();
-                        try
-                        {
-                            std::vector<std::string> names;
-                            Poco::File(bundledWordbook).list(names);
-                            for (const auto& name : names)
-                            {
-                                const std::string src = Poco::Path(bundledWordbook, name).toString();
-                                const std::string dst = Poco::Path(sharedWordbook, name).toString();
-                                if (Poco::File(src).isFile() && !FileUtil::Stat(dst).exists())
-                                    FileUtil::copy(src, dst, /*log=*/false, /*throw_on_error=*/false);
-                            }
-                        }
-                        catch (const Poco::Exception& e)
-                        {
-                            LOG_WRN("Could not seed shared wordbook with bundled "
-                                    "dictionaries: " << e.displayText());
-                        }
-                    }
-
-                    for (const auto& group : SharedPresetGroups)
-                    {
-                        const std::string presetSrc =
-                            sharedPresetSource(configIdPresets, group.stagingPath);
-                        if (FileUtil::isEmptyDirectory(presetSrc))
-                            continue; // nothing configured for this preset
-
-                        const std::string presetDst =
-                            sharedPresetDestination(loJailDestPath, group.sharePath);
-                        if (!FileUtil::Stat(presetDst).exists())
-                        {
-                            LOG_WRN("Cannot apply shared preset [" << presetSrc
-                                    << "]: target [" << presetDst
-                                    << "] is not provided by the engine.");
-                            continue;
-                        }
-
-                        if (!JailUtil::bind(presetSrc, presetDst) ||
-                            !JailUtil::remountReadonly(presetSrc, presetDst))
-                            LOG_WRN("Failed to mount shared preset [" << presetSrc
-                                    << "] -> [" << presetDst << "], skipping.");
+                        presetsPathInKit = '/' + JailUtil::PRESETS_JAIL_SUBPATH;
+                        allowedPaths.emplace_back(presetsPathInKit,
+                                                  Landlock::Access::ReadOnlyDir);
                     }
                 }
 
@@ -4326,6 +4276,7 @@ void lokit_main(
                 const std::string configIdPresets =
                     Poco::Path(sharedPresets, Uri::encode(configId)).toString();
                 allowedPaths.emplace_back(configIdPresets, Landlock::Access::ReadOnlyDir);
+                presetsPathInKit = configIdPresets;
             }
             JailRoot = jailPathStr;
 
@@ -4447,6 +4398,14 @@ void lokit_main(
             LOG_INF("RLIMIT_NOFILE is " << rlim.rlim_max << " files.");
         else
             LOG_SYS("Failed to get RLIMIT_NOFILE");
+
+        if (!presetsPathInKit.empty())
+        {
+            const std::string presetsUrl = Poco::URI(Poco::Path(presetsPathInKit)).toString();
+            LOG_DBG("Shared presets of configuration [" << configId << "] are at [" << presetsUrl
+                                                        << "] for this kit.");
+            coKit->setOption("addsharedpresetpaths", presetsUrl.c_str());
+        }
 
         LOG_INF("Kit process for Jail [" << jailId << "] is ready.");
 

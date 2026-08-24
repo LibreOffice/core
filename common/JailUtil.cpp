@@ -456,6 +456,11 @@ bool tryRemoveJail(const std::string& root)
         //FIXME: technically, the loTemplate directory may have any name.
         unmount(Poco::Path(root, "lo").toString());
 
+        // Unmount the shared presets of the configuration this jail served.
+        const std::string presetsPath = Poco::Path(root, PRESETS_JAIL_SUBPATH).toString();
+        if (FileUtil::Stat(presetsPath).exists())
+            unmount(presetsPath);
+
         // Unmount the test-mount directory too.
         const std::string testMountPath = Poco::Path(root, CoolTestMountpoint).toString();
         if (FileUtil::Stat(testMountPath).exists())

@@ -32,6 +32,10 @@ const std::string CHILDROOT_TMP_SHARED_PRESETS_PATH = "/tmp/sharedpresets";
 /// The LO installation directory with jail.
 const std::string LO_JAIL_SUBPATH = "lo";
 
+/// The directory within a jail that holds the shared presets of the configuration the jail
+/// serves. It has one subdirectory per preset group.
+const std::string PRESETS_JAIL_SUBPATH = "presets";
+
 #ifdef __linux__
 
 /** Linux user/mount namespaces

@@ -132,6 +132,10 @@ do
     ln -f -s `${REALPATH} --relative-to=$INSTDIR_PARENT $CHROOT/lo` $CHROOT/$path
 done
 
+# The shared presets of the configuration a jail serves are mounted at /presets, so the
+# mount point has to be part of the template.
+mkdir -p $CHROOT/presets
+
 # /usr/share/fonts needs to be taken care of separately because the
 # directory time stamps must be preserved for fontconfig to trust
 # its cache.
