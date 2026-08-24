@@ -852,7 +852,15 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             xsltSecurityPrefsPtr securityPrefs = xsltNewSecurityPrefs();
             if (securityPrefs)
             {
+                // Refuse every option libxslt has, then allow back the reads the help pages
+                // need. One page pulls in another through a vnd.sun.star.help URL, and libxslt
+                // counts every scheme other than file as a network read.
+                for (auto eOption : { XSLT_SECPREF_READ_FILE, XSLT_SECPREF_WRITE_FILE,
+                                      XSLT_SECPREF_CREATE_DIRECTORY, XSLT_SECPREF_READ_NETWORK,
+                                      XSLT_SECPREF_WRITE_NETWORK })
+                    xsltSetSecurityPrefs(securityPrefs, eOption, xsltSecurityForbid);
                 xsltSetSecurityPrefs(securityPrefs, XSLT_SECPREF_READ_FILE, xsltSecurityAllow);
+                xsltSetSecurityPrefs(securityPrefs, XSLT_SECPREF_READ_NETWORK, xsltSecurityAllow);
                 if (xsltSetCtxtSecurityPrefs(securityPrefs, transformContext) == 0)
                 {
                     res = xsltApplyStylesheetUser(cur, doc, parameter, nullptr, nullptr, transformContext);
