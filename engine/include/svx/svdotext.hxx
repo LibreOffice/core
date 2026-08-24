@@ -361,8 +361,11 @@ public:
 
     bool IsTextEditActive() const { return mpEditingOutliner != nullptr; }
 
-    /** Returns the background color behind the given text for auto color calculation.*/
-    virtual std::optional<Color> GetActiveTextBackgroundColor(const SdrText* pSdrText) const;
+    /** Returns the background color behind the given text for auto color calculation.
+        oBehind is the background the object sits on, resolved by the caller for its render
+        target; a fill that is not fully opaque is mixed with it. */
+    virtual std::optional<Color> GetActiveTextBackgroundColor(
+        const SdrText* pSdrText, std::optional<Color> oBehind = std::nullopt) const;
 
     /** returns the currently active text. */
     virtual SdrText* getActiveText() const;

@@ -1839,6 +1839,11 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
         aColor = pView->GetApplicationDocumentColor();
     }
 
+    return GetPageBackgroundColor(aColor);
+}
+
+Color SdrPage::GetPageBackgroundColor(const Color& rBehind) const
+{
     const SfxItemSet* pBackgroundFill = &getSdrPageProperties().GetItemSet();
 
     if(!IsMasterPage() && TRG_HasMasterPage())
@@ -1867,12 +1872,10 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
 
     // A page fill that is not fully opaque is mixed with the color behind the page, which is the
     // document background this page is painted on.
-    const Color aBehindPage(aColor);
+    if (auto oColor = GetDraftFillColor(*pBackgroundFill, rBehind))
+        return *oColor;
 
-    if (auto oColor = GetDraftFillColor(*pBackgroundFill, aBehindPage))
-        aColor = *oColor;
-
-    return aColor;
+    return rBehind;
 }
 
 /** *deprecated, use GetBackgroundColor with SdrPageView */

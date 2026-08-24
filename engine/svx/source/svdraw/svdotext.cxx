@@ -2008,9 +2008,10 @@ rtl::Reference<SdrObject> SdrTextObj::getFullDragClone() const
 
 /* End chaining code */
 
-std::optional<Color> SdrTextObj::GetActiveTextBackgroundColor(const SdrText* /*pSdrText*/) const
+std::optional<Color> SdrTextObj::GetActiveTextBackgroundColor(const SdrText* /*pSdrText*/,
+                                                              std::optional<Color> oBehind) const
 {
-    return GetDraftFillColor(GetMergedItemSet());
+    return GetDraftFillColor(GetMergedItemSet(), oBehind);
 }
 
 /** returns the currently active text. */

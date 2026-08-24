@@ -47,6 +47,9 @@
 #include <svx/svdoutl.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xfltrit.hxx>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <svtools/colorcfg.hxx>
 #include <unotools/datetime.hxx>
 
@@ -2395,6 +2398,119 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorUnfilledSha
 
     CPPUNIT_ASSERT_EQUAL(
         COL_WHITE, getShapeTextEditAutoColor(pXImpressDocument, pObject, pViewShell->GetView()));
+}
+
+// Leaves the first view on a light theme while a second view switches to a dark one. The color
+// configuration of the process belongs to whichever view switched its theme last, so it now
+// disagrees with the theme of the first view, which is current again on return.
+static void switchSecondViewToDarkTheme(const css::uno::Reference<css::lang::XComponent>& xComponent)
+{
+    const int nFirstViewId = KitHelper::getCurrentView();
+    dispatchThemeCommand(xComponent, u".uno:ChangeTheme"_ustr, u"Light"_ustr);
+    KitHelper::createView();
+    dispatchThemeCommand(xComponent, u".uno:ChangeTheme"_ustr, u"Dark"_ustr);
+    KitHelper::setView(nFirstViewId);
+}
+
+// A shape fill that is not fully opaque is mixed with the page background of the view being
+// painted when the automatic font color is resolved against it, not with the document background
+// of the color configuration
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorTranslucentFill)
+{
+    addScheme(u"Dark"_ustr, Color(0x1c, 0x1c, 0x1c));
+    addScheme(u"Light"_ustr, COL_WHITE);
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+    switchSecondViewToDarkTheme(mxComponent);
+
+    // Fill the shape with black that mostly lets the white page of this view through
+    pObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pObject->SetMergedItem(XFillColorItem(OUString(), COL_BLACK));
+    pObject->SetMergedItem(XFillTransparenceItem(80));
+
+    // The fill over the white page of this view is light, so the automatic font color is black;
+    // without the accompanying fix the fill was mixed with the dark document background of the
+    // color configuration, which the second view had put there, and the text of the light first
+    // view came out white
+    CPPUNIT_ASSERT_EQUAL(
+        COL_BLACK, getShapeTextEditAutoColor(pXImpressDocument, pObject, pViewShell->GetView()));
+}
+
+// The fill of a table cell that is not fully opaque gets the same treatment while the cell is
+// edited: mixed with the page background of the view being painted
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTableCellTextEditAutoColorTranslucentFill)
+{
+    addScheme(u"Dark"_ustr, Color(0x1c, 0x1c, 0x1c));
+    addScheme(u"Light"_ustr, COL_WHITE);
+    SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+    switchSecondViewToDarkTheme(mxComponent);
+
+    // Fill the first cell, where text edit will start, with black that mostly lets the white
+    // page of this view through
+    uno::Reference<table::XCellRange> xCellRange(pTableObject->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCell(xCellRange->getCellByPosition(0, 0),
+                                              uno::UNO_QUERY_THROW);
+    xCell->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_SOLID));
+    xCell->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_BLACK));
+    xCell->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(sal_Int32(80)));
+
+    // The cell background in this view is light, so the automatic font color is black
+    CPPUNIT_ASSERT_EQUAL(
+        COL_BLACK, getShapeTextEditAutoColor(pXImpressDocument, pObject, pViewShell->GetView()));
+}
+
+// Rendering the text of a table cell from the model resolves the same mix for the render target
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTableCellAutoColorTranslucentFillRender)
+{
+    addScheme(u"Dark"_ustr, Color(0x1c, 0x1c, 0x1c));
+    addScheme(u"Light"_ustr, COL_WHITE);
+    SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    // Put text with an automatic color into the first cell and fill the cell with black that
+    // mostly lets the white page of this view through
+    uno::Reference<table::XCellRange> xCellRange(pTableObject->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCell(xCellRange->getCellByPosition(0, 0),
+                                              uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY_THROW);
+    xText->setString(u"Automatic"_ustr);
+    xCell->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_SOLID));
+    xCell->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_BLACK));
+    xCell->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(sal_Int32(80)));
+
+    switchSecondViewToDarkTheme(mxComponent);
+
+    // The first cell takes the upper half of the table; its region in the tile, which maps
+    // 15360x7680 twips onto 1024x1024 pixels, stepped in a bit so the cell borders stay outside
+    const ::tools::Rectangle aRect(pObject->GetLogicRect());
+    const ::tools::Long nLeft(o3tl::toTwips(aRect.Left(), o3tl::Length::mm100) * 1024 / 15360 + 8);
+    const ::tools::Long nRight(o3tl::toTwips(aRect.Right(), o3tl::Length::mm100) * 1024 / 15360 - 8);
+    const ::tools::Long nTop(o3tl::toTwips(aRect.Top(), o3tl::Length::mm100) * 1024 / 7680 + 8);
+    const ::tools::Long nBottom(
+        o3tl::toTwips(aRect.Top() + aRect.GetHeight() / 2, o3tl::Length::mm100) * 1024 / 7680 - 8);
+
+    Bitmap aBitmap = getTile(pXImpressDocument);
+    BitmapScopedReadAccess pAccess(aBitmap);
+    bool bDarkText(false);
+    for (::tools::Long nY = nTop; nY <= nBottom && !bDarkText; ++nY)
+    {
+        for (::tools::Long nX = nLeft; nX <= nRight && !bDarkText; ++nX)
+            bDarkText = Color(pAccess->GetPixel(nY, nX)).IsDark();
+    }
+
+    // The cell background in this light view is light, so the automatic text color has to be
+    // dark; without the accompanying fix the mix was made against the dark document background
+    // of the color configuration and the text of this view was painted white
+    CPPUNIT_ASSERT(bDarkText);
 }
 
 // Test that changing the theme in one view doesn't change it in the other view

@@ -1284,12 +1284,20 @@ const SfxItemSet& SdrTableObj::GetActiveCellItemSet() const
     return getActiveCell()->GetItemSet();
 }
 
-std::optional<Color> SdrTableObj::GetActiveTextBackgroundColor(const SdrText* pSdrText) const
+std::optional<Color> SdrTableObj::GetActiveTextBackgroundColor(const SdrText* pSdrText,
+                                                               std::optional<Color> oBehind) const
 {
-    // Prefer the cell's own fill color if set.
+    // Prefer the cell's own fill color if set. The color behind a cell fill that is not fully
+    // opaque is the page background, not the table object's fill, which is not painted behind
+    // the cells.
     const SfxItemSet& rCellItemSet = pSdrText ? pSdrText->GetItemSet() : GetActiveCellItemSet();
-    if (auto oColor = GetDraftFillColor(rCellItemSet))
+    if (auto oColor = GetDraftFillColor(rCellItemSet, oBehind))
         return oColor;
+
+    // Cell has no fill, so the page background is the answer, and a caller that has resolved
+    // it for its render target already holds it.
+    if (oBehind)
+        return oBehind;
 
     // Cell has no fill, so use the page/slide background directly instead
     // of the table object's fill, which does not represent the actual

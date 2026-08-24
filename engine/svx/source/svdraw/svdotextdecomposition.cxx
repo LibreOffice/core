@@ -476,7 +476,14 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     if (bIsCell)
     {
-        if (auto oColor = GetActiveTextBackgroundColor(rSdrBlockTextPrimitive.getSdrText()))
+        // The page background behind the cell, resolved for this render target: the fill of
+        // the page over what the renderer says an automatic background is.
+        Color aBehind(aViewInformation.getResolvedAutoColor());
+        if (const SdrPage* pPage = getSdrPageFromSdrObject())
+            aBehind = pPage->GetPageBackgroundColor(aBehind);
+
+        if (auto oColor
+            = GetActiveTextBackgroundColor(rSdrBlockTextPrimitive.getSdrText(), aBehind))
             rOutliner.SetBackgroundColor(*oColor);
     }
     else

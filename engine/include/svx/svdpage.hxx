@@ -535,6 +535,11 @@ public:
     // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
     Color GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDisplay = true) const;
 
+    /** returns the background of this page over the given color behind it: the fill of the
+        page or of its master page, mixed with rBehind where it is not fully opaque, rBehind
+        itself if there is no such fill */
+    Color GetPageBackgroundColor(const Color& rBehind) const;
+
     /** this method returns true if the object from the ViewObjectContact should
         be visible on this page while rendering.
         bEdit selects if visibility test is for an editing view or a final render,
