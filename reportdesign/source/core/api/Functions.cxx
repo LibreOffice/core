@@ -38,7 +38,7 @@ OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xPar
 {
 }
 
-// TODO: VirtualFunctionFinder: This is virtual function!
+// TODO: VirtualFunctionFinder: This is a virtual function!
 
 OFunctions::~OFunctions()
 {
@@ -49,7 +49,7 @@ void SAL_CALL OFunctions::dispose()
     cppu::WeakComponentImplHelperBase::dispose();
 }
 
-// TODO: VirtualFunctionFinder: This is virtual function!
+// TODO: VirtualFunctionFinder: This is a virtual function!
 
 void SAL_CALL OFunctions::disposing()
 {

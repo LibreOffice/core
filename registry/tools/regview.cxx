@@ -70,7 +70,7 @@ int __cdecl main( int argc, char * argv[] )
                 }
                 else
                 {
-                    fprintf(stderr, "key \"%s\" not exists in registry \"%s\"\n",
+                    fprintf(stderr, "key \"%s\" does not exist in registry \"%s\"\n",
                             argv[2], argv[1]);
                 }
             }

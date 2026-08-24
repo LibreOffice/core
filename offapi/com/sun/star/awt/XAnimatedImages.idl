@@ -21,7 +21,7 @@
 module com { module sun { module star { module awt {
 
 
-/** allows administrating a set of images, to be displayed as animated seres.
+/** allows administrating a set of images, to be displayed as animated series.
 
     <p>Components implementing this interface maintain a variable number of image sets. Components displaying
     those images will choose the best-fitting image set depending on the available space, and possibly other
