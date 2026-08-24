@@ -105,6 +105,7 @@ browser/npm-shrinkwrap.json
 browser/jsconfig.json
 browser/admin/jsconfig.json
 browser/dist
+browser/admin-templates
 browser/compilets
 browser/typescript_js
 *.tsbuildinfo
