@@ -36,7 +36,7 @@ class ScDispatchProviderInterceptor final : public cppu::WeakImplHelper<
 {
     ScTabViewShell*     pViewShell;
 
-    /// the component which's dispatches we're intercepting
+    /// the component whose dispatches we're intercepting
     css::uno::Reference< css::frame::XDispatchProviderInterception> m_xIntercepted;
 
     /// chaining

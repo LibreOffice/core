@@ -2054,7 +2054,7 @@ ConvertDataList::ConvertDataList()
 
     // LENGTH: 1 Meter is...
     NEWDP( "m",         1.0000000000000000E00,  CDC_Length ); // Meter
-    NEWD( "mi",         6.2137119223733397E-04, CDC_Length ); // Britsh Mile        6,21371192237333969617434184363e-4
+    NEWD( "mi",         6.2137119223733397E-04, CDC_Length ); // British Mile        6,21371192237333969617434184363e-4
     NEWD( "Nmi",        5.3995680345572354E-04, CDC_Length ); // Nautical Mile      5,39956803455723542116630669546e-4
     NEWD( "in",         3.9370078740157480E01,  CDC_Length ); // Inch               39,37007874015748031496062992126
     NEWD( "ft",         3.2808398950131234E00,  CDC_Length ); // Foot               3,2808398950131233595800524934383
@@ -2145,7 +2145,7 @@ ConvertDataList::ConvertDataList()
     NEWDP( "L",         1.0000000000000000E00,  CDC_Volume ); // Liter also
     NEWDP( "lt",        1.0000000000000000E00,  CDC_Volume ); // Liter also
     NEWDP( "m3",        1.0000000000000000E-03, CDC_Volume ); // *** Cubic Meter
-    NEWD( "mi3",        2.3991275857892772E-13, CDC_Volume ); // *** Cubic Britsh Mile
+    NEWD( "mi3",        2.3991275857892772E-13, CDC_Volume ); // *** Cubic British Mile
     NEWD( "Nmi3",       1.5742621468581148E-13, CDC_Volume ); // *** Cubic Nautical Mile
     NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); // *** Cubic Inch
     NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); // *** Cubic Foot
@@ -2171,7 +2171,7 @@ ConvertDataList::ConvertDataList()
 
     // 1 Square Meter is...
     NEWDP( "m2",        1.0000000000000000E00,  CDC_Area ); // *** Square Meter
-    NEWD( "mi2",        3.8610215854244585E-07, CDC_Area ); // *** Square Britsh Mile
+    NEWD( "mi2",        3.8610215854244585E-07, CDC_Area ); // *** Square British Mile
     NEWD( "Nmi2",       2.9155334959812286E-07, CDC_Area ); // *** Square Nautical Mile
     NEWD( "in2",        1.5500031000062000E03,  CDC_Area ); // *** Square Inch
     NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); // *** Square Foot
@@ -2193,7 +2193,7 @@ ConvertDataList::ConvertDataList()
     NEWDP( "m/sec", 1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second also
     NEWDP( "m/h",   3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour
     NEWDP( "m/hr",  3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour also
-    NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); // *** Britsh Miles per Hour
+    NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); // *** British Miles per Hour
     NEWD( "kn",     1.9438444924406048E00,  CDC_Speed ); // *** Knot = Nautical Miles per Hour
     NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed ); // *** Admiralty Knot
     NEWD( "ludicrous speed", 2.0494886343432328E-14, CDC_Speed ); // ***

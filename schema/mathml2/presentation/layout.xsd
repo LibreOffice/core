@@ -86,7 +86,7 @@ value="(\+|-)?([0-9]+|[0-9]*\.[0-9]+)(((%?) *(width|lspace|height|depth))|(em|ex
 
 <xs:simpleType name="mpadded-width-space">
   <xs:restriction base="xs:string">
-    <!-- MaxF: definition from spec seems wrong, fixing to ([+|-] unsigned-number (%[pseudo-unit]|pseudo-unit|h-unit)) | namedspace | 0 -->
+    <!-- MaxF: definition from spec seems wrong, fixing to ([+|-] unsigned-number (%[pseudo-unit]|pseudo-unit|h-unit)) | namespace | 0 -->
     <xs:pattern value="((\+|-)?([0-9]+|[0-9]*\.[0-9]+)(((%?) *(width|lspace|height|depth)?)|(width|lspace|height|depth)|(em|ex|px|in|cm|mm|pt|pc)))|((veryverythin|verythin|thin|medium|thick|verythick|veryverythick)mathspace)|0"/>
   </xs:restriction>
 </xs:simpleType>

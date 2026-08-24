@@ -905,7 +905,7 @@ public:
     // to do something which Slim can't represent
     ScDPResultMember* Promote(ScDPResultMemberSlim* pSlim, SCROW nOrder);
 
-    // Called by an ScDPResultMemberSlim to get it's parent information
+    // Called by an ScDPResultMemberSlim to get its parent information
     ScDPDimension* GetParentDimForResult() { return mpDimension; };
     ScDPLevel* GetParentLevelForResult() { return mpLevel; };
 };
