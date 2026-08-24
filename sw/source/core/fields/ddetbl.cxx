@@ -74,7 +74,7 @@ void SwDDETable::ImplDestroy()
         }
     }
 
-    // If it is the last dependent of the "deleted field" than delete it finally
+    // If it is the last dependent of the "deleted field" then delete it finally
     if( m_pDDEType->IsDeleted() && m_pDDEType->HasOnlyOneListener() )
     {
         m_aDepends.EndListeningAll();

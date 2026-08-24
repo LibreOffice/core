@@ -4041,7 +4041,7 @@ SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
     const SwFrame* pLowerFrame = Lower();
     while ( pLowerFrame )
     {
-        // Note: independent on text direction page header and page footer are
+        // Note: independent of text direction, page header and page footer are
         //       always at top respectively at bottom of the page frame.
         if ( pLowerFrame->IsHeaderFrame() )
         {
@@ -4078,7 +4078,7 @@ void GetSpacingValuesOfFrame( const SwFrame& rFrame,
     else
     {
         const SvxULSpaceItem& rULSpace = rFrame.GetAttrSet()->GetULSpace();
-        // check contextual spacing if the style of actual and next paragraphs are identical
+        // check contextual spacing if the styles of current and next paragraphs are identical
         if (bIdenticalStyles)
             onLowerSpacing = (rULSpace.GetContext() ? 0 : rULSpace.GetLower());
         else

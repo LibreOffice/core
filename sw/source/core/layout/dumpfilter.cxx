@@ -29,7 +29,7 @@ namespace
     {
         int written = nLen;
 
-        // Actually write bytes to XOutputSream
+        // Actually write bytes to XOutputStream
         try
         {
             uno::XInterface* pObj = static_cast<uno::XInterface*>(pContext);
@@ -95,7 +95,7 @@ namespace sw
         {
             SwRootFrame* pLayout = pXDoc->GetDocShell()->GetWrtShell()->GetLayout();
 
-            // Get sure that the whole layout is processed: set a visible area
+            // Make sure that the whole layout is processed: set a visible area
             // even though there isn't any need of it
             pXDoc->GetDocShell()->GetWrtShell()->StartAction();
             tools::Rectangle aRect( 0, 0, 26000, 21000 );

@@ -112,7 +112,7 @@ public:
      * Method <ContainsAny()> doesn't investigate content of footnotes by default.
      * But under certain circumstances this investigation is intended.
      * Thus, introduce new optional parameter <_bInvestigateFootnoteForSections>.
-     * It's default is <false>, still indicating that content of footnotes isn't
+     * Its default is <false>, still indicating that content of footnotes isn't
      * investigated for sections.
      */
     const SwFrame *ContainsAny( const bool _bInvestigateFootnoteForSections = false ) const;
