@@ -219,7 +219,7 @@ gb_UnpackedTarball_get_dir = $(error please use plain gb_UnpackedTarball_workdir
 gb_UnpackedTarball_workdir := $(WORKDIR)/UnpackedTarball
 gb_UnpackedTarball_get_pristine_dir = $(WORKDIR)/UnpackedTarball/$(1).org
 gb_UnpackedTarball_get_final_target = $(WORKDIR)/UnpackedTarball/$(1).update
-# NOTE: the .done target is hardcoded in solenv/bin/concat-deps.c !
+# NOTE: the .done target is hardcoded in solenv/bin/concat-deps.cxx !
 gb_UnpackedTarball_get_target = $(WORKDIR)/UnpackedTarball/$(1).done
 gb_UnpackedTarball_get_version_target = $(WORKDIR)/UnpackedTarball/$(1).version
 gb_UnpackedTarball_get_preparation_target = $(WORKDIR)/UnpackedTarball/$(1).prepare

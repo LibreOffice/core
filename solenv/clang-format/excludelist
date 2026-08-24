@@ -10449,7 +10449,7 @@ slideshow/test/testshape.cxx
 slideshow/test/testview.cxx
 slideshow/test/views.cxx
 smoketest/smoketest.cxx
-solenv/bin/concat-deps.c
+solenv/bin/concat-deps.cxx
 solenv/gbuildtojson/gbuildtojson.cxx
 solenv/gcc-wrappers/wrapper.cxx
 solenv/lockfile/autoconf.h.in

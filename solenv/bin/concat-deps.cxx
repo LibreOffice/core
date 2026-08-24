@@ -146,6 +146,8 @@ static unsigned int get_unaligned_uint(const unsigned char* cursor)
     return result;
 }
 
+namespace
+{
 /* ===============================================
  * memory pool for fast fix-size allocation (non-thread-safe)
  * ===============================================
@@ -160,6 +162,7 @@ struct pool
     int      primary;    /**< primary allocation in bytes */
     int      secondary;  /**< secondary allocation in bytes */
 };
+}
 #define POOL_ALIGN_INCREMENT 8 /**< alignment, must be a power of 2 and of size > to sizeof(void*) */
 
 
@@ -167,7 +170,7 @@ static void* pool_take_extent(struct pool* pool, int allocate)
 {
     unsigned int size = 0;
     void* extent;
-    char* data = NULL;
+    char* data = nullptr;
 
     if(pool->extent)
     {
@@ -187,17 +190,17 @@ static void* pool_take_extent(struct pool* pool, int allocate)
         extent = malloc(size);
         if(extent)
         {
-            *(void**)extent = pool->extent;
+            *static_cast<void**>(extent) = pool->extent;
             pool->extent = extent;
             if(allocate)
             {
-                data = ((char*)extent) + POOL_ALIGN_INCREMENT;
+                data = static_cast<char*>(extent) + POOL_ALIGN_INCREMENT;
                 pool->fresh = data + pool->size_elem;
                 pool->tail = pool->fresh + (size - pool->size_elem);
             }
             else
             {
-                pool->fresh = ((char*)extent) + POOL_ALIGN_INCREMENT;
+                pool->fresh = static_cast<char*>(extent) + POOL_ALIGN_INCREMENT;
                 pool->tail = pool->fresh + (size - pool->size_elem);
             }
         }
@@ -217,8 +220,8 @@ static struct pool* pool_create(int size_elem, int primary, int secondary)
     assert(secondary >= 0);
     assert(size_elem > 0);
 
-    pool = (struct pool*)calloc(1, sizeof(struct pool));
-    if(!pool) return NULL;
+    pool = static_cast<struct pool*>(calloc(1, sizeof(struct pool)));
+    if(!pool) return nullptr;
     /* Adjust the element size so that it be aligned, and so that an element could
      * at least contain a void*
      */
@@ -237,12 +240,12 @@ static void pool_destroy(struct pool* pool)
     void* extent;
     void* next;
 
-    if(pool != NULL)
+    if(pool != nullptr)
     {
         extent = pool->extent;
         while(extent)
         {
-            next = *(void**)extent;
+            next = *static_cast<void**>(extent);
             free(extent);
             extent = next;
         }
@@ -255,7 +258,7 @@ static void* pool_alloc(struct pool* pool)
     void* data;
 
     data = pool->head_free;
-    if(data == NULL)
+    if(data == nullptr)
     {
         /* we have no old-freed elem */
         if(pool->fresh <= pool->tail)
@@ -273,13 +276,14 @@ static void* pool_alloc(struct pool* pool)
     else
     {
         /* re-used old freed element by chopping the head of the free list */
-        pool->head_free = *(void**)data;
+        pool->head_free = *static_cast<void**>(data);
     }
 
     return data;
 }
 
-
+namespace
+{
 /* ===============================================
  * Hash implementation customized to be just tracking
  * a unique list of string (i.e no data associated
@@ -320,6 +324,7 @@ struct hash
     int memcmp;
 #endif
 };
+}
 
 /* The following hash_compute function was adapted from :
  * lookup3.c, by Bob Jenkins, May 2006, Public Domain.
@@ -367,7 +372,7 @@ static unsigned int hash_compute( struct hash const * hash, const char* key, int
     unsigned int a;
     unsigned int b;
     unsigned int c;                                          /* internal state */
-    const unsigned char* uk = (const unsigned char*)key;
+    const unsigned char* uk = reinterpret_cast<const unsigned char*>(key);
 
     /* Set up the internal state */
     a = b = c = 0xdeadbeef + (length << 2);
@@ -442,13 +447,13 @@ static struct hash* hash_create(unsigned int size)
     struct hash* hash;
 
     assert(size > 0);
-    hash = (struct hash*)(calloc(1, sizeof(struct hash)));
+    hash = static_cast<struct hash*>(calloc(1, sizeof(struct hash)));
     if(hash)
     {
         size += (size >> 2) + 1; /* ~ 75% load factor */
         if(size >= 15)
         {
-            hash->size = (((unsigned int)0xFFFFFFFF) >> clz(size));
+            hash->size = (static_cast<unsigned int>(0xFFFFFFFF) >> clz(size));
         }
         else
         {
@@ -456,11 +461,11 @@ static struct hash* hash_create(unsigned int size)
         }
         hash->load_limit = hash->size - (hash->size >> 2);
         hash->used = 0;
-        hash->array = (struct hash_elem**)calloc(hash->size + 1, sizeof(struct hash_elem*));
-        if(hash->array == NULL)
+        hash->array = static_cast<struct hash_elem**>(calloc(hash->size + 1, sizeof(struct hash_elem*)));
+        if(hash->array == nullptr)
         {
             hash_destroy(hash);
-            hash = NULL;
+            hash = nullptr;
         }
     }
     if(hash)
@@ -470,7 +475,7 @@ static struct hash* hash_create(unsigned int size)
         if(!hash->elems_pool)
         {
             hash_destroy(hash);
-            hash = NULL;
+            hash = nullptr;
         }
     }
     return hash;
@@ -492,7 +497,7 @@ static void hash_resize(struct hash* hash)
     {
         return;
     }
-    array = (struct hash_elem**)calloc(hash->size + 1, sizeof(struct hash_elem*));
+    array = static_cast<struct hash_elem**>(calloc(hash->size + 1, sizeof(struct hash_elem*)));
     if(array)
     {
         hash->load_limit = hash->size - (hash->size >> 2);
@@ -552,7 +557,7 @@ static int hash_store(struct hash* hash, const char* key, int key_len)
 
     if(!hash_elem)
     {
-        hash_elem = (struct hash_elem*)pool_alloc(hash->elems_pool);
+        hash_elem = static_cast<struct hash_elem*>(pool_alloc(hash->elems_pool));
         if(hash_elem)
         {
             hash_elem->key = key;
@@ -616,10 +621,10 @@ static char* file_load(const char* name, off_t* size, int* return_rc)
 {
     off_t local_size = 0;
     int rc = 0;
-    char* buffer = NULL;
+    char* buffer = nullptr;
     int fd;
 
-    assert(name != NULL);
+    assert(name != nullptr);
 
     if(!size)
     {
@@ -631,14 +636,14 @@ static char* file_load(const char* name, off_t* size, int* return_rc)
         fd = open(name, FILE_O_RDONLY | FILE_O_BINARY);
         if (!(fd == -1))
         {
-            buffer = (char*)malloc((size_t)(*size + 1));
+            buffer = static_cast<char*>(malloc(static_cast<size_t>(*size + 1)));
 #if !ENABLE_RUNTIME_OPTIMIZATIONS
-            if (buffer != NULL)
+            if (buffer != nullptr)
             {
                 if (file_load_buffer_count == 100000)
                 {
                     free(buffer);
-                    buffer = NULL;
+                    buffer = nullptr;
                 }
                 else
                 {
@@ -646,7 +651,7 @@ static char* file_load(const char* name, off_t* size, int* return_rc)
                 }
             }
 #endif
-            if (buffer == NULL)
+            if (buffer == nullptr)
             {
                 rc = ENOMEM;
             }
@@ -655,7 +660,7 @@ static char* file_load(const char* name, off_t* size, int* return_rc)
                 ssize_t i;
 
               REDO:
-                i = read(fd, buffer, (size_t)(*size));
+                i = read(fd, buffer, static_cast<size_t>(*size));
                 if(i == -1)
                 {
                     if(errno == EINTR)
@@ -683,7 +688,7 @@ static char* file_load(const char* name, off_t* size, int* return_rc)
     if(rc && buffer)
     {
         free(buffer);
-        buffer = NULL;
+        buffer = nullptr;
     }
     if(return_rc)
     {
@@ -788,7 +793,7 @@ static void print_fullpaths(char* line)
     char* end;
     int boost_count = 0;
     int token_len;
-    const char * unpacked_end = NULL; /* end of UnpackedTarget match (if any) */
+    const char * unpacked_end = nullptr; /* end of UnpackedTarget match (if any) */
     /* for UnpackedTarget the target is GenC{,xx}Object, don't mangle! */
     int target_seen = 0;
 
@@ -800,7 +805,7 @@ static void print_fullpaths(char* line)
         /* hard to believe that in this day and age drive letters still exist */
         if (*end && (':' == *(end+1)) &&
             (('\\' == *(end+2)) || ('/' == *(end+2))) &&
-            isalpha((unsigned char)*end))
+            isalpha(static_cast<unsigned char>(*end)))
         {
             end = end + 3; /* only one cross, err drive letter per filename */
         }
@@ -831,7 +836,7 @@ static void print_fullpaths(char* line)
                 {
                     emit_unpacked_target(token, unpacked_end);
                 }
-                unpacked_end = NULL;
+                unpacked_end = nullptr;
             }
         }
         else
@@ -870,7 +875,7 @@ static char* generate_phony_line(char const * phony_target, char const * extensi
 {
     char const * src;
     char* dest;
-    char* last_dot = NULL;
+    char* last_dot = nullptr;
     //fprintf(stderr, "generate_phony_line called with phony_target %s and extension %s\n", phony_target, extension);
     for(dest = phony_content_buffer+work_dir_len+1, src = phony_target; *src != 0; ++src, ++dest)
     {
@@ -972,7 +977,7 @@ static int process(struct hash* dep_hash, const char* fn)
                              * duplicate out
                              */
                             int key_len = eat_space_at_end(cursor_out) - base;
-                            if (!elide_dependency(base,key_len + 1, NULL)
+                            if (!elide_dependency(base,key_len + 1, nullptr)
                                 && hash_store(dep_hash, base, key_len))
                             {
                                 /* DO NOT modify base after it has been added
@@ -1019,7 +1024,7 @@ static int process(struct hash* dep_hash, const char* fn)
             if(last_ns == ':')
             {
                 int key_len = eat_space_at_end(cursor_out) - base;
-                if (!elide_dependency(base,key_len + 1, NULL) &&
+                if (!elide_dependency(base,key_len + 1, nullptr) &&
                     hash_store(dep_hash, base, key_len))
                 {
                     puts(base);
@@ -1039,7 +1044,7 @@ static int process(struct hash* dep_hash, const char* fn)
         {
             if(strncmp(fn+work_dir_len, "/Dep/", 5) == 0)
             {
-                char* created_line = NULL;
+                char* created_line = nullptr;
                 src_relative = fn+work_dir_len+5;
                 // cases ordered by frequency
                 if (strncmp(src_relative, "CxxObject/", 10) == 0
@@ -1105,7 +1110,7 @@ int main(int argc, char** argv)
     char* in_list;
     char* in_list_cursor;
     char* in_list_base;
-    struct hash* dep_hash = NULL;
+    struct hash* dep_hash = nullptr;
     const char *env_str;
 
     if(argc < 2)
@@ -1116,7 +1121,7 @@ int main(int argc, char** argv)
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
     work_dir_len = strlen(work_dir);
-    phony_content_buffer = (char*)malloc(PHONY_TARGET_BUFFER);
+    phony_content_buffer = static_cast<char*>(malloc(PHONY_TARGET_BUFFER));
     assert(phony_content_buffer); // Don't handle OOM conditions
     strcpy(phony_content_buffer, work_dir);
     phony_content_buffer[work_dir_len] = '/';
