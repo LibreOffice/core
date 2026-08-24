@@ -308,7 +308,7 @@ bool DataSupplier::getData(std::unique_lock<std::mutex>& rResultSetGuard)
         ContentProperties::UCBNamesToDAVNames(
                         getResultSet()->getProperties(), propertyNames );
 
-        // Append "resourcetype", if not already present. It's value is
+        // Append "resourcetype", if not already present. Its value is
         // needed to get a valid ContentProperties::pIsFolder value, which
         // is needed for OpenMode handling.
 

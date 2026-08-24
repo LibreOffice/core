@@ -432,7 +432,7 @@ bool DocumentSignatureHelper::CanSignWithGPG(
 
 
 
-//sElementList contains all files which are expected to be signed. Only those files must me signed,
+//sElementList contains all files which are expected to be signed. Only those files must be signed,
 //no more, no less.
 //The DocumentSignatureAlgorithm indicates if the document was created with OOo 2.x. Then
 //the uri s in the Reference elements in the signature, were not properly encoded.

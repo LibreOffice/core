@@ -2161,7 +2161,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     if (!xCharStyleIdx || xCharStyleIdx->empty() || GetMainEntryCharStyle().isEmpty())
         return;
 
-    // eventually the last index must me appended
+    // eventually the last index must be appended
     if (xCharStyleIdx->size()&0x01)
         xCharStyleIdx->push_back(aNumStr.getLength());
 
