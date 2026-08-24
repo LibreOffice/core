@@ -45,8 +45,8 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
         }
         else
         {
-            // a xml namespace without name is not allowed (e.g. "xmlns:" )
-            throw SAXException( u"A xml namespace without name is not allowed!"_ustr, Reference< XInterface >(), Any() );
+            // an XML namespace without name is not allowed (e.g. "xmlns:" )
+            throw SAXException( u"An XML namespace without name is not allowed!"_ustr, Reference< XInterface >(), Any() );
         }
     }
 

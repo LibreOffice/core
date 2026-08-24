@@ -46,7 +46,7 @@ bool TargetHelper::matchSpecialTarget(std::u16string_view sCheckTarget  ,
 bool TargetHelper::isValidNameForFrame(std::u16string_view sName)
 {
     // some special targets are really special ones :-)
-    // E.g. the are really used to locate one frame inside the frame tree.
+    // E.g. they are really used to locate one frame inside the frame tree.
     if (
         (sName.empty()                                    ) ||
         (TargetHelper::matchSpecialTarget(sName, ESpecialTarget::HelpTask)) ||
@@ -54,8 +54,8 @@ bool TargetHelper::isValidNameForFrame(std::u16string_view sName)
        )
         return true;
 
-    // all other names must be checked more general
-    // special targets starts with a "_".
+    // all other names must be checked more generally
+    // special targets start with a "_".
     return (sName.find('_') != 0);
 }
 

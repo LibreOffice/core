@@ -21,7 +21,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-/// Sample interception implementation that asserts getInterceptedURLs() and queryDispatch() is in sync.
+/// Sample interception implementation that asserts getInterceptedURLs() and queryDispatch() are in sync.
 class MyInterceptor
     : public cppu::WeakImplHelper<frame::XDispatchProviderInterceptor, frame::XInterceptorInfo>
 {
