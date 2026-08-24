@@ -1,0 +1,5 @@
+# Generated per-run logs
+install-*.log
+wopi-*.log
+wsclient-*.log
+wsclient.log
