@@ -1020,7 +1020,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
     }
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
-    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // objects, so the persist name must be handled correctly ( although no real persist entry is used )
     // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
     if ( m_bIsLinkURL )
     {
@@ -1194,7 +1194,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
-    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // objects, so the persist name must be handled correctly ( although no real persist entry is used )
     // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
     if ( m_bIsLinkURL )
         return;
@@ -1324,7 +1324,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
-    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // objects, so the persist name must be handled correctly ( although no real persist entry is used )
     // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
     if ( m_bIsLinkURL )
     {
@@ -1460,7 +1460,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     }
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
-    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // objects, so the persist name must be handled correctly ( although no real persist entry is used )
     // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
     if ( m_bIsLinkURL )
     {

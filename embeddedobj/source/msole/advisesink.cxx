@@ -69,7 +69,7 @@ STDMETHODIMP_(ULONG) OleWrapperAdviseSink::Release()
 
 void OleWrapperAdviseSink::disconnectOleComponent()
 {
-    // must not be called from the descructor of OleComponent!!!
+    // must not be called from the destructor of OleComponent!!!
     osl::MutexGuard aGuard( m_aMutex );
     m_pOleComp = nullptr;
 }

@@ -55,8 +55,8 @@ css::awt::Gradient2 createUnoGradient2(basegfx::BGradient const& rGradient)
     // NOTE: All code after adapting to multi color gradients works
     //       using the ColorSteps, so in principle Start/EndColor might
     //       be either
-    //        (a) ignored consequently everywhere or
-    //        (b) be set/added consequently everywhere
+    //        (a) ignored consistently everywhere or
+    //        (b) be set/added consistently everywhere
     //       since this is - in principle - redundant data.
     //       Be aware that e.g. cases like DrawingML::EqualGradients
     //       and others would have to be identified and adapted (!)
@@ -68,7 +68,7 @@ css::awt::Gradient2 createUnoGradient2(basegfx::BGradient const& rGradient)
     //       ColorSteps if these are not empty, assuming that these
     //       already contain Start/EndColor.
     //       In principle that redundancy and that it is conflict-free
-    //       could even be checked and asserted, but consequently using
+    //       could even be checked and asserted, but consistently using
     //       (b) methodically should be safe.
     const basegfx::BColorStops& rColorStops = rGradient.GetColorStops();
     aGradient2.StartColor = static_cast<sal_Int32>(::Color(rColorStops.front().getStopColor()));
