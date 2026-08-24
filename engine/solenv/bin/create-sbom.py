@@ -445,6 +445,9 @@ def process_file(file_path):
 
 
 def sbom_skeleton(package, gid, languages):
+    """Create root SPDX elements of package."""
+
+    assert isinstance(languages, set)
     root_spdx_id = make_spdx_id(package, f"SPDXRef-{package}")
     package_spdx_id = package_id(package)
     tool_spdx_id = make_spdx_id(package, "SPDXRef-Tool-CustomScript")
@@ -542,12 +545,12 @@ def gen_packages(packinfos, ziplist, languages, product):
         name = pattern.sub(replace, name_pi)
         if "%LANGUAGESTRING" in name:
             for lang in languages:
-                gen_package(name.replace("%LANGUAGESTRING", lang), gid + "_" + lang.replace("-", "_"), lang)
+                gen_package(name.replace("%LANGUAGESTRING", lang), gid + "_" + lang.replace("-", "_"), {lang})
         else:
             if sys.platform == "win32" and gid == "gid_Module_Root":
                 gen_package(name, gid, languages)
             else:
-                gen_package(name, gid, "en-US")
+                gen_package(name, gid, {"en-US"})
 
     return root_gids
 
@@ -566,19 +569,26 @@ def process_install_script(install_script, root_gids):
 
     modules = install_script["Module"]
 
+    def get_lang(module):
+        if "LANGUAGEMODULE" in install_script_value_to_array(module.get("Styles", "")):
+            if not "Language" in module:
+                raise Exception(f"LANGUAGEMODULE without Language: {module['gid']}")
+            return module["Language"]
+        return None # every language
+
     def get_root(module):
         parent = module["ParentID"]
         if parent in root_gids:
             return parent
         return get_root(modules[parent])
 
-    def get_files(module):
+    def get_files(module, lang):
         if "Assigns" in module:
             templategid = module["Assigns"]
             template = modules[templategid]
             if not "TEMPLATEMODULE" in install_script_value_to_array(template["Styles"]):
                 raise Exception(f"Assigns not TEMPLATEMODULE: {templategid}")
-            return get_files(template)
+            return get_files(template, lang)
         else:
             result = []
             if not "Files" in module:
@@ -586,6 +596,10 @@ def process_install_script(install_script, root_gids):
             files = install_script_value_to_array(module["Files"])
             for filegid in files:
                 file = install_script["File"][filegid]
+                if lang is not None:
+                    # copy it so lang can be assigned to each copy
+                    file = file.copy()
+                    file["modulelang"] = lang
                 file_with_parents = [file]
                 parent = file["Dir"]
                 while parent != "PREDEFINED_PROGDIR":
@@ -618,16 +632,24 @@ def process_install_script(install_script, root_gids):
             and "HIDDEN_ROOT" in install_script_value_to_array(modules["gid_Module_Helppack_Helproot"]["Styles"]):
                 continue # skip if help is disabled or "online"
         module = modules[gid]
-        files = get_files(module)
+        lang = get_lang(module)
+        files = get_files(module, lang)
         if len(files) == 0:
             raise Exception(f"unexpected root module with no files: {gid}")
         result[gid] = files
 
+    assigned_templates = set(module["Assigns"] for module in modules.values() if "Assigns" in module)
+
     for gid in modules:
         if not(gid in root_gids):
             module = modules[gid]
+            if "TEMPLATEMODULE" in install_script_value_to_array(module.get("Styles", "")):
+                if len(get_files(module, None)) != 0 and not(gid in assigned_templates):
+                    raise Exception(f"template module with files is never assigned: {gid}")
+                continue
             rootgid = get_root(module)
-            files = get_files(module)
+            lang = get_lang(module)
+            files = get_files(module, lang)
             if len(files) != 0: # some are empty
                 result[rootgid] += files
 
@@ -704,7 +726,7 @@ class FileFlags(Flag):
     ARCHIVE = auto()
     STRUCTURED = auto()
 
-def locate_files(files_by_package, languages, ziplist, product, filelistdirs):
+def locate_files(files_by_package, ziplist, product, filelistdirs):
     """
     Find actual paths of the files, which depends on language and variables,
     and determine flags.
@@ -809,8 +831,13 @@ def locate_files(files_by_package, languages, ziplist, product, filelistdirs):
 
     for package in files_by_package:
         package_files = []
+        package_langs = next(sbom_data[key][1] for key in sbom_data if sbom_data[key][0] == package)
         for pathlist in files_by_package[package]:
             file = pathlist[0]
+            if "modulelang" in file:
+                languages = package_langs.intersection({file["modulelang"]})
+            else:
+                languages = package_langs
             files = get_files(pathlist, languages)
             for (abspath, instpath) in files:
                 flags = get_flags(file, abspath, instpath)
@@ -1070,7 +1097,7 @@ def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
     externalstaticlink = read_external_staticlink(externalstaticfile)
     externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile)
     assign_externals(files_by_package, externalfiles)
-    files = locate_files(files_by_package, languages, ziplist, product, filelistdirs)
+    files = locate_files(files_by_package, ziplist, product, filelistdirs)
     filter_files(files)
     add_dependencies(files, files_extra_deps)
     add_static_dependencies(files, externalstaticlink, False)
@@ -1095,7 +1122,7 @@ if __name__ == "__main__":
         packinfos += parse_packinfo(sys.argv[8])
         packinfos += parse_packinfo(sys.argv[9])
         install_script = parse_install_script(sys.argv[10])
-        languages = sys.argv[13].split()
+        languages = set(sys.argv[13].split())
         externalsfile = sys.argv[14]
         externalstaticfile = sys.argv[15]
         externalpackagestaticfile = sys.argv[16]
@@ -1116,6 +1143,6 @@ if __name__ == "__main__":
             filename = f"{package}-sbom.spdx.json"
             filepath = os.path.join(sbom_path, filename)
             with open(filepath, "w", encoding="utf-8") as file:
-                json.dump(data, file, indent=2)
+                json.dump(data[2], file, indent=2)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
