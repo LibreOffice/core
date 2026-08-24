@@ -227,7 +227,7 @@ void SdGRFFilter::InsertSdrGrafObj(const Graphic& rGraphic, SdPage* pPage)
 
 bool SdGRFFilter::Export()
 {
-    // SJ: todo: error handling, the GraphicExportFilter does not support proper errorhandling
+    // SJ: todo: error handling, the GraphicExportFilter does not support proper error handling
     bool bRet = false;
 
     const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
@@ -250,7 +250,7 @@ bool SdGRFFilter::Export()
 
     if ( pPage )
     {
-        // taking the 'correct' page number, seems that there might exist a better method to archive this
+        // taking the 'correct' page number, seems that there might exist a better method to achieve this
         pPage = mrDocument.GetSdPage( pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0, ePageKind );
         if ( pPage )
         {

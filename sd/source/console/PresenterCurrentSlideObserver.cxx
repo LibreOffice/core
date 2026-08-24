@@ -53,7 +53,7 @@ PresenterCurrentSlideObserver::~PresenterCurrentSlideObserver()
 
 void SAL_CALL PresenterCurrentSlideObserver::disposing()
 {
-    // Disconnect form the slide show controller.
+    // Disconnect from the slide show controller.
     if(mxSlideShowController.is())
     {
         mxSlideShowController->removeSlideShowListener(static_cast<XSlideShowListener*>(this));

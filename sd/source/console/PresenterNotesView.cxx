@@ -433,7 +433,7 @@ void PresenterNotesView::Layout()
                 mpScrollBar->SetThumbPosition(0, false);
             UpdateScrollBar();
     }
-    // Has the text area has changed it position or size?
+    // Has the text area changed its position or size?
     if (aNewTextBoundingBox.X1 != maTextBoundingBox.X1
         || aNewTextBoundingBox.Y1 != maTextBoundingBox.Y1
         || aNewTextBoundingBox.X2 != maTextBoundingBox.X2
