@@ -2431,7 +2431,6 @@ followColorScheme
 followSib
 followedHyperlink
 font
-font4
 fontAlgn
 fontColor
 fontId

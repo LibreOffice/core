@@ -53,7 +53,8 @@ struct OOX_DLLPUBLIC TextFontModel
     std::optional< OUString > moNameComplex; ///< Complex font name.
     std::optional< OUString > moColor;    ///< Font color, HTML encoded, sort of.
     std::optional< sal_Int32 > monSize;          ///< Font size in twips.
-    std::optional< sal_Int32 > monUnderline;     ///< Single or double underline.
+    std::optional<bool> mobUnderline; ///< Underlined text.
+    std::optional<OUString> moUnderlineClass; ///< Font record naming the underline style.
     std::optional< sal_Int32 > monEscapement;    ///< Subscript or superscript.
     std::optional< bool >    mobBold;
     std::optional< bool >    mobItalic;
