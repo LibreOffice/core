@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>
@@ -270,6 +271,13 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
 
 void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 {
+    // In COKit the configuration and the factory data are shared by every view of the
+    // document, while each view opens its tool windows through an explicit request from
+    // its own client. Keeping the stored state at the registration defaults means a new
+    // view frame starts without the tool windows other views have opened.
+    if (comphelper::COKit::isActive())
+        return;
+
     sal_uInt16 nID = GetType();
 
     OUString aInfoVisible = rInfo.bVisible ? u"V"_ustr : u"H"_ustr;
