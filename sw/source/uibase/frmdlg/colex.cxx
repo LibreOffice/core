@@ -211,7 +211,7 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
 
     const tools::Rectangle aDefineRect(aRect);
 
-    // #97495# make sure that the automatic column width's are always equal
+    // #97495# make sure that the automatic column widths are always equal
     bool bAutoWidth = m_pColMgr->IsAutoWidth();
     sal_Int32 nAutoColWidth = 0;
     if (bAutoWidth)
@@ -427,7 +427,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
         nRight /= nWishSum;
         pCol->SetRight(o3tl::narrowing<sal_uInt16>(nRight));
     }
-    // #97495# make sure that the automatic column width's are always equal
+    // #97495# make sure that the automatic column widths are always equal
     if(!(nColCount && m_aCols.IsOrtho()))
         return;
 

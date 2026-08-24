@@ -153,7 +153,7 @@ bool SwGlosDocShell::Save()
 {
     // In case of an API object which holds this document, it is possible that the WrtShell is already
     // dead. For instance, if the doc is modified via this API object, and then, upon office shutdown,
-    // the document's view is closed (by the SFX framework) _before_ the API object is release and
+    // the document's view is closed (by the SFX framework) _before_ the API object is released and
     // tries to save the doc, again.
     // 96380 - 2002-03-03 - fs@openoffice.org
     if ( GetWrtShell() )

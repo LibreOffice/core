@@ -47,7 +47,7 @@ void SwWait::EnterWaitAndLockDispatcher()
         pFrame->GetWindow().EnterWait();
         if ( mbLockUnlockDispatcher )
         {
-            // do not look already locked dispatchers
+            // do not lock already locked dispatchers
             SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
             if ( !pDispatcher->IsLocked() )
             {

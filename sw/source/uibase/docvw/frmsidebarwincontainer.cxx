@@ -168,6 +168,6 @@ std::vector<vcl::Window*> SwFrameSidebarWinContainer::getAll(const SwFrame& rFra
     return aSidebarWins;
 }
 
-} // eof of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
