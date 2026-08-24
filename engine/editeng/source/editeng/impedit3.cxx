@@ -4907,7 +4907,7 @@ Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGet
     return mxISC;
 }
 
-static bool hasColorContrast(const Color& rColor, const Color& rBackgroundColor)
+bool HasColorContrast(const Color& rColor, const Color& rBackgroundColor)
 {
     if (rColor.IsDark() && !rBackgroundColor.IsDark())
         return true;
@@ -4939,7 +4939,7 @@ Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
         aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
 
         // allow using FONTCOLOR if it provides contrast to the current background color
-        if (aColor != COL_AUTO && hasColorContrast(aColor, aBackgroundColor))
+        if (aColor != COL_AUTO && HasColorContrast(aColor, aBackgroundColor))
             return aColor;
     }
 

@@ -27,6 +27,7 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
@@ -2434,6 +2435,10 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     // color for subsidiary lines:
     const Color& rCol( gProp.pSGlobalShell->GetViewOptions()->GetTableBoundariesColor() );
 
+    // the current page background color, used below to keep a border line legible
+    // when its own color would otherwise blend into that background:
+    const Color& rDocColor( gProp.pSGlobalShell->GetViewOptions()->GetDocColor() );
+
     // high contrast mode:
     // overrides the color of non-subsidiary lines.
     const Color* pHCColor = nullptr;
@@ -2539,6 +2544,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
             // subsidiary lines
             const Color* pTmpColor = nullptr;
+            Color aContrastColor;
             if (0 == aStyles[ 0 ].GetWidth())
             {
                 if (isSubsidiaryLinesEnabled() &&
@@ -2549,7 +2555,19 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     aStyles[0].SetType(SvxBorderLineStyle::NONE);
             }
             else
+            {
                 pTmpColor = pHCColor;
+
+                // keep this border legible against the current on-screen page background,
+                // the way automatic text color already does, instead of always showing
+                // the line's own stored color:
+                if (!pTmpColor && gProp.pSGlobalShell->GetWin() &&
+                    !HasColorContrast(aStyles[0].GetColorPrim(), rDocColor))
+                {
+                    aContrastColor = rDocColor.IsDark() ? COL_WHITE : COL_BLACK;
+                    pTmpColor = &aContrastColor;
+                }
+            }
 
             // The (twip) positions will be adjusted to meet these requirements:
             // 1. The y coordinates are located in the middle of the pixel grid

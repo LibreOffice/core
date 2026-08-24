@@ -84,6 +84,7 @@
 #include <rootfrm.hxx>
 #include <fmtanchr.hxx>
 #include <docsh.hxx>
+#include <itabenum.hxx>
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <textcontentcontrol.hxx>
@@ -1703,6 +1704,32 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertedBackgroundLightensText)
 
     // Without the fix the text kept its own black on the dark background, so the tile had no light
     // pixel at all.
+    CPPUNIT_ASSERT(countLightPixels(getTile(pXTextDocument)) > 0);
+}
+
+// A table's default border is painted in a light variant once the document background is
+// inverted, also when the color scheme of the view stays light.
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertedBackgroundLightensTableBorder)
+{
+    const Color aDarkColor(0x1c, 0x1c, 0x1c);
+    addDarkLightThemes(aDarkColor, COL_WHITE);
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwTestViewCallback aView;
+    dispatchThemeCommand(getSwDocShell(), u".uno:ChangeTheme"_ustr, u"Light"_ustr);
+
+    // A table's default border color is a literal black, not an automatic color that would
+    // already track the background on its own, so this needs that default to show the mapping.
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, 2, 2);
+    Scheduler::ProcessEventsToIdle();
+
+    // The document background is inverted on its own, the color scheme of the view stays light.
+    dispatchThemeCommand(getSwDocShell(), u".uno:InvertBackground"_ustr, u"Dark"_ustr);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
+
+    // Without the fix the table's border kept its own black on the dark background, so the tile
+    // had no light pixel at all.
     CPPUNIT_ASSERT(countLightPixels(getTile(pXTextDocument)) > 0);
 }
 

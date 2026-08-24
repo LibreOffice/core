@@ -142,6 +142,10 @@ enum class SetAttribsMode {
     NONE, WholeWord, Edge
 };
 
+/// Returns true if a color built from rColor stays legible on a background of rBackgroundColor,
+/// judging legibility from whether the two colors fall on opposite sides of light and dark.
+EDITENG_DLLPUBLIC bool HasColorContrast(const Color& rColor, const Color& rBackgroundColor);
+
 class EDITENG_DLLPUBLIC EditEngine
 {
     friend class EditView;
