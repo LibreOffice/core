@@ -57,7 +57,7 @@ void AcceleratorsTest::configNotification()
         CPPUNIT_ASSERT(xSwAccelCfg.is());
     }
 
-    // The two modules configs shouldn’t be the same object, otherwise
+    // The two module configs shouldn’t be the same object, otherwise
     // the test is not really testing anything
     CPPUNIT_ASSERT(xSwAccelCfgs[0] != xSwAccelCfgs[1]);
 

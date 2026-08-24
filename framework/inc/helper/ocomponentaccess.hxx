@@ -82,7 +82,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
             @seealso    interface XEnumeration
             @seealso    class Desktop
             @return     If the desktop and some components exist => a valid reference to an enumeration<BR>
-                        An NULL-reference, other way.
+                        A NULL-reference, otherwise.
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
