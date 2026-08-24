@@ -2528,6 +2528,29 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleIsIndependent)
     m_pDoc->DeleteTab(0);
 }
 
+// A name of the user's own may carry the same per-cent token the numbering pattern
+// uses, and it still reaches the copy as they wrote it.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleNameKeepsPerCentToken)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"PerCentName"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    const OUString aRequested = u"Sales %2 and %1"_ustr;
+    const OUString aFirst = pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, aRequested);
+    const OUString aSecond = pStyles->DuplicateTableStyle(u"TableStyleMedium2"_ustr, aRequested);
+
+    CPPUNIT_ASSERT_EQUAL(aRequested, pStyles->GetTableStyle(aFirst)->GetUIName());
+    CPPUNIT_ASSERT_EQUAL(u"Sales %2 and %1 (2)"_ustr,
+                         pStyles->GetTableStyle(aSecond)->GetUIName());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateTableStyleUINameStaysApart)
 {
     m_pDoc->InitDrawLayer();

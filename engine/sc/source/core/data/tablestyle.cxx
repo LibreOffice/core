@@ -9,6 +9,8 @@
 
 #include <tablestyle.hxx>
 #include <sc.hrc>
+#include <scresid.hxx>
+#include <strings.hrc>
 #include <o3tl/string_view.hxx>
 #include <algorithm>
 #include <sfx2/kit/helper.hxx>
@@ -1223,7 +1225,11 @@ OUString ScTableStyles::GetUnusedUIName(const OUString& rBaseName) const
 
     for (sal_Int32 nCandidate = 2;; ++nCandidate)
     {
-        OUString aName = rBaseName + " (" + OUString::number(nCandidate) + ")";
+        // The count goes in first so the name goes in last, and a name carrying a
+        // per-cent token of its own reaches the result as the user wrote it.
+        OUString aName = ScResId(STR_TABLE_STYLE_NAME_NUMBERED)
+                             .replaceFirst("%2", OUString::number(nCandidate))
+                             .replaceFirst("%1", rBaseName);
         if (!bIsTaken(aName))
             return aName;
     }

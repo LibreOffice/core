@@ -451,6 +451,9 @@
 #define STR_TABLE_STYLE_NONE                        NC_("STR_TABLE_STYLE_NONE", "None")
 /* The name given to a style made by copying another one */
 #define STR_TABLE_STYLE_COPY_OF                     NC_("STR_TABLE_STYLE_COPY_OF", "Copy of %1")
+/* A style name that has to be told apart from one already in use: %1 is the name
+   that was asked for and %2 the count that makes it unique */
+#define STR_TABLE_STYLE_NAME_NUMBERED               NC_("STR_TABLE_STYLE_NAME_NUMBERED", "%1 (%2)")
 /* Region names in the New Table Style dialog, one per table-style element */
 #define STR_TABLESTYLE_ELEM_WHOLETABLE              NC_("STR_TABLESTYLE_ELEM_WHOLETABLE", "Whole Table")
 #define STR_TABLESTYLE_ELEM_HEADERROW               NC_("STR_TABLESTYLE_ELEM_HEADERROW", "Header Row")
