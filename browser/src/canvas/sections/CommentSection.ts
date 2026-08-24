@@ -477,7 +477,12 @@ export class Comment extends CanvasSectionObject {
 			}
 		}
 
-		if (this.isSelected()) {
+		if (this.sectionProperties.commentListSection.isShownBig(this)) {
+			// Full view lifts the card and the overlay it casts over the sidebars.
+			// That level lives in the stylesheet, so leave the inline value empty
+			// here instead of pinning the card back down beside the document.
+			this.sectionProperties.container.style.zIndex = '';
+		} else if (this.isSelected()) {
 			this.sectionProperties.container.style.zIndex = 14;
 		} else if (this.isEdit()) {
 			this.sectionProperties.container.style.zIndex = 13;

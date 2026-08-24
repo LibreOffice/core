@@ -2711,7 +2711,12 @@ export class CommentSection extends CanvasSectionObject {
 				yOrigin = this.sectionProperties.commentList[selectedIndex].sectionProperties.data.anchorSPoint.vY;
 				var tempCrd: Array<number> = this.sectionProperties.commentList[selectedIndex].sectionProperties.data.anchorSPoint.vToArray();
 				var resolved:string = this.sectionProperties.commentList[selectedIndex].sectionProperties.data.resolved;
-				if (!resolved || resolved === 'false' || this.sectionProperties.showResolved) {
+				// In full view the card sits centred over the document instead of in
+				// the comment column, so the connector would run to empty space.
+				if (this.sectionProperties.showSelectedBigger) {
+					this.hideArrow();
+				}
+				else if (!resolved || resolved === 'false' || this.sectionProperties.showResolved) {
 					var posX = isRTL ? (this.containerObject.getDocumentAnchorSection().size[0] + x + 15) : x;
 					this.showArrow([tempCrd[0], tempCrd[1]], [posX, tempCrd[1]]);
 				}
