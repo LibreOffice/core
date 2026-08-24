@@ -260,7 +260,7 @@ static void* pool_alloc(struct pool* pool)
         if(pool->fresh <= pool->tail)
         {
             /* pick a slice of the current extent */
-            data = (void*)pool->fresh;
+            data = pool->fresh;
             pool->fresh += pool->size_elem;
         }
         else
