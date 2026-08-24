@@ -72,8 +72,8 @@ class FastParser;
 struct XmlFilterBaseImpl;
 
 using ShapePairs
-    = std::map<std::shared_ptr<drawingml::Shape>, css::uno::Reference<css::drawing::XShape>>;
-using NamedShapePairs = std::map<OUString, ShapePairs>;
+    = std::unordered_map<std::shared_ptr<drawingml::Shape>, css::uno::Reference<css::drawing::XShape>>;
+using NamedShapePairs = std::unordered_map<OUString, ShapePairs>;
 
 class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {

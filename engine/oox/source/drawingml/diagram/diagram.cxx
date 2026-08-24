@@ -450,7 +450,7 @@ void SmartArtDiagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno:
 }
 
 using ShapePairs
-    = std::map<std::shared_ptr<drawingml::Shape>, uno::Reference<drawing::XShape>>;
+    = std::unordered_map<std::shared_ptr<drawingml::Shape>, uno::Reference<drawing::XShape>>;
 
 void SmartArtDiagram::syncDiagramFontHeights()
 {
