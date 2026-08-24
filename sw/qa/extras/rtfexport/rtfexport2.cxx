@@ -1380,7 +1380,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo62288)
                                                                       uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
         uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-        // Margins were inherited from the previous cell, even there was a \pard there.
+        // Margins were inherited from the previous cell, even though there was a \pard there.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
     };
     createSwDoc("fdo62288.rtf");

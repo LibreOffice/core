@@ -229,7 +229,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunComboBox)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPicture)
 {
-    // Given a document with a dropdown inline/run SDT:
+    // Given a document with a picture inline/run SDT:
     loadFromFile(u"sdt-run-picture.docx");
 
     // Then make sure that the doc model has a clickable picture content control:

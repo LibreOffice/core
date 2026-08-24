@@ -3044,7 +3044,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf106137_UnicodeEscapeInReplacement_B
     SwPaM* pCursor = pShell->GetCursor();
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
 
-    // Insert text that contains a actual escaped unicode string
+    // Insert text that contains an actual escaped unicode string
     rIDCO.InsertString(*pCursor, u"find \\u0042"_ustr);
 
     uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
