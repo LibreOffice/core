@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <Python.h>
+
 #include <sal/log.hxx>
 #include <config_folders.h>
 
