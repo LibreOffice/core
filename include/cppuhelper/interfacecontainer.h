@@ -75,12 +75,12 @@ public:
        Create an iterator over the elements of the container. The iterator
        copies the elements of the container. A change to the container
        during the lifetime of an iterator is allowed and does not
-       affect the iterator-instance. The iterator and the container take cares
-       themself for concurrent access, no additional guarding is necessary.
+       affect the iterator-instance. The iterator and the container take care
+       themselves for concurrent access, no additional guarding is necessary.
 
-       Remark: The copy is on demand. The iterator copy the elements only if the container
-       change the contents. It is not allowed to destroy the container as long
-       as an iterator exist.
+       Remark: The copy is on demand. The iterator copies the elements only if the container
+       changes the contents. It is not allowed to destroy the container as long
+       as an iterator exists.
 
        @param rCont the container of the elements.
      */
@@ -191,7 +191,7 @@ public:
     */
     sal_Int32 SAL_CALL removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /**
-      Call disposing on all object in the container that
+      Call disposing on all objects in the container that
       support XEventListener. Then clear the container.
      */
     void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
@@ -258,7 +258,7 @@ friend class OInterfaceIteratorHelper;
 
     /*
       Duplicate content of the container and release the old one without destroying.
-      The mutex must be locked and the memberbInUse must be true.
+      The mutex must be locked and the member bInUse must be true.
      */
     void copyAndResetInUse();
 
@@ -587,7 +587,7 @@ public:
         const css::uno::Reference< css::uno::XInterface > & rxIFace );
 
     /**
-      Call disposing on all object in the container that
+      Call disposing on all objects in the container that
       support XEventListener. Then clear the container.
      */
     void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );

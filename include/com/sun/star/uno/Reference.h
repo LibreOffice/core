@@ -61,7 +61,7 @@ enum UnoReference_NoAcquire
 };
 
 /** This base class serves as a base class for all template reference classes and
-    has been introduced due to compiler problems with templated operators ==, =!.
+    has been introduced due to compiler problems with templated operators ==, !=.
 */
 class BaseReference
 {
@@ -374,7 +374,7 @@ public:
 
     /** Cast operator to Reference< XInterface >: Reference objects are binary compatible and
         any interface must be derived from com.sun.star.uno.XInterface.
-        This a useful direct cast possibility.
+        This is a useful direct cast possibility.
     */
     SAL_CALL operator const Reference< XInterface > & () const
         { return * reinterpret_cast< const Reference< XInterface > * >( this ); }

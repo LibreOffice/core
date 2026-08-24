@@ -176,21 +176,21 @@ public:
     /** Compares two types.
 
         @param rType another type
-        @return true if both types refer the same type, false otherwise
+        @return true if both types refer to the same type, false otherwise
     */
     bool SAL_CALL equals( const Type & rType ) const
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Equality operator: Compares two types.
 
         @param rType another type
-        @return true if both types refer the same type, false otherwise
+        @return true if both types refer to the same type, false otherwise
     */
     bool SAL_CALL operator == ( const Type & rType ) const
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Inequality operator: Compares two types.
 
         @param rType another type
-        @return false if both types refer the same type, true otherwise
+        @return false if both types refer to the same type, true otherwise
     */
     bool SAL_CALL operator != ( const Type & rType ) const
         { return (! ::typelib_typedescriptionreference_equals( _pType, rType._pType )); }
