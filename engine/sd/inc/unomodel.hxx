@@ -321,7 +321,7 @@ public:
                             int nTilePosY,
                             tools::Long nTileWidth,
                             tools::Long nTileHeight ) override;
-    virtual Size getDocumentSize() override;
+    SD_DLLPUBLIC virtual Size getDocumentSize() override;
     virtual Size getPartSize(int part) override;
     virtual void getAllPartSize(::tools::JsonWriter& rJsonWriter) override;
     SD_DLLPUBLIC virtual void setPart(   int nPart, bool bAllowChangeFocus = true ) override;

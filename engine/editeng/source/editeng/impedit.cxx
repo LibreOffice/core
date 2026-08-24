@@ -638,7 +638,16 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     };
     getImpEditEngine().IterateLineAreas(DrawHighlight, ImpEditEngine::IterFlag::none);
 
-    if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow)
+    // A render of the document into its own device - a slide preview, a
+    // thumbnail, a tile - lays the text out for that device, so the rectangles
+    // measured above are that device's and not the view's. A whole slide
+    // painted into 180 by 101 pixels puts one device pixel at about 88 twips,
+    // which is how far such a rectangle can sit from the text it covers. Only a
+    // measurement of the view is reported.
+    const bool bRendering = comphelper::COKit::isTiledPainting()
+                            || comphelper::COKit::isVectorRendering();
+
+    if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow && !bRendering)
         kitSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
 
     if (pRegion || comphelper::COKit::isActive())

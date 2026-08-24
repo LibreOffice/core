@@ -2305,14 +2305,17 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
         // while the complex command in question executes.
         // We don't want to suppress everything here on the wrong assumption
         // that no new events are fired during painting.
+        //
+        // Painting the tile of another part switches the view to that part and
+        // switches it back. The text selection reported in between belongs to
+        // that transient state and is empty, which says that the selection is
+        // gone. So the three selection types are not in the list below, and a
+        // paint reports nothing about the selection.
         if (type != COKitCallbackType::STATE_CHANGED &&
             type != COKitCallbackType::INVALIDATE_TILES &&
             type != COKitCallbackType::INVALIDATE_VISIBLE_CURSOR &&
             type != COKitCallbackType::CURSOR_VISIBLE &&
             type != COKitCallbackType::VIEW_CURSOR_VISIBLE &&
-            type != COKitCallbackType::TEXT_SELECTION &&
-            type != COKitCallbackType::TEXT_SELECTION_START &&
-            type != COKitCallbackType::TEXT_SELECTION_END &&
             type != COKitCallbackType::MEDIA_SHAPE &&
             type != COKitCallbackType::REFERENCE_MARKS)
         {

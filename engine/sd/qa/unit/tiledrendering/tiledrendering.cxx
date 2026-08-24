@@ -1209,6 +1209,46 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testKeepTextSelectionAcrossTransientP
                              xClipboard->getContents(), "text/plain;charset=utf-8"_ostr));
 }
 
+// A slide preview paints the whole slide into a device of a couple of hundred
+// pixels, and the text being edited is laid out for that device. The reported
+// text selection stays the measurement of the view: with a whole slide painted
+// into 180 by 101 pixels one device pixel covers about 88 twips, which is how
+// far the preview's own rectangles can sit from the text they cover.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewRenderKeepsReportedTextSelection)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+
+    uno::Reference<container::XIndexAccess> xDrawPage(
+        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setString(u"Aaa bbb."_ustr);
+
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    pView->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection(0, 4, 0, 7));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
+    const ::tools::Rectangle aSelectionOfTheView = m_aSelection[0];
+
+    // Paint a preview of the slide: the whole page into 180 by 101 pixels.
+    const Size aPageSize = pXImpressDocument->getDocumentSize();
+    std::vector<unsigned char> aPixmap(180 * 101 * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(180, 101), 1.0, Point(),
+                                                       aPixmap.data());
+    pXImpressDocument->paintTile(*pDevice, 180, 101, 0, 0, aPageSize.Width(),
+                                aPageSize.Height());
+    Scheduler::ProcessEventsToIdle();
+
+    // This failed: the preview reported the rectangle it measured for its own
+    // device, which is narrower than the text.
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(aSelectionOfTheView, m_aSelection[0]);
+}
+
 /**
  * tests a cut/paste bug around bullet items in a list and
  * graphic (bitmap) bullet items in a list (Tdf103083, Tdf166882)
