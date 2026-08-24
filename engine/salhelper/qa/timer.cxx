@@ -28,7 +28,7 @@ public:
     {
     }
 
-    void SAL_CALL onShot() override
+    void onShot() override
     {
         {
             std::scoped_lock l(mutex);

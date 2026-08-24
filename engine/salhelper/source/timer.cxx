@@ -42,7 +42,7 @@ public:
 
 protected:
     /// worker-function of thread
-    virtual void SAL_CALL run() override;
+    virtual void run() override;
 
     /// Checking and triggering of a timer event
     void checkForTimeout();

@@ -49,12 +49,12 @@ public:
     {}
 
 
-    void SAL_CALL acquire()
+    void acquire()
     {
         osl_atomic_increment(&m_nReferenceCount);
     }
 
-    void SAL_CALL release()
+    void release()
     {
         if (osl_atomic_decrement(&m_nReferenceCount) == 0)
         {

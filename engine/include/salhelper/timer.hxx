@@ -63,7 +63,7 @@ struct SAL_WARN_UNUSED TTimeValue : public TimeValue
         normalize();
     }
 
-    void SAL_CALL normalize()
+    void normalize()
     {
         if ( Nanosec > 1000000000 )
         {
@@ -72,7 +72,7 @@ struct SAL_WARN_UNUSED TTimeValue : public TimeValue
         }
     }
 
-    void SAL_CALL addTime( const TTimeValue& Delta )
+    void addTime( const TTimeValue& Delta )
     {
         Seconds += Delta.Seconds;
         Nanosec += Delta.Nanosec;
@@ -80,7 +80,7 @@ struct SAL_WARN_UNUSED TTimeValue : public TimeValue
         normalize();
     }
 
-    bool SAL_CALL isEmpty() const
+    bool isEmpty() const
     {
         return ( ( Seconds == 0 ) && ( Nanosec == 0 ) );
     }
@@ -134,52 +134,52 @@ public:
 
     /** Start timer.
      */
-    void        SAL_CALL start();
+    void        start();
 
     /** Abort timer prematurely.
      */
-    void        SAL_CALL stop();
+    void        stop();
 
     /** Returns true if timer is running.
      */
-    bool    SAL_CALL isTicking() const;
+    bool    isTicking() const;
 
     /** Is the timer expired?
      */
-    bool    SAL_CALL isExpired() const;
+    bool    isExpired() const;
 
     /** Does pTimer expires before us?
      */
-    bool    SAL_CALL expiresBefore( const Timer* pTimer ) const;
+    bool    expiresBefore( const Timer* pTimer ) const;
 
     /** Set the absolute time when the timer should fire.
      */
-    void        SAL_CALL setAbsoluteTime( const TTimeValue& Time );
+    void        setAbsoluteTime( const TTimeValue& Time );
 
     /** Set the time to fire to 'now' + Remaining.
      */
-    void        SAL_CALL setRemainingTime( const TTimeValue& Remaining );
+    void        setRemainingTime( const TTimeValue& Remaining );
 
     /** Set the time to fire to 'now' + Remaining with repeat interveal
      * Repeat.
      */
-    void        SAL_CALL setRemainingTime( const TTimeValue& Remaining, const TTimeValue& Repeat );
+    void        setRemainingTime( const TTimeValue& Remaining, const TTimeValue& Repeat );
 
     /** Adds Time to the 'fire time'.
      */
-    void        SAL_CALL addTime( const TTimeValue& Time );
+    void        addTime( const TTimeValue& Time );
 
     /** Returns the remaining time before timer expiration relative to now.
      */
-    TTimeValue  SAL_CALL getRemainingTime() const;
+    TTimeValue  getRemainingTime() const;
 
     /** Internal method to shutdown the timer thread
      */
-    static void SAL_CALL joinThread();
+    static void joinThread();
 
     /** Internal method to re-start the timer thread if necessary
      */
-    static void SAL_CALL startThread();
+    static void startThread();
 
 protected:
 
@@ -189,7 +189,7 @@ protected:
 
     /** What should be done when the 'timer fires'.
      */
-    virtual void SAL_CALL onShot() = 0;
+    virtual void onShot() = 0;
 
 protected:
 
@@ -217,7 +217,7 @@ private:
 
     /** Copy assignment operator deleted.
      */
-    void SAL_CALL operator=( const Timer& rTimer ) SAL_DELETED_FUNCTION;
+    void operator=( const Timer& rTimer ) SAL_DELETED_FUNCTION;
 
     friend class TimerManager;
 };
