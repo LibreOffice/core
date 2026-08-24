@@ -32,7 +32,7 @@ namespace cppu {
 /** Converts the value stored in an any to a concrete C++ type.
     The function does the same as the operator >>= () at the
     Any class, except that it throws an IllegalArgumentException in case of
-    failures (the value cannot be extracted without data loss )
+    failures (the value cannot be extracted without data loss)
 
    @exception css::lang::IllegalArgumentException when the type could not be converted.
  */

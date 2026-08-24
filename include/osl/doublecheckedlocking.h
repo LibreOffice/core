@@ -39,7 +39,7 @@ extern "C" {
     empty.  This is a macro instead of a (C++ inline) function to allow for
     maximum performance in both C and C++.
 
-    If possible, use the rtl_Instance template instead of explicitly spelling
+    If possible, use the rtl::Instance template instead of explicitly spelling
     out the double-checked locking pattern.  There are few cases where you
     will have to spell it out explicitly (e.g., the logic of a certain
     instance of the pattern is too complex to be mapped to the template, or
