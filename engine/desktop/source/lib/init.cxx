@@ -111,6 +111,7 @@
 #include <comphelper/threadpool.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/xmlencode.hxx>
 
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -6152,7 +6153,61 @@ static void reInitDictionaryList()
     }
 };
 
-static void updateConfig(const OUString& rConfigPath)
+/// Adds one directory to the OrganizationPaths of a named path of org.openoffice.Office.Paths.
+/// The shared extension layer holds the entry, so it ranks above the shipped defaults and below
+/// the settings of the individual user.
+static void addOrganizationPath(const OUString& rPathName, const OUString& rDirectoryUrl)
+{
+    OUString aXcuUrl;
+    oslFileHandle aHandle = nullptr;
+    if (osl::FileBase::createTempFile(nullptr, &aHandle, &aXcuUrl) != osl::FileBase::E_None)
+    {
+        SAL_WARN("kit", "Failed to create a file for the " << rPathName << " path entry");
+        return;
+    }
+
+    const OUString aContent
+        = OUString::Concat("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           "<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\""
+                           " oor:name=\"Paths\" oor:package=\"org.openoffice.Office\">"
+                           "<node oor:name=\"Paths\"><node oor:name=\"")
+          + comphelper::string::encodeForXml(rPathName)
+          + "\" oor:op=\"fuse\"><prop oor:name=\"OrganizationPaths\""
+            " oor:type=\"oor:string-list\"><value>"
+          + comphelper::string::encodeForXml(rDirectoryUrl)
+          + "</value></prop></node></node></oor:component-data>";
+
+    const OString aXcu = OUStringToOString(aContent, RTL_TEXTENCODING_UTF8);
+
+    sal_uInt64 nWritten = 0;
+    const bool bWritten
+        = osl_writeFile(aHandle, aXcu.getStr(), aXcu.getLength(), &nWritten) == osl_File_E_None
+          && nWritten == static_cast<sal_uInt64>(aXcu.getLength());
+    osl_closeFile(aHandle);
+
+    if (!bWritten)
+    {
+        SAL_WARN("kit", "Failed to write the " << rPathName << " path entry to " << aXcuUrl);
+        osl::File::remove(aXcuUrl);
+        return;
+    }
+
+    // The file stays for the life of the process. The configuration holds the layer under the
+    // URL it was read from.
+    try
+    {
+        css::configuration::Update::get(comphelper::getProcessComponentContext())
+            ->insertExtensionXcuFile(true, aXcuUrl);
+        SAL_INFO("kit", "Added " << rDirectoryUrl << " to the " << rPathName << " path");
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("kit", "Failed to add " << rDirectoryUrl << " to the " << rPathName
+                                                    << " path");
+    }
+}
+
+static void updateConfig(const OUString& rConfigPath, bool bSharedConfig)
 {
     osl::Directory aScanRootDir(rConfigPath);
     if (aScanRootDir.open() != osl::Directory::E_None)
@@ -6223,9 +6278,22 @@ static void updateConfig(const OUString& rConfigPath)
                 xUpdate->insertModificationXcuFile(xcustat.getFileURL(), aAllowedSubset, {});
             }
         }
+        else if (sFileName == "autotext")
+        {
+            if (bSharedConfig)
+                addOrganizationPath(u"AutoText"_ustr, stat.getFileURL());
+        }
         else if (sFileName == "wordbook")
         {
+            if (bSharedConfig)
+                addOrganizationPath(u"Dictionary"_ustr, stat.getFileURL());
             reInitDictionaryList();
+        }
+        else if (sFileName == "template")
+        {
+            // The templates sit in a group subdirectory of this directory, so this is the root.
+            if (bSharedConfig)
+                addOrganizationPath(u"Template"_ustr, stat.getFileURL());
         }
     }
 }
@@ -6266,10 +6334,10 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
         if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
             pDocSh->AllowLinkUpdate();
     }
-    else if (strcmp(pOption, "addconfig") == 0)
+    else if (strcmp(pOption, "addconfig") == 0 || strcmp(pOption, "addsharedconfig") == 0)
     {
         const OUString aConfigPath(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
-        updateConfig(aConfigPath);
+        updateConfig(aConfigPath, strcmp(pOption, "addsharedconfig") == 0);
         // The per-session call (the per-user tree) arrives last and wins.
         comphelper::COKit::setUserConfigDir(aConfigPath);
     }

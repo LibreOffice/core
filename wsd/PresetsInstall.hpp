@@ -49,6 +49,9 @@ private:
     // Per-group destination override; a group listed here goes under <override>/<group>/ instead of
     // the default <_presetsPath>/<group>/:
     std::map<std::string, std::string> _groupOverridePath;
+    // True for the presets of a whole configuration, which every user of that configuration
+    // shares. False for the presets of one individual user:
+    bool _sharedPresets;
     // Extension ids the integrator advertised for this round; anything present on disk under
     // <extensions>/ but not in this set after the install completes is a leftover from a prior
     // round (the integrator dropped that entry) and gets swept on completion:
@@ -86,7 +89,7 @@ private:
 public:
     PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll, const std::string& configId,
                        const std::string& presetsPath,
-                       std::map<std::string, std::string> groupOverridePath,
+                       std::map<std::string, std::string> groupOverridePath, bool sharedPresets,
                        const std::function<void(bool)>& installFinishedCB);
 
     bool empty() const

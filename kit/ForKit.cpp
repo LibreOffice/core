@@ -632,7 +632,10 @@ int createSubForKit(const std::string& subForKitIdent, const std::string& childR
             Poco::Path sharedPresets(childRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH);
             Poco::Path presetsPath = Poco::Path(sharedPresets, Uri::encode(subForKitIdent)).toString();
             assert(loKitPtr);
-            loKitPtr->setOption("addconfig", Poco::URI(presetsPath).toString().c_str());
+            // In the no-capabilities mode a kit keeps the real paths, so the engine can read a
+            // preset group from the staging directory under its own name.
+            const char* configOption = NoCapsForKit ? "addsharedconfig" : "addconfig";
+            loKitPtr->setOption(configOption, Poco::URI(presetsPath).toString().c_str());
         }
 
         LOG_INF("SubForKit process is ready. Parent: " << parentPid);

@@ -295,6 +295,7 @@ define start_coolwsd_instance
 			--o:user_interface.mode=$(USER_INTERFACE) \
 			--o:accessibility.enable=$(A11Y_ENABLE) \
 			--o:security.enable_macros_execution=true \
+			$(if $(CAPABILITIES),--o:security.capabilities=$(CAPABILITIES)) \
 			--o:ai.enabled=true --o:ai.allow_user_settings=true \
 			--o:ai.api_url="" --o:ai.api_key="" --o:ai.model="" \
 			$(if $(SHORT_IDLE),--o:per_view.out_of_focus_timeout_secs=1) \

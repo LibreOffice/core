@@ -650,26 +650,24 @@ namespace
         }
     }
 
-    /// Shared configuration presets. A pair of staging directory and engine installation directory.
-    constexpr std::pair<std::string_view, std::string_view> SharedPresetGroups[] = {
-        { "autotext", "share/autotext/common" },
-        { "wordbook", "share/wordbook" },
-        { "template", "share/template/common/presnt" },
+    /// One group of shared configuration presets: the path of its staging directory below the
+    /// presets of a configuration, and the engine installation directory that holds the same kind
+    /// of file.
+    struct SharedPresetGroup
+    {
+        std::string_view stagingPath;
+        std::string_view sharePath;
     };
 
-    std::string sharedPresetSource(const std::string& configIdPresets, std::string_view group)
-    {
-        return Poco::Path(configIdPresets, std::string(group)).toString();
-    }
+    constexpr SharedPresetGroup SharedPresetGroups[] = {
+        { "autotext", "share/autotext/common" },
+        { "wordbook", "share/wordbook" },
+        { "template/presnt", "share/template/common/presnt" },
+    };
 
-    bool hasSharedPresets(const std::string& configIdPresets)
+    std::string sharedPresetSource(const std::string& configIdPresets, std::string_view stagingPath)
     {
-        for (const auto& group : SharedPresetGroups)
-        {
-            if (!FileUtil::isEmptyDirectory(sharedPresetSource(configIdPresets, group.first)))
-                return true;
-        }
-        return false;
+        return Poco::Path(configIdPresets, std::string(stagingPath)).toString();
     }
 
     std::string sharedPresetDestination(const std::string& loJailDestPath,
@@ -678,17 +676,19 @@ namespace
         return Poco::Path(loJailDestPath, std::string(sharePath)).toString();
     }
 
+    /// Copies the presets of a configuration into an engine installation.
     void linkOrCopySharedPresets(const std::string& configIdPresets,
                                  const std::string& loJailDestPath,
                                  const std::string& linkablePath)
     {
-        for (const auto& [group, sharePath] : SharedPresetGroups)
+        for (const auto& group : SharedPresetGroups)
         {
-            const std::string source = sharedPresetSource(configIdPresets, group);
+            const std::string source = sharedPresetSource(configIdPresets, group.stagingPath);
             if (FileUtil::isEmptyDirectory(source))
                 continue;
 
-            const std::string destination = sharedPresetDestination(loJailDestPath, sharePath);
+            const std::string destination
+                = sharedPresetDestination(loJailDestPath, group.sharePath);
             linkOrCopy(source, destination + "/", linkablePath, LinkOrCopyType::All);
         }
     }
@@ -4086,14 +4086,15 @@ void lokit_main(
                         }
                     }
 
-                    for (const auto& [group, sharePath] : SharedPresetGroups)
+                    for (const auto& group : SharedPresetGroups)
                     {
-                        const std::string presetSrc = sharedPresetSource(configIdPresets, group);
+                        const std::string presetSrc =
+                            sharedPresetSource(configIdPresets, group.stagingPath);
                         if (FileUtil::isEmptyDirectory(presetSrc))
                             continue; // nothing configured for this preset
 
                         const std::string presetDst =
-                            sharedPresetDestination(loJailDestPath, sharePath);
+                            sharedPresetDestination(loJailDestPath, group.sharePath);
                         if (!FileUtil::Stat(presetDst).exists())
                         {
                             LOG_WRN("Cannot apply shared preset [" << presetSrc
@@ -4306,56 +4307,25 @@ void lokit_main(
         }
         else // noCapabilities set
         {
-            // The engine reads the shared presets of a configuration from its installation
-            // tree, so a configuration that carries any needs a specially set up jail.
-            // Link it from the template and copy the presets into it. A configuration
-            // with no shared presets reads the template itself, shared by all such jails.
-            const std::string sharedPresets =
-                Poco::Path(childRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
-            const std::string configIdPresets =
-                Poco::Path(sharedPresets, Uri::encode(configId)).toString();
-
-            std::string loInstallation = loTemplate;
-            if (!configId.empty() && hasSharedPresets(configIdPresets))
-            {
-                Poco::Path jailLOInstallation(jailPath, JailUtil::LO_JAIL_SUBPATH);
-                jailLOInstallation.makeDirectory();
-                const std::string linkablePath = childRoot + "/linkable";
-
-                // mark copied installation for deletion
-                JailUtil::markJailCopied(jailPathStr);
-
-                linkOrCopy(loTemplate, jailLOInstallation, linkablePath, LinkOrCopyType::LO);
-
-                loInstallation = jailLOInstallation.toString();
-                while (!loInstallation.empty() && loInstallation.back() == '/')
-                    loInstallation.pop_back();
-
-                linkOrCopySharedPresets(configIdPresets, loInstallation, linkablePath);
-
-                LOG_INF("Using installation [" << loInstallation
-                        << "] linked from template [" << loTemplate
-                        << "], carrying the shared presets of configuration ["
-                        << configId << "].");
-            }
-            else
-            {
-                LOG_INF("Using template [" << loTemplate
-                        << "] as install subpath directly, without chroot jail setup.");
-            }
+            LOG_INF("Using template [" << loTemplate
+                    << "] as install subpath directly, without chroot jail setup.");
 
             userdir_url = "file://" + jailPathStr + "tmp/user";
 #ifndef __APPLE__
-            instdir_path = '/' + loInstallation + "/program";
+            instdir_path = '/' + loTemplate + "/program";
 #else
-            instdir_path = '/' + loInstallation + "/Contents/Frameworks";
+            instdir_path = '/' + loTemplate + "/Contents/Frameworks";
 #endif
-            allowedPaths.emplace_back(loInstallation, Landlock::Access::ReadOnlyDir);
-            if (loInstallation != loTemplate)
+            allowedPaths.emplace_back(loTemplate, Landlock::Access::ReadOnlyDir);
+            if (!configId.empty())
             {
-                // Forkit preloaded the engine from the template, and some of the paths it
-                // resolved then are still read by their own name here.
-                allowedPaths.emplace_back(loTemplate, Landlock::Access::ReadOnlyDir);
+                // The engine reads the presets of this configuration from the staging directory
+                // itself. All the kits of the configuration share it.
+                const std::string sharedPresets =
+                    Poco::Path(childRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
+                const std::string configIdPresets =
+                    Poco::Path(sharedPresets, Uri::encode(configId)).toString();
+                allowedPaths.emplace_back(configIdPresets, Landlock::Access::ReadOnlyDir);
             }
             JailRoot = jailPathStr;
 

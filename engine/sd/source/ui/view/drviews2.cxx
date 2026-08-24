@@ -118,6 +118,8 @@
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <o3tl/string_view.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 
 #include <vcl/abstdlg.hxx>
@@ -292,15 +294,27 @@ bool lcl_IsValidDesignIntentWord(const OUString& rWord)
 std::vector<std::pair<OUString, OUString>> CollectDesignTemplates()
 {
     // The bundled set lives in a dedicated subdirectory, deliberately NOT the
-    // standard presentation template directory: with an integrator the kit mounts
-    // the per-config preset templates over share/template/common/presnt, which
-    // would hide bundled templates placed there. The preset directory is listed
-    // second so an uploaded template is offered as well, and a bundled template
-    // wins when a preset shares its name.
-    const OUString aSearchDirs[] = {
+    // standard presentation template directory: with an integrator the kit may
+    // mount the per-config preset templates over share/template/common/presnt,
+    // which would hide bundled templates placed there. It comes first, so a
+    // bundled template wins when a preset shares its name.
+    std::vector<OUString> aSearchDirs {
         u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/cool-ai-templates/"_ustr,
-        u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/template/common/presnt/"_ustr,
     };
+
+    // Every template root keeps its groups as subdirectories, and "presnt" is the
+    // presentation group. A configuration adds its own root, so walking the roots
+    // reaches an uploaded template wherever the root lives.
+    const OUString aTemplateRoots = SvtPathOptions().GetTemplatePath();
+    sal_Int32 nRootIndex = 0;
+    while (nRootIndex >= 0)
+    {
+        OUString aRoot(o3tl::getToken(aTemplateRoots, 0, ';', nRootIndex));
+        while (aRoot.endsWith("/"))
+            aRoot = aRoot.copy(0, aRoot.getLength() - 1);
+        if (!aRoot.isEmpty())
+            aSearchDirs.push_back(aRoot + "/presnt/");
+    }
 
     std::vector<std::pair<OUString, OUString>> aTemplates;
     std::unordered_set<OUString> aSeen;

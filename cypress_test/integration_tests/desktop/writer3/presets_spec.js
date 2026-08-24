@@ -45,6 +45,20 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Preset tests.', function()
 		cy.cGet('body').type('{esc}');
 	});
 
+	// The shared presets and the installation both hold a "standard" autotext group, and each
+	// group has a "TY" entry. Expanding "TY" gives the shared text.
+	it('Verify shared autotext wins a duplicated group name.', function() {
+		// Add some text and expand via autotext
+		ceHelper.type('TY');
+
+		// F3
+		cy.get('@clipboard').trigger('keydown', { key: "F3", code: "F3", which: 114, force: true })
+
+		writerHelper.selectAllTextOfDoc();
+		helper.copy();
+		cy.cGet('#copy-paste-container p').should('contain.text', 'Thank you from the whole organization.');
+	});
+
 	// Ensure that user autotext was installed.
 	it('Verify user autotext install.', function() {
 		// Add some text and expand via autotext

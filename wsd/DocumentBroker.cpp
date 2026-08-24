@@ -1873,6 +1873,13 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
         auto const & groupBase
             = overrideIt != _groupOverridePath.end() ? overrideIt->second : _presetsPath;
         Poco::Path destDir(groupBase, groupName);
+        // A template root's subdirectory names are its template group names, and the engine's own
+        // installation keeps the presentation templates in "presnt".
+        if (_sharedPresets && groupName == "template")
+        {
+            destDir.makeDirectory();
+            destDir.pushDirectory("presnt");
+        }
         Poco::File(destDir).createDirectories();
         std::string filePath;
         // browsersetting/viewsetting are read by fixed name; other groups
@@ -1934,11 +1941,12 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
 PresetsInstallTask::PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll,
                    const std::string& configId,
                    const std::string& presetsPath,
-                   std::map<std::string, std::string> groupOverridePath,
+                   std::map<std::string, std::string> groupOverridePath, bool sharedPresets,
                    const std::function<void(bool)>& installFinishedCB)
     : _configId(configId)
     , _presetsPath(presetsPath)
     , _groupOverridePath(std::move(groupOverridePath))
+    , _sharedPresets(sharedPresets)
     , _poll(poll)
     , _idCount(0)
     , _reportedStatus(false)
@@ -2347,7 +2355,7 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
     loadTimings().record("presetsInstallStart");
     _asyncInstallTask = asyncInstallPresets(_poll, configId, userSettingsUri,
                                             presetsPath, std::move(groupOverridePath),
-                                            session, installFinishedCB);
+                                            /*sharedPresets=*/false, session, installFinishedCB);
     _asyncInstallTask->appendCallback([selfWeak = weak_from_this(), this,
                                        keepPollAlive=_poll](bool){
         // For the edge case where the DocumentBroker lifecycle ends before the document
@@ -2450,6 +2458,7 @@ DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, con
                                     const std::string& userSettingsUri,
                                     const std::string& presetsPath,
                                     std::map<std::string, std::string> groupOverridePath,
+                                    bool sharedPresets,
                                     const std::shared_ptr<ClientSession>& session,
                                     const std::function<void(bool)>& installFinishedCB)
 {
@@ -2463,7 +2472,7 @@ DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, con
 
     auto presetTasks = std::make_shared<PresetsInstallTask>(poll, configId, presetsPath,
                                                             std::move(groupOverridePath),
-                                                            installFinishedCB);
+                                                            sharedPresets, installFinishedCB);
 
     // When result arrives, extract uris of what we want to install to the jail's user presets
     // and async download and install those.

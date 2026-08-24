@@ -211,10 +211,14 @@ void RequestVettingStation::launchInstallPresets()
     std::string configIdPresets = Poco::Path(presetsPath, Uri::encode(configId)).toString();
     Poco::File(Poco::Path(configIdPresets, "autotext")).createDirectories();
     Poco::File(Poco::Path(configIdPresets, "wordbook")).createDirectories();
-    Poco::File(Poco::Path(configIdPresets, "template")).createDirectories();
+    Poco::Path sharedTemplates(configIdPresets, "template");
+    sharedTemplates.makeDirectory();
+    sharedTemplates.pushDirectory("presnt");
+    Poco::File(sharedTemplates).createDirectories();
     // ensure the server config is downloaded and populate a subforkit when config is available
     _asyncInstallTask = DocumentBroker::asyncInstallPresets(_poll, configId, sharedSettings.getUri(), configIdPresets,
-                                                            {}, nullptr, finishedCallback);
+                                                            {}, /*sharedPresets=*/true, nullptr,
+                                                            finishedCallback);
 }
 
 #endif
