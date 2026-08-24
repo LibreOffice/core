@@ -128,7 +128,7 @@ public class FirstLoadComponent {
 
             // load calc file as template
             //xSpreadsheetComponent = xComponentLoader.loadComponentFromURL(
-            //    "file:///c:/temp/DataAnalysys.ods", "_blank", 0, loadProps);
+            //    "file:///c:/temp/DataAnalysis.ods", "_blank", 0, loadProps);
 
             // *********************************************************
             // example for use of XEnumerationAccess

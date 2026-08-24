@@ -73,7 +73,7 @@ try
 
     // Uncomment to load a Calc file as template
     //xSpreadsheetComponent = xComponentLoader.loadComponentFromURL(
-    //    "file:///c:/temp/DataAnalysys.ods", "_blank", 0, loadProps);
+    //    "file:///c:/temp/DataAnalysis.ods", "_blank", 0, loadProps);
 
     // Example usage of XEnumerationAccess
     XCellRangesQuery xCellQuery = sheet.castOrDefault<XCellRangesQuery>();

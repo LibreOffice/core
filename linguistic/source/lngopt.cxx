@@ -88,7 +88,7 @@ struct WID_Name
 
 }
 
-//! order of entries is import (see LinguOptions::GetName)
+//! order of entries is important (see LinguOptions::GetName)
 //! since the WID is used as index in this table!
 constexpr WID_Name aWID_Name[] =
 {
