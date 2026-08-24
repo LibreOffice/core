@@ -497,7 +497,7 @@ static void hash_resize(struct hash* hash)
         hash->load_limit = hash->size - (hash->size >> 2);
         for(i=0; i <= old_size; i++)
         {
-            hash_elem = (struct hash_elem*)hash->array[i];
+            hash_elem = hash->array[i];
             while(hash_elem)
             {
                 next = hash_elem->next;
