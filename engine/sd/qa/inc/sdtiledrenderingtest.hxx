@@ -76,6 +76,8 @@ public:
     OString m_ShapeSelection;
     std::vector<std::string> m_aStateChanged;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
+    /// Number of jsdialog "select" actions seen for a given control id.
+    std::map<std::string, int> m_aJSDialogSelectCounts;
     TestKitCallbackWrapper m_callbackWrapper;
     bool invalidatedAll;
     int editModeOfInvalidation;

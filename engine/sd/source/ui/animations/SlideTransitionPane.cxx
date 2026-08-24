@@ -541,14 +541,14 @@ void SlideTransitionPane::updateControls()
     if( aEffect.mbEffectAmbiguous )
     {
         SAL_WARN( "sd.transitions", "Unusual, ambiguous transition effect" );
-        mxTransitionsIconView->select(0);
+        selectTransitionEntry(0);
     }
     else
     {
          // ToDo: That 0 is "no transition" is documented nowhere except in the
         // CTOR of sdpage
         if( aEffect.mnType == 0 )
-            mxTransitionsIconView->select(0);
+            selectTransitionEntry(0);
         else
             updateVariants(getPreset(aEffect));
     }
@@ -941,12 +941,27 @@ void SlideTransitionPane::addListener()
 
     Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mpEventMultiplexer->AddEventListener( aLink );
+
+    // The document shell is shared by every view on the document, so this
+    // also catches a transition changed by another user in a co-editing
+    // session, not just this pane's own view navigating around.
+    if (mpDrawDoc && mpDrawDoc->GetDocSh())
+        StartListening(*mpDrawDoc->GetDocSh());
 }
 
 void SlideTransitionPane::removeListener()
 {
     Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mpEventMultiplexer->RemoveEventListener( aLink );
+
+    if (mpDrawDoc && mpDrawDoc->GetDocSh())
+        EndListening(*mpDrawDoc->GetDocSh());
+}
+
+void SlideTransitionPane::Notify(SfxBroadcaster&, const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::DocChanged)
+        onChangeCurrentPage();
 }
 
 IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
@@ -1031,7 +1046,7 @@ void SlideTransitionPane::updateVariants(TransitionPresetPtr const& pPreset)
 
     if (!pPreset)
     {
-        mxTransitionsIconView->select(0);
+        selectTransitionEntry(0);
     }
     else
     {
@@ -1050,9 +1065,21 @@ void SlideTransitionPane::updateVariants(TransitionPresetPtr const& pPreset)
                 mxLB_VARIANT->set_sensitive(true);
             }
 
-            mxTransitionsIconView->select(pTransitionEntry->mnIndex);
+            selectTransitionEntry(pTransitionEntry->mnIndex);
         }
     }
+}
+
+// The document broadcasts a change notification for any edit in the document,
+// including one made by another user in a co-editing session, and every open
+// pane reacts by re-syncing its controls to the current slide. Only select the
+// entry when its identity actually changed, so that resyncing after an edit
+// that leaves the current slide's transition untouched does not send a new
+// selection to every view and reset the gallery scroll position each holds.
+void SlideTransitionPane::selectTransitionEntry(int nIndex)
+{
+    if (mxTransitionsIconView->get_selected_id() != mxTransitionsIconView->get_id(nIndex))
+        mxTransitionsIconView->select(nIndex);
 }
 
 IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled, weld::Toggleable&, void)

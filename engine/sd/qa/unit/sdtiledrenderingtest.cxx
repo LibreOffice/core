@@ -335,6 +335,24 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aStateChanges[aCommandName] = aTree;
         }
         break;
+        case COKitCallbackType::JSDIALOG:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            auto itData = aTree.find("data");
+            if (itData == aTree.not_found())
+                break;
+
+            auto itControlId = itData->second.find("control_id");
+            auto itActionType = itData->second.find("action_type");
+            if (itControlId == itData->second.not_found() || itActionType == itData->second.not_found())
+                break;
+
+            if (itActionType->second.get_value<std::string>() == "select")
+                ++m_aJSDialogSelectCounts[itControlId->second.get_value<std::string>()];
+        }
+        break;
         default:
         break;
     }

@@ -37,10 +37,12 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <osl/conditn.hxx>
+#include <osl/thread.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/lstner.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
@@ -54,6 +56,7 @@
 #include <unotools/datetime.hxx>
 
 #include <DrawDocShell.hxx>
+#include <TransitionPreset.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
 #include <SlideshowLayerRenderer.hxx>
@@ -607,6 +610,86 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursors)
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelectionInvalidated);
     // Second view notices that there was a selection change in its own view.
     CPPUNIT_ASSERT(aView2.m_bGraphicSelectionInvalidated);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideTransitionOtherView)
+{
+    // Given an Impress document, with the Slide Transition sidebar panel open in the first
+    // of two views co-editing the presentation:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView1;
+    sfx2::sidebar::Sidebar::Setup(u"");
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:SidebarDeck.SdSlideTransitionDeck"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Let the panel's deferred entry population timer run, so its gallery holds real
+    // entries and the initial ("no transition") entry gets selected, the same as when a
+    // user actually opens it.
+    osl::Thread::wait(std::chrono::milliseconds(250));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_aJSDialogSelectCounts["transitions_icons"] > 0);
+    aView1.m_aJSDialogSelectCounts.clear();
+
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView2;
+
+    // When the second (now current) view sets the transition to a real preset, through the
+    // property set, the same path the transition dispatch commands go through:
+    const sd::TransitionPresetList& rPresets = sd::TransitionPreset::getTransitionPresetList();
+    CPPUNIT_ASSERT(!rPresets.empty());
+    const sd::TransitionPresetPtr& pPreset = rPresets.front();
+
+    uno::Reference<beans::XPropertySet> xPage(
+        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    xPage->setPropertyValue(u"TransitionType"_ustr, cpo::uno::Any(pPreset->getTransition()));
+    xPage->setPropertyValue(u"TransitionSubtype"_ustr, cpo::uno::Any(pPreset->getSubtype()));
+    xPage->setPropertyValue(u"TransitionDirection"_ustr, cpo::uno::Any(pPreset->getDirection()));
+    xPage->setPropertyValue(u"TransitionFadeColor"_ustr, cpo::uno::Any(pPreset->getFadeColor()));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the first view's panel must pick up the new transition too, instead of showing a
+    // stale value until the user navigates away from the slide and back.
+    CPPUNIT_ASSERT(aView1.m_aJSDialogSelectCounts["transitions_icons"] > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideTransitionNoRedundantSelectOnOtherEdit)
+{
+    // Given an Impress document with the Slide Transition sidebar panel open:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    sfx2::sidebar::Sidebar::Setup(u"");
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:SidebarDeck.SdSlideTransitionDeck"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Let the panel's deferred entry population timer run, so its gallery holds real
+    // entries and a real one gets selected, the same as when a user actually opens it.
+    osl::Thread::wait(std::chrono::milliseconds(250));
+    Scheduler::ProcessEventsToIdle();
+
+    // Sanity check the capture plumbing itself: building the panel selects the current
+    // slide's transition, so this must have produced at least one recorded "select" action.
+    // Without this check, a broken capture (wrong JSON field names, wrong control id) would
+    // make the counter stay at 0 no matter what happens below, passing for the wrong reason.
+    CPPUNIT_ASSERT(aView.m_aJSDialogSelectCounts["transitions_icons"] > 0);
+
+    // Ignore the "select" actions sent while the panel was being built and populated.
+    aView.m_aJSDialogSelectCounts.clear();
+
+    // When another user edits the document without touching the current slide's
+    // transition, twice, to rule out a one-shot fluke:
+    pXImpressDocument->GetDocShell()->SetModified(true);
+    Scheduler::ProcessEventsToIdle();
+    pXImpressDocument->GetDocShell()->SetModified(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the panel must not resend a selection for an entry that is already selected.
+    // Without the fix in place, this test would have failed: updateControls() reselected
+    // the same entry unconditionally on every resync, sending a redundant "select" action
+    // that resets the scroll position of every other user's gallery.
+    CPPUNIT_ASSERT_EQUAL(0, aView.m_aJSDialogSelectCounts["transitions_icons"]);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursorParts)

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "sddllapi.h"
 
 #include <vector>
 #include <map>
@@ -38,7 +39,7 @@ typedef std::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::vector< TransitionPresetPtr > TransitionPresetList;
 typedef std::unordered_map< OUString, OUString > UStringMap;
 
-class TransitionPreset
+class SD_DLLPUBLIC TransitionPreset
 {
 public:
     static const TransitionPresetList& getTransitionPresetList();
