@@ -82,7 +82,7 @@ rtl::Reference<SdrPage> SwDPage::CloneSdrPage(SdrModel& rTargetModel) const
 rtl::Reference<SdrObject> SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
-    OSL_ENSURE( pOld, "Oups, Object not replaced" );
+    OSL_ENSURE( pOld, "Oops, Object not replaced" );
     SdrObjUserCall* pContact;
     if ( nullptr != ( pContact = GetUserCall(pOld) ) &&
          RES_DRAWFRMFMT == static_cast<SwContact*>(pContact)->GetFormat()->Which())

@@ -841,7 +841,7 @@ void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
         m_aCellStyles.erase(iter);
         return;
     }
-    SAL_INFO("sw.core", "SwCellStyleTable::RemoveBoxFormat, format with given name doesn't exists");
+    SAL_INFO("sw.core", "SwCellStyleTable::RemoveBoxFormat, format with given name doesn't exist");
 }
 
 UIName SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const

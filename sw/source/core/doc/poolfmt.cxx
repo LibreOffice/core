@@ -146,7 +146,7 @@ const OUString* SwDoc::GetDocPattern(size_t const nPos) const
 }
 
 // Look for the style name's position. If it doesn't exist,
-// insert an anew
+// insert a new one
 size_t SwDoc::SetDocPattern(const OUString& rPatternName)
 {
     OSL_ENSURE( !rPatternName.isEmpty(), "no Document style name" );
@@ -304,7 +304,7 @@ void SwDoc::RemoveAllFormatLanguageDependencies()
     SwTextFormatColl * pTextFormatColl = getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD );
 
     pTextFormatColl->ResetFormatAttr( RES_PARATR_ADJUST );
-    /* koreans do not like SvxScriptItem(TRUE) */
+    /* Koreans do not like SvxScriptItem(TRUE) */
     pTextFormatColl->ResetFormatAttr( RES_PARATR_SCRIPTSPACE );
 
     SvxFrameDirectionItem aFrameDir( SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR );
