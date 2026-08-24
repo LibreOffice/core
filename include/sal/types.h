@@ -689,7 +689,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 /** Annotate pointer-returning functions to indicate that such a pointer
     is never nullptr.
 
-    Note that MSVC supports this feature via it's SAL _Ret_notnull_
+    Note that MSVC supports this feature via its SAL _Ret_notnull_
     annotation, but since it's in a completely different place on
     the function declaration, it's a little hard to support both.
 
