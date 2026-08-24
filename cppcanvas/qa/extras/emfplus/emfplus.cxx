@@ -35,7 +35,7 @@ public:
         std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
         Bitmap aResultBitmap;
         CPPUNIT_ASSERT(xMetaFile->CreateThumbnail(aResultBitmap));
-        // If this is set, the metafile will be dumped as a PNG one for debug purposes.
+        // If this is set, the metafile will be dumped as a PNG for debug purposes.
         char* pEnv = getenv("CPPCANVAS_DEBUG_EMFPLUS_DUMP_TO");
         if (pEnv)
         {

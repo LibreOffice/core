@@ -25,7 +25,7 @@ namespace connectivity
     class java_lang_String : public java_lang_Object
     {
     protected:
-    // statis Data for the Class
+    // static Data for the Class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;

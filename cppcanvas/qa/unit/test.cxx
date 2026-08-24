@@ -152,7 +152,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
         aOutputMetaFile.Stop();
     }
 
-    // Then check that the text array drawn by the canvas renderer didn’t loose
+    // Then check that the text array drawn by the canvas renderer didn’t lose
     // the Kashida insertion positions.
     {
         auto pInputAction = aInputMetaFile.GetAction(aInputMetaFile.GetActionSize() - 1);

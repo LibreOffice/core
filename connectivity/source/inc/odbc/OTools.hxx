@@ -350,7 +350,7 @@ using SQLWChars = CHARS<SQLWCHAR>;
 #ifdef _WIN32
 const bool bUseWChar = true;
 #else
-const volatile inline bool bUseWChar = false; // volatile to avoid "unreachabe code" warnings
+const volatile inline bool bUseWChar = false; // volatile to avoid "unreachable code" warnings
 #endif
 }
 
