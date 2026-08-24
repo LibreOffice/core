@@ -68,6 +68,22 @@ PERF="${PERF:-perf}"
 set -e
 
 WORK_DIR=`mktemp -d -p /var/tmp`
+
+# Take the background jobs and the spool directory down together on any exit the
+# shell can see, a kill included. perf record, inotifywait and the processing loop
+# all stop with the script, and the unprocessed dumps go with them.
+cleanup() {
+    trap - EXIT INT TERM
+    for pid in `jobs -p`; do
+        pkill -P "$pid" 2> /dev/null || true
+        kill "$pid" 2> /dev/null || true
+    done
+    if test -d "$WORK_DIR"; then
+        rm -rf "$WORK_DIR"
+    fi
+}
+trap cleanup EXIT INT TERM
+
 pushd "$WORK_DIR" > /dev/null
 echo spooling profiling to "$WORK_DIR" 1>&2
 
@@ -88,7 +104,6 @@ echo spooling profiling to "$WORK_DIR" 1>&2
 
 wait
 
-rm -rf "$WORK_DIR"
 popd > /dev/null
 echo profiling complete 1>&2
 
