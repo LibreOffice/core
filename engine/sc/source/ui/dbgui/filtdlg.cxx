@@ -499,6 +499,9 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                 SCTAB nTab       = nSrcTab;
                 SCROW nFirstRow = theQueryData.nRow1;
                 SCROW nLastRow   = theQueryData.nRow2;
+                // A totals row is a summary, not data: keep its values out of the list.
+                if (theQueryData.bHasTotals && nLastRow > nFirstRow)
+                    --nLastRow;
                 if (maHasDates.size() < nOffset+nList)
                     maHasDates.resize(nOffset+nList, false);
                 maHasDates[nOffset+nList-1] = false;

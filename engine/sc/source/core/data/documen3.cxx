@@ -1627,11 +1627,11 @@ void ScDocument::GetFilterEntries(
     SCROW nEndRow;
     pDBData->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
 
+    // A totals row is a summary, not data
+    if (pDBData->HasTotals() && nEndRow > nStartRow)
+        --nEndRow;
     if (pDBData->HasHeader())
         ++nStartRow;
-    // For Table Styles area, exclude total row
-    if (pDBData->HasTotals() && pDBData->GetTableStyleInfo())
-        --nEndRow;
 
     ScQueryParam aParam;
     pDBData->GetQueryParam( aParam );

@@ -22,6 +22,7 @@
 #include <undotab.hxx>
 #include <attrib.hxx>
 #include <dbdata.hxx>
+#include <filterentries.hxx>
 #include <reftokenhelper.hxx>
 #include <userdat.hxx>
 #include <refdata.hxx>
@@ -4298,6 +4299,41 @@ CPPUNIT_TEST_FIXTURE(Test, testAdvancedFilter)
     CPPUNIT_ASSERT_MESSAGE("rows 8-10 should be visible.", !bFiltered);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 8-10 should be visible.", SCROW(7), nRow1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 8-10 should be visible.", SCROW(9), nRow2);
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFilterEntriesTotalsRow)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    m_pDoc->SetString(0, 0, 0, u"Header"_ustr);
+    m_pDoc->SetString(0, 1, 0, u"one"_ustr);
+    m_pDoc->SetString(0, 2, 0, u"two"_ustr);
+    m_pDoc->SetString(0, 3, 0, u"Total"_ustr);
+
+    // A named database range with a totals row, no table style.
+    ScDBData* pDBData = new ScDBData(u"MyRange"_ustr, 0, 0, 0, 0, 3, true, true, /*bTotals*/true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(
+        std::unique_ptr<ScDBData>(pDBData)));
+
+    {
+        ScFilterEntries aEntries;
+        m_pDoc->GetFilterEntries(0, 0, 0, aEntries);
+
+        // The totals row is a summary, not data.
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aEntries.size());
+        for (const auto& rEntry : aEntries)
+            CPPUNIT_ASSERT(rEntry.GetString() != u"Total"_ustr);
+    }
+
+    // Without a totals row the last row is data again.
+    pDBData->SetTotals(false);
+    {
+        ScFilterEntries aEntries;
+        m_pDoc->GetFilterEntries(0, 0, 0, aEntries);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aEntries.size());
+    }
 
     m_pDoc->DeleteTab(0);
 }

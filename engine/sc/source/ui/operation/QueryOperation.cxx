@@ -164,7 +164,7 @@ bool QueryOperation::runImplementation()
         if (aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly)
             bKeepSub = true;
 
-        if (pDBData->HasTotals() && pDBData->GetTableStyleInfo())
+        if (pDBData->HasTotals())
             bKeepTotals = true;
     }
 
