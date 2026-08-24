@@ -507,6 +507,7 @@ class LOUtil {
 			fontworkcharacterspacingfloater: 'spacing',
 			tablesort: 'datasort',
 			spellcheckignoreall: 'spelling',
+			spellonline: 'autospellcheck-on',
 			deleterowbreak: 'delbreakmenu',
 			alignmentpropertypanel: 'alignvcenter',
 			cellvertcenter: 'alignvcenter',
