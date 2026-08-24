@@ -574,7 +574,7 @@ struct Picture: public FBox
     hchar     dummy;
 /**
  * follow_block_size is the size information of the Drawing object of hwp.
- * It's value is greater than 0 if the pictype is PICTYPE_DRAW.
+ * Its value is greater than 0 if the pictype is PICTYPE_DRAW.
  */
     uint      follow_block_size;                  /* Additional information length. */
     short     dummy1;                             // to not change structure size */

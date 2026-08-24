@@ -102,7 +102,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     if (nch > 0)
         hwpf.AddCharShape(cshape);
 
-/* Paragraph paragraphs shape  */
+/* Paragraph shape  */
     if (nch && !reuse_shape)
     {
         pshape->Read(hwpf);
