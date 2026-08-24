@@ -271,10 +271,18 @@ SpookyHash V2 – a 128-bit noncryptographic hash function.
 By Bob Jenkins
 Public domain
 
+Collabora Online binaries include PNG output code derived from the cairo graphics library.
+Copyright © 2003 University of Southern California
+Dual licensed: LGPL-2.1 or MPL-1.1
+
 Collabora Online client side JavaScript code uses the following 3rd party modules.
 
 Autolinker.js
 Copyright(c) 2020 Gregory Jacobs <greg@greg-jacobs.com>
+MIT License
+
+Base.js – simple JavaScript inheritance
+Copyright 2006-2010, Dean Edwards
 MIT License
 
 braintee/sanitize-url
@@ -284,6 +292,10 @@ MIT License
 Bulma: the modern CSS framework that just works
 Copyright (c) 2023 Jeremy Thomas
 MIT License
+
+D3.js – JavaScript library for visualizing data
+Copyright 2010-2020 Mike Bostock
+BSD 3-Clause License
 
 fzstd – High performance Zstandard decompression in a pure JavaScript
 Copyright (c) 2020 Arjun Barrett
@@ -340,6 +352,11 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+Marked – a markdown parser and compiler
+Copyright (c) 2011-2018, Christopher Jeffrey
+Copyright (c) 2018+, MarkedJS
+MIT License
+
 SmartMenus jQuery Plugin
 Copyright Vasil Dinkov, Vadikom Web Ltd.
 MIT License
@@ -364,7 +381,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Montserraft Regular Font
+Montserrat Regular Font
 Copyright 2011 The Montserrat Project Authors
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

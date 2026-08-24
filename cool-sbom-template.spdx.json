@@ -216,6 +216,38 @@
       "filesAnalyzed": false,
       "downloadLocation": "https://burtleburtle.net/bob/hash/spooky.html",
       "licenseConcluded": "LicenseRef-PublicDomain"
+    },
+    {
+      "SPDXID": "SPDXRef-cairo",
+      "name": "cairo - derived PNG output code",
+      "versionInfo": "NONE",
+      "filesAnalyzed": false,
+      "downloadLocation": "https://www.cairographics.org/",
+      "licenseConcluded": "LGPL-2.1-only OR MPL-1.1"
+    },
+    {
+      "SPDXID": "SPDXRef-marked",
+      "name": "Marked - markdown parser and compiler",
+      "versionInfo": "15.0.6",
+      "filesAnalyzed": false,
+      "downloadLocation": "NONE",
+      "licenseConcluded": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-d3",
+      "name": "D3.js",
+      "versionInfo": "6.7.0",
+      "filesAnalyzed": false,
+      "downloadLocation": "NONE",
+      "licenseConcluded": "BSD-3-Clause"
+    },
+    {
+      "SPDXID": "SPDXRef-basejs",
+      "name": "Base.js - simple JavaScript inheritance",
+      "versionInfo": "1.1a",
+      "filesAnalyzed": false,
+      "downloadLocation": "https://dean.edwards.name/weblog/2006/03/base/",
+      "licenseConcluded": "MIT"
     }
   ],
   "hasExtractedLicensingInfos": [
@@ -304,11 +336,6 @@
     {
       "spdxElementId": "SPDXRef-coolwsd",
       "relationshipType": "CONTAINS",
-      "relatedSpdxElement": "SPDXRef-jquery-contextMenu"
-    },
-    {
-      "spdxElementId": "SPDXRef-coolwsd",
-      "relationshipType": "CONTAINS",
       "relatedSpdxElement": "SPDXRef-jquery-ui"
     },
     {
@@ -345,6 +372,31 @@
       "spdxElementId": "SPDXRef-coolwsd",
       "relationshipType": "CONTAINS",
       "relatedSpdxElement": "SPDXRef-spookyhash"
+    },
+    {
+      "spdxElementId": "SPDXRef-coolwsd",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-leaflet"
+    },
+    {
+      "spdxElementId": "SPDXRef-coolwsd",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-cairo"
+    },
+    {
+      "spdxElementId": "SPDXRef-coolwsd",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-marked"
+    },
+    {
+      "spdxElementId": "SPDXRef-coolwsd",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-d3"
+    },
+    {
+      "spdxElementId": "SPDXRef-coolwsd",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-basejs"
     }
   ]
 }
