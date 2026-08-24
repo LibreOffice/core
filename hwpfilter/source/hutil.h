@@ -21,11 +21,11 @@
 
 #include "hbox.h"
 /**
- * Transfer number to roman character
+ * Transfer number to Roman numeral
  */
 void    num2roman(int num, char *buf);
 /**
- * Transfer 8bit string to 16bit string used internally in hwp
+ * Transfer 8-bit string to 16-bit string used internally in hwp
  */
 void    str2hstr(const char *c, hchar *i);
 

@@ -88,9 +88,9 @@ struct HWPColumnInfo{
  * f.ReadHwpFile( stream );
  * </pre>
  *
- * There are two way to read hwp information from stream, one is to read all at a time
- * to use @ref ReadhwpFile() method like above example, other is to read partial information
- * to use @ref Open(), @ref InfoRead(), @ref FontRead(), @ref StyleRead(), @ref ParaListRead(), @ref TagsRead(),
+ * There are two ways to read hwp information from stream, one is to read all at a time
+ * using @ref ReadHwpFile() method like the example above; the other is to read partial information
+ * using @ref Open(), @ref InfoRead(), @ref FontRead(), @ref StyleRead(), @ref ParaListRead(), @ref TagsRead(),
  *
  * @short HWP file management object
  */
@@ -114,7 +114,7 @@ class DLLEXPORT HWPFile
 
 /**
  * Say current state
- * @returns 0 if normal, otherwise error code. If it's  bigger than USER_ERROR_BIT, it is internally using error, otherwise it's system error which is able to get the message @ref strerror() method.
+ * @returns 0 if normal, otherwise error code. If it's bigger than USER_ERROR_BIT, it is an internal error, otherwise it's system error which is able to get the message @ref strerror() method.
  */
         int State( void ) const { return error_code;}
 /**
@@ -282,7 +282,7 @@ class DLLEXPORT HWPFile
         std::vector<std::unique_ptr<HWPColumnInfo>> columnlist;
         // paragraph list
         std::vector<std::unique_ptr<HWPPara>> plist;
-        // keep paragraph's that failed to load until
+        // keep paragraphs that failed to load until
         // import is complete to avoid dangling references
         // elsewhere
         std::vector<std::unique_ptr<HWPPara>> pfailedlist;
@@ -297,7 +297,7 @@ class DLLEXPORT HWPFile
         std::vector<HeaderFooter*> headerfooters;
         std::vector<ShowPageNum*> pagenumbers;
         std::vector<std::unique_ptr<Table>> tables;
-        //track the stack of HParas types we're currently importing
+        // track the stack of HPara types we're currently importing
         std::vector<unsigned char> element_import_stack;
 
 // for global document handling

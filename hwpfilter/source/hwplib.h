@@ -31,7 +31,7 @@
 
 /* hwp96부터 hunit가 4byte가 되었다. */
 /**
- * size of hunit is 4 since hwp96 version
+ * size of hunit is 4 bytes since hwp96 version
  */
 typedef char16_t  hchar;
 typedef int     hunit;
