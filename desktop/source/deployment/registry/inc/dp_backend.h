@@ -242,7 +242,7 @@ protected:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
     /* deletes folders and files.
 
-       All folder all files which end with ".tmp" or ".tmp_" and which are
+       All folders and files which end with ".tmp" or ".tmp_" and which are
        not used are deleted.
      */
     void deleteUnusedFolders(

@@ -23,7 +23,7 @@
 
 namespace framework{
 
-// same items with a name space alias
+// same items with a namespace alias
 inline constexpr OUString AL_ELEMENT_ACCELERATORLIST = u"accel:acceleratorlist"_ustr;
 inline constexpr OUString AL_ELEMENT_ITEM = u"accel:item"_ustr;
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// stdafx1.h : include file for standard system include files,
+// StdAfx2.h : include file for standard system include files,
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
