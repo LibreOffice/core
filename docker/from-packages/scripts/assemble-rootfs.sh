@@ -305,6 +305,17 @@ if [ -n "${HARDENED_ROOT:-}" ]; then
             echo "  KEPT     /etc/ssl/certs/ca-certificates.crt (not found in target)"
         fi
     fi
+
+    # The builder's CA bundle is not shipped in the rootfs because the
+    # hardened base provides its own; a base chosen via the runtime_base build
+    # arg may not (e.g. debian:stable-slim, used for platforms ZenDiS does not
+    # publish). Ship the builder's bundle then, so coolwsd outside the jail can
+    # verify the TLS certificates of WOPI hosts.
+    if [ -z "$(resolve_in_target /etc/ssl/certs/ca-certificates.crt)" ]; then
+        install -D -m 0644 /etc/ssl/certs/ca-certificates.crt \
+            "$ROOTFS/etc/ssl/certs/ca-certificates.crt"
+        echo "  shipped  /etc/ssl/certs/ca-certificates.crt from the builder (target has none)"
+    fi
 fi
 
 echo "=== rootfs assembled under $ROOTFS ==="

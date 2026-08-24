@@ -41,7 +41,19 @@ to a running container; build them in instead:
 Macro execution must also be enabled at runtime, e.g.
 extra_params=--o:security.enable_macros_execution=true
 
-4. Build Collabora Online
+4. Build for a platform the hardened base image does not support
+
+The default runtime base (ZenDiS) is published for amd64 and arm64 only. For
+other platforms, e.g. ppc64le, override the runtime base with an image that
+supports them, such as debian:stable-slim (the same distribution the builder
+stage uses; note it is not distroless - it ships a shell and a package
+manager):
+
+   cd from-packages
+   docker build --no-cache --platform linux/ppc64le \
+       --build-arg runtime_base=debian:stable-slim -t mydomain/code .
+
+5. Build Collabora Online
 
    cd from-packages
    # Get your secret URL key from https://support.collaboraoffice.com/ (Collabora Partners/Customers)
@@ -49,12 +61,12 @@ extra_params=--o:security.enable_macros_execution=true
    echo Example-413539ece39485afc35b4a469adfde0a279d2fd2 > secret_key
    docker build --no-cache --secret id=secret_key,src=secret_key --build-arg type=cool -t mydomain/cool .
 
-5. Build Collabora Online license key enabled version
+6. Build Collabora Online license key enabled version
 
    cd from-packages
    docker build --no-cache --build-arg type=key -t mydomain/cool .
 
-6. Build Collabora Online from master branch (from source code)
+7. Build Collabora Online from master branch (from source code)
 
    cd from-source
    ./build.sh
