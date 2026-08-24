@@ -934,6 +934,7 @@ public:
             bool bTakeOwnership);
     virtual void set_image(VirtualDevice* pDevice) override;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_from_icon_name(const OUString& rIconName) override;
 };
 
 class JSLevelBar : public JSWidget<SalInstanceLevelBar, ::ProgressBar>

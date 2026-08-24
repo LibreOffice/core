@@ -2262,6 +2262,12 @@ void JSImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImag
     sendUpdate();
 }
 
+void JSImage::set_from_icon_name(const OUString& rIconName)
+{
+    SalInstanceImage::set_from_icon_name(rIconName);
+    sendUpdate();
+}
+
 JSLevelBar::JSLevelBar(JSDialogSender* pSender, ::ProgressBar* pProgressBar,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceLevelBar, ::ProgressBar>(pSender, pProgressBar, pBuilder, bTakeOwnership)
