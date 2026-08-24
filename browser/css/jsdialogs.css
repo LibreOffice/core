@@ -635,22 +635,27 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 
 /* Vertical tab rail: used when a dialog has more tabs than comfortably fit a
    horizontal row. The rail sits on the inline-start side and the panel fills
-   the rest. The rail has a fixed width and is taken out of the normal flow, so
-   the panel beside it stays a plain block that sizes to its own content. The
-   dialog measures each tab page from that panel to size itself, the same as in
-   the horizontal layout, and the panel reserves a margin for the rail. */
+   the rest. Rail and panel share one grid row, so the root is as tall as the
+   taller of the two: the rail stays fully visible even when the selected page
+   is empty (e.g. the Area tab with fill "None"), and a tall page stretches the
+   rail to its full height. The dialog measures each tab page from the panel to
+   size itself, the same as in the horizontal layout. */
 
 .ui-tabs-root.vertical {
 	position: relative;
 	--cool-vertical-rail-width: 150px;
+	display: grid;
+	/* An auto column sizes the dialog to the widest page and still stretches
+	   into free space; a fr column would not grow the dialog intrinsically. */
+	grid-template-columns: var(--cool-vertical-rail-width) auto;
 }
 
 .ui-tabs.vertical.jsdialog.ui-widget {
-	position: absolute;
-	inset-block: 0;
-	inset-inline-start: 0;
+	grid-row: 1;
+	grid-column: 1;
+	box-sizing: border-box;
 	width: var(--cool-vertical-rail-width);
-	height: 100%;
+	min-height: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -659,7 +664,8 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 }
 
 .ui-tabs-root.vertical > .ui-tabs-content.jsdialog {
-	margin-inline-start: var(--cool-vertical-rail-width);
+	grid-row: 1;
+	grid-column: 2;
 	padding-left: 16px;
 }
 
