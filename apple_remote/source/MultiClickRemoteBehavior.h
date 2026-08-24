@@ -33,7 +33,7 @@
 
 /**
     A behavior that adds multiclick and hold events on top of a device.
-    Events are generated and send to a delegate
+    Events are generated and sent to a delegate
  */
 @interface MultiClickRemoteBehavior : NSObject
 {
@@ -69,7 +69,7 @@
 // click counting does delay each event as it has to wait if there is another event (second click)
 // therefore there is a slight time difference (maximumClickCountTimeDifference) between a single click
 // of the user and the call of your delegate method
-// click counting can be enabled individually for specific buttons. Use the property clickCountEnableButtons to
+// click counting can be enabled individually for specific buttons. Use the property clickCountEnabledButtons to
 // set the buttons for which click counting shall be enabled
 - (BOOL)clickCountingEnabled;
 - (void)setClickCountingEnabled:(BOOL)value;
