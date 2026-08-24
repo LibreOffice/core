@@ -2498,7 +2498,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
         m_bChanged = false;
 
         // create temporary copies so that all boxes that
-        // have already cursors can be removed
+        // already have cursors can be removed
         SwSelBoxes aTmp(m_SelectedBoxes);
 
         // compare old and new ones

@@ -162,7 +162,7 @@ bool SwAccessibleCell::InvalidateChildrenCursorPos( const SwFrame *pFrame )
                             xAccImpl.get() )->InvalidateMyCursorPos();
                 }
                 else
-                    bChanged = true; // If the context is not know we
+                    bChanged = true; // If the context is not known we
                                          // don't know whether the selection
                                          // changed or not.
             }

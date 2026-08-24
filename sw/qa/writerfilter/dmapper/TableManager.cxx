@@ -27,7 +27,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXImport)
 {
-    // Given a document with a nested floating table at cell start and an other inner floating table:
+    // Given a document with a nested floating table at cell start and another inner floating table:
     // When importing that document:
     loadFromFile(u"floattable-nested-cellstart.docx");
 
