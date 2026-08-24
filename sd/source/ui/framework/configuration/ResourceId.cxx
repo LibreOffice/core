@@ -188,7 +188,7 @@ sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
     const sal_uInt32 nLocalURLCount (maResourceURLs.size());
     const sal_uInt32 nURLCount(rId.maResourceURLs.size());
 
-    // Start comparison with the top most anchors.
+    // Start comparison with the top-most anchors.
     for (sal_Int32 nIndex=nURLCount-1,nLocalIndex=nLocalURLCount-1;
          nIndex>=0 && nLocalIndex>=0;
          --nIndex,--nLocalIndex)

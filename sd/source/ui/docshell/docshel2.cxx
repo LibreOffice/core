@@ -48,7 +48,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect,
 {
     if (nAspect == ASPECT_THUMBNAIL)
     {
-      // THUMBNAIL: here we may can set the draft mode
+      // THUMBNAIL: here we can set the draft mode
     }
 
     std::optional<ClientView> pView( std::in_place, this, pOut );

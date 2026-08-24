@@ -132,7 +132,7 @@ void NotesPaneModule::notifyConfigurationChange(const ConfigurationChangeEvent& 
     if (!mxConfigurationController.is())
         return;
 
-    // the late init is hacked here since there's EventMultiplexer isn't available when the
+    // the late init is hacked here since the EventMultiplexer isn't available when the
     // NotesPaneModule is constructed
     if (!mbListeningEventMultiplexer)
     {

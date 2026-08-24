@@ -154,7 +154,7 @@ void SlideSorterModule::notifyConfigurationChange (
             else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
             {
                 // The resource managed by this ResourceManager has been
-                // explicitly been requested (maybe by us).  Remember this
+                // explicitly requested (maybe by us). Remember this
                 // setting.
                 HandleResourceRequest(true, rEvent.Configuration);
             }
@@ -170,7 +170,7 @@ void SlideSorterModule::notifyConfigurationChange (
             else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
             {
                 // The resource managed by this ResourceManager has been
-                // explicitly been requested to be hidden (maybe by us).
+                // explicitly requested to be hidden (maybe by us).
                 // Remember this setting.
                 HandleResourceRequest(false, rEvent.Configuration);
             }
