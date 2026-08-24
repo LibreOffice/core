@@ -304,7 +304,7 @@ constexpr struct FormulaEntry FormulaMapTab[] = {
 {"rightharpoonup", DEFAULT_VALUE},
 {"rightharpoondown", DEFAULT_VALUE},
 
-// Delimeter
+// Delimiter
 {"(", DEFAULT_VALUE},
 {")", DEFAULT_VALUE},
 {"[", DEFAULT_VALUE},
@@ -319,7 +319,7 @@ constexpr struct FormulaEntry FormulaMapTab[] = {
 {"rangle", DEFAULT_VALUE},
 {"mid", DEFAULT_VALUE},
 
-// Large Delimeter
+// Large Delimiter
 {"rmoustache", DEFAULT_VALUE},
 {"lmoustache", DEFAULT_VALUE},
 {"rgroup", DEFAULT_VALUE},

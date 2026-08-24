@@ -27,7 +27,7 @@ namespace i18npool {
  */
 
 #define CT_CTRL     0       // Control character
-#define CT_NON      1       // Non-composible
+#define CT_NON      1       // Non-composable
 #define CT_CONS     2       // Consonant
 #define CT_LV       3       // Leading vowel
 #define CT_FV1      4       // Following vowel

@@ -95,7 +95,7 @@ const sal_Unicode NumberChar[][10] = {
 };
 
 static sal_Unicode DecimalChar[] = {
-    0x002E, // Half Width (Ascii)
+    0x002E, // Half Width (ASCII)
     0xFF0E, // Full Width
     0xFF0E, // Chinese Lower
     0x70B9, // S. Chinese Upper
@@ -130,7 +130,7 @@ static sal_Unicode DecimalChar[] = {
 };
 
 const sal_Unicode MinusChar[] = {
-    0x002D, // Half Width (Ascii)
+    0x002D, // Half Width (ASCII)
     0xFF0D, // Full Width
     0xFF0D, // Chinese Lower
     0x8D1F, // S. Chinese Upper
@@ -141,7 +141,7 @@ const sal_Unicode MinusChar[] = {
     0xFF0D, // Korean Upper
     0xFF0D, // Korean Hangul
     0x0000, // Arabic Indic
-    0x2212, // Est. Arabic Indic
+    0x2212, // East Arabic Indic
     0x0000, // Indic
     0x0000, // Thai
     0x0000, // Odia
@@ -165,7 +165,7 @@ const sal_Unicode MinusChar[] = {
 };
 
 static sal_uInt16 SeparatorChar[] = {
-    0x002C, // Half Width (Ascii)
+    0x002C, // Half Width (ASCII)
     0xFF0C, // Full Width
     0x3001, // Chinese Lower
     0x3001, // S. Chinese Upper
@@ -176,7 +176,7 @@ static sal_uInt16 SeparatorChar[] = {
     0x002C, // Korean Upper
     0x002C, // Korean Hangul
     0x0000, // Arabic Indic
-    0x066C, // Est. Arabic Indic
+    0x066C, // East Arabic Indic
     0x0000, // Indic
     0x0000, // Thai
     0x0000, // Odia
