@@ -10,60 +10,7 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-# Source-list duplication mirrors the convention in test/Makefile.am: paths
-# are sub-Makefile-relative (../common/Foo.cpp etc), so they don't share with
-# the top-level shared_sources/coolwsd_sources/coolforkit_sources directly.
-# When adding sources to those top-level lists, update the copies here too.
-
-if ENABLE_MACOS
-util_platform_cpp = ../common/Util-macos.cpp
-else
-util_platform_cpp = ../common/Util-linux.cpp
-endif
-
-shared_sources = \
-                 $(util_platform_cpp) \
-                 ../common/Authorization.cpp \
-                 ../common/CommandControl.cpp \
-                 ../common/ConfigUtil.cpp \
-                 ../common/CoolMount.cpp \
-                 ../common/FileUtil-unix.cpp \
-                 ../common/FileUtil.cpp \
-                 ../common/JailUtil.cpp \
-                 ../common/Landlock.cpp \
-                 ../common/Log-common.cpp \
-                 ../common/Log-poco.cpp \
-                 ../common/MobileApp.cpp \
-                 ../common/ProcUtil.cpp \
-                 ../common/Protocol.cpp \
-                 ../common/RegexUtil.cpp \
-                 ../common/Seccomp.cpp \
-                 ../common/Session.cpp \
-                 ../common/SigUtil-server.cpp \
-                 ../common/Simd.cpp \
-                 ../common/SpookyV2.cpp \
-                 ../common/StringVector.cpp \
-                 ../common/Syscall.cpp \
-                 ../common/TraceEvent.cpp \
-                 ../common/Unit-server.cpp \
-                 ../common/Unit.cpp \
-                 ../common/Uri.cpp \
-                 ../common/Util-server.cpp \
-                 ../common/Util-unix.cpp \
-                 ../common/Util.cpp \
-                 ../kit/KitQueue.cpp \
-                 ../kit/LogUI.cpp \
-                 ../net/HttpHelper.cpp \
-                 ../net/HttpRequest.cpp \
-                 ../net/NetUtil.cpp \
-                 ../net/Socket.cpp \
-                 ../wsd/Exceptions.cpp
-if ENABLE_SSL
-shared_sources += ../net/Ssl.cpp
-endif
-
 coolwsd_sources = \
-                  ../common/Crypto.cpp \
                   ../wsd/Admin.cpp \
                   ../wsd/AdminModel.cpp \
                   ../wsd/AIChatSession.cpp \
@@ -114,8 +61,7 @@ common_fuzzer_sources = \
                        $(coolwsd_sources) \
                        ../wsd/coolwsd-inproc.cpp \
                        ../wsd/KitWSDGlobals.cpp \
-                       $(coolforkit_sources) \
-                       $(shared_sources)
+                       $(coolforkit_sources)
 
 include_paths = -I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/wsd -I${top_srcdir}/kit ${ZLIB_CFLAGS} ${ZSTD_CFLAGS} ${PNG_CFLAGS}
 if ENABLE_SSL
@@ -167,7 +113,20 @@ LIBFUZZER_CFI_FLAGS = -fsanitize=cfi -fno-sanitize=cfi-derived-cast,cfi-unrelate
                       $(CFI_IGNORELIST_FLAGS)
 endif
 LIBFUZZER_CXXFLAGS_COMMON = $(AM_CXXFLAGS) $(LIBFUZZER_CFI_FLAGS)
-LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS)
+
+# Pull in code produced by gbuild already.
+GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
+GBUILD_SHARED_WHOLE = -Wl,--whole-archive,$(GBUILD_SHARED_LIB),--no-whole-archive
+
+LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS) $(GBUILD_SHARED_WHOLE)
+
+# Dependency for code produced by gbuild.
+EXTRA_admin_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+EXTRA_clientrequest_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+EXTRA_clientsession_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+EXTRA_collab_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+EXTRA_httpresponse_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+EXTRA_httpecho_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
 
 # When configure found the static Poco archives (@POCO_FUZZER_STATIC_LIBS@), link
 # them into every fuzzer to avoid cross-DSO CFI aborts against the

@@ -38,6 +38,11 @@ $(eval $(call gb_StaticLibrary_use_externals,shared, \
     zstd \
 ))
 
+# Set in Makefile.am's build-fuzzer-gbuild-libs target.
+$(eval $(call gb_StaticLibrary_add_cxxflags,shared, \
+    $(ONLINE.FUZZER_CFLAGS) \
+))
+
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/AIHttpTransport \
     common/Authorization \
