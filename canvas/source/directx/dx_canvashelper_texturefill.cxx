@@ -231,7 +231,7 @@ namespace dxcanvas
                 // gradients ever: SetFocusScales completely ignores
                 // transformations, both when set at the PathGradientBrush
                 // and for the world coordinate system. Thus, to correctly
-                // display anisotrophic path gradients, we have to render
+                // display anisotropic path gradients, we have to render
                 // them by hand. WTF.
 
                 // TODO(F2): This does not yet support other repeat modes
@@ -268,7 +268,7 @@ namespace dxcanvas
                 ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
                                                                 texture.AffineTransform );
                 // determine overall transformation for inner polygon (might
-                // have to be prefixed by anisotrophic scaling)
+                // have to be prefixed by anisotropic scaling)
                 ::basegfx::B2DHomMatrix aInnerPolygonTransformMatrix;
 
                 // For performance reasons, we create a temporary VCL polygon
@@ -287,7 +287,7 @@ namespace dxcanvas
                 aOuterPoly.transform(aTextureTransform);
 
 
-                // apply scaling (possibly anisotrophic) to inner polygon
+                // apply scaling (possibly anisotropic) to inner polygon
 
 
                 // scale inner polygon according to aspect ratio: for
@@ -310,7 +310,7 @@ namespace dxcanvas
                 }
                 else
                 {
-                    // isotrophic case
+                    // isotropic case
                     aInnerPolygonTransformMatrix.scale( 0.0, 0.0 );
                 }
 

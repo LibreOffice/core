@@ -329,11 +329,11 @@ namespace vclcanvas
             aOuterPoly.transform( rTextureTransform );
 
             // determine overall transformation for inner polygon (might
-            // have to be prefixed by anisotrophic scaling)
+            // have to be prefixed by anisotropic scaling)
             ::basegfx::B2DHomMatrix aInnerPolygonTransformMatrix;
 
 
-            // apply scaling (possibly anisotrophic) to inner polygon
+            // apply scaling (possibly anisotropic) to inner polygon
 
 
             // scale inner polygon according to aspect ratio: for
@@ -356,7 +356,7 @@ namespace vclcanvas
             }
             else
             {
-                // isotrophic case
+                // isotropic case
                 aInnerPolygonTransformMatrix.scale( 0.0, 0.0 );
             }
 

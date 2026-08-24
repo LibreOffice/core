@@ -78,8 +78,8 @@ bool Narrow::VisitBinaryOperator(const BinaryOperator* binaryOp)
     if (tc.Typedef("sal_UCS4").GlobalNamespace()
         || lhsType->isSpecificBuiltinType(BuiltinType::UInt))
         return true;
-    report(DiagnosticsEngine::Warning,
-           "loosing information assigning a sal_UCS4 value to a %0 type", binaryOp->getBeginLoc())
+    report(DiagnosticsEngine::Warning, "losing information assigning a sal_UCS4 value to a %0 type",
+           binaryOp->getBeginLoc())
         << lhsType << binaryOp->getSourceRange();
     return true;
 }
@@ -95,8 +95,8 @@ bool Narrow::VisitVarDecl(const VarDecl* decl)
         return true;
     if (loplugin::TypeCheck(decl->getType()).Typedef("sal_UCS4").GlobalNamespace())
         return true;
-    report(DiagnosticsEngine::Warning,
-           "loosing information assigning a sal_UCS4 value to a %0 type", decl->getBeginLoc())
+    report(DiagnosticsEngine::Warning, "losing information assigning a sal_UCS4 value to a %0 type",
+           decl->getBeginLoc())
         << decl->getType() << decl->getSourceRange();
     return true;
 }

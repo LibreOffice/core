@@ -13,7 +13,7 @@
 #include "plugin.hxx"
 
 // Warn about unnamed namespaces nested (directly) within unnamed namespaces.  (It can be hard to
-// keep track whether a certain spot in a source file is already in an unnamed namespace, so it
+// keep track of whether a certain spot in a source file is already in an unnamed namespace, so it
 // happens that additions to the source add redundant, nested unnamed namespaces.)
 
 namespace
