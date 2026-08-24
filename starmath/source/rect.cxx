@@ -522,7 +522,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                           bool bKeepVerAlignParams)
     // as 'ExtendBy' but keeps original values for AlignT, -M and -B and
     // baseline.
-    // (this is used in 'SmSupSubNode' where the sub-/supscripts shouldn't
+    // (this is used in 'SmSupSubNode' where the sub-/superscripts shouldn't
     // be allowed to modify these values.)
 {
     tools::Long  nOldAlignT   = GetAlignT(),

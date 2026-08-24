@@ -200,7 +200,7 @@ namespace svgio::svgreader
                 (bNoSWidth ? 1.0 : 1.0 / fSWidth) * rTarget.getWidth(),
                 (bNoSHeight ? 1.0 : 1.0 / fSHeight) * rTarget.getHeight());
 
-            // transform from unit rage to target range
+            // transform from unit range to target range
             aRetval.translate(rTarget.getMinX(), rTarget.getMinY());
 
             return aRetval;
@@ -901,7 +901,7 @@ namespace svgio::svgreader
 
                                                         // caution: String is evaluated from left to right, but matrix multiplication
                                                         // in SVG is right to left, so put the new transformation before the current
-                                                        // one by multiplicating from the right side
+                                                        // one by multiplying from the right side
                                                         aMatrix = aMatrix * aNew;
                                                     }
                                                 }

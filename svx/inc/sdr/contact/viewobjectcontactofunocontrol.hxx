@@ -66,14 +66,14 @@ namespace sdr::contact {
                 const SdrUnoObj& _rUnoObject
             );
 
-        /// ensures that the control belonging to this instances has a given visibility
+        /// ensures that the control belonging to this instance has a given visibility
         void    ensureControlVisibility( bool _bVisible ) const;
 
         /** sets the design/alive mode of the control
         */
         void    setControlDesignMode( bool _bDesignMode ) const;
 
-        /** callback from impl class to react on changes of properties form the XControlModel
+        /** callback from impl class to react on changes of properties from the XControlModel
         */
         void propertyChange();
 
