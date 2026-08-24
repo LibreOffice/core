@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <ooxml/OOXMLDocument.hxx>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <databindingnamespaces.hxx>
 #include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <unotxdoc.hxx>
@@ -185,38 +186,6 @@ void SdtHelper::loadPropertiesXMLs()
     m_bPropertiesXMLsLoaded = true;
 }
 
-static void lcl_registerNamespaces(std::u16string_view sNamespaceString,
-                                   const uno::Reference<XXPathAPI>& xXPathAPI)
-{
-    // Split namespaces and register it in XPathAPI
-    auto aNamespaces = string::split(sNamespaceString, ' ');
-    for (const auto& sNamespace : aNamespaces)
-    {
-        // Here we have just one namespace in format "xmlns:ns0='http://someurl'"
-        auto aNamespace = string::split(sNamespace, '=');
-        if (aNamespace.size() < 2)
-        {
-            SAL_WARN("writerfilter",
-                     "SdtHelper::getValueFromDataBinding: invalid namespace: " << sNamespace);
-            continue;
-        }
-
-        auto aNamespaceId = string::split(aNamespace[0], ':');
-        if (aNamespaceId.size() < 2)
-        {
-            SAL_WARN("writerfilter",
-                     "SdtHelper::getValueFromDataBinding: invalid namespace: " << aNamespace[0]);
-            continue;
-        }
-
-        OUString sNamespaceURL = aNamespace[1];
-        sNamespaceURL = string::strip(sNamespaceURL, ' ');
-        sNamespaceURL = string::strip(sNamespaceURL, '\'');
-
-        xXPathAPI->registerNS(aNamespaceId[1], sNamespaceURL);
-    }
-}
-
 std::optional<OUString> SdtHelper::getValueFromDataBinding()
 {
     // No xpath - nothing to do
@@ -229,7 +198,7 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
 
     uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
 
-    lcl_registerNamespaces(m_sDataBindingPrefixMapping, xXpathAPI);
+    sw::RegisterDataBindingNamespaces(m_sDataBindingPrefixMapping, xXpathAPI);
 
     // Find storage by store id and eval xpath there
     const auto aSourceIt = m_xPropertiesXMLs.find(m_sDataBindingStoreItemID);
