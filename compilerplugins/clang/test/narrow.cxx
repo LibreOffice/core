@@ -16,13 +16,13 @@ namespace test1
 sal_UCS4 GetChar();
 void f()
 {
-    // expected-error@+1 {{loosing information assigning a sal_UCS4 value to a 'sal_Unicode' (aka 'char16_t') type [loplugin:narrow]}}
+    // expected-error@+1 {{losing information assigning a sal_UCS4 value to a 'sal_Unicode' (aka 'char16_t') type [loplugin:narrow]}}
     sal_Unicode cChar = GetChar();
     (void)cChar;
     // no error expected
     sal_UCS4 cChar2 = GetChar();
     (void)cChar2;
-    // expected-error@+1 {{loosing information assigning a sal_UCS4 value to a 'sal_Unicode' (aka 'char16_t') type [loplugin:narrow]}}
+    // expected-error@+1 {{losing information assigning a sal_UCS4 value to a 'sal_Unicode' (aka 'char16_t') type [loplugin:narrow]}}
     cChar = GetChar();
 }
 }

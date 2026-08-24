@@ -13,7 +13,7 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
-/** Look for static O*String and O*String[] which can be constepxr.
+/** Look for static O*String and O*String[] which can be constexpr.
  */
 namespace {
 

@@ -14,7 +14,7 @@
 #include "plugin.hxx"
 
 /**
-  Find code where we are return a const value type from a function.
+  Find code where we return a const value type from a function.
   Which makes no sense.
   Either we should return by non-const value, or by const ref.
   e.g.

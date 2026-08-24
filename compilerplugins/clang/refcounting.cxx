@@ -634,7 +634,7 @@ bool RefCounting::VisitReturnStmt(const ReturnStmt * returnStmt) {
     if (containsOWeakObjectSubclass(qt)) {
         report(
             DiagnosticsEngine::Warning,
-            "new object of cppu::OWeakObject subclass %0 being returned via raw pointer, should be returned by via rtl::Reference",
+            "new object of cppu::OWeakObject subclass %0 being returned via raw pointer, should be returned via rtl::Reference",
             returnStmt->getBeginLoc())
             << qt
             << returnStmt->getSourceRange();
