@@ -593,8 +593,8 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     {
         // provide an empty rectangle with alignment parameters for the "current"
         // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
-        // same sub-/supscript positions.)
-        //! be sure to use a character that has explicitly defined HiAttribut
+        // same sub-/superscript positions.)
+        //! be sure to use a character that has explicitly defined HiAttribute
         //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
         //! 'vec {a}'.
         SmRect::operator = (SmRect(aTmpDev, &rFormat, u"a"_ustr,
@@ -1155,13 +1155,13 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     const SmRect &rBodyRect = pBody->GetRect();
     SmRect::operator = (rBodyRect);
 
-    // line that separates sub- and supscript rectangles
+    // line that separates sub- and superscript rectangles
     tools::Long  nDelimLine = SmFromTo(GetAlignB(), GetAlignT(), 0.4);
 
     Point  aPos;
     tools::Long   nDelta, nDist;
 
-    // iterate over all possible sub-/supscripts
+    // iterate over all possible sub-/superscripts
     SmRect  aTmpRect (rBodyRect);
     for (int i = 0;  i < SUBSUP_NUM_ENTRIES;  i++)
     {
@@ -1180,7 +1180,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                     break;
             }
 
-        // prevent sub-/supscripts from diminishing in size
+        // prevent sub-/superscripts from diminishing in size
         // (as would be in "a_{1_{2_{3_4}}}")
         if (GetFont().GetFontSize().Height() > rFormat.GetBaseSize().Height() / 3)
         {

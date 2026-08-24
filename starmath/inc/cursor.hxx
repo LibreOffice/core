@@ -286,7 +286,7 @@ private:
      * first element in pLineList.
      *
      * If the current position is inside an SmTextNode, this node will be split in two, for this
-     * reason you should beaware that iterators to elements in pLineList may be invalidated, and
+     * reason you should be aware that iterators to elements in pLineList may be invalidated, and
      * that you should call PatchLineList() with this iterator if no action is taken.
      */
     static SmNodeList::iterator FindPositionInLineList(SmNodeList& rLineList,

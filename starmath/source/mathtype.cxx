@@ -662,7 +662,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
          quotes to avoid scanning the TokenTable for matches
 
          Unfortunately it may turn out that the string gets
-         split during the handling of a character emblishment
+         split during the handling of a character embellishment
          so this special case must be handled in the
          character handler case 2:
          */
@@ -2838,14 +2838,14 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
 
     if (xfEMBELL(nTag))
     {
-        //A bit tricky, the character emblishments for
+        //A bit tricky, the character embellishments for
         //mathtype can all be listed after each other, in
         //starmath some must go before the character and some
-        //must go after. In addition some of the emblishments
+        //must go after. In addition some of the embellishments
         //may repeated and in starmath some of these groups
         //must be gathered together. sPost is the portion that
         //follows the char and nPostSup and nPostlSup are the
-        //indexes at which this class of emblishment is
+        //indexes at which this class of embellishment is
         //collated together
         sPost = "";
         nPostSup = nPostlSup = 0;

@@ -1501,7 +1501,7 @@ public:
 };
 
 
-/** Enum used to index sub-/supscripts in the 'maSubNodes' array
+/** Enum used to index sub-/superscripts in the 'maSubNodes' array
  * in 'SmSubSupNode'
  *
  * See graphic for positions at char:
@@ -1523,7 +1523,7 @@ enum SmSubSup
 };
 
 /** numbers of entries in the above enum (that is: the number of possible
- * sub-/supscripts)
+ * sub-/superscripts)
  */
 #define SUBSUP_NUM_ENTRIES 6
 
