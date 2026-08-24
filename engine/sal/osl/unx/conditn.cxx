@@ -40,7 +40,7 @@ struct oslConditionImpl
 
 }
 
-oslCondition SAL_CALL osl_createCondition()
+oslCondition osl_createCondition()
 {
     oslConditionImpl* pCond = new oslConditionImpl;
 
@@ -49,7 +49,7 @@ oslCondition SAL_CALL osl_createCondition()
     return static_cast<oslCondition>(pCond);
 }
 
-void SAL_CALL osl_destroyCondition(oslCondition Condition)
+void osl_destroyCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
 
@@ -61,7 +61,7 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
         delete pCond;
 }
 
-bool SAL_CALL osl_setCondition(oslCondition Condition)
+bool osl_setCondition(oslCondition Condition)
 {
    oslConditionImpl* pCond;
 
@@ -80,7 +80,7 @@ bool SAL_CALL osl_setCondition(oslCondition Condition)
 
 }
 
-bool SAL_CALL osl_resetCondition(oslCondition Condition)
+bool osl_resetCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
 
@@ -98,7 +98,7 @@ bool SAL_CALL osl_resetCondition(oslCondition Condition)
     return true;
 }
 
-oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout)
+oslConditionResult osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout)
 {
     oslConditionImpl* pCond;
 
@@ -130,7 +130,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     return osl_cond_result_ok;
 }
 
-bool SAL_CALL osl_checkCondition(oslCondition Condition)
+bool osl_checkCondition(oslCondition Condition)
 {
     bool State;
     oslConditionImpl* pCond;

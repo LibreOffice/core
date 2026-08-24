@@ -42,8 +42,8 @@ rtl_cache_type * rtl_cache_activate(
     const char *     name,
     size_t           objsize,
     size_t           objalign,
-    int  (SAL_CALL * constructor)(void * obj, void * userarg),
-    void (SAL_CALL * destructor) (void * obj, void * userarg),
+    int  (* constructor)(void * obj, void * userarg),
+    void (* destructor) (void * obj, void * userarg),
     void *           userarg
 )
 {
@@ -80,13 +80,13 @@ rtl_cache_type * rtl_cache_activate(
 
 } //namespace
 
-rtl_cache_type * SAL_CALL rtl_cache_create(
+rtl_cache_type * rtl_cache_create(
     const char *     name,
     sal_Size         objsize,
     sal_Size         objalign,
-    int  (SAL_CALL * constructor)(void * obj, void * userarg),
-    void (SAL_CALL * destructor) (void * obj, void * userarg),
-    void (SAL_CALL * /*reclaim*/)    (void * userarg),
+    int  (* constructor)(void * obj, void * userarg),
+    void (* destructor) (void * obj, void * userarg),
+    void (* /*reclaim*/)    (void * userarg),
     void *           userarg,
     rtl_arena_type *,
     int
@@ -130,7 +130,7 @@ try_alloc:
     return result;
 }
 
-void SAL_CALL rtl_cache_destroy(rtl_cache_type * cache) noexcept
+void rtl_cache_destroy(rtl_cache_type * cache) noexcept
 {
     if (cache)
     {
@@ -138,7 +138,7 @@ void SAL_CALL rtl_cache_destroy(rtl_cache_type * cache) noexcept
     }
 }
 
-void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) noexcept
+void * rtl_cache_alloc(rtl_cache_type * cache) noexcept
 {
     void * obj = nullptr;
 
@@ -158,7 +158,7 @@ void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) noexcept
     return obj;
 }
 
-void SAL_CALL rtl_cache_free(
+void rtl_cache_free(
     rtl_cache_type * cache,
     void *           obj
 ) noexcept
@@ -176,7 +176,7 @@ void SAL_CALL rtl_cache_free(
 
 #if defined(SAL_UNX)
 
-void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) noexcept
+void rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) noexcept
 {
     //currently glibc doesn't implement memset_s
     volatile char *p = static_cast<volatile char*>(Ptr);
@@ -186,7 +186,7 @@ void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) noexcept
 
 #elif defined(_WIN32)
 
-void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) noexcept
+void rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) noexcept
 {
     RtlSecureZeroMemory(Ptr, Bytes);
 }

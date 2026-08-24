@@ -30,8 +30,8 @@ struct rtl_cache_st
 
     sal_Size                  m_type_size;   /* const */
 
-    int  (SAL_CALL * m_constructor)(void * obj, void * userarg); /* const */
-    void (SAL_CALL * m_destructor) (void * obj, void * userarg); /* const */
+    int  (* m_constructor)(void * obj, void * userarg); /* const */
+    void (* m_destructor) (void * obj, void * userarg); /* const */
     void *                    m_userarg;
 };
 

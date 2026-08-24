@@ -54,7 +54,7 @@ void rtl_locale_fini()
     g_pDefaultLocale = nullptr;
 }
 
-rtl_Locale * SAL_CALL rtl_locale_register(const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant)
+rtl_Locale * rtl_locale_register(const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant)
 {
     sal_Unicode c = 0;
     rtl_uString* sLanguage = nullptr;
@@ -92,40 +92,40 @@ rtl_Locale * SAL_CALL rtl_locale_register(const sal_Unicode * language, const sa
     return ret;
 }
 
-rtl_Locale * SAL_CALL rtl_locale_getDefault()
+rtl_Locale * rtl_locale_getDefault()
 {
     return g_pDefaultLocale;
 }
 
-void SAL_CALL rtl_locale_setDefault(const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant)
+void rtl_locale_setDefault(const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant)
 {
     g_pDefaultLocale = rtl_locale_register(language, country, variant);
 }
 
-rtl_uString * SAL_CALL rtl_locale_getLanguage(rtl_Locale * This)
+rtl_uString * rtl_locale_getLanguage(rtl_Locale * This)
 {
     rtl_uString_acquire(This->Language);
     return This->Language;
 }
 
-rtl_uString * SAL_CALL rtl_locale_getCountry(rtl_Locale * This)
+rtl_uString * rtl_locale_getCountry(rtl_Locale * This)
 {
     rtl_uString_acquire(This->Country);
     return This->Country;
 }
 
-rtl_uString * SAL_CALL rtl_locale_getVariant(rtl_Locale * This)
+rtl_uString * rtl_locale_getVariant(rtl_Locale * This)
 {
     rtl_uString_acquire(This->Variant);
     return This->Variant;
 }
 
-sal_Int32 SAL_CALL rtl_locale_hashCode(rtl_Locale * This)
+sal_Int32 rtl_locale_hashCode(rtl_Locale * This)
 {
     return This->HashCode;
 }
 
-sal_Int32 SAL_CALL rtl_locale_equals(rtl_Locale * This, rtl_Locale * obj)
+sal_Int32 rtl_locale_equals(rtl_Locale * This, rtl_Locale * obj)
 {
     return This == obj;
 }

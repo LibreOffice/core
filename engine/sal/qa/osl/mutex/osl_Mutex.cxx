@@ -76,7 +76,7 @@ public:
 protected:
     struct resource *pResource;
 
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         pResource->lock.acquire( );
         for( sal_Int8 i = 0; i < 3; i++ )
@@ -104,7 +104,7 @@ public:
 protected:
     struct resource *pResource;
 
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         pResource->lock.acquire( );
         for( sal_Int8 i = 0; i < 3; i++ )
@@ -141,7 +141,7 @@ public:
 protected:
     struct chain* pChain;
 
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         //block here if the mutex has been acquired
         pChain->lock.acquire( );
@@ -179,7 +179,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run() override
+    void run() override
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
@@ -201,7 +201,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
@@ -223,7 +223,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "#GlobalMutexThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         // block here if the mutex has been acquired
         Mutex* pGlobalMutex;
@@ -546,7 +546,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         // block here if the mutex has been acquired
         MutexGuard aGuard( pMyMutex );
@@ -635,7 +635,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         // acquire the mutex
         // printf("# ClearGuardThread" );
@@ -780,7 +780,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( ) override
+    void run( ) override
     {
         // acquire the mutex
         printf("# ResettableGuard\n" );

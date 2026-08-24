@@ -178,7 +178,7 @@ static oslFileError osl_createTempFile_impl_(
     return osl_error;
 }
 
-oslFileError SAL_CALL osl_createTempFile(
+oslFileError osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL)
@@ -221,7 +221,7 @@ oslFileError SAL_CALL osl_createTempFile(
     return osl_error;
 }
 
-oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
+oslFileError osl_getTempDirURL(rtl_uString** pustrTempDir)
 {
     osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
     LPWSTR  lpBuffer = o3tl::toW(aBuffer);

@@ -58,7 +58,7 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path)
 /* osl_loadModule */
 /*****************************************************************************/
 
-oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
+oslModule osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
 {
     oslModule pModule=nullptr;
     rtl_uString* ustrTmp = nullptr;
@@ -85,7 +85,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 /* osl_loadModuleAscii */
 /*****************************************************************************/
 
-oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldMode)
+oslModule osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldMode)
 {
 #if HAVE_UNIX_DLAPI
     SAL_WARN_IF(
@@ -147,7 +147,7 @@ oslModule osl_loadModuleRelativeAscii(
 /* osl_getModuleHandle */
 /*****************************************************************************/
 
-bool SAL_CALL
+bool
 osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 {
 #if HAVE_UNIX_DLAPI
@@ -162,7 +162,7 @@ osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 /*****************************************************************************/
 /* osl_unloadModule */
 /*****************************************************************************/
-void SAL_CALL osl_unloadModule(oslModule hModule)
+void osl_unloadModule(oslModule hModule)
 {
 #if !defined(DISABLE_DYNLOADING) && HAVE_UNIX_DLAPI
     if (hModule)
@@ -201,7 +201,7 @@ void * getSymbol(oslModule module, char const * symbol)
 /*****************************************************************************/
 /* osl_getSymbol */
 /*****************************************************************************/
-void* SAL_CALL
+void*
 osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 {
     // Arbitrarily using UTF-8:
@@ -226,7 +226,7 @@ osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 /*****************************************************************************/
 /* osl_getAsciiFunctionSymbol */
 /*****************************************************************************/
-oslGenericFunction SAL_CALL
+oslGenericFunction
 osl_getAsciiFunctionSymbol(oslModule Module, const char *pSymbol)
 {
     return reinterpret_cast<oslGenericFunction>(getSymbol(Module, pSymbol));
@@ -237,7 +237,7 @@ osl_getAsciiFunctionSymbol(oslModule Module, const char *pSymbol)
 /*****************************************************************************/
 /* osl_getFunctionSymbol */
 /*****************************************************************************/
-oslGenericFunction SAL_CALL
+oslGenericFunction
 osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 {
     return reinterpret_cast<oslGenericFunction>(
@@ -249,7 +249,7 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 /*****************************************************************************/
 /* osl_getModuleURLFromAddress */
 /*****************************************************************************/
-bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
+bool osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     bool result = false;
     rtl_String * path = nullptr;
@@ -286,7 +286,7 @@ bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryU
 /*****************************************************************************/
 /* osl_getModuleURLFromFunctionAddress */
 /*****************************************************************************/
-bool SAL_CALL osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, rtl_uString ** ppLibraryUrl)
+bool osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, rtl_uString ** ppLibraryUrl)
 {
     return osl_getModuleURLFromAddress(
         reinterpret_cast<void*>(addr), ppLibraryUrl);

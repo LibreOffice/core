@@ -35,9 +35,9 @@ rtl_TextEncoding& getThreadTextEncodingImpl()
 }
 }
 
-rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding() { return getThreadTextEncodingImpl(); }
+rtl_TextEncoding osl_getThreadTextEncoding() { return getThreadTextEncodingImpl(); }
 
-rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
+rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
 {
     return std::exchange(getThreadTextEncodingImpl(), Encoding);
 }

@@ -597,7 +597,7 @@ bootstrap_map_t bootstrap_map;
 
 }
 
-rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
+rtlBootstrapHandle rtl_bootstrap_args_open(rtl_uString * pIniName)
 {
     static o3tl::lru_map<OUString,OUString> fileUrlLookupCache(16);
 
@@ -659,7 +659,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
     return static_cast< rtlBootstrapHandle >( that );
 }
 
-void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle) noexcept
+void rtl_bootstrap_args_close(rtlBootstrapHandle handle) noexcept
 {
     if (!handle)
         return;
@@ -684,7 +684,7 @@ void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle) noexcept
     }
 }
 
-bool SAL_CALL rtl_bootstrap_get_from_handle(
+bool rtl_bootstrap_get_from_handle(
     rtlBootstrapHandle handle,
     rtl_uString      * pName,
     rtl_uString     ** ppValue,
@@ -706,7 +706,7 @@ bool SAL_CALL rtl_bootstrap_get_from_handle(
     return found;
 }
 
-void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
+void rtl_bootstrap_get_iniName_from_handle (
     rtlBootstrapHandle handle,
     rtl_uString     ** ppIniName
 )
@@ -726,7 +726,7 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
     }
 }
 
-void SAL_CALL rtl_bootstrap_setIniFileName (
+void rtl_bootstrap_setIniFileName (
     rtl_uString * pName
 )
 {
@@ -735,7 +735,7 @@ void SAL_CALL rtl_bootstrap_setIniFileName (
     file = pName;
 }
 
-bool SAL_CALL rtl_bootstrap_get (
+bool rtl_bootstrap_get (
     rtl_uString  * pName,
     rtl_uString ** ppValue,
     rtl_uString  * pDefault
@@ -744,7 +744,7 @@ bool SAL_CALL rtl_bootstrap_get (
     return rtl_bootstrap_get_from_handle(nullptr, pName, ppValue, pDefault);
 }
 
-void SAL_CALL rtl_bootstrap_set (
+void rtl_bootstrap_set (
     rtl_uString * pName,
     rtl_uString * pValue
 )
@@ -768,7 +768,7 @@ void SAL_CALL rtl_bootstrap_set (
     rtl_bootstrap_set_vector.emplace_back(name, value);
 }
 
-void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
+void rtl_bootstrap_expandMacros_from_handle(
     rtlBootstrapHandle handle,
     rtl_uString     ** macro)
 {
@@ -781,7 +781,7 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
     rtl_uString_assign(macro, expanded.pData);
 }
 
-void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
+void rtl_bootstrap_expandMacros(rtl_uString ** macro)
 {
     rtl_bootstrap_expandMacros_from_handle(nullptr, macro);
 }

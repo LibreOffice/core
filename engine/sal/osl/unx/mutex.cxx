@@ -37,7 +37,7 @@ typedef struct _oslMutexImpl
     pthread_mutex_t mutex;
 } oslMutexImpl;
 
-oslMutex SAL_CALL osl_createMutex()
+oslMutex osl_createMutex()
 {
     oslMutexImpl* pMutex = static_cast<oslMutexImpl*>(malloc(sizeof(oslMutexImpl)));
     pthread_mutexattr_t aMutexAttr;
@@ -68,7 +68,7 @@ oslMutex SAL_CALL osl_createMutex()
     return pMutex;
 }
 
-void SAL_CALL osl_destroyMutex(oslMutex pMutex)
+void osl_destroyMutex(oslMutex pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
@@ -84,7 +84,7 @@ void SAL_CALL osl_destroyMutex(oslMutex pMutex)
     }
 }
 
-bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
+bool osl_acquireMutex(oslMutex pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
@@ -103,7 +103,7 @@ bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
     return false;
 }
 
-bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
+bool osl_tryToAcquireMutex(oslMutex pMutex)
 {
     bool result = false;
 
@@ -121,7 +121,7 @@ bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
     return result;
 }
 
-bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
+bool osl_releaseMutex(oslMutex pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 

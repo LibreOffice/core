@@ -78,7 +78,7 @@ constexpr auto uriCharClass = rtl::createUriCharClass(
 
 }
 
-oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
+oslFileError osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
 {
     OSL_FAIL("osl_getCanonicalName not implemented");
 
@@ -326,7 +326,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
 
 }
 
-oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath )
+oslFileError osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath )
 {
     OUString path;
     oslFileError e;
@@ -346,7 +346,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     return e;
 }
 
-oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrFileURL )
+oslFileError osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrFileURL )
 {
     rtl_uString *pTmp = nullptr;
     sal_Int32 nIndex;

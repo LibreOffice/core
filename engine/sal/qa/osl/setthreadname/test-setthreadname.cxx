@@ -30,7 +30,7 @@ namespace {
 
 class TestThread: public osl::Thread {
 private:
-    virtual void SAL_CALL run() override;
+    virtual void run() override;
 public:
     TestThread() = default;
     TestThread(const TestThread&) = delete;

@@ -461,7 +461,7 @@ void appendPath(
 
 }
 
-bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass) noexcept
+bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass) noexcept
 {
     static constexpr std::array<bool, rtl::UriCharClassSize> aCharClass[] = {
         rtl::createUriCharClass(u8""), // None
@@ -494,7 +494,7 @@ bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass) noexcept
     return aCharClass[eCharClass].data();
 }
 
-void SAL_CALL rtl_uriEncode(rtl_uString * pText, bool const * pCharClass,
+void rtl_uriEncode(rtl_uString * pText, bool const * pCharClass,
                             rtl_UriEncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset, rtl_uString ** pResult) noexcept
 {
@@ -559,7 +559,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, bool const * pCharClass,
     *pResult = rtl_uStringBuffer_makeStringAndClear(pResult, &nCapacity);
 }
 
-void SAL_CALL rtl_uriDecode(rtl_uString * pText,
+void rtl_uriDecode(rtl_uString * pText,
                             rtl_UriDecodeMechanism eMechanism,
                             rtl_TextEncoding eCharset, rtl_uString ** pResult) noexcept
 {
@@ -614,7 +614,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
     }
 }
 
-bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
+bool rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
                                          rtl_uString * pRelUriRef,
                                          rtl_uString ** pResult,
                                          rtl_uString ** pException) noexcept

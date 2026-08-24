@@ -11,7 +11,7 @@
 
 #include <osl/mutex.hxx>
 
-oslMutex* SAL_CALL osl_getGlobalMutex()
+oslMutex* osl_getGlobalMutex()
 {
     static osl::Mutex g_Mutex;
     return &g_Mutex.mutex;

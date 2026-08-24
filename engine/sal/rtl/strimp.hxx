@@ -52,7 +52,7 @@ rtl_String* rtl_string_ImplAlloc( sal_Int32 nLen );
 
 extern "C" {
 
-typedef void *(SAL_CALL * rtl_allocateStringFn)(size_t size);
+typedef void *(* rtl_allocateStringFn)(size_t size);
 typedef void  (*rtl_freeStringFn)(void *);
 
 }

@@ -813,13 +813,13 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
     return nError;
 }
 
-oslFileError SAL_CALL osl_getSystemPathFromFileURL(
+oslFileError osl_getSystemPathFromFileURL(
     rtl_uString *ustrURL, rtl_uString **pustrPath)
 {
     return osl_getSystemPathFromFileURL_(OUString::unacquired(&ustrURL), pustrPath, true);
 }
 
-oslFileError SAL_CALL osl_searchFileURL(
+oslFileError osl_searchFileURL(
     rtl_uString *ustrFileName,
     rtl_uString *ustrSystemSearchPath,
     rtl_uString **pustrPath)
@@ -895,7 +895,7 @@ oslFileError SAL_CALL osl_searchFileURL(
     return error;
 }
 
-oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL )
+oslFileError osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL )
 {
     oslFileError eError = osl_File_E_None;
     OUString     ustrRelSysPath;
@@ -984,7 +984,7 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
     return  eError;
 }
 
-oslFileError SAL_CALL osl_getCanonicalName( rtl_uString *strRequested, rtl_uString **strValid )
+oslFileError osl_getCanonicalName( rtl_uString *strRequested, rtl_uString **strValid )
 {
     rtl_uString_newFromString(strValid, strRequested);
     return osl_File_E_None;

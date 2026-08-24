@@ -30,7 +30,7 @@
     CRITICAL_SECTION structure.
 */
 
-oslMutex SAL_CALL osl_createMutex(void)
+oslMutex osl_createMutex(void)
 {
     CRITICAL_SECTION* pMutexImpl;
 
@@ -43,7 +43,7 @@ oslMutex SAL_CALL osl_createMutex(void)
     return reinterpret_cast<oslMutex>(pMutexImpl);
 }
 
-void SAL_CALL osl_destroyMutex(oslMutex Mutex)
+void osl_destroyMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 
@@ -54,7 +54,7 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
     }
 }
 
-bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
+bool osl_acquireMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 
@@ -65,7 +65,7 @@ bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
     return true;
 }
 
-bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
+bool osl_tryToAcquireMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 
@@ -74,7 +74,7 @@ bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
     return TryEnterCriticalSection(pMutexImpl) != FALSE;
 }
 
-bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
+bool osl_releaseMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 

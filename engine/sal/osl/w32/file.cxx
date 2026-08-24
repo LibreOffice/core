@@ -612,7 +612,7 @@ extern "C" oslFileHandle osl_createFileHandleFromOSHandle(
     return static_cast<oslFileHandle>(pImpl);
 }
 
-oslFileError SAL_CALL osl_openFile(
+oslFileError osl_openFile(
     rtl_uString *   strPath,
     oslFileHandle * pHandle,
     sal_uInt32      uFlags)
@@ -650,7 +650,7 @@ oslFileError SAL_CALL osl_openFile(
     return result;
 }
 
-oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
+oslFileError osl_syncFile(oslFileHandle Handle)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile))
@@ -668,7 +668,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
+oslFileError osl_closeFile(oslFileHandle Handle)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile))
@@ -702,7 +702,7 @@ template<typename T> bool exceedsMaxSIZE_T(T n)
 
 }
 
-oslFileError SAL_CALL osl_mapFile(
+oslFileError osl_mapFile(
     oslFileHandle Handle,
     void**        ppAddr,
     sal_uInt64    uLength,
@@ -771,7 +771,7 @@ oslFileError SAL_CALL osl_mapFile(
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
+oslFileError osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
 {
     if (!pAddr)
         return osl_File_E_INVAL;
@@ -782,13 +782,13 @@ oslFileError SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_unmapMappedFile(oslFileHandle /* Handle */, void* pAddr, sal_uInt64 uLength)
+oslFileError osl_unmapMappedFile(oslFileHandle /* Handle */, void* pAddr, sal_uInt64 uLength)
 {
     return osl_unmapFile(pAddr, uLength);
 }
 
 oslFileError
-SAL_CALL osl_readLine(
+osl_readLine(
     oslFileHandle   Handle,
     sal_Sequence ** ppSequence)
 {
@@ -806,7 +806,7 @@ SAL_CALL osl_readLine(
     return result;
 }
 
-oslFileError SAL_CALL osl_readFile(
+oslFileError osl_readFile(
     oslFileHandle Handle,
     void *        pBuffer,
     sal_uInt64    uBytesRequested,
@@ -825,7 +825,7 @@ oslFileError SAL_CALL osl_readFile(
     return result;
 }
 
-oslFileError SAL_CALL osl_writeFile(
+oslFileError osl_writeFile(
     oslFileHandle Handle,
     const void *  pBuffer,
     sal_uInt64    uBytesToWrite,
@@ -857,7 +857,7 @@ template<typename T> bool exceedsMinLONGLONG(T n)
 
 }
 
-oslFileError SAL_CALL osl_readFileAt(
+oslFileError osl_readFileAt(
     oslFileHandle Handle,
     sal_uInt64    uOffset,
     void*         pBuffer,
@@ -880,7 +880,7 @@ oslFileError SAL_CALL osl_readFileAt(
     return pImpl->readFileAt(nOffset, pBuffer, uBytesRequested, pBytesRead);
 }
 
-oslFileError SAL_CALL osl_writeFileAt(
+oslFileError osl_writeFileAt(
     oslFileHandle Handle,
     sal_uInt64    uOffset,
     const void*   pBuffer,
@@ -903,7 +903,7 @@ oslFileError SAL_CALL osl_writeFileAt(
     return pImpl->writeFileAt(nOffset, pBuffer, uBytesToWrite, pBytesWritten);
 }
 
-oslFileError SAL_CALL osl_isEndOfFile(oslFileHandle Handle, bool *pIsEOF)
+oslFileError osl_isEndOfFile(oslFileHandle Handle, bool *pIsEOF)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
@@ -915,7 +915,7 @@ oslFileError SAL_CALL osl_isEndOfFile(oslFileHandle Handle, bool *pIsEOF)
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
+oslFileError osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile) || (!pPos))
@@ -927,7 +927,7 @@ oslFileError SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset)
+oslFileError osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile))
@@ -970,7 +970,7 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
     return pImpl->setPos(nPos + nOffset);
 }
 
-oslFileError SAL_CALL osl_getFileSize(oslFileHandle Handle, sal_uInt64 *pSize)
+oslFileError osl_getFileSize(oslFileHandle Handle, sal_uInt64 *pSize)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
@@ -982,7 +982,7 @@ oslFileError SAL_CALL osl_getFileSize(oslFileHandle Handle, sal_uInt64 *pSize)
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
+oslFileError osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
@@ -1004,7 +1004,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
     return pImpl->setSize(uSize);
 }
 
-oslFileError SAL_CALL osl_removeFile(rtl_uString* strPath)
+oslFileError osl_removeFile(rtl_uString* strPath)
 {
     OUString strSysPath;
     oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
@@ -1019,7 +1019,7 @@ oslFileError SAL_CALL osl_removeFile(rtl_uString* strPath)
     return error;
 }
 
-oslFileError SAL_CALL osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPath)
+oslFileError osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPath)
 {
     OUString strSysPath, strSysDestPath;
     oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
@@ -1041,7 +1041,7 @@ oslFileError SAL_CALL osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPat
     return error;
 }
 
-oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPath)
+oslFileError osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPath)
 {
     OUString strSysPath, strSysDestPath;
     oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
@@ -1063,7 +1063,7 @@ oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPat
     return error;
 }
 
-oslFileError SAL_CALL osl_replaceFile(rtl_uString* strPath, rtl_uString* strDestPath)
+oslFileError osl_replaceFile(rtl_uString* strPath, rtl_uString* strDestPath)
 {
     OUString strSysPath, strSysDestPath;
     oslFileError    error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);

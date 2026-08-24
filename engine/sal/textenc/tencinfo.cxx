@@ -29,7 +29,7 @@
 #include "gettextencodingdata.hxx"
 #include "tenchelp.hxx"
 
-bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
+bool rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return
         nEncoding > RTL_TEXTENCODING_DONTKNOW
@@ -57,7 +57,7 @@ struct ImplStrFirstPartCharsetDef
 
 /* ======================================================================= */
 
-bool SAL_CALL rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_TextEncodingInfo* pEncInfo )
+bool rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_TextEncodingInfo* pEncInfo )
 {
     const ImplTextEncodingData* pData;
 
@@ -106,7 +106,7 @@ bool SAL_CALL rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_TextE
 
 /* ======================================================================= */
 
-rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinCharset )
+rtl_TextEncoding rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinCharset )
 {
     rtl_TextEncoding eTextEncoding;
 
@@ -138,7 +138,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinC
 
 /* ----------------------------------------------------------------------- */
 
-rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixCharset )
+rtl_TextEncoding rtl_getTextEncodingFromUnixCharset( const char* pUnixCharset )
 {
     /* See <ftp://ftp.x.org/pub/DOCS/registry>, section 14 ("Font Charset
      * (Registry and Encoding) Names").
@@ -375,7 +375,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
 
 /* ----------------------------------------------------------------------- */
 
-rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeCharset )
+rtl_TextEncoding rtl_getTextEncodingFromMimeCharset( const char* pMimeCharset )
 {
     /* All Identifiers are in lower case and contain only alphanumeric */
     /* characters. The function search for the first equal string in */
@@ -665,7 +665,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
 
 /* ======================================================================= */
 
-sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
+sal_uInt8 rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
@@ -675,7 +675,7 @@ sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding e
 
 /* ----------------------------------------------------------------------- */
 
-const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
+const char* rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
@@ -687,7 +687,7 @@ const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eT
 
 /* ----------------------------------------------------------------------- */
 
-char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
+char const * rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
                                                              nEncoding)
 {
     ImplTextEncodingData const * p = Impl_getTextEncodingData(nEncoding);
@@ -695,7 +695,7 @@ char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
                p->mpBestMimeCharset : nullptr;
 }
 
-const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
+const char* rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
@@ -708,7 +708,7 @@ const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eT
    charsets/charset4.asp>, and <http://www.iana.org/assignments/character-sets>.
  */
 
-rtl_TextEncoding SAL_CALL
+rtl_TextEncoding
 rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage)
 {
     switch (nCodePage)
@@ -785,7 +785,7 @@ rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage)
     }
 }
 
-sal_uInt32 SAL_CALL
+sal_uInt32
 rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding)
 {
     switch (nEncoding)

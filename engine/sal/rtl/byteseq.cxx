@@ -36,7 +36,7 @@ static sal_Sequence aEmpty_rtl_ByteSeq =
     { 0 }   /* sal_Unicode  buffer[1];  */
 };
 
-void SAL_CALL rtl_byte_sequence_reference2One(
+void rtl_byte_sequence_reference2One(
     sal_Sequence ** ppSequence ) noexcept
 {
     sal_Sequence * pSequence;
@@ -80,7 +80,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     }
 }
 
-void SAL_CALL rtl_byte_sequence_realloc(
+void rtl_byte_sequence_realloc(
     sal_Sequence ** ppSequence, sal_Int32 nSize ) noexcept
 {
     sal_Sequence * pSequence;
@@ -129,13 +129,13 @@ void SAL_CALL rtl_byte_sequence_realloc(
     *ppSequence = pSequence;
 }
 
-void SAL_CALL rtl_byte_sequence_acquire( sal_Sequence *pSequence ) noexcept
+void rtl_byte_sequence_acquire( sal_Sequence *pSequence ) noexcept
 {
     assert(pSequence);
     osl_atomic_increment( &(pSequence->nRefCount) );
 }
 
-void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence ) noexcept
+void rtl_byte_sequence_release( sal_Sequence *pSequence ) noexcept
 {
     if ( pSequence != nullptr )
     {
@@ -146,7 +146,7 @@ void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence ) noexcept
     }
 }
 
-void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32 nLength ) noexcept
+void rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32 nLength ) noexcept
 {
     assert(ppSequence);
     if( *ppSequence )
@@ -172,7 +172,7 @@ void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32
     }
 }
 
-void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , sal_Int32 nLength ) noexcept
+void rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , sal_Int32 nLength ) noexcept
 {
     assert(ppSequence);
     if( *ppSequence )
@@ -190,7 +190,7 @@ void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , 
     }
 }
 
-void SAL_CALL rtl_byte_sequence_constructFromArray(
+void rtl_byte_sequence_constructFromArray(
     sal_Sequence **ppSequence, const sal_Int8 *pData , sal_Int32 nLength ) noexcept
 {
     rtl_byte_sequence_constructNoDefault( ppSequence , nLength );
@@ -198,7 +198,7 @@ void SAL_CALL rtl_byte_sequence_constructFromArray(
         memcpy( (*ppSequence)->elements, pData, nLength );
 }
 
-void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence *pSequence ) noexcept
+void rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence *pSequence ) noexcept
 {
     if ( *ppSequence != pSequence)
     {
@@ -214,7 +214,7 @@ void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence
 
 }
 
-bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence *pSequence2 ) noexcept
+bool rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence *pSequence2 ) noexcept
 {
     assert(pSequence1 && pSequence2);
     if (pSequence1 == pSequence2)
@@ -231,12 +231,12 @@ bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence 
         == 0;
 }
 
-const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray( sal_Sequence *pSequence ) noexcept
+const sal_Int8 *rtl_byte_sequence_getConstArray( sal_Sequence *pSequence ) noexcept
 {
     return reinterpret_cast<sal_Int8*>(pSequence->elements);
 }
 
-sal_Int32 SAL_CALL rtl_byte_sequence_getLength( sal_Sequence *pSequence ) noexcept
+sal_Int32 rtl_byte_sequence_getLength( sal_Sequence *pSequence ) noexcept
 {
     return pSequence->nElements;
 }

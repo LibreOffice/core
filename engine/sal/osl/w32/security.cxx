@@ -191,7 +191,7 @@ bool getUserNameImpl(oslSecurity Security, rtl_uString** strName, bool bIncludeD
 }
 } // namespace
 
-oslSecurity SAL_CALL osl_getCurrentSecurity(void)
+oslSecurity osl_getCurrentSecurity(void)
 {
     oslSecurityImpl* pSecImpl = static_cast<oslSecurityImpl *>(malloc(sizeof(oslSecurityImpl)));
     if (pSecImpl)
@@ -204,7 +204,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity(void)
     return pSecImpl;
 }
 
-oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *strPasswd, oslSecurity *pSecurity )
+oslSecurityError osl_loginUser( rtl_uString *strUserName, rtl_uString *strPasswd, oslSecurity *pSecurity )
 {
     oslSecurityError ret;
 
@@ -253,7 +253,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
     return ret;
 }
 
-oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
+oslSecurityError osl_loginUserOnFileServer(rtl_uString *strUserName,
                                                     rtl_uString *strPasswd,
                                                     rtl_uString *strFileServer,
                                                     oslSecurity *pSecurity)
@@ -297,7 +297,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     return osl_Security_E_UserUnknown;
 }
 
-bool SAL_CALL osl_isAdministrator(oslSecurity Security)
+bool osl_isAdministrator(oslSecurity Security)
 {
     if (!Security)
         return false;
@@ -341,7 +341,7 @@ bool SAL_CALL osl_isAdministrator(oslSecurity Security)
     return bSuccess;
 }
 
-void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
+void osl_freeSecurityHandle(oslSecurity Security)
 {
     if (!Security)
         return;
@@ -360,7 +360,7 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
     free (pSecImpl);
 }
 
-bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
+bool osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 {
     if (!Security)
        return false;
@@ -398,17 +398,17 @@ bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
     return false;
 }
 
-bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
+bool osl_getUserName(oslSecurity Security, rtl_uString **strName)
 {
     return getUserNameImpl(Security, strName, true);
 }
 
-bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **strName)
+bool osl_getShortUserName(oslSecurity Security, rtl_uString **strName)
 {
     return getUserNameImpl(Security, strName, false);
 }
 
-bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     if (!Security)
         return false;
@@ -423,7 +423,7 @@ bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
            && osl_File_E_None == osl_getFileURLFromSystemPath(aSysDir.pData, pustrDirectory);
 }
 
-bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     if (!Security)
         return false;
@@ -457,7 +457,7 @@ bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirector
     return false;
 }
 
-bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
+bool osl_loadUserProfile(oslSecurity Security)
 {
     /*  CreateProcessAsUser does not load the specified user's profile
         into the HKEY_USERS registry key. This means that access to information
@@ -492,7 +492,7 @@ bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
     return false;
 }
 
-void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
+void osl_unloadUserProfile(oslSecurity Security)
 {
     if ( static_cast<oslSecurityImpl*>(Security)->m_hProfile == nullptr )
         return;

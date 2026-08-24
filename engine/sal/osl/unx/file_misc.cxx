@@ -126,7 +126,7 @@ static oslFileError osl_psz_createDirectory(
     char const * pszPath, sal_uInt32 flags);
 static oslFileError osl_psz_removeDirectory(const char* pszPath);
 
-oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirectory* pDirectory)
+oslFileError osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirectory* pDirectory)
 {
     oslFileError eRet;
 
@@ -221,7 +221,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
     return oslTranslateFileError(errno);
 }
 
-oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
+oslFileError osl_closeDirectory(oslDirectory pDirectory)
 {
     SAL_WARN_IF(!pDirectory, "sal.file", "pDirectory is nullptr");
     DirectoryImpl* pDirImpl = static_cast<DirectoryImpl*>(pDirectory);
@@ -275,7 +275,7 @@ static struct dirent* osl_readdir_impl_(DIR* pdir)
     return pdirent;
 }
 
-oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
+oslFileError osl_getNextDirectoryItem(oslDirectory pDirectory,
         oslDirectoryItem* pItem, SAL_UNUSED_PARAMETER sal_uInt32 /*uHint*/)
 {
     SAL_WARN_IF(!pDirectory, "sal.file", "pDirectory is nullptr");
@@ -332,7 +332,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirectoryItem* pItem)
+oslFileError osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirectoryItem* pItem)
 {
     OString strSystemPath;
     oslFileError osl_error = osl_File_E_INVAL;
@@ -361,7 +361,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirector
     return osl_error;
 }
 
-oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
+oslFileError osl_acquireDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
     if (pImpl == nullptr)
@@ -371,7 +371,7 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
+oslFileError osl_releaseDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
     if (pImpl == nullptr)
@@ -381,7 +381,7 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_createDirectory( rtl_uString* ustrDirectoryURL )
+oslFileError osl_createDirectory( rtl_uString* ustrDirectoryURL )
 {
     return osl_createDirectoryWithFlags(
         ustrDirectoryURL, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
@@ -409,7 +409,7 @@ oslFileError osl_createDirectoryWithFlags(
     return osl_psz_createDirectory( path, flags );
 }
 
-oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
+oslFileError osl_removeDirectory( rtl_uString* ustrDirectoryURL )
 {
     char path[PATH_MAX];
     oslFileError eRet;
@@ -542,7 +542,7 @@ static oslFileError create_dir_recursively_(
     return create_dir_with_callback(dir_path, aDirectoryCreationCallbackFunc, pData);
 }
 
-oslFileError SAL_CALL osl_createDirectoryPath(
+oslFileError osl_createDirectoryPath(
     rtl_uString* aDirectoryUrl,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
@@ -575,7 +575,7 @@ static int           oslDoCopyLink(const char* pszSourceFileName, const char* ps
 static int           oslDoCopyFile(const char* pszSourceFileName, const char* pszDestFileName, size_t nSourceSize, mode_t mode);
 static oslFileError  oslDoMoveFile(const char* pszPath, const char* pszDestPath);
 
-oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
+oslFileError osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
 {
     char srcPath[PATH_MAX];
     char destPath[PATH_MAX];
@@ -606,7 +606,7 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     return oslDoMoveFile( srcPath, destPath );
 }
 
-oslFileError SAL_CALL osl_replaceFile(rtl_uString* ustrFileURL, rtl_uString* ustrDestURL)
+oslFileError osl_replaceFile(rtl_uString* ustrFileURL, rtl_uString* ustrDestURL)
 {
     int nGid = -1;
     char destPath[PATH_MAX];
@@ -647,7 +647,7 @@ oslFileError SAL_CALL osl_replaceFile(rtl_uString* ustrFileURL, rtl_uString* ust
     return eRet;
 }
 
-oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
+oslFileError osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
 {
     char srcPath[PATH_MAX];
     char destPath[PATH_MAX];
@@ -674,7 +674,7 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     return osl_psz_copyFile( srcPath, destPath, false );
 }
 
-oslFileError SAL_CALL osl_removeFile(rtl_uString* ustrFileURL)
+oslFileError osl_removeFile(rtl_uString* ustrFileURL)
 {
     char path[PATH_MAX];
     oslFileError eRet;

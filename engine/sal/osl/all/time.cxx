@@ -18,7 +18,7 @@
 #endif
 
 // FIXME: in-time we should move all timezone related code using ICU here.
-void SAL_CALL osl_setTimezone(const char* pTimezone)
+void osl_setTimezone(const char* pTimezone)
 {
     if (pTimezone)
 #ifdef WIN32
@@ -28,7 +28,7 @@ void SAL_CALL osl_setTimezone(const char* pTimezone)
 #endif
 }
 
-void SAL_CALL osl_resetTimezone()
+void osl_resetTimezone()
 {
 #ifdef WIN32
     _putenv_s("TZ", "");

@@ -53,7 +53,7 @@ oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
     return Action;
 }
 
-oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler, void* pData)
+oslSignalHandler osl_addSignalHandler(oslSignalHandlerFunction handler, void* pData)
 {
     if (!handler)
         return nullptr;
@@ -80,7 +80,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler,
     return nullptr;
 }
 
-bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
+bool osl_removeSignalHandler(oslSignalHandler handler)
 {
     std::scoped_lock aGuard(getSignalMutex());
 
@@ -114,7 +114,7 @@ bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
     return false;
 }
 
-oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
+oslSignalAction osl_raiseSignal(sal_Int32 userSignal, void* userData)
 {
     std::scoped_lock aGuard(getSignalMutex());
 
@@ -131,7 +131,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
     return action;
 }
 
-bool SAL_CALL osl_setErrorReporting(bool /*bEnable*/)
+bool osl_setErrorReporting(bool /*bEnable*/)
 {
     // this is part of the stable API
     return false;

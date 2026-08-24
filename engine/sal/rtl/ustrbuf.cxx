@@ -28,21 +28,21 @@
 
 #include "strtmpl.hxx"
 
-void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
+void rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
                                                        const sal_Unicode * value,
                                                        sal_Int32 count)
 {
     rtl::str::stringbuffer_newFromStr_WithLength(newStr, value, count);
 }
 
-rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString * pThis )
+rtl_uString * rtl_uStringBuffer_refReturn( rtl_uString * pThis )
 {
     RTL_LOG_STRING_NEW( pThis );
     rtl::str::acquire( pThis );
     return pThis;
 }
 
-rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear( rtl_uString ** ppThis,
+rtl_uString * rtl_uStringBuffer_makeStringAndClear( rtl_uString ** ppThis,
                                                              sal_Int32 *nCapacity )
 {
     assert(ppThis);
@@ -59,20 +59,20 @@ rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear( rtl_uString ** ppTh
     return pStr;
 }
 
-sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
+sal_Int32 rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
                                                           sal_Int32 capacity,
                                                           rtl_uString * oldStr )
 {
     return rtl::str::stringbuffer_newFromStringBuffer(newStr, capacity, oldStr);
 }
 
-void SAL_CALL rtl_uStringbuffer_ensureCapacity
+void rtl_uStringbuffer_ensureCapacity
     (rtl_uString ** This, sal_Int32* capacity, sal_Int32 minimumCapacity)
 {
     rtl::str::stringbuffer_ensureCapacity(This, capacity, minimumCapacity);
 }
 
-void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
+void rtl_uStringbuffer_insert( rtl_uString ** This,
                                         sal_Int32 * capacity,
                                         sal_Int32 offset,
                                         const sal_Unicode * str,
@@ -89,7 +89,7 @@ void rtl_uStringbuffer_insertUtf32(
     rtl::str::stringbuffer_insert(pThis, capacity, offset, buf, len);
 }
 
-void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
+void rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
                                                 /*inout*/sal_Int32 * capacity,
                                                 sal_Int32 offset,
                                                 const char * str,
@@ -101,7 +101,7 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
 /*************************************************************************
  *  rtl_uStringbuffer_remove
  */
-void SAL_CALL rtl_uStringbuffer_remove( rtl_uString ** This,
+void rtl_uStringbuffer_remove( rtl_uString ** This,
                                        sal_Int32 start,
                                        sal_Int32 len )
 {

@@ -39,7 +39,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
+oslProcessError osl_terminateProcess(oslProcess Process)
 {
     if (Process == nullptr)
         return osl_Process_E_Unknown;
@@ -142,7 +142,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     return (TerminateProcess(hProcess, 0) == FALSE) ? osl_Process_E_Unknown : osl_Process_E_None;
 }
 
-oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
+oslProcess osl_getProcess(oslProcessIdentifier Ident)
 {
     oslProcessImpl* pProcImpl;
     HANDLE hProcess = OpenProcess(
@@ -161,7 +161,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     return pProcImpl;
 }
 
-void SAL_CALL osl_freeProcessHandle(oslProcess Process)
+void osl_freeProcessHandle(oslProcess Process)
 {
     if (Process != nullptr)
     {
@@ -171,7 +171,7 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
     }
 }
 
-oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields,
+oslProcessError osl_getProcessInfo(oslProcess Process, oslProcessData Fields,
                                    oslProcessInfo* pInfo)
 {
     HANDLE hProcess;
@@ -244,12 +244,12 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
+oslProcessError osl_joinProcess(oslProcess Process)
 {
     return osl_joinProcessWithTimeout(Process, nullptr);
 }
 
-oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
+oslProcessError osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
 {
     DWORD           timeout   = INFINITE;
     oslProcessError osl_error = osl_Process_E_None;
@@ -358,7 +358,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 
 }
 
-oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
+oslProcessError osl_getExecutableFile( rtl_uString **ppustrFile )
 {
     {
         osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
@@ -372,7 +372,7 @@ oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
     return bootstrap_getExecutableFile(ppustrFile);
 }
 
-sal_uInt32 SAL_CALL osl_getCommandArgCount()
+sal_uInt32 osl_getCommandArgCount()
 {
     sal_uInt32 result = 0;
 
@@ -389,7 +389,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
     return result;
 }
 
-oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
+oslProcessError osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
 {
     oslProcessError result = osl_Process_E_NotFound;
 
@@ -405,7 +405,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
     return result;
 }
 
-void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
+void osl_setCommandArgs (int argc, char ** argv)
 {
     assert(argc > 0);
     osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
@@ -421,7 +421,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     }
 }
 
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
+oslProcessError osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
 {
     WCHAR buff[32 * 1024];
     DWORD len = GetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), buff, std::size(buff));
@@ -433,7 +433,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
     return osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
+oslProcessError osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
 {
     // set Windows environment variable
     if (SetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), o3tl::toW(ustrValue->buffer)))
@@ -444,7 +444,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *u
     return osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
+oslProcessError osl_clearEnvironment(rtl_uString *ustrVar)
 {
     // delete the variable from the current process environment
     // by setting SetEnvironmentVariable's second parameter to NULL
@@ -456,7 +456,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
     return osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
+oslProcessError osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
     osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
     DWORD dwLen = GetCurrentDirectoryW(aBuffer.getBufSizeInSymbols(), o3tl::toW(aBuffer));
@@ -482,7 +482,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
 static rtl_Locale * g_theProcessLocale = nullptr;
 
-oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
+oslProcessError osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
     osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
 
@@ -496,7 +496,7 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     return osl_Process_E_None;
 }
 
-oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
+oslProcessError osl_setProcessLocale( rtl_Locale * pLocale )
 {
     osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
 

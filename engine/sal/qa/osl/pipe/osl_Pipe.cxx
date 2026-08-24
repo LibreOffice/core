@@ -212,7 +212,7 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline bool SAL_CALL is() const;
+        inline bool is() const;
     */
     class is : public CppUnit::TestFixture
     {
@@ -345,7 +345,7 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline void SAL_CALL clear();
+        inline void clear();
     */
     class clear : public CppUnit::TestFixture
     {
@@ -369,8 +369,8 @@ namespace osl_Pipe
     };
 
     /** testing the methods:
-        inline Pipe& SAL_CALL operator= (const Pipe& pipe);
-        inline Pipe& SAL_CALL operator= (const oslPipe pipe );
+        inline Pipe& operator= (const Pipe& pipe);
+        inline Pipe& operator= (const oslPipe pipe );
     */
     class assign : public CppUnit::TestFixture
     {
@@ -416,12 +416,12 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline bool SAL_CALL isValid() const;
+        inline bool isValid() const;
         isValid( ) has not been implemented under the following platforms, please refer to osl/pipe.hxx
     */
 
     /** testing the method:
-        inline bool SAL_CALL operator==( const Pipe& rPipe ) const;
+        inline bool operator==( const Pipe& rPipe ) const;
     */
     class isEqual : public CppUnit::TestFixture
     {
@@ -466,7 +466,7 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline void SAL_CALL close();
+        inline void close();
     */
     class close : public CppUnit::TestFixture
     {
@@ -505,12 +505,12 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
+        inline oslPipeError accept(StreamPipe& Connection);
         please refer to StreamPipe::recv
     */
 
     /** testing the method:
-        inline oslPipeError SAL_CALL getError() const;
+        inline oslPipeError getError() const;
     */
     class getError : public CppUnit::TestFixture
     {
@@ -548,7 +548,7 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline oslPipe SAL_CALL getHandle() const;
+        inline oslPipe getHandle() const;
     */
     class getHandle : public CppUnit::TestFixture
     {
@@ -722,8 +722,8 @@ namespace osl_StreamPipe
     };
 
     /** testing the methods:
-        inline StreamPipe & SAL_CALL operator=(oslPipe Pipe);
-        inline StreamPipe& SAL_CALL operator=(const Pipe& pipe);
+        inline StreamPipe & operator=(oslPipe Pipe);
+        inline StreamPipe& operator=(const Pipe& pipe);
         mindy: not implemented in osl/pipe.hxx, so remove the cases
     */
 
@@ -747,7 +747,7 @@ namespace osl_StreamPipe
         Pipe_DataSink_Thread( ) { }
 
     protected:
-        void SAL_CALL run( ) override
+        void run( ) override
             {
                 printf("open pipe\n");
                 ::osl::StreamPipe aSenderPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );  // test::uniquePipeName(aTestPipeName) is a string = "TestPipe"
@@ -794,7 +794,7 @@ namespace osl_StreamPipe
                 aListenPipe.close();
             }
     protected:
-        void SAL_CALL run( ) override
+        void run( ) override
             {
                 //create pipe.
                 printf("listen\n");

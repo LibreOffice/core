@@ -109,19 +109,19 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     return pThreadImpl;
 }
 
-oslThread SAL_CALL osl_createThread(oslWorkerFunction pWorker,
+oslThread osl_createThread(oslWorkerFunction pWorker,
                                     void* pThreadData)
 {
     return oslCreateThread(pWorker, pThreadData, 0);
 }
 
-oslThread SAL_CALL osl_createSuspendedThread(oslWorkerFunction pWorker,
+oslThread osl_createSuspendedThread(oslWorkerFunction pWorker,
                                              void* pThreadData)
 {
     return oslCreateThread(pWorker, pThreadData, CREATE_SUSPENDED);
 }
 
-oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
+oslThreadIdentifier osl_getThreadIdentifier(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -131,7 +131,7 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
         return static_cast<oslThreadIdentifier>(GetCurrentThreadId());
 }
 
-void SAL_CALL osl_destroyThread(oslThread Thread)
+void osl_destroyThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -148,7 +148,7 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
     free(Thread);
 }
 
-void SAL_CALL osl_resumeThread(oslThread Thread)
+void osl_resumeThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -157,7 +157,7 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
     ResumeThread(pThreadImpl->m_hThread);
 }
 
-void SAL_CALL osl_suspendThread(oslThread Thread)
+void osl_suspendThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -166,7 +166,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
     SuspendThread(pThreadImpl->m_hThread);
 }
 
-void SAL_CALL osl_setThreadPriority(oslThread Thread,
+void osl_setThreadPriority(oslThread Thread,
                            oslThreadPriority Priority)
 {
     int winPriority;
@@ -217,7 +217,7 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
     SetThreadPriority(pThreadImpl->m_hThread, winPriority);
 }
 
-oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
+oslThreadPriority osl_getThreadPriority(const oslThread Thread)
 {
     int winPriority;
     oslThreadPriority Priority;
@@ -273,7 +273,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     return Priority;
 }
 
-bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
+bool osl_isThreadRunning(const oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -286,7 +286,7 @@ bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
     return WaitForSingleObject(pThreadImpl->m_hThread, 0) != WAIT_OBJECT_0;
 }
 
-void SAL_CALL osl_joinWithThread(oslThread Thread)
+void osl_joinWithThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -300,7 +300,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     WaitForSingleObject(pThreadImpl->m_hThread, INFINITE);
 }
 
-void SAL_CALL osl_waitThread(const TimeValue* pDelay)
+void osl_waitThread(const TimeValue* pDelay)
 {
     if (pDelay)
     {
@@ -310,7 +310,7 @@ void SAL_CALL osl_waitThread(const TimeValue* pDelay)
     }
 }
 
-void SAL_CALL osl_terminateThread(oslThread Thread)
+void osl_terminateThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -324,7 +324,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
     osl_atomic_increment(&(pThreadImpl->m_nTerminationRequested));
 }
 
-bool SAL_CALL osl_scheduleThread(oslThread Thread)
+bool osl_scheduleThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -340,7 +340,7 @@ bool SAL_CALL osl_scheduleThread(oslThread Thread)
     return 0 == pThreadImpl->m_nTerminationRequested;
 }
 
-void SAL_CALL osl_yieldThread(void)
+void osl_yieldThread(void)
 {
     Sleep(0);
 }
@@ -364,7 +364,7 @@ static void impSetThreadDescription(char const * name) {
     }
 }
 
-void SAL_CALL osl_setThreadName(char const * name) {
+void osl_setThreadName(char const * name) {
     /* See < https://docs.microsoft.com/en-us/visualstudio/debugger/how-to-set-a-thread-name-in-native-code >: */
 #pragma pack(push, 8)
     struct {
@@ -456,7 +456,7 @@ void osl_callThreadKeyCallbackOnThreadDetach(void)
     }
 }
 
-oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback)
+oslThreadKey osl_createThreadKey(oslThreadKeyCallbackFunction pCallback)
 {
     PTLS    pTls = static_cast<PTLS>(malloc( sizeof(TLS) ));
 
@@ -475,7 +475,7 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
     return pTls;
 }
 
-void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
+void osl_destroyThreadKey(oslThreadKey Key)
 {
     if (Key != nullptr)
     {
@@ -487,7 +487,7 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
     }
 }
 
-void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
+void* osl_getThreadKeyData(oslThreadKey Key)
 {
     if (Key != nullptr)
     {
@@ -499,7 +499,7 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
     return nullptr;
 }
 
-bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
+bool osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     if (Key != nullptr)
     {

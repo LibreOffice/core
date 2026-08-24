@@ -47,7 +47,7 @@ static int GetLocaleInfoN(LPCWSTR l, LCTYPE t, DWORD& n)
                            sizeof(n) / sizeof(WCHAR));
 }
 
-rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
+rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
     /* if pLocale is NULL, use process locale as default */
     if( nullptr == pLocale )

@@ -610,8 +610,8 @@ rtl_arena_type * rtl_arena_activate(
     const char *     name,
     sal_Size         quantum,
     rtl_arena_type * source_arena,
-    void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
-    void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size)
+    void * (* source_alloc)(rtl_arena_type *, sal_Size *),
+    void   (* source_free) (rtl_arena_type *, void *, sal_Size)
 )
 {
     assert(arena);
@@ -732,13 +732,13 @@ void rtl_arena_deactivate(rtl_arena_type * arena)
 
 } // namespace
 
-rtl_arena_type * SAL_CALL rtl_arena_create(
+rtl_arena_type * rtl_arena_create(
     const char *       name,
     sal_Size           quantum,
     sal_Size,
     rtl_arena_type *   source_arena,
-    void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
-    void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size),
+    void * (* source_alloc)(rtl_arena_type *, sal_Size *),
+    void   (* source_free) (rtl_arena_type *, void *, sal_Size),
     SAL_UNUSED_PARAMETER int
 ) noexcept
 {
@@ -786,7 +786,7 @@ try_alloc:
     return result;
 }
 
-void SAL_CALL rtl_arena_destroy(rtl_arena_type * arena) noexcept
+void rtl_arena_destroy(rtl_arena_type * arena) noexcept
 {
     if (arena)
     {
@@ -796,7 +796,7 @@ void SAL_CALL rtl_arena_destroy(rtl_arena_type * arena) noexcept
     }
 }
 
-void * SAL_CALL rtl_arena_alloc(
+void * rtl_arena_alloc(
     rtl_arena_type * arena,
     sal_Size *       pSize
 ) noexcept
@@ -855,7 +855,7 @@ void * SAL_CALL rtl_arena_alloc(
     return addr;
 }
 
-void SAL_CALL rtl_arena_free (
+void rtl_arena_free (
     rtl_arena_type * arena,
     void *           addr,
     sal_Size         size

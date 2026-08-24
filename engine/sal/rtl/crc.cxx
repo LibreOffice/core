@@ -26,7 +26,7 @@
 // Zlib's crc32() is very fast, so simply use that one instead
 // of implementing this ourselves.
 
-sal_uInt32 SAL_CALL rtl_crc32 (
+sal_uInt32 rtl_crc32 (
     sal_uInt32  Crc,
     const void *Data, sal_uInt32 DatLen) noexcept
 {

@@ -74,7 +74,7 @@ protected:
 
         @see ThreadSafeValue
     */
-    void SAL_CALL run() override
+    void run() override
         {
             for (int i = 0; i != 5; ++i)
             {

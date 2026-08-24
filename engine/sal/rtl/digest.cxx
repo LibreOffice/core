@@ -81,7 +81,7 @@ static void swapLong(sal_uInt32 *pData, sal_uInt32 nDatLen)
     }
 }
 
-rtlDigest SAL_CALL rtl_digest_create(rtlDigestAlgorithm Algorithm) noexcept
+rtlDigest rtl_digest_create(rtlDigestAlgorithm Algorithm) noexcept
 {
     rtlDigest Digest = nullptr;
     switch (Algorithm)
@@ -96,7 +96,7 @@ rtlDigest SAL_CALL rtl_digest_create(rtlDigestAlgorithm Algorithm) noexcept
     return Digest;
 }
 
-rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm(rtlDigest Digest) noexcept
+rtlDigestAlgorithm rtl_digest_queryAlgorithm(rtlDigest Digest) noexcept
 {
     Digest_Impl *pImpl = static_cast<Digest_Impl *>(Digest);
     if (pImpl)
@@ -104,7 +104,7 @@ rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm(rtlDigest Digest) noexcept
     return rtl_Digest_AlgorithmInvalid;
 }
 
-sal_uInt32 SAL_CALL rtl_digest_queryLength(rtlDigest Digest) noexcept
+sal_uInt32 rtl_digest_queryLength(rtlDigest Digest) noexcept
 {
     Digest_Impl *pImpl = static_cast<Digest_Impl *>(Digest);
     if (pImpl)
@@ -112,7 +112,7 @@ sal_uInt32 SAL_CALL rtl_digest_queryLength(rtlDigest Digest) noexcept
     return 0;
 }
 
-rtlDigestError SAL_CALL rtl_digest_init(
+rtlDigestError rtl_digest_init(
     rtlDigest Digest, const sal_uInt8 *pData, sal_uInt32 nDatLen) noexcept
 {
     Digest_Impl *pImpl = static_cast<Digest_Impl *>(Digest);
@@ -125,7 +125,7 @@ rtlDigestError SAL_CALL rtl_digest_init(
     return rtl_Digest_E_Argument;
 }
 
-rtlDigestError SAL_CALL rtl_digest_update(
+rtlDigestError rtl_digest_update(
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen) noexcept
 {
     Digest_Impl *pImpl = static_cast<Digest_Impl *>(Digest);
@@ -134,7 +134,7 @@ rtlDigestError SAL_CALL rtl_digest_update(
     return rtl_Digest_E_Argument;
 }
 
-rtlDigestError SAL_CALL rtl_digest_get(
+rtlDigestError rtl_digest_get(
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen) noexcept
 {
     Digest_Impl *pImpl = static_cast<Digest_Impl *>(Digest);
@@ -143,7 +143,7 @@ rtlDigestError SAL_CALL rtl_digest_get(
     return rtl_Digest_E_Argument;
 }
 
-void SAL_CALL rtl_digest_destroy(rtlDigest Digest) noexcept
+void rtl_digest_destroy(rtlDigest Digest) noexcept
 {
     Digest_Impl *pImpl = static_cast<Digest_Impl *>(Digest);
     if (pImpl && pImpl->m_delete)
@@ -408,7 +408,7 @@ rtlDigestError rtl_digest_rawMD5(
 
 }
 
-rtlDigestError SAL_CALL rtl_digest_MD5_MSOffice(
+rtlDigestError rtl_digest_MD5_MSOffice(
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen) noexcept
 {
@@ -699,7 +699,7 @@ static sal_uInt32 updateSHA_1(sal_uInt32 x)
     return RTL_DIGEST_ROTL(x, 1);
 }
 
-rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug(
+rtlDigestError rtl_digest_SHA1_StarOfficeBug(
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen) noexcept
 {
@@ -717,7 +717,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug(
     return result;
 }
 
-rtlDigest SAL_CALL rtl_digest_createSHA1_StarOfficeBug() noexcept
+rtlDigest rtl_digest_createSHA1_StarOfficeBug() noexcept
 {
     DigestSHA_Impl *pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
     if (pImpl)
@@ -728,7 +728,7 @@ rtlDigest SAL_CALL rtl_digest_createSHA1_StarOfficeBug() noexcept
     return static_cast<rtlDigest>(pImpl);
 }
 
-rtlDigestError SAL_CALL rtl_digest_updateSHA1(
+rtlDigestError rtl_digest_updateSHA1(
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen) noexcept
 {
     DigestSHA_Impl *pImpl = static_cast< DigestSHA_Impl * >(Digest);
@@ -799,7 +799,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA1(
     return rtl_Digest_E_None;
 }
 
-rtlDigestError SAL_CALL rtl_digest_getSHA1 (
+rtlDigestError rtl_digest_getSHA1 (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen) noexcept
 {
     DigestSHA_Impl *pImpl = static_cast<DigestSHA_Impl *>(Digest);
@@ -829,7 +829,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA1 (
     return rtl_Digest_E_None;
 }
 
-void SAL_CALL rtl_digest_destroySHA1(rtlDigest Digest) noexcept
+void rtl_digest_destroySHA1(rtlDigest Digest) noexcept
 {
     DigestSHA_Impl *pImpl = static_cast< DigestSHA_Impl * >(Digest);
     if (pImpl)
@@ -1065,7 +1065,7 @@ static void updatePBKDF2(
     rtl_secureZeroMemory(U, DIGEST_CBLOCK_PBKDF2);
 }
 
-rtlDigestError SAL_CALL rtl_digest_PBKDF2(
+rtlDigestError rtl_digest_PBKDF2(
     sal_uInt8 *pKeyData , sal_uInt32 nKeyLen,
     const sal_uInt8 *pPassData, sal_uInt32 nPassLen,
     const sal_uInt8 *pSaltData, sal_uInt32 nSaltLen,

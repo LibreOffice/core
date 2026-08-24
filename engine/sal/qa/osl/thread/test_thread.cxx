@@ -35,9 +35,9 @@ public:
     explicit Thread(osl::Condition & cond): m_cond(cond) {}
 
 private:
-    virtual void SAL_CALL run() {}
+    virtual void run() {}
 
-    virtual void SAL_CALL onTerminated() {
+    virtual void onTerminated() {
         m_cond.set();
         CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, global.wait());
     }

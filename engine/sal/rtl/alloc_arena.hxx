@@ -82,8 +82,8 @@ struct rtl_arena_st
     rtl_arena_stat_type       m_stats;
 
     rtl_arena_type *          m_source_arena;
-    void * (SAL_CALL * m_source_alloc)(rtl_arena_type *, sal_Size *);
-    void   (SAL_CALL * m_source_free) (rtl_arena_type *, void *, sal_Size);
+    void * (* m_source_alloc)(rtl_arena_type *, sal_Size *);
+    void   (* m_source_free) (rtl_arena_type *, void *, sal_Size);
 
     sal_Size                  m_quantum;
     sal_Size                  m_quantum_shift; /* log2(m_quantum) */

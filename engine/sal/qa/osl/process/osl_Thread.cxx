@@ -224,7 +224,7 @@ protected:
 
         @see ThreadSafeValue
     */
-    void SAL_CALL run() override
+    void run() override
         {
             while(schedule())
             {
@@ -235,7 +235,7 @@ protected:
 
 public:
 
-    virtual void SAL_CALL suspend() override
+    virtual void suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
@@ -270,7 +270,7 @@ public:
             //m_bWait = true;
         }
 
-    virtual void SAL_CALL suspend() override
+    virtual void suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
@@ -281,7 +281,7 @@ protected:
     //bool m_bWait;
     sal_Int32 m_nWaitSec;
 
-    void SAL_CALL run() override
+    void run() override
         {
             /// if the thread should terminate, schedule return false
             while (m_aFlag.getValue() < 20 && schedule())
@@ -299,7 +299,7 @@ protected:
                 }
             }
         }
-    void SAL_CALL onTerminated() override
+    void onTerminated() override
         {
             t_print("normally terminate this thread %u!\n", static_cast<unsigned>(getIdentifier()));
         }
@@ -323,14 +323,14 @@ class ONoScheduleThread : public Thread
 public:
     sal_Int32 getValue() { return m_aFlag.getValue(); }
 
-    virtual void SAL_CALL suspend() override
+    virtual void suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
             m_aFlag.release();
         }
 protected:
-    void SAL_CALL run() override
+    void run() override
         {
             while (m_aFlag.getValue() < 10)
             {
@@ -338,7 +338,7 @@ protected:
                 ThreadHelper::thread_sleep_tenth_sec(1);
             }
         }
-    void SAL_CALL onTerminated() override
+    void onTerminated() override
         {
             t_print("normally terminate this thread %u!\n", static_cast<unsigned>(getIdentifier()));
         }
@@ -366,14 +366,14 @@ public:
     OAddThread(){}
     sal_Int32 getValue() { return m_aFlag.getValue(); }
 
-    virtual void SAL_CALL suspend() override
+    virtual void suspend() override
         {
             m_aFlag.acquire();
             ::osl::Thread::suspend();
             m_aFlag.release();
         }
 protected:
-    void SAL_CALL run() override
+    void run() override
         {
             //if the thread should terminate, schedule return false
             while (schedule())
@@ -381,7 +381,7 @@ protected:
                 m_aFlag.incValue();
             }
         }
-    void SAL_CALL onTerminated() override
+    void onTerminated() override
         {
             // t_print("normally terminate this thread %d!\n", getIdentifier());
         }
@@ -1705,7 +1705,7 @@ public:
 private:
     char m_nData;
 
-    void SAL_CALL run() override
+    void run() override
         {
             char * pc = new char[2];
 //      strcpy(pc, &m_nData);
@@ -1739,7 +1739,7 @@ class idThread: public Thread
 public:
     oslThreadIdentifier m_Id;
 private:
-    void SAL_CALL run() override
+    void run() override
         {
             std::unique_ptr<oslThreadIdentifier> pId( new oslThreadIdentifier );
             *pId = getIdentifier();

@@ -39,7 +39,7 @@
     as a WIN32 HANDLE (which is also a 32-bit value)
 */
 
-oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
+oslModule osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
 #if OSL_DEBUG_LEVEL < 2
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
@@ -83,7 +83,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     return static_cast<oslModule>(h);
 }
 
-oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 )
+oslModule osl_loadModuleAscii(const char *pModuleName, sal_Int32 )
 {
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 
@@ -108,7 +108,7 @@ oslModule osl_loadModuleRelativeAscii(
 
 #endif // !DISABLE_DYNLOADING
 
-bool SAL_CALL
+bool
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     LPCWSTR pName = pModuleName ? o3tl::toW(pModuleName->buffer) : nullptr;
@@ -122,12 +122,12 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
     return false;
 }
 
-void SAL_CALL osl_unloadModule(oslModule Module)
+void osl_unloadModule(oslModule Module)
 {
     FreeLibrary(static_cast<HMODULE>(Module));
 }
 
-void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
+void* osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
 {
     /* casting from a function pointer to a data pointer is invalid
        be in this case unavoidable because the API has to stay
@@ -136,7 +136,7 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
     return reinterpret_cast<void*>(osl_getFunctionSymbol(Module, strSymbolName));
 }
 
-oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *strSymbolName )
+oslGenericFunction osl_getFunctionSymbol( oslModule Module, rtl_uString *strSymbolName )
 {
     OSL_ASSERT(Module);
     assert(strSymbolName);
@@ -146,7 +146,7 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     return osl_getAsciiFunctionSymbol(Module, symbolName.getStr());
 }
 
-oslGenericFunction SAL_CALL
+oslGenericFunction
 osl_getAsciiFunctionSymbol( oslModule Module, const char *pSymbol )
 {
     oslGenericFunction fncAddr = nullptr;
@@ -157,7 +157,7 @@ osl_getAsciiFunctionSymbol( oslModule Module, const char *pSymbol )
     return fncAddr;
 }
 
-bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
+bool osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
     HMODULE hModule{};
     GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
@@ -174,7 +174,7 @@ bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
     return osl_getFileURLFromSystemPath(ustrSysPath.pData, pustrURL) == osl_File_E_None;
 }
 
-bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )
+bool osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )
 {
     /* casting a function pointer to a data pointer (void*) is
        not allowed according to the C/C++ standards. In this case

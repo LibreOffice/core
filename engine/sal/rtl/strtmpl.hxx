@@ -1717,7 +1717,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
     append(pResult, pResultCapacity, nResultOffset, std::basic_string_view(pBuf, p - pBuf));
 }
 
-template <sal_Int32 maxLen, typename C, typename T> sal_Int32 SAL_CALL valueOfFP(C* pStr, T f)
+template <sal_Int32 maxLen, typename C, typename T> sal_Int32 valueOfFP(C* pStr, T f)
 {
     assert(pStr);
     rtl_String* pResult = nullptr;

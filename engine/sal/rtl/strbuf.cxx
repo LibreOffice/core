@@ -29,7 +29,7 @@
 /*************************************************************************
  *  rtl_stringbuffer_newFromStr_WithLength
  */
-void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
+void rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
                                                       const char * value,
                                                       sal_Int32 count )
 {
@@ -39,7 +39,7 @@ void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
 /*************************************************************************
  *  rtl_stringbuffer_newFromStringBuffer
  */
-sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
+sal_Int32 rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
                                                          sal_Int32 capacity,
                                                          rtl_String * oldStr )
 {
@@ -49,7 +49,7 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
 /*************************************************************************
  *  rtl_stringbuffer_ensureCapacity
  */
-void SAL_CALL rtl_stringbuffer_ensureCapacity
+void rtl_stringbuffer_ensureCapacity
     (rtl_String ** This, sal_Int32* capacity, sal_Int32 minimumCapacity)
 {
     rtl::str::stringbuffer_ensureCapacity(This, capacity, minimumCapacity);
@@ -58,7 +58,7 @@ void SAL_CALL rtl_stringbuffer_ensureCapacity
 /*************************************************************************
  *  rtl_stringbuffer_insert
  */
-void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
+void rtl_stringbuffer_insert( rtl_String ** This,
                                        sal_Int32 * capacity,
                                        sal_Int32 offset,
                                        const char * str,
@@ -70,7 +70,7 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
 /*************************************************************************
  *  rtl_stringbuffer_remove
  */
-void SAL_CALL rtl_stringbuffer_remove( rtl_String ** This,
+void rtl_stringbuffer_remove( rtl_String ** This,
                                        sal_Int32 start,
                                        sal_Int32 len )
 {

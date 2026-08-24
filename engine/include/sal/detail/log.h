@@ -55,7 +55,7 @@ enum sal_detail_LogLevel {
     SAL_DETAIL_LOG_LEVEL_DEBUG = SAL_MAX_ENUM
 };
 
-SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
+SAL_DLLPUBLIC void sal_detail_logFormat(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 #if defined __GNUC__

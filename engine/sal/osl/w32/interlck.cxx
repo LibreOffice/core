@@ -21,12 +21,12 @@
 
 #include <osl/interlck.h>
 
-oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return InterlockedIncrement(pCount);
 }
 
-oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return InterlockedDecrement(pCount);
 }

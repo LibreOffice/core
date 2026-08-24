@@ -32,7 +32,7 @@
 
 #include <cassert>
 
-oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
+oslFileError osl_getTempDirURL( rtl_uString** pustrTempDir )
 {
     oslFileError error;
     /* described in environ(7) */
@@ -270,7 +270,7 @@ static oslFileError osl_create_temp_file_impl_(
     return osl_error;
 }
 
-oslFileError SAL_CALL osl_createTempFile(
+oslFileError osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL)

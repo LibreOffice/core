@@ -203,7 +203,7 @@ namespace
 
 }
 
-oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pStat, sal_uInt32 uFieldMask)
+oslFileError osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pStat, sal_uInt32 uFieldMask)
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
 
@@ -310,7 +310,7 @@ static oslFileError osl_psz_setFileAttributes( const char* pszFilePath, sal_uInt
     return osl_error;
 }
 
-oslFileError SAL_CALL osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt64 uAttributes )
+oslFileError osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt64 uAttributes )
 {
     char path[PATH_MAX];
     oslFileError eRet;
@@ -394,7 +394,7 @@ static oslFileError osl_psz_setFileTime (
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_setFileTime (
+oslFileError osl_setFileTime (
     rtl_uString* ustrFileURL,
     SAL_UNUSED_PARAMETER const TimeValue* /* pCreationTime */,
     const TimeValue* pLastAccessTime,
@@ -419,7 +419,7 @@ oslFileError SAL_CALL osl_setFileTime (
 }
 
 bool
-SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
+osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 {
     DirectoryItem_Impl *pA = static_cast<DirectoryItem_Impl *>(a);
     DirectoryItem_Impl *pB = static_cast<DirectoryItem_Impl *>(b);

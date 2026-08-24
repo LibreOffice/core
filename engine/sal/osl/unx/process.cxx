@@ -381,7 +381,7 @@ static void ChildStatusProc(void *pData)
 
 }
 
-oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
+oslProcessError osl_executeProcess_WithRedirectedIO(
                                             rtl_uString *ustrImageName,
                                             rtl_uString *ustrArguments[],
                                             sal_uInt32   nArguments,
@@ -541,7 +541,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     return Error;
 }
 
-oslProcessError SAL_CALL osl_executeProcess(
+oslProcessError osl_executeProcess(
                                             rtl_uString *ustrImageName,
                                             rtl_uString *ustrArguments[],
                                             sal_uInt32   nArguments,
@@ -679,7 +679,7 @@ oslProcessError osl_psz_executeProcess(char *pszImageName,
     return osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
+oslProcessError osl_terminateProcess(oslProcess Process)
 {
     if (Process == nullptr)
         return osl_Process_E_Unknown;
@@ -702,7 +702,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     return osl_Process_E_None;
 }
 
-oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
+oslProcess osl_getProcess(oslProcessIdentifier Ident)
 {
     oslProcessImpl *pProcImpl;
 
@@ -754,7 +754,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     return pProcImpl;
 }
 
-void SAL_CALL osl_freeProcessHandle(oslProcess Process)
+void osl_freeProcessHandle(oslProcess Process)
 {
     if (Process == nullptr)
         return;
@@ -982,7 +982,7 @@ static bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 
 #endif
 
-oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo)
+oslProcessError osl_getProcessInfo(oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo)
 {
     pid_t   pid;
 
@@ -1133,7 +1133,7 @@ static bool is_process_dead(pid_t pid)
     return ((kill(pid, 0) == -1) && (ESRCH == errno));
 }
 
-oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
+oslProcessError osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
 {
     oslProcessImpl* pChild    = ChildList;
     oslProcessError osl_error = osl_Process_E_None;
@@ -1195,7 +1195,7 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     return osl_error;
 }
 
-oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
+oslProcessError osl_joinProcess(oslProcess Process)
 {
     return osl_joinProcessWithTimeout(Process, nullptr);
 }

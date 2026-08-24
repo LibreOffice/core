@@ -81,7 +81,7 @@ void init()
 
 }
 
-oslProcessError SAL_CALL rtl_getAppCommandArg (
+oslProcessError rtl_getAppCommandArg (
     sal_uInt32 nArg, rtl_uString **ppCommandArg)
 {
     init();
@@ -94,7 +94,7 @@ oslProcessError SAL_CALL rtl_getAppCommandArg (
     return result;
 }
 
-sal_uInt32 SAL_CALL rtl_getAppCommandArgCount()
+sal_uInt32 rtl_getAppCommandArgCount()
 {
     init();
     return g_nCommandArgCount;

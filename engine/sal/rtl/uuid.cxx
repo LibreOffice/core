@@ -52,7 +52,7 @@ struct UUID
 
 }
 
-extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
+extern "C" void rtl_createUuid(sal_uInt8 *pTargetUUID ,
                                         SAL_UNUSED_PARAMETER const sal_uInt8 *,
                                         SAL_UNUSED_PARAMETER bool)
 {
@@ -65,7 +65,7 @@ extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
     pTargetUUID[8] |= 0x80;
 }
 
-extern "C" sal_Int32 SAL_CALL rtl_compareUuid(const sal_uInt8 *pUUID1, const sal_uInt8 *pUUID2)
+extern "C" sal_Int32 rtl_compareUuid(const sal_uInt8 *pUUID1, const sal_uInt8 *pUUID2)
 {
     int i;
     UUID u1;

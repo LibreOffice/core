@@ -70,9 +70,9 @@ namespace osl_Security
     }; // class ctors
 
     /** testing the methods:
-        inline bool SAL_CALL logonUser(const OUString& strName,
+        inline bool logonUser(const OUString& strName,
                                        const OUString& strPasswd);
-        inline bool SAL_CALL logonUser(const OUString & strName,
+        inline bool logonUser(const OUString & strName,
                                        const OUString & strPasswd,
                                        const OUString & strFileServer);
     */
@@ -144,7 +144,7 @@ namespace osl_Security
     }; // class getUserIdent
 
     /** testing the method:
-        inline bool SAL_CALL getUserName( OUString& strName) const;
+        inline bool getUserName( OUString& strName) const;
     */
     class getUserName : public CppUnit::TestFixture
     {
@@ -200,7 +200,7 @@ namespace osl_Security
     }; // class getConfigDir
 
     /** testing the method:
-        inline bool SAL_CALL isAdministrator() const;
+        inline bool isAdministrator() const;
     */
     class isAdministrator : public CppUnit::TestFixture
     {

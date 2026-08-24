@@ -32,7 +32,7 @@ extern "C" {
 
 #ifndef DISABLE_DYNLOADING
 
-oslModule SAL_CALL osl_loadModuleRelative(
+oslModule osl_loadModuleRelative(
     oslGenericFunction const baseModule, rtl_uString * const relativePath,
     sal_Int32 const mode)
 {

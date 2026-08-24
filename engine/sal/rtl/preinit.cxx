@@ -22,7 +22,7 @@
 
 #include "strimp.hxx"
 
-void SAL_CALL rtl_alloc_preInit(sal_uInt8 mode) SAL_THROW_EXTERN_C()
+void rtl_alloc_preInit(sal_uInt8 mode) SAL_THROW_EXTERN_C()
 {
     switch (mode)
     {

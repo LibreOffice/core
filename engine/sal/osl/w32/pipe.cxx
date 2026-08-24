@@ -93,7 +93,7 @@ static void osl_destroyPipeImpl(oslPipe pPipe)
     free(pPipe);
 }
 
-oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options,
+oslPipe osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options,
                        oslSecurity Security)
 {
     rtl_uString* name = nullptr;
@@ -246,12 +246,12 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     return nullptr;
 }
 
-void SAL_CALL osl_acquirePipe(oslPipe pPipe)
+void osl_acquirePipe(oslPipe pPipe)
 {
     osl_atomic_increment(&(pPipe->m_Reference));
 }
 
-void SAL_CALL osl_releasePipe(oslPipe pPipe)
+void osl_releasePipe(oslPipe pPipe)
 {
     if (!pPipe)
         return;
@@ -265,7 +265,7 @@ void SAL_CALL osl_releasePipe(oslPipe pPipe)
     }
 }
 
-void SAL_CALL osl_closePipe(oslPipe pPipe)
+void osl_closePipe(oslPipe pPipe)
 {
     if (pPipe && !pPipe->m_bClosed)
     {
@@ -279,7 +279,7 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
     }
 }
 
-oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
+oslPipe osl_acceptPipe(oslPipe pPipe)
 {
     oslPipe pAcceptedPipe = nullptr;
 
@@ -357,7 +357,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     return pAcceptedPipe;
 }
 
-sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
+sal_Int32 osl_receivePipe(oslPipe pPipe,
                         void* pBuffer,
                         sal_Int32 BytesToRead)
 {
@@ -394,7 +394,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
     return nBytes;
 }
 
-sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
+sal_Int32 osl_sendPipe(oslPipe pPipe,
                        const void* pBuffer,
                        sal_Int32 BytesToSend)
 {
@@ -421,7 +421,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
     return nBytes;
 }
 
-sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer , sal_Int32 n)
+sal_Int32 osl_writePipe(oslPipe pPipe, const void *pBuffer , sal_Int32 n)
 {
     /* loop until all desired bytes were send or an error occurred */
     sal_Int32 BytesSend = 0;
@@ -446,7 +446,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer , sal_Int32 
     return BytesSend;
 }
 
-sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
+sal_Int32 osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
 {
     /* loop until all desired bytes were read or an error occurred */
     sal_Int32 BytesRead = 0;
@@ -469,7 +469,7 @@ sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
     return BytesRead;
 }
 
-oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
+oslPipeError osl_getLastPipeError(oslPipe pPipe)
 {
     oslPipeError Error;
 

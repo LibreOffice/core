@@ -165,7 +165,7 @@ namespace osl_Module
     }; // class getUrlFromAddress
 
     /** testing the method:
-        bool SAL_CALL load( const OUString& strModuleName,
+        bool load( const OUString& strModuleName,
                                                  sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     */
     class load : public CppUnit::TestFixture
@@ -193,7 +193,7 @@ namespace osl_Module
     }; // class load
 
     /** testing the method:
-        void SAL_CALL unload()
+        void unload()
     */
     class unload : public CppUnit::TestFixture
     {
@@ -217,7 +217,7 @@ namespace osl_Module
     }; // class unload
 
     /** testing the methods:
-        bool SAL_CALL is() const
+        bool is() const
     */
     class is : public CppUnit::TestFixture
     {
@@ -253,7 +253,7 @@ namespace osl_Module
     }; // class is
 
     /** testing the methods:
-        void* SAL_CALL getSymbol( const OUString& strSymbolName)
+        void* getSymbol( const OUString& strSymbolName)
     */
     class getSymbol : public CppUnit::TestFixture
     {
@@ -334,7 +334,7 @@ namespace osl_Module
     }; // class optr_oslModule
 
     /** testing the methods:
-        oslGenericFunction SAL_CALL getFunctionSymbol( const OUString& ustrFunctionSymbolName )
+        oslGenericFunction getFunctionSymbol( const OUString& ustrFunctionSymbolName )
     */
     class getFunctionSymbol : public CppUnit::TestFixture
     {

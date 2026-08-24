@@ -118,7 +118,7 @@ static void deleteSecurityImpl(oslSecurityImpl * impl) {
     free(impl);
 }
 
-oslSecurity SAL_CALL osl_getCurrentSecurity()
+oslSecurity osl_getCurrentSecurity()
 {
     std::size_t n = 0;
     oslSecurityImpl * p = nullptr;
@@ -175,7 +175,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
     }
 }
 
-oslSecurityError SAL_CALL osl_loginUser(
+oslSecurityError osl_loginUser(
     SAL_UNUSED_PARAMETER rtl_uString *,
     SAL_UNUSED_PARAMETER rtl_uString *,
     SAL_UNUSED_PARAMETER oslSecurity *
@@ -184,7 +184,7 @@ oslSecurityError SAL_CALL osl_loginUser(
     return osl_Security_E_None;
 }
 
-oslSecurityError SAL_CALL osl_loginUserOnFileServer(
+oslSecurityError osl_loginUserOnFileServer(
     SAL_UNUSED_PARAMETER rtl_uString *,
     SAL_UNUSED_PARAMETER rtl_uString *,
     SAL_UNUSED_PARAMETER rtl_uString *,
@@ -194,7 +194,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     return osl_Security_E_UserUnknown;
 }
 
-bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
+bool osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
 {
     bool     bRet = false;
     char pszIdent[1024];
@@ -228,7 +228,7 @@ bool osl_psz_getUserIdent(oslSecurity Security, char *pszIdent, sal_uInt32 nMax)
     return true;
 }
 
-bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
+bool osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     bool     bRet = false;
     char * pszName;
@@ -256,12 +256,12 @@ bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     return bRet;
 }
 
-bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **ustrName)
+bool osl_getShortUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     return osl_getUserName(Security, ustrName); // No domain name on unix
 }
 
-bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     bool     bRet = false;
     OString pszDirectory;
@@ -378,7 +378,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
     return true;
 }
 
-bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     bool     bRet = false;
     OString pszDirectory;
@@ -510,7 +510,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
 
 #endif
 
-bool SAL_CALL osl_isAdministrator(oslSecurity Security)
+bool osl_isAdministrator(oslSecurity Security)
 {
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
@@ -523,16 +523,16 @@ bool SAL_CALL osl_isAdministrator(oslSecurity Security)
     return true;
 }
 
-void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
+void osl_freeSecurityHandle(oslSecurity Security)
 {
     deleteSecurityImpl(static_cast<oslSecurityImpl *>(Security));
 }
 
-bool SAL_CALL osl_loadUserProfile(SAL_UNUSED_PARAMETER oslSecurity)
+bool osl_loadUserProfile(SAL_UNUSED_PARAMETER oslSecurity)
 {
     return false;
 }
 
-void SAL_CALL osl_unloadUserProfile(SAL_UNUSED_PARAMETER oslSecurity) {}
+void osl_unloadUserProfile(SAL_UNUSED_PARAMETER oslSecurity) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

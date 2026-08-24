@@ -25,18 +25,18 @@
 #elif defined (__sun) && defined ( X86 )
 #error please use asm/interlck_x86.s
 #elif HAVE_GCC_BUILTIN_ATOMIC
-oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return __sync_add_and_fetch(pCount, 1);
 }
-oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return __sync_sub_and_fetch(pCount, 1);
 }
 #elif defined ( __GNUC__ ) && ( defined ( X86 ) || defined ( X86_64 ) )
 /* That's possible on x86-64 too since oslInterlockedCount is a sal_Int32 */
 
-oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     register oslInterlockedCount nCount asm("%eax");
     nCount = 1;
@@ -49,7 +49,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     return ++nCount;
 }
 
-oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
     register oslInterlockedCount nCount asm("%eax");
     nCount = -1;
@@ -66,7 +66,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 
 static pthread_mutex_t InterLock = PTHREAD_MUTEX_INITIALIZER;
 
-oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     oslInterlockedCount Count;
 
@@ -77,7 +77,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     return Count;
 }
 
-oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
+oslInterlockedCount osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
     oslInterlockedCount Count;
 

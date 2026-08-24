@@ -211,7 +211,7 @@ void systemPathRemoveSeparator(/*inout*/ OUString& path)
     }
 }
 
-oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
+oslFileError osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
     if ( Handle )
     {
@@ -222,7 +222,7 @@ oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handl
         return osl_File_E_INVAL;
 }
 
-oslFileError SAL_CALL osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
+oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
     if ( Handle )
     {
@@ -233,7 +233,7 @@ oslFileError SAL_CALL osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handl
         return osl_File_E_INVAL;
 }
 
-oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **pstrPath )
+oslFileError osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **pstrPath )
 {
     if ( Handle && pstrPath )
     {
@@ -607,7 +607,7 @@ static DWORD create_dir_recursively_(
     return create_dir_with_callback(dir_path, aDirectoryCreationCallbackFunc, pData);
 }
 
-oslFileError SAL_CALL osl_createDirectoryPath(
+oslFileError osl_createDirectoryPath(
     rtl_uString* aDirectoryUrl,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
@@ -628,7 +628,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
         sys_path.pData, aDirectoryCreationCallbackFunc, pData));
 }
 
-oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
+oslFileError osl_createDirectory(rtl_uString* strPath)
 {
     return osl_createDirectoryWithFlags(
         strPath, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
@@ -661,7 +661,7 @@ oslFileError osl_createDirectoryWithFlags(rtl_uString * strPath, sal_uInt32)
     return error;
 }
 
-oslFileError SAL_CALL osl_removeDirectory(rtl_uString* strPath)
+oslFileError osl_removeDirectory(rtl_uString* strPath)
 {
     OUString strSysPath;
     oslFileError error = osl_getSystemPathFromFileURL_(OUString::unacquired(&strPath), &strSysPath.pData, false);
@@ -676,7 +676,7 @@ oslFileError SAL_CALL osl_removeDirectory(rtl_uString* strPath)
     return error;
 }
 
-oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
+oslFileError osl_openDirectory(rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
 {
     oslFileError    error;
 
@@ -800,7 +800,7 @@ static oslFileError osl_getNextFileItem(
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_getNextDirectoryItem(
+oslFileError osl_getNextDirectoryItem(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint)
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
@@ -827,7 +827,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(
     }
 }
 
-oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
+oslFileError osl_closeDirectory(oslDirectory Directory)
 {
     Directory_Impl  *pDirImpl = static_cast<Directory_Impl *>(Directory);
     oslFileError    eError = osl_File_E_INVAL;
@@ -872,7 +872,7 @@ enum PATHTYPE
 
 }
 
-oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirectoryItem *pItem)
+oslFileError osl_getDirectoryItem(rtl_uString *strFilePath, oslDirectoryItem *pItem)
 {
     oslFileError    error = osl_File_E_None;
     OUString strSysFilePath;
@@ -989,7 +989,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     return error;
 }
 
-oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
+oslFileError osl_acquireDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl  *pItemImpl = static_cast<DirectoryItem_Impl *>(Item);
 
@@ -1000,7 +1000,7 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
+oslFileError osl_releaseDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl  *pItemImpl = static_cast<DirectoryItem_Impl *>(Item);
 
@@ -1014,7 +1014,7 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
 }
 
 bool
-SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
+osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 {
     DirectoryItem_Impl *pA = static_cast<DirectoryItem_Impl *>(a);
     DirectoryItem_Impl *pB = static_cast<DirectoryItem_Impl *>(b);
@@ -1286,7 +1286,7 @@ static void path_travel_to_volume_root(const OUString& system_path, OUString& vo
     systemPathEnsureSeparator(volume_root);
 }
 
-oslFileError SAL_CALL osl_getVolumeInformation(
+oslFileError osl_getVolumeInformation(
     rtl_uString *ustrURL, oslVolumeInfo *pInfo, sal_uInt32 uFieldMask )
 {
     if (!pInfo)
@@ -1439,7 +1439,7 @@ static oslFileError osl_getServerInfo(
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_getFileStatus(
+oslFileError osl_getFileStatus(
     oslDirectoryItem Item,
     oslFileStatus *pStatus,
     sal_uInt32 uFieldMask )
@@ -1574,7 +1574,7 @@ oslFileError SAL_CALL osl_getFileStatus(
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_setFileAttributes(
+oslFileError osl_setFileAttributes(
     rtl_uString *ustrFileURL,
     sal_uInt64 uAttributes )
 {
@@ -1614,7 +1614,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
     return error;
 }
 
-oslFileError SAL_CALL osl_setFileTime(
+oslFileError osl_setFileTime(
     rtl_uString *filePath,
     const TimeValue *aCreationTime,
     const TimeValue *aLastAccessTime,

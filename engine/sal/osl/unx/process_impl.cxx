@@ -168,7 +168,7 @@ static struct CommandArgs_Impl g_command_args =
     nullptr
 };
 
-oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
+oslProcessError osl_getExecutableFile (rtl_uString ** ppustrFile)
 {
     pthread_mutex_lock (&(g_command_args.m_mutex));
     if (g_command_args.m_nCount == 0)
@@ -183,7 +183,7 @@ oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
     return osl_Process_E_None;
 }
 
-sal_uInt32 SAL_CALL osl_getCommandArgCount()
+sal_uInt32 osl_getCommandArgCount()
 {
     sal_uInt32 result = 0;
 
@@ -198,7 +198,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
     return result;
 }
 
-oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strCommandArg)
+oslProcessError osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strCommandArg)
 {
     oslProcessError result = osl_Process_E_NotFound;
 
@@ -214,7 +214,7 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     return result;
 }
 
-void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
+void osl_setCommandArgs (int argc, char ** argv)
 {
     assert(argc > 0);
     pthread_mutex_lock (&(g_command_args.m_mutex));
@@ -276,7 +276,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     pthread_mutex_unlock (&(g_command_args.m_mutex));
 }
 
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uString** ppustrValue)
+oslProcessError osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uString** ppustrValue)
 {
     oslProcessError  result   = osl_Process_E_NotFound;
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
@@ -308,7 +308,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     return result;
 }
 
-oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uString* pustrValue)
+oslProcessError osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uString* pustrValue)
 {
     oslProcessError  result   = osl_Process_E_Unknown;
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
@@ -361,7 +361,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     return result;
 }
 
-oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
+oslProcessError osl_clearEnvironment(rtl_uString* pustrEnvVar)
 {
     oslProcessError  result   = osl_Process_E_Unknown;
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
@@ -405,7 +405,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
     return result;
 }
 
-oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir)
+oslProcessError osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir)
 {
     oslProcessError result = osl_Process_E_Unknown;
     char buffer[PATH_MAX];
@@ -447,7 +447,7 @@ static struct ProcessLocale_Impl g_process_locale =
     nullptr
 };
 
-oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
+oslProcessError osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
     oslProcessError result = osl_Process_E_Unknown;
     OSL_PRECOND(ppLocale, "osl_getProcessLocale(): Invalid parameter.");
@@ -465,7 +465,7 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     return result;
 }
 
-oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
+oslProcessError osl_setProcessLocale( rtl_Locale * pLocale )
 {
     OSL_PRECOND(pLocale, "osl_setProcessLocale(): Invalid parameter.");
 

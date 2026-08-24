@@ -367,7 +367,7 @@ oslThread osl_createSuspendedThread (
         THREADIMPL_FLAGS_SUSPENDED );
 }
 
-void SAL_CALL osl_destroyThread(oslThread Thread)
+void osl_destroyThread(oslThread Thread)
 {
     if (Thread != nullptr) {
         Thread_Impl * impl = static_cast<Thread_Impl *>(Thread);
@@ -382,7 +382,7 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
     }
 }
 
-void SAL_CALL osl_resumeThread(oslThread Thread)
+void osl_resumeThread(oslThread Thread)
 {
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
@@ -404,7 +404,7 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
     pthread_mutex_unlock (&(pImpl->m_Lock));
 }
 
-void SAL_CALL osl_suspendThread(oslThread Thread)
+void osl_suspendThread(oslThread Thread)
 {
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
@@ -431,7 +431,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
     pthread_mutex_unlock (&(pImpl->m_Lock));
 }
 
-bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
+bool osl_isThreadRunning(const oslThread Thread)
 {
     bool active;
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
@@ -446,7 +446,7 @@ bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
     return active;
 }
 
-void SAL_CALL osl_joinWithThread(oslThread Thread)
+void osl_joinWithThread(oslThread Thread)
 {
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
@@ -479,7 +479,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     }
 }
 
-void SAL_CALL osl_terminateThread(oslThread Thread)
+void osl_terminateThread(oslThread Thread)
 {
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
@@ -503,7 +503,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
     pthread_mutex_unlock (&(pImpl->m_Lock));
 }
 
-bool SAL_CALL osl_scheduleThread(oslThread Thread)
+bool osl_scheduleThread(oslThread Thread)
 {
     bool terminate;
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
@@ -535,7 +535,7 @@ bool SAL_CALL osl_scheduleThread(oslThread Thread)
     return !terminate;
 }
 
-void SAL_CALL osl_waitThread(const TimeValue* pDelay)
+void osl_waitThread(const TimeValue* pDelay)
 {
     if (pDelay)
     {
@@ -553,12 +553,12 @@ void SAL_CALL osl_waitThread(const TimeValue* pDelay)
     function, since a thread only reschedules to other thread, when
     it blocks (sleep, blocking I/O) OR calls sched_yield().
 */
-void SAL_CALL osl_yieldThread()
+void osl_yieldThread()
 {
     sched_yield();
 }
 
-void SAL_CALL osl_setThreadName(char const * name)
+void osl_setThreadName(char const * name)
 {
     assert( name );
 #if defined LINUX && ! defined __FreeBSD_kernel__
@@ -723,7 +723,7 @@ static void removeThreadId (pthread_t hThread)
     }
 }
 
-oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
+oslThreadIdentifier osl_getThreadIdentifier(oslThread Thread)
 {
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
     oslThreadIdentifier Ident;
@@ -841,7 +841,7 @@ static void osl_thread_priority_init_Impl()
     valid priority-levels from 0 .. INT_MAX, only the
     range 0..127 is accepted. (0 lowest, 127 highest)
 */
-void SAL_CALL osl_setThreadPriority (
+void osl_setThreadPriority (
     oslThread         Thread,
     oslThreadPriority Priority)
 {
@@ -926,7 +926,7 @@ void SAL_CALL osl_setThreadPriority (
 #endif /* NO_PTHREAD_PRIORITY */
 }
 
-oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
+oslThreadPriority osl_getThreadPriority(const oslThread Thread)
 {
 #ifndef NO_PTHREAD_PRIORITY
 
@@ -998,7 +998,7 @@ struct wrapper_pthread_key
 
 }
 
-oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
+oslThreadKey osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
 {
     wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(malloc(sizeof(wrapper_pthread_key)));
 
@@ -1016,7 +1016,7 @@ oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallbac
     return static_cast<oslThreadKey>(pKey);
 }
 
-void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
+void osl_destroyThreadKey(oslThreadKey Key)
 {
     wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
     if (pKey)
@@ -1026,13 +1026,13 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
     }
 }
 
-void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
+void* osl_getThreadKeyData(oslThreadKey Key)
 {
     wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
     return pKey ? pthread_getspecific(pKey->m_key) : nullptr;
 }
 
-bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
+bool osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     bool bRet;
     void *pOldData = nullptr;

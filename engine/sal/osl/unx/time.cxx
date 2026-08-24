@@ -45,7 +45,7 @@ typedef struct timeval osl_time_t;
 #endif
 static osl_time_t startTime;
 
-bool SAL_CALL osl_getSystemTime(TimeValue* tv)
+bool osl_getSystemTime(TimeValue* tv)
 {
 #ifdef __MACH__
     clock_serv_t cclock;
@@ -81,7 +81,7 @@ bool SAL_CALL osl_getSystemTime(TimeValue* tv)
     return true;
 }
 
-bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
+bool osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     osl::tz::BrokenDown bd;
     if (!osl::tz::epochToUtc(static_cast<std::int64_t>(pTimeVal->Seconds), bd))
@@ -99,7 +99,7 @@ bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTi
     return true;
 }
 
-bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
+bool osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
     /* The API says pDateTime is in GMT, so this is a pure UTC-to-epoch conversion. */
     osl::tz::BrokenDown bd;
@@ -121,7 +121,7 @@ bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeVa
     return true;
 }
 
-bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
+bool osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     std::int64_t utcEpoch = static_cast<std::int64_t>(pSystemTimeVal->Seconds);
     std::int32_t offset = osl::tz::getUtcOffsetForUtcTime(utcEpoch);
@@ -136,7 +136,7 @@ bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, T
     return true;
 }
 
-bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
+bool osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
     std::int64_t localEpoch = static_cast<std::int64_t>(pLocalTimeVal->Seconds);
     std::int32_t offset = osl::tz::getUtcOffsetForLocalTime(localEpoch);
@@ -168,7 +168,7 @@ void sal_initGlobalTimer()
 #endif /* ! (MACOSX || IOS) */
 }
 
-sal_uInt32 SAL_CALL osl_getGlobalTimer()
+sal_uInt32 osl_getGlobalTimer()
 {
     sal_uInt32 nSeconds;
 

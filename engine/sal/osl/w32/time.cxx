@@ -28,7 +28,7 @@
 #include <osl/time.h>
 #include <sys/timeb.h>
 
-bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
+bool osl_getSystemTime(TimeValue* pTimeVal)
 {
     unsigned __int64 CurTime;
 
@@ -61,7 +61,7 @@ bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     return true;
 }
 
-bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
+bool osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     FILETIME    aFileTime;
     SYSTEMTIME  aSystemTime;
@@ -87,7 +87,7 @@ bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTi
     return false;
 }
 
-bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
+bool osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
     FILETIME    aFileTime;
     SYSTEMTIME  aSystemTime;
@@ -113,7 +113,7 @@ bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeVa
     return false;
 }
 
-bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
+bool osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     TIME_ZONE_INFORMATION aTimeZoneInformation;
 
@@ -138,7 +138,7 @@ bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, T
     return false;
 }
 
-bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
+bool osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
     TIME_ZONE_INFORMATION aTimeZoneInformation;
 
@@ -170,7 +170,7 @@ void sal_initGlobalTimer()
     _ftime( &startTime );
 }
 
-sal_uInt32 SAL_CALL osl_getGlobalTimer(void)
+sal_uInt32 osl_getGlobalTimer(void)
 {
   struct _timeb currentTime;
   sal_uInt32 nSeconds;

@@ -29,7 +29,7 @@
     as a WIN32 HANDLE (which is also a 32-bit value)
 */
 
-oslCondition SAL_CALL osl_createCondition(void)
+oslCondition osl_createCondition(void)
 {
     oslCondition Condition;
 
@@ -42,27 +42,27 @@ oslCondition SAL_CALL osl_createCondition(void)
 
 }
 
-void SAL_CALL osl_destroyCondition(oslCondition Condition)
+void osl_destroyCondition(oslCondition Condition)
 {
     if(Condition)
         OSL_VERIFY(CloseHandle(Condition));
 }
 
-bool SAL_CALL osl_setCondition(oslCondition Condition)
+bool osl_setCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
     return SetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
 
-bool SAL_CALL osl_resetCondition(oslCondition Condition)
+bool osl_resetCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
     return ResetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
 
-oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
+oslConditionResult osl_waitCondition(oslCondition Condition,
                                      const TimeValue* pTimeout)
 {
     DWORD timeout;
@@ -90,7 +90,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     }
 }
 
-bool SAL_CALL osl_checkCondition(oslCondition Condition)
+bool osl_checkCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 

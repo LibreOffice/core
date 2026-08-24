@@ -361,7 +361,7 @@ namespace /* private */
 
 } // namespace private
 
-oslProcessError SAL_CALL osl_executeProcess(
+oslProcessError osl_executeProcess(
     rtl_uString *strImageName,
     rtl_uString *strArguments[],
     sal_uInt32   nArguments,
@@ -386,7 +386,7 @@ oslProcessError SAL_CALL osl_executeProcess(
         nullptr, nullptr, nullptr );
 }
 
-oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
+oslProcessError osl_executeProcess_WithRedirectedIO(
     rtl_uString *ustrImageName,
     rtl_uString *ustrArguments[],
     sal_uInt32   nArguments,

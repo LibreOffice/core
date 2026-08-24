@@ -141,7 +141,7 @@ int getBitsInFracPart(double fAbsValue)
 }
 }
 
-void SAL_CALL rtl_math_doubleToString(rtl_String** pResult, sal_Int32* pResultCapacity,
+void rtl_math_doubleToString(rtl_String** pResult, sal_Int32* pResultCapacity,
                                       sal_Int32 nResultOffset, double fValue,
                                       rtl_math_StringFormat eFormat, sal_Int32 nDecPlaces,
                                       char cDecSeparator, sal_Int32 const* pGroups,
@@ -151,7 +151,7 @@ void SAL_CALL rtl_math_doubleToString(rtl_String** pResult, sal_Int32* pResultCa
                              cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
 }
 
-void SAL_CALL rtl_math_doubleToUString(rtl_uString** pResult, sal_Int32* pResultCapacity,
+void rtl_math_doubleToUString(rtl_uString** pResult, sal_Int32* pResultCapacity,
                                        sal_Int32 nResultOffset, double fValue,
                                        rtl_math_StringFormat eFormat, sal_Int32 nDecPlaces,
                                        sal_Unicode cDecSeparator, sal_Int32 const* pGroups,
@@ -387,7 +387,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
 }
 }
 
-double SAL_CALL rtl_math_stringToDouble(char const* pBegin, char const* pEnd, char cDecSeparator,
+double rtl_math_stringToDouble(char const* pBegin, char const* pEnd, char cDecSeparator,
                                         char cGroupSeparator, rtl_math_ConversionStatus* pStatus,
                                         char const** pParsedEnd) noexcept
 {
@@ -398,7 +398,7 @@ double SAL_CALL rtl_math_stringToDouble(char const* pBegin, char const* pEnd, ch
                           reinterpret_cast<unsigned char const**>(pParsedEnd));
 }
 
-double SAL_CALL rtl_math_uStringToDouble(sal_Unicode const* pBegin, sal_Unicode const* pEnd,
+double rtl_math_uStringToDouble(sal_Unicode const* pBegin, sal_Unicode const* pEnd,
                                          sal_Unicode cDecSeparator, sal_Unicode cGroupSeparator,
                                          rtl_math_ConversionStatus* pStatus,
                                          sal_Unicode const** pParsedEnd) noexcept
@@ -406,7 +406,7 @@ double SAL_CALL rtl_math_uStringToDouble(sal_Unicode const* pBegin, sal_Unicode 
     return stringToDouble(pBegin, pEnd, cDecSeparator, cGroupSeparator, pStatus, pParsedEnd);
 }
 
-double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
+double rtl_math_round(double fValue, int nDecPlaces,
                                enum rtl_math_RoundingMode eMode) noexcept
 {
     if (!std::isfinite(fValue))
@@ -546,12 +546,12 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     return bSign ? -fValue : fValue;
 }
 
-double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) noexcept
+double rtl_math_pow10Exp(double fValue, int nExp) noexcept
 {
     return fValue * getN10Exp(nExp);
 }
 
-double SAL_CALL rtl_math_approxValue(double fValue) noexcept
+double rtl_math_approxValue(double fValue) noexcept
 {
     const double fBigInt = 0x1p41; // 2^41 -> only 11 bits left for fractional part, fine as decimal
     if (fValue == 0.0 || !std::isfinite(fValue) || fValue > fBigInt)
@@ -600,7 +600,7 @@ double SAL_CALL rtl_math_approxValue(double fValue) noexcept
     return bSign ? -fValue : fValue;
 }
 
-bool SAL_CALL rtl_math_approxEqual(double a, double b) noexcept
+bool rtl_math_approxEqual(double a, double b) noexcept
 {
     // threshold is last four bits of mantissa:
     static const double e48 = 0x1p-48;
@@ -631,9 +631,9 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) noexcept
     return true;
 }
 
-double SAL_CALL rtl_math_expm1(double fValue) noexcept { return expm1(fValue); }
+double rtl_math_expm1(double fValue) noexcept { return expm1(fValue); }
 
-double SAL_CALL rtl_math_log1p(double fValue) noexcept
+double rtl_math_log1p(double fValue) noexcept
 {
 #ifdef __APPLE__
     if (fValue == -0.0)
@@ -643,18 +643,18 @@ double SAL_CALL rtl_math_log1p(double fValue) noexcept
     return log1p(fValue);
 }
 
-double SAL_CALL rtl_math_atanh(double fValue) noexcept { return ::atanh(fValue); }
+double rtl_math_atanh(double fValue) noexcept { return ::atanh(fValue); }
 
 /** Parent error function (erf) */
-double SAL_CALL rtl_math_erf(double x) noexcept { return erf(x); }
+double rtl_math_erf(double x) noexcept { return erf(x); }
 
 /** Parent complementary error function (erfc) */
-double SAL_CALL rtl_math_erfc(double x) noexcept { return erfc(x); }
+double rtl_math_erfc(double x) noexcept { return erfc(x); }
 
 /** improved accuracy of asinh for |x| large and for x near zero
     @see #i97605#
  */
-double SAL_CALL rtl_math_asinh(double fX) noexcept
+double rtl_math_asinh(double fX) noexcept
 {
     if (fX == 0.0)
         return 0.0;
@@ -678,7 +678,7 @@ double SAL_CALL rtl_math_asinh(double fX) noexcept
 /** improved accuracy of acosh for x large and for x near 1
     @see #i97605#
  */
-double SAL_CALL rtl_math_acosh(double fX) noexcept
+double rtl_math_acosh(double fX) noexcept
 {
     double fZ = fX - 1.0;
     if (fX < 1.0)

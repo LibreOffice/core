@@ -49,7 +49,7 @@ protected:
     ::osl::Condition& m_MyCon;
     ConditionType m_MyType;
 
-    void SAL_CALL run() override
+    void run() override
     {
         switch ( m_MyType )
         {
