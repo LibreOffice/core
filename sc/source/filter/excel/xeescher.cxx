@@ -24,12 +24,14 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 
 #include <set>
 #include <vcl/BitmapReadAccess.hxx>
@@ -246,6 +248,84 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
                 break;
             }
         }
+    }
+}
+
+const char* lcl_GetVmlHorAlign(sal_uInt8 nHorAlign)
+{
+    switch (nHorAlign)
+    {
+        case EXC_OBJ_HOR_CENTER:
+            return "Center";
+        case EXC_OBJ_HOR_RIGHT:
+            return "Right";
+        default:
+            return "Left";
+    }
+}
+
+const char* lcl_GetVmlDivStyle(sal_uInt8 nHorAlign)
+{
+    switch (nHorAlign)
+    {
+        case EXC_OBJ_HOR_CENTER:
+            return "text-align:center";
+        case EXC_OBJ_HOR_RIGHT:
+            return "text-align:right";
+        default:
+            return "text-align:left";
+    }
+}
+
+const char* lcl_GetVmlVerAlign(sal_uInt8 nVerAlign)
+{
+    switch (nVerAlign)
+    {
+        case EXC_OBJ_VER_CENTER:
+            return "Center";
+        case EXC_OBJ_VER_BOTTOM:
+            return "Bottom";
+        default:
+            return "Top";
+    }
+}
+
+const char* lcl_GetDrawingHorAlign(sal_uInt8 nHorAlign)
+{
+    switch (nHorAlign)
+    {
+        case EXC_OBJ_HOR_CENTER:
+            return "ctr";
+        case EXC_OBJ_HOR_RIGHT:
+            return "r";
+        default:
+            return "l";
+    }
+}
+
+const char* lcl_GetDrawingVerAlign(sal_uInt8 nVerAlign)
+{
+    switch (nVerAlign)
+    {
+        case EXC_OBJ_VER_CENTER:
+            return "ctr";
+        case EXC_OBJ_VER_BOTTOM:
+            return "b";
+        default:
+            return "t";
+    }
+}
+
+const char* lcl_GetDrawingUnderline(FontLineStyle eUnderline)
+{
+    switch (eUnderline)
+    {
+        case LINESTYLE_NONE:
+            return "none";
+        case LINESTYLE_DOUBLE:
+            return "dbl";
+        default:
+            return "sng";
     }
 }
 
@@ -672,6 +752,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     namespace FormCompType = css::form::FormComponentType;
     namespace AwtVisualEffect = css::awt::VisualEffect;
     namespace AwtScrollOrient = css::awt::ScrollBarOrientation;
+    namespace AwtTextAlign = css::awt::TextAlign;
 
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
     if( !xShape.is() || !aCtrlProp.Is() )
@@ -775,18 +856,49 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         mrEscherEx.AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
         mrEscherEx.UpdateDffFragmentEnd();
 
-        sal_uInt16 nXclFont = EXC_FONT_APP;
         if( !msLabel.isEmpty() )
         {
-            XclFontData aFontData;
-            GetFontPropSetHelper().ReadFontProperties( aFontData, aCtrlProp, EXC_FONTPROPSET_CONTROL );
-            if( (!aFontData.maName.isEmpty() ) && (aFontData.mnHeight > 0) )
-                nXclFont = GetFontBuffer().Insert( aFontData, EXC_COLOR_CTRLTEXT );
+            GetFontPropSetHelper().ReadFontProperties(maFontData, aCtrlProp,
+                                                      EXC_FONTPROPSET_CONTROL);
+            if ((!maFontData.maName.isEmpty()) && (maFontData.mnHeight > 0))
+                mnXclFont = GetFontBuffer().Insert(maFontData, EXC_COLOR_CTRLTEXT);
         }
 
-        pTxo.reset( new XclTxo( msLabel, nXclFont ) );
-        pTxo->SetHorAlign( (mnObjType == EXC_OBJTYPE_BUTTON) ? EXC_OBJ_HOR_CENTER : EXC_OBJ_HOR_LEFT );
-        pTxo->SetVerAlign( EXC_OBJ_VER_CENTER );
+        // Align holds the model default - centered on a button, left elsewhere - where the
+        // control has it at all; VerticalAlign is void unless set, and the member default centers
+        if (sal_Int16 nApiHorAlign = 0; aCtrlProp.GetProperty(nApiHorAlign, u"Align"_ustr))
+        {
+            switch (nApiHorAlign)
+            {
+                case AwtTextAlign::CENTER:
+                    mnTextHAlign = EXC_OBJ_HOR_CENTER;
+                    break;
+                case AwtTextAlign::RIGHT:
+                    mnTextHAlign = EXC_OBJ_HOR_RIGHT;
+                    break;
+                default:
+                    mnTextHAlign = EXC_OBJ_HOR_LEFT;
+            }
+        }
+        if (css::style::VerticalAlignment eApiVerAlign{};
+            aCtrlProp.GetProperty(eApiVerAlign, u"VerticalAlign"_ustr))
+        {
+            switch (eApiVerAlign)
+            {
+                case css::style::VerticalAlignment_TOP:
+                    mnTextVAlign = EXC_OBJ_VER_TOP;
+                    break;
+                case css::style::VerticalAlignment_BOTTOM:
+                    mnTextVAlign = EXC_OBJ_VER_BOTTOM;
+                    break;
+                default:
+                    mnTextVAlign = EXC_OBJ_VER_CENTER;
+            }
+        }
+
+        pTxo.reset( new XclTxo( msLabel, mnXclFont ) );
+        pTxo->SetHorAlign( mnTextHAlign );
+        pTxo->SetVerAlign( mnTextVAlign );
     }
 
     mrEscherEx.CloseContainer();  // ESCHER_SpContainer
@@ -1140,12 +1252,19 @@ public:
     bool m_bLook3d = true;
     bool m_bStroked = false;
     std::optional<Color> m_oBackgroundFill;
+    XclFontData m_aFontData;
+    sal_uInt16 m_nXclFont = EXC_FONT_APP;
+    sal_uInt8 m_nTextHAlign = EXC_OBJ_HOR_LEFT;
+    sal_uInt8 m_nTextVAlign = EXC_OBJ_VER_CENTER;
 
 protected:
     using VMLExport::StartShape;
     sal_Int32 StartShape() override;
     using VMLExport::EndShape;
     void EndShape(sal_Int32 nShapeElement) override;
+
+private:
+    void WriteLabel();
 };
 
 VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p,
@@ -1187,16 +1306,58 @@ sal_Int32 VmlFormControlExporter::StartShape()
     return VMLExport::StartShape();
 }
 
+void VmlFormControlExporter::WriteLabel()
+{
+    sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
+
+    pVmlDrawing->startElement(XML_div, XML_style, lcl_GetVmlDivStyle(m_nTextHAlign));
+
+    const Color& rColor = m_aFontData.maComplexColor.getFinalColor();
+    // the VML size is in twips, which is what XclFontData::mnHeight already holds
+    pVmlDrawing->startElement(
+        XML_font, XML_face,
+        sax_fastparser::UseIf(m_aFontData.maName, !m_aFontData.maName.isEmpty()), XML_size,
+        sax_fastparser::UseIf(OUString::number(m_aFontData.mnHeight), m_aFontData.mnHeight != 0),
+        XML_color, rColor == COL_AUTO ? u"auto"_ustr : "#" + rColor.AsRGBHexString());
+
+    // Excel writes the effects here as well as into the DrawingML run properties
+    const bool bBold = m_aFontData.GetScWeight() > WEIGHT_NORMAL;
+    const FontLineStyle eUnderline = m_aFontData.GetScUnderline();
+    if (bBold)
+        pVmlDrawing->startElement(XML_b);
+    if (m_aFontData.mbItalic)
+        pVmlDrawing->startElement(XML_i);
+    if (eUnderline != LINESTYLE_NONE)
+    {
+        // a bare <u> cannot say "double", so Excel points at the workbook font record instead
+        const OString aFontClass = OString::Concat("font") + OString::number(m_nXclFont);
+        const bool bDouble = eUnderline == LINESTYLE_DOUBLE && m_nXclFont != EXC_FONT_APP;
+        pVmlDrawing->startElement(XML_u, XML_class, sax_fastparser::UseIf(aFontClass, bDouble));
+    }
+    if (m_aFontData.mbStrikeout)
+        pVmlDrawing->startElement(XML_s);
+
+    pVmlDrawing->writeEscaped(m_aLabel);
+
+    if (m_aFontData.mbStrikeout)
+        pVmlDrawing->endElement(XML_s);
+    if (eUnderline != LINESTYLE_NONE)
+        pVmlDrawing->endElement(XML_u);
+    if (m_aFontData.mbItalic)
+        pVmlDrawing->endElement(XML_i);
+    if (bBold)
+        pVmlDrawing->endElement(XML_b);
+    pVmlDrawing->endElement(XML_font);
+
+    pVmlDrawing->endElement(XML_div);
+}
+
 void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
 {
     sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
 
     pVmlDrawing->startElement(FSNS(XML_v, XML_textbox));
-    pVmlDrawing->startElement(XML_div);
-    pVmlDrawing->startElement(XML_font);
-    pVmlDrawing->writeEscaped(m_aLabel);
-    pVmlDrawing->endElement(XML_font);
-    pVmlDrawing->endElement(XML_div);
+    WriteLabel();
     pVmlDrawing->endElement(FSNS(XML_v, XML_textbox));
 
     OString aObjectType;
@@ -1230,12 +1391,17 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
     if (!m_bLook3d)
         pVmlDrawing->singleElement(FSNS(XML_x, XML_NoThreeD));
 
-    // XclExpOcxControlObj::WriteSubRecs() has the same fixed values.
-    if (m_nObjType == EXC_OBJTYPE_BUTTON)
+    // Excel leaves these out for Left and Top, which the import applies when they are missing
+    if (m_nTextHAlign != EXC_OBJ_HOR_LEFT)
     {
-        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextHAlign), "Center");
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextHAlign),
+                                  lcl_GetVmlHorAlign(m_nTextHAlign));
     }
-    XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextVAlign), "Center");
+    if (m_nTextVAlign != EXC_OBJ_VER_TOP)
+    {
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextVAlign),
+                                  lcl_GetVmlVerAlign(m_nTextVAlign));
+    }
 
     if (!m_sFmlaLink.isEmpty())
         XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_FmlaLink), m_sFmlaLink);
@@ -1269,6 +1435,10 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     aFormControlExporter.m_bLook3d = !mbFlatButton;
     aFormControlExporter.m_bStroked = mbStroked;
     aFormControlExporter.m_oBackgroundFill = moBackgroundFill;
+    aFormControlExporter.m_aFontData = maFontData;
+    aFormControlExporter.m_nXclFont = mnXclFont;
+    aFormControlExporter.m_nTextHAlign = mnTextHAlign;
+    aFormControlExporter.m_nTextVAlign = mnTextVAlign;
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
                                       /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true, mnShapeId);
@@ -1296,6 +1466,39 @@ void XclExpTbxControlObj::WriteAnchor(const sax_fastparser::FSHelperPtr& rTarget
     rTarget->startElement(bIsDrawing ? FSNS(XML_xdr, XML_to) : XML_to);
     lcl_WriteAnchorVertex(rTarget, rAreaTo);
     rTarget->endElement(bIsDrawing ? FSNS(XML_xdr, XML_to) : XML_to);
+}
+
+void XclExpTbxControlObj::WriteLabelFont(const sax_fastparser::FSHelperPtr& rTarget) const
+{
+    // the VML can only say "double" through the font record mnXclFont names, so without one
+    // both halves say single rather than disagreeing
+    FontLineStyle eUnderline = maFontData.GetScUnderline();
+    if (eUnderline == LINESTYLE_DOUBLE && mnXclFont == EXC_FONT_APP)
+        eUnderline = LINESTYLE_SINGLE;
+
+    // a:rPr wants hundredths of a point, XclFontData::mnHeight is in twips
+    rTarget->startElementNS(
+        XML_a, XML_rPr, XML_sz,
+        sax_fastparser::UseIf(OString::number(maFontData.mnHeight * 5), maFontData.mnHeight != 0),
+        XML_b, ToPsz10(maFontData.GetScWeight() > WEIGHT_NORMAL), XML_i,
+        ToPsz10(maFontData.mbItalic), XML_u, lcl_GetDrawingUnderline(eUnderline),
+        XML_strike, maFontData.mbStrikeout ? "sngStrike" : "noStrike");
+
+    if (const Color& rColor = maFontData.maComplexColor.getFinalColor(); rColor != COL_AUTO)
+    {
+        rTarget->startElementNS(XML_a, XML_solidFill);
+        rTarget->singleElementNS(XML_a, XML_srgbClr, XML_val,
+                                 I32SHEX(sal_uInt32(rColor) & 0x00FFFFFF));
+        rTarget->endElementNS(XML_a, XML_solidFill);
+    }
+
+    if (!maFontData.maName.isEmpty())
+    {
+        rTarget->singleElementNS(XML_a, XML_latin, XML_typeface, maFontData.maName);
+        rTarget->singleElementNS(XML_a, XML_cs, XML_typeface, maFontData.maName);
+    }
+
+    rTarget->endElementNS(XML_a, XML_rPr);
 }
 
 // save into xl\drawings\drawing1.xml
@@ -1412,7 +1615,7 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
                     XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != DEFLRINS),
                     XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != DEFTBINS),
                     XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != DEFTBINS),
-                    XML_anchor, "ctr");
+                    XML_anchor, lcl_GetDrawingVerAlign(mnTextVAlign));
 
                 {
                     bool bTextAutoGrowHeight = false;
@@ -1436,7 +1639,10 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
 
                 {
                     pDrawing->startElementNS(XML_a, XML_p);
+                    pDrawing->singleElementNS(XML_a, XML_pPr, XML_algn,
+                                              lcl_GetDrawingHorAlign(mnTextHAlign));
                     pDrawing->startElementNS(XML_a, XML_r);
+                    WriteLabelFont(pDrawing);
                     pDrawing->startElementNS(XML_a, XML_t);
                     pDrawing->writeEscaped(msLabel);
                     pDrawing->endElementNS(XML_a, XML_t);

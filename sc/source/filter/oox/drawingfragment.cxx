@@ -899,9 +899,20 @@ void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rn
     setFlag( rAxFontData.mnFontEffects, AxFontFlags::Bold, rFontModel.mobBold.value_or( false ) );
     setFlag( rAxFontData.mnFontEffects, AxFontFlags::Italic, rFontModel.mobItalic.value_or( false ) );
     setFlag( rAxFontData.mnFontEffects, AxFontFlags::Strikeout, rFontModel.mobStrikeout.value_or( false ) );
-    sal_Int32 nUnderline = rFontModel.monUnderline.value_or( XML_none );
-    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Underline, nUnderline != XML_none );
-    rAxFontData.mbDblUnderline = nUnderline == XML_double;
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Underline, rFontModel.mobUnderline.value_or( false ) );
+    // A bare <u> element cannot say "double", so Excel names the workbook font record that carries
+    // the style - the class is a reference, not a style of its own.
+    rAxFontData.mbDblUnderline = false;
+    if ((rAxFontData.mnFontEffects & AxFontFlags::Underline) && rFontModel.moUnderlineClass)
+    {
+        if (OUString aFontId; rFontModel.moUnderlineClass.value().startsWith(u"font", &aFontId))
+        {
+            if (FontRef rxFont = getStyles().getFont(aFontId.toInt32()); rxFont)
+                rAxFontData.mbDblUnderline
+                    = (rxFont->getModel().mnUnderline == XML_double)
+                      || (rxFont->getModel().mnUnderline == XML_doubleAccounting);
+        }
+    }
 
     // font color
     rnOleTextColor = convertControlTextColor( rFontModel.moColor.value_or( OUString() ) );

@@ -33,11 +33,17 @@
 #include <tools/fldunit.hxx>
 #include <svl/numformat.hxx>
 
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1170,6 +1176,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "/xml/v:shape/xx:ClientData/xx:Anchor", u"1, 22, 3, 3, 3, 30, 6, 1");
 
+    // Without the fix, the label's font was written as a bare <font> element
+    assertXPath(pDoc, "/xml/v:shape/v:textbox/div/font", "face", u"Segoe UI");
+    assertXPath(pDoc, "/xml/v:shape/v:textbox/div/font", "size", u"160");
+
+    // Excel builds its model from the DrawingML, so the font has to reach it as well
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:p/"
+                "a:r/a:rPr",
+                "sz", u"800");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:p/"
+                "a:r/a:rPr/a:latin",
+                "typeface", u"Segoe UI");
+
     // reloaded document: make sure it still has a flat (non-3d) look
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA_DrawPage(
@@ -1191,6 +1213,164 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= aColor;
     // without the fix, this was COL_WHITE
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, aColor);
+
+    OUString sFontName;
+    xPropertySet->getPropertyValue(u"FontName"_ustr) >>= sFontName;
+    // without the fix, this was the control's default font
+    CPPUNIT_ASSERT_EQUAL(u"Segoe UI"_ustr, sFontName);
+
+    float fFontHeight = 0;
+    xPropertySet->getPropertyValue(u"FontHeight"_ustr) >>= fFontHeight;
+    // without the fix, this was 10 - so adjacent labels overlapped
+    CPPUNIT_ASSERT_EQUAL(8.0f, fFontHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlFontXlsxExport)
+{
+    // Given two checkbox form controls, the first with a bold, italic, doubly underlined and
+    // struck out label, the second with a singly underlined one:
+    createScDoc("xlsx/checkbox-form-control-font.xlsx");
+
+    // When exporting to XLSX:
+    saveAndReload(TestFilter::XLSX);
+
+    // Then make sure the effects are written into the label's VML markup. Without the fix, the
+    // <font> element carried neither the effects nor the font name, size and colour.
+    xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xml/v:shape[1]/v:textbox/div/font", "face", u"DejaVu Sans");
+    assertXPath(pDoc, "/xml/v:shape[1]/v:textbox/div/font", "size", u"160");
+    assertXPath(pDoc, "/xml/v:shape[1]/v:textbox/div/font", "color", u"#c9211e");
+    // which record the class names depends on the fonts the document holds
+    OUString aFontId;
+    CPPUNIT_ASSERT(getXPath(pDoc, "/xml/v:shape[1]/v:textbox/div/font/b/i/u", "class")
+                       .startsWith(u"font", &aFontId));
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStyles);
+    const OString aRecord
+        = "/x:styleSheet/x:fonts/x:font[" + OString::number(aFontId.toInt32() + 1) + "]";
+    assertXPath(pStyles, aRecord + "/x:u", "val", u"double");
+    assertXPath(pStyles, aRecord + "/x:name", "val", u"DejaVu Sans");
+    assertXPath(pStyles, aRecord + "/x:sz", "val", u"8");
+    assertXPathContent(pDoc, "/xml/v:shape[1]/v:textbox/div/font/b/i/u/s", u"All effects");
+    assertXPathContent(pDoc, "/xml/v:shape[2]/v:textbox/div/font/u", u"Underlined");
+    assertXPathNoAttribute(pDoc, "/xml/v:shape[2]/v:textbox/div/font/u", "class");
+
+    // Excel builds its model from the DrawingML, so the effects have to reach it as well
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[1]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:r/a:rPr",
+                "b", u"1");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[1]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:r/a:rPr",
+                "i", u"1");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[1]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:r/a:rPr",
+                "u", u"dbl");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[1]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:r/a:rPr",
+                "strike", u"sngStrike");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[1]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:r/a:rPr/a:solidFill/a:srgbClr",
+                "val", u"C9211E");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[2]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:r/a:rPr",
+                "u", u"sng");
+
+    // reloaded document: the controls still carry the effects
+    auto xDrawPagesSupplier = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
+    auto xIA_DrawPage
+        = xDrawPagesSupplier->getDrawPages()->getByIndex(0).queryThrow<container::XIndexAccess>();
+    auto xControlShape = xIA_DrawPage->getByIndex(0).queryThrow<drawing::XControlShape>();
+    auto xPropertySet = xControlShape->getControl().queryThrow<beans::XPropertySet>();
+
+    float fFontWeight = 0;
+    xPropertySet->getPropertyValue(u"FontWeight"_ustr) >>= fFontWeight;
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, fFontWeight);
+
+    // the control model exposes the slant as a short, not as an awt::FontSlant
+    sal_Int16 nFontSlant = 0;
+    xPropertySet->getPropertyValue(u"FontSlant"_ustr) >>= nFontSlant;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontSlant_ITALIC), nFontSlant);
+
+    sal_Int16 nFontUnderline = 0;
+    xPropertySet->getPropertyValue(u"FontUnderline"_ustr) >>= nFontUnderline;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::DOUBLE), nFontUnderline);
+
+    sal_Int16 nFontStrikeout = 0;
+    xPropertySet->getPropertyValue(u"FontStrikeout"_ustr) >>= nFontStrikeout;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontStrikeout::SINGLE), nFontStrikeout);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlAlignXlsxExport)
+{
+    // Given two checkbox form controls, the first with a right and bottom aligned label, the
+    // second with a centered and top aligned one:
+    createScDoc("xlsx/checkbox-form-control-align.xlsx");
+
+    // When exporting to XLSX:
+    saveAndReload(TestFilter::XLSX);
+
+    // Then make sure the alignment reaches the VML markup. Without the fix, TextHAlign was a
+    // fixed Center on a button and absent elsewhere, TextVAlign a fixed Center on every control,
+    // and the <div> carried no style.
+    xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xml/v:shape[1]/v:textbox/div", "style", u"text-align:right");
+    assertXPathContent(pDoc, "/xml/v:shape[1]/xx:ClientData/xx:TextHAlign", u"Right");
+    assertXPathContent(pDoc, "/xml/v:shape[1]/xx:ClientData/xx:TextVAlign", u"Bottom");
+    assertXPath(pDoc, "/xml/v:shape[2]/v:textbox/div", "style", u"text-align:center");
+    assertXPathContent(pDoc, "/xml/v:shape[2]/xx:ClientData/xx:TextHAlign", u"Center");
+    // Top is Excel's default, which it writes by leaving the element out
+    assertXPath(pDoc, "/xml/v:shape[2]/xx:ClientData/xx:TextVAlign", 0);
+
+    // Excel only honours the alignment when the DrawingML side agrees with the VML
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[1]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:bodyPr",
+                "anchor", u"b");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[1]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:pPr",
+                "algn", u"r");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[2]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:bodyPr",
+                "anchor", u"t");
+    assertXPath(pDrawing,
+                "/xdr:wsDr/mc:AlternateContent[2]/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:txBody/"
+                "a:p/a:pPr",
+                "algn", u"ctr");
+
+    // reloaded document: the controls still carry the alignment
+    auto xDrawPagesSupplier = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
+    auto xIA_DrawPage
+        = xDrawPagesSupplier->getDrawPages()->getByIndex(0).queryThrow<container::XIndexAccess>();
+
+    auto xFirstShape = xIA_DrawPage->getByIndex(0).queryThrow<drawing::XControlShape>();
+    auto xFirst = xFirstShape->getControl().queryThrow<beans::XPropertySet>();
+    sal_Int16 nAlign = 0;
+    xFirst->getPropertyValue(u"Align"_ustr) >>= nAlign;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
+    style::VerticalAlignment eVerAlign{};
+    xFirst->getPropertyValue(u"VerticalAlign"_ustr) >>= eVerAlign;
+    CPPUNIT_ASSERT_EQUAL(style::VerticalAlignment_BOTTOM, eVerAlign);
+
+    auto xSecondShape = xIA_DrawPage->getByIndex(1).queryThrow<drawing::XControlShape>();
+    auto xSecond = xSecondShape->getControl().queryThrow<beans::XPropertySet>();
+    xSecond->getPropertyValue(u"Align"_ustr) >>= nAlign;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
+    xSecond->getPropertyValue(u"VerticalAlign"_ustr) >>= eVerAlign;
+    CPPUNIT_ASSERT_EQUAL(style::VerticalAlignment_TOP, eVerAlign);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testVMLShapeStroke)

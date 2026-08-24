@@ -278,6 +278,8 @@ private:
     void                WriteSbs( XclExpStream& rStrm );
     /** Writes an anchor, if empty calculates one form XShape */
     void                WriteAnchor( const sax_fastparser::FSHelperPtr& rTarget, bool bIsDrawing ) const;
+    /** Writes the label's run properties, the DrawingML half of the label font. */
+    void WriteLabelFont(const sax_fastparser::FSHelperPtr& rTarget) const;
 
 private:
     const css::uno::Reference< css::drawing::XShape > mxShape;
@@ -306,6 +308,10 @@ private:
     tools::Rectangle    maAreaTo;
     XclExpObjectManager& mrRoot;
     std::optional<::Color> moBackgroundFill;
+    XclFontData maFontData; /// Font of the control label.
+    sal_uInt16 mnXclFont = EXC_FONT_APP; /// Font record index of the control label.
+    sal_uInt8 mnTextHAlign = EXC_OBJ_HOR_LEFT; /// Horizontal alignment of the control label.
+    sal_uInt8 mnTextVAlign = EXC_OBJ_VER_CENTER; /// Vertical alignment of the control label.
 };
 
 //#endif

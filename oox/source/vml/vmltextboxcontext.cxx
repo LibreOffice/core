@@ -51,8 +51,9 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper const & rParent,
             maFont.monSize = rAttribs.getInteger( XML_size );
         break;
         case XML_u:
-            OSL_ENSURE( !maFont.monUnderline, "TextPortionContext::TextPortionContext - nested <u> elements" );
-            maFont.monUnderline = (rAttribs.getToken( XML_class, XML_TOKEN_INVALID ) == XML_font4) ? XML_double : XML_single;
+            OSL_ENSURE( !maFont.mobUnderline.has_value(), "TextPortionContext::TextPortionContext - nested <u> elements" );
+            maFont.mobUnderline = true;
+            maFont.moUnderlineClass = rAttribs.getXString(XML_class);
         break;
         case XML_sub:
         case XML_sup:

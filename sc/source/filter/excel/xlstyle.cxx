@@ -585,7 +585,7 @@ const char *const *const sppcPropNamesChCmplxNoName = sppcPropNamesChCmplx + 1;
 const char *const sppcPropNamesControl[] =
 {
     "FontName", "FontFamily", "FontCharset", "FontHeight", "FontSlant",
-    "FontWeight", "FontLineStyle", "FontStrikeout", "TextColor", nullptr
+    "FontWeight", "FontUnderline", "FontStrikeout", "TextColor", nullptr
 };
 
 /** Inserts all passed API font settings into the font data object. */
