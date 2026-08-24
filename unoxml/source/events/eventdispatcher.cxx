@@ -212,7 +212,7 @@ namespace DOM::events {
         // the capture vector now holds the node path from target to root
         // first we must search for capture listeners in order root to
         // to target. after that, any target listeners have to be called
-        // then bubbeling phase listeners are called in target to root
+        // then bubbling phase listeners are called in target to root
         // order
         // start at the root
         auto rinode = std::as_const(captureVector).rbegin();
@@ -236,7 +236,7 @@ namespace DOM::events {
         pEvent->m_currentTarget = inode->first;
         callListeners(targetListeners, inode->second, aType, xEvent);
         if  (pEvent->m_canceled) return;
-        // bubbeling phase
+        // bubbling phase
         ++inode;
         if (i_xEvent->getBubbles()) {
             pEvent->m_phase = PhaseType_BUBBLING_PHASE;

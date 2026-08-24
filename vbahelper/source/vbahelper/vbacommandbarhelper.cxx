@@ -46,7 +46,7 @@ private:
 
     MSO2OOCommandbarHelper()
     {
-        // Buildin toolbars
+        // Built-in toolbars
         maBuildinToolbarMap.insert( std::make_pair( u"Standard"_ustr ,    u"private:resource/toolbar/standardbar"_ustr ) );
         maBuildinToolbarMap.insert( std::make_pair( u"Formatting"_ustr,   u"private:resource/toolbar/formatobjectbar"_ustr ) );
         maBuildinToolbarMap.insert( std::make_pair( u"Drawing"_ustr,      u"private:resource/toolbar/drawbar"_ustr ) );
@@ -179,7 +179,7 @@ bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, std::u16stri
 // return the resource url if found
 OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName )
 {
-    // check if it is a buildin toolbar
+    // check if it is a built-in toolbar
     OUString sResourceUrl = MSO2OOCommandbarHelper::getMSO2OOCommandbarHelper()->findBuildinToolbar( sName );
     if( !sResourceUrl.isEmpty() )
         return sResourceUrl;
