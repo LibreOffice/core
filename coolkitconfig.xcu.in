@@ -7,6 +7,10 @@
 <!-- tdf#106488 - reverse hostname lookup can go badly wrong -->
 <item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="UseLocking" oor:op="fuse"><value>false</value></prop></item>
 
+<!-- Use the built-in color picker dialog: the "system" color chooser wrapper
+     does not go through the JSDialog machinery, so it never reaches the client -->
+<item oor:path="/org.openoffice.Office.Common/Misc"><prop oor:name="UseSystemColorDialog" oor:op="fuse"><value>false</value></prop></item>
+
 <!-- Dialogs have limited real estate, limit drop-down height -->
 <item oor:path="/org.openoffice.Office.Common/Accessibility"><prop oor:name="ListBoxMaximumLineCount" oor:op="fuse"><value>11</value></prop></item>
 
