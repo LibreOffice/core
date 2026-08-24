@@ -18,12 +18,15 @@
 namespace JailUtil
 {
 
-/// General temporary directory owned by us.
+/// Holds one directory per jail: cool-<jailId> for the jail's own tmp, and systemplate-<jailId>
+/// carrying an up-to-date copy of the system template's etc directory when the installed one is
+/// out of date.
 const std::string CHILDROOT_TMP_PATH = "/tmp";
 
 /// Files uploaded by users are stored in this sub-directory of child-root.
 const std::string CHILDROOT_TMP_INCOMING_PATH = "/tmp/incoming";
 
+/// The preset configuration files a configuration id carries, shared by every jail that names it.
 const std::string CHILDROOT_TMP_SHARED_PRESETS_PATH = "/tmp/sharedpresets";
 
 /// The LO installation directory with jail.

@@ -1441,7 +1441,10 @@ void COOLWSD::setupChildRoot(const bool UseMountNamespaces)
 
     if constexpr (!Util::isMobileApp())
     {
-        // Create after cleanupJails, which deletes any pre-existing content under ChildRoot.
+        // The TMPDIR that coolwsd, forkit and anything they spawn inherit. Library code that
+        // honours TMPDIR lands its files here, in the phase before any jail exists. It sits above
+        // the jails, so nothing inside one can see it. Create it after cleanupJails, which
+        // deletes any pre-existing content under ChildRoot.
         const std::string tmpDir = ChildRoot + "systmp";
         FileUtil::createDirectories(tmpDir);
         LOG_INF("Setting system temporary directory path: " << tmpDir);
