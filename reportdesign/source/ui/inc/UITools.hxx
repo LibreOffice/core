@@ -130,7 +130,7 @@ namespace rptui
 
     const sal_Int16 ISOVER_IGNORE_CUSTOMSHAPES = 1;
 
-    /** checks whether the given rectangle overlapps another OUnoObject object in that view.
+    /** checks whether the given rectangle overlaps another OUnoObject object in that view.
     *
     * \param _rRect
     * \param _rPage
@@ -141,7 +141,7 @@ namespace rptui
 
     SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects, rtl::Reference<SdrUnoObj> _pIgnoreList[], int _nIgnoreListLength);
 
-    /** checks whether the given OUnoObject object rectangle overlapps another object in that view.
+    /** checks whether the given OUnoObject object rectangle overlaps another object in that view.
     *
     * \param _pObj
     * \param _rPage

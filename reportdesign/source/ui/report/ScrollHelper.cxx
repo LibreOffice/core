@@ -124,7 +124,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     {
         bChanged = false;
 
-        // does we need a vertical ScrollBar
+        // do we need a vertical ScrollBar
         if ( aOutPixSz.Width() < m_aTotalPixelSize.Width() && !bHVisible )
         {
             bHVisible = true;
@@ -132,7 +132,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
             bChanged = true;
         }
 
-        // does we need a horizontal ScrollBar
+        // do we need a horizontal ScrollBar
         if ( aOutPixSz.Height() < m_aTotalPixelSize.Height() && !bVVisible )
         {
             bVVisible = true;

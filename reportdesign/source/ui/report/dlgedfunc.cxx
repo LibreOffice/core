@@ -576,7 +576,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
         if (rDragStat.GetDragMethod() != nullptr)
         {
             SdrObjListIter aIter(m_pParent->getPage(),SdrIterMode::DeepNoGroups);
-            // loop through all marked objects and check if there new rect overlapps an old one.
+            // loop through all marked objects and check if there new rect overlaps an old one.
             for (;;)
             {
                 SdrObject* pObjIter = aIter.Next();

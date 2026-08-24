@@ -221,7 +221,7 @@ public class JobQueue {
             }
         }
 
-        // always wait for asynchron jobqueue to be finished !
+        // always wait for asynchronous jobqueue to be finished !
         if(job != null && _async_jobQueue != null) {
             synchronized(_async_jobQueue) {
                 // wait for async queue to be empty and last job to be done
