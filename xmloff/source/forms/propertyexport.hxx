@@ -82,7 +82,7 @@ namespace xmloff
     public:
         /** constructs an object capable of handling attributes for export
             @param  _rContext
-                the export context to which's attribute list the property translation should be added
+                the export context to whose attribute list the property translation should be added
             @param  m_xControl
                 the property set to be exported
         */
@@ -90,7 +90,7 @@ namespace xmloff
             const css::uno::Reference< css::beans::XPropertySet >& _rxProps);
 
     protected:
-        /** examines a property set given for all properties which's value are to made persistent
+        /** examines a property set given for all properties whose values are to be made persistent
 
             <p>upon return the <method>m_aRemainingProps</method> will be filled with the names of all properties
             which need to be stored</p>
