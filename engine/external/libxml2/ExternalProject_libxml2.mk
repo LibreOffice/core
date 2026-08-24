@@ -14,11 +14,11 @@ $(eval $(call gb_ExternalProject_register_targets,libxml2,\
 ))
 
 ifeq ($(OS),EMSCRIPTEN)
-$(call gb_ExternalProject_use_external_project,libxml2,icu)
+$(eval $(call gb_ExternalProject_use_external_project,libxml2,icu))
 endif
 
 ifeq ($(OS),WNT)
-$(call gb_ExternalProject_use_external_project,libxml2,icu)
+$(eval $(call gb_ExternalProject_use_external_project,libxml2,icu))
 
 # remove VERSION file after the compilation, otherwise, libabw, libvisio,
 # and probably other libraries fail to compile with
