@@ -440,7 +440,7 @@ void SmartArtDiagram::addDiagramModelData(boost::property_tree::ptree& rTarget) 
 }
 
 using ShapePairs
-    = std::map<std::shared_ptr<drawingml::Shape>, uno::Reference<drawing::XShape>>;
+    = std::unordered_map<std::shared_ptr<drawingml::Shape>, uno::Reference<drawing::XShape>>;
 
 void SmartArtDiagram::syncDiagramFontHeights()
 {
