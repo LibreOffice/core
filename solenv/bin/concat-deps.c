@@ -166,7 +166,7 @@ static void* pool_take_extent(struct pool* pool, int allocate)
 {
     unsigned int size = 0;
     void* extent;
-    void* data = NULL;
+    char* data = NULL;
 
     if(pool->extent)
     {
@@ -191,7 +191,7 @@ static void* pool_take_extent(struct pool* pool, int allocate)
             if(allocate)
             {
                 data = ((char*)extent) + POOL_ALIGN_INCREMENT;
-                pool->fresh = ((char*)data) + pool->size_elem;
+                pool->fresh = data + pool->size_elem;
                 pool->tail = pool->fresh + (size - pool->size_elem);
             }
             else
