@@ -890,7 +890,7 @@ static char* generate_phony_line(char const * phony_target, char const * extensi
     return phony_content_buffer;
 }
 
-static int generate_phony_file(char* fn, char const * content)
+static int generate_phony_file(const char* fn, char const * content)
 {
     FILE* depfile;
     depfile = fopen(fn, "w");
@@ -906,7 +906,7 @@ static int generate_phony_file(char* fn, char const * content)
     return !depfile;
 }
 
-static int process(struct hash* dep_hash, char* fn)
+static int process(struct hash* dep_hash, const char* fn)
 {
     int rc;
     char* buffer;
@@ -915,7 +915,7 @@ static int process(struct hash* dep_hash, char* fn)
     char* cursor_out;
     char* base;
     char* created_line = NULL;
-    char* src_relative;
+    const char* src_relative;
     int continuation = 0;
     char last_ns = 0;
     off_t size;
