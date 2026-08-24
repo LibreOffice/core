@@ -1141,7 +1141,7 @@ static void usage(void)
 
 static int get_var(char **var, const char *name)
 {
-    *var = (char *)getenv(name);
+    *var = getenv(name);
     if(!*var)
     {
         fprintf(stderr,"Error: %s is missing in the environment\n", name);
