@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering3, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     editeng \
     sal \
     sfx \
