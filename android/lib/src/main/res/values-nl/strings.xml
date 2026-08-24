@@ -23,4 +23,9 @@
     <string name="ask_for_convert_odf">Bestandsformaat bevestigen</string>
     <string name="use_odf">ODF-formaat gebruiken</string>
     <string name="cant_open_the_document">Kon het document niet openen</string>
+    <string name="all_files_access_title">Geopend in alleen-lezenmodus</string>
+    <string name="all_files_access_message">De app die dit bestand deelde, stond niet toe dat er wijzigingen in werden opgeslagen.\n\nVerleen \"Volledige bestandstoegang\" om deze app het bestand te laten schrijven waar het is opgeslagen, zodat u het hier kunt bewerken.</string>
+    <string name="all_files_access_grant">Toegang verlenen</string>
+    <string name="do_not_ask_again">Niet meer vragen</string>
+    <string name="failed_to_save_file">Kon de wijzigingen in het bestand niet opslaan</string>
 </resources>
