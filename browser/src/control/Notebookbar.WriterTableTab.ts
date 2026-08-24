@@ -632,12 +632,20 @@ class WriterTableTab implements NotebookbarTab {
 				orientation: 'vertical',
 			} as SeparatorWidgetJSON,
 			{
-				type: 'bigtoolitem',
-				id: 'table-insert-caption-dialog',
-				text: _UNO('.uno:InsertCaptionDialog', 'text'),
-				command: '.uno:InsertCaptionDialog',
+				type: 'overflowgroup',
+				id: 'table-caption-group',
+				name: _('Caption'),
 				accessibility: { focusBack: true, combination: 'IC', de: null },
-			} as ToolItemWidgetJSON,
+				children: [
+					{
+						type: 'bigtoolitem',
+						id: 'table-insert-caption-dialog',
+						text: _UNO('.uno:InsertCaptionDialog', 'text'),
+						command: '.uno:InsertCaptionDialog',
+						accessibility: { focusBack: true, combination: 'IC', de: null },
+					} as ToolItemWidgetJSON,
+				],
+			} as OverflowGroupWidgetJSON,
 		];
 		return content;
 	}

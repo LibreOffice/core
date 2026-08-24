@@ -2838,6 +2838,22 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					},
 				]
 			},
+			{ type: 'separator', id: 'shape-leavegroup-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
+				'id': 'shape-caption-group',
+				'name': _('Caption'),
+				'accessibility': { focusBack: false, combination: 'IC', de: null },
+				'children': [
+					{
+						'type': 'bigtoolitem',
+						'id': 'shape-insert-caption-dialog',
+						'text': _UNO('.uno:InsertCaptionDialog', 'text'),
+						'command': '.uno:InsertCaptionDialog',
+						'accessibility': { focusBack: true, combination: 'IC', de: null },
+					},
+				]
+			},
 		];
 
 		return this.getTabPage(shapeTabName, content);
@@ -3174,6 +3190,22 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'text': _UNO('.uno:Crop'),
 				'command': '.uno:Crop',
 				'context': 'Graphic'
+			},
+			{ type: 'separator', id: 'picture-crop-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
+				'id': 'picture-caption-group',
+				'name': _('Caption'),
+				'accessibility': { focusBack: false, combination: 'IC', de: null },
+				'children': [
+					{
+						'type': 'bigtoolitem',
+						'id': 'picture-insert-caption-dialog',
+						'text': _UNO('.uno:InsertCaptionDialog', 'text'),
+						'command': '.uno:InsertCaptionDialog',
+						'accessibility': { focusBack: true, combination: 'IC', de: null },
+					},
+				]
 			},
 		];
 

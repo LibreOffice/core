@@ -6,9 +6,15 @@ var mode = Cypress.env('USER_INTERFACE');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', { testIsolation: false }, function() {
 
+	// The Table tab of the notebookbar holds ten groups. In the 1000px wide
+	// window Cypress opens by default the overflow manager has to fold every
+	// one of them, which puts the row and column sizing buttons the tests
+	// below click into the hidden overflow container. A normal desktop width
+	// keeps them on the tab itself.
 	desktopHelper.shareDocumentAcrossTests('writer/table_operation.odt', {
 		notebookbar: true,
 		caretToDocumentStart: true,
+		viewport: [1280, 800],
 	});
 
 	before(function() {

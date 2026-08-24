@@ -121,7 +121,6 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		/*Graphic Tab*/
 		this._toolitemHandlers['.uno:GraphicFilterToolbox'] = function() {};
 		this._toolitemHandlers['.uno:SaveGraphic'] = function() {};
-		this._toolitemHandlers['.uno:InsertCaptionDialog'] = function() {};
 		this._toolitemHandlers['.uno:CompressGraphic'] = function() {};
 		this._toolitemHandlers['.uno:GraphicDialog'] = function() {};
 		this._toolitemHandlers['.uno:BorderDialog'] = function() {};
