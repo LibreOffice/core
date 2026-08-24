@@ -891,7 +891,7 @@ static char* generate_phony_line(char const * phony_target, char const * extensi
     return phony_content_buffer;
 }
 
-static int generate_phony_file(const char* fn, char const * content)
+static bool generate_phony_file(const char* fn, char const * content)
 {
     FILE* depfile;
     depfile = fopen(fn, "w");
@@ -904,7 +904,7 @@ static int generate_phony_file(const char* fn, char const * content)
         fputs(content, depfile);
         fclose(depfile);
     }
-    return !depfile;
+    return depfile;
 }
 
 static int process(struct hash* dep_hash, const char* fn)
@@ -1058,9 +1058,10 @@ static int process(struct hash* dep_hash, const char* fn)
                     || strncmp(src_relative, "GenCxxClrObject/", 16) == 0)
                 {
                     created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                    if (!rc)
+                    const bool ok = generate_phony_file(fn, created_line);
+                    if (ok)
                         puts(created_line);
+                    rc = ok ? 0 : 1;
                 }
                 else
                 {
