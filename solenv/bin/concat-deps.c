@@ -79,6 +79,7 @@
 #endif /* Def __sun */
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -116,7 +117,7 @@
 #define FALSE 0
 #endif
 
-static int internal_boost = 0;
+static bool internal_boost = false;
 static char* base_dir;
 static char* work_dir;
 static size_t work_dir_len;
