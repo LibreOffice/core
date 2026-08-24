@@ -50,7 +50,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
         if(rSrcLevel.GetNumberingType() != css::style::NumberingType::CHAR_SPECIAL &&
            rSrcLevel.GetNumberingType() != css::style::NumberingType::NUMBER_NONE )
         {
-            // if enumeration instead bullet is chosen, adjust bullet font to template font
+            // if enumeration instead of bullet is chosen, adjust bullet font to template font
 
             // to be implemented if module supports CJK
 

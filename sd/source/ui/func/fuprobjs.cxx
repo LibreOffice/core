@@ -69,7 +69,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     if( !pOutlineViewShell )
         return;
 
-    /* does the selections end in a unique presentation layout?
+    /* do the selections end in a unique presentation layout?
        if not, it is not allowed to edit the templates */
     SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<SID_STATUS_LAYOUT, SID_STATUS_LAYOUT>(mrDoc.GetItemPool() ));
     pOutlineViewShell->GetStatusBarState( aSet );

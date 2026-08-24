@@ -236,7 +236,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     pOptions->SetDisplay( aDlgSet.Get(ATTR_PRESENT_DISPLAY).GetValue() );
 
-    // is something has changed, we set the modified flag
+    // if something has changed, we set the modified flag
     if ( bValuesChanged )
         mrDoc.SetChanged();
 }

@@ -333,7 +333,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
          mrDoc.GetDocumentType() == DocumentType::Impress )
     {
         /**********************************************
-        * Objects was created on the slide master page
+        * Object was created on the slide master page
         ***********************************************/
         OUString aName( pPage->GetLayoutName() );
         sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + SD_LT_SEPARATOR.getLength();
