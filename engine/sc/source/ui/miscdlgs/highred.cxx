@@ -34,12 +34,13 @@ ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld:
     , m_xCbAccept(m_xBuilder->weld_check_button(u"showaccepted"_ustr))
     , m_xCbReject(m_xBuilder->weld_check_button(u"showrejected"_ustr))
     , m_xOkButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xFtAssign(m_xBuilder->weld_label(u"rangelabel"_ustr))
     , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry(u"range"_ustr)))
     , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button(u"rangeref"_ustr)))
     , m_xBox(m_xBuilder->weld_container(u"box"_ustr))
     , m_xFilterCtr(new SvxTPFilter(m_xBox.get()))
 {
-    m_xEdAssign->SetReferences(this);
+    m_xEdAssign->SetReferences(this, m_xFtAssign.get());
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
 
     m_xOkButton->connect_clicked(LINK( this, ScHighlightChgDlg, OKBtnHdl));
@@ -147,6 +148,7 @@ void ScHighlightChgDlg::RefInputDone( bool bForced)
     {
         m_xFilterCtr->SetRange(m_xEdAssign->GetText());
         m_xFilterCtr->SetFocusToRange();
+        m_xFtAssign->hide();
         m_xEdAssign->GetWidget()->hide();
         m_xRbAssign->GetWidget()->hide();
     }
@@ -182,6 +184,7 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef, void )
     if(pRef!=nullptr)
     {
         SetDispatcherLock( true );
+        m_xFtAssign->show();
         m_xEdAssign->GetWidget()->show();
         m_xRbAssign->GetWidget()->show();
         m_xEdAssign->SetText(m_xFilterCtr->GetRange());

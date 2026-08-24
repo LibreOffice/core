@@ -40,6 +40,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbReject;
     std::unique_ptr<weld::Button> m_xOkButton;
 
+    std::unique_ptr<weld::Label> m_xFtAssign;
     std::unique_ptr<formula::RefEdit> m_xEdAssign;
     std::unique_ptr<formula::RefButton> m_xRbAssign;
 
