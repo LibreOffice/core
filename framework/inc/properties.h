@@ -24,7 +24,7 @@
 
 namespace framework{
 
-// Please add new entries alphabetical sorted and correct all other handles!
+// Please add new entries alphabetically sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
 enum class FramePropHandle : sal_Int32
 {
@@ -111,8 +111,8 @@ class PropHelper
 {
     public:
 
-    /** checks if given property will be changed by this settings.
-     *  We compare the content of the given any values. If they are different we return sal_True - sal_False otherwise.
+    /** checks if given property will be changed by these settings.
+     *  We compare the content of the given any values. If they are different we return true - false otherwise.
      *
      *  @param  aCurrentValue   contains the current value for this property
      *  @param  aNewValue       contains the new value for this property
@@ -133,7 +133,7 @@ class PropHelper
         aOldValue.clear();
         aChangedValue.clear();
 
-        // if value change ...
+        // if value changed ...
         bChanged = aCurrentValue != aNewValue;
         if (bChanged)
         {

@@ -23,7 +23,7 @@
 
 namespace framework{
 
-//  used servicenames by framework
+//  used service names by framework
 
 inline constexpr OUString SERVICENAME_FILTERFACTORY = u"com.sun.star.document.FilterFactory"_ustr;
 inline constexpr OUString SERVICENAME_CFGUPDATEACCESS = u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr; // provides read/write access to the configuration
@@ -32,7 +32,7 @@ inline constexpr OUString SERVICENAME_JOB = u"com.sun.star.task.Job"_ustr;
 inline constexpr OUString SERVICENAME_PROTOCOLHANDLER = u"com.sun.star.frame.ProtocolHandler"_ustr;
 inline constexpr OUString SERVICENAME_POPUPMENUCONTROLLER = u"com.sun.star.frame.PopupMenuController"_ustr;
 
-//  used implementationnames by framework
+//  used implementation names by framework
 
 #define IMPLEMENTATIONNAME_QUICKLAUNCHER                        "com.sun.star.comp.desktop.QuickstartWrapper"
 

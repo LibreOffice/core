@@ -31,7 +31,7 @@ namespace framework{
 
 /**
     some protocols must be checked during loading or dispatching URLs manually
-    It can be necessary to decide, if a URL represent a non visible content or
+    It can be necessary to decide if a URL represents a non-visible content or
     a real visible component.
  */
 
@@ -43,7 +43,7 @@ namespace framework{
 #define SPECIALPROTOCOL_PRIVATE_FACTORY   u"private:factory"
 // internal protocol of the sfx project for generic dispatch functionality
 #define SPECIALPROTOCOL_SLOT              u"slot:"
-// external representation of the slot protocol using names instead of id's
+// external representation of the slot protocol using names instead of IDs
 #define SPECIALPROTOCOL_UNO               u".uno:"
 // special sfx protocol to execute macros
 #define SPECIALPROTOCOL_MACRO             u"macro:"
@@ -73,7 +73,7 @@ class ProtocolCheck
     public:
 
     /**
-        it checks if given URL match the required protocol only
+        it checks if a given URL matches the required protocol only
         It should be used instead of specifyProtocol() if only this question
         is interesting to perform the code. We must not check for all possible protocols here...
      */
