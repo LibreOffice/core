@@ -568,15 +568,6 @@ public:
     }
 
     /**
-      Append the contents of an OUStringBuffer to this string.
-
-      @param    str         an OUStringBuffer.
-
-      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-    */
-    inline OUString & operator+=( const OUStringBuffer & str ) &;
-
-    /**
       Append a string to this string.
 
       @param    str         an OUString.
@@ -585,7 +576,15 @@ public:
     */
     OUString & operator+=( const OUString & str ) &
     {
-        return internalAppend(str.pData);
+        rtl_uString* pNewData = nullptr;
+        rtl_uString_newConcat(&pNewData, pData, str.pData);
+        if (!pNewData)
+        {
+            throw std::bad_alloc();
+        }
+        rtl_uString_assign(&pData, pNewData);
+        rtl_uString_release(pNewData);
+        return *this;
     }
     void operator+=(OUString const &) && = delete;
 
@@ -2815,18 +2814,6 @@ public:
     Concat(T (& value)[N]) { return OUStringConcat<OUStringConcatMarker, T[N]>(value); }
 
 private:
-    OUString & internalAppend( rtl_uString* pOtherData )
-    {
-        rtl_uString* pNewData = NULL;
-        rtl_uString_newConcat( &pNewData, pData, pOtherData );
-        if (pNewData == NULL) {
-            throw std::bad_alloc();
-        }
-        rtl_uString_assign(&pData, pNewData);
-        rtl_uString_release(pNewData);
-        return *this;
-    }
-
     static constexpr auto empty = OUStringLiteral(u""); // [-loplugin:ostr]
 };
 

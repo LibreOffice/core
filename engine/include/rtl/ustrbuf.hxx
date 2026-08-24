@@ -1478,16 +1478,6 @@ template<> struct ToStringHelper<OUStringBuffer> {
 };
 
     // Define this here to avoid circular includes
-    inline OUString & OUString::operator+=( const OUStringBuffer & str ) &
-    {
-        // Call operator= if this is empty, otherwise rtl_uString_newConcat will attempt to
-        // acquire() the str.pData buffer, which is part of the OUStringBuffer mutable state.
-        if (isEmpty())
-            return operator=(str.toString());
-        else
-            return internalAppend(str.pData);
-    }
-
     inline OUString const& OUString::unacquired(const OUStringBuffer& str)
     {
         return unacquired(&str.pData);
