@@ -124,6 +124,29 @@ namespace osl_Forbidden
                                          false, osl::qa::isForbidden(maScratchGood + "/notthere/file", osl_File_OpenFlag_Write));
         }
 
+        // The guard says the caller handles a denial. It must not change the answer, only what
+        // happens after it.
+        void acceptableDenial()
+        {
+            setAllowedPaths(maScratchGood);
+
+            {
+                osl::AcceptableAccessDenial aDenialIsHandled;
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad stays forbidden inside the guard",
+                                             true, osl::qa::isForbidden(maScratchBad, osl_File_OpenFlag_Read));
+                {
+                    osl::AcceptableAccessDenial aNested;
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad stays forbidden when nested",
+                                                 true, osl::qa::isForbidden(maScratchBad, osl_File_OpenFlag_Read));
+                }
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("read good stays allowed inside the guard",
+                                             false, osl::qa::isForbidden(maScratchGood, osl_File_OpenFlag_Read));
+            }
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad stays forbidden after the guard",
+                                         true, osl::qa::isForbidden(maScratchBad, osl_File_OpenFlag_Read));
+        }
+
 /*
         void open()
         {
@@ -170,6 +193,7 @@ namespace osl_Forbidden
 */
         CPPUNIT_TEST_SUITE(Forbidden);
         CPPUNIT_TEST(forbidden);
+        CPPUNIT_TEST(acceptableDenial);
 //        CPPUNIT_TEST(open);
 //        CPPUNIT_TEST(copy);
 //        CPPUNIT_TEST(nextTests);

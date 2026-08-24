@@ -77,6 +77,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
 
     try
     {
+        osl::AcceptableAccessDenial aDenialIsHandled;
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
         m_bReadOnly = false;
     }

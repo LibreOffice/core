@@ -26,6 +26,7 @@
 #include <rtl/string.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <acceptableaccessdenial.hxx>
 #include <setallowedpaths.hxx>
 
 #include "system.hxx"
@@ -960,7 +961,7 @@ bool isForbidden(const OString &filePath, sal_uInt32 nFlags)
                  (allowed ? " allowed " : " forbidden") <<
                  " check list: " << pCheckPaths->size());
 
-    if (abortOnForbidden && !allowed)
+    if (abortOnForbidden && !allowed && !isAccessDenialAcceptable())
         abort(); // a bit abrupt - but don't try to escape.
 
     return !allowed;

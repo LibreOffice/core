@@ -1928,6 +1928,22 @@ public:
     }
 };
 
+/** Marks the calling thread as ready to handle a file access that the sandbox denies, for as
+    long as the instance lives.
+
+    A denied access returns an error to the caller instead of ending the process. The warning
+    naming the path is still logged.
+*/
+class AcceptableAccessDenial final
+{
+public:
+    AcceptableAccessDenial() { osl_pushAcceptableAccessDenial(); }
+    ~AcceptableAccessDenial() { osl_popAcceptableAccessDenial(); }
+
+    AcceptableAccessDenial(const AcceptableAccessDenial&) = delete;
+    AcceptableAccessDenial& operator=(const AcceptableAccessDenial&) = delete;
+};
+
 } /* namespace osl */
 
 #endif // INCLUDED_OSL_FILE_HXX

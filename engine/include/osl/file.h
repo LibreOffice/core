@@ -1646,6 +1646,26 @@ SAL_DLLPUBLIC oslFileError osl_createTempFile(
 SAL_DLLPUBLIC oslFileError osl_replaceFile(rtl_uString* pustrSourceFileURL,
                                                     rtl_uString* pustrDestFileURL);
 
+/** Marks the calling thread as ready to handle a file access that the sandbox denies.
+
+    While the count is above zero, a denied access makes the call fail instead of ending the
+    process. The warning naming the path is still logged. Use it around an open whose failure
+    the caller already handles, such as an attempt to open a file for writing that falls back
+    to reading.
+
+    Each call must be paired with one call to osl_popAcceptableAccessDenial(). The C++ class
+    osl::AcceptableAccessDenial in osl/file.hxx pairs them for you.
+
+    @since Collabora Office 26.04
+*/
+SAL_DLLPUBLIC void osl_pushAcceptableAccessDenial(void);
+
+/** Ends one region opened by osl_pushAcceptableAccessDenial().
+
+    @since Collabora Office 26.04
+*/
+SAL_DLLPUBLIC void osl_popAcceptableAccessDenial(void);
+
 #ifdef __cplusplus
 }
 #endif
