@@ -28,7 +28,7 @@ namespace connectivity
 
     class java_lang_Exception : public java_lang_Throwable{
     protected:
-    // statis Data for the class
+    // static Data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;

@@ -39,7 +39,7 @@ java_sql_Date::java_sql_Date( const css::util::Date& _rOut ) : java_util_Date( n
     OUString sDateStr = ::dbtools::DBTypeConversion::toDateString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
-    // Turn of Java-Call for the constructor
+    // Turn off Java-Call for the constructor
     // initialise temporary variables
     jobject tempObj;
     static jmethodID mID(nullptr);

@@ -82,7 +82,7 @@ Reference< XPropertySet > Key::createDataDescriptor(  )
 
 Reference< XNameAccess > Key::getColumns(  )
 {
-    // TODO: cash columns object !
+    // TODO: cache columns object !
     if( !m_keyColumns.is() )
     {
         Sequence< OUString > columnNames, foreignColumnNames;
@@ -145,7 +145,7 @@ Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  )
 
 Reference< XNameAccess > KeyDescriptor::getColumns(  )
 {
-    // TODO: cash columns object !
+    // TODO: cache columns object !
     if( !m_keyColumns.is() )
     {
         m_keyColumns = new KeyColumnDescriptors( m_xMutex, m_conn, m_pSettings );
