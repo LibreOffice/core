@@ -394,7 +394,7 @@ struct LibreOfficeKitDocumentClassStruct
     /// @see lok::Document::getPartInfo().
     char* (*getPartInfo) (LibreOfficeKitDocument* pThis, int nPart);
 
-    /// Paints window with given id to the buffer with the give DPI scale
+    /// Paints window with given id to the buffer with the given DPI scale
     /// (every pixel is dpiscale-times larger).
     /// @see lok::Document::paintWindow().
     void (*paintWindowDPI) (LibreOfficeKitDocument* pThis, unsigned nWindowId,

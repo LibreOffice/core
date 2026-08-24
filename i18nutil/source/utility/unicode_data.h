@@ -755,7 +755,7 @@ const sal_Unicode UnicodeScriptType[][2] = {
     {0xfe50, 0xfe6f}, // 83. Small Form Variants
     {0xfe70, 0xfefe}, // 84. Arabic Presentation Forms-B
     {0xfeff, 0xfeff}, // 85. kNoScript
-    {0xff00, 0xffef}, // 85. Halfwidth and Fullwidth Forms
+    {0xff00, 0xffef}, // 86. Halfwidth and Fullwidth Forms
 };
 
 #endif
