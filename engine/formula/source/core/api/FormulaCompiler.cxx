@@ -411,8 +411,9 @@ bool isPotentialRangeType( FormulaToken const * pToken, bool bRPN, bool bRight )
             return true;
         case svSep:
             // A special case if a previous ocSep was converted to ocUnion it
-            // stays svSep instead of svByte.
-            return bRPN && !bRight && pToken->GetOpCode() == ocUnion;
+            // stays svSep instead of svByte. A union yields a reference, so it
+            // is fine on either side of an operator.
+            return bRPN && pToken->GetOpCode() == ocUnion;
         default:
             // Separators are not part of RPN and right opcodes need to be
             // other StackVar types or functions and thus svByte.
@@ -1657,7 +1658,8 @@ bool FormulaCompiler::GetToken()
             }
             else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
                     mpLastToken && mpToken &&
-                    isPotentialRangeType( mpToken.get(), false, true) &&
+                    (mpToken->GetOpCode() == ocOpen
+                     || isPotentialRangeType(mpToken.get(), false, true)) &&
                     (mpLastToken->GetOpCode() == ocClose || isPotentialRangeType( mpLastToken.get(), false, false)))
             {
                 // Let IntersectionLine() <- Factor() decide how to treat this,
@@ -3425,12 +3427,16 @@ OpCode FormulaCompiler::NextToken()
         if (eOp == ocSpaces && FormulaGrammar::isExcelSyntax( meGrammar))
         {
             // Fake an intersection op as last op for the next round, but at
-            // least roughly check if it could make sense at all.
+            // least roughly check if it could make sense at all. The parenthesis
+            // tokens have the separator type, so accept them by opcode instead -
+            // a parenthesised expression is valid on either side of the space.
             FormulaToken* pPrev = maArrIterator.PeekPrevNoSpaces();
-            if (pPrev && isPotentialRangeType( pPrev, false, false))
+            if (pPrev
+                && (pPrev->GetOpCode() == ocClose || isPotentialRangeType(pPrev, false, false)))
             {
                 FormulaToken* pNext = maArrIterator.PeekNextNoSpaces();
-                if (pNext && isPotentialRangeType( pNext, false, true))
+                if (pNext
+                    && (pNext->GetOpCode() == ocOpen || isPotentialRangeType(pNext, false, true)))
                     meLastOp = ocIntersect;
                 else
                     meLastOp = eOp;
