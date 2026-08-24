@@ -70,7 +70,7 @@ css::uno::Reference< css::beans::XPropertySet > OKeyColumnsHelper::createObject(
         }
     }
 
-    // now describe the column _rName and set his related column
+    // now describe the column _rName and set its related column
     xResult = m_pKey->getTable()->getMetaData()->getColumns(Catalog, aSchema, aTable, _rName);
 
     if ( !xResult.is() )

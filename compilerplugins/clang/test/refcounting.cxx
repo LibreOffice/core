@@ -92,7 +92,7 @@ void foo4()
 
 UnoObject* foo5()
 {
-    // expected-error@+1 {{new object of cppu::OWeakObject subclass 'UnoObject' being returned via raw pointer, should be returned by via rtl::Reference [loplugin:refcounting]}}
+    // expected-error@+1 {{new object of cppu::OWeakObject subclass 'UnoObject' being returned via raw pointer, should be returned via rtl::Reference [loplugin:refcounting]}}
     return new UnoObject;
 }
 rtl::Reference<UnoObject> foo6()

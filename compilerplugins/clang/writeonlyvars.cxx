@@ -1125,7 +1125,7 @@ std::optional<CalleeWrapper> WriteOnlyVars::getCallee(CallExpr const* callExpr)
     if (functionDecl)
         return CalleeWrapper(functionDecl);
 
-    // Extract the functionprototype from a type
+    // Extract the function prototype from a type
     clang::Type const* calleeType = callExpr->getCallee()->getType().getTypePtr();
     if (auto pointerType = calleeType->getUnqualifiedDesugaredType()->getAs<clang::PointerType>())
     {

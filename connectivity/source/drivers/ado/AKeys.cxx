@@ -79,7 +79,7 @@ css::uno::Reference< css::beans::XPropertySet > OKeys::appendObject( const OUStr
                             vOptional)) )
     {
         ADOS::ThrowException(m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
-        // just make sure that an SQLExceptionis thrown here
+        // just make sure that an SQLException is thrown here
         m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
     }
 
