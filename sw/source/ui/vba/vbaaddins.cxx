@@ -34,7 +34,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
     uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference<ucb::XSimpleFileAccess3> xSFA(ucb::SimpleFileAccess::create(xContext));
     SvtPathOptions aPathOpt;
-    // FIXME: temporary the STARTUP path is located in $OO/basic3.1/program/addin
+    // FIXME: temporarily the STARTUP path is located in $OO/basic3.1/program/addin
     const OUString& aAddinPath = aPathOpt.GetAddinPath();
     SAL_INFO("sw.vba", "lcl_getAddinCollection: " << aAddinPath );
     if( xSFA->isFolder( aAddinPath ) )
@@ -49,7 +49,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
         }
     }
 
-    // TODO: second get the customize addins in the org.openoffice.Office.Writer/GlobalTemplateList
+    // TODO: second get the customized addins in the org.openoffice.Office.Writer/GlobalTemplateList
 
     uno::Reference< container::XIndexAccess > xAddinsAccess( new XNamedObjectCollectionHelper< word::XAddin >( std::move(aAddins) ) );
     return xAddinsAccess;

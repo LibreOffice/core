@@ -176,7 +176,7 @@ SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange )
         xTextRange.set( word::getXTextViewCursor( mxModel ), uno::UNO_QUERY_THROW );
     }
 
-    // remove the exist bookmark
+    // remove the existing bookmark
     if( m_xNameAccess->hasByName( rName ) )
         removeBookmarkByName( rName );
 
@@ -194,7 +194,7 @@ SwVbaBookmarks::getDefaultSorting()
 void SAL_CALL
 SwVbaBookmarks::setDefaultSorting( sal_Int32/* _type*/ )
 {
-    // not support in Writer
+    // not supported in Writer
 }
 
 sal_Bool SAL_CALL
@@ -206,7 +206,7 @@ SwVbaBookmarks::getShowHidden()
 void SAL_CALL
 SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ )
 {
-    // not support in Writer
+    // not supported in Writer
 }
 
 sal_Bool SAL_CALL

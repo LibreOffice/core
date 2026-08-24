@@ -60,7 +60,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBodyContentContex
 
 void SwXMLBodyContentContext_Impl::endFastElement(sal_Int32 )
 {
-    /* Code moved to SwXMLOmport::endDocument */
+    /* Code moved to SwXMLImport::endDocument */
     GetImport().GetTextImport()->SetOutlineStyles( false );
 }
 
