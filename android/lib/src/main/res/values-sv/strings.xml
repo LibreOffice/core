@@ -22,4 +22,9 @@
     <string name="view_only">Visa endast</string>
     <string name="cant_open_the_document">Det gick inte att öppna dokumentet</string>
     <string name="restarting">Startar om...</string>
+    <string name="all_files_access_title">Öppnad i skrivskyddat läge</string>
+    <string name="all_files_access_message">Appen som delade den här filen tillät inte att ändringar sparades tillbaka till den.\n\nGe \"Åtkomst till alla filer\" för att låta den här appen skriva till filen där den är lagrad, så att du kan redigera den här.</string>
+    <string name="all_files_access_grant">Tillåt åtkomst</string>
+    <string name="do_not_ask_again">Fråga inte igen</string>
+    <string name="failed_to_save_file">Kunde inte spara ändringar till filen</string>
 </resources>
