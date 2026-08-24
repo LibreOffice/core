@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 
 #include <map>
+#include <unordered_map>
 #include <memory>
 #include <string_view>
 #include <vector>
@@ -80,7 +81,7 @@ struct ShapeStyleRef
     ShapeStyleRef() : mnThemedIdx(0) {}
 };
 
-typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
+typedef ::std::unordered_map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
