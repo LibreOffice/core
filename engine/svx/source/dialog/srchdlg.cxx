@@ -2362,7 +2362,14 @@ void SvxSearchDialog::SaveToModule_Impl()
 }
 
 void SvxSearchDialog::executeSubDialog(VclPtr<VclAbstractDialog> dialog, const std::function<void(sal_Int32)>& func) {
-    assert(!m_executingSubDialog);
+    // Only one sub-dialog runs at a time. A JSDialog client delivers button clicks to this
+    // dialog even while a modal sub-dialog is open, so a request that arrives while one is
+    // already running is ignored. The unused dialog is disposed right away.
+    if (m_executingSubDialog)
+    {
+        dialog->disposeOnce();
+        return;
+    }
     m_executingSubDialog = true;
 
     dialog->StartExecuteAsync([dialog, func, this](sal_Int32 nResult) {
