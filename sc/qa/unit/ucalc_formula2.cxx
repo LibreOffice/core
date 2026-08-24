@@ -7438,6 +7438,29 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAUnionListPartJoinsWhenItBeginsWithARefer
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAFunctionCallMayFollowTheRangeOperator)
+{
+    // A1:IF has letters that are also a valid column name, so the symbol lexes like a range
+    // but names none. The parenthesis after it makes it a range operator followed by a call,
+    // so the reference in front stands on its own and the call gives the other end of the
+    // range.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 100.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 40.0);
+
+    m_pDoc->SetFormula(ScAddress(3, 0, 0), u"=SUM(A1:IF(TRUE,A2))"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(140.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    // The display grammar reads the symbol the same way.
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"=SUM(A1:IF(TRUE();A2))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(140.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testUnionParenthesesEncloseExactlyTheirList)
 {
     // The list's opening parenthesis moves the text behind it along, and a wrapper
