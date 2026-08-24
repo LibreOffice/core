@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-09 01:51+0000\n"
+"PO-Revision-Date: 2026-08-24 06:10+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/id/>\n"
-"Language: \n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -414,12 +414,12 @@ msgid "Your WOPI server is not secure: SSL verification failed"
 msgstr "Peladen WOPI Anda tidak aman: verifikasi SSL gagal"
 
 #: admin/src/AdminSocketServerAudit.js:40
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Dokumen tidak ditampung secara efektif: kemampuan atau ruang nama tidak ada."
+"Dokumen tidak terbungkus secara efektif: tidak ada kemampuan, namespace, dan "
+"landlock."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -546,7 +546,7 @@ msgstr "Modus Gelap"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Pemeriksaan Ejaan Otomatis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Smart Zoom"
@@ -558,7 +558,7 @@ msgstr "Zoom Bawaan"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Pengguliran halus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Compact layout"
@@ -1966,66 +1966,65 @@ msgstr "Asisten AI"
 #: src/control/Control.AIChatSidebar.ts:2361
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
+msgstr[0] "sisipkan %n slide"
 
 #: src/control/Control.AIChatSidebar.ts:2364
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
+msgstr[0] "hapus %n slide"
 
 #: src/control/Control.AIChatSidebar.ts:2369
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
+msgstr[0] "duplikasi %n slide"
 
 #: src/control/Control.AIChatSidebar.ts:2375
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
+msgstr[0] "pindahkan %n slide"
 
 #: src/control/Control.AIChatSidebar.ts:2378
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
+msgstr[0] "ganti nama %n slide"
 
 #: src/control/Control.AIChatSidebar.ts:2383
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
+msgstr[0] "ubah %n tata letak"
 
 #: src/control/Control.AIChatSidebar.ts:2387
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
+msgstr[0] "atur teks di %n tempat"
 
 #: src/control/Control.AIChatSidebar.ts:2395
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
+msgstr[0] "format teks di %n tempat"
 
 #: src/control/Control.AIChatSidebar.ts:2403
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Citra yang dihasilkan"
+msgstr[0] "hasilkan %n gambar"
 
 #: src/control/Control.AIChatSidebar.ts:2411
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
+msgstr[0] "jalankan %n perintah dokumen"
 
 #: src/control/Control.AIChatSidebar.ts:2442
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
+msgstr[0] "jalankan %n perintah %1"
 
 #: src/control/Control.AIChatSidebar.ts:2450
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "terapkan templat desain '%1'"
 
 #: src/control/Control.AIChatSidebar.ts:2453
 msgid "This will: %1."
-msgstr ""
+msgstr "Ini akan: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2467
 msgid "Do you want to proceed?"
@@ -2100,11 +2099,11 @@ msgstr "Gagal mengurai konten seleksi"
 
 #: src/control/Control.AIChatSidebar.ts:3005
 msgid "Design (optional):"
-msgstr ""
+msgstr "Desain (opsional):"
 
 #: src/control/Control.AIChatSidebar.ts:3022
 msgid "No design"
-msgstr ""
+msgstr "Tanpa desain"
 
 #: src/control/Control.AIChatSidebar.ts:3023
 msgid "Continue without a design template"
@@ -2115,50 +2114,52 @@ msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Berikut adalah usulan kerangka. Edit judul atau deskripsi, hapus slide yang "
+"tidak Anda inginkan, lalu setujui untuk membuat deck:"
 
 #: src/control/Control.AIChatSidebar.ts:3150
 msgid "Reject outline"
-msgstr ""
+msgstr "Tolak kerangka"
 
 #: src/control/Control.AIChatSidebar.ts:3156
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Berikan judul pada setiap slide yang ditambahkan untuk menyetujui."
 
 #: src/control/Control.AIChatSidebar.ts:3184
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Judul slide %1"
 
 #: src/control/Control.AIChatSidebar.ts:3190
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Deskripsi slide %1"
 
 #: src/control/Control.AIChatSidebar.ts:3196
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Hapus slide %1"
 
 #: src/control/Control.AIChatSidebar.ts:3244
 msgid "Slide title"
-msgstr ""
+msgstr "Judul slide"
 
 #: src/control/Control.AIChatSidebar.ts:3256
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Apa yang harus dicakup oleh slide ini"
 
 #: src/control/Control.AIChatSidebar.ts:3281
 msgid "Add slide"
-msgstr ""
+msgstr "Tambahkan slide"
 
 #: src/control/Control.AIChatSidebar.ts:3319
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Kerangka disetujui - membuat %1 slide."
 
 #: src/control/Control.AIChatSidebar.ts:3328
 msgid "Outline rejected."
-msgstr ""
+msgstr "Kerangka ditolak."
 
 #: src/control/Control.AIChatSidebar.ts:3364
 msgid "Building slides..."
-msgstr ""
+msgstr "Membuat slide..."
 
 #: src/control/Control.AIChatSidebar.ts:3398
 msgid "Formula analysis timeout"
@@ -4975,10 +4976,9 @@ msgid "Expand All Sections"
 msgstr "Perluas Semua Bagian"
 
 #: src/control/Control.PartsPreview.js:1065
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Hapus bagian \"%1\" dan %2 salindianya?"
+msgstr[0] "Hapus bagian \"%1\" dan %n slide-nya?"
 
 #: src/control/Control.PartsPreview.js:1114
 msgid "Enter new section name:"
@@ -6005,7 +6005,7 @@ msgstr "Sangat Longgar"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Salin Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6028,26 +6028,24 @@ msgid "All users"
 msgstr "Semua pengguna"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Soroti sel dengan..."
+msgstr "Sorot sel dengan"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Aturan Puncak/Dasar..."
+msgstr "Aturan Atas/Bawah"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Skala Warna"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Bar Data"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Set Ikon"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6869,18 +6867,18 @@ msgstr "Kehabisan tabel"
 #: src/layer/marker/A11yTextInput.js:257
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
+msgstr[0] "%n baris"
 
 #: src/layer/marker/A11yTextInput.js:258
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
+msgstr[0] "%n kolom"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:261
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tabel dengan {0} dan {1}"
 
 #: src/layer/marker/A11yTextInput.js:266
 msgid "Row {0} through {1}"
@@ -7329,10 +7327,9 @@ msgid "No Notes"
 msgstr "Tidak ada Catatan"
 
 #: src/slideshow/PresenterConsole.js:1658
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Ulangi dalam {0} detik"
+msgstr[0] "Ulangi dalam %n detik"
 
 #: src/slideshow/PresenterConsole.js:1665
 #: src/slideshow/SlideShowPresenter.ts:663
