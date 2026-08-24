@@ -42,6 +42,11 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="OrganizationPaths" oor:type="oor:string-list">
+        <info>
+          <desc>Contains path values configured for the whole organization (read-only for the user). They come before the internal paths, the user paths and the write path, so a name that appears in more than one of them resolves to the organization copy.</desc>
+        </info>
+      </prop>
       <set oor:name="InternalPaths" oor:node-type="MultiPath">
         <info>
           <desc>Contains path values configured by an administrator or package (read-only for the user).</desc>

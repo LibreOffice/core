@@ -55,6 +55,7 @@
 
 using namespace framework;
 
+constexpr OUString CFGPROP_ORGANIZATIONPATHS = u"OrganizationPaths"_ustr;
 constexpr OUString CFGPROP_USERPATHS = u"UserPaths"_ustr;
 constexpr OUString CFGPROP_WRITEPATH = u"WritePath"_ustr;
 
@@ -107,6 +108,10 @@ class PathSettings : public PathSettings_BASE
 
             /// an internal name describing this path
             OUString sPathName;
+
+            /// contains all paths configured for the whole organization. They come before the
+            /// internal paths.
+            std::vector<OUString> lOrganizationPaths;
 
             /// contains all paths, which are used internally - but are not visible for the user.
             std::vector<OUString> lInternalPaths;
@@ -352,6 +357,10 @@ private:
                     PathSettings::PathInfo& aPath   ,
                     bool                bReSubst);
 
+    /** the paths the user cannot edit, organization first, then the installation's own. */
+    static std::vector<OUString> impl_joinInternalPaths(const std::vector<OUString>& lOrganizationPaths,
+                                                        const std::vector<OUString>& lInternalPaths);
+
     /** converts our new string list schema to the old ";" separated schema ... */
     static OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath );
     static std::vector<OUString> impl_convertOldStyle2Path(std::u16string_view sOldStylePath);
@@ -554,6 +563,12 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(std::unique_lock<std::mu
 
     PathSettings::PathInfo aPathVal;
 
+    // read organization path list
+    cpo::uno::Sequence<OUString> vTmpOrganizationPathsSeq;
+    xPath->getByName(CFGPROP_ORGANIZATIONPATHS) >>= vTmpOrganizationPathsSeq;
+    aPathVal.lOrganizationPaths
+        = comphelper::sequenceToContainer<std::vector<OUString>>(vTmpOrganizationPathsSeq);
+
     // read internal path list
     css::uno::Reference< css::container::XNameAccess > xIPath;
     xPath->getByName(u"InternalPaths"_ustr) >>= xIPath;
@@ -654,6 +669,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
         else
         {
             if (
+                (  std::find(rPath.lOrganizationPaths.begin(), rPath.lOrganizationPaths.end(), old) == rPath.lOrganizationPaths.end()) &&
                 (  std::find(rPath.lInternalPaths.begin(), rPath.lInternalPaths.end(), old) == rPath.lInternalPaths.end()) &&
                 (  std::find(rPath.lUserPaths.begin(), rPath.lUserPaths.end(), old)     == rPath.lUserPaths.end()    ) &&
                 (  rPath.sWritePath != old                                     )
@@ -869,9 +885,11 @@ void PathSettings::impl_notifyPropListener( std::unique_lock<std::mutex>& g,
             case IDGROUP_INTERNAL_PATHS :
                  {
                     if (pPathOld)
-                        plOldVals[0] <<= comphelper::containerToSequence(pPathOld->lInternalPaths);
+                        plOldVals[0] <<= comphelper::containerToSequence(impl_joinInternalPaths(
+                            pPathOld->lOrganizationPaths, pPathOld->lInternalPaths));
                     if (pPathNew)
-                        plNewVals[0] <<= comphelper::containerToSequence(pPathNew->lInternalPaths);
+                        plNewVals[0] <<= comphelper::containerToSequence(impl_joinInternalPaths(
+                            pPathNew->lOrganizationPaths, pPathNew->lInternalPaths));
                  }
                  break;
 
@@ -926,6 +944,7 @@ void PathSettings::impl_subst(std::unique_lock<std::mutex>& g,
 {
     css::uno::Reference< css::util::XStringSubstitution > xSubst = fa_getSubstitution(g);
 
+    impl_subst(aPath.lOrganizationPaths, xSubst, bReSubst);
     impl_subst(aPath.lInternalPaths, xSubst, bReSubst);
     impl_subst(aPath.lUserPaths    , xSubst, bReSubst);
     if (bReSubst)
@@ -935,11 +954,20 @@ void PathSettings::impl_subst(std::unique_lock<std::mutex>& g,
 }
 
 // static
+std::vector<OUString> PathSettings::impl_joinInternalPaths(const std::vector<OUString>& lOrganizationPaths,
+                                                           const std::vector<OUString>& lInternalPaths)
+{
+    std::vector<OUString> lJoined(lOrganizationPaths);
+    lJoined.insert(lJoined.end(), lInternalPaths.begin(), lInternalPaths.end());
+    return lJoined;
+}
+
+// static
 OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath)
 {
     OUStringBuffer sPathVal(256);
 
-    for (auto const& internalPath : rPath.lInternalPaths)
+    for (auto const& internalPath : impl_joinInternalPaths(rPath.lOrganizationPaths, rPath.lInternalPaths))
     {
         if (sPathVal.getLength())
             sPathVal.append(";");
@@ -981,6 +1009,18 @@ std::vector<OUString> PathSettings::impl_convertOldStyle2Path(std::u16string_vie
 void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
                                         std::vector<OUString>& lList)
 {
+    // Erase items in the organization path list from lList.
+    // Also erase items in the organization path list from the user path list.
+    for (auto const& organizationPath : rPath.lOrganizationPaths)
+    {
+        std::vector<OUString>::iterator pItem = std::find(lList.begin(), lList.end(), organizationPath);
+        if (pItem != lList.end())
+            lList.erase(pItem);
+        pItem = std::find(rPath.lUserPaths.begin(), rPath.lUserPaths.end(), organizationPath);
+        if (pItem != rPath.lUserPaths.end())
+            rPath.lUserPaths.erase(pItem);
+    }
+
     // Erase items in the internal path list from lList.
     // Also erase items in the internal path list from the user path list.
     for (auto const& internalPath : rPath.lInternalPaths)
@@ -1095,14 +1135,16 @@ cpo::uno::Any PathSettings::impl_getPathValue(std::unique_lock<std::mutex>& g, s
              {
                 if (pPath->lInternalPathsTemplate.empty())
                 {
-                    aVal <<= comphelper::containerToSequence(pPath->lInternalPaths);
+                    aVal <<= comphelper::containerToSequence(
+                        impl_joinInternalPaths(pPath->lOrganizationPaths, pPath->lInternalPaths));
                 }
                 else
                 {
                     // re-expand $(vlang) against the active view's language now
                     std::vector<OUString> aLive = pPath->lInternalPathsTemplate;
                     impl_subst(aLive, fa_getSubstitution(g), false);
-                    aVal <<= comphelper::containerToSequence(aLive);
+                    aVal <<= comphelper::containerToSequence(
+                        impl_joinInternalPaths(pPath->lOrganizationPaths, aLive));
                 }
              }
              break;
