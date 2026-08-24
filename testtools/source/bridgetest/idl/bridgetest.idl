@@ -426,7 +426,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     boolean sequenceOfCallTestPassed();
 
     /****
-     * methods to check, if threads thread identity is holded.
+     * methods to check, if threads thread identity is held.
      *
      ***/
     void startRecursiveCall( [in] XRecursiveCall xCall , [in] long nToCall );

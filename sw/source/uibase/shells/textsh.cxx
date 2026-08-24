@@ -408,7 +408,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     xDataProvider.set( GetView().GetDocShell()->getIDocumentChartDataProviderAccess().GetChartDataProvider() );
                 }
                 else
-                    bFillWithData = false;  // will create chart with only it's default image
+                    bFillWithData = false;  // will create chart with only its default image
 
                 SwTableFUNC( &rSh ).InsertChart( xDataProvider, bFillWithData, aRangeString );
                 rSh.LaunchOLEObj();

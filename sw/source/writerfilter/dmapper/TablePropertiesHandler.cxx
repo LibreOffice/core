@@ -299,7 +299,7 @@ namespace writerfilter::dmapper {
             break;
             case NS_ooxml::LN_CT_TcPrBase_shd:
             {
-                // each color sprm contains as much colors as cells are in a row
+                // each color sprm contains as many colors as cells are in a row
                 //LN_CT_TcPrBase_shd: cell shading contains: LN_CT_Shd_val, LN_CT_Shd_fill, LN_CT_Shd_color
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties )
