@@ -509,7 +509,7 @@ static void hash_resize(struct hash* hash)
             }
         }
         free(hash->array);
-        hash->array = (struct hash_elem**)array;
+        hash->array = array;
     }
     else
     {
