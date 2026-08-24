@@ -20,6 +20,7 @@
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 #include <libxml/xmlstring.h>
+#include <libxslt/security.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #include <libxslt/variables.h>
@@ -308,6 +309,7 @@ namespace XSLT
         xsltDebugDumpExtensions(NULL);
 #endif
         std::optional<OleHandler> oh(std::in_place, m_transformer->getComponentContext());
+        xsltSecurityPrefsPtr securityPrefs = nullptr;
         if (styleSheet)
         {
             xsltTransformContextPtr tcontext = xsltNewTransformContext(
@@ -318,8 +320,23 @@ namespace XSLT
             }
             oh->registercontext(tcontext);
             xsltQuoteUserParams(tcontext, params.data());
-            result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
-                                             tcontext);
+            // A stylesheet builds the result tree and nothing else. Refuse every option libxslt
+            // has, then allow back the local reads, which is how a stylesheet picks up a second
+            // file that sits beside the one it converts.
+            securityPrefs = xsltNewSecurityPrefs();
+            if (securityPrefs)
+            {
+                for (auto eOption : { XSLT_SECPREF_READ_FILE, XSLT_SECPREF_WRITE_FILE,
+                                      XSLT_SECPREF_CREATE_DIRECTORY, XSLT_SECPREF_READ_NETWORK,
+                                      XSLT_SECPREF_WRITE_NETWORK })
+                    xsltSetSecurityPrefs(securityPrefs, eOption, xsltSecurityForbid);
+                xsltSetSecurityPrefs(securityPrefs, XSLT_SECPREF_READ_FILE, xsltSecurityAllow);
+            }
+            if (securityPrefs && xsltSetCtxtSecurityPrefs(securityPrefs, tcontext) == 0)
+                result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
+                                                 tcontext);
+            else
+                m_transformer->error(u"No security preferences were applied"_ustr);
         }
 
         if (result)
@@ -352,6 +369,7 @@ namespace XSLT
             std::swap(m_tcontext, tcontext);
         }
         xsltFreeTransformContext(tcontext);
+        xsltFreeSecurityPrefs(securityPrefs);
         xmlFreeDoc(doc);
         xmlFreeDoc(result);
     }
