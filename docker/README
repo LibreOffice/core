@@ -28,7 +28,20 @@ The brand package of CODE is not open source. To build an image without it:
    cd from-packages
    docker build --no-cache --build-arg nobrand=yes -t mydomain/code .
 
-3. Build Collabora Online
+3. Build latest CODE with server-side Python macro support
+
+The pyuno and Python script provider packages are not installed by default,
+so server-side Python macros (e.g. the CallPythonScript postMessage API) do
+not work. The image has no shell or package manager, so they cannot be added
+to a running container; build them in instead:
+
+   cd from-packages
+   docker build --no-cache --build-arg withpython=yes -t mydomain/code .
+
+Macro execution must also be enabled at runtime, e.g.
+extra_params=--o:security.enable_macros_execution=true
+
+4. Build Collabora Online
 
    cd from-packages
    # Get your secret URL key from https://support.collaboraoffice.com/ (Collabora Partners/Customers)
@@ -36,12 +49,12 @@ The brand package of CODE is not open source. To build an image without it:
    echo Example-413539ece39485afc35b4a469adfde0a279d2fd2 > secret_key
    docker build --no-cache --secret id=secret_key,src=secret_key --build-arg type=cool -t mydomain/cool .
 
-4. Build Collabora Online license key enabled version
+5. Build Collabora Online license key enabled version
 
    cd from-packages
    docker build --no-cache --build-arg type=key -t mydomain/cool .
 
-5. Build Collabora Online from master branch (from source code)
+6. Build Collabora Online from master branch (from source code)
 
    cd from-source
    ./build.sh
