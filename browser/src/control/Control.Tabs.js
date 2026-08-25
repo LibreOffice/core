@@ -153,7 +153,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 				isHtmlName: true,
 				callback: (this._moveOrCopySheet).bind(this),
 				visible: areTabsMultiple,
-				_image: 'Move',
+				_image: 'MoveorCopy',
 			},
 			'.uno:CopyTab': {
 				name: app.IconUtil.createMenuItemLink(_('Copy Sheet...'), 'CopyTab'),
@@ -163,7 +163,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 					return !areTabsMultiple();
 				},
 				text: _('Copy Sheet...'),
-				_image: 'CopyTab',
+				_image: 'MoveorCopy',
 			},
 		};
 
