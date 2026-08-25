@@ -229,9 +229,12 @@ SlideFragmentHandler::~SlideFragmentHandler()
         break;
 
     case PPT_TOKEN( pos ):
-        mpSlidePersistPtr->getCommentsList().cmLst.back().setPoint(
-            rAttribs.getStringDefaulted(XML_x),
-            rAttribs.getStringDefaulted(XML_y));
+        if (!mpSlidePersistPtr->getCommentsList().cmLst.empty())
+        {
+            mpSlidePersistPtr->getCommentsList().cmLst.back().setPoint(
+                rAttribs.getStringDefaulted(XML_x),
+                rAttribs.getStringDefaulted(XML_y));
+        }
         break;
 
     case PPT_TOKEN( cmAuthor ):
