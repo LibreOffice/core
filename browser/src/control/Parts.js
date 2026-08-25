@@ -132,7 +132,8 @@ window.L.Map.include({
 			docLayer._invalidatePreviews();
 		}
 		if (this._docLayer._docType === 'presentation' || this._docLayer._docType === 'drawing') {
-			this._docLayer._preview.focusCurrentSlide();
+			if (this._docLayer._preview.partsFocused)
+				this._docLayer._preview.focusCurrentSlide();
 		} else {
 			this.focus();
 		}

@@ -41,20 +41,88 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._lastSelectionEnd = 0;
 		this._listPrefixLength = 0;
 		this._isLeftRightArrow = 0;
+
+		// pending macOS live region update
+		this._a11yLiveRegionUpdate = 0;
+
+		// what this element stands for while it is not a text box
+		this._a11yContext = '';
+
+		this._updateA11yEditableStateBound = this._updateA11yEditableState.bind(this);
 	},
 
 	onAdd: function() {
 		window.L.TextInput.prototype.onAdd.call(this);
 		// the canvas only exists once the doc layer has been built
 		this._map.on('doclayerinit', this._bindCanvasFocusGuard, this);
+		this._map.on('doclayerinit', this._updateA11yEditableState, this);
+		this._map.on('updateparts', this._onA11yPartChanged, this);
+		app.events.on('updatepermission', this._updateA11yEditableStateBound);
 	},
 
 	onRemove: function() {
 		this._map.off('doclayerinit', this._bindCanvasFocusGuard, this);
+		this._map.off('doclayerinit', this._updateA11yEditableState, this);
+		this._map.off('updateparts', this._onA11yPartChanged, this);
+		app.events.off('updatepermission', this._updateA11yEditableStateBound);
 		var canvas = document.getElementById('document-canvas');
 		if (canvas)
 			window.L.DomEvent.off(canvas, 'mousedown', this._keepFocusOnCanvasClick, this);
 		window.L.TextInput.prototype.onRemove.call(this);
+	},
+
+	// What a screen reader says about this element while it is the idle
+	_setA11yContext: function(text) {
+		this._a11yContext = text;
+		if (this._textArea.isContentEditable)
+			return;
+		this._textArea.setAttribute('role', 'group');
+		this._textArea.setAttribute('aria-roledescription', text);
+	},
+
+	_slideContext: function() {
+		return _('Slide');
+	},
+
+	// A part change drops the selection with it, so the context goes back to
+	// naming the slide.
+	_onA11yPartChanged: function() {
+		this._setA11yContext(this._slideContext());
+	},
+
+	// macOS only: this hands the announcing over to the assertive live region,
+	// which is itself macOS only, since a screen reader reads aria-description
+	// as part of announcing a form field and stops doing so once this is a plain div.
+	_updateA11yEditableState: function() {
+		if (!window.L.Browser.mac)
+			return;
+		// a read-only document has its own contenteditable handling, see
+		// TextInput._onPermission
+		if (!this._map.isEditMode())
+			return;
+
+		var idleSurface = this._map.getDocType() === 'presentation' && !this._isEditingInSelection;
+		// already in the wanted state?
+		if (this._textArea.isContentEditable === !idleSurface)
+			return;
+
+		var hadFocus = document.activeElement === this._textArea;
+		if (idleSurface) {
+			// a div that is not editable needs a tabindex to stay focusable, so
+			// give it one before taking the contenteditable away
+			this._textArea.setAttribute('tabindex', '0');
+			this._textArea.setAttribute('contenteditable', 'false');
+			this._setA11yContext(this._a11yContext || this._slideContext());
+		} else {
+			this._textArea.setAttribute('contenteditable', 'true');
+			this._textArea.removeAttribute('tabindex');
+			// a text box announces itself as one again
+			this._textArea.removeAttribute('role');
+			this._textArea.removeAttribute('aria-roledescription');
+		}
+		// dropping contenteditable can drop the focus with it
+		if (hadFocus && document.activeElement !== this._textArea)
+			this._textArea.focus({ preventScroll: true });
 	},
 
 	_bindCanvasFocusGuard: function() {
@@ -243,16 +311,23 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		if (window.L.Browser.mac) {
 			// avoid duplicate cell announcement in Chrome
 			var sinceFocus = Date.now() - (this._a11yFocusTime || 0);
-			if (text && sinceFocus < this.A11Y_FOCUS_ANNOUNCEMENT_MS
+			if (this._textArea.isContentEditable && text
+				&& sinceFocus < this.A11Y_FOCUS_ANNOUNCEMENT_MS
 				&& text === this._a11yFocusDescription)
 				return;
 
 			// required on macOS as VoiceOver is not triggered by description change only
 			var region = this._a11yLiveRegion;
 			if (region) {
+				if (this._a11yLiveRegionUpdate)
+					cancelAnimationFrame(this._a11yLiveRegionUpdate);
 				region.textContent = '';
 				var t = text;
-				requestAnimationFrame(function () { region.textContent = t; });
+				var that = this;
+				this._a11yLiveRegionUpdate = requestAnimationFrame(function () {
+					that._a11yLiveRegionUpdate = 0;
+					region.textContent = t;
+				});
 			}
 		}
 	},
@@ -326,6 +401,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._log('onAccessibilityEditingInSelectionState: cell: ' + cell + ', enabled: ' + enabled);
 		if (!cell) {
 			this._isEditingInSelection = enabled;
+			// entering shape text editing makes this a real text box again
+			this._updateA11yEditableState();
 		}
 		if (enabled) {
 			clearTimeout(this._timeoutForA11yDescription);
@@ -351,6 +428,9 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		var eventDescription = '';
 		if (action === 'create' || action === 'add') {
 			this._hasAnySelection = true;
+			// the selected object is now what this element stands for, so that is
+			// what a screen reader reads when the focus next enters the document
+			this._setA11yContext(name);
 			eventDescription =  _('{0} selected').replace('{0}', name) + '. ';
 			if (typeof textContent === 'string' && textContent.length > 0) {
 				eventDescription += (cell ? '' : _('Has text: ')) + textContent;
@@ -358,10 +438,12 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 		else if (action === 'remove') {
 			this._hasAnySelection = false;
+			this._setA11yContext(this._slideContext());
 			eventDescription = _('{0} unselected').replace('{0}', name);
 		}
 		else if (action === 'delete') {
 			this._hasAnySelection = false;
+			this._setA11yContext(this._slideContext());
 			eventDescription = _('{0} deleted').replace('{0}', name);
 		}
 		this._setDescription(eventDescription);
