@@ -4975,7 +4975,7 @@ SfxVoidItem ExportTo SID_EXPORTDOC
 
 
 SfxVoidItem ExportToPDF SID_EXPORTDOCASPDF
-(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
+(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME, SfxStringItem SignatureCert FN_PARAM_1, SfxStringItem SignatureKey FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

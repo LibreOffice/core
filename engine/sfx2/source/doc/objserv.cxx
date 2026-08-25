@@ -543,6 +543,28 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     sal_uInt16 nId = rReq.GetSlot();
 
+    if (nId == SID_EXPORTDOCASPDF)
+    {
+        // See if a signing cert/key is passed as a parameter (the COKit case:
+        // the kit annotates the interactive .uno:ExportToPDF with the
+        // certificate from the session's user private info, the same way it
+        // does for .uno:Signature): if so, put it on the view before the PDF
+        // export dialog is created, so its signature tab is offered and can
+        // sign from it.
+        const SfxStringItem* pSignatureCert = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+        const SfxStringItem* pSignatureKey = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+        SfxViewFrame* pSignFrame = GetFrame();
+        SfxViewShell* pSignViewShell = pSignFrame ? pSignFrame->GetViewShell() : nullptr;
+        if (pSignViewShell && pSignatureCert && pSignatureKey
+            && !pSignatureCert->GetValue().isEmpty() && !pSignatureKey->GetValue().isEmpty())
+        {
+            svl::crypto::CertificateOrName aCertificateOrName;
+            aCertificateOrName.m_xCertificate = KitHelper::getSigningCertificate(
+                pSignatureCert->GetValue().toUtf8(), pSignatureKey->GetValue().toUtf8());
+            pSignViewShell->SetSigningCertificate(aCertificateOrName);
+        }
+    }
+
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
         weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);

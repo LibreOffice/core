@@ -800,9 +800,12 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                     }
                 }
             }
-            else if (tokens[1] == ".uno:Signature" || tokens[1] == ".uno:InsertSignatureLine")
+            else if (tokens[1] == ".uno:Signature" || tokens[1] == ".uno:InsertSignatureLine"
+                     || tokens[1] == ".uno:ExportToPDF")
             {
                 // See if the command has parameters: if not, annotate with sign cert/key.
+                // For .uno:ExportToPDF this puts the certificate on the view before the
+                // export dialog is created, so its signature tab is offered.
                 if (tokens.size() == 2 && unoSignatureCommand(tokens[1]))
                 {
                     // The command has been sent with parameters from user private info, done.
@@ -2533,10 +2536,9 @@ bool ChildSession::completeFunction(const StringVector& tokens)
     return true;
 }
 
-bool ChildSession::unoSignatureCommand(const std::string_view commandName)
+bool ChildSession::addSignatureArguments(Object::Ptr& argumentsObj)
 {
-    // See if user private info has a signing key/cert: if so, annotate the UNO command with those
-    // parameters before sending.
+    // See if user private info has a signing key/cert: if so, add those to the arguments.
     const std::string& userPrivateInfo = getUserPrivateInfo();
     if (userPrivateInfo.empty())
     {
@@ -2561,13 +2563,11 @@ bool ChildSession::unoSignatureCommand(const std::string_view commandName)
 
     std::string signatureCert;
     JsonUtil::findJSONValue(userPrivateInfoObj, "SignatureCert", signatureCert);
-    Object::Ptr argumentsObj = new Object();
     if (signatureCert.empty())
     {
         return false;
     }
 
-    argumentsObj->set("SignatureCert", JsonUtil::makePropertyValue("string", signatureCert));
     std::string signatureKey;
     JsonUtil::findJSONValue(userPrivateInfoObj, "SignatureKey", signatureKey);
     if (signatureKey.empty())
@@ -2575,7 +2575,20 @@ bool ChildSession::unoSignatureCommand(const std::string_view commandName)
         return false;
     }
 
+    argumentsObj->set("SignatureCert", JsonUtil::makePropertyValue("string", signatureCert));
     argumentsObj->set("SignatureKey", JsonUtil::makePropertyValue("string", signatureKey));
+    return true;
+}
+
+bool ChildSession::unoSignatureCommand(const std::string_view commandName)
+{
+    // See if user private info has a signing key/cert: if so, annotate the UNO command with those
+    // parameters before sending.
+    Object::Ptr argumentsObj = new Object();
+    if (!addSignatureArguments(argumentsObj))
+    {
+        return false;
+    }
 
     std::ostringstream oss;
     oss << "uno ";
@@ -3432,11 +3445,19 @@ bool ChildSession::exportAs(const StringVector& tokens)
 
     if (isPDF || isEPUB)
     {
-        const std::string arguments = "{"
-            "\"SynchronMode\":{"
-                "\"type\":\"boolean\","
-                "\"value\": false"
-            "}}";
+        Object::Ptr argumentsObj = new Object();
+        argumentsObj->set("SynchronMode", JsonUtil::makePropertyValue("boolean", false));
+
+        if (isPDF)
+        {
+            // Put the signing certificate from user private info on the view, so
+            // the export dialog offers its signature tab.
+            addSignatureArguments(argumentsObj);
+        }
+
+        std::ostringstream oss;
+        argumentsObj->stringify(oss);
+        const std::string arguments = oss.str();
 
         if (isPDF)
             getLOKitDocument()->postUnoCommand(".uno:ExportToPDF", arguments.c_str(), false);

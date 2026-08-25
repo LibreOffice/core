@@ -195,6 +195,10 @@ private:
     bool completeFunction(const StringVector& tokens);
     bool unoCommand(const StringVector& tokens);
     bool unoSignatureCommand(std::string_view commandName);
+    /// Adds the SignatureCert/SignatureKey properties from the session's user
+    /// private info to the given UNO command arguments. Returns true if both
+    /// were present and added.
+    bool addSignatureArguments(Poco::JSON::Object::Ptr& argumentsObj);
     bool editWithPassword(const StringVector& tokens);
     bool selectText(const StringVector& tokens, LokEventTargetEnum target);
     bool selectGraphic(const StringVector& tokens);
