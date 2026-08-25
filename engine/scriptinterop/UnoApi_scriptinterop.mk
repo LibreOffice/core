@@ -61,6 +61,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     TextDirection \
     ThemeColorType \
     VideoSourceType \
+    XAffineTransform \
+    XAffineTransformBuilder \
+    XAutofit \
     XBase \
     XBlob \
     XBody \
@@ -79,11 +82,13 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XFootnote \
     XInlineImage \
     XLineFill \
+    XLink \
     XPage \
     XPageBackground \
     XParagraph \
     XPictureFill \
     XPivotTable \
+    XPoint \
     XPresentation \
     XRange \
     XRangeBuilder \

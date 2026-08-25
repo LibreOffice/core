@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
+#include <scriptinterop/XAffineTransformBuilder.hpp>
 #include <scriptinterop/XBlob.hpp>
 #include <scriptinterop/XDocument.hpp>
 #include <scriptinterop/XDrawing.hpp>
@@ -96,6 +97,12 @@ public:
                            u"com.sun.star.presentation.PresentationDocument"_ustr));
     }
 
+    cpo::uno::Reference<scriptinterop::XAffineTransformBuilder> SAL_CALL
+    newAffineTransformBuilder() override
+    {
+        throw cpo::uno::RuntimeException(u"newAffineTransformBuilder: not implemented"_ustr);
+    }
+
     cpo::uno::Reference<scriptinterop::XBlob> newBlobBytes(
         cpo::uno::Sequence<sal_Int8> const & data) override
     {
@@ -154,4 +161,4 @@ scriptinterop_Cool_get_implementation(cpo::uno::XComponentContext*,
     return cppu::acquire(new FactoryImpl);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
