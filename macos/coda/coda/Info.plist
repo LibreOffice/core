@@ -1996,6 +1996,7 @@
                     <string>public.tiff</string>
                     <string>public.png</string>
                     <string>public.xbitmap-image</string>
+                    <string>com.adobe.pdf</string>
                     <string>com.adobe.encapsulated-postscript</string>
                     <string>com.microsoft.bmp</string>
                     <string>com.microsoft.word.doc</string>
