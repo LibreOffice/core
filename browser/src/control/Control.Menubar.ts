@@ -3275,6 +3275,17 @@ class Menubar extends window.L.Control {
 	 */
 	private _initializeMenu(menu: any[]): void {
 		this._isFileODF = app.LOUtil.isFileODF(this._map);
+		if (window.mode.isCODesktop()) {
+			// In the desktop apps the File entry only opens the backstage view
+			// (see _onClicked), so build it without its dropdown menu: that
+			// was otherwise still reachable with keyboard navigation between
+			// the top-level menus, where no click is involved.
+			menu = menu.map((item) =>
+				item.id === 'file'
+					? { name: item.name, id: item.id, type: 'action' }
+					: item,
+			);
+		}
 		var menuHtml = this._createMenu(menu);
 		for (var i in menuHtml) {
 			this._menubarCont?.appendChild(menuHtml[i]);
