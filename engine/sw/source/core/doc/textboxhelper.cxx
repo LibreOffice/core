@@ -1147,9 +1147,9 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                         if (pObj)
                         {
                             aVertOrient.setPosition(
-                                gfx::Length::twip(pObj->GetRelativePos().getX() + aRect.Top()));
+                                gfx::Length::twip(pObj->GetRelativePos().getY() + aRect.Top()));
                             aHoriOrient.setPosition(
-                                gfx::Length::twip(pObj->GetRelativePos().getY() + aRect.Left()));
+                                gfx::Length::twip(pObj->GetRelativePos().getX() + aRect.Left()));
                         }
                         else
                         {
