@@ -194,6 +194,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/movecopysheet.ui" },
         { u"modules/scalc/ui/movingaveragedialog.ui" },
         { u"modules/scalc/ui/nosolutiondialog.ui" },
+        { u"modules/scalc/ui/onlyactivesheetsaveddialog.ui" },
         { u"modules/scalc/ui/optimalcolwidthdialog.ui" },
         { u"modules/scalc/ui/optimalrowheightdialog.ui" },
         { u"modules/scalc/ui/paradialog.ui" },

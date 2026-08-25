@@ -25,25 +25,19 @@ ScOnlyActiveSheetSavedDlg::ScOnlyActiveSheetSavedDlg(weld::Window* pParent)
                               u"OnlyActiveSheetSavedDialog"_ustr)
     , m_xWarningOnBox(m_xBuilder->weld_check_button(u"cbShow"_ustr))
 {
-    m_xDialog->set_default_response(RET_YES);
+    m_xDialog->set_default_response(RET_OK);
 }
 
-short ScOnlyActiveSheetSavedDlg::run()
+void ScOnlyActiveSheetSavedDlg::StoreWarningChoice()
 {
-    short nRet = RET_YES;
+    if (m_xWarningOnBox->get_active())
+        return;
+
     ScModule* pScMod = ScModule::get();
     assert(pScMod);
-    if (pScMod->GetInputOptions().GetWarnActiveSheet())
-    {
-        m_xDialog->run();
-        if (!m_xWarningOnBox->get_active())
-        {
-            ScInputOptions aInputOpt(pScMod->GetInputOptions());
-            aInputOpt.SetWarnActiveSheet(false);
-            pScMod->SetInputOptions(aInputOpt);
-        }
-    }
-    return nRet;
+    ScInputOptions aInputOpt(pScMod->GetInputOptions());
+    aInputOpt.SetWarnActiveSheet(false);
+    pScMod->SetInputOptions(aInputOpt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

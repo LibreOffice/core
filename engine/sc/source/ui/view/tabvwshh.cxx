@@ -263,8 +263,9 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 
 void ScTabViewShell::ExecuteOnlyActiveSheetSavedDlg()
 {
-    ScOnlyActiveSheetSavedDlg aDlg(GetFrameWeld());
-    aDlg.run();
+    // The warning only reports what the save already did, so it runs after the save finishes.
+    auto xDlg = std::make_shared<ScOnlyActiveSheetSavedDlg>(GetFrameWeld());
+    weld::DialogController::runAsync(xDlg, [xDlg](sal_Int32) { xDlg->StoreWarningChoice(); });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

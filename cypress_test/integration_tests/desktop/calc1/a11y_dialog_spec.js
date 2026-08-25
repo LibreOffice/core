@@ -351,6 +351,16 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         a11yHelper.testPDFExportWarningDialog(win);
     });
 
+    it('Only active sheet saved warning dialog', function () {
+        // csv holds one sheet, so downloading this multi-sheet document as
+        // csv raises the warning. The document itself stays as it is.
+        cy.then(() => {
+            win.app.map.downloadAs('a11y.csv', 'csv', null, 'export');
+        });
+
+        a11yHelper.handleDialog(win, 1, '', true, '#btnOk-button');
+    });
+
     it('Settings dialog', function () {
         cy.then(() => {
             win.app.map.settings.showSettingsDialog();

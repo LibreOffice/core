@@ -357,8 +357,9 @@ function handleTabsInDialog(win, level, command) {
  * @param {number} level - The dialog nesting level
  * @param {string} command - The uno command that opened the dialog (optional)
  * @param {boolean} isWarningDialog - If this is a warning dialog
+ * @param {string} warningButtonSelector - The button a warning dialog is closed with (optional)
  */
-function handleDialog(win, level, command, isWarningDialog) {
+function handleDialog(win, level, command, isWarningDialog, warningButtonSelector) {
 	getActiveDialog(level)
 		.then(() => {
 			return helper.processToIdle(win);
@@ -435,7 +436,7 @@ function handleDialog(win, level, command, isWarningDialog) {
 
 			handleTabsInDialog(win, level, command);
 			if (isWarningDialog) {
-				closeActiveWarningDialog(level);
+				closeActiveWarningDialog(level, warningButtonSelector);
 			} else {
 				closeActiveDialog(level);
 			}

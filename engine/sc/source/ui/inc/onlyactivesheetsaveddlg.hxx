@@ -27,10 +27,9 @@ private:
 
 public:
     ScOnlyActiveSheetSavedDlg(weld::Window* pParent);
-    /** Opens dialog if IsDialogEnabled() returns true.
-        @descr  If after executing the dialog the checkbox "Do not show again" is set,
-                the method DisableDialog() will be called. */
-    virtual short run() override;
+    /** Turns the warning off in the input options if the user cleared the "Show this message
+        again" checkbox. */
+    void StoreWarningChoice();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
