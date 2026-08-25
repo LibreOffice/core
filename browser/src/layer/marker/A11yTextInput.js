@@ -43,6 +43,32 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._isLeftRightArrow = 0;
 	},
 
+	onAdd: function() {
+		window.L.TextInput.prototype.onAdd.call(this);
+		// the canvas only exists once the doc layer has been built
+		this._map.on('doclayerinit', this._bindCanvasFocusGuard, this);
+	},
+
+	onRemove: function() {
+		this._map.off('doclayerinit', this._bindCanvasFocusGuard, this);
+		var canvas = document.getElementById('document-canvas');
+		if (canvas)
+			window.L.DomEvent.off(canvas, 'mousedown', this._keepFocusOnCanvasClick, this);
+		window.L.TextInput.prototype.onRemove.call(this);
+	},
+
+	_bindCanvasFocusGuard: function() {
+		var canvas = document.getElementById('document-canvas');
+		if (canvas)
+			window.L.DomEvent.on(canvas, 'mousedown', this._keepFocusOnCanvasClick, this);
+	},
+
+	_keepFocusOnCanvasClick: function(ev) {
+		if (ev.button === 0 && this._map.getDocType() === 'presentation'
+			&& document.activeElement === this._textArea)
+			ev.preventDefault();
+	},
+
 	hasAccessibilitySupport: function() {
 		return true;
 	},
