@@ -397,9 +397,12 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		].includes(ev.keyCode);
 	},
 
+	_isSlideSorterDeleteKey: function (ev) {
+		return [this.keyCodes.DELETE, this.keyCodes.BACKSPACE].includes(ev.keyCode);
+	},
+
 	_isSlideSorterKey: function (ev) {
-		return this._isNavigationKey(ev)
-			|| [this.keyCodes.DELETE, this.keyCodes.BACKSPACE].includes(ev.keyCode);
+		return this._isNavigationKey(ev) || this._isSlideSorterDeleteKey(ev);
 	},
 
 	_isRangeExtendKeystroke: function (ev) {
@@ -514,7 +517,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				&& this._isSlideSorterKey(ev)
 				&& ev.type === 'keydown') {
 
-				var deletePart = (ev.keyCode === this.keyCodes.DELETE || ev.keyCode === this.keyCodes.BACKSPACE) ? true : false;
+				var deletePart = this._isSlideSorterDeleteKey(ev);
 
 				if (!deletePart) {
 					if (ev.keyCode === this.keyCodes.HOME) {
