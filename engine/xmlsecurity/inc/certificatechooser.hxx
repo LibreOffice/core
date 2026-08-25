@@ -59,6 +59,10 @@ private:
     CertificateChooserUserAction const meAction;
     SfxViewShell* m_pViewShell;
 
+    /// The action labels from the .ui, without the appended certificate source info.
+    OUString msSignBaseText;
+    OUString msEncryptBaseText;
+
     std::unique_ptr<weld::Label>    m_xFTSign;
     std::unique_ptr<weld::Label>    m_xFTEncrypt;
     std::unique_ptr<weld::Label>    m_xFTLoadedCerts;
