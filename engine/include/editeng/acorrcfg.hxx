@@ -98,6 +98,9 @@ public:
     // the pointer is transferred to the possession of the ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
+    /** Re-read the share and user autocorrect directories from the path settings. */
+    void ReloadPaths();
+
     bool IsAutoFormatByInput() const       { return bAutoFmtByInput; }
     void SetAutoFormatByInput( bool bSet ) { bAutoFmtByInput = bSet;aSwConfig.SetModified();}
 

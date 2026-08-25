@@ -163,6 +163,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <editeng/acorrcfg.hxx>
 #include <editeng/flstitem.hxx>
 #ifdef IOS
 #include <sfx2/app.hxx>
@@ -9974,6 +9975,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             uno::Reference<lang::XInitialization> xReInitSettings(xPathSettings, uno::UNO_QUERY_THROW);
             xReInitSettings->initialize({});
             reInitDictionaryList();
+            SvxAutoCorrCfg::Get().ReloadPaths();
         }
     }
 

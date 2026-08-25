@@ -1940,6 +1940,14 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
     return pLists != nullptr;
 }
 
+void SvxAutoCorrect::SetAutoCorrFileNames(const OUString& rShareFile, const OUString& rUserFile)
+{
+    sShareAutoCorrFile = rShareFile;
+    sUserAutoCorrFile = rUserFile;
+    m_aLangTable.clear();
+    aLastFileTable.clear();
+}
+
 bool SvxAutoCorrect::PutText( const OUString& rShort, const OUString& rLong,
                                 LanguageType eLang )
 {

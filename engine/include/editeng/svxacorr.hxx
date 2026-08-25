@@ -414,6 +414,10 @@ public:
                                 { return bool(nFlags & nFlag); }
     void SetAutoCorrFlag( ACFlags nFlag, bool bOn = true );
 
+    /** Point the object at the share and user autocorrect directories in use now, and drop
+        the language lists read from the previous pair. */
+    void SetAutoCorrFileNames(const OUString& rShareFile, const OUString& rUserFile);
+
     // Load, Set, Get - the replacement list
     SvxAutocorrWordList* LoadAutocorrWordList( LanguageType eLang )
         { return GetLanguageList_( eLang ).LoadAutocorrWordList(); }
