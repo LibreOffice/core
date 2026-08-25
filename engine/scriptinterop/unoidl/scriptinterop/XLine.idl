@@ -1,0 +1,76 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module scriptinterop {
+
+interface XConnectionSite;
+interface XLink;
+
+interface XLine : XPageElementBase
+{
+    DashStyle getDashStyle();
+
+    XPoint getEnd();
+
+    ArrowStyle getEndArrow();
+
+    XConnectionSite getEndConnection();
+
+    LineCategory getLineCategory();
+
+    XLineFill getLineFill();
+
+    LineType getLineType();
+
+    XLink getLink();
+
+    XPoint getStart();
+
+    ArrowStyle getStartArrow();
+
+    XConnectionSite getStartConnection();
+
+    double getWeight();
+
+    boolean isConnector();
+
+    void removeLink();
+
+    XLine setDashStyle([in] DashStyle dashStyle);
+
+    [overload setEnd] XLine setEnd([in] double left, [in] double top);
+
+    [overload setEnd] XLine setEndPoint([in] XPoint point);
+
+    XLine setEndArrow([in] ArrowStyle arrowStyle);
+
+    XLine setEndConnection([in] XConnectionSite connectionSite);
+
+    XLine setLineCategory([in] LineCategory lineCategory);
+
+    XLink setLinkSlide([in] any slide);
+
+    XLink setLinkUrl([in] string url);
+
+    [overload setStart] XLine setStart([in] double left, [in] double top);
+
+    [overload setStart] XLine setStartPoint([in] XPoint point);
+
+    XLine setStartArrow([in] ArrowStyle arrowStyle);
+
+    XLine setStartConnection([in] XConnectionSite connectionSite);
+
+    XLine setWeight([in] double points);
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

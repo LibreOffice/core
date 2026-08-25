@@ -72,6 +72,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XClientRuntime \
     XColor \
     XColorScheme \
+    XConnectionSite \
     XContainerElement \
     XCursor \
     XDocument \
@@ -80,11 +81,16 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XFactory \
     XFill \
     XFootnote \
+    XGroup \
+    XImage \
     XInlineImage \
+    XLine \
     XLineFill \
     XLink \
     XPage \
     XPageBackground \
+    XPageElement \
+    XPageElementBase \
     XParagraph \
     XPictureFill \
     XPivotTable \
@@ -98,6 +104,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XSheet \
     XSlide \
     XSlideSelection \
+    XSlideTable \
+    XSlideTableCell \
+    XSlideTableColumn \
+    XSlideTableRow \
     XSolidFill \
     XSpreadsheet \
     XTable \
@@ -108,6 +118,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XTextRange \
     XTextStyle \
     XThemeColor \
+    XVideo \
+    XWordArt \
 ))
 
 # vim: set noet sw=4 ts=4:

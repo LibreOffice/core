@@ -1,0 +1,95 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module scriptinterop {
+
+// Forward declarations, so these interfaces can name each other in a cycle.
+interface XConnectionSite;
+interface XGroup;
+interface XPage;
+interface XPageElement;
+
+interface XPageElementBase : XBase
+{
+    XPageElementBase alignOnPage([in] AlignmentPosition alignmentPosition);
+
+    XPageElementBase bringForward();
+
+    XPageElementBase bringToFront();
+
+    XPageElement duplicate();
+
+    sequence<XConnectionSite> getConnectionSites();
+
+    string getDescription();
+
+    double getHeight();
+
+    double getInherentHeight();
+
+    double getInherentWidth();
+
+    double getLeft();
+
+    string getObjectId();
+
+    PageElementType getPageElementType();
+
+    XGroup getParentGroup();
+
+    XPage getParentPage();
+
+    double getRotation();
+
+    string getTitle();
+
+    double getTop();
+
+    XAffineTransform getTransform();
+
+    double getWidth();
+
+    XPageElementBase preconcatenateTransform([in] XAffineTransform transform);
+
+    void remove();
+
+    XPageElementBase scaleHeight([in] double ratio);
+
+    XPageElementBase scaleWidth([in] double ratio);
+
+    [overload select] void select();
+
+    [overload select] void selectWithReplace([in] boolean replace);
+
+    XPageElementBase sendBackward();
+
+    XPageElementBase sendToBack();
+
+    XPageElementBase setDescription([in] string description);
+
+    XPageElementBase setHeight([in] double points);
+
+    XPageElementBase setLeft([in] double points);
+
+    XPageElementBase setRotation([in] double angle);
+
+    XPageElementBase setTitle([in] string title);
+
+    XPageElementBase setTop([in] double points);
+
+    XPageElementBase setTransform([in] XAffineTransform transform);
+
+    XPageElementBase setWidth([in] double points);
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
