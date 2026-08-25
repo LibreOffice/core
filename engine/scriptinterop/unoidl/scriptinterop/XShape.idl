@@ -11,29 +11,46 @@
 
 module scriptinterop {
 
-interface XShape : XBase
+interface XImage;
+interface XLink;
+interface XPageElement;
+interface XTextRange;
+
+interface XShape : XPageElementBase
 {
+    XAutofit getAutofit();
+
+    XBorder getBorder();
+
+    ContentAlignment getContentAlignment();
+
+    XFill getFill();
+
+    XLink getLink();
+
+    XPageElement getParentPlaceholder();
+
+    long getPlaceholderIndex();
+
+    PlaceholderType getPlaceholderType();
+
+    ShapeType getShapeType();
+
     XTextRange getText();
 
-    double getLeft();
+    void removeLink();
 
-    double getTop();
+    [overload replaceWithImage] XImage replaceWithImage([in] any image);
 
-    com::sun::star::beans::Optional<double> getWidth();
+    [overload replaceWithImage] XImage replaceWithImageCropped([in] any image, [in] boolean crop);
 
-    com::sun::star::beans::Optional<double> getHeight();
+    XShape setContentAlignment([in] ContentAlignment contentAlignment);
 
-    XShape setLeft([in] double points);
+    XLink setLinkSlide([in] any slide);
 
-    XShape setTop([in] double points);
-
-    XShape setWidth([in] double points);
-
-    XShape setHeight([in] double points);
-
-    void remove();
+    XLink setLinkUrl([in] string url);
 };
 
 };
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

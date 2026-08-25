@@ -31,7 +31,7 @@ interface XPageElementBase : XBase
 
     string getDescription();
 
-    double getHeight();
+    com::sun::star::beans::Optional<double> getHeight();
 
     double getInherentHeight();
 
@@ -55,7 +55,7 @@ interface XPageElementBase : XBase
 
     XAffineTransform getTransform();
 
-    double getWidth();
+    com::sun::star::beans::Optional<double> getWidth();
 
     XPageElementBase preconcatenateTransform([in] XAffineTransform transform);
 

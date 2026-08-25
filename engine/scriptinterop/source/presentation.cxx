@@ -43,7 +43,17 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
+#include <scriptinterop/ContentAlignment.hpp>
+#include <scriptinterop/PlaceholderType.hpp>
+#include <scriptinterop/ShapeType.hpp>
+#include <scriptinterop/XAutofit.hpp>
+#include <scriptinterop/XBorder.hpp>
+#include <scriptinterop/XFill.hpp>
+#include <scriptinterop/XImage.hpp>
+#include <scriptinterop/XLink.hpp>
 #include <scriptinterop/XPage.hpp>
+#include <scriptinterop/XPageElement.hpp>
+#include <scriptinterop/XPageElementBase.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
 #include <scriptinterop/XSlide.hpp>
@@ -105,6 +115,194 @@ bool isSlide(cpo::uno::Reference<css::frame::XModel> const& model,
     }
     return false;
 }
+
+// Throwing defaults for the shared page element surface.  A leaf implementation class derives
+// from this template with its own interface and overrides the methods it implements; the rest
+// keep throwing until an implementation is added.
+template <typename Iface> class PageElementStub : public cppu::WeakImplHelper<Iface>
+{
+public:
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL
+    alignOnPage(scriptinterop::AlignmentPosition) override
+    {
+        throw cpo::uno::RuntimeException(u"alignOnPage: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL bringForward() override
+    {
+        throw cpo::uno::RuntimeException(u"bringForward: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL bringToFront() override
+    {
+        throw cpo::uno::RuntimeException(u"bringToFront: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL duplicate() override
+    {
+        throw cpo::uno::RuntimeException(u"duplicate: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XConnectionSite>> SAL_CALL
+    getConnectionSites() override
+    {
+        throw cpo::uno::RuntimeException(u"getConnectionSites: not implemented"_ustr);
+    }
+
+    OUString SAL_CALL getDescription() override
+    {
+        throw cpo::uno::RuntimeException(u"getDescription: not implemented"_ustr);
+    }
+
+    css::beans::Optional<double> SAL_CALL getHeight() override
+    {
+        throw cpo::uno::RuntimeException(u"getHeight: not implemented"_ustr);
+    }
+
+    double SAL_CALL getInherentHeight() override
+    {
+        throw cpo::uno::RuntimeException(u"getInherentHeight: not implemented"_ustr);
+    }
+
+    double SAL_CALL getInherentWidth() override
+    {
+        throw cpo::uno::RuntimeException(u"getInherentWidth: not implemented"_ustr);
+    }
+
+    double SAL_CALL getLeft() override
+    {
+        throw cpo::uno::RuntimeException(u"getLeft: not implemented"_ustr);
+    }
+
+    OUString SAL_CALL getObjectId() override
+    {
+        throw cpo::uno::RuntimeException(u"getObjectId: not implemented"_ustr);
+    }
+
+    scriptinterop::PageElementType SAL_CALL getPageElementType() override
+    {
+        throw cpo::uno::RuntimeException(u"getPageElementType: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XGroup> SAL_CALL getParentGroup() override
+    {
+        throw cpo::uno::RuntimeException(u"getParentGroup: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPage> SAL_CALL getParentPage() override
+    {
+        throw cpo::uno::RuntimeException(u"getParentPage: not implemented"_ustr);
+    }
+
+    double SAL_CALL getRotation() override
+    {
+        throw cpo::uno::RuntimeException(u"getRotation: not implemented"_ustr);
+    }
+
+    OUString SAL_CALL getTitle() override
+    {
+        throw cpo::uno::RuntimeException(u"getTitle: not implemented"_ustr);
+    }
+
+    double SAL_CALL getTop() override
+    {
+        throw cpo::uno::RuntimeException(u"getTop: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XAffineTransform> SAL_CALL getTransform() override
+    {
+        throw cpo::uno::RuntimeException(u"getTransform: not implemented"_ustr);
+    }
+
+    css::beans::Optional<double> SAL_CALL getWidth() override
+    {
+        throw cpo::uno::RuntimeException(u"getWidth: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL
+    preconcatenateTransform(cpo::uno::Reference<scriptinterop::XAffineTransform> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"preconcatenateTransform: not implemented"_ustr);
+    }
+
+    void SAL_CALL remove() override
+    {
+        throw cpo::uno::RuntimeException(u"remove: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL scaleHeight(double) override
+    {
+        throw cpo::uno::RuntimeException(u"scaleHeight: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL scaleWidth(double) override
+    {
+        throw cpo::uno::RuntimeException(u"scaleWidth: not implemented"_ustr);
+    }
+
+    void SAL_CALL select() override
+    {
+        throw cpo::uno::RuntimeException(u"select: not implemented"_ustr);
+    }
+
+    void SAL_CALL selectWithReplace(bool) override
+    {
+        throw cpo::uno::RuntimeException(u"selectWithReplace: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL sendBackward() override
+    {
+        throw cpo::uno::RuntimeException(u"sendBackward: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL sendToBack() override
+    {
+        throw cpo::uno::RuntimeException(u"sendToBack: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL
+    setDescription(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"setDescription: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setHeight(double) override
+    {
+        throw cpo::uno::RuntimeException(u"setHeight: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setLeft(double) override
+    {
+        throw cpo::uno::RuntimeException(u"setLeft: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setRotation(double) override
+    {
+        throw cpo::uno::RuntimeException(u"setRotation: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL
+    setTitle(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"setTitle: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setTop(double) override
+    {
+        throw cpo::uno::RuntimeException(u"setTop: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL
+    setTransform(cpo::uno::Reference<scriptinterop::XAffineTransform> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"setTransform: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setWidth(double) override
+    {
+        throw cpo::uno::RuntimeException(u"setWidth: not implemented"_ustr);
+    }
+};
 
 class TextStyleImpl : public cppu::WeakImplHelper<scriptinterop::XTextStyle>
 {
@@ -342,7 +540,7 @@ private:
     cpo::uno::Reference<css::text::XTextRange> range_;
 };
 
-class ShapeImpl : public cppu::WeakImplHelper<scriptinterop::XShape>
+class ShapeImpl : public PageElementStub<scriptinterop::XShape>
 {
 public:
     ShapeImpl(cpo::uno::Reference<css::drawing::XDrawPage> const& page,
@@ -376,7 +574,7 @@ public:
         return {true, hundredthMmToPoints(shape_->getSize().Height)};
     }
 
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL setLeft(double points) override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setLeft(double points) override
     {
         auto pos = shape_->getPosition();
         pos.X = pointsToHundredthMm(points);
@@ -384,7 +582,7 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL setTop(double points) override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setTop(double points) override
     {
         auto pos = shape_->getPosition();
         pos.Y = pointsToHundredthMm(points);
@@ -392,7 +590,7 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL setWidth(double points) override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setWidth(double points) override
     {
         auto size = shape_->getSize();
         size.Width = extentToHundredthMm(points);
@@ -400,7 +598,7 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL setHeight(double points) override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setHeight(double points) override
     {
         auto size = shape_->getSize();
         size.Height = extentToHundredthMm(points);
@@ -412,6 +610,84 @@ public:
     {
         cpo::uno::Reference<css::drawing::XShapes> const shapes(page_, cpo::uno::UNO_QUERY_THROW);
         shapes->remove(shape_);
+    }
+
+    cpo::uno::Reference<scriptinterop::XFill> SAL_CALL getFill() override
+    {
+        throw cpo::uno::RuntimeException(u"getFill: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XAutofit> SAL_CALL getAutofit() override
+    {
+        throw cpo::uno::RuntimeException(u"getAutofit: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XBorder> SAL_CALL getBorder() override
+    {
+        throw cpo::uno::RuntimeException(u"getBorder: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLink> SAL_CALL getLink() override
+    {
+        throw cpo::uno::RuntimeException(u"getLink: not implemented"_ustr);
+    }
+
+    void SAL_CALL removeLink() override
+    {
+        throw cpo::uno::RuntimeException(u"removeLink: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLink> SAL_CALL setLinkUrl(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"setLinkUrl: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLink> SAL_CALL setLinkSlide(cpo::uno::Any const&) override
+    {
+        throw cpo::uno::RuntimeException(u"setLinkSlide: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL getParentPlaceholder() override
+    {
+        throw cpo::uno::RuntimeException(u"getParentPlaceholder: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL getPlaceholderIndex() override
+    {
+        throw cpo::uno::RuntimeException(u"getPlaceholderIndex: not implemented"_ustr);
+    }
+
+    scriptinterop::PlaceholderType SAL_CALL getPlaceholderType() override
+    {
+        throw cpo::uno::RuntimeException(u"getPlaceholderType: not implemented"_ustr);
+    }
+
+    scriptinterop::ShapeType SAL_CALL getShapeType() override
+    {
+        throw cpo::uno::RuntimeException(u"getShapeType: not implemented"_ustr);
+    }
+
+    scriptinterop::ContentAlignment SAL_CALL getContentAlignment() override
+    {
+        throw cpo::uno::RuntimeException(u"getContentAlignment: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL
+    setContentAlignment(scriptinterop::ContentAlignment) override
+    {
+        throw cpo::uno::RuntimeException(u"setContentAlignment: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XImage> SAL_CALL
+    replaceWithImage(cpo::uno::Any const&) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceWithImage: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XImage> SAL_CALL
+    replaceWithImageCropped(cpo::uno::Any const&, bool) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceWithImageCropped: not implemented"_ustr);
     }
 
 private:
@@ -673,4 +949,4 @@ createPresentation(cpo::uno::Reference<css::frame::XModel> const& model)
 }
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
