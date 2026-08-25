@@ -37,6 +37,11 @@ private:
     void HandleBrace(const SmBraceNode* pNode, int nLevel) override;
     void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel) override;
     void HandleBlank() override;
+    /// Writes the m:ctrlPr carrying the color of the parts a construct draws itself.
+    void WriteCtrlPrColor(const SmNode* pNode);
+    /// True when the color of the node is written out, which needs a color other than
+    /// the default and a DOCX.
+    bool HasOwnColor(const SmNode* pNode) const;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
     oox::core::OoxmlVersion version;
     /// needed to determine markup for nested run properties

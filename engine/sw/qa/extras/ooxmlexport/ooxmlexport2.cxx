@@ -370,6 +370,34 @@ CPPUNIT_TEST_FIXTURE(Test, testMathColor)
     assertXPath(pXmlDoc, "//w:p[7]//m:oMath/m:r[1]/w:rPr/w:color", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMathFractionBarColor)
+{
+    createSwDoc("math-color-ctrlpr.docx");
+
+    // A fraction bar and a root sign are drawn by the construct itself, and their color
+    // travels in the m:ctrlPr. One command around the whole construct colors the part it
+    // draws as well as the terms inside it.
+    CHECK_FORMULA(u"color red {{x} over {2}}"_ustr, getFormula(getRun(getParagraph(1), 1)));
+    CHECK_FORMULA(u"color blue {sqrt {y}}"_ustr, getFormula(getRun(getParagraph(2), 1)));
+    // An m:ctrlPr that names no color leaves the fraction at the default color
+    CHECK_FORMULA(u"{a} over {b}"_ustr, getFormula(getRun(getParagraph(3), 1)));
+    // A border box that draws no line of its own is dropped, and the color it named
+    // stays on the content that is left
+    CHECK_FORMULA(u"color red {c}"_ustr, getFormula(getRun(getParagraph(4), 1)));
+
+    saveAndReload(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // The color goes back on the m:ctrlPr, so the bar and the root sign keep it
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:fPr/m:ctrlPr/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:num/m:r/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:den/m:r/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[2]//m:rad/m:radPr/m:ctrlPr/w:rPr/w:color", "val", u"0000FF");
+    // and a construct at the default color says nothing about it
+    assertXPath(pXmlDoc, "//w:p[3]//m:f/m:fPr/m:ctrlPr/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "//w:p[4]//m:oMath/m:r[1]/w:rPr/w:color", "val", u"FF0000");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMathD, "math-d.docx")
 {
     CHECK_FORMULA( u"left (x mline y mline z right )"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
