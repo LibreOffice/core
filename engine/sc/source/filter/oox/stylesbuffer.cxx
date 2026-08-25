@@ -2640,7 +2640,7 @@ void TableStyle::finalizeImport(const DxfVector& rDxfs)
                 pTableStyle->SetColStripeSize(nStripeCount, -1);
                 break;
             case ScTableStyleElement::SecondColumnStripe:
-                pTableStyle->SetRowStripeSize(-1, nStripeCount);
+                pTableStyle->SetColStripeSize(-1, nStripeCount);
                 break;
             default:
                 SAL_WARN("sc", "the stripe count should only be set for row and column stripe elements");

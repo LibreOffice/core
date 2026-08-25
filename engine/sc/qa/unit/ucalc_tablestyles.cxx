@@ -843,6 +843,61 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBandedColumns)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBandingSkipsHeaderAndTotals)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Only the stripes carry a fill, so a header or totals cell that wrongly counts
+    // as banded shows the stripe colour instead of no fill at all.
+    ScTableStyle aStyle(u"Banding"_ustr, std::nullopt);
+
+    auto pColumnStripe = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pColumnStripe->ItemSetPut(SvxBrushItem(COL_GREEN, ATTR_BACKGROUND));
+    aStyle.SetPattern(ScTableStyleElement::FirstColumnStripe, std::move(pColumnStripe));
+
+    auto pRowStripe = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pRowStripe->ItemSetPut(SvxBrushItem(COL_YELLOW, ATTR_BACKGROUND));
+    aStyle.SetPattern(ScTableStyleElement::FirstRowStripe, std::move(pRowStripe));
+
+    // The totals row sits on the second stripe, so that one needs a fill too for the
+    // totals check below to be able to fail
+    auto pSecondRowStripe = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pSecondRowStripe->ItemSetPut(SvxBrushItem(COL_MAGENTA, ATTR_BACKGROUND));
+    aStyle.SetPattern(ScTableStyleElement::SecondRowStripe, std::move(pSecondRowStripe));
+
+    ScDBData aDBData(u"Banding"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"Banding"_ustr;
+    aStyleParam.mbFirstColumn = false;
+    aStyleParam.mbLastColumn = false;
+
+    // Column banding covers the data rows, never the header or the totals row
+    aStyleParam.mbRowStripes = false;
+    aStyleParam.mbColumnStripes = true;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    const SvxBrushItem* pFill = aStyle.GetFillItem(aDBData, 0, 1, 0);
+    CPPUNIT_ASSERT(pFill);
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN, pFill->GetColor());
+
+    CPPUNIT_ASSERT(!aStyle.GetFillItem(aDBData, 0, 0, -1));
+    CPPUNIT_ASSERT(!aStyle.GetFillItem(aDBData, 0, 10, 9));
+
+    // Row banding follows the same rule
+    aStyleParam.mbRowStripes = true;
+    aStyleParam.mbColumnStripes = false;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    pFill = aStyle.GetFillItem(aDBData, 0, 1, 0);
+    CPPUNIT_ASSERT(pFill);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pFill->GetColor());
+
+    CPPUNIT_ASSERT(!aStyle.GetFillItem(aDBData, 0, 0, -1));
+    CPPUNIT_ASSERT(!aStyle.GetFillItem(aDBData, 0, 10, 9));
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test 11: Verify first/last column special formatting
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFirstLastColumn)
 {

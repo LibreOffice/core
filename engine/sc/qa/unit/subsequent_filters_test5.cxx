@@ -28,6 +28,12 @@
 
 #include <docmodel/color/ComplexColor.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <tablestyle.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -581,6 +587,52 @@ void dispatchDatabaseTotalRow(ScTabViewShell* pViewShell, bool bTotalRow)
     pDispatcher->ExecuteList(SID_TABLE_TOTALROW, SfxCallMode::SYNCHRON, { &aItem });
 }
 } // anonymous namespace
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleStripeSizes)
+{
+    // Table1 over A1:I18 - header row 1, data rows 2 to 17, total row 18.
+    createScDoc("xlsx/tablestyle-stripe-sizes.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
+    CPPUNIT_ASSERT(pParam);
+    CPPUNIT_ASSERT(pParam->mbRowStripes);
+    CPPUNIT_ASSERT(pParam->mbColumnStripes);
+    const ScTableStyle* pStyle = pDoc->GetTableStyles()->GetTableStyle(pParam->maStyleID);
+    CPPUNIT_ASSERT(pStyle);
+
+    auto aFill = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
+        return pStyle->GetFillItem(*pDBData, nCol, nRow, nRow - 1);
+    };
+
+    const SvxBrushItem* pColumnStripe = aFill(0, 3);
+    CPPUNIT_ASSERT(pColumnStripe);
+    const Color aFirstColStripe = pColumnStripe->GetColor();
+    CPPUNIT_ASSERT(aFirstColStripe != COL_YELLOW);
+    CPPUNIT_ASSERT(aFirstColStripe != COL_LIGHTRED);
+
+    for (SCROW nRow = 1; nRow <= 16; ++nRow)
+    {
+        const bool bBandedRow = ((nRow - 1) % 3) < 2;
+        for (SCCOL nCol = 0; nCol <= 8; ++nCol)
+        {
+            const SvxBrushItem* pFill = aFill(nCol, nRow);
+            CPPUNIT_ASSERT(pFill);
+
+            const Color aExpected
+                = bBandedRow ? COL_YELLOW : ((nCol % 4) < 1 ? aFirstColStripe : COL_LIGHTRED);
+            CPPUNIT_ASSERT_EQUAL(aExpected, pFill->GetColor());
+        }
+    }
+
+    CPPUNIT_ASSERT(!aFill(0, 0));
+    CPPUNIT_ASSERT(!aFill(1, 0));
+    CPPUNIT_ASSERT(!aFill(0, 17));
+    CPPUNIT_ASSERT(!aFill(1, 17));
+}
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)
 {

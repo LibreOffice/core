@@ -124,7 +124,7 @@ const SfxItemSet* ScTableStyle::GetFontItemSet(const ScDBData& rDBData, SCCOL nC
             }
         }
 
-        if (pParam->mbColumnStripes)
+        if (pParam->mbColumnStripes && nRowIndex >= 0)
         {
             SCCOL nRelativeCol = nCol - aRange.aStart.Col();
             sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
@@ -234,7 +234,7 @@ const SvxBrushItem* ScTableStyle::GetFillItem(const ScDBData& rDBData, SCCOL nCo
             }
         }
 
-        if (pParam->mbColumnStripes)
+        if (pParam->mbColumnStripes && nRowIndex >= 0)
         {
             SCCOL nRelativeCol = nCol - aRange.aStart.Col();
             sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
@@ -639,7 +639,7 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                 return std::make_unique<SvxBoxItem>(*pPoolItem);
         }
 
-        if (pParam->mbColumnStripes)
+        if (pParam->mbColumnStripes && nRowIndex >= 0)
         {
             SCCOL nRelativeCol = nCol - aRange.aStart.Col();
             sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
