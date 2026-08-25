@@ -203,16 +203,20 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
     {
         Dl_info dli;
         void* addr = backtraceState->buffer[i];
-        std::unique_lock guard(frameCacheMutex);
-        auto it = frameCache.find(addr);
-        bool found = it != frameCache.end();
-        guard.unlock();
-        if( found )
+        bool found = false;
         {
-            frameData[ i ].info = it->second;
-            frameData[ i ].handled = true;
+            // The cache evicts its oldest entry when a new one arrives, so copy the string out
+            // while the lock is held.
+            std::lock_guard guard(frameCacheMutex);
+            auto it = frameCache.find(addr);
+            if (it != frameCache.end())
+            {
+                frameData[ i ].info = it->second;
+                frameData[ i ].handled = true;
+                found = true;
+            }
         }
-        else if (dladdr(addr, &dli) != 0)
+        if (!found && dladdr(addr, &dli) != 0)
         {
             if (dli.dli_fname && dli.dli_fbase)
             {
