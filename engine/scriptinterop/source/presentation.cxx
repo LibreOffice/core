@@ -1422,6 +1422,31 @@ public:
         return {true, new PageImpl(model_, page)};
     }
 
+    cpo::uno::Reference<scriptinterop::XPageElementRange> SAL_CALL getPageElementRange() override
+    {
+        throw cpo::uno::RuntimeException(u"getPageElementRange: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageRange> SAL_CALL getPageRange() override
+    {
+        throw cpo::uno::RuntimeException(u"getPageRange: not implemented"_ustr);
+    }
+
+    scriptinterop::SelectionType SAL_CALL getSelectionType() override
+    {
+        throw cpo::uno::RuntimeException(u"getSelectionType: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlideTableCellRange> SAL_CALL getTableCellRange() override
+    {
+        throw cpo::uno::RuntimeException(u"getTableCellRange: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL getTextRange() override
+    {
+        throw cpo::uno::RuntimeException(u"getTextRange: not implemented"_ustr);
+    }
+
 private:
     cpo::uno::Reference<css::frame::XModel> model_;
 };

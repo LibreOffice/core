@@ -11,19 +11,9 @@
 
 module scriptinterop {
 
-interface XSlideSelection : XBase
+interface XSlideTableCellRange : XBase
 {
-    com::sun::star::beans::Optional<XPage> getCurrentPage();
-
-    XPageElementRange getPageElementRange();
-
-    XPageRange getPageRange();
-
-    SelectionType getSelectionType();
-
-    XSlideTableCellRange getTableCellRange();
-
-    XTextRange getTextRange();
+    sequence< sequence<XSlideTableCell> > getTableCells();
 };
 
 };

@@ -100,6 +100,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XPageBase \
     XPageElement \
     XPageElementBase \
+    XPageElementRange \
+    XPageRange \
     XParagraph \
     XParagraphStyle \
     XPictureFill \
@@ -116,6 +118,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XSlideSelection \
     XSlideTable \
     XSlideTableCell \
+    XSlideTableCellRange \
     XSlideTableColumn \
     XSlideTableRow \
     XSolidFill \
