@@ -31,6 +31,7 @@ class AIUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testValidateTransformStructure);
     CPPUNIT_TEST(testParseLenientArgs);
     CPPUNIT_TEST(testNormalizeAIBaseUrl);
+    CPPUNIT_TEST(testHostOfBaseUrl);
     CPPUNIT_TEST(testSlideCommandTable);
     CPPUNIT_TEST(testSlideCommandDocs);
     CPPUNIT_TEST_SUITE_END();
@@ -38,6 +39,7 @@ class AIUtilTests : public CPPUNIT_NS::TestFixture
     void testValidateTransformStructure();
     void testParseLenientArgs();
     void testNormalizeAIBaseUrl();
+    void testHostOfBaseUrl();
     void testSlideCommandTable();
     void testSlideCommandDocs();
 };
@@ -146,6 +148,32 @@ void AIUtilTests::testNormalizeAIBaseUrl()
 
     // The empty string maps to the empty string.
     LOK_ASSERT_EQUAL(std::string(), AIUtil::normalizeAIBaseUrl(""));
+}
+
+void AIUtilTests::testHostOfBaseUrl()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT_EQUAL(std::string("ai.example.com"),
+                     AIUtil::hostOfBaseUrl("https://ai.example.com"));
+
+    // A port is not part of the host.
+    LOK_ASSERT_EQUAL(std::string("localhost"), AIUtil::hostOfBaseUrl("http://localhost:11434"));
+
+    // A path on the base URL is left out too.
+    LOK_ASSERT_EQUAL(std::string("ai.example.com"),
+                     AIUtil::hostOfBaseUrl("https://ai.example.com/v1"));
+
+    // An IPv6 literal comes back without its brackets.
+    LOK_ASSERT_EQUAL(std::string("::1"), AIUtil::hostOfBaseUrl("http://[::1]:11434"));
+
+    // The host comes back lowercase, so two spellings of one name give the same host.
+    LOK_ASSERT_EQUAL(std::string("ai.example.com"),
+                     AIUtil::hostOfBaseUrl("https://AI.Example.com"));
+
+    // Nothing usable gives the empty string.
+    LOK_ASSERT_EQUAL(std::string(), AIUtil::hostOfBaseUrl(""));
+    LOK_ASSERT_EQUAL(std::string(), AIUtil::hostOfBaseUrl("not a url"));
 }
 
 void AIUtilTests::testSlideCommandTable()

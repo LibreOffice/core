@@ -2689,9 +2689,10 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         return;
     }
 
-    // A built-in provider's host is a fixed public endpoint and is always
-    // allowed; only a custom host goes through the net.lok_allow allowlist.
+    // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
+    // always allowed; any other host goes through the net.lok_allow allowlist.
     if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
+        !AIUtil::isConfiguredAIProviderHost(uri.getHost()) &&
         HostUtil::isForbiddenKitHost(uri.getHost()))
     {
         LOG_WRN("Rejected fetch-models request to host not in KIT allowlist ["

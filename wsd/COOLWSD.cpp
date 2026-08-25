@@ -2582,12 +2582,17 @@ void COOLWSD::setLokitEnvironmentVariables(const Poco::Util::LayeredConfiguratio
     if (lokAllowedHosts.size())
     {
         std::string allowedRegex;
-        for (size_t i = 0; i < lokAllowedHosts.size(); i++)
+        for (const std::string& host : lokAllowedHosts)
         {
-            if (RegexUtil::isRegexValid(lokAllowedHosts[i]))
-                allowedRegex += (i != 0 ? "|" : "") + lokAllowedHosts[i];
-            else
-                LOG_ERR("Invalid regular expression for allowed host: \"" << lokAllowedHosts[i] << "\"");
+            if (!RegexUtil::isRegexValid(host))
+            {
+                LOG_ERR("Invalid regular expression for allowed host: \"" << host << "\"");
+                continue;
+            }
+
+            if (!allowedRegex.empty())
+                allowedRegex += '|';
+            allowedRegex += host;
         }
 
         setenv("KIT_HOST_ALLOWLIST", allowedRegex.c_str(), true);

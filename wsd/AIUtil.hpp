@@ -44,6 +44,14 @@ bool isPreCannedAIProviderHost(std::string_view host);
 /// already ends in "/v1" does not produce a doubled "/v1/v1/..." path.
 std::string normalizeAIBaseUrl(std::string_view baseUrl);
 
+/// The host part of a base URL, lowercase and without an IPv6 literal's brackets. A base URL
+/// that is empty, unparseable, or has no host part gives an empty string.
+std::string hostOfBaseUrl(std::string_view baseUrl);
+
+/// Whether the host is the host of ai.api_url or ai.image_api_url in coolwsd.xml. False for an
+/// empty host, and false for every host while ai.enabled is false.
+bool isConfiguredAIProviderHost(std::string_view host);
+
 /// One command of the Impress SlideCommands vocabulary. The table behind
 /// getSlideCommands() is the single source of truth for the vocabulary.
 struct SlideCommandInfo

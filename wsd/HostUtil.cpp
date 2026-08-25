@@ -366,11 +366,11 @@ bool HostUtil::isWopiHostsEmpty()
 
 bool HostUtil::isForbiddenKitHost(const std::string& host)
 {
-    static const char* allowlist = std::getenv("KIT_HOST_ALLOWLIST");
+    const char* allowlist = std::getenv("KIT_HOST_ALLOWLIST");
     if (!allowlist || allowlist[0] == '\0')
         return false;
 
-    static const std::regex allowedRegex(allowlist);
+    const std::regex allowedRegex(allowlist);
     return !std::regex_match(host, allowedRegex);
 }
 

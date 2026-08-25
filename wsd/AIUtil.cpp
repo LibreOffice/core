@@ -13,12 +13,14 @@
 
 #include "AIUtil.hpp"
 
+#include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 
 #include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Parser.h>
+#include <Poco/URI.h>
 
 #include <cstddef>
 #include <exception>
@@ -110,6 +112,39 @@ std::string normalizeAIBaseUrl(std::string_view baseUrl)
     }
 
     return url;
+}
+
+std::string hostOfBaseUrl(std::string_view baseUrl)
+{
+    if (baseUrl.empty())
+        return std::string();
+
+    try
+    {
+        return Poco::URI(std::string(baseUrl)).getHost();
+    }
+    catch (const std::exception&)
+    {
+        return std::string();
+    }
+}
+
+bool isConfiguredAIProviderHost(std::string_view host)
+{
+    if (host.empty())
+        return false;
+
+    if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
+        return false;
+
+    for (const auto& key : { "ai.api_url", "ai.image_api_url" })
+    {
+        const std::string url = ConfigUtil::getConfigValue<std::string>(key, "");
+        if (!url.empty() && host == hostOfBaseUrl(url))
+            return true;
+    }
+
+    return false;
 }
 
 namespace

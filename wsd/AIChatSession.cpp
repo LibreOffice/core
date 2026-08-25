@@ -1081,14 +1081,7 @@ void AIChatSession::callLLMAPI()
         return;
 
 #if !MOBILEAPP
-    std::string host;
-    try
-    {
-        host = Poco::URI(_toolLoop->requestUrl).getHost();
-    }
-    catch (const std::exception&)
-    {
-    }
+    const std::string host = AIUtil::hostOfBaseUrl(_toolLoop->requestUrl);
 
     // A provider URL without a host, for example one missing its scheme,
     // can never be reached; report it as a configuration problem instead of
@@ -1103,9 +1096,10 @@ void AIChatSession::callLLMAPI()
         return;
     }
 
-    // A built-in provider's host is a fixed public endpoint and is always
-    // allowed; only a custom host goes through the net.lok_allow allowlist.
-    if (!AIUtil::isPreCannedAIProviderHost(host) && HostUtil::isForbiddenKitHost(host))
+    // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
+    // always allowed; any other host goes through the net.lok_allow allowlist.
+    if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
+        HostUtil::isForbiddenKitHost(host))
     {
         LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
@@ -2861,14 +2855,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     req.requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl) + "/v1/images/generations";
 
 #if !MOBILEAPP
-    std::string host;
-    try
-    {
-        host = Poco::URI(req.requestUrl).getHost();
-    }
-    catch (const std::exception&)
-    {
-    }
+    const std::string host = AIUtil::hostOfBaseUrl(req.requestUrl);
 
     // A provider URL without a host, for example one missing its scheme,
     // can never be reached; report it as a configuration problem instead of
@@ -2880,9 +2867,10 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
         return req;
     }
 
-    // A built-in provider's host is a fixed public endpoint and is always
-    // allowed; only a custom host goes through the net.lok_allow allowlist.
-    if (!AIUtil::isPreCannedAIProviderHost(host) && HostUtil::isForbiddenKitHost(host))
+    // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
+    // always allowed; any other host goes through the net.lok_allow allowlist.
+    if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
+        HostUtil::isForbiddenKitHost(host))
     {
         req.error =
             "Host \"" + host + "\" is not in the allowed host list, contact your administrator";
