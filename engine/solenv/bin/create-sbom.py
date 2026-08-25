@@ -1084,6 +1084,17 @@ def add_merge_module(files_by_package, install_script):
             "external": "visual_c\\+\\+_redistributable",
             "sha512": get_sha512(abspath), "deps": [], "sysdeps": []})
 
+def check_files(*fileses):
+    """Sanity check for duplicates."""
+    allfiles = set()
+    for files_by_package in fileses:
+        for package in files_by_package:
+            for file in files_by_package[package]:
+                instpath = file["instpath"]
+                if instpath in allfiles:
+                    raise Exception(f"Unexpected duplicate instpath: {file}")
+                allfiles.add(instpath)
+
 
 def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
         externalstaticfile, externalpackagestaticfile, product, filelistdirs,
@@ -1137,6 +1148,10 @@ if __name__ == "__main__":
             files_sdk = gen_product(ziplist, packinfos_sdk, install_script_sdk, languages,
                 externalsfile, externalstaticfile, externalpackagestaticfile,
                 productname_sdk, filelistdirs_sdk, files_product)
+
+            check_files(files_product, files_sdk)
+        else:
+            check_files(files_product)
 
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
