@@ -803,9 +803,6 @@ if test -z "$anonym_msg";  then
   anonym_msg="anonymization of user-data is disabled"
 fi
 
-# Disable (0) or Enable (2) exotic file formats
-ENABLE_EXOTIC_FILE_FORMATS="0"
-
 if test "$enable_experimental" = "yes" ; then
   ENABLE_EXPERIMENTAL=true
   experimental_msg="enabled by default"
@@ -817,14 +814,6 @@ AC_MSG_CHECKING([if ssl verification is enabled by default])
 AC_MSG_RESULT([$SSL_VERIFY])
 AC_DEFINE_UNQUOTED([SSL_VERIFY],["$SSL_VERIFY"],[Default SSL Verification mode])
 AC_SUBST(SSL_VERIFY)
-
-AC_MSG_CHECKING([if exotic file formats are enabled by default])
-if test "$ENABLE_EXOTIC_FILE_FORMATS" = "0"; then
-  AC_MSG_RESULT([no])
-else
-  AC_MSG_RESULT([yes])
-fi
-AC_SUBST(ENABLE_EXOTIC_FILE_FORMATS)
 
 AC_SUBST(SERVER_SIGNATURE)
 
