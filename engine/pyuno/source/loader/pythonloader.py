@@ -18,6 +18,7 @@
 #
 import uno
 import unohelper
+import pyuno
 import sys
 import types
 import os
@@ -137,7 +138,13 @@ class Loader(XImplementationLoader, XServiceInfo, unohelper.Base):
         if DEBUG:
             print("pythonloader.Loader.activate")
 
-        mod = self.getModuleFromUrl(locationUrl)
+        # A registered component's module ships with the office or an extension; only a script
+        # embedded in a document is what the legacy UNO API notice warns about:
+        pyuno.suppressLegacyUnoApiStart()
+        try:
+            mod = self.getModuleFromUrl(locationUrl)
+        finally:
+            pyuno.suppressLegacyUnoApiEnd()
         implHelper = mod.__dict__.get("g_ImplementationHelper", None)
         if DEBUG:
             print("Fetched ImplHelper as " + str(implHelper))
@@ -150,7 +157,11 @@ class Loader(XImplementationLoader, XServiceInfo, unohelper.Base):
         if DEBUG:
             print("pythonloader.Loader.writeRegistryInfo")
 
-        mod = self.getModuleFromUrl(locationUrl)
+        pyuno.suppressLegacyUnoApiStart()
+        try:
+            mod = self.getModuleFromUrl(locationUrl)
+        finally:
+            pyuno.suppressLegacyUnoApiEnd()
         implHelper = mod.__dict__.get("g_ImplementationHelper", None)
         if implHelper is None:
             return mod.writeRegistryInfo(self.ctx.ServiceManager, regKey)

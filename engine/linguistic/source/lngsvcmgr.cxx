@@ -36,6 +36,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/lang.h>
@@ -69,6 +70,10 @@ static cpo::uno::Sequence< lang::Locale > GetAvailLocales(
         const cpo::uno::Sequence< OUString > &rSvcImplNames )
 {
     cpo::uno::Sequence< lang::Locale > aRes;
+
+    // Asking each service for its locales instantiates and runs the ones written in a scripting
+    // language, which is not the embedded script the legacy UNO API notice is about:
+    auto const aSuppression = comphelper::suppressLegacyApiWarning();
 
     const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     if( rSvcImplNames.hasElements() )
@@ -933,6 +938,10 @@ template<typename T> uno::Reference<T> createLinguisticInstance(
     const uno::Reference<uno::XComponentContext>& rContext,
     const cpo::uno::Any& rCurrent)
 {
+    // A linguistic service written in a scripting language is office or extension code, not the
+    // embedded script the legacy UNO API notice is about:
+    auto const aSuppression = comphelper::suppressLegacyApiWarning();
+
     uno::Reference<lang::XSingleComponentFactory> xCompFactory(rCurrent, css::uno::UNO_QUERY);
     if (xCompFactory.is())
         return uno::Reference<T>(xCompFactory->createInstanceWithContext(rContext), uno::UNO_QUERY_THROW);

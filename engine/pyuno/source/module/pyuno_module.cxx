@@ -24,6 +24,7 @@
 #include <cassert>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 
 #include <osl/module.hxx>
 #include <osl/thread.h>
@@ -853,6 +854,30 @@ static PyObject *sal_debug(
     return Py_None;
 }
 
+// Bracketing calls for the office's own Python (pythonloader), whose com.sun.star imports are not
+// the embedded script the legacy UNO API notice is about; the JS counterpart is
+// $internal.suppressLegacyUnoApiStart/End. The scopes wait here for their closing call:
+thread_local std::vector<comphelper::LegacyApiWarningSuppression> g_legacyApiWarningSuppressions;
+
+static PyObject* suppressLegacyUnoApiStart(SAL_UNUSED_PARAMETER PyObject*,
+                                           SAL_UNUSED_PARAMETER PyObject*)
+{
+    g_legacyApiWarningSuppressions.push_back(comphelper::suppressLegacyApiWarning());
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyObject* suppressLegacyUnoApiEnd(SAL_UNUSED_PARAMETER PyObject*,
+                                         SAL_UNUSED_PARAMETER PyObject*)
+{
+    if (g_legacyApiWarningSuppressions.empty())
+        SAL_INFO("pyuno.runtime", "spurious pyuno.suppressLegacyUnoApiEnd() call");
+    else
+        g_legacyApiWarningSuppressions.pop_back();
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 }
 
 #if defined __GNUC__ && !defined __clang__
@@ -890,6 +915,8 @@ struct PyMethodDef PyUNOModule_methods [] =
     {"setCurrentContext", setCurrentContext, METH_VARARGS, nullptr},
     {"getCurrentContext", getCurrentContext, METH_VARARGS, nullptr},
     {"sal_debug", sal_debug, METH_VARARGS, nullptr},
+    {"suppressLegacyUnoApiStart", suppressLegacyUnoApiStart, METH_NOARGS, nullptr},
+    {"suppressLegacyUnoApiEnd", suppressLegacyUnoApiEnd, METH_NOARGS, nullptr},
     {nullptr, nullptr, 0, nullptr}
 };
 #if defined __GNUC__ && !defined __clang__

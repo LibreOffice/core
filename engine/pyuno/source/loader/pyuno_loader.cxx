@@ -37,6 +37,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -284,6 +285,10 @@ pyuno_Loader_get_implementation(
 
     // tdf#114815 init python only once, via single-instance="true" in pythonloader.component
     pythonInit();
+
+    // The loader drags in unohelper, and its own object is asked for its UNO types; those
+    // com.sun.star names belong to the office itself, not to any embedded script:
+    auto const aSuppression = comphelper::suppressLegacyApiWarning();
 
     Reference< XInterface > ret;
 

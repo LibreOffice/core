@@ -283,9 +283,9 @@ struct RuntimeData
 
     // Set whenever the script touches the legacy UNO API outside a suppression scope:
     bool usedLegacyUnoApi = false;
-    // Nesting depth of $internal.suppressLegacyUnoApiStart/End bracketing calls; while non-zero,
-    // moduleGetProperty does not flip usedLegacyUnoApi:
-    std::uint64_t legacyUnoApiSuppressionDepth = 0;
+    // Scopes opened by $internal.suppressLegacyUnoApiStart and not closed again; owning them here
+    // ends whatever the script leaves unbalanced together with the runtime:
+    std::vector<comphelper::LegacyApiWarningSuppression> legacyApiWarningSuppressions;
 
     AtomRef symbolIteratorAtom;
 
@@ -1306,7 +1306,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
     }
     buf.append(OUString::fromUtf8(JS_AtomToCString(ctx, atom)));
     auto const id = buf.makeStringAndClear();
-    if (comphelper::isLegacyUnoApi(id) && getRuntimeData(ctx)->legacyUnoApiSuppressionDepth == 0)
+    if (comphelper::isLegacyUnoApi(id) && !comphelper::isLegacyApiWarningSuppressed())
     {
         getRuntimeData(ctx)->usedLegacyUnoApi = true;
     }
@@ -2728,25 +2728,22 @@ JSValue internalTakeProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int arg
 
 JSValue internalSuppressLegacyUnoApiStart(JSContext* ctx, JSValueConst, int, JSValueConst*)
 {
-    auto& depth = getRuntimeData(ctx)->legacyUnoApiSuppressionDepth;
-    if (depth == std::numeric_limits<std::uint64_t>::max())
-    {
-        JS_ThrowRangeError(ctx, "$internal.suppressLegacyUnoApiStart nesting overflow");
-        return JS_EXCEPTION;
-    }
-    ++depth;
-    return JS_UNDEFINED;
+    return callFromJs(ctx, [ctx] {
+        getRuntimeData(ctx)->legacyApiWarningSuppressions.push_back(
+            comphelper::suppressLegacyApiWarning());
+        return JS_UNDEFINED;
+    });
 }
 
 JSValue internalSuppressLegacyUnoApiEnd(JSContext* ctx, JSValueConst, int, JSValueConst*)
 {
-    auto& depth = getRuntimeData(ctx)->legacyUnoApiSuppressionDepth;
-    if (depth == 0)
+    auto& suppressions = getRuntimeData(ctx)->legacyApiWarningSuppressions;
+    if (suppressions.empty())
     {
         SAL_INFO("jsuno", "spurious $internal.suppressLegacyUnoApiEnd() call");
         return JS_UNDEFINED;
     }
-    --depth;
+    suppressions.pop_back();
     return JS_UNDEFINED;
 }
 
