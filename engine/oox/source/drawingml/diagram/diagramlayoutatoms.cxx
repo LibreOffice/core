@@ -837,20 +837,21 @@ namespace
 OUString navigate(const SmartArtDiagram& rDgm, svx::diagram::TypeConstant nType, std::u16string_view rFrom,
                   bool bSourceToDestination)
 {
-    for (const auto& rConnection : rDgm.getData()->getConnections())
+    for (const rtl::Reference<svx::diagram::Connection>& rConnection :
+             rDgm.getData()->getConnections())
     {
-        if (rConnection.mnXMLType != nType)
+        if (rConnection->mnXMLType != nType)
             continue;
 
         if (bSourceToDestination)
         {
-            if (rConnection.msSourceId == rFrom)
-                return rConnection.msDestId;
+            if (rConnection->msSourceId == rFrom)
+                return rConnection->msDestId;
         }
         else
         {
-            if (rConnection.msDestId == rFrom)
-                return rConnection.msSourceId;
+            if (rConnection->msDestId == rFrom)
+                return rConnection->msSourceId;
         }
     }
 
@@ -860,18 +861,20 @@ OUString navigate(const SmartArtDiagram& rDgm, svx::diagram::TypeConstant nType,
 sal_Int32 calcMaxDepth(std::u16string_view rNodeName, const svx::diagram::Connections& rConnections)
 {
     sal_Int32 nMaxLength = 0;
-    for (auto const& aCxn : rConnections)
-        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msSourceId == rNodeName)
-            nMaxLength = std::max(nMaxLength, calcMaxDepth(aCxn.msDestId, rConnections) + 1);
+    for (const rtl::Reference<svx::diagram::Connection>& aCxn : rConnections)
+        if (aCxn->mnXMLType == svx::diagram::TypeConstant::XML_parOf
+            && aCxn->msSourceId == rNodeName)
+            nMaxLength = std::max(nMaxLength, calcMaxDepth(aCxn->msDestId, rConnections) + 1);
 
     return nMaxLength;
 }
 }
 
-sal_Int32 ConditionAtom::getNodeCount(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const
+sal_Int32 ConditionAtom::getNodeCount(const SmartArtDiagram& rDgm,
+                                      const rtl::Reference<svx::diagram::Point>& rPresPoint) const
 {
     sal_Int32 nCount = 0;
-    OUString sNodeId = pPresPoint->msPresentationAssociationId;
+    OUString sNodeId = rPresPoint->msPresentationAssociationId;
 
     // HACK: special case - count children of first child
     if (maIter.maAxis.size() == 2 && maIter.maAxis[0] == XML_ch && maIter.maAxis[1] == XML_ch)
@@ -879,19 +882,22 @@ sal_Int32 ConditionAtom::getNodeCount(const SmartArtDiagram& rDgm, const svx::di
 
     if (!sNodeId.isEmpty())
     {
-        for (const auto& aCxn : rDgm.getData()->getConnections())
-            if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msSourceId == sNodeId)
+        for (const rtl::Reference<svx::diagram::Connection>& aCxn :
+                 rDgm.getData()->getConnections())
+            if (aCxn->mnXMLType == svx::diagram::TypeConstant::XML_parOf
+                && aCxn->msSourceId == sNodeId)
                 nCount++;
     }
 
     return nCount;
 }
 
-bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const
+bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm,
+                                const rtl::Reference<svx::diagram::Point>& rPresPoint) const
 {
     if (mIsElse)
         return true;
-    if (!pPresPoint)
+    if (!rPresPoint.is())
         return false;
 
     switch (maCond.mnFunc)
@@ -899,22 +905,23 @@ bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm, const svx::diagram:
     case XML_var:
     {
         if (maCond.mnArg == XML_dir)
-            return compareResult(maCond.mnOp, pPresPoint->mnDirection, maCond.mnVal);
+            return compareResult(maCond.mnOp, rPresPoint->mnDirection, maCond.mnVal);
         else if (maCond.mnArg == XML_hierBranch)
         {
-            sal_Int32 nHierarchyBranch = pPresPoint->moHierarchyBranch.value_or(XML_std);
-            if (!pPresPoint->moHierarchyBranch.has_value())
+            sal_Int32 nHierarchyBranch = rPresPoint->moHierarchyBranch.value_or(XML_std);
+            if (!rPresPoint->moHierarchyBranch.has_value())
             {
                 // If <dgm:hierBranch> is missing in the current presentation
                 // point, ask the parent.
-                OUString aParent = navigate(rDgm, svx::diagram::TypeConstant::XML_presParOf, pPresPoint->msModelId,
+                OUString aParent = navigate(rDgm, svx::diagram::TypeConstant::XML_presParOf,
+                                            rPresPoint->msModelId,
                                             /*bSourceToDestination*/ false);
-                const svx::diagram::Point* it(rDgm.getData()->getPointByModelID(aParent));
-                if (nullptr != it)
+                const rtl::Reference<svx::diagram::Point> it(
+                    rDgm.getData()->getPointByModelID(aParent));
+                if (it.is())
                 {
-                    const svx::diagram::Point* pParent = it;
-                    if (pParent->moHierarchyBranch.has_value())
-                        nHierarchyBranch = pParent->moHierarchyBranch.value();
+                    if (it->moHierarchyBranch.has_value())
+                        nHierarchyBranch = it->moHierarchyBranch.value();
                 }
             }
             return compareResult(maCond.mnOp, nHierarchyBranch, maCond.mnVal);
@@ -923,11 +930,12 @@ bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm, const svx::diagram:
     }
 
     case XML_cnt:
-        return compareResult(maCond.mnOp, getNodeCount(rDgm, pPresPoint), maCond.msVal.toInt32());
+        return compareResult(maCond.mnOp, getNodeCount(rDgm, rPresPoint), maCond.msVal.toInt32());
 
     case XML_maxDepth:
     {
-        sal_Int32 nMaxDepth = calcMaxDepth(pPresPoint->msPresentationAssociationId, rDgm.getData()->getConnections());
+        sal_Int32 nMaxDepth = calcMaxDepth(rPresPoint->msPresentationAssociationId,
+                                           rDgm.getData()->getConnections());
         return compareResult(maCond.mnOp, nMaxDepth, maCond.msVal.toInt32());
     }
 
@@ -1074,29 +1082,30 @@ bool HasCustomText(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
     const PresPointShapeMap& rPresPointShapeMap = rDgm.getLayout()->getPresPointShapeMap();
     const DiagramData_oox::StringMap& rPresOfNameMap = rDgm.getData()->getPresOfNameMap();
     // Get the first presentation node of the shape.
-    const svx::diagram::Point* pPresNode = nullptr;
+    rtl::Reference<svx::diagram::Point> xPresNode;
     for (const auto& rPair : rPresPointShapeMap)
     {
         if (rPair.second == rShape)
         {
-            pPresNode = rPair.first;
+            xPresNode = rPair.first;
             break;
         }
     }
     // Get the first data node of the presentation node.
-    const svx::diagram::Point* pDataNode = nullptr;
-    if (pPresNode)
+    rtl::Reference<svx::diagram::Point> xDataNode;
+    if (xPresNode.is())
     {
-        auto itPresToData = rPresOfNameMap.find(pPresNode->msModelId);
+        auto itPresToData = rPresOfNameMap.find(xPresNode->msModelId);
         if (itPresToData != rPresOfNameMap.end())
         {
             for (const auto& rPair : itPresToData->second)
             {
                 const DiagramData_oox::SourceIdAndDepth& rItem = rPair.second;
-                const svx::diagram::Point* it(rDgm.getData()->getPointByModelID(rItem.msSourceId));
-                if (nullptr != it)
+                const rtl::Reference<svx::diagram::Point> it(
+                    rDgm.getData()->getPointByModelID(rItem.msSourceId));
+                if (it.is())
                 {
-                    pDataNode = it;
+                    xDataNode = it;
                     break;
                 }
             }
@@ -1104,9 +1113,9 @@ bool HasCustomText(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
     }
 
     // If we have a data node, see if its text is customized or not.
-    if (pDataNode)
+    if (xDataNode.is())
     {
-        return pDataNode->mbCustomText;
+        return xDataNode->mbCustomText;
     }
 
     return false;
@@ -1863,16 +1872,18 @@ void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape, const svx::diagram::Point* pPresNode, sal_Int32 nCurrIdx ) const
+bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape,
+                             const rtl::Reference<svx::diagram::Point>& rPresNode,
+                             sal_Int32 nCurrIdx ) const
 {
     SAL_INFO(
         "oox.drawingml",
         "Filling content from layout node named \"" << msName
-            << "\", modelId \"" << pPresNode->msModelId << "\"");
+            << "\", modelId \"" << rPresNode->msModelId << "\"");
 
     // have the presentation node - now, need the actual data node:
     const DiagramData_oox::StringMap::const_iterator aNodeName = rDgm.getData()->getPresOfNameMap().find(
-        pPresNode->msModelId);
+        rPresNode->msModelId);
     if( aNodeName != rDgm.getData()->getPresOfNameMap().end() )
     {
         // Calculate the depth of what is effectively the topmost element.
@@ -1886,22 +1897,23 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
         for (const auto& rPair : aNodeName->second)
         {
             const DiagramData_oox::SourceIdAndDepth& rItem = rPair.second;
-            // pPresNode is the presentation node of the aDataNode2 data node.
-            const svx::diagram::Point* pDataNode2(rDgm.getData()->getPointByModelID(rItem.msSourceId));
-            if (nullptr == pDataNode2)
+            // rPresNode is the presentation node of the aDataNode2 data node.
+            const rtl::Reference<svx::diagram::Point> xDataNode2(
+                rDgm.getData()->getPointByModelID(rItem.msSourceId));
+            if (!xDataNode2.is())
             {
                 //busted, skip it
                 continue;
             }
 
-            Shape* pDataNode2Shape(rDgm.getData()->getOrCreateAssociatedShape(*pDataNode2));
+            Shape* pDataNode2Shape(rDgm.getData()->getOrCreateAssociatedShape(*xDataNode2));
             if (nullptr == pDataNode2Shape)
             {
                 //busted, skip it
                 continue;
             }
 
-            rShape->setDataNodeType(pDataNode2->mnXMLType);
+            rShape->setDataNodeType(xDataNode2->mnXMLType);
 
             if (rItem.mnDepth == 0)
             {
@@ -1971,7 +1983,7 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
                 " processing shape type "
                 << rShape->getCustomShapeProperties()->getShapePresetType()
                 << " for layout node named \"" << msName << "\"");
-        Shape* pPresNodeShape(rDgm.getData()->getOrCreateAssociatedShape(*pPresNode));
+        Shape* pPresNodeShape(rDgm.getData()->getOrCreateAssociatedShape(*rPresNode));
         if (nullptr != pPresNodeShape)
             rShape->getFillProperties().assignUsed(pPresNodeShape->getFillProperties());
     }
@@ -1980,7 +1992,7 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
     // point's presStyleLbl for both style & color
     // if not found use layout node's styleLbl
     // however, docs are a bit unclear on this
-    OUString aStyleLabel = pPresNode->msPresentationLayoutStyleLabel;
+    OUString aStyleLabel = rPresNode->msPresentationLayoutStyleLabel;
     if (aStyleLabel.isEmpty())
         aStyleLabel = msStyleLabel;
     if( !aStyleLabel.isEmpty() )

@@ -60,14 +60,15 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
-    const svx::diagram::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
-    if (!mpCurrentNode || !pNewNode)
+    const rtl::Reference<svx::diagram::Point>& rNewNode(aDataNode->second.at(mnCurrIdx));
+    if (!mxCurrentNode.is() || !rNewNode.is())
         return;
 
     bool bIsChild = false;
-    for (const auto& aConnection : mrDgm.getData()->getConnections())
-        if (aConnection.msSourceId == mpCurrentNode->msModelId
-            && aConnection.msDestId == pNewNode->msModelId)
+    for (const rtl::Reference<svx::diagram::Connection>& aConnection :
+             mrDgm.getData()->getConnections())
+        if (aConnection->msSourceId == mxCurrentNode->msModelId
+            && aConnection->msDestId == rNewNode->msModelId)
             bIsChild = true;
 
     if (!bIsChild)
@@ -79,16 +80,16 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     {
         // reuse existing shape
         ShapePtr pShape = rAtom.getExistingShape();
-        if (rAtom.setupShape(mrDgm, pShape, pNewNode, mnCurrIdx))
+        if (rAtom.setupShape(mrDgm, pShape, rNewNode, mnCurrIdx))
         {
             pShape->setInternalName(rAtom.getName());
             rAtom.addNodeShape(pShape);
-            mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = std::move(pShape);
+            mrDgm.getLayout()->getPresPointShapeMap()[rNewNode] = std::move(pShape);
         }
     }
     else
     {
-        ShapeTemplateVisitor aTemplateVisitor(mrDgm, pNewNode);
+        ShapeTemplateVisitor aTemplateVisitor(mrDgm, rNewNode);
         aTemplateVisitor.defaultVisit(rAtom);
         ShapePtr pShape = aTemplateVisitor.getShapeCopy();
 
@@ -98,13 +99,13 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                      "processing shape type "
                          << (pShape->getCustomShapeProperties()->getShapePresetType()));
 
-            if (rAtom.setupShape(mrDgm, pShape, pNewNode, mnCurrIdx))
+            if (rAtom.setupShape(mrDgm, pShape, rNewNode, mnCurrIdx))
             {
                 pShape->setInternalName(rAtom.getName());
                 xCurrParent->addChild(pShape);
                 xCurrParent = pShape;
                 rAtom.addNodeShape(pShape);
-                mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = std::move(pShape);
+                mrDgm.getLayout()->getPresPointShapeMap()[rNewNode] = std::move(pShape);
             }
         }
         else
@@ -115,8 +116,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         }
     }
 
-    const svx::diagram::Point* pPreviousNode = mpCurrentNode;
-    mpCurrentNode = pNewNode;
+    const rtl::Reference<svx::diagram::Point> xPreviousNode(mxCurrentNode);
+    mxCurrentNode = rNewNode;
 
     // set new parent for children
     ShapePtr xPreviousParent(mpParentShape);
@@ -132,7 +133,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     // restore parent
     mpParentShape = std::move(xPreviousParent);
-    mpCurrentNode = pPreviousNode;
+    mxCurrentNode = xPreviousNode;
 }
 
 void ShapeCreationVisitor::visit(ShapeAtom& /*rAtom*/)
@@ -183,8 +184,8 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
     mpShape->cloneFillProperties();
 
     // add/set ModelID from current node to allow later association
-    if (mpCurrentNode)
-        mpShape->setDiagramDataModelID(mpCurrentNode->msModelId);
+    if (mxCurrentNode)
+        mpShape->setDiagramDataModelID(mxCurrentNode->msModelId);
 }
 
 void ShapeLayoutingVisitor::visit(ConstraintAtom& rAtom)
@@ -204,7 +205,7 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
     if (meLookFor == ALGORITHM)
     {
         const PresPointShapeMap aMap = mrDgm.getLayout()->getPresPointShapeMap();
-        auto pShape = aMap.find(mpCurrentNode);
+        auto pShape = aMap.find(mxCurrentNode);
         if (pShape != aMap.end())
             rAtom.layoutShape(mrDgm, pShape->second, maConstraints, maRules);
     }
@@ -223,14 +224,15 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
         || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
-    const svx::diagram::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
-    if (!mpCurrentNode || !pNewNode)
+    const rtl::Reference<svx::diagram::Point>& rNewNode(aDataNode->second.at(mnCurrIdx));
+    if (!mxCurrentNode.is() || !rNewNode.is())
         return;
 
     bool bIsChild = false;
-    for (const auto& aConnection : mrDgm.getData()->getConnections())
-        if (aConnection.msSourceId == mpCurrentNode->msModelId
-            && aConnection.msDestId == pNewNode->msModelId)
+    for (const rtl::Reference<svx::diagram::Connection>& aConnection :
+             mrDgm.getData()->getConnections())
+        if (aConnection->msSourceId == mxCurrentNode->msModelId
+            && aConnection->msDestId == rNewNode->msModelId)
             bIsChild = true;
 
     if (!bIsChild)
@@ -238,8 +240,8 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
 
     size_t nParentConstraintsNumber = maConstraints.size();
 
-    const svx::diagram::Point* pPreviousNode = mpCurrentNode;
-    mpCurrentNode = pNewNode;
+    const rtl::Reference<svx::diagram::Point> xPreviousNode(mxCurrentNode);
+    mxCurrentNode = rNewNode;
 
     // process alg atoms first, nested layout nodes afterwards
     meLookFor = CONSTRAINT;
@@ -251,7 +253,7 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
 
-    mpCurrentNode = pPreviousNode;
+    mxCurrentNode = xPreviousNode;
 
     // delete added constraints, keep parent constraints
     maConstraints.erase(maConstraints.begin() + nParentConstraintsNumber, maConstraints.end());

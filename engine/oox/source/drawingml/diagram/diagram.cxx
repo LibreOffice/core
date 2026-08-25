@@ -133,16 +133,16 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
 
     pParentShape->setChildSize(pParentShape->getSize());
 
-    const svx::diagram::Point* pRootPoint = mpData->getRootPoint();
-    if (bCreate && mpLayout->getNode() && pRootPoint)
+    const rtl::Reference<svx::diagram::Point> xRootPoint(mpData->getRootPoint());
+    if (bCreate && mpLayout->getNode() && xRootPoint.is())
     {
         // create Shape hierarchy
-        ShapeCreationVisitor aCreationVisitor(*this, pRootPoint, pParentShape);
+        ShapeCreationVisitor aCreationVisitor(*this, xRootPoint, pParentShape);
         mpLayout->getNode()->setExistingShape(pParentShape);
         mpLayout->getNode()->accept(aCreationVisitor);
 
         // layout shapes - now all shapes are created
-        ShapeLayoutingVisitor aLayoutingVisitor(*this, pRootPoint);
+        ShapeLayoutingVisitor aLayoutingVisitor(*this, xRootPoint);
         mpLayout->getNode()->accept(aLayoutingVisitor);
 
         sortChildrenByZOrder(pParentShape);

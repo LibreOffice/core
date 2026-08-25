@@ -50,9 +50,10 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
     std::shared_ptr<::oox::drawingml::Theme>    mpDiagramThemePtr;
 
     // data values set by addDiagramNode to be used by next reLayout call
-    // when a new ode gets added
+    // when a new Node gets added
     OUString msNewNodeId;
     OUString msNewNodeText;
+    OUString msNewNodeTemplateId;
 
     bool hasDiagramData() const;
 
@@ -84,9 +85,15 @@ public:
     // returns vector of (id, text)
     virtual std::vector<std::pair<OUString, OUString>> getDiagramChildren(const OUString& rParentId) const override;
 
+    // true for a node that holds no nodes below it, false for a node that holds nodes
+    virtual bool isChildNode(std::u16string_view rNodeId) const override;
+
+    // true for a node that can take a node below it, which depends on the layout
+    virtual bool canHoldChildNode(std::u16string_view rNodeId) const override;
+
     // add/remove new top-level node to data model, returns its id
-    virtual OUString addDiagramNode(const OUString& rText, SdrModel& rDrawModel) override;
-    virtual bool removeDiagramNode(const OUString& rNodeId, SdrModel& rDrawModel) override;
+    virtual OUString addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel) override;
+    virtual bool removeDiagramNode(std::u16string_view rNodeId, SdrModel& rDrawModel) override;
     virtual void TextInformationChange() override;
     virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) override;
 

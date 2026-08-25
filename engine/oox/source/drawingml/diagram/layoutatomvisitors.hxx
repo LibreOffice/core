@@ -32,9 +32,9 @@ class ShapeCreationVisitor : public LayoutAtomVisitorBase
 {
 public:
     ShapeCreationVisitor(const SmartArtDiagram& rDgm,
-                         const svx::diagram::Point* pRootPoint,
+                         const rtl::Reference<svx::diagram::Point>& rRootPoint,
                          ShapePtr xParentShape) :
-        LayoutAtomVisitorBase(rDgm, pRootPoint),
+        LayoutAtomVisitorBase(rDgm, rRootPoint),
         mpParentShape(std::move(xParentShape))
     {}
 
@@ -52,8 +52,9 @@ private:
 class ShapeTemplateVisitor : public LayoutAtomVisitorBase
 {
 public:
-    ShapeTemplateVisitor(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint)
-        : LayoutAtomVisitorBase(rDgm, pRootPoint)
+    ShapeTemplateVisitor(const SmartArtDiagram& rDgm,
+                         const rtl::Reference<svx::diagram::Point>& rRootPoint)
+        : LayoutAtomVisitorBase(rDgm, rRootPoint)
     {}
 
     using LayoutAtomVisitorBase::visit;
@@ -74,8 +75,9 @@ private:
 class ShapeLayoutingVisitor : public LayoutAtomVisitorBase
 {
 public:
-    ShapeLayoutingVisitor(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint) :
-        LayoutAtomVisitorBase(rDgm, pRootPoint)
+    ShapeLayoutingVisitor(const SmartArtDiagram& rDgm,
+                          const rtl::Reference<svx::diagram::Point>& rRootPoint) :
+        LayoutAtomVisitorBase(rDgm, rRootPoint)
     {}
 
     using LayoutAtomVisitorBase::visit;

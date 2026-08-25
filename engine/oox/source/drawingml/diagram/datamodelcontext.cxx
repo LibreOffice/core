@@ -53,8 +53,8 @@ public:
             {
                 case DGM_TOKEN( cxn ):
                 {
-                    mrConnection.emplace_back( );
-                    svx::diagram::Connection& rConnection=mrConnection.back();
+                    svx::diagram::Connection& rConnection(
+                        *mrConnection.emplace_back(new svx::diagram::Connection));
 
                     rConnection.mnXMLType = static_cast<svx::diagram::TypeConstant>(rAttribs.getToken( XML_type, XML_parOf ));
                     rConnection.msModelId = rAttribs.getStringDefaulted( XML_modelId );
@@ -277,8 +277,9 @@ public:
             case DGM_TOKEN( pt ):
             {
                 // CT_Pt
-                mrPoints.emplace_back( );
-                return new PtContext( *this, rAttribs, mrPoints.back(), mrDiagramData );
+                svx::diagram::Point& rPoint(*mrPoints.emplace_back(new svx::diagram::Point));
+
+                return new PtContext(*this, rAttribs, rPoint, mrDiagramData);
             }
             default:
                 break;

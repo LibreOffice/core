@@ -113,9 +113,16 @@ public:
     virtual std::vector<std::pair<OUString, OUString>>
     getDiagramChildren(const OUString& rParentId) const = 0;
 
+    // true for a node that holds no nodes below it, false for a node that holds some and for an
+    // id that leads to no node at all
+    virtual bool isChildNode(std::u16string_view rNodeId) const = 0;
+
+    // true for a node that can take a node below it, which depends on what the layout draws
+    virtual bool canHoldChildNode(std::u16string_view rNodeId) const = 0;
+
     // add/remove new top-level node to data model, returns its id
-    virtual OUString addDiagramNode(const OUString& rText, SdrModel& rDrawModel) = 0;
-    virtual bool removeDiagramNode(const OUString& rNodeId, SdrModel& rDrawModel) = 0;
+    virtual OUString addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel) = 0;
+    virtual bool removeDiagramNode(std::u16string_view rNodeId, SdrModel& rDrawModel) = 0;
     virtual void TextInformationChange() = 0;
     virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) = 0;
 

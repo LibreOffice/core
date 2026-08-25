@@ -22,6 +22,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <utility>
@@ -276,11 +277,13 @@ class ConditionAtom
 public:
     explicit ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual void accept( LayoutAtomVisitor& ) override;
-    bool getDecision(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const;
+    bool getDecision(const SmartArtDiagram& rDgm,
+                     const rtl::Reference<svx::diagram::Point>& rPresPoint) const;
 
 private:
     static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
-    sal_Int32 getNodeCount(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const;
+    sal_Int32 getNodeCount(const SmartArtDiagram& rDgm,
+                           const rtl::Reference<svx::diagram::Point>& rPresPoint) const;
 
     bool          mIsElse;
     IteratorAttr  maIter;
@@ -341,6 +344,16 @@ public:
         { msMoveWith = sName; }
     void setStyleLabel( const OUString & sLabel )
         { msStyleLabel = sLabel; }
+    const OUString & getStyleLabel() const
+        { return msStyleLabel; }
+
+    // What the shape of this layout node represents: which data Points it stands for and along which
+    // axis they are reached. A layout node that holds no value of its own represents no data Point and
+    // only gives the layout somewhere to put other nodes.
+    void setPresentationOf( const IteratorAttr & rIterator )
+        { moPresentationOf = rIterator; }
+    const std::optional<IteratorAttr> & getPresentationOf() const
+        { return moPresentationOf; }
     void setChildOrder( sal_Int32 nOrder )
         { mnChildOrder = nOrder; }
     sal_Int32 getChildOrder() const { return mnChildOrder; }
@@ -354,13 +367,14 @@ public:
         { mpNodeShapes.push_back(pShape); }
 
     bool setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape,
-                     const svx::diagram::Point* pPresNode,
+                     const rtl::Reference<svx::diagram::Point>& rPresNode,
                      sal_Int32 nCurrIdx ) const;
 
     const LayoutNode* getParentLayoutNode() const;
 
 private:
     VarMap                       mVariables;
+    std::optional<IteratorAttr>  moPresentationOf;
     OUString                     msMoveWith;
     OUString                     msStyleLabel;
     ShapePtr                     mpExistingShape;
