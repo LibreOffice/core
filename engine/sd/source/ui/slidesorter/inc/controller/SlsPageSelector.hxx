@@ -75,7 +75,7 @@ public:
     /** Select the specified descriptor.  The selection state of the other
         descriptors is not affected.
     */
-    void SelectPage(int nPageIndex);
+    void SelectPage(int nPageIndex, const bool bUpdateCurrentPage = true);
     /** Select the descriptor that is associated with the given page.  The
         selection state of the other descriptors is not affected.
     */
@@ -83,7 +83,8 @@ public:
     /** Select the specified descriptor.  The selection state of the other
         descriptors is not affected.
     */
-    void SelectPage(const model::SharedPageDescriptor& rpDescriptor);
+    void SelectPage(const model::SharedPageDescriptor& rpDescriptor,
+                    const bool bUpdateCurrentPage = true);
 
     /** Return whether the specified page is selected.  This convenience
         method is a substitute for
@@ -100,10 +101,10 @@ public:
     SD_DLLPUBLIC bool IsPageExcluded(int nPageIndex);
 
     /** Deselect the descriptor that is associated with the given page.
-        The current page is updated to the first slide
-        of the remaining selection.
+        Unless bUpdateCurrentPage is false the current page is updated to
+        the first slide of the remaining selection.
     */
-    void DeselectPage(int nPageIndex);
+    void DeselectPage(int nPageIndex, const bool bUpdateCurrentPage = true);
     void DeselectPage(const model::SharedPageDescriptor& rpDescriptor,
                       const bool bUpdateCurrentPage = true);
 

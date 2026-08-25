@@ -271,6 +271,10 @@ IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback, Timer *, void)
         // too.
         SetCurrentSlideAtViewShellBase(mpCurrentSlide);
         SetCurrentSlideAtXController(mpCurrentSlide);
+
+        PageSelector& rSelector = mrSlideSorter.GetController().GetPageSelector();
+        if (rSelector.GetSelectedPageCount() > 1)
+            rSelector.SetCoreSelection();
     }
 }
 

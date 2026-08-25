@@ -780,8 +780,10 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 /**
  * Mark the desired page as selected (1), deselected (0), toggle (2).
  * nPage refers to the page in question.
+ * With bUpdateCurrentPage false the current page stays where it is instead
+ * of moving to the first slide of the new selection.
  */
-bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
+bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect, bool bUpdateCurrentPage)
 {
     SdPage* pPage = GetDoc()->GetSdPage(nPage, PageKind::Standard);
     if (!pPage)
@@ -795,13 +797,15 @@ bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
     {
         GetDoc()->SetSelected(pPage, true); // Select.
         if (pSlideSorterVS)
-            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().SelectPage(nPage);
+            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().SelectPage(
+                nPage, bUpdateCurrentPage);
     }
     else
     {
         GetDoc()->SetSelected(pPage, false); // Deselect.
         if (pSlideSorterVS)
-            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().DeselectPage(nPage);
+            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().DeselectPage(
+                nPage, bUpdateCurrentPage);
     }
 
     return true;

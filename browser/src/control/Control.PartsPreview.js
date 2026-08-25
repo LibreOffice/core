@@ -26,6 +26,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 	partsFocused: false,
 
+	_focusedCurrentPart: undefined,
+
 	initialize: function (container, preview, options) {
 		window.L.setOptions(this, options);
 
@@ -155,7 +157,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					// it while the sorter owns the keyboard, so a screen
 					// reader announces the slide the sorter marks as the
 					// current one.
-					if (this.hasSlideFocus() || this.partsFocused)
+					const currentPartMoved = this._focusedCurrentPart !== selectedPart;
+					this._focusedCurrentPart = selectedPart;
+					if (currentPartMoved && (this.hasSlideFocus() || this.partsFocused))
 						this.focusCurrentSlide();
 				}
 				this._updateSelectedSection();
@@ -204,6 +208,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var partList = (app.impress && app.impress.partList) || [];
 		var activeTab = (selectedPart >= 0 && selectedPart < this._previewTiles.length)
 			? selectedPart : 0;
+		var focusedTab = this._previewTiles.indexOf(document.activeElement);
+		if (focusedTab !== -1)
+			activeTab = focusedTab;
 		for (var i = 0; i < this._previewTiles.length; i++) {
 			var img = this._previewTiles[i];
 			if (!img)

@@ -4960,7 +4960,8 @@ void SdXImpressDocument::selectPart(int nPart, int nSelect)
     if (!pViewSh)
         return;
 
-    pViewSh->SelectPage(nPart, nSelect);
+    // Extending the selection must leave the current part alone
+    pViewSh->SelectPage(nPart, nSelect, /*bUpdateCurrentPage=*/false);
 }
 
 void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)

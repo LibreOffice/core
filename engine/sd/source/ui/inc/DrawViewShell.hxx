@@ -259,8 +259,11 @@ public:
     /**
      * Mark the desired page as selected (1), deselected (0), toggle (2).
      * nPage refers to the page in question.
+     * With bUpdateCurrentPage false the current page stays where it is
+     * instead of moving to the first slide of the new selection.
      */
-    bool            SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect);
+    bool            SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect,
+                               bool bUpdateCurrentPage = true);
     bool            IsSelected(sal_uInt16 nPage);
 
     void            GotoBookmark(std::u16string_view rBookmark);
