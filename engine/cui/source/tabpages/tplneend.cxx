@@ -83,6 +83,8 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogC
     m_xBtnLoad->connect_clicked(LINK( this, SvxLineEndDefTabPage, ClickLoadHdl_Impl));
     m_xBtnSave->connect_clicked(LINK( this, SvxLineEndDefTabPage, ClickSaveHdl_Impl));
 
+    m_xLbLineEnds->set_render_selected_entry(true);
+    m_xLbLineEnds->set_whole_width_preview(true);
     m_xLbLineEnds->connect_changed(LINK(this, SvxLineEndDefTabPage, SelectLineEndHdl_Impl));
 }
 

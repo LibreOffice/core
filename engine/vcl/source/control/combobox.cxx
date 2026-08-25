@@ -1578,10 +1578,6 @@ bool ComboBox::set_property(const OUString &rKey, const OUString &rValue)
     }
     else if (rKey == "placeholder-text")
         SetPlaceholderText(rValue);
-    else if (rKey == "render-selected-entry")
-        SetRenderSelectedEntry(toBool(rValue));
-    else if (rKey == "whole-width-preview")
-        SetWholeWidthPreview(toBool(rValue));
     else
         return Control::set_property(rKey, rValue);
     return true;

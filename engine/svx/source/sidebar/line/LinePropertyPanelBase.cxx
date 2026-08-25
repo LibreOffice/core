@@ -149,6 +149,8 @@ void LinePropertyPanelBase::Initialize()
     mxLBEnd->connect_custom_render(LINK(this, LinePropertyPanelBase, RenderEndHdl));
     mxLBStart->set_custom_renderer(true);
     mxLBEnd->set_custom_renderer(true);
+    mxLBStart->set_render_selected_entry(true);
+    mxLBEnd->set_render_selected_entry(true);
 
     SvxLineStyleToolBoxControl* pLineStyleControl = getLineStyleToolBoxControl(*mxLineStyleDispatch);
     pLineStyleControl->setLineStyleIsNoneFunction(*mxLineStyleNoneChange);

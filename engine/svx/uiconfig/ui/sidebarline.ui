@@ -212,7 +212,6 @@
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="has-entry">True</property>
-                <property name="render-selected-entry">True</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarline|startarrowstyle|tooltip_text">Select the style of the start arrowhead.</property>
                 <child internal-child="entry">
                   <object class="GtkEntry">
@@ -246,7 +245,6 @@
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="has-entry">True</property>
-                <property name="render-selected-entry">True</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarline|endarrowstyle|tooltip_text">Select the style of the end arrowhead.</property>
                 <child internal-child="entry">
                   <object class="GtkEntry">

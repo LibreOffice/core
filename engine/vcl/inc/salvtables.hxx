@@ -1011,6 +1011,10 @@ public:
 
     virtual void set_entry_hidden(int pos, bool bHidden) override;
 
+    virtual void set_render_selected_entry(bool on) override;
+
+    virtual void set_whole_width_preview(bool on) override;
+
     virtual void set_entry_text(const OUString& rText) override;
 
     virtual void set_entry_width_chars(int nChars) override;

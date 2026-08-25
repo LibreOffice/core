@@ -6581,6 +6581,16 @@ void SalInstanceComboBoxWithEdit::set_entry_hidden(int pos, bool bHidden)
     m_xComboBox->SetEntryHidden(pos, bHidden);
 }
 
+void SalInstanceComboBoxWithEdit::set_render_selected_entry(bool on)
+{
+    m_xComboBox->SetRenderSelectedEntry(on);
+}
+
+void SalInstanceComboBoxWithEdit::set_whole_width_preview(bool on)
+{
+    m_xComboBox->SetWholeWidthPreview(on);
+}
+
 void SalInstanceComboBoxWithEdit::set_entry_text(const OUString& rText)
 {
     m_xComboBox->SetText(rText);

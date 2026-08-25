@@ -80,8 +80,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="has-entry">True</property>
-                    <property name="render-selected-entry">True</property>
-                    <property name="whole-width-preview">True</property>
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can-focus">True</property>

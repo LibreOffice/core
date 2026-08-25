@@ -295,6 +295,8 @@ public:
     void save_value() { m_xControl->save_value(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     bool get_sensitive() const { return m_xControl->get_sensitive(); }
+    void set_render_selected_entry(bool on) { m_xControl->set_render_selected_entry(on); }
+    void set_whole_width_preview(bool on) { m_xControl->set_whole_width_preview(on); }
 };
 
 class SdrObject;

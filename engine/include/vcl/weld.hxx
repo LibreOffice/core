@@ -1001,6 +1001,11 @@ public:
     // get the width needed to show the menu launcher in a custom row
     virtual int get_menu_button_width() const = 0;
 
+    // Draw the current value with the custom renderer too, rather than showing it as text:
+    virtual void set_render_selected_entry(bool /*on*/) {}
+    // Let a custom-rendered row take the whole width of the box:
+    virtual void set_whole_width_preview(bool /*on*/) {}
+
     // for mru support
     virtual int get_max_mru_count() const = 0;
     virtual void set_max_mru_count(int nCount) = 0;
