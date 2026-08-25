@@ -3330,6 +3330,79 @@ SbUnoClass* findUnoClass( const OUString& rName )
     return pUnoClass;
 }
 
+
+static SbxVariable* lookupUno(const Reference< XIdlReflection >& xCoreReflection, const OUString& aNewName)
+{
+    SbxVariable* pRes = nullptr;
+    // Is it a constant?
+    Reference< XHierarchicalNameAccess > xHarryName( xCoreReflection, UNO_QUERY );
+    if( xHarryName.is() )
+    {
+        try
+        {
+            Any aValue = xHarryName->getByHierarchicalName( aNewName );
+            TypeClass eType = aValue.getValueTypeClass();
+
+            // Interface located? Then it is a class
+            if( eType == TypeClass_INTERFACE )
+            {
+                Reference< XIdlClass > xClass( aValue, UNO_QUERY );
+                if( xClass.is() )
+                {
+                    pRes = new SbxVariable( SbxVARIANT );
+                    SbxObjectRef xWrapper = static_cast<SbxObject*>(new SbUnoClass( aNewName, xClass ));
+                    pRes->PutObject( xWrapper.get() );
+                }
+            }
+            else
+            {
+                pRes = new SbxVariable( SbxVARIANT );
+                unoToSbxValue( pRes, aValue );
+            }
+        }
+        catch( const NoSuchElementException& )
+        {
+        }
+    }
+
+    // Otherwise take it again as class
+    if( !pRes )
+    {
+        SbUnoClass* pNewClass = findUnoClass( aNewName );
+        if( pNewClass )
+        {
+            pRes = new SbxVariable( SbxVARIANT );
+            SbxObjectRef xWrapper = static_cast<SbxObject*>(pNewClass);
+            pRes->PutObject( xWrapper.get() );
+        }
+    }
+
+    // A UNO service?
+    if( !pRes )
+    {
+        SbUnoService* pUnoService = findUnoService( aNewName );
+        if( pUnoService )
+        {
+            pRes = new SbxVariable( SbxVARIANT );
+            SbxObjectRef xWrapper = static_cast<SbxObject*>(pUnoService);
+            pRes->PutObject( xWrapper.get() );
+        }
+    }
+
+    // A UNO singleton?
+    if( !pRes )
+    {
+        SbUnoSingleton* pUnoSingleton = findUnoSingleton( aNewName );
+        if( pUnoSingleton )
+        {
+            pRes = new SbxVariable( SbxVARIANT );
+            SbxObjectRef xWrapper = static_cast<SbxObject*>(pUnoSingleton);
+            pRes->PutObject( xWrapper.get() );
+        }
+    }
+    return pRes;
+}
+
 SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
 {
     SbxVariable* pRes = SbxObject::Find( rName, SbxClassType::Variable );
@@ -3370,72 +3443,18 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
             Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
             if( xCoreReflection.is() )
             {
-                // Is it a constant?
-                Reference< XHierarchicalNameAccess > xHarryName( xCoreReflection, UNO_QUERY );
-                if( xHarryName.is() )
-                {
-                    try
-                    {
-                        Any aValue = xHarryName->getByHierarchicalName( aNewName );
-                        TypeClass eType = aValue.getValueTypeClass();
+                pRes = lookupUno(xCoreReflection, aNewName);
 
-                        // Interface located? Then it is a class
-                        if( eType == TypeClass_INTERFACE )
-                        {
-                            Reference< XIdlClass > xClass( aValue, UNO_QUERY );
-                            if( xClass.is() )
-                            {
-                                pRes = new SbxVariable( SbxVARIANT );
-                                SbxObjectRef xWrapper = static_cast<SbxObject*>(new SbUnoClass( aNewName, xClass ));
-                                pRes->PutObject( xWrapper.get() );
-                            }
-                        }
-                        else
-                        {
-                            pRes = new SbxVariable( SbxVARIANT );
-                            unoToSbxValue( pRes, aValue );
-                        }
-                    }
-                    catch( const NoSuchElementException& )
-                    {
-                    }
+                OUString aRest;
+                if (!pRes && aNewName.startsWith("com.sun.star.", &aRest))
+                {
+                    // If the lookup failed, and this name is potentially the "old" name
+                    // from before we moved stuff from the com.sun.star namespace to the cpo namespace,
+                    // then try doing a lookup using the new name, to preserve compatibility for old
+                    // basic code.
+                    pRes = lookupUno(xCoreReflection, "cpo." + aRest);
                 }
 
-                // Otherwise take it again as class
-                if( !pRes )
-                {
-                    SbUnoClass* pNewClass = findUnoClass( aNewName );
-                    if( pNewClass )
-                    {
-                        pRes = new SbxVariable( SbxVARIANT );
-                        SbxObjectRef xWrapper = static_cast<SbxObject*>(pNewClass);
-                        pRes->PutObject( xWrapper.get() );
-                    }
-                }
-
-                // A UNO service?
-                if( !pRes )
-                {
-                    SbUnoService* pUnoService = findUnoService( aNewName );
-                    if( pUnoService )
-                    {
-                        pRes = new SbxVariable( SbxVARIANT );
-                        SbxObjectRef xWrapper = static_cast<SbxObject*>(pUnoService);
-                        pRes->PutObject( xWrapper.get() );
-                    }
-                }
-
-                // A UNO singleton?
-                if( !pRes )
-                {
-                    SbUnoSingleton* pUnoSingleton = findUnoSingleton( aNewName );
-                    if( pUnoSingleton )
-                    {
-                        pRes = new SbxVariable( SbxVARIANT );
-                        SbxObjectRef xWrapper = static_cast<SbxObject*>(pUnoSingleton);
-                        pRes->PutObject( xWrapper.get() );
-                    }
-                }
             }
         }
 
