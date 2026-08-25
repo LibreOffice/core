@@ -81,6 +81,29 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
 // NOTE: This is still work in progress and unfinished, but it already covers a good
 // part of the ooxml math stuff.
 
+// The w prefix is bound in a DOCX and nowhere else. A formula in a presentation or a
+// spreadsheet goes out inside a slide or a sheet, which never declare it, so a color
+// there would leave the prefix unbound.
+bool SmOoxmlExport::HasOwnColor( const SmNode* pNode ) const
+{
+    return drawingml::DOCUMENT_DOCX == m_DocumentType
+        && pNode->GetFont().GetColor() != COL_AUTO;
+}
+
+// A construct such as a fraction or a pair of brackets draws part of itself, and the
+// color of that part travels in the m:ctrlPr of the construct's property element.
+void SmOoxmlExport::WriteCtrlPrColor( const SmNode* pNode )
+{
+    if( !HasOwnColor( pNode ))
+        return;
+    m_pSerializer->startElementNS( XML_m, XML_ctrlPr );
+    m_pSerializer->startElementNS( XML_w, XML_rPr );
+    m_pSerializer->singleElementNS( XML_w, XML_color, FSNS( XML_w, XML_val ),
+        msfilter::util::ConvertColorOU( pNode->GetFont().GetColor()));
+    m_pSerializer->endElementNS( XML_w, XML_rPr );
+    m_pSerializer->endElementNS( XML_m, XML_ctrlPr );
+}
+
 void SmOoxmlExport::HandleVerticalStack( const SmNode* pNode, int nLevel )
 {
     m_pSerializer->startElementNS(XML_m, XML_eqArr);
@@ -189,10 +212,12 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
 void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char* type )
 {
     m_pSerializer->startElementNS(XML_m, XML_f);
-    if( type != nullptr )
+    if( type != nullptr || HasOwnColor( pNode ))
     {
         m_pSerializer->startElementNS(XML_m, XML_fPr);
-        m_pSerializer->singleElementNS(XML_m, XML_type, FSNS(XML_m, XML_val), type);
+        if( type != nullptr )
+            m_pSerializer->singleElementNS(XML_m, XML_type, FSNS(XML_m, XML_val), type);
+        WriteCtrlPrColor( pNode );
         m_pSerializer->endElementNS( XML_m, XML_fPr );
     }
     assert( pNode->GetNumSubNodes() == 3 );
@@ -232,6 +257,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributeNode* pNode, int nLevel )
             m_pSerializer->startElementNS(XML_m, XML_accPr);
             OString value = OUStringToOString(pNode->Attribute()->GetToken().cMathChar, RTL_TEXTENCODING_UTF8 );
             m_pSerializer->singleElementNS(XML_m, XML_chr, FSNS(XML_m, XML_val), value);
+            WriteCtrlPrColor( pNode );
             m_pSerializer->endElementNS( XML_m, XML_accPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );
@@ -245,6 +271,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributeNode* pNode, int nLevel )
             m_pSerializer->startElementNS(XML_m, XML_barPr);
             m_pSerializer->singleElementNS( XML_m, XML_pos, FSNS( XML_m, XML_val ),
                 ( pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top" );
+            WriteCtrlPrColor( pNode );
             m_pSerializer->endElementNS( XML_m, XML_barPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );
@@ -259,6 +286,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributeNode* pNode, int nLevel )
             m_pSerializer->singleElementNS(XML_m, XML_hideLeft, FSNS(XML_m, XML_val), "1");
             m_pSerializer->singleElementNS(XML_m, XML_hideRight, FSNS(XML_m, XML_val), "1");
             m_pSerializer->singleElementNS(XML_m, XML_strikeH, FSNS(XML_m, XML_val), "1");
+            WriteCtrlPrColor( pNode );
             m_pSerializer->endElementNS( XML_m, XML_borderBoxPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );
@@ -276,6 +304,12 @@ void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
     m_pSerializer->startElementNS(XML_m, XML_rad);
     if( const SmNode* argument = pNode->Argument())
     {
+        if( HasOwnColor( pNode ))
+        {
+            m_pSerializer->startElementNS(XML_m, XML_radPr);
+            WriteCtrlPrColor( pNode );
+            m_pSerializer->endElementNS( XML_m, XML_radPr );
+        }
         m_pSerializer->startElementNS(XML_m, XML_deg);
         HandleNode( argument, nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_deg );
@@ -284,6 +318,7 @@ void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
     {
         m_pSerializer->startElementNS(XML_m, XML_radPr);
         m_pSerializer->singleElementNS(XML_m, XML_degHide, FSNS(XML_m, XML_val), "1");
+        WriteCtrlPrColor( pNode );
         m_pSerializer->endElementNS( XML_m, XML_radPr );
         m_pSerializer->singleElementNS(XML_m, XML_deg); // empty but present
     }
@@ -329,6 +364,7 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
                 m_pSerializer->singleElementNS(XML_m, XML_subHide, FSNS(XML_m, XML_val), "1");
             if( subsup == nullptr || subsup->GetSubSup( CSUP ) == nullptr )
                 m_pSerializer->singleElementNS(XML_m, XML_supHide, FSNS(XML_m, XML_val), "1");
+            WriteCtrlPrColor( pNode );
             m_pSerializer->endElementNS( XML_m, XML_naryPr );
             if( subsup == nullptr || subsup->GetSubSup( CSUB ) == nullptr )
                 m_pSerializer->singleElementNS(XML_m, XML_sub);
@@ -552,6 +588,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
         m_pSerializer->singleElementNS( XML_m, XML_endChr,
             FSNS( XML_m, XML_val ), mathSymbolToString(pNode->ClosingBrace()) );
 
+    WriteCtrlPrColor( pNode );
     m_pSerializer->endElementNS( XML_m, XML_dPr );
     if (subnodes.empty())
     {
@@ -590,6 +627,7 @@ void SmOoxmlExport::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int n
                 FSNS( XML_m, XML_val ), top ? "top" : "bot" );
             m_pSerializer->singleElementNS(XML_m, XML_vertJc, FSNS(XML_m, XML_val),
                                            top ? "bot" : "top");
+            WriteCtrlPrColor( pNode );
             m_pSerializer->endElementNS( XML_m, XML_groupChrPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );
