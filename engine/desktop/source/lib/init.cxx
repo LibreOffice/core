@@ -120,6 +120,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
@@ -140,6 +141,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridge.hpp>
@@ -9587,6 +9589,28 @@ static void preloadData()
         OutputDevice::GetDefaultFont(DefaultFontType::CJK_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
         OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
+    }
+
+    std::cerr << "Preload module UI configuration\n";
+    try
+    {
+        uno::Reference<css::ui::XModuleUIConfigurationManagerSupplier> xUICfgSupplier =
+            css::ui::theModuleUIConfigurationManagerSupplier::get(xContext);
+        uno::Reference<container::XNameAccess> xModules(
+            css::frame::ModuleManager::create(xContext), uno::UNO_QUERY_THROW);
+        for (const OUString& rModule : xModules->getElementNames())
+        {
+            try
+            {
+                xUICfgSupplier->getUIConfigurationManager(rModule);
+            }
+            catch (const cpo::uno::Exception&)
+            {
+            }
+        }
+    }
+    catch (const cpo::uno::Exception&)
+    {
     }
 
     std::cerr << "Preload config\n";
