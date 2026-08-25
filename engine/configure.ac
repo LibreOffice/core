@@ -6625,6 +6625,30 @@ if test -n "$BUILDING_PCH_WITH_OBJ"; then
         AC_MSG_RESULT(no)
     fi
 fi
+if test -n "$PCH_DEBUGINFO" -a "$COM" != MSC; then
+    AC_MSG_CHECKING([whether the vtable survives -fpch-debuginfo])
+    cat > conftest_pch.hxx <<_ACEOF
+#pragma once
+struct A { A() {} virtual ~A(); virtual void f(); };
+_ACEOF
+    cat > conftest_pch.cxx <<_ACEOF
+#include "conftest_pch.hxx"
+A::~A() {}
+void A::f() {}
+_ACEOF
+    pch_debuginfo_flags="$BUILDING_PCH_WITH_OBJ $PCH_INSTANTIATE_TEMPLATES $PCH_CODEGEN $PCH_DEBUGINFO"
+    if $CXX $CXXFLAGS -x c++-header -Xclang -emit-pch $pch_debuginfo_flags -c conftest_pch.hxx \
+            -o conftest_pch.hxx.pch >/dev/null 2>&1 \
+        && $CXX $CXXFLAGS -include-pch conftest_pch.hxx.pch -S conftest_pch.cxx -o conftest_pch.s \
+            >/dev/null 2>&1 \
+        && grep -q '_ZTV1A:' conftest_pch.s; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT([no, not using -fpch-debuginfo])
+        PCH_DEBUGINFO=
+    fi
+    rm -f conftest_pch.hxx conftest_pch.cxx conftest_pch.hxx.pch conftest_pch.s
+fi
 AC_SUBST(PCH_DEBUGINFO)
 
 TAB=`printf '\t'`
