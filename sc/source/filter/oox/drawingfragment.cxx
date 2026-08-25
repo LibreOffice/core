@@ -907,7 +907,7 @@ void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rn
     {
         if (OUString aFontId; rFontModel.moUnderlineClass.value().startsWith(u"font", &aFontId))
         {
-            if (FontRef rxFont = getStyles().getFont(aFontId.toInt32()); rxFont)
+            if (FontRef rxFont = getStyles().getFont(aFontId.toInt32()))
                 rAxFontData.mbDblUnderline
                     = (rxFont->getModel().mnUnderline == XML_double)
                       || (rxFont->getModel().mnUnderline == XML_doubleAccounting);

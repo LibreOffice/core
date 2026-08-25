@@ -864,8 +864,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
                 mnXclFont = GetFontBuffer().Insert(maFontData, EXC_COLOR_CTRLTEXT);
         }
 
-        // Align holds the model default - centered on a button, left elsewhere - where the
-        // control has it at all; VerticalAlign is void unless set, and the member default centers
+        // The default for Align is centered on a button, left elsewhere; the default for
+        // VerticalAlign is center
         if (sal_Int16 nApiHorAlign = 0; aCtrlProp.GetProperty(nApiHorAlign, u"Align"_ustr))
         {
             switch (nApiHorAlign)
