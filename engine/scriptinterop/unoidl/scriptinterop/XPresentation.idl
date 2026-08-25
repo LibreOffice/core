@@ -13,17 +13,50 @@ module scriptinterop {
 
 interface XPresentation : XBase
 {
-    sequence<XSlide> getSlides();
+    [overload appendSlide] XSlide appendSlide();
 
-    XSlide appendSlide();
+    [overload appendSlide] XSlide appendSlideFrom([in] any layoutOrSlide);
 
-    double getPageWidth();
+    [overload appendSlide] XSlide appendSlideLinked([in] XSlide slide,
+                                                    [in] SlideLinkingMode linkingMode);
+
+    sequence<XLayout> getLayouts();
+
+    sequence<XMaster> getMasters();
+
+    string getName();
+
+    XNotesMaster getNotesMaster();
+
+    double getNotesPageHeight();
+
+    double getNotesPageWidth();
+
+    XPageElement getPageElementById([in] string id);
 
     double getPageHeight();
 
+    double getPageWidth();
+
     com::sun::star::beans::Optional<XSlideSelection> getSelection();
+
+    XSlide getSlideById([in] string id);
+
+    sequence<XSlide> getSlides();
+
+    [overload insertSlide] XSlide insertSlide([in] long index);
+
+    [overload insertSlide] XSlide insertSlideFrom([in] long index, [in] any layoutOrSlide);
+
+    [overload insertSlide] XSlide insertSlideLinked([in] long index, [in] XSlide slide,
+                                                    [in] SlideLinkingMode linkingMode);
+
+    [overload replaceAllText] long replaceAllText([in] string findText, [in] string replaceText);
+
+    [overload replaceAllText] long replaceAllTextMatchCase(
+        [in] string findText, [in] string replaceText, [in] boolean matchCase);
 };
 
 };
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

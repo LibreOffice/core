@@ -62,6 +62,7 @@
 #include <scriptinterop/XLink.hpp>
 #include <scriptinterop/XListStyle.hpp>
 #include <scriptinterop/XMaster.hpp>
+#include <scriptinterop/XNotesMaster.hpp>
 #include <scriptinterop/XNotesPage.hpp>
 #include <scriptinterop/XPage.hpp>
 #include <scriptinterop/XPageBackground.hpp>
@@ -1461,6 +1462,78 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return model_; }
 
+    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL appendSlide() override
+    {
+        auto const pages = drawPages();
+        // Inserting at getCount() appends; the new page is blank, without layout placeholders.
+        auto const page = pages->insertNewByIndex(pages->getCount());
+        return new SlideImpl(model_, page);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
+    appendSlideFrom(cpo::uno::Any const&) override
+    {
+        throw cpo::uno::RuntimeException(u"appendSlideFrom: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
+    appendSlideLinked(cpo::uno::Reference<scriptinterop::XSlide> const&,
+                      scriptinterop::SlideLinkingMode) override
+    {
+        throw cpo::uno::RuntimeException(u"appendSlideLinked: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XLayout>> SAL_CALL getLayouts() override
+    {
+        throw cpo::uno::RuntimeException(u"getLayouts: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XMaster>> SAL_CALL getMasters() override
+    {
+        throw cpo::uno::RuntimeException(u"getMasters: not implemented"_ustr);
+    }
+
+    OUString SAL_CALL getName() override
+    {
+        throw cpo::uno::RuntimeException(u"getName: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XNotesMaster> SAL_CALL getNotesMaster() override
+    {
+        throw cpo::uno::RuntimeException(u"getNotesMaster: not implemented"_ustr);
+    }
+
+    double SAL_CALL getNotesPageHeight() override
+    {
+        throw cpo::uno::RuntimeException(u"getNotesPageHeight: not implemented"_ustr);
+    }
+
+    double SAL_CALL getNotesPageWidth() override
+    {
+        throw cpo::uno::RuntimeException(u"getNotesPageWidth: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL
+    getPageElementById(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"getPageElementById: not implemented"_ustr);
+    }
+
+    double SAL_CALL getPageHeight() override { return pageSizePoints(u"Height"_ustr); }
+
+    double SAL_CALL getPageWidth() override { return pageSizePoints(u"Width"_ustr); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XSlideSelection>> SAL_CALL
+    getSelection() override
+    {
+        return {true, new SlideSelectionImpl(model_)};
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL getSlideById(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"getSlideById: not implemented"_ustr);
+    }
+
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSlide>> SAL_CALL getSlides() override
     {
         std::vector<cpo::uno::Reference<scriptinterop::XSlide>> slides;
@@ -1479,22 +1552,32 @@ public:
                                                                               slides.size());
     }
 
-    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL appendSlide() override
+    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL insertSlide(sal_Int32) override
     {
-        auto const pages = drawPages();
-        // Inserting at getCount() appends; the new page is blank, without layout placeholders.
-        auto const page = pages->insertNewByIndex(pages->getCount());
-        return new SlideImpl(model_, page);
+        throw cpo::uno::RuntimeException(u"insertSlide: not implemented"_ustr);
     }
 
-    double SAL_CALL getPageWidth() override { return pageSizePoints(u"Width"_ustr); }
-
-    double SAL_CALL getPageHeight() override { return pageSizePoints(u"Height"_ustr); }
-
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XSlideSelection>> SAL_CALL
-    getSelection() override
+    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
+    insertSlideFrom(sal_Int32, cpo::uno::Any const&) override
     {
-        return {true, new SlideSelectionImpl(model_)};
+        throw cpo::uno::RuntimeException(u"insertSlideFrom: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
+    insertSlideLinked(sal_Int32, cpo::uno::Reference<scriptinterop::XSlide> const&,
+                      scriptinterop::SlideLinkingMode) override
+    {
+        throw cpo::uno::RuntimeException(u"insertSlideLinked: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL replaceAllText(OUString const&, OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceAllText: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL replaceAllTextMatchCase(OUString const&, OUString const&, bool) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceAllTextMatchCase: not implemented"_ustr);
     }
 
 private:

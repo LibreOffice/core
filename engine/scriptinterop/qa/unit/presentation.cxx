@@ -328,6 +328,27 @@ CPPUNIT_TEST_FIXTURE(Test, testCurrentPageOutsideNormalView)
     CPPUNIT_ASSERT(
         getValue(getValue(xPresentation->getSelection())->getCurrentPage())->asSlide().is());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testUnimplementedMethodReportsItInTheExceptionMessage)
+{
+    auto const xPresentation = loadPresentation();
+    // The facade reaches all the way from the presentation down to a slide obtained through the
+    // selection.
+    auto const xSlide
+        = getValue(getValue(xPresentation->getSelection())->getCurrentPage())->asSlide();
+    // A method still awaiting an implementation says so plainly in its exception message.
+    try
+    {
+        xSlide->getLayout();
+        CPPUNIT_FAIL("getLayout: expected an exception");
+    }
+    catch (cpo::uno::RuntimeException const& e)
+    {
+        // A debug build appends the throw site to the message, so the check looks for the
+        // wording rather than the exact end of the string.
+        CPPUNIT_ASSERT(e.Message.indexOf(u"not implemented") >= 0);
+    }
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
