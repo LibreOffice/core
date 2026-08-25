@@ -388,13 +388,25 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		return ev.shiftKey && !ev.ctrlKey && !ev.altKey && !ev.metaKey;
 	},
 
+	_isNavigationKey: function (ev) {
+		return [
+			this.keyCodes.UP, this.keyCodes.DOWN,
+			this.keyCodes.LEFT, this.keyCodes.RIGHT,
+			this.keyCodes.PAGEUP, this.keyCodes.PAGEDOWN,
+			this.keyCodes.HOME, this.keyCodes.END
+		].includes(ev.keyCode);
+	},
+
 	_isSlideSorterKey: function (ev) {
-		var codes = this.keyCodes;
-		return ev.keyCode === codes.DOWN || ev.keyCode === codes.UP ||
-		       ev.keyCode === codes.RIGHT || ev.keyCode === codes.LEFT ||
-		       ev.keyCode === codes.PAGEDOWN || ev.keyCode === codes.PAGEUP ||
-		       ev.keyCode === codes.DELETE || ev.keyCode === codes.BACKSPACE ||
-		       ev.keyCode === codes.HOME || ev.keyCode === codes.END;
+		return this._isNavigationKey(ev)
+			|| [this.keyCodes.DELETE, this.keyCodes.BACKSPACE].includes(ev.keyCode);
+	},
+
+	_isRangeExtendKeystroke: function (ev) {
+		return this._isShiftOnly(ev) && [
+			this.keyCodes.UP, this.keyCodes.DOWN,
+			this.keyCodes.HOME, this.keyCodes.END
+		].includes(ev.keyCode);
 	},
 
 	// _onKeyDown - called only as a DOM event handler
@@ -481,9 +493,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		}
 
 		if (this._slideSorterFocused()) {
-			if (this._isShiftOnly(ev)
-				&& (ev.keyCode === this.keyCodes.DOWN || ev.keyCode === this.keyCodes.UP || ev.keyCode === this.keyCodes.HOME || ev.keyCode === this.keyCodes.END)
-				&& ev.type === 'keydown') {
+			if (this._isRangeExtendKeystroke(ev) && ev.type === 'keydown') {
 
 				if (ev.keyCode === this.keyCodes.UP)
 					this._map._docLayer._preview._modifySelectedPartRange("UP");
