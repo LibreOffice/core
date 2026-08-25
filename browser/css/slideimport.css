@@ -1,0 +1,375 @@
+/*
+ * Styles for the slide import pane, docked beside the navigation sidebar
+ * in a presentation.
+ */
+
+/* The wrapper paints the whole pane's background with the token the slide
+ * navigator uses, so the two slide panels share one surface color and a
+ * branding recolors them together. */
+#slide-import-dock-wrapper {
+	display: none;
+	background: var(--color-background-lighter);
+	position: relative;
+	overflow: hidden;
+	z-index: 990;
+	height: 100%;
+}
+
+#slide-import-dock-wrapper.visible {
+	display: block;
+	width: var(--slide-import-width, 320px);
+	border-inline-end: 1px solid var(--color-border);
+}
+
+#slide-import-panel {
+	height: 100%;
+}
+
+/* The header at the top is the slide navigator's (navigation-header with
+ * its title, expand and close button classes), so its styles live in
+ * jssidebar.css and both panels stay in step. Only the pane's own content
+ * below it is styled here. */
+
+/* The pane keeps its own compact title size on the shared header. */
+.navigation-title.slide-import-title {
+	font-size: 1.15em;
+	color: var(--color-text-dark);
+}
+
+.slide-import {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.slide-import-body {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	padding: 8px;
+	box-sizing: border-box;
+	gap: 8px;
+}
+
+/* A plain content-sized secondary button, as the design system specifies;
+ * the shared .button rule provides the look and the max-content width. The
+ * pane's own column gap replaces the button margin. */
+.slide-import-choose {
+	margin: 0;
+}
+
+.slide-import-choose:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.slide-import-filename {
+	color: var(--color-text-dark);
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+.slide-import-hint,
+.slide-import-status {
+	color: var(--color-text-light);
+}
+
+.slide-import-error {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px;
+	border: 1px solid var(--color-error);
+	border-radius: var(--border-radius);
+	color: var(--color-text-dark);
+}
+
+.slide-import-retry {
+	margin: 0;
+	min-width: 0;
+}
+
+.slide-import-keepdesign,
+.slide-import-linksource {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--color-text-dark);
+}
+
+/* The slides carry the slide navigator's preview classes, so
+ * partsPreviewControl.css styles the thumbnails of both panels; the rules
+ * here only lay the list out inside the pane. The counter behind the
+ * navigator's slide numbers restarts per list. */
+.slide-import-list {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	scrollbar-width: var(--scrollbar-width);
+	scrollbar-color: var(--scrollbar-color);
+	counter-reset: slide-number;
+}
+
+/* The roving tab stop sits on the frame; it shows on the thumbnail's ring,
+ * where the slide navigator draws its selection. */
+.slide-import-slide:focus-visible {
+	outline: none;
+}
+
+.slide-import-slide:focus-visible .preview-img {
+	outline-color: var(--color-primary-dark);
+}
+
+/* The thumbnail picture and its selection checkbox share this box, so the
+ * checkbox sits over the picture's corner. In the maximized grid the box
+ * takes the full column and the picture keeps filling it. */
+.slide-import-thumb {
+	position: relative;
+	display: inline-flex;
+}
+
+.parts-preview-grid .slide-import-thumb {
+	width: 100%;
+}
+
+/* The selection checkbox over a thumbnail's corner. A plain click on it
+ * toggles that slide in and out of the selection, so the mouse builds a
+ * multi-selection without a modifier key. The span is the click target,
+ * larger than the drawn box so a click lands easily; the box itself is the
+ * before pseudo-element, and the checked tick the after one. */
+.slide-import-checkbox {
+	display: none;
+	position: absolute;
+	/* The drawn box sits 8px inside the picture's corner: 5px of this
+	 * span's own inset here, 3px more from the before pseudo-element,
+	 * past the picture's 10px strip margin and 3px transparent border. */
+	inset-block-start: 5px;
+	inset-inline-start: 15px;
+	width: 22px;
+	height: 22px;
+	cursor: pointer;
+}
+
+/* In the grid the picture starts at the box edge (no strip margin). */
+.parts-preview-grid .slide-import-checkbox {
+	inset-inline-start: 5px;
+}
+
+.slide-import-checkbox::before {
+	content: '';
+	position: absolute;
+	inset: 3px;
+	box-sizing: border-box;
+	border: 1px solid var(--color-border);
+	border-radius: 3px;
+	background: var(--color-main-background);
+	/* A shadow keeps the box readable over busy slide content. */
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.slide-import-checkbox.checked::before {
+	border-color: var(--color-primary);
+	background: var(--color-primary);
+}
+
+/* The tick: the bottom and end edges of a small rectangle, turned 45
+ * degrees. */
+.slide-import-checkbox.checked::after {
+	content: '';
+	position: absolute;
+	inset-block-start: 5px;
+	inset-inline-start: 8px;
+	width: 5px;
+	height: 9px;
+	border: solid var(--color-primary-text);
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+/* The checkbox shows while the pointer is over its slide or the slide holds
+ * the keyboard focus, and stays on show on every slide while any slide is
+ * checked, so an ongoing multi-selection keeps all of its toggles visible. */
+.slide-import-slide:hover .slide-import-checkbox,
+.slide-import-slide:focus .slide-import-checkbox,
+.slide-import-list:has(.slide-import-checkbox.checked) .slide-import-checkbox {
+	display: block;
+}
+
+/* A slide whose thumbnail has not arrived yet: the picture is a blank
+ * placeholder with the slide's shape, and the shimmer plays on the
+ * background showing through it. */
+.preview-img.slide-import-skeleton {
+	background: linear-gradient(
+		90deg,
+		var(--color-background-lighter) 25%,
+		var(--color-background-darker) 50%,
+		var(--color-background-lighter) 75%
+	);
+	background-size: 200% 100%;
+	animation: slide-import-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes slide-import-skeleton-shimmer {
+	from {
+		background-position: 200% 0;
+	}
+	to {
+		background-position: -200% 0;
+	}
+}
+
+.slide-import-footer {
+	display: flex;
+}
+
+.slide-import-insert {
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	font-weight: 600;
+}
+
+.slide-import-insert:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+/* The divider between the two maximized slide grids. It sits on their
+ * boundary, which starts at the middle of the document area. The docked
+ * side-by-side panels have fixed widths, so no divider shows there. */
+.pane-splitter {
+	display: none;
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: var(--expanded-navigation-width, 50%);
+	width: 8px;
+	margin-inline-start: -4px;
+	z-index: 993;
+	cursor: col-resize;
+	touch-action: none;
+}
+
+#main-document-content.panes-expanded:has(#navigation-sidebar.visible):has(
+#slide-import-dock-wrapper.visible
+)
+.pane-splitter {
+	display: block;
+}
+
+/* A thin line down the middle of the wider drag target. */
+.pane-splitter::before {
+	content: '';
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 50%;
+	width: 1px;
+	transform: translateX(-50%);
+	background: var(--color-border);
+}
+
+.pane-splitter:hover::before,
+.pane-splitter.dragging::before,
+.pane-splitter:focus-visible::before {
+	background: var(--color-primary);
+	width: 2px;
+}
+
+/* Maximized layout: the open panels cover the document area. The document
+ * canvas underneath keeps rendering, so returning to the normal layout
+ * needs no re-render. Each panel alone fills the whole area; with both
+ * open they share it side by side, split at the divider. */
+#main-document-content.panes-expanded #navigation-sidebar.visible {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	inset-inline-end: 0;
+	width: auto;
+	z-index: 992;
+}
+
+#main-document-content.panes-expanded:has(#slide-import-dock-wrapper.visible)
+#navigation-sidebar.visible {
+	inset-inline-end: auto;
+	width: var(--expanded-navigation-width, 50%);
+}
+
+#main-document-content.panes-expanded #slide-import-dock-wrapper.visible {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	inset-inline-end: 0;
+	width: auto;
+	z-index: 992;
+}
+
+/* Leave room for the navigation grid only when it is actually open; with
+ * it closed the maximized import pane covers the whole document area. */
+#main-document-content.panes-expanded:has(#navigation-sidebar.visible)
+#slide-import-dock-wrapper.visible {
+	inset-inline-start: var(--expanded-navigation-width, 50%);
+}
+
+/* In the wide layout the insert button keeps the compact width of the
+ * navigator's import-your-slides pill and sits centred like it, instead
+ * of stretching across the whole panel. */
+#main-document-content.panes-expanded .slide-import-insert {
+	width: 300px;
+	box-sizing: border-box;
+}
+
+#main-document-content.panes-expanded .slide-import-footer {
+	justify-content: center;
+}
+
+/* The import-your-slides button row under the slide sorter. The spacing
+ * lives on the button, not the row, so the row collapses to nothing when
+ * the button is hidden (a Draw document, or a read-only presentation). */
+#presentation-import-toolbar {
+	display: flex;
+	box-sizing: border-box;
+}
+
+#presentation-import-toolbar .unotoolbutton {
+	flex: 1;
+	margin: 4px;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: var(--btn-size);
+	background-color: var(--color-primary);
+	border-radius: var(--border-radius);
+	cursor: pointer;
+}
+
+#presentation-import-toolbar .unotoolbutton:hover {
+	background-color: var(--color-primary-dark);
+}
+
+/* The icon-less button fills the whole pill as the click and keyboard
+ * target. It carries no chrome of its own, so the pill background shows
+ * through and the label inside it stays visible and centred. */
+#presentation-import-toolbar .unotoolbutton .unobutton {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: none;
+	background: transparent;
+}
+
+#presentation-import-toolbar .unotoolbutton:focus-within {
+	outline: 2px solid var(--color-primary-darker);
+	outline-offset: 1px;
+}
+
+#presentation-import-toolbar .unotoolbutton .unolabel {
+	color: var(--color-primary-text);
+	cursor: pointer;
+}

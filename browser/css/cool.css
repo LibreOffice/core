@@ -835,8 +835,17 @@ input, button {
 	margin: 0;
 	padding: 0;
 	min-height: 0;
-	/* The maximized panes are placed against this box. */
+	/* The splitter overlay and the maximized panes are placed against this
+	 * box. */
 	position: relative;
+	/* Widths of the navigation sidebar and the slide import pane, in pixels.
+	 * They start equal so the import pane reads as a twin of the navigator. */
+	--navigation-sidebar-width: 250px;
+	--slide-import-width: 250px;
+	/* The width of the navigation grid while the panels are maximized over
+	 * the document area; the import grid fills the rest. The two grids start
+	 * at an even split. */
+	--expanded-navigation-width: 50%;
 }
 
 .cool-annotation-collapsed-show .cool-annotation-img {

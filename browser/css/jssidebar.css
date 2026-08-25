@@ -700,22 +700,10 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	border-bottom-color: rgba(var(--doc-type), 1);
 }
 #navigation-sidebar {
-	width: 250px;
+	width: var(--navigation-sidebar-width, 250px);
 	display: none;
 	border-inline-end: 1px solid var(--color-border);
 	/* bg set in #sidebar-dock-wrapper, #navigator-dock-wrapper */
-}
-
-/* Maximized layout: the open panel covers the document area. The document
- * canvas underneath keeps rendering, so returning to the normal layout
- * needs no re-render. */
-#main-document-content.panes-expanded #navigation-sidebar.visible {
-	position: absolute;
-	inset-block: 0;
-	inset-inline-start: 0;
-	inset-inline-end: 0;
-	width: auto;
-	z-index: 992;
 }
 
 /* Quick Find Panel */

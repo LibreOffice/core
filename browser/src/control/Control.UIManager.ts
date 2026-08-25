@@ -651,6 +651,9 @@ class UIManager extends window.L.Control {
 
 		this.initializeMenubarAndTopToolbar();
 
+		// A presentation holds linked slides on every device.
+		this.map.slideLinks = new SlideLinks(this.map);
+
 		if (window.mode.isSmallScreenDevice()) {
 			$('#toolbar-mobile-back').on('click', () => {
 				this.enterReadonlyOrClose();
@@ -664,7 +667,10 @@ class UIManager extends window.L.Control {
 
 			this.map.navigator = JSDialog.NavigatorPanel(this.map);
 
+			this.map.slideImportPane = new SlideImportPane(this.map);
+
 			this.map.paneExpander = new PaneExpander(this.map);
+			this.map.paneSplitter = new PaneSplitter(this.map);
 
 			this.map.formulaautocomplete = new FormulaAutoCompletePopup(this.map);
 			this.map.formulausage = new FormulaUsagePopup(this.map);

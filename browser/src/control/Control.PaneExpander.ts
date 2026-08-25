@@ -11,12 +11,17 @@
  */
 
 /*
- * PaneExpander - the expand state of the navigation sidebar. Maximizing
- * covers the document area with the open panel, which shows its slides as
- * a grid of larger thumbnails. The expand toggle in the panel's header
- * reflects the state through aria-pressed. The current state is a single
- * class on #main-document-content, which the CSS turns into the overlay
- * layout. Pressing Escape returns to the normal layout.
+ * PaneExpander - the shared expand state for the navigation sidebar and the
+ * slide import pane. Maximizing covers the document area with the open
+ * panels: with both open they share it side by side, each showing its
+ * slides as a grid, split at the draggable divider; with one open that
+ * panel fills the area alone. The expand toggle in either panel's header
+ * switches the one shared state, so both toggles reflect it through
+ * aria-pressed. The current state is a single class on
+ * #main-document-content, which the CSS turns into the overlay layout.
+ *
+ * While maximized the navigation sidebar's slide list switches to a grid
+ * of larger thumbnails. Pressing Escape returns to the normal layout.
  */
 
 /* global app */
@@ -26,7 +31,10 @@ type PaneExpandMode = 'normal' | 'expanded';
 class PaneExpander {
 	// The panels the maximized layout can hold, by element id. A panel is
 	// open while it carries the visible class.
-	private static readonly PANEL_IDS: string[] = ['navigation-sidebar'];
+	private static readonly PANEL_IDS: string[] = [
+		'navigation-sidebar',
+		'slide-import-dock-wrapper',
+	];
 
 	private map: any;
 	private mainContent: HTMLElement;
@@ -72,18 +80,22 @@ class PaneExpander {
 		if (this.mode === mode || !this.mainContent) return;
 		this.mainContent.classList.toggle('panes-expanded', mode === 'expanded');
 		this.mode = mode;
-		// The slide list is a grid only while the panel fills the document
+		// The slide list is a grid only while the panels fill the document
 		// area; otherwise it stays the narrow vertical strip.
 		this.applyGridMode(mode === 'expanded');
 		this.updateToggles();
+		if (this.map.paneSplitter) this.map.paneSplitter.onModeChange();
 	}
 
 	private applyGridMode(enabled: boolean): void {
 		const preview = this.map._docLayer && this.map._docLayer._preview;
 		if (preview && typeof preview.setGridMode === 'function')
 			preview.setGridMode(enabled);
+		if (this.map.slideImportPane) this.map.slideImportPane.setGridMode(enabled);
 	}
 
+	// Every panel's expand toggle carries the shared class, so one query
+	// keeps them all reflecting the one shared mode.
 	private updateToggles(): void {
 		const pressed = this.mode === 'expanded';
 		document.querySelectorAll('.navigation-expand-button').forEach((button) => {

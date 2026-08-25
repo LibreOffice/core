@@ -59,4 +59,5 @@
 /// <reference path="./CDarkOverlay.test.ts" />
 /// <reference path="./AIChatMessageCodes.test.ts" />
 /// <reference path="./OtherViewCursorSection.test.ts" />
+/// <reference path="./SlideLinks.test.ts" />
 // NOTE: reference new tests here ...

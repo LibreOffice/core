@@ -1575,6 +1575,22 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							}
 						],
 						'vertical': 'true'
+					},
+					{
+						'id': 'insert-import-slides',
+						'type': 'bigcustomtoolitem',
+						'text': _('Import Slides'),
+						'command': 'importslides',
+						'icon': 'lc_insertcanvasslide.svg',
+						'accessibility': { focusBack: true, combination: 'IF', de: null }
+					},
+					{
+						'id': 'insert-update-slide-links',
+						'type': 'bigcustomtoolitem',
+						'text': _('Update Links'),
+						'command': 'updateslidelinks',
+						'icon': 'lc_updateall.svg',
+						'accessibility': { focusBack: true, combination: 'UL', de: null }
 					}
 				]
 			},

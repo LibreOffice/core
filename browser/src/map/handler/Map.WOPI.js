@@ -34,6 +34,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	UserCanNotWriteRelative: true,
 	EnableInsertRemoteImage: false,
 	EnableInsertRemoteFile: false, /* Separate, because requires explicit integration support */
+	EnableRemoteSlideImport: false,
 	DisableInsertLocalImage: false,
 	EnableInsertRemoteLink: false,
 	EnableRemoteAIContent: false,
@@ -161,6 +162,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this.UserCanNotWriteRelative = !!wopiInfo['UserCanNotWriteRelative'];
 		this.EnableInsertRemoteImage = !!wopiInfo['EnableInsertRemoteImage'];
 		this.EnableInsertRemoteFile = !!wopiInfo['EnableInsertRemoteFile'];
+		this.EnableRemoteSlideImport = !!wopiInfo['EnableRemoteSlideImport'];
 		this.DisableInsertLocalImage = !!wopiInfo['DisableInsertLocalImage'];
 		this.EnableRemoteLinkPicker = !!wopiInfo['EnableRemoteLinkPicker'];
 		this.EnableRemoteAIContent = !!wopiInfo['EnableRemoteAIContent'];
@@ -787,6 +789,41 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		else if (msg.MessageId === 'Action_InsertFile') {
 			if (msg.Values && (msg.Values.File instanceof Blob)) {
 				this._map.fire('insertfile', {file: msg.Values.File});
+			}
+		}
+		else if (msg.MessageId === 'Action_InsertSlides') {
+			if (msg.Values && (msg.Values.File instanceof Blob)) {
+				app.events.fire('slideimport:pick', {
+					file: msg.Values.File,
+					fileName: msg.Values.FileName
+				});
+			}
+			else if (msg.Values && msg.Values.url) {
+				app.events.fire('slideimport:pick', {
+					url: msg.Values.url,
+					fileName: msg.Values.filename
+				});
+			}
+		}
+		else if (msg.MessageId === 'Action_RefreshSlideSource') {
+			// The file picked for the source of a linked-slide update. The
+			// server reads the source from a location, so the url is the part
+			// of the reply a refresh can use; content marks a reply that
+			// carried the file itself instead. Either reply ends the wait for
+			// this source.
+			app.events.fire('slidelink:picked', {
+				url: msg.Values && msg.Values.url ? msg.Values.url : '',
+				content: !!(msg.Values && (msg.Values.File instanceof Blob))
+			});
+		}
+		else if (msg.MessageId === 'Action_ResolveSlideSource') {
+			// A location the host resolved on its own for a source it named
+			// earlier, which is how linked slides are refreshed with no gesture.
+			if (msg.Values && msg.Values.SourceId && msg.Values.Url) {
+				app.events.fire('slidelink:resolved', {
+					source: msg.Values.SourceId,
+					url: msg.Values.Url
+				});
 			}
 		}
 		else if (msg.MessageId == 'Action_Paste') {

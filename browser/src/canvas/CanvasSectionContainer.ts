@@ -1563,12 +1563,25 @@ class CanvasSectionContainer {
 		this.stopLongPress();
 	}
 
+	// A drag that carries one of these types is a slide preview being reordered in the slide
+	// sorter, or a thumbnail brought in from the slide import pane; the document area takes no
+	// drops from either.
+	private isSlideDrag(e: DragEvent): boolean {
+		if (!e.dataTransfer || !e.dataTransfer.types) return false;
+		return (
+			e.dataTransfer.types.includes('application/x-cool-slide') ||
+			e.dataTransfer.types.includes('application/x-cool-slide-import')
+		);
+	}
+
 	private onDragOver(e: DragEvent) {
+		if (this.isSlideDrag(e)) return;
 		// This is necessary to prevent window from taking the dropped object.
 		e.preventDefault();
 	}
 
 	private onDrop(e: DragEvent) {
+		if (this.isSlideDrag(e)) return;
 		e.preventDefault();
 
 		const point = this.convertPositionToCanvasLocale(e);

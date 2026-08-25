@@ -211,6 +211,9 @@ m4_ifelse(MOBILEAPP, [true],
           <div id="quickfind-panel" class="sidebar-panel"></div>
         </div>
       </nav>
+      <div id="slide-import-dock-wrapper">
+        <div id="slide-import-panel"></div>
+      </div>
       <div id="navigator-floating-icon"></div>
       <div id="document-container" class="readonly" dir="ltr">
         <div id="map"></div>

@@ -628,6 +628,8 @@ class Menubar extends window.L.Control {
 			{name: _UNO('.uno:SlideMenu', 'presentation'), id: 'slide', type: 'menu', accessibility: {combination: 'MS'}, menu: [
 				{name: _UNO('.uno:InsertSlide', 'presentation'), unoid: '.uno:InsertSlide', id: 'insertpage', type: 'action'},
 				{name: _UNO('.uno:DuplicateSlide', 'presentation'), unoid: '.uno:DuplicateSlide', id: 'duplicatepage', type: 'action'},
+				{name: _('Insert Slides from File...'), id: 'importslides', type: 'action'},
+				{name: _('Update Linked Slides...'), id: 'updateslidelinks', type: 'action'},
 				{name: _UNO('.uno:DeleteSlide', 'presentation'), unoid: '.uno:DeleteSlide', id: 'deletepage', type: 'action'},
 				{name: _UNO('.uno:ShowSlide', 'presentation'), unoid: '.uno:ShowSlide', id: 'showslide', type: 'action'},
 				{name: _UNO('.uno:HideSlide', 'presentation'), unoid: '.uno:HideSlide', id: 'hideslide', type: 'action'},
@@ -2637,7 +2639,9 @@ class Menubar extends window.L.Control {
 			|| id === 'animationdeck'
 			|| id === 'transitiondeck'
 			|| id.startsWith('extension-toggle-')
-			|| id.startsWith('ext:')) {
+			|| id.startsWith('ext:')
+			|| id === 'importslides'
+			|| id === 'updateslidelinks') {
 			app.dispatcher.dispatch(id);
 		} else if (id === ('settings-dialog')) {
 			this._map.settings.showSettingsDialog();

@@ -100,6 +100,8 @@ interface MapInterface extends Evented {
 		UserCanWrite: boolean;
 		HideChangeTrackingControls: boolean;
 		EnableRemoteLinkPicker: boolean;
+		EnableRemoteSlideImport: boolean;
+		EnableInsertRemoteFile: boolean;
 		HideSaveOption: boolean;
 	};
 
@@ -177,7 +179,10 @@ interface MapInterface extends Evented {
 	showComments(on?: boolean): void;
 	showResolvedComments(on?: boolean): void;
 	navigator: NavigatorPanel;
+	slideImportPane: SlideImportPane;
+	slideLinks: SlideLinks;
 	paneExpander: PaneExpander;
+	paneSplitter: PaneSplitter;
 	setPart(
 		part: number | string,
 		external?: boolean,

@@ -12,7 +12,32 @@
  * window.L.Control.PartsPreview
  */
 
-/* global _ _n app $ Hammer _UNO cool JSDialog buildSlideDragGhost */
+/* global _ _n app $ Hammer _UNO cool JSDialog buildSlideSectionHeader buildSlideDragGhost */
+
+// Drag data type that marks a drag as carrying slides to import from another
+// presentation, with a payload of {slides:[...]} source slide indices. A drag
+// reordering the current slides carries no custom type, so the presence of
+// this type tells an import drag apart from a reorder drag.
+const SLIDE_IMPORT_DND_TYPE = 'application/x-cool-slide-import';
+
+// True when the drag carries slides from the slide import pane.
+function isSlideImportDrag(e) {
+	const types = e.dataTransfer && e.dataTransfer.types;
+	return !!types && Array.prototype.indexOf.call(types, SLIDE_IMPORT_DND_TYPE) !== -1;
+}
+
+// The slides named by a slide import drag, or an empty array. The data is
+// only readable once the drop happens, so this returns nothing on dragover.
+function readSlideImportDrag(e) {
+	try {
+		const data = e.dataTransfer.getData(SLIDE_IMPORT_DND_TYPE);
+		const parsed = data ? JSON.parse(data) : null;
+		return parsed && Array.isArray(parsed.slides) ? parsed.slides : [];
+	} catch (ex) {
+		return [];
+	}
+}
+
 window.L.Control.PartsPreview = window.L.Control.extend({
 	options: {
 		fetchThumbnail: true,
@@ -85,6 +110,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('beforerequestpreview', this._beforeRequestPreview, this);
 		map.on('updatesections', this._updateSections, this);
 		map.on('docloaded', this._focusCurrentSlideOnLoad, this);
+		app.events.on('slidelink:changed', this._updateLinkMarks.bind(this));
 
 		window.addEventListener('resize', window.L.bind(this._resize, this));
 	},
@@ -165,6 +191,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				this._updateSelectedSection();
 			}
 
+			this._updateLinkMarks();
 			this._updateA11ySelection();
 
 			if (!this.options.allowOrientation) {
@@ -347,7 +374,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		var imgClassName = 'preview-img ' + this.options.imageClass;
 		var img = window.L.DomUtil.create('img', imgClassName, frame);
-		this._setPreviewPositionLabels(img, i);
 		// A drag grabbed on the picture starts from the frame, the nearest
 		// draggable ancestor, so it carries the slide marker data and shows
 		// the framed preview as its ghost.
@@ -362,6 +388,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// The part number of the slide this preview shows: the slide's
 		// stable unique id, carried by the slide list entries.
 		img._part = part;
+		// The mark of a slide that is linked to another file, drawn over the
+		// corner of the thumbnail. It is a picture alone, so the pointer goes
+		// through it to the thumbnail, which describes the link.
+		img._linkBadge = window.L.DomUtil.create('span', 'preview-link-badge', frame);
+		img._linkBadge.setAttribute('aria-hidden', 'true');
+		this._setPreviewLinkMark(img, i);
 		this._setPlaceholder(img, 'previewSmile');
 		img.fetched = false;
 		if (!window.mode.isDesktop()) {
@@ -673,16 +705,53 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		return img;
 	},
 
-	// The visible digit, the alt text and the tooltip are plain position
-	// strings, valid whether or not the slide renders. Callers that move
-	// a preview to a different position must call this again.
+	// Unlike the visible digit, the alt text and tooltip are plain
+	// attribute strings, so they only ever hold the position they were
+	// given here. Callers that move a preview to a different position
+	// must call this again with the new position. A slide linked to another
+	// file names that file and the slide of it in both.
 	_setPreviewPositionLabels: function (img, i) {
-		img.setAttribute('alt', _('preview of page %1').replace('%1', String(i + 1)));
-		img.setAttribute('data-cooltip', _('Slide %1').replace('%1', String(i + 1)));
-		const slideNumber = img.parentNode &&
-			img.parentNode.querySelector('.preview-slide-number');
-		if (slideNumber)
-			slideNumber.textContent = String(i + 1);
+		const link = this._pageLink(img);
+		const position = String(i + 1);
+		if (link) {
+			// One pass, with the replacement returned by a function, so a
+			// name holding a '$' pattern or a '%N' of its own goes in as it
+			// is.
+			const values = { '%1': position, '%2': link.name, '%3': link.source };
+			const fill = function (text) {
+				return text.replace(/%[123]/g, function (token) {
+					return values[token];
+				});
+			};
+			img.setAttribute('alt', fill(_('preview of page %1, linked to %2 in %3')));
+			img.setAttribute('data-cooltip', fill(_('Slide %1, linked to %2 in %3')));
+			return;
+		}
+		img.setAttribute('alt', _('preview of page %1').replace('%1', position));
+		img.setAttribute('data-cooltip', _('Slide %1').replace('%1', position));
+	},
+
+	// The source document a slide is linked to and the slide of that document
+	// it was made from, or null for a slide that is linked to nothing.
+	_pageLink: function (img) {
+		const links = this._map.slideLinks;
+		return links && img._part ? links.getPageLink(img._part) : null;
+	},
+
+	// Shows the link mark on the preview of a slide that is linked to another
+	// file, and describes the link in the preview's labels.
+	_setPreviewLinkMark: function (img, i) {
+		img._linkBadge.classList.toggle('linked', this._pageLink(img) !== null);
+		this._setPreviewPositionLabels(img, i);
+	},
+
+	// Brings the link marks of every preview to what the document reports
+	// its linked pages to be.
+	_updateLinkMarks: function () {
+		for (let i = 0; i < this._previewTiles.length; i++) {
+			if (this._previewTiles[i])
+				this._setPreviewLinkMark(this._previewTiles[i], i);
+		}
 	},
 
 	// Relabels every preview from startIndex onward to match its current
@@ -793,34 +862,20 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	_createSectionHeader: function (section, sectionIndex) {
 		var that = this;
 
-		var header = window.L.DomUtil.create('div', 'slide-section-header');
-		header.setAttribute('data-section-index', sectionIndex);
-		header.setAttribute('data-start-index', section.startIndex);
-		header.setAttribute('draggable', 'false');
+		// The shared builder wires the collapse toggle and the click that
+		// selects all slides in the section.
+		var header = buildSlideSectionHeader(
+			section.name, sectionIndex,
+			this._collapsedSections.has(section.name), {
+				onToggle: function () {
+					that._toggleSectionCollapse(sectionIndex);
+				},
+				onSelect: function () {
+					that._selectSection(sectionIndex);
+				},
+			});
 
-		var toggleBtn = window.L.DomUtil.create('button', 'slide-section-toggle ui-expander-btn', header);
-		toggleBtn.type = 'button';
-		toggleBtn.setAttribute('aria-label',
-			_('Toggle section %1').replace('%1', section.name));
-
-		var nameSpan = window.L.DomUtil.create('span', 'slide-section-name', header);
-		nameSpan.textContent = section.name;
-		nameSpan.setAttribute('title', section.name);
-
-		window.L.DomEvent.on(toggleBtn, 'click', function (e) {
-			window.L.DomEvent.stopPropagation(e);
-			window.L.DomEvent.preventDefault(e);
-			that._toggleSectionCollapse(sectionIndex);
-		}, this);
-
-		// Click on the header (but not the toggle) selects all slides in the section.
-		window.L.DomEvent.on(header, 'click', function (e) {
-			if (toggleBtn.contains(e.target))
-				return;
-			window.L.DomEvent.stopPropagation(e);
-			window.L.DomEvent.preventDefault(e);
-			that._selectSection(sectionIndex);
-		}, this);
+		const toggleBtn = header.querySelector('.slide-section-toggle');
 
 		// The second press of a double-click on the header (but not on the toggle) opens
 		// the rename dialog.
@@ -1375,6 +1430,21 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	_syncPreviews: function () {
 		var it = 0;
 
+		// The preview images that exist now, keyed by part number. A part
+		// number stays the same for the slide's whole lifetime, so an image
+		// fetched for a part number is still right for that slide wherever
+		// the update puts it.
+		const previewByPart = {};
+		for (it = 0; it < this._previewTiles.length; it++) {
+			if (this._previewTiles[it]._part) {
+				previewByPart[this._previewTiles[it]._part] = {
+					src: this._previewTiles[it].src,
+					fetched: this._previewTiles[it].fetched,
+					placeholderName: this._previewTiles[it].placeholderName
+				};
+			}
+		}
+
 		if (app.impress.partList.length !== this._previewTiles.length) {
 			if (Math.abs(app.impress.partList.length - this._previewTiles.length) === 1) {
 				if (app.impress.partList.length > this._previewTiles.length) {
@@ -1401,58 +1471,48 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				}
 			}
 			else {
-				// sync all, should never happen
+				// A batch insert or delete changed the count by more than
+				// one in a single update. Bring the preview list to the
+				// new length with placeholder tiles that carry no part
+				// number; the matching loop below hands every index its
+				// part number and the image that already carries it, so
+				// only genuinely new slides are left with the placeholder.
 				while (this._previewTiles.length < app.impress.partList.length) {
-					this._insertPreview({selectedPart: this._previewTiles.length - 1,
-							     part: app.impress.partList[this._previewTiles.length].part});
+					this._insertPreview({selectedPart: this._previewTiles.length - 1});
 				}
 
 				while (this._previewTiles.length > app.impress.partList.length) {
 					this._deletePreview({selectedPart: this._previewTiles.length - 1});
 				}
+			}
+		}
 
-				for (it = 0; it < app.impress.partList.length; it++) {
-					this._previewTiles[it]._part = app.impress.partList[it].part;
+		// The counts match here, but a part number can sit at a new index:
+		// the slides were reordered, an index holds a new slide, or the
+		// batch path above left placeholders at the tail. The preview image
+		// that already carries a part number can move to the slide's new
+		// index and show up there immediately; a part number no image
+		// carries yet is a new slide and shows the placeholder.
+		for (it = 0; it < app.impress.partList.length; it++) {
+			const newPart = app.impress.partList[it].part;
+			if (this._previewTiles[it]._part !== newPart) {
+				this._previewTiles[it]._part = newPart;
+				const knownPreview = newPart ? previewByPart[newPart] : undefined;
+				if (knownPreview) {
+					this._previewTiles[it].src = knownPreview.src;
+					this._previewTiles[it].fetched = knownPreview.fetched;
+					this._previewTiles[it].placeholderName = knownPreview.placeholderName;
+				} else {
 					this._setPlaceholder(this._previewTiles[it], 'previewSmile');
 					this._previewTiles[it].fetched = false;
 				}
 			}
 		}
-		else {
-			// The same number of slides with part identifiers at new indices
-			// means the slides were reordered (or an index holds a new
-			// slide). A part identifier stays the same for the slide's whole
-			// lifetime, so the preview image that already carries it can
-			// move to the slide's new index and show up there immediately;
-			// only an identifier no preview carries needs a fetch.
-			const previewByPart = {};
-			for (it = 0; it < this._previewTiles.length; it++) {
-				if (this._previewTiles[it]._part) {
-					previewByPart[this._previewTiles[it]._part] = {
-						src: this._previewTiles[it].src,
-						fetched: this._previewTiles[it].fetched,
-						placeholderName: this._previewTiles[it].placeholderName
-					};
-				}
-			}
-			for (it = 0; it < app.impress.partList.length; it++) {
-				const newPart = app.impress.partList[it].part;
-				if (this._previewTiles[it]._part !== newPart) {
-					this._previewTiles[it]._part = newPart;
-					const knownPreview = newPart ? previewByPart[newPart] : undefined;
-					if (knownPreview) {
-						this._previewTiles[it].src = knownPreview.src;
-						this._previewTiles[it].fetched = knownPreview.fetched;
-						this._previewTiles[it].placeholderName = knownPreview.placeholderName;
-					} else {
-						this._map.getPreview(it, it, this.options.maxWidth, this.options.maxHeight, {autoUpdate: this.options.autoUpdate});
-					}
-				}
-			}
-			// A moved preview that was never fetched keeps its placeholder;
-			// fetch the ones that are in view now.
-			this._ensureVisiblePreviews();
-		}
+		// A tile left with a placeholder - a new slide, or a moved
+		// preview that was never fetched - stays unfetched until it is
+		// in view; fetch the ones that are in view now. The ones out of
+		// view are fetched as scrolling reaches them.
+		this._ensureVisiblePreviews();
 	},
 
 	_resize: function () {
@@ -1881,7 +1941,21 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	_handleContainerDragOver: function (e) {
-		const state = this._dragState;
+		// A drag from the slide import pane brings slides in from another
+		// file. It starts outside the sorter, so it opens its own drag
+		// state on the first move rather than in a dragstart handler.
+		const importDrag = isSlideImportDrag(e);
+		let state = this._dragState;
+		if (importDrag && (!state || !state.external)) {
+			if (!this._map.isEditMode()) {
+				e.preventDefault();
+				if (e.dataTransfer)
+					e.dataTransfer.dropEffect = 'none';
+				return;
+			}
+			state = this._beginImportDrag();
+		}
+
 		// A drag that did not start on a slide (a file from the desktop,
 		// for example) has no drop target here; refusing it keeps the
 		// browser from opening the file in place of the editor.
@@ -1894,7 +1968,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		e.preventDefault();
 		if (e.dataTransfer)
-			e.dataTransfer.dropEffect = 'move';
+			e.dataTransfer.dropEffect = importDrag ? 'copy' : 'move';
 
 		// dragover keeps firing while the pointer rests; the gap only
 		// needs recomputing when the pointer moved.
@@ -1904,6 +1978,42 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		state.pointer = { x: e.clientX, y: e.clientY };
 		this._updateDropGap();
 		this._ensureAutoScroll();
+	},
+
+	// Start the drag visuals for an import drag. Nothing leaves the sorter,
+	// so there are no frames to collapse; the state's only job is to open a
+	// slide-sized insertion gap that follows the pointer, the same way a
+	// reorder drag does. The gap takes the size of the first preview frame.
+	_beginImportDrag: function () {
+		const sizeProperty = this._direction === 'x' ? 'width' : 'height';
+		let gapSize = 0;
+		// Size the gap from the first preview still on show; a frame in a
+		// collapsed section is hidden and would measure as zero.
+		for (var i = 0; i < this._previewTiles.length; i++) {
+			var size = this._previewTiles[i].parentNode.getBoundingClientRect()[sizeProperty];
+			if (size > 0) {
+				gapSize = size;
+				break;
+			}
+		}
+		this._dragState = {
+			external: true,
+			draggedParts: [],
+			frames: [],
+			sizes: [],
+			sizeProperty: sizeProperty,
+			grid: this._gridMode,
+			gapSize: gapSize,
+			gapFrame: null,
+			gapSide: null,
+			gapPlaceholder: null,
+			insertIndex: null,
+			intoSection: null,
+			pointer: null,
+			autoScrollId: null
+		};
+		this._partsPreviewCont.classList.add('dragging-slide');
+		return this._dragState;
 	},
 
 	_handleContainerDragLeave: function (e) {
@@ -1919,6 +2029,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (e.clientX >= rect.left && e.clientX < rect.right &&
 		    e.clientY >= rect.top && e.clientY < rect.bottom)
 			return;
+		// An import drag ends on a thumbnail in another pane, so no dragend
+		// reaches the sorter to clear its visuals; leaving the sorter ends
+		// them here.
+		if (state.external) {
+			this._finishDrag(false);
+			return;
+		}
 		this._closeDropGap(state);
 		state.insertIndex = null;
 		state.pointer = null;
@@ -1934,6 +2051,21 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		e.stopPropagation();
 
 		const insertIndex = state.insertIndex;
+
+		// An import drag hands the slides to the import session to insert
+		// from the other file; the current slides are not reordered and
+		// the inserted previews arrive with the server's status update.
+		if (state.external) {
+			if (insertIndex !== null && this._map.isEditMode()) {
+				app.events.fire('slideimport:dropinsert', {
+					pos: insertIndex - 1,
+					slides: readSlideImportDrag(e),
+				});
+			}
+			this._finishDrag(false);
+			return;
+		}
+
 		if (insertIndex === null) {
 			this._finishDrag(true);
 			return;
@@ -2101,9 +2233,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// the slides land outside the section and the gap opens above the
 		// header; below it they become the section's first slides and the
 		// gap opens between the header and the slide.
+		// An import drag has one outcome at the boundary: the inserted
+		// slides become the section's first slides, so its gap keeps to
+		// the spot below the header.
 		let intoSection = null;
-		const boundaryHeader = (gapFrame && gapSide === 'before') ?
-			this._sectionHeaderAt(insertIndex) : null;
+		const boundaryHeader =
+			(!state.external && gapFrame && gapSide === 'before') ?
+				this._sectionHeaderAt(insertIndex) : null;
 		if (boundaryHeader) {
 			const rect = boundaryHeader.getBoundingClientRect();
 			// A grid header spans its own full row, so the grid boundary

@@ -288,6 +288,7 @@ COOL_CSS =\
 	$(srcdir)/css/forced-colors.css \
 	$(srcdir)/css/aichat-sidebar.css \
 	$(srcdir)/css/extension-sidebar.css \
+	$(srcdir)/css/slideimport.css \
 	$(srcdir)/css/override-smartmenus.css \
 	$(srcdir)/css/jquery-ui-lightness.css \
 	$(srcdir)/css/infobar.css \
@@ -607,9 +608,14 @@ COOL_JS_LST =\
 	src/control/Control.ESignature.ts \
 	src/control/Control.ESignatureDialog.ts \
 	src/control/Control.AIChatSidebar.ts \
+	src/slideimport/SlideImportSession.ts \
+	src/slideimport/SlideLinks.ts \
 	src/control/SlideDragGhost.tsx \
+	src/control/SlideSectionHeader.tsx \
+	src/control/Control.SlideImportPane.tsx \
 	src/control/Control.PaneExpander.ts \
 	src/control/Control.SecurityLabelBanner.ts \
+	src/control/Control.PaneSplitter.tsx \
 	src/control/CalcNotifications.ts \
 	src/control/ColorPicker.ts \
 	src/control/jsdialog/Util.Shortcuts.ts \
@@ -1645,8 +1651,13 @@ pot:
 		src/control/Control.PartsPreview.js \
 		src/control/Control.PresentationBar.js \
 		src/control/Control.SaveState.tsx \
+		src/control/Control.SlideImportPane.tsx \
 		src/control/SlideDragGhost.tsx \
+		src/control/SlideSectionHeader.tsx \
+		src/slideimport/SlideImportSession.ts \
+		src/slideimport/SlideLinks.ts \
 		src/control/Control.PaneExpander.ts \
+		src/control/Control.PaneSplitter.tsx \
 		src/control/Control.Scroll.Annotation.js \
 		src/control/Control.ServerAuditDialog.ts \
 		src/control/Control.SheetsBar.js \

@@ -130,8 +130,30 @@ class LOUtil {
 		'text/rtf',
 	];
 
+	// Presentation formats the slide import can open, covering the same
+	// extensions the local file picker accepts (odp, otp, ppt, pptx, pptm,
+	// potx, pps, ppsx).
+	public static presentationMimeFilter = [
+		'application/vnd.oasis.opendocument.presentation',
+		'application/vnd.oasis.opendocument.presentation-template',
+		'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+		'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+		'application/vnd.openxmlformats-officedocument.presentationml.template',
+		'application/vnd.ms-powerpoint',
+		'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+	];
+
 	// Time in milliseconds a touch has to stay down to count as a long press.
 	public static readonly longPressTime = 550;
+
+	// Whether the integration offers a file chooser of its own, which is the
+	// way a file other than the open document can be picked at all. wopi is
+	// the CheckFileInfo property set of the document.
+	public static hostOffersFileChooser(wopi: any): boolean {
+		return (
+			!!wopi && !!(wopi.EnableInsertRemoteFile || wopi.EnableRemoteSlideImport)
+		);
+	}
 
 	public static onRemoveHTMLElement(
 		element: Element,

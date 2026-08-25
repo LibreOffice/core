@@ -135,6 +135,43 @@
 	opacity: 0.5;
 }
 
+/* The mark of a slide that is linked to another file. The span takes no room
+   of its own and its picture overflows back over the thumbnail's top right
+   corner, so the thumbnails stay where they are and the mark follows the
+   picture in the strip and in the grid alike. The pointer goes through it to
+   the thumbnail, which carries the description of the link. */
+.preview-link-badge {
+	display: none;
+	width: 0;
+	height: 0;
+	overflow: visible;
+	pointer-events: none;
+}
+
+.preview-link-badge.linked {
+	display: block;
+}
+
+.preview-link-badge::before {
+	content: '';
+	display: block;
+	position: relative;
+	/* Back over the picture: its 10px strip margin, the width of the mark,
+	   and 6px inside the picture's corner. */
+	left: -32px;
+	top: 6px;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--color-background-lighter) url('images/lc_inserthyperlink.svg') no-repeat center;
+	background-size: 12px 12px;
+	box-shadow: 0 0 2px var(--color-border);
+}
+
+[data-theme='dark'] .preview-link-badge::before {
+	background-image: url('images/dark/lc_inserthyperlink.svg');
+}
+
 /* Slide section headers - styled to match sidebar expander labels */
 .slide-section-header {
 	display: flex;
@@ -213,15 +250,17 @@
 	flex-direction: column;
 }
 
-/* Grid layout for the slide list while the panel is maximized. The slides
- * flow into as many columns as the wide panel fits; the reorder drop site
- * and the section headers take a whole row of their own. The grid takes
- * the space left above the toolbar and scrolls on its own. The rows pack
- * at their content height from the top: left to the default stretch, a
- * short deck's row tracks would inflate to fill the panel and any
- * fixed-height cell added to a row would redistribute that slack, moving
- * every row. */
-.parts-preview-grid #slide-sorter {
+/* Grid layout for a slide list while the panels are maximized. The slide
+ * navigator's list and the slide import pane's list flow through the same
+ * rules, so the two grids always look alike. The slides flow into as many
+ * columns as the wide panel fits; the reorder drop site and the section
+ * headers take a whole row of their own. The grid takes the space left
+ * above the toolbar and scrolls on its own. The rows pack at their content
+ * height from the top: left to the default stretch, a short deck's row
+ * tracks would inflate to fill the panel and any fixed-height cell added
+ * to a row would redistribute that slack, moving every row. */
+.parts-preview-grid #slide-sorter,
+.parts-preview-grid .slide-import-list {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	align-content: start;
@@ -251,6 +290,17 @@
 	gap: 4px;
 }
 
+/* Centre the import button and give it a fixed width rather than letting it
+ * stretch across the whole row. */
+.parts-preview-grid #presentation-import-toolbar {
+	justify-content: center;
+}
+
+.parts-preview-grid #presentation-import-toolbar .unotoolbutton {
+	flex: 0 0 auto;
+	width: 300px;
+}
+
 .parts-preview-grid #first-drop-site,
 .parts-preview-grid .slide-section-header {
 	grid-column: 1 / -1;
@@ -275,4 +325,10 @@
 	width: 100% !important;
 	height: auto !important;
 	margin: 0;
+}
+
+/* The picture fills its cell here and carries no strip margin, so the mark
+   sits that much closer to the cell's edge. */
+.parts-preview-grid .preview-link-badge::before {
+	left: -22px;
 }

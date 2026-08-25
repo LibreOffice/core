@@ -88,6 +88,21 @@ class PresentationBar {
 						visible: this.map.getDocType() === 'presentation'
 					}
 				]
+			},
+			{
+				id: 'presentation-import-toolbar',
+				type: 'toolbox',
+				children: [
+					{
+						id: 'importslides',
+						type: 'customtoolitem',
+						text: _('Import your slides'),
+						command: 'importslides',
+						image: false,
+						inlineLabel: true,
+						visible: this.map.getDocType() === 'presentation'
+					}
+				]
 			}
 		];
 
@@ -153,6 +168,10 @@ class PresentationBar {
 
 	onUpdatePermission(e) {
 		var presentationButtons = ['insertpage', 'duplicatepage', 'deletepage'];
+
+		if (this.map.getDocType() === 'presentation') {
+			this.showItem('importslides', e.detail.perm === 'edit');
+		}
 
 		if (e.detail.perm === 'edit') {
 			presentationButtons.forEach((id) => { this.enableItem(id, true); });

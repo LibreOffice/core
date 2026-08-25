@@ -363,6 +363,7 @@ interface Window {
 	prefs: {
 		useBrowserSetting: boolean;
 		getBoolean(key: string, defaultValue?: boolean): boolean;
+		getNumber(key: string, defaultValue?: number): number;
 		get(key: string, defaultValue?: any): any;
 		_initializeBrowserSetting(msg: string): void;
 		set(key: string, value: any): void;
