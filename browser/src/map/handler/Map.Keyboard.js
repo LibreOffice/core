@@ -497,17 +497,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 
 		if (this._slideSorterFocused()) {
 			if (this._isRangeExtendKeystroke(ev) && ev.type === 'keydown') {
-
-				if (ev.keyCode === this.keyCodes.UP)
-					this._map._docLayer._preview._modifySelectedPartRange("UP");
-				else if (ev.keyCode === this.keyCodes.DOWN)
-					this._map._docLayer._preview._modifySelectedPartRange("DOWN");
-				else if (ev.keyCode === this.keyCodes.HOME)
-					this._map._docLayer._preview._selectPartRange(undefined, 0);
-				else if (ev.keyCode === this.keyCodes.END)
-					this._map._docLayer._preview._selectPartRange(undefined, this._map._docLayer._parts - 1);
-
-				ev.preventDefault();
+				this._extendPartRange(ev);
 			}
 
 			// this.modifier belongs to _onKeyDown, which never runs while the
@@ -579,6 +569,21 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				app.map.focus();
 			}
 		}
+	},
+
+	// _extendPartRange - grows the range of selected parts towards the key that was pressed,
+	// or out to the first or the last part.
+	_extendPartRange: function (ev) {
+		if (ev.keyCode === this.keyCodes.UP)
+			this._map._docLayer._preview._modifySelectedPartRange("UP");
+		else if (ev.keyCode === this.keyCodes.DOWN)
+			this._map._docLayer._preview._modifySelectedPartRange("DOWN");
+		else if (ev.keyCode === this.keyCodes.HOME)
+			this._map._docLayer._preview._selectPartRange(undefined, 0);
+		else if (ev.keyCode === this.keyCodes.END)
+			this._map._docLayer._preview._selectPartRange(undefined, this._map._docLayer._parts - 1);
+
+		ev.preventDefault();
 	},
 
 	_globalKeyUp: function (ev) {
