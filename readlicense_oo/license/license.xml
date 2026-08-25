@@ -717,7 +717,7 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
     </div>
-    <div class="HYPH">
+    <div class="HYPHEN">
         <h2>Hyphen</h2>
         <p>The following software may be included in this product: Hyphen. Use of any of this software is governed by
         the terms of the license below:</p>
@@ -898,7 +898,7 @@
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
-    <div class="LIBEXTTEXTCAT_DATA" >
+    <div class="LIBEXTTEXTCAT">
         <h2>libexttextcat</h2>
         <p>The following software may be included in this product: libexttextcat. Use of any of this software is
         governed by the terms of the license below:</p>
@@ -1490,7 +1490,7 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
-    <div class="LIBXML">
+    <div class="LIBXML2">
         <h2>libxml2</h2>
         <p>The following software may be included in this product: libxml2. Use of any of this software is governed by
         the terms of the license below:</p>
@@ -2059,23 +2059,23 @@
     GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
     LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-    <h2>Raptor RDF Parser Library</h2>
-    <p>The following software may be included in this product: Raptor RDF Parser Library. Use of any of this software
-    is governed by the terms of the license below:</p>
-    <p>Copyright (C) 2000-2008 <a href="http://www.dajobe.org/">David Beckett</a><br />
-    Copyright (C) 2000-2005 <a href="http://www.bristol.ac.uk/">University of Bristol</a>. All Rights Reserved.</p>
-    <p>All the licenses below are alternatives and if you select one license, that one alone applies.</p>
-    <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
-    <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
-    <h2>Rasqal RDF Query Library</h2>
-    <p>The following software may be included in this product: Rasqal RDF Query Library. Use of any of this software is
-    governed by the terms of the license below:</p>
-    <p>Copyright (C) 2000-2008 <a href="http://www.dajobe.org/">David Beckett</a><br />
-    Copyright (C) 2000-2005 <a href="http://www.bristol.ac.uk/">University of Bristol</a>. All Rights Reserved.</p>
-    <p>All the licenses below are alternatives and if you select one license, that one alone applies.</p>
-    <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
-    <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     <div class="REDLAND">
+        <h2>Raptor RDF Parser Library</h2>
+        <p>The following software may be included in this product: Raptor RDF Parser Library. Use of any of this software
+        is governed by the terms of the license below:</p>
+        <p>Copyright (C) 2000-2008 <a href="http://www.dajobe.org/">David Beckett</a><br />
+        Copyright (C) 2000-2005 <a href="http://www.bristol.ac.uk/">University of Bristol</a>. All Rights Reserved.</p>
+        <p>All the licenses below are alternatives and if you select one license, that one alone applies.</p>
+        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
+        <h2>Rasqal RDF Query Library</h2>
+        <p>The following software may be included in this product: Rasqal RDF Query Library. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>Copyright (C) 2000-2008 <a href="http://www.dajobe.org/">David Beckett</a><br />
+        Copyright (C) 2000-2005 <a href="http://www.bristol.ac.uk/">University of Bristol</a>. All Rights Reserved.</p>
+        <p>All the licenses below are alternatives and if you select one license, that one alone applies.</p>
+        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
         <h2>Redland RDF Application Framework</h2>
         <p>The following software may be included in this product: Redland RDF Application Framework. Use of any of
         this software is governed by the terms of the license below:</p>
