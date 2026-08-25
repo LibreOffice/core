@@ -309,6 +309,7 @@
                 <property name="margin-top">6</property>
                 <child>
                   <object class="GtkToggleButton" id="viewprops">
+                    <!-- Translator note: This string is part of a pair of buttons to switch between “View” and “Edit” mode in the style dialog. -->
                     <property name="label" translatable="yes" context="managestylepage|viewprops">View</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -327,6 +328,7 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="editprops">
+                    <!-- Translator note: This string is part of a pair of buttons to switch between “View” and “Edit” mode in the style dialog. -->
                     <property name="label" translatable="yes" context="managestylepage|editprops">Edit</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
