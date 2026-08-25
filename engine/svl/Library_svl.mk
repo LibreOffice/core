@@ -106,6 +106,17 @@ $(eval $(call gb_Library_use_externals,svl,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,svl,\
+    CoreFoundation \
+    Security \
+))
+
+$(eval $(call gb_Library_add_exception_objects,svl,\
+    svl/source/crypto/applekeychain \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/asiancfg \
     svl/source/config/cjkoptions \

@@ -25,6 +25,10 @@
 #include "seinitializer_nssimpl.hxx"
 #include "securityenvironment_nssimpl.hxx"
 
+#ifdef MACOSX
+#include "apple/seinitializer_appleimpl.hxx"
+#endif
+
 #include <cert.h>
 
 
@@ -137,7 +141,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SEInitializer_get_implementation(
     uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
+#ifdef MACOSX
+    // The macOS initializer extends the NSS one with Keychain support.
+    return cppu::acquire(new SEInitializer_AppleImpl(pCtx));
+#else
     return cppu::acquire(new SEInitializer_NssImpl(pCtx));
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,6 +26,10 @@
 #include <xmlsec/errorcallback.hxx>
 
 #include "securityenvironment_nssimpl.hxx"
+#include "xmlsignature_nssimpl.hxx"
+#ifdef MACOSX
+#include "apple/xmlsignature_appleimpl.hxx"
+#endif
 
 #include <xmlsec/xmldsig.h>
 #include <sal/log.hxx>
@@ -57,33 +61,6 @@ template <> struct default_delete<xmlSecDSigCtx>
 {
     void operator()(xmlSecDSigCtxPtr ptr) { xmlSecDSigCtxDestroy(ptr); }
 };
-}
-
-namespace {
-
-class XMLSignature_NssImpl
-    : public ::cppu::WeakImplHelper<xml::crypto::XXMLSignature, lang::XServiceInfo>
-{
-public:
-    explicit XMLSignature_NssImpl();
-
-    //Methods from XXMLSignature
-    virtual uno::Reference<xml::crypto::XXMLSignatureTemplate> SAL_CALL
-    generate(const uno::Reference<xml::crypto::XXMLSignatureTemplate>& aTemplate,
-             const uno::Reference<xml::crypto::XSecurityEnvironment>& aEnvironment) override;
-
-    virtual uno::Reference<xml::crypto::XXMLSignatureTemplate> SAL_CALL
-    validate(const uno::Reference<xml::crypto::XXMLSignatureTemplate>& aTemplate,
-             const uno::Reference<xml::crypto::XXMLSecurityContext>& aContext) override;
-
-    //Methods from XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-};
-
 }
 
 XMLSignature_NssImpl::XMLSignature_NssImpl() {
@@ -316,7 +293,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_XMLSignature_get_implementation(uno::XComponentContext* /*pCtx*/,
                                                         cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
+#ifdef MACOSX
+    // The macOS implementation extends the NSS one with Keychain-backed signing.
+    return cppu::acquire(new XMLSignature_AppleImpl);
+#else
     return cppu::acquire(new XMLSignature_NssImpl);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

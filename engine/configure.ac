@@ -11067,6 +11067,11 @@ if test "$build_crypto" = yes; then
         BUILD_TYPE="$BUILD_TYPE CRYPTO_NSS"
         AC_DEFINE([USE_CRYPTO_NSS])
     fi
+    dnl On macOS, additionally use the Security framework (Keychain Access) for
+    dnl certificates and signing keys, on top of the NSS crypto engine.
+    if test "$_os" = Darwin; then
+        AC_DEFINE([USE_CRYPTO_APPLE])
+    fi
 fi
 
 ARGON2_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/argon2/include"

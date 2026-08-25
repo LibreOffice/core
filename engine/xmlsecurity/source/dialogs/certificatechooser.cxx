@@ -84,13 +84,16 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     // disable buttons
     CertificateHighlightHdl(*m_xCertLB);
 
+#if !defined(_WIN32) && !defined(MACOSX)
     if (comphelper::COKit::isActive())
     {
         // Single certificate doesn't change during the lifetime of a COKit view: no need to search or
-        // reload it.
+        // reload it. The Windows and macOS desktop apps list the native certificate store instead,
+        // where these buttons are useful.
         m_xSearchBox->hide();
         m_xReloadBtn->hide();
     }
+#endif
 }
 
 CertificateChooser::~CertificateChooser()
@@ -218,11 +221,13 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
                 if (meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign)
                 {
                     // The COKit (online/server) case takes the signing certificate
-                    // from the session/view. The Windows desktop app (CODA-W, the
-                    // only _WIN32 COKit build) instead signs from the native Windows
-                    // certificate store like the regular desktop.
+                    // from the session/view. The desktop apps instead sign from the
+                    // native certificate store like the regular desktop: the Windows
+                    // one (CODA-W, the only _WIN32 COKit build) from the Windows
+                    // certificate store, the macOS one (CODA-M, the only MACOSX
+                    // COKit build) from Keychain Access (and the NSS database).
                     bool bUseSessionCertificate = comphelper::COKit::isActive();
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(MACOSX)
                     bUseSessionCertificate = false;
 #endif
                     if (bUseSessionCertificate)

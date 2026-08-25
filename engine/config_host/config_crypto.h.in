@@ -25,7 +25,15 @@
  */
 #define USE_CRYPTO_NSS 0
 
-#if USE_CRYPTO_MSCAPI || USE_CRYPTO_NSS
+/*
+ * Additionally use the Apple Security framework (Keychain Access) for certificates and
+ * signing keys on macOS. This complements USE_CRYPTO_NSS rather than replacing it: NSS
+ * remains the XML-DSig / CMS engine, while private-key operations can be performed with
+ * Keychain-backed (possibly non-exportable) keys.
+ */
+#define USE_CRYPTO_APPLE 0
+
+#if USE_CRYPTO_MSCAPI || USE_CRYPTO_NSS || USE_CRYPTO_APPLE
 #define USE_CRYPTO_ANY 1
 #else
 #define USE_CRYPTO_ANY 0

@@ -65,6 +65,15 @@
 #include <comphelper/windowserrorstring.hxx>
 #endif
 
+#if USE_CRYPTO_APPLE
+// Apple Security framework, used to sign with Keychain-backed private keys
+#include <Security/Security.h>
+#include <svl/applekeychain.hxx>
+#include <cstdio>
+#include <cstring>
+#include <ctime>
+#endif
+
 using namespace com::sun::star;
 
 namespace {
@@ -852,6 +861,391 @@ bool CreateSigningCertificateAttribute(void const * pDerEncoded, int nDerEncoded
 }
 #endif // USE_CRYPTO_MSCAPI
 
+#if USE_CRYPTO_APPLE
+
+// Minimal DER writer, used to hand-assemble a CMS SignedData, since the Security framework's
+// CMSEncoder does not support the signed attributes required for PAdES (SigningCertificateV2).
+typedef std::vector<unsigned char> DerBytes;
+
+// Pre-encoded OID bodies (without tag/length).
+constexpr unsigned char OID_SIGNEDDATA[] = { 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x07, 0x02 }; // 1.2.840.113549.1.7.2
+constexpr unsigned char OID_DATA[] = { 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x07, 0x01 }; // 1.2.840.113549.1.7.1
+constexpr unsigned char OID_SHA256[] = { 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01 }; // 2.16.840.1.101.3.4.2.1
+constexpr unsigned char OID_RSAENCRYPTION[] = { 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01 }; // 1.2.840.113549.1.1.1
+constexpr unsigned char OID_ECDSAWITHSHA256[] = { 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02 }; // 1.2.840.10045.4.3.2
+constexpr unsigned char OID_CONTENTTYPE[] = { 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x09, 0x03 }; // 1.2.840.113549.1.9.3
+constexpr unsigned char OID_MESSAGEDIGEST[] = { 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x09, 0x04 }; // 1.2.840.113549.1.9.4
+constexpr unsigned char OID_SIGNINGTIME[] = { 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x09, 0x05 }; // 1.2.840.113549.1.9.5
+// For the SigningCertificateV2 attribute, the file-global OID_SIGNINGCERTIFICATEV2 is reused.
+
+void DerAppendLength(DerBytes& rBuf, size_t nLength)
+{
+    if (nLength < 0x80)
+    {
+        rBuf.push_back(static_cast<unsigned char>(nLength));
+        return;
+    }
+    unsigned char aBytes[sizeof(size_t)];
+    int nCount = 0;
+    while (nLength)
+    {
+        aBytes[nCount++] = static_cast<unsigned char>(nLength & 0xff);
+        nLength >>= 8;
+    }
+    rBuf.push_back(static_cast<unsigned char>(0x80 | nCount));
+    for (int i = nCount - 1; i >= 0; --i)
+        rBuf.push_back(aBytes[i]);
+}
+
+DerBytes DerTLV(unsigned char nTag, const DerBytes& rContent)
+{
+    DerBytes aRet;
+    aRet.push_back(nTag);
+    DerAppendLength(aRet, rContent.size());
+    aRet.insert(aRet.end(), rContent.begin(), rContent.end());
+    return aRet;
+}
+
+DerBytes DerTLV(unsigned char nTag, const unsigned char* pContent, size_t nLength)
+{
+    DerBytes aRet;
+    aRet.push_back(nTag);
+    DerAppendLength(aRet, nLength);
+    aRet.insert(aRet.end(), pContent, pContent + nLength);
+    return aRet;
+}
+
+void DerAppend(DerBytes& rBuf, const DerBytes& rOther)
+{
+    rBuf.insert(rBuf.end(), rOther.begin(), rOther.end());
+}
+
+template <size_t N> DerBytes DerOid(const unsigned char (&rOid)[N])
+{
+    return DerTLV(0x06, rOid, N);
+}
+
+/// AlgorithmIdentifier for SHA-256, parameters absent (RFC 5754).
+DerBytes DerSha256AlgorithmIdentifier()
+{
+    return DerTLV(0x30, DerOid(OID_SHA256));
+}
+
+/// Minimal DER reader: reads one TLV at rPos, returns false on malformed input.
+bool DerReadTLV(const unsigned char* pData, size_t nSize, size_t& rPos, unsigned char& rTag,
+                size_t& rContentPos, size_t& rContentSize)
+{
+    if (rPos + 2 > nSize)
+        return false;
+    rTag = pData[rPos];
+    size_t nPos = rPos + 1;
+    size_t nLength = pData[nPos++];
+    if (nLength & 0x80)
+    {
+        size_t nLengthBytes = nLength & 0x7f;
+        if (nLengthBytes == 0 || nLengthBytes > sizeof(size_t) || nPos + nLengthBytes > nSize)
+            return false;
+        nLength = 0;
+        for (size_t i = 0; i < nLengthBytes; ++i)
+            nLength = (nLength << 8) | pData[nPos++];
+    }
+    if (nPos + nLength > nSize)
+        return false;
+    rContentPos = nPos;
+    rContentSize = nLength;
+    rPos = nPos + nLength;
+    return true;
+}
+
+/// Extracts the full issuer Name TLV and serialNumber INTEGER TLV from a DER certificate.
+bool DerGetIssuerAndSerial(const unsigned char* pCert, size_t nCertSize, DerBytes& rIssuerTlv,
+                           DerBytes& rSerialTlv)
+{
+    unsigned char nTag;
+    size_t nPos = 0, nContentPos = 0, nContentSize = 0;
+
+    // Certificate ::= SEQUENCE { tbsCertificate, signatureAlgorithm, signatureValue }
+    if (!DerReadTLV(pCert, nCertSize, nPos, nTag, nContentPos, nContentSize) || nTag != 0x30)
+        return false;
+    const unsigned char* pTbsOuter = pCert + nContentPos;
+    size_t nTbsOuterSize = nContentSize;
+
+    // TBSCertificate ::= SEQUENCE { [0] version?, serialNumber, signature, issuer, ... }
+    nPos = 0;
+    if (!DerReadTLV(pTbsOuter, nTbsOuterSize, nPos, nTag, nContentPos, nContentSize)
+        || nTag != 0x30)
+        return false;
+    const unsigned char* pTbs = pTbsOuter + nContentPos;
+    size_t nTbsSize = nContentSize;
+
+    nPos = 0;
+    size_t nTlvStart = nPos;
+    if (!DerReadTLV(pTbs, nTbsSize, nPos, nTag, nContentPos, nContentSize))
+        return false;
+    if (nTag == 0xa0)
+    {
+        // Skip the explicit version.
+        nTlvStart = nPos;
+        if (!DerReadTLV(pTbs, nTbsSize, nPos, nTag, nContentPos, nContentSize))
+            return false;
+    }
+    if (nTag != 0x02)
+        return false;
+    rSerialTlv.assign(pTbs + nTlvStart, pTbs + nPos);
+
+    // Skip the signature AlgorithmIdentifier.
+    if (!DerReadTLV(pTbs, nTbsSize, nPos, nTag, nContentPos, nContentSize) || nTag != 0x30)
+        return false;
+
+    nTlvStart = nPos;
+    if (!DerReadTLV(pTbs, nTbsSize, nPos, nTag, nContentPos, nContentSize) || nTag != 0x30)
+        return false;
+    rIssuerTlv.assign(pTbs + nTlvStart, pTbs + nPos);
+    return true;
+}
+
+/// CMS signingTime attribute value: UTCTime until 2049, GeneralizedTime after.
+DerBytes DerEncodeSigningTime(sal_Int64 nMilliSeconds)
+{
+    time_t aSeconds = static_cast<time_t>(nMilliSeconds / 1000);
+    struct tm aTm;
+    gmtime_r(&aSeconds, &aTm);
+    char pBuffer[32];
+    if (aTm.tm_year + 1900 < 2050)
+    {
+        snprintf(pBuffer, sizeof(pBuffer), "%02d%02d%02d%02d%02d%02dZ", (aTm.tm_year + 1900) % 100,
+                 aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
+        return DerTLV(0x17, reinterpret_cast<const unsigned char*>(pBuffer), strlen(pBuffer));
+    }
+    snprintf(pBuffer, sizeof(pBuffer), "%04d%02d%02d%02d%02d%02dZ", aTm.tm_year + 1900,
+             aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
+    return DerTLV(0x18, reinterpret_cast<const unsigned char*>(pBuffer), strlen(pBuffer));
+}
+
+/// Attribute ::= SEQUENCE { attrType OID, attrValues SET OF AttributeValue }
+template <size_t N> DerBytes DerAttribute(const unsigned char (&rOid)[N], const DerBytes& rValue)
+{
+    DerBytes aContent = DerOid(rOid);
+    DerAppend(aContent, DerTLV(0x31, rValue));
+    return DerTLV(0x30, aContent);
+}
+
+enum class AppleSignStatus
+{
+    Signed,
+    NoKeychainIdentity,
+    Failed
+};
+
+/** Produces a detached CMS signature with a Keychain-backed private key.
+
+    Returns NoKeychainIdentity when the certificate's private key is not in the Keychain, so the
+    caller can fall back to NSS.
+*/
+AppleSignStatus SignWithAppleKeychain(
+    svl::crypto::SigningContext& rSigningContext, const cpo::uno::Sequence<sal_Int8>& rDerEncoded,
+    const std::vector<std::pair<const void*, sal_Int32>>& rDataBlocks, const OUString& rSignTSA,
+    OStringBuffer& rCMSHexBuffer)
+{
+    using svl::crypto::CFRef;
+
+    CFRef<SecIdentityRef> aIdentity = svl::crypto::CopyKeychainIdentityForCertificate(rDerEncoded);
+    if (!aIdentity.is())
+        return AppleSignStatus::NoKeychainIdentity;
+
+    SAL_INFO("svl.crypto", "SignWithAppleKeychain: signing with a Keychain identity");
+
+    if (!rSignTSA.isEmpty())
+        SAL_WARN("svl.crypto", "SignWithAppleKeychain: timestamping (TSA) is not yet supported "
+                               "with Keychain-backed keys, signing without a timestamp");
+
+    if (rSigningContext.m_nSignatureTime == 0)
+        rSigningContext.m_nSignatureTime = static_cast<sal_Int64>(time(nullptr)) * 1000;
+
+    // Hash the signed byte ranges.
+    std::vector<unsigned char> aContentHash;
+    {
+        comphelper::Hash aHash(comphelper::HashType::SHA256);
+        for (const auto& rPair : rDataBlocks)
+            aHash.update(static_cast<const unsigned char*>(rPair.first), rPair.second);
+        aContentHash = aHash.finalize();
+    }
+
+    auto pDerBytes = reinterpret_cast<const unsigned char*>(rDerEncoded.getConstArray());
+    size_t nDerSize = rDerEncoded.getLength();
+
+    SecCertificateRef pCertificate = nullptr;
+    if (SecIdentityCopyCertificate(aIdentity.get(), &pCertificate) != errSecSuccess)
+    {
+        SAL_WARN("svl.crypto", "SignWithAppleKeychain: SecIdentityCopyCertificate failed");
+        return AppleSignStatus::Failed;
+    }
+    CFRef<SecCertificateRef> aCertificate(pCertificate);
+
+    SecKeyRef pPrivateKey = nullptr;
+    OSStatus nStatus = SecIdentityCopyPrivateKey(aIdentity.get(), &pPrivateKey);
+    if (nStatus != errSecSuccess || !pPrivateKey)
+    {
+        SAL_WARN("svl.crypto",
+                 "SignWithAppleKeychain: SecIdentityCopyPrivateKey failed, status " << nStatus);
+        return AppleSignStatus::Failed;
+    }
+    CFRef<SecKeyRef> aPrivateKey(pPrivateKey);
+
+    // RSA or ECDSA?
+    bool bIsRSA = true;
+    {
+        CFRef<CFDictionaryRef> aAttributes(SecKeyCopyAttributes(aPrivateKey.get()));
+        if (aAttributes.is())
+        {
+            CFTypeRef pKeyType = CFDictionaryGetValue(aAttributes.get(), kSecAttrKeyType);
+            if (pKeyType && CFEqual(pKeyType, kSecAttrKeyTypeECSECPrimeRandom))
+                bIsRSA = false;
+        }
+    }
+
+    // Build the signed attributes.
+    DerBytes aIssuerTlv, aSerialTlv;
+    if (!DerGetIssuerAndSerial(pDerBytes, nDerSize, aIssuerTlv, aSerialTlv))
+    {
+        SAL_WARN("svl.crypto", "SignWithAppleKeychain: failed to parse the certificate");
+        return AppleSignStatus::Failed;
+    }
+
+    std::vector<DerBytes> aAttributes;
+    aAttributes.push_back(DerAttribute(OID_CONTENTTYPE, DerOid(OID_DATA)));
+    aAttributes.push_back(
+        DerAttribute(OID_SIGNINGTIME, DerEncodeSigningTime(rSigningContext.m_nSignatureTime)));
+    aAttributes.push_back(
+        DerAttribute(OID_MESSAGEDIGEST, DerTLV(0x04, aContentHash.data(), aContentHash.size())));
+    {
+        // SigningCertificateV2 (RFC 5035), required for PAdES.
+        std::vector<unsigned char> aCertHash
+            = comphelper::Hash::calculateHash(pDerBytes, nDerSize, comphelper::HashType::SHA256);
+        // IssuerSerial ::= SEQUENCE { issuer GeneralNames, serialNumber CertificateSerialNumber }
+        // with GeneralNames ::= SEQUENCE OF GeneralName, directoryName GeneralName ::= [4] Name
+        DerBytes aIssuerSerial;
+        DerAppend(aIssuerSerial, DerTLV(0x30, DerTLV(0xa4, aIssuerTlv)));
+        DerAppend(aIssuerSerial, aSerialTlv);
+        // ESSCertIDv2 ::= SEQUENCE { hashAlgorithm DEFAULT sha256 (omitted), certHash, issuerSerial }
+        DerBytes aEssCertId = DerTLV(0x04, aCertHash.data(), aCertHash.size());
+        DerAppend(aEssCertId, DerTLV(0x30, aIssuerSerial));
+        // SigningCertificateV2 ::= SEQUENCE { certs SEQUENCE OF ESSCertIDv2 }
+        aAttributes.push_back(DerAttribute(
+            OID_SIGNINGCERTIFICATEV2, DerTLV(0x30, DerTLV(0x30, DerTLV(0x30, aEssCertId)))));
+    }
+
+    // DER SET OF requires the elements sorted by their encoding.
+    std::sort(aAttributes.begin(), aAttributes.end());
+    DerBytes aAttributesContent;
+    for (const DerBytes& rAttribute : aAttributes)
+        DerAppend(aAttributesContent, rAttribute);
+
+    // What is signed is the signed attributes with an explicit SET tag; in the SignerInfo they
+    // are emitted with the [0] implicit tag instead.
+    DerBytes aToSign = DerTLV(0x31, aAttributesContent);
+
+    SecKeyAlgorithm eAlgorithm = bIsRSA ? kSecKeyAlgorithmRSASignatureMessagePKCS1v15SHA256
+                                        : kSecKeyAlgorithmECDSASignatureMessageX962SHA256;
+    if (!SecKeyIsAlgorithmSupported(aPrivateKey.get(), kSecKeyOperationTypeSign, eAlgorithm))
+    {
+        SAL_WARN("svl.crypto", "SignWithAppleKeychain: signature algorithm not supported by the "
+                               "private key");
+        return AppleSignStatus::Failed;
+    }
+
+    CFRef<CFDataRef> aToSignData(
+        CFDataCreate(kCFAllocatorDefault, aToSign.data(), aToSign.size()));
+    CFErrorRef pError = nullptr;
+    CFRef<CFDataRef> aSignature(
+        SecKeyCreateSignature(aPrivateKey.get(), eAlgorithm, aToSignData.get(), &pError));
+    if (!aSignature.is())
+    {
+        CFRef<CFErrorRef> aError(pError);
+        OUString aMessage;
+        if (aError.is())
+        {
+            CFRef<CFStringRef> aDescription(CFErrorCopyDescription(aError.get()));
+            if (aDescription.is())
+            {
+                std::vector<char> aBuffer(
+                    CFStringGetMaximumSizeForEncoding(CFStringGetLength(aDescription.get()),
+                                                      kCFStringEncodingUTF8)
+                    + 1);
+                if (CFStringGetCString(aDescription.get(), aBuffer.data(), aBuffer.size(),
+                                       kCFStringEncodingUTF8))
+                    aMessage = OUString::fromUtf8(aBuffer.data());
+            }
+        }
+        SAL_WARN("svl.crypto", "SignWithAppleKeychain: SecKeyCreateSignature failed: " << aMessage);
+        return AppleSignStatus::Failed;
+    }
+    else if (pError)
+        CFRelease(pError);
+
+    // SignerInfo ::= SEQUENCE { version, sid, digestAlgorithm, signedAttrs [0] IMPLICIT,
+    //                           signatureAlgorithm, signature }
+    DerBytes aSignerInfoContent;
+    {
+        const unsigned char aVersion[] = { 0x01 };
+        DerAppend(aSignerInfoContent, DerTLV(0x02, aVersion, 1));
+        DerBytes aIssuerAndSerial = aIssuerTlv;
+        DerAppend(aIssuerAndSerial, aSerialTlv);
+        DerAppend(aSignerInfoContent, DerTLV(0x30, aIssuerAndSerial));
+        DerAppend(aSignerInfoContent, DerSha256AlgorithmIdentifier());
+        DerAppend(aSignerInfoContent, DerTLV(0xa0, aAttributesContent));
+        if (bIsRSA)
+        {
+            DerBytes aRsaAlgorithm = DerOid(OID_RSAENCRYPTION);
+            const unsigned char aNull[] = { 0x05, 0x00 };
+            aRsaAlgorithm.insert(aRsaAlgorithm.end(), aNull, aNull + 2);
+            DerAppend(aSignerInfoContent, DerTLV(0x30, aRsaAlgorithm));
+        }
+        else
+            DerAppend(aSignerInfoContent, DerTLV(0x30, DerOid(OID_ECDSAWITHSHA256)));
+        DerAppend(aSignerInfoContent,
+                  DerTLV(0x04, CFDataGetBytePtr(aSignature.get()),
+                         CFDataGetLength(aSignature.get())));
+    }
+
+    // SignedData ::= SEQUENCE { version, digestAlgorithms, encapContentInfo,
+    //                           certificates [0] IMPLICIT, signerInfos }
+    DerBytes aSignedDataContent;
+    {
+        const unsigned char aVersion[] = { 0x01 };
+        DerAppend(aSignedDataContent, DerTLV(0x02, aVersion, 1));
+        DerAppend(aSignedDataContent, DerTLV(0x31, DerSha256AlgorithmIdentifier()));
+        // Detached signature: EncapsulatedContentInfo without eContent.
+        DerAppend(aSignedDataContent, DerTLV(0x30, DerOid(OID_DATA)));
+        DerBytes aCertificates;
+        for (const DerBytes& rCertificate :
+             svl::crypto::CopyKeychainCertificateChain(aCertificate.get()))
+            DerAppend(aCertificates, rCertificate);
+        DerAppend(aSignedDataContent, DerTLV(0xa0, aCertificates));
+        DerAppend(aSignedDataContent, DerTLV(0x31, DerTLV(0x30, aSignerInfoContent)));
+    }
+
+    // ContentInfo ::= SEQUENCE { contentType, content [0] EXPLICIT }
+    DerBytes aContentInfoContent = DerOid(OID_SIGNEDDATA);
+    DerAppend(aContentInfoContent, DerTLV(0xa0, DerTLV(0x30, aSignedDataContent)));
+    DerBytes aContentInfo = DerTLV(0x30, aContentInfoContent);
+
+    if (aContentInfo.size() * 2 > MAX_SIGNATURE_CONTENT_LENGTH)
+    {
+        SAL_WARN("svl.crypto", "SignWithAppleKeychain: signature requires more space ("
+                                   << aContentInfo.size() * 2 << ") than we reserved ("
+                                   << MAX_SIGNATURE_CONTENT_LENGTH << ")");
+        return AppleSignStatus::Failed;
+    }
+
+    for (unsigned char nByte : aContentInfo)
+        svl::crypto::Signing::appendHex(nByte, rCMSHexBuffer);
+
+    return AppleSignStatus::Signed;
+}
+
+#endif // USE_CRYPTO_APPLE
+
 } // anonymous namespace
 
 namespace svl::crypto {
@@ -904,6 +1298,26 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             return false;
         }
     }
+
+#if USE_CRYPTO_APPLE
+    // Prefer the Keychain when it holds the private key for the signing certificate: NSS below
+    // can only sign with keys stored in its own database.
+    if (m_rSigningContext.m_xCertificate.is())
+    {
+        switch (SignWithAppleKeychain(m_rSigningContext, aDerEncoded, m_dataBlocks, m_aSignTSA,
+                                      rCMSHexBuffer))
+        {
+            case AppleSignStatus::Signed:
+                return true;
+            case AppleSignStatus::Failed:
+                return false;
+            case AppleSignStatus::NoKeychainIdentity:
+                // The certificate's key is not in the Keychain (e.g. it came from the NSS
+                // database), fall through.
+                break;
+        }
+    }
+#endif
 
 #if USE_CRYPTO_NSS
     std::vector<unsigned char> aHashResult;

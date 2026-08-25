@@ -154,6 +154,23 @@ $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	nssutil3 \
 ))
 
+ifeq ($(OS),MACOSX)
+# The frameworks must come after the NSS libraries: Security.framework exports some symbols
+# with the same names as NSS (e.g. PORT_NewArena) and the static xmlsec-nss code must not
+# bind to those.
+$(eval $(call gb_Library_use_system_darwin_frameworks,xsec_xmlsec,\
+	CoreFoundation \
+	Security \
+))
+
+$(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
+	xmlsecurity/source/xmlsec/apple/securityenvironment_appleimpl \
+	xmlsecurity/source/xmlsec/apple/seinitializer_appleimpl \
+	xmlsecurity/source/xmlsec/apple/x509certificate_appleimpl \
+	xmlsecurity/source/xmlsec/apple/xmlsignature_appleimpl \
+))
+endif
+
 else # ! $(ENABLE_NSS)
 
 ifeq ($(ENABLE_OPENSSL),TRUE)

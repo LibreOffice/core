@@ -263,12 +263,14 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     }
 
     {
-        // The Windows desktop app (CODA-W, the only _WIN32 build) signs from the
-        // native Windows certificate store like the regular desktop, so it does
-        // not require a session certificate to enable the Sign button; the
-        // online/server path still does. The certificate-manager button stays
-        // hidden everywhere - there is no local manager to launch.
-#if !defined(_WIN32)
+        // The desktop apps sign from the native certificate store like the regular
+        // desktop - the Windows one (CODA-W, the only _WIN32 build) from the
+        // Windows certificate store, the macOS one (CODA-M, the only MACOSX build)
+        // from Keychain Access - so they do not require a session certificate to
+        // enable the Sign button; the online/server path still does. The
+        // certificate-manager button stays hidden everywhere - there is no local
+        // manager to launch.
+#if !defined(_WIN32) && !defined(MACOSX)
         // If the view has a signing certificate, then allow adding a signature.
         if (!pViewShell || !pViewShell->GetSigningCertificate().m_xCertificate.is())
         {

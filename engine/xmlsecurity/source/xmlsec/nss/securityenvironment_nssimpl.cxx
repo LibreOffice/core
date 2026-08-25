@@ -42,6 +42,9 @@
 
 #include "x509certificate_nssimpl.hxx"
 #include "secerror.hxx"
+#ifdef MACOSX
+#include "apple/securityenvironment_appleimpl.hxx"
+#endif
 #include <prerror.h>
 #include <keyhi.h>
 #include <xmlsec/base64.h>
@@ -883,7 +886,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SecurityEnvironment_get_implementation(
     uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
+#ifdef MACOSX
+    // The macOS environment extends the NSS one with Keychain support.
+    return cppu::acquire(new SecurityEnvironment_AppleImpl);
+#else
     return cppu::acquire(new SecurityEnvironment_NssImpl);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,6 +31,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
+    CppunitTest_xmlsecurity_keychain \
+))
+endif
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_signing \
     CppunitTest_xmlsecurity_signing2 \
