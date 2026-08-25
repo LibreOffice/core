@@ -565,30 +565,42 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 	// _selectOrDeletePart - the key either moves the selection to another part or deletes the
 	// selected one. Either way the key belongs to the sorter and the browser does not see it.
 	_selectOrDeletePart: function (ev) {
-		var deletePart = this._isSlideSorterDeleteKey(ev);
+		if (this._isSlideSorterDeleteKey(ev))
+			this._deleteSelectedPart();
+		else
+			this._selectPartForKey(ev);
 
-		if (!deletePart) {
-			if (ev.keyCode === this.keyCodes.HOME) {
-				this._map.deselectAll();
-				this._map.setPart(0);
-			} else if (ev.keyCode === this.keyCodes.END) {
-				this._map.deselectAll();
-				this._map.setPart(this._map._docLayer._parts - 1);
-			} else {
-				var partToSelect = (ev.keyCode === this.keyCodes.UP || ev.keyCode === this.keyCodes.LEFT ||
-								ev.keyCode === this.keyCodes.PAGEUP) ? 'prev' : 'next';
+		ev.preventDefault();
+	},
 
-				this._map.deselectAll();
-				this._map.setPart(partToSelect);
-			}
+	// _selectPartForKey - makes another part the selected one: the first for Home, the last
+	// for End, and the one before or after for the arrows and the page keys.
+	_selectPartForKey: function (ev) {
+		if (ev.keyCode === this.keyCodes.HOME) {
+			this._map.deselectAll();
+			this._map.setPart(0);
+		} else if (ev.keyCode === this.keyCodes.END) {
+			this._map.deselectAll();
+			this._map.setPart(this._map._docLayer._parts - 1);
+		} else {
+			var partToSelect = (ev.keyCode === this.keyCodes.UP || ev.keyCode === this.keyCodes.LEFT ||
+							ev.keyCode === this.keyCodes.PAGEUP) ? 'prev' : 'next';
+
+			this._map.deselectAll();
+			this._map.setPart(partToSelect);
 		}
-		else if (this._map.isEditMode() && !app.file.fileBasedView &&
+	},
+
+	// _deleteSelectedPart - removes the selected part, in the cases where that is allowed: the
+	// document is being edited, it is not the view that shows every page at once, and no dialog
+	// is in the way.
+	_deleteSelectedPart: function () {
+		if (this._map.isEditMode() && !app.file.fileBasedView &&
 				this._map.jsdialog &&
 				!this._map.jsdialog.hasDialogOpened()
 		) {
 			this._map.deletePage(this._map._docLayer._selectedPart);
 		}
-		ev.preventDefault();
 	},
 
 	_globalKeyUp: function (ev) {
