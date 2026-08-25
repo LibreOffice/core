@@ -17,10 +17,12 @@
 // the GUI thread, while the provider callbacks fire on the kit thread with the
 // SolarMutex held. Advertising is therefore queued to the GUI thread (with the
 // ownership flag set synchronously so an immediate paste still sees its own
-// copy), and the paste-direction reads block on the GUI thread. That blocking
-// is deadlock-free because the engine only reads through the provider when
-// ownsClipboard() said the clipboard is foreign, and every GUI-thread path
-// into the engine is guarded on that same ownership flag.
+// copy), and the paste-direction reads block on the GUI thread: the format
+// list on every query, the bytes once per foreign clipboard change, taken as
+// one snapshot of every advertised format. That blocking is deadlock-free
+// because the engine only reads through the provider when ownsClipboard()
+// said the clipboard is foreign, and every GUI-thread path into the engine is
+// guarded on that same ownership flag.
 
 #include <config.h>
 
@@ -58,6 +60,21 @@ COKit* sOffice = nullptr;
 // synchronously on the kit thread when the engine advertises a copy, and
 // maintained by the GUI thread's dataChanged watcher afterwards.
 std::atomic<bool> sWeOwnClipboard{ false };
+
+// Counts system clipboard changes, bumped by the GUI thread's dataChanged
+// watcher, so a paste can tell whether its byte snapshot is still current.
+std::atomic<quint64> sClipboardGeneration{ 0 };
+
+// One consistent read of the foreign clipboard: every advertised format's
+// bytes, taken in a single GUI-thread visit. Touched only on the kit thread
+// (every provider callback fires there), so it needs no lock.
+struct ForeignClipboardSnapshot
+{
+    bool valid = false;
+    quint64 generation = 0;
+    QHash<QString, QByteArray> data;
+};
+ForeignClipboardSnapshot sForeignSnapshot;
 
 /// Run fn on the GUI thread and wait for it to finish. The paste-direction
 /// provider callbacks fire on the kit thread, but QClipboard may only be used
@@ -145,8 +162,38 @@ protected:
 
 void onClipboardDataChanged()
 {
+    sClipboardGeneration.fetch_add(1, std::memory_order_relaxed);
     const QMimeData* data = QGuiApplication::clipboard()->mimeData();
     sWeOwnClipboard.store(dynamic_cast<const LazyEngineMimeData*>(data) != nullptr);
+}
+
+/// The clipboard formats the engine can consume, under the names it expects.
+/// GUI thread only: reads the passed QMimeData.
+QStringList engineMimeTypes(const QMimeData* data)
+{
+    QStringList types;
+    if (!data)
+        return types;
+    bool havePlainText = data->hasText();
+    for (const QString& format : data->formats())
+    {
+        // Fold every text/plain variant into the one canonical UTF-8 name the
+        // engine advertises itself; the bytes are converted to match when the
+        // format is read.
+        if (format.startsWith(QLatin1String("text/plain")))
+        {
+            havePlainText = true;
+            continue;
+        }
+        // Qt synthesizes entries like "application/x-qt-image" aside, non-MIME
+        // names mean nothing to the engine's format tables.
+        if (!format.contains(QLatin1Char('/')) || types.contains(format))
+            continue;
+        types.append(format);
+    }
+    if (havePlainText)
+        types.append(QStringLiteral("text/plain;charset=utf-8"));
+    return types;
 }
 
 /**
@@ -167,6 +214,9 @@ void clipboardProviderAdvertise(const char** pMimeTypes)
     // between must already take the engine's in-memory shortcut.
     sWeOwnClipboard.store(true);
 
+    // The foreign bytes cannot be pasted any more; free them.
+    sForeignSnapshot = {};
+
     QMetaObject::invokeMethod(
         qApp,
         [types = std::move(types)]() mutable
@@ -180,31 +230,7 @@ std::vector<std::string> clipboardProviderGetMimeTypes()
 {
     QStringList types;
     runOnGuiThreadBlocking(
-        [&types]()
-        {
-            const QMimeData* data = QGuiApplication::clipboard()->mimeData();
-            if (!data)
-                return;
-            bool havePlainText = data->hasText();
-            for (const QString& format : data->formats())
-            {
-                // Fold every text/plain variant into the one canonical UTF-8
-                // name the engine advertises itself; the bytes are converted
-                // to match in the data callback.
-                if (format.startsWith(QLatin1String("text/plain")))
-                {
-                    havePlainText = true;
-                    continue;
-                }
-                // Qt synthesizes entries like "application/x-qt-image" aside,
-                // non-MIME names mean nothing to the engine's format tables.
-                if (!format.contains(QLatin1Char('/')) || types.contains(format))
-                    continue;
-                types.append(format);
-            }
-            if (havePlainText)
-                types.append(QStringLiteral("text/plain;charset=utf-8"));
-        });
+        [&types]() { types = engineMimeTypes(QGuiApplication::clipboard()->mimeData()); });
 
     std::vector<std::string> result;
     result.reserve(static_cast<size_t>(types.size()));
@@ -215,23 +241,54 @@ std::vector<std::string> clipboardProviderGetMimeTypes()
 
 bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* pOutData)
 {
-    const QString mimeType = QString::fromUtf8(pMimeType);
-    QByteArray bytes;
-    runOnGuiThreadBlocking(
-        [&bytes, &mimeType]()
-        {
-            const QMimeData* data = QGuiApplication::clipboard()->mimeData();
-            if (!data)
-                return;
-            // The advertised text/plain;charset=utf-8 stands for whatever
-            // text/plain variant the platform holds; QMimeData::text()
-            // decodes it and toUtf8() delivers what the engine expects.
-            if (mimeType.startsWith(QLatin1String("text/plain")))
-                bytes = data->text().toUtf8();
-            else
-                bytes = data->data(mimeType);
-        });
+    // The advertised text/plain;charset=utf-8 stands for whatever text/plain
+    // variant the platform holds; the snapshot stores it under that name.
+    QString mimeType = QString::fromUtf8(pMimeType);
+    if (mimeType.startsWith(QLatin1String("text/plain")))
+        mimeType = QStringLiteral("text/plain;charset=utf-8");
 
+    // Read the whole foreign clipboard in one GUI-thread visit, and serve
+    // every format from that snapshot until the clipboard changes: one
+    // blocking hop and one consistent clipboard state per paste, instead of
+    // one inter-process fetch per format the engine probes.
+    if (!sForeignSnapshot.valid
+        || sForeignSnapshot.generation != sClipboardGeneration.load())
+    {
+        sForeignSnapshot = {};
+        QHash<QString, QByteArray> snapshot;
+        quint64 generation = 0;
+        bool changedUnderUs = false;
+        runOnGuiThreadBlocking(
+            [&snapshot, &generation, &changedUnderUs]()
+            {
+                generation = sClipboardGeneration.load();
+                const QClipboard* clipboard = QGuiApplication::clipboard();
+                for (const QString& type : engineMimeTypes(clipboard->mimeData()))
+                {
+                    // Each fetch can spin the event loop waiting on the source
+                    // app, so the clipboard can change mid-visit; re-fetch the
+                    // (then re-created) mime data and give up rather than mix
+                    // two clipboards' bytes.
+                    const QMimeData* data = clipboard->mimeData();
+                    if (!data || sClipboardGeneration.load() != generation)
+                    {
+                        changedUnderUs = true;
+                        return;
+                    }
+                    // QMimeData::text() decodes whatever text/plain variant
+                    // the platform holds; toUtf8() matches the advertise.
+                    if (type == QLatin1String("text/plain;charset=utf-8"))
+                        snapshot.insert(type, data->text().toUtf8());
+                    else
+                        snapshot.insert(type, data->data(type));
+                }
+            });
+        if (changedUnderUs)
+            return false;
+        sForeignSnapshot = { true, generation, std::move(snapshot) };
+    }
+
+    const QByteArray bytes = sForeignSnapshot.data.value(mimeType);
     if (bytes.isEmpty())
         return false;
 
