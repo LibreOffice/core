@@ -22,7 +22,6 @@
 #include <sal/types.h>
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/ColorDialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
@@ -177,8 +176,6 @@ public:
                                                 bool bAllowCycleFocusOut, sal_uInt64 nKitWindowId = 0);
     virtual std::unique_ptr<weld::MessageDialog> CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage);
-    virtual std::unique_ptr<weld::ColorChooserDialog>
-    CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode);
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 
     // methods for DisplayConnectionDispatch

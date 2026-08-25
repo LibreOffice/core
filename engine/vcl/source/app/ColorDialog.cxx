@@ -18,51 +18,13 @@
  */
 
 #include <colorpicker.hxx>
-#include <salinst.hxx>
-#include <svdata.hxx>
 
-#include <officecfg/Office/Common.hxx>
 #include <vcl/ColorDialog.hxx>
-#include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
-
-namespace
-{
-class ColorChooserDialogController : public ColorDialogController
-{
-    std::unique_ptr<weld::ColorChooserDialog> m_pColorChooserDialog;
-
-public:
-    ColorChooserDialogController(std::unique_ptr<weld::ColorChooserDialog> pColorChooserDialog)
-        : m_pColorChooserDialog(std::move(pColorChooserDialog))
-    {
-    }
-
-    virtual void SetColor(const Color& rColor) override
-    {
-        m_pColorChooserDialog->set_color(rColor);
-    }
-    virtual Color GetColor() const override { return m_pColorChooserDialog->get_color(); }
-
-private:
-    virtual weld::ColorChooserDialog* getDialog() override { return m_pColorChooserDialog.get(); }
-};
-}
 
 ColorDialog::ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
-    if (!officecfg::Office::Common::Misc::UseSystemColorDialog::get())
-    {
-        // use custom LibreOffice color picker dialog
-        m_pColorDialogController = std::make_shared<ColorPickerDialog>(pParent, COL_BLACK, eMode);
-        return;
-    }
-
-    std::unique_ptr<weld::ColorChooserDialog> pDialog
-        = GetSalInstance()->CreateColorChooserDialog(pParent, eMode);
-    assert(pDialog);
-    pDialog->set_modal(true);
-    m_pColorDialogController = std::make_shared<ColorChooserDialogController>(std::move(pDialog));
+    m_pColorDialogController = std::make_shared<ColorPickerDialog>(pParent, COL_BLACK, eMode);
 }
 
 ColorDialog::~ColorDialog() {}

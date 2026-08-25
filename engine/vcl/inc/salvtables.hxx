@@ -30,7 +30,6 @@
 #include <vcl/toolkit/svlbitm.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include "calendar.hxx"
-#include "colorpicker.hxx"
 #include "iconview.hxx"
 #include "messagedialog.hxx"
 #include "verticaltabctrl.hxx"
@@ -2341,19 +2340,6 @@ public:
     virtual void set_show_tabs(bool /*bShow*/) override;
 
     virtual ~SalInstanceVerticalNotebook() override;
-};
-
-class SalInstanceColorChooserDialog : public SalInstanceDialog,
-                                      public virtual weld::ColorChooserDialog
-{
-    std::unique_ptr<ColorPickerDialog> m_pColorPickerDialog;
-
-public:
-    SalInstanceColorChooserDialog(std::unique_ptr<ColorPickerDialog> pColorDialog);
-    virtual ~SalInstanceColorChooserDialog() override;
-
-    virtual void set_color(const Color& rColor) override;
-    virtual Color get_color() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

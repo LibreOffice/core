@@ -5750,37 +5750,6 @@ public:
         return gtk_paned_get_position(m_pPaned);
     }
 };
-
-class GtkInstanceColorChooserDialog : public GtkInstanceDialog,
-                                      public virtual weld::ColorChooserDialog
-{
-    GtkColorChooserDialog* m_pColorChooserDialog;
-
-public:
-    GtkInstanceColorChooserDialog(GtkColorChooserDialog* pColorChooserDialog)
-        : GtkInstanceDialog(GTK_WINDOW(pColorChooserDialog), nullptr, true)
-        , m_pColorChooserDialog(pColorChooserDialog)
-    {
-        assert(m_pColorChooserDialog);
-        gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(m_pColorChooserDialog), false);
-
-        // directly show the advanced color editor
-        g_object_set(G_OBJECT(m_pColorChooserDialog), "show-editor", true, nullptr);
-    }
-
-    virtual void set_color(const Color& rColor) override
-    {
-        GdkRGBA aColor = toGdkColor(rColor);
-        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(m_pColorChooserDialog), &aColor);
-    }
-
-    virtual Color get_color() const override
-    {
-        GdkRGBA aColor;
-        gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(m_pColorChooserDialog), &aColor);
-        return toVclColor(aColor);
-    }
-};
 }
 
 static GType immobilized_viewport_get_type();
@@ -19536,16 +19505,6 @@ std::unique_ptr<weld::MessageDialog> GtkInstance::CreateMessageDialog(weld::Widg
                                                           VclToGtk(eMessageType), VclToGtk(eButtonsType), "%s",
                                                           OUStringToOString(rPrimaryMessage, RTL_TEXTENCODING_UTF8).getStr()));
     return std::make_unique<GtkInstanceMessageDialog>(pMessageDialog, nullptr, true);
-}
-
-std::unique_ptr<weld::ColorChooserDialog>
-GtkInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode)
-{
-    GtkInstanceWindow* pWindow = dynamic_cast<GtkInstanceWindow*>(pParent);
-    GtkWindow* pGtkParent = pWindow ? pWindow->getWindow() : nullptr;
-    GtkColorChooserDialog* pDialog = GTK_COLOR_CHOOSER_DIALOG(
-        gtk_color_chooser_dialog_new(VclResId(RID_STR_PICK_COLOR).toUtf8().getStr(), pGtkParent));
-    return std::make_unique<GtkInstanceColorChooserDialog>(pDialog);
 }
 
 weld::Window* GtkInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)

@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <colorpicker.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/string_view.hxx>
@@ -6929,23 +6928,6 @@ void SalInstancePopover::resize_to_request()
 
 IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }
 
-SalInstanceColorChooserDialog::SalInstanceColorChooserDialog(
-    std::unique_ptr<ColorPickerDialog> pColorDialog)
-    : SalInstanceDialog(dynamic_cast<SalInstanceDialog&>(*pColorDialog->getDialog()).getDialog(),
-                        nullptr, false)
-    , m_pColorPickerDialog(std::move(pColorDialog))
-{
-}
-
-SalInstanceColorChooserDialog::~SalInstanceColorChooserDialog() {}
-
-void SalInstanceColorChooserDialog::set_color(const Color& rColor)
-{
-    m_pColorPickerDialog->SetColor(rColor);
-}
-
-Color SalInstanceColorChooserDialog::get_color() const { return m_pColorPickerDialog->GetColor(); }
-
 SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
                                        const OUString& rUIFile,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame)
@@ -7425,14 +7407,6 @@ std::unique_ptr<weld::MessageDialog> SalInstance::CreateMessageDialog(weld::Widg
     VclPtrInstance<MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
                                                  eButtonsType);
     return std::make_unique<SalInstanceMessageDialog>(xMessageDialog, nullptr, true);
-}
-
-std::unique_ptr<weld::ColorChooserDialog>
-SalInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
-{
-    std::unique_ptr<ColorPickerDialog> pColorPickerDialog
-        = std::make_unique<ColorPickerDialog>(pParent, COL_BLACK, eMode);
-    return std::make_unique<SalInstanceColorChooserDialog>(std::move(pColorPickerDialog));
 }
 
 weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
