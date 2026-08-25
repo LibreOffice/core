@@ -31,9 +31,10 @@ declare var DOMPurify: any;
 
 // cool: URLs are used by mobile/derivative apps (iOS, Android, CODA-W,
 // CODA-Q) for embedded media; DOMPurify's default allow-list rejects them.
+// A media source URL is the only content that carries the scheme.
 if (window.ThisIsAMobileApp && DOMPurify.isSupported) {
 	DOMPurify.addHook('uponSanitizeAttribute', (_node: Node, data: any) => {
-		if (data.attrValue.startsWith('cool:')) {
+		if (data.attrName === 'src' && data.attrValue.startsWith('cool:')) {
 			data.forceKeepAttr = true;
 		}
 	});
