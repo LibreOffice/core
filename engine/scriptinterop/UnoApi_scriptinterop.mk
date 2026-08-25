@@ -64,6 +64,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XAffineTransform \
     XAffineTransformBuilder \
     XAutofit \
+    XAutoText \
     XBase \
     XBlob \
     XBody \
@@ -87,11 +88,14 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XLine \
     XLineFill \
     XLink \
+    XList \
+    XListStyle \
     XPage \
     XPageBackground \
     XPageElement \
     XPageElementBase \
     XParagraph \
+    XParagraphStyle \
     XPictureFill \
     XPivotTable \
     XPoint \

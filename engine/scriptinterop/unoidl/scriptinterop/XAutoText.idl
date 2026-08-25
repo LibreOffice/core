@@ -13,11 +13,13 @@ module scriptinterop {
 
 interface XTextRange;
 
-interface XTextParagraph : XBase
+interface XAutoText : XBase
 {
+    AutoTextType getAutoTextType();
+
     long getIndex();
 
-    com::sun::star::beans::Optional<XTextRange> getRange();
+    XTextRange getRange();
 };
 
 };

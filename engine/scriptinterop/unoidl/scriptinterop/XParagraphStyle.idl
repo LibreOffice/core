@@ -1,0 +1,51 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module scriptinterop {
+
+interface XParagraphStyle : XBase
+{
+    double getIndentEnd();
+
+    double getIndentFirstLine();
+
+    double getIndentStart();
+
+    double getLineSpacing();
+
+    ParagraphAlignment getParagraphAlignment();
+
+    double getSpaceAbove();
+
+    double getSpaceBelow();
+
+    TextDirection getTextDirection();
+
+    XParagraphStyle setIndentEnd([in] double points);
+
+    XParagraphStyle setIndentFirstLine([in] double points);
+
+    XParagraphStyle setIndentStart([in] double points);
+
+    XParagraphStyle setLineSpacing([in] double lineSpacing);
+
+    XParagraphStyle setParagraphAlignment([in] ParagraphAlignment paragraphAlignment);
+
+    XParagraphStyle setSpaceAbove([in] double points);
+
+    XParagraphStyle setSpaceBelow([in] double points);
+
+    XParagraphStyle setTextDirection([in] TextDirection textDirection);
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

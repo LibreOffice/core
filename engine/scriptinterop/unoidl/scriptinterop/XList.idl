@@ -11,13 +11,13 @@
 
 module scriptinterop {
 
-interface XTextRange;
+interface XTextParagraph;
 
-interface XTextParagraph : XBase
+interface XList : XBase
 {
-    long getIndex();
+    string getListId();
 
-    com::sun::star::beans::Optional<XTextRange> getRange();
+    sequence<XTextParagraph> getListParagraphs();
 };
 
 };

@@ -11,13 +11,21 @@
 
 module scriptinterop {
 
-interface XTextRange;
+interface XList;
 
-interface XTextParagraph : XBase
+interface XListStyle : XBase
 {
-    long getIndex();
+    XListStyle applyListPreset([in] ListPreset listPreset);
 
-    com::sun::star::beans::Optional<XTextRange> getRange();
+    string getGlyph();
+
+    XList getList();
+
+    long getNestingLevel();
+
+    boolean isInList();
+
+    XListStyle removeFromList();
 };
 
 };

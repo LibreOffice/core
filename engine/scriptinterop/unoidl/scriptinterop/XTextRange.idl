@@ -11,25 +11,81 @@
 
 module scriptinterop {
 
-// Forward declaration: appendParagraph returns a paragraph, and the paragraph's getRange returns
-// a range, so the two interfaces refer to each other.
+interface XAutoText;
+interface XListStyle;
 interface XTextParagraph;
+interface XTextStyle;
 
 interface XTextRange : XBase
 {
-    string asString();
+    XTextParagraph appendParagraph([in] string text);
 
-    XTextRange setText([in] string newText);
+    [overload appendRange] XTextRange appendRange([in] XTextRange range);
+
+    [overload appendRange] XTextRange appendRangeMatchSourceFormatting(
+        [in] XTextRange range, [in] boolean matchSourceFormatting);
 
     XTextRange appendText([in] string text);
 
-    XTextParagraph appendParagraph([in] string text);
+    string asRenderedString();
+
+    string asString();
+
+    [overload clear] void clear();
+
+    [overload clear] void clearRange([in] long startOffset, [in] long endOffset);
+
+    [overload find] sequence<XTextRange> find([in] string pattern);
+
+    [overload find] sequence<XTextRange> findFrom([in] string pattern, [in] long startOffset);
+
+    sequence<XAutoText> getAutoTexts();
+
+    long getEndIndex();
+
+    long getLength();
+
+    sequence<XTextRange> getLinks();
+
+    sequence<XTextParagraph> getListParagraphs();
+
+    XListStyle getListStyle();
+
+    sequence<XTextParagraph> getParagraphs();
+
+    XParagraphStyle getParagraphStyle();
+
+    XTextRange getRange([in] long startOffset, [in] long endOffset);
+
+    sequence<XTextRange> getRuns();
+
+    long getStartIndex();
+
+    com::sun::star::beans::Optional<XTextStyle> getTextStyle();
+
+    XTextParagraph insertParagraph([in] long startOffset, [in] string text);
+
+    [overload insertRange] XTextRange insertRange([in] long startOffset, [in] XTextRange range);
+
+    [overload insertRange] XTextRange insertRangeMatchSourceFormatting(
+        [in] long startOffset, [in] XTextRange range, [in] boolean matchSourceFormatting);
+
+    XTextRange insertText([in] long startOffset, [in] string text);
+
+    boolean isEmpty();
+
+    [overload replaceAllText] long replaceAllText([in] string findText, [in] string replaceText);
+
+    [overload replaceAllText] long replaceAllTextMatchCase(
+        [in] string findText, [in] string replaceText, [in] boolean matchCase);
+
+    void select();
 
     XTextRange setBulletLevel([in] long level);
 
-    com::sun::star::beans::Optional<XTextStyle> getTextStyle();
+    XTextRange setText([in] string newText);
 };
 
 };
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

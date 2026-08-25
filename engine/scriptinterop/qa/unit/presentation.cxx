@@ -27,6 +27,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cool.hpp>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
@@ -104,8 +105,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTextStyling)
     auto const xSlide = xPresentation->appendSlide();
     auto const xShape = xSlide->insertTextBox(u"Styled"_ustr, 36, 36, 288, 72);
     auto const xRange = xShape->getText();
-    getValue(xRange->getTextStyle())->setBold(true)->setFontSize(24)
-        ->setForegroundColor(u"#c9211e"_ustr);
+    getValue(xRange->getTextStyle())
+        ->setBold(true)
+        ->setFontSize(24)
+        ->setForegroundColor(cpo::uno::Any(u"#c9211e"_ustr));
     // The formatting lands on the text runs, so a cursor over the text reports it.
     cpo::uno::Reference<css::text::XText> const xText(xShape->getuno(),
                                                       cpo::uno::UNO_QUERY_THROW);
@@ -329,4 +332,4 @@ CPPUNIT_TEST_FIXTURE(Test, testCurrentPageOutsideNormalView)
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

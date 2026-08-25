@@ -46,14 +46,19 @@
 #include <scriptinterop/ContentAlignment.hpp>
 #include <scriptinterop/PlaceholderType.hpp>
 #include <scriptinterop/ShapeType.hpp>
+#include <scriptinterop/TextBaselineOffset.hpp>
 #include <scriptinterop/XAutofit.hpp>
+#include <scriptinterop/XAutoText.hpp>
 #include <scriptinterop/XBorder.hpp>
+#include <scriptinterop/XColor.hpp>
 #include <scriptinterop/XFill.hpp>
 #include <scriptinterop/XImage.hpp>
 #include <scriptinterop/XLink.hpp>
+#include <scriptinterop/XListStyle.hpp>
 #include <scriptinterop/XPage.hpp>
 #include <scriptinterop/XPageElement.hpp>
 #include <scriptinterop/XPageElementBase.hpp>
+#include <scriptinterop/XParagraphStyle.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
 #include <scriptinterop/XSlide.hpp>
@@ -323,6 +328,99 @@ public:
         return text_;
     }
 
+    cpo::uno::Reference<scriptinterop::XColor> SAL_CALL getBackgroundColor() override
+    {
+        throw cpo::uno::RuntimeException(u"getBackgroundColor: not implemented"_ustr);
+    }
+
+    scriptinterop::TextBaselineOffset SAL_CALL getBaselineOffset() override
+    {
+        throw cpo::uno::RuntimeException(u"getBaselineOffset: not implemented"_ustr);
+    }
+
+    OUString SAL_CALL getFontFamily() override
+    {
+        throw cpo::uno::RuntimeException(u"getFontFamily: not implemented"_ustr);
+    }
+
+    double SAL_CALL getFontSize() override
+    {
+        throw cpo::uno::RuntimeException(u"getFontSize: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XColor> SAL_CALL getForegroundColor() override
+    {
+        throw cpo::uno::RuntimeException(u"getForegroundColor: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLink> SAL_CALL getLink() override
+    {
+        throw cpo::uno::RuntimeException(u"getLink: not implemented"_ustr);
+    }
+
+    bool SAL_CALL hasLink() override
+    {
+        throw cpo::uno::RuntimeException(u"hasLink: not implemented"_ustr);
+    }
+
+    bool SAL_CALL isBackgroundTransparent() override
+    {
+        throw cpo::uno::RuntimeException(u"isBackgroundTransparent: not implemented"_ustr);
+    }
+
+    bool SAL_CALL isBold() override
+    {
+        throw cpo::uno::RuntimeException(u"isBold: not implemented"_ustr);
+    }
+
+    bool SAL_CALL isItalic() override
+    {
+        throw cpo::uno::RuntimeException(u"isItalic: not implemented"_ustr);
+    }
+
+    bool SAL_CALL isSmallCaps() override
+    {
+        throw cpo::uno::RuntimeException(u"isSmallCaps: not implemented"_ustr);
+    }
+
+    bool SAL_CALL isStrikethrough() override
+    {
+        throw cpo::uno::RuntimeException(u"isStrikethrough: not implemented"_ustr);
+    }
+
+    bool SAL_CALL isUnderline() override
+    {
+        throw cpo::uno::RuntimeException(u"isUnderline: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL removeLink() override
+    {
+        throw cpo::uno::RuntimeException(u"removeLink: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle>
+        SAL_CALL setBackgroundColor(cpo::uno::Any const&) override
+    {
+        throw cpo::uno::RuntimeException(u"setBackgroundColor: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle>
+        SAL_CALL setBackgroundColorRgb(sal_Int32, sal_Int32, sal_Int32) override
+    {
+        throw cpo::uno::RuntimeException(u"setBackgroundColorRgb: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setBackgroundColorTransparent() override
+    {
+        throw cpo::uno::RuntimeException(u"setBackgroundColorTransparent: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle>
+        SAL_CALL setBaselineOffset(scriptinterop::TextBaselineOffset) override
+    {
+        throw cpo::uno::RuntimeException(u"setBaselineOffset: not implemented"_ustr);
+    }
+
     cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setBold(bool bold) override
     {
         auto const props = cursorProperties(text_, range_);
@@ -333,26 +431,9 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setItalic(bool italic) override
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setFontFamily(OUString const&) override
     {
-        auto const props = cursorProperties(text_, range_);
-        auto const slant = italic ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE;
-        props->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(slant));
-        props->setPropertyValue(u"CharPostureAsian"_ustr, cpo::uno::Any(slant));
-        props->setPropertyValue(u"CharPostureComplex"_ustr, cpo::uno::Any(slant));
-        return this;
-    }
-
-    cpo::uno::Reference<scriptinterop::XTextStyle>
-        SAL_CALL setStrikethrough(bool strikethrough) override
-    {
-        // A single CharStrikeout property covers all scripts; there is no Asian or complex
-        // variant.
-        auto const strikeout
-            = strikethrough ? css::awt::FontStrikeout::SINGLE : css::awt::FontStrikeout::NONE;
-        cursorProperties(text_, range_)
-            ->setPropertyValue(u"CharStrikeout"_ustr, cpo::uno::Any(strikeout));
-        return this;
+        throw cpo::uno::RuntimeException(u"setFontFamily: not implemented"_ustr);
     }
 
     cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setFontSize(double points) override
@@ -367,11 +448,65 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XTextStyle>
-        SAL_CALL setForegroundColor(OUString const& hexColor) override
+        SAL_CALL setForegroundColor(cpo::uno::Any const& color) override
     {
+        if (!color.has<OUString>())
+        {
+            throw cpo::uno::RuntimeException(u"setForegroundColor: not implemented"_ustr);
+        }
         cursorProperties(text_, range_)
-            ->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(parseHexColor(hexColor)));
+            ->setPropertyValue(u"CharColor"_ustr,
+                               cpo::uno::Any(parseHexColor(color.get<OUString>())));
         return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle>
+        SAL_CALL setForegroundColorRgb(sal_Int32, sal_Int32, sal_Int32) override
+    {
+        throw cpo::uno::RuntimeException(u"setForegroundColorRgb: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setItalic(bool italic) override
+    {
+        auto const props = cursorProperties(text_, range_);
+        auto const slant = italic ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE;
+        props->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(slant));
+        props->setPropertyValue(u"CharPostureAsian"_ustr, cpo::uno::Any(slant));
+        props->setPropertyValue(u"CharPostureComplex"_ustr, cpo::uno::Any(slant));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setLinkSlide(cpo::uno::Any const&)
+        override
+    {
+        throw cpo::uno::RuntimeException(u"setLinkSlide: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setLinkUrl(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"setLinkUrl: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setSmallCaps(bool) override
+    {
+        throw cpo::uno::RuntimeException(u"setSmallCaps: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle>
+        SAL_CALL setStrikethrough(bool strikethrough) override
+    {
+        // A single CharStrikeout property covers all scripts; there is no Asian or complex
+        // variant.
+        auto const strikeout
+            = strikethrough ? css::awt::FontStrikeout::SINGLE : css::awt::FontStrikeout::NONE;
+        cursorProperties(text_, range_)
+            ->setPropertyValue(u"CharStrikeout"_ustr, cpo::uno::Any(strikeout));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL setUnderline(bool) override
+    {
+        throw cpo::uno::RuntimeException(u"setUnderline: not implemented"_ustr);
     }
 
 private:
@@ -390,6 +525,11 @@ public:
     cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override
     {
         return range_->getuno();
+    }
+
+    sal_Int32 SAL_CALL getIndex() override
+    {
+        throw cpo::uno::RuntimeException(u"getIndex: not implemented"_ustr);
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextRange>> SAL_CALL getRange()
@@ -426,6 +566,24 @@ public:
         return text_;
     }
 
+    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL
+    appendRange(cpo::uno::Reference<scriptinterop::XTextRange> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"appendRange: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL
+    appendRangeMatchSourceFormatting(cpo::uno::Reference<scriptinterop::XTextRange> const&,
+                                     bool) override
+    {
+        throw cpo::uno::RuntimeException(u"appendRangeMatchSourceFormatting: not implemented"_ustr);
+    }
+
+    OUString SAL_CALL asRenderedString() override
+    {
+        throw cpo::uno::RuntimeException(u"asRenderedString: not implemented"_ustr);
+    }
+
     OUString SAL_CALL asString() override
     {
         if (range_.is())
@@ -433,6 +591,132 @@ public:
             return range_->getString();
         }
         return text_->getString();
+    }
+
+    void SAL_CALL clear() override
+    {
+        throw cpo::uno::RuntimeException(u"clear: not implemented"_ustr);
+    }
+
+    void SAL_CALL clearRange(sal_Int32, sal_Int32) override
+    {
+        throw cpo::uno::RuntimeException(u"clearRange: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XTextRange>> SAL_CALL
+    find(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"find: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XTextRange>> SAL_CALL
+    findFrom(OUString const&, sal_Int32) override
+    {
+        throw cpo::uno::RuntimeException(u"findFrom: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XAutoText>> SAL_CALL
+    getAutoTexts() override
+    {
+        throw cpo::uno::RuntimeException(u"getAutoTexts: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL getEndIndex() override
+    {
+        throw cpo::uno::RuntimeException(u"getEndIndex: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL getLength() override
+    {
+        throw cpo::uno::RuntimeException(u"getLength: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XTextRange>> SAL_CALL getLinks() override
+    {
+        throw cpo::uno::RuntimeException(u"getLinks: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XTextParagraph>> SAL_CALL
+    getListParagraphs() override
+    {
+        throw cpo::uno::RuntimeException(u"getListParagraphs: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XListStyle> SAL_CALL getListStyle() override
+    {
+        throw cpo::uno::RuntimeException(u"getListStyle: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XTextParagraph>> SAL_CALL
+    getParagraphs() override
+    {
+        throw cpo::uno::RuntimeException(u"getParagraphs: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XParagraphStyle> SAL_CALL getParagraphStyle() override
+    {
+        throw cpo::uno::RuntimeException(u"getParagraphStyle: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL getRange(sal_Int32, sal_Int32) override
+    {
+        throw cpo::uno::RuntimeException(u"getRange: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XTextRange>> SAL_CALL getRuns() override
+    {
+        throw cpo::uno::RuntimeException(u"getRuns: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL getStartIndex() override
+    {
+        throw cpo::uno::RuntimeException(u"getStartIndex: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextParagraph> SAL_CALL
+    insertParagraph(sal_Int32, OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertParagraph: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL
+    insertRange(sal_Int32, cpo::uno::Reference<scriptinterop::XTextRange> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertRange: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL
+    insertRangeMatchSourceFormatting(sal_Int32,
+                                     cpo::uno::Reference<scriptinterop::XTextRange> const&,
+                                     bool) override
+    {
+        throw cpo::uno::RuntimeException(u"insertRangeMatchSourceFormatting: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL
+    insertText(sal_Int32, OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertText: not implemented"_ustr);
+    }
+
+    bool SAL_CALL isEmpty() override
+    {
+        throw cpo::uno::RuntimeException(u"isEmpty: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL replaceAllText(OUString const&, OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceAllText: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL replaceAllTextMatchCase(OUString const&, OUString const&, bool) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceAllTextMatchCase: not implemented"_ustr);
+    }
+
+    void SAL_CALL select() override
+    {
+        throw cpo::uno::RuntimeException(u"select: not implemented"_ustr);
     }
 
     cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL setText(OUString const& newText)
