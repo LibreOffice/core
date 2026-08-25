@@ -74,6 +74,8 @@ else
 # Every other Windows CPU builds nspr with coreconf, then compiles nss on top
 # with gyp and ninja, run inline below. gyp comes from the gyp-next tarball
 # unpacked beside nss.
+# On Windows gyp takes the compiler from the Visual Studio install and ignores
+# CC, so the compiler cache goes in as a wrapper around it instead.
 
 ifeq ($(CPUNAME),X86_64)
 python_arch_subdir=amd64
@@ -95,6 +97,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			VSPATH='$(VS_INSTALL_DIR)' \
 			GYP_MSVS_OVERRIDE_PATH='$(VS_INSTALL_DIR)' \
 			GYP_MSVS_VERSION='$(VS_YEAR)' \
+			$(if $(CCACHE),CC_wrapper='$(CCACHE)') \
 			bash ./build.sh --msvc $(if $(MSVC_USE_DEBUG_RUNTIME),,-o) -t x64 -Ddisable_dbm=0 -Ddisable_libpkix=0 -Dsign_libs=0 -Ddisable_werror=1 -Ddisable_cmds=1 \
 				--disable-tests \
 				--with-nspr="$$(cygpath -m "$$root/dist/out")/include:$$(cygpath -m "$$root/dist/out")/lib" \

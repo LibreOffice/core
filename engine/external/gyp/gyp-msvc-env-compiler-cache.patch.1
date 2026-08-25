@@ -1,0 +1,32 @@
+Keep the compiler cache variables in the captured Windows environment.
+
+On Windows the generated ninja file runs every compile through "ninja -t msvc -e
+environment.<arch>", which replaces the whole environment with the block gyp
+captured when it generated the build. That block keeps only the variables the
+Visual Studio toolchain itself needs, so a compiler cache put in front of cl.exe
+starts with no home directory and no configuration:
+
+ ccache: error: The USERPROFILE environment variable must be set to your user
+ profile folder
+
+Keeping USERPROFILE and the CCACHE_ variables lets the cache find its home and
+the shared cache directory the build was told to use.
+
+--- a/pylib/gyp/msvs_emulation.py
++++ b/pylib/gyp/msvs_emulation.py
+@@ -1101,6 +1101,7 @@
+     """Extracts environment variables required for the toolchain to run from
+     a textual dump output by the cmd.exe 'set' command."""
+     envvars_to_save = (
++        "ccache_.*",
+         "goma_.*",  # TODO(scottmg): This is ugly, but needed for goma.
+         "include",
+         "lib",
+@@ -1110,6 +1111,7 @@
+         "systemroot",
+         "temp",
+         "tmp",
++        "userprofile",
+     )
+     env = {}
+     # This occasionally happens and leads to misleading SYSTEMROOT error messages
