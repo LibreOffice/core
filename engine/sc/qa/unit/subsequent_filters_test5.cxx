@@ -634,6 +634,91 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleStripeSizes)
     CPPUNIT_ASSERT(!aFill(1, 17));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleFontEffects)
+{
+    // Table1 over A1:E10 - header row 1, data rows 2 to 9, total row 10.
+    createScDoc("xlsx/tablestyle-font-effects.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
+    CPPUNIT_ASSERT(pParam);
+    CPPUNIT_ASSERT_EQUAL(u"MergeProbe"_ustr, pParam->maStyleID);
+    const ScTableStyle* pStyle = pDoc->GetTableStyles()->GetTableStyle(pParam->maStyleID);
+    CPPUNIT_ASSERT(pStyle);
+
+    auto aResolve = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
+        return pStyle->GetFontItemSet(*pDBData, nCol, nRow, nRow - 1);
+    };
+    auto aWeight = [](const SfxItemSet* pSet) {
+        const SvxWeightItem* pItem = pSet->GetItemIfSet(ATTR_FONT_WEIGHT, false);
+        return pItem ? pItem->GetWeight() : WEIGHT_DONTKNOW;
+    };
+    auto aPosture = [](const SfxItemSet* pSet) {
+        const SvxPostureItem* pItem = pSet->GetItemIfSet(ATTR_FONT_POSTURE, false);
+        return pItem ? pItem->GetPosture() : ITALIC_DONTKNOW;
+    };
+    auto aUnderline = [](const SfxItemSet* pSet) {
+        const SvxUnderlineItem* pItem = pSet->GetItemIfSet(ATTR_FONT_UNDERLINE, false);
+        return pItem ? pItem->GetLineStyle() : LINESTYLE_DONTKNOW;
+    };
+    auto aColor = [](const SfxItemSet* pSet) {
+        const SvxColorItem* pItem = pSet->GetItemIfSet(ATTR_FONT_COLOR, false);
+        return pItem ? pItem->GetValue() : COL_AUTO;
+    };
+
+    const SfxItemSet* pSet = aResolve(0, 0);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aPosture(pSet));
+
+    pSet = aResolve(1, 0);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPosture(pSet));
+
+    pSet = aResolve(4, 0);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPosture(pSet));
+
+    pSet = aResolve(0, 1);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aPosture(pSet));
+    pSet = aResolve(1, 1);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aWeight(pSet));
+
+    pSet = aResolve(0, 9);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aUnderline(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aPosture(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
+
+    pSet = aResolve(1, 9);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aUnderline(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aWeight(pSet));
+
+    pSet = aResolve(4, 9);
+    CPPUNIT_ASSERT(pSet);
+    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aUnderline(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPosture(pSet));
+
+    ScPatternAttr aCellPattern(pDoc->getCellAttributeHelper());
+    SfxItemSet aEditSet(*pDoc->GetEditEnginePool());
+    ScPatternAttr::FillToEditItemSet(aEditSet, aCellPattern.GetItemSet(), nullptr, aResolve(0, 9));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aEditSet.Get(EE_CHAR_ITALIC).GetPosture());
+    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aEditSet.Get(EE_CHAR_UNDERLINE).GetLineStyle());
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)
 {
     // Load test file: Table2 with A1:C10, TableStyleMedium2, totalsRowCount=1

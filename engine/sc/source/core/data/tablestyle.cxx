@@ -39,10 +39,11 @@ namespace
 {
 // The only font attributes a Table Style can contribute.
 constexpr sal_uInt16 aTableStyleFontWhich[] = {
-    ATTR_FONT,        ATTR_CJK_FONT,        ATTR_CTL_FONT,
-    ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT,
-    ATTR_FONT_WEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CTL_FONT_WEIGHT,
-    ATTR_FONT_COLOR,
+    ATTR_FONT,         ATTR_CJK_FONT,         ATTR_CTL_FONT,
+    ATTR_FONT_HEIGHT,  ATTR_CJK_FONT_HEIGHT,  ATTR_CTL_FONT_HEIGHT,
+    ATTR_FONT_WEIGHT,  ATTR_CJK_FONT_WEIGHT,  ATTR_CTL_FONT_WEIGHT,
+    ATTR_FONT_POSTURE, ATTR_CJK_FONT_POSTURE, ATTR_CTL_FONT_POSTURE,
+    ATTR_FONT_COLOR,   ATTR_FONT_UNDERLINE,   ATTR_FONT_CROSSEDOUT,
 };
 
 constexpr size_t nTableStyleElementCount = static_cast<size_t>(ScTableStyleElement::LAST) + 1;

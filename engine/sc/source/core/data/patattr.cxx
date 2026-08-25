@@ -642,14 +642,10 @@ void ScPatternAttr::fillFontOnly(
         const SvxWeightItem* pFontHWeightItem = lcl_populateresult( nWeightId, rItemSet, pCondSet, pTableSet );
         eWeight = pFontHWeightItem->GetValue();
 
-        const SvxPostureItem* pPostureItem = pCondSet->GetItemIfSet( nPostureId );
-        if ( !pPostureItem )
-            pPostureItem = &rItemSet.Get( nPostureId );
+        const SvxPostureItem* pPostureItem = lcl_populateresult( nPostureId, rItemSet, pCondSet, pTableSet );
         eItalic = pPostureItem->GetValue();
 
-        const SvxUnderlineItem* pUnderlineItem = pCondSet->GetItemIfSet( ATTR_FONT_UNDERLINE );
-        if ( !pUnderlineItem )
-            pUnderlineItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
+        const SvxUnderlineItem* pUnderlineItem = lcl_populateresult( ATTR_FONT_UNDERLINE, rItemSet, pCondSet, pTableSet );
         eUnder = pUnderlineItem->GetValue();
 
         const SvxOverlineItem* pOverlineItem = pCondSet->GetItemIfSet( ATTR_FONT_OVERLINE );
@@ -662,9 +658,7 @@ void ScPatternAttr::fillFontOnly(
             pWordlineItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
         bWordLine = pWordlineItem->GetValue();
 
-        const SvxCrossedOutItem* pCrossedOutItem = pCondSet->GetItemIfSet( ATTR_FONT_CROSSEDOUT );
-        if ( !pCrossedOutItem )
-            pCrossedOutItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
+        const SvxCrossedOutItem* pCrossedOutItem = lcl_populateresult( ATTR_FONT_CROSSEDOUT, rItemSet, pCondSet, pTableSet );
         eStrike = pCrossedOutItem->GetValue();
 
         const SvxContourItem* pContourItem = pCondSet->GetItemIfSet( ATTR_FONT_CONTOUR );
@@ -702,11 +696,11 @@ void ScPatternAttr::fillFontOnly(
         const SvxWeightItem* pFontHWeightItem = lcl_populateresult( nWeightId, rItemSet, pCondSet, pTableSet );
         eWeight = pFontHWeightItem->GetValue();
 
-        eItalic = rItemSet.Get( nPostureId ).GetValue();
-        eUnder = rItemSet.Get( ATTR_FONT_UNDERLINE ).GetValue();
+        eItalic = lcl_populateresult( nPostureId, rItemSet, pCondSet, pTableSet )->GetValue();
+        eUnder = lcl_populateresult( ATTR_FONT_UNDERLINE, rItemSet, pCondSet, pTableSet )->GetValue();
         eOver = rItemSet.Get( ATTR_FONT_OVERLINE ).GetValue();
         bWordLine = rItemSet.Get( ATTR_FONT_WORDLINE ).GetValue();
-        eStrike = rItemSet.Get( ATTR_FONT_CROSSEDOUT ).GetValue();
+        eStrike = lcl_populateresult( ATTR_FONT_CROSSEDOUT, rItemSet, pCondSet, pTableSet )->GetValue();
         bOutline = rItemSet.Get( ATTR_FONT_CONTOUR ).GetValue();
         bShadow = rItemSet.Get( ATTR_FONT_SHADOWED ).GetValue();
         eEmphasis = rItemSet.Get( ATTR_FONT_EMPHASISMARK ).GetEmphasisMark();
@@ -1088,20 +1082,14 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
         pWeightItem = lcl_populateresult( ATTR_CTL_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet );
         eCtlWeight = pWeightItem->GetValue();
 
-        const SvxPostureItem* pPostureItem = pCondSet->GetItemIfSet( ATTR_FONT_POSTURE );
-        if ( !pPostureItem )
-            pPostureItem = &rSrcSet.Get( ATTR_FONT_POSTURE );
+        const SvxPostureItem* pPostureItem = lcl_populateresult( ATTR_FONT_POSTURE, rSrcSet, pCondSet, pTableSet );
         eItalic = pPostureItem->GetValue();
-        pPostureItem = pCondSet->GetItemIfSet( ATTR_CJK_FONT_POSTURE );
-        if ( !pPostureItem )
-            pPostureItem = &rSrcSet.Get( ATTR_CJK_FONT_POSTURE );
+        pPostureItem = lcl_populateresult( ATTR_CJK_FONT_POSTURE, rSrcSet, pCondSet, pTableSet );
         eCjkItalic = pPostureItem->GetValue();
-        pPostureItem = pCondSet->GetItemIfSet( ATTR_CTL_FONT_POSTURE );
-        if ( !pPostureItem )
-            pPostureItem = &rSrcSet.Get( ATTR_CTL_FONT_POSTURE );
+        pPostureItem = lcl_populateresult( ATTR_CTL_FONT_POSTURE, rSrcSet, pCondSet, pTableSet );
         eCtlItalic = pPostureItem->GetValue();
 
-        lcl_populate(oUnderlineItem, ATTR_FONT_UNDERLINE, rSrcSet, pCondSet);
+        lcl_populate(oUnderlineItem, ATTR_FONT_UNDERLINE, rSrcSet, pCondSet, pTableSet);
         lcl_populate(oOverlineItem, ATTR_FONT_OVERLINE, rSrcSet, pCondSet);
 
         const SvxWordLineModeItem* pWordLineModeItem = pCondSet->GetItemIfSet( ATTR_FONT_WORDLINE );
@@ -1109,9 +1097,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
             pWordLineModeItem = &rSrcSet.Get( ATTR_FONT_WORDLINE );
         bWordLine = pWordLineModeItem->GetValue();
 
-        const SvxCrossedOutItem* pCrossedOutItem = pCondSet->GetItemIfSet( ATTR_FONT_CROSSEDOUT );
-        if ( !pCrossedOutItem )
-            pCrossedOutItem = &rSrcSet.Get( ATTR_FONT_CROSSEDOUT );
+        const SvxCrossedOutItem* pCrossedOutItem = lcl_populateresult( ATTR_FONT_CROSSEDOUT, rSrcSet, pCondSet, pTableSet );
         eStrike = pCrossedOutItem->GetValue();
 
         const SvxContourItem* pContourItem = pCondSet->GetItemIfSet( ATTR_FONT_CONTOUR );
@@ -1182,13 +1168,13 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
         pWeightItem = lcl_populateresult(ATTR_CTL_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet);
         eCtlWeight = pWeightItem->GetValue();
 
-        eItalic = rSrcSet.Get( ATTR_FONT_POSTURE ).GetValue();
-        eCjkItalic = rSrcSet.Get( ATTR_CJK_FONT_POSTURE ).GetValue();
-        eCtlItalic = rSrcSet.Get( ATTR_CTL_FONT_POSTURE ).GetValue();
-        oUnderlineItem.emplace(rSrcSet.Get(ATTR_FONT_UNDERLINE));
+        eItalic = lcl_populateresult( ATTR_FONT_POSTURE, rSrcSet, pCondSet, pTableSet )->GetValue();
+        eCjkItalic = lcl_populateresult( ATTR_CJK_FONT_POSTURE, rSrcSet, pCondSet, pTableSet )->GetValue();
+        eCtlItalic = lcl_populateresult( ATTR_CTL_FONT_POSTURE, rSrcSet, pCondSet, pTableSet )->GetValue();
+        lcl_populate(oUnderlineItem, ATTR_FONT_UNDERLINE, rSrcSet, pCondSet, pTableSet);
         oOverlineItem.emplace(rSrcSet.Get(ATTR_FONT_OVERLINE));
         bWordLine = rSrcSet.Get( ATTR_FONT_WORDLINE ).GetValue();
-        eStrike = rSrcSet.Get( ATTR_FONT_CROSSEDOUT ).GetValue();
+        eStrike = lcl_populateresult( ATTR_FONT_CROSSEDOUT, rSrcSet, pCondSet, pTableSet )->GetValue();
         bOutline = rSrcSet.Get( ATTR_FONT_CONTOUR ).GetValue();
         bShadow = rSrcSet.Get( ATTR_FONT_SHADOWED ).GetValue();
         bForbidden = rSrcSet.Get( ATTR_FORBIDDEN_RULES ).GetValue();

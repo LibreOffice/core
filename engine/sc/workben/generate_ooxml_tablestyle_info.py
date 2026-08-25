@@ -172,8 +172,14 @@ def parse_fill(fill) -> Fill:
     return Fill(parse_color(fgColor))
 
 
+def parse_flag(element) -> bool:
+    if element is None:
+        return False
+    return element.get("val", "1") not in ("0", "false")
+
+
 def parse_font(font) -> Font:
-    is_bold = font.find("b") is not None
+    is_bold = parse_flag(font.find("b"))
     color = font.find("color")
     assert color is not None
     return Font(is_bold, parse_color(color))
