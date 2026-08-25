@@ -380,6 +380,14 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		return !!preview && (preview.partsFocused === true || preview.hasSlideFocus());
 	},
 
+	_isNoModifier: function (ev) {
+		return !ev.ctrlKey && !ev.altKey && !ev.shiftKey && !ev.metaKey;
+	},
+
+	_isShiftOnly: function (ev) {
+		return ev.shiftKey && !ev.ctrlKey && !ev.altKey && !ev.metaKey;
+	},
+
 	_isSlideSorterKey: function (ev) {
 		var codes = this.keyCodes;
 		return ev.keyCode === codes.DOWN || ev.keyCode === codes.UP ||
@@ -473,7 +481,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		}
 
 		if (this._slideSorterFocused()) {
-			if (ev.shiftKey && !ev.ctrlKey && !ev.altKey && !ev.metaKey
+			if (this._isShiftOnly(ev)
 				&& (ev.keyCode === this.keyCodes.DOWN || ev.keyCode === this.keyCodes.UP || ev.keyCode === this.keyCodes.HOME || ev.keyCode === this.keyCodes.END)
 				&& ev.type === 'keydown') {
 
@@ -492,9 +500,9 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			// this.modifier belongs to _onKeyDown, which never runs while the
 			// sorter has the focus, so it would hold whatever the document
 			// last saw. Read the modifiers off this event instead.
-			else if (!ev.ctrlKey && !ev.altKey && !ev.shiftKey && !ev.metaKey
-				           && this._isSlideSorterKey(ev)
-				           && ev.type === 'keydown') {
+			else if (this._isNoModifier(ev)
+				&& this._isSlideSorterKey(ev)
+				&& ev.type === 'keydown') {
 
 				var deletePart = (ev.keyCode === this.keyCodes.DELETE || ev.keyCode === this.keyCodes.BACKSPACE) ? true : false;
 
@@ -538,7 +546,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				app.socket.sendMessage('uno .uno:Undo');
 				ev.preventDefault();
 			}
-			else if (!ev.ctrlKey && !ev.altKey && !ev.shiftKey && !ev.metaKey
+			else if (this._isNoModifier(ev)
 				&& ev.keyCode === this.keyCodes.enter && ev.type === 'keydown') {
 				if (this._map.isEditMode() && !app.file.fileBasedView &&
 					this._map.jsdialog && !this._map.jsdialog.hasDialogOpened()) {
