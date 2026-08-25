@@ -18,9 +18,13 @@
 #include <unordered_set>
 #include <vector>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 /* On Windows cl lower-cases some paths, so include prefixes are compared
    case-insensitively there. */
-#ifdef _MSC_VER
+#ifdef _WIN32
 #define PATHNCMP _strnicmp
 #else
 #define PATHNCMP strncmp
@@ -34,12 +38,11 @@ static bool internal_boost = false;
 static std::string work_dir;
 
 /* SRCDIR, BUILDDIR and WORKDIR with every backslash turned into a forward
-   slash. cl /sourceDependencies emits forward-slash-normalised include paths,
-   and these copies let a plain prefix compare decide whether an include lives
-   inside the build tree. build_dir_fwd stays empty when BUILDDIR is not set. */
-static std::string src_dir_fwd;
-static std::string build_dir_fwd;
-static std::string work_dir_fwd;
+   slash, each registered in every spelling it can turn up in. cl
+   /sourceDependencies emits forward-slash-normalised include paths, and these
+   copies let a plain prefix compare decide whether an include lives inside the
+   build tree. */
+static std::vector<std::string> build_tree_prefixes;
 
 /* Return a copy of s with every backslash turned into a forward slash. An empty
    string comes back for a null pointer, so an unset environment variable and an
@@ -57,6 +60,63 @@ static std::string dup_forward_slashes(const char* s)
         }
     }
     return result;
+}
+
+#ifdef _WIN32
+/* The path s as convert - GetLongPathNameA or GetShortPathNameA - spells it,
+   forward-slash-normalised, or an empty string when the conversion fails (say
+   for a directory that does not exist, or on a volume that keeps no 8.3
+   names). */
+static std::string win_path_variant(const std::string& s,
+                                    DWORD(WINAPI* convert)(LPCSTR, LPSTR, DWORD))
+{
+    std::string in(s);
+    for (char& c : in)
+    {
+        if (c == '/')
+            c = '\\';
+    }
+    const DWORD size = convert(in.c_str(), nullptr, 0);
+    if (size == 0)
+        return std::string();
+    std::vector<char> out(size);
+    const DWORD len = convert(in.c_str(), out.data(), size);
+    if (len == 0 || len >= size)
+        return std::string();
+    return dup_forward_slashes(out.data());
+}
+#endif
+
+/* Add path to build_tree_prefixes unless it is empty or already there. */
+static void add_prefix(const std::string& path)
+{
+    if (path.empty())
+        return;
+    for (const std::string& known : build_tree_prefixes)
+    {
+        if (known.size() == path.size() && PATHNCMP(known.c_str(), path.c_str(), path.size()) == 0)
+            return;
+    }
+    build_tree_prefixes.push_back(path);
+}
+
+/* Register dir as a directory whose includes belong to the build tree. On
+   Windows configure hands out SRCDIR and BUILDDIR in 8.3 short form as soon as
+   a path component is longer than eight characters, while cl reports the long
+   path of an include it opened - and the short one for an include reached
+   through a short -I - so both spellings are registered and either one
+   matches. */
+static void add_build_tree_prefix(const char* dir)
+{
+    const std::string path = dup_forward_slashes(dir);
+    add_prefix(path);
+#ifdef _WIN32
+    if (!path.empty())
+    {
+        add_prefix(win_path_variant(path, GetLongPathNameA));
+        add_prefix(win_path_variant(path, GetShortPathNameA));
+    }
+#endif
 }
 
 /* Load the whole regular file name into out. Returns false when the file is
@@ -327,11 +387,10 @@ static std::string write_phony_dep_file(const char* fn)
    the lower-cased paths cl emits still match the mixed-case prefixes. */
 static bool include_in_build_tree(const std::string& path)
 {
-    const std::string* prefixes[] = { &src_dir_fwd, &build_dir_fwd, &work_dir_fwd };
-    for (const std::string* prefix : prefixes)
+    for (const std::string& prefix : build_tree_prefixes)
     {
-        if (!prefix->empty() && path.size() >= prefix->size()
-            && PATHNCMP(path.c_str(), prefix->c_str(), prefix->size()) == 0)
+        if (path.size() >= prefix.size()
+            && PATHNCMP(path.c_str(), prefix.c_str(), prefix.size()) == 0)
             return true;
     }
     return false;
@@ -735,11 +794,10 @@ int main(int argc, char** argv)
     work_dir = workdir;
 
     /* BUILDDIR is optional here. It only helps keep cl /sourceDependencies deps
-       trimmed to the build tree. The forward-slash copies feed the include
-       allowlist. */
-    build_dir_fwd = dup_forward_slashes(getenv("BUILDDIR"));
-    src_dir_fwd = dup_forward_slashes(srcdir);
-    work_dir_fwd = dup_forward_slashes(workdir);
+       trimmed to the build tree. These prefixes feed the include allowlist. */
+    add_build_tree_prefix(getenv("BUILDDIR"));
+    add_build_tree_prefix(srcdir);
+    add_build_tree_prefix(workdir);
 
     const char* env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str, "TRUE") != 0;
