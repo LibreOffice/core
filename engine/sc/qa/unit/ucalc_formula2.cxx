@@ -7923,6 +7923,26 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAUnionListPartJoinsWhenItBeginsWithARefer
                        formula::FormulaGrammar::GRAM_OOXML);
     CPPUNIT_ASSERT_EQUAL(300.0, m_pDoc->GetValue(ScAddress(3, 13, 0)));
 
+    // An error constant part becomes the result of the union, wherever the blank around the
+    // separator is.
+    m_pDoc->SetFormula(ScAddress(3, 14, 0), u"=(A1, #REF!)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(3, 14, 0)));
+    m_pDoc->SetFormula(ScAddress(3, 16, 0), u"=(A1 ,#REF!)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(3, 16, 0)));
+
+    // The same list read the way it arrives from a file: no leading equals sign, and the
+    // implicit intersections worked out during the parse.
+    {
+        ScCompiler aCompiler(*m_pDoc, ScAddress(3, 17, 0), formula::FormulaGrammar::GRAM_OOXML,
+                             true, false);
+        std::unique_ptr<ScTokenArray> pArray = aCompiler.CompileString(u"(A1 ,#REF!)"_ustr);
+        aCompiler.CompileTokenArray();
+        m_pDoc->SetFormula(ScAddress(3, 17, 0), *pArray);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(3, 17, 0)));
+    }
+
     // An @ part sits on the reference after it, and a bare list has no value anyway.
     m_pDoc->SetFormula(ScAddress(3, 15, 0), u"=(A1, _xlfn.SINGLE(B1))"_ustr,
                        formula::FormulaGrammar::GRAM_OOXML);

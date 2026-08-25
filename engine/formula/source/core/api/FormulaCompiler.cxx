@@ -2874,14 +2874,14 @@ bool FormulaCompiler::AppendTokenOrError(OUStringBuffer& rBuffer, const FormulaT
             // A call with no name would come out as "#NAME!()", which no reader
             // accepts, so the error string replaces the whole formula.
             rBuffer.setLength(0);
-            rBuffer.append(GetNativeSymbol(ocErrRef));
+            rBuffer.append(mxSymbols->getSymbol(ocErrRef));
             return false;
         }
         if (eOp == ocExternal || eOp == ocPush)
         {
             // A function token that lost its name. The error string stands in for
             // this one token only.
-            rBuffer.append(GetNativeSymbol(ocErrRef));
+            rBuffer.append(mxSymbols->getSymbol(ocErrRef));
             rpToken = maArrIterator.Next();
             return true;
         }
@@ -2896,7 +2896,7 @@ bool FormulaCompiler::AppendTokenOrError(OUStringBuffer& rBuffer, const FormulaT
             // The error would come out as "#NAME?$C7", which no reader accepts,
             // so the error string replaces the whole formula.
             rBuffer.setLength(0);
-            rBuffer.append(GetNativeSymbol(ocErrName));
+            rBuffer.append(mxSymbols->getSymbol(ocErrName));
             return false;
         }
     }
