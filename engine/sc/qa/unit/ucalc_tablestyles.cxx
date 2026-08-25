@@ -289,6 +289,42 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorders)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersNoWholeTable)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    ScTableStyle aStyle(u"HeaderOnly"_ustr, std::nullopt);
+
+    editeng::SvxBorderLine aLine(nullptr, SvxBorderLineWidth::Thick);
+    SvxBoxItem aBox(ATTR_BORDER);
+    aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+
+    auto pHeaderPattern = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pHeaderPattern->ItemSetPut(aBox);
+    aStyle.SetPattern(ScTableStyleElement::HeaderRow, std::move(pHeaderPattern));
+
+    ScDBData aDBData(u"HeaderOnly"_ustr, 0, 0, 0, 3, 10, true, true, false);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"HeaderOnly"_ustr;
+    aStyleParam.mbRowStripes = false;
+    aStyleParam.mbColumnStripes = false;
+    aStyleParam.mbFirstColumn = false;
+    aStyleParam.mbLastColumn = false;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    std::unique_ptr<SvxBoxItem> pHeaderBox = aStyle.GetBoxItem(aDBData, 1, 0, -1);
+    CPPUNIT_ASSERT(pHeaderBox);
+    const editeng::SvxBorderLine* pBotLine = pHeaderBox->GetLine(SvxBoxItemLine::BOTTOM);
+    CPPUNIT_ASSERT(pBotLine);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(SvxBorderLineWidth::Thick), pBotLine->GetWidth());
+
+    CPPUNIT_ASSERT(!aStyle.GetBoxItem(aDBData, 1, 5, 4));
+    CPPUNIT_ASSERT(!aStyle.GetFillItem(aDBData, 1, 5, 4));
+    CPPUNIT_ASSERT(!aStyle.GetFontItemSet(aDBData, 1, 5, 4));
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test 3b: Single-column table keeps both left and right outer edges (regression)
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersSingleColumn)
 {
@@ -400,6 +436,85 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFonts)
         if (pDataWeight)
             CPPUNIT_ASSERT(pDataWeight->GetWeight() != WEIGHT_BOLD);
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFontsAcrossElements)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    ScTableStyle aStyle(u"Split"_ustr, std::nullopt);
+
+    auto pTablePattern = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pTablePattern->ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    pTablePattern->ItemSetPut(SvxColorItem(COL_BLUE, ATTR_FONT_COLOR));
+    aStyle.SetPattern(ScTableStyleElement::WholeTable, std::move(pTablePattern));
+
+    auto pHeaderPattern = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pHeaderPattern->ItemSetPut(SvxColorItem(COL_RED, ATTR_FONT_COLOR));
+    aStyle.SetPattern(ScTableStyleElement::HeaderRow, std::move(pHeaderPattern));
+
+    ScDBData aDBData(u"Split"_ustr, 0, 0, 0, 3, 10, true, true, false);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"Split"_ustr;
+    aStyleParam.mbRowStripes = false;
+    aStyleParam.mbColumnStripes = false;
+    aStyleParam.mbFirstColumn = false;
+    aStyleParam.mbLastColumn = false;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    const SfxItemSet* pHeaderFont = aStyle.GetFontItemSet(aDBData, 0, 0, -1);
+    CPPUNIT_ASSERT(pHeaderFont);
+    const SvxColorItem* pHeaderColor = pHeaderFont->GetItemIfSet(ATTR_FONT_COLOR, false);
+    CPPUNIT_ASSERT(pHeaderColor);
+    CPPUNIT_ASSERT_EQUAL(COL_RED, pHeaderColor->GetValue());
+    const SvxWeightItem* pHeaderWeight = pHeaderFont->GetItemIfSet(ATTR_FONT_WEIGHT, false);
+    CPPUNIT_ASSERT(pHeaderWeight);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, pHeaderWeight->GetWeight());
+
+    const SfxItemSet* pDataFont = aStyle.GetFontItemSet(aDBData, 0, 5, 4);
+    CPPUNIT_ASSERT(pDataFont);
+    const SvxColorItem* pDataColor = pDataFont->GetItemIfSet(ATTR_FONT_COLOR, false);
+    CPPUNIT_ASSERT(pDataColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pDataColor->GetValue());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFontsHeaderFirstColumn)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleDark8"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    ScDBData aDBData(u"HeaderFirstCol"_ustr, 0, 0, 0, 3, 10, true, true, false);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleDark8"_ustr;
+    aStyleParam.mbRowStripes = false;
+    aStyleParam.mbColumnStripes = false;
+    aStyleParam.mbFirstColumn = true;
+    aStyleParam.mbLastColumn = true;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    const SfxItemSet* pCornerFont = pStyle->GetFontItemSet(aDBData, 0, 0, -1);
+    CPPUNIT_ASSERT(pCornerFont);
+    const SvxColorItem* pColor = pCornerFont->GetItemIfSet(ATTR_FONT_COLOR, false);
+    CPPUNIT_ASSERT(pColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pColor->GetValue());
+    const SvxWeightItem* pWeight = pCornerFont->GetItemIfSet(ATTR_FONT_WEIGHT, false);
+    CPPUNIT_ASSERT(pWeight);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, pWeight->GetWeight());
+
+    const SfxItemSet* pHeaderFont = pStyle->GetFontItemSet(aDBData, 1, 0, -1);
+    CPPUNIT_ASSERT(pHeaderFont);
+    CPPUNIT_ASSERT(!pHeaderFont->GetItemIfSet(ATTR_FONT_WEIGHT, false));
 
     m_pDoc->DeleteTab(0);
 }

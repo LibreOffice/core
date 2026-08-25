@@ -10,7 +10,9 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
+#include <o3tl/enumarray.hxx>
 
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -38,6 +40,7 @@ enum class ScTableStyleElement
     TotalRow,
     FirstHeaderCell,
     LastHeaderCell,
+    LAST = LastHeaderCell // keep on the last element
 };
 
 // The visual family a table style belongs to, derived from its programmatic
@@ -58,11 +61,6 @@ enum class ScTableStyleFamily
 // which family a style belongs to.
 ScTableStyleFamily ScGetTableStyleFamily(std::u16string_view rName, bool bIsBuiltin);
 
-template <class T> const T* GetItemFromPattern(ScPatternAttr* pPattern, TypedWhichId<T> nWhich)
-{
-    return pPattern->GetItemSet().GetItemIfSet(nWhich);
-}
-
 class SC_DLLPUBLIC ScTableStyle
 {
 private:
@@ -71,17 +69,10 @@ private:
     void operator=(ScTableStyle const&) = delete;
     void operator=(ScTableStyle&&) = delete;
 
-    std::unique_ptr<ScPatternAttr> mpTablePattern;
-    std::unique_ptr<ScPatternAttr> mpFirstColumnStripePattern;
-    std::unique_ptr<ScPatternAttr> mpSecondColumnStripePattern;
-    std::unique_ptr<ScPatternAttr> mpFirstRowStripePattern;
-    std::unique_ptr<ScPatternAttr> mpSecondRowStripePattern;
-    std::unique_ptr<ScPatternAttr> mpLastColumnPattern;
-    std::unique_ptr<ScPatternAttr> mpFirstColumnPattern;
-    std::unique_ptr<ScPatternAttr> mpHeaderRowPattern;
-    std::unique_ptr<ScPatternAttr> mpTotalRowPattern;
-    std::unique_ptr<ScPatternAttr> mpFirstHeaderCellPattern;
-    std::unique_ptr<ScPatternAttr> mpLastHeaderCellPattern;
+    o3tl::enumarray<ScTableStyleElement, std::unique_ptr<ScPatternAttr>> maPatterns;
+
+    // Whether that element's pattern sets any of the font attributes
+    o3tl::enumarray<ScTableStyleElement, bool> maHasFontAttr;
 
     sal_Int32 mnFirstRowStripeSize;
     sal_Int32 mnSecondRowStripeSize;
@@ -92,10 +83,19 @@ private:
     std::optional<OUString> maUIName;
     bool mbIsOOXMLDefault;
 
+    // Font attributes merged across the table elements
+    mutable std::unordered_map<sal_uInt32, std::unique_ptr<SfxItemSet>> maMergedFontSets;
+
+    template <class T>
+    const T* GetElementItem(ScTableStyleElement eElement, TypedWhichId<T> nWhich) const
+    {
+        const std::unique_ptr<ScPatternAttr>& rpPattern = maPatterns[eElement];
+        return rpPattern ? rpPattern->GetItemSet().GetItemIfSet(nWhich) : nullptr;
+    }
+
 public:
     ScTableStyle(const OUString& rName, const std::optional<OUString>& rUIName);
 
-    static bool HasFontAttrSet(const ScPatternAttr* pPattern);
     const SfxItemSet* GetFontItemSet(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
                                      SCROW nRowIndex) const;
     const SvxBrushItem* GetFillItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
