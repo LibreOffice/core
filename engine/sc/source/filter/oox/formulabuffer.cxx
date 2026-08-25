@@ -378,6 +378,16 @@ void applyCellFormulas(
         stripRedundantParentheses(*pCode, {ocSingleValue});
         liftAnchorArrayToPostfix(*pCode);
         aCompiler.CompileTokenArray(); // Generate RPN tokens.
+        // OOXML leaves the @ of a plain =@ref# cell out of the text, expressing it by
+        // keeping the cell a non-array formula, so put it back. Anything wider keeps its
+        // _xlfn.SINGLE, so only the bare shape qualifies: one reference and the operator,
+        // not even parentheses. A dynamic-array master spills instead, so it gets no @.
+        if (!rItem.mbDynamicArrayMaster && pCode->GetLen() == 2
+            && pCode->TokenAt(0)->GetType() == formula::svSingleRef
+            && pCode->TokenAt(1)->GetOpCode() == ocSpill)
+        {
+            ScFormulaCell::ResolveImplicitIntersection(*pCode, rDoc.getDoc(), aPos);
+        }
 
         ScFormulaCell* pCell = new ScFormulaCell(rDoc.getDoc(), aPos, std::move(pCode));
         if (rItem.mbDynamicArrayMaster)
