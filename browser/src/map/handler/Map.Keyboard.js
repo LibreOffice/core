@@ -527,11 +527,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			}
 			else if (this._isNoModifier(ev)
 				&& ev.keyCode === this.keyCodes.enter && ev.type === 'keydown') {
-				if (this._map.isEditMode() && !app.file.fileBasedView &&
-					this._map.jsdialog && !this._map.jsdialog.hasDialogOpened()) {
-					this._map.insertPage();
-				}
-				ev.preventDefault();
+				this._insertPart(ev);
 			}
 			else if (!ev.ctrlKey && !ev.shiftKey) {
 				if (ev.key === 'Meta' || ev.key === 'Alt' ||
@@ -601,6 +597,16 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		) {
 			this._map.deletePage(this._map._docLayer._selectedPart);
 		}
+	},
+
+	// _insertPart - adds a part after the selected one, in the same cases where deleting one is
+	// allowed.
+	_insertPart: function (ev) {
+		if (this._map.isEditMode() && !app.file.fileBasedView &&
+			this._map.jsdialog && !this._map.jsdialog.hasDialogOpened()) {
+			this._map.insertPage();
+		}
+		ev.preventDefault();
 	},
 
 	_globalKeyUp: function (ev) {
