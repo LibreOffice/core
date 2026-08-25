@@ -1,0 +1,35 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module scriptinterop {
+
+enum ListPreset
+{
+    DISC_CIRCLE_SQUARE,
+    DIAMONDX_ARROW3D_SQUARE,
+    CHECKBOX,
+    ARROW_DIAMOND_DISC,
+    STAR_CIRCLE_SQUARE,
+    ARROW3D_CIRCLE_SQUARE,
+    LEFTTRIANGLE_DIAMOND_DISC,
+    DIAMONDX_HOLLOWDIAMOND_SQUARE,
+    DIAMOND_CIRCLE_SQUARE,
+    DIGIT_ALPHA_ROMAN,
+    DIGIT_ALPHA_ROMAN_PARENS,
+    DIGIT_NESTED,
+    UPPERALPHA_ALPHA_ROMAN,
+    UPPERROMAN_UPPERALPHA_DIGIT,
+    ZERODIGIT_ALPHA_ROMAN
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

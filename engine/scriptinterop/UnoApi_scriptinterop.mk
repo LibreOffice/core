@@ -26,12 +26,41 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,,\
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
+    AlignmentPosition \
+    ArrowStyle \
+    AutofitType \
+    AutoTextType \
+    CellMergeState \
+    ColorType \
+    ContentAlignment \
+    DashStyle \
     ElementType \
+    FillType \
     GlyphType \
     HorizontalAlignment \
     ImageOptions \
+    LineCategory \
+    LineFillType \
+    LineType \
+    LinkType \
+    ListPreset \
+    PageBackgroundType \
+    PageElementType \
+    PageType \
+    ParagraphAlignment \
     ParagraphHeading \
+    PlaceholderType \
+    PredefinedLayout \
+    SelectionType \
+    ShapeType \
+    SlideLinkingMode \
+    SlidePosition \
+    SpacingMode \
     TextAlignment \
+    TextBaselineOffset \
+    TextDirection \
+    ThemeColorType \
+    VideoSourceType \
     XBase \
     XBlob \
     XBody \
