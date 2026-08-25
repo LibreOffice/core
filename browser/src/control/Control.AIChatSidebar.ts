@@ -2714,7 +2714,9 @@ namespace cool {
 		}): void {
 			if (this.isProcessing) return;
 			this.inputText = _('Use section: ') + choice.label;
-			void this.sendMessage();
+			this.sendMessage().catch((e: any) => {
+				window.console.error('Sending the section choice failed:', e);
+			});
 		}
 
 		clearConversation(): void {
