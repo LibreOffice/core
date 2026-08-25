@@ -420,7 +420,8 @@ class Dispatcher {
 	//
 	// An area defines blur only when it leaves sticky focus state behind that
 	// has to be cleared as focus moves away from it.
-	private getFocusRegions(): Array<{
+	getFocusRegions(): Array<{
+		name: string;
 		available: () => boolean;
 		hasFocus: () => boolean;
 		focus: () => boolean;
@@ -442,6 +443,7 @@ class Dispatcher {
 		};
 
 		const topBar = {
+			name: 'topBar',
 			available: () => true,
 			hasFocus: () =>
 				contains(document.querySelector('.notebookbar-tabs-container')) ||
@@ -450,6 +452,7 @@ class Dispatcher {
 		};
 
 		const topToolbar = {
+			name: 'topToolbar',
 			available: () => {
 				if (app.map.uiManager.getCurrentMode() === 'notebookbar') return false;
 				const bar = document.getElementById('toolbar-up');
@@ -462,6 +465,7 @@ class Dispatcher {
 		};
 
 		const formulaBar = {
+			name: 'formulaBar',
 			available: () =>
 				!app.isReadOnly() &&
 				isVisible(document.getElementById('sc_input_window')),
@@ -499,6 +503,7 @@ class Dispatcher {
 			isVisible(document.getElementById('slide-sorter'));
 
 		const navigationSidebar = {
+			name: 'navigationSidebar',
 			available: () =>
 				slideSorterShowing() ||
 				(!!app.map.navigator && app.map.navigator.isNavigationPanelVisible()),
@@ -522,6 +527,7 @@ class Dispatcher {
 		};
 
 		const documentArea = {
+			name: 'documentArea',
 			available: () => true,
 			hasFocus: () => app.map.hasFocus() && !app.map.calcInputBarHasFocus(),
 			focus: () => {
@@ -531,12 +537,14 @@ class Dispatcher {
 		};
 
 		const sidebar = {
+			name: 'sidebar',
 			available: () => !!app.map.sidebar && app.map.sidebar.isVisible(),
 			hasFocus: () => !!app.map.sidebar && contains(app.map.sidebar.wrapper),
 			focus: () => focusFirstIn(app.map.sidebar.wrapper),
 		};
 
 		const statusBar = {
+			name: 'statusBar',
 			available: () => {
 				const bar = document.getElementById('toolbar-down');
 				if (!isVisible(bar)) return false;
@@ -548,6 +556,7 @@ class Dispatcher {
 		};
 
 		const sheetTabs = {
+			name: 'sheetTabs',
 			available: () =>
 				isVisible(document.getElementById('spreadsheet-toolbar')),
 			hasFocus: () => {
