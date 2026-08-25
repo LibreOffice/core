@@ -29,6 +29,13 @@ rm -rf cov-int
 # below only compiles these modules again.
 make -C engine $(for m in $ENGINE_MODULES; do printf '%s.clean ' "$m"; done)
 
+# cov-emit stops on a suppressible assertion when it meets the _ostr and
+# _ustr string literal operators, which take a class type as a template
+# parameter. The number is the frontend source line its own message names:
+# "emit-types.cpp:1519: Attempting to initialize an entity of type
+# rtl::OUStringLiteral<1ul> const with a constant of type char16_t const [1]".
+export COVERITY_SUPPRESS_ASSERT=1519
+
 # A full make, not "make <module>". The per-module target builds only that one
 # module and takes the libraries it links against from workdir, which the clean
 # above just emptied.
