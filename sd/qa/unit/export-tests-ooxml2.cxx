@@ -363,6 +363,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathObject)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathObjectColorOmittedInSlide)
+{
+    // A colored formula still exports as a slide that binds every prefix it uses. The
+    // run properties that carry a color live in the w namespace, which a slide does not
+    // declare, so the color is left out and the run holds nothing but its text.
+    createSdImpressDoc("odp/math-color.fodp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPathContent(pXmlDocContent,
+                       "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/"
+                       "a14:m/m:oMath/m:r[1]/m:t",
+                       u"1");
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/"
+                "a14:m/m:oMath/m:r[1]/*",
+                1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathExportNonBMP)
 {
     // Check import / export of math object

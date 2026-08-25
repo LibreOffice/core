@@ -11,6 +11,9 @@
 
 #include <rtl/ustring.hxx>
 
+#include <memory>
+
+class SmParser5;
 namespace oox::formulaimport { class XmlStream; }
 /**
  Class implementing reading of formulas from OOXML. The toplevel element is expected
@@ -20,8 +23,11 @@ class SmOoxmlImport
 {
 public:
     explicit SmOoxmlImport( oox::formulaimport::XmlStream& stream );
+    ~SmOoxmlImport();
     OUString ConvertToStarMath();
 private:
+    /// The parser that tells whether a run's text stands as an expression of its own.
+    SmParser5& getParser();
     OUString handleStream();
     OUString handleAcc();
     OUString handleBar();
@@ -47,6 +53,9 @@ private:
     static OUString handleSetString(const OUString& setOUstring);
 
     oox::formulaimport::XmlStream& m_rStream;
+    // Built on first use, because constructing one creates a character classification
+    // service, and most formulas never need it.
+    std::unique_ptr<SmParser5> m_pParser;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
