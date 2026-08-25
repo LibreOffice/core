@@ -84,8 +84,9 @@ window.L.Clipboard = window.L.Class.extend({
 		document.oncut = function(ev)   { return that.cut(ev); };
 		document.oncopy = function(ev)  { return that.copy(ev); };
 		document.onpaste = function(ev) {
-			if (window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
-				// For each app that uses the COKitClipboardProvider API
+			if (window.mode.isCODesktop()) {
+				// The desktop provider apps map the paste event straight to
+				// .uno:Paste; the iOS app handles it in paste() instead.
 				ev.preventDefault();
 				window.postMobileMessage('uno .uno:Paste');
 				return;
@@ -492,7 +493,7 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	_sendToInternalClipboard: async function (content) {
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
+		if (window.mode.hasEngineClipboardProvider()) {
 			// Nothing to send: the engine serves the paste on the following
 			// .uno:Paste, either from our own copy (when we still own the platform
 			// clipboard) or by reading the platform clipboard through the installed
@@ -781,10 +782,7 @@ window.L.Clipboard = window.L.Class.extend({
 			return;
 		}
 
-		if (!window.ThisIsTheiOSApp && // in mobile apps, we want to drop straight to navigatorClipboardRead as execCommand will require user interaction...
-			!window.ThisIsTheMacOSApp &&
-			!window.ThisIsTheWindowsApp &&
-			!window.ThisIsTheQtApp &&
+		if (!window.mode.hasEngineClipboardProvider() && // in mobile apps, we want to drop straight to navigatorClipboardRead as execCommand will require user interaction...
 			document.execCommand(operation) &&
 			serial !== this._clipboardSerial) {
 			window.app.console.log('copied successfully');
@@ -956,7 +954,7 @@ window.L.Clipboard = window.L.Class.extend({
 
 	// Executes the navigator.clipboard.write() call, if it's available.
 	_navigatorClipboardWrite: function(params) {
-		if (!window.L.Browser.clipboardApiAvailable && !window.ThisIsTheiOSApp && !window.ThisIsTheMacOSApp && !window.ThisIsTheWindowsApp && !window.ThisIsTheQtApp) {
+		if (!window.L.Browser.clipboardApiAvailable && !window.mode.hasEngineClipboardProvider()) {
 			return false;
 		}
 
@@ -986,7 +984,7 @@ window.L.Clipboard = window.L.Class.extend({
 		// I don't like it either :). If you change this make sure to thoroughly test
 		// cross-browser and cross-device!
 
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
+		if (window.mode.hasEngineClipboardProvider()) {
 			// The engine advertises the copied formats straight onto the system
 			// clipboard through the installed clipboard provider, so there is no
 			// write to make here; just confirm the copy went through.
@@ -1100,7 +1098,7 @@ window.L.Clipboard = window.L.Class.extend({
 
 	// Executes the navigator.clipboard.read() call, if it's available.
 	_navigatorClipboardRead: function(isSpecial) {
-		if (!window.L.Browser.clipboardApiAvailable && !window.ThisIsTheiOSApp && !window.ThisIsTheMacOSApp && !window.ThisIsTheWindowsApp && !window.ThisIsTheQtApp) {
+		if (!window.L.Browser.clipboardApiAvailable && !window.mode.hasEngineClipboardProvider()) {
 			return false;
 		}
 
@@ -1112,7 +1110,7 @@ window.L.Clipboard = window.L.Class.extend({
 	// ClipboardItem array, or null on the apps whose engine reads the system
 	// clipboard itself.
 	_readClipboardItems: async function() {
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp)
+		if (window.mode.hasEngineClipboardProvider())
 			// The engine clipboard provider reads the pasteboard itself on
 			// .uno:Paste, so there is nothing to fetch here. Reporting null
 			// drops straight to an internal paste.

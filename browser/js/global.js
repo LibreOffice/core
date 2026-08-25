@@ -210,6 +210,13 @@ class BrowserProperties {
 			isCODesktop: function() {
 				return global.ThisIsTheMacOSApp || global.ThisIsTheQtApp || global.ThisIsTheWindowsApp;
 			},
+			// The apps whose engine drives the system clipboard through the
+			// installed clipboard provider: copy advertises straight onto the
+			// system clipboard and .uno:Paste reads it back in the engine, so
+			// the browser moves no clipboard payload itself.
+			hasEngineClipboardProvider: function() {
+				return global.ThisIsTheiOSApp || global.mode.isCODesktop();
+			},
 			isDesktop: function() {
 				if (global.ThisIsTheWindowsApp || global.ThisIsTheQtApp	|| global.ThisIsTheMacOSApp)
 					return true;
