@@ -33,6 +33,9 @@
 #include <sfx2/sfxsids.hrc>
 
 #include <comphelper/kit.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/digitalsignatures.hxx>
+#include <svl/cryptosign.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -210,7 +213,23 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
                RID_L + RID_TAB_PDFLINKS.sIconName);
     AddTabPage(u"security"_ustr, TabResId(RID_TAB_PDFPROTECT.aLabel), ImpPDFTabSecurityPage::Create,
                RID_L + RID_TAB_PDFPROTECT.sIconName);
-    if (!comphelper::COKit::isActive())
+    // Offer the signature tab whenever a signing certificate is reachable.
+    // The desktop apps list the native certificate store (CODA-W, the only
+    // _WIN32 COKit build, the Windows certificate store; CODA-M, the only
+    // MACOSX COKit build, Keychain Access), so the tab is always available
+    // there. Elsewhere in COKit mode (COOL, CODA-Q) signing uses the
+    // certificate supplied via viewsettings and put on the view, so only
+    // offer the tab once such a certificate is present.
+    bool bCanSign = true;
+#if !defined(_WIN32) && !defined(MACOSX)
+    if (comphelper::COKit::isActive())
+    {
+        SfxViewShell* pSignViewShell = SfxViewShell::Current();
+        bCanSign
+            = pSignViewShell && pSignViewShell->GetSigningCertificate().m_xCertificate.is();
+    }
+#endif
+    if (bCanSign)
         AddTabPage(u"digitalsignatures"_ustr, TabResId(RID_TAB_PDFSIGN.aLabel),
                    ImpPDFTabSigningPage::Create, RID_L + RID_TAB_PDFSIGN.sIconName);
 
@@ -1838,10 +1857,17 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
             comphelper::getProcessComponentContext()));
     xSigner->setParentWindow(GetFrameWeld()->GetXWindow());
 
-    // The use may provide a description while choosing a certificate.
+    // The user may provide a description while choosing a certificate.
     OUString aDescription;
-    maSignCertificate = xSigner->selectSigningCertificateWithType(
-        security::CertificateKind::CertificateKind_X509, aDescription);
+    // Use the view-aware overload: in COKit mode the certificate chooser may
+    // source the signing certificate from the view when it is supplied via
+    // viewsettings (COOL, CODA-Q). The plain UNO method passes no view, so
+    // the chooser cannot reach that certificate and comes up empty.
+    sfx2::DigitalSignatures* pModelSigner
+        = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());
+    assert(pModelSigner);
+    maSignCertificate = pModelSigner->SelectSigningCertificateWithType(
+        SfxViewShell::Current(), security::CertificateKind::CertificateKind_X509, aDescription);
 
     if (!maSignCertificate.is())
         return;
