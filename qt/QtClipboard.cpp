@@ -130,7 +130,9 @@ bool insertClipboardImageFile(int dstFd, const QMimeData* data)
             continue;
         }
 
-        const std::string message = "insertfile name=" + fileInfo.fileName().toStdString() +
+        const std::string filename = QUrl::toPercentEncoding(fileInfo.fileName()).toStdString();
+
+        const std::string message = "insertfile name=" + filename +
                                     " type=graphic data=" + file.readAll().toBase64().toStdString();
         fakeSocketWriteQueue(dstFd, message.c_str(), message.size());
 

@@ -2380,8 +2380,18 @@ bool ChildSession::insertFile(const StringVector& tokens)
                    type == "comparedocuments");
             std::string binaryData;
             macaron::Base64::Decode(data, binaryData);
-            url = writeFileToJail(FileUtil::createRandomTmpDir() + '/' + name, binaryData.data(),
-                                  binaryData.size());
+
+            std::string decodedName;
+            if (type == "graphic")
+            {
+                URI::decode(name, decodedName);
+            }
+            else
+            {
+                decodedName = name;
+            }
+            url = writeFileToJail(FileUtil::createRandomTmpDir() + '/' + decodedName,
+                                  binaryData.data(), binaryData.size());
         }
 
         postInsertCommand(type, url, multimedia_width, multimedia_height);
