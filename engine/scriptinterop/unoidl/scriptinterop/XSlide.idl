@@ -11,18 +11,28 @@
 
 module scriptinterop {
 
-interface XSlide : XBase
-{
-    sequence<XShape> getShapes();
+interface XLayout;
+interface XNotesPage;
 
-    XShape insertTextBox([in] string text, [in] double left, [in] double top,
-                         [in] double width, [in] double height);
+interface XSlide : XEditablePageBase
+{
+    XSlide duplicate();
+
+    XLayout getLayout();
+
+    XNotesPage getNotesPage();
+
+    SlideLinkingMode getSlideLinkingMode();
+
+    boolean isSkipped();
+
+    void move([in] long index);
 
     XSlide setBackgroundColor([in] string hexColor);
 
-    void remove();
+    void setSkipped([in] boolean skipped);
 };
 
 };
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

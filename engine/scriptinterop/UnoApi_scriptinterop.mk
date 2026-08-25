@@ -78,6 +78,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XCursor \
     XDocument \
     XDrawing \
+    XEditablePageBase \
     XElement \
     XFactory \
     XFill \
@@ -85,13 +86,18 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XGroup \
     XImage \
     XInlineImage \
+    XLayout \
     XLine \
     XLineFill \
     XLink \
     XList \
     XListStyle \
+    XMaster \
+    XNotesMaster \
+    XNotesPage \
     XPage \
     XPageBackground \
+    XPageBase \
     XPageElement \
     XPageElementBase \
     XParagraph \

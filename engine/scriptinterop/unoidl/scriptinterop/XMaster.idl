@@ -12,16 +12,10 @@
 module scriptinterop {
 
 interface XLayout;
-interface XMaster;
-interface XSlide;
 
-interface XPage : XEditablePageBase
+interface XMaster : XEditablePageBase
 {
-    XLayout asLayout();
-
-    XMaster asMaster();
-
-    XSlide asSlide();
+    sequence<XLayout> getLayouts();
 };
 
 };

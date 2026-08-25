@@ -11,17 +11,17 @@
 
 module scriptinterop {
 
-interface XLayout;
-interface XMaster;
-interface XSlide;
+interface XShape;
 
-interface XPage : XEditablePageBase
+interface XNotesPage : XPageBase
 {
-    XLayout asLayout();
+    XShape getSpeakerNotesShape();
 
-    XMaster asMaster();
+    [overload replaceAllText] long replaceAllText([in] string findText, [in] string replaceText);
 
-    XSlide asSlide();
+    [overload replaceAllText] long replaceAllTextMatchCase(
+        [in] string findText, [in] string replaceText, [in] boolean matchCase);
+
 };
 
 };

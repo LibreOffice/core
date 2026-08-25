@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertTextBoxGeometryRoundTrip)
 {
     auto const xPresentation = loadPresentation();
     auto const xSlide = xPresentation->appendSlide();
-    auto const xShape = xSlide->insertTextBox(u"Hello"_ustr, 36, 72, 288, 144);
+    auto const xShape = xSlide->insertTextBoxAt(u"Hello"_ustr, 36, 72, 288, 144);
     CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, xShape->getText()->asString());
     // The chosen point values convert to whole 1/100 mm, so they round-trip exactly.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(36.0, xShape->getLeft(), 0.05);
@@ -103,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextStyling)
 {
     auto const xPresentation = loadPresentation();
     auto const xSlide = xPresentation->appendSlide();
-    auto const xShape = xSlide->insertTextBox(u"Styled"_ustr, 36, 36, 288, 72);
+    auto const xShape = xSlide->insertTextBoxAt(u"Styled"_ustr, 36, 36, 288, 72);
     auto const xRange = xShape->getText();
     getValue(xRange->getTextStyle())
         ->setBold(true)
@@ -135,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(Test, testItalicAndStrikethrough)
 {
     auto const xPresentation = loadPresentation();
     auto const xSlide = xPresentation->appendSlide();
-    auto const xShape = xSlide->insertTextBox(u"Styled"_ustr, 36, 36, 288, 72);
+    auto const xShape = xSlide->insertTextBoxAt(u"Styled"_ustr, 36, 36, 288, 72);
     getValue(xShape->getText()->getTextStyle())->setItalic(true)->setStrikethrough(true);
     // The formatting lands on the text runs, so a cursor over the text reports it.
     cpo::uno::Reference<css::text::XText> const xText(xShape->getuno(),
@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendTextRunStyling)
 {
     auto const xPresentation = loadPresentation();
     auto const xSlide = xPresentation->appendSlide();
-    auto const xShape = xSlide->insertTextBox(u""_ustr, 36, 36, 288, 72);
+    auto const xShape = xSlide->insertTextBoxAt(u""_ustr, 36, 36, 288, 72);
     auto const xText = xShape->getText();
     auto const xPlain = xText->appendText(u"plain "_ustr);
     auto const xBold = xText->appendText(u"bold"_ustr);
@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
 {
     auto const xPresentation = loadPresentation();
     auto const xSlide = xPresentation->appendSlide();
-    auto const xShape = xSlide->insertTextBox(u""_ustr, 36, 36, 288, 144);
+    auto const xShape = xSlide->insertTextBoxAt(u""_ustr, 36, 36, 288, 144);
     auto const xText = xShape->getText();
     xText->setBulletLevel(0);
     xText->appendText(u"first"_ustr);
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGeometryValidation)
 {
     auto const xPresentation = loadPresentation();
     auto const xSlide = xPresentation->appendSlide();
-    auto const xShape = xSlide->insertTextBox(u"x"_ustr, 36, 36, 288, 72);
+    auto const xShape = xSlide->insertTextBoxAt(u"x"_ustr, 36, 36, 288, 72);
     // A geometry value must be a finite number that fits the page coordinate range.
     CPPUNIT_ASSERT_THROW(xShape->setLeft(std::numeric_limits<double>::quiet_NaN()),
                          cpo::uno::RuntimeException);
@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGeometryValidation)
     CPPUNIT_ASSERT_THROW(xShape->setWidth(-1), cpo::uno::RuntimeException);
     CPPUNIT_ASSERT_THROW(xShape->setHeight(-1), cpo::uno::RuntimeException);
     // A rejected insertTextBox leaves the slide without the new shape.
-    CPPUNIT_ASSERT_THROW(xSlide->insertTextBox(u"x"_ustr, 0, 0, -10, 10),
+    CPPUNIT_ASSERT_THROW(xSlide->insertTextBoxAt(u"x"_ustr, 0, 0, -10, 10),
                          cpo::uno::RuntimeException);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSlide->getShapes().getLength());
     // A rejected setter leaves the shape's geometry untouched.
