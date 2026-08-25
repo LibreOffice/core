@@ -276,6 +276,18 @@ window.L.Control.Tabs = window.L.Control.extend({
 								return function(e) {
 									this._tabForContextMenu = j;
 									if (!this._map.isReadOnlyMode()) {
+										if (e.pointerType === 'touch') {
+											// The menu slides up under the finger while it is still down. Cancel
+											// the default action of the release, so the menu stays open with
+											// nothing selected when the finger lifts.
+											const cancelRelease = function (releaseEvent) {
+												releaseEvent.preventDefault();
+												window.removeEventListener('touchend', cancelRelease, true);
+												window.removeEventListener('touchcancel', cancelRelease, true);
+											};
+											window.addEventListener('touchend', cancelRelease, true);
+											window.addEventListener('touchcancel', cancelRelease, true);
+										}
 										if (window.mode.isSmallScreenDevice()) {
 											window.contextMenuWizard = true;
 											// Build the structure now, so entries that depend on the
