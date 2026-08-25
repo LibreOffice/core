@@ -116,7 +116,7 @@ def createTable():
         0)
     textInTextFrame.insertString(
         cursorInTextFrame,
-        "\nWith this second line the height of the rame raises.",
+        "\nWith this second line the height of the frame raises.",
         0)
     text.insertControlCharacter(cursor, PARAGRAPH_BREAK, 0)
 

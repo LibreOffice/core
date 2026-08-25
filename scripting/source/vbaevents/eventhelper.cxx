@@ -313,7 +313,7 @@ eventMethodToDescriptor( std::u16string_view rEventMethod, ScriptEventDescriptor
 
     EventInfoHash& infos = getEventTransInfo();
 
-    // Only create an ScriptEventDescriptor for an event we can translate
+    // Only create a ScriptEventDescriptor for an event we can translate
     // or emulate
     if ( !sMethodName.isEmpty()
          && !sTypeName.isEmpty()
@@ -326,7 +326,7 @@ eventMethodToDescriptor( std::u16string_view rEventMethod, ScriptEventDescriptor
         evtDesc.ListenerType = sTypeName;
         evtDesc.EventMethod = sMethodName;
 
-        // set this it VBAInterop, ensures that it doesn't
+        // set this to VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
         evtDesc.ScriptType = "VBAInterop";
         return true;

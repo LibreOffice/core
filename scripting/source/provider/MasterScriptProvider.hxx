@@ -117,7 +117,7 @@ private:
     // in case of createInstanceWithArgumentsXXX() called m_bIsValid is set to reset
     // and then set to true when initialisation is complete
     bool m_bIsValid;
-    // m_bInitialised ensure initialisation only takes place once.
+    // m_bInitialised ensures initialisation only takes place once.
     bool m_bInitialised;
     bool m_bIsPkgMSP;
     css::uno::Reference< css::script::provider::XScriptProvider > m_xMSPPkg;

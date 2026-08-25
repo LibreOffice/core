@@ -1422,7 +1422,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
 
 // Private helper methods
 
-static bool checkNamingSceme( std::u16string_view aName, std::u16string_view aNameBase,
+static bool checkNamingScheme( std::u16string_view aName, std::u16string_view aNameBase,
                        Locale& aLocale )
 {
     bool bSuccess = false;
@@ -1494,7 +1494,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
             //OUString aName = aInetObj.getBase();
             Locale aLocale;
 
-            if( checkNamingSceme( aPureName, m_aNameBase, aLocale ) )
+            if( checkNamingScheme( aPureName, m_aNameBase, aLocale ) )
             {
                 LocaleItem* pLocaleItem = new LocaleItem( std::move(aLocale), false );
                 m_aLocaleItemVector.emplace_back( pLocaleItem );
@@ -1511,7 +1511,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
         }
         else if( !bDefaultFound && aExtension == "default" )
         {
-            if( checkNamingSceme( aPureName, m_aNameBase, aDefaultLocale ) )
+            if( checkNamingScheme( aPureName, m_aNameBase, aDefaultLocale ) )
                 bDefaultFound = true;
         }
     }
@@ -1560,7 +1560,7 @@ bool StringResourcePersistenceImpl::implLoadLocale(std::unique_lock<std::mutex>&
     return false;
 }
 
-static OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
+static OUString implGetNameSchemeForLocaleItem( const LocaleItem* pLocaleItem )
 {
     /* FIXME-BCP47: this uses '_' underscore character as separator and
      * also appends Variant, which can't be blindly changed as it would
@@ -1569,7 +1569,7 @@ static OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
     static const char aUnder[] = "_";
 
     assert(pLocaleItem &&
-        "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL");
+        "StringResourcePersistenceImpl::implGetNameSchemeForLocaleItem(): pLocaleItem == NULL");
     Locale aLocale = pLocaleItem->m_locale;
 
     OUString aRetStr = aUnder + aLocale.Language;
@@ -1595,7 +1595,7 @@ OUString StringResourcePersistenceImpl::implGetFileNameForLocaleItem
     if( aFileName.isEmpty() )
         aFileName = aNameBaseDefaultStr;
 
-    aFileName += implGetNameScemeForLocaleItem( pLocaleItem );
+    aFileName += implGetNameSchemeForLocaleItem( pLocaleItem );
     return aFileName;
 }
 

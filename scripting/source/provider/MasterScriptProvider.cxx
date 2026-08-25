@@ -509,7 +509,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
                                                       Reference < XInterface > (), 1 );
         }
         // TODO for library package parse the language, for the moment will try
-        // to get each provider to process the new Package, the first one the succeeds
+        // to get each provider to process the new Package, the first one that succeeds
         // will terminate processing
         const bool bSuccess = FindProviderAndApply(
             *providerCache(), [&aName, &aElement](Reference<container::XNameContainer>& xCont) {

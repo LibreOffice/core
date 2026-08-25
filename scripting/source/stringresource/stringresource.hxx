@@ -108,12 +108,12 @@ protected:
     /// @throws css::lang::NoSupportException
     void implCheckReadOnly( const char* pExceptionMsg );
 
-    // Returns the LocalItem for a given locale, if it exists, otherwise NULL
+    // Returns the LocaleItem for a given locale, if it exists, otherwise NULL
     // This method compares the locales exactly, no closest match search is performed
     /// @throws css::lang::IllegalArgumentException
     LocaleItem* getItemForLocale( const css::lang::Locale& locale, bool bException );
 
-    // Returns the LocalItem for a given locale, if it exists, otherwise NULL
+    // Returns the LocaleItem for a given locale, if it exists, otherwise NULL
     // This method performs a closest match search, at least the language must match
     LocaleItem* getClosestMatchItemForLocale( const css::lang::Locale& locale );
     /// @throws css::lang::IllegalArgumentException

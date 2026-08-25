@@ -1095,7 +1095,7 @@ class PythonScript(unohelper.Base, XScript):
             e.Message = e.Message + " (" + complete + ")"
             raise
         except Exception:
-            # General python exception are converted to uno RuntimeException
+            # General python exceptions are converted to uno RuntimeException
             text = lastException2String()
             complete = (
                 "Error during invoking function "

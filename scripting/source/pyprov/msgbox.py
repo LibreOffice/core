@@ -39,7 +39,7 @@ class MsgBox(unohelper.Base):
         self.ButtonSize = 50
         self.boxSize = 200
         self.lineHeight = 10
-        self.fromBroxSize = False
+        self.fromBoxSize = False
         self.numberOfLines = -1
 
         self.Buttons = []
@@ -62,7 +62,7 @@ class MsgBox(unohelper.Base):
 
         numberOfButtons = len(self.Buttons)
         self.ButtonSpace = self.ButtonSize/2
-        if self.fromBroxSize:
+        if self.fromBoxSize:
             # button size is calculated from boxsize
             size = (2 * self.boxSize) / (3 * numberOfButtons + 1)
             self.ButtonSize = size
@@ -180,12 +180,12 @@ class MsgBox(unohelper.Base):
 
     def renderFromBoxSize(self, size = 150):
         self.boxSize = size
-        self.fromBroxSize = True
+        self.fromBoxSize = True
         return
 
     def renderFromButtonSize(self, size = 50):
         self.ButtonSize = size
-        self.fromBroxSize = False
+        self.fromBoxSize = False
         return
 
 class ButtonListener(unohelper.Base, XActionListener):
@@ -220,14 +220,14 @@ if __name__ == '__main__':
     myBox.addButton("No")
     myBox.addButton("May be")
     myBox.renderFromBoxSize(150)
-    myBox.numberOflines = 2
+    myBox.numberOfLines = 2
 
     print(myBox.show("A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message A very long message " + chr(10)+chr(10)+"Do you agree ?",0,"Dialog title"))
 
     myBox = MsgBox(ctx)
     myBox.addButton("oK")
     myBox.renderFromButtonSize()
-    myBox.numberOflines = 2
+    myBox.numberOfLines = 2
 
     print(myBox.show("A small message",0,"Dialog title"))
 
