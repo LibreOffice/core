@@ -86,6 +86,69 @@ div.ui-treeview-icon-column {
 	margin: 5px;
 }
 
+/* Select Certificate dialog (xmlsec/ui/selectcertificatedialog.ui). The
+   !important overrides beat the inline styles the builder puts on
+   containers (display: grid with stretched auto columns, which tore the
+   label/field pairs apart, and an inert row-gap on a display: block
+   vertical box). */
+#SelectCertificateDialog #box1 {
+	display: flex !important;
+	flex-direction: column;
+	gap: var(--spacing-m);
+	min-width: 46em;
+}
+#SelectCertificateDialog #searchbox-hbox,
+#SelectCertificateDialog #dialog-hbox1 {
+	display: flex !important;
+	align-items: center;
+	gap: var(--spacing-m) !important;
+}
+#SelectCertificateDialog #searchbox-hbox > label,
+#SelectCertificateDialog #dialog-hbox1 > label {
+	flex: 0 0 auto;
+	width: auto !important;
+	/* shared label column, so the two fields align */
+	min-width: 6em;
+	text-align: start !important;
+}
+#SelectCertificateDialog #searchbox-hbox #searchbox,
+#SelectCertificateDialog #dialog-hbox1 #description.ui-edit-container {
+	flex: 1 1 auto;
+}
+#SelectCertificateDialog #searchbox-hbox input,
+#SelectCertificateDialog #dialog-hbox1 input {
+	width: 100%;
+	box-sizing: border-box;
+}
+/* The certificate list: the cell text has to be fully readable (this is
+   about document signing), so wrap it instead of truncating, and scroll
+   vertically. The minmax() bounds let the fr maxima fill the available
+   width exactly, so nothing overflows horizontally. */
+#SelectCertificateDialog .ui-treeview {
+	grid-template-columns: minmax(8em, 2fr) minmax(8em, 2fr) minmax(3em, auto) minmax(6em, auto)
+		minmax(6em, 1fr) !important;
+	max-width: 60em;
+	max-height: 20em;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+#SelectCertificateDialog .ui-treeview .ui-treeview-entry > div,
+#SelectCertificateDialog .ui-treeview .ui-treeview-headers > div {
+	white-space: normal !important;
+	overflow-wrap: anywhere;
+}
+/* The header cells have a 16px sort-indicator padding on a content-box,
+   which made each header overflow its subgrid track and produced a
+   permanent horizontal scrollbar. */
+#SelectCertificateDialog .ui-treeview-headers > .ui-treeview-header {
+	box-sizing: border-box;
+}
+#SelectCertificateDialog #box1 > .ui-grid-cell:last-child {
+	display: flex !important;
+	justify-content: flex-end;
+	gap: var(--spacing-m) !important;
+}
+
 #AcceptRejectChangesDialog .ui-treeview-headers {
 	grid-template-columns: 120px 120px 150px 130px;
 	position: sticky;
