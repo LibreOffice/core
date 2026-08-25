@@ -77,25 +77,25 @@ bool prepareLocale() {
     setMsLangIdFallback(officecfg::System::L10N::Locale::get());
     css::uno::Sequence<OUString> inst(
         officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
-    OUString locale(officecfg::Office::Linguistic::General::UILocale::get());
-    if (!locale.isEmpty()) {
-        locale = getInstalledLocaleForLanguage(inst, locale);
-        if (locale.isEmpty()) {
-            // Selected language is not/no longer installed:
-            try {
-                std::shared_ptr<comphelper::ConfigurationChanges> batch(
-                    comphelper::ConfigurationChanges::create());
-                officecfg::Office::Linguistic::General::UILocale::set(
-                    u""_ustr, batch);
-                batch->commit();
-            } catch (const css::uno::Exception &) {
-                TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
+    OUString locale = getInstalledLocaleForLanguage(
+            inst, Desktop::GetCommandLineArgs().GetLanguage());
+    if (locale.isEmpty()) {
+        locale = officecfg::Office::Linguistic::General::UILocale::get();
+        if (!locale.isEmpty()) {
+            locale = getInstalledLocaleForLanguage(inst, locale);
+            if (locale.isEmpty()) {
+                // Selected language is not/no longer installed:
+                try {
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                        comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Linguistic::General::UILocale::set(
+                        u""_ustr, batch);
+                    batch->commit();
+                } catch (const css::uno::Exception &) {
+                    TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
+                }
             }
         }
-    }
-    if (locale.isEmpty()) {
-        locale = getInstalledLocaleForLanguage(
-            inst, Desktop::GetCommandLineArgs().GetLanguage());
     }
     if (locale.isEmpty()) {
         locale = getInstalledLocaleForSystemUILanguage(inst, true);
