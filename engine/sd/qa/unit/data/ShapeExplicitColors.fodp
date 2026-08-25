@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:style style:name="grPlain" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#7f59ae" draw:stroke="solid" svg:stroke-color="#e54b89"/>
+  </style:style>
+  <style:style style:name="grThemed" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#008000" draw:stroke="none">
+    <loext:fill-complex-color loext:theme-type="accent2" loext:color-type="theme"/>
+   </style:graphic-properties>
+  </style:style>
+  <!-- Accent 3 is a pure grey, so halving its luminance is exactly half of each channel. -->
+  <style:style style:name="grShaded" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#404040" draw:stroke="none">
+    <loext:fill-complex-color loext:theme-type="accent3" loext:color-type="theme">
+     <loext:transformation loext:type="lummod" loext:value="5000"/>
+    </loext:fill-complex-color>
+   </style:graphic-properties>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default">
+   <loext:theme loext:name="Test">
+    <loext:theme-colors loext:name="Test">
+     <loext:color loext:name="dark1" loext:color="#000000"/>
+     <loext:color loext:name="light1" loext:color="#ffffff"/>
+     <loext:color loext:name="dark2" loext:color="#000000"/>
+     <loext:color loext:name="light2" loext:color="#ffffff"/>
+     <loext:color loext:name="accent1" loext:color="#ff0000"/>
+     <loext:color loext:name="accent2" loext:color="#008000"/>
+     <loext:color loext:name="accent3" loext:color="#808080"/>
+     <loext:color loext:name="accent4" loext:color="#0000ff"/>
+     <loext:color loext:name="accent5" loext:color="#ffff00"/>
+     <loext:color loext:name="accent6" loext:color="#00ffff"/>
+     <loext:color loext:name="hyperlink" loext:color="#0000ee"/>
+     <loext:color loext:name="followed-hyperlink" loext:color="#551a8b"/>
+    </loext:theme-colors>
+   </loext:theme>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:master-page-name="Default">
+    <draw:custom-shape draw:style-name="grPlain" svg:x="1cm" svg:y="1cm" svg:width="4cm" svg:height="3cm">
+     <draw:enhanced-geometry draw:type="rectangle"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="grThemed" svg:x="6cm" svg:y="1cm" svg:width="4cm" svg:height="3cm">
+     <draw:enhanced-geometry draw:type="rectangle"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="grShaded" svg:x="11cm" svg:y="1cm" svg:width="4cm" svg:height="3cm">
+     <draw:enhanced-geometry draw:type="rectangle"/>
+    </draw:custom-shape>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

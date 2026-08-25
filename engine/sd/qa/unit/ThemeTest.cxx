@@ -19,6 +19,7 @@
 #include <docmodel/theme/Theme.hxx>
 
 #include <svx/unoapi.hxx>
+#include <tools/XPath.hxx>
 
 #include <DrawDocShell.hxx>
 #include <unomodel.hxx>
@@ -52,12 +53,27 @@ Color GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
     return nColor;
 }
 
+Color GetShapeColor(const uno::Reference<beans::XPropertySet>& xShape,
+                    const OUString& rPropertyName)
+{
+    Color aColor{};
+    xShape->getPropertyValue(rPropertyName) >>= aColor;
+    return aColor;
+}
+
 /// Get the solid fill color of xShape.
 Color GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
 {
-    Color nColor{};
-    xShape->getPropertyValue(u"FillColor"_ustr) >>= nColor;
-    return nColor;
+    return GetShapeColor(xShape, u"FillColor"_ustr);
+}
+
+model::ComplexColor GetComplexColor(const uno::Reference<beans::XPropertySet>& xShape,
+                                    const OUString& rPropertyName)
+{
+    uno::Reference<util::XComplexColor> xComplexColor;
+    CPPUNIT_ASSERT(xShape->getPropertyValue(rPropertyName) >>= xComplexColor);
+    CPPUNIT_ASSERT(xComplexColor.is());
+    return model::color::getFromXComplexColor(xComplexColor);
 }
 
 } // end anonymous namespace
@@ -150,6 +166,78 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     CPPUNIT_ASSERT_EQUAL(Color(0x90c226), GetShapeFillColor(xShape4));
     // Green, lighter:
     CPPUNIT_ASSERT_EQUAL(Color(0xd5eda2), GetShapeFillColor(xShape5));
+}
+
+CPPUNIT_TEST_FIXTURE(ThemeTest, testExplicitShapeColorsRoundtrip)
+{
+    // A plain shape colour survives a round trip, and so does one that names a theme colour.
+    createSdImpressDoc("ShapeExplicitColors.fodp");
+
+    // The shapes inherit from a default drawing style that names a theme colour, and the export
+    // repeats each shape's fill on a paragraph style of its own that is applied after it. Only an
+    // exported document has those paragraph styles.
+    saveAndReload(TestFilter::ODP);
+
+    uno::Reference<beans::XPropertySet> xPlain(getShapeFromPage(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x7f59ae), GetShapeFillColor(xPlain));
+    CPPUNIT_ASSERT_EQUAL(Color(0xe54b89), GetShapeColor(xPlain, u"LineColor"_ustr));
+    for (OUString const& rPropertyName : { u"FillComplexColor"_ustr, u"LineComplexColor"_ustr })
+    {
+        auto aComplexColor = GetComplexColor(xPlain, rPropertyName);
+        CPPUNIT_ASSERT(!aComplexColor.isUsed());
+        CPPUNIT_ASSERT(!aComplexColor.isValidThemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Unknown, aComplexColor.getThemeColorType());
+        CPPUNIT_ASSERT(aComplexColor.getTransformations().empty());
+    }
+
+    uno::Reference<beans::XPropertySet> xThemed(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x008000), GetShapeFillColor(xThemed));
+    {
+        auto aComplexColor = GetComplexColor(xThemed, u"FillComplexColor"_ustr);
+        CPPUNIT_ASSERT(aComplexColor.isValidThemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getThemeColorType());
+        CPPUNIT_ASSERT(aComplexColor.getTransformations().empty());
+    }
+
+    // Accent 3 is grey, so half its luminance is half of each channel.
+    uno::Reference<beans::XPropertySet> xShaded(getShapeFromPage(2, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x404040), GetShapeFillColor(xShaded));
+    {
+        auto aComplexColor = GetComplexColor(xShaded, u"FillComplexColor"_ustr);
+        CPPUNIT_ASSERT(aComplexColor.isValidThemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aComplexColor.getTransformations().size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
+                             aComplexColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5000), aComplexColor.getTransformations()[0].mnValue);
+    }
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    tools::XPath aPath(pXmlDoc.get(), [](xmlXPathContextPtr pContext) {
+        XmlTestTools::registerOOXMLNamespaces(pContext);
+    });
+    auto pFill = aPath.create("/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:solidFill/a:srgbClr");
+    CPPUNIT_ASSERT_EQUAL(1, pFill->count());
+    CPPUNIT_ASSERT_EQUAL(u"7F59AE"_ustr, pFill->attribute("val"));
+
+    auto pLine = aPath.create("/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:ln/a:solidFill/a:srgbClr");
+    CPPUNIT_ASSERT_EQUAL(1, pLine->count());
+    CPPUNIT_ASSERT_EQUAL(u"E54B89"_ustr, pLine->attribute("val"));
+
+    auto pThemed = aPath.create("/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:solidFill/a:schemeClr");
+    CPPUNIT_ASSERT_EQUAL(1, pThemed->count());
+    CPPUNIT_ASSERT_EQUAL(u"accent2"_ustr, pThemed->attribute("val"));
+    CPPUNIT_ASSERT_EQUAL(0, pThemed->at(0)->countChildren());
+
+    auto pShaded = aPath.create("/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:solidFill/a:schemeClr");
+    CPPUNIT_ASSERT_EQUAL(1, pShaded->count());
+    CPPUNIT_ASSERT_EQUAL(u"accent3"_ustr, pShaded->attribute("val"));
+    // A luminance modulation is a percentage on a 0..100000 scale here.
+    auto pLumMod = aPath.create(pShaded, "/a:lumMod");
+    CPPUNIT_ASSERT_EQUAL(1, pLumMod->count());
+    CPPUNIT_ASSERT_EQUAL(u"50000"_ustr, pLumMod->attribute("val"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
