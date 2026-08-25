@@ -2895,6 +2895,7 @@ if test "$enable_windowsapp" = "yes"; then
     # of the way. CODA_CCACHE holds that directory, or stays empty when no
     # ccache is found, in which case the build keeps the stock clang-cl.
     CODA_CCACHE=
+    CODA_CCACHE_DIR=
     AC_ARG_WITH([coda-ccache],
         AS_HELP_STRING([--with-coda-ccache=PATH],
             [Path to the Windows ccache.exe used to wrap the windows app
@@ -2921,16 +2922,45 @@ if test "$enable_windowsapp" = "yes"; then
              coda_ccache_exe=no])])
     AS_IF([test -n "$coda_ccache_exe" -a "$coda_ccache_exe" != "no"],
         [coda_ccache_shim="`pwd`/windows/coda/ccache-shim"
+         coda_ccache_dir=`dirname "$coda_ccache_exe"`
          AS_MKDIR_P([$coda_ccache_shim])
-         rm -f "$coda_ccache_shim/clang-cl.exe"
+         rm -f "$coda_ccache_shim/clang-cl.exe" "$coda_ccache_shim/ccache.exe"
          ln "$coda_ccache_exe" "$coda_ccache_shim/clang-cl.exe" 2>/dev/null \
              || cp -f "$coda_ccache_exe" "$coda_ccache_shim/clang-cl.exe"
-         AS_IF([command -v wslpath >/dev/null 2>&1],
-                   [CODA_CCACHE=`wslpath -w "$coda_ccache_shim"`],
-               [command -v cygpath >/dev/null 2>&1],
-                   [CODA_CCACHE=`cygpath -w "$coda_ccache_shim"`],
-               [CODA_CCACHE="$coda_ccache_shim"])])
+         dnl The shim is the same binary in a directory of its own, so a ccache
+         dnl that links against DLLs sitting next to the original (a MinGW
+         dnl build, say the one in Strawberry Perl) stops finding them and dies
+         dnl at startup with STATUS_ENTRYPOINT_NOT_FOUND as soon as PATH offers
+         dnl another build of one of those DLLs. CODA_CCACHE_DIR puts the real
+         dnl ccache's directory back on the compiler PATH, and the check here
+         dnl makes sure the relocated binary starts at all, so a ccache that
+         dnl still cannot start costs cache hits, not the build. The check runs
+         dnl from the real ccache's directory, which Windows searches for DLLs
+         dnl too: a PATH set here would not reach a Windows process launched
+         dnl from WSL. And it runs under its own name, where ccache reports its
+         dnl version instead of masquerading as the compiler.
+         AC_MSG_CHECKING([whether $coda_ccache_exe runs from the shim directory])
+         ln "$coda_ccache_shim/clang-cl.exe" "$coda_ccache_shim/ccache.exe" 2>/dev/null \
+             || cp -f "$coda_ccache_shim/clang-cl.exe" "$coda_ccache_shim/ccache.exe"
+         coda_ccache_runs=no
+         AS_IF([(cd "$coda_ccache_dir" && "$coda_ccache_shim/ccache.exe" --version) \
+                    >/dev/null 2>&1],
+             [coda_ccache_runs=yes])
+         rm -f "$coda_ccache_shim/ccache.exe"
+         AC_MSG_RESULT([$coda_ccache_runs])
+         AS_IF([test "$coda_ccache_runs" = "no"],
+             [rm -f "$coda_ccache_shim/clang-cl.exe"
+              AC_MSG_WARN([$coda_ccache_exe does not run once copied to $coda_ccache_shim; building without ccache. Pass --with-coda-ccache=PATH to name a ccache.exe that does.])],
+             [AS_IF([command -v wslpath >/dev/null 2>&1],
+                        [CODA_CCACHE=`wslpath -w "$coda_ccache_shim"`
+                         CODA_CCACHE_DIR=`wslpath -w "$coda_ccache_dir"`],
+                    [command -v cygpath >/dev/null 2>&1],
+                        [CODA_CCACHE=`cygpath -w "$coda_ccache_shim"`
+                         CODA_CCACHE_DIR=`cygpath -w "$coda_ccache_dir"`],
+                    [CODA_CCACHE="$coda_ccache_shim"
+                     CODA_CCACHE_DIR="$coda_ccache_dir"])])])
     AC_SUBST([CODA_CCACHE])
+    AC_SUBST([CODA_CCACHE_DIR])
 
     AC_CONFIG_FILES([windows/coda/config.h
                      windows/coda/config.props])

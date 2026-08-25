@@ -30,5 +30,11 @@
   <PropertyGroup Condition="'@CODA_CCACHE@' != ''">
     <CLToolPath>@CODA_CCACHE@</CLToolPath>
     <CLToolExe>clang-cl.exe</CLToolExe>
+    <!-- The shim is the real ccache binary in a directory of its own, where it
+         no longer sees the DLLs a MinGW-built ccache links against next to the
+         original, so its own directory goes on the compiler PATH. It goes
+         behind the LLVM one, so ccache still resolves clang-cl to Visual
+         Studio's rather than to a MinGW clang-cl in that same directory. -->
+    <ExecutablePath>$(LLVMInstallDir)\bin;@CODA_CCACHE_DIR@;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
 </Project>
