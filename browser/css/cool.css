@@ -90,6 +90,9 @@
 	/* Notebookbar */
 	--notebookbar-element-height: 64px;
 
+	/* Dialogs */
+	--dialog-tab-rail-width: 150px;
+
 	/* Scrollbars */
 	--scrollbar-width: thin;
 }

@@ -738,18 +738,17 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 
 .ui-tabs-root.vertical {
 	position: relative;
-	--cool-vertical-rail-width: 150px;
 	display: grid;
 	/* An auto column sizes the dialog to the widest page and still stretches
 	   into free space; a fr column would not grow the dialog intrinsically. */
-	grid-template-columns: var(--cool-vertical-rail-width) auto;
+	grid-template-columns: var(--dialog-tab-rail-width) auto;
 }
 
 .ui-tabs.vertical.jsdialog.ui-widget {
 	grid-row: 1;
 	grid-column: 1;
 	box-sizing: border-box;
-	width: var(--cool-vertical-rail-width);
+	width: var(--dialog-tab-rail-width);
 	min-height: 0;
 	height: 100%;
 	display: flex;
