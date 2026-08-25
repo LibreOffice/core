@@ -10,13 +10,22 @@
 #include <seclabeldlg.hxx>
 
 #include <tools/stream.hxx>
+#include <rtl/bootstrap.hxx>
+#include <config_folders.h>
 
 #include <set>
 
 namespace
 {
 // TODO dev stopgap: fixed policy path. Replaced by WOPI provisioning (Phase F).
-constexpr OUString gsDevPolicyUrl = u"file:///etc/spif-collabora.xml"_ustr;
+// The file sits beside the sample TSCP policies in the installation.
+OUString getDevPolicyUrl()
+{
+    OUString sUrl(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER
+                  "/classification/spif-collabora.xml"_ustr);
+    rtl::Bootstrap::expandMacros(sUrl);
+    return sUrl;
+}
 }
 
 SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
@@ -29,7 +38,7 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
     m_xCategories->set_size_request(m_xCategories->get_approximate_digit_width() * 32,
                                     m_xCategories->get_height_rows(6));
 
-    SvFileStream aStream(gsDevPolicyUrl, StreamMode::READ);
+    SvFileStream aStream(getDevPolicyUrl(), StreamMode::READ);
     if (aStream.IsOpen())
         m_aPolicy.parse(aStream);
 
