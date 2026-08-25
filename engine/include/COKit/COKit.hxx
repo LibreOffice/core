@@ -1916,6 +1916,24 @@ struct COKit
                                     std::vector<std::vector<char>>& rOutStreams) = 0;
 
     /**
+     * Single-format convenience over getGlobalClipboard(), for the platform
+     * glue serving one advertised clipboard format on demand. Returns true
+     * and fills rOutData only when the shared clipboard holds a non-empty
+     * payload for pMimeType.
+     */
+    bool getGlobalClipboardData(const char* pMimeType, std::vector<char>& rOutData)
+    {
+        const char* pFilter[] = { pMimeType, nullptr };
+        std::vector<std::string> aOutMimeTypes;
+        std::vector<std::vector<char>> aOutStreams;
+        if (!getGlobalClipboard(pFilter, aOutMimeTypes, aOutStreams) || aOutStreams.empty()
+            || aOutStreams[0].empty())
+            return false;
+        rOutData = std::move(aOutStreams[0]);
+        return true;
+    }
+
+    /**
      * Translate an ODF file's "_"-marked strings into the given language
      * using the file's embedded "l10n" stream.
      *

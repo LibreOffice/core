@@ -146,20 +146,11 @@ static NSData *_Nullable copyEngineClipboardData(const char *mime)
 {
     // The clipboard is process-global (one shared clipboard for the desktop
     // app), so read it straight from the office; no document is involved.
-    if (!sOffice)
+    std::vector<char> bytes;
+    if (!sOffice || !sOffice->getGlobalClipboardData(mime, bytes))
         return nil;
 
-    const char *filter[] = { mime, nullptr };
-    std::vector<std::string> outMimeTypes;
-    std::vector<std::vector<char>> outStreams;
-    if (!sOffice->getGlobalClipboard(filter, outMimeTypes, outStreams)
-        || outStreams.size() == 0)
-        return nil;
-
-    NSData *data = nil;
-    if (outStreams[0].size() > 0)
-        data = [NSData dataWithBytes:outStreams[0].data() length:outStreams[0].size()];
-    return data;
+    return [NSData dataWithBytes:bytes.data() length:bytes.size()];
 }
 
 @implementation COClipboardOwner

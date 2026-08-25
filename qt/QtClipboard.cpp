@@ -77,18 +77,11 @@ void runOnGuiThreadBlocking(std::function<void()> fn)
 /// straight from the office; no document is involved.
 QByteArray fetchEngineClipboardData(const QString& mimeType)
 {
-    if (!sOffice)
+    std::vector<char> data;
+    if (!sOffice || !sOffice->getGlobalClipboardData(mimeType.toStdString().c_str(), data))
         return {};
 
-    const std::string mimeStr = mimeType.toStdString();
-    const char* filter[] = { mimeStr.c_str(), nullptr };
-    std::vector<std::string> outMimeTypes;
-    std::vector<std::vector<char>> outStreams;
-    if (!sOffice->getGlobalClipboard(filter, outMimeTypes, outStreams) || outStreams.empty()
-        || outStreams[0].empty())
-        return {};
-
-    return QByteArray(outStreams[0].data(), static_cast<qsizetype>(outStreams[0].size()));
+    return QByteArray(data.data(), static_cast<qsizetype>(data.size()));
 }
 
 /// QMimeData subclass that advertises the engine's MIME types without

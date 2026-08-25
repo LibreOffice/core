@@ -3762,17 +3762,8 @@ static HANDLE copyEngineClipboardData(UINT format, const std::string& mimeType)
 {
     // The clipboard is process-global (one shared clipboard for the desktop app), so read it
     // straight from the engine; no document is involved.
-    if (!office)
-        return 0;
-
-    const char *filter[] = { mimeType.c_str(), nullptr };
-    std::vector<std::string> outMimeTypes;
-    std::vector<std::vector<char>> outStreams;
-    if (!office->getGlobalClipboard(filter, outMimeTypes, outStreams) ||
-        outStreams.size() == 0)
-        return 0;
-
-    if (outStreams[0].empty())
+    std::vector<char> bytes;
+    if (!office || !office->getGlobalClipboardData(mimeType.c_str(), bytes))
         return 0;
 
     HGLOBAL hMem;
@@ -3782,20 +3773,20 @@ static HANDLE copyEngineClipboardData(UINT format, const std::string& mimeType)
     std::string temp;
     if (format == CF_UNICODETEXT && mimeType == "text/plain;charset=utf-8")
     {
-        wtemp = Util::string_to_wide_string(std::string_view(outStreams[0].data(), outStreams[0].size()));
+        wtemp = Util::string_to_wide_string(std::string_view(bytes.data(), bytes.size()));
         src = wtemp.c_str();
         size = (wtemp.length() + 1) * 2;
     }
     else if (format == RegisterClipboardFormatW(L"HTML Format") && mimeType == "text/html")
     {
-        temp = generate_html_format(std::string(outStreams[0].data(), outStreams[0].size()));
+        temp = generate_html_format(std::string(bytes.data(), bytes.size()));
         src = temp.c_str();
         size = temp.length();
     }
     else
     {
-        src = outStreams[0].data();
-        size = outStreams[0].size();
+        src = bytes.data();
+        size = bytes.size();
     }
     hMem = GlobalAlloc(GMEM_MOVEABLE, size);
     if (hMem == NULL)
