@@ -2924,6 +2924,7 @@ OUString jsuno::execute(OUString const& script, OUString const & source, int lin
                         bool* usedLegacyUnoApi)
 {
     auto const rt = JS_NewRuntime();
+    JS_SetMaxStackSize(rt, 4 * 1024 * 1024); // from default 256 KiB to 4 MiB
     JS_SetRuntimeOpaque(
         rt, new RuntimeData(rt, std::move(consoleHook), std::move(proxyCallHook)));
     JS_NewClassID(rt, &getRuntimeData(rt)->pointerClassId);
