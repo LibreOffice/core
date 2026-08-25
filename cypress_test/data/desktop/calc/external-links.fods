@@ -11,10 +11,12 @@
         <table:table-column/>
         <!-- A reference into another file registers an external-reference
              link in the document's link manager, which is what makes the
-             engine hold the link back and report externallinksdisabled. -->
+             engine hold the link back and report externallinksdisabled.
+             The name is relative, so it resolves beside this document, and
+             no such file is put there. -->
         <table:table-row>
           <table:table-cell
-              table:formula="of:=[&apos;file:///fake_path/external.ods&apos;#$Sheet1.A1]"
+              table:formula="of:=[&apos;missing-external.ods&apos;#$Sheet1.A1]"
               office:value-type="float" office:value="0">
             <text:p>0</text:p>
           </table:table-cell>
