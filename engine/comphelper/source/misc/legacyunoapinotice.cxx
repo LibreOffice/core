@@ -27,7 +27,9 @@ std::atomic<bool> g_legacyUnoApiUseFlag{ false };
 thread_local std::uint64_t g_legacyApiWarningSuppressions = 0;
 }
 
-bool comphelper::isLegacyUnoApi(std::u16string_view id) { return id.starts_with(u"com.sun.star."); }
+bool comphelper::isLegacyUnoApi(std::u16string_view id) {
+    return id.starts_with(u"com.sun.star.") || id.starts_with(u"cpo.");
+}
 
 void comphelper::notifyLegacyUnoApiUse(std::u16string_view id)
 {
