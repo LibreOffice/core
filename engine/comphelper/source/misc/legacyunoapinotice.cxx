@@ -31,11 +31,14 @@ bool comphelper::isLegacyUnoApi(std::u16string_view id) {
     return id.starts_with(u"com.sun.star.") || id.starts_with(u"cpo.");
 }
 
-void comphelper::notifyLegacyUnoApiUse(std::u16string_view id)
+bool comphelper::notifyLegacyUnoApiUse(std::u16string_view id)
 {
     if (g_legacyApiWarningSuppressions == 0 && isLegacyUnoApi(id))
     {
         g_legacyUnoApiUseFlag.store(true, std::memory_order_relaxed);
+        return true;
+    } else {
+        return false;
     }
 }
 

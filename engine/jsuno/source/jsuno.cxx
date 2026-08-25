@@ -253,9 +253,12 @@ struct RuntimeData
 {
     RuntimeData(
         JSRuntime* rt,
+        OUString const & source_, int line_,
         std::function<void(OUString const& level, OUString const& message)> consoleHook_,
         std::function<void(OUString const&)> proxyCallHook_)
-        : consoleHook(std::move(consoleHook_))
+        : source(source_)
+        , line(line_)
+        , consoleHook(std::move(consoleHook_))
         , proxyCallHook(std::move(proxyCallHook_))
         , symbolIteratorAtom(rt)
     {
@@ -275,6 +278,9 @@ struct RuntimeData
     JSClassID ctorClassId = 0;
     JSClassID singletonClassId = 0;
     JSClassID moduleClassId = 0;
+
+    OUString source;
+    int line;
 
     std::function<void(OUString const& level, OUString const& message)> consoleHook;
 
@@ -1309,6 +1315,10 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
     if (comphelper::isLegacyUnoApi(id) && !comphelper::isLegacyApiWarningSuppressed())
     {
         getRuntimeData(ctx)->usedLegacyUnoApi = true;
+        SAL_INFO(
+            "jsuno.legacyapi",
+            "legacy UNO API " << id << " at " << getRuntimeData(ctx)->source << ":"
+                << getRuntimeData(ctx)->line);
     }
     css::uno::Reference<css::container::XHierarchicalNameAccess> mgr(
         comphelper::getProcessComponentContext()->getValueByName(
@@ -2926,7 +2936,7 @@ OUString jsuno::execute(OUString const& script, OUString const & source, int lin
     auto const rt = JS_NewRuntime();
     JS_SetMaxStackSize(rt, 4 * 1024 * 1024); // from default 256 KiB to 4 MiB
     JS_SetRuntimeOpaque(
-        rt, new RuntimeData(rt, std::move(consoleHook), std::move(proxyCallHook)));
+        rt, new RuntimeData(rt, source, line, std::move(consoleHook), std::move(proxyCallHook)));
     JS_NewClassID(rt, &getRuntimeData(rt)->pointerClassId);
     JSClassDef pointerClass{ "InternalPointer", pointerFinalizer, nullptr, nullptr, nullptr };
     [[maybe_unused]] auto e = JS_NewClass(rt, getRuntimeData(rt)->pointerClassId, &pointerClass);

@@ -40,6 +40,7 @@ certain functionality.
 @section basic
 
 @li @c basic
+@li @c basic.legacyapi
 @li @c basic.sbx
 
 @section bridges
@@ -354,6 +355,7 @@ certain functionality.
 
 @section pyuno
 
+@li @c pyuno.legacyapi
 @li @c pyuno.runtime
 
 @section rustuno
@@ -637,6 +639,7 @@ certain functionality.
 @li @c idl
 @li @c javaunohelper
 @li @c jsuno
+@li @c jsuno.legacyapi
 @li @c jvmaccess
 @li @c lingucomponent
 @li @c linguistic

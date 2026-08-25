@@ -23,7 +23,7 @@ namespace comphelper
 {
 COMPHELPER_DLLPUBLIC bool isLegacyUnoApi(std::u16string_view id);
 
-COMPHELPER_DLLPUBLIC void notifyLegacyUnoApiUse(std::u16string_view id);
+COMPHELPER_DLLPUBLIC bool notifyLegacyUnoApiUse(std::u16string_view id);
 
 COMPHELPER_DLLPUBLIC bool takeLegacyUnoApiUseFlag();
 

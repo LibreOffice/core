@@ -71,6 +71,26 @@ using namespace pyuno;
 
 namespace {
 
+OUString getOrigin() {
+    auto const frame = PyEval_GetFrame();
+    if (frame == nullptr) {
+        return u"<no frame>"_ustr;
+    }
+    OUString filename;
+    if (auto const code = PyFrame_GetCode(frame)) {
+        auto const name = PyObject_GetAttrString(reinterpret_cast<PyObject *>(code), "co_filename");
+        if (name != nullptr && PyUnicode_Check(name)) {
+            if (auto const utf8 = PyUnicode_AsUTF8(name)) {
+                filename = OUString::fromUtf8(utf8);
+            }
+        }
+        Py_XDECREF(name);
+        Py_DECREF(code);
+    }
+    return (filename.isEmpty() ? u"<unknown>"_ustr : filename) + ":"
+        + OUString::number(PyFrame_GetLineNumber(frame));
+}
+
 /**
    @ index of the next to be used member in the initializer list !
  */
@@ -422,7 +442,11 @@ static PyObject *createUnoStructHelper(
                 if( PyTuple_Check( initializer ) && PyDict_Check ( keywordArgs ) )
                 {
                     OUString typeName( OUString::createFromAscii(PyUnicode_AsUTF8(structName)));
-                    comphelper::notifyLegacyUnoApiUse(typeName);
+                    if (comphelper::notifyLegacyUnoApiUse(typeName)) {
+                        SAL_INFO(
+                            "pyuno.legacyapi",
+                            "legacy UNO API " << typeName << " at " << getOrigin());
+                    }
                     RuntimeCargo *c = runtime.getImpl()->cargo;
                     Reference<XIdlClass> idl_class = c->xCoreReflection->forName (typeName);
                     if (idl_class.is ())
@@ -499,7 +523,9 @@ static PyObject *getTypeByName(
         if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
-            comphelper::notifyLegacyUnoApiUse(typeName);
+            if (comphelper::notifyLegacyUnoApiUse(typeName)) {
+                SAL_INFO("pyuno.legacyapi", "legacy UNO API " << typeName << " at " << getOrigin());
+            }
             TypeDescription typeDesc( typeName );
             if( typeDesc.is() )
             {
@@ -532,7 +558,9 @@ static PyObject *getConstantByName(
         if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
-            comphelper::notifyLegacyUnoApiUse(typeName);
+            if (comphelper::notifyLegacyUnoApiUse(typeName)) {
+                SAL_INFO("pyuno.legacyapi", "legacy UNO API " << typeName << " at " << getOrigin());
+            }
             Runtime runtime;
             css::uno::Reference< css::reflection::XConstantTypeDescription > td;
             if (!(runtime.getImpl()->cargo->xTdMgr->getByHierarchicalName(
@@ -623,7 +651,9 @@ static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     {
         Runtime runtime;
         OUString className = pyString2ustring(obj);
-        comphelper::notifyLegacyUnoApiUse(className);
+        if (comphelper::notifyLegacyUnoApiUse(className)) {
+            SAL_INFO("pyuno.legacyapi", "legacy UNO API " << className << " at " << getOrigin());
+        }
         PyRef ret = getClass(className, runtime);
         Py_XINCREF( ret.get() );
         return ret.get();
