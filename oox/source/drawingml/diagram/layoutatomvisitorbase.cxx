@@ -36,7 +36,7 @@ void LayoutAtomVisitorBase::visit(ChooseAtom& rAtom)
     for (const auto& pChild : rAtom.getChildren())
     {
         const ConditionAtomPtr pCond = std::dynamic_pointer_cast<ConditionAtom>(pChild);
-        if (pCond && pCond->getDecision(mrDgm, mpCurrentNode))
+        if (pCond && pCond->getDecision(mrDgm, mxCurrentNode))
         {
             SAL_INFO("oox.drawingml", "Entering if node: " << pCond->getName());
             pCond->accept(*this);
@@ -81,7 +81,7 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
         // count child data nodes - check all child Atoms for "name"
         // attribute that is contained in diagram's
         // getPointsPresNameMap()
-        ShallowPresNameVisitor aVisitor(mrDgm, mpCurrentNode);
+        ShallowPresNameVisitor aVisitor(mrDgm, mxCurrentNode);
         for (const auto& pAtom : rAtom.getChildren())
             pAtom->accept(aVisitor);
         nChildren = aVisitor.getCount();
@@ -122,25 +122,26 @@ void LayoutAtomVisitorBase::visit(LayoutNode& rAtom)
         || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
-    const svx::diagram::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
-    if (!mpCurrentNode || !pNewNode)
+    const rtl::Reference<svx::diagram::Point>& rNewNode(aDataNode->second.at(mnCurrIdx));
+    if (!mxCurrentNode.is() || !rNewNode.is())
         return;
 
     bool bIsChild = false;
-    for (const auto& aConnection : mrDgm.getData()->getConnections())
-        if (aConnection.msSourceId == mpCurrentNode->msModelId
-            && aConnection.msDestId == pNewNode->msModelId)
+    for (const rtl::Reference<svx::diagram::Connection>& aConnection :
+             mrDgm.getData()->getConnections())
+        if (aConnection->msSourceId == mxCurrentNode->msModelId
+            && aConnection->msDestId == rNewNode->msModelId)
             bIsChild = true;
 
     if (!bIsChild)
         return;
 
-    const svx::diagram::Point* pPreviousNode = mpCurrentNode;
-    mpCurrentNode = pNewNode;
+    const rtl::Reference<svx::diagram::Point> xPreviousNode(mxCurrentNode);
+    mxCurrentNode = rNewNode;
 
     defaultVisit(rAtom);
 
-    mpCurrentNode = pPreviousNode;
+    mxCurrentNode = xPreviousNode;
 }
 
 void ShallowPresNameVisitor::visit(ConstraintAtom& /*rAtom*/)

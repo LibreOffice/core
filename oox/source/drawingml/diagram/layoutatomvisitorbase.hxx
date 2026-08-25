@@ -43,9 +43,10 @@ struct LayoutAtomVisitor
 class LayoutAtomVisitorBase : public LayoutAtomVisitor
 {
 public:
-    LayoutAtomVisitorBase(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint) :
+    LayoutAtomVisitorBase(const SmartArtDiagram& rDgm,
+                          const rtl::Reference<svx::diagram::Point>& rRootPoint) :
         mrDgm(rDgm),
-        mpCurrentNode(pRootPoint),
+        mxCurrentNode(rRootPoint),
         mnCurrIdx(0),
         mnCurrStep(0),
         mnCurrCnt(0),
@@ -62,7 +63,7 @@ public:
 
 protected:
     const SmartArtDiagram& mrDgm;
-    const svx::diagram::Point* mpCurrentNode;
+    rtl::Reference<svx::diagram::Point> mxCurrentNode;
     sal_Int32 mnCurrIdx;
     sal_Int32 mnCurrStep;
     sal_Int32 mnCurrCnt;
@@ -72,8 +73,9 @@ protected:
 class ShallowPresNameVisitor : public LayoutAtomVisitorBase
 {
 public:
-    explicit ShallowPresNameVisitor(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint) :
-        LayoutAtomVisitorBase(rDgm, pRootPoint),
+    explicit ShallowPresNameVisitor(const SmartArtDiagram& rDgm,
+                                    const rtl::Reference<svx::diagram::Point>& rRootPoint) :
+        LayoutAtomVisitorBase(rDgm, rRootPoint),
         mnCnt(0)
     {}
 

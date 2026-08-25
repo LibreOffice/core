@@ -278,10 +278,17 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         return new ConstraintListContext( *this, mpNode );
     case DGM_TOKEN( presOf ):
     {
-        // CT_PresentationOf
-        // TODO
+        // CT_PresentationOf: defines the data Points that the shape of this layout node represents. The
+        // point type says whether those are nodes or one of the two transition Points, so a
+        // layout node that carries it represents a data Point and one that does not is a container
         IteratorAttr aIterator;
         aIterator.loadFromXAttr(rAttribs.getFastAttributeList());
+
+        LayoutNodePtr pNode(std::dynamic_pointer_cast<LayoutNode>(mpNode));
+
+        if (pNode)
+            pNode->setPresentationOf(aIterator);
+
         break;
     }
     case DGM_TOKEN( ruleLst ):
