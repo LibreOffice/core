@@ -5293,15 +5293,6 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
 
         break;
     }
-    case COKitCallbackType::CLIPBOARD_MIMETYPES:
-    {
-        if (_copyToClipboard)
-        {
-            sendTextFrame("clipboardmimetypes: " + payload);
-        }
-
-        break;
-    }
     case COKitCallbackType::CONTEXT_CHANGED:
         sendTextFrame("context: " + payload);
         break;

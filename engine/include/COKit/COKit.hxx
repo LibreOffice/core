@@ -1257,15 +1257,6 @@ enum class COKitCallbackType
     VERTICAL_RULER_UPDATE = 73,
 
     /**
-     * Advertises the MIME types currently held by the kit clipboard,
-     * without any serialised content.
-     *
-     * Payload format is JSON.
-     * Example: { "mimeTypes": ["text/plain;charset=utf-8", "image/png"] }
-     */
-    CLIPBOARD_MIMETYPES = 74,
-
-    /**
      * Preview geometry while a shape handle is dragged.
      *
      * Sent in response to a MoveShapeHandle command in preview mode. The
@@ -1282,7 +1273,7 @@ enum class COKitCallbackType
      * The points are in twips, in document coordinates. An empty
      * "polygons" array means no preview is available for this handle.
      */
-    SHAPE_DRAG_PREVIEW = 75,
+    SHAPE_DRAG_PREVIEW = 74,
 
     /**
      * A vector-primitives delta for a slide that changed.
@@ -1294,7 +1285,7 @@ enum class COKitCallbackType
      * The page itself is the first object. Its entry comes along when
      * the background or the master page content changed.
      */
-    VECTOR_PRIMITIVES_DELTA = 76,
+    VECTOR_PRIMITIVES_DELTA = 75,
 
     /**
      * The presentation info of an Impress or Draw document changed and
@@ -1305,7 +1296,7 @@ enum class COKitCallbackType
      * pages changes. The payload is a JSON object naming the reason and the
      * changed part, for example { "reason": "gifupdate", "part": 3 }.
      */
-    PRESENTATION_INFO = 77,
+    PRESENTATION_INFO = 76,
 
     /**
      * The pages of an Impress or Draw document that are linked to a source
@@ -1316,7 +1307,7 @@ enum class COKitCallbackType
      * or a redo gives that source back. The payload is empty; the receiving
      * view reads the link list for itself.
      */
-    SLIDE_LINKS_CHANGED = 78
+    SLIDE_LINKS_CHANGED = 77
 };
 
 enum class COKitKeyEventType
@@ -1490,8 +1481,6 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_TOOLTIP";
     case COKitCallbackType::SHAPE_INNER_TEXT:
         return "KIT_CALLBACK_SHAPE_INNER_TEXT";
-    case COKitCallbackType::CLIPBOARD_MIMETYPES:
-        return "KIT_CALLBACK_CLIPBOARD_MIMETYPES";
     case COKitCallbackType::SHAPE_DRAG_PREVIEW:
         return "KIT_CALLBACK_SHAPE_DRAG_PREVIEW";
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:

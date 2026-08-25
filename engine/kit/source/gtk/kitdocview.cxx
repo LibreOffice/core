@@ -1524,7 +1524,6 @@ callback (gpointer pData)
     case COKitCallbackType::CORE_LOG:
     case COKitCallbackType::TOOLTIP:
     case COKitCallbackType::SHAPE_INNER_TEXT:
-    case COKitCallbackType::CLIPBOARD_MIMETYPES:
     case COKitCallbackType::SHAPE_DRAG_PREVIEW:
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
     case COKitCallbackType::PRESENTATION_INFO:

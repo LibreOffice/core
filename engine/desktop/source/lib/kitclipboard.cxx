@@ -14,7 +14,6 @@
 #include <unordered_map>
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/json_writer.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -122,7 +121,6 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
         return it->second;
     }
     rtl::Reference<KitClipboard> xClip(new KitClipboard());
-    xClip->setViewId(nViewId);
     xClip->setDocId(KitHelper::getDocumentIdOfView(nViewId));
     (*pClipboards)[nViewId] = xClip;
     SAL_INFO("kit", "Created clip: " << xClip.get() << " for viewId " << nViewId);
@@ -353,14 +351,11 @@ void KitClipboard::setContents(
         listener->changedContents(aEv);
     }
 
-    // Emit here rather than from SfxClipboardChangeListener: the listener can
-    // attach to the pre-Kit default clipboard before the per-view Kit clipboard
-    // lands on the window frame, and then miss every real copy.
-    // A real copy needs either a view to notify (the collaborative server) or a
-    // provider to advertise to (the desktop app); the shared clipboard used by
-    // the desktop app has no single view of its own.
-    const bool bHasProvider = m_oProvider && m_oProvider->advertiseToPlatform;
-    if (!xTrans.is() || !comphelper::COKit::isActive() || (m_nViewId < 0 && !bHasProvider))
+    // Advertise here rather than from SfxClipboardChangeListener: the listener
+    // can attach to the pre-Kit default clipboard before the per-view Kit
+    // clipboard lands on the window frame, and then miss every real copy.
+    if (!xTrans.is() || !comphelper::COKit::isActive() || !m_oProvider
+        || !m_oProvider->advertiseToPlatform)
         return;
 
     std::vector<OString> aMimeTypes;
@@ -385,27 +380,12 @@ void KitClipboard::setContents(
     if (aMimeTypes.empty())
         return;
 
-    // With a provider, advertise straight onto the platform clipboard; otherwise
-    // tell the view's client (the browser) which formats are now available.
-    if (m_oProvider && m_oProvider->advertiseToPlatform)
-    {
-        std::vector<const char*> aPtrs;
-        aPtrs.reserve(aMimeTypes.size() + 1);
-        for (const auto& rMime : aMimeTypes)
-            aPtrs.push_back(rMime.getStr());
-        aPtrs.push_back(nullptr);
-        m_oProvider->advertiseToPlatform(aPtrs.data());
-        return;
-    }
-
-    tools::JsonWriter aWriter;
-    {
-        auto aArr = aWriter.startArray("mimeTypes");
-        for (const auto& rMime : aMimeTypes)
-            aWriter.putSimpleValue(OUString::fromUtf8(rMime));
-    }
-    KitHelper::notifyView(m_nViewId, COKitCallbackType::CLIPBOARD_MIMETYPES,
-                          aWriter.finishAndGetAsOString());
+    std::vector<const char*> aPtrs;
+    aPtrs.reserve(aMimeTypes.size() + 1);
+    for (const auto& rMime : aMimeTypes)
+        aPtrs.push_back(rMime.getStr());
+    aPtrs.push_back(nullptr);
+    m_oProvider->advertiseToPlatform(aPtrs.data());
 }
 
 void KitClipboard::addClipboardListener(

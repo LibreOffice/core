@@ -32,7 +32,6 @@ class KitClipboard final
     cpo::uno::Reference<css::datatransfer::XTransferable> m_xTransferable;
     cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
-    int m_nViewId = -1;
     /// The document this view belongs to, cached so the clipboard can be
     /// released on document destroy even after the view shell is gone.
     int m_nDocId = -1;
@@ -46,7 +45,6 @@ public:
     KitClipboard();
     ~KitClipboard();
 
-    void setViewId(int nViewId) { m_nViewId = nViewId; }
     void setDocId(int nDocId) { m_nDocId = nDocId; }
     int getDocId() const { return m_nDocId; }
 

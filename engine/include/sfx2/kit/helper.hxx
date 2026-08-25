@@ -223,9 +223,6 @@ public:
     /// Builds the ".uno:ModifiedStatus=true" or "...=false" state-change payload.
     static OString makeModifiedStatusPayload(bool bModified);
 
-    /// Dispatches a callback to a single view identified by its view id.
-    static void notifyView(int nViewId, COKitCallbackType eType, const OString& rPayload);
-
     /// Notify about the editing context change.
     static void notifyContextChange(const css::ui::ContextChangeEventObject& rEvent);
 
