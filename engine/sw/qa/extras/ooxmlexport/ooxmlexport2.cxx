@@ -329,6 +329,47 @@ DECLARE_OOXMLEXPORT_TEST(testMathAccents, "math-accents.docx")
         getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMathColor)
+{
+    createSwDoc("math-color.docx");
+
+    // A font color on part of a formula becomes a color command around that part.
+    // FF0000 is a color StarMath names, 00B050 is not, so one comes back as a name
+    // and the other as hexadecimal digits.
+    CHECK_FORMULA(u"color red {x} + color hex 00B050 {y}"_ustr,
+                  getFormula(getRun(getParagraph(1), 1)));
+    // An operator on its own cannot stand as an expression, so it goes in as a literal
+    // and the formula still parses
+    CHECK_FORMULA(u"a color blue {\"+\"} b"_ustr, getFormula(getRun(getParagraph(2), 1)));
+    // A color of auto is the default color, so the formula stays plain
+    CHECK_FORMULA(u"c"_ustr, getFormula(getRun(getParagraph(3), 1)));
+    // The color is found wherever the run properties keep it, not only when it comes
+    // first. This run puts several other properties in front of it.
+    CHECK_FORMULA(u"color yellow {z}"_ustr, getFormula(getRun(getParagraph(4), 1)));
+    // The parser reads only uppercase hexadecimal digits, so a value written in
+    // lowercase comes back in uppercase and stays one command
+    CHECK_FORMULA(u"color hex 00B050 {w}"_ustr, getFormula(getRun(getParagraph(5), 1)));
+    // and a run of several operators is no more an expression than a single one
+    CHECK_FORMULA(u"a color blue {\"+-\"} b"_ustr, getFormula(getRun(getParagraph(6), 1)));
+    // A run that is not an expression on its own keeps no color command at all, so the
+    // formula reads the way it did before any color was carried over
+    CHECK_FORMULA(u"a+ b"_ustr, getFormula(getRun(getParagraph(7), 1)));
+
+    saveAndReload(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // Each color goes back on the run it belongs to, and the run between them
+    // keeps the default color
+    assertXPath(pXmlDoc, "//w:p[1]//m:oMath/m:r[1]/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[1]//m:oMath/m:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "//w:p[1]//m:oMath/m:r[3]/w:rPr/w:color", "val", u"00B050");
+    assertXPath(pXmlDoc, "//w:p[3]//m:oMath/m:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "//w:p[4]//m:oMath/m:r[1]/w:rPr/w:color", "val", u"FFFF00");
+    assertXPath(pXmlDoc, "//w:p[5]//m:oMath/m:r[1]/w:rPr/w:color", "val", u"00B050");
+    assertXPath(pXmlDoc, "//w:p[6]//m:oMath/m:r[2]/w:rPr/w:color", "val", u"0000FF");
+    assertXPath(pXmlDoc, "//w:p[7]//m:oMath/m:r[1]/w:rPr/w:color", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMathD, "math-d.docx")
 {
     CHECK_FORMULA( u"left (x mline y mline z right )"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));

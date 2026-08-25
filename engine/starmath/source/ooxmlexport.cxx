@@ -13,6 +13,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <oox/mathml/imexport.hxx>
+#include <filter/msfilter/util.hxx>
+#include <tools/color.hxx>
 
 using namespace oox;
 using namespace oox::core;
@@ -105,11 +107,24 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
         m_pSerializer->singleElementNS(XML_m, XML_nor);
         m_pSerializer->endElementNS( XML_m, XML_rPr );
     }
-    if (drawingml::DOCUMENT_DOCX == m_DocumentType && ECMA_376_1ST_EDITION == version)
-    { // HACK: MSOffice2007 does not import characters properly unless this font is explicitly given
+    const bool bWriteFont
+        = drawingml::DOCUMENT_DOCX == m_DocumentType && ECMA_376_1ST_EDITION == version;
+    // A surrounding color command has already reached this node.
+    const Color aColor = pNode->GetFont().GetColor();
+    const bool bWriteColor
+        = drawingml::DOCUMENT_DOCX == m_DocumentType && aColor != COL_AUTO;
+    if( bWriteFont || bWriteColor )
+    {
         m_pSerializer->startElementNS(XML_w, XML_rPr);
-        m_pSerializer->singleElementNS( XML_w, XML_rFonts, FSNS( XML_w, XML_ascii ), "Cambria Math",
-            FSNS( XML_w, XML_hAnsi ), "Cambria Math" );
+        if( bWriteFont )
+            // HACK: MSOffice2007 does not import characters properly unless this font is
+            // explicitly given
+            m_pSerializer->singleElementNS( XML_w, XML_rFonts,
+                FSNS( XML_w, XML_ascii ), "Cambria Math",
+                FSNS( XML_w, XML_hAnsi ), "Cambria Math" );
+        if( bWriteColor )
+            m_pSerializer->singleElementNS( XML_w, XML_color, FSNS( XML_w, XML_val ),
+                msfilter::util::ConvertColorOU( aColor ));
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
     m_pSerializer->startElementNS(XML_m, XML_t, FSNS(XML_xml, XML_space), "preserve");
