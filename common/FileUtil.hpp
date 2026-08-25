@@ -23,6 +23,8 @@
 #include <string>
 #include <sys/stat.h>
 
+#include <o3tl/safeint.hxx>
+
 #ifndef _WIN32
 #include <optional>
 #endif
@@ -279,7 +281,7 @@ namespace FileUtil
             }
 
             got += n;
-            if (static_cast<std::size_t>(n) < room)
+            if (o3tl::make_unsigned(n) < room)
                 break;
         }
         closeFD(fd);
