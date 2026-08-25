@@ -473,7 +473,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		}
 
 		if (this._slideSorterFocused()) {
-			if (ev.shiftKey && !ev.ctrlKey && !ev.altKey
+			if (ev.shiftKey && !ev.ctrlKey && !ev.altKey && !ev.metaKey
 				&& (ev.keyCode === this.keyCodes.DOWN || ev.keyCode === this.keyCodes.UP || ev.keyCode === this.keyCodes.HOME || ev.keyCode === this.keyCodes.END)
 				&& ev.type === 'keydown') {
 
