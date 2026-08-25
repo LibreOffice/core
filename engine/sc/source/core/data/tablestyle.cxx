@@ -91,10 +91,16 @@ const SfxItemSet* ScTableStyle::GetFontItemSet(const ScDBData& rDBData, SCCOL nC
 
     // Collect the elements the cell falls in, highest precedence win.
     ScTableStyleFontElements aElements;
-    if (bHeaderRow && nCol == aRange.aEnd.Col())
+    if (bTotalRow && pParam->mbLastColumn && nCol == aRange.aEnd.Col())
+        aElements.Add(maPatterns, maHasFontAttr, ScTableStyleElement::LastTotalCell);
+
+    if (bTotalRow && pParam->mbFirstColumn && nCol == aRange.aStart.Col())
+        aElements.Add(maPatterns, maHasFontAttr, ScTableStyleElement::FirstTotalCell);
+
+    if (bHeaderRow && pParam->mbLastColumn && nCol == aRange.aEnd.Col())
         aElements.Add(maPatterns, maHasFontAttr, ScTableStyleElement::LastHeaderCell);
 
-    if (bHeaderRow && nCol == aRange.aStart.Col())
+    if (bHeaderRow && pParam->mbFirstColumn && nCol == aRange.aStart.Col())
         aElements.Add(maPatterns, maHasFontAttr, ScTableStyleElement::FirstHeaderCell);
 
     if (bTotalRow)
@@ -173,7 +179,25 @@ const SvxBrushItem* ScTableStyle::GetFillItem(const ScDBData& rDBData, SCCOL nCo
 
     bool bHasHeader = rDBData.HasHeader();
     bool bHasTotal = rDBData.HasTotals();
-    if (bHasHeader && nRow == aRange.aStart.Row() && nCol == aRange.aEnd.Col())
+    if (bHasTotal && pParam->mbLastColumn && nRow == aRange.aEnd.Row() && nCol == aRange.aEnd.Col())
+    {
+        const SvxBrushItem* pPoolItem
+            = GetElementItem(ScTableStyleElement::LastTotalCell, ATTR_BACKGROUND);
+        if (pPoolItem)
+            return pPoolItem;
+    }
+
+    if (bHasTotal && pParam->mbFirstColumn && nRow == aRange.aEnd.Row()
+        && nCol == aRange.aStart.Col())
+    {
+        const SvxBrushItem* pPoolItem
+            = GetElementItem(ScTableStyleElement::FirstTotalCell, ATTR_BACKGROUND);
+        if (pPoolItem)
+            return pPoolItem;
+    }
+
+    if (bHasHeader && pParam->mbLastColumn && nRow == aRange.aStart.Row()
+        && nCol == aRange.aEnd.Col())
     {
         const SvxBrushItem* pPoolItem
             = GetElementItem(ScTableStyleElement::LastHeaderCell, ATTR_BACKGROUND);
@@ -181,7 +205,8 @@ const SvxBrushItem* ScTableStyle::GetFillItem(const ScDBData& rDBData, SCCOL nCo
             return pPoolItem;
     }
 
-    if (bHasHeader && nRow == aRange.aStart.Row() && nCol == aRange.aStart.Col())
+    if (bHasHeader && pParam->mbFirstColumn && nRow == aRange.aStart.Row()
+        && nCol == aRange.aStart.Col())
     {
         const SvxBrushItem* pPoolItem
             = GetElementItem(ScTableStyleElement::FirstHeaderCell, ATTR_BACKGROUND);
@@ -261,7 +286,71 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
 
     bool bHasHeader = rDBData.HasHeader();
     bool bHasTotal = rDBData.HasTotals();
-    if (bHasHeader && nRow == aRange.aStart.Row() && nCol == aRange.aEnd.Col())
+    if (bHasTotal && pParam->mbLastColumn && nRow == aRange.aEnd.Row() && nCol == aRange.aEnd.Col())
+    {
+        const SvxBoxItem* pPoolItem
+            = GetElementItem(ScTableStyleElement::LastTotalCell, ATTR_BORDER);
+        if (const SvxBoxItem* pBoxItem
+            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
+        {
+            const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
+            const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
+            const ::editeng::SvxBorderLine* pLLine
+                = nCol == aRange.aStart.Col() ? pBoxItem->GetLine(SvxBoxItemLine::LEFT) : nullptr;
+            if (pBLine || pRLine || pLLine)
+            {
+                std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone() : nullptr);
+                if (!pNewBoxItem)
+                    pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
+                if (pBLine)
+                    pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
+                if (pRLine)
+                    pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
+                if (pLLine)
+                    pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
+
+                return pNewBoxItem;
+            }
+        }
+
+        if (pPoolItem)
+            return std::make_unique<SvxBoxItem>(*pPoolItem);
+    }
+
+    if (bHasTotal && pParam->mbFirstColumn && nRow == aRange.aEnd.Row()
+        && nCol == aRange.aStart.Col())
+    {
+        const SvxBoxItem* pPoolItem
+            = GetElementItem(ScTableStyleElement::FirstTotalCell, ATTR_BORDER);
+        if (const SvxBoxItem* pBoxItem
+            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
+        {
+            const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
+            const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
+            const ::editeng::SvxBorderLine* pRLine
+                = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT) : nullptr;
+            if (pBLine || pLLine || pRLine)
+            {
+                std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone() : nullptr);
+                if (!pNewBoxItem)
+                    pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
+                if (pBLine)
+                    pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
+                if (pLLine)
+                    pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
+                if (pRLine)
+                    pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
+
+                return pNewBoxItem;
+            }
+        }
+
+        if (pPoolItem)
+            return std::make_unique<SvxBoxItem>(*pPoolItem);
+    }
+
+    if (bHasHeader && pParam->mbLastColumn && nRow == aRange.aStart.Row()
+        && nCol == aRange.aEnd.Col())
     {
         const SvxBoxItem* pPoolItem
             = GetElementItem(ScTableStyleElement::LastHeaderCell, ATTR_BORDER);
@@ -292,7 +381,8 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             return std::make_unique<SvxBoxItem>(*pPoolItem);
     }
 
-    if (bHasHeader && nRow == aRange.aStart.Row() && nCol == aRange.aStart.Col())
+    if (bHasHeader && pParam->mbFirstColumn && nRow == aRange.aStart.Row()
+        && nCol == aRange.aStart.Col())
     {
         const SvxBoxItem* pPoolItem
             = GetElementItem(ScTableStyleElement::FirstHeaderCell, ATTR_BORDER);
@@ -1050,6 +1140,10 @@ std::string_view tableStyleElementName(ScTableStyleElement eElement)
             return "FirstHeaderCell";
         case ScTableStyleElement::LastHeaderCell:
             return "LastHeaderCell";
+        case ScTableStyleElement::FirstTotalCell:
+            return "FirstTotalCell";
+        case ScTableStyleElement::LastTotalCell:
+            return "LastTotalCell";
     }
     return {};
 }

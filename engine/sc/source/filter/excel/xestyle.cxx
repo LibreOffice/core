@@ -3397,7 +3397,29 @@ XclExpXmlTableStyle::XclExpXmlTableStyle(const XclExpRoot& rRoot, const ScTableS
     }
 }
 
-const std::map<ScTableStyleElement, const char*> aTableStyleElementToOOXML = { {ScTableStyleElement::WholeTable, "wholeTable"}, {ScTableStyleElement::FirstColumnStripe, "firstColumnStripe"}, {ScTableStyleElement::SecondColumnStripe, "secondColumnStripe"}, {ScTableStyleElement::FirstRowStripe, "firstRowStripe"}, {ScTableStyleElement::SecondRowStripe, "secondRowStripe"}, {ScTableStyleElement::LastColumn, "lastColumn"}, {ScTableStyleElement::FirstColumn, "firstColumn"}, {ScTableStyleElement::HeaderRow, "headerRow"}, {ScTableStyleElement::TotalRow, "totalRow"}, {ScTableStyleElement::FirstHeaderCell, "firstHeaderCell"}, {ScTableStyleElement::LastHeaderCell, "lastHeaderCell"} };
+namespace
+{
+const char* lcl_tableStyleElementToOOXML( ScTableStyleElement eElement )
+{
+    switch (eElement)
+    {
+        case ScTableStyleElement::WholeTable:            return "wholeTable";
+        case ScTableStyleElement::FirstColumnStripe:     return "firstColumnStripe";
+        case ScTableStyleElement::SecondColumnStripe:    return "secondColumnStripe";
+        case ScTableStyleElement::FirstRowStripe:        return "firstRowStripe";
+        case ScTableStyleElement::SecondRowStripe:       return "secondRowStripe";
+        case ScTableStyleElement::LastColumn:            return "lastColumn";
+        case ScTableStyleElement::FirstColumn:           return "firstColumn";
+        case ScTableStyleElement::HeaderRow:             return "headerRow";
+        case ScTableStyleElement::TotalRow:              return "totalRow";
+        case ScTableStyleElement::FirstHeaderCell:       return "firstHeaderCell";
+        case ScTableStyleElement::LastHeaderCell:        return "lastHeaderCell";
+        case ScTableStyleElement::FirstTotalCell:        return "firstTotalCell";
+        case ScTableStyleElement::LastTotalCell:         return "lastTotalCell";
+    }
+    return nullptr;
+}
+}
 
 void XclExpXmlTableStyle::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -3405,7 +3427,14 @@ void XclExpXmlTableStyle::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->startElement( XML_tableStyle, XML_count, OString::number(maTableElements.size()), XML_name, maStyleName.toUtf8());
     for (auto& rTableStyleElement : maTableElements)
     {
-        rStyleSheet->singleElement( XML_tableStyleElement, XML_dxfId, OString::number(rTableStyleElement.second), XML_type, aTableStyleElementToOOXML.find(rTableStyleElement.first)->second);
+        const char* pElementType = lcl_tableStyleElementToOOXML(rTableStyleElement.first);
+        if (!pElementType)
+        {
+            SAL_WARN("sc", "XclExpXmlTableStyle::SaveXml - unknown Table Style Element");
+            continue;
+        }
+
+        rStyleSheet->singleElement( XML_tableStyleElement, XML_dxfId, OString::number(rTableStyleElement.second), XML_type, pElementType);
     }
     rStyleSheet->endElement(XML_tableStyle);
 }

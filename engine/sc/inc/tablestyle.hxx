@@ -40,7 +40,9 @@ enum class ScTableStyleElement
     TotalRow,
     FirstHeaderCell,
     LastHeaderCell,
-    LAST = LastHeaderCell // keep on the last element
+    FirstTotalCell,
+    LastTotalCell,
+    LAST = LastTotalCell // keep on the last element
 };
 
 // The visual family a table style belongs to, derived from its programmatic

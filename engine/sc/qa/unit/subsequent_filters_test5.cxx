@@ -634,6 +634,49 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleStripeSizes)
     CPPUNIT_ASSERT(!aFill(1, 17));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleCornerCells)
+{
+    // Table1 over A1:E10 - header row 1, data rows 2 to 9, total row 10, first and last
+    // column both shown.
+    createScDoc("xlsx/tablestyle-corner-cells.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
+    CPPUNIT_ASSERT(pParam);
+    CPPUNIT_ASSERT(pParam->mbFirstColumn);
+    CPPUNIT_ASSERT(pParam->mbLastColumn);
+    const ScTableStyle* pStyle = pDoc->GetTableStyles()->GetTableStyle(pParam->maStyleID);
+    CPPUNIT_ASSERT(pStyle);
+
+    const Color aHeaderRow(0x00, 0x70, 0xC0);
+    const Color aTotalRow(0x00, 0xB0, 0xF0);
+
+    auto aFill = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
+        const SvxBrushItem* pFill = pStyle->GetFillItem(*pDBData, nCol, nRow, nRow - 1);
+        CPPUNIT_ASSERT(pFill);
+        return pFill->GetColor();
+    };
+
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFill(0, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aFill(4, 0));
+    CPPUNIT_ASSERT_EQUAL(aHeaderRow, aFill(2, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFill(0, 9));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aFill(4, 9));
+    CPPUNIT_ASSERT_EQUAL(aTotalRow, aFill(2, 9));
+
+    ScTableStyleParam aNoColumns(*pParam);
+    aNoColumns.mbFirstColumn = false;
+    aNoColumns.mbLastColumn = false;
+    pDBData->SetTableStyleInfo(aNoColumns);
+    CPPUNIT_ASSERT_EQUAL(aHeaderRow, aFill(0, 0));
+    CPPUNIT_ASSERT_EQUAL(aHeaderRow, aFill(4, 0));
+    CPPUNIT_ASSERT_EQUAL(aTotalRow, aFill(0, 9));
+    CPPUNIT_ASSERT_EQUAL(aTotalRow, aFill(4, 9));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleFontEffects)
 {
     // Table1 over A1:E10 - header row 1, data rows 2 to 9, total row 10.

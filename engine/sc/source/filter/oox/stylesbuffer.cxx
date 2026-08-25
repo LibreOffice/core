@@ -2592,7 +2592,9 @@ void TableStyle::importTableStyleElement(const AttributeList& rAttribs)
             { u"headerRow"_ustr, ScTableStyleElement::HeaderRow },
             { u"totalRow"_ustr, ScTableStyleElement::TotalRow },
             { u"firstHeaderCell"_ustr, ScTableStyleElement::FirstHeaderCell },
-            { u"lastHeaderCell"_ustr, ScTableStyleElement::LastHeaderCell }
+            { u"lastHeaderCell"_ustr, ScTableStyleElement::LastHeaderCell },
+            { u"firstTotalCell"_ustr, ScTableStyleElement::FirstTotalCell },
+            { u"lastTotalCell"_ustr, ScTableStyleElement::LastTotalCell }
         };
     auto aElementItr = aTableStyleElementMap.find(aTableStyleElementName);
     if (aElementItr == aTableStyleElementMap.end())

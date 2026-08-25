@@ -482,6 +482,69 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFontsAcrossElements)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleTotalCells)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    ScTableStyle aStyle(u"TotalCells"_ustr, std::nullopt);
+
+    auto pTotalRow = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pTotalRow->ItemSetPut(SvxBrushItem(COL_LIGHTBLUE, ATTR_BACKGROUND));
+    aStyle.SetPattern(ScTableStyleElement::TotalRow, std::move(pTotalRow));
+
+    auto pFirstColumn = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pFirstColumn->ItemSetPut(SvxBrushItem(COL_GREEN, ATTR_BACKGROUND));
+    aStyle.SetPattern(ScTableStyleElement::FirstColumn, std::move(pFirstColumn));
+
+    auto pFirstTotal = std::make_unique<ScPatternAttr>(m_pDoc->getCellAttributeHelper());
+    pFirstTotal->ItemSetPut(SvxBrushItem(COL_RED, ATTR_BACKGROUND));
+    pFirstTotal->ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    SvxBoxItem aBox(ATTR_BORDER);
+    editeng::SvxBorderLine aLine(nullptr, SvxBorderLineWidth::Thick);
+    aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+    pFirstTotal->ItemSetPut(aBox);
+    aStyle.SetPattern(ScTableStyleElement::FirstTotalCell, std::move(pFirstTotal));
+
+    ScDBData aDBData(u"TotalCells"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TotalCells"_ustr;
+    aStyleParam.mbRowStripes = false;
+    aStyleParam.mbColumnStripes = false;
+    aStyleParam.mbFirstColumn = true;
+    aStyleParam.mbLastColumn = false;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    const SvxBrushItem* pFill = aStyle.GetFillItem(aDBData, 0, 10, 9);
+    CPPUNIT_ASSERT(pFill);
+    CPPUNIT_ASSERT_EQUAL(COL_RED, pFill->GetColor());
+
+    pFill = aStyle.GetFillItem(aDBData, 3, 10, 9);
+    CPPUNIT_ASSERT(pFill);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, pFill->GetColor());
+
+    pFill = aStyle.GetFillItem(aDBData, 1, 10, 9);
+    CPPUNIT_ASSERT(pFill);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, pFill->GetColor());
+
+    pFill = aStyle.GetFillItem(aDBData, 0, 5, 4);
+    CPPUNIT_ASSERT(pFill);
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN, pFill->GetColor());
+
+    const SfxItemSet* pFont = aStyle.GetFontItemSet(aDBData, 0, 10, 9);
+    CPPUNIT_ASSERT(pFont);
+    const SvxWeightItem* pWeight = pFont->GetItemIfSet(ATTR_FONT_WEIGHT, false);
+    CPPUNIT_ASSERT(pWeight);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, pWeight->GetWeight());
+
+    std::unique_ptr<SvxBoxItem> pBox = aStyle.GetBoxItem(aDBData, 0, 10, 9);
+    CPPUNIT_ASSERT(pBox);
+    const editeng::SvxBorderLine* pBotLine = pBox->GetLine(SvxBoxItemLine::BOTTOM);
+    CPPUNIT_ASSERT(pBotLine);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(SvxBorderLineWidth::Thick), pBotLine->GetWidth());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFontsHeaderFirstColumn)
 {
     m_pDoc->InitDrawLayer();
