@@ -5056,6 +5056,36 @@ void DocumentBroker::addToIncomingDocKeyChain(const std::string& docKeyChain)
         {
             LOG_DBG("The docKey [" << docKey << "] is on the connection chain of [" << _docKey
                                    << ']');
+
+#if !MOBILEAPP
+            // The chain proves this docKey (transitively) subscribes to this
+            // document. A live subscription of ours back to it closes a loop
+            // that would keep both documents loaded forever. When documents
+            // subscribed to each other at the same moment, each end sees the
+            // other's chain; the greater docKey yields so one link survives.
+            if (_docKey > docKey && RemoteDocumentBroker::isInitialized())
+            {
+                for (auto it = _remoteSubscriptions.begin(); it != _remoteSubscriptions.end();)
+                {
+                    if (RequestDetails::getDocKey(std::get<0>(*it)) == docKey)
+                    {
+                        LOG_WRN("Dropping the remote document link tag="
+                                << std::get<2>(*it) << " of [" << _docKey << "] to [" << docKey
+                                << "]: it subscribes back to this document");
+                        RemoteDocumentBroker::instance().unsubscribeAsync(
+                            std::get<0>(*it), std::get<1>(*it), _docKey, std::get<2>(*it));
+                        sendRemoteDocumentError(std::get<2>(*it), Uri::encode(std::get<0>(*it)),
+                                                "cycledetected");
+                        it = _remoteSubscriptions.erase(it);
+                    }
+                    else
+                    {
+                        ++it;
+                    }
+                }
+            }
+#endif
+
             _incomingDocKeyChain.push_back(std::move(docKey));
         }
     }
@@ -5191,6 +5221,19 @@ void DocumentBroker::sendRemoteDocumentError(const std::string& tag,
 {
     sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
                        " event=error kind=" + kind);
+}
+
+void DocumentBroker::removeRemoteSubscription(const std::string& wopiSrc, const std::string& tag)
+{
+    ASSERT_CORRECT_THREAD();
+
+    for (auto it = _remoteSubscriptions.begin(); it != _remoteSubscriptions.end();)
+    {
+        if (std::get<0>(*it) == wopiSrc && std::get<2>(*it) == tag)
+            it = _remoteSubscriptions.erase(it);
+        else
+            ++it;
+    }
 }
 
 void DocumentBroker::unsubscribeAllRemoteDocuments()

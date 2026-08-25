@@ -569,6 +569,39 @@ void RemoteDocumentBroker::pollingThread()
     LOG_INF("RemoteDoc: the RemoteDocumentBroker poll finished");
 }
 
+bool RemoteDocumentBroker::formsSubscriptionCycle(const std::string& targetDocKey,
+                                                  const std::string& consumerDocKey) const
+{
+    ASSERT_CORRECT_THREAD();
+
+    // Walk the subscription edges of the registry: a remote document is
+    // subscribed to by its consumers and by the docKeys on their chains.
+    // A path from the new target back to the new consumer means the new
+    // link would close a loop.
+    std::vector<std::string> pending{ targetDocKey };
+    std::set<std::string> visited;
+    while (!pending.empty())
+    {
+        const std::string current = std::move(pending.back());
+        pending.pop_back();
+
+        if (current == consumerDocKey)
+            return true;
+
+        if (!visited.insert(current).second)
+            continue;
+
+        for (const auto& it : _remoteDocuments)
+        {
+            const std::vector<std::string> subscribers = it.second->getDocKeyChains();
+            if (std::find(subscribers.begin(), subscribers.end(), current) != subscribers.end())
+                pending.push_back(it.second->getDocKey());
+        }
+    }
+
+    return false;
+}
+
 void RemoteDocumentBroker::subscribe(const RemoteDocumentRequest& request)
 {
     ASSERT_CORRECT_THREAD();
@@ -593,6 +626,19 @@ void RemoteDocumentBroker::subscribe(const RemoteDocumentRequest& request)
                 << request.localDocKey << "] to [" << docKey << "]: chain depth "
                 << request.docKeyChain.size() + 1 << " over the limit " << _maxChainDepth);
         reject(request, "chaindepth");
+        return;
+    }
+
+    // The registry serializes subscriptions on this thread, so a subscription
+    // whose target already reaches the subscriber through registered links is
+    // caught here even when two documents subscribe to each other at the same
+    // moment, before either connection chain has traveled.
+    if (formsSubscriptionCycle(docKey, request.localDocKey))
+    {
+        LOG_WRN("RemoteDoc: rejecting the subscription of ["
+                << request.localDocKey << "] to [" << docKey
+                << "]: the target already subscribes to the subscriber");
+        reject(request, "cycledetected");
         return;
     }
 
@@ -658,6 +704,14 @@ void RemoteDocumentBroker::reject(const RemoteDocumentRequest& request, const st
 {
     RemoteDocument::Consumer consumer{ request.consumer, request.tag, {} };
     RemoteDocument::sendEvent(consumer, request.wopiSrc, "event=error kind=" + kind);
+
+    // The consumer recorded the subscription when sending it; a rejection
+    // removes that record again.
+    if (std::shared_ptr<DocumentBroker> docBroker = request.consumer.lock())
+    {
+        docBroker->addCallback([docBroker, wopiSrc = request.wopiSrc, tag = request.tag]()
+                               { docBroker->removeRemoteSubscription(wopiSrc, tag); });
+    }
 }
 
 void RemoteDocumentBroker::dumpState(std::ostream& os) const

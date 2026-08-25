@@ -279,6 +279,11 @@ private:
     void unsubscribe(const std::string& wopiSrc, const std::string& accessToken,
                      const std::string& localDocKey, const std::string& tag);
 
+    /// Returns true when a subscription of the given consumer to the given
+    /// target would close a loop through the links already in the registry.
+    bool formsSubscriptionCycle(const std::string& targetDocKey,
+                                const std::string& consumerDocKey) const;
+
     /// Rejects the request with "event=error kind=<kind>" sent to the consumer.
     static void reject(const RemoteDocumentRequest& request, const std::string& kind);
 

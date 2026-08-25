@@ -152,6 +152,13 @@ public:
         }
     }
 
+    bool onDataLoss(const std::string& reason) override
+    {
+        // The editor's modification is intentionally never saved.
+        TST_LOG("onDataLoss (expected): " << reason);
+        return false;
+    }
+
     void invokeWSDTest() override
     {
         switch (_phase)
@@ -291,9 +298,147 @@ public:
     }
 };
 
+/// Two documents subscribe to each other at the same moment. Exactly one
+/// link survives and the other is refused as a cycle, so the pair cannot
+/// keep each other loaded forever.
+class UnitRemoteDocumentMutual : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitFirstLoad, LoadSecond, WaitSecondLoad, WaitOutcome, Done) _phase;
+
+    /// The user of the second document.
+    std::unique_ptr<UnitWebSocket> _secondWs;
+
+    int _connectedCount = 0;
+    int _cycleCount = 0;
+
+    std::string fileWopiSrc(int fileId) const
+    {
+        return helpers::getTestServerURI() + "/wopi/files/" + std::to_string(fileId);
+    }
+
+public:
+    UnitRemoteDocumentMutual()
+        : WopiTestServer("UnitRemoteDocumentMutual")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // Each document lists the other as a related document.
+        const std::string path = Poco::URI(request.getURI()).getPath();
+        const int other = path.ends_with("/1") ? 2 : path.ends_with("/2") ? 1 : 0;
+        if (other)
+        {
+            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
+            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+            entry->set("WOPISrc", fileWopiSrc(other));
+            entry->set("AccessToken", "remotetoken");
+            relatedDocuments->add(entry);
+            fileInfo->set("RelatedDocuments", relatedDocuments);
+        }
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitFirstLoad)
+        {
+            TRANSITION_STATE(_phase, Phase::LoadSecond);
+        }
+        else if (_phase == Phase::WaitSecondLoad)
+        {
+            // Both documents subscribe to each other back to back, before
+            // either connection chain can have traveled.
+            TRANSITION_STATE(_phase, Phase::WaitOutcome);
+            WSD_CMD("remotedocsubscribe wopisrc=" + Uri::encode(fileWopiSrc(2)));
+            helpers::sendTextFrame(_secondWs->getWebSocket(),
+                                   "remotedocsubscribe wopisrc=" + Uri::encode(fileWopiSrc(1)),
+                                   getTestname());
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotedocevent:") || _phase != Phase::WaitOutcome)
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+        {
+            ++_connectedCount;
+            LOK_ASSERT_MESSAGE("Both mutual subscriptions connected, the documents keep each "
+                               "other loaded",
+                               _connectedCount < 2);
+        }
+        else if (message.find("event=error") != std::string::npos)
+        {
+            LOK_ASSERT_MESSAGE("Expected only cycle rejections",
+                               message.find("kind=cycledetected") != std::string::npos);
+            ++_cycleCount;
+        }
+
+        // The event echo reaches every view of a document, including the
+        // headless one of the surviving link, so the rejection may be seen
+        // more than once.
+        if (_connectedCount == 1 && _cycleCount > 0)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("One of two mutual subscriptions connected, the other was refused");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstLoad);
+
+                initWebsocket("/wopi/files/1?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::LoadSecond:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondLoad);
+
+                const std::string secondWopiSrc =
+                    Uri::encode(fileWopiSrc(2) + "?access_token=anything");
+                TST_LOG("Connecting the second document: " << secondWopiSrc);
+                _secondWs = std::make_unique<UnitWebSocket>(
+                    socketPoll(), "/cool/" + secondWopiSrc + "/ws", getTestname());
+                helpers::sendTextFrame(_secondWs->getWebSocket(), "load url=" + secondWopiSrc,
+                                       getTestname());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(), nullptr };
+    return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
+                              new UnitRemoteDocumentMutual(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

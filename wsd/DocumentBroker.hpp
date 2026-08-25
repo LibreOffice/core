@@ -464,6 +464,10 @@ public:
     /// this document.
     bool isKnownAccessToken(const std::string& accessToken) const;
 
+    /// Removes the record of a remote document subscription that was not
+    /// accepted.
+    void removeRemoteSubscription(const std::string& wopiSrc, const std::string& tag);
+
     /// Records the docKeys from a comma-separated chain as linked to this
     /// document through headless sessions.
     void addToIncomingDocKeyChain(const std::string& docKeyChain);
