@@ -123,8 +123,6 @@ namespace BackstageTemplates {
     config: BackstageTabConfig,
     props: SidebarProps,
   ): HTMLElement {
-    const svgContent = config.icon ? BackstageSVGIcons[config.icon] : undefined;
-
     return (
       <div
         class="backstage-sidebar-item"
@@ -135,15 +133,9 @@ namespace BackstageTemplates {
         onClick={() => props.onTabClick(config)}
       >
         {config.icon ? (
-          <span
-            class="backstage-sidebar-icon"
-            aria-hidden="true"
-            dangerouslySetInnerHTML={
-              svgContent
-                ? { __html: app.LOUtil.sanitize(svgContent, 'svg') }
-                : undefined
-            }
-          />
+          <span class="backstage-sidebar-icon" aria-hidden="true">
+            {BackstageTemplates.inlineIcon(config.icon)}
+          </span>
         ) : null}
         <span>{config.label}</span>
       </div>

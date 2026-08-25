@@ -82,7 +82,6 @@ namespace BackstageTemplates {
   }
 
   export function openTile(props: OpenTileProps): HTMLElement {
-    const svg = props.iconName ? BackstageSVGIcons[props.iconName] : undefined;
     const ariaLabel = props.subtitle
       ? `${props.label} (${props.subtitle})`
       : props.label;
@@ -103,10 +102,11 @@ namespace BackstageTemplates {
             .filter(Boolean)
             .join(' ')}
           aria-hidden="true"
-          dangerouslySetInnerHTML={
-            svg ? { __html: app.LOUtil.sanitize(svg, 'svg') } : undefined
-          }
-        />
+        >
+          {props.iconName
+            ? BackstageTemplates.inlineIcon(props.iconName)
+            : null}
+        </span>
         <span class="backstage-open-tile-label">{props.label}</span>
         {props.subtitle ? (
           <span class="backstage-open-tile-sublabel">{props.subtitle}</span>
@@ -116,7 +116,6 @@ namespace BackstageTemplates {
   }
 
   function cloudProviderTile(t: CloudTileData): HTMLElement {
-    const editIcon = BackstageSVGIcons['lc_edit.svg'];
     return (
       <div
         class="backstage-open-tile is-cloud-provider"
@@ -143,12 +142,9 @@ namespace BackstageTemplates {
             e.stopPropagation();
             t.onEdit();
           }}
-          dangerouslySetInnerHTML={
-            editIcon
-              ? { __html: app.LOUtil.sanitize(editIcon, 'svg') }
-              : undefined
-          }
-        />
+        >
+          {BackstageTemplates.inlineIcon('lc_edit.svg')}
+        </button>
       </div>
     );
   }

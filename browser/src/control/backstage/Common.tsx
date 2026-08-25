@@ -50,6 +50,15 @@ namespace BackstageTemplates {
     );
   }
 
+  // Backstage icons are embedded, not linked, so that the colouring works on the DOM.
+  export function inlineIcon(name: string): Element | null {
+    const markup = BackstageSVGIcons[name];
+    if (!markup) return null;
+    const holder = document.createElement('div');
+    holder.innerHTML = app.LOUtil.sanitize(markup, 'svg');
+    return holder.firstElementChild;
+  }
+
   export function emptyRecentDocs(): HTMLElement {
     return (
       <p class="backstage-content-description">
