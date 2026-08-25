@@ -530,15 +530,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				this._insertPart(ev);
 			}
 			else if (!ev.ctrlKey && !ev.shiftKey) {
-				if (ev.key === 'Meta' || ev.key === 'Alt' ||
-				    ev.key === 'AltGraph' || ev.key === 'CapsLock' ||
-				    ev.key === 'NumLock')
-					return;
-				if (this._isSlideSorterKey(ev))
-					return;
-				this._map._docLayer._preview.partsFocused = false;
-				app.map._clip.clearSelection();
-				app.map.focus();
+				this._leaveSlideSorter(ev);
 			}
 		}
 	},
@@ -607,6 +599,21 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			this._map.insertPage();
 		}
 		ev.preventDefault();
+	},
+
+	// _leaveSlideSorter - hands the focus back to the document. A key that only names a
+	// modifier leaves the focus where it is, because the user is part way through a
+	// combination, and so does a key the sorter acts on itself.
+	_leaveSlideSorter: function (ev) {
+		if (ev.key === 'Meta' || ev.key === 'Alt' ||
+		    ev.key === 'AltGraph' || ev.key === 'CapsLock' ||
+		    ev.key === 'NumLock')
+			return;
+		if (this._isSlideSorterKey(ev))
+			return;
+		this._map._docLayer._preview.partsFocused = false;
+		app.map._clip.clearSelection();
+		app.map.focus();
 	},
 
 	_globalKeyUp: function (ev) {
