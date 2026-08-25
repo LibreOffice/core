@@ -6389,6 +6389,19 @@ static void lcl_reportSaveResult(COKitDocumentImpl* pDocument, int nView, const 
     SAL_WARN("kit", "Could not report .uno:Save result: no callback handler");
 }
 
+/// Whether the document carries a separate password required to modify it.
+static bool hasPasswordToModify(const SfxObjectShell* pObjectShell)
+{
+    return pObjectShell->GetModifyPasswordHash() // binary DOC/XLS/PPT formats
+           || pObjectShell->GetModifyPasswordInfo().hasElements(); // ODF/OOXML
+}
+
+/// Whether the document has a password to modify that has not been entered yet.
+static bool hasPendingPasswordToModify(const SfxObjectShell* pObjectShell)
+{
+    return hasPasswordToModify(pObjectShell) && !pObjectShell->IsModifyPasswordEntered();
+}
+
 static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     comphelper::ProfileZone aZone("doc_postUnoCommand");
@@ -6406,6 +6419,19 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
             aJson.put("success", false);
+
+            // The save is refused because this view is read-only. When the document has an
+            // edit password and carries no changes, the refusal is reported like a save of an
+            // unmodified document.
+            SfxViewShell* pViewShell = SfxViewShell::Current();
+            const SfxObjectShell* pObjectShell = pViewShell ? pViewShell->GetObjectShell() : nullptr;
+            if (pObjectShell && hasPasswordToModify(pObjectShell) && !pObjectShell->IsModified())
+            {
+                auto resultNode = aJson.startNode("result");
+                aJson.put("type", "string");
+                aJson.put("value", "unmodified");
+            }
+
             lcl_reportSaveResult(pRefusedDocument,
                                  KitHelper::getViewId(pRefusedDocument->mnDocumentId),
                                  aJson.finishAndGetAsOString());
@@ -7502,19 +7528,6 @@ static void doc_resetSelection(COKitDocument* pThis)
     }
 
     pDoc->resetSelection();
-}
-
-/// Whether the document carries a separate password required to modify it.
-static bool hasPasswordToModify(const SfxObjectShell* pObjectShell)
-{
-    return pObjectShell->GetModifyPasswordHash() // binary DOC/XLS/PPT formats
-           || pObjectShell->GetModifyPasswordInfo().hasElements(); // ODF/OOXML
-}
-
-/// Whether the document has a password to modify that has not been entered yet.
-static bool hasPendingPasswordToModify(const SfxObjectShell* pObjectShell)
-{
-    return hasPasswordToModify(pObjectShell) && !pObjectShell->IsModifyPasswordEntered();
 }
 
 static std::string getDocReadOnly(COKitDocument* pThis)

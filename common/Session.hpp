@@ -123,8 +123,17 @@ public:
     void setAllowManageRedlines(bool allow) { _isAllowManageRedlines = allow; }
     bool isAllowManageRedlines() const { return _isAllowManageRedlines; }
 
-    /// Returns true iff the view is either non-readonly or can change comments or manage redlines.
-    bool isEditable() const { return !isReadOnly() || isAllowChangeComments() || isAllowManageRedlines(); }
+    /// Whether the view is read-only until it enters the document's password to modify.
+    void setLockedByPassword(bool locked) { _isLockedByPassword = locked; }
+    bool isLockedByPassword() const { return _isLockedByPassword; }
+
+    /// Returns true iff the view is either non-readonly or can change comments or manage redlines,
+    /// and has entered the document's password to modify, if it has one.
+    bool isEditable() const
+    {
+        return !_isLockedByPassword &&
+               (!isReadOnly() || isAllowChangeComments() || isAllowManageRedlines());
+    }
 
     /// if certification verification was disabled for the wopi server
     bool isDisableVerifyHost() const { return _disableVerifyHost; }
@@ -516,6 +525,9 @@ private:
     /// Whether the session can add/change comments.
     /// Must have _isWritable=true, regardless of _isReadOnly.
     bool _isAllowManageRedlines = false;
+
+    /// Whether the view is still read-only because it has not entered the document's edit password
+    bool _isLockedByPassword = false;
 
     /// If password is provided or not
     bool _haveDocPassword;

@@ -1190,17 +1190,18 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     if (!loadTimingMsg.empty())
         sendTextFrame(loadTimingMsg);
 
+    // The document has an edit password, so this view is read-only. The client
+    // can provide the password with an 'editwithpassword' message to make this
+    // view editable. This goes out before the status message, so the server
+    // knows the view is locked by the time it counts the view as loaded.
+    if (_docManager->hasPasswordToModify() && !_isDocPasswordToModifyEntered)
+        sendTextFrame("haspasswordtomodify: true");
+
     if (status.empty() || !sendTextFrame("status: " + status))
     {
         LOG_ERR("Failed to get/forward document status [" << status << ']');
         return false;
     }
-
-    // The document has an edit password, so this view is read-only. The client
-    // can provide the password with an 'editwithpassword' message to make this
-    // view editable.
-    if (_docManager->hasPasswordToModify() && !_isDocPasswordToModifyEntered)
-        sendTextFrame("haspasswordtomodify: true");
 
     // Inform everyone (including this one) about updated view info
     _docManager->notifyViewInfo();

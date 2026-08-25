@@ -745,10 +745,11 @@ loaded: viewid=<viewId> views=<number of active views> isfirst=<true|false>
 
 haspasswordtomodify: true
 
-    Sent after loading a document that has a separate password for
+    Sent while loading a document that has a separate password for
     modifying, to every view that has not entered that password yet.
-    The view is read-only until it provides the password with an
-    editwithpassword message.
+    It arrives before the status: message of that view. The view is
+    read-only until it provides the password with an editwithpassword
+    message.
 
 editwithpassword: success
 

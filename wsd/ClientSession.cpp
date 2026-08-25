@@ -1050,8 +1050,22 @@ bool ClientSession::_handleInput(const char *buffer, int length)
                 }
             }
 
-            docBroker->manualSave(client_from_this(), dontTerminateEdit != 0,
-                                  dontSaveIfUnmodified != 0, extendedData);
+            if (isLockedByPassword())
+            {
+                // This view has no changes of its own, so the save is answered like a save of
+                // an unmodified document.
+                LOG_INF("Session [" << getId() << "] on document [" << docBroker->getDocKey()
+                                    << "] is locked by the password to modify and the "
+                                       "document is unmodified.");
+                sendTextFrame("unocommandresult: {\"commandName\":\".uno:Save\","
+                              "\"success\":false,\"result\":{\"type\":\"string\","
+                              "\"value\":\"unmodified\"}}");
+            }
+            else
+            {
+                docBroker->manualSave(client_from_this(), dontTerminateEdit != 0,
+                                      dontSaveIfUnmodified != 0, extendedData);
+            }
         }
     }
     else if (tokens.equals(0, "savetostorage"))
@@ -1280,7 +1294,8 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             return false;
 
         std::string value;
-        if (tokens.size() > 1 && getTokenString(tokens[1], "value", value) && value == "true")
+        if (tokens.size() > 1 && getTokenString(tokens[1], "value", value) && value == "true" &&
+            !isLockedByPassword())
         {
             // Write the modifications right away, while the view may still save; the kit's
             // read-only command filters do not dispatch .uno:Save for a read-only view
@@ -2962,6 +2977,15 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
             LOG_WRN("Ignoring kit to client message of: " << firstLine);
             return false;
         }
+    }
+    else if (tokens.equals(0, "haspasswordtomodify:"))
+    {
+        setLockedByPassword(true);
+    }
+    else if (tokens.equals(0, "editwithpassword:"))
+    {
+        if (tokens.equals(1, "success"))
+            setLockedByPassword(false);
     }
     else if (tokens.equals(0, "unocommandresult:"))
     {

@@ -4049,9 +4049,10 @@ std::shared_ptr<ClientSession> DocumentBroker::getWriteableSession() const
             savingSession = session;
         }
 
-        // or if any of the sessions is document owner, use that.
+        // or if any of the sessions is document owner, use that. An owner that has not entered
+        // the document's edit password has no changes of its own, so it is skipped here.
         //FIXME: can the owner be read-only?
-        if (session->isDocumentOwner())
+        if (session->isDocumentOwner() && !session->isLockedByPassword())
         {
             savingSession = session;
             break;

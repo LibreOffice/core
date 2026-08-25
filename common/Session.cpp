@@ -430,6 +430,7 @@ void Session::dumpState(std::ostream& os)
        << "\n\t\tisReadOnly: " << _isReadOnly
        << "\n\t\tisAllowChangeComments: " << _isAllowChangeComments
        << "\n\t\tisAllowManageRedlines: " << _isAllowManageRedlines
+       << "\n\t\tisLockedByPassword: " << _isLockedByPassword
        << "\n\t\tisEditable: " << isEditable()
        << "\n\t\tdocURL: " << _docURL
        << "\n\t\tjailedFilePath: " << Anonymizer::anonymizeUrl(_jailedFilePath)
