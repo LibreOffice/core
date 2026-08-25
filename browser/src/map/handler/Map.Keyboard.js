@@ -496,42 +496,49 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		}
 
 		if (this._slideSorterFocused()) {
-			if (this._isRangeExtendKeystroke(ev) && ev.type === 'keydown') {
-				this._extendPartRange(ev);
-			}
+			this._handleSlideSorterKey(ev);
+		}
+	},
 
-			// this.modifier belongs to _onKeyDown, which never runs while the
-			// sorter has the focus, so it would hold whatever the document
-			// last saw. Read the modifiers off this event instead.
-			else if (this._isNoModifier(ev)
-				&& this._isSlideSorterKey(ev)
-				&& ev.type === 'keydown') {
-				this._selectOrDeletePart(ev);
-			}
-			else if (ev.ctrlKey && !ev.altKey && ev.keyCode === this.keyCodes.HOME)
-				app.map.setPart(0);
-			else if (ev.ctrlKey && !ev.altKey && ev.keyCode === this.keyCodes.END)
-				app.map.setPart(app.map._docLayer._parts - 1);
-			else if (ev.ctrlKey && !ev.altKey && this.keyCodes.C.includes(ev.keyCode)) {
-				app.map._clip.clearSelection();
-				app.map._clip.setTextSelectionType('slide');
-			}
-			else if (this._isCtrlKey(ev) && !ev.altKey
-				&& (ev.keyCode === this.keyCodes.Y || (ev.shiftKey && ev.keyCode === this.keyCodes.Z))) {
-				app.socket.sendMessage('uno .uno:Redo');
-				ev.preventDefault();
-			}
-			else if (this._isCtrlKey(ev) && !ev.altKey && ev.keyCode === this.keyCodes.Z) {
-				app.socket.sendMessage('uno .uno:Undo');
-				ev.preventDefault();
-			}
-			else if (this._isNoModifier(ev)
-				&& ev.keyCode === this.keyCodes.enter && ev.type === 'keydown') {
-				this._insertPart(ev);
-			}
-			else if (!ev.ctrlKey && !ev.shiftKey) {
-				this._leaveSlideSorter(ev);
-			}
+	// _handleSlideSorterKey - acts on the slides the sorter shows: the range of selected
+	// slides, which slide is the current one, inserting a slide and deleting one, undo and
+	// redo, and the keys that hand the focus back to the document.
+	_handleSlideSorterKey: function (ev) {
+		if (this._isRangeExtendKeystroke(ev) && ev.type === 'keydown') {
+			this._extendPartRange(ev);
+		}
+
+		// this.modifier belongs to _onKeyDown, which never runs while the
+		// sorter has the focus, so it would hold whatever the document
+		// last saw. Read the modifiers off this event instead.
+		else if (this._isNoModifier(ev)
+			&& this._isSlideSorterKey(ev)
+			&& ev.type === 'keydown') {
+			this._selectOrDeletePart(ev);
+		}
+		else if (ev.ctrlKey && !ev.altKey && ev.keyCode === this.keyCodes.HOME)
+			app.map.setPart(0);
+		else if (ev.ctrlKey && !ev.altKey && ev.keyCode === this.keyCodes.END)
+			app.map.setPart(app.map._docLayer._parts - 1);
+		else if (ev.ctrlKey && !ev.altKey && this.keyCodes.C.includes(ev.keyCode)) {
+			app.map._clip.clearSelection();
+			app.map._clip.setTextSelectionType('slide');
+		}
+		else if (this._isCtrlKey(ev) && !ev.altKey
+			&& (ev.keyCode === this.keyCodes.Y || (ev.shiftKey && ev.keyCode === this.keyCodes.Z))) {
+			app.socket.sendMessage('uno .uno:Redo');
+			ev.preventDefault();
+		}
+		else if (this._isCtrlKey(ev) && !ev.altKey && ev.keyCode === this.keyCodes.Z) {
+			app.socket.sendMessage('uno .uno:Undo');
+			ev.preventDefault();
+		}
+		else if (this._isNoModifier(ev)
+			&& ev.keyCode === this.keyCodes.enter && ev.type === 'keydown') {
+			this._insertPart(ev);
+		}
+		else if (!ev.ctrlKey && !ev.shiftKey) {
+			this._leaveSlideSorter(ev);
 		}
 	},
 
