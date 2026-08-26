@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-23 07:18+0000\n"
-"Last-Translator: Tom Haelbich <haelbito@outlook.com>\n"
+"PO-Revision-Date: 2026-08-27 10:51+0000\n"
+"Last-Translator: Loto-dev1 <loto-dev1@proton.me>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -888,7 +888,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:972
 msgid "Upload Extension"
-msgstr ""
+msgstr "Upload-Erweiterung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1061
 msgid "Settings are only available to signed-in users."
@@ -1580,7 +1580,7 @@ msgstr "Zelladresse"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Namensfeld"
 
 #: src/control/Control.AIChatSidebar.ts:136
 msgid "Make the following text more concise"
@@ -1604,7 +1604,7 @@ msgstr "Diesen Text erweitern und mit weiteren Details ergänzen"
 
 #: src/control/Control.AIChatSidebar.ts:145
 msgid "Expand this text"
-msgstr ""
+msgstr "Diesen Text erweitern"
 
 #: src/control/Control.AIChatSidebar.ts:148
 msgid "Fix grammar, spelling, and punctuation errors"
