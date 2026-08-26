@@ -990,7 +990,7 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
                 aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
                 rpGraphicContent = BinaryDataContainer(aMemStream, nMemoryLength);
 
-                // Make a uncompressed copy for GfxLink
+                // Make an uncompressed copy for GfxLink
                 if (!aMemStream.GetError())
                 {
                     auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(rpGraphicContent, VectorGraphicDataType::Svg);
