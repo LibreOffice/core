@@ -993,6 +993,7 @@ class SettingIframe {
 				fileAccept: '.zip',
 				buttonText: _('Upload Extension'),
 				uploadPath: this.PATH.extensionsUpload(),
+				enabledFor: 'systemconfig',
 				element: null,
 			},
 		];

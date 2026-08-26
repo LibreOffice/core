@@ -957,10 +957,9 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 	const builtinIds = await fetchIndex('extensions/');
 	sources.push({ baseRel: 'extensions/', ids: builtinIds });
 	if (app.presetConfigId) await addPresetSource(app.presetConfigId);
-	if (app.userPresetConfigId) await addPresetSource(app.userPresetConfigId);
 
 	// Flatten the sources into one list of (id, baseRel) entries; Map.set's last-write-wins
-	// behavior causes per-user extensions to override admin extensions to overrride built-in
+	// behavior causes admin extensions to override built-in
 	// ones:
 	const byId = new Map<string, string>();
 	for (const src of sources) {

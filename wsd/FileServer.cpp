@@ -2965,6 +2965,34 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
         return;
     }
 
+    bool bad =
+        !filePath.starts_with('/')
+        || filePath.find("/./") != std::string::npos
+        || filePath.find("/../") != std::string::npos
+        || filePath.ends_with("/.")
+        || filePath.ends_with("/..");
+    if (!bad) {
+        std::string normalized;
+        normalized.reserve(filePath.size());
+        for (auto const c: filePath) {
+            if (c != '/' || normalized.empty() || normalized.back() != '/') {
+                normalized.push_back(c);
+            }
+        }
+        if (normalized.starts_with("/settings/userconfig/extensions/")) {
+            bad = true;
+        }
+    }
+    if (bad) {
+        LOG_WRN(
+            "Rejected upload to per-user extensions filePath ["
+            << Anonymizer::anonymizeUrl(filePath) << ']');
+        sendError(
+            http::StatusCode::Forbidden, getRequestPath(request), socket, shortMessage,
+            "Per-user extension installation is disabled");
+        return;
+    }
+
     Poco::URI wopiUri(wopiSettingBaseUrl + "/upload");
 
     if (!isAllowedWopiHost(wopiUri))
