@@ -42,6 +42,7 @@ root_version = (
     os.environ.get("LIBO_VERSION_MICRO") + "." +
     os.environ.get("LIBO_VERSION_PATCH")
 )
+root_license = "MPL-2.0" if os.environ.get("MPL_SUBSET") == "TRUE" else "LGPL-3.0"
 
 
 def extract_version_from_filename(filename):
@@ -350,15 +351,14 @@ def add_license_relationship(graph, from_id, type, license_expr):
     key = license_expr
     if key not in license_cache:
         license_id = make_spdx_id(f"License-{license_expr}")
-        graph.append({
+        license_cache[key] = [{
             "type": "simplelicensing_LicenseExpression",
             "spdxId": license_id,
             "creationInfo": "_:creationinfo",
             "simplelicensing_licenseExpression": license_expr
-        })
-        license_cache[key] = license_id
+        }]
     else:
-        license_id = license_cache[key]
+        license_id = license_cache[key][0]["spdxId"]
 
     graph.append({
         "type": "Relationship",
@@ -526,7 +526,7 @@ def sbom_skeleton(package, gid, languages):
     package_spdx_id = package_id(package)
     tool_spdx_id = make_spdx_id("SPDXRef-Tool-CustomScript")
 
-    sbom_data[package] = (gid, languages, {
+    sbom_data[package] = (gid, languages, root_spdx_id, {
         "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
         "@graph": [
             {
@@ -580,8 +580,8 @@ def sbom_skeleton(package, gid, languages):
     })
 
     # Add license for root package
-    graph = sbom_data[package][2]["@graph"]
-    add_license_relationship(graph, root_spdx_id, "hasConcludedLicense", "MPL-2.0")
+    graph = sbom_data[package][3]["@graph"]
+    add_license_relationship(graph, root_spdx_id, "hasConcludedLicense", root_license)
 
 
 def gen_packages(packinfos, ziplist, languages, product):
@@ -1232,6 +1232,6 @@ if __name__ == "__main__":
             filename = f"{package}-sbom.spdx.json"
             filepath = os.path.join(sbom_path, filename)
             with open(filepath, "w", encoding="utf-8") as file:
-                json.dump(data[2], file, indent=2)
+                json.dump(data[3], file, indent=2)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

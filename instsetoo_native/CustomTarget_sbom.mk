@@ -39,7 +39,7 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PY )
 	$(foreach v, \
-		$(filter PRODUCTNAME_WITHOUT_SPACES LIBO_VERSION% %TARBALL %SHA256SUM, $(.VARIABLES)), \
+		$(filter MPL_SUBSET PRODUCTNAME_WITHOUT_SPACES LIBO_VERSION% %TARBALL %SHA256SUM, $(.VARIABLES)), \
 		$(eval export $(v)=$($v)) \
 	)
 	EXTERNALSFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Externals)) \
