@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128634)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf130657)
 {
     loadFromFile(u"xlsx/tdf130657.xlsx");
-    // Test ShiftedCategoryPosition for charts which is not contain a "crossbetween" OOXML tag.
+    // Test ShiftedCategoryPosition for charts which do not contain a "crossbetween" OOXML tag.
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
@@ -399,7 +399,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf125444PercentageCustomLabel)
     Reference<beans::XPropertySet> xDp = xDataSeries->getDataPointByIndex(1);
     Sequence<Reference<chart2::XDataPointCustomLabelField>> aLabelFields;
     CPPUNIT_ASSERT(xDp->getPropertyValue(u"CustomLabelFields"_ustr) >>= aLabelFields);
-    // There are three label field: a value label, a newline and a percentage label. We want
+    // There are three label fields: a value label, a newline and a percentage label. We want
     // to assert the latter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aLabelFields.getLength());
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType_PERCENTAGE,
@@ -1082,7 +1082,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf166428)
     // The file was generated in ODF 1.3 by LO 24.8
     loadFromFile(u"ods/tdf166428_Low_High_StockChart_LO248.ods");
 
-    // The attribute table:cell-range-address does not exist in ODF 1.4. and therefore may not be
+    // The attribute table:cell-range-address does not exist in ODF 1.4. and therefore may not
     // be written.
     saveAndReload(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);

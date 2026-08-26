@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testSetSeriesToSecondaryAxisXLSX)
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    // Check there are only two <lineChart> tag in the XML, one for the primary and one for the secondary axis.
+    // Check there are only two <lineChart> tags in the XML, one for the primary and one for the secondary axis.
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart", 2);
 }
 

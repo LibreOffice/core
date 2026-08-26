@@ -28,7 +28,7 @@
 // the GNU General Public License.
 
 // This is derived from the C++ ABI for IA-64.  Where we diverge
-// for cross-architecture compatibility are noted with "@@@".
+// for cross-architecture compatibility is noted with "@@@".
 
 #pragma once
 
@@ -116,7 +116,7 @@ struct __cxa_exception
 #if !__LP64__
 	// This is a new field to support C++ 0x exception_ptr.
 	// For binary compatibility it is placed where the compiler
-	// previously adding padded to 64-bit align unwindHeader.
+	// previously added padding to 64-bit align unwindHeader.
   size_t referenceCount;
 #endif
 
