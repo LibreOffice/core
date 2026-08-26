@@ -1758,7 +1758,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConvertWithMasterDeduplication)
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
 
-    // For each slide check that it's layout exists
+    // For each slide check that its layout exists
     for (int i = 1; i <= 4; ++i)
     {
         xmlDocUniquePtr pXmlDocRels

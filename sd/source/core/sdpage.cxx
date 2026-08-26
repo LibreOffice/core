@@ -1466,7 +1466,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
         [&sLayoutType](const Reference<XNode>& layoutNode) {
             Reference<XNamedNodeMap> layoutAttrList = layoutNode->getAttributes();
 
-            // get the attribute value of layout (i.e it's type)
+            // get the attribute value of layout (i.e its type)
             OUString sLayoutAttName = layoutAttrList->getNamedItem(u"type"_ustr)->getNodeValue();
             return sLayoutAttName == sLayoutType;
         });

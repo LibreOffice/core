@@ -768,7 +768,7 @@ std::unordered_set<OUString> PowerPointExport::getUsedFontList()
     return aReturnSet;
 }
 
-// Writers the list of all embedded fonts and reference to the fonts
+// Writes the list of all embedded fonts and reference to the fonts
 void PowerPointExport::WriteEmbeddedFontList()
 {
     if (!mbEmbedFonts)
