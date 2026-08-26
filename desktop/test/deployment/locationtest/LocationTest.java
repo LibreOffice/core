@@ -77,7 +77,7 @@ public class LocationTest {
             return getServiceNames();
         }
 
-        /** This method is a simple helper function to used in the
+        /** This method is a simple helper function to be used in the
          * static component initialisation functions as well as in
          * getSupportedServiceNames.
          */

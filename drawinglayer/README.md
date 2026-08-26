@@ -94,8 +94,8 @@ For example, in `emfio/qa/cppunit/emf/EmfImportTest.cxx`, one can write:
     Primitive2DSequence aSequence = parseEmf(u"emfio/qa/cppunit/wmf/data/stockobject.emf");
     drawinglayer::Primitive2dXmlDump dumper;
     Primitive2DContainer aContainer(aSequence);
-    dumper.dump(aContainer, "/tmp/drawyinglayer.xml");
+    dumper.dump(aContainer, "/tmp/drawinglayer.xml");
 
-Then, after invoking `make CppunitTest_emfio_emf`, `/tmp/drawyinglayer.xml` will
+Then, after invoking `make CppunitTest_emfio_emf`, `/tmp/drawinglayer.xml` will
 be the dump of the drawinglayer primitives used to draw the emf file in
 LibreOffice. The top level tag will be <primitive2D>.
