@@ -535,7 +535,7 @@ public:
 
         if (hasRenderTarget())
         {
-            // set Viewort if none was given. We have a fixed pixel target, s we know the
+            // set Viewport if none was given. We have a fixed pixel target, so we know the
             // exact Viewport to work on
             if (getViewInformation2D().getViewport().isEmpty())
             {
@@ -1558,11 +1558,11 @@ void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(
                         //     "miterLimit is relative to 1/2 LineWidth", so a length. After some experimenting
                         //     it shows that the (better understandable) angle has to be converted to the length
                         //     that a miter prolongation would have at that angle, so use some trigonometry.
-                        //     Unfortunately there is also some'precision' problem (probably), so I had to
+                        //     Unfortunately there is also some 'precision' problem (probably), so I had to
                         //     experimentally come to a correction value around 0.9925. Since that seems to
                         //     be no obvious numerical value involved somehow (and as long as I find no other
                         //     explanation) I will have to use that.
-                        // NOTE: To find that correction value I usd that handy bRenderDecomposeForCompareInRed
+                        // NOTE: To find that correction value I used that handy bRenderDecomposeForCompareInRed
                         //       and changes in debugger - as work tipp
                         // With both done I can use Direct2D for Miter completely - what is good for speed.
                         aLineJoin = D2D1_LINE_JOIN_MITER_OR_BEVEL;
@@ -2063,7 +2063,7 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         // NOTE: In these implementations you could always call what the default
         //       case below does - call process(rCandidate) to use the decomposition.
         //       So these impls should only do something if they can do it better/
-        //       faster that the decomposition. So some of them check if they could
+        //       faster than the decomposition. So some of them check if they could
         //       - and if not - use exactly that.
         case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
         {

@@ -203,7 +203,7 @@ namespace drawinglayer::primitive3d
                         //
                         // Unfortunately there is no bezier polygon provided by the chart module; one reason is
                         // that the API for extrude wants a 3D polygon geometry (for historical reasons, i guess)
-                        // and those have no beziers. Another reason is that he chart module uses self-created
+                        // and those have no beziers. Another reason is that the chart module uses self-created
                         // stuff to create the 2D geometry (in ShapeFactory::createPieSegment), but this geometry
                         // does not contain bezier infos, either. The only way which is possible for now is to 'detect'
                         // candidates for vertical edges of pie segments by looking for the angles in the polygon.

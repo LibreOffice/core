@@ -1200,7 +1200,7 @@ Bitmap CairoPixelProcessor2D::extractBitmap() const
         // we for now only support ARGB32 and RGB24, format not supported, not valid
         return aRetval;
 
-    // ensure surface read access, wer need CAIRO_SURFACE_TYPE_IMAGE
+    // ensure surface read access, we need CAIRO_SURFACE_TYPE_IMAGE
     cairo_surface_t* pReadSource(pSource);
 
     if (CAIRO_SURFACE_TYPE_IMAGE != cairo_surface_get_type(pReadSource))
@@ -3401,7 +3401,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_fallback_decompose(
     // draw all-covering initial BG polygon 1st using getOuterColor and getOutputRange
     processFillGradientPrimitive2D_drawOutputRange(rFillGradientPrimitive2D);
 
-    // bet basic form in unit coordinates
+    // get basic form in unit coordinates
     CairoPathHelper aForm(rFillGradientPrimitive2D.getUnitPolygon());
 
     // paint solid fill steps by providing callback as lambda
@@ -4245,7 +4245,7 @@ void CairoPixelProcessor2D::processSvgLinearGradientPrimitive2D(
             break;
     }
 
-    // get PathGeometry & paint it filed with gradient
+    // get PathGeometry & paint it filled with gradient
     cairo_new_path(mpRT);
     getOrCreateFillGeometry(mpRT, rCandidate.getPolyPolygon());
     cairo_set_source(mpRT, pPattern);
@@ -4353,7 +4353,7 @@ void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
             break;
     }
 
-    // get PathGeometry & paint it filed with gradient
+    // get PathGeometry & paint it filled with gradient
     cairo_new_path(mpRT);
     getOrCreateFillGeometry(mpRT, rCandidate.getPolyPolygon());
     cairo_set_source(mpRT, pPattern);
@@ -4383,7 +4383,7 @@ void CairoPixelProcessor2D::processControlPrimitive2D(
 
     if (bControlIsVisibleAsChildWindow)
     {
-        // f the control is already visualized as a VCL-ChildWindow it
+        // if the control is already visualized as a VCL-ChildWindow it
         // does not need to be painted at all
         return;
     }
