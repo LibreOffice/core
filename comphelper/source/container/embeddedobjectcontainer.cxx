@@ -254,7 +254,7 @@ bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embed::X
 bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rName )
 {
     // allows to detect whether the object was already instantiated
-    // currently the filter instantiate it on loading, so this method allows
+    // currently the filter instantiates it on loading, so this method allows
     // to avoid objects pointing to the same persistence
     return pImpl->maNameToObjectMap.contains(rName);
 }
@@ -390,7 +390,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         AddEmbeddedObject( xObj, rNewName );
 
         OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
-                    "A freshly create object should be running always!" );
+                    "A freshly created object should be running always!" );
     }
     catch (uno::Exception const& e)
     {
@@ -408,7 +408,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject(
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XEmbedPersist > xEmb( xObj, uno::UNO_QUERY );
     uno::Reference < embed::XLinkageSupport > xLink( xEmb, uno::UNO_QUERY );
-    // if the object has a persistence and the object is not a link than it must have persistence entry in the storage
+    // if the object has a persistence and the object is not a link then it must have persistence entry in the storage
     OSL_ENSURE( !( xEmb.is() && ( !xLink.is() || !xLink->isLink() ) ) || xAccess->hasByName(rName),
                     "Added element not in storage!" );
 #endif
@@ -612,7 +612,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
         OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
-                    "A freshly create object should be running always!" );
+                    "A freshly created object should be running always!" );
 
         // possible optimization: store later!
         if ( xPersist.is())
@@ -645,7 +645,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
         OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
-                    "A freshly create object should be running always!" );
+                    "A freshly created object should be running always!" );
 
         // possible optimization: store later!
         if ( xPersist.is())
@@ -904,7 +904,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject(
     uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
     sal_Bool bIsNotEmbedded = !xPersist.is() || ( xLink.is() && xLink->isLink() );
 
-    // if the object has a persistence and the object is not a link than it must have persistence entry in the storage
+    // if the object has a persistence and the object is not a link then it must have persistence entry in the storage
     OSL_ENSURE( bIsNotEmbedded || xAccess->hasByName(aName), "Removing element not present in storage!" );
 #endif
 
@@ -989,7 +989,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject(
     try
     {
 #if OSL_DEBUG_LEVEL > 1
-        // if the object has a persistence and the object is not a link than it must have persistence entry in storage
+        // if the object has a persistence and the object is not a link then it must have persistence entry in storage
         OSL_ENSURE( bIsNotEmbedded || pImpl->mxStorage->hasByName( aName ), "The object has no persistence entry in the storage!" );
 #endif
         if ( xPersist.is() && pImpl->mxStorage->hasByName( aName ) )

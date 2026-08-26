@@ -190,7 +190,7 @@ public class Map
         {
             components[i] = getMSF().createInstance( "com.sun.star.form.component." + serviceNames[i] );
         }
-        // "normalize" the first component, so it has the property type
+        // "normalize" the first component, so it has the proper type
         Type formComponentType = new Type( XFormComponent.class );
         components[0] = UnoRuntime.queryInterface( formComponentType.getZClass(), components[0] );
         impl_checkMappings( components, serviceNames, "XFormComponent->string" );
@@ -378,7 +378,7 @@ public class Map
     private void impl_verifyEnumerationContent( XEnumeration _enum, final Object[] _expectedElements, final String _context )
         throws com.sun.star.uno.Exception
     {
-        // since we cannot assume the map to preserve the ordering in which the elements where inserted,
+        // since we cannot assume the map to preserve the ordering in which the elements were inserted,
         // we can only verify that all elements exist as expected, plus *no more* elements than expected
         // are provided by the enumeration
         Set<Integer> set = new HashSet<Integer>();

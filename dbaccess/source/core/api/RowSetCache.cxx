@@ -1089,7 +1089,7 @@ bool ORowSetCache::last(  )
         }
         m_nPosition = m_xCacheSet->getRow();
         moveWindow();
-        // we have to repositioning because moveWindow can modify the cache
+        // we have to reposition because moveWindow can modify the cache
         m_xCacheSet->last();
         OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < static_cast<sal_Int32>(m_pMatrix->size()),"Position is behind end()!");
         m_aMatrixIter = calcPosition();
