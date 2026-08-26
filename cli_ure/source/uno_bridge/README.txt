@@ -1,5 +1,5 @@
 Because of the LoaderLock bug in .NET Framework 1.0 and 1.1 the cli_uno.dll is linked 
-with the /NOENTRY switch, which prevent that the C-runtime is initialized when loading 
+with the /NOENTRY switch, which prevents the C-runtime from being initialized when loading 
 the dll.
 
 Also I removed all static c++ objects which need construction by the CRT, 
@@ -11,7 +11,7 @@ this had to be called. If we would do that we would have to implement that
 the bridge can be disposed.
 
 
-Sell also:
+See also:
 
 http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dv_vstechart/html/vcconmixeddllloadingproblem.asp
 http://support.microsoft.com/?id=814472

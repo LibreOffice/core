@@ -79,7 +79,7 @@ QualType reconstructTemplateArgumentType(
 }
 
 bool areSameTypedef(QualType type1, QualType type2) {
-    // type1.getTypePtr() == typ2.getTypePtr() fails for e.g. ::sal_Bool vs.
+    // type1.getTypePtr() == type2.getTypePtr() fails for e.g. ::sal_Bool vs.
     // sal_Bool:
     auto t1 = type1->getAs<TypedefType>();
     auto t2 = type2->getAs<TypedefType>();
