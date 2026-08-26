@@ -21,7 +21,7 @@ Installation instructions:
    server. You can download the Servlet API from http://java.sun.com/products/servlet/index.html . 
 4. Use your GNU make (http://www.gnu.org) to build the servlet class.
 5. Make the servlet class known to your web server.
-   The example creates also a WAR file which can be easy deployed in a Tomcat server.
+   The example creates also a WAR file which can be easily deployed in a Tomcat server.
    5.1 Browse the 'Tomcat Web Application Manager'
    5.2 Navigate into the section 'Upload a WAR file to install'
    5.3 Browse to your generated WAR file and select it

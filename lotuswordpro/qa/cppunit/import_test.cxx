@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
     //         A. Lettered bullet uppercase 1 (A.)
     //         B. Lettered bullet uppercase 2 (B.)
     //         C. Lettered bullet uppercase 3 (C.)
-    // It is also make sure that nested and skipped bullets are working correctly:
+    // It also makes sure that nested and skipped bullets are working correctly:
     //         1) Numbered bullet w/ bracket one (1))
     //            Skipped bullet
     //         2) Numbered bullet w/ bracket two (2))
@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
     uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     OUString aListLabelString;
     xPara->getPropertyValue(u"ListLabelString"_ustr) >>= aListLabelString;
-    // Make sure the list start from 1.
+    // Make sure the list starts from 1.
     CPPUNIT_ASSERT_EQUAL(u"1."_ustr, aListLabelString);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara->getPropertyValue(u"ListLabelString"_ustr) >>= aListLabelString;
@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara->getPropertyValue(u"ListLabelString"_ustr) >>= aListLabelString;
-    // Make sure the list start from i.
+    // Make sure the list starts from i.
     CPPUNIT_ASSERT_EQUAL(u"i."_ustr, aListLabelString);
 
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
@@ -85,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara->getPropertyValue(u"ListLabelString"_ustr) >>= aListLabelString;
-    // Make sure the list start from I.
+    // Make sure the list starts from I.
     CPPUNIT_ASSERT_EQUAL(u"I."_ustr, aListLabelString);
 
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
