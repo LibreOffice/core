@@ -223,13 +223,13 @@ void FilterCache::load(EFillState eRequired)
             m_sActLocale = DEFAULT_OFFICELOCALE;
         }
 
-        // Support the old configuration support. Read it only one times during office runtime!
+        // Support the old configuration support. Read it only once during office runtime!
         impl_readOldFormat();
     }
 
 
     // b) If the required fill state was not reached
-    //    but std values was already loaded ...
+    //    but std values were already loaded ...
     //    we must load some further missing items.
     impl_load(eRequired);
     // <- SAFE
@@ -807,7 +807,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         }
         break;
 
-        default : throw css::uno::RuntimeException(u"These configuration node is not supported here for open!"_ustr, nullptr);
+        default : throw css::uno::RuntimeException(u"This configuration node is not supported here for open!"_ustr, nullptr);
     }
 
     {
@@ -1704,10 +1704,10 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
     {
         if (pItemInCache != pList->end())
             pList->erase(pItemInCache);
-        // OK - this item does not exists inside configuration.
+        // OK - this item does not exist inside configuration.
         // And we already updated our internal cache.
         // But the outside code needs this NoSuchElementException
-        // to know, that this item does notexists.
+        // to know, that this item does not exist.
         // Nobody checks the iterator!
         throw css::container::NoSuchElementException();
     }

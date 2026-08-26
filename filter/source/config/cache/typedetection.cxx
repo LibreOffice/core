@@ -963,7 +963,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
                             = aURL.getName(INetURLObject::LAST_SEGMENT, true,
                                            INetURLObject::DecodeMechanism::WithCharset);
 
-                        // Ask the user whether they wants to try to repair
+                        // Ask the user whether they want to try to repair
                         RequestPackageReparation aRequest(aDocumentTitle);
                         xInteraction->handle(aRequest.GetRequest());
 
@@ -992,7 +992,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
     // a) no types                                => no detection
     // b) deep detection not allowed              => return first valid type of list (because it's the preferred or the first valid one)
     //    or(!) match by URLPattern               => in such case a deep detection will be suppressed!
-    // c) type has no detect service              => safe the first occurred type without a detect service
+    // c) type has no detect service              => save the first occurred type without a detect service
     //                                               as "last chance"(!). It will be used outside of this method
     //                                               if no further type could be detected.
     //                                               It must be the first one, because it can be a preferred type.

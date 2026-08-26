@@ -131,7 +131,7 @@ class FilterCache : public cppu::BaseMutex
                         <ul>
                             <li>if the item exists inside config layer but not inside our cache => REMOVED</li>
                             <li>if the item exists inside config layer and inside our cache => CHANGED</li>
-                            <li>if the item does not exists inside config layer but inside our cache => ADDED.</li>
+                            <li>if the item does not exist inside config layer but inside our cache => ADDED.</li>
                         </ul>
          */
         enum EItemFlushState
@@ -142,7 +142,7 @@ class FilterCache : public cppu::BaseMutex
             E_ITEM_REMOVED = 1,
             /// indicates an item, which exists inside config layer and inside our own cache
             E_ITEM_CHANGED = 2,
-            /// indicates an item, which does not exists inside config layer but inside our own cache
+            /// indicates an item, which does not exist inside config layer but inside our own cache
             E_ITEM_ADDED = 3
         };
 
@@ -212,7 +212,7 @@ class FilterCache : public cppu::BaseMutex
 
 
         /** @short  contains status, which cache items/properties
-                    was already loaded from the underlying configuration.
+                    were already loaded from the underlying configuration.
 
             @descr  This information can be used to detect missing
                     information and load it on demand.
@@ -663,14 +663,14 @@ class FilterCache : public cppu::BaseMutex
             @return     [css::uno::Any]
                         the value of the requested key.
                         Can be empty if an internal error occurred or if the requested
-                        key does not exists!
+                        key does not exist!
          */
         css::uno::Any impl_getDirectCFGValue(std::u16string_view sDirectKey);
 
 
         /** @short      load the underlying configuration into this cache.
 
-            @descr      Which items should be read can be regulate by the
+            @descr      Which items should be read can be regulated by the
                         parameter eRequiredState. That provides the possibility
                         to load standard values on startup only and update this
                         cache later on demand with all available information.
@@ -766,7 +766,7 @@ class FilterCache : public cppu::BaseMutex
         /** @short  try to load the requested item on demand from the underlying configuration
                     layer.
 
-            @descr  The outside code has to be sure, that the item does not already exists
+            @descr  The outside code has to be sure, that the item does not already exist
                     inside this cache. Otherwise it will be loaded twice. This method
                     doesn't check such constellations!
 
@@ -783,7 +783,7 @@ class FilterCache : public cppu::BaseMutex
                     But to improve robustness - it should be checked :-)
 
             @throw  [css::container::NoSuchElementException]
-                    if the item does not exists inside the configuration layer too!
+                    if the item does not exist inside the configuration layer too!
 
             @throw  [css::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
