@@ -297,7 +297,7 @@ void lcl_SplineCalculation::CalculatePeriodic()
         Aupper[ n ] = xDiff_i;
         u [ n ] = 3 * (yDiff_i - yDiff_im1);
 
-        // decomposite A=(R transpose)*D*R
+        // decompose A=(R transpose)*D*R
         Ddiag[1] = Adiag[1];
         Rupper[1] = Aupper[1] / Ddiag[1];
         Rright[1] = Aupper[n] / Ddiag[1];
