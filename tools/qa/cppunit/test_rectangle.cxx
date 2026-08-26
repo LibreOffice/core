@@ -19,7 +19,7 @@ class RectangleTest : public CppUnit::TestFixture
 public:
     void testConstruction();
     void testOpenClosedSize();
-    void testUnitConvesion();
+    void testUnitConversion();
     void testSetOperators();
     void test_rectnormalize_alreadynormal();
     void test_rectnormalize_zerorect();
@@ -32,7 +32,7 @@ public:
     CPPUNIT_TEST_SUITE(RectangleTest);
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testOpenClosedSize);
-    CPPUNIT_TEST(testUnitConvesion);
+    CPPUNIT_TEST(testUnitConversion);
     CPPUNIT_TEST(testSetOperators);
     CPPUNIT_TEST(test_rectnormalize_zerorect);
     CPPUNIT_TEST(test_rectnormalize_alreadynormal);
@@ -121,7 +121,7 @@ void RectangleTest::testOpenClosedSize()
     }
 }
 
-void RectangleTest::testUnitConvesion()
+void RectangleTest::testUnitConversion()
 {
     {
         static constexpr tools::Rectangle aRectTwip(100, 100, 100, 100);
