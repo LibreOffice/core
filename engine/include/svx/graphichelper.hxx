@@ -37,6 +37,7 @@ class SVXCORE_DLLPUBLIC GraphicHelper
 public:
     static void GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic );
     static OUString GetImageType(const Graphic& rGraphic);
+    static bool IsGifGraphic(const Graphic& rGraphic);
     static OUString ExportGraphic(weld::Window* pWin, const Graphic& rGraphic, const OUString& rGraphicName);
     static OUString ExportGraphicToTempFile(const Graphic& rGraphic, std::u16string_view rGraphicName);
     static void

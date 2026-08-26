@@ -764,6 +764,15 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
     GetView().GetViewFrame().GetBindings().Invalidate(rReq.GetSlot());
 }
 
+namespace
+{
+    // These attributes and filters never show on a Gif
+    bool lcl_IsGifGraphic( const GraphicObject* pGrafObj )
+    {
+        return pGrafObj && GraphicHelper::IsGifGraphic( pGrafObj->GetGraphic() );
+    }
+}
+
 void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -850,14 +859,24 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_LUMINANCE:
             if( !bParentCntProt )
-                rSet.Put( SfxInt16Item( nWhich,
-                        aCoreSet.Get(RES_GRFATR_LUMINANCE).GetValue() ));
+            {
+                if( lcl_IsGifGraphic( rSh.GetGraphicObj() ) )
+                    bDisable = true;
+                else
+                    rSet.Put( SfxInt16Item( nWhich,
+                            aCoreSet.Get(RES_GRFATR_LUMINANCE).GetValue() ));
+            }
             break;
 
         case SID_ATTR_GRAF_CONTRAST:
             if( !bParentCntProt )
-                rSet.Put( SfxInt16Item( nWhich,
-                        aCoreSet.Get(RES_GRFATR_CONTRAST).GetValue() ));
+            {
+                if( lcl_IsGifGraphic( rSh.GetGraphicObj() ) )
+                    bDisable = true;
+                else
+                    rSet.Put( SfxInt16Item( nWhich,
+                            aCoreSet.Get(RES_GRFATR_CONTRAST).GetValue() ));
+            }
             break;
 
         case SID_ATTR_GRAF_RED:
@@ -892,7 +911,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 if ( pGrafObj )
                 {
                     if( pGrafObj->IsAnimated() ||
-                        GraphicType::GdiMetafile == pGrafObj->GetType() )
+                        GraphicType::GdiMetafile == pGrafObj->GetType() ||
+                        lcl_IsGifGraphic( pGrafObj ) )
                         bDisable = true;
                     else
                         rSet.Put( SfxUInt16Item( nWhich,
@@ -909,7 +929,12 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_MODE:
             if( !bParentCntProt )
-                rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(aCoreSet.Get(RES_GRFATR_DRAWMODE).GetValue()) ));
+            {
+                if( lcl_IsGifGraphic( rSh.GetGraphicObj() ) )
+                    bDisable = true;
+                else
+                    rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(aCoreSet.Get(RES_GRFATR_DRAWMODE).GetValue()) ));
+            }
             break;
 
         case SID_GRFFILTER:
@@ -941,7 +966,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        bDisable = eGraphicType != GraphicType::Bitmap;
+                        bDisable = eGraphicType != GraphicType::Bitmap ||
+                                   lcl_IsGifGraphic( rSh.GetGraphicObj() );
                     }
                 }
             }

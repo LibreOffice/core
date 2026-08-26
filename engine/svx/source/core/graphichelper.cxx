@@ -136,6 +136,12 @@ OUString GraphicHelper::GetImageType(const Graphic& rGraphic)
     return SvxResId(STR_IMAGE_UNKNOWN);
 }
 
+bool GraphicHelper::IsGifGraphic(const Graphic& rGraphic)
+{
+    const auto& pGfxLink = rGraphic.GetSharedGfxLink();
+    return pGfxLink && pGfxLink->GetType() == GfxLinkType::NativeGif;
+}
+
 namespace {
 
 

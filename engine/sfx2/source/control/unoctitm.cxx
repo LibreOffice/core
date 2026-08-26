@@ -1017,6 +1017,18 @@ OString Int32Payload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateEv
     return aBuffer.makeStringAndClear();
 }
 
+// Like Int32Payload, but sends "disabled" - an empty value reads as "no value".
+OString Int32OrDisabledPayload(sal_uInt16, SfxViewFrame*,
+                               const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem*)
+{
+    OStringBuffer aBuffer(aEvent.FeatureURL.Complete.toUtf8() + "=");
+    if (sal_Int32 aInt32; aEvent.IsEnabled && (aEvent.State >>= aInt32))
+        aBuffer.append(aInt32);
+    else
+        aBuffer.append("disabled");
+    return aBuffer.makeStringAndClear();
+}
+
 OString TransformPayload(sal_uInt16 nSID, SfxViewFrame* pViewFrame,
                          const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem*)
 {
@@ -1195,6 +1207,7 @@ constexpr auto enumToPayload = frozen::make_unordered_map<PayloadType, PayloadGe
     { PayloadType::EnabledPayload, EnabledPayload },
     { PayloadType::ParaDirectionPayload, ParaDirectionPayload },
     { PayloadType::Int32Payload, Int32Payload },
+    { PayloadType::Int32OrDisabledPayload, Int32OrDisabledPayload },
     { PayloadType::TransformPayload, TransformPayload },
     { PayloadType::StringPayload, StringPayload },
     { PayloadType::RowColSelCountPayload, RowColSelCountPayload },
@@ -1441,15 +1454,16 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"ExecuteAnimationEffect", { PayloadType::EnabledPayload, true } },
         { u"PasteSlide", { PayloadType::EnabledPayload, true } },
         { u"LineStyle", { PayloadType::EnabledPayload, true } },
+        { u"GraphicFilterToolbox", { PayloadType::EnabledPayload, true } },
 
         { u"ParaLeftToRight", { PayloadType::ParaDirectionPayload, true } },
         { u"ParaRightToLeft", { PayloadType::ParaDirectionPayload, true } },
 
         { u"AssignLayout", { PayloadType::Int32Payload, true } },
-        { u"GrafContrast", { PayloadType::Int32Payload, true } },
-        { u"GrafLuminance", { PayloadType::Int32Payload, true } },
-        { u"GrafMode", { PayloadType::Int32Payload, true } },
-        { u"GrafTransparence", { PayloadType::Int32Payload, true } },
+        { u"GrafContrast", { PayloadType::Int32OrDisabledPayload, true } },
+        { u"GrafLuminance", { PayloadType::Int32OrDisabledPayload, true } },
+        { u"GrafMode", { PayloadType::Int32OrDisabledPayload, true } },
+        { u"GrafTransparence", { PayloadType::Int32OrDisabledPayload, true } },
         { u"StatusSelectionMode", { PayloadType::Int32Payload, true } },
         { u"Signature", { PayloadType::Int32Payload, false } },
         { u"SelectionMode", { PayloadType::Int32Payload, true } },

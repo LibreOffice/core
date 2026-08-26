@@ -45,6 +45,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/graphichelper.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/grafctrl.hxx>
@@ -791,6 +792,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
     const           SdrMarkList& rMarkList = rView.GetMarkedObjectList();
     bool            bEnableColors = true;
     bool            bEnableTransparency = true;
+    bool            bEnableAdjustments = true;
     bool            bEnableCrop = ( 1 == rMarkList.GetMarkCount() );
 
     for( size_t i = 0, nCount = rMarkList.GetMarkCount(); i < nCount; ++i )
@@ -808,6 +810,10 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
         {
             bEnableTransparency = false;
         }
+
+        // A GIF is animated on the client, so these attributes never show.
+        if( bEnableAdjustments && GraphicHelper::IsGifGraphic( pGrafObj->GetGraphic() ) )
+            bEnableAdjustments = false;
     }
 
     rView.GetAttributes( aAttrSet );
@@ -822,7 +828,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
                 {
-                    if( bEnableColors )
+                    if( bEnableColors && bEnableAdjustments )
                     {
                         rSet.Put( SfxUInt16Item( nSlotId,
                             sal::static_int_cast< sal_uInt16 >( aAttrSet.Get(SDRATTR_GRAFMODE).GetValue() ) ) );
@@ -887,7 +893,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFLUMINANCE ) )
                 {
-                    if( bEnableColors )
+                    if( bEnableColors && bEnableAdjustments )
                     {
                         rSet.Put( SfxInt16Item( nSlotId, aAttrSet.Get(SDRATTR_GRAFLUMINANCE).GetValue()) );
                     }
@@ -903,7 +909,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFCONTRAST ) )
                 {
-                    if( bEnableColors )
+                    if( bEnableColors && bEnableAdjustments )
                     {
                         rSet.Put( SfxInt16Item( nSlotId,
                             aAttrSet.Get(SDRATTR_GRAFCONTRAST).GetValue()) );
@@ -937,7 +943,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
                 {
-                    if( bEnableTransparency )
+                    if( bEnableTransparency && bEnableAdjustments )
                     {
                         rSet.Put( SfxUInt16Item( nSlotId,
                             aAttrSet.Get(SDRATTR_GRAFTRANSPARENCE).GetValue() ) );

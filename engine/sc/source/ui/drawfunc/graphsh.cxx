@@ -94,8 +94,9 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
-            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
-            bEnable = true;
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap &&
+                !GraphicHelper::IsGifGraphic( pGraphicObj->GetGraphic() ) )
+                bEnable = true;
     }
 
     if( !bEnable )
@@ -112,7 +113,8 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
         rtl::Reference<SdrObject> xObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>(xObj.get()) )
-            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap &&
+                !GraphicHelper::IsGifGraphic( pGraphicObj->GetGraphic() ) )
             {
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, pGraphicObj->GetGraphicObject(),
                     [pView, pGraphicObj, xObj, rMarkList] (GraphicObject aFilterObj) -> void

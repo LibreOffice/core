@@ -25,6 +25,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>
+#include <svx/graphichelper.hxx>
 
 #include <sfx2/objface.hxx>
 
@@ -91,7 +92,8 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( auto pGrafObj = dynamic_cast< SdrGrafObj *>( pObj ) )
-            if( pGrafObj->GetGraphicType() == GraphicType::Bitmap )
+            if( pGrafObj->GetGraphicType() == GraphicType::Bitmap &&
+                !GraphicHelper::IsGifGraphic( pGrafObj->GetGraphic() ) )
                 bEnable = true;
     }
 
@@ -108,7 +110,8 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( auto pGrafObj = dynamic_cast< SdrGrafObj *>( pObj ) )
-            if( pGrafObj->GetGraphicType() == GraphicType::Bitmap )
+            if( pGrafObj->GetGraphicType() == GraphicType::Bitmap &&
+                !GraphicHelper::IsGifGraphic( pGrafObj->GetGraphic() ) )
             {
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, pGrafObj->GetGraphicObject(),
                     [this, pObj] (GraphicObject aFilterObj) -> void

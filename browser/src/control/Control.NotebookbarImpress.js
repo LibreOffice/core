@@ -2905,7 +2905,9 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							{
 								'id': 'picture-effects:PictureEffectsMenu',
 								'type': 'menubutton',
+								'command': '.uno:GraphicFilterToolbox',
 								'text': _('Effects'),
+								'icon': 'lc_pictureeffectsmenu.svg',
 								'accessibility': { focusBack: true, combination: 'EF', de: null }
 							},
 							{

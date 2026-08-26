@@ -96,6 +96,8 @@
 #include <SwRewriter.hxx>
 #include <GraphicSizeCheck.hxx>
 #include <svx/galleryitem.hxx>
+#include <svx/graphichelper.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -1759,7 +1761,9 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
         case SID_GRFFILTER_POPART:
         case SID_GRFFILTER_SEPIA:
         case SID_GRFFILTER_SOLARIZE:
-            bSetState = bState = GraphicType::Bitmap == nGrfType;
+            bSetState = bState = GraphicType::Bitmap == nGrfType &&
+                    !( rSh.GetGraphicObj() &&
+                       GraphicHelper::IsGifGraphic( rSh.GetGraphicObj()->GetGraphic() ) );
             break;
         }
 

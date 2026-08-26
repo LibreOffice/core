@@ -23,6 +23,7 @@ enum class PayloadType
     EnabledPayload,
     ParaDirectionPayload,
     Int32Payload,
+    Int32OrDisabledPayload,
     TransformPayload,
     StringPayload,
     RowColSelCountPayload,
