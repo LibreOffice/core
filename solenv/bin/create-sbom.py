@@ -29,6 +29,7 @@ import pefile
 
 
 sbom_data = {}
+sbom_externals = {}
 filelistdirs = []
 filelistdirs_sdk = []
 timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -327,29 +328,28 @@ def package_id(package):
 
 spdx_id_cache = {}
 
-def make_spdx_id(package, fragment):
-    """Create a URN UUID for an SPDX element"""
-    key = (package, fragment)
+def make_spdx_id(fragment):
+    """Create a URN UUID for an SPDX element; important to use the same in all packages."""
+    key = fragment
     if key not in spdx_id_cache:
         spdx_id_cache[key] = f"urn:uuid:{uuid.uuid4()}"
     return spdx_id_cache[key]
 
 
-def next_rel_id(package):
+def next_rel_id():
     """Generate a unique relationship URN UUID."""
     return f"urn:uuid:{uuid.uuid4()}"
 
 
 license_cache = {}
 
-def add_license_relationship(package, from_id, license_expr):
+def add_license_relationship(graph, from_id, type, license_expr):
     """Add a license expression element and hasDeclaredLicense relationship."""
 
-    graph = sbom_data[package][2]["@graph"]
-
-    key = (package, license_expr)
+    assert type in ("hasDeclaredLicense", "hasConcludedLicense")
+    key = license_expr
     if key not in license_cache:
-        license_id = make_spdx_id(package, f"License-{license_expr}")
+        license_id = make_spdx_id(f"License-{license_expr}")
         graph.append({
             "type": "simplelicensing_LicenseExpression",
             "spdxId": license_id,
@@ -362,10 +362,10 @@ def add_license_relationship(package, from_id, license_expr):
 
     graph.append({
         "type": "Relationship",
-        "spdxId": next_rel_id(package),
+        "spdxId": next_rel_id(),
         "creationInfo": "_:creationinfo",
         "from": from_id,
-        "relationshipType": "hasDeclaredLicense",
+        "relationshipType": type,
         "to": [license_id]
     })
 
@@ -374,35 +374,67 @@ def extract_spdx_info(line):
     """
     Extract relevant SPDX information from a line.
     The line format is assumed to be like:
-    <!-- Name: Box2D, Source: BOX2D_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+    <!-- Name: box2d, Vendor:, Source: BOX2D_TARBALL, URL: https://github.com/erincatto/box2d, Declared: MIT, Concluded: MPL-2.0 -->
+    Source may be either a tarball variable, or a path.
+    Name and Vendor are used to create CPE2.3 identifier.
     """
-    pattern = r"<!-- Name:\s*(?P<name>[\w\s-]+),\s*Source:\s*(?P<source>[\w/]+),\s*Package:\s*(?P<package>[\w-]+),\s*SPDX-License-Identifier:\s*(?P<license>[\w\s.+-]+) -->"
+    match = re.search(r"<!-- *Name:", line)
+    if not(match):
+        return
+
+    CPE23_name = r"(?:[A-Za-z0-9._-]|\\[!-/:-@\[-`{-~])*"
+    pattern = rf"<!-- Name:\s*(?P<name>{CPE23_name}),\s*Vendor:\s*(?P<vendor>{CPE23_name}),\s*Source:\s*(?P<source>[\w/.]+),\s*URL:\s*(?P<url>[^\s,]*),\s*Declared:\s*(?P<declared>[\w\s.+-]+),\s*Concluded:\s*(?P<concluded>[\w\s.+-]+) -->"
     match = re.search(pattern, line)
 
-    if match:
+    if not(match):
+        raise Exception(f"Malformed comment in license file: {line}")
+    else:
         name = match.group("name").strip()
+        if len(name) == 0:
+            raise Exception(f"No name in license file comment: {line}")
+        vendor = match.group("vendor").strip()
         source = match.group("source").strip()
-        package = match.group("package").strip()
-        if not source.isupper():
-            version = None
-        elif package.startswith("dict"):
+        url = match.group("url").strip()
+        if source.isupper():
+            tarball = os.environ.get(source)
+#            sha512 = get_sha512(os.environ.get("TARFILE_LOCATION") + "/" + tarball)
+            sha256 = os.environ.get(source.replace("_TARBALL", "_SHA256SUM"))
+            if sha256 is None:
+                raise Exception(f"No SHA256SUM for {source}")
+            version = extract_version_from_filename(tarball)
+            locator = "https://dev-www.libreoffice.org/src/" + tarball
+        elif name.startswith("dict"):
+            # unclear how to hash these, it's an entire dir tree...
+            sha256 = None
             version = extract_version_for_dictionary(source)
+            locator = "https://cgit.collaboraoffice.com/c/dictionaries/tree/" + source
         else:
-            version = extract_version_from_filename(os.environ.get(source))
-        license = match.group("license").strip()
+            sha256 = None
+            version = None
+            locator = None if len(source) == 0 else "https://cgit.collaboraoffice.com/c/core/tree/" + source
+        declared = match.group("declared").strip()
+        if len(declared) == 0:
+            raise Exception(f"No declared in license file comment: {line}")
+        concluded = match.group("concluded").strip()
+        if len(concluded) == 0:
+            raise Exception(f"No concluded in license file comment: {line}")
 
         spdx_info = {
-            "package": package,
             "fragment": f"SPDXRef-{name}",
             "name": name,
+            "vendor": vendor,
+            "sha256" : sha256,
             "version": version,
-            "license": license
+            "locator": locator,
+            "url": url,
+            "declared": declared,
+            "concluded": concluded,
         }
         return spdx_info
     return None
 
 
-def process_file(file_path):
+def process_license_file(file_path):
     """
     Process the file and append SPDX information for matching lines.
     """
@@ -410,13 +442,19 @@ def process_file(file_path):
         for line in file:
             spdx_info = extract_spdx_info(line)
             if spdx_info:
-                package = spdx_info["package"]
-                root_spdx_id = make_spdx_id(package, f"SPDXRef-{productname}-{package}")
-                if not sbom_data.get(package):
-                    sbom_skeleton(package, root_spdx_id)
+                name = spdx_info["name"]
+                if name in sbom_externals:
+                    raise Exception(f"duplicate Name in license file: {name}")
 
-                graph = sbom_data[package]["@graph"]
-                pkg_spdx_id = make_spdx_id(package, spdx_info["fragment"])
+                pkg_spdx_id = make_spdx_id(spdx_info["fragment"])
+
+                def cpe23_any(string):
+                    return "*" if string is None or len(string) == 0 else string
+
+                def cpe23(spdx_info):
+                    vendor = cpe23_any(spdx_info["vendor"])
+                    version = cpe23_any(spdx_info["version"])
+                    return f"cpe:2.3:a:{vendor}:{name}:{version}:*:*:*:*:*:*:*"
 
                 # Add the package element
                 pkg_element = {
@@ -425,32 +463,68 @@ def process_file(file_path):
                     "originatedBy": ["https://collaboraoffice.com"],
                     "creationInfo": "_:creationinfo",
                     "name": spdx_info["name"],
+                    "externalIdentifiers": [{
+                        "externalIdentifierType": "cpe23",
+                        "identifier": cpe23(spdx_info),
+                    }]
                 }
+                if len(spdx_info["url"]) != 0:
+                    pkg_element["software_homePage"] = spdx_info["url"]
+
+                    # This was based on mistaken assumption that purl can be
+                    # generated from a homepage; it looks like it needs to be a
+                    # git or other VCS repository, or an actual upstream
+                    # release tarball
+#                    pkg_element["externalIdentifers"].append({
+#                            "externalIdentifierType": "packageURL",
+#                            "identifier": purl(spdx_info)}
+#                         })
+
                 if spdx_info["version"]:
                     pkg_element["software_packageVersion"] = spdx_info["version"]
-                graph.append(pkg_element)
+                source_spdx_id = make_spdx_id(f'{spdx_info["fragment"]}-source')
+                source_element = {
+                    "type": "software_SoftwareArtifact",
+                    "spdxId": source_spdx_id,
+                    "software_primaryPurpose": "source",
+                    "externalRef": [{
+                        "type": "ExternalRef",
+                        "externalRefType": "SourceArtifact",
+                        "locator": spdx_info["locator"]
+                    }],
+                }
 
-                # Add CONTAINS relationship
-                graph.append({
-                    "type": "Relationship",
-                    "spdxId": next_rel_id(package),
-                    "creationInfo": "_:creationinfo",
-                    "from": root_spdx_id,
-                    "relationshipType": "contains",
-                    "to": [pkg_spdx_id]
-                })
+                if spdx_info["sha256"] is not None:
+                    source_element["verifiedUsing"] = [{
+                        "type": "Hash",
+                        "algorithm": "sha256",
+                        "hashValue": spdx_info["sha256"]
+                    }]
 
-                add_license_relationship(
-                    package, pkg_spdx_id, spdx_info["license"])
+                graph = [pkg_element, source_element,
+                    {
+                        "type": "Relationship",
+                        "from": source_spdx_id,
+                        "relationshipType": "generates",
+                        "to": [pkg_spdx_id],
+                        "completeness": "complete"
+                    }]
+
+                add_license_relationship(graph, pkg_spdx_id,
+                     "hasDeclaredLicense", spdx_info["declared"])
+                add_license_relationship(graph, pkg_spdx_id,
+                     "hasConcludedLicense", spdx_info["concluded"])
+
+                sbom_externals[name] = (graph, spdx_info["declared"], spdx_info["concluded"])
 
 
 def sbom_skeleton(package, gid, languages):
     """Create root SPDX elements of package."""
 
     assert isinstance(languages, set)
-    root_spdx_id = make_spdx_id(package, f"SPDXRef-{package}")
+    root_spdx_id = make_spdx_id(f"SPDXRef-{package}")
     package_spdx_id = package_id(package)
-    tool_spdx_id = make_spdx_id(package, "SPDXRef-Tool-CustomScript")
+    tool_spdx_id = make_spdx_id("SPDXRef-Tool-CustomScript")
 
     sbom_data[package] = (gid, languages, {
         "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
@@ -496,7 +570,7 @@ def sbom_skeleton(package, gid, languages):
             },
             {
                 "type": "Relationship",
-                "spdxId": next_rel_id(package),
+                "spdxId": next_rel_id(),
                 "creationInfo": "_:creationinfo",
                 "from": package_spdx_id,
                 "relationshipType": "describes",
@@ -506,7 +580,8 @@ def sbom_skeleton(package, gid, languages):
     })
 
     # Add license for root package
-    add_license_relationship(package, root_spdx_id, "MPL-2.0")
+    graph = sbom_data[package][2]["@graph"]
+    add_license_relationship(graph, root_spdx_id, "hasConcludedLicense", "MPL-2.0")
 
 
 def gen_packages(packinfos, ziplist, languages, product):
@@ -1122,6 +1197,7 @@ if __name__ == "__main__":
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
+        process_license_file(license_path)
         ziplist = parse_ziplist(sys.argv[3])
         resolve_ziplist_inheritance(ziplist)
         packinfos = []
@@ -1152,7 +1228,6 @@ if __name__ == "__main__":
         else:
             check_files(files_product)
 
-        #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
             filepath = os.path.join(sbom_path, filename)
