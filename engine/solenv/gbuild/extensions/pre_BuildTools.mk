@@ -13,7 +13,6 @@ ifeq ($(gb_Side),build)
 gb_BUILD_TOOLS_executables = \
 		bestreversemap \
 		cfgex \
-		climaker \
 		cpp \
 		cppumaker \
 		$(if $(ENABLE_EMBIND_UNO),embindmaker) \

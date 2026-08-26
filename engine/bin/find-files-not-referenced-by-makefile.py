@@ -17,8 +17,7 @@ with a.stdout as txt:
             and filename.find("/qa/") == -1 \
             and filename.find("/test/") == -1 \
             and not filename.startswith("testtools/") \
-            and not filename.startswith("vcl/") \
-            and not filename.startswith("cli_ure/"):
+            and not filename.startswith("vcl/"):
             sourceFiles.add(filename.strip())
 
 a = subprocess.Popen("git ls-files */*.mk", stdout=subprocess.PIPE, shell=True, encoding='utf8')

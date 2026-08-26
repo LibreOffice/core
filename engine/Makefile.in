@@ -163,9 +163,6 @@ gbuild_TARGETS := AllLangHelp \
 	AllLangMoTarget \
 	AllLangPackage \
 	AutoInstall \
-	CliLibrary \
-	CliNativeLibrary \
-	CliUnoApi \
 	CompilerTest \
     ComponentTarget \
 	Configuration \

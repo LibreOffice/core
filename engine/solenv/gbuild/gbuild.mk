@@ -336,10 +336,6 @@ include $(foreach class, \
 	UnoApi \
 	UnpackedTarball \
 	InternalUnoApi \
-	CliAssembly \
-	CliLibrary \
-	CliNativeLibrary \
-	CliUnoApi \
 	DotnetLibrary \
 	DotnetTest \
 	Zip \

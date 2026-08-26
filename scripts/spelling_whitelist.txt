@@ -2638,7 +2638,6 @@ clientaddress
 clienttest
 clientvisiblearea
 clientzoom
-climaker
 clipboardcontent
 clipboardkey
 clipboardowner

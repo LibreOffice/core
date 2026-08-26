@@ -255,7 +255,6 @@ class Parser:
             "bridges" : 1,
             "canvas" : 1,
             "chart2" : 1,
-            "cli_ure" : 1,
             "codemaker" : 1,
             "comphelper" : 1,
             "compilerplugins" : 1,

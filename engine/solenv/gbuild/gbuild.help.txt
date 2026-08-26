@@ -74,9 +74,6 @@ AVAILABLE TARGETS
        <class>_<target> for all targets and for the following classes:
            o AllLangMoTarget
            o AllLangZip
-           o CliLibrary
-           o CliNativeLibrary
-           o CliUnoApi
            o ComponentTarget
            o Configuration
            o CppunitTest

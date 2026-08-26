@@ -44,7 +44,6 @@ CollaboraOffice
             USERDIRPRODUCTVERSION 4
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             UPDATEURL https://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
             PACKAGEREVISION @LIBO_VERSION_PATCH@

@@ -19,10 +19,6 @@
 
 # outdir target pattern
 
-# these are hard-coded to URE for now since there are so few of them...
-gb_CliLibrary_get_target = $(INSTROOT)/$(LIBO_URE_LIB_FOLDER)/$(1)$(gb_CliLibrary_EXT)
-gb_CliNativeLibrary_get_target = $(INSTROOT)/$(LIBO_URE_LIB_FOLDER)/$(1)$(gb_CliNativeLibrary_EXT)
-gb_CliUnoApi_get_target = $(INSTROOT)/$(if $(filter cli_uretypes,$(1)),$(LIBO_URE_LIB_FOLDER),$(LIBO_LIB_FOLDER))/$(1)$(gb_CliUnoApi_EXT)
 gb_PackagePart_get_destinations = \
 	$(INSTDIR) \
 	$(WORKDIR)/unittest \
@@ -46,11 +42,6 @@ gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_CObject_get_dwo_target = $(WORKDIR)/CObject/$(1).dwo
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
 gb_GenCObject_get_dwo_target = $(WORKDIR)/GenCObject/$(1).dwo
-gb_CliAssembly_get_target = $(WORKDIR)/CliAssembly/$(1).done
-gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1).done
-gb_CliAssemblyTarget_get_assembly_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
-gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
-gb_CliNativeLibrary_get_preparation_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).prepare
 gb_CompilerTest_get_target = $(WORKDIR)/CompilerTest/$(1)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_target_for_build = $(WORKDIR_FOR_BUILD)/ComponentTarget/$(1).component
@@ -263,12 +254,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	AllLangHelp \
 	AllLangPackage \
 	AllLangMoTarget \
-	CliAssembly \
-	CliAssemblyTarget \
-	CliConfigTarget \
-	CliLibrary \
-	CliNativeLibrary \
-	CliUnoApi \
 	CompilerTest \
 	ComponentTarget \
 	CustomPackage \

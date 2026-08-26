@@ -6,7 +6,6 @@ Generators for language-binding--specific representations of UNOIDL entities:
   binding
 - `javamaker` generates class files for the JVM language binding
 - `netmaker` generates C# code files for the .NET language binding
-- `climaker` (the old codemaker for .NET Framework) is in module `cli_ure`
 - `pythonmaker` generates Python stub (pyi) files for the Python UNO language binding
 
 Note the different terminology used by cppumaker vs. gbuild for the three

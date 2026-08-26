@@ -86,9 +86,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables,NONE, \
-	$(if $(ENABLE_CLI),\
-		$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),climaker)) \
-	) \
 	cppumaker \
 	javamaker \
 	netmaker \
@@ -454,7 +451,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,writer, \
     swui \
 ))
 
-# cli_cppuhelper is NONE even though it is actually in URE because it is CliNativeLibrary
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	smoketest \
 	subsequenttest \
@@ -473,16 +469,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	sdqahelper \
 	wpftqahelper \
 	precompiled_system \
-	$(if $(ENABLE_CLI),$(if $(filter MSC,$(COM)),cli_cppuhelper)) \
 	$(if $(filter $(OS),ANDROID),cokit-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
-	$(if $(ENABLE_CLI),\
-		$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),cli_uno)) \
-	) \
 	i18nlangtag \
 	$(if $(ENABLE_DOTNET), \
 		net_uno \

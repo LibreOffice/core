@@ -683,11 +683,6 @@ gb_NMAKE_VARS = \
 
 gb_InstallScript_EXT := .inf
 
-# CliAssemblyTarget class
-
-gb_CliAssemblyTarget_POLICYEXT := $(gb_Library_DLLEXT)
-gb_CliAssemblyTarget_get_dll = $(call gb_Library__get_dir_for_layer,NONE)/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
-
 # Extension class
 
 gb_Extension_LICENSEFILE_DEFAULT := $(INSTROOT)/license.txt

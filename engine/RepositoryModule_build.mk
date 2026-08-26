@@ -14,7 +14,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	binaryurp \
 	bridges \
 	chart2 \
-	cli_ure \
 	codemaker \
 	comphelper \
 	cppu \

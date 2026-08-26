@@ -3258,17 +3258,6 @@ $(call gb_Executable_add_runtime_dependencies,bestreversemap,\
 )
 endef
 
-# TODO depending on the whole URE might be overkill, but I do not have a
-# Windows machine to debug it...
-define gb_Executable__register_climaker
-$(call gb_Executable_add_runtime_dependencies,climaker,\
-	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
-	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
-	$(call gb_UnoApi_get_target_for_build,udkapi) \
-	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno)
-)
-endef
-
 define gb_Executable__register_cppumaker
 $(call gb_Executable_add_runtime_dependencies,cppumaker,\
     $(call gb_CondLibSalTextenc,$(call gb_Library_get_target,sal_textenc)) \

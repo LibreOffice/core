@@ -2186,11 +2186,6 @@ AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
         [Generates the static UNO object constructor mapping from the build.]))
 
-AC_ARG_ENABLE(cli,
-    AS_HELP_STRING([--disable-cli],
-        [Disable the generation of old CLI bindings.]),
-,enable_cli=yes)
-
 AC_ARG_WITH(extra-cc-flags,
     AS_HELP_STRING([--with-extra-cc-flags=...],
         [Specify extra flags (like GCC's -fdiagnostics-color=always, which is useful in combination
@@ -6905,59 +6900,6 @@ if test $_os = Darwin; then
     fi
 fi
 
-find_csc()
-{
-    # Return value: $csctest
-
-    unset csctest
-
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client" "InstallPath"
-    if test -n "$regvalue"; then
-        csctest=$regvalue
-        return
-    fi
-}
-
-find_al()
-{
-    # Return value: $altest
-
-    unset altest
-
-    # We need this check to detect 4.6.1 or above.
-    for ver in 4.8.1 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools" "InstallationFolder"
-        PathFormat "$regvalue"
-        if test -n "$regvalue" -a \( -f "$formatted_path_unix/al.exe" -o -f "$formatted_path_unix/bin/al.exe" \); then
-            altest=$regvalue
-            return
-        fi
-    done
-
-    reg_list_values_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows"
-    for x in $reglist; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools" "InstallationFolder"
-        PathFormat "$regvalue"
-        if test -n "$regvalue" -a \( -f "$formatted_path_unix/al.exe" -o -f "$formatted_path_unix/bin/al.exe" \); then
-            altest=$regvalue
-            return
-        fi
-    done
-}
-
-find_dotnetsdk()
-{
-    unset frametest
-
-    for ver in 4.8.1 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver" "KitsInstallationFolder"
-        if test -n "$regvalue"; then
-            frametest=$regvalue
-            return
-        fi
-    done
-    AC_MSG_ERROR([The Windows NET SDK (minimum 4.6) not found, check the installation])
-}
 
 find_winsdk_version()
 {
@@ -7192,90 +7134,7 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPE
 
     PathFormat "$MIDL_PATH"
     MIDL_PATH="$formatted_path"
-
-    if test "$enable_cli" = yes; then
-        dnl Check csc.exe
-        AC_MSG_CHECKING([for csc.exe])
-        find_csc
-        PathFormat "$csctest"
-        csctest_unix="$formatted_path_unix"
-        if test -f "$csctest_unix/csc.exe"; then
-            CSC_PATH="$csctest"
-        fi
-        if test ! -f "$csctest_unix/csc.exe"; then
-            AC_MSG_ERROR([csc.exe not found as $CSC_PATH/csc.exe])
-        else
-            AC_MSG_RESULT([$CSC_PATH/csc.exe])
-        fi
-
-        CSC_PATH=`win_short_path_for_make "$CSC_PATH"`
-
-        dnl Check al.exe
-        AC_MSG_CHECKING([for al.exe])
-        if test -n "$winsdkbinsubdir" \
-            -a -f "$winsdktest_unix/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/al.exe"
-        then
-            AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH"
-        elif test -f "$winsdktest_unix/Bin/$WIN_BUILD_ARCH/al.exe"; then
-            AL_PATH="$winsdktest/Bin/$WIN_BUILD_ARCH"
-        elif test -f "$winsdktest_unix/Bin/al.exe"; then
-            AL_PATH="$winsdktest/Bin"
-        fi
-
-        if test -z "$AL_PATH"; then
-            find_al
-            PathFormat "$altest"
-            altest_unix="$formatted_path_unix"
-            if test -f "$altest_unix/bin/al.exe"; then
-                AL_PATH="$altest/bin"
-            elif test -f "$altest_unix/al.exe"; then
-                AL_PATH="$altest"
-            fi
-        fi
-        PathFormat "$AL_PATH"
-        if test ! -f "$formatted_path_unix/al.exe"; then
-            AC_MSG_ERROR([al.exe not found as $AL_PATH/al.exe])
-        else
-            AC_MSG_RESULT([$AL_PATH/al.exe])
-        fi
-
-        AL_PATH=`win_short_path_for_make "$AL_PATH"`
-
-        dnl Check mscoree.lib / .NET Framework dir
-        AC_MSG_CHECKING(.NET Framework)
-        find_dotnetsdk
-        PathFormat "$frametest"
-        frametest="$formatted_path_unix"
-        if test -f "$frametest/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-            DOTNET_FRAMEWORK_HOME="$frametest"
-        else
-            if test -f "$winsdktest_unix/lib/mscoree.lib" -o -f "$winsdktest_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-                DOTNET_FRAMEWORK_HOME="$winsdktest"
-            fi
-        fi
-        PathFormat "$DOTNET_FRAMEWORK_HOME"
-        if test ! -f "$formatted_path_unix/lib/mscoree.lib" -a ! -f "$formatted_path_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib" -a ! -f "$formatted_path_unix/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-            AC_MSG_ERROR([mscoree.lib not found])
-        fi
-        AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
-
-        PathFormat "$AL_PATH"
-        AL_PATH="$formatted_path"
-
-        PathFormat "$DOTNET_FRAMEWORK_HOME"
-        DOTNET_FRAMEWORK_HOME="$formatted_path"
-
-        PathFormat "$CSC_PATH"
-        CSC_PATH="$formatted_path"
-
-        ENABLE_CLI="TRUE"
-    else
-        ENABLE_CLI=""
-    fi
-else
-    ENABLE_CLI=""
 fi
-AC_SUBST(ENABLE_CLI)
 
 dnl ===================================================================
 dnl Testing for C++ compiler and version...
@@ -13686,13 +13545,6 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPE
     ucrtlibpath_formatted=$formatted_path
     ILIB="$ILIB;$ucrtlibpath_formatted"
     ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
-    if test -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib"; then
-        PathFormat "$DOTNET_FRAMEWORK_HOME/lib"
-        ILIB="$ILIB;$formatted_path"
-    else
-        PathFormat "$DOTNET_FRAMEWORK_HOME/Lib/um/$WIN_HOST_ARCH"
-        ILIB="$ILIB;$formatted_path"
-    fi
 
     if test "$cross_compiling" != "yes"; then
         ILIB_FOR_BUILD="$ILIB"
@@ -14180,14 +14032,8 @@ else
             # needed for msi packaging - as of 10.0.22621 SDK no arm64 ones yet
             pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x86" "before"
         fi
-        # .NET 4.6 and higher don't have bin directory
-        if test -f "$DOTNET_FRAMEWORK_HOME/bin"; then
-            pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
-        fi
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
-        pathmunge "$CSC_PATH" "before"
         pathmunge "$MIDL_PATH" "before"
-        pathmunge "$AL_PATH" "before"
         pathmunge "$MSVC_MULTI_PATH" "before"
         pathmunge "$MSVC_BUILD_PATH" "before"
         if test -n "$MSBUILD_PATH" ; then
@@ -14530,7 +14376,7 @@ rm -f a.out a.wasm a.out.js a.out.wasm
 
 dnl cspell:ignore Randr Xext alignof altlinuxhyph appex bzlib ccached coreutils createmsi cxxabi
 dnl cspell:ignore cygdrive devel devenv dlsym dtrace emconfigure fpch frobozz gnucp
-dnl cspell:ignore ifdef ifndef libc libdl libjpipe libstdc longjmp memcpy mscoree msicreator
+dnl cspell:ignore ifdef ifndef libc libdl libjpipe libstdc longjmp memcpy msicreator
 dnl cspell:ignore msiglobal mspdb msys nmake omindex optimised pagein pkgmk qconfig qtbase
 dnl cspell:ignore quadrigraph rbbi rpms sccache strbuf stringop tosvg ucrt ustring uuidgen vclplugs
 dnl cspell:ignore vswhere werror wilangid xcent xcrun

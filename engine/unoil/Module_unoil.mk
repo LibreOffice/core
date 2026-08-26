@@ -16,14 +16,4 @@ $(eval $(call gb_Module_add_targets,unoil,\
 ))
 endif
 
-ifeq ($(ENABLE_CLI),TRUE)
-ifeq ($(COM),MSC)
-ifneq ($(CPUNAME)_$(CROSS_COMPILING),AARCH64_TRUE)
-$(eval $(call gb_Module_add_targets,unoil,\
-    CliUnoApi_oootypes \
-))
-endif
-endif
-endif
-
 # vim:set noet sw=4 ts=4:
