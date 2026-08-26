@@ -500,6 +500,17 @@ void EditUndoSetParaAttribs::Redo()
     lcl_DoSetSelection( GetEditEngine()->GetActiveView(), nPara );
 }
 
+
+EditUndoContentAttribsInfo::EditUndoContentAttribsInfo( SfxItemSet aParaAttribs ) :
+        aPrevParaAttribs(std::move( aParaAttribs))
+{
+}
+
+void EditUndoContentAttribsInfo::AppendCharAttrib(EditCharAttrib* pNew)
+{
+    aPrevCharAttribs.push_back(std::unique_ptr<EditCharAttrib>(pNew));
+}
+
 EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel, SfxItemSet aNewItems) :
     EditUndo(EDITUNDO_ATTRIBS, pEE),
     aESel(rESel),
@@ -526,7 +537,7 @@ void EditUndoSetAttribs::Undo()
     bool bFields = false;
     for ( sal_Int32 nPara = aESel.start.nPara; nPara <= aESel.end.nPara; nPara++ )
     {
-        const ContentAttribsInfo& rInf = *aPrevAttribs[nPara-aESel.start.nPara];
+        const EditUndoContentAttribsInfo& rInf = *aPrevAttribs[nPara-aESel.start.nPara];
 
         // first the paragraph attributes ...
         pEE->SetParaAttribsOnly(nPara, rInf.GetPrevParaAttribs());
@@ -570,9 +581,9 @@ void EditUndoSetAttribs::Redo()
     }
 }
 
-void EditUndoSetAttribs::AppendContentInfo(ContentAttribsInfo* pNew)
+void EditUndoSetAttribs::AppendContentInfo(EditUndoContentAttribsInfo* pNew)
 {
-    aPrevAttribs.push_back(std::unique_ptr<ContentAttribsInfo>(pNew));
+    aPrevAttribs.push_back(std::unique_ptr<EditUndoContentAttribsInfo>(pNew));
 }
 
 void EditUndoSetAttribs::ImpSetSelection()
