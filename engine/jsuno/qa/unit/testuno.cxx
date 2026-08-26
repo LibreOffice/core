@@ -853,6 +853,10 @@ console.assert(test.StringAttribute === 'foo');
     console.assert(v[2][2] === uno.idl.com.sun.star.testuno.Enum.E_10);
 }
 
+// Backwards-compatibility support for the com.sun.star -> cpo renaming:
+console.assert(
+    uno.idl.com.sun.star.uno.TypeClass.VOID.toString()
+    === uno.idl.cpo.uno.TypeClass.VOID.toString());
 )"_ustr);
     }
 

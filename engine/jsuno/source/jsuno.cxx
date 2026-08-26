@@ -1312,7 +1312,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
         buf.append('.');
     }
     buf.append(OUString::fromUtf8(JS_AtomToCString(ctx, atom)));
-    auto const id = buf.makeStringAndClear();
+    auto id = buf.makeStringAndClear();
     if (comphelper::isLegacyUnoApi(id) && !comphelper::isLegacyApiWarningSuppressed())
     {
         getRuntimeData(ctx)->usedLegacyUnoApi = true;
@@ -1327,7 +1327,16 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
         css::uno::UNO_QUERY_THROW);
     if (!mgr->hasByHierarchicalName(id))
     {
-        return JS_UNDEFINED;
+        // Backwards-compatibility support for the com.sun.star -> cpo renaming:
+        OUString rest;
+        if (!id.startsWith(u"com.sun.star.", &rest)) {
+            return JS_UNDEFINED;
+        }
+        OUString const newId = "cpo." + rest;
+        if (!mgr->hasByHierarchicalName(newId)) {
+            return JS_UNDEFINED;
+        }
+        id = newId;
     }
     css::uno::Reference<css::reflection::XTypeDescription> td(mgr->getByHierarchicalName(id),
                                                               css::uno::UNO_QUERY_THROW);
