@@ -34,6 +34,13 @@ ifeq ($(OS),WNT)
 # cannot build nspr in this environment. It then compiles nss on top with gyp
 # and ninja, run inline below. gyp comes from the gyp-next tarball unpacked
 # beside nss.
+
+ifeq ($(CPUNAME),X86_64)
+python_arch_subdir=amd64
+else ifeq ($(CPUNAME),AARCH64)
+python_arch_subdir=arm64
+endif
+
 $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
 		$(SRCDIR)/external/nss/nsinstall.py
@@ -60,7 +67,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			NSS_DISABLE_GTESTS=1 \
 			NSS_DISABLE_CMD_TOOLS=1 \
 			CCC="$(CXX)" \
-		&& export PYEXE='$(gb_UnpackedTarball_workdir)/python3/PCbuild/amd64/python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe' \
+		&& export PYEXE='$(gb_UnpackedTarball_workdir)/python3/PCbuild/$(python_arch_subdir)/python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe' \
 		&& root=$$(cygpath -u "$$("$$PYEXE" -c 'import os,sys;sys.stdout.write(os.path.realpath(sys.argv[1]))' "$$(cygpath -m ..)")") \
 		&& cd "$$root/nss" \
 		&& PATH="$(shell cygpath -u '$(SRCDIR)/external/gyp/bin'):$(shell cygpath -u '$(dir $(NINJA))'):$$PATH" \
