@@ -167,20 +167,6 @@ bool VCLXAccessibleEdit::PreferFullTextInTextChangedEvent()
     return isComboBoxChild();
 }
 
-// XServiceInfo
-
-
-OUString VCLXAccessibleEdit::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleEdit"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleEdit"_ustr };
-}
-
 // XAccessibleContext
 
 sal_Int64 VCLXAccessibleEdit::getAccessibleChildCount()
