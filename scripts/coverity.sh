@@ -16,7 +16,7 @@ cd "$(dirname "$0")/.."
 
 # Deliberately a few modules from the bottom of the dependency graph, so the
 # warnings each newly added module brings can be judged on their own.
-ENGINE_MODULES="sal salhelper store registry unoidl xmlreader cppu cppuhelper"
+ENGINE_MODULES="sal salhelper store registry unoidl xmlreader cppu cppuhelper ucbhelper i18nlangtag comphelper"
 
 online_include='browser/(src|admin|welcome)'
 engine_include="engine/($(echo "$ENGINE_MODULES" | tr ' ' '|'))/"
