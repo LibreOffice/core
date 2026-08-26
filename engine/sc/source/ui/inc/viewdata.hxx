@@ -645,6 +645,13 @@ public:
      */
     void            EditGrowY( bool bInitial = false );
 
+    /**
+     * True while the edit area is being grown. EditGrowX and EditGrowY leave
+     * the area unchanged while it is set.
+     */
+    void            SetEditGrowing( bool bSet )     { bGrowing = bSet; }
+    bool            IsEditGrowing() const           { return bGrowing; }
+
     ScSplitPos      GetEditActivePart() const       { return eEditActivePart; }
     SCCOL           GetEditViewCol() const          { return nEditCol; }
     SCROW           GetEditViewRow() const          { return nEditRow; }

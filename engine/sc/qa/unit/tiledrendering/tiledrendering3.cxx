@@ -1491,6 +1491,67 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtendEditInvalidateRectForText)
     CPPUNIT_ASSERT_EQUAL(aCell, ScGridWindow::ExtendEditInvalidateRectForText(aCell, 50));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testForeignEditPaintKeepsEditArea)
+{
+    // The cell range an in-place edit covers is measured against the editing view's own output
+    // area, so a second view painting that same edit into its tiles leaves the range as it is.
+    // The paint hands the editing view an area rounded to the painting view's pixels, and a
+    // single line of text in a default row already sits within about 80 units (1/100 mm) of the
+    // height at which the edit takes in the row below. Before the fix one coarse pixel of
+    // rounding was enough to take that row in, and the painting view then drew the opaque edit
+    // rectangle over the cell below the edited one.
+    ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+
+    // A 256 px tile holds 3840 twips at zoom 1.0, so 3072 twips per tile is zoom 1.25. The paint
+    // picks the view whose zoom matches the tile, and every zoom here divides exactly in both
+    // places, so each paint below belongs to the view it is meant for.
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 15360, 7680));
+    pModelObj->setClientZoom(256, 256, 3072, 3072);
+    pModelObj->paintTile(*xDevice, 256, 256, 0, 0, 3072, 3072);
+    Scheduler::ProcessEventsToIdle();
+
+    // a short text in a plain cell: the edit covers that one cell
+    typeCharsInCell("text", 0, 2, pView1, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    Scheduler::ProcessEventsToIdle();
+
+    ScViewData& rViewData1 = pView1->GetViewData();
+    CPPUNIT_ASSERT(hasEditView(rViewData1));
+    const SCROW nEditEndRow = rViewData1.GetEditEndRow();
+    const SCCOL nEditEndCol = rViewData1.GetEditEndCol();
+    const SCCOL nEditStartCol = rViewData1.GetEditStartCol();
+    CPPUNIT_ASSERT_EQUAL(rViewData1.GetEditStartRow(), nEditEndRow);
+
+    KitHelper::createView();
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+
+    // 15360 twips per 256 px tile is zoom 0.25 and 7680 is zoom 0.5, where one pixel is worth
+    // over 100 and about 53 units. The rounding direction of the area the paint hands over
+    // follows the pixel grid, so the edit is painted at both.
+    const int aCoarseTiles[] = { 15360, 7680 };
+    for (const int nTileTwips : aCoarseTiles)
+    {
+        pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, nTileTwips, nTileTwips));
+        pModelObj->setClientZoom(256, 256, nTileTwips, nTileTwips);
+        pModelObj->paintTile(*xDevice, 256, 256, 0, 0, nTileTwips, nTileTwips);
+
+        // The range is read straight after the paint, before a pending event can restart the
+        // edit and measure the range again against view 1's own output area.
+        CPPUNIT_ASSERT_MESSAGE("view 1 is still editing the cell after the foreign paint",
+                               hasEditView(rViewData1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("the painting view extended the edit over further rows",
+                                     nEditEndRow, rViewData1.GetEditEndRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("the painting view extended the edit over further columns",
+                                     nEditEndCol, rViewData1.GetEditEndCol());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("the painting view moved the edit's first column",
+                                     nEditStartCol, rViewData1.GetEditStartCol());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
 {
     // Given a document that has 2 views:
