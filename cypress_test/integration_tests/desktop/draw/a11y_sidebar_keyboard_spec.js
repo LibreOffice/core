@@ -46,6 +46,10 @@ describe(['tagdesktop'], 'Draw sidebar keyboard navigation', { testIsolation: fa
 		a11yHelper.sidebarKeyboard.assertHelperReportsTabOrder(getWin);
 	});
 
+	it('the focusable predicate agrees with the helper', function () {
+		a11yHelper.sidebarKeyboard.assertPredicateAgreesWithHelper(getWin);
+	});
+
 	it('F6 enters the deck on its first widget', function () {
 		a11yHelper.sidebarKeyboard.assertRingEntersOnFirstWidget(getWin);
 	});

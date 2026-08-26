@@ -672,6 +672,33 @@ const sidebarKeyboard = {
 		});
 	},
 
+	assertPredicateAgreesWithHelper: function (getWin) {
+		cy.then(function () {
+			const win = getWin();
+			const wrapper = win.app.map.sidebar.wrapper;
+			const hidden = Array.prototype.filter.call(
+				wrapper.querySelectorAll(win.JSDialog.FocusableSelector),
+				function (element) {
+					return !element.checkVisibility({
+						visibilityProperty: true,
+						contentVisibilityAuto: true,
+					});
+				});
+
+			expect(hidden.map(describeFocusable),
+				'widgets of the deck hidden with visibility').to.not.be.empty;
+			hidden.forEach(function (element) {
+				expect(win.JSDialog.IsFocusable(element),
+					describeFocusable(element) + ' is hidden').to.equal(false);
+			});
+
+			win.JSDialog.GetFocusableElements(wrapper).forEach(function (element) {
+				expect(win.JSDialog.IsFocusable(element),
+					describeFocusable(element) + ' is reported focusable').to.equal(true);
+			});
+		});
+	},
+
 	assertRingEntersOnFirstWidget: function (getWin) {
 		cy.realPress('F6');
 		sidebarKeyboard.assertFocusedIs(getWin(), function () {
