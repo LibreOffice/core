@@ -2453,6 +2453,14 @@ FillRef const & Dxf::createFill( bool bAlwaysNew )
     return mxFill;
 }
 
+// tdf#122473 - import alignment and axis-based pivot area formats
+AlignmentRef const& Dxf::createAlignment(bool bAlwaysNew)
+{
+    if (bAlwaysNew || !mxAlignment)
+        mxAlignment = std::make_shared<Alignment>(*this);
+    return mxAlignment;
+}
+
 ProtectionRef const & Dxf::createProtection( bool bAlwaysNew )
 {
     if ( bAlwaysNew || !mxProtection )

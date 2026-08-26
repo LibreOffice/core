@@ -15,6 +15,7 @@
 #include <document.hxx>
 #include <dpobject.hxx>
 #include <attrib.hxx>
+#include <scitems.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <rtl/string.hxx>
@@ -401,6 +402,34 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableFormatsSubTo
         auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
         OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testTdf122473_PivotTableLabelRotation)
+{
+    // Contains a pivotTable with differential formatting (dxf) and direct formatting
+    // with only an <alignment> child (textRotation) applied to two row-label cells
+    // ("Sum of C" rotated 90° and "Sum of D" set to stacked/vertical text).
+    createScDoc("xlsx/pivot-table/tdf122473_PivotTableLabelRotation.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 9000
+        // - Actual  : 0
+        // "Sum of C" row label at F9 -> dxf 0: textRotation="90"
+        CPPUNIT_ASSERT_EQUAL(Degree100(9000).get(),
+                             rDocument.GetAttr(5, 8, 0, ATTR_ROTATE_VALUE).GetValue().get());
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 1
+        // - Actual  : 0
+        // "Sum of D" row label at F10 -> dxf 1: textRotation="255" (stacked/vertical)
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.GetAttr(5, 9, 0, ATTR_STACKED).GetValue());
     };
 
     checkFormats();

@@ -51,7 +51,8 @@ private:
     bool mbOutline = true;
     std::optional<OUString> moOffset = std::nullopt;
     bool mbCollapsedLevelsAreSubtotals = false;
-    // TODO Axis
+    // tdf#122473 - import alignment and axis-based pivot area formats
+    std::optional<sal_Int32> moAxis = std::nullopt;
     std::optional<sal_uInt32> moFieldPosition = std::nullopt;
 
     std::vector<std::shared_ptr<PivotTableReference>> maReferences;

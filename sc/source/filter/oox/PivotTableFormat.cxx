@@ -12,6 +12,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <pivot/PivotTableFormats.hxx>
+#include <pivot/PivotTableFormatOutput.hxx>
 #include <dpsave.hxx>
 #include <dpobject.hxx>
 
@@ -72,6 +73,8 @@ void PivotTableFormat::importPivotArea(const oox::AttributeList& rAttribs)
     moOffset = rAttribs.getXString(XML_offset);
     mbCollapsedLevelsAreSubtotals = rAttribs.getBool(XML_collapsedLevelsAreSubtotals, false);
     moFieldPosition = rAttribs.getUnsigned(XML_fieldPosition);
+    // tdf#122473 - import alignment and axis-based pivot area formats
+    moAxis = rAttribs.getToken(XML_axis);
 }
 
 void PivotTableFormat::finalizeImport()
@@ -145,6 +148,18 @@ void PivotTableFormat::finalizeImport()
                                .nIndices = rReference->maFieldItemsIndices,
                                .bHasSubtotal = bHasSubtotal });
         }
+    }
+
+    // tdf#122473 - import alignment and axis-based pivot area formats
+    // There is no field or reference given. However, there exists an axis value.
+    // The format uses it to identify the label of the field data. Treat it as an
+    // explicit reference to the values field.
+    if (maReferences.empty() && mbLabelOnly && moAxis && *moAxis == XML_axisValues)
+    {
+        aFormat.aSelections.push_back(sc::Selection{ .bSelected = true,
+                                                     .nField = sal_Int32(sc::constDataDimension),
+                                                     .nIndices = {},
+                                                     .bHasSubtotal = false });
     }
     aFormats.add(aFormat);
 

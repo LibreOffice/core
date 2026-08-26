@@ -339,6 +339,9 @@ private:
     ApiAlignmentData    maApiData;          /// Alignment data converted to API constants.
 };
 
+// tdf#122473 - import alignment and axis-based pivot area formats
+typedef std::shared_ptr<Alignment> AlignmentRef;
+
 /** Contains all XML cell protection attributes, e.g. from a protection element. */
 struct ProtectionModel
 {
@@ -705,6 +708,8 @@ public:
     BorderRef const &   createBorder( bool bAlwaysNew = true );
     /** Creates a new empty fill object. */
     FillRef const &     createFill( bool bAlwaysNew = true );
+    /** Creates a new empty alignment object. */
+    AlignmentRef const& createAlignment(bool bAlwaysNew = true);
     /** Creates a new empty protection object. */
     ProtectionRef const & createProtection( bool bAlwaysNew = true );
 
