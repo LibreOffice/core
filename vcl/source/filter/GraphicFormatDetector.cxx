@@ -74,7 +74,7 @@ bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest
     // go through the MET test. These problems are of course not only in MET and BMP.
     // Therefore, in the case of a format check (bTest == true)  we only test *exactly* this
     // format. Everything else could have fatal consequences, for example if the user says it is
-    // a BMP file (and it is a BMP) file, and the file would go through the MET test ...
+    // a BMP file (and it is a BMP file), and the file would go through the MET test ...
 
     if (!bTest || rFormatExtension.startsWith("MET"))
     {
@@ -1347,7 +1347,7 @@ bool GraphicFormatDetector::checkSVG()
     // extended search for svg element
     if (!bIsSvg)
     {
-        // it's a xml, look for '<svg' in full file. Should not happen too
+        // it's an XML, look for '<svg' in full file. Should not happen too
         // often since the tests above will handle most cases, but can happen
         // with Svg files containing big comment headers or Svg as the host
         // language

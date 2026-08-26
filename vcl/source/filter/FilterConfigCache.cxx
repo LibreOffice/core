@@ -86,7 +86,7 @@ OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
     @return A valid object if open was successful. The access on opened
             data will be readonly. It returns NULL in case open failed.
 
-    @throws It let pass RuntimeExceptions only.
+    @throws It lets pass RuntimeExceptions only.
  */
 static Reference< XInterface > openConfig(const char* sPackage)
 {
