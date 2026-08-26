@@ -13,6 +13,8 @@ module scriptinterop {
 
 interface XSelection : XBase
 {
+    sequence<XRangeElement> getRangeElements();
+
     string getText();
 
     void replace([in] string newText);

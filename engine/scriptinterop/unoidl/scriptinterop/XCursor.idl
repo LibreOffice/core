@@ -11,15 +11,18 @@
 
 module scriptinterop {
 
-interface XParagraph : XBase
-{
-    ElementType getElementType();
+// Insertion-point cursor over the document, matching GAS's Cursor shape (getElement() gives the
+// paragraph the cursor sits in, getOffset() the character position inside that paragraph,
+// getSurroundingText() the paragraph's text, insertText() inserts at the cursor and leaves it
+// advanced past the inserted characters):
+interface XCursor: XBase {
+    XParagraph getElement();
 
-    string getText();
+    long getOffset();
 
-    sequence<XTextRun> getTextRuns();
+    string getSurroundingText();
 
-    boolean isLeftToRight();
+    void insertText([in] string text);
 };
 
 };

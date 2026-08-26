@@ -164,7 +164,7 @@ async function generate() {
             if (useSelection) {
                 return doc.getSelection().getText();
             }
-            return doc.getText();
+            return doc.getBody().getText();
         }, source === 'selection');
         if (!text || !text.trim()) {
             resultEl.classList.add('error');

@@ -35,9 +35,13 @@
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -50,11 +54,16 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <sal/types.h>
+#include <scriptinterop/ElementType.hpp>
 #include <scriptinterop/ImageOptions.hpp>
+#include <scriptinterop/XBody.hpp>
+#include <scriptinterop/XCursor.hpp>
 #include <scriptinterop/XDocument.hpp>
 #include <scriptinterop/XFootnote.hpp>
 #include <scriptinterop/XParagraph.hpp>
+#include <scriptinterop/XRangeElement.hpp>
 #include <scriptinterop/XSelection.hpp>
 #include <scriptinterop/XTextRun.hpp>
 
@@ -71,6 +80,9 @@ public:
     }
 
     css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return ranges_; }
+
+    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
+        override;
 
     OUString SAL_CALL getText() override
     {
@@ -193,6 +205,21 @@ public:
 
     css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return content_; }
 
+    scriptinterop::ElementType getElementType() override {
+        css::uno::Reference<css::beans::XPropertySet> const props(content_, css::uno::UNO_QUERY);
+        if (props.is()) {
+            auto const info(props->getPropertySetInfo());
+            if (info.is() && info->hasPropertyByName(u"NumberingIsNumber"_ustr)) {
+                bool numbered = false;
+                props->getPropertyValue(u"NumberingIsNumber"_ustr) >>= numbered;
+                if (numbered) {
+                    return scriptinterop::ElementType_LIST_ITEM;
+                }
+            }
+        }
+        return scriptinterop::ElementType_PARAGRAPH;
+    }
+
     OUString SAL_CALL getText() override
     {
         css::uno::Reference<css::text::XTextRange> const range(content_, css::uno::UNO_QUERY);
@@ -257,6 +284,197 @@ cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> enumeratePara
     return cpo::uno::Sequence(v.data(), v.size());
 }
 
+// Walk the containing XText's paragraphs and return the one whose extent covers `marker`s start;
+// null if the walk finds no paragraph or if the ranges live in different Text hosts:
+css::uno::Reference<css::text::XTextContent> findContainingParagraph(
+    css::uno::Reference<css::text::XTextRange> const & marker)
+{
+    if (!marker.is()) {
+        return {};
+    }
+    auto const containingText = marker->getText();
+    if (!containingText.is()) {
+        return {};
+    }
+    css::uno::Reference<css::text::XTextRangeCompare> const cmp(
+        containingText, css::uno::UNO_QUERY);
+    if (!cmp.is()) {
+        return {};
+    }
+    css::uno::Reference<css::container::XEnumerationAccess> const ea(
+        containingText, css::uno::UNO_QUERY);
+    if (!ea.is()) {
+        return {};
+    }
+    auto const en = ea->createEnumeration();
+    while (en.is() && en->hasMoreElements()) {
+        css::uno::Reference<css::text::XTextContent> xtc;
+        en->nextElement() >>= xtc;
+        if (!xtc.is()) {
+            continue;
+        }
+        css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
+        if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+            continue;
+        }
+        css::uno::Reference<css::text::XTextRange> const paraRange(xtc, css::uno::UNO_QUERY);
+        if (!paraRange.is()) {
+            continue;
+        }
+        try {
+            if (cmp->compareRegionStarts(marker->getStart(), paraRange->getStart()) >= 0
+                && cmp->compareRegionStarts(marker->getStart(), paraRange->getEnd()) <= 0)
+            {
+                return xtc;
+            }
+        } catch (css::lang::IllegalArgumentException const & e) {
+            SAL_WARN(
+                "scriptinterop",
+                "findContainingParagraph: compareRegionStarts failed: " << e.Message);
+        }
+    }
+    return {};
+}
+
+class RangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
+public:
+    explicit RangeElementImpl(css::uno::Reference<css::text::XTextRange> const & range):
+        range_(range), paragraph_(findContainingParagraph(range))
+    {
+        rangeLen_ = range.is() ? range->getString().getLength() : sal_Int32(0);
+        if (!paragraph_.is()) {
+            return;
+        }
+        css::uno::Reference<css::text::XTextRange> const paraRange(
+            paragraph_, css::uno::UNO_QUERY);
+        if (!paraRange.is()) {
+            return;
+        }
+        paragraphLen_ = paraRange->getString().getLength();
+        auto const host = paraRange->getText();
+        if (!host.is()) {
+            return;
+        }
+        auto const probe = host->createTextCursorByRange(paraRange->getStart());
+        if (!probe.is()) {
+            return;
+        }
+        probe->gotoRange(range->getStart(), true);
+        startOffset_ = probe->getString().getLength();
+    }
+
+    css::uno::Reference<css::uno::XInterface> getuno() override { return range_; }
+
+    css::uno::Reference<scriptinterop::XParagraph> getElement() override {
+        return paragraph_.is() ? new ParagraphImpl(paragraph_) : nullptr;
+    }
+
+    sal_Int32 getEndOffsetInclusive() override {
+        return rangeLen_ == 0 ? startOffset_ : startOffset_ + rangeLen_ - 1;
+    }
+
+    sal_Int32 getStartOffset() override { return startOffset_; }
+
+    bool isPartial() override {
+        if (!paragraph_.is()) {
+            return true;
+        }
+        return startOffset_ != 0 || startOffset_ + rangeLen_ != paragraphLen_;
+    }
+
+private:
+    css::uno::Reference<css::text::XTextRange> range_;
+    css::uno::Reference<css::text::XTextContent> paragraph_;
+    sal_Int32 startOffset_ = 0;
+    sal_Int32 rangeLen_ = 0;
+    sal_Int32 paragraphLen_ = 0;
+};
+
+cpo::uno::Sequence<css::uno::Reference<scriptinterop::XRangeElement>>
+SelectionImpl::getRangeElements() {
+    std::vector<css::uno::Reference<scriptinterop::XRangeElement>> v;
+    if (ranges_.is()) {
+        auto const n = ranges_->getCount();
+        for (sal_Int32 i = 0; i != n; ++i) {
+            css::uno::Reference<css::text::XTextRange> range;
+            ranges_->getByIndex(i) >>= range;
+            if (range.is()) {
+                v.emplace_back(new RangeElementImpl(range));
+            }
+        }
+    }
+    return cpo::uno::Sequence(v.data(), v.size());
+}
+
+class CursorImpl: public cppu::WeakImplHelper<scriptinterop::XCursor> {
+public:
+    explicit CursorImpl(css::uno::Reference<css::frame::XModel> const & model): model_(model) {}
+
+    css::uno::Reference<css::uno::XInterface> getuno() override { return viewCursor(); }
+
+    css::uno::Reference<scriptinterop::XParagraph> getElement() override {
+        auto const c = viewCursor();
+        if (!c.is()) {
+            return {};
+        }
+        auto const para = findContainingParagraph(c);
+        return para.is() ? new ParagraphImpl(para) : nullptr;
+    }
+
+    sal_Int32 getOffset() override {
+        auto const c = viewCursor();
+        auto const para = findContainingParagraph(c);
+        if (!para.is()) {
+            return 0;
+        }
+        css::uno::Reference<css::text::XTextRange> const paraRange(para, css::uno::UNO_QUERY);
+        if (!paraRange.is()) {
+            return 0;
+        }
+        auto const host = paraRange->getText();
+        if (!host.is()) {
+            return 0;
+        }
+        auto const probe = host->createTextCursorByRange(paraRange->getStart());
+        if (!probe.is()) {
+            return 0;
+        }
+        probe->gotoRange(c->getStart(), true);
+        return probe->getString().getLength();
+    }
+
+    OUString getSurroundingText() override {
+        auto const c = viewCursor();
+        auto const para = findContainingParagraph(c);
+        if (!para.is()) {
+            return u""_ustr;
+        }
+        css::uno::Reference<css::text::XTextRange> const range(para, css::uno::UNO_QUERY);
+        return range.is() ? range->getString() : u""_ustr;
+    }
+
+    void insertText(OUString const & text) override {
+        auto const c = viewCursor();
+        if (!c.is()) {
+            return;
+        }
+        auto const host = c->getText();
+        if (!host.is()) {
+            return;
+        }
+        host->insertString(c->getStart(), text, false);
+    }
+
+private:
+    css::uno::Reference<css::text::XTextViewCursor> viewCursor() {
+        css::uno::Reference<css::text::XTextViewCursorSupplier> const sup(
+            model_->getCurrentController(), css::uno::UNO_QUERY);
+        return sup.is() ? sup->getViewCursor() : css::uno::Reference<css::text::XTextViewCursor>();
+    }
+
+    css::uno::Reference<css::frame::XModel> model_;
+};
+
 class FootnoteImpl: public cppu::WeakImplHelper<scriptinterop::XFootnote> {
 public:
     explicit FootnoteImpl(css::uno::Reference<css::text::XFootnote> const & footnote):
@@ -271,6 +489,22 @@ public:
 
 private:
     css::uno::Reference<css::text::XFootnote> footnote_;
+};
+
+class BodyImpl: public cppu::WeakImplHelper<scriptinterop::XBody> {
+public:
+    explicit BodyImpl(css::uno::Reference<css::text::XText> const & text): text_(text) {}
+
+    css::uno::Reference<css::uno::XInterface> getuno() override { return text_; }
+
+    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> getChildren() override {
+        return enumerateParagraphs(text_);
+    }
+
+    OUString getText() override { return text_.is() ? text_->getString() : u""_ustr; }
+
+private:
+    css::uno::Reference<css::text::XText> text_;
 };
 
 class DocumentImpl : public cppu::WeakImplHelper<scriptinterop::XDocument>
@@ -296,18 +530,15 @@ public:
         return new SelectionImpl(ranges);
     }
 
-    OUString SAL_CALL getText() override
+    css::uno::Reference<scriptinterop::XBody> getBody() override
     {
         css::uno::Reference<css::text::XTextDocument> const doc(model_, css::uno::UNO_QUERY_THROW);
-        auto const text = doc->getText();
-        return text.is() ? text->getString() : OUString();
+        return new BodyImpl(doc->getText());
     }
 
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>>
-        SAL_CALL getParagraphs() override
+    css::uno::Reference<scriptinterop::XCursor> getCursor() override
     {
-        css::uno::Reference<css::text::XTextDocument> const doc(model_, css::uno::UNO_QUERY_THROW);
-        return enumerateParagraphs(doc->getText());
+        return new CursorImpl(model_);
     }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XFootnote>> getFootnotes() override {

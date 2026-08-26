@@ -51,7 +51,7 @@ function apply() {
     const doc = cool.getActiveDocument();
     doc.uno.getText().createTextCursor().setString(greeting);
     if (colorize) {
-      for (const para of doc.getParagraphs()) {
+      for (const para of doc.getBody().getChildren()) {
         const color = Math.floor(Math.random() * 0xffffff);
         try {
           para.uno.setPropertyValue('CharColor', color);
@@ -83,7 +83,7 @@ async function pickAndColorize() {
   el.appendChild(document.createTextNode('applying ' + picked.name + ' (' + picked.color + ')...'));
   const rgb = parseInt(picked.color.slice(1), 16); // color value is "#rrggbb"
   await cool.callRemote(function (rgb) {
-    for (const para of cool.getActiveDocument().getParagraphs()) {
+    for (const para of cool.getActiveDocument().getBody().getChildren()) {
       try {
         para.uno.setPropertyValue('CharColor', rgb);
       } catch (e) {
@@ -100,7 +100,7 @@ function readNthParagraph() {
   resultEl.classList.remove('error');
   resultEl.textContent = '...';
   cool.callRemote(function (n) {
-    return cool.getActiveDocument().getParagraphs()[n - 1].getText();
+    return cool.getActiveDocument().getBody().getChildren()[n - 1].getText();
   }, n).then(function (text) {
     resultEl.textContent = text;
   }).catch(function (err) {

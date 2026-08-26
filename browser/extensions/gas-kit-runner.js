@@ -52,39 +52,44 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
         }
 
         function selectionFacade() {
-            const doc = activeDoc();
-            const sel = doc.getSelection();
+            const sel = activeDoc().getSelection();
             if (!sel) return null;
-            const txt = sel.getText();
-            if (!txt) return null;
-            const el = textFacade(sel, txt);
-            // Report the range as partial so filters looking for a subrange (Docs-to-Markdown etc.)
-            // accept it:
-            const range = {
-                isPartial: function() { return true; },
-                getElement: function() { return el; },
-                getStartOffset: function() { return 0; },
-                getEndOffsetInclusive: function() { return txt.length - 1; }
-            };
+            const ranges = sel.getRangeElements();
+            if (!ranges.length) return null;
+            const wrapped = [];
+            for (let i = 0; i < ranges.length; ++i) {
+                const r = ranges[i];
+                const para = r.getElement();
+                const el = para
+                    ? paragraphElement(para, i)
+                    : textFacade(sel, sel.getText());
+                wrapped.push({
+                    isPartial: function() { return r.isPartial(); },
+                    getElement: function() { return el; },
+                    getStartOffset: function() { return r.getStartOffset(); },
+                    getEndOffsetInclusive: function() { return r.getEndOffsetInclusive(); }
+                });
+            }
             return {
-                getSelectedElements: function() { return [range]; },
-                getRangeElements: function() { return [range]; }
+                getSelectedElements: function() { return wrapped; },
+                getRangeElements: function() { return wrapped; }
             };
         }
 
         function cursorFacade() {
-            const doc = activeDoc();
-            const sel = doc.getSelection();
-            // XTextViewCursor is not exposed by scriptinterop, so approximate from the selection:
-            const selText = sel ? sel.getText() : '';
+            const xc = activeDoc().getCursor();
             return {
-                getElement: function() { return { getType: function() { return 'TEXT'; } }; },
-                getOffset: function() { return 0; },
-                getSurroundingText: function() {
-                    return { getText: function() { return selText; } };
+                getElement: function() {
+                    const p = xc.getElement();
+                    return p ? paragraphElement(p, 0) : { getType: function() { return 'TEXT'; } };
                 },
-                getSurroundingTextOffset: function() { return 0; },
-                insertText: function(t) { if (sel) sel.replace(String(t)); }
+                getOffset: function() { return xc.getOffset(); },
+                getSurroundingText: function() {
+                    const t = xc.getSurroundingText();
+                    return { getText: function() { return t; } };
+                },
+                getSurroundingTextOffset: function() { return xc.getOffset(); },
+                insertText: function(t) { xc.insertText(String(t)); }
             };
         }
 
@@ -128,6 +133,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
         // Placeholder used by appendParagraph/appendListItem when there is no real UNO paragraph
         // yet:
         const emptyPara = {
+            getElementType: function() { return 'PARAGRAPH'; },
             getText: function() { return ''; },
             getTextRuns: function() { return []; },
             isLeftToRight: function() { return true; }
@@ -203,8 +209,17 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                     return url === '' ? null : url;
                 }
             };
+            // Only pass through names GAS's ElementType actually defines; anything scriptinterop
+            // grows later that GAS does not know (including the UNSUPPORTED fallback) collapses to
+            // PARAGRAPH so a .gs script comparing with ElementType.PARAGRAPH keeps working:
+            const gasKnown = {
+                PARAGRAPH: true, LIST_ITEM: true, TABLE: true, INLINE_IMAGE: true,
+                PAGE_BREAK: true, HORIZONTAL_RULE: true
+            };
+            const rawType = String(paragraph.getElementType());
+            const gasType = gasKnown[rawType] ? rawType : 'PARAGRAPH';
             const paraEl = {
-                getType: function() { return 'PARAGRAPH'; },
+                getType: function() { return gasType; },
                 getText: function() { return text; },
                 asText: function() { return textEl; },
                 editAsText: function() { return textEl; },
@@ -264,11 +279,11 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
         }
 
         function bodyFacade() {
-            const doc = activeDoc();
+            const xbody = activeDoc().getBody();
             let cached = null;
             function paras() {
                 if (!cached) {
-                    const list = doc.getParagraphs();
+                    const list = xbody.getChildren();
                     cached = [];
                     for (let i = 0; i < list.length; ++i) {
                         cached.push(paragraphElement(list[i], i));
@@ -278,11 +293,11 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             }
             const body = {
                 getType: function() { return 'BODY_SECTION'; },
-                getText: function() { return doc.getText(); },
+                getText: function() { return xbody.getText(); },
                 getNumChildren: function() { return paras().length; },
                 getChild: function(n) { return paras()[n]; },
-                editAsText: function() { return textFacade(null, doc.getText()); },
-                asText: function() { return textFacade(null, doc.getText()); },
+                editAsText: function() { return textFacade(null, xbody.getText()); },
+                asText: function() { return textFacade(null, xbody.getText()); },
                 copy: function() { return body; },
                 appendParagraph: function() { return paragraphElement(emptyPara, paras().length); },
                 appendListItem: function() { return paragraphElement(emptyPara, paras().length); },

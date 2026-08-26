@@ -11,15 +11,16 @@
 
 module scriptinterop {
 
-interface XParagraph : XBase
-{
-    ElementType getElementType();
-
-    string getText();
-
-    sequence<XTextRun> getTextRuns();
-
-    boolean isLeftToRight();
+// Discriminator for a body-level element, matching the Google Apps Script Document ElementType
+// enum names.  Grow with additional values as the implementation learns to recognise them:
+enum ElementType {
+    PARAGRAPH,
+    LIST_ITEM,
+    TABLE,
+    INLINE_IMAGE,
+    PAGE_BREAK,
+    HORIZONTAL_RULE,
+    UNSUPPORTED
 };
 
 };

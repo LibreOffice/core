@@ -11,15 +11,16 @@
 
 module scriptinterop {
 
-interface XParagraph : XBase
-{
-    ElementType getElementType();
+// One selection segment, tied back to the paragraph it lives in.  Offsets are character positions
+// within that paragraph's own getText(), consistent with GAS's Selection.getRangeElements() model:
+interface XRangeElement: XBase {
+    XParagraph getElement();
 
-    string getText();
+    long getEndOffsetInclusive();
 
-    sequence<XTextRun> getTextRuns();
+    long getStartOffset();
 
-    boolean isLeftToRight();
+    boolean isPartial();
 };
 
 };

@@ -15,9 +15,9 @@ interface XDocument : XBase
 {
     XSelection getSelection();
 
-    string getText();
+    XBody getBody();
 
-    sequence<XParagraph> getParagraphs();
+    XCursor getCursor();
 
     sequence<XFootnote> getFootnotes();
 
