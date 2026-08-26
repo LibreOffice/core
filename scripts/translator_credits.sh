@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # probably obsoletes extract_translator.sh
 # Historical list of translators was collected with the following command in browser/po:

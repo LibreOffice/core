@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
+
 #
 # './g log [-p] file.cxx' to see the entire 'git log [-p] --follow file.cxx'
 # across the engine subtree merge (normal 'git log [-p] --follow' just stops

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Run one Python-macro test case against a Collabora Online container image.
 #
 # Usage: run-case.sh <image> <label> [--install-pyuno]

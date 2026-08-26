@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 #
 # get a flamegraph of where the watchdog is called from to create a
 # visualization of where interactive responsiveness is poor

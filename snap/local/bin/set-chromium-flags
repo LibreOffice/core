@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # command-chain wrapper that prepares QTWEBENGINE_CHROMIUM_FLAGS before
 # coda-qt runs. Disables Chromium's inner sandbox (snap is already a

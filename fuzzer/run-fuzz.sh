@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Run libFuzzer for coolwsd targets, or merge findings back into the corpus.
 #
 # Usage: fuzzer/run-fuzz.sh <target> [libfuzzer options...]

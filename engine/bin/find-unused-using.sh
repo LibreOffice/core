@@ -3,7 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-#!/bin/bash
+#!/usr/bin/env bash
 
 for ns in accessibility basegfx chart com css cppu comphelper connectivity formula dbtools editeng rtl sfx2 svt osl oox sax_fastparser sal sd ucbhelper utl vcl xmloff; do
     echo "Searching for namespace: $ns";

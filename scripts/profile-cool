@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 #
 # get a flamegraph of an online session
 # a) sends SIGUSR1 to get kitbrokers to dump info to logs

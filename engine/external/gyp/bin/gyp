@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Run gyp with a chosen python and gyp's own pylib. build.sh runs gyp by name, so
 # this sits on PATH as "gyp". GYPDIR names the unpacked gyp directory. PYEXE names
 # the python to use and defaults to python3. When cygpath is present the paths are

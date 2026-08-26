@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Replay a git history-editing subcommand (cherry-pick, revert, ...) from the old core history onto
 # the subtree-merged online repo, rewriting all paths under engine/.

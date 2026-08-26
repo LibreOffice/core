@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 find browser/src/ -name "*.js" -exec grep ': function' \{\} \; | sed -e 's/:.*//' -e 's/^[\t ]*//' -e 's/[\t ]*$//' | grep -v " " | sort | uniq | \
     while read FUNC ; do

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # usage:
 # make -s cmd cmd='${SRCDIR}/solenv/bin/generate-flatpak-manifest.sh' > external-tarballs.json

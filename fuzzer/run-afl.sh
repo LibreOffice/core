@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Run AFL++ fuzzing for coolwsd targets, or update their corpus.
 #
 # Usage: fuzzer/run-afl.sh <target> [afl-fuzz options...]

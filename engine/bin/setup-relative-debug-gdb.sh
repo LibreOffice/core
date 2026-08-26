@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Install (or print) a gdb hook for builds configured with relative debug
 # paths (--enable-relative-debug-paths, which --enable-ccache-shared turns

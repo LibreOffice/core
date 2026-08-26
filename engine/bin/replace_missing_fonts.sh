@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 declare -A replacements
 replacements["Agency FB"]="Noto Sans"

@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 #
 # get a memory profile flamegraph of a kit session
 # 1. to start memory profiling
