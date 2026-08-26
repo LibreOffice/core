@@ -325,7 +325,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     // most widgets when drawn on transparent background are drawn properly (and the result
     // is in premultiplied alpha format), some such as "Edit" (used by ControlType::Editbox)
     // keep the alpha channel as transparent. Therefore the alpha is actually computed
-    // from the difference in the premultiplied red channels when drawn one black and on white.
+    // from the difference in the premultiplied red channels when drawn on black and on white.
     // Alpha is computed as "alpha = 1.0 - abs(black.red - white.red)".
     // I doubt this can be done using Skia, so do it manually here. Fortunately
     // the bitmaps should be fairly small and are cached.

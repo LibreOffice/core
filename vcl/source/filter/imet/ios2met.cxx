@@ -1443,7 +1443,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
                 break;
             }
             case  4:   // SQUARE
-            case  8: { // SOLIDSUARE
+            case  8: { // SOLIDSQUARE
                 tools::Polygon aPoly(4);
                 aPoly.SetPoint(Point(x+4,y+4),0);
                 aPoly.SetPoint(Point(x+4,y-4),1);
