@@ -22,6 +22,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignOnSlide" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignCenter" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight" toolbar:visible="false"/>
@@ -29,7 +31,6 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignOnSlide" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
