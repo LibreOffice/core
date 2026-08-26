@@ -4313,6 +4313,13 @@ void lokit_main(
             allowedPaths.emplace_back(pathFromFileURL(userdir_url),
                                       Landlock::Access::ReadOnlyDir);
 
+            // Landlock binds the calling thread and its children, and succeeds either
+            // way, so a sibling thread would stay outside the sandbox unremarked.
+            const int threads = getCurrentThreadCount();
+            if (threads != 1)
+                LOG_ERR("kit has " << threads << " threads as landlock is applied, and only "
+                        "the calling one is restricted");
+
             if (Landlock::lock(allowedPaths))
             {
                 LOG_INF("Landlock jail successfully created.");
