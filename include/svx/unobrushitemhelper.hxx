@@ -26,13 +26,13 @@ class SfxItemSet;
 
 // Helper function definitions for UNO API fallbacks to replace SvxBrushItem. The
 // idea is to have fallbacks to create a SvxBrushItem if needed for backwards compatibility
-// if needed from the SfxItemSet and vice versa. This is used in cases where e.g. UNO API
+// from the SfxItemSet and vice versa. This is used in cases where e.g. UNO API
 // accesses to slots in the SvxBrushItem are used (see cases in SvxBrushItem::QueryValue
 // and SvxBrushItem::PutValue as MID_BACK_COLOR and similar).
 // To make this work, a cycle of creating a SvxBrushItem from a SfxItemSet, changing a value
 // using PutValue, putting back to the SfxItemSet should create the *same* SvxBrushItem
 // the next time this will be created using getSvxBrushItemFromSourceSet. For more details,
-// see comments at the implementations of that two methods.
+// see comments at the implementations of those two methods.
 
 // Set the equivalent in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST] in the given
 // SfxItemSet to create the same FillStyle as is expressed by the given SvxBrushItem.

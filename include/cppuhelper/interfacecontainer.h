@@ -124,7 +124,7 @@ private:
 
 /**
   A container of interfaces. To access the elements use an iterator.
-  This implementation is thread save.
+  This implementation is thread safe.
 
   @see OInterfaceIteratorHelper
  */

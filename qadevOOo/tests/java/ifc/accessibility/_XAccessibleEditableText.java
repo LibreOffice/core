@@ -42,7 +42,7 @@ import com.sun.star.beans.PropertyValue;
  *  <li> <code>'XAccessibleEditableText.hasAttr'</code>
  *  (of type <code>Boolean</code>):
  *   Indicates whether or not the text has changeable attributes.
- *   E.g. text within writer document have attributes which can
+ *   E.g. text within writer document has attributes which can
  *   be changed, while the text within edit field has fixed
  *   attributes. <p>
  *   If the relation is <code>false</code> then the component
@@ -62,7 +62,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
 
     /**
      * Indicates whether or not the text has changeable attributes.
-     * E.g. text within writer document have attributes which can
+     * E.g. text within writer document has attributes which can
      * be changed, while the text within edit field has fixed
      * attributes.
      */
@@ -475,7 +475,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             res &= (changeableAttr && locRes)
                 || (!changeableAttr && !locRes);
             if (changeableAttr) {
-                log.print("checking that new attributes was set...");
+                log.print("checking that new attributes were set...");
                 PropertyValue[] newAttrs = oObj.getCharacterAttributes(0, new String[]{""});
                 locRes = ValueComparer.equalValue(attrs, newAttrs);
                 log.println(locRes);
