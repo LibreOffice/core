@@ -1149,14 +1149,80 @@ def add_static_dependencies(files_by_package, externalstaticlink, with_path):
 def add_merge_module(files_by_package, install_script):
     """Add any MSI merge modules as dummy files to root package."""
 
+    license_spdx_id = None
     for msm in install_script["MergeModule"]:
         msm_file = install_script["MergeModule"][msm]["Name"]
-        abspath = os.environ["MSM_PATH"] + msm_file
+        abspath = os.environ.get("MSM_PATH") + msm_file
         files_by_package["gid_Module_Root"].append({
             "flags": FileFlags.ARCHIVE | FileFlags.STRUCTURED,
             "instpath": msm_file, "abspath": abspath,
-            "external": "visual_c\\+\\+_redistributable",
+            "external": msm_file,
             "sha512": get_sha512(abspath), "deps": [], "sysdeps": []})
+
+        # also add package component and license - this is a very special case
+        vcver = os.environ.get("VCVER")
+        if vcver.startswith("16."):
+            vcyear = 2019
+        elif vcver.startswith("17."):
+            vcyear = 2022
+        elif vcver.startswith("18."):
+            vcyear = 2026
+        else:
+            raise Exception(f"Unknown Visual Studio version: {vcver}")
+
+        pkg_spdx_id = make_spdx_id(f"SPDXRef-{msm_file}")
+        pkg_element = {
+            "type": "software_Package",
+            "spdxId": pkg_spdx_id,
+            "originatedBy": ["https://microsoft.com"],
+            "creationInfo": "_:creationinfo",
+            "name": msm_file,
+            "software_homePage": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+            "externalIdentifiers": [{
+                "externalIdentifierType": "cpe23",
+                "identifier": f"cpe:2.3:a:microsoft:visual_c\\+\\+:{vcyear}:*:*:*:redistributable_package:*:*:*",
+            }]
+        }
+        msm_elements = [pkg_element]
+
+        # hack: all MSM end up in same MSI, so add license definition only to first one
+        if license_spdx_id is None:
+            custom_license_spdx_id = make_spdx_id("License-msvcrt-custom")
+            license_spdx_id = make_spdx_id("License-msvcrt")
+            license_cache["License-msvcrt"] = ([
+                {
+                    "type": "simplelicensing_LicenseExpression",
+                    "spdxId": license_spdx_id,
+                    "creationInfo": "_:creationInfo",
+                    "simplelicensing_licenseExpression": f"LicenseRef-Microsoft-Visual-Studio-{vcyear}-Distributable-Code",
+                    "simplelicensing_customIdToUri": [{
+                        "type": "DictionaryEntry",
+                        "key": f"LicenseRef-Microsoft-Visual-Studio-{vcyear}-Distributable-Code",
+                        "value": custom_license_spdx_id
+                    }]
+                },
+                {
+                    "type": "expandedlicensing_CustomLicense",
+                    "spdxId": custom_license_spdx_id,
+                    "creationInfo": "_:creationInfo",
+                    "name": f"Microsoft Visual Studio {vcyear} License Terms, Distributable Code",
+                    "expandedlicensing_licenseText": "...verbatim terms...",
+                    "expandedlicensing_isOsiApproved": False,
+                    "expandedlicensing_isFsfLibre": False,
+                    "expandedlicensing_seeAlso": ["https://visualstudio.microsoft.com/license-terms/"]
+                }])
+
+        msm_elements.append({
+            "type": "Relationship",
+            "spdxId": next_rel_id(),
+            "creationInfo": "_:creationinfo",
+            "from": pkg_spdx_id,
+            "relationshipType": "hasDeclaredLicense",
+            "to": [license_spdx_id]
+        })
+
+        sbom_externals[msm_file] = (msm_elements, "License-msvcrt", "License-msvcrt")
+
 
 def check_files(*fileses):
     """Sanity check for duplicates."""
