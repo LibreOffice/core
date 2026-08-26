@@ -785,6 +785,14 @@ gb_LinkTarget__use_jawt :=
 
 endif # ENABLE_JAVA
 
+# only used on non-x86
+ifneq ($(filter INTEL X86_64,$(CPUNAME)),)
+
+gb_LinkTarget__use_libatomic_ops :=
+gb_ExternalProject__use_libatomic_ops :=
+
+else # CPUNAME
+
 ifneq ($(SYSTEM_LIBATOMIC_OPS),)
 
 define gb_LinkTarget__use_libatomic_ops
@@ -822,6 +830,7 @@ $(call gb_ExternalProject_use_external_project,$(1),libatomic_ops,libatomic_ops)
 endef
 
 endif # SYSTEM_LIBATOMIC_OPS
+endif # CPUNAME
 
 
 ifneq ($(SYSTEM_LIBEXTTEXTCAT),)
