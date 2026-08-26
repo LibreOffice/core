@@ -65,9 +65,7 @@ public class AccessibleMenuSeparator extends TestCase {
     private static XMultiServiceFactory msf = null;
 
     /**
-     * Finds first accessible component with role <code>SEPARATOR</code>
-     * and implementation name <code>AccessibleMenuSeparator</code>
-     * walking through the accessible component tree of a document.
+     * Finds accessible menu separator.
      */
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
