@@ -1237,6 +1237,130 @@ def check_files(*fileses):
                 allfiles.add(instpath)
 
 
+def sbom_add_files(files_by_package):
+    """Add all files to the SBOM graphs."""
+
+    for package in files_by_package:
+        sbom = next(sbom_data[key] for key in sbom_data if sbom_data[key][0] == package)
+        graph = sbom[3]["@graph"]
+        root_spdx_id = sbom[2]
+        package_sysdeps = set()
+        package_externals = {}
+        package_licenses = set()
+
+        def add_license(license):
+            if not(license in package_licenses):
+                graph.extend(license_cache[license])
+                package_licenses.add(license)
+
+        add_license(root_license)
+
+        def add_external(external):
+            if external is None:
+                parent = root_spdx_id
+            else:
+                if external in package_externals:
+                    parent = package_externals[external]
+                else:
+                    parent = sbom_externals[external][0][0]["spdxId"]
+                    graph.extend(sbom_externals[external][0])
+                    graph.append({
+                        "type": "Relationship",
+                        "spdxId": next_rel_id(),
+                        "creationInfo": "_:creationinfo",
+                        "from": root_spdx_id,
+                        "relationshipType": "contains",
+                        "to": [parent]
+                    })
+                    package_externals[external] = parent
+
+                    add_license(sbom_externals[external][1])
+                    add_license(sbom_externals[external][2])
+            return parent
+
+        for file in files_by_package[package]:
+            file_spdx_id = make_spdx_id(f"File-{file["instpath"]}")
+            parent = add_external(file["external"])
+
+            def get_flags(flags):
+                result = []
+                if flags & FileFlags.EXECUTABLE:
+                    result.append("executable")
+                if flags & FileFlags.ARCHIVE:
+                    result.append("archive")
+                if flags & FileFlags.STRUCTURED:
+                    result.append("container")
+                return result
+            flags = get_flags(file["flags"])
+
+            graph.append({
+                "type": "software_File",
+                "spdxId": file_spdx_id,
+                "name": file["instpath"],
+                "verifiedUsing": [{
+                    "type": "Hash",
+                    "algorithm": "sha512",
+                    "hashValue": file["sha512"],
+                    "software_additionalPurpose": flags,
+                    "comment": "software_additionalPurpose field is used to indicate the properties of BSI TR-03183-2"
+                    }]
+                })
+            graph.append({
+                    "type": "Relationship",
+                    "from": parent,
+                    "relationshipType": "hasDistributionArtifact",
+                    "to": [file_spdx_id],
+                    # "incomplete" because filter_files throws everything without a flag away
+                    "completeness": "incomplete"
+                })
+
+            # for dependencies, hopefully it will work if it's in another package
+            if "deps" in file:
+                deps = [make_spdx_id(f"File-{dep}") for dep in file["deps"]]
+                if len(deps) != 0:
+                    graph.append({
+                            "type": "Relationship",
+                            "from": file_spdx_id,
+                            "relationshipType": "dependsOn",
+                            "to": deps,
+                            "completeness": "noAssertion"
+                        })
+
+            if "externaldeps" in file:
+                externaldeps = [add_external(dep) for dep in file["externaldeps"]]
+                graph.append({
+                        "type": "Relationship",
+                        "from": file_spdx_id,
+                        "relationshipType": "contains",
+                        "software_softwareLinkage": "static",
+                        "to": externaldeps,
+                        "completeness": "noAssertion"
+                    })
+
+            if "sysdeps" in file:
+                sysdeps = []
+                for dep in file["sysdeps"]:
+                    sysdep_spdx_id = make_spdx_id(f"Sysdep-{dep}")
+                    if not(dep in package_sysdeps):
+                        graph.append({
+                                "type": "software_Package",
+                                "spdxId": sysdep_spdx_id,
+                                "creationInfo": "_:creationinfo",
+                                "name": dep,
+                                "comment": "Supplied by the operating system."
+                            })
+                        package_sysdeps.add(dep)
+                    sysdeps.append(sysdep_spdx_id)
+                if len(sysdeps) != 0:
+                    graph.append({
+                            "type": "Relationship",
+                            "from": file_spdx_id,
+                            "relationshipType": "dependsOn",
+                            "to": sysdeps,
+                            "completeness": "noAssertion"
+                        })
+
+
 def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
         externalstaticfile, externalpackagestaticfile, product, filelistdirs,
         files_extra_deps = None):
@@ -1292,8 +1416,11 @@ if __name__ == "__main__":
                 productname_sdk, filelistdirs_sdk, files_product)
 
             check_files(files_product, files_sdk)
+            sbom_add_files(files_product)
+            sbom_add_files(files_sdk)
         else:
             check_files(files_product)
+            sbom_add_files(files_product)
 
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
