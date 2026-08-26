@@ -69,6 +69,9 @@ gb_MSBUILD_CONFIG_AND_PLATFORM := \
 # Each msbuild call gets its own worker processes, which exit when it does.
 export MSBUILDDISABLENODEREUSE := 1
 
+# msbuild's librarian and linker tasks log every file they open, into a .tlog beside the objects.
+gb_MSBUILD_DEPENDENCY_TRACKING := $(if $(gb_FULLDEPS),,/p:TrackFileAccess=false)
+
 gb_CONFIGURE_PLATFORMS := \
 	$(if $(and $(filter i686-pc-cygwin,$(HOST_PLATFORM)),$(filter x86_64-pc-cygwin,$(BUILD_PLATFORM))), \
 		--build=$(HOST_PLATFORM),--build=$(BUILD_PLATFORM)) --host=$(HOST_PLATFORM)
