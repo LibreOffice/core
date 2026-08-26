@@ -2516,6 +2516,52 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16080_layoutShapesStayOnTheirLa
                 "val", u"0000FF");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16080_masterKeepsWhatItsLayoutsShare)
+{
+    // Given a deck of one master that draws a rule of its own across the top of the slide, in
+    // segments of colour, and seven layouts that draw nothing:
+    createSdImpressDoc("pptx/tdf157740.pptx");
+    saveAndReload(TestFilter::PPTX);
+
+    // The rule is on the slide master, so PowerPoint edits it once for every layout. The import
+    // gives each of the seven Impress master pages a copy, and the master used to get none.
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMaster,
+                "/p:sldMaster/p:cSld/p:spTree/p:grpSp[p:nvGrpSpPr/p:cNvPr/@name='Group 1']", 1);
+
+    // It moved there rather than being written seven more times: a layout holds the three
+    // placeholders it inherits and nothing else.
+    xmlDocUniquePtr pLayout = parseExportedLayoutNamed(u"Title, Content over Content");
+    static constexpr OString aLayoutTree("/p:sldLayout/p:cSld/p:spTree"_ostr);
+    assertXPath(pLayout, aLayoutTree + "/*[not(self::p:nvGrpSpPr) and not(self::p:grpSpPr)]", 3);
+    assertXPath(pLayout, aLayoutTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph", 3);
+
+    // And the slide still shows the rule, wherever it is written
+    utl::TempFileNamed aPng;
+    aPng.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(1920)),
+        comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(1080))
+    };
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue(u"URL"_ustr, aPng.GetURL()),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
+    };
+    auto xExporter = drawing::GraphicExportFilter::create(getComponentContext());
+    xExporter->setSourceDocument(getPage(0).queryThrow<lang::XComponent>());
+    xExporter->filter(aDescriptor);
+
+    SvFileStream aStream(aPng.GetURL(), StreamMode::READ);
+    Bitmap aSlide = vcl::PngImageReader(aStream).read();
+    CPPUNIT_ASSERT_EQUAL(Size(1920, 1080), aSlide.GetSizePixel());
+    // 90EBCD is accent5 of the deck's theme, the fill of the rule's second segment
+    CPPUNIT_ASSERT_EQUAL(Color(0x90EBCD), aSlide.GetPixelColor(200, 5));
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16082_layoutKeepsSubtitle)
 {
     // Given a deck whose Title Slide layout carries a subtitle placeholder:

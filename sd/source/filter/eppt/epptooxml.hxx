@@ -144,6 +144,17 @@ private:
 
     void FindEquivalentMasterPages();
     sal_uInt32 GetEquivalentMasterPage(sal_uInt32 nMasterPage);
+    /** How many of a page's leading shapes belong to the slide master of its group
+
+        A PPTX master and one of its layouts collapse onto one Impress master page, so for an
+        imported deck the leading shapes every page of a group shares are the ones from the master
+        they share. An ODF deck has no such master, and moving them is then a choice: it paints
+        the same, and the slide master holds the shape once for all its layouts.
+
+        @param nMasterPage Any master page, in a group or not
+        @returns How many leading shapes the group's slide master owns, 0 for a page in no group
+    */
+    size_t GetMasterOwnShapeCount(sal_uInt32 nMasterPage);
 
     /// Should we export as .pptm, ie. do we contain macros?
     bool mbPptm;
@@ -161,6 +172,9 @@ private:
     std::vector<std::pair<SdrPage*, sal_Int32>> maMastersLayouts;
     // For each Impress master, which master will represent it on the exported file (SAL_MAX_UINT32 if not in an equivalency group)
     std::vector<sal_uInt32> maEquivalentMasters;
+    // How many shapes a slide master owns, per equivalency group; every master in no group
+    // shares the SAL_MAX_UINT32 entry. See GetMasterOwnShapeCount
+    std::unordered_map<sal_uInt32, size_t> maMasterOwnShapeCounts;
     std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs; // map authors to remove personal info
     std::vector< ::sax_fastparser::FSHelperPtr > mpSlidesFSArray;
     sal_Int32 mnLayoutFileIdMax;

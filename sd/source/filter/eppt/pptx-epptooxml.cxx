@@ -37,6 +37,8 @@
 #include <svl/itempool.hxx>
 #include <editeng/section.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <map>
 #include <o3tl/safeint.hxx>
@@ -88,7 +90,12 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/sdr/properties/properties.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/ColorSets.hxx>
@@ -104,6 +111,8 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <algorithm>
+#include <cstdlib>
 #include <utility>
 #include <unordered_map>
 #include <unordered_set>
@@ -238,6 +247,170 @@ bool isPlaceholderStillEmpty(const Reference<XPropertySet>& xProps, PlaceholderT
     OUString aMediaURL;
     return xProps->getPropertySetInfo()->hasPropertyByName(u"MediaURL"_ustr)
            && (xProps->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL) && aMediaURL.isEmpty();
+}
+
+// The nth shape of a page, if it and all below it are non-placeholders. A placeholder stops the
+// count, because master shapes paint below layout shapes and it stays on the layout.
+// IsPresObj is wider than the write side's mbPresObj, so the run can only stop earlier.
+const SdrObject* getLeadingShape(SdPage& rPage, size_t nIndex)
+{
+    if (nIndex >= rPage.GetObjCount())
+        return nullptr;
+    for (size_t nObj = 0; nObj <= nIndex; ++nObj)
+    {
+        SdrObject* pObj = rPage.GetObj(nObj);
+        if (!pObj || rPage.IsPresObj(pObj))
+            return nullptr;
+    }
+    return rPage.GetObj(nIndex);
+}
+
+// The same place, within the slack that a page's own text layout can move a frame by
+bool isSameRect(const tools::Rectangle& rRect, const tools::Rectangle& rOther)
+{
+    constexpr tools::Long nSlack = 10; // 10/100 mm
+    return std::abs(rRect.Left() - rOther.Left()) <= nSlack
+           && std::abs(rRect.Top() - rOther.Top()) <= nSlack
+           && std::abs(rRect.Right() - rOther.Right()) <= nSlack
+           && std::abs(rRect.Bottom() - rOther.Bottom()) <= nSlack;
+}
+
+// Whether these are the same shape as far as a slide shows. Two copies have in common what the
+// document set for them; each page also carries values it recalculated for itself, which is why
+// SdrObject::Equals is no use here - it reads the cached m_nOrdNum and mnNavigationPosition - and
+// why the geometry gets a slack. What the export writes from outside the item set is compared
+// below, one kind at a time; a kind that cannot be compared in full is never the same.
+bool isSameShape(const SdrObject& rShape, const SdrObject& rOther)
+{
+    if (rShape.GetObjInventor() != rOther.GetObjInventor()
+        || rShape.GetObjIdentifier() != rOther.GetObjIdentifier()
+        || rShape.GetRotateAngle() != rOther.GetRotateAngle()
+        || rShape.GetShearAngle() != rOther.GetShearAngle()
+        || rShape.GetLayer() != rOther.GetLayer() || rShape.IsVisible() != rOther.IsVisible()
+        || rShape.IsPrintable() != rOther.IsPrintable() || rShape.GetName() != rOther.GetName()
+        || rShape.GetTitle() != rOther.GetTitle()
+        || rShape.GetDescription() != rOther.GetDescription())
+        return false;
+
+    // Both rectangles: getPosition and getSize use the logic rect for most kinds and the snap
+    // rect for a group or a path, and rotation makes the two differ.
+    if (!isSameRect(rShape.GetSnapRect(), rOther.GetSnapRect())
+        || !isSameRect(rShape.GetLogicRect(), rOther.GetLogicRect()))
+        return false;
+
+    // Not items: the style sheet, which the item comparison below does not resolve through, and
+    // the decorative flag, written as an extLst
+    if (rShape.GetStyleSheet() != rOther.GetStyleSheet()
+        || rShape.IsDecorative() != rOther.IsDecorative())
+        return false;
+
+    // Also not an item: the grab bag holds the effect list, p:style, 3D and theme colours
+    uno::Any aGrabBag;
+    uno::Any aOtherGrabBag;
+    rShape.GetGrabBagItem(aGrabBag);
+    rOther.GetGrabBagItem(aOtherGrabBag);
+    if (aGrabBag != aOtherGrabBag)
+        return false;
+
+    // A click action or bookmark lives in the shape's user data, so refuse a shape that has one
+    if (SdDrawDocument::GetShapeUserData(const_cast<SdrObject&>(rShape))
+        || SdDrawDocument::GetShapeUserData(const_cast<SdrObject&>(rOther)))
+        return false;
+
+    const OutlinerParaObject* pText = rShape.GetOutlinerParaObject();
+    const OutlinerParaObject* pOtherText = rOther.GetOutlinerParaObject();
+    if (bool(pText) != bool(pOtherText))
+        return false;
+    // operator==, not EditTextObject::Equals: it also compares the outline depth, exported as
+    // a:pPr/@lvl.
+    if (pText && *pText != *pOtherText)
+        return false;
+
+    switch (rShape.GetObjIdentifier())
+    {
+        case SdrObjKind::Group:
+        {
+            // GetObjectItemSet() can't be used with groups, so compare the members instead
+            // A diagram group exports as a graphicFrame with parts of its own, none compared here
+            if (rShape.getDiagramHelper() || rOther.getDiagramHelper())
+                return false;
+            const SdrObjList* pMembers = rShape.GetSubList();
+            const SdrObjList* pOtherMembers = rOther.GetSubList();
+            if (!pMembers || !pOtherMembers
+                || pMembers->GetObjCount() != pOtherMembers->GetObjCount())
+                return false;
+            for (size_t nObj = 0; nObj < pMembers->GetObjCount(); ++nObj)
+            {
+                const SdrObject* pMember = pMembers->GetObj(nObj);
+                const SdrObject* pOtherMember = pOtherMembers->GetObj(nObj);
+                if (!pMember || !pOtherMember || !isSameShape(*pMember, *pOtherMember))
+                    return false;
+            }
+            return true;
+        }
+        case SdrObjKind::Graphic:
+        {
+            // The graphic and the mirror flag are not items. Compare by checksum, not by
+            // Graphic::operator==, which uses whatever is decoded at the time; the checksum reads
+            // the imported bytes, and 0 means there was nothing to read.
+            const auto* pGraphic = dynamic_cast<const SdrGrafObj*>(&rShape);
+            const auto* pOtherGraphic = dynamic_cast<const SdrGrafObj*>(&rOther);
+            if (!pGraphic || !pOtherGraphic
+                || pGraphic->IsMirrored() != pOtherGraphic->IsMirrored())
+                return false;
+            const auto nChecksum = pGraphic->GetGraphicObject().GetGraphic().GetChecksum();
+            if (nChecksum == 0
+                || nChecksum != pOtherGraphic->GetGraphicObject().GetGraphic().GetChecksum())
+                return false;
+            break;
+        }
+        case SdrObjKind::Line:
+        case SdrObjKind::Polygon:
+        case SdrObjKind::PolyLine:
+        case SdrObjKind::PathLine:
+        case SdrObjKind::PathFill:
+        case SdrObjKind::FreehandLine:
+        case SdrObjKind::FreehandFill:
+        case SdrObjKind::PathPoly:
+        case SdrObjKind::PathPolyLine:
+        {
+            // The polygon is not an item
+            const auto* pPath = dynamic_cast<const SdrPathObj*>(&rShape);
+            const auto* pOtherPath = dynamic_cast<const SdrPathObj*>(&rOther);
+            if (!pPath || !pOtherPath || pPath->GetPathPoly() != pOtherPath->GetPathPoly())
+                return false;
+            break;
+        }
+        case SdrObjKind::Rectangle:
+        case SdrObjKind::CircleOrEllipse:
+        case SdrObjKind::CircleSection:
+        case SdrObjKind::CircleArc:
+        case SdrObjKind::CircleCut:
+        case SdrObjKind::Text:
+        case SdrObjKind::TitleText:
+        case SdrObjKind::OutlineText:
+        case SdrObjKind::CustomShape:
+            break; // the attributes and the text are all of it
+        default:
+            // A table, OLE frame, media object, connector, callout or 3D scene: not compared
+            // here, so it stays on its layout
+            return false;
+    }
+
+    if (!rShape.GetProperties().GetObjectItemSet().Equals(rOther.GetProperties().GetObjectItemSet(),
+                                                          false))
+        return false;
+
+    // Autofit sets the font and spacing scale at layout time and the export writes them. Last,
+    // because reading a scale lays the text out, and the item sets already agree by here.
+    if (rShape.GetMergedItem(SDRATTR_TEXT_FITTOSIZE).GetValue()
+        != drawing::TextFitToSizeType_AUTOFIT)
+        return true;
+    const SdrTextObj* pTextShape = DynCastSdrTextObj(&rShape);
+    const SdrTextObj* pOtherTextShape = DynCastSdrTextObj(&rOther);
+    return !pTextShape || !pOtherTextShape
+           || (pTextShape->GetFontScale() == pOtherTextShape->GetFontScale()
+               && pTextShape->GetSpacingScale() == pOtherTextShape->GetSpacingScale());
 }
 
 // The page knows what a shape is a placeholder for; its class only says what represents it.
@@ -2144,6 +2317,52 @@ sal_uInt32 PowerPointExport::GetEquivalentMasterPage(sal_uInt32 nMasterPage)
     return maEquivalentMasters[nMasterPage];
 }
 
+size_t PowerPointExport::GetMasterOwnShapeCount(sal_uInt32 nMasterPage)
+{
+    const sal_uInt32 nGroup = GetEquivalentMasterPage(nMasterPage);
+    if (const auto aIter = maMasterOwnShapeCounts.find(nGroup);
+        aIter != maMasterOwnShapeCounts.end())
+        return aIter->second;
+
+    std::vector<SdPage*> aPages;
+    if (nGroup != SAL_MAX_UINT32)
+    {
+        // The representative is the lowest index of its group, and the page the master part
+        // writes, so every other page is compared against it
+        for (sal_uInt32 i = 0; i < mnMasterPages; ++i)
+        {
+            if (maEquivalentMasters[i] == nGroup && maMastersLayouts[i].first)
+                aPages.push_back(static_cast<SdPage*>(maMastersLayouts[i].first));
+        }
+        assert(!aPages.empty() && aPages.front() == maMastersLayouts[nGroup].first);
+    }
+    if (aPages.empty())
+    {
+        maMasterOwnShapeCounts.emplace(nGroup, 0);
+        return 0;
+    }
+
+    // Each page draws the master's shapes first and its own after, so the leading run they all
+    // share is the master's. Stopping at the first difference keeps the z-order, since a shape can
+    // only move to the master along with everything below it.
+    size_t nOwn = 0;
+    for (;;)
+    {
+        const SdrObject* pShape = getLeadingShape(*aPages.front(), nOwn);
+        if (!pShape)
+            break;
+        if (!std::all_of(aPages.begin() + 1, aPages.end(), [pShape, nOwn](SdPage* pPage) {
+                const SdrObject* pOther = getLeadingShape(*pPage, nOwn);
+                return pOther && isSameShape(*pShape, *pOther);
+            }))
+            break;
+        ++nOwn;
+    }
+
+    maMasterOwnShapeCounts.emplace(nGroup, nOwn);
+    return nOwn;
+}
+
 void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPropertySet > const& aXBackgroundPropSet)
 {
     SAL_INFO("sd.eppt", "write master slide: " << nPageNum << "\n--------------");
@@ -2615,14 +2834,17 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
     aDML.SetSlideMasterPart(bSlideMasterPart);
     aDML.SetBackgroundDark(mbIsBackgroundDark);
 
-    // A master standing for a group of layouts writes only its placeholders. A placeholder there
-    // is a prototype: it reaches a slide only through a layout that references it by type and
-    // index. A drawn shape paints under every slide that uses one of this master's layouts, and
-    // the page representing the group holds one layout's own artwork, since an imported master
-    // and layout collapse onto one Impress master page. Each of those layouts writes its page's
-    // shapes itself; a master of its own has no layout to leave them to.
-    const bool bPlaceholdersOnly
+    // A master standing for a group writes its placeholders and the shapes the group shares. A
+    // placeholder reaches a slide only through a layout that references it, while a drawn shape
+    // paints below every slide of this master - so a shape one layout drew does not belong there.
+    // A master of its own has no layout to leave anything to.
+    const bool bMasterOfGroup
         = bSlideMasterPart && GetEquivalentMasterPage(nMasterNum) == nMasterNum;
+    // The layouts of such a group leave those shapes to the master
+    const bool bLayoutOfGroup = !bSlideMasterPart && ePageType == MASTER;
+    assert(!bLayoutOfGroup || GetEquivalentMasterPage(nMasterNum) != SAL_MAX_UINT32);
+    const size_t nMasterOwn
+        = bMasterOfGroup || bLayoutOfGroup ? GetMasterOwnShapeCount(nMasterNum) : 0;
 
     pFS->startElementNS(XML_p, XML_spTree);
     pFS->write(MAIN_GROUP);
@@ -2645,8 +2867,15 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         if (GetShapeByIndex(GetCurrentGroupIndex(), true))
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
-            if (bPlaceholdersOnly && !mbPresObj)
-                continue;
+            // The run leads the page, so the page index tells the master's shapes from a
+            // layout's own. The index is the page's because this loop never enters a group.
+            assert(GetCurrentGroupLevel() == 0);
+            const bool bOwn = GetCurrentGroupIndex() < nMasterOwn;
+            assert(!bOwn || !mbPresObj);
+            if (bMasterOfGroup && !bOwn && !mbPresObj)
+                continue; // one layout's own shape, which that layout writes
+            if (bLayoutOfGroup && bOwn)
+                continue; // the master draws it for every layout of the group
 
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
             bool bSaveAsDiagram(false);
