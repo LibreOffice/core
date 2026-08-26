@@ -351,7 +351,7 @@ OutlineView::OutlineView(DrawDocShell& rDocSh, vcl::Window* pWindow,
     maSlideImage = vcl::CommandInfoProvider::GetImageForCommand(u".uno:ShowSlide"_ustr, xFrame, vcl::ImageType::Size26);
 
     // Tell undo manager of the document about the undo manager of the
-    // outliner, so that the former can synchronize with the later.
+    // outliner, so that the former can synchronize with the latter.
     sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
     if (pDocUndoMgr != nullptr)
         pDocUndoMgr->SetLinkedUndoManager(&mrOutliner.GetUndoManager());
