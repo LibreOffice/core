@@ -69,7 +69,7 @@ struct ConnectionHint
 
 /** this map store all gluepoint id mappings for shapes that had user defined gluepoints. This
     is needed because on insertion the gluepoints will get a new and unique id */
-typedef std::map<sal_Int32,sal_Int32> GluePointIdMap;
+typedef std::unordered_map<sal_Int32,sal_Int32> GluePointIdMap;
 typedef std::unordered_map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap > ShapeGluePointsMap;
 
 /** this struct is created for each startPage() call and stores information that is needed during
