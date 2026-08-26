@@ -2930,6 +2930,13 @@ bool PDFNameElement::Read(SvStream& rStream)
     return false;
 }
 
+void PDFNameElement::writeString(OStringBuffer& rBuffer)
+{
+    rBuffer.append("/");
+    pdf::COSWriter::appendName(m_aValue, rBuffer); // this does the necessary escaping
+}
+
+
 const OString& PDFNameElement::GetValue() const { return m_aValue; }
 
 sal_uInt64 PDFNameElement::GetLocation() const { return m_nLocation; }

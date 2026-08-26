@@ -166,7 +166,7 @@ public:
 
     static void appendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);
     static void appendName(std::u16string_view rString, OStringBuffer& rBuffer);
-    static void appendName(const char* pString, OStringBuffer& rBuffer);
+    static void appendName(std::string_view aString, OStringBuffer& rBuffer);
 };
 }
 

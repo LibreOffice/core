@@ -170,22 +170,21 @@ void COSWriter::appendName(std::u16string_view rStr, OStringBuffer& rBuffer)
     }
 }
 
-void COSWriter::appendName(const char* pStr, OStringBuffer& rBuffer)
+void COSWriter::appendName(std::string_view aStr, OStringBuffer& rBuffer)
 {
     // FIXME i59651 see above
-    while (pStr && *pStr)
+    for (const auto ch : aStr)
     {
-        if ((*pStr >= 'A' && *pStr <= 'Z') || (*pStr >= 'a' && *pStr <= 'z')
-            || (*pStr >= '0' && *pStr <= '9') || *pStr == '-')
+        if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')
+            || (ch >= '0' && ch <= '9') || ch == '-')
         {
-            rBuffer.append(*pStr);
+            rBuffer.append(ch);
         }
         else
         {
             rBuffer.append('#');
-            appendHex(static_cast<sal_Int8>(*pStr), rBuffer);
+            appendHex(static_cast<sal_Int8>(ch), rBuffer);
         }
-        pStr++;
     }
 }
 

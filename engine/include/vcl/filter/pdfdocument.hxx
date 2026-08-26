@@ -231,12 +231,7 @@ public:
     const OString& GetValue() const;
     SAL_DLLPRIVATE sal_uInt64 GetLocation() const;
     sal_uInt64 GetLength() const { return m_aValue.getLength(); }
-
-    void writeString(OStringBuffer& rBuffer) override
-    {
-        rBuffer.append("/");
-        rBuffer.append(m_aValue);
-    }
+    void writeString(OStringBuffer& rBuffer) override;
 };
 
 /// Dictionary object: a set key-value pairs.

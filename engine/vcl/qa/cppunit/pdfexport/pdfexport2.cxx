@@ -6815,6 +6815,31 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, tdf150076BackgroundPdf)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pPageObject->getType());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, cool16122BadPantoneElement)
+{
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"cool16122.odt");
+    save(TestFilter::PDF_WRITER);
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    // Previously this would have failed here with "PDFDocument::Tokenize: unexpected 'C' keyword at byte position 280"
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // But just to be sure, check that the PANTONE element round-trips properly
+    bool bFound = false;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        if (auto pObject = dynamic_cast<vcl::filter::PDFNameElement*>(rDocElement.get()))
+            if (pObject->GetValue() == "PANTONE 293 C")
+            {
+                bFound = true;
+                break;
+            }
+    }
+    CPPUNIT_ASSERT(bFound);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
