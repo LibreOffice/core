@@ -199,13 +199,13 @@ def windowsDefaultAppMightExecute():
 
     # First get the length of the string
     if assocQueryString(flags, assocStr, ".py", None, None, ctypes.byref(length)) != 1: # S_FALSE
-        log.debug("AsscQueryStringW failed")
+        log.debug("AssocQueryStringW failed")
         return True
 
     exeBuf = ctypes.create_unicode_buffer(length.value)
 
     if assocQueryString(flags, assocStr, ".py", None, exeBuf, ctypes.byref(length)) != 0: # S_OK
-        log.debug("AsscQueryStringW failed")
+        log.debug("AssocQueryStringW failed")
         return True
 
     if length.value < 2:
@@ -935,7 +935,7 @@ class DummyProgressHandler(unohelper.Base, XProgressHandler):
         log.debug("pythonscript: DummyProgressHandler.update " + str(status))
 
     def pop(self, event):
-        log.debug("pythonscript: DummyProgressHandler.push " + str(event))
+        log.debug("pythonscript: DummyProgressHandler.pop " + str(event))
 
 
 class CommandEnvironment(unohelper.Base, XCommandEnvironment):
@@ -1318,7 +1318,7 @@ class PythonScriptProvider(unohelper.Base, XBrowseNode, XScriptProvider, XNameCo
             self.provCtx.removePackageByUrl(uri)
         else:
             log.debug("removeByName unknown uri " + str(name) + ", ignoring")
-            raise NoSuchElementException(uri + "is not in package", self)
+            raise NoSuchElementException(uri + " is not in package", self)
         log.debug("removeByName called" + str(uri) + " successful")
 
     def insertByName(self, name, value):

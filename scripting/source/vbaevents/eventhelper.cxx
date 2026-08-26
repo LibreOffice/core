@@ -555,7 +555,7 @@ public:
                 {
                     xCloseBroadcaster->removeCloseListener( this );
                 }
-                // Add the listener into the new XCloseBroadcaster.
+                // Add the listener to the new XCloseBroadcaster.
                 xCloseBroadcaster.set( xModel, uno::UNO_QUERY );
                 if (xCloseBroadcaster.is())
                 {

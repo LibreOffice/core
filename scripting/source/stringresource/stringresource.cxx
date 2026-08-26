@@ -2334,7 +2334,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     bOk = (aArguments[5] >>= m_xInteractionHandler);
     if( !bOk )
     {
-        throw IllegalArgumentException( u"StringResourceWithStorageImpl::initialize: invalid type"_ustr, Reference< XInterface >(), 5 );
+        throw IllegalArgumentException( u"StringResourceWithLocationImpl::initialize: invalid type"_ustr, Reference< XInterface >(), 5 );
     }
 
     implInitializeCommonParameters( aGuard, aArguments );
