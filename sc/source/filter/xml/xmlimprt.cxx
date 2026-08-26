@@ -1614,7 +1614,7 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
     /*  Check if a namespace URL could be resolved from the attribute value.
         Use that namespace only, if the Calc document knows an associated
         external formula parser. This prevents that the range operator in
-        conjunction with defined names is confused as namespaces prefix, e.g.
+        conjunction with defined names is confused as a namespace prefix, e.g.
         in the expression 'table:A1' where 'table' is a named reference. */
     if( ((nNsId & XML_NAMESPACE_UNKNOWN_FLAG) != 0) && !rFormulaNmsp.isEmpty() &&
         mpDoc->GetFormulaParserPool().hasFormulaParser( rFormulaNmsp ) )

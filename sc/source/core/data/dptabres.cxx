@@ -247,7 +247,7 @@ bool ScDPRowMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) con
     const ScDPResultMember* pMember1 = rDimension.GetMember(nIndex1);
     const ScDPResultMember* pMember2 = rDimension.GetMember(nIndex2);
 
-// make the hide item to the largest order.
+    // make hidden items have the largest order.
     if ( !pMember1->IsVisible() || !pMember2->IsVisible() )
         return pMember1->IsVisible();
     const ScDPDataMember* pDataMember1 =  pMember1->GetDataRoot() ;
@@ -1345,7 +1345,7 @@ bool ScDPResultMember::IsValid() const
 {
     //  non-Valid members are left out of calculation
 
-    //  was member set no invisible at the DataPilotSource?
+    //  was member set to invisible at the DataPilotSource?
     const ScDPMember* pMemberDesc = GetDPMember();
     if ( pMemberDesc && !pMemberDesc->isVisible() )
         return false;
@@ -2108,7 +2108,7 @@ void ScDPDataMember::ProcessData( const std::vector< SCROW >& aChildMembers, con
     if ( pResultData->IsLateInit() && !pChildDimension && pResultMember && pResultMember->GetChildDimension() )
     {
         //  if this DataMember doesn't have a child dimension because the ResultMember's
-        //  child dimension wasn't there yet during this DataMembers's creation,
+        //  child dimension wasn't there yet during this DataMember's creation,
         //  create the child dimension now
         InitFrom( pResultMember->GetChildDimension() );
     }
