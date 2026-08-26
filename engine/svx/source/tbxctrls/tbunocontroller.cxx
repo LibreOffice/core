@@ -351,7 +351,7 @@ IMPL_LINK(SvxFontSizeBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonW
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : FontHeightToolBoxControl_Base( rxContext,
                            uno::Reference< frame::XFrame >(),
-                           ".uno:FontHeight" ),
+                           u".uno:FontHeight"_ustr ),
    m_pBox( nullptr )
 {
     addStatusListener( u".uno:CharFontName"_ustr);

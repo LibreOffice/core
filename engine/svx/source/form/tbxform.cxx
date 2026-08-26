@@ -157,7 +157,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 
 VclPtr<InterimItemWindow> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {
-    m_xFixedText.reset(VclPtr<LabelItemWindow>::Create(pParent, "123456"));
+    m_xFixedText.reset(VclPtr<LabelItemWindow>::Create(pParent, u"123456"_ustr));
     m_xFixedText->set_label(u""_ustr);
 
     m_xFixedText->Show();

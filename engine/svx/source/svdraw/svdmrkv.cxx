@@ -2537,9 +2537,9 @@ void collectUIInformation(const SdrObject* pObj)
     aDescription.aKeyWord = u"CurrentApp"_ustr;
 
     if (!pObj->GetName().isEmpty())
-        aDescription.aParameters = {{"OBJECT", pObj->GetName()}};
+        aDescription.aParameters = {{u"OBJECT"_ustr, pObj->GetName()}};
     else
-        aDescription.aParameters = {{"OBJECT", "Unnamed_Obj_" + OUString::number(pObj->GetOrdNum())}};
+        aDescription.aParameters = {{u"OBJECT"_ustr, "Unnamed_Obj_" + OUString::number(pObj->GetOrdNum())}};
 
     UITestLogger::getInstance().logEvent(aDescription);
 }

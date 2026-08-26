@@ -186,17 +186,17 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { "SearchItem.SearchString", cpo::uno::Any( sFindText ) },
+        { u"SearchItem.SearchString"_ustr, cpo::uno::Any( sFindText ) },
         // Related tdf#102506: make Find Bar Ctrl+F searching by value by default
-        { "SearchItem.CellType", cpo::uno::Any( sal_Int16(SvxSearchCellType::VALUE) ) },
-        { "SearchItem.Backward", cpo::uno::Any( aSearchBackwards ) },
-        { "SearchItem.SearchFlags", cpo::uno::Any( sal_Int32(0) ) },
-        { "SearchItem.TransliterateFlags", cpo::uno::Any( static_cast<sal_Int32>(nFlags) ) },
-        { "SearchItem.Command", cpo::uno::Any( static_cast<sal_Int16>(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
-        { "SearchItem.AlgorithmType", cpo::uno::Any( sal_Int16(css::util::SearchAlgorithms_ABSOLUTE) ) },
-        { "SearchItem.AlgorithmType2", cpo::uno::Any( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
-        { "SearchItem.SearchFormatted", cpo::uno::Any( bSearchFormatted ) },
-        { "UseAttrItemList", cpo::uno::Any(false) }
+        { u"SearchItem.CellType"_ustr, cpo::uno::Any( sal_Int16(SvxSearchCellType::VALUE) ) },
+        { u"SearchItem.Backward"_ustr, cpo::uno::Any( aSearchBackwards ) },
+        { u"SearchItem.SearchFlags"_ustr, cpo::uno::Any( sal_Int32(0) ) },
+        { u"SearchItem.TransliterateFlags"_ustr, cpo::uno::Any( static_cast<sal_Int32>(nFlags) ) },
+        { u"SearchItem.Command"_ustr, cpo::uno::Any( static_cast<sal_Int16>(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
+        { u"SearchItem.AlgorithmType"_ustr, cpo::uno::Any( sal_Int16(css::util::SearchAlgorithms_ABSOLUTE) ) },
+        { u"SearchItem.AlgorithmType2"_ustr, cpo::uno::Any( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
+        { u"SearchItem.SearchFormatted"_ustr, cpo::uno::Any( bSearchFormatted ) },
+        { u"UseAttrItemList"_ustr, cpo::uno::Any(false) }
     } ) );
 
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
@@ -1214,7 +1214,7 @@ public:
 FindAllToolboxController::FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : FindAllToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            ".uno:FindAll" )
+            u".uno:FindAll"_ustr )
 {
 }
 
@@ -1298,7 +1298,7 @@ public:
 ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : ExitSearchToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            ".uno:ExitSearch" )
+            u".uno:ExitSearch"_ustr )
 {
 }
 
@@ -1396,7 +1396,7 @@ private:
 SearchLabelToolboxController::SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : SearchLabelToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            ".uno:SearchLabel" )
+            u".uno:SearchLabel"_ustr )
 {
 }
 
@@ -1457,7 +1457,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::
     if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemWindowNonInteractive(nId, true);
 
-    m_xSL = VclPtr<LabelItemWindow>::Create(VCLUnoHelper::GetWindow(Parent), "");
+    m_xSL = VclPtr<LabelItemWindow>::Create(VCLUnoHelper::GetWindow(Parent), u""_ustr);
     m_xSL->SetSizePixel(Size(16, m_xSL->GetSizePixel().Height()));
     return VCLUnoHelper::GetInterface(m_xSL);
 }

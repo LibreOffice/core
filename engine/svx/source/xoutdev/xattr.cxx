@@ -1333,7 +1333,7 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
             return nullptr;
 
         // force empty name for empty polygons
-        return std::make_unique<XLineStartItem>( "", maPolyPolygon );
+        return std::make_unique<XLineStartItem>( u""_ustr, maPolyPolygon );
     }
 
     if( maPolyPolygon.count() > 1 )
@@ -1440,7 +1440,7 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
             return nullptr;
 
         // force empty name for empty polygons
-        return std::make_unique<XLineEndItem>( "", maPolyPolygon );
+        return std::make_unique<XLineEndItem>( u""_ustr, maPolyPolygon );
     }
 
     if( maPolyPolygon.count() > 1 )

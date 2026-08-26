@@ -227,17 +227,17 @@ IMPL_LINK(NumberingPopup, ItemActivatedHdl, weld::IconView&, rIconView, bool)
 
     if ( mePageType == NumberingPageType::BULLET )
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "BulletIndex", Any( nId + 1 ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { u"BulletIndex"_ustr, Any( nId + 1 ) } } ) );
         mrController.dispatchCommand( u".uno:SetBullet"_ustr, aArgs );
     }
     else if ( mePageType == NumberingPageType::SINGLENUM )
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "SetNumber", Any( nId + 1 ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { u"SetNumber"_ustr, Any( nId + 1 ) } } ) );
         mrController.dispatchCommand( u".uno:SetNumber"_ustr, aArgs );
     }
     else
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", Any( nId + 1 ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { u"SetOutline"_ustr, Any( nId + 1 ) } } ) );
         mrController.dispatchCommand( u".uno:SetOutline"_ustr, aArgs );
     }
     mrController.EndPopupMode();
@@ -257,7 +257,7 @@ IMPL_LINK(NumberingPopup, DocItemActivatedHdl, weld::IconView&, rIconView, bool)
         OUString nChar(maCustomBullets[nId].first);
         OUString sFont(maCustomBullets[nId].second);
         auto aArgs(comphelper::InitPropertySequence(
-            { { "BulletChar", Any(nChar) }, { "BulletFont", Any(sFont) } }));
+            { { u"BulletChar"_ustr, Any(nChar) }, { u"BulletFont"_ustr, Any(sFont) } }));
         mrController.dispatchCommand(u".uno:SetBullet"_ustr, aArgs);
         mrController.EndPopupMode();
     }
@@ -281,7 +281,7 @@ void NumberingPopup::GrabFocus()
 
 IMPL_LINK_NOARG(NumberingPopup, VSButtonClickSetHdl, weld::Button&, void)
 {
-    auto aArgs( comphelper::InitPropertySequence( { { "Page", Any( u"customize"_ustr ) } } ) );
+    auto aArgs( comphelper::InitPropertySequence( { { u"Page"_ustr, Any( u"customize"_ustr ) } } ) );
     mrController.dispatchCommand( u".uno:OutlineBullet"_ustr, aArgs );
 
     mrController.EndPopupMode();

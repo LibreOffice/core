@@ -3597,7 +3597,7 @@ css::uno::Reference<css::awt::XWindow> SvxStyleToolBoxControl::createItemWindow(
             SolarMutexGuard aSolarMutexGuard;
 
             m_pImpl->m_xVclBox = VclPtr<SvxStyleBox_Impl>::Create(pParent,
-                                                                ".uno:StyleApply",
+                                                                u".uno:StyleApply"_ustr,
                                                                 SfxStyleFamily::Para,
                                                                 m_xFrame,
                                                                 m_pImpl->aClearForm,

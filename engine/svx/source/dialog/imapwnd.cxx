@@ -326,7 +326,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case SdrObjKind::Rectangle:
         {
             SdrRectObj*    pRectObj = const_cast<SdrRectObj*>(static_cast<const SdrRectObj*>(&rObj));
-            auto pObj = std::make_shared<IMapRectangleObject>( pRectObj->GetLogicRect(), "", "", "", "", "", true, false );
+            auto pObj = std::make_shared<IMapRectangleObject>( pRectObj->GetLogicRect(), u""_ustr, u""_ustr, u""_ustr, u""_ustr, u""_ustr, true, false );
 
             pRectObj->appendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( pObj )) );
         }
@@ -340,7 +340,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
 
             pPathObj.clear();
 
-            auto pObj = std::make_shared<IMapPolygonObject>( aPoly, "", "", "", "", "", true, false );
+            auto pObj = std::make_shared<IMapPolygonObject>( aPoly, u""_ustr, u""_ustr, u""_ustr, u""_ustr, u""_ustr, true, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
             pCircObj->appendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( pObj )) );
         }
@@ -357,7 +357,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             if ( rXPolyPoly.count() )
             {
                 tools::Polygon aPoly(rXPolyPoly.getB2DPolygon(0));
-                auto pObj = std::make_shared<IMapPolygonObject>( aPoly, "", "", "", "", "", true, false );
+                auto pObj = std::make_shared<IMapPolygonObject>( aPoly, u""_ustr, u""_ustr, u""_ustr, u""_ustr, u""_ustr, true, false );
                 pPathObj->appendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( pObj )) );
             }
         }
@@ -396,7 +396,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         case SdrObjKind::Rectangle:
         {
             pUserData->ReplaceObject( std::make_shared<IMapRectangleObject>( static_cast<const SdrRectObj&>(rObj).GetLogicRect(),
-                      aURL, aAltText, aDesc, aTarget, "", bActive, false ) );
+                      aURL, aAltText, aDesc, aTarget, u""_ustr, bActive, false ) );
         }
         break;
 
@@ -406,7 +406,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             rtl::Reference<SdrPathObj> pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ).get() );
             tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
 
-            auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
+            auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, u""_ustr, bActive, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
             pPathObj.clear();
@@ -426,7 +426,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             if ( rXPolyPoly.count() )
             {
                 tools::Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0));
-                auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
+                auto pObj = std::make_shared<IMapPolygonObject>( aPoly, aURL, aAltText, aDesc, aTarget, u""_ustr, bActive, false );
                 pUserData->ReplaceObject( pObj );
             }
         }
