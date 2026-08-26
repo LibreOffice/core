@@ -224,8 +224,8 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
             rAxisSeriesSeq.realloc(nLength + 1);
             rAxisSeriesSeq.getArray()[nLength] = xSeries;
         }
-        // if the first series attached to secondary axis, then export those series first, which are attached to primary axis
-        // also the MS Office export every time in this order
+        // if the first series is attached to the secondary axis, then export those series first which are attached to the primary axis;
+        // MS Office also exports in this order every time
         if (aSplitSeries.size() > 1 && nAxisIndexOfFirstSeries == 1)
         {
             std::swap(aSplitSeries[0], aSplitSeries[1]);

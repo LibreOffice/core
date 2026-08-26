@@ -18,8 +18,8 @@ using namespace oox::drawingml::table;
 
 /* tdf#107604
  * There are predefined table styles that have a
- * style id (in ppt/slides/slidex.xml) but does not have
- * corresponding style definition (ppt/tableStyles.xml).
+ * style id (in ppt/slides/slidex.xml) but do not have
+ * a corresponding style definition (ppt/tableStyles.xml).
  * So we should create those styles here for this case.
  * There are 74 predefined styles and many different
  * variables. A style map was created by examining all

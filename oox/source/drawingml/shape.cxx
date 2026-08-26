@@ -305,7 +305,7 @@ void Shape::migrateDiagramHelperToNewShape(const ShapePtr& pTarget)
 
     if(pTarget->mpDiagramHelper)
     {
-        // this should no happen, but if there is already a helper, clean it up
+        // this should not happen, but if there is already a helper, clean it up
         delete pTarget->mpDiagramHelper;
         pTarget->mpDiagramHelper = nullptr;
     }
@@ -437,7 +437,7 @@ void Shape::addShape(
 
             if (isWPGChild() && xShape)
             {
-                // This is a wps shape and it is the child of the WPG, now copy the
+                // This is a wps shape and it is the child of the WPG, now copy
                 // the text body properties to the xshape.
                 Reference<XPropertySet> xChildWPSProperties(xShape, uno::UNO_QUERY);
 
