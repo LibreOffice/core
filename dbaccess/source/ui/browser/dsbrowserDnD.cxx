@@ -143,7 +143,7 @@ namespace dbaui
             m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
             m_aAsyncDrop.xDroppedAt     = std::move(xHitEntry);
 
-            // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
+            // asynchronously because we have some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
             return DND_ACTION_COPY;
         }
@@ -157,7 +157,7 @@ namespace dbaui
             {
                 m_aAsyncDrop.xDroppedAt = std::move(xHitEntry);
 
-                // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
+                // asynchronously because we have some dialogs and we aren't allowed to show them while in D&D
                 m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
                 return DND_ACTION_COPY;
             }

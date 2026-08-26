@@ -2392,7 +2392,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     {
         m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
 
-        // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
+        // asynchronously because we have some dialogs and we aren't allowed to show them while in D&D
         m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
         return DND_ACTION_COPY;
     }
@@ -2439,7 +2439,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         if ( nAction != DND_ACTION_NONE )
         {
             m_aAsyncDrop.nAction = nAction;
-            // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
+            // asynchronously because we have some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
         }
         else
@@ -2451,7 +2451,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         SharedConnection xConnection( ensureConnection() );
         if ( xConnection.is() && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xConnection ) )
         {
-            // asynchronously because we some dialogs and we aren't allowed to show them while in D&D
+            // asynchronously because we have some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
             return DND_ACTION_COPY;
         }
@@ -2499,7 +2499,7 @@ void OApplicationController::OnFirstControllerConnected()
     }
 
     // if we have forms or reports which contain macros/scripts, then show a warning
-    // which suggests the user to migrate them to the database document
+    // which suggests that the user migrate them to the database document
     Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
     if ( xDocumentScripts.is() )
     {

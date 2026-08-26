@@ -137,8 +137,8 @@ namespace dbaui
     /** retrieves a data source given by name or URL, and displays an error if this fails
 
         Any <type scope="css::sdbc">SQLException</type>s which occur will be displayed.
-        Additionally, and Exceptions which indicate a data source name pointing to a non-existent database
-        URL will also be denoted. Yet more additionally, and other exceptions will be forwarded to
+        Additionally, any Exceptions which indicate a data source name pointing to a non-existent database
+        URL will also be denoted. Yet more additionally, any other exceptions will be forwarded to
         a <type scope="css::sdb">InteractionHandler</type>.
 
         @param _rDataSourceName
@@ -199,7 +199,7 @@ namespace dbaui
                         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                         weld::Window* pParent);
 
-    /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
+    /** notifySystemWindow adds or removes the given window _pToRegister at the Systemwindow found when search _pWindow.
         @param  _pWindow
             The window which is used to search for the SystemWindow.
         @param  _pToRegister
