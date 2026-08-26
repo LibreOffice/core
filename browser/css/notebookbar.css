@@ -894,6 +894,7 @@ label.notebookbar.ui-checkbox-label {
 	flex-grow: 1;
 	scroll-snap-type: y mandatory;
 	scroll-behavior: smooth;
+	width: 35vw !important;
 }
 
 .notebookbar #transitions_icons.ui-iconview > * {
