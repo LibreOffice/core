@@ -49,7 +49,7 @@ OUString VCLXAccessiblePopupMenu::getImplementationName()
 
 Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames()
 {
-    return { u"com.sun.star.awt.AccessiblePopupMenu"_ustr };
+    return {};
 }
 
 
