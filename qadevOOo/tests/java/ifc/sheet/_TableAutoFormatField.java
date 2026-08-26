@@ -90,7 +90,7 @@ public class _TableAutoFormatField extends MultiPropertyTest {
     }
 
     /**
-    * Locale values are predefined and can't be arbitrary changed.
+    * Locale values are predefined and can't be arbitrarily changed.
     * In this property value is changed from ('de', 'DE', '')
     * to ('es', 'ES', '') and vice versa.
     */

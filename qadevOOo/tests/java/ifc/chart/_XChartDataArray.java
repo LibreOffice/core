@@ -150,9 +150,9 @@ public class _XChartDataArray extends MultiMethodTest {
     }
 
     /**
-    * Test calls the method and compare returned values with values restored
+    * Test calls the method and compares returned values with values restored
     * after method <code>setColumnDescriptions</code>. <p>
-    * Has <b> OK </b> status if the returned values equals to restored values. <p>
+    * Has <b> OK </b> status if the returned values are equal to restored values. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setData </code> : to set and restore new values </li>
@@ -176,9 +176,9 @@ public class _XChartDataArray extends MultiMethodTest {
     }
 
     /**
-    * Test calls the method and compare returned values with values restored
+    * Test calls the method and compares returned values with values restored
     * after method <code>setRowDescriptions</code>. <p>
-    * Has <b> OK </b> status if the returned values equals to restored values. <p>
+    * Has <b> OK </b> status if the returned values are equal to restored values. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setData </code> : to set and restore new values </li>
@@ -202,9 +202,9 @@ public class _XChartDataArray extends MultiMethodTest {
     }
 
     /**
-    * Test calls the method and compare returned values with values restored
+    * Test calls the method and compares returned values with values restored
     * after method <code>setData</code>. <p>
-    * Has <b> OK </b> status if the returned values equals to restored values. <p>
+    * Has <b> OK </b> status if the returned values are equal to restored values. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setData </code> : to set and restore new values </li>
