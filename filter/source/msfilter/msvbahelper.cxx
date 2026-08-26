@@ -204,7 +204,7 @@ static bool hasMacro(SfxObjectShell const* pShell, const OUString& sLibrary, OUS
     if (!pBasic)
         return false;
 
-    if (!sMod.isEmpty()) // we wish to find the macro is a specific module
+    if (!sMod.isEmpty()) // we wish to find the macro in a specific module
     {
         SbModule* pModule = pBasic->FindModule(sMod);
         if (!pModule)

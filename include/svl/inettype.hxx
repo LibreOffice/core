@@ -65,7 +65,7 @@ inline constexpr OUString CONTENT_TYPE_STR_APP_MSPPOINT = u"application/x-mspowe
 inline constexpr OUString CONTENT_TYPE_STR_APP_MSWORD_TEMPL = u"application/x-msword-template"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_APP_MSWORD = u"application/x-msword"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_APP_STARCALC = u"application/x-starcalc"_ustr;
-inline constexpr OUString CONTENT_TYPE_STR_APP_STARCHART = u"application/x-starchart;"_ustr;
+inline constexpr OUString CONTENT_TYPE_STR_APP_STARCHART = u"application/x-starchart"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_APP_STARDRAW = u"application/x-stardraw"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_APP_STARHELP = u"application/x-starhelp"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_APP_STARIMAGE = u"application/x-starimage"_ustr;
@@ -111,7 +111,7 @@ inline constexpr OUString CONTENT_TYPE_STR_TEXT_VCARD = u"text/x-vCard"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_VIDEO_MSVIDEO = u"video/x-msvideo"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_VIDEO_THEORA = u"video/theora"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_VIDEO_VDO = u"video/vdo"_ustr;
-inline constexpr OUString CONTENT_TYPE_STR_VIDEO_WEBM = u"audio/webm"_ustr;
+inline constexpr OUString CONTENT_TYPE_STR_VIDEO_WEBM = u"video/webm"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_X_STARMAIL = u"x-starmail"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_X_VRML = u"x-world/x-vrml"_ustr;
 inline constexpr OUString CONTENT_TYPE_STR_APP_VND_SUN_XML_WRITER
