@@ -1225,6 +1225,17 @@ endif # ANDROID
 
 endif # SYSTEM_REDLAND
 
+ifneq ($(filter MACOSX WNT,$(OS)),)
+
+gb_LinkTarget__use_cairo :=
+gb_LinkTarget__use_freetype_headers :=
+gb_LinkTarget__use_freetype :=
+gb_ExternalProject__use_freetype :=
+gb_LinkTarget__use_fontconfig :=
+gb_ExternalProject__use_fontconfig :=
+
+else # !MACOSX, !WNT
+
 ifneq ($(SYSTEM_CAIRO),)
 
 define gb_LinkTarget__use_cairo
@@ -1238,8 +1249,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
 endef
 
 else # !SYSTEM_CAIRO
-
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
 
 $(eval $(call gb_Helper_register_external_packages_for_install,pixman,ooo,\
     pixman \
@@ -1268,8 +1277,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 
 endef
-
-endif # !MACOSX, !WNT
 
 endif # !SYSTEM_CAIRO
 
@@ -1332,13 +1339,9 @@ gb_ExternalProject__use_fontconfig :=
 
 else # SYSTEM_FONTCONFIG
 
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
-
 $(eval $(call gb_Helper_register_external_packages_for_install,fontconfig,ooo,\
 	fontconfig \
 ))
-
-endif
 
 define gb_LinkTarget__use_fontconfig
 ifeq ($(OS),LINUX)
@@ -1363,6 +1366,9 @@ $(call gb_ExternalProject_use_external_project,$(1),fontconfig)
 endef
 
 endif # SYSTEM_FONTCONFIG
+
+endif # !MACOSX, !WNT
+
 
 ifneq ($(SYSTEM_GRAPHITE),)
 
