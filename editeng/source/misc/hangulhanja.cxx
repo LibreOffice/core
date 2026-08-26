@@ -593,8 +593,8 @@ namespace editeng
                 {   // found asian text
 
                     // determine if it's Hangul
-                    CharClass aCharClassificaton( m_xContext, LanguageTag( m_aSourceLocale) );
-                    css::i18n::UnicodeScript nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
+                    CharClass aCharClassification( m_xContext, LanguageTag( m_aSourceLocale) );
+                    css::i18n::UnicodeScript nScript = aCharClassification.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
                     if  (   ( UnicodeScript_kHangulJamo == nScript )
                         ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
                         ||  ( UnicodeScript_kHangulSyllable == nScript )
