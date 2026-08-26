@@ -756,8 +756,8 @@ namespace
         if (osl_getProcessWorkingDir(&cwd_url.pData) == osl_Process_E_None)
         {
             OUString cwd;
-            FileBase::getSystemPathFromFileURL(cwd_url, cwd);
-            bfound = osl::searchPath(file_path, cwd, result);
+            if (FileBase::getSystemPathFromFileURL(cwd_url, cwd) == FileBase::E_None)
+                bfound = osl::searchPath(file_path, cwd, result);
         }
         return bfound;
     }
