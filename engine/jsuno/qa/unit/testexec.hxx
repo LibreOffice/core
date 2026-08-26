@@ -23,7 +23,7 @@ OUString testexec(OUString const & script) {
     return jsuno::execute(
         script, u"<input>"_ustr, 1,
         [](OUString const & level, OUString const & message) {
-            std::cout << "console." << level << ": " << message << '\n';
+            std::cout << "console." << level << ": " << message << std::endl;
             if (level == u"assert") {
                 std::abort();
             }
