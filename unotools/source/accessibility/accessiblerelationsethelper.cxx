@@ -103,7 +103,7 @@ sal_Int32 SAL_CALL
     /** Tests whether the relation set contains a relation matching the
         specified key.
 
-        @param aRelationType
+        @param eRelationType
             The type of relation to look for in this set of relations.  This
             has to be one of the constants of
             <type>AccessibleRelationType</type>.

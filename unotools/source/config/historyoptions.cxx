@@ -402,7 +402,7 @@ void TogglePinItem(EHistoryType eHistory, const OUString& sURL)
             uno::Reference<container::XNameContainer> xOrderList;
             xListAccess->getByName(s_sOrderList) >>= xOrderList;
 
-            // Shift item to the beginning of the document list if is not pinned now
+            // Shift item to the beginning of the document list if it is not pinned now
             if (bIsItemPinned)
                 MoveItemToUnpinned(xCfg, xOrderList, xItemList, sURL);
             else

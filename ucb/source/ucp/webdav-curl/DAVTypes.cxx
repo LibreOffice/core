@@ -123,7 +123,6 @@ bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOpt
             // if stale, remove from cache, do not restore
             m_aTheCache.erase( it );
             return false;
-            // return false instead
         }
         rDAVOptions = (*it).second;
         return true;
