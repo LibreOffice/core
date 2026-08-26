@@ -76,10 +76,10 @@ processing all
 and
 .I #else
 directives so that it can correctly tell which
-.I #include,
+.I #include
 directives would be used in a compilation.
 Any
-.I #include,
+.I #include
 directives can reference files having other
 .I #include
 directives, and parsing will occur in these files as well.
@@ -289,7 +289,7 @@ file exactly once, maintaining an internal symbol table
 for each.
 Thus, the first file on the command line will take an amount of time
 proportional to the amount of time that a normal C preprocessor takes.
-But on subsequent files, if it encounter's an include file
+But on subsequent files, if it encounters an include file
 that it has already parsed, it does not parse it again.
 .PP
 For example,

@@ -200,7 +200,7 @@ static void* pool_take_extent(struct pool* pool, bool allocate)
     return data;
 }
 
-/* Create a memory pool for fix size objects
+/* Create a memory pool for fixed-size objects
  * this is a simplified implementation that
  * is _not_ thread safe.
  */
@@ -370,7 +370,7 @@ static unsigned int hash_compute( struct hash const * hash, const char* key, int
     a = b = c = 0xdeadbeef + (length << 2);
 
     /* we use this to 'hash' full path with mostly a common root
-     * let's now waste too much cycles hashing mostly constant stuff
+     * let's not waste too many cycles hashing mostly constant stuff
      */
     if(length > 36)
     {
