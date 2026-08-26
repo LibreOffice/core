@@ -89,7 +89,7 @@ SwContentNode* GetNode(SwPaM&, bool&, SwMoveFnCollection const &,
 namespace sw {
 
     void MakeRegion(SwMoveFnCollection const & fnMove,
-            const SwPaM & rOrigRg, std::optional<SwPaM>& rDestinaton);
+            const SwPaM & rOrigRg, std::optional<SwPaM>& rDestination);
 
     /// Search.
     bool FindTextImpl(SwPaM & rSearchPam,

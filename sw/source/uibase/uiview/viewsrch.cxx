@@ -584,7 +584,7 @@ bool SwView::SearchAndWrap(bool bApi)
     oWait.reset();
 
         // Search in the specialized areas when no search is present in selections.
-        // When searching selections will already searched in these special areas.
+        // When searching selections they will already be searched in these special areas.
     bool bHasSrchInOther = s_bExtra;
     if (!s_pSrchItem->GetSelection() && !s_bExtra )
     {
