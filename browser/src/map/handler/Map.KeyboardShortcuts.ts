@@ -266,7 +266,10 @@ class KeyboardShortcuts {
             // In read-only mode, block shortcuts that send uno commands to core, or
             // that run an extension's own command (an opaque script we cannot
             // otherwise tell apart from one that edits the document), unless they
-            // are explicitly meant for read-only use.
+            // are explicitly meant for read-only use.  (Extensions are hidden entirely by
+            // Control.Extension.ts's loadExtensions when a doc opens in a restricted mode, so the
+            // ext: branch here only fires for a doc that was editable at open and has since been
+            // toggled into view mode.)
             const isExtensionAction =
                 !!shortcut.dispatchAction && shortcut.dispatchAction.startsWith('ext:');
 

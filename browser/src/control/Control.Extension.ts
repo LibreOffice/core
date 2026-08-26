@@ -884,6 +884,16 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 	// experimental functionality never fetch the discovery index:
 	if (!window.enableExperimentalFeatures) return {};
 
+	if (
+		map.wopi &&
+		(!map.wopi.UserCanWrite ||
+			map.wopi.DisableCopy ||
+			map.wopi.DisableExport ||
+			map.wopi.DisablePrint)
+	) {
+		return {};
+	}
+
 	const sources: { baseRel: string; ids: string[] }[] = [];
 	const fetchIndex = async (indexBase: string): Promise<string[]> => {
 		try {
