@@ -255,8 +255,16 @@ interface Document {
 // Extend the global Element interface with checkVisibility, which the DOM
 // types of the TypeScript release in use do not declare yet. It answers
 // whether the element is rendered, so a display: none ancestor makes it false.
+// Every option defaults to false, so visibility: hidden and a skipped
+// content-visibility subtree only count as invisible when asked for.
+interface CheckVisibilityOptions {
+	contentVisibilityAuto?: boolean;
+	opacityProperty?: boolean;
+	visibilityProperty?: boolean;
+}
+
 interface Element {
-	checkVisibility(): boolean;
+	checkVisibility(options?: CheckVisibilityOptions): boolean;
 }
 
 // Extend StringConstructor

@@ -67,7 +67,10 @@ function getFocusableElements(
 		);
 
 	return Array.from(ret).filter(function (elem) {
-		return elem.checkVisibility();
+		return elem.checkVisibility({
+			visibilityProperty: true,
+			contentVisibilityAuto: true,
+		});
 	});
 }
 
