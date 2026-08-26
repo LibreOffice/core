@@ -96,7 +96,12 @@ UnitBase::TestResult UnitLegacyUnoApiWarning::testWarningShownForLegacyApiUse()
 
         bool sawResult = false;
         bool sawNotice = false;
-        callScriptAndObserve(socket, testname, sawResult, sawNotice, 5s);
+#if ENABLE_RUNTIME_OPTIMIZATIONS
+        constexpr std::chrono::seconds window(5);
+#else
+        constexpr std::chrono::seconds window(30);
+#endif
+        callScriptAndObserve(socket, testname, sawResult, sawNotice, window);
 
         LOK_ASSERT_MESSAGE("Expected a command result for the script call", sawResult);
         LOK_ASSERT_MESSAGE("Expected the legacy UNO API notice", sawNotice);

@@ -99,7 +99,12 @@ UnitBase::TestResult UnitLegacyUnoApiWarningSuppressed::testWarningSuppressedFor
         bool sawNotice = false;
         // The full window elapses whenever the notice never arrives, so this
         // waits it out rather than exiting the moment the command result is seen.
-        callScriptAndObserve(socket, testname, sawResult, sawNotice, 5s);
+#if ENABLE_RUNTIME_OPTIMIZATIONS
+        constexpr std::chrono::seconds window(5);
+#else
+        constexpr std::chrono::seconds window(30);
+#endif
+        callScriptAndObserve(socket, testname, sawResult, sawNotice, window);
 
         LOK_ASSERT_MESSAGE("Expected a command result for the script call", sawResult);
         LOK_ASSERT_MESSAGE("Did not expect the legacy UNO API notice", !sawNotice);
