@@ -180,114 +180,6 @@ void SvPasteObjectDialog::PreGetFormat( const TransferableDataHelper &rHelper )
         }
     }
 
-    ObjectLB().thaw();
-    SelectObject();
-
-    SetSourceLabel(aTypeName, aSourceName);
-}
-
-SotClipboardFormatId SvPasteObjectDialog::GetFormatOnly()
-{
-    return static_cast<SotClipboardFormatId>(ObjectLB().get_selected_id().toUInt32());
-}
-
-SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper)
-{
-    //TODO/LATER: why is the Descriptor never used?!
-    TransferableObjectDescriptor aDesc;
-    if (rHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
-    {
-        (void)rHelper.GetTransferableObjectDescriptor(
-                                SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc);
-    }
-    const DataFlavorExVector* pFormats = &rHelper.GetDataFlavorExVector();
-
-    // create and fill dialog box
-    OUString aSourceName, aTypeName;
-    SotClipboardFormatId nSelFormat = SotClipboardFormatId::NONE;
-    SvGlobalName aEmptyNm;
-
-    ObjectLB().freeze();
-
-    for (auto const& format : *pFormats)
-    {
-        SotClipboardFormatId nFormat = format.mnSotId;
-
-        std::map< SotClipboardFormatId, OUString >::iterator itName =
-            aSupplementMap.find( nFormat );
-
-        // if there is an "Embed Source" or and "Embedded Object" on the
-        // Clipboard we read the Description and the Source of this object
-        // from an accompanied "Object Descriptor" format on the clipboard
-        // Remember: these formats mostly appear together on the clipboard
-        OUString aName;
-        const OUString* pName = nullptr;
-        if ( itName == aSupplementMap.end() )
-        {
-            SvPasteObjectHelper::GetEmbeddedName(rHelper,aName,aSourceName,nFormat);
-            if ( !aName.isEmpty() )
-                pName = &aName;
-        }
-        else
-        {
-            pName = &(itName->second);
-        }
-
-        if( pName )
-        {
-            aName = *pName;
-
-            if( SotClipboardFormatId::EMBED_SOURCE == nFormat )
-            {
-                if( aDesc.maClassName != aEmptyNm )
-                {
-                    aSourceName = aDesc.maDisplayName;
-
-                    if( aDesc.maClassName == aObjClassName )
-                        aName = aObjName;
-                    else
-                        aName = aTypeName = aDesc.maTypeName;
-                }
-            }
-            else if( SotClipboardFormatId::LINK_SOURCE == nFormat )
-            {
-                continue;
-            }
-            else if( aName.isEmpty() )
-                aName = SvPasteObjectHelper::GetSotFormatUIName( nFormat );
-
-            // Show RICHTEXT only in case RTF is not present.
-            if (nFormat == SotClipboardFormatId::RICHTEXT &&
-                std::any_of(pFormats->begin(), pFormats->end(),
-                            [](const DataFlavorEx& rFlavor) {
-                                return rFlavor.mnSotId == SotClipboardFormatId::RTF;
-                            }))
-            {
-                continue;
-            }
-
-            if (ObjectLB().find_text(aName) == -1)
-            {
-                ObjectLB().append(OUString::number(static_cast<sal_uInt32>(nFormat)), aName);
-            }
-        }
-    }
-
-    if( aTypeName.isEmpty() && aSourceName.isEmpty() )
-    {
-        if( aDesc.maClassName != aEmptyNm )
-        {
-            aSourceName = aDesc.maDisplayName;
-            aTypeName = aDesc.maTypeName;
-        }
-
-        if( aTypeName.isEmpty() && aSourceName.isEmpty() )
-        {
-            // global resource from svtools (former so3 resource)
-            aSourceName = SvtResId(STR_UNKNOWN_SOURCE);
-        }
-    }
-
     if (!aExtraCommand.first.isEmpty())
     {
         ObjectLB().append(aExtraCommand.first, aExtraCommand.second);
@@ -297,21 +189,26 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
     SelectObject();
 
     SetSourceLabel(aTypeName, aSourceName);
+}
 
-    if (run() == RET_OK)
+SotClipboardFormatId SvPasteObjectDialog::GetFormatOnly()
+{
+    // Handle the extra-command entry.
+    if (ObjectLB().get_selected_id().startsWithIgnoreAsciiCase(".uno"))
     {
-        if (ObjectLB().get_selected_id().startsWithIgnoreAsciiCase(".uno"))
-        {
-            comphelper::dispatchCommand(aExtraCommand.first, {});
-            nSelFormat = SotClipboardFormatId::NONE;
-        }
-        else
-        {
-            nSelFormat = static_cast<SotClipboardFormatId>(ObjectLB().get_selected_id().toUInt32());
-        }
+        comphelper::dispatchCommand(aExtraCommand.first, {});
+        return SotClipboardFormatId::NONE;
     }
 
-    return nSelFormat;
+    return static_cast<SotClipboardFormatId>(ObjectLB().get_selected_id().toUInt32());
+}
+
+SotClipboardFormatId SvPasteObjectDialog::GetFormat(const TransferableDataHelper& rHelper)
+{
+    PreGetFormat(rHelper);
+    if (run() != RET_OK)
+        return SotClipboardFormatId::NONE;
+    return GetFormatOnly();
 }
 
 void SvPasteObjectDialog::SetSourceLabel(OUString aTypeName, OUString aSourceName)

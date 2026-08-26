@@ -1911,7 +1911,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if ( nFormatCount )
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pTabViewShell->GetFrameWeld()));
+                            VclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pTabViewShell->GetFrameWeld()));
                             for (sal_uInt16 i=0; i<nFormatCount; i++)
                             {
                                 SotClipboardFormatId nFormatId = aFormats.GetClipbrdFormatId( i );
@@ -1929,27 +1929,38 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             OUString sLabel(vcl::CommandInfoProvider::GetTooltipLabelForCommand(aProperties));
                             pDlg->InsertUno(u".uno:PasteTextImportDialog"_ustr, sLabel);
 
-                            TransferableDataHelper aDataHelper(
-                                TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
-                            SotClipboardFormatId nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
-                            if (nFormat != SotClipboardFormatId::NONE)
-                            {
-                                {
-                                    weld::WaitObject aWait( GetViewData().GetDialogParent() );
-                                    if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
-                                        pTabViewShell->PasteDraw();
+                            auto xDatahelper = std::make_shared<TransferableDataHelper>(
+                                TransferableDataHelper::CreateFromSystemClipboard(pWin));
+                            pDlg->PreGetFormat(*xDatahelper);
+
+                            auto xRequest = std::make_shared<SfxRequest>(rReq);
+                            rReq.Ignore(); // the 'old' request is not relevant any more
+                            pDlg->StartExecuteAsync(
+                                [pDlg, xDatahelper, xRequest, pTabViewShell, bDraw, nSlot](sal_Int32 nResult) {
+                                    SotClipboardFormatId nFormat = (nResult == RET_OK)
+                                        ? pDlg->GetFormatOnly()
+                                        : SotClipboardFormatId::NONE;
+                                    if (nFormat != SotClipboardFormatId::NONE)
+                                    {
+                                        {
+                                            weld::WaitObject aWait(pTabViewShell->GetFrameWeld());
+                                            if (bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE)
+                                                pTabViewShell->PasteDraw();
+                                            else
+                                                pTabViewShell->PasteFromSystem(nFormat);
+                                        }
+                                        xRequest->SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success
+                                        xRequest->AppendItem(
+                                            SfxUInt32Item(nSlot, static_cast<sal_uInt32>(nFormat)));
+                                        xRequest->Done();
+                                    }
                                     else
-                                        pTabViewShell->PasteFromSystem(nFormat);
-                                }
-                                rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = success
-                                rReq.AppendItem( SfxUInt32Item( nSlot, static_cast<sal_uInt32>(nFormat) ) );
-                                rReq.Done();
-                            }
-                            else
-                            {
-                                rReq.SetReturnValue(SfxInt16Item(nSlot, 0));    // 0 = fail
-                                rReq.Ignore();
-                            }
+                                    {
+                                        xRequest->SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
+                                        xRequest->Ignore();
+                                    }
+                                    pDlg->disposeOnce();
+                                });
                         }
                         else
                             rReq.SetReturnValue(SfxInt16Item(nSlot, 0));        // 0 = fail
