@@ -21,34 +21,6 @@
 #define NC_(Context, String) TranslateId(Context, u8##String)
 
 #define RID_CUISTR_KEY_GALLERY_DIR                  NC_("RID_SVXSTR_KEY_GALLERY_DIR", "Gallery")
-/* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
-#define RID_CUISTR_NEW_MENU                         NC_("RID_SVXSTR_NEW_MENU", "New Menu %n")
-/* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
-#define RID_CUISTR_NEW_TOOLBAR                      NC_("RID_SVXSTR_NEW_TOOLBAR", "New Toolbar %n")
-#define RID_CUISTR_MOVE_MENU                        NC_("RID_SVXSTR_MOVE_MENU", "Move Menu")
-#define RID_CUISTR_ADD_SUBMENU                      NC_("RID_SVXSTR_ADD_SUBMENU", "Add Submenu")
-#define RID_CUISTR_SUBMENU_NAME                     NC_("RID_SVXSTR_SUBMENU_NAME", "Submenu name")
-#define RID_CUISTR_DELETE_ICON_CONFIRM              NC_("RID_SVXSTR_DELETE_ICON_CONFIRM", "Are you sure to delete the image?")
-#define RID_CUISTR_REPLACE_ICON_WARNING             NC_("RID_SVXSTR_REPLACE_ICON_WARNING", "The icon %ICONNAME is already contained in the image list.\nWould you like to replace the existing icon?")
-#define RID_CUISTR_REPLACE_ICON_CONFIRM             NC_("RID_SVXSTR_REPLACE_ICON_CONFIRM", "Confirm Icon Replacement")
-#define RID_CUISTR_YESTOALL                         NC_("RID_SVXSTR_YESTOALL", "Yes to All")
-#define RID_SXVSTR_CONFIRM_DELETE_TOOLBAR           NC_("RID_SXVSTR_CONFIRM_DELETE_TOOLBAR", "There are no more commands on the toolbar. Do you want to delete the toolbar?")
-/* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder
-   and will be replaced at runtime by the name of the selected application
-   or document.
-*/
-#define RID_CUISTR_CONFIRM_MENU_RESET               NC_("RID_SVXSTR_CONFIRM_MENU_RESET", "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?")
-#define RID_CUISTR_CONFIRM_TOOLBAR_RESET            NC_("RID_SVXSTR_CONFIRM_TOOLBAR_RESET", "The toolbar configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?")
-#define RID_CUISTR_CONFIRM_RESTORE_DEFAULT          NC_("RID_SVXSTR_CONFIRM_RESTORE_DEFAULT", "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?")
-#define RID_CUISTR_CONFIRM_RESTORE_DEFAULT_MENU     NC_("RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU", "This will delete all changes previously made to this context menu. Do you really want to reset?")
-#define RID_CUISTR_LABEL_NEW_NAME                   NC_("RID_SVXSTR_LABEL_NEW_NAME", "~New name")
-#define RID_CUISTR_RENAME_MENU                      NC_("RID_SVXSTR_RENAME_MENU", "Rename Menu")
-#define RID_CUISTR_RENAME_TOOLBAR                   NC_("RID_SVXSTR_RENAME_TOOLBAR", "Rename Toolbar")
-#define RID_CUISTR_ALL_COMMANDS                     NC_("RID_SVXSTR_ALL_COMMANDS", "All Commands")
-#define RID_CUISTR_TABBED                           NC_("RID_SVXSTR_TABBED", "Tabbed")
-#define RID_CUISTR_TABBED_COMPACT                   NC_("RID_SVXSTR_TABBED_COMPACT", "Tabbed Compact")
-#define RID_CUISTR_GROUPEDBAR                       NC_("RID_SVXSTR_GROUPEDBAR", "Groupedbar")
-#define RID_CUISTR_GROUPEDBAR_COMPACT               NC_("RID_SVXSTR_GROUPEDBAR_COMPACT", "Groupedbar Compact")
 
 #define RID_CUISTR_HYPDLG_CLOSEBUT                  NC_("RID_SVXSTR_HYPDLG_CLOSEBUT", "Close")
 #define RID_CUISTR_HYPDLG_MACROACT1                 NC_("RID_SVXSTR_HYPDLG_MACROACT1", "Mouse over object")
@@ -60,10 +32,8 @@
 
 #define RID_CUISTR_SELECT_FILE_IFRAME               NC_("RID_SVXSTR_SELECT_FILE_IFRAME", "Select File for Floating Frame")
 #define RID_CUISTR_ALLFUNCTIONS                     NC_("RID_SVXSTR_ALLFUNCTIONS", "All commands")
-#define RID_CUISTR_MACROS                           NC_("RID_SVXSTR_MACROS", "Macros")
 #define RID_CUISTR_MYMACROS                         NC_("RID_SVXSTR_MYMACROS", "My Macros")
 #define RID_CUISTR_PRODMACROS                       NC_("RID_SVXSTR_PRODMACROS", "Application Macros")
-#define RID_CUISTR_NOMACRODESC                      NC_("RID_SVXSTR_NOMACRODESC", "There is no description available for this macro.")
 #define RID_CUISTR_SELECTOR_RUN                     NC_("RID_SVXSTR_SELECTOR_RUN", "Run")
 #define RID_CUISTR_ROW                              NC_("RID_SVXSTR_ROW", "Insert Rows")
 // tdf#119293 Labels depending on row/col
@@ -77,9 +47,6 @@
 #define RID_CUISTR_INSERTCOL_AFTER                  NC_("RID_SVXSTR_INSERTCOL_AFTER", "After selection")
 #define RID_CUISTR_AUTO_ENTRY                       NC_("RID_SVXSTR_AUTO_ENTRY", "Automatic")
 #define RID_CUISTR_EDIT_GRAPHIC                     NC_("RID_SVXSTR_EDIT_GRAPHIC", "Link")
-#define RID_CUISTR_LOADACCELCONFIG                  NC_("RID_SVXSTR_LOADACCELCONFIG", "Load Keyboard Configuration")
-#define RID_CUISTR_SAVEACCELCONFIG                  NC_("RID_SVXSTR_SAVEACCELCONFIG", "Save Keyboard Configuration")
-#define RID_CUISTR_FILTERNAME_CFG                   NC_("RID_SVXSTR_FILTERNAME_CFG", "Configuration (*.cfg)")
 #define RID_CUISTR_HYPDLG_ERR_LERR_NOENTRIES        NC_("RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES", "Targets do not exist in the document.")
 #define RID_CUISTR_HYPDLG_ERR_LERR_DOCNOTOPEN       NC_("RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN", "Couldn't open the document.")
 #define RID_CUISTR_EDITHINT                         NC_("RID_SVXSTR_EDITHINT", "[Enter text here]")
@@ -325,7 +292,6 @@
 #define RID_CUISTR_COMMANDLABEL                     NC_("RID_SVXSTR_COMMANDLABEL", "Label")
 #define RID_CUISTR_COMMANDNAME                      NC_("RID_SVXSTR_COMMANDLABEL", "Command")
 #define RID_CUISTR_COMMANDTIP                       NC_("RID_SVXSTR_COMMANDLABEL", "Tooltip")
-#define RID_CUISTR_COMMANDEXPERIMENTAL              NC_("RID_SVXSTR_COMMANDEXPERIMENTAL", "Experimental")
 
 #define RID_CUISTR_QRCODEDATALONG                   NC_("RID_SVXSTR_QRCODEDATALONG", "The URL or text is too long for the current error correction level. Either shorten the text or decrease the correction level.")
 #define RID_CUISTR_DELETEUSERCOLOR1                 NC_("RID_SVXSTR_DELETEUSERCOLOR1", "You can only delete user-defined colors")

@@ -378,9 +378,6 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     // linked list
     if (fn == SRCDIR "/filter/source/graphicfilter/ios2met/ios2met.cxx")
         return;
-    // no idea what this is trying to do
-    if (fn == SRCDIR "/cui/source/customize/SvxMenuConfigPage.cxx")
-        return;
     // I cannot follow the ownership of OSQLParseNode's
     if (fn == SRCDIR "/dbaccess/source/core/api/SingleSelectQueryComposer.cxx")
         return;

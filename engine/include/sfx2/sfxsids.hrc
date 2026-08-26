@@ -486,15 +486,7 @@ class SvxZoomItem;
 #define SID_APPLY_THEME                     (SID_SFX_START + 818)
 
 // default-ids for configuration
-#define SID_CONFIG                          TypedWhichId<SfxStringItem>(SID_SFX_START + 904)
-#define SID_TOOLBOXOPTIONS                  (SID_SFX_START + 907)
-#define SID_MACROINFO                       TypedWhichId<SfxMacroInfoItem>(SID_SFX_START + 919)
 #define SID_TOGGLESTATUSBAR                 TypedWhichId<SfxBoolItem>(SID_SFX_START + 920)
-#define SID_CONFIGSTATUSBAR                 (SID_SFX_START + 921)
-#define SID_CONFIGMENU                      (SID_SFX_START + 924)
-#define SID_CONFIGACCEL                     (SID_SFX_START + 925)
-#define SID_CONFIGEVENT                     (SID_SFX_START + 926)
-#define SID_CFGFILE                         (SID_SFX_START + 927)
 #define SID_SHOWPOPUPS                      (SID_SFX_START + 929)
 
 // Item-Id for the assigned event Tabpage.
