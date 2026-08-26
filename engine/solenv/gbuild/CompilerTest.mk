@@ -43,8 +43,6 @@ gb_CompilerTest_add_objcobject = $(call gb_CompilerTest__forward_to_Linktarget,$
 gb_CompilerTest_add_objcobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CompilerTest_add_objcxxobject = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CompilerTest_add_objcxxobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
-gb_CompilerTest_add_cxxclrobject = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
-gb_CompilerTest_add_cxxclrobjects = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CompilerTest_use_externals = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CompilerTest_use_udk_api = $(call gb_CompilerTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 

@@ -367,9 +367,7 @@ static std::string write_phony_dep_file(const char* fn)
         || strncmp(src_relative, "GenObjCxxObject/", 16) == 0
         || strncmp(src_relative, "GenObjCObject/", 14) == 0
         || strncmp(src_relative, "GenAsmObject/", 13) == 0
-        || strncmp(src_relative, "GenNasmObject/", 14) == 0
-        || strncmp(src_relative, "CxxClrObject/", 13) == 0
-        || strncmp(src_relative, "GenCxxClrObject/", 16) == 0)
+        || strncmp(src_relative, "GenNasmObject/", 14) == 0)
     {
         std::string created_line = generate_phony_line(src_relative, "o");
         if (!generate_phony_file(fn, created_line))

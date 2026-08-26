@@ -67,7 +67,6 @@ gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(call gb_LinkTarget__get_deb
 gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(call gb_LinkTarget__get_debugflags,$(1)))
 gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(call gb_LinkTarget__get_debugflags,$(1)))
 gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(call gb_LinkTarget__get_debugflags,$(1)))
-gb_LinkTarget__get_cxxclrflags=$(call gb_LinkTarget__get_debugflags,$(1))
 # call gb_LinkTarget__get_ldflags,linktargetmakefilename
 gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_debugldflags,$(1)))
 
@@ -148,29 +147,14 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE) \
 		)
 endef
-define gb_CxxClrObject__tool_command
-$(call gb_Helper_abbreviate_dirs,\
-        ICECC=no CCACHE_DISABLE=1 \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(T_LTOFLAGS) \
-		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(if $(3),$(gb_COMPILER_PLUGINS_TOOL)) \
-		$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND) \
-		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
-		-c $(2) \
-		$(INCLUDE) \
-		)
-endef
 
 
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
-# LinkTarget                  linking                      AsmObject CObject CxxObject GenCObject GenCxxObject ObjCObject ObjCxxObject GenObjCObject GenObjCxxObject GenAsmObject GenNasmObject CxxClrObject
+# LinkTarget                  linking                      AsmObject CObject CxxObject GenCObject GenCxxObject ObjCObject ObjCxxObject GenObjCObject GenObjCxxObject GenAsmObject GenNasmObject
 #                                                          LinkTarget/headers
-# LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep GenObjCObject/dep GenObjCxxObject/dep GenAsmObject/dep GenNasmObject/dep CxxClrObject/dep GenCxxClrObject/dep
+# LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep GenObjCObject/dep GenObjCxxObject/dep GenAsmObject/dep GenNasmObject/dep
 #                                                          | LinkTarget/headers
 # LinkTarget/headers          all headers available
 #                             including own generated
@@ -191,9 +175,6 @@ endef
 #                              generated source
 # GenNasmObject               nasm compile from            | LinkTarget/headers
 #                              generated source
-# CxxClrObject                C++ CLR compile              | LinkTarget/headers
-# GenCxxClrObject             C++ CLR compile from         | LinkTarget/headers
-#                              generated source
 #
 # AsmObject                   asm compile                  | LinkTarget
 #
@@ -207,8 +188,6 @@ endef
 # GenObjCxxObject/dep         dependencies
 # GenAsmObject/dep            dependencies
 # GenNasmObject/dep           dependencies
-# CxxClrObject/dep            dependencies
-# GenCxxClrObject/dep         dependencies
 # AsmObject/dep               dependencies
 
 # LinkTarget/headers means gb_LinkTarget_get_headers_target etc.
@@ -409,40 +388,6 @@ $(dir $(call gb_GenCxxObject_get_dep_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_GenCxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@)
-
-endif
-
-
-# GenCxxClrObject class
-
-gb_GenCxxClrObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
-
-ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_GenCxxClrObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
-	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),$(true),CLR,3)
-	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
-	test -f $(GEN_CXXCLR_SOURCE) || (echo "Missing generated source file $(GEN_CXXCLR_SOURCE)" && false)
-	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxClrObject__tool_command,$*,$(GEN_CXXCLR_SOURCE),$(COMPILER_PLUGINS)))
-	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND),$(GEN_CXXCLR_SOURCE),$(call gb_GenCxxClrObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
-	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
-else
-$(call gb_GenCxxClrObject_get_target,%) :
-	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),$(true),CLR,3)
-	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
-	test -f $(GEN_CXXCLR_SOURCE) || (echo "Missing generated source file $(GEN_CXXCLR_SOURCE)" && false)
-	$(call gb_CObject__command_pattern,$@,$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND),$(GEN_CXXCLR_SOURCE),$(call gb_GenCxxClrObject_get_dep_target,$*),$(COMPILER_PLUGINS),)
-	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
-endif
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(dir $(call gb_GenCxxClrObject_get_dep_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_GenCxxClrObject_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_GenCxxClrObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
 endif
@@ -685,39 +630,6 @@ $(call gb_GenNasmObject_get_dep_target,%) :
 endif
 
 
-# CxxClrObject class
-#
-
-gb_CxxClrObject_get_source = $(1)/$(2).cxx
-
-ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_TARGET)
-	$(call gb_Output_announce,$*.cxx,$(true),CLR,3)
-	$(call gb_Trace_StartRange,$*.cxx,CLR)
-	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxClrObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
-	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND),$<,$(call gb_CxxClrObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
-	$(call gb_Trace_EndRange,$*.cxx,CLR)
-else
-$(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%)
-	$(call gb_Output_announce,$*.cxx,$(true),$(if $(COMPILER_TEST),C?R,CLR),3)
-	$(call gb_Trace_StartRange,$*.cxx,$(if $(COMPILER_TEST),C?R,CLR))
-	$(call gb_CObject__command_pattern,$@,$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND),$<,$(call gb_CxxClrObject_get_dep_target,$*),$(COMPILER_PLUGINS),)
-	$(call gb_Trace_EndRange,$*.cxx,$(if $(COMPILER_TEST),C?R,CLR))
-endif
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(dir $(call gb_CxxClrObject_get_dep_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_CxxClrObject_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_CxxClrObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@)
-
-endif
-
-
 # AsmObject class
 
 $(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SRCDIR),%)
@@ -756,9 +668,6 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dwo_target,$(object))) \
-		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_target,$(object))) \
-		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_dep_target,$(object))) \
-		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_dwo_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dwo_target,$(object))) \
@@ -780,9 +689,6 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_dwo_target,$(object))) \
-		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
-		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dep_target,$(object))) \
-		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dwo_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_dep_target,$(LINKTARGET)) \
 		$(if $(gb_PARTIAL_BUILD),, \
@@ -812,7 +718,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dep_target,$(object)))\
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
-		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_dep_target,$(object)))\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object)))\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
@@ -820,7 +725,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_dep_target,$(object))) \
-		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dep_target,$(object))) \
 		) && \
 	SYSTEM_BOOST="$(SYSTEM_BOOST)" $(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
@@ -835,7 +739,6 @@ $(file >$(1),\
 	$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 	$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 	$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
-	$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_target,$(object))) \
 	$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 	$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
@@ -843,7 +746,6 @@ $(file >$(1),\
 	$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_target,$(object))) \
 	$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_target,$(object))) \
 	$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
-	$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
 	$(PCHOBJS) \
 	$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))))
 
@@ -1020,8 +922,6 @@ $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : CXXCLROBJECTS :=
-$(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : ASMOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS :=
@@ -1035,8 +935,6 @@ $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENNASMOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENOBJCXXOBJECTS :=
-$(call gb_LinkTarget_get_clean_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : GENCXXCLROBJECTS :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS_APPEND :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
@@ -1049,8 +947,6 @@ $(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAG
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS_APPEND :=
 $(call gb_LinkTarget_get_target,$(1)) : T_NASMFLAGS := $$(NAFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_NASMFLAGS_APPEND :=
-$(call gb_LinkTarget_get_target,$(1)) : T_CXXCLRFLAGS := $$(gb_LinkTarget_CXXCLRFLAGS)
-$(call gb_LinkTarget_get_target,$(1)) : T_CXXCLRFLAGS_APPEND :=
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := -I$$(SRCDIR)/include $$(gb_LinkTarget_INCLUDE)
@@ -1097,7 +993,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : CXXCLROBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
@@ -1105,7 +1000,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENNASMOBJECTS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXCLROBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
 endif # gb_FULLDEPS
 
@@ -1149,11 +1043,6 @@ endef
 # call gb_LinkTarget_add_nasmflags,linktarget,nasmflags
 define gb_LinkTarget_add_nasmflags
 $(call gb_LinkTarget_get_target,$(1)) : T_NASMFLAGS_APPEND += $(2)
-endef
-
-# call gb_LinkTarget_add_cxxclrflags,linktarget,cxxclrflags
-define gb_LinkTarget_add_cxxclrflags
-$(call gb_LinkTarget_get_target,$(1)) : T_CXXCLRFLAGS_APPEND += $(2)
 endef
 
 # call gb_LinkTarget__add_include,linktarget,includes
@@ -1557,27 +1446,6 @@ endif
 
 endef
 
-# call gb_LinkTarget_add_cxxclrobject,linktarget,sourcefile,cxxclrflags,linktargetmakefilename
-define gb_LinkTarget_add_cxxclrobject
-$(if $(wildcard $(call gb_CxxClrObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_CxxClrObject_get_source,$(SRCDIR),$(2)))))
-$(call gb_LinkTarget_get_target,$(1)) : CXXCLROBJECTS += $(2)
-$(call gb_LinkTarget_get_clean_target,$(1)) : CXXCLROBJECTS += $(2)
-
-$(call gb_LinkTarget_get_target,$(1)) : $(call gb_CxxClrObject_get_target,$(2))
-$(call gb_CxxClrObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_CxxClrObject_get_target,$(2)) : T_CXXCLRFLAGS += $(call gb_LinkTarget__get_cxxclrflags,$(4)) $(3)
-$(call gb_CxxClrObject_get_target,$(2)) : \
-	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : CXXCLROBJECTS += $(2)
-$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxClrObject_get_dep_target,$(2))
-$(call gb_CxxClrObject_get_dep_target,$(2)) :| $(dir $(call gb_CxxClrObject_get_dep_target,$(2))).dir
-$(call gb_CxxClrObject_get_target,$(2)) :| $(dir $(call gb_CxxClrObject_get_dep_target,$(2))).dir
-endif
-
-endef
-
 # call gb_LinkTarget_add_asmobject,linktarget,sourcefile
 define gb_LinkTarget_add_asmobject
 $(if $(wildcard $(call gb_AsmObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_AsmObject_get_source,$(SRCDIR),$(2)))))
@@ -1757,28 +1625,6 @@ endif
 
 endef
 
-# call gb_LinkTarget_add_generated_cxxclrobject,linktarget,sourcefile,cxxclrflags,linktargetmakefilename
-define gb_LinkTarget_add_generated_cxxclrobject
-$(call gb_LinkTarget_get_target,$(1)) : GENCXXCLROBJECTS += $(2)
-$(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXCLROBJECTS += $(2)
-
-$(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxClrObject_get_target,$(2))
-$(call gb_GenCxxClrObject_get_target,$(2)) : $(call gb_GenCxxClrObject_get_source,$(2),$(1))
-$(call gb_GenCxxClrObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_GenCxxClrObject_get_target,$(2)) : T_CXXCLRFLAGS += $(call gb_LinkTarget__get_cxxclrflags,$(4)) $(3)
-$(call gb_GenCxxClrObject_get_target,$(2)) : \
-	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
-$(call gb_GenCxxClrObject_get_target,$(2)) : GEN_CXXCLR_SOURCE := $(call gb_GenCxxClrObject_get_source,$(2),$(1))
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXCLROBJECTS += $(2)
-$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCxxClrObject_get_dep_target,$(2))
-$(call gb_GenCxxClrObject_get_dep_target,$(2)) :| $(dir $(call gb_GenCxxClrObject_get_dep_target,$(2))).dir
-$(call gb_GenCxxClrObject_get_target,$(2)) :| $(dir $(call gb_GenCxxClrObject_get_dep_target,$(2))).dir
-endif
-
-endef
-
 # Add a bison grammar to the build.
 # call gb_LinkTarget_add_grammar,linktarget,yaccfile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_grammar
@@ -1865,11 +1711,6 @@ define gb_LinkTarget_add_objcxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_objcxxobject,$(1),$(obj),$(3),$(4)))
 endef
 
-# call gb_LinkTarget_add_cxxclrobjects,linktarget,sourcefiles,cxxclrflags,linktargetmakefilename
-define gb_LinkTarget_add_cxxclrobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_cxxclrobject,$(1),$(obj),$(3),$(4)))
-endef
-
 # call gb_LinkTarget_add_asmobjects,linktarget,sourcefiles,asmflags,linktargetmakefilename
 define gb_LinkTarget_add_asmobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3),$(4)))
@@ -1926,11 +1767,6 @@ endef
 # call gb_LinkTarget_add_generated_nasmobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_nasmobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_nasm_object,$(1),$(obj),$(3),$(4)))
-endef
-
-# call gb_LinkTarget_add_generated_cxxclrobjects,linktarget,sourcefiles,cxxclrflags,linktargetmakefilename
-define gb_LinkTarget_add_generated_cxxclrobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxxclrobject,$(1),$(obj),$(3),$(4)))
 endef
 
 # call gb_LinkTarget_set_targettype,linktarget,targettype

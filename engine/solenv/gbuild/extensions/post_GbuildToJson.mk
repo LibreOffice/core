@@ -50,12 +50,10 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --yaccobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(YACCOBJECTS)) \
 --objcobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(OBJCOBJECTS)) \
 --objcxxobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(OBJCXXOBJECTS)) \
---cxxclrobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(CXXCLROBJECTS)) \
 --asmobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(ASMOBJECTS)) \
 --lexobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(LEXOBJECTS)) \
 --gencobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(GENCOBJECTS)) \
 --gencxxobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(GENCXXOBJECTS)) \
---gencxxclrobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(GENCXXCLROBJECTS)) \
 --cobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(COBJECTS)) \
 --javaobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(JAVAOBJECTS)) \
 --pythonobjects=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(PYTHONOBJECTS)) \
@@ -67,8 +65,6 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --objcflagsappend=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(T_OBJCFLAGS_APPEND)) \
 --objcxxflags=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(T_OBJCXXFLAGS)) \
 --objcxxflagsappend=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(T_OBJCXXFLAGS_APPEND)) \
---cxxclrflags=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(T_CXXCLRFLAGS)) \
---cxxclrflagsappend=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(T_CXXCLRFLAGS_APPEND)) \
 --defs=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(DEFS)) \
 --include=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(INCLUDE)) \
 --linked_libs=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(LINKED_LIBS)) \
@@ -117,20 +113,12 @@ define gb_LinkTarget_add_generated_cxx_object_internal
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 
 endef
-define gb_LinkTarget_add_generated_cxxclrobject
-$(call gb_LinkTarget_get_target,$(1)) : GENCXXCLROBJECTS += $(2)
-
-endef
 define gb_LinkTarget_add_objcobject
 $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS += $(2)
 
 endef
 define gb_LinkTarget_add_objcxxobject
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS += $(2)
-
-endef
-define gb_LinkTarget_add_cxxclrobject
-$(call gb_LinkTarget_get_target,$(1)) : CXXCLROBJECTS += $(2)
 
 endef
 define gb_LinkTarget_add_scanners

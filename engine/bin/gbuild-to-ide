@@ -39,7 +39,7 @@ class GbuildLinkTarget:
 
     @staticmethod
     def __split_objs(objsline):
-        return [obj for obj in objsline.strip().split(' ') if obj not in { '', 'CXXOBJECTS', 'COBJECTS', 'OBJCXXOBJECTS', 'CXXCLROBJECTS', '+=' }]
+        return [obj for obj in objsline.strip().split(' ') if obj not in { '', 'CXXOBJECTS', 'COBJECTS', 'OBJCXXOBJECTS', '+=' }]
 
     @staticmethod
     def __split_defs(defsline):
@@ -64,7 +64,7 @@ class GbuildLinkTarget:
 
     def __init__(self, json):
         (foundincludes, foundisystem) = GbuildLinkTarget.__split_includes(json['INCLUDE'])
-        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.objcxxobjects, self.cxxflags, self.objcxxflags, self.cobjects, self.objcobjects, self.cflags, self.objcflags, self.cxxclrobjects, self.cxxclrflags, self.linked_libs, self.linked_static_libs, self.link_target) = (
+        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.objcxxobjects, self.cxxflags, self.objcxxflags, self.cobjects, self.objcobjects, self.cflags, self.objcflags, self.linked_libs, self.linked_static_libs, self.link_target) = (
             type(self).targetpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
@@ -78,8 +78,6 @@ class GbuildLinkTarget:
             GbuildLinkTarget.__split_objs(json['OBJCOBJECTS']),
             GbuildLinkTarget.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
             GbuildLinkTarget.__split_flags(json['OBJCFLAGS'], json['OBJCFLAGSAPPEND']),
-            GbuildLinkTarget.__split_objs(json['CXXCLROBJECTS']),
-            GbuildLinkTarget.__split_flags(json['CXXCLRFLAGS'], json['CXXCLRFLAGSAPPEND']),
             json['LINKED_LIBS'].strip().split(' '),
             json['LINKED_STATIC_LIBS'].strip().split(' '),
             json['LINKTARGET'].strip())
@@ -935,7 +933,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     # Check if the target is empty (no source files would be added to project file)
     @staticmethod
     def should_skip(target):
-        return not target.cxxobjects and not target.cxxclrobjects and not target.cobjects
+        return not target.cxxobjects and not target.cobjects
 
     def emit(self):
         all_projects = []
@@ -1106,7 +1104,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             os.makedirs(folder)
         project_guid = self.gen_guid('project', target.short_name())
         cxxflags = ' '.join(target.cxxflags)
-        cxxclrflags = ' '.join(target.cxxclrflags)
         cflags = ' '.join(target.cflags)
         ET.register_namespace('', self.ns)
         proj_node = ET.Element('{%s}Project' % self.ns, DefaultTargets='Build', ToolsVersion='4.0')
@@ -1187,7 +1184,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % self.ns)
         self.add_objects(target.cxxobjects, self.gbuildparser.srcdir, '.cxx', target, cxxobjects_node)
-        self.add_objects(target.cxxclrobjects, self.gbuildparser.srcdir, '.cxx', target, cxxobjects_node, cxxclrflags)
 
         cobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % self.ns)
         self.add_objects(target.cobjects, self.gbuildparser.srcdir, '.c', target, cobjects_node, cflags)

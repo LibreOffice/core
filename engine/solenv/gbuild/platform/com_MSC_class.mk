@@ -31,9 +31,7 @@ define gb_CObject__compiler
 		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
 			$(if $(filter %.c,$(2)), \
 				$(if $(3), $(3), $(gb_CC)), \
-				$(if $(filter -clr,$(1)), \
-					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl, \
-						$(if $(3), $(3), $(gb_CXX))))))
+				$(if $(3), $(3), $(gb_CXX)))))
 endef
 
 # Avoid annoying warning D9025 about overriding command-line arguments.
@@ -86,10 +84,10 @@ $(call gb_Helper_abbreviate_dirs,\
 			$(if $(6), $(call gb_CObject__filter_out_clang_cflags,$(2)),$(2)) \
 			$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 			$(if $(EXTERNAL_CODE), \
-				$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
+				$(if $(COM_IS_CLANG),-Wno-undef), \
 				$(gb_DEFS_INTERNAL)) \
 			$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-			$(if $(filter -clr,$(2)),,$(if $(5),$(gb_COMPILER_PLUGINS))) \
+			$(if $(5),$(gb_COMPILER_PLUGINS)) \
 			$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
 			$(PCHFLAGS) \
 			$(if $(COMPILER_TEST),,$(if $(or $(COM_IS_CLANG),$(T_USE_CLANG)),$(gb_COMPILERDEPFLAGS),/sourceDependencies $(4).json)) \
@@ -219,7 +217,6 @@ endif
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
-gb_LinkTarget_CXXCLRFLAGS := $(gb_CXXCLRFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
 	$(SOLARINC) \
@@ -271,8 +268,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
-		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_target,$(object))) \
-		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
@@ -350,9 +345,9 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 # fastlink is faster but pdb files reference .obj files.
 # Static gate, resolved once at parse time: dbgutil and a linker that supports it.
 gb_Windows_PE_FASTLINK := $(if $(filter TRUE,$(ENABLE_DBGUTIL)),$(HAVE_LINK_DEBUG_FASTLINK))
-# but don't do that for setup_native DLLs: this produces make error 139 in some configurations;
-# same for managed/CLR images. Per-target carve-outs, resolved at link time.
-gb_Windows_PE_use_fastlink = $(if $(gb_Windows_PE_FASTLINK),$(if $(filter -U_DLL,$(1))$(CXXCLROBJECTS)$(GENCXXCLROBJECTS),,:fastlink))
+# but don't do that for setup_native DLLs: this produces make error 139 in some
+# configurations. Per-target carve-out, resolved at link time.
+gb_Windows_PE_use_fastlink = $(if $(gb_Windows_PE_FASTLINK),$(if $(filter -U_DLL,$(1)),,:fastlink))
 gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = -debug$(call gb_Windows_PE_use_fastlink,$(1))
 
 ifeq ($(ENABLE_LTO),TRUE)

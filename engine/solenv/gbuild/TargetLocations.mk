@@ -156,10 +156,6 @@ gb_GenObjCxxObject_get_target = $(WORKDIR)/GenObjCxxObject/$(1).o
 gb_GenObjCxxObject_get_dwo_target = $(WORKDIR)/GenObjCxxObject/$(1).dwo
 gb_GenObjCObject_get_target = $(WORKDIR)/GenObjCObject/$(1).o
 gb_GenObjCObject_get_dwo_target = $(WORKDIR)/GenObjCObject/$(1).dwo
-gb_CxxClrObject_get_target = $(WORKDIR)/CxxClrObject/$(1).o
-gb_CxxClrObject_get_dwo_target = $(WORKDIR)/CxxClrObject/$(1).dwo
-gb_GenCxxClrObject_get_target = $(WORKDIR)/GenCxxClrObject/$(1).o
-gb_GenCxxClrObject_get_dwo_target = $(WORKDIR)/GenCxxClrObject/$(1).dwo
 gb_Pagein_get_target = $(WORKDIR)/Pagein/pagein-$(1)
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1).filelist
@@ -332,7 +328,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	CxxObject \
 	ObjCObject \
 	ObjCxxObject \
-	CxxClrObject \
 	AsmObject \
 	GenCObject \
 	GenCxxObject \
@@ -340,7 +335,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	GenObjCxxObject \
 	GenAsmObject \
 	GenNasmObject \
-	GenCxxClrObject \
 	SdiTarget \
 ))
 
