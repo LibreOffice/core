@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-19 17:51+0000\n"
+"PO-Revision-Date: 2026-08-26 10:13+0000\n"
 "Last-Translator: AlexYang <a012-alex@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/help/zh_Hans/>\n"
@@ -968,14 +968,13 @@ msgstr ""
 ">+</span><kbd>Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
-#, fuzzy
 msgid ""
 "3 seconds in Insert mode, Arrow Key inserts row/column, <kbd>Ctrl</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</kbd> "
 "inserts cell"
 msgstr ""
-"处于插入模式 3 秒钟，方向键插入行或列，<kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>方向键</kbd>插入单元格"
+"进入插入模式 3 秒后，方向键 插入行/列，<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>方向键</kbd> 插入单元格"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-38
 msgid ""
@@ -986,14 +985,14 @@ msgstr ""
 ">+</span><kbd>Del</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
-#, fuzzy
 msgid ""
 "3 seconds in Delete mode, Arrow key deletes row/column, <kbd>Ctrl</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow key</kbd> merges "
 "cell with neighboring cell"
 msgstr ""
-"处于删除模式 3 秒，方向键删除行或列，<kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>方向键</kbd>将单元格与相邻单元格合并"
+"进入删除模式 3 秒后，方向键删除行/列，<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>方向键</kbd> 合并当前单元格与相邻单"
+"元格"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
 msgid ""
