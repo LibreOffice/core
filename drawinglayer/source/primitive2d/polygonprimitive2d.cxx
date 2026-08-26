@@ -468,7 +468,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             // all directions and the rounded cap needs the same grow in all directions independent
             // from its orientation. Unfortunately this is not the case for drawing::LineCap_SQUARE
 
-            // NOTE: I thought about using [sqrt(2) * 0.5] a a factor for LineCap_SQUARE and not
+            // NOTE: I thought about using [sqrt(2) * 0.5] as a factor for LineCap_SQUARE and not
             // set bUseDecomposition. I even tried that it works. Then an auto-test failing showed
             // not only that view-dependent stuff needs to be considered (what is done for the
             // hairline case below), *BUT* also e.g. conversions to PNG/exports use the B2DRange
@@ -500,7 +500,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             //     and is correct when it already exists since the values the decomposition is
             //     based on cannot change.
             // (3) If this *is* done (like it was here) and the Primitive is derived from
-            //     BufferedDecompositionPrimitive2D and thus buffers it's decomposition,
+            //     BufferedDecompositionPrimitive2D and thus buffers its decomposition,
             //     the risk is that in this case the *wrong* decomposition will be used by
             //     other PrimitiveProcessors. Maybe not by the VclPixelProcessor2D/VclProcessor2D
             //     since it handles this primitive directly - not even sure for all cases.
@@ -508,7 +508,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             //     decomposition, and as an error, a non-stroked line will be painted/used.
             // (4) The B2DRange is not strictly defined as minimal bound for the geometry,
             //     but it should be as small/tight as possible. Making it larger risks more
-            //     area to be invalidated (repaint) and processed (all geometric stuff,l may
+            //     area to be invalidated (repaint) and processed (all geometric stuff, may
             //     include future and existing exports to other formats which are or will be
             //     implemented as PrimitiveProcessor). It is easy to imagine cases with much
             //     too large B2DRange - a line with a pattern that would solve to a single
@@ -537,7 +537,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             // Thus here I would use (c): It accepts the disadvantages of (4) over speed, but
             // avoids the errors/problems from (1-4).
             // Additional argument for this: The hairline case below *also* uses the full
-            // B2DRange of the polygon, ignoring an evtl. stroke, so (4) applies
+            // B2DRange of the polygon, ignoring an eventual stroke, so (4) applies
             if (!getStrokeAttribute().isDefault())
             {
                 // only do this if StrokeAttribute is used, else recursion may happen (!)

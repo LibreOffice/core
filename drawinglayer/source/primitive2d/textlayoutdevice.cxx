@@ -46,14 +46,14 @@ namespace
 {
 class ImpTimedRefDev;
 
-// VDev RevDevice provider
+// VDev RefDevice provider
 
-//the scoped_timed_RefDev owns an ImpTimeRefDev and releases it on dtor
+//the scoped_timed_RefDev owns an ImpTimedRefDev and releases it on dtor
 //or disposing of the default XComponentContext which causes the underlying
 //OutputDevice to get released
 
-//The ImpTimerRefDev itself, if the timeout ever gets hit, will call
-//reset on the scoped_timed_RefDev to release the ImpTimerRefDev early
+//The ImpTimedRefDev itself, if the timeout ever gets hit, will call
+//reset on the scoped_timed_RefDev to release the ImpTimedRefDev early
 //if it's unused for a few minutes
 class scoped_timed_RefDev : public comphelper::unique_disposing_ptr<ImpTimedRefDev>
 {
@@ -161,7 +161,7 @@ void releaseGlobalVirtualDevice()
 TextLayouterDevice::TextLayouterDevice()
     : mrDevice(acquireGlobalVirtualDevice())
 {
-    // tdf#168002 activate SubpixelPositioning for al TextLayouterDevice-calls
+    // tdf#168002 activate SubpixelPositioning for all TextLayouterDevice-calls
     mrDevice.setSubpixelPositioning(true);
 }
 

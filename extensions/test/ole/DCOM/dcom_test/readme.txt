@@ -1,4 +1,4 @@
-The program creates the com.sun.star.Servicemanager on a remote machine:
+The program creates the com.sun.star.ServiceManager on a remote machine:
 
 Set objServiceManager = CreateObject("com.sun.star.ServiceManager", "\\jl-1036")
 
