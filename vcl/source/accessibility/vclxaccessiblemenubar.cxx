@@ -129,7 +129,7 @@ OUString VCLXAccessibleMenuBar::getImplementationName()
 
 Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames()
 {
-    return { u"com.sun.star.awt.AccessibleMenuBar"_ustr };
+    return {};
 }
 
 
