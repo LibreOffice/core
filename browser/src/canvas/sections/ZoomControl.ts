@@ -137,7 +137,6 @@ class ZoomControl extends CanvasSectionObject {
 	// zoomEndScale (target) and hand it to the layout, which the tiles section
 	// paints as this frame is drawn.
 	public onAnimate(frameCount: number, elapsedTime: number): void {
-		void frameCount;
 		const p =
 			this.zoomDurationMs > 0
 				? Math.min(1, elapsedTime / this.zoomDurationMs)
@@ -145,17 +144,8 @@ class ZoomControl extends CanvasSectionObject {
 		this.layout.stepZoom(1 + (this.zoomEndScale - 1) * p);
 	}
 
-	// The scaled tiles are painted by TilesSection.drawZoomFrame while a zoom
-	// animation is active, so nothing to draw here.
-	public onDraw(frameCount?: number, elapsedTime?: number): void {
-		void frameCount;
-		void elapsedTime;
-	}
-
 	// Commit the final zoom when the animation finishes.
 	public onAnimationEnded(frameCount: number, elapsedTime: number): void {
-		void frameCount;
-		void elapsedTime;
 		if (this.zoomTarget !== null && this.zoomAnchor) {
 			this.layout.endZoom(this.zoomTarget, this.zoomAnchor);
 		}
@@ -171,7 +161,6 @@ class ZoomControl extends CanvasSectionObject {
 		delta: Array<number>,
 		e: WheelEvent,
 	): void {
-		void delta;
 		if (!e.ctrlKey || !this.layout) return;
 		if (!this.inDocumentArea(point)) return;
 
@@ -192,7 +181,6 @@ class ZoomControl extends CanvasSectionObject {
 	private pinchTargetZoom: number | null = null;
 
 	public onMultiTouchStart(e: TouchEvent): void {
-		void e;
 		this.pinchStartDistance = null;
 		this.pinchStartZoom = app.map.getZoom();
 		this.pinchAnchor = null;
@@ -204,7 +192,6 @@ class ZoomControl extends CanvasSectionObject {
 		distance: number,
 		e: TouchEvent,
 	): void {
-		void e;
 		if (!this.layout) return;
 		if (!this.inDocumentArea(point)) return;
 
@@ -224,7 +211,6 @@ class ZoomControl extends CanvasSectionObject {
 	}
 
 	public onMultiTouchEnd(e: TouchEvent): void {
-		void e;
 		if (this.pinchTargetZoom !== null && this.pinchAnchor) {
 			const delta = this.pinchTargetZoom - this.pinchStartZoom;
 			const finalZoom =

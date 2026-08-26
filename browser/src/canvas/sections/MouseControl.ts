@@ -701,7 +701,6 @@ class MouseControl extends CanvasSectionObject {
 	// Pinch zoom is handled by ZoomControl (a window section that receives the
 	// same multi-touch events). Here we only interrupt an ongoing swipe.
 	onMultiTouchStart(e: TouchEvent): void {
-		void e;
 		if (this.inSwipeAction) this.containerObject.stopAnimating();
 	}
 
