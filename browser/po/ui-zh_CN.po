@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-26 10:13+0000\n"
+"PO-Revision-Date: 2026-08-27 10:51+0000\n"
 "Last-Translator: AlexYang <a012-alex@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hans/>\n"
@@ -5279,7 +5279,7 @@ msgstr "上一页"
 #: src/slideshow/SlideShowPresenter.ts:841
 #: src/slideshow/SlideShowPresenter.ts:892
 msgid "Next"
-msgstr "下一个"
+msgstr "下一步"
 
 #: src/control/Control.Zotero.js:292
 msgid "Language:"
