@@ -264,7 +264,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorders)
     CPPUNIT_ASSERT(pStyle);
 
     // Data cell (row 5, middle of table) — should have thin borders from WholeTable
-    std::unique_ptr<SvxBoxItem> pBoxItem = pStyle->GetBoxItem(*pDBData, 1, 5, 4);
+    const SvxBoxItem* pBoxItem = pStyle->GetBoxItem(*pDBData, 1, 5, 4);
     CPPUNIT_ASSERT(pBoxItem);
 
     // Top and bottom borders should be thin (SvxBorderLineWidth::Thin = 15)
@@ -279,8 +279,17 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorders)
     // Border color should be Accent1-tinted (reddish)
     CPPUNIT_ASSERT(pTopLine->GetColor().GetRed() > pTopLine->GetColor().GetGreen());
 
+    // B6 sits inside the table (A1:D11), so it has no vertical edge at all, while D6 in the
+    // same band closes the table on the right. The two cells differ only in the column.
+    CPPUNIT_ASSERT(!pBoxItem->GetLine(SvxBoxItemLine::LEFT));
+    CPPUNIT_ASSERT(!pBoxItem->GetLine(SvxBoxItemLine::RIGHT));
+    const SvxBoxItem* pLastColBox = pStyle->GetBoxItem(*pDBData, 3, 5, 4);
+    CPPUNIT_ASSERT(pLastColBox);
+    CPPUNIT_ASSERT(pLastColBox->GetLine(SvxBoxItemLine::RIGHT));
+    CPPUNIT_ASSERT(!pLastColBox->GetLine(SvxBoxItemLine::LEFT));
+
     // Total row (row 10, rowIndex 9) — should have a DOUBLE top border
-    std::unique_ptr<SvxBoxItem> pTotalBox = pStyle->GetBoxItem(*pDBData, 1, 10, 9);
+    const SvxBoxItem* pTotalBox = pStyle->GetBoxItem(*pDBData, 1, 10, 9);
     CPPUNIT_ASSERT(pTotalBox);
     const editeng::SvxBorderLine* pTotalTop = pTotalBox->GetLine(SvxBoxItemLine::TOP);
     CPPUNIT_ASSERT(pTotalTop);
@@ -312,7 +321,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersNoWholeTable)
     aStyleParam.mbLastColumn = false;
     aDBData.SetTableStyleInfo(aStyleParam);
 
-    std::unique_ptr<SvxBoxItem> pHeaderBox = aStyle.GetBoxItem(aDBData, 1, 0, -1);
+    const SvxBoxItem* pHeaderBox = aStyle.GetBoxItem(aDBData, 1, 0, -1);
     CPPUNIT_ASSERT(pHeaderBox);
     const editeng::SvxBorderLine* pBotLine = pHeaderBox->GetLine(SvxBoxItemLine::BOTTOM);
     CPPUNIT_ASSERT(pBotLine);
@@ -342,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersSingleColumn)
     const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleMedium2"_ustr);
     CPPUNIT_ASSERT(pStyle);
 
-    auto assertOuterLeftRight = [](const std::unique_ptr<SvxBoxItem>& pBox, const char* pWhat) {
+    auto assertOuterLeftRight = [](const SvxBoxItem* pBox, const char* pWhat) {
         CPPUNIT_ASSERT_MESSAGE(pWhat, pBox);
         CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::LEFT) != nullptr);
         CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::RIGHT) != nullptr);
@@ -369,7 +378,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersSingleColumnInnerVert
     const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleLight17"_ustr);
     CPPUNIT_ASSERT(pStyle);
 
-    auto assertLeftRight = [](const std::unique_ptr<SvxBoxItem>& pBox, const char* pWhat) {
+    auto assertLeftRight = [](const SvxBoxItem* pBox, const char* pWhat) {
         CPPUNIT_ASSERT_MESSAGE(pWhat, pBox);
         CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::LEFT) != nullptr);
         CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::RIGHT) != nullptr);
@@ -536,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleTotalCells)
     CPPUNIT_ASSERT(pWeight);
     CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, pWeight->GetWeight());
 
-    std::unique_ptr<SvxBoxItem> pBox = aStyle.GetBoxItem(aDBData, 0, 10, 9);
+    const SvxBoxItem* pBox = aStyle.GetBoxItem(aDBData, 0, 10, 9);
     CPPUNIT_ASSERT(pBox);
     const editeng::SvxBorderLine* pBotLine = pBox->GetLine(SvxBoxItemLine::BOTTOM);
     CPPUNIT_ASSERT(pBotLine);
@@ -622,7 +631,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleThemeChange)
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xFF), aColorB.GetBlue());
 
     // Border colors should also have changed
-    std::unique_ptr<SvxBoxItem> pBoxB = pStyle->GetBoxItem(*pDBData, 1, 5, 4);
+    const SvxBoxItem* pBoxB = pStyle->GetBoxItem(*pDBData, 1, 5, 4);
     CPPUNIT_ASSERT(pBoxB);
     const editeng::SvxBorderLine* pLine = pBoxB->GetLine(SvxBoxItemLine::TOP);
     CPPUNIT_ASSERT(pLine);
@@ -746,7 +755,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testMultipleTableStyleCategories)
                                    pFill != nullptr);
 
             // Medium styles should have borders on data cells
-            std::unique_ptr<SvxBoxItem> pBox = pMedium->GetBoxItem(*pDBData, 1, 5, 4);
+            const SvxBoxItem* pBox = pMedium->GetBoxItem(*pDBData, 1, 5, 4);
             CPPUNIT_ASSERT_MESSAGE(OString("No borders for: " + rName.toUtf8()).getStr(),
                                    pBox != nullptr);
         }
@@ -935,7 +944,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleNoHeaderNoTotal)
 
     // No total row — last row (row 9) is just a data row, not a total row
     // No DOUBLE_THIN border
-    std::unique_ptr<SvxBoxItem> pBoxLast = pStyle->GetBoxItem(aDBNoHeaderNoTotal, 1, 9, 9);
+    const SvxBoxItem* pBoxLast = pStyle->GetBoxItem(aDBNoHeaderNoTotal, 1, 9, 9);
     if (pBoxLast)
     {
         const editeng::SvxBorderLine* pTopLine = pBoxLast->GetLine(SvxBoxItemLine::TOP);
@@ -973,7 +982,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleNoHeaderNoTotal)
     CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xFF), pHeaderFill->GetColor().GetRed());
 
     // Total row (row 10) should have DOUBLE_THIN top border
-    std::unique_ptr<SvxBoxItem> pTotalBox = pStyle->GetBoxItem(aDBWithBoth, 1, 10, 9);
+    const SvxBoxItem* pTotalBox = pStyle->GetBoxItem(aDBWithBoth, 1, 10, 9);
     CPPUNIT_ASSERT(pTotalBox);
     const editeng::SvxBorderLine* pTotalTop = pTotalBox->GetLine(SvxBoxItemLine::TOP);
     CPPUNIT_ASSERT(pTotalTop);
@@ -1130,7 +1139,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFirstLastColumn)
     m_pDoc->DeleteTab(0);
 }
 
-// Test 12: Verify tiny table (single data row) doesn't crash
+// Test 12: The smallest Tables — one column, and the smallest one with a total row
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleTinyTable)
 {
     m_pDoc->InitDrawLayer();
@@ -1153,37 +1162,73 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleTinyTable)
     aStyleParam.mbLastColumn = false;
     aDB1.SetTableStyleInfo(aStyleParam);
 
-    // Should not crash — header row 0
+    // Header row 0
     const SvxBrushItem* pFill = pStyle->GetFillItem(aDB1, 0, 0, 0);
     CPPUNIT_ASSERT(pFill); // header should still have fill
     const SfxItemSet* pFont = pStyle->GetFontItemSet(aDB1, 0, 0, 0);
     CPPUNIT_ASSERT(pFont);
-    std::unique_ptr<SvxBoxItem> pBox = pStyle->GetBoxItem(aDB1, 0, 0, 0);
-    // Border may or may not exist, just verify no crash
 
-    // Data row 1
+    // A1 opens the table on the left, and B1 closes it on the right, so the header cell
+    // carries the top and left edges but no right one.
+    const SvxBoxItem* pHeaderBox = pStyle->GetBoxItem(aDB1, 0, 0, 0);
+    CPPUNIT_ASSERT(pHeaderBox);
+    CPPUNIT_ASSERT(pHeaderBox->GetLine(SvxBoxItemLine::TOP));
+    CPPUNIT_ASSERT(pHeaderBox->GetLine(SvxBoxItemLine::LEFT));
+    CPPUNIT_ASSERT(!pHeaderBox->GetLine(SvxBoxItemLine::RIGHT));
+
+    // Data row 1 — the only data row, so it is the last row of the table as well. Without a
+    // total row it must not take the total row's double top border, and it has to close the
+    // table at the bottom.
     pStyle->GetFillItem(aDB1, 0, 1, 0);
     pStyle->GetFontItemSet(aDB1, 0, 1, 0);
-    pStyle->GetBoxItem(aDB1, 0, 1, 0);
+    const SvxBoxItem* pDataBox = pStyle->GetBoxItem(aDB1, 0, 1, 0);
+    CPPUNIT_ASSERT(pDataBox);
+    const editeng::SvxBorderLine* pDataTop = pDataBox->GetLine(SvxBoxItemLine::TOP);
+    CPPUNIT_ASSERT(pDataTop);
+    CPPUNIT_ASSERT(pDataTop->GetBorderLineStyle() != SvxBorderLineStyle::DOUBLE_THIN);
+    CPPUNIT_ASSERT(pDataBox->GetLine(SvxBoxItemLine::BOTTOM));
 
-    // Single cell table: A1:A1 — just header, no data
-    ScDBData aDB2(u"Tiny2"_ustr, 0, 0, 0, 0, 0, true, true, false);
+    // Single column table: A1:A2 — header + one data row
+    ScDBData aDB2(u"Tiny2"_ustr, 0, 0, 0, 0, 1, true, true, false);
     aDB2.SetTableStyleInfo(aStyleParam);
 
-    // Should not crash
     pStyle->GetFillItem(aDB2, 0, 0, 0);
     pStyle->GetFontItemSet(aDB2, 0, 0, 0);
-    pStyle->GetBoxItem(aDB2, 0, 0, 0);
 
-    // Header + total, no data rows: A1:B2 with total
-    ScDBData aDB3(u"Tiny3"_ustr, 0, 0, 0, 1, 1, true, true, true);
+    // A1 is the first and the last column at once, so it takes both outer edges. The same
+    // cell of aDB1 above took only the left one, and both tables share this ScTableStyle.
+    const SvxBoxItem* pOneColBox = pStyle->GetBoxItem(aDB2, 0, 0, 0);
+    CPPUNIT_ASSERT(pOneColBox);
+    CPPUNIT_ASSERT(pOneColBox->GetLine(SvxBoxItemLine::TOP));
+    CPPUNIT_ASSERT(pOneColBox->GetLine(SvxBoxItemLine::LEFT));
+    CPPUNIT_ASSERT(pOneColBox->GetLine(SvxBoxItemLine::RIGHT));
+
+    // Header + two data rows + total: A1:B4
+    ScDBData aDB3(u"Tiny3"_ustr, 0, 0, 0, 1, 3, true, true, true);
     aDB3.SetTableStyleInfo(aStyleParam);
 
-    // Row 0 = header, row 1 = total — no data rows
     pStyle->GetFillItem(aDB3, 0, 0, 0);
-    pStyle->GetFillItem(aDB3, 0, 1, 0);
+    pStyle->GetFillItem(aDB3, 0, 3, 2);
     pStyle->GetBoxItem(aDB3, 0, 0, 0);
-    pStyle->GetBoxItem(aDB3, 0, 1, 0);
+
+    // A4 is the total row: double top border, and the outer bottom and left edges. Its row
+    // index is even like aDB1's data row above, so both cells land on the same row stripe
+    // and the total row is all that separates them. Keep the data row count even.
+    const SvxBoxItem* pTotalBox = pStyle->GetBoxItem(aDB3, 0, 3, 2);
+    CPPUNIT_ASSERT(pTotalBox);
+    const editeng::SvxBorderLine* pTotalTop = pTotalBox->GetLine(SvxBoxItemLine::TOP);
+    CPPUNIT_ASSERT(pTotalTop);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE_THIN, pTotalTop->GetBorderLineStyle());
+    CPPUNIT_ASSERT(pTotalBox->GetLine(SvxBoxItemLine::BOTTOM));
+    CPPUNIT_ASSERT(pTotalBox->GetLine(SvxBoxItemLine::LEFT));
+    CPPUNIT_ASSERT(!pTotalBox->GetLine(SvxBoxItemLine::RIGHT));
+
+    // B4 ends both the total row and the table
+    const SvxBoxItem* pLastTotalBox = pStyle->GetBoxItem(aDB3, 1, 3, 2);
+    CPPUNIT_ASSERT(pLastTotalBox);
+    CPPUNIT_ASSERT(pLastTotalBox->GetLine(SvxBoxItemLine::RIGHT));
+    CPPUNIT_ASSERT(pLastTotalBox->GetLine(SvxBoxItemLine::BOTTOM));
+    CPPUNIT_ASSERT(!pLastTotalBox->GetLine(SvxBoxItemLine::LEFT));
 
     m_pDoc->DeleteTab(0);
 }

@@ -88,6 +88,17 @@ private:
     // Font attributes merged across the table elements
     mutable std::unordered_map<sal_uInt32, std::unique_ptr<SfxItemSet>> maMergedFontSets;
 
+    // Borders built per position, keyed by what GetBoxItem's result depends on. A null
+    // entry = the style draws no border there. Dropped whenever a pattern changes.
+    mutable std::unordered_map<sal_uInt32, std::unique_ptr<SvxBoxItem>> maBoxItems;
+
+    // The bits of rDBData and the cell position that GetBoxItem's outcome turns on
+    sal_uInt32 GetBoxCacheKey(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                              SCROW nRowIndex) const;
+
+    std::unique_ptr<SvxBoxItem> BuildBoxItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                                             SCROW nRowIndex) const;
+
     template <class T>
     const T* GetElementItem(ScTableStyleElement eElement, TypedWhichId<T> nWhich) const
     {
@@ -102,8 +113,8 @@ public:
                                      SCROW nRowIndex) const;
     const SvxBrushItem* GetFillItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
                                     SCROW nRowIndex) const;
-    std::unique_ptr<SvxBoxItem> GetBoxItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
-                                           SCROW nRowIndex) const;
+    const SvxBoxItem* GetBoxItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                                 SCROW nRowIndex) const;
 
     // Materialize this style's fill/border/font onto the Table's cells as direct cell attributes
     // (Convert to Range), only where the style is what actually renders; attributes that already

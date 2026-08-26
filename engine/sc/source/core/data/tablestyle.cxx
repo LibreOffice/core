@@ -277,8 +277,66 @@ const SvxBrushItem* ScTableStyle::GetFillItem(const ScDBData& rDBData, SCCOL nCo
     return GetElementItem(ScTableStyleElement::WholeTable, ATTR_BACKGROUND);
 }
 
-std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SCCOL nCol,
-                                                     SCROW nRow, SCROW nRowIndex) const
+sal_uInt32 ScTableStyle::GetBoxCacheKey(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                                        SCROW nRowIndex) const
+{
+    const ScTableStyleParam* pParam = rDBData.GetTableStyleInfo();
+    ScRange aRange;
+    rDBData.GetArea(aRange);
+
+    // Parity only counts where the banding is actually consulted, so cells that never reach
+    // it share an entry instead of splitting one per stripe.
+    const bool bBanded = nRowIndex >= 0;
+    bool bFirstRowStripe = false;
+    if (pParam->mbRowStripes && bBanded)
+    {
+        sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
+        bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
+    }
+
+    bool bFirstColStripe = false;
+    if (pParam->mbColumnStripes && bBanded)
+    {
+        SCCOL nRelativeCol = nCol - aRange.aStart.Col();
+        sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
+        bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
+    }
+
+    const bool aKeyBits[] = { nCol == aRange.aStart.Col(),
+                              nCol == aRange.aEnd.Col(),
+                              nRow == aRange.aStart.Row(),
+                              nRow == aRange.aEnd.Row(),
+                              rDBData.HasHeader(),
+                              rDBData.HasTotals(),
+                              pParam->mbFirstColumn,
+                              pParam->mbLastColumn,
+                              pParam->mbRowStripes,
+                              pParam->mbColumnStripes,
+                              bBanded,
+                              bFirstRowStripe,
+                              bFirstColStripe };
+
+    sal_uInt32 nKey = 0;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aKeyBits); ++i)
+        nKey |= sal_uInt32(aKeyBits[i]) << i;
+    return nKey;
+}
+
+const SvxBoxItem* ScTableStyle::GetBoxItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
+                                           SCROW nRowIndex) const
+{
+    const sal_uInt32 nKey = GetBoxCacheKey(rDBData, nCol, nRow, nRowIndex);
+    auto aItr = maBoxItems.find(nKey);
+    if (aItr == maBoxItems.end())
+        aItr = maBoxItems.emplace(nKey, BuildBoxItem(rDBData, nCol, nRow, nRowIndex)).first;
+
+    return aItr->second.get();
+}
+
+// Anything this reads about the cell's position or the table's options has to go into
+// GetBoxCacheKey too, or GetBoxItem hands a cached border to a cell that should not share it.
+std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, SCCOL nCol,
+                                                       SCROW nRow, SCROW nRowIndex) const
 {
     const ScTableStyleParam* pParam = rDBData.GetTableStyleInfo();
     ScRange aRange;
@@ -863,7 +921,7 @@ void ScTableStyle::BakeInto(ScDocument& rDoc, const ScDBData& rDBData) const
                                               || pCellBox->GetLeft() || pCellBox->GetRight());
             if (!bCellBoxNonEmpty)
             {
-                if (std::unique_ptr<SvxBoxItem> pBox = GetBoxItem(rDBData, nCol, nRow, nRowIndex))
+                if (const SvxBoxItem* pBox = GetBoxItem(rDBData, nCol, nRow, nRowIndex))
                 {
                     aBake.ItemSetPut(*pBox);
                     bAny = true;
@@ -934,6 +992,7 @@ void ScTableStyle::SetPattern(ScTableStyleElement eTableStyleElement,
                               std::unique_ptr<ScPatternAttr> pPattern)
 {
     maMergedFontSets.clear();
+    maBoxItems.clear();
 
     maPatterns[eTableStyleElement] = std::move(pPattern);
     const ScPatternAttr* pNew = maPatterns[eTableStyleElement].get();
@@ -1087,6 +1146,7 @@ void ScTableStyle::UpdateThemedColors(const model::ColorSet& rColorSet)
         return; // defaults are fully regenerated, not updated in-place
 
     maMergedFontSets.clear();
+    maBoxItems.clear();
 
     for (const std::unique_ptr<ScPatternAttr>& rpPattern : maPatterns)
     {

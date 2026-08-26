@@ -453,10 +453,11 @@ void ScDocument::FillInfo(
                     pThisRowInfo->bEmptyBack = false;
                 }
 
-                std::unique_ptr<SvxBoxItem> pLinesAttr = pTableStyle->GetBoxItem(*pDBData, nCol, nRow, nRowIndex);
+                const SvxBoxItem* pLinesAttr
+                    = pTableStyle->GetBoxItem(*pDBData, nCol, nRow, nRowIndex);
                 if (pLinesAttr)
                 {
-                    pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pLinesAttr.get());
+                    pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pLinesAttr);
                 }
 
                 const SfxItemSet* pPoolItem = pTableStyle->GetFontItemSet(*pDBData, nCol, nRow, nRowIndex);
