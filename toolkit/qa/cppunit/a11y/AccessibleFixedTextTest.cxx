@@ -84,7 +84,7 @@ void AccessibleFixedTextTest::testFixedText()
     xFT->setText("FixedText");
 
     /* Set the text control to its preferred size, otherwise it
-     * defaults to the size hard coded in its constructor (100 x 12) */
+     * defaults to the size hard-coded in its constructor (100 x 12) */
     css::uno::Reference<css::awt::XLayoutConstrains> xLCTxt(xFixedTextControl,
                                                             css::uno::UNO_QUERY_THROW);
     css::awt::Size textSize = xLCTxt->getPreferredSize();

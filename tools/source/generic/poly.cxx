@@ -437,7 +437,7 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
 
             for(sal_uInt32 a(0); a < nLoopCount; a++)
             {
-                // add current point (always) and remember StartPointIndex for evtl. later corrections
+                // add current point (always) and remember StartPointIndex for eventual later corrections
                 const Point aStartPoint(
                     basegfx::fround<tools::Long>(aBezier.getStartPoint().getX()),
                     basegfx::fround<tools::Long>(aBezier.getStartPoint().getY()));

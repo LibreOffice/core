@@ -190,12 +190,12 @@ public:
 
 private:
     /**
-     * @brief Checks whether mrStream needs to be uncompressed and returns a pointer to the
+     * @brief Checks whether mrStream needs to be uncompressed and returns a pointer
      * to aUncompressedBuffer or a pointer to maFirstBytes if it doesn't need to be uncompressed
      *
      * @param aUncompressedBuffer the buffer to hold the uncompressed data
      * @param nSize the amount of bytes to uncompress
-     * @param nRetSize the amount of bytes actually uncompressed
+     * @param nDecompressedSize the amount of bytes actually uncompressed
      * @return sal_uInt8* a pointer to maFirstBytes or aUncompressed buffer
      */
     SAL_DLLPRIVATE sal_uInt8* checkAndUncompressBuffer(sal_uInt8* aUncompressedBuffer,
