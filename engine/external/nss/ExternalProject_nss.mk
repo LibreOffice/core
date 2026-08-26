@@ -30,10 +30,50 @@ endif
 # no certificate chain ever validates.
 
 ifeq ($(OS),WNT)
-# Windows builds nspr with coreconf's build_nspr target, because nss's build.sh
-# cannot build nspr in this environment. It then compiles nss on top with gyp
-# and ninja, run inline below. gyp comes from the gyp-next tarball unpacked
-# beside nss.
+# Windows builds nspr with coreconf's make, because nss's build.sh cannot build
+# nspr in this environment. Both Windows routes below run coreconf with the same
+# settings, and take the coreconf target to run as their argument.
+nss_WNT_MAKE = \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
+	$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
+		MOZ_DEBUG_SYMBOLS=1 \
+		MOZ_DEBUG_FLAGS=" " \
+		OPT_CODE_SIZE=0) \
+	OS_TARGET=WINNT \
+	USE_SYSTEM_ZLIB=1 \
+	$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
+	$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
+	LIB="$(ILIB)" \
+	XCFLAGS="$(SOLARINC) $(ZLIB_CFLAGS)" \
+	NSPR_CONFIGURE_OPTS="$(gb_CONFIGURE_PLATFORMS)" \
+	COMMA=$(COMMA) \
+	$(if $(CROSS_COMPILING),\
+		CROSS_COMPILE=1 \
+		$(if $(filter AARCH64,$(CPUNAME)),CPU_ARCH=aarch64)) \
+	$(MAKE) $(1) RC="rc.exe $(SOLARINC)" \
+		NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
+		NSS_DISABLE_GTESTS=1 \
+		NSS_DISABLE_CMD_TOOLS=1 \
+		CCC="$(CXX)"
+
+ifeq ($(CPUNAME),AARCH64)
+# arm64 Windows builds all of nss with coreconf. nss's gyp build has no arm64
+# Windows target: coreconf/config.gypi names the compiler platform and the
+# 64-bit defines for ia32 and x64 alone, and gyp answers an arm64 request with
+# its x86 default, which produces x86 libraries against an arm64 nspr.
+$(call gb_ExternalProject_get_state_target,nss,build): \
+		$(call gb_ExternalExecutable_get_dependencies,python) \
+		$(SRCDIR)/external/nss/nsinstall.py
+	$(call gb_Trace_StartRange,nss,EXTERNAL)
+	$(call gb_ExternalProject_run,build,\
+		$(call nss_WNT_MAKE,nss_build_all) \
+	,nss)
+	$(call gb_Trace_EndRange,nss,EXTERNAL)
+
+else
+# Every other Windows CPU builds nspr with coreconf, then compiles nss on top
+# with gyp and ninja, run inline below. gyp comes from the gyp-next tarball
+# unpacked beside nss.
 
 ifeq ($(CPUNAME),X86_64)
 python_arch_subdir=amd64
@@ -46,27 +86,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(SRCDIR)/external/nss/nsinstall.py
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
-		$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
-			MOZ_DEBUG_SYMBOLS=1 \
-			MOZ_DEBUG_FLAGS=" " \
-			OPT_CODE_SIZE=0) \
-		OS_TARGET=WINNT \
-		USE_SYSTEM_ZLIB=1 \
-		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
-		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
-		LIB="$(ILIB)" \
-		XCFLAGS="$(SOLARINC) $(ZLIB_CFLAGS)" \
-		NSPR_CONFIGURE_OPTS="$(gb_CONFIGURE_PLATFORMS)" \
-		COMMA=$(COMMA) \
-		$(if $(CROSS_COMPILING),\
-			CROSS_COMPILE=1 \
-			$(if $(filter AARCH64,$(CPUNAME)),CPU_ARCH=aarch64)) \
-		$(MAKE) build_nspr RC="rc.exe $(SOLARINC)" \
-			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
-			NSS_DISABLE_GTESTS=1 \
-			NSS_DISABLE_CMD_TOOLS=1 \
-			CCC="$(CXX)" \
+		$(call nss_WNT_MAKE,build_nspr) \
 		&& export PYEXE='$(gb_UnpackedTarball_workdir)/python3/PCbuild/$(python_arch_subdir)/python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe' \
 		&& root=$$(cygpath -u "$$("$$PYEXE" -c 'import os,sys;sys.stdout.write(os.path.realpath(sys.argv[1]))' "$$(cygpath -m ..)")") \
 		&& cd "$$root/nss" \
@@ -85,6 +105,8 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		done \
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
+
+endif
 
 else ifeq ($(OS),LINUX)
 # Linux builds nss with gyp and ninja through build.sh instead of coreconf.
