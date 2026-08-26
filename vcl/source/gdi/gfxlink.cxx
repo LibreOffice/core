@@ -36,10 +36,10 @@ GfxLink::GfxLink()
 {
 }
 
-GfxLink::GfxLink(BinaryDataContainer aDataConainer, GfxLinkType nType)
+GfxLink::GfxLink(BinaryDataContainer aDataContainer, GfxLinkType nType)
     : meType(nType)
     , mnUserId(0)
-    , maDataContainer(std::move(aDataConainer))
+    , maDataContainer(std::move(aDataContainer))
     , maHash(0)
     , mbPrefMapModeValid(false)
     , mbPrefSizeValid(false)

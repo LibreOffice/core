@@ -453,7 +453,7 @@ OUString convertPixelFormatToString(vcl::PixelFormat ePixelFormat)
     return OUString();
 }
 
-OUString convertComplexTestLayoutFlags(vcl::text::ComplexTextLayoutFlags nFlags)
+OUString convertComplexTextLayoutFlags(vcl::text::ComplexTextLayoutFlags nFlags)
 {
     if (nFlags == vcl::text::ComplexTextLayoutFlags::Default)
         return u"Default"_ustr;
@@ -1533,7 +1533,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
 
                 rWriter.startElement(sCurrentElementTag);
 
-                rWriter.attribute("textlayout", convertComplexTestLayoutFlags(pMetaLayoutModeAction->GetLayoutMode()));
+                rWriter.attribute("textlayout", convertComplexTextLayoutFlags(pMetaLayoutModeAction->GetLayoutMode()));
 
                 rWriter.endElement();
             }
