@@ -458,7 +458,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             bool bDummy( false );
             if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
 // TODO: what if this fly moved bc it's in table? does sth prevent that?
-                                *this, *GetPageFrame(),
+                                *this, GetPageFrame()->GetPhyPageNum(),
                                 bAnchoredAtMaster, nToPageNum, bDummy))
             {
                 bConsiderWrapInfluenceDueToMovedFwdAnchor = true;

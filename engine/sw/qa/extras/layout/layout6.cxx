@@ -2665,6 +2665,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16076_contentOutsideCellAndFrame)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(112.85, lcl_getClipWidth(*pPage, u"f001"), 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAnchoredInFollow)
+{
+    // the layout formats a shape whose anchor paragraph is split over two pages of a
+    // columned section: the anchor character sits in the follow on page 2 while
+    // CalcContent formats the master on page 1; loading used to abort in
+    // SwObjectFormatterTextFrame::DoFormatObj comparing the pages of the two frames
+    //
+    // The document is derived from the crashtesting bugdoc novell592907-1.docx, adjusted
+    // to change the fonts to ones that pass under SAL_NON_APPLICATION_FONT_USE, and tweaked
+    // to make the problem reproducible on a simple load
+    createSwDoc("shape-anchored-in-follow.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 3);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

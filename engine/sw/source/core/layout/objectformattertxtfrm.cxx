@@ -229,12 +229,8 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 sal_uInt32 nToPageNum( 0 );
                 // #i43913#
                 bool bDummy( false );
-                // see how SwObjectFormatter::FormatObjsAtFrame_() checks
-                // "pPageFrameOfAnchor == &mrPageFrame" - only caller relevant for
-                // this subclass
-                assert(GetPageFrame().GetPhyPageNum() == GetPgNumOfCollected(nIdx));
                 if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition( *GetCollectedObj( nIdx ),
-                                              GetPageFrame(),
+                                              GetPgNumOfCollected( nIdx ),
                                               IsCollectedAnchoredAtMaster( nIdx ),
                                               nToPageNum, bDummy))
                 {
@@ -533,14 +529,10 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
                     // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                     GetWrapInfluenceOnObjPos( true ) == _nWrapInfluenceOnPosition )
         {
-            // see how SwObjectFormatter::FormatObjsAtFrame_() checks
-            // "pPageFrameOfAnchor == &mrPageFrame" - only caller relevant for
-            // this subclass
-            assert(GetPageFrame().GetPhyPageNum() == GetPgNumOfCollected(i));
             // #i26945# - use new method <_CheckMovedFwdCondition(..)>
             // #i43913#
             if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition( *GetCollectedObj( i ),
-                                          GetPageFrame(),
+                                          GetPgNumOfCollected( i ),
                                           IsCollectedAnchoredAtMaster( i ),
                                           _noToPageNum, _boInFollow ) )
             {
@@ -557,12 +549,11 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
 // - replace private method by corresponding static public method
 bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                                             SwAnchoredObject& _rAnchoredObj,
-                                            SwPageFrame const& rFromPageFrame,
+                                            const sal_uInt32 _nFromPageNum,
                                             const bool _bAnchoredAtMasterBeforeFormatAnchor,
                                             sal_uInt32& _noToPageNum,
                                             bool& _boInFollow)
 {
-    const sal_uInt32 _nFromPageNum(rFromPageFrame.GetPhyPageNum());
     bool bAnchorIsMovedForward( false );
 
     SwPageFrame* pPageFrameOfAnchor = _rAnchoredObj.FindPageFrameOfAnchor();
