@@ -554,6 +554,170 @@ function assertFocusWithin(selector) {
 	});
 }
 
+/**
+ * The tab order of the open sidebar deck: every tabbable descendant in DOM
+ * order, which is the order the browser moves through with Tab as long as no
+ * widget forces a position of its own with a positive tabindex.
+ *
+ * JSDialog.GetFocusableElements is deliberately not used to build it, so the
+ * expectation stays independent of the helper under test.
+ * @param {Object} win - The frame window object
+ */
+function sidebarTabOrder(win) {
+	const wrapper = win.app.map.sidebar.wrapper;
+	const candidates = wrapper.querySelectorAll(
+		'a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]');
+
+	return Array.prototype.filter.call(candidates, function (element) {
+		if (element.disabled) return false;
+		const tabindex = element.getAttribute('tabindex');
+		if (tabindex !== null && parseInt(tabindex, 10) < 0) return false;
+		// visibilityProperty matters: a deck keeps the widgets of the styles
+		// it does not show in place with visibility hidden, and those are not
+		// tabbable even though the default checkVisibility() call says so.
+		return element.checkVisibility({
+			visibilityProperty: true,
+			contentVisibilityAuto: true,
+		});
+	});
+}
+
+/**
+ * Name an element for an assertion message.
+ * @param {Element} element
+ */
+function describeFocusable(element) {
+	if (!element) return 'nothing';
+	return element.tagName + '#' + (element.id || '<no id>');
+}
+
+/**
+ * Open the property deck if it is not up yet and let its focus grab settle,
+ * so it cannot steal the focus back mid-test.
+ * @param {function} getWin - Returns the frame window object
+ */
+function openSidebarPropertyDeck(getWin) {
+	cy.cGet('#sidebar-dock-wrapper').then(function ($dock) {
+		if (!$dock.is(':visible')) {
+			cy.then(function () {
+				getWin().app.map.sendUnoCommand('.uno:SidebarDeck.PropertyDeck');
+				return helper.processToIdle(getWin());
+			});
+		}
+	});
+	cy.cGet('#sidebar-dock-wrapper').should('be.visible');
+
+	cy.then(function () {
+		helper.waitUntilLayoutingIsIdle(getWin());
+		helper.waitForTimers(getWin(), 'sidebarstealfocus');
+	});
+}
+
+/**
+ * Bodies of the sidebar deck keyboard tests. The deck differs per module, so
+ * every expectation is read from the DOM rather than naming widgets, and the
+ * same checks hold for Writer, Calc, Impress and Draw. Each spec declares its
+ * own it() blocks -- the tag preprocessor only rewrites spec files, so tests
+ * declared from here never reach the runner.
+ */
+const sidebarKeyboard = {
+	assertFocusedIs: function (win, getExpected, label) {
+		cy.cGet('#sidebar-dock-wrapper').should(function () {
+			const expected = getExpected();
+			const active = win.document.activeElement;
+			expect(describeFocusable(active), label)
+				.to.equal(describeFocusable(expected));
+			expect(active, label + ' (same element)').to.equal(expected);
+		});
+	},
+
+	assertNoForcedTabPosition: function (getWin) {
+		cy.then(function () {
+			const order = sidebarTabOrder(getWin());
+			expect(order.length, 'tabbable widgets of the deck').to.be.greaterThan(1);
+
+			const forced = order.filter(function (element) {
+				return parseInt(element.getAttribute('tabindex'), 10) > 0;
+			}).map(describeFocusable);
+			expect(forced, 'widgets with a positive tabindex').to.be.empty;
+		});
+	},
+
+	// A deck keeps the widgets of the styles it does not show in place with
+	// visibility hidden. A bare checkVisibility() does not look at the
+	// visibility property, so the helper used to offer them as focusable.
+	assertHelperSkipsInvisible: function (getWin) {
+		cy.then(function () {
+			const win = getWin();
+			const focusables = win.JSDialog.GetFocusableElements(win.app.map.sidebar.wrapper);
+			expect(focusables, 'focusables of the deck').to.not.be.empty;
+
+			const invisible = focusables.filter(function (element) {
+				return !element.checkVisibility({
+					visibilityProperty: true,
+					contentVisibilityAuto: true,
+				});
+			}).map(describeFocusable);
+			expect(invisible, 'widgets laid out but not visible').to.be.empty;
+		});
+	},
+
+	assertRingEntersOnFirstWidget: function (getWin) {
+		cy.realPress('F6');
+		sidebarKeyboard.assertFocusedIs(getWin(), function () {
+			return sidebarTabOrder(getWin())[0];
+		}, 'widget focused when the ring enters the sidebar');
+	},
+
+	assertTabWalksTheDeck: function (getWin) {
+		cy.realPress('F6');
+
+		cy.then(function () {
+			const win = getWin();
+			const order = sidebarTabOrder(win);
+			const from = order.indexOf(win.document.activeElement);
+			expect(from, 'the focused widget is part of the tab order')
+				.to.be.greaterThan(-1);
+
+			// walk to the end of the deck, then back to where we started
+			for (let at = from + 1; at < order.length; at++) {
+				cy.then(function () {
+					cy.realPress('Tab');
+					sidebarKeyboard.assertFocusedIs(win, function () {
+						return sidebarTabOrder(win)[at];
+					}, 'widget ' + at + ' of the deck');
+				});
+			}
+
+			for (let at = order.length - 2; at >= from; at--) {
+				cy.then(function () {
+					cy.realPress(['Shift', 'Tab']);
+					sidebarKeyboard.assertFocusedIs(win, function () {
+						return sidebarTabOrder(win)[at];
+					}, 'widget ' + at + ' of the deck, walking back');
+				});
+			}
+		});
+	},
+
+	assertRingLeavesTheDeck: function (getWin) {
+		cy.realPress('F6');
+		cy.realPress('Tab');
+
+		cy.cGet('#sidebar-dock-wrapper').should(function ($dock) {
+			expect($dock[0].contains(getWin().document.activeElement),
+				'focus is inside the deck').to.equal(true);
+		});
+
+		cy.realPress('F6');
+
+		cy.cGet('#sidebar-dock-wrapper').should(function ($dock) {
+			expect($dock[0].contains(getWin().document.activeElement),
+				'focus left the deck').to.equal(false);
+		});
+	},
+};
+
 module.exports.assertFocusWithin = assertFocusWithin;
 module.exports.enableUICoverage = enableUICoverage;
 module.exports.reportUICoverage = reportUICoverage;
@@ -571,3 +735,7 @@ module.exports.testDialog = testDialog;
 module.exports.allCommonDialogs = allCommonDialogs;
 module.exports.needsLinguisticData = needsLinguisticData;
 module.exports.testPDFExportWarningDialog = testPDFExportWarningDialog;
+module.exports.sidebarTabOrder = sidebarTabOrder;
+module.exports.describeFocusable = describeFocusable;
+module.exports.openSidebarPropertyDeck = openSidebarPropertyDeck;
+module.exports.sidebarKeyboard = sidebarKeyboard;
