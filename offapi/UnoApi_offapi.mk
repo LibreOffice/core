@@ -490,7 +490,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt,\
 	AccessibleEdit \
 	AccessibleList \
 	AccessibleListBox \
-	AccessibleMenu \
 	AccessibleRadioButton \
 	AccessibleScrollBar \
 	AccessibleStatusBar \
