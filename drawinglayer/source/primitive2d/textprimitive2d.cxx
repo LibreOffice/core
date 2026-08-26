@@ -277,6 +277,7 @@ bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive)
                 && LocalesAreEqual(getLocale(), rCompare.getLocale())
                 && getFontColor() == rCompare.getFontColor()
                 && maTextFillColor == rCompare.maTextFillColor
+                && getFontVariations() == rCompare.getFontVariations()
                 && getProportionalFontSize() == rCompare.getProportionalFontSize()
                 && getEscapement() == rCompare.getEscapement());
     }
