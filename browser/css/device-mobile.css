@@ -335,13 +335,13 @@ textarea.cool-annotation-textarea {
 #slide-sorter.landscape .preview-img {
 	min-width: 20px;
 	max-width: 60px;
-	margin: 0;
+	margin: 0 6px 0 0;
 }
 
 #slide-sorter.landscape .preview-frame {
 	max-height: initial;
-	max-width: 66px;
-	display: block;
+	max-width: 94px;
+	display: flex;
 	margin: 1em 3px;
 }
 
