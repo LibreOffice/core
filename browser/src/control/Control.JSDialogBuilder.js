@@ -1044,7 +1044,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 								|| currentElement.closest('.ui-iconview-root');
 							if (useDomOrder) {
 								var allFocusables = Array.from(container[0].querySelectorAll('*'))
-									.filter(function(el) { return el.checkVisibility() && JSDialog.IsFocusable(el); });
+									.filter(function(el) { return JSDialog.IsFocusable(el); });
 								// Only leaf-level focusable elements are navigation targets.
 								var focusables = allFocusables.filter(function(el) {
 									return !allFocusables.some(function(other) { return other !== el && el.contains(other); });
@@ -1094,7 +1094,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 								);
 								
 								var allFocusables = visibleContainer ? Array.from(visibleContainer.querySelectorAll('*'))
-									.filter(function(el) { return el.checkVisibility() && JSDialog.IsFocusable(el); }) : [];
+									.filter(function(el) { return JSDialog.IsFocusable(el); }) : [];
 
 								// Only leaf-level focusable elements are candidates.
 								var focusables = allFocusables.filter(function(el) {

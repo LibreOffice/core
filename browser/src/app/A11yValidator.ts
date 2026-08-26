@@ -356,8 +356,9 @@ class A11yValidator {
 		);
 		if (decorativeImages.length === 0) return;
 
-		// If there is any focusable element, the frame has accessible content
-		if (JSDialog.FindFocusableWithin(content, 'next')) return;
+		// Markup, not live focus: a widget on an unselected tab page is
+		// hidden and still counts as content of the frame.
+		if (content.querySelector(JSDialog.FocusableSelector)) return;
 
 		// If there are any form controls (even disabled), the frame has
 		// real content rather than only decorative images

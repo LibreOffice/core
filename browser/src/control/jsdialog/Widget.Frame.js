@@ -176,10 +176,12 @@ function buildFrame(parentContainer, data, builder) {
 	const children = groupControl ? data.children.slice(1) : data.children;
 	builder.build(frameChildren, children);
 
+	// Markup, not live focus: the frame is still detached while it is being
+	// built, so nothing inside it is visible yet.
 	if (
 		groupControl &&
 		!fieldsetLegend &&
-		JSDialog.FindFocusableWithin(frameChildren, 'next')
+		frameChildren.querySelector(JSDialog.FocusableSelector)
 	) {
 		frame.setAttribute('role', 'group');
 		if (groupLabelCandidateId) {
