@@ -3124,7 +3124,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter();
                 if ( pFilter && aFilterName == pFilter->GetFilterName() )
                 {
-                    // #i119366# - If the former file saving with password, do not trying in StoreSelf anyway...
+                    // #i119366# - If the former file was saved with password, do not try StoreSelf anyway...
                     bool bFormerPassword = false;
                     {
                         uno::Sequence< beans::NamedValue > aOldEncryptionData;

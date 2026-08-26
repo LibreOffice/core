@@ -546,7 +546,6 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         return;
 
     // object already disposed?
-    // object already disposed?
     SolarMutexGuard aGuard;
 
     // get view for sfx printing capabilities

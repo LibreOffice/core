@@ -138,7 +138,7 @@ BackingComp::BackingComp()
 
 /** return information about supported interfaces.
 
-    Some interfaces are supported by his class directly, but some other ones are
+    Some interfaces are supported by this class directly, but some other ones are
     used by aggregation. An instance of this class must provide some window interfaces.
     But it must represent a VCL window behind such interfaces too! So we use an internal
     saved window member to ask it for its interfaces and return it. But we must be aware then,
@@ -210,7 +210,7 @@ void SAL_CALL BackingComp::release()
 
     Optimize this method !
     We initialize a static variable only one time.
-    And we don't must use a mutex at every call!
+    And we must not use a mutex at every call!
     For the first call; pTypeCollection is NULL -
     for the second call pTypeCollection is different from NULL!
 
@@ -244,7 +244,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
 /** create one unique Id for all instances of this class.
 
     Optimize this method
-    We initialize a static variable only one time. And we don't must use a mutex at every call!
+    We initialize a static variable only one time. And we must not use a mutex at every call!
     For the first call; pID is NULL - for the second call pID is different from NULL!
 
     @return A byte array, which represent the unique id.
@@ -343,7 +343,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if (!m_xWindow.is())
         return; // disposed
 
-    // safe the frame reference
+    // save the frame reference
     m_xFrame = xFrame;
 
     // initialize the component and its parent window
