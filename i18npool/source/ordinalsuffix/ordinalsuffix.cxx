@@ -126,7 +126,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
         if (!bSimpleOrdinalSuffix)
             continue;
 
-        // Remove the number to get the prefix
+        // Remove the number to get the suffix
         sal_Int32 len = sValueWithNoOrdinal.getLength();
         retVec.push_back(sValueWithOrdinal.copy(len));
     }
