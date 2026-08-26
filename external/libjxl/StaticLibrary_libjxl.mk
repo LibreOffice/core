@@ -45,6 +45,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,libjxl,\
     UnpackedTarball/libjxl/lib/jxl/color_encoding_internal \
     UnpackedTarball/libjxl/lib/jxl/compressed_dc \
     UnpackedTarball/libjxl/lib/jxl/dec_ans \
+    UnpackedTarball/libjxl/lib/jxl/dec_bit_reader \
     UnpackedTarball/libjxl/lib/jxl/dec_cache \
     UnpackedTarball/libjxl/lib/jxl/dec_context_map \
     UnpackedTarball/libjxl/lib/jxl/dec_frame \
@@ -76,6 +77,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,libjxl,\
     UnpackedTarball/libjxl/lib/jxl/modular/transform/palette \
     UnpackedTarball/libjxl/lib/jxl/modular/transform/rct \
     UnpackedTarball/libjxl/lib/jxl/modular/transform/squeeze \
+    UnpackedTarball/libjxl/lib/jxl/modular/transform/squeeze_params \
     UnpackedTarball/libjxl/lib/jxl/modular/transform/transform \
     UnpackedTarball/libjxl/lib/jxl/opsin_params \
     UnpackedTarball/libjxl/lib/jxl/passes_state \
@@ -83,6 +85,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,libjxl,\
     UnpackedTarball/libjxl/lib/jxl/quantizer \
     UnpackedTarball/libjxl/lib/jxl/render_pipeline/low_memory_render_pipeline \
     UnpackedTarball/libjxl/lib/jxl/render_pipeline/render_pipeline \
+    UnpackedTarball/libjxl/lib/jxl/render_pipeline/render_pipeline_stage \
     UnpackedTarball/libjxl/lib/jxl/render_pipeline/simple_render_pipeline \
     UnpackedTarball/libjxl/lib/jxl/render_pipeline/stage_blending \
     UnpackedTarball/libjxl/lib/jxl/render_pipeline/stage_chroma_upsampling \

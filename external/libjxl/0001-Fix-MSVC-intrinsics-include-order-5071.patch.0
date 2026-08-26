@@ -1,0 +1,36 @@
+From 3645615e825919cdb3ef1356979d6aeb575fe785 Mon Sep 17 00:00:00 2001
+From: Robert McConnell <robert@mcc0nnell.org>
+Date: Fri, 30 Oct 2026 15:07:47 +0000
+Subject: [PATCH] Fix MSVC intrinsics include order (#5071)
+
+Define JXL_COMPILER_MSVC before guarding the intrin.h include. This makes _sub_overflow_i32 visible on supported MSVC x86/x64 toolchains.
+
+Fixes libjxl/libjxl#5013
+
+Co-authored-by: Eugene Kliuchnikov <eustas@google.com>
+---
+ lib/jxl/base/common.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/jxl/base/common.h b/lib/jxl/base/common.h
+index 53d09594..12d94586 100644
+--- lib/jxl/base/common.h
++++ lib/jxl/base/common.h
+@@ -18,12 +18,12 @@
+ #include <type_traits>
+ #include <vector>
+ 
++#include "lib/jxl/base/compiler_specific.h"
++
+ #if JXL_COMPILER_MSVC
+ #include <intrin.h>
+ #endif
+ 
+-#include "lib/jxl/base/compiler_specific.h"
+-
+ namespace jxl {
+ // Some enums and typedefs used by more than one header file.
+ 
+-- 
+2.47.3
+
