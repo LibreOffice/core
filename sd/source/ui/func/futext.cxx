@@ -836,7 +836,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 else
                 {
                     // This is for Format/Page settings. Since this also leads
-                    // to the object defaults to be changed, i think this code can be
+                    // to the object defaults being changed, I think this code can be
                     // removed. CL. wanted to take a look before adding this.
 
                     // Look in the object defaults if left-to-right is wanted. If

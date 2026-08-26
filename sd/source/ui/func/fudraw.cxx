@@ -513,10 +513,10 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
             if ((eDragMode == SdrDragMode::Rotate) && (eHit == SdrHitKind::MarkedObject))
             {
-                // The goal of this request is show always the rotation arrow for 3D-objects at rotation mode
+                // The goal of this request is to always show the rotation arrow for 3D-objects in rotation mode
                 // Independent of the settings at Tools->Options->Draw "Objects always moveable"
-                // 2D-objects acquit in another way. Otherwise, the rotation of 3d-objects around any axes
-                // wouldn't be possible per default.
+                // 2D-objects act in another way. Otherwise, the rotation of 3d-objects around any axes
+                // wouldn't be possible by default.
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
                 SdrObject* pObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 if (DynCastE3dObject(pObject) && (rMarkList.GetMarkCount() == 1))

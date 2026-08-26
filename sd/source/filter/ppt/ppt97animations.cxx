@@ -485,7 +485,7 @@ void Ppt97Animation::UpdateCacheData() const
                     m_aPresetId = "ooo-entrance-swivel";
                     m_aSubType = "vertical";
                 break;
-                case 0x1c:                                                                              // --- spirale ---
+                case 0x1c:                                                                              // --- spiral ---
                     m_aPresetId = "ooo-entrance-spiral-in";
                 break;
             }
