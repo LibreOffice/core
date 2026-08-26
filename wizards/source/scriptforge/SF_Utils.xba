@@ -21,7 +21,7 @@ REM ===================================================================== GLOBAL
 Global _SF_		As Variant		&apos;	SF_Root (Basic) class singleton
 
 &apos;&apos;&apos;	ScriptForge version
-Const SF_Version = &quot;26.8&quot;
+Const SF_Version = &quot;27.2&quot;
 
 &apos;&apos;&apos;	Standard symbolic names for VarTypes
 &apos;				V_EMPTY			= 0
@@ -242,7 +242,7 @@ Dim sHeader As String			&apos;	The specific header to insert
 				&amp; &quot;*********************************************************************\n&quot; _
 				&amp; &quot;\n&quot; _
 				&amp; &quot;ScriptForge Release &quot; &amp; SF_Version &amp; &quot;\n&quot; _
-				&amp; &quot;-----------------------&quot;
+				&amp; &quot;-------------------&quot; &amp; String(Len(SF_Version) + 1, &quot;-&quot;)
 
 Try:
 	With _SF_
