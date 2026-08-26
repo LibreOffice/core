@@ -26,6 +26,7 @@
 #include <string>
 #include <set>
 #include <common/Clipboard.hpp>
+#include <common/ConfigUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/AIHttpTransport.hpp>
 #include <common/SettingsStorage.hpp>
@@ -624,6 +625,14 @@ static std::atomic<int> appDocIdCounter(1);
 
 + (bool)isRtlLanguage:(NSString *)language {
     return LangUtil::isRtlLanguage(std::string([language UTF8String]));
+}
+
++ (bool)isWelcomeEnabled {
+#if ENABLE_DEBUG
+    return ConfigUtil::getBool("welcome.enable", false);
+#else
+    return true;
+#endif
 }
 
 + (bool)darkModeWithSystemDefault:(bool)systemDefault {

@@ -44,6 +44,7 @@
 
 #include <common/AIHttpTransport.hpp>
 #include <common/Clipboard.hpp>
+#include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Protocol.hpp>
@@ -538,6 +539,14 @@ static void do_hullo_handling_things(WindowData& data)
 
 static void do_welcome_handling_things(WindowData& data)
 {
+#if ENABLE_DEBUG
+    // A debug build bundles the placeholder slideshow, shown only when the configuration turns
+    // the welcome screen on. A release build carries a slideshow only when the app branding
+    // provides one.
+    if (!ConfigUtil::getBool("welcome.enable", false))
+        return;
+#endif
+
     const auto welcomeSlideshow = Poco::Path(app_installation_path + "..\\cool\\welcome\\welcome-slideshow.odp");
 
     if (!Poco::File(welcomeSlideshow).exists())

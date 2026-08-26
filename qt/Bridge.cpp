@@ -19,6 +19,7 @@
 #include <qt/RemoteOpen.hpp>
 #include <qt/DocumentOperations.hpp>
 #include <net/FakeSocket.hpp>
+#include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
@@ -749,9 +750,21 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "WELCOME"))
     {
+#if ENABLE_DEBUG
+        // A debug build bundles the placeholder slideshow, shown only when the configuration
+        // turns the welcome screen on.
+        const bool welcomeEnabled = ConfigUtil::getBool("welcome.enable", false);
+#else
+        // A release build carries a slideshow only when the app branding provides one.
+        const bool welcomeEnabled = true;
+#endif
         const std::string welcomePath = getDataDir() + "/browser/dist/welcome/welcome-slideshow.odp";
         struct stat st;
-        if (FileUtil::getStatOfFile(welcomePath, st) == 0)
+        if (!welcomeEnabled)
+        {
+            LOG_TRC_NOFILE("The welcome slideshow is off in the configuration");
+        }
+        else if (FileUtil::getStatOfFile(welcomePath, st) == 0)
         {
             Poco::URI fileURL{Poco::Path(welcomePath)};
             QPointer<QMainWindow> parent = _owner ? _owner->mainWindow() : nullptr;

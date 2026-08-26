@@ -43,6 +43,8 @@
 
 + (bool)isRtlLanguage:(NSString *_Nonnull)language;
 
++ (bool)isWelcomeEnabled NS_SWIFT_NAME(isWelcomeEnabled());
+
 + (bool)darkModeWithSystemDefault:(bool)systemDefault NS_SWIFT_NAME(darkMode(systemDefault:));
 + (void)setDarkMode:(bool)value NS_SWIFT_NAME(setDarkMode(_:));
 

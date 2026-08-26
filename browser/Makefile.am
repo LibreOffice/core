@@ -1094,9 +1094,9 @@ if APP_HAS_BRANDING
 	@echo
 	@echo "JS, HTML and CSS has been updated ($(DIST_FOLDER))."
 endif
-# The placeholder welcome slideshow is a developer aid. Debug builds bundle it so the welcome
-# flow can be exercised. Release builds bundle a welcome slideshow only when the app branding
-# provides one, and the app shells show no welcome window when the file is absent.
+# A release build carries a welcome slideshow only when the app branding provides one. A debug
+# build also bundles the placeholder, which the apps keep hidden unless the welcome.enable
+# setting is true.
 if ENABLE_DEBUG
 	@if test "$(ENABLE_QTAPP)" = true || test "$(ENABLE_MACOSAPP)" = true || test "$(ENABLE_WINDOWSAPP)" = true ; then \
 		mkdir -p $(DIST_FOLDER)/welcome && \

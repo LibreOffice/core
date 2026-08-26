@@ -315,6 +315,11 @@ final class DocumentController: NSDocumentController {
      * Opens the bundled welcome file (welcome/welcome-slideshow.odp).
      */
     func openWelcome() {
+        guard COWrapper.isWelcomeEnabled() else {
+            COWrapper.LOG_TRC("The welcome slideshow is off in the configuration")
+            return
+        }
+
         guard let url = Bundle.main.url(forResource: "welcome-slideshow", withExtension: "odp", subdirectory: "welcome") else {
             COWrapper.LOG_ERR("welcome/welcome.odp not found in bundle")
             return
