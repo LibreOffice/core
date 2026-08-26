@@ -37,22 +37,6 @@ bool VCLXAccessiblePopupMenu::IsFocused()
     return !IsChildHighlighted();
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessiblePopupMenu::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessiblePopupMenu"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames()
-{
-    return {};
-}
-
-
 // XAccessibleContext
 
 

@@ -60,22 +60,6 @@ bool VCLXAccessibleMenu::IsPopupMenuOpen()
     return bPopupMenuOpen;
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleMenu::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleMenu"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleMenu::getSupportedServiceNames()
-{
-    return {};
-}
-
-
 // XAccessibleContext
 
 

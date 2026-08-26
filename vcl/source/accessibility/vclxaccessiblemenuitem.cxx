@@ -144,22 +144,6 @@ void VCLXAccessibleMenuItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32
     nEndIndex = 0;
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleMenuItem::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleMenuItem"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleMenuItem::getSupportedServiceNames()
-{
-    return {};
-}
-
-
 // XAccessibleContext
 
 

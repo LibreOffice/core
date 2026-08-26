@@ -28,10 +28,6 @@ class VCLXAccessiblePopupMenu final : public OAccessibleMenuComponent
 public:
     using OAccessibleMenuComponent::OAccessibleMenuComponent;
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -34,8 +33,7 @@ class VclMenuEvent;
 
 class OAccessibleMenuItemComponent;
 
-class OAccessibleMenuBaseComponent
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
+class OAccessibleMenuBaseComponent : public comphelper::OAccessible
 {
     friend class OAccessibleMenuItemComponent;
     friend class VCLXAccessibleMenuItem;
@@ -106,9 +104,6 @@ public:
     virtual ~OAccessibleMenuBaseComponent() override;
 
     void                    SetStates();
-
-    // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;

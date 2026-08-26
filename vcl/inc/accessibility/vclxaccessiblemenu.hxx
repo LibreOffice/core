@@ -39,10 +39,6 @@ public:
     VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr ):
         ImplInheritanceHelper(pParent, nItemPos, pMenu) {}
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;

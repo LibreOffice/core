@@ -30,15 +30,6 @@ VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator(Menu* pParent, sal_uInt
 {
 }
 
-// XServiceInfo
-
-OUString VCLXAccessibleMenuSeparator::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleMenuSeparator"_ustr;
-}
-
-Sequence<OUString> VCLXAccessibleMenuSeparator::getSupportedServiceNames() { return {}; }
-
 // XAccessibleContext
 
 sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole() { return AccessibleRole::SEPARATOR; }

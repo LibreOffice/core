@@ -117,22 +117,6 @@ void VCLXAccessibleMenuBar::disposing()
     }
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleMenuBar::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleMenuBar"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames()
-{
-    return {};
-}
-
-
 // XAccessibleContext
 
 

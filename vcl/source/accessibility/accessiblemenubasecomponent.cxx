@@ -624,15 +624,6 @@ void OAccessibleMenuBaseComponent::disposing()
     m_aAccessibleChildren.clear();
 }
 
-
-// XServiceInfo
-
-
-sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
 // XAccessibleContext
 
 
