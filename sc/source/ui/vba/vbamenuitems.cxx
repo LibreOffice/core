@@ -81,7 +81,7 @@ ScVbaMenuItems::createEnumeration()
 uno::Any
 ScVbaMenuItems::createCollectionObject( const uno::Any& aSource )
 {
-    // make no sense
+    // makes no sense
     return aSource;
 }
 
