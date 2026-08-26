@@ -31,11 +31,6 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
-#include <config_features.h>
-
-#if HAVE_FEATURE_SCRIPTING
-class SfxMacroInfoItem;
-#endif
 
 struct SfxStyleInfo_Impl
 {
@@ -227,9 +222,6 @@ public:
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
-#if HAVE_FEATURE_SCRIPTING
-    void                SelectMacro(const SfxMacroInfoItem*);
-#endif
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 
     static OUString GetImage(

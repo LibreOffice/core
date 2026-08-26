@@ -427,9 +427,7 @@ void ScriptContainersListBox::Insert(
 }
 
 // fills the scripts list box
-// inspired by code in void CommandCategoryListBox::addChildren
-// cui/source/customize/CommandCategoryListBox.cxx
-// and void CuiConfigGroupListBox::GroupSelected()
+// inspired by code in void CuiConfigGroupListBox::GroupSelected()
 // cui/source/customize/cfgutil.cxx
 void ScriptContainersListBox::ScriptContainerSelected()
 {

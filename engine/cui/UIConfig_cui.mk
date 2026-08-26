@@ -16,7 +16,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 endif
 
 $(eval $(call gb_UIConfig_add_uifiles,cui,\
-	cui/uiconfig/ui/accelconfigpage \
 	cui/uiconfig/ui/additionsdialog \
 	cui/uiconfig/ui/additionsfragment \
 	cui/uiconfig/ui/agingdialog \
@@ -55,17 +54,14 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/editdictionarydialog \
 	cui/uiconfig/ui/editmodulesdialog \
 	cui/uiconfig/ui/embossdialog \
-	cui/uiconfig/ui/entrycontextmenu \
 	cui/uiconfig/ui/eventassigndialog \
 	cui/uiconfig/ui/eventassignpage \
 	cui/uiconfig/ui/fontfragment \
 	cui/uiconfig/ui/formatnumberdialog \
 	cui/uiconfig/ui/fmsearchdialog \
 	cui/uiconfig/ui/gradientpage \
-	cui/uiconfig/ui/customizedialog \
 	cui/uiconfig/ui/dbregisterpage \
 	cui/uiconfig/ui/effectspage \
-	cui/uiconfig/ui/eventsconfigpage \
 	cui/uiconfig/ui/formatcellsdialog \
 	cui/uiconfig/ui/fontfeaturesdialog \
 	cui/uiconfig/ui/galleryapplyprogress \
@@ -91,8 +87,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/hyperlinkmailpage \
 	cui/uiconfig/ui/hyperlinknewdocpage \
 	cui/uiconfig/ui/hyphenate \
-	cui/uiconfig/ui/iconchangedialog \
-	cui/uiconfig/ui/iconselectordialog \
 	cui/uiconfig/ui/insertfloatingframe \
 	cui/uiconfig/ui/insertoleobject \
 	cui/uiconfig/ui/insertrowcolumn \
@@ -106,14 +100,11 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/macroassignpage \
         cui/uiconfig/ui/macromanagerdialog \
 	cui/uiconfig/ui/macroselectordialog \
-	cui/uiconfig/ui/menuassignpage \
 	cui/uiconfig/ui/mosaicdialog \
-	cui/uiconfig/ui/movemenu \
 	cui/uiconfig/ui/multipathdialog \
 	cui/uiconfig/ui/namedialog \
 	cui/uiconfig/ui/newlibdialog \
 	cui/uiconfig/ui/newtabledialog \
-	cui/uiconfig/ui/newtoolbardialog \
 	cui/uiconfig/ui/numberdialog \
 	cui/uiconfig/ui/numberingformatpage \
 	cui/uiconfig/ui/numberingoptionspage \

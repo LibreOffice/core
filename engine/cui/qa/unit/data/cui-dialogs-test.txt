@@ -45,7 +45,6 @@ cui/ui/textdialog.ui
 # covering a to e
 
 
-cui/ui/accelconfigpage.ui
 cui/ui/acorexceptpage.ui
 cui/ui/acoroptionspage.ui
 cui/ui/acorreplacepage.ui
@@ -72,7 +71,6 @@ cui/ui/comment.ui
 cui/ui/connectortabpage.ui
 cui/ui/croppage.ui
 cui/ui/cuiimapdlg.ui
-cui/ui/customizedialog.ui
 cui/ui/databaselinkdialog.ui
 cui/ui/dbregisterpage.ui
 cui/ui/dimensionlinestabpage.ui

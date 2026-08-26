@@ -38,7 +38,6 @@
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <sfx2/minfitem.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/kit.hxx>
@@ -1033,111 +1032,6 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
     }
     return true;
 }
-
-#if HAVE_FEATURE_SCRIPTING
-void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
-{
-    const std::u16string_view aLocation = pItem->GetLocation();
-    const std::u16string_view aLib = pItem->GetLib();
-    const std::u16string_view aModule = pItem->GetModule();
-    const std::u16string_view aMethod = pItem->GetMethod();
-
-    std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->make_iterator();
-    if (!m_xTreeView->get_iter_first(*xIter))
-        return;
-
-    do
-    {
-        OUString aEntryBas = m_xTreeView->get_text(*xIter);
-        if (aEntryBas == xImp->m_sDlgMacros)
-        {
-            m_xTreeView->expand_row(*xIter);
-            std::unique_ptr<weld::TreeIter> xLocationIter = m_xTreeView->make_iterator(xIter.get());
-            if (m_xTreeView->iter_children(*xLocationIter))
-            {
-                do
-                {
-                    if (aLocation !=  m_xTreeView->get_text(*xLocationIter))
-                        continue;
-                    m_xTreeView->expand_row(*xLocationIter);
-                    std::unique_ptr<weld::TreeIter> xLibIter = m_xTreeView->make_iterator(xLocationIter.get());
-                    if (m_xTreeView->iter_children(*xLibIter))
-                    {
-                        do
-                        {
-                            OUString aEntryLib = m_xTreeView->get_text(*xLibIter);
-                            if (aEntryLib == aLib)
-                            {
-                                if (aModule.empty())
-                                {
-                                    m_xTreeView->scroll_to_row(*xLibIter);
-                                    m_xTreeView->select(*xLibIter);
-                                    GroupSelected();
-                                    weld::TreeView& rFunctionListBoxTreeView
-                                        = m_pFunctionListBox->get_widget();
-                                    std::unique_ptr<weld::TreeIter> xFunctionListBoxIter
-                                        = rFunctionListBoxTreeView.make_iterator();
-                                    if (!rFunctionListBoxTreeView.get_iter_first(
-                                            *xFunctionListBoxIter))
-                                        return;
-                                    do
-                                    {
-                                        OUString aEntryMethod = rFunctionListBoxTreeView.get_text(
-                                            *xFunctionListBoxIter);
-                                        if (aEntryMethod == aMethod)
-                                        {
-                                            rFunctionListBoxTreeView.scroll_to_row(
-                                                *xFunctionListBoxIter);
-                                            rFunctionListBoxTreeView.select(*xFunctionListBoxIter);
-                                            return;
-                                        }
-                                    } while (
-                                        rFunctionListBoxTreeView.iter_next(*xFunctionListBoxIter));
-                                    return;
-                                }
-
-                                m_xTreeView->expand_row(*xLibIter);
-                                std::unique_ptr<weld::TreeIter> xModIter = m_xTreeView->make_iterator(xLibIter.get());
-                                if (m_xTreeView->iter_children(*xModIter))
-                                {
-                                    do
-                                    {
-                                        OUString aEntryMod = m_xTreeView->get_text(*xModIter);
-                                        if ( aEntryMod == aModule )
-                                        {
-                                            m_xTreeView->expand_row(*xModIter);
-                                            m_xTreeView->scroll_to_row(*xModIter);
-                                            m_xTreeView->select(*xModIter);
-                                            GroupSelected();
-                                            for (int i = 0, nCount = m_pFunctionListBox->n_children(); i < nCount; ++i)
-                                            {
-                                                OUString aEntryMethod = m_pFunctionListBox->get_text(i);
-                                                if (aEntryMethod == aMethod)
-                                                {
-                                                    m_pFunctionListBox->select(i);
-                                                    m_pFunctionListBox->scroll_to_row(i);
-                                                    return;
-                                                }
-                                            }
-                                            m_xTreeView->collapse_row(*xModIter);
-                                        }
-                                    } while (m_xTreeView->iter_next_sibling(*xModIter));
-                                }
-                                m_xTreeView->collapse_row(*xLibIter);
-                            }
-                        } while (m_xTreeView->iter_next_sibling(*xLibIter));
-                    }
-                    m_xTreeView->collapse_row(*xLocationIter);
-                } while (m_xTreeView->iter_next_sibling(*xLocationIter));
-            }
-            // If the macro can't be located, preselect the "Application Macros" category:
-            m_xTreeView->scroll_to_row(*xIter);
-            m_xTreeView->select(*xIter);
-            return;
-        }
-    } while (m_xTreeView->iter_next_sibling(*xIter));
-}
-#endif
 
 /*
  * Implementation of SvxScriptSelectorDialog
