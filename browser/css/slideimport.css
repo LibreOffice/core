@@ -70,6 +70,51 @@
 	overflow-wrap: anywhere;
 }
 
+.slide-import-related-title {
+	color: var(--color-text-dark);
+	font-weight: 600;
+}
+
+.slide-import-related-list {
+	list-style: none;
+	margin: 4px 0 0;
+	padding: 0;
+}
+
+.slide-import-related-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 4px 0;
+}
+
+.slide-import-related-name {
+	color: var(--color-text-dark);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.slide-import-related-state {
+	color: var(--color-text-light);
+	flex-shrink: 0;
+}
+
+.slide-import-related-subscribe {
+	margin: 0;
+	min-width: 0;
+	flex-shrink: 0;
+}
+
+.slide-import-related-item[data-state='connected'] .slide-import-related-state {
+	color: var(--color-primary);
+}
+
+.slide-import-related-item[data-state='failed'] .slide-import-related-state {
+	color: var(--color-error);
+}
+
 .slide-import-hint,
 .slide-import-status {
 	color: var(--color-text-light);

@@ -56,6 +56,7 @@ class SlideImportPane {
     app.events.on('slideimport:inserted', this.onInserted.bind(this));
     app.events.on('updatepermission', this.onUpdatePermission.bind(this));
     map.on('docloaded', this.onDocLoaded, this);
+    map.on('relateddocuments', this.onRelatedDocuments, this);
   }
 
   public isVisible(): boolean {
@@ -154,6 +155,90 @@ class SlideImportPane {
 
   private onSessionChanged(): void {
     if (this.visible) this.render();
+  }
+
+  private onRelatedDocuments(): void {
+    if (this.visible) this.render();
+  }
+
+  // The file name part of a related document's WOPISrc.
+  private relatedDocumentName(wopiSrc: string): string {
+    const path = wopiSrc.split('?')[0];
+    const name = path.substring(path.lastIndexOf('/') + 1);
+    try {
+      return decodeURIComponent(name) || wopiSrc;
+    } catch {
+      return name || wopiSrc;
+    }
+  }
+
+  // Asks the server to open a live link to the related document; the state
+  // in the next relateddocuments: message follows the subscription.
+  private subscribeRelatedDocument(wopiSrc: string): void {
+    app.socket.sendMessage(
+      'remotedocsubscribe wopisrc=' + encodeURIComponent(wopiSrc),
+    );
+  }
+
+  private relatedDocumentStateLabel(state: string): string {
+    switch (state) {
+      case 'subscribed':
+        return _('Subscribed');
+      case 'connected':
+        return _('Connected');
+      case 'disconnected':
+        return _('Disconnected');
+      case 'failed':
+        return _('Failed');
+      default:
+        return _('Available');
+    }
+  }
+
+  // The related documents the server announced for this document, with the
+  // state of their subscriptions.
+  private renderRelatedDocuments(): HTMLElement | null {
+    const documents = app.relatedDocuments || [];
+    if (!documents.length) return null;
+
+    return (
+      <div class="slide-import-related">
+        <div class="slide-import-related-title">{_('Related documents')}</div>
+        <ul
+          class="slide-import-related-list"
+          aria-label={_('Related documents')}
+        >
+          {documents.map((doc: { wopiSrc: string; state: string }) => (
+            <li
+              class="slide-import-related-item"
+              data-state={doc.state}
+              title={this.relatedDocumentName(doc.wopiSrc)}
+            >
+              <span class="slide-import-related-name">
+                {this.relatedDocumentName(doc.wopiSrc)}
+              </span>
+              {doc.state === 'available' ? (
+                <button
+                  class="button slide-import-related-subscribe"
+                  aria-label={
+                    _('Subscribe to') +
+                    ' ' +
+                    this.relatedDocumentName(doc.wopiSrc)
+                  }
+                  onClick={() => this.subscribeRelatedDocument(doc.wopiSrc)}
+                >
+                  {_('Subscribe')}
+                </button>
+              ) : (
+                <span class="slide-import-related-state">
+                  {this.relatedDocumentStateLabel(doc.state)}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
   }
 
   private onInventory(): void {
@@ -295,6 +380,7 @@ class SlideImportPane {
               {_('Choose a presentation file to import slides from.')}
             </div>
           )}
+          {this.renderRelatedDocuments()}
           <div
             class="slide-import-status"
             role="status"
