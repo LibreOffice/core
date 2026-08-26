@@ -58,7 +58,7 @@
 #include "DrawAspectHdl.hxx"
 #include <xmloff/XMLComplexColorHandler.hxx>
 
-#include <map>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -129,7 +129,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_ScriptType_Enum[]
         { XML_COMPLEX, text::ScriptHintType::COMPLEX },
         { XML_TOKEN_INVALID, text::ScriptHintType::AUTOMATIC } };
 
-typedef std::map<sal_Int32, const XMLPropertyHandler*> CacheMap;
+typedef std::unordered_map<sal_Int32, const XMLPropertyHandler*> CacheMap;
 
 struct XMLPropertyHandlerFactory::Impl
 {
@@ -158,8 +158,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nTyp
 {
     const XMLPropertyHandler* pRet = nullptr;
 
-    if( mpImpl->maHandlerCache.find( nType ) != mpImpl->maHandlerCache.end() )
-        pRet = mpImpl->maHandlerCache.find( nType )->second;
+    auto it = mpImpl->maHandlerCache.find( nType );
+    if( it != mpImpl->maHandlerCache.end() )
+        pRet = it->second;
 
     return pRet;
 }
