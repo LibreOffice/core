@@ -22,4 +22,9 @@
     <string name="ask_for_convert_odf">确认文件格式</string>
     <string name="convert_odf_message">此文档可能包含无法以当前选择的文件格式“Text”保存的格式或内容。</string>
     <string name="cant_open_the_document">打不开文档</string>
+    <string name="all_files_access_title">以只读模式打开</string>
+    <string name="all_files_access_message">分享此文件的应用不允许将修改保存回原文件。\n\n请授予“所有文件访问权限”，以允许此应用将修改写入原存储位置，以便您在此进行编辑。</string>
+    <string name="all_files_access_grant">允许访问</string>
+    <string name="do_not_ask_again">不再询问</string>
+    <string name="failed_to_save_file">无法将修改保存到文件</string>
 </resources>
