@@ -283,7 +283,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			const lastDialog = this.dialogs[lastKey];
 			const lastContainer = lastDialog ? lastDialog.container : null;
 			if (lastDialog && lastDialog.canHaveFocus && lastContainer) {
-				var initialFocusElement = JSDialog.GetFocusableElements(lastContainer);
+				var initialFocusElement = this._getFocusablesForInitialFocus(lastContainer);
 				if (initialFocusElement && initialFocusElement.length)
 					initialFocusElement[0].focus();
 				else
