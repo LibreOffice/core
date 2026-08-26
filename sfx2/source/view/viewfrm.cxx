@@ -456,7 +456,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             //
             // when the 'http/https' protocol is active, the bool bPhysObjIsYounger relies upon the getlastmodified Property of a WebDAV resource.
             // Said property should be implemented, but sometimes it's not.
-            // implemented. On this case the reload activated here will not work properly.
+            // In this case the reload activated here will not work properly.
             // TODO: change the check age method for WebDAV to etag (entity-tag) property value, need some rethinking, since the
             // etag tells that the cache representation (e.g. in LO) is different from the one on the server,
             // but tells nothing about the age
@@ -1398,7 +1398,7 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
         aResId = STR_MACROS_DISABLED_CONTENT_UNSIGNED;
     else if(pObjImpl->aMacroMode.hasInvalidSignaturesError())
         aResId = STR_MACROS_DISABLED_SIGNATURE_INVALID;
-    // The idea here is to always present an infobar is there was some
+    // The idea here is to always present an infobar if there was some
     // macro/script related potential hazard disabled in the source document
     auto pInfoBar = AppendInfoBar(u"macro"_ustr, SfxResId(STR_MACROS_DISABLED_TITLE),
                                   SfxResId(aResId), InfobarType::WARNING);
