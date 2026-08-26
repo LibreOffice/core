@@ -1699,7 +1699,10 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
     }
 
     if (pIsImpressDoc)
+    {
         m_xNumberFormatText->set_label(SvxResId(STR_SLIDE_NUMBERS));
+        m_xResizeAllPages->set_label(SvxResId(STR_RESIZE_ALL_SLIDES));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

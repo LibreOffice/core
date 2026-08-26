@@ -43,6 +43,9 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
                              u"DrawPageDialog"_ustr, pAttr)
     , mbIsImpressDoc(bIsImpressDoc)
 {
+    if (mbIsImpressDoc)
+        set_title(SdResId(STR_SLIDE_PROPERTIES));
+
     SvxColorListItem const* pColorListItem = pDocSh->GetItem(SID_COLOR_TABLE);
     SvxGradientListItem const* pGradientListItem = pDocSh->GetItem(SID_GRADIENT_LIST);
     SvxBitmapListItem const* pBitmapListItem = pDocSh->GetItem(SID_BITMAP_LIST);
