@@ -153,6 +153,12 @@ void ScSpellDialogChildWindow::Reset()
         mpViewShell->UpdateInputHandler();
         mpDoc->EnableIdle(mbOldIdleEnabled);
     }
+    else if (mpViewShell)
+    {
+        // Kill the edit view, because it holds a raw pointer into mxEngine.
+        mpViewData->SetSpellingView(nullptr);
+        mpViewShell->KillEditView(true);
+    }
     mxEngine.reset();
     mxUndoDoc.reset();
     mxRedoDoc.reset();
