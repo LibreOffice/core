@@ -1704,6 +1704,11 @@ img.ui-combobox-value-preview {
 		box-shadow: var(--shadow-subtle);
 		/* the dropdown content padding, from .modalpopup[id$='-dropdown'] .ui-dialog-content */
 		padding: 0;
+		/* the dropdown content scroll box, from .jsdialog-container .ui-dialog-content.
+		   The list scrolls once it grows past this. Stating a height the browser can
+		   resolve as soon as the list is drawn also settles its width there and then,
+		   so the list opens at the width it goes on to keep. */
+		max-height: calc(90vh - 34px);
 	}
 
 	/* Hide the browser marker; the app's own arrow span shows instead. */
