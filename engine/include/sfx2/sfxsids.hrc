@@ -111,7 +111,6 @@ class SvxZoomItem;
 // free                                     (SID_SFX_START + 407)
 
 // free                                     (SID_SFX_START + 410)
-#define SID_SEND_FEEDBACK                   (SID_SFX_START + 421)
 #define SID_Q_AND_A                         (SID_SFX_START + 422)
 #define SID_DOCUMENTATION                   (SID_SFX_START + 423)
 // free                                     (SID_SFX_START + 424)

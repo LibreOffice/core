@@ -4987,22 +4987,6 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem SendFeedback SID_SEND_FEEDBACK
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
 SfxVoidItem QuestionAnswers SID_Q_AND_A
 ()
 [

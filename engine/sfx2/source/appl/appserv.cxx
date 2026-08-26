@@ -96,7 +96,6 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sorgitm.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/templatedlg.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
@@ -522,15 +521,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             rReq.SetReturnValue( SfxBoolItem( 0, bOK ) );
             rReq.Done();
-            break;
-        }
-
-        case SID_SEND_FEEDBACK:
-        {
-            OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL("mailto:hello@collaboraoffice.com?Subject=Version:%20" + utl::ConfigManager::getAboutBoxProductVersion() +
-                ",%20Locale:%20" + utl::ConfigManager::getUILocale() + ",%20Module:%20" + module.subView(module.lastIndexOf('.') + 1 )  );
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
 
