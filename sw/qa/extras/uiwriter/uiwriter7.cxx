@@ -3017,7 +3017,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf106137_UnicodeEscapeInReplacement)
 {
-    // unicode values in replacement strings should expand to Unicode character when regular expressions is selected as a option
+    // unicode values in replacement strings should expand to a Unicode character when regular expressions is selected as an option
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwCursorShell* pShell(pDoc->GetEditShell());

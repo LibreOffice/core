@@ -306,7 +306,7 @@ lcl_CleanStr(const SwTextNode& rNd,
                 case RES_TXTATR_METAFIELD:
                     {
                         // (1998) they are desired as separators and
-                        // belong not any longer to a word.
+                        // no longer belong to a word.
                         // they should also be ignored at a
                         // beginning/end of a sentence if blank. Those are
                         // simply removed if first. If at the end, we keep the
