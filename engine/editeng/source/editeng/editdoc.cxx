@@ -584,16 +584,6 @@ ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
 }
 #endif
 
-ContentAttribsInfo::ContentAttribsInfo( SfxItemSet aParaAttribs ) :
-        aPrevParaAttribs(std::move( aParaAttribs))
-{
-}
-
-void ContentAttribsInfo::AppendCharAttrib(EditCharAttrib* pNew)
-{
-    aPrevCharAttribs.push_back(std::unique_ptr<EditCharAttrib>(pNew));
-}
-
 void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit )
 {
     DBG_ASSERT( eSourceUnit != eDestUnit, "ConvertItem - Why?!" );

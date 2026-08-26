@@ -214,7 +214,7 @@ std::unique_ptr<EditUndoSetAttribs> ImpEditEngine::CreateAttribUndo( EditSelecti
     {
         ContentNode* pNode = maEditDoc.GetObject( nPara );
         DBG_ASSERT( maEditDoc.GetObject( nPara ), "Node not found: CreateAttribUndo" );
-        ContentAttribsInfo* pInf = new ContentAttribsInfo( pNode->GetContentAttribs().GetItems() );
+        EditUndoContentAttribsInfo* pInf = new EditUndoContentAttribsInfo( pNode->GetContentAttribs().GetItems() );
         pUndo->AppendContentInfo(pInf);
 
         for ( sal_Int32 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )

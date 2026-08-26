@@ -203,12 +203,27 @@ public:
 };
 
 
-// EditUndoSetAttribs
+class EditUndoContentAttribsInfo
+{
+private:
+    typedef std::vector<std::unique_ptr<EditCharAttrib> > CharAttribsType;
+
+    SfxItemSet          aPrevParaAttribs;
+    CharAttribsType     aPrevCharAttribs;
+
+public:
+                        EditUndoContentAttribsInfo( SfxItemSet aParaAttribs );
+
+    const SfxItemSet&       GetPrevParaAttribs() const  { return aPrevParaAttribs; }
+    const CharAttribsType&  GetPrevCharAttribs() const  { return aPrevCharAttribs; }
+
+    void AppendCharAttrib(EditCharAttrib* pNew);
+};
 
 class EditUndoSetAttribs: public EditUndo
 {
 private:
-    typedef std::vector<std::unique_ptr<ContentAttribsInfo> > InfoArrayType;
+    typedef std::vector<std::unique_ptr<EditUndoContentAttribsInfo> > InfoArrayType;
 
     ESelection          aESel;
     SfxItemSet          aNewAttribs;
@@ -239,7 +254,7 @@ public:
     virtual void        Undo() override;
     virtual void        Redo() override;
 
-    void AppendContentInfo(ContentAttribsInfo* pNew);
+    void AppendContentInfo(EditUndoContentAttribsInfo* pNew);
 };
 
 
