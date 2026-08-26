@@ -28,7 +28,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/minfitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
@@ -652,7 +651,6 @@ MacroManagerDialog::MacroManagerDialog(weld::Window* pParent,
     , m_xMacroDeleteButton(m_xBuilder->weld_button(u"macrodelete"_ustr))
     , m_xMacroCreateButton(m_xBuilder->weld_button(u"macrocreate"_ustr))
     , m_xMacroRenameButton(m_xBuilder->weld_button(u"macrorename"_ustr))
-    , m_xAssignButton(m_xBuilder->weld_button(u"assign"_ustr))
 {
     m_aScriptsListBoxLabelBaseStr = m_xScriptsListBoxLabel->get_label();
 
@@ -666,7 +664,6 @@ MacroManagerDialog::MacroManagerDialog(weld::Window* pParent,
         LINK(this, MacroManagerDialog, FunctionDoubleClickHdl));
     m_xScriptsListBox->connect_popup_menu(LINK(this, MacroManagerDialog, ContextMenuHdl));
 
-    m_xAssignButton->connect_clicked(LINK(this, MacroManagerDialog, ClickHdl));
     m_xRunButton->connect_clicked(LINK(this, MacroManagerDialog, ClickHdl));
     m_xCloseButton->connect_clicked(LINK(this, MacroManagerDialog, ClickHdl));
     m_xNewLibraryButton->connect_clicked(LINK(this, MacroManagerDialog, ClickHdl));
@@ -993,8 +990,6 @@ void MacroManagerDialog::CheckButtons()
     bool bSensitiveMacroRenameButton = false;
     bool bSensitiveMacroDeleteButton = false;
 
-    bool bSensitiveAssignButton = false;
-
     weld::TreeView& rScriptContainersTreeView = m_xScriptContainersListBox->get_widget();
     std::unique_ptr<weld::TreeIter> xScriptContainersSelectedIter
         = rScriptContainersTreeView.make_iterator();
@@ -1158,8 +1153,6 @@ void MacroManagerDialog::CheckButtons()
             if (rScriptsTreeView.n_children()
                 && rScriptsTreeView.get_selected(xScriptsSelectedIter.get()))
             {
-                bSensitiveAssignButton = true;
-
                 css::uno::Reference<css::script::browse::XBrowseNode> node;
                 node = getBrowseNode(rScriptsTreeView, *xScriptsSelectedIter);
                 if (node.is())
@@ -1204,7 +1197,6 @@ void MacroManagerDialog::CheckButtons()
     m_xMacroEditButton->set_sensitive(bSensitiveMacroEditButton);
     m_xMacroRenameButton->set_sensitive(bSensitiveMacroRenameButton);
     m_xMacroDeleteButton->set_sensitive(bSensitiveMacroDeleteButton);
-    m_xAssignButton->set_sensitive(bSensitiveAssignButton);
 }
 
 // void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
@@ -1559,27 +1551,6 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
             // see: void MacroChooser::DeleteMacro()
             return;
         }
-        else if (&rButton == m_xAssignButton.get())
-        {
-            SfxAllItemSet Args(SfxGetpApp()->GetPool());
-            SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
-            if (m_xDocumentFrame.is())
-                aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, m_xDocumentFrame));
-            SfxRequest aRequest(SID_CONFIGACCEL, SfxCallMode::SYNCHRON, Args, aInternalSet);
-
-            SfxMacroInfoItem aMacroInfoItem(
-                SID_MACROINFO, aDocument.getBasicManager(),
-                m_xScriptContainersListBox->GetSelectedEntryContainerName(
-                    ScriptContainerType::LIBRARY),
-                m_xScriptContainersListBox->GetSelectedEntryContainerName(
-                    ScriptContainerType::MODULEORDIALOG),
-                m_xScriptsListBox->GetSelectedScriptName(), OUString(),
-                m_xScriptContainersListBox->GetSelectedEntryContainerName(
-                    ScriptContainerType::LOCATION));
-            aRequest.AppendItem(aMacroInfoItem);
-
-            SfxGetpApp()->ExecuteSlot(aRequest);
-        }
         return;
     }
 
@@ -1651,23 +1622,6 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
         if (!rTreeView.get_selected(xSelectedIter.get()))
             return; // should never happen
         ScriptingFrameworkScriptsRenameEntry(rTreeView, *xSelectedIter);
-    }
-    else if (&rButton == m_xAssignButton.get())
-    {
-        SfxAllItemSet Args(SfxGetpApp()->GetPool());
-        SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
-        if (m_xDocumentFrame.is())
-            aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, m_xDocumentFrame));
-        SfxRequest aRequest(SID_CONFIGACCEL, SfxCallMode::SYNCHRON, Args, aInternalSet);
-
-        SfxMacroInfoItem aMacroInfoItem(
-            SID_MACROINFO, nullptr,
-            m_xScriptContainersListBox->GetSelectedEntryContainerName(ScriptContainerType::LIBRARY),
-            OUString(), m_xScriptsListBox->GetSelectedScriptName(), OUString(),
-            m_xScriptContainersListBox->GetSelectedEntryContainerName(
-                ScriptContainerType::LOCATION));
-        aRequest.AppendItem(aMacroInfoItem);
-        SfxGetpApp()->ExecuteSlot(aRequest);
     }
 }
 

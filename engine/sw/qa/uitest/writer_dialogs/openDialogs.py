@@ -109,9 +109,6 @@ dialogs = [
     {"command": ".uno:RunMacro", "closeButton": "cancel"},
     {"command": ".uno:ScriptOrganizer", "closeButton": "close"},
     {"command": ".uno:OpenXMLFilterSettings", "closeButton": "close"},
-    # {"command": ".uno:ConfigureDialog", "closeButton": "cancel"},
-        # tested in uitest/writer_tests/customizeDialog.py
-        # used in various places
     {"command": ".uno:ShowLicense", "closeButton": "close", "skipTestOK": True},
     # {"command": ".uno:About", "closeButton": "close"},
         # tested in sw/qa/uitest/writer_tests5/about_test.py

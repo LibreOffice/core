@@ -50,7 +50,6 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <unotools/cmdoptions.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -407,33 +406,10 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 
     // Create commands for non-toolbars
 
-    bool          bAddCommand( true );
-    SvtCommandOptions aCmdOptions;
-
-    if ( aCmdOptions.HasEntriesDisabled() && aCmdOptions.LookupDisabled(u"ConfigureDialog"_ustr))
-        bAddCommand = false;
-
-    if ( bAddCommand )
+    if ( m_xPopupMenu->getItemCount() > 0 )
     {
-        // Create command for configure
-        if ( m_xPopupMenu->getItemCount() > 0 )
-        {
-            sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
-            m_xPopupMenu->insertSeparator( nItemCount+1 );
-        }
-
-        addCommand( m_xPopupMenu, u".uno:ConfigureDialog"_ustr, u""_ustr );
-    }
-
-    // Add separator if no configure has been added
-    if ( !bAddCommand )
-    {
-        // Create command for configure
-        if ( m_xPopupMenu->getItemCount() > 0 )
-        {
-            sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
-            m_xPopupMenu->insertSeparator( nItemCount+1 );
-        }
+        sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
+        m_xPopupMenu->insertSeparator( nItemCount+1 );
     }
 
     OUString aLabelStr(FwkResId(STR_RESTORE_TOOLBARS));

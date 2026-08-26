@@ -84,7 +84,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/minfitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -408,55 +407,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Set return value, terminate if possible
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
             return;
-        }
-
-        case SID_CONFIG:
-        case SID_TOOLBOXOPTIONS:
-        case SID_CONFIGSTATUSBAR:
-        case SID_CONFIGMENU:
-        case SID_CONFIGACCEL:
-        case SID_CONFIGEVENT:
-        {
-            SfxAbstractDialogFactory* pFact =
-                SfxAbstractDialogFactory::Create();
-
-            const SfxStringItem* pStringItem = rReq.GetArg(SID_CONFIG);
-
-            SfxItemSetFixed<SID_CONFIG, SID_CONFIG, SID_MACROINFO, SID_MACROINFO> aSet( GetPool() );
-
-            // SID_CONFIG property will determine the default page shown
-            if ( pStringItem )
-            {
-                aSet.Put( SfxStringItem(
-                    SID_CONFIG, pStringItem->GetValue() ) );
-            }
-            else if (rReq.GetSlot() == SID_CONFIGEVENT)
-            {
-                aSet.Put( SfxStringItem(
-                    SID_CONFIG, u"private:resource/event/"_ustr ) );
-            }
-            else if (rReq.GetSlot() == SID_TOOLBOXOPTIONS)
-            {
-                aSet.Put( SfxStringItem(
-                    SID_CONFIG, u"private:resource/toolbar/"_ustr ) );
-            }
-
-#if HAVE_FEATURE_SCRIPTING
-            // Preselect a macro in the 'keyboard' page
-            if (auto const item = rReq.GetArg(SID_MACROINFO)) {
-                aSet.Put(*item);
-            }
-#endif
-
-            Reference <XFrame> xFrame(GetRequestFrame(rReq));
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(rReq.GetFrameWeld(),
-                &aSet, xFrame ));
-
-            const short nRet = pDlg->Execute();
-
-            if ( nRet )
-                bDone = true;
-            break;
         }
 
         case SID_CLOSEDOCS:
@@ -1237,18 +1187,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     else
                         rSet.Put(SfxStringItem(nWhich, SfxResId(STR_QUITAPP)));
-                    break;
-                }
-
-                case SID_CONFIG:
-                case SID_TOOLBOXOPTIONS:
-                case SID_CONFIGSTATUSBAR:
-                case SID_CONFIGMENU:
-                case SID_CONFIGACCEL:
-                case SID_CONFIGEVENT:
-                {
-                    if( officecfg::Office::Common::Misc::DisableUICustomization::get() )
-                        rSet.DisableItem(nWhich);
                     break;
                 }
 

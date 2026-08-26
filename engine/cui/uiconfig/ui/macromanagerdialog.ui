@@ -399,20 +399,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="assign">
-                                <property name="label" translatable="yes" context="macromanagerdialog|assign">Assign...</property>
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkButton" id="macrocreate">
                                 <property name="label" translatable="yes" context="macromanagerdialog|macrocreate">Create...</property>
                                 <property name="visible">True</property>

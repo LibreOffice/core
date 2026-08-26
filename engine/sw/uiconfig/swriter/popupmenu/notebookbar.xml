@@ -14,7 +14,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:UIPicker" menu:style="text"/>
   <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-  <menu:menuitem menu:id=".uno:ConfigureDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:HelpIndex"/>
   <menu:menuseparator/>

@@ -21,7 +21,6 @@
 
 #include <o3tl/string_view.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/whiter.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/virdev.hxx>
@@ -171,19 +170,6 @@ VirtualDevice &SmModule::GetDefaultVirtualDev()
         mpVirtualDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
     }
     return *mpVirtualDev;
-}
-
-void SmModule::GetState(SfxItemSet &rSet)
-{
-    SfxWhichIter aIter(rSet);
-
-    for (sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich())
-        switch (nWh)
-        {
-            case SID_CONFIGEVENT :
-                rSet.DisableItem(SID_CONFIGEVENT);
-                break;
-        }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

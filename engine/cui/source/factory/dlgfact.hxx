@@ -35,9 +35,6 @@ public:
                                                                  std::unique_ptr<const SfxItemSet> xAttr,
                                                                  const css::uno::Reference< css::frame::XFrame >& rFrame) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet) override;
-    virtual VclPtr<SfxAbstractTabDialog> CreateCustomizeTabDialog(weld::Window* pParent,
-                                            const SfxItemSet* pAttrSet,
-                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame ) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateTextTabDialog( weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView ) override;

@@ -37,7 +37,6 @@
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/frame.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -69,7 +68,6 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     , m_xMacroBoxIter(m_xMacroBox->make_iterator())
     , m_xRunButton(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xCloseButton(m_xBuilder->weld_button(u"close"_ustr))
-    , m_xAssignButton(m_xBuilder->weld_button(u"assign"_ustr))
     , m_xEditButton(m_xBuilder->weld_button(u"edit"_ustr))
     , m_xDelButton(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xNewButton(m_xBuilder->weld_button(u"new"_ustr))
@@ -84,7 +82,6 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
 
     m_xRunButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xCloseButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
-    m_xAssignButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xEditButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xDelButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xNewButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
@@ -405,9 +402,6 @@ void MacroChooser::CheckButtons()
 
     // organising still possible?
 
-    // Assign...
-    EnableButton(*m_xAssignButton, pMethod != nullptr);
-
     // Edit...
     EnableButton(*m_xEditButton, bMacroEntry);
 
@@ -706,37 +700,6 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
             }
         }
     }
-    else if (&rButton == m_xAssignButton.get())
-    {
-        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
-        {
-            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-            return;
-        }
-        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
-        const ScriptDocument& aDocument( aDesc.GetDocument() );
-        DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
-        if ( !aDocument.isAlive() )
-            return;
-        BasicManager* pBasMgr = aDocument.getBasicManager();
-        const OUString& aLib( aDesc.GetLibName() );
-        const OUString& aMod( aDesc.GetName() );
-        OUString aSub( m_xMacroNameEdit->get_text() );
-        SbMethod* pMethod = GetMacro();
-        DBG_ASSERT( pBasMgr, "BasMgr?" );
-        DBG_ASSERT( pMethod, "Method?" );
-        OUString aComment( GetInfo( pMethod ) );
-        SfxMacroInfoItem aItem( SID_MACROINFO, pBasMgr, aLib, aMod, aSub, aComment );
-        SfxAllItemSet Args( SfxGetpApp()->GetPool() );
-
-        SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
-        if (m_xDocumentFrame.is())
-            aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, m_xDocumentFrame));
-
-        SfxRequest aRequest(SID_CONFIGACCEL, SfxCallMode::SYNCHRON, Args, aInternalSet);
-        aRequest.AppendItem( aItem );
-        SfxGetpApp()->ExecuteSlot( aRequest );
-    }
     else if (&rButton == m_xNewLibButton.get())
     {
         if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
@@ -849,7 +812,6 @@ void MacroChooser::SetMode (Mode nM)
             EnableButton(*m_xNewButton, false);
             EnableButton(*m_xOrganizeButton, false);
 
-            m_xAssignButton->hide();
             m_xEditButton->hide();
             m_xDelButton->hide();
             m_xNewButton->hide();

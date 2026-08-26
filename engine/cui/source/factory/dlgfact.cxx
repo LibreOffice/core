@@ -67,7 +67,6 @@
 #include <SignSignatureLineDialog.hxx>
 #include <QrCodeGenDialog.hxx>
 #include <SpellDialog.hxx>
-#include <cfg.hxx>
 #include <numpages.hxx>
 #include <paragrph.hxx>
 #include <tabstpge.hxx>
@@ -170,15 +169,6 @@ public:
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet)
 {
     return VclPtr<CuiAbstractTabController_Impl<OfaAutoCorrDlg>>::Create(pParent, pAttrSet);
-}
-
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialog(weld::Window* pParent,
-                                                const SfxItemSet* pAttrSet,
-                                                const Reference< frame::XFrame >& xViewFrame )
-{
-    auto xDlg1 = std::make_shared<SvxConfigDialog>(pParent, pAttrSet);
-    xDlg1->SetFrame(xViewFrame);
-    return VclPtr<CuiAbstractTabController_Impl<SvxConfigDialog>>::Create(std::move(xDlg1));
 }
 
 // TabDialog that use functionality of the drawing layer

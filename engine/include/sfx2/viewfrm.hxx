@@ -63,7 +63,6 @@ class SFX2_DLLPUBLIC SfxViewFrame final : public SfxShell, public SfxListener
     SAL_DLLPRIVATE virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     DECL_DLLPRIVATE_LINK(MacroButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SecurityButtonHandler, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(EventButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(ViewSignaturesButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SwitchReadOnlyHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);

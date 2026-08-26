@@ -2901,13 +2901,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSettings-ConfigureDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ConfigureDialog</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuSettings-OptionsTreeDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

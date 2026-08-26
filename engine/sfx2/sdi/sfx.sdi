@@ -738,25 +738,6 @@ SfxVoidItem CompileBasic SID_BASICCOMPILE
 ]
 
 
-SfxVoidItem ConfigureDialog SID_CONFIG
-(SfxStringItem ResourceURL SID_CONFIG)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
-
 SfxStringItem Context SID_CONTEXT
 
 [
@@ -2175,25 +2156,6 @@ SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
 ]
 
 
-SfxVoidItem LoadAccel SID_CONFIGACCEL
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
 SfxVoidItem LoadBasic SID_BASICLOAD
 ()
 [
@@ -2210,82 +2172,6 @@ SfxVoidItem LoadBasic SID_BASICLOAD
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Insert;
-]
-
-
-SfxVoidItem LoadEvents SID_CONFIGEVENT
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem LoadMenu SID_CONFIGMENU
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem LoadStatusBar SID_CONFIGSTATUSBAR
-(SfxStringItem FileName SID_CFGFILE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
-]
-
-
-SfxVoidItem LoadToolBox SID_TOOLBOXOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Options;
 ]
 
 

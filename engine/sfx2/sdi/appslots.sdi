@@ -65,36 +65,6 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
-    SID_CONFIG // ole(no) api(final/play/rec)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-    SID_TOOLBOXOPTIONS // ole(no) api(final/play)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-    SID_CONFIGSTATUSBAR // ole(no) api(final/play)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-    SID_CONFIGMENU // ole(no) api(final/play)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-    SID_CONFIGACCEL // ole(no) api(final/play)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-    SID_CONFIGEVENT // ole(no) api(final/play)
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
     SID_TEMPLATE_MANAGER // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;

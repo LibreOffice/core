@@ -198,7 +198,6 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
     std::unique_ptr<weld::Button> m_xMacroDeleteButton;
     std::unique_ptr<weld::Button> m_xMacroCreateButton;
     std::unique_ptr<weld::Button> m_xMacroRenameButton;
-    std::unique_ptr<weld::Button> m_xAssignButton;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(SelectHdl, weld::TreeView&, void);

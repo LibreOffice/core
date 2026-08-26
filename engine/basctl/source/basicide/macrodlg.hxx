@@ -81,7 +81,6 @@ private:
     std::unique_ptr<weld::TreeIter> m_xMacroBoxIter;
     std::unique_ptr<weld::Button> m_xRunButton;
     std::unique_ptr<weld::Button> m_xCloseButton;
-    std::unique_ptr<weld::Button> m_xAssignButton;
     std::unique_ptr<weld::Button> m_xEditButton;
     std::unique_ptr<weld::Button> m_xDelButton;
     std::unique_ptr<weld::Button> m_xNewButton;

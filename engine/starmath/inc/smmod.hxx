@@ -82,7 +82,6 @@ public:
     SmMathConfig *          GetConfig();
     SmSymbolManager &       GetSymbolManager();
 
-    static void GetState(SfxItemSet&);
 
     const SvtSysLocale& GetSysLocale();
 

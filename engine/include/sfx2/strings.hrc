@@ -295,7 +295,6 @@
 #define STR_MACROS_DISABLED_CONTENT_UNSIGNED    NC_("STR_MACROS_DISABLED_CONTENT_UNSIGNED", "Macros are signed, but the document (containing document events) is not signed.")
 #define STR_MACROS                              NC_("STR_MACROS", "Show Macros")
 #define STR_SECURITY_OPTIONS                    NC_("STR_MACROS", "Show Security Options")
-#define STR_EVENTS                              NC_("STR_EVENTS", "Show Events")
 
 // Translators: default Impress template names
 #define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Grey Elegant")

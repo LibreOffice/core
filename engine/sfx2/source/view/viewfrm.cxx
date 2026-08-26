@@ -1411,51 +1411,11 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
     // what's the difference between pObjImpl->documentStorageHasMacros() and pObjImpl->aMacroMode.hasMacroLibrary() ?
     bool bHasDocumentMacros = pObjImpl->aMacroMode.hasMacroLibrary();
 
-    Reference<XModel> xModel = m_xObjSh->GetModel();
-    uno::Reference<document::XEventsSupplier> xSupplier(xModel, uno::UNO_QUERY);
-    bool bHasBoundConfigEvents(false);
-    if (xSupplier.is())
-    {
-        css::uno::Reference<css::container::XNameReplace> xDocumentEvents = xSupplier->getEvents();
-
-        Sequence<OUString> eventNames = xDocumentEvents->getElementNames();
-        sal_Int32 nEventCount = eventNames.getLength();
-        for (sal_Int32 nEvent = 0; nEvent < nEventCount; ++nEvent)
-        {
-            OUString url;
-            try
-            {
-                Any aAny(xDocumentEvents->getByName(eventNames[nEvent]));
-                Sequence<beans::PropertyValue> props;
-                if (aAny >>= props)
-                {
-                    ::comphelper::NamedValueCollection aProps(props);
-                    url = aProps.getOrDefault(u"Script"_ustr, url);
-                }
-            }
-            catch (const cpo::uno::Exception&)
-            {
-            }
-            if (!url.isEmpty())
-            {
-                bHasBoundConfigEvents = true;
-                break;
-            }
-        }
-    }
-
     if (bHasDocumentMacros)
     {
         weld::Button& rMacroButton = pInfoBar->addButton();
         rMacroButton.set_label(SfxResId(STR_MACROS));
         rMacroButton.connect_clicked(LINK(this, SfxViewFrame, MacroButtonHandler));
-    }
-
-    if (bHasBoundConfigEvents)
-    {
-        weld::Button& rEventButton = pInfoBar->addButton();
-        rEventButton.set_label(SfxResId(STR_EVENTS));
-        rEventButton.connect_clicked(LINK(this, SfxViewFrame, EventButtonHandler));
     }
 
     if (pObjImpl->aMacroMode.hasInvalidSignaturesError())
@@ -1755,13 +1715,6 @@ IMPL_LINK_NOARG(SfxViewFrame, SecurityButtonHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_OPTIONS_SECURITY, SfxCallMode::SYNCHRON);
     RemoveInfoBar(u"securitywarn");
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, EventButtonHandler, weld::Button&, void)
-{
-    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
-    GetDispatcher()->ExecuteList(SID_CONFIGEVENT, SfxCallMode::ASYNCHRON,
-                                 {}, { &aDocFrame });
 }
 
 IMPL_LINK_NOARG(SfxViewFrame, ViewSignaturesButtonHandler, weld::Button&, void)

@@ -148,7 +148,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:MacroRecorder"/>
             <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
-            <menu:menuitem menu:id=".uno:ConfigureDialog"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:WindowList">

@@ -140,9 +140,6 @@ public:
                                         virtual ~SfxAbstractDialogFactory() override;    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
     virtual VclPtr<SfxAbstractTabDialog>       CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet) = 0;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateCustomizeTabDialog(weld::Window* pParent,
-                                            const SfxItemSet* pAttrSet,
-                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
     virtual VclPtr<SfxAbstractInsertObjectDialog> CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommand,
