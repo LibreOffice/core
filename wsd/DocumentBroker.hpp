@@ -457,17 +457,14 @@ public:
     /// Sends a raw text frame to the kit child process, without a view prefix.
     bool sendTextFrameToKit(const std::string& message);
 
-    /// Stores the access token to use for a subscription to the given remote
-    /// document. The latest token per WOPISrc wins.
-    void setRemoteDocumentToken(const std::string& wopiSrc, const std::string& accessToken);
-
     /// Returns true when the given access token belongs to a live session of
     /// this document.
     bool isKnownAccessToken(const std::string& accessToken) const;
 
-    /// Returns true when this document holds a subscription to the remote
-    /// document with the given docKey.
-    bool hasRemoteSubscription(const std::string& remoteDocKey) const;
+#if !MOBILEAPP
+    /// Stores the access token to use for a subscription to the given remote
+    /// document. The latest token per WOPISrc wins.
+    void setRemoteDocumentToken(const std::string& wopiSrc, const std::string& accessToken);
 
     /// Removes the record of a remote document subscription that was not
     /// accepted.
@@ -481,6 +478,7 @@ public:
     /// Records the docKeys from a comma-separated chain as linked to this
     /// document through headless sessions.
     void addToIncomingDocKeyChain(const std::string& docKeyChain);
+#endif
 
     /// Transfer this socket into our polling thread / loop.
     void addSocketToPoll(const std::shared_ptr<StreamSocket>& socket);
@@ -846,16 +844,6 @@ private:
                                   const std::shared_ptr<Message>& completion, bool cached);
 
     void handleDialogRequest(const std::string& dialogCmd);
-
-    /// Handles a remotedocsubscribe: or remotedocunsubscribe: message from the kit.
-    void handleRemoteDocumentMessage(const std::shared_ptr<Message>& message, bool subscribe);
-
-    /// Answers a remote document subscription with an error event.
-    void sendRemoteDocumentError(const std::string& tag, const std::string& encodedWopiSrc,
-                                 const std::string& kind);
-
-    /// Drops every remote document subscription this document holds.
-    void unsubscribeAllRemoteDocuments();
 
 
     /// Invoked to issue a save before renaming the document filename.
@@ -1933,20 +1921,11 @@ private:
     // Maps download id -> URL
     std::map<std::string, std::string> _registeredDownloadLinks;
 
-    /// Access tokens for remote documents this document may subscribe to,
-    /// keyed by the remote document's docKey.
-    std::map<std::string, std::string> _remoteDocumentTokens;
-
-    /// The client-facing view of the related documents.
+#if !MOBILEAPP
+    /// The related documents this document may subscribe to, with their
+    /// subscriptions and the client-facing view of them.
     RelatedDocuments _relatedDocuments;
-
-    /// The remote documents this document is subscribed to, as
-    /// (WOPISrc, access token, link tag) tuples.
-    std::set<std::tuple<std::string, std::string, std::string>> _remoteSubscriptions;
-
-    /// docKeys of the documents connected to this one through headless
-    /// sessions, from the remotechain option of the sessions' URIs.
-    std::vector<std::string> _incomingDocKeyChain;
+#endif
 
     /// Embedded media map [id, json].
     std::map<std::string, std::string> _embeddedMedia;
