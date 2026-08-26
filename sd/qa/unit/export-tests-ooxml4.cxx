@@ -9,6 +9,7 @@
 
 #include "sdmodeltestbase.hxx"
 #include <tools/color.hxx>
+#include <tools/stream.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -25,14 +26,18 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/unoapi.hxx>
+#include <unotools/tempfile.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -2465,6 +2470,50 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16080_masterKeepsItsPlaceholder
     assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='body']", 1);
     assertXPath(pMaster, aTree + "/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='body']/p:spPr/a:xfrm/a:off",
                 "y", u"1825560");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16080_layoutShapesStayOnTheirLayout)
+{
+    // Given a deck whose first layout paints the whole slide blue, and a slide on another layout,
+    // which is therefore white:
+    createSdImpressDoc("pptx/layout-own-background.pptx");
+    saveAndReload(TestFilter::PPTX);
+
+    utl::TempFileNamed aPng;
+    aPng.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(64)),
+        comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(36))
+    };
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue(u"URL"_ustr, aPng.GetURL()),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
+    };
+    auto xExporter = drawing::GraphicExportFilter::create(getComponentContext());
+    xExporter->setSourceDocument(getPage(0).queryThrow<lang::XComponent>());
+    xExporter->filter(aDescriptor);
+
+    SvFileStream aStream(aPng.GetURL(), StreamMode::READ);
+    Bitmap aSlide = vcl::PngImageReader(aStream).read();
+    CPPUNIT_ASSERT_EQUAL(Size(64, 36), aSlide.GetSizePixel());
+
+    // The slide is still white. An imported master and layout collapse onto one Impress master
+    // page, so the page standing for the group holds the first layout's rectangle - and writing
+    // that page's shapes into the master part painted it under every slide of the deck. Sample
+    // the side margins, which no placeholder of this layout reaches.
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[ffffffff]
+    // - Actual  : rgba[0000ffff]
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aSlide.GetPixelColor(2, 18));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aSlide.GetPixelColor(61, 18));
+
+    // The layout it belongs to still paints it, which is what a slide of that layout inherits.
+    xmlDocUniquePtr pLayout = parseExportedLayoutNamed(u"Title Slide");
+    assertXPath(pLayout,
+                "/p:sldLayout/p:cSld/p:spTree/p:sp[p:nvSpPr/p:cNvPr/@name='Blue background']"
+                "/p:spPr/a:solidFill/a:srgbClr",
+                "val", u"0000FF");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16082_layoutKeepsSubtitle)

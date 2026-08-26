@@ -2222,9 +2222,9 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     pFS->startElementNS(XML_p, XML_cSld);
 
-    // The master carries its own shapes even where the layouts repeat them, as PowerPoint
-    // authors it: an empty master leaves nothing to inherit from and nothing to edit once for
-    // every layout.
+    // The master carries its own placeholders even where the layouts repeat them, as PowerPoint
+    // authors it: an empty master has nothing to inherit from, and no date, footer or slide number
+    // placeholder to set that state on.
     if (aXBackgroundPropSet)
         ImplWriteBackground(pFS, aXBackgroundPropSet);
     WriteShapeTree(pFS, MASTER, true, /*bSlideMasterPart=*/true, nPageNum);
@@ -2595,7 +2595,7 @@ void PowerPointExport::ImplWritePPTXLayoutWithContent(
     if (aXBackgroundPropSet)
         ImplWriteBackground(pFS, aXBackgroundPropSet);
 
-    WriteShapeTree(pFS, MASTER, true);
+    WriteShapeTree(pFS, MASTER, true, /*bSlideMasterPart=*/false, nMasterNum);
 
     pFS->endElementNS(XML_p, XML_cSld);
 
@@ -2614,6 +2614,15 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
     aDML.SetPageType(ePageType);
     aDML.SetSlideMasterPart(bSlideMasterPart);
     aDML.SetBackgroundDark(mbIsBackgroundDark);
+
+    // A master standing for a group of layouts writes only its placeholders. A placeholder there
+    // is a prototype: it reaches a slide only through a layout that references it by type and
+    // index. A drawn shape paints under every slide that uses one of this master's layouts, and
+    // the page representing the group holds one layout's own artwork, since an imported master
+    // and layout collapse onto one Impress master page. Each of those layouts writes its page's
+    // shapes itself; a master of its own has no layout to leave them to.
+    const bool bPlaceholdersOnly
+        = bSlideMasterPart && GetEquivalentMasterPage(nMasterNum) == nMasterNum;
 
     pFS->startElementNS(XML_p, XML_spTree);
     pFS->write(MAIN_GROUP);
@@ -2636,6 +2645,9 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         if (GetShapeByIndex(GetCurrentGroupIndex(), true))
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
+            if (bPlaceholdersOnly && !mbPresObj)
+                continue;
+
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
             bool bSaveAsDiagram(false);
 
