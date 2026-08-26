@@ -255,7 +255,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
     OUString language = sfUri->getParameter( langKey );
     OUString location = sfUri->getParameter( locKey );
 
-    // if script us located in uno pkg
+    // if script is located in uno pkg
     sal_Int32 index = -1;
     OUString pkgTag(u":uno_packages"_ustr);
     // for languages other than basic,  scripts located in uno packages
@@ -279,7 +279,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
     Reference< provider::XScript > xScript;
 
     // If the script location is in the same location context as this
-    // MSP then delete to the language provider controlled by this MSP
+    // MSP then delegate to the language provider controlled by this MSP
     // ** Special case is BASIC, all calls to getScript will be handled
     // by the language script provider in the current location context
     // even if it's different

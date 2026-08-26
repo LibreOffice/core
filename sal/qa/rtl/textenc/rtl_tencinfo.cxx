@@ -36,7 +36,7 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getBestMimeCharsetFromTextEncoding && rtl_getTextEncodingFromMimeCharset differ", eOut, eTextEnc );
         }
 
-        // the defines for the following test could be found in file inc/rtl/textenc.h
+        // the defines for the following test can be found in file inc/rtl/textenc.h
 
         void MimeCharsetFromTextEncoding_MS_1252()
         {

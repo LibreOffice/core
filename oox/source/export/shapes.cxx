@@ -755,7 +755,7 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
             sTarget = "slide" + OUString::number(i + 1) + ".xml";
             break;
         }
-        else // If URL is linked to a shape, assign it's slide as target
+        else // If URL is linked to a shape, assign its slide as target
         {
             Reference<XShapes> xShapes = xDrawPage;
             sal_uInt32 nShapes = xShapes->getCount();
@@ -2621,7 +2621,7 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
 void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const BorderLine2& rBorderLine)
 {
 // While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
-// To get original value of LineWidth need to multiple by 2.
+// To get original value of LineWidth need to multiply by 2.
     sal_Int32 nBorderWidth = rBorderLine.LineWidth;
     nBorderWidth *= 2;
     nBorderWidth = oox::drawingml::convertHmmToEmu( nBorderWidth );
