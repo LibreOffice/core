@@ -1158,7 +1158,7 @@ void WinSalFrame::SetExtendedFrameStyle( SalExtStyle )
 void WinSalFrame::Show( bool bVisible, bool bNoActivate )
 {
     // Post this Message to the window, because this only works
-    // in the thread of the window, which has create this window.
+    // in the thread of the window, which has created this window.
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
     {
@@ -1937,7 +1937,7 @@ void WinSalFrame::ToTop( SalFrameToTop nFlags )
 {
     nFlags &= ~SalFrameToTop::GrabFocus;   // this flag is not needed on win32
     // Post this Message to the window, because this only works
-    // in the thread of the window, which has create this window.
+    // in the thread of the window, which has created this window.
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
     {
@@ -2078,8 +2078,8 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void WinSalFrame::CaptureMouse( bool bCapture )
 {
-    // Send this Message to the window, because CaptureMouse() only work
-    // in the thread of the window, which has create this window
+    // Send this Message to the window, because CaptureMouse() only works
+    // in the thread of the window, which has created this window
     int nMsg;
     if ( bCapture )
         nMsg = SAL_MSG_CAPTUREMOUSE;

@@ -528,7 +528,7 @@ void Window::ImplCallResize()
     Resize();
 
     // #88419# Most classes don't call the base class in Resize() and Move(),
-    // => Call ImpleResize/Move instead of Resize/Move directly...
+    // => Call ImplResize/Move instead of Resize/Move directly...
     CallEventListeners( VclEventId::WindowResize );
 }
 

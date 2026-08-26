@@ -240,7 +240,7 @@ private:
         // Reads the header of the Pict file, set IsVersion and aBoundingRect
 
     sal_uInt64 ReadData(sal_uInt16 nOpcode);
-        // Reads the date of anOopcode and executes the operation.
+        // Reads the data of an opcode and executes the operation.
         // The number of data bytes belonging to the opcode will be returned
         // in any case.
 
