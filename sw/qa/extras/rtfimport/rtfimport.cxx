@@ -1042,6 +1042,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167713)
                          getProperty<OUString>(xImage2->getAnchor()->getText(), u"CellName"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167713ShapeText)
+{
+    // Importing this used to abort in DomainMapper_Impl::substream(), asserting on an empty table
+    // manager stack: a shape with text in a buffered row was closed without ever being opened, and
+    // took the manager that the next substream needed.
+    createSwDoc("tdf167713-shapetext.rtf");
+
+    // Each shape stayed in the cell it was written in: the footer's, which the draw page hands out
+    // first, in C1, and the header's in B1.
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    auto xShape1 = getShape(1).queryThrow<text::XTextContent>();
+    CPPUNIT_ASSERT_EQUAL(u"C1"_ustr,
+                         getProperty<OUString>(xShape1->getAnchor()->getText(), u"CellName"_ustr));
+
+    auto xShape2 = getShape(2).queryThrow<text::XTextContent>();
+    CPPUNIT_ASSERT_EQUAL(u"B1"_ustr,
+                         getProperty<OUString>(xShape2->getAnchor()->getText(), u"CellName"_ustr));
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();

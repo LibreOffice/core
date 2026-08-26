@@ -1983,7 +1983,13 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         else if (std::get<0>(aTuple) == RTFBufferTypes::PAR)
             parBreak();
         else if (std::get<0>(aTuple) == RTFBufferTypes::StartShape)
+        {
+            // The shape belongs where the replay stands, not in the buffer being replayed.
+            RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
+            m_aStates.top().setCurrentBuffer(nullptr);
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
+            m_aStates.top().setCurrentBuffer(pCurrentBuffer);
+        }
         else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveShape)
         {
             // Make sure there is no current buffer while replaying the shape,
