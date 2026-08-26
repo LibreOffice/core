@@ -43,12 +43,6 @@ public:
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleParent(  ) override;
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    // Return text field specific services.
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
-
 private:
     virtual ~VCLXAccessibleTextField() override = default;
 

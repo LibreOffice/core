@@ -73,19 +73,4 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
     return m_xParent;
 }
 
-
-// XServiceInfo
-
-OUString VCLXAccessibleTextField::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleTextField"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleTextField::getSupportedServiceNames()
-{
-    return comphelper::concatSequences(VCLXAccessibleTextComponent::getSupportedServiceNames(),
-                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleTextField"_ustr});
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,7 +45,7 @@ service AccessibleComboBox
        <li>Description: The description of a combo box is its localized
            help text.</li>
        <li>Children: There exists two children.
-            The first is a com::sun::star::awt::AccessibleTextField
+            The first is a text field
             and the 2nd is a com::sun::star::awt::AccessibleList. </li>
        <li>Parent: The parent is the window that contains the combo box.</li>
        <li>Relations: There are no relations.</li>

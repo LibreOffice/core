@@ -498,7 +498,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt,\
 	AccessibleTabBarPageList \
 	AccessibleTabControl \
 	AccessibleTabPage \
-	AccessibleTextField \
 	AccessibleWindow \
 	AnimatedImagesControl \
 	AnimatedImagesControlModel \
