@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>Apps Script extension</title>
+<style>
+  /* Google's absolute .sidebar layout expects a fixed-height host frame; here the iframe grows to
+   * fit content, so let it flow and hand cool.js's Resize a first-paint height: */
+  html, body { margin: 0; padding: 0; }
+  body { min-height: 480px; }
+  .sidebar { position: static !important; }
+  .sidebar.branding-below { top: auto; bottom: auto; }
+  .sidebar.bottom { position: static; }
+  #gas-error {
+    color: #b00; padding: 8px; font-family: -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif; font-size: 13px;
+  }
+</style>
+<script src="cool.js"></script>
+<script src="gas-kit-runner.js"></script>
+<script src="gas-shim.js"></script>
+</head>
+<body>
+<!-- Removed once the sidebar HTML is grafted in; visible if bootstrapping stalls: -->
+<div id="gas-loading" style="padding: 12px; font: 13px sans-serif; color: #666;">Loading...</div>
+<script>
+// Query params: base (extension directory), sidebar (default "sidebar.html"), scripts (CSV):
+(function() {
+    function fail(msg) {
+        const el = document.createElement('div');
+        el.id = 'gas-error';
+        el.textContent = 'Apps Script wrapper: ' + msg;
+        document.body.appendChild(el);
+        console.warn('gas-wrapper: ' + msg);
+    }
+    const params = new URLSearchParams(location.search);
+    const base = params.get('base');
+    if (!base) { fail('missing "base" query parameter'); return; }
+    const sidebarName = params.get('sidebar') || 'sidebar.html';
+    const scriptNames = (params.get('scripts') || '').split(',').filter(Boolean);
+    const baseUrl = new URL(base, location.href);
+    async function fetchText(url) {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(url + ' HTTP ' + r.status);
+        return await r.text();
+    }
+    // Serialise script insertion so a later inline script that depends on an external one above it
+    // (typical jQuery pattern) sees the library rather than racing against its async load:
+    async function injectBody(bodyDoc) {
+        for (const el of Array.from(bodyDoc.childNodes)) {
+            if (el.nodeType === 1 && el.tagName === 'SCRIPT') {
+                const s = document.createElement('script');
+                for (const a of Array.from(el.attributes)) {
+                    s.setAttribute(a.name, a.value);
+                }
+                if (s.src) {
+                    s.async = false;
+                    await new Promise(function(resolve) {
+                        s.onload = resolve;
+                        s.onerror = function() { resolve(); };
+                        document.body.appendChild(s);
+                    });
+                } else {
+                    s.text = el.textContent;
+                    document.body.appendChild(s);
+                }
+            } else {
+                document.body.appendChild(el);
+            }
+        }
+    }
+    // Expand the one common HtmlService scriptlet form `<?!= include('name') ?>` (fetching
+    // name.html, per Google's convention that on-disk files gain a .html suffix):
+    async function expandScriptlets(html) {
+        const includeRe = /<\?!=\s*include\(\s*['"]([^'"]+)['"]\s*\)\s*\?>/g;
+        let out = '';
+        let last = 0;
+        let match;
+        while ((match = includeRe.exec(html)) !== null) {
+            out += html.substring(last, match.index);
+            const name = match[1];
+            try {
+                out += await fetchText(new URL(name + '.html', baseUrl));
+            } catch (err) {
+                out += '<!-- gas-wrapper: include(' + name + ') failed: '
+                    + (err && err.message ? err.message : String(err)) + ' -->';
+                console.warn('gas-wrapper: include(' + name + ') failed:', err);
+            }
+            last = match.index + match[0].length;
+        }
+        out += html.substring(last);
+        if (/<\?/.test(out)) {
+            console.warn('gas-wrapper: unhandled template scriptlets remain in',
+                         sidebarName);
+        }
+        return out;
+    }
+    (async function() {
+        const sources = await Promise.all(scriptNames.map(function(s) {
+            return fetchText(new URL(s, baseUrl));
+        }));
+        window.__gasScriptSources = sources;
+        window.__gasScriptNames = scriptNames;
+        const rawHtml = await fetchText(new URL(sidebarName, baseUrl));
+        const html = await expandScriptlets(rawHtml);
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        // Merge <head> children in so <link rel="stylesheet"> and <style> apply:
+        for (const el of Array.from(doc.head.children)) {
+            if (el.tagName === 'TITLE') { document.title = el.textContent; continue; }
+            document.head.appendChild(el);
+        }
+        // Move body attributes over so class/id-based CSS keeps applying:
+        for (const a of Array.from(doc.body.attributes)) {
+            document.body.setAttribute(a.name, a.value);
+        }
+        await injectBody(doc.body);
+        const loading = document.getElementById('gas-loading');
+        if (loading) loading.remove();
+    })().catch(function(err) {
+        fail(err && err.message ? err.message : String(err));
+    });
+})();
+</script>
+</body>
+</html>

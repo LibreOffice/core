@@ -80,7 +80,9 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstdio>
 #include <iomanip>
+#include <set>
 #include <sstream>
 #include <string>
 #include <regex>
@@ -1047,68 +1049,243 @@ const std::string *FileServerRequestHandler::getCompressedFile(const std::string
     return pair.second.empty() ? &pair.first : &pair.second;
 }
 
+static std::string jsonQuote(std::string const & s) {
+    std::string out;
+    out.reserve(s.size() + 2);
+    out.push_back('"');
+    for (char c : s) {
+        switch (c) {
+        case '"': out.append("\\\""); break;
+        case '\\': out.append("\\\\"); break;
+        case '\b': out.append("\\b"); break;
+        case '\f': out.append("\\f"); break;
+        case '\n': out.append("\\n"); break;
+        case '\r': out.append("\\r"); break;
+        case '\t': out.append("\\t"); break;
+        default:
+            if (static_cast<unsigned char>(c) < 0x20) {
+                char buf[8];
+                std::snprintf(buf, sizeof(buf), "\\u%04x", static_cast<unsigned char>(c));
+                out.append(buf);
+            } else {
+                out.push_back(c);
+            }
+            break;
+        }
+    }
+    out.push_back('"');
+    return out;
+}
+
+// Assemble an Apps Script <id>/_cool-gas.json sidecar body from the extension directory contents:
+//  - `scripts` is a list of (.gs file name, source text) pairs
+//  - `htmls` is a list of .html/.htm file names
+// The client-side tryLoadAppsScriptExtension in Control.Extension.ts reads the body to know
+// which .gs files to fetch and which sidebar to load, and picks up an optional display name
+// and target document types the sniffing here can extract:
+static std::string synthesizeGasSidecar(
+    std::vector<std::pair<std::string, std::string>> const & scripts,
+    std::vector<std::string> const & htmls)
+{
+    // Guess the add-on's target document types from the DocumentApp/SpreadsheetApp/SlidesApp
+    // mentions:
+    std::vector<std::string> supports;
+    auto containsAnySource = [&scripts](std::string_view needle) {
+        for (auto const & [name, src]: scripts) {
+            if (src.find(needle) != std::string::npos) {
+                return true;
+            }
+        }
+        return false;
+    };
+    if (containsAnySource("DocumentApp")) {
+        supports.push_back("text");
+    }
+    if (containsAnySource("SpreadsheetApp")) {
+        supports.push_back("spreadsheet");
+    }
+    if (containsAnySource("SlidesApp")) {
+        supports.push_back("presentation");
+    }
+
+    // Prefer a well-known entry name so sidebar.css.html doesn't beat sidebar.html alphabetically:
+    std::string sidebar;
+    static char const * const preferred[] = {
+        "sidebar.html", "Sidebar.html", "main.html", "index.html"};
+    for (auto const p: preferred) {
+        for (auto const & h: htmls) {
+            if (h == p) {
+                sidebar = h;
+                break;
+            }
+        }
+        if (!sidebar.empty()) {
+            break;
+        }
+    }
+    if (sidebar.empty() && !htmls.empty()) {
+        sidebar = htmls.front();
+    }
+
+    // Guess a display name from setTitle("...") or a NAME_TITLE = "..." constant:
+    std::string displayName;
+    static const std::regex reSetTitle(R"RE(setTitle\s*\(\s*(?:'([^']+)'|"([^"]+)"))RE");
+    static const std::regex reTitleConst(
+        R"RE([A-Za-z_][A-Za-z0-9_]*_TITLE\s*=\s*(?:'([^']+)'|"([^"]+)"))RE");
+    auto tryMatch = [&scripts](std::regex const & re) {
+        for (auto const & [name, src]: scripts) {
+            std::smatch m;
+            if (std::regex_search(src, m, re)) {
+                return m[1].matched ? m[1].str() : m[2].str();
+            }
+        }
+        return std::string();
+    };
+    displayName = tryMatch(reSetTitle);
+    if (displayName.empty()) {
+        displayName = tryMatch(reTitleConst);
+    }
+
+    std::string body = "{\"scripts\":[";
+    bool firstScript = true;
+    for (auto const & [name, src]: scripts) {
+        if (!firstScript) {
+            body.push_back(',');
+        }
+        firstScript = false;
+        body.append(jsonQuote(name));
+    }
+    body.append("],\"sidebar\":");
+    body.append(jsonQuote(sidebar));
+    if (!displayName.empty()) {
+        body.append(",\"name\":");
+        body.append(jsonQuote(displayName));
+    }
+    if (!supports.empty()) {
+        body.append(",\"supports\":[");
+        bool firstSupport = true;
+        for (auto const & s: supports) {
+            if (!firstSupport) {
+                body.push_back(',');
+            }
+            firstSupport = false;
+            body.append(jsonQuote(s));
+        }
+        body.push_back(']');
+    }
+    body.push_back('}');
+    return body;
+}
+
 // For the dev-only "drop a directory into browser/dist/extensions/" feature, emit
 // /browser/dist/extensions/index.json as a JSON array of the <id>s with a cached
-// <id>/manifest.json.  Called once after readDirToHash.
+// <id>/manifest.json, plus a <id>/_cool-gas.json sidecar for each Apps Script directory
+// (manifest.json vs. appsscript.json distinguishes the two kinds).  Called once after
+// readDirToHash.
 void FileServerRequestHandler::synthesizeBuiltinExtensionsIndex()
 {
 #if ENABLE_DEBUG
     static const std::string prefix = "/browser/dist/extensions/";
-    static const std::string suffix = "/manifest.json";
-    std::vector<std::string> ids;
-    for (const auto& entry : FileHash)
-    {
-        const std::string& key = entry.first;
-        if (!key.starts_with(prefix) || !key.ends_with(suffix))
-            continue;
-        const std::string id =
-            key.substr(prefix.size(), key.size() - prefix.size() - suffix.size());
-        // Skip nested manifest.json files (only direct subdirectories of extensions/
-        // are extension roots):
-        if (id.find('/') != std::string::npos)
-            continue;
-        ids.push_back(id);
-    }
-    std::sort(ids.begin(), ids.end());
-
-    std::string json;
-    json.push_back('[');
-    bool first = true;
-    for (const auto& id : ids)
-    {
-        if (!first) json.push_back(',');
-        first = false;
-        json.push_back('"');
-        json.append(id);
-        json.push_back('"');
-    }
-    json.push_back(']');
+    static const std::string manifestSuffix = "/manifest.json";
+    static const std::string gasSuffix = "/appsscript.json";
 
     // Pre-compress in step with the rest of readDirToHash so the request handler's
     // gzip path serves correctly-encoded bytes; getCompressedFile silently falls back
     // to the uncompressed entry on init/deflate failure here, matching readDirToHash.
-    std::string gzipped;
-    z_stream strm;
-    strm.zalloc = Z_NULL;
-    strm.zfree = Z_NULL;
-    strm.opaque = Z_NULL;
-    if (deflateInit2(&strm, Z_BEST_COMPRESSION, Z_DEFLATED, 31, 8, Z_DEFAULT_STRATEGY) == Z_OK)
+    auto installAsset = [this](const std::string& path, std::string body) {
+        std::string gzipped;
+        z_stream strm;
+        strm.zalloc = Z_NULL;
+        strm.zfree = Z_NULL;
+        strm.opaque = Z_NULL;
+        if (deflateInit2(&strm, Z_BEST_COMPRESSION, Z_DEFLATED, 31, 8, Z_DEFAULT_STRATEGY) == Z_OK)
+        {
+            const unsigned long bound = deflateBound(&strm, body.size());
+            gzipped.resize(bound);
+            strm.next_in = reinterpret_cast<unsigned char*>(body.data());
+            strm.avail_in = body.size();
+            strm.next_out = reinterpret_cast<unsigned char*>(gzipped.data());
+            strm.avail_out = bound;
+            if (deflate(&strm, Z_FINISH) == Z_STREAM_END)
+                gzipped.resize(bound - strm.avail_out);
+            else
+                gzipped.clear();
+            deflateEnd(&strm);
+        }
+        FileHash[path] = std::make_pair(std::move(body), std::move(gzipped));
+    };
+
+    std::set<std::string> nativeIds;
+    std::set<std::string> gasIds;
+    for (const auto& entry : FileHash)
     {
-        const unsigned long bound = deflateBound(&strm, json.size());
-        gzipped.resize(bound);
-        strm.next_in = reinterpret_cast<unsigned char*>(json.data());
-        strm.avail_in = json.size();
-        strm.next_out = reinterpret_cast<unsigned char*>(gzipped.data());
-        strm.avail_out = bound;
-        if (deflate(&strm, Z_FINISH) == Z_STREAM_END)
-            gzipped.resize(bound - strm.avail_out);
-        else
-            gzipped.clear();
-        deflateEnd(&strm);
+        const std::string& key = entry.first;
+        if (!key.starts_with(prefix))
+            continue;
+        std::string id;
+        bool isGas = false;
+        if (key.ends_with(manifestSuffix)) {
+            id = key.substr(prefix.size(), key.size() - prefix.size() - manifestSuffix.size());
+        } else if (key.ends_with(gasSuffix)) {
+            id = key.substr(prefix.size(), key.size() - prefix.size() - gasSuffix.size());
+            isGas = true;
+        } else {
+            continue;
+        }
+        if (id.empty() || id.find('/') != std::string::npos)
+            continue;
+        (isGas ? gasIds : nativeIds).insert(id);
+    }
+    // A native manifest.json wins if both markers are present:
+    for (auto const & id: nativeIds) {
+        gasIds.erase(id);
     }
 
-    // Replaces any stale build-time index.json so the runtime view always wins:
-    FileHash[prefix + "index.json"] = std::make_pair(std::move(json), std::move(gzipped));
+    std::vector<std::string> allIds;
+    allIds.reserve(nativeIds.size() + gasIds.size());
+    for (auto const & id: nativeIds) {
+        allIds.push_back(id);
+    }
+    for (auto const & id: gasIds) {
+        allIds.push_back(id);
+    }
+    std::sort(allIds.begin(), allIds.end());
+
+    std::string indexJson = "[";
+    bool first = true;
+    for (const auto& id : allIds)
+    {
+        if (!first) indexJson.push_back(',');
+        first = false;
+        indexJson.append(jsonQuote(id));
+    }
+    indexJson.push_back(']');
+    installAsset(prefix + "index.json", std::move(indexJson));
+
+    // Stash a <id>/_cool-gas.json sidecar listing each Apps Script directory's .gs and sidebar:
+    for (auto const & id: gasIds) {
+        const std::string dirPrefix = prefix + id + "/";
+        std::vector<std::pair<std::string, std::string>> scripts;
+        std::vector<std::string> htmls;
+        for (auto const & entry: FileHash) {
+            auto const & key = entry.first;
+            if (!key.starts_with(dirPrefix)) {
+                continue;
+            }
+            auto const name = key.substr(dirPrefix.size());
+            if (name.empty() || name.find('/') != std::string::npos) {
+                continue;
+            }
+            if (name.ends_with(".gs")) {
+                scripts.emplace_back(name, entry.second.first);
+            } else if (name.ends_with(".html") || name.ends_with(".htm")) {
+                htmls.push_back(name);
+            }
+        }
+        std::sort(scripts.begin(), scripts.end());
+        std::sort(htmls.begin(), htmls.end());
+        installAsset(dirPrefix + "_cool-gas.json", synthesizeGasSidecar(scripts, htmls));
+    }
 #endif
 }
 
@@ -1236,6 +1413,55 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         || file.find("../") != std::string::npos || file.find("/..") != std::string::npos)
     {
         HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+        return true;
+    }
+
+    // _cool-gas.json is synthesized on demand from the extension directory contents so the
+    // client-side tryLoadAppsScriptExtension can treat an appsscript.json directory as a JS
+    // extension without any COOL-specific files under it:
+    if (file == "_cool-gas.json") {
+        Poco::Path dirPath(extDir);
+        dirPath.pushDirectory(id);
+        Poco::Path const appsscript(dirPath, "appsscript.json");
+        if (!Poco::File(appsscript).exists()) {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+            return true;
+        }
+        std::vector<std::pair<std::string, std::string>> scripts;
+        std::vector<std::string> htmls;
+        try {
+            for (Poco::DirectoryIterator it(dirPath), end; it != end; ++it) {
+                if (!it->isFile()) {
+                    continue;
+                }
+                auto const & name = it.name();
+                if (name.ends_with(".gs")) {
+                    Poco::FileInputStream stream(it->path());
+                    std::string src;
+                    Poco::StreamCopier::copyToString(stream, src);
+                    scripts.emplace_back(name, std::move(src));
+                } else if (name.ends_with(".html") || name.ends_with(".htm")) {
+                    htmls.push_back(name);
+                }
+            }
+        } catch (Poco::Exception const & e) {
+            LOG_WRN(
+                "Failed to synthesize _cool-gas.json for preset extension ["
+                << configId << "/" << id << "]: " << e.displayText());
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+            return true;
+        }
+        std::sort(scripts.begin(), scripts.end());
+        std::sort(htmls.begin(), htmls.end());
+        std::string const body = synthesizeGasSidecar(scripts, htmls);
+        response.setContentType("application/json");
+        response.add("X-Content-Type-Options", "nosniff");
+        response.set("Content-Length", std::to_string(body.size()));
+        if (noCache) {
+            response.set("Cache-Control", "no-cache");
+        }
+        socket->send(response);
+        socket->send(body);
         return true;
     }
 

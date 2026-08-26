@@ -2759,6 +2759,28 @@ JSValue internalTakeProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int arg
     });
 }
 
+JSValue internalEvalWithSource(JSContext * ctx, JSValueConst, int argc, JSValueConst* argv) {
+    return callFromJs(ctx, [ctx, argc, argv] {
+        if (argc != 3 || !JS_IsString(argv[0]) || !JS_IsString(argv[1]) || !JS_IsNumber(argv[2])) {
+            JS_ThrowTypeError(ctx, "$internal.evalWithSource: (script, source, line) required");
+            throw JsException();
+        }
+        std::size_t scriptLen = 0;
+        UniqueCString8 const script(ctx, JS_ToCStringLen(ctx, &scriptLen, argv[0]));
+        if (script.get() == nullptr) {
+            throw JsException();
+        }
+        UniqueCString8 const source(ctx, JS_ToCString(ctx, argv[1]));
+        if (source.get() == nullptr) {
+            throw JsException();
+        }
+        int32_t line = 1;
+        JS_ToInt32(ctx, &line, argv[2]);
+        JSEvalOptions opts{JS_EVAL_OPTIONS_VERSION, JS_EVAL_TYPE_GLOBAL, source.get(), line};
+        return JS_Eval2(ctx, script.get(), scriptLen, &opts);
+    });
+}
+
 JSValue internalSuppressLegacyUnoApiStart(JSContext* ctx, JSValueConst, int, JSValueConst*)
 {
     return callFromJs(ctx, [ctx] {
@@ -3107,6 +3129,9 @@ OUString jsuno::execute(OUString const& script, OUString const & source, int lin
                           JS_NewCFunction(ctx, internalCreateProxy, "createProxy", 2));
         JS_SetPropertyStr(ctx, internalObj, "takeProxy",
                           JS_NewCFunction(ctx, internalTakeProxy, "takeProxy", 1));
+        JS_SetPropertyStr(
+            ctx, internalObj, "evalWithSource",
+            JS_NewCFunction(ctx, internalEvalWithSource, "evalWithSource", 3));
         JS_SetPropertyStr(ctx, internalObj, "suppressLegacyUnoApiStart",
                           JS_NewCFunction(ctx, internalSuppressLegacyUnoApiStart,
                                           "suppressLegacyUnoApiStart", 0));

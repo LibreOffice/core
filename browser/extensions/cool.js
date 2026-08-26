@@ -68,23 +68,41 @@
 	// function application's JSON-decoded return value, or rejects with an Error whose `.name`,
 	// `.message` and `.stack` reflect the JS engine's own error.
 	//
+	// The first argument may also be an `{fn, source, line}` object, giving an explicit source
+	// name and 1-based start line reported back in stack traces.
+	//
 	// The function `fn` is shipped as source text via `fn.toString()` and evaluated on the
 	// server side, so it must be self-contained: it cannot close over variables in the iframe's
 	// scope, but it can use the JS UNO `uno` global and its own arguments and locals.  The
 	// `args` must be JSON-serializable.
-	window.cool.callRemote = function (fn) {
+	window.cool.callRemote = function (fnOrOpts) {
 		const args = Array.prototype.slice.call(arguments, 1);
 		const callId = String(nextCallId++);
 		const promise = new Promise(function (resolve, reject) {
 			pending[callId] = { resolve: resolve, reject: reject };
 		});
-		const loc = detectCallerLocation();
+		let fn, source, line;
+		if (typeof fnOrOpts === 'function') {
+			fn = fnOrOpts;
+			const loc = detectCallerLocation();
+			if (loc) {
+				source = loc.source;
+				line = loc.line;
+			} else {
+				source = '<input>';
+				line = 1;
+			}
+		} else {
+			fn = fnOrOpts.fn;
+			source = fnOrOpts.source;
+			line = fnOrOpts.line;
+		}
 		window.parent.postMessage(JSON.stringify({
 			msgId: 'Extension_Call',
 			callId: callId,
 			fn: fn.toString(),
-			source: loc ? loc.source : '<input>',
-			line: loc ? loc.line : 1,
+			source,
+			line,
 			args: args
 		}), '*');
 		return promise;
@@ -121,7 +139,8 @@
 	// the method's UNO arguments and may return a value (or a Promise of one) to be sent back
 	// as the listener method's return value (only relevant for non-void methods).
 	//
-	// Returns a handle with a `.detach()` method.
+	// Returns `{ready, detach}`: `ready` resolves after the kit-side attach script has run;
+	// `detach()` runs `spec.detach` on the kit as the matching callRemote.
 	function attachListenerImpl(typeName, spec, facade) {
 		const proxyId = 'p' + (nextProxyId++);
 		listeners[proxyId] = {
@@ -129,9 +148,10 @@
 			detach: spec.detach,
 			facade: facade
 		};
-		window.cool.callRemote(
+		const ready = window.cool.callRemote(
 			attachTrampoline, typeName, proxyId, spec.attach.toString(), facade);
 		return {
+			ready,
 			detach: function () {
 				const entry = listeners[proxyId];
 				if (!entry) return;
@@ -143,6 +163,16 @@
 	}
 	window.cool.attachListener = function (typeName, spec) {
 		return attachListenerImpl(typeName, spec, false);
+	};
+
+	// Register a handler map under a caller-chosen proxyId; pairs with a kit-side
+	// `$internal.createProxy(type, proxyId)` inside one callRemote body whose runner takes
+	// the proxy back before returning:
+	window.cool.registerProxy = function (proxyId, handlers) {
+		listeners[proxyId] = { on: handlers, detach: null, facade: false };
+	};
+	window.cool.unregisterProxy = function (proxyId) {
+		delete listeners[proxyId];
 	};
 
 	// Open a modal dialog whose content is a page under the extension's own base URL, and

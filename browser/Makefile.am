@@ -155,7 +155,11 @@ COOL_WELCOME_SRC = $(shell find $(srcdir)/welcome -name '*')
 COOL_WELCOME_DST = $(patsubst $(srcdir)/welcome/%,$(DIST_FOLDER)/welcome/%,$(COOL_WELCOME_SRC))
 endif
 
-COOL_EXTENSIONS_SRC = $(srcdir)/extensions/cool.js
+COOL_EXTENSIONS_SRC = \
+	$(srcdir)/extensions/cool.js \
+	$(srcdir)/extensions/gas-kit-runner.js \
+	$(srcdir)/extensions/gas-shim.js \
+	$(srcdir)/extensions/gas-wrapper.html
 COOL_EXTENSIONS_DST = $(patsubst $(srcdir)/extensions/%,$(DIST_FOLDER)/extensions/%,$(COOL_EXTENSIONS_SRC))
 
 COOL_ADMIN_SRC = $(shell find $(srcdir)/admin -name '*.html' -or -name '*.css' -or -name '*.ttf' -or -name 'OFL.txt' -or -name '*.svg')
@@ -1382,12 +1386,31 @@ $(DIST_FOLDER)/extensions/%: $(srcdir)/extensions/%
 .PHONY: install-demo-extensions
 install-demo-extensions:
 	ids= && \
-	for m in $(srcdir)/extensions/*/manifest.json; do \
-		dir=$$(dirname $$m) && \
+	for dir in $(srcdir)/extensions/*/; do \
 		id=$$(basename $$dir) && \
-		mkdir -p $(DIST_FOLDER)/extensions/$$id && \
-		cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/ && \
-		ids="$$ids$${ids:+,}\"$$id\""; \
+		if test -f "$$dir/manifest.json"; then \
+			mkdir -p $(DIST_FOLDER)/extensions/$$id && \
+			cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/ && \
+			ids="$$ids$${ids:+,}\"$$id\""; \
+		elif test -f "$$dir/appsscript.json"; then \
+			mkdir -p $(DIST_FOLDER)/extensions/$$id && \
+			cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/ && \
+			scripts= && \
+			for gs in "$$dir"/*.gs; do \
+				test -f "$$gs" || continue; \
+				name=$$(basename "$$gs") && \
+				scripts="$$scripts$${scripts:+,}\"$$name\""; \
+			done && \
+			sidebar= && \
+			for html in "$$dir"/*.html; do \
+				test -f "$$html" || continue; \
+				sidebar=$$(basename "$$html") && \
+				break; \
+			done && \
+			printf '{"scripts":[%s],"sidebar":"%s"}\n' "$$scripts" "$$sidebar" \
+				> $(DIST_FOLDER)/extensions/$$id/_cool-gas.json && \
+			ids="$$ids$${ids:+,}\"$$id\""; \
+		fi; \
 	done && \
 	if test "$(ENABLE_MOBILEAPP)" = true; then \
 		printf '[%s]\n' "$$ids" > $(DIST_FOLDER)/extensions/index.json; \

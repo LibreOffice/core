@@ -11,17 +11,22 @@
 
 module scriptinterop {
 
-interface XDocument : XBase
-{
-    XSelection getSelection();
+interface XTextRun: XBase {
+    short getEscapement(); // -1 subscript, 0 normal, 1 superscript
+
+    string getFontFamily();
+
+    string getLinkUrl();
 
     string getText();
 
-    sequence<XParagraph> getParagraphs();
+    boolean isBold();
 
-    sequence<XFootnote> getFootnotes();
+    boolean isItalic();
 
-    void insertImage([in] sequence<byte> data, [in] ImageOptions opts);
+    boolean isStrikethrough();
+
+    boolean isUnderline();
 };
 
 };

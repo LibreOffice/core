@@ -1,0 +1,38 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module scriptinterop {
+
+// Iframe-side primitives the kit script reaches synchronously via jsuno proxies:
+interface XClientRuntime {
+    // Get the user-scoped PropertiesService value for `key`:
+    com::sun::star::beans::Optional<string> userPropGetProperty([in] string key);
+
+    // Set the user-scoped PropertiesService value for `key` to `value`:
+    void userPropSetProperty([in] string key, [in] string value);
+
+    // Remove the user-scoped PropertiesService entry for `key`; a key that is not set is silently
+    // accepted:
+    void userPropDeleteProperty([in] string key);
+
+    // Return every user-scoped PropertiesService key currently set:
+    sequence<string> userPropGetKeys();
+
+    // Remove every user-scoped PropertiesService entry:
+    void userPropDeleteAll();
+
+    // Translate text from ISO 639-1 `origin` to `dest`; empty `origin` means auto-detect:
+    string translate([in] string text, [in] string origin, [in] string dest);
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

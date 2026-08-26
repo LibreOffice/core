@@ -11,17 +11,8 @@
 
 module scriptinterop {
 
-interface XDocument : XBase
-{
-    XSelection getSelection();
-
-    string getText();
-
+interface XFootnote: XBase {
     sequence<XParagraph> getParagraphs();
-
-    sequence<XFootnote> getFootnotes();
-
-    void insertImage([in] sequence<byte> data, [in] ImageOptions opts);
 };
 
 };

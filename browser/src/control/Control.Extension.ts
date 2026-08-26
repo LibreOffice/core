@@ -873,6 +873,46 @@ window.L.control.extension = function (
 	});
 };
 
+// If the directory carries appsscript.json, synthesize a manifest that hands the sidebar off
+// to the shared gas-wrapper.html; the _cool-gas.json sidecar lists .gs sources and sidebar file:
+async function tryLoadAppsScriptExtension(
+	id: string,
+	baseRel: string,
+): Promise<ExtensionManifest | null> {
+	const gasResp = await fetch(app.LOUtil.getURL(baseRel + 'appsscript.json'));
+	if (!gasResp.ok) return null;
+	let listing: {
+		scripts?: string[];
+		sidebar?: string;
+		supports?: string[];
+		name?: string;
+		icon?: string;
+	} = {};
+	try {
+		const listResp = await fetch(app.LOUtil.getURL(baseRel + '_cool-gas.json'));
+		if (listResp.ok) listing = await listResp.json();
+	} catch {
+		// Missing sidecar is not fatal; the wrapper still loads the sidebar with no scripts.
+	}
+	const params = new URLSearchParams();
+	params.set('base', app.LOUtil.getURL(baseRel));
+	if (listing.sidebar) params.set('sidebar', listing.sidebar);
+	if (listing.scripts && listing.scripts.length) {
+		params.set('scripts', listing.scripts.join(','));
+	}
+	// The shared wrapper sits one directory above <id>/ so a leading "../" reaches it:
+	const manifest: ExtensionManifest = {
+		manifestVersion: '0.1',
+		name: listing.name && listing.name.length ? listing.name : id,
+		entry: '../gas-wrapper.html?' + params.toString(),
+	};
+	if (listing.icon) manifest.icon = listing.icon;
+	if (listing.supports && listing.supports.length) {
+		manifest.supports = listing.supports;
+	}
+	return manifest;
+}
+
 // Discover and register the JS extensions for this document by fetching three discovery indexes
 // (built-in, admin preset, per-user preset), in that order, merging with per-user > admin >
 // built-in precedence on ID collision, then loading each surviving manifest.json and registering
@@ -984,6 +1024,13 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 				}
 				return { id, baseRel, manifest };
 			} catch (err) {
+				try {
+					const gasManifest = await tryLoadAppsScriptExtension(id, baseRel);
+					if (gasManifest) return { id, baseRel, manifest: gasManifest };
+				} catch (gasErr) {
+					console.warn('extension ' + id + ': failed to load:', gasErr);
+					return null;
+				}
 				console.warn('extension ' + id + ': failed to load:', err);
 				return null;
 			}

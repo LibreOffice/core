@@ -12,8 +12,13 @@
 #include <cmath>
 #include <vector>
 
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -25,6 +30,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -45,8 +53,10 @@
 #include <sal/types.h>
 #include <scriptinterop/ImageOptions.hpp>
 #include <scriptinterop/XDocument.hpp>
+#include <scriptinterop/XFootnote.hpp>
 #include <scriptinterop/XParagraph.hpp>
 #include <scriptinterop/XSelection.hpp>
+#include <scriptinterop/XTextRun.hpp>
 
 #include "document.hxx"
 
@@ -107,6 +117,72 @@ private:
     css::uno::Reference<css::container::XIndexAccess> ranges_;
 };
 
+class TextRunImpl: public cppu::WeakImplHelper<scriptinterop::XTextRun> {
+public:
+    explicit TextRunImpl(css::uno::Reference<css::text::XTextRange> const & range): range_(range) {}
+
+    css::uno::Reference<css::uno::XInterface> getuno() override { return range_; }
+
+    sal_Int16 getEscapement() override {
+        sal_Int16 esc = 0;
+        getProp(u"CharEscapement"_ustr) >>= esc;
+        return esc > 0 ? 1 : esc < 0 ? -1 : 0;
+    }
+
+    OUString getFontFamily() override {
+        OUString name;
+        getProp(u"CharFontName"_ustr) >>= name;
+        return name;
+    }
+
+    OUString getLinkUrl() override {
+        OUString url;
+        getProp(u"HyperLinkURL"_ustr) >>= url;
+        return url;
+    }
+
+    OUString getText() override { return range_.is() ? range_->getString() : u""_ustr; }
+
+    bool isBold() override {
+        float weight = css::awt::FontWeight::NORMAL;
+        getProp(u"CharWeight"_ustr) >>= weight;
+        return weight >= css::awt::FontWeight::BOLD;
+    }
+
+    bool isItalic() override {
+        css::awt::FontSlant slant = css::awt::FontSlant_NONE;
+        getProp(u"CharPosture"_ustr) >>= slant;
+        return slant == css::awt::FontSlant_ITALIC || slant == css::awt::FontSlant_OBLIQUE;
+    }
+
+    bool isStrikethrough() override {
+        sal_Int16 strike = css::awt::FontStrikeout::NONE;
+        getProp(u"CharStrikeout"_ustr) >>= strike;
+        return strike != css::awt::FontStrikeout::NONE;
+    }
+
+    bool isUnderline() override {
+        sal_Int16 underline = css::awt::FontUnderline::NONE;
+        getProp(u"CharUnderline"_ustr) >>= underline;
+        return underline != css::awt::FontUnderline::NONE;
+    }
+
+private:
+    cpo::uno::Any getProp(OUString const & name) {
+        css::uno::Reference<css::beans::XPropertySet> const props(range_, css::uno::UNO_QUERY);
+        if (!props.is()) {
+            return {};
+        }
+        auto const info(props->getPropertySetInfo());
+        if (!info.is() || !info->hasPropertyByName(name)) {
+            return {};
+        }
+        return props->getPropertyValue(name);
+    }
+
+    css::uno::Reference<css::text::XTextRange> range_;
+};
+
 class ParagraphImpl : public cppu::WeakImplHelper<scriptinterop::XParagraph>
 {
 public:
@@ -123,8 +199,78 @@ public:
         return range.is() ? range->getString() : OUString();
     }
 
+    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XTextRun>> getTextRuns() override {
+        std::vector<css::uno::Reference<scriptinterop::XTextRun>> v;
+        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
+                content_, css::uno::UNO_QUERY})
+        {
+            auto const en = ea->createEnumeration();
+            while (en.is() && en->hasMoreElements()) {
+                css::uno::Reference<css::text::XTextRange> portion;
+                en->nextElement() >>= portion;
+                if (portion.is()) {
+                    v.emplace_back(new TextRunImpl(portion));
+                }
+            }
+        }
+        return cpo::uno::Sequence(v.data(), v.size());
+    }
+
+    bool isLeftToRight() override {
+        css::uno::Reference<css::beans::XPropertySet> const props(content_, css::uno::UNO_QUERY);
+        if (!props.is()) {
+            return true;
+        }
+        auto const info(props->getPropertySetInfo());
+        if (!info.is() || !info->hasPropertyByName(u"WritingMode"_ustr)) {
+            return true;
+        }
+        sal_Int16 mode = css::text::WritingMode2::LR_TB;
+        props->getPropertyValue(u"WritingMode"_ustr) >>= mode;
+        return mode != css::text::WritingMode2::RL_TB;
+    }
+
 private:
     css::uno::Reference<css::text::XTextContent> content_;
+};
+
+cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> enumerateParagraphs(
+    css::uno::Reference<css::text::XText> const & text)
+{
+    std::vector<css::uno::Reference<scriptinterop::XParagraph>> v;
+    if (css::uno::Reference<css::container::XEnumerationAccess> const ea{text, css::uno::UNO_QUERY})
+    {
+        auto const en = ea->createEnumeration();
+        while (en.is() && en->hasMoreElements()) {
+            css::uno::Reference<css::text::XTextContent> xtc;
+            en->nextElement() >>= xtc;
+            if (!xtc.is()) {
+                continue;
+            }
+            css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
+            if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+                continue;
+            }
+            v.emplace_back(new ParagraphImpl(xtc));
+        }
+    }
+    return cpo::uno::Sequence(v.data(), v.size());
+}
+
+class FootnoteImpl: public cppu::WeakImplHelper<scriptinterop::XFootnote> {
+public:
+    explicit FootnoteImpl(css::uno::Reference<css::text::XFootnote> const & footnote):
+        footnote_(footnote) {}
+
+    css::uno::Reference<css::uno::XInterface> getuno() override { return footnote_; }
+
+    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> getParagraphs() override {
+        return enumerateParagraphs(
+            css::uno::Reference<css::text::XText>(footnote_, css::uno::UNO_QUERY));
+    }
+
+private:
+    css::uno::Reference<css::text::XFootnote> footnote_;
 };
 
 class DocumentImpl : public cppu::WeakImplHelper<scriptinterop::XDocument>
@@ -161,30 +307,27 @@ public:
         SAL_CALL getParagraphs() override
     {
         css::uno::Reference<css::text::XTextDocument> const doc(model_, css::uno::UNO_QUERY_THROW);
-        std::vector<css::uno::Reference<scriptinterop::XParagraph>> paragraphs;
-        css::uno::Reference<css::container::XEnumerationAccess> const ea(doc->getText(),
-                                                                         css::uno::UNO_QUERY);
-        if (ea.is())
+        return enumerateParagraphs(doc->getText());
+    }
+
+    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XFootnote>> getFootnotes() override {
+        std::vector<css::uno::Reference<scriptinterop::XFootnote>> v;
+        if (css::uno::Reference<css::text::XFootnotesSupplier> const sup{
+                model_, css::uno::UNO_QUERY})
         {
-            auto const en = ea->createEnumeration();
-            while (en.is() && en->hasMoreElements())
-            {
-                css::uno::Reference<css::text::XTextContent> xtc;
-                en->nextElement() >>= xtc;
-                if (!xtc.is())
-                {
-                    continue;
+            auto const idx = sup->getFootnotes();
+            if (idx.is()) {
+                auto const n = idx->getCount();
+                for (sal_Int32 i = 0; i != n; ++i) {
+                    css::uno::Reference<css::text::XFootnote> footnote;
+                    idx->getByIndex(i) >>= footnote;
+                    if (footnote.is()) {
+                        v.emplace_back(new FootnoteImpl(footnote));
+                    }
                 }
-                css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
-                if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr))
-                {
-                    continue;
-                }
-                paragraphs.emplace_back(new ParagraphImpl(xtc));
             }
         }
-        return cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>>(
-            paragraphs.data(), paragraphs.size());
+        return cpo::uno::Sequence(v.data(), v.size());
     }
 
     void SAL_CALL insertImage(cpo::uno::Sequence<sal_Int8> const& data,

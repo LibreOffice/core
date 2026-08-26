@@ -28,9 +28,11 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,,\
 $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     ImageOptions \
     XBase \
+    XClientRuntime \
     XDocument \
     XDrawing \
     XFactory \
+    XFootnote \
     XPage \
     XParagraph \
     XPresentation \
@@ -41,6 +43,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XSpreadsheet \
     XTextParagraph \
     XTextRange \
+    XTextRun \
     XTextStyle \
 ))
 
