@@ -737,7 +737,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         rIStm.ReadUInt32( nId1 ).ReadUInt32( nId2 );
 
         // In newer versions a 512 byte reserve buffer is located at the end,
-        // the data is located at the beginning of this buffer and are clamped
+        // the data is located at the beginning of this buffer and is clamped
         // by a VersionCompatRead.
         if( !rIStm.eof() &&
             nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&

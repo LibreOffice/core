@@ -310,7 +310,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
                         }
                     }
 
-                    // scaling must performed here because png/jpg writer s
+                    // scaling must be performed here because png/jpg writers
                     // do not take care of that.
                     Size aSizePixel( aGraphic.GetSizePixel() );
                     if( nWidth && nHeight &&

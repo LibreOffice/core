@@ -209,7 +209,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         aURL.setBase( aName );
     }
 
-    // #i121128# use shortcut to write Vector Graphic Data data in original form (if possible)
+    // #i121128# use shortcut to write Vector Graphic Data in original form (if possible)
     if (OUString aExt = isKnownVectorFormat(rGraphic, rFilterName); !aExt.isEmpty())
     {
         if (!(nFlags & XOutFlags::DontAddExtension))
