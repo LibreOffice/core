@@ -34,9 +34,7 @@ service AccessibleMenu
         <li>Description: The description of a menu is its localized
             help text.</li>
         <li>Children: The children of a menu are menus, menu items or
-            menu separators, whose accessible context supports the services
-            AccessibleMenu, AccessibleMenuItem or
-            AccessibleMenuSeparator.</li>
+            menu separators.</li>
         <li>Parent: The parent of a menu is a menu bar, a pop-up menu or
             a menu, whose accessible context supports the services
             AccessibleMenuBar, AccessiblePopupMenu

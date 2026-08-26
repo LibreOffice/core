@@ -35,9 +35,7 @@ service AccessibleMenuBar
         <li>Description: The description of a menu bar is its localized
             help text.</li>
         <li>Children: The children of a menu bar are menus, menu items or
-            menu separators, whose accessible context supports the services
-            AccessibleMenu, AccessibleMenuItem or
-            AccessibleMenuSeparator.</li>
+            menu separators.</li>
         <li>Parent: The parent is the window that contains the menu bar.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are

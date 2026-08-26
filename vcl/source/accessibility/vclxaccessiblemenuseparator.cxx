@@ -37,10 +37,7 @@ OUString VCLXAccessibleMenuSeparator::getImplementationName()
     return u"com.sun.star.comp.toolkit.AccessibleMenuSeparator"_ustr;
 }
 
-Sequence<OUString> VCLXAccessibleMenuSeparator::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleMenuSeparator"_ustr };
-}
+Sequence<OUString> VCLXAccessibleMenuSeparator::getSupportedServiceNames() { return {}; }
 
 // XAccessibleContext
 

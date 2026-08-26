@@ -493,7 +493,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt,\
 	AccessibleMenu \
 	AccessibleMenuBar \
 	AccessibleMenuItem \
-	AccessibleMenuSeparator \
 	AccessiblePopupMenu \
 	AccessibleRadioButton \
 	AccessibleScrollBar \
