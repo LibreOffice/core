@@ -243,7 +243,7 @@ namespace dbaui
         virtual void addModelListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
         virtual void removeModelListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
 
-        // want to be a listener grid columns ? use this !
+        // want to be a listener to the grid columns ? use this !
         virtual void AddColumnListener(const css::uno::Reference< css::beans::XPropertySet > & xCol);
         virtual void RemoveColumnListener(const css::uno::Reference< css::beans::XPropertySet > & xCol);
 
