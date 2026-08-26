@@ -2643,7 +2643,7 @@ void SfxViewShell::InnerResizePixel
     Neither the Vis-Area of SfxObjectShell nor its scale or position are
     allowed to be changed
 
-    If the Border is changed due to the new calculation then is has to be set
+    If the Border is changed due to the new calculation then it has to be set
     by <SfxViewShell::SetBorderPixel(const SvBorder&)>.
     The Positioning of Tools is only allowed after the calling of
     'SetBorderPixel'.

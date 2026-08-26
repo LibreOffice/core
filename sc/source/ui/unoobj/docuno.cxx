@@ -1555,7 +1555,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if ( nId == SfxHintId::DataChanged )
     {
         //  cached data for rendering become invalid when contents change
-        //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
+        //  (if a broadcast is added to SetDrawModified, it has to be tested here, too)
 
         pPrintFuncCache.reset();
         m_pPrintState.reset();

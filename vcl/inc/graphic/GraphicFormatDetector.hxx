@@ -131,7 +131,7 @@ static inline OUString getImportFormatShortName(GraphicFileFormat nFormat)
     return aKeyName;
 }
 /***
- * This function is has two modes:
+ * This function has two modes:
  * - determine the file format when bTest = false
  *   returns true, success
  *   out rFormatExtension - on success: file format string

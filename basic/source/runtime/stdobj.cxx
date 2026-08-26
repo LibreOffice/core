@@ -983,7 +983,7 @@ SbiStdObject::~SbiStdObject()
 
 // Finding an element:
 // It runs linearly through the method table here until an
-// adequate method is has been found. Because of the bits in
+// adequate method is found. Because of the bits in
 // the nArgs-field the adequate instance of an SbxObjElement
 // is created then. If the method/property hasn't been found,
 // return NULL without error code, so that a whole chain of

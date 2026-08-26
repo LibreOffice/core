@@ -1197,7 +1197,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if( rHint.GetId() == SfxHintId::TextViewCaretChanged )
     {
-        // Check whether the line number where the caret is has changed and the
+        // Check whether the line number where the caret is, has changed and the
         // highlight needs to be redrawn
         sal_uInt32 nStartPara = pEditView->GetSelection().GetStart().GetPara();
         sal_uInt32 nEndPara = pEditView->GetSelection().GetEnd().GetPara();

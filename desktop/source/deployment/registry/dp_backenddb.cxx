@@ -420,7 +420,7 @@ void BackendDb::writeSimpleList(
     }
 }
 
-//Writes only the element if is has a value.
+//Writes only the element if it has a value.
 //The prefix is automatically added to the element name
 void BackendDb::writeSimpleElement(
     std::u16string_view sElementName, OUString const & value,

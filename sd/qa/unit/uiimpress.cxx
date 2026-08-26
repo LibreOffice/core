@@ -2478,7 +2478,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testNumToBullet)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testBulletOffOn)
 {
-    // Given a document with a shape, last paragraph is has a bullet:
+    // Given a document with a shape, last paragraph it has a bullet:
     createSdImpressDoc("odp/bullet-off-on.odp");
     sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);

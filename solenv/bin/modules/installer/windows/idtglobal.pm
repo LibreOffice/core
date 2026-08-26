@@ -1586,7 +1586,7 @@ sub set_positions_in_table
 
                 my $position = get_customaction_position($customaction, $sequencetable);
 
-                if ( $position >= 0 )   # Found CustomAction and is has a position. Otherwise return value is "-1".
+                if ( $position >= 0 )   # Found CustomAction and it has a position. Otherwise return value is "-1".
                 {
                     my $newposition = 0;
                     if ( $setbehind ) { $newposition = $position + 2; }

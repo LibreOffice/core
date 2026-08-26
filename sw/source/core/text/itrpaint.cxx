@@ -665,7 +665,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if( bDrawInWindow )
     {
         // If special vertical alignment is enabled, GetInfo().Y() is the
-        // top of the current line. Therefore is has to be adjusted for
+        // top of the current line. Therefore it has to be adjusted for
         // the painting of the remaining stuff. We first store the old value.
         const SwTwips nOldY = GetInfo().Y();
 

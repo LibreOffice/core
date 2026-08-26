@@ -106,7 +106,7 @@ published service HelpContent
         contains the scopes in which to search ).
         </li>
         <li>
-        string AnchorName ( readonly, only if content is has media type "text/html".
+        string AnchorName ( readonly, only if content has media type "text/html" ).
         </li>
         </ul>
 

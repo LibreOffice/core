@@ -486,7 +486,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                 bContinue = true;
             }
 
-            // then is has to go on the stack
+            // then it has to go on the stack
             if( !bContinue )
             {
                 pCmp = &m_pFindArr[ nWhch - m_nArrStart ];
@@ -652,7 +652,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                 bContinue = true;
             }
 
-            // then is has to go on the stack
+            // then it has to go on the stack
             if( !bContinue )
             {
                 pCmp = &m_pFindArr[ nWhch - m_nArrStart ];
