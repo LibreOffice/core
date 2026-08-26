@@ -4510,6 +4510,13 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // The document has a view again from the moment this session joins.
         setDetached(false);
 
+#if !MOBILEAPP
+        // The joining session gets the current related documents list; later
+        // changes are broadcast.
+        if (!_relatedDocuments.empty())
+            _relatedDocuments.sendTo(*this, session);
+#endif
+
         const std::size_t count = _sessions.size();
         LOG_TRC("Added " << (session->isReadOnly() ? "readonly" : "non-readonly") << " session ["
                          << id << "] to docKey [" << _docKey << "] with appDocId ["
@@ -5017,13 +5024,38 @@ void DocumentBroker::setRemoteDocumentToken(const std::string& wopiSrc,
     // WOPISrc resolve to one entry.
     try
     {
-        _remoteDocumentTokens[RequestDetails::getDocKey(wopiSrc)] = accessToken;
+        const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+        _remoteDocumentTokens[docKey] = accessToken;
+        _relatedDocuments.add(*this, docKey, wopiSrc);
     }
     catch (const std::exception& exc)
     {
         LOG_ERR("Ignoring the access token for the invalid remote document WOPISrc ["
                 << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
     }
+}
+
+bool DocumentBroker::hasRemoteSubscription(const std::string& remoteDocKey) const
+{
+    for (const auto& it : _remoteSubscriptions)
+    {
+        if (RequestDetails::getDocKey(std::get<0>(it)) == remoteDocKey)
+            return true;
+    }
+
+    return false;
+}
+
+void DocumentBroker::sendRemoteDocumentEvent(const std::string& tag,
+                                             const std::string& encodedWopiSrc,
+                                             const std::string& eventArguments)
+{
+    ASSERT_CORRECT_THREAD();
+
+    sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc + ' ' +
+                       eventArguments);
+
+    _relatedDocuments.onEvent(*this, encodedWopiSrc, eventArguments);
 }
 
 bool DocumentBroker::isKnownAccessToken(const std::string& accessToken) const
@@ -5163,6 +5195,7 @@ void DocumentBroker::handleRemoteDocumentMessage(const std::shared_ptr<Message>&
             }
         }
 
+        _relatedDocuments.refresh(*this);
         return;
     }
 
@@ -5212,6 +5245,8 @@ void DocumentBroker::handleRemoteDocumentMessage(const std::shared_ptr<Message>&
     request.consumer = shared_from_this();
 
     _remoteSubscriptions.emplace(wopiSrc, itToken->second, tag);
+    _relatedDocuments.setSubscribed(*this, remoteDocKey);
+
     RemoteDocumentBroker::instance().subscribeAsync(std::move(request));
 }
 
@@ -5219,8 +5254,7 @@ void DocumentBroker::sendRemoteDocumentError(const std::string& tag,
                                              const std::string& encodedWopiSrc,
                                              const std::string& kind)
 {
-    sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
-                       " event=error kind=" + kind);
+    sendRemoteDocumentEvent(tag, encodedWopiSrc, "event=error kind=" + kind);
 }
 
 void DocumentBroker::removeRemoteSubscription(const std::string& wopiSrc, const std::string& tag)
@@ -5234,6 +5268,8 @@ void DocumentBroker::removeRemoteSubscription(const std::string& wopiSrc, const 
         else
             ++it;
     }
+
+    _relatedDocuments.refresh(*this);
 }
 
 void DocumentBroker::unsubscribeAllRemoteDocuments()
@@ -6970,9 +7006,7 @@ void DocumentBroker::dumpState(std::ostream& os)
     for (const auto& it : _remoteSubscriptions)
         os << "\n    " << Anonymizer::anonymizeUrl(std::get<0>(it))
            << " tag: " << std::get<2>(it);
-    os << "\n  remote document tokens: " << _remoteDocumentTokens.size();
-    for (const auto& it : _remoteDocumentTokens)
-        os << "\n    " << it.first;
+    _relatedDocuments.dumpState(*this, os);
     os << "\n  incoming docKey chain: " << _incomingDocKeyChain.size();
     for (const std::string& docKey : _incomingDocKeyChain)
         os << "\n    " << docKey;

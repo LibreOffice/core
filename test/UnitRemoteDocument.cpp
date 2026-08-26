@@ -45,6 +45,10 @@ class UnitRemoteDocument : public WopiTestServer
     /// A second user editing the remote document (file 2).
     std::unique_ptr<UnitWebSocket> _editorWs;
 
+    /// The subscription states seen in the relateddocuments: messages.
+    bool _sawAvailableState = false;
+    bool _sawConnectedState = false;
+
     std::string remoteWopiSrc() const
     {
         return helpers::getTestServerURI() + "/wopi/files/2";
@@ -99,6 +103,18 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
+        if (message.starts_with("relateddocuments:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            LOK_ASSERT_MESSAGE("The related documents JSON must not carry access tokens",
+                               message.find("remotetoken") == std::string_view::npos);
+            if (message.find("\"state\":\"available\"") != std::string_view::npos)
+                _sawAvailableState = true;
+            if (message.find("\"state\":\"connected\"") != std::string_view::npos)
+                _sawConnectedState = true;
+            return false;
+        }
+
         if (!message.starts_with("remotedocevent:"))
             return false;
 
@@ -150,6 +166,11 @@ public:
         // unsubscription, while the editor still holds it open.
         if (_phase == Phase::WaitHeadlessGone && docKey.ends_with("2") && session->isReadOnly())
         {
+            LOK_ASSERT_MESSAGE("The clients saw the related document as available",
+                               _sawAvailableState);
+            LOK_ASSERT_MESSAGE("The clients saw the related document as connected",
+                               _sawConnectedState);
+
             TRANSITION_STATE(_phase, Phase::Done);
             passTest("The remote document subscription connected, forwarded the modification "
                      "and disconnected cleanly");

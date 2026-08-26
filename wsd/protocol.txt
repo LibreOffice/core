@@ -686,6 +686,20 @@ downloadas: jail=<jail directory> dir=<a tmp dir> name=<name> port=<port> filena
     The client should then request http://server:port/jail/dir/name in order to download
     the document
 
+relateddocuments: <json>
+
+    The related documents the server tracks for this document, from the
+    RelatedDocuments field of CheckFileInfo and from POST
+    /cool/relateddocument. Sent to a client when it joins and to every
+    client when the list or a subscription state changes. Access tokens are
+    never included. The JSON carries a documents array of entries:
+
+        { "wopiSrc": "<decoded WOPISrc, no query>",
+          "state": "available|subscribed|connected|disconnected|failed" }
+
+    'available' means no live subscription; the other values follow the
+    remotedocevent states of the current subscription.
+
 remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>]
 
     An event about a remote document this document subscribed to with

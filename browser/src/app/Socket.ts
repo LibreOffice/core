@@ -1468,6 +1468,14 @@ class Socket {
 			this._onHyperlinkClickedMsg(textMsg);
 		} else if (textMsg.startsWith('browsersetting:')) {
 			window.prefs._initializeBrowserSetting(textMsg);
+		} else if (textMsg.startsWith('relateddocuments:')) {
+			const related = JSON.parse(
+				textMsg.substring('relateddocuments:'.length + 1),
+			);
+			app.relatedDocuments = related.documents || [];
+			this._map.fire('relateddocuments', {
+				documents: app.relatedDocuments,
+			});
 		} else if (textMsg.startsWith('presetconfigid:')) {
 			app.presetConfigId = textMsg.substring('presetconfigid:'.length).trim();
 		} else if (textMsg.startsWith('userpresetconfigid:')) {

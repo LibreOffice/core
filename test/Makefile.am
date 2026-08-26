@@ -180,6 +180,7 @@ wsd_sources = \
 	../wsd/ProxyProtocol.cpp \
 	../wsd/ProxyRequestHandler.cpp \
 	../wsd/QuarantineUtil.cpp \
+	../wsd/RelatedDocuments.cpp \
 	../wsd/RemoteConfig.cpp \
 	../wsd/RemoteDocumentBroker.cpp \
 	../wsd/RequestDetails.cpp \

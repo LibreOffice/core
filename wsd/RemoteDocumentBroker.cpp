@@ -444,11 +444,9 @@ void RemoteDocument::sendEvent(const Consumer& consumer, const std::string& wopi
     if (!docBroker)
         return;
 
-    const std::string message =
-        "remotedocevent tag=" + consumer.tag + " wopisrc=" + Uri::encode(wopiSrc) + ' ' +
-        eventArguments;
-
-    docBroker->addCallback([docBroker, message]() { docBroker->sendTextFrameToKit(message); });
+    docBroker->addCallback(
+        [docBroker, tag = consumer.tag, encodedWopiSrc = Uri::encode(wopiSrc), eventArguments]()
+        { docBroker->sendRemoteDocumentEvent(tag, encodedWopiSrc, eventArguments); });
 }
 
 void RemoteDocument::dumpState(std::ostream& os) const
