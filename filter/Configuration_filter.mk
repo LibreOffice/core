@@ -585,7 +585,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,f
 	draw_CorelDraw_Document \
 	draw_Corel_Presentation_Exchange \
 	draw_Freehand_Document \
-	draw_Visio_Document \
 	draw_ClarisWorks \
 	draw_PageMaker_Document \
 	draw_QXP_Document \
