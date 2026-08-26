@@ -74,8 +74,7 @@ ui.json:
   ```js
   var commands = {
       insertDate: function () {
-          var desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-          var model = desktop.getCurrentFrame().getController().getModel();
+          var doc = cool.getActiveDocument();
           // ... call into the document via the UNO API ...
       },
   };
