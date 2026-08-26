@@ -2044,12 +2044,12 @@ bool EscherPropertyContainer::CreatePolygonProperties(
 
 
 /*
-in MS,the connector including 9 types :
+in MS, the connector includes 9 types :
 "straightConnector1",
 "bentConnector2","bentConnector3","bentConnector4","bentConnector5"
 "curvedConnector2","curvedConnector3","curvedConnector4","curvedConnector5"
-in AOO,including 4 types:"standard","lines","line","curve"
-when save as MS file, the connector must be convert to corresponding type.
+in AOO, including 4 types: "standard","lines","line","curve"
+when saved as MS file, the connector must be converted to corresponding type.
 "line" and "lines" <-> "straightConnector1"
 "standard" <->  "bentConnector2-5"
 "curve" <-> "curvedConnector2-5"
@@ -2140,7 +2140,7 @@ static void lcl_Rotate(Degree100 nAngle, Point center, Point& pt)
 /*
  FlipV defines that the shape will be flipped vertically about the center of its bounding box.
 Generally, draw the connector from top to bottom, from left to right when meet the adjust value,
-but when (X1>X2 or Y1>Y2),the draw director must be reverse, FlipV or FlipH should be set to true.
+but when (X1>X2 or Y1>Y2), the draw direction must be reversed, FlipV or FlipH should be set to true.
 */
 static bool lcl_GetAngle(tools::Polygon &rPoly, ShapeFlag& rShapeFlags,sal_Int32& nAngle )
 {

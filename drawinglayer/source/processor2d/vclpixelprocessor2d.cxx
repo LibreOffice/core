@@ -579,7 +579,7 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
                     SAL_WARN_IF(!pPoHair, "drawinglayer",
                                 "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
-                    // do no tallow by default - problem is that self-overlapping parts of this geometry will
+                    // do not allow by default - problem is that self-overlapping parts of this geometry will
                     // not be in an all-same transparency but will already alpha-cover themselves with blending.
                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                     // content to be uniformly transparent.
@@ -595,7 +595,7 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
                     SAL_WARN_IF(!pPoStroke, "drawinglayer",
                                 "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
-                    // do no tallow by default - problem is that self-overlapping parts of this geometry will
+                    // do not allow by default - problem is that self-overlapping parts of this geometry will
                     // not be in an all-same transparency but will already alpha-cover themselves with blending.
                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                     // content to be uniformly transparent.
@@ -646,7 +646,7 @@ void VclPixelProcessor2D::processControlPrimitive2D(
 
     if (bControlIsVisibleAsChildWindow)
     {
-        // f the control is already visualized as a VCL-ChildWindow it
+        // if the control is already visualized as a VCL-ChildWindow it
         // does not need to be painted at all
         return;
     }
