@@ -887,6 +887,27 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testConnectorText)
     CPPUNIT_ASSERT_EQUAL(u"{55B8016A-A755-4069-A179-DFC2070CA8C9}"_ustr, sName);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_verticalArrow)
+{
+    loadFromFile(u"cool16121_VerticalProcess.pptx");
+    // The file contains a SmartArt diagram of type "Vertical Process"
+    // Mark the diagram
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    // and force recreate of the diagram, which drops the fallback drawing.
+    dispatchCommand(mxComponent, u".uno:RegenerateDiagram"_ustr, {});
+
+    // Make sure arrow in the diagram points down
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(getChildShape(xShape, 2), uno::UNO_QUERY);
+    sal_Int32 nAngle;
+    xPropSet->getPropertyValue(u"RotateAngle"_ustr) >>= nAngle;
+    // Without fix, the test would have failed with nAngle 9000
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(27000), nAngle);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

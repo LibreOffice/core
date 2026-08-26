@@ -1563,8 +1563,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             {
             case XML_fromL: nConnectorAngle = 0; break;
             case XML_fromR: nConnectorAngle = 180; break;
-            case XML_fromT: nConnectorAngle = 270; break;
-            case XML_fromB: nConnectorAngle = 90; break;
+            case XML_fromT: nConnectorAngle = 90; break;
+            case XML_fromB: nConnectorAngle = 270; break;
             }
 
             awt::Size aSpaceSize;
