@@ -34,7 +34,7 @@ void collectUIInformation(const OUString& aID, const OUString& aPos)
 {
     EventDescription aDescription;
     aDescription.aID = aID;
-    aDescription.aParameters = { { "POS", aPos } };
+    aDescription.aParameters = { { u"POS"_ustr, aPos } };
     aDescription.aAction = u"SELECT"_ustr;
     aDescription.aKeyWord = u"VerticalTab"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);

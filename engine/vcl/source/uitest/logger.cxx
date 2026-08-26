@@ -163,11 +163,13 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyE
     bool bMod3 = rEvent.GetKeyCode().IsMod3();
 
     static const std::map<OUString, sal_uInt16> aKeyMap
-        = { { "ESC", KEY_ESCAPE },    { "TAB", KEY_TAB },          { "DOWN", KEY_DOWN },
-            { "UP", KEY_UP },         { "LEFT", KEY_LEFT },        { "RIGHT", KEY_RIGHT },
-            { "DELETE", KEY_DELETE }, { "INSERT", KEY_INSERT },    { "BACKSPACE", KEY_BACKSPACE },
-            { "RETURN", KEY_RETURN }, { "HOME", KEY_HOME },        { "END", KEY_END },
-            { "PAGEUP", KEY_PAGEUP }, { "PAGEDOWN", KEY_PAGEDOWN } };
+        = { { u"ESC"_ustr, KEY_ESCAPE },          { u"TAB"_ustr, KEY_TAB },
+            { u"DOWN"_ustr, KEY_DOWN },           { u"UP"_ustr, KEY_UP },
+            { u"LEFT"_ustr, KEY_LEFT },           { u"RIGHT"_ustr, KEY_RIGHT },
+            { u"DELETE"_ustr, KEY_DELETE },       { u"INSERT"_ustr, KEY_INSERT },
+            { u"BACKSPACE"_ustr, KEY_BACKSPACE }, { u"RETURN"_ustr, KEY_RETURN },
+            { u"HOME"_ustr, KEY_HOME },           { u"END"_ustr, KEY_END },
+            { u"PAGEUP"_ustr, KEY_PAGEUP },       { u"PAGEDOWN"_ustr, KEY_PAGEDOWN } };
 
     OUString aFound;
     for (const auto& itr : aKeyMap)

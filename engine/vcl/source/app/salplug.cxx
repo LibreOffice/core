@@ -350,7 +350,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
     }
 #else // !_WIN32
 #if defined ANDROID
-    OUString aError(rErrorText.isEmpty() ? "Unspecified application error" : rErrorText);
+    OUString aError(rErrorText.isEmpty() ? u"Unspecified application error"_ustr : rErrorText);
     LOGE("SalAbort: '%s'", OUStringToOString(aError, osl_getThreadTextEncoding()).getStr());
 #elif defined(iOS)
     NSLog(@"SalAbort: %s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr());

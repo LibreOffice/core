@@ -95,7 +95,7 @@ public:
     virtual void UpdateSettings( AllSettings &rSettings ) override
     {
         // Clobber the UI fonts
-        vcl::Font aFont( "Helvetica", Size( 0, 10 ) );
+        vcl::Font aFont( u"Helvetica"_ustr, Size( 0, 10 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
         aStyleSet.SetAppFont( aFont );

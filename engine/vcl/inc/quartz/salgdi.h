@@ -272,7 +272,7 @@ public:
 
     OUString getRenderBackendName() const override
     {
-        return "aqua";
+        return u"aqua"_ustr;
     }
 
     void setClipRegion(vcl::Region const& rRegion) override;

@@ -87,7 +87,7 @@ NSString* CreateNSString( const OUString& rStr )
 
 OUString NSStringArrayToOUString(NSArray* array)
 {
-    OUString result = "[";
+    OUString result = u"["_ustr;
     OUString sep;
     for (NSUInteger i = 0; i < [array count]; i++)
     {
@@ -100,7 +100,7 @@ OUString NSStringArrayToOUString(NSArray* array)
 
 OUString NSDictionaryKeysToOUString(NSDictionary* dict)
 {
-    OUString result = "{";
+    OUString result = u"{"_ustr;
     OUString sep;
     for (NSString *key in dict)
     {

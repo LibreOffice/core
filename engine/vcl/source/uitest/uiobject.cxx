@@ -164,18 +164,18 @@ sal_uInt16 get_key(sal_Unicode cChar, bool& bShift)
 bool isFunctionKey(const OUString& rStr, sal_uInt16& rKeyCode)
 {
     static const std::map<OUString, sal_uInt16> aFunctionKeyMap = {
-        {"F1", KEY_F1},
-        {"F2", KEY_F2},
-        {"F3", KEY_F3},
-        {"F4", KEY_F4},
-        {"F5", KEY_F5},
-        {"F6", KEY_F6},
-        {"F7", KEY_F7},
-        {"F8", KEY_F8},
-        {"F9", KEY_F9},
-        {"F10", KEY_F10},
-        {"F11", KEY_F11},
-        {"F12", KEY_F12}
+        {u"F1"_ustr, KEY_F1},
+        {u"F2"_ustr, KEY_F2},
+        {u"F3"_ustr, KEY_F3},
+        {u"F4"_ustr, KEY_F4},
+        {u"F5"_ustr, KEY_F5},
+        {u"F6"_ustr, KEY_F6},
+        {u"F7"_ustr, KEY_F7},
+        {u"F8"_ustr, KEY_F8},
+        {u"F9"_ustr, KEY_F9},
+        {u"F10"_ustr, KEY_F10},
+        {u"F11"_ustr, KEY_F11},
+        {u"F12"_ustr, KEY_F12}
     };
 
     rKeyCode = 0;
@@ -192,21 +192,21 @@ std::vector<KeyEvent> generate_key_events_from_keycode(std::u16string_view rStr)
     std::vector<KeyEvent> aEvents;
 
     static const std::map<OUString, sal_uInt16> aKeyMap = {
-        {"ESC", KEY_ESCAPE},
-        {"TAB", KEY_TAB},
-        {"DOWN", KEY_DOWN},
-        {"UP", KEY_UP},
-        {"LEFT", KEY_LEFT},
-        {"RIGHT", KEY_RIGHT},
-        {"DELETE", KEY_DELETE},
-        {"INSERT", KEY_INSERT},
-        {"SPACE", KEY_SPACE},
-        {"BACKSPACE", KEY_BACKSPACE},
-        {"RETURN", KEY_RETURN},
-        {"HOME", KEY_HOME},
-        {"END", KEY_END},
-        {"PAGEUP", KEY_PAGEUP},
-        {"PAGEDOWN", KEY_PAGEDOWN}
+        {u"ESC"_ustr, KEY_ESCAPE},
+        {u"TAB"_ustr, KEY_TAB},
+        {u"DOWN"_ustr, KEY_DOWN},
+        {u"UP"_ustr, KEY_UP},
+        {u"LEFT"_ustr, KEY_LEFT},
+        {u"RIGHT"_ustr, KEY_RIGHT},
+        {u"DELETE"_ustr, KEY_DELETE},
+        {u"INSERT"_ustr, KEY_INSERT},
+        {u"SPACE"_ustr, KEY_SPACE},
+        {u"BACKSPACE"_ustr, KEY_BACKSPACE},
+        {u"RETURN"_ustr, KEY_RETURN},
+        {u"HOME"_ustr, KEY_HOME},
+        {u"END"_ustr, KEY_END},
+        {u"PAGEUP"_ustr, KEY_PAGEUP},
+        {u"PAGEDOWN"_ustr, KEY_PAGEDOWN}
     };
 
     // split string along '+'

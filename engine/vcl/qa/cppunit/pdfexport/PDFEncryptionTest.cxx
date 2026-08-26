@@ -142,9 +142,9 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_6)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(16)) },
-          { "EncryptFile", cpo::uno::Any(true) },
-          { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });
+        { { u"SelectPdfVersion"_ustr, cpo::uno::Any(sal_Int32(16)) },
+          { u"EncryptFile"_ustr, cpo::uno::Any(true) },
+          { u"DocumentOpenPassword"_ustr, cpo::uno::Any(u"secret"_ustr) } });
     maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 
@@ -163,9 +163,9 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(17)) },
-          { "EncryptFile", cpo::uno::Any(true) },
-          { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });
+        { { u"SelectPdfVersion"_ustr, cpo::uno::Any(sal_Int32(17)) },
+          { u"EncryptFile"_ustr, cpo::uno::Any(true) },
+          { u"DocumentOpenPassword"_ustr, cpo::uno::Any(u"secret"_ustr) } });
     maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 
@@ -184,9 +184,9 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(20)) },
-          { "EncryptFile", cpo::uno::Any(true) },
-          { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });
+        { { u"SelectPdfVersion"_ustr, cpo::uno::Any(sal_Int32(20)) },
+          { u"EncryptFile"_ustr, cpo::uno::Any(true) },
+          { u"DocumentOpenPassword"_ustr, cpo::uno::Any(u"secret"_ustr) } });
     maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 
@@ -218,9 +218,9 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0_PaddingB
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(20)) },
-          { "EncryptFile", cpo::uno::Any(true) },
-          { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });
+        { { u"SelectPdfVersion"_ustr, cpo::uno::Any(sal_Int32(20)) },
+          { u"EncryptFile"_ustr, cpo::uno::Any(true) },
+          { u"DocumentOpenPassword"_ustr, cpo::uno::Any(u"secret"_ustr) } });
     maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 
@@ -316,10 +316,10 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEmbeddedDocumentOfEncryptedHybridFil
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(20)) },
-          { "IsAddStream", cpo::uno::Any(true) },
-          { "EncryptFile", cpo::uno::Any(true) },
-          { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });
+        { { u"SelectPdfVersion"_ustr, cpo::uno::Any(sal_Int32(20)) },
+          { u"IsAddStream"_ustr, cpo::uno::Any(true) },
+          { u"EncryptFile"_ustr, cpo::uno::Any(true) },
+          { u"DocumentOpenPassword"_ustr, cpo::uno::Any(u"secret"_ustr) } });
     maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 

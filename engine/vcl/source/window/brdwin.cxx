@@ -1942,7 +1942,7 @@ void ImplBorderWindow::SetNotebookBar(const OUString& rUIXMLDescription,
 {
     if (mpNotebookBar)
         mpNotebookBar.disposeAndClear();
-    mpNotebookBar = VclPtr<NotebookBar>::Create(this, "NotebookBar", rUIXMLDescription, rFrame,
+    mpNotebookBar = VclPtr<NotebookBar>::Create(this, u"NotebookBar"_ustr, rUIXMLDescription, rFrame,
                                                 std::move(pNotebookBarAddonsItem));
     Resize();
 }

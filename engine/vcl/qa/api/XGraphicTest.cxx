@@ -124,9 +124,9 @@ void XGraphicTest::testGraphicProvider()
         xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
         auto aMediaProperties(comphelper::InitPropertySequence({
-            { "URL", cpo::uno::Any(aGraphicURL) },
-            { "LazyRead", cpo::uno::Any(true) },
-            { "LoadAsLink", cpo::uno::Any(false) },
+            { u"URL"_ustr, cpo::uno::Any(aGraphicURL) },
+            { u"LazyRead"_ustr, cpo::uno::Any(true) },
+            { u"LoadAsLink"_ustr, cpo::uno::Any(false) },
         }));
 
         uno::Reference<graphic::XGraphic> xGraphic(
@@ -163,9 +163,9 @@ void XGraphicTest::testGraphicProvider()
         xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
         auto aMediaProperties(comphelper::InitPropertySequence({
-            { "URL", cpo::uno::Any(aGraphicURL) },
-            { "LazyRead", cpo::uno::Any(false) },
-            { "LoadAsLink", cpo::uno::Any(true) },
+            { u"URL"_ustr, cpo::uno::Any(aGraphicURL) },
+            { u"LazyRead"_ustr, cpo::uno::Any(false) },
+            { u"LoadAsLink"_ustr, cpo::uno::Any(true) },
         }));
 
         uno::Reference<graphic::XGraphic> xGraphic(
@@ -200,9 +200,9 @@ void XGraphicTest::testGraphicProvider()
         xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
         auto aMediaProperties(comphelper::InitPropertySequence({
-            { "URL", cpo::uno::Any(aGraphicURL) },
-            { "LazyRead", cpo::uno::Any(true) },
-            { "LoadAsLink", cpo::uno::Any(true) },
+            { u"URL"_ustr, cpo::uno::Any(aGraphicURL) },
+            { u"LazyRead"_ustr, cpo::uno::Any(true) },
+            { u"LoadAsLink"_ustr, cpo::uno::Any(true) },
         }));
 
         uno::Reference<graphic::XGraphic> xGraphic(

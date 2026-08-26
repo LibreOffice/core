@@ -219,7 +219,7 @@ void VectorGraphicData::ensureSequenceAndRange()
         {
             const uno::Reference<graphic::XPdfDecomposer> xPdfDecomposer = graphic::PdfTools::create(xContext);
             cpo::uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
-                {"PageIndex", cpo::uno::Any(sal_Int32(mnPageIndex))},
+                {u"PageIndex"_ustr, cpo::uno::Any(sal_Int32(mnPageIndex))},
             });
 
             rtl::Reference<UnoBinaryDataContainer> xDataContainer = new UnoBinaryDataContainer(getBinaryDataContainer());

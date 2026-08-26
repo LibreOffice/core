@@ -99,7 +99,7 @@ Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
 {
     if (!isValidFlavor(aFlavor) || !isDataFlavorSupported(aFlavor))
     {
-        throw UnsupportedFlavorException("Unsupported data flavor",
+        throw UnsupportedFlavorException(u"Unsupported data flavor"_ustr,
                                          static_cast<XTransferable*>(this));
     }
 
@@ -117,14 +117,15 @@ Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
         // "disallow" option and so we can't access the current clipboard
         // contents. Also, by throwing an exception, the "allow or disallow"
         // dialog will display again the next time the user tries to paste.
-        throw UnsupportedFlavorException("Data flavor is nil", static_cast<XTransferable*>(this));
+        throw UnsupportedFlavorException(u"Data flavor is nil"_ustr,
+                                         static_cast<XTransferable*>(this));
     }
 
     dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
 
     if (dp.get() == nullptr)
     {
-        throw UnsupportedFlavorException("Unsupported data flavor",
+        throw UnsupportedFlavorException(u"Unsupported data flavor"_ustr,
                                          static_cast<XTransferable*>(this));
     }
 
@@ -148,7 +149,8 @@ void iOSTransferable::initClipboardItemList()
 
     if (pboardFormats == nullptr)
     {
-        throw RuntimeException("Cannot get clipboard data", static_cast<XTransferable*>(this));
+        throw RuntimeException(u"Cannot get clipboard data"_ustr,
+                               static_cast<XTransferable*>(this));
     }
 
     SAL_INFO("vcl.ios.clipboard", "Types on clipboard: " << NSStringArrayToOUString(pboardFormats));
