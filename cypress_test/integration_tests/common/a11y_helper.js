@@ -662,6 +662,16 @@ const sidebarKeyboard = {
 		});
 	},
 
+	assertHelperReportsTabOrder: function (getWin) {
+		cy.then(function () {
+			const win = getWin();
+			const reported = win.JSDialog.GetFocusableElements(win.app.map.sidebar.wrapper)
+				.map(describeFocusable);
+			expect(reported, 'widgets the helper reports')
+				.to.deep.equal(sidebarTabOrder(win).map(describeFocusable));
+		});
+	},
+
 	assertRingEntersOnFirstWidget: function (getWin) {
 		cy.realPress('F6');
 		sidebarKeyboard.assertFocusedIs(getWin(), function () {

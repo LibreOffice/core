@@ -42,6 +42,10 @@ describe(['tagdesktop'], 'Draw sidebar keyboard navigation', { testIsolation: fa
 		a11yHelper.sidebarKeyboard.assertHelperSkipsInvisible(getWin);
 	});
 
+	it('the focusable helper reports the tab order of the deck', function () {
+		a11yHelper.sidebarKeyboard.assertHelperReportsTabOrder(getWin);
+	});
+
 	it('F6 enters the deck on its first widget', function () {
 		a11yHelper.sidebarKeyboard.assertRingEntersOnFirstWidget(getWin);
 	});
