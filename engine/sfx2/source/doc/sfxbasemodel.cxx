@@ -1025,9 +1025,9 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
         // hopefully it is a temporary solution, I guess nonconvertable properties
         // should not be supported so then there will be only ItemSet from medium
 
-        comphelper::SequenceAsHashMap seqArgsNew = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());
+        SfxUnoArguments seqArgsNew = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());
         TransformParameters( SID_OPENDOC, m_pData->m_seqArguments, aSet );
-        comphelper::SequenceAsHashMap seqArgsOld = TransformItems(SID_OPENDOC, aSet);
+        SfxUnoArguments seqArgsOld = TransformItems(SID_OPENDOC, aSet);
 
         if (requestedArgs.empty() || requestedArgs.count(u"WinExtent"))
         {
@@ -1785,7 +1785,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
         impl_store(rURL, rArgs, false);
     }
 
-    comphelper::SequenceAsHashMap aSequence = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());
+    SfxUnoArguments aSequence = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());
     attachResource(rURL, aSequence.getAsConstPropertyValueList());
 
     loadCmisProperties( );
@@ -2668,7 +2668,7 @@ void SAL_CALL SfxBaseModel::checkOut(  )
         m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
         m_pData->m_pObjectShell->GetMedium( )->GetMedium_Impl( );
         m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-        comphelper::SequenceAsHashMap aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
+        SfxUnoArguments aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
         attachResource(sURL, aSequence.getAsConstPropertyValueList());
 
         // Reload the CMIS properties
@@ -2733,7 +2733,7 @@ void SAL_CALL SfxBaseModel::checkIn( bool bIsMajor, const OUString& rMessage )
         if ( sName != sNewName )
         {
             m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-            comphelper::SequenceAsHashMap aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
+            SfxUnoArguments aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
             attachResource(sNewName, aSequence.getAsConstPropertyValueList());
 
             // Reload the CMIS properties

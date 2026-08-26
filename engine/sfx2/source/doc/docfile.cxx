@@ -85,6 +85,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <comphelper/string.hxx>
 #include <framework/interaction.hxx>
@@ -2975,7 +2976,8 @@ void SfxMedium::GetLockingStream_Impl()
         return;
 
     // open the original document
-    comphelper::SequenceAsHashMap aMedium(TransformItems(SID_OPENDOC, GetItemSet()));
+    comphelper::SequenceAsHashMap aMedium(
+        TransformItems(SID_OPENDOC, GetItemSet()).getAsConstPropertyValueList());
 
     utl::MediaDescriptor::addInputStreamOwnLock(aMedium);
 
@@ -3059,7 +3061,8 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
-            comphelper::SequenceAsHashMap aMedium(TransformItems(SID_OPENDOC, GetItemSet()));
+            comphelper::SequenceAsHashMap aMedium(
+                TransformItems(SID_OPENDOC, GetItemSet()).getAsConstPropertyValueList());
 
             if ( pImpl->m_xLockingStream.is() && !bFromTempFile )
             {

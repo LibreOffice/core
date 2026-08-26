@@ -30,6 +30,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <osl/diagnose.h>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -49,6 +50,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 
+#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -910,8 +912,50 @@ void TransformParameters( sal_uInt16 nSlotId, const cpo::uno::Sequence<beans::Pr
 #endif
 }
 
-comphelper::SequenceAsHashMap TransformItems(sal_uInt16 nSlotId, const SfxItemSet& rSet,
-                                             const SfxSlot* pSlot)
+namespace
+{
+// deduces the const and non-const vector, so that operator[] gets a mutable iterator
+template <class TArgs> auto findArg(TArgs& rArgs, std::u16string_view aName)
+{
+    return std::ranges::find_if(rArgs, [aName](const auto& rArg) { return rArg.first == aName; });
+}
+}
+
+Any& SfxUnoArguments::operator[](const OUString& rName)
+{
+    if (auto it = findArg(m_aArgs, rName); it != m_aArgs.end())
+        return it->second;
+    return m_aArgs.emplace_back(rName, Any()).second;
+}
+
+Any SfxUnoArguments::getValue(std::u16string_view aName) const
+{
+    if (auto it = findArg(m_aArgs, aName); it != m_aArgs.end())
+        return it->second;
+    return {};
+}
+
+bool SfxUnoArguments::contains(std::u16string_view aName) const
+{
+    return findArg(m_aArgs, aName) != m_aArgs.end();
+}
+
+void SfxUnoArguments::erase(std::u16string_view aName)
+{
+    if (auto it = findArg(m_aArgs, aName); it != m_aArgs.end())
+        m_aArgs.erase(it);
+}
+
+Sequence<PropertyValue> SfxUnoArguments::getAsConstPropertyValueList() const
+{
+    Sequence<PropertyValue> aRet(m_aArgs.size());
+    std::ranges::transform(m_aArgs, aRet.getArray(), [](const auto& rArg) {
+        return comphelper::makePropertyValue(rArg.first, rArg.second);
+    });
+    return aRet;
+}
+
+SfxUnoArguments TransformItems(sal_uInt16 nSlotId, const SfxItemSet& rSet, const SfxSlot* pSlot)
 {
     if ( !pSlot )
         pSlot = SFX_SLOTPOOL().GetSlot( nSlotId );
@@ -1290,7 +1334,7 @@ comphelper::SequenceAsHashMap TransformItems(sal_uInt16 nSlotId, const SfxItemSe
         return {};
 
     // convert every item into a property
-    comphelper::SequenceAsHashMap aSequ;
+    SfxUnoArguments aSequ;
 
     if ( !pSlot->IsMode(SfxSlotMode::METHOD) )
     {

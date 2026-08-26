@@ -509,7 +509,7 @@ bool SfxObjectShell::DoInitNew()
         if ( xModel.is() )
         {
             SfxItemSet &rSet = GetMedium()->GetItemSet();
-            comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, rSet);
+            SfxUnoArguments aArgs = TransformItems(SID_OPENDOC, rSet);
             aArgs[u"Title"_ustr] <<= GetTitle(SFX_TITLE_DETECT);
             xModel->attachResource(OUString(), aArgs.getAsConstPropertyValueList());
             if (!comphelper::IsFuzzing())
@@ -2395,7 +2395,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
             if ( xModel.is() )
             {
                 const OUString& aURL {pNewMed->GetOrigURL()};
-                comphelper::SequenceAsHashMap aMediaDescr = TransformItems(SID_OPENDOC, pNewMed->GetItemSet());
+                SfxUnoArguments aMediaDescr = TransformItems(SID_OPENDOC, pNewMed->GetItemSet());
                 try
                 {
                     xModel->attachResource(aURL, aMediaDescr.getAsConstPropertyValueList());
@@ -2554,7 +2554,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             xImporter->setTargetDocument( xComp );
 
             rMedium.GetItemSet().Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
-            comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, rMedium.GetItemSet());
+            SfxUnoArguments aArgs = TransformItems(SID_OPENDOC, rMedium.GetItemSet());
 
             static constexpr OUString sInputStream ( u"InputStream"_ustr  );
 
@@ -2711,7 +2711,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         SfxItemSet& rItems = rMedium.GetItemSet();
 
         // put in the REAL file name, and copy all PropertyValues
-        comphelper::SequenceAsHashMap aNewArgs = TransformItems(SID_SAVEASDOC, rItems);
+        SfxUnoArguments aNewArgs = TransformItems(SID_SAVEASDOC, rItems);
         const comphelper::SequenceAsHashMap& aMediumArgs(rMedium.GetArgs());
 
         if (aNewArgs.contains(u"FileName"_ustr))

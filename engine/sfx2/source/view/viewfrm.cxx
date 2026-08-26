@@ -815,7 +815,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( xOldObj->IsModifyPasswordEntered() )
                     xNewObj->SetModifyPasswordEntered();
 
-                comphelper::SequenceAsHashMap aLoadArgs = TransformItems(SID_OPENDOC, *pNewSet);
+                SfxUnoArguments aLoadArgs = TransformItems(SID_OPENDOC, *pNewSet);
                 try
                 {
                     uno::Reference < frame::XLoadable > xLoad( xNewObj->GetModel(), uno::UNO_QUERY );

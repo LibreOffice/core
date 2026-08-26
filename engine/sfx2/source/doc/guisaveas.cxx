@@ -1116,7 +1116,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
-    GetMediaDescr() = TransformItems(nSlotID, *pDialogParams);
+    GetMediaDescr() << TransformItems(nSlotID, *pDialogParams).getAsConstPropertyValueList();
 
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );

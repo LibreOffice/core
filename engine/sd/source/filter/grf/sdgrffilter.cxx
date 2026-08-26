@@ -264,7 +264,7 @@ bool SdGRFFilter::Export()
                 {
                     rtl::Reference< SdGRFFilter_ImplInteractionHdl > xInteractionHandler;
 
-                    comphelper::SequenceAsHashMap aArgs = TransformItems(SID_SAVEASDOC, rSet);
+                    SfxUnoArguments aArgs = TransformItems(SID_SAVEASDOC, rSet);
 
                     static constexpr OUString sFilterName( u"FilterName"_ustr );
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );

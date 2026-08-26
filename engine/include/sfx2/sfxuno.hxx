@@ -22,7 +22,11 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
-#include <comphelper/sequenceashashmap.hxx>
+#include <cpo/uno/Any.hxx>
+
+#include <string_view>
+#include <utility>
+#include <vector>
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -32,12 +36,43 @@ class SfxAllItemSet ;
 class SfxItemSet    ;
 class SfxSlot       ;
 
+/// The UNO arguments that an SfxItemSet was transformed into
+/// This is similar to SequenceAsHashMap, but maintains the order of arguments
+class SFX2_DLLPUBLIC SfxUnoArguments
+{
+public:
+    /// Returns the named argument, appending it to the end when it is not there yet. Note that
+    /// the reference is invalidated on following insertions / deletions
+    cpo::uno::Any& operator[](const OUString& rName);
+
+    /// Returns the named argument, or an empty Any when there is none
+    cpo::uno::Any getValue(std::u16string_view aName) const;
+
+    template <class T>
+    T getUnpackedValueOrDefault(std::u16string_view aName, const T& rDefault) const
+    {
+        if (T aValue = T(); getValue(aName) >>= aValue)
+            return aValue;
+        return rDefault;
+    }
+
+    bool contains(std::u16string_view aName) const;
+
+    /// Drops the named argument; the remaining ones keep their relative order
+    void erase(std::u16string_view aName);
+
+    cpo::uno::Sequence<css::beans::PropertyValue> getAsConstPropertyValueList() const;
+
+private:
+    std::vector<std::pair<OUString, cpo::uno::Any>> m_aArgs;
+};
+
 SFX2_DLLPUBLIC void TransformParameters(            sal_uInt16                          nSlotId     ,
                             const   cpo::uno::Sequence< css::beans::PropertyValue >&    seqArgs     ,
                                     SfxAllItemSet&                                      aSet        ,
                             const   SfxSlot*                                            pSlot = nullptr   );
 
-SFX2_DLLPUBLIC comphelper::SequenceAsHashMap
+SFX2_DLLPUBLIC SfxUnoArguments
 TransformItems(sal_uInt16 nSlotId, const SfxItemSet& aSet, const SfxSlot* pSlot = nullptr);
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData );

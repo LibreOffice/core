@@ -850,7 +850,7 @@ using namespace cpo::uno;
                     }
                 }
 
-                comphelper::SequenceAsHashMap aArguments = TransformItems(nSlot, aToggled);
+                SfxUnoArguments aArguments = TransformItems(nSlot, aToggled);
                 aFeaturePos->second->dispatch(aArguments.getAsConstPropertyValueList());
             }
             break;

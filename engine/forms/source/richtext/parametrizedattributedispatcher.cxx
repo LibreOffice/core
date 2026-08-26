@@ -76,7 +76,7 @@ namespace frm
             return;
 
         SfxItemSet aEmptySet(getEditView()->GetEmptyItemSet());
-        comphelper::SequenceAsHashMap aUnoStateDescription;
+        SfxUnoArguments aUnoStateDescription;
         if ( _rState.getItem() )
         {
             aEmptySet.Put( *_rState.getItem() );

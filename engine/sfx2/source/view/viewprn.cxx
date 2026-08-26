@@ -697,7 +697,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( pSelectItem && rReq.GetArgs()->Count() == 1 )
                 bIsAPI = false;
 
-            comphelper::SequenceAsHashMap aProps;
+            SfxUnoArguments aProps;
             if ( bIsAPI )
             {
                 // supported properties:
@@ -716,12 +716,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                 if (aProps.contains(u"Copies"_ustr))
                 {
-                    aProps[u"CopyCount"_ustr] = aProps[u"Copies"_ustr];
+                    aProps[u"CopyCount"_ustr] = aProps.getValue(u"Copies"_ustr);
                 }
 
                 if (aProps.contains(u"RangeText"_ustr))
                 {
-                    aProps[u"Pages"_ustr] = aProps[u"RangeText"_ustr];
+                    aProps[u"Pages"_ustr] = aProps.getValue(u"RangeText"_ustr);
                 }
 
                 if (aProps.contains(u"Asynchron"_ustr))

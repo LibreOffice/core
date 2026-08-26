@@ -13,6 +13,12 @@
 
 #include <helper/qahelper.hxx>
 #include <sal/log.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -21,6 +27,7 @@
 
 #include <conditio.hxx>
 #include <document.hxx>
+#include <tabvwsh.hxx>
 #include <scitems.hxx>
 
 #include <algorithm>
@@ -34,6 +41,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -1177,6 +1185,41 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testVbaOnTime)
 
     // A1 has the expected number now:
     CPPUNIT_ASSERT_EQUAL(42.0, pDoc->GetValue(0, 0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf173160)
+{
+    // A macro reached through a hyperlink is handed the media descriptor as positional arguments,
+    // with the URL first; the dispatch drops the argument names, so the order is all it has
+    loadWithParams(
+        createFileURL(u"tdf173160.ods"),
+        { comphelper::makePropertyValue(u"MacroExecutionMode"_ustr,
+                                        document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN) });
+
+    static constexpr OUString aScriptUrl
+        = u"vnd.sun.star.script:Standard.Module1.Main1?language=Basic&location=document"_ustr;
+
+    // the items ScGlobal::OpenURL builds for a Ctrl+click on a cell hyperlink
+    SfxViewFrame& rViewFrame = getViewShell()->GetViewFrame();
+    SfxStringItem aUrl(SID_FILE_NAME, aScriptUrl);
+    SfxStringItem aTarget(SID_TARGETNAME, u""_ustr);
+    SfxFrameItem aFrame(SID_DOCFRAME, &rViewFrame);
+    SfxStringItem aReferer(SID_REFERER, u"private:user"_ustr);
+    SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, false);
+    SfxBoolItem aBrowsing(SID_BROWSE, true);
+    // asynchronous like the hyperlink itself: a script URL can only be dispatched that way,
+    // because ScriptProtocolHandler has no XSynchronousDispatch
+    rViewFrame.GetDispatcher()->ExecuteList(
+        SID_OPENDOC, SfxCallMode::ASYNCHRON,
+        { &aUrl, &aTarget, &aFrame, &aReferer, &aNewView, &aBrowsing });
+    Scheduler::ProcessEventsToIdle();
+
+    // the macro wrote down what it got: A1 the first argument, B1 how many there were
+    ScDocument* pDoc = getScDoc();
+    // Without the accompanying fix in place, this test would have failed: the arguments reached
+    // the macro in the order their names happened to hash, so the first one was not the URL
+    CPPUNIT_ASSERT_EQUAL(aScriptUrl, pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(1, 0, 0));
 }
 
 ScMacrosTest::ScMacrosTest()

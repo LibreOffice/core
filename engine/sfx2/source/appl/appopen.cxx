@@ -394,7 +394,7 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
         std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet().Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
-        comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, *pNew);
+        SfxUnoArguments aArgs = TransformItems(SID_OPENDOC, *pNew);
         aArgs[u"Title"_ustr] <<= xDoc->GetTitle(SFX_TITLE_DETECT);
         xModel->attachResource(OUString(), aArgs.getAsConstPropertyValueList());
     }
@@ -1066,7 +1066,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     // convert items to properties for framework API calls
-    comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, *rReq.GetArgs());
+    SfxUnoArguments aArgs = TransformItems(SID_OPENDOC, *rReq.GetArgs());
     // Any Referer (that was relevant in the above call to
     // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
     // this "open" request is initiated directly by the user:

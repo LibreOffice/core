@@ -1049,7 +1049,7 @@ SfxObjectShell* SfxObjectShell::CreateObject( const OUString& rServiceName, SfxO
 
 Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet )
 {
-    comphelper::SequenceAsHashMap aProps = TransformItems(SID_OPENDOC, rSet);
+    SfxUnoArguments aProps = TransformItems(SID_OPENDOC, rSet);
     const SfxStringItem* pFileNameItem = rSet.GetItem<SfxStringItem>(SID_FILE_NAME, false);
     const SfxStringItem* pTargetItem = rSet.GetItem<SfxStringItem>(SID_TARGETNAME, false);
     OUString aURL;

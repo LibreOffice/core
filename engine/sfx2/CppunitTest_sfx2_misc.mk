@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_misc, \
 	sal \
     subsequenttest \
 	sfx \
+	svl \
 	utl \
 	tl \
 ))
