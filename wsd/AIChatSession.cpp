@@ -2240,7 +2240,7 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
                 r->set("formula", formula);
                 resultArr.add(r);
 
-                lastCell = escapedCell;
+                lastCell = std::move(escapedCell);
             }
 
             // Leave the cursor on the last cell written, so the user sees the result.
