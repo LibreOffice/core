@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideBackgroundRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"slide-background-link.fodp", aParams);
+    loadWithParams(createFileURL(u"slide-background-link.fodp"), aParams);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
 
@@ -218,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterPageBackgroundRemoteNotFetc
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"master-page-background-link.fodp", aParams);
+    loadWithParams(createFileURL(u"master-page-background-link.fodp"), aParams);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
 
@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testBulletImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"bullet-image-link.fodp", aParams);
+    loadWithParams(createFileURL(u"bullet-image-link.fodp"), aParams);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
     pImpressDocument->initializeForTiledRendering({});
@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeFillRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"shape-fill-link.fodp", aParams);
+    loadWithParams(createFileURL(u"shape-fill-link.fodp"), aParams);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
     pImpressDocument->initializeForTiledRendering({});
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testFormImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"form-image-link.fodp", aParams);
+    loadWithParams(createFileURL(u"form-image-link.fodp"), aParams);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
     pImpressDocument->initializeForTiledRendering({});

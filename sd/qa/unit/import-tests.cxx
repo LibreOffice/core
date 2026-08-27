@@ -2190,7 +2190,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testLinkedOLEExport)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::FULL_UPDATE)),
     };
-    loadFromFile(u"linked_ole.fodp", aParams);
+    loadWithParams(createFileURL(u"linked_ole.fodp"), aParams);
 
     const SdrPage* pPage = GetPage(1);
     CPPUNIT_ASSERT(pPage);
@@ -2217,7 +2217,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawObjectLinkDeferred)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"draw-object-link.fodp", aParams);
+    loadWithParams(createFileURL(u"draw-object-link.fodp"), aParams);
 
     const SdrPage* pPage = GetPage(1);
     CPPUNIT_ASSERT(pPage);
@@ -2237,7 +2237,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"draw-image-link.fodp", aParams);
+    loadWithParams(createFileURL(u"draw-image-link.fodp"), aParams);
 
     CPPUNIT_ASSERT(mxComponent.is());
 }

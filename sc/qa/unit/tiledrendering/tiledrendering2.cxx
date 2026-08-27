@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageBackgroundRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"page-background-link.fods", aParams);
+    loadWithParams(createFileURL(u"page-background-link.fods"), aParams);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering({});
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeBackgroundRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"shape-background-link.fods", aParams);
+    loadWithParams(createFileURL(u"shape-background-link.fods"), aParams);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
@@ -313,7 +313,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBulletImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"bullet-image-link.fods", aParams);
+    loadWithParams(createFileURL(u"bullet-image-link.fods"), aParams);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering({});
@@ -331,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFormImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"form-image-link.fods", aParams);
+    loadWithParams(createFileURL(u"form-image-link.fods"), aParams);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering({});

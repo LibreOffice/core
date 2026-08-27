@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawObjectLinkDeferred)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"draw-object-link.fodt", aParams);
+    loadWithParams(createFileURL(u"draw-object-link.fodt"), aParams);
     CPPUNIT_ASSERT(!getSwDocShell()->GetMedium()->GetWarningError());
     calcLayout();
 
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"draw-image-link.fodt", aParams);
+    loadWithParams(createFileURL(u"draw-image-link.fodt"), aParams);
 
     // if we reach here without hanging, no fetch was attempted
     SwDoc* pDoc = getSwDoc();
@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImageEmbeddedNotBlocked)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"draw-image-embedded.fodt", aParams);
+    loadWithParams(createFileURL(u"draw-image-embedded.fodt"), aParams);
 
     SwDoc* pDoc = getSwDoc();
     SwNodeOffset nNodes = pDoc->GetNodes().Count();

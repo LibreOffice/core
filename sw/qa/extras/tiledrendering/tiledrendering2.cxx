@@ -856,7 +856,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testImageBulletRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"image-bullet-link.fodt", aParams);
+    loadWithParams(createFileURL(u"image-bullet-link.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -887,7 +887,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"background-image-link.fodt", aParams);
+    loadWithParams(createFileURL(u"background-image-link.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -921,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleBackgroundImageRemo
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"paragraph-style-background-link.fodt", aParams);
+    loadWithParams(createFileURL(u"paragraph-style-background-link.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -950,7 +950,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleDeleteReleasesBackg
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"paragraph-style-background-link.fodt", aParams);
+    loadWithParams(createFileURL(u"paragraph-style-background-link.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     sfx2::LinkManager& rLinkMgr
@@ -978,7 +978,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphDeleteReleasesBackground
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"two-paragraph-background-links.fodt", aParams);
+    loadWithParams(createFileURL(u"two-paragraph-background-links.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     sfx2::LinkManager& rLinkMgr
@@ -1010,7 +1010,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageLinkSurvivesUpdate
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"two-paragraph-background-links.fodt", aParams);
+    loadWithParams(createFileURL(u"two-paragraph-background-links.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     sfx2::LinkManager& rLinkMgr
@@ -1045,7 +1045,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageBackgroundImageRemoteNotFetch
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"page-background-link.fodt", aParams);
+    loadWithParams(createFileURL(u"page-background-link.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -1072,7 +1072,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeFillRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"shape-fill-link.fodt", aParams);
+    loadWithParams(createFileURL(u"shape-fill-link.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -1097,7 +1097,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"form-image-link.fodt", aParams);
+    loadWithParams(createFileURL(u"form-image-link.fodt"), aParams);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();

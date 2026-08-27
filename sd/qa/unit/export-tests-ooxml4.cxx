@@ -1127,7 +1127,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testLinkedOLE)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::FULL_UPDATE)),
     };
-    loadFromFile(u"odp/linked_ole.odp", aParams);
+    loadWithParams(createFileURL(u"odp/linked_ole.odp"), aParams);
 
     save(TestFilter::PPTX);
 

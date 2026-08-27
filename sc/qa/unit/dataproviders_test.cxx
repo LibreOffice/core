@@ -257,12 +257,12 @@ void ScDataProvidersTest::testLinkUpdateGate()
 
     // With updating not allowed, updating the links leaves the saved value.
     pDocShell->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
-    pLinkManager->UpdateAllLinks(false, false, nullptr, OUString());
+    pLinkManager->UpdateAllLinks(false, nullptr, OUString());
     CPPUNIT_ASSERT_EQUAL(u"unchanged"_ustr, pDoc->GetString(0, 0, 0));
 
     // Once the user allows updating, the same update brings in the live value.
     pDocShell->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
-    pLinkManager->UpdateAllLinks(false, false, nullptr, OUString());
+    pLinkManager->UpdateAllLinks(false, nullptr, OUString());
     CPPUNIT_ASSERT_EQUAL(u"changed"_ustr, pDoc->GetString(0, 0, 0));
 }
 

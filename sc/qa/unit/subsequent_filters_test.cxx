@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawObjectLinkDeferred)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"draw-object-link.fods", aParams);
+    loadWithParams(createFileURL(u"draw-object-link.fods"), aParams);
 
     const SdrOle2Obj* pOleObj = getSingleOleObject(*getScDoc(), 0);
     CPPUNIT_ASSERT_MESSAGE("OLE placeholder should exist after import", pOleObj);
@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawImageRemoteNotFetched)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
-    loadFromFile(u"draw-image-link.fods", aParams);
+    loadWithParams(createFileURL(u"draw-image-link.fods"), aParams);
 
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT(pDoc);
