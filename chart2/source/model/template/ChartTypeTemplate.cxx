@@ -370,7 +370,7 @@ void ChartTypeTemplate::applyStyle2(
     ::sal_Int32 /* nSeriesIndex */,
     ::sal_Int32 /* nSeriesCount */ )
 {
-    // sset stacking mode
+    // set stacking mode
     if( !xSeries.is())
         return;
 

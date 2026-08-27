@@ -799,7 +799,7 @@ namespace dxcanvas
         const Gdiplus::CompositingMode eCompositing( calcCompositingMode( renderState.CompositeOperation ) );
         ENSURE_OR_THROW(
             Gdiplus::Ok == rGraphics->SetCompositingMode( eCompositing ),
-            "CanvasHelper::setupGraphicsState(): Cannot set GDI* compositing mode)" );
+            "CanvasHelper::setupGraphicsState(): Cannot set GDI+ compositing mode" );
     }
 
     void CanvasHelper::flush() const

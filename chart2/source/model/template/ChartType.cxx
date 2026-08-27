@@ -439,7 +439,7 @@ bool ChartType::isSupportingRightAngledAxes()
 
 bool ChartType::isSupportingOverlapAndGapWidthProperties(sal_Int32 nDimensionCount)
 {
-    //2D bar charts do support a this special properties
+    //2D bar charts do support these special properties
     if (nDimensionCount == 3)
         return false;
 
