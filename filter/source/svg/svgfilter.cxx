@@ -524,8 +524,8 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
         else
         {
             /*
-             *  We get all master page that are targeted by at least one draw page.
-             *  The master page are put in an unordered set.
+             *  We get all master pages that are targeted by at least one draw page.
+             *  The master pages are put in an unordered set.
              */
             std::unordered_set<uno::Reference<drawing::XDrawPage>> aMasterPageTargetSet;
             for(const uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
