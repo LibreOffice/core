@@ -122,7 +122,7 @@ std::u16string_view const cSuffixes = u"%&!#@$";
  * Helper functions to get/set text in TextEngine using
  * the stream interface.
  *
- * get/setText() only supports tools Strings limited to 64K).
+ * get/setText() only supports tools Strings limited to 64K.
  */
 OUString getTextEngineText (ExtTextEngine& rEngine)
 {
@@ -784,7 +784,7 @@ void EditorWindow::HandleAutoCloseParen()
     if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
     {
         GetEditView()->InsertText(u")"_ustr);
-        //leave the cursor on its place: inside the parenthesis
+        //leave the cursor in its place: inside the parenthesis
         TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
         GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
     }
@@ -805,7 +805,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     if( aLine.getLength() > 0 && !aLine.endsWith("\"") && (aPortions.back().tokenType != TokenType::String) )
     {
         GetEditView()->InsertText(u"\""_ustr);
-        //leave the cursor on its place: inside the two double quotes
+        //leave the cursor in its place: inside the two double quotes
         TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
         GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
     }
@@ -2971,7 +2971,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
             aRetVect.push_back( rMethod->getName() );
         }
     }
-    return aRetVect;//this is empty when cannot code complete
+    return aRetVect;//this is empty when it cannot code complete
 }
 
 std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
@@ -2985,7 +2985,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
             aRetVect.push_back( rxField->getName() );
         }
     }
-    return aRetVect;//this is empty when cannot code complete
+    return aRetVect;//this is empty when it cannot code complete
 }
 
 

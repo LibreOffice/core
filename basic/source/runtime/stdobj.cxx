@@ -31,7 +31,7 @@
 // enough, if not we need to increase the size of nArgs member in the Methods
 // struct below.
 // note: the limitation of 63 args is only for RTL functions defined here and
-// does NOT impose a limit on User defined procedures ). This changes is to
+// does NOT impose a limit on User defined procedures ). This change is to
 // allow us space for a flag to denylist some functions in vba mode
 
 namespace {
@@ -772,9 +772,9 @@ constexpr Method aMethods[] = {
     arg(u"number", SbxDOUBLE),
 
 { u"SLN",                           SbxDOUBLE,    3 |  FUNCTION_ | COMPATONLY_, SbRtl_SLN         },
-    arg(u"Cost",   SbxDOUBLE),
-    arg(u"Double", SbxDOUBLE),
-    arg(u"Life",   SbxDOUBLE),
+    arg(u"Cost",    SbxDOUBLE),
+    arg(u"Salvage", SbxDOUBLE),
+    arg(u"Life",    SbxDOUBLE),
 
 { u"SYD",                           SbxDOUBLE,    4 |  FUNCTION_ | COMPATONLY_, SbRtl_SYD         },
     arg(u"Cost",    SbxDOUBLE),

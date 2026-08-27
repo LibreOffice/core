@@ -440,7 +440,7 @@ public class OOoBean
 
         If no document is loaded and the instance is added to a Java container that
         is showing, then this method needs not to be called. If later one of the methods
-        {@link #loadFromURL loadFromURL}, {@link #loadFromStream loadFromStream1},
+        {@link #loadFromURL loadFromURL}, {@link #loadFromStream loadFromStream},
         or {@link #loadFromByteArray loadFromByteArray}
         is called, then the document is automatically displayed.
 
