@@ -174,7 +174,7 @@
 #define STR_SELCOUNT                            NC_("STR_SELCOUNT", "Selected: %1, %2")
 // STR_SELCOUNT_ROWARG is %1 of STR_SELCOUNT. %d of STR_SELCOUNT_ROWARG is number of rows
 #define STR_SELCOUNT_ROWARG                     NNC_("STR_SELCOUNT_ROWARG", "%d row", "%d rows")
-// STR_SELCOUNT_COLARG is %2 of STR_SELCOUNT. %d of STR_SELCOUNT_ROWARG is number of columns
+// STR_SELCOUNT_COLARG is %2 of STR_SELCOUNT. %d of STR_SELCOUNT_COLARG is number of columns
 #define STR_SELCOUNT_COLARG                     NNC_("STR_SELCOUNT_COLARG", "%d column", "%d columns")
 #define STR_FILTER_SELCOUNT                     NC_("STR_FILTER_SELCOUNT", "%1 of %2 records found")
 #define STR_COLUMN                              NC_("STR_COLUMN", "Column")
@@ -265,7 +265,7 @@
 #define STR_LONG_ERR_ILL_ARG                    NC_("STR_LONG_ERR_ILL_ARG", "Error: Invalid argument")
 #define STR_LONG_ERR_ILL_PAR                    NC_("STR_LONG_ERR_ILL_PAR", "Error in parameter list")
 #define STR_LONG_ERR_ILL_CHAR                   NC_("STR_LONG_ERR_ILL_CHAR", "Error: Invalid character")
-#define STR_LONG_ERR_PAIR                       NC_("STR_LONG_ERR_PAIR", "Error: in bracketing")
+#define STR_LONG_ERR_PAIR                       NC_("STR_LONG_ERR_PAIR", "Error in bracketing")
 #define STR_LONG_ERR_OP_EXP                     NC_("STR_LONG_ERR_OP_EXP", "Error: Operator missing")
 #define STR_LONG_ERR_VAR_EXP                    NC_("STR_LONG_ERR_VAR_EXP", "Error: Variable missing")
 #define STR_LONG_ERR_CODE_OVF                   NC_("STR_LONG_ERR_CODE_OVF", "Error: Formula overflow")
