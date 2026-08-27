@@ -74,7 +74,7 @@ public:
 
      @param bUseSystemClipboard
      If 'pasteboard' is NULL 'bUseSystemClipboard' determines whether the
-     system clipboard will be created (bUseSystemClipboard == true) or if
+     system clipboard will be created (bUseSystemClipboard == true) or
      the DragPasteboard if bUseSystemClipboard == false
    */
   AquaClipboard(NSPasteboard* pasteboard,

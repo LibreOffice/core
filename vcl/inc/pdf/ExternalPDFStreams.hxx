@@ -22,7 +22,7 @@
 
 namespace vcl
 {
-// An external PDF stream, which stores the PDF stream data as byte array.
+// An external PDF stream, which stores the PDF stream data as a byte array.
 // This struct is also responsible for parsing the stream as a PDFDocument,
 // and storing its instance for the life-cycle of the struct, so that it
 // is reused to avoid unnecessary parsing.
@@ -54,7 +54,7 @@ struct VCL_DLLPUBLIC ExternalPDFStream
     }
 };
 
-// Class to manage external PDF streams, for the de-duplication purpose.
+// Class to manage external PDF streams, for deduplication purposes.
 class ExternalPDFStreams
 {
 private:

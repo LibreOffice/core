@@ -109,7 +109,7 @@ void AquaSalTimer::Start( sal_uInt64 nMS )
                                                     repeats: NO
                                            ] retain];
             /* #i84055# add timer to tracking run loop mode,
-               so they also elapse while e.g. live resize
+               so it also elapses during e.g. live resize
             */
             [[NSRunLoop currentRunLoop] addTimer: m_pRunningTimer forMode: NSEventTrackingRunLoopMode];
         }
