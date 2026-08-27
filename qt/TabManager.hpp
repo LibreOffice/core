@@ -108,7 +108,25 @@ private:
         // closeTab), holding one override cursor that the parked callback
         // (or detachAt, if the tab leaves another way) must release.
         bool closeWaitsForSave = false;
+        // The value of _activationTick when this tab was last activated. The
+        // higher the value, the more recently the user was on the tab.
+        unsigned long long lastActiveTick = 0;
+        // Stands in the stack for a tab whose view is discarded, so a stack
+        // index still matches the tab's own position. Null otherwise, and
+        // owned by the stack while it is there.
+        QWidget* placeholder = nullptr;
     };
+
+    // The widget this tab occupies in the stack: its view, or its placeholder while the
+    // view is discarded.
+    QWidget* stackWidgetFor(const Entry& e) const;
+
+    // Build the view of a discarded tab again and put it back in the stack.
+    void restoreTabView(std::vector<Entry>::iterator it);
+
+    // Discard the views of every tab beyond the live-view limit, least recently used
+    // first, so the number of web engine processes stays bounded as tabs are opened.
+    void enforceLiveViewLimit();
 
     int registerTab(std::unique_ptr<WebView> wv, int insertAt);
     std::unique_ptr<WebView> detachAt(std::vector<Entry>::iterator it);
@@ -131,6 +149,8 @@ private:
     std::vector<Entry> _tabs;
     static int s_nextTabId;
     int _activeTabId = -1;
+    // Counts activations. Each tab records the value it saw when it was last activated.
+    unsigned long long _activationTick = 0;
     // Set by requestCloseAll(): after each tab finishes closing, closeTab()
     // continues with the next one until none remain.
     bool _closingAll = false;

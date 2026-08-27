@@ -87,6 +87,9 @@ public:
     // console windows (no-op otherwise).
     void endPresentation();
 
+    // True while this view is running a presentation.
+    bool isPresenting() const { return _presentationView != nullptr; }
+
 protected:
     // Intercept files dropped onto the window from the OS
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -213,6 +216,20 @@ public:
     void saveAndClose();
     // Called when this document's window gains or loses the active state.
     void onWindowActiveChanged(bool active);
+
+    /// Destroy this document's webview, and with it the web engine process that renders it.
+    /// The document stays loaded in the engine with any unsaved change.
+    void discardView();
+
+    /// Build a webview again and rejoin the document left loaded under this view's appDocId.
+    void restoreDiscardedView();
+
+    bool isViewDiscarded() const { return _viewDiscarded; }
+
+    /// True when this view may be discarded: it shows a local document that has a file
+    /// on disk, it holds no unsaved change, and it is not presenting.
+    bool canDiscardView() const;
+
     bool isDocumentModified() const;
     void endPresentation();
     bool isStarterScreen() const { return _docType == QStringLiteral("starter"); }
@@ -222,9 +239,16 @@ private:
     // query gnome font scaling factor and apply it to the web view
     void queryGnomeFontScalingUpdateZoom();
 
+    // Make the webview and its page, and wire up the page signals.
+    void createWebEngineView();
+
     QMainWindow* _mainWindow;
+    QWebEngineProfile* _profile;
     std::unique_ptr<CODAWebEngineView> _webView;
     coda::DocumentData _document;
+    // The cool.html URL, with its query, that this document was loaded from.
+    QString _loadedUrl;
+    bool _viewDiscarded;
     QString _docTitle;
     QString _docType;
     bool _isWelcome;

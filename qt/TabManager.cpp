@@ -23,6 +23,7 @@
 #include <Poco/File.h>
 #include <Poco/Path.h>
 
+#include <qt/CodaConfig.hpp>
 #include <qt/qt.hpp>
 #include <common/Log.hpp>
 #include <common/SettingsStorage.hpp>
@@ -232,6 +233,62 @@ QPointer<TabManager> TabManager::s_lastHoverTarget;
 int TabManager::s_lastHoverInsertAt = -1;
 QElapsedTimer TabManager::s_lastHoverLeftAt;
 
+QWidget* TabManager::stackWidgetFor(const Entry& e) const
+{
+    if (e.webView->isViewDiscarded())
+        return e.placeholder;
+    return e.webView->webEngineView();
+}
+
+void TabManager::restoreTabView(std::vector<Entry>::iterator it)
+{
+    if (!it->webView->isViewDiscarded())
+        return;
+
+    const int index = static_cast<int>(std::distance(_tabs.begin(), it));
+    it->webView->restoreDiscardedView();
+    it->webView->setMainWindow(_window);
+    // Insert before the placeholder goes, so the tab keeps its place in the stack.
+    _stack->insertWidget(index, it->webView->webEngineView());
+    _stack->removeWidget(it->placeholder);
+    delete it->placeholder;
+    it->placeholder = nullptr;
+}
+
+void TabManager::enforceLiveViewLimit()
+{
+    const int limit = CodaConfig::instance().liveViewLimit();
+    if (limit <= 0)
+        return;
+
+    // Most recently used first. The active tab is always the most recent one.
+    std::vector<Entry*> byUse;
+    byUse.reserve(_tabs.size());
+    for (Entry& e : _tabs)
+        byUse.push_back(&e);
+    std::sort(byUse.begin(), byUse.end(),
+              [](const Entry* a, const Entry* b) { return a->lastActiveTick > b->lastActiveTick; });
+
+    int live = 0;
+    for (Entry* e : byUse)
+    {
+        if (e->webView->isViewDiscarded())
+            continue;
+        ++live;
+        if (live <= limit || !e->webView->canDiscardView())
+            continue;
+
+        const int index = static_cast<int>(std::distance(_tabs.data(), e));
+        QWidget* placeholder = new QWidget();
+        // Insert before the view goes, so the tab keeps its place in the stack.
+        _stack->insertWidget(index, placeholder);
+        _stack->removeWidget(e->webView->webEngineView());
+        e->placeholder = placeholder;
+        e->webView->discardView();
+        --live;
+    }
+}
+
 int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
 {
     const int size = static_cast<int>(_tabs.size());
@@ -275,10 +332,13 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
     it->webView->endPresentation();
     const int detachedIndex = static_cast<int>(std::distance(_tabs.begin(), it));
     const int detachedId = it->id;
+    QWidget* stackWidget = stackWidgetFor(*it);
+    QWidget* placeholder = it->placeholder;
     std::unique_ptr<WebView> wv = std::move(it->webView);
     _tabs.erase(it);
 
-    _stack->removeWidget(wv->webEngineView());
+    _stack->removeWidget(stackWidget);
+    delete placeholder;
     wv->setOnCloseRequest({});
     wv->setOnTitleChange({});
 
@@ -353,6 +413,9 @@ void TabManager::onTargetDragOver(int insertAt)
 
 std::unique_ptr<WebView> TabManager::releaseTab(int tabId)
 {
+    auto it = findTab(tabId);
+    if (it != _tabs.end())
+        restoreTabView(it);
     auto wv = detachAt(findTab(tabId));
     if (_tabs.empty())
         emit requestWindowClose();
@@ -375,8 +438,9 @@ void TabManager::closeTab(int tabId)
 
     // A ready-to-close tab skips both round-trips below: its page-JS may be
     // terminating already (BYE/EXIT_TEST), and a stale save-in-flight flag
-    // would park this close on a SAVECOMPLETED that never arrives.
-    if (!wv->isReadyToClose())
+    // would park this close on a SAVECOMPLETED that never arrives. A discarded
+    // tab has no page either, and its content is already on disk.
+    if (!wv->isReadyToClose() && !wv->isViewDiscarded())
     {
         // The tab was closed while a save is still round-tripping: wait for
         // the save and then close, rather than asking about "unsaved changes"
@@ -456,11 +520,14 @@ void TabManager::activateTab(int tabId)
     if (it == _tabs.end())
         return;
     _activeTabId = tabId;
+    it->lastActiveTick = ++_activationTick;
+    restoreTabView(it);
     WebView* wv = it->webView.get();
     _stack->setCurrentWidget(wv->webEngineView());
     _window->setWindowTitle(wv->composedWindowTitle());
     emitTabsChangedNow();
     focusActiveDocument();
+    enforceLiveViewLimit();
 }
 
 void TabManager::reorderTab(int fromIndex, int toIndex)
@@ -475,7 +542,7 @@ void TabManager::reorderTab(int fromIndex, int toIndex)
     _tabs[fromIndex].webView->endPresentation();
 
     Entry e = std::move(_tabs[fromIndex]);
-    QWebEngineView* view = e.webView->webEngineView();
+    QWidget* view = stackWidgetFor(e);
     const int activeId = _activeTabId;
     const int movedId = e.id;
     _tabs.erase(_tabs.begin() + fromIndex);

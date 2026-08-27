@@ -23,6 +23,7 @@
 #include <qt/CodaConfig.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
+#include <wsd/DocumentBroker.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
@@ -782,11 +783,21 @@ CODAWebEngineView::~CODAWebEngineView()
 WebView::WebView(QWebEngineProfile* profile, bool isWelcome)
     : QObject(nullptr)
     , _mainWindow(nullptr)
-    , _webView(std::make_unique<CODAWebEngineView>(nullptr))
+    , _profile(profile)
+    , _viewDiscarded(false)
     , _isWelcome(isWelcome)
     , _bridge(nullptr)
 {
-    QWebEnginePage* page = new LoggingWebEnginePage(profile, _webView.get());
+    createWebEngineView();
+    s_instances.push_back(this);
+}
+
+void WebView::createWebEngineView()
+{
+    _webView = std::make_unique<CODAWebEngineView>(nullptr);
+    _webView->setMainWindow(_mainWindow);
+
+    QWebEnginePage* page = new LoggingWebEnginePage(_profile, _webView.get());
     _webView->setPage(page);
     page->setBackgroundColor(Qt::transparent);
 
@@ -848,12 +859,15 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome)
                                                     view->reload();
                                             });
                      });
-
-    s_instances.push_back(this);
 }
 
 WebView::~WebView() {
     std::erase(s_instances, this);
+
+    // A discarded view has no bridge, and the document it left loaded is nobody else's
+    // to end.
+    if (_viewDiscarded)
+        closeDetachedDocument(_document._appDocId);
 
     // Only delete our bridge - Qt's parent-child ownership handles the rest
     // Note: QWebChannel was created with page as parent: new QWebChannel(_webView->page())
@@ -862,6 +876,73 @@ WebView::~WebView() {
         delete _bridge;
         _bridge = nullptr;
     }
+}
+
+bool WebView::canDiscardView() const
+{
+    // The starter screen and the welcome page hold no document of their own. A remote
+    // document is driven by the page's collab connection, which a rebuilt page does not
+    // take up again. A template working copy carries the redirect of its first save in
+    // the bridge, which a rebuilt bridge does not have.
+    if (_viewDiscarded || !_bridge || isStarterScreen() || _isWelcome)
+        return false;
+    if (_document._remoteInfo || _templateWorkingDir)
+        return false;
+    if (_document._fileURL.getPath().empty())
+        return false;
+    // A running presentation ends with the view it was started from.
+    if (_webView && _webView->isPresenting())
+        return false;
+    // Only a document whose content is already on disk is dropped, so the drop can cost
+    // no content at all.
+    return !isDocumentModified() && !isSaveInFlight();
+}
+
+void WebView::discardView()
+{
+    if (_viewDiscarded || !_bridge)
+        return;
+
+    LOG_INF("discarding the view of appDocId " << _document._appDocId << ", client fd "
+                                               << _document._fakeClientFd);
+
+    endPresentation();
+
+    // Release the connection first, which marks the document as one that is kept loaded
+    // with no view of its own.
+    _bridge->detachFromView();
+    // The bridge belongs to the page and goes with it. The document stays loaded for the
+    // next bridge that carries the same appDocId.
+    _bridge->keepDocumentLoaded();
+    delete _bridge;
+    _bridge = nullptr;
+
+    _viewDiscarded = true;
+    _webView.reset();
+}
+
+void WebView::restoreDiscardedView()
+{
+    if (!_viewDiscarded)
+        return;
+
+    LOG_INF("restoring the view of appDocId " << _document._appDocId);
+
+    createWebEngineView();
+    _viewDiscarded = false;
+
+    QWebChannel* channel = new QWebChannel(_webView->page());
+    queryGnomeFontScalingUpdateZoom();
+
+    assert(_bridge == nullptr);
+    _bridge = new Bridge(channel, this, _document, nullptr, _webView.get());
+    // The page's HULLO takes a fresh socket to the document still loaded under this
+    // appDocId, rather than loading the file again.
+    _bridge->markDetached();
+    channel->registerObject("bridge", _bridge);
+    _webView->page()->setWebChannel(channel);
+
+    _webView->load(QUrl(_loadedUrl));
 }
 
 void WebView::onWindowActiveChanged(bool active)
@@ -1041,6 +1122,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
 
     const std::string urlAndQueryStr = urlAndQuery.toString();
     LOG_TRC("Open URL: " << urlAndQueryStr);
+    _loadedUrl = QString::fromStdString(urlAndQueryStr);
 
     if (isStarterMode)
     {
@@ -1117,6 +1199,7 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
     coda::addRemoteCoolParams(urlAndQuery, _document);
 
     LOG_TRC("Open remote URL: " << urlAndQuery.toString().toStdString());
+    _loadedUrl = urlAndQuery.toString();
 
     // Tab/window title is a generic "<APP_NAME>" until the page-JS
     // resolves the actual filename via /co/collab/fetch - at which
@@ -1327,7 +1410,8 @@ void WebView::queryGnomeFontScalingUpdateZoom()
 
                          bool ok;
                          double factor = innerVariant.toDouble(&ok);
-                         if (ok)
+                         // The reply can arrive after the view was discarded.
+                         if (ok && _webView)
                              _webView->setZoomFactor(factor);
                      });
 }

@@ -73,6 +73,9 @@ class Bridge : public QObject
     bool _readyToClose = false;
     bool _detached = false;
 
+    // true when this bridge goes away while the document stays loaded under its appDocId.
+    bool _keepDocumentLoaded = false;
+
     // true while the document was opened from a template and has not yet been
     // saved to a real file. While set, a save is turned into a Save As so the
     // template working copy is never written back as if it were the document.
@@ -141,6 +144,13 @@ public:
     /// True from the moment the connection to the in-process server is released until
     /// a new one is established. The document stays loaded in the engine throughout.
     bool isDetached() const { return _detached; }
+
+    /// Take the reattaching side of the next HULLO: allocate a fresh socket and rejoin
+    /// the document already loaded under this bridge's appDocId.
+    void markDetached() { _detached = true; }
+
+    /// Leave the document loaded when this bridge is destroyed.
+    void keepDocumentLoaded() { _keepDocumentLoaded = true; }
 
     /// Set _readyToClose so that the next closeEvent re-entry
     /// proceeds with teardown.  Used by the save-in-flight defer

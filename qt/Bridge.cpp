@@ -135,7 +135,8 @@ Bridge::~Bridge() {
     coda::unregisterBridge(this);
     // A document with no view of its own is kept loaded on purpose, so closing its
     // last session is not what ends it. Ask for it directly.
-    closeDetachedDocument(_document._appDocId);
+    if (!_keepDocumentLoaded)
+        closeDetachedDocument(_document._appDocId);
     if (_document._fakeClientFd != -1) {
         fakeSocketClose(_document._fakeClientFd);
     }
