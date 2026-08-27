@@ -502,8 +502,8 @@ void TextConvWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttri
         // replace old text and select new text
         m_pEditView->InsertText( rNewText, true );
 
-        // since 'SetAttribs' below function like merging with the attributes
-        // from the itemset with any existing ones we have to get rid of all
+        // since 'SetAttribs' below functions like merging with the attributes
+        // from the itemset with any existing ones we have to get rid of
         // all attributes now. (Those attributes that may take effect left
         // to the position where the new text gets inserted after the old text
         // was deleted)

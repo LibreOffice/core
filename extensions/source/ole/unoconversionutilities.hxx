@@ -81,7 +81,7 @@ extern std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > ComPtrToWrapp
 // must be returned.
 extern std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 
-// This function tries to the change the type of a value (contained in the Any)
+// This function tries to change the type of a value (contained in the Any)
 // to the smallest possible that can hold the value. This is actually done only
 // for types of VT_I4 (see o2u_variantToAny). The reason is the following:
 // JavaScript passes integer values always as VT_I4. If there is a parameter or
@@ -188,7 +188,7 @@ public:
 
     /*
       Return true means var contained a ValueObject, and it was successfully converted.
-      The result is in any. It an error occurred a BridgeRuntimeError will be thrown.
+      The result is in any. If an error occurred a BridgeRuntimeError will be thrown.
      */
     bool convertValueObject( const VARIANTARG *var, Any& any);
     void dispatchExObject2Sequence( const VARIANTARG* pvar, Any& anySeq, const Type& type);
@@ -600,7 +600,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
             throw IllegalArgumentException(
                 "[automation bridge]UnoConversionUtilities<T>:variantToAny\n"
                 "The provided VARIANT of type\" " + OUString::number(static_cast<sal_Int32>(var.vt)) +
-                "\" is unappropriate for conversion!", Reference<XInterface>(), -1);
+                "\" is inappropriate for conversion!", Reference<XInterface>(), -1);
     }
     catch (const CannotConvertException &)
     {
@@ -1008,7 +1008,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             throw IllegalArgumentException(
                       "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
                       "The provided any of type\" " + rAny.getValueTypeName() +
-                "\" is unappropriate for conversion!", Reference<XInterface>(), -1);
+                "\" is inappropriate for conversion!", Reference<XInterface>(), -1);
 
         }
     }
@@ -1672,7 +1672,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
 // implements all these interfaces.
 // This is only done if "pUnknown" is not already a UNO wrapper,
 // that is it is actually NOT a UNO object that was converted to a COM object. If it is an
-// UNO wrapper than the original UNO object is being extracted, queried for "aType" (if
+// UNO wrapper then the original UNO object is being extracted, queried for "aType" (if
 // it is no struct) and returned.
 template<class T>
 Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type& aType)
