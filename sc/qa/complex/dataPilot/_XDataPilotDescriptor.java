@@ -47,7 +47,7 @@ import lib.TestParameters;
 * <ul>
 *  <li> <code>'FIELDSAMOUNT'</code> (of type <code>Integer</code>):
 *   to have number of fields </li>
-* <ul> <p>
+* </ul> <p>
 * @see com.sun.star.sheet.XDataPilotDescriptor
 */
 public class _XDataPilotDescriptor {
@@ -406,7 +406,7 @@ public class _XDataPilotDescriptor {
             e.printStackTrace();
             return false ;
         }
-        System.out.println(" - FAILED (field " + fieldsNames[rem] + " was not found.") ;
+        System.out.println(" - FAILED (field " + fieldsNames[rem] + " was not found.)") ;
         return false ;
     }
 

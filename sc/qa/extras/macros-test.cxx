@@ -53,7 +53,7 @@ public:
 // I suppose you could say this test doesn't really belong here, OTOH
 // we need a full document to run the test ( it related originally to an
 // imported Excel VBA macro ) It's convenient and fast to unit test
-// this the problem this way. Perhaps in the future there will be some sort
+// the problem this way. Perhaps in the future there will be some sort
 // of slowcheck tests ( requiring a full document environment in the scripting
 // module, we could move the test there then ) - relates to fdo#67547
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMSP)
@@ -1077,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf47479)
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf161948NaturalSortAPI)
 {
     // Since LO 26.2 the feature natural sort is available in the API.
-    // Here we test, that is can be used in Basic macros.
+    // Here we test, that it can be used in Basic macros.
     createScDoc("tdf161948_NaturalSort.ods");
     ScDocument* pDoc = getScDoc();
     // The source has "K3", "K10", "K104", "K23", "K2" in Range A2:A6 and label in A1.
