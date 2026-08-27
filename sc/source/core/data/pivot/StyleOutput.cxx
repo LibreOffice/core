@@ -159,8 +159,8 @@ public:
         AddRow(mnDataStartRow);
         AddCol(mnDataStartCol);
 
-        mnCols.push_back(mnTabEndCol + 1); //set last row bottom
-        mnRows.push_back(mnTabEndRow + 1); //set last col bottom
+        mnCols.push_back(mnTabEndCol + 1); //set last col right
+        mnRows.push_back(mnTabEndRow + 1); //set last row bottom
 
         bool bAllRows = ((mnTabEndRow - mnDataStartRow + 2) == static_cast<SCROW>(mnRows.size()));
 

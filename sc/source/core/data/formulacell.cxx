@@ -1500,7 +1500,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
         // for each F9
         bDirty = true;
     }
-    // No SetDirty yet, as no all Listeners are known yet (only in SetDirtyAfterLoad)
+    // No SetDirty yet, as not all Listeners are known yet (only in SetDirtyAfterLoad)
 }
 
 bool ScFormulaCell::MarkUsedExternalReferences()
@@ -4922,7 +4922,7 @@ struct ScDependantsCalculator
     // Because Lookup will extend the Result Vector under certain circumstances listed at:
     // https://wiki.documentfoundation.org/Documentation/Calc_Functions/LOOKUP
     // then if the Lookup has a Result Vector only accept the Lookup for parallelization
-    // of the Result Vector has the same dimensions as the Search Vector.
+    // if the Result Vector has the same dimensions as the Search Vector.
     bool LookupResultVectorMismatch(sal_Int32 nTokenIdx)
     {
         if (nTokenIdx >= 3)
@@ -4984,7 +4984,7 @@ struct ScDependantsCalculator
             {
                 // The dependency evaluator evaluates all arguments of IF/IFS/SWITCH irrespective
                 // of the result of the condition expression.
-                // This is a perf problem if we *don't* intent on recalc'ing all dirty cells
+                // This is a perf problem if we *don't* intend on recalc'ing all dirty cells
                 // in the document. So let's disable threading and stop dependency evaluation if
                 // the call did not originate from ScDocShell::DoRecalc()/ScDocShell::DoHardRecalc()
                 // for formulae with IF/IFS/SWITCH

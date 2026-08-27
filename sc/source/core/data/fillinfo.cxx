@@ -48,7 +48,7 @@
 #include <vector>
 #include <memory>
 
-// Similar as in output.cxx
+// Similar to output.cxx
 
 static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
                             const ScDocument* pDoc, RowInfo* pRowInfo,
