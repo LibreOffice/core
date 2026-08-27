@@ -46,7 +46,7 @@ public class CustomizeView extends    JPanel
                            implements IShutdownListener
 {
     /**
-     * These const URL's describe feature for toggling some properties of loaded document.
+     * These const URL's describe features for toggling some properties of loaded document.
      * Dispatch it with the corresponding parameter to the frame.
      */
     private static final String FEATUREURL_MENUBAR      = "slot:6661"         ;
@@ -93,7 +93,7 @@ public class CustomizeView extends    JPanel
 
     /**
      * ctor
-     * Create view controls on startup and initialize it.
+     * Create view controls on startup and initialize them.
      * We don't start listening here. see setFrame()!
      */
     CustomizeView()
@@ -165,9 +165,9 @@ public class CustomizeView extends    JPanel
     /*
      * react for click events of the used check boxes
      * We use our internal set dispatch objects to
-     * call it. This calls toggle the menu/object- or toolbar.
-     * Note: Because we are listener status events too - hopefully
-     * we get a notification, if toggling was successfully or not.
+     * call it. These calls toggle the menu/object- or toolbar.
+     * Note: Because we are listening for status events too - hopefully
+     * we get a notification, whether toggling was successful or not.
      * We use this information to update our check boxes again.
      * But such update doesn't force (hopefully) an action event. Otherwise
      * we can produce a never ending recursion!
@@ -186,7 +186,7 @@ public class CustomizeView extends    JPanel
 
         /**
          * ctor
-         * It initialize an instance of this class only.
+         * It initializes an instance of this class only.
          */
         private ClickListener( String                    sURL   ,
                        String                    sProp  ,
@@ -204,7 +204,7 @@ public class CustomizeView extends    JPanel
          * Such events occur, if someone clicked the
          * JCheckBox control, on which we are registered.
          * Such events do not occur, if we set it programmatically
-         * (e.g. if we get status events to -> see class StatusListener too)
+         * (e.g. if we get status events too -> see class StatusListener too)
          *
          * @param aEvent
          *          describes the check box and its state
@@ -247,7 +247,7 @@ public class CustomizeView extends    JPanel
          * and forget his reference.
          *
          * @param aEvent
-         *          describes the source which fire this event
+         *          describes the source which fires this event
          *          Must be our internal saved frame. Otherwise
          *          somewhere know us without a registration ...
          */
@@ -263,7 +263,7 @@ public class CustomizeView extends    JPanel
 
 
     /**
-     * If this java application shutdown - we must cancel all current existing
+     * If this java application shuts down - we must cancel all current existing
      * listener connections. Otherwise the office will run into some
      * DisposedExceptions if it tries to use these forgotten listener references.
      * And of course it can die doing that.

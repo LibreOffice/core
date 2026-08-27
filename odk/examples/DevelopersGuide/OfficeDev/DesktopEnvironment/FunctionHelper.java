@@ -48,13 +48,13 @@ import java.net.*;
 /**
  * Is a collection of basic features.
  * This helper shows different functionality of framework api
- * in an example manner. You can use the follow ones:
+ * in an example manner. You can use the following ones:
  *      (1) parse URL's
  *      (2) create frames (inside/outside a java application)
  *      (3) dispatches (with[out] notifications)
  *      (4) loading/saving documents
  *      (5) convert documents to HTML (if possible)
- *      (6) close documents (and her frames) correctly
+ *      (6) close documents (and their frames) correctly
  *
  * There exist some other helper functionality too, which
  * doesn't use or demonstrate the office api:
@@ -65,8 +65,8 @@ public class FunctionHelper
 
 
     /**
-     * This convert a URL (formatted as a string) to a struct com.sun.star.util.URL.
-     * It use a special service to do that: the URLTransformer.
+     * This converts a URL (formatted as a string) to a struct com.sun.star.util.URL.
+     * It uses a special service to do that: the URLTransformer.
      * Because some API calls need it and it's not allowed to set "Complete"
      * part of the util struct only. The URL must be parsed.
      *
@@ -128,13 +128,13 @@ public class FunctionHelper
     /**
      * create a new empty target frame
      * Attention: Currently we must use special service com.sun.star.frame.Task instead of Frame.
-     * Because desktop environment accept this special frame type only as direct children.
-     * Note - This service will be deprecated and must be replaces by com.sun.star.frame.Frame in
-     * further versions. To feature prove we use both service names. If for new versions
-     * the deprecated one not exist we get an empty frame, we can try to use the new service.
+     * Because desktop environment accepts this special frame type only as direct children.
+     * Note - This service will be deprecated and must be replaced by com.sun.star.frame.Frame in
+     * further versions. To future proof we use both service names. If for new versions
+     * the deprecated one does not exist and we get an empty frame, we can try to use the new service.
      *
-     * @param xSMGR
-     *          we need the remote service manager to create this task/frame service
+     * @param xCtx
+     *          we need the component context to create this task/frame service
      *
      * @return [com.sun.star.frame.XFrame]
      *          the new created frame reference in case of success or null otherwise
@@ -181,7 +181,7 @@ public class FunctionHelper
      *     to transport it to the remote office toolkit and get a child office
      *     window.
      *     This is the old way. It's better to use the second one - but to be
-     *     future prove this old one should be tried too.
+     *     future proof this old one should be tried too.
      *   - it's possible to pass the native window handle directly to the toolkit.
      *     A special interface method was enabled to accept that.
      *
@@ -189,8 +189,8 @@ public class FunctionHelper
      *   - try to use second creation mode (directly using of the window handle)
      *   - if it failed ... use the old way by packing the handle inside an object
      *
-     * @param xSMGR
-     *          we need a service manager to be able to create remote office
+     * @param xCtx
+     *          we need a component context to be able to create remote office
      *          services
      *
      * @param aParentView
@@ -325,14 +325,14 @@ public class FunctionHelper
 
 
     /**
-     * This method create a new empty child frame on desktop instance of remote office.
-     * It use a special JNI functionality to pass the office XWindow over a java window.
+     * This method creates a new empty child frame on desktop instance of remote office.
+     * It uses a special JNI functionality to pass the office XWindow over a java window.
      * This java window can be inserted into another java window container for complex layouting.
      * If this parent java window isn't used, a top level system window will be created.
      * The resulting office frame isn't plugged into this java application.
      *
      * @param sName
-     *          name to set it on the new created frame
+     *          name to set on the new created frame
      *
      * @param aParentView
      *          java window which should be used as parent window of new created office frame window
@@ -427,9 +427,9 @@ public class FunctionHelper
     /**
      * Dispatch a URL to given frame.
      * Caller can register himself for following status events for dispatched
-     * URL too. But nobody guarantee that such notifications will occur.
-     * (see dispatchWithNotification() if you interest on that)
-     * The returned dispatch object should be hold alive by caller
+     * URL too. But nobody guarantees that such notifications will occur.
+     * (see dispatchWithNotification() if you are interested in that)
+     * The returned dispatch object should be held alive by caller
      * till he doesn't need it any longer. Otherwise the dispatcher can(!)
      * die by decreasing his refcount.
      *
@@ -596,8 +596,8 @@ public class FunctionHelper
         {
             // Check for supported model functionality.
             // Normally the application documents (text, spreadsheet ...) do so
-            // but some other ones (e.g. db components) doesn't do that.
-            // They can't be save then.
+            // but some other ones (e.g. db components) don't do that.
+            // They can't be saved then.
             com.sun.star.frame.XModel xModel = UnoRuntime.queryInterface(
                 com.sun.star.frame.XModel.class,
                 xDocument);
@@ -634,11 +634,11 @@ public class FunctionHelper
 
 
     /**
-     * It try to export given document in HTML format.
+     * It tries to export given document in HTML format.
      * Current document will be converted to HTML and moved to new place on disk.
      * A "new" file will be created by given URL (may be overwritten
-     * if it already exist). Right filter will be used automatically if factory of
-     * this document support it. If no valid filter can be found for export,
+     * if it already exists). Right filter will be used automatically if factory of
+     * this document supports it. If no valid filter can be found for export,
      * nothing will be done here.
      *
      * @param   xDocument   document which should be exported
@@ -813,7 +813,7 @@ public class FunctionHelper
      *
      *          should represent a unique frame name, which currently isn't
      *          used inside the remote office frame tree
-     *          (Couldn't guaranteed for a real multithreaded environment.
+     *          (Couldn't be guaranteed for a real multithreaded environment.
      *           But we try it ...)
      */
     private static final String BASEFRAMENAME = "Desk View ";

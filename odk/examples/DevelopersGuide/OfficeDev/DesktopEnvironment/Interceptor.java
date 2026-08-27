@@ -45,15 +45,15 @@ import com.sun.star.uno.UnoRuntime;
 /*
  * This class can be used to intercept dispatched URL's
  * on any frame used in this demo application.
- * It intercept all URL's which try to create a new empty frame.
+ * It intercepts all URL's which try to create a new empty frame.
  * (e.g. "private:factory/swriter")
  * Nobody can guarantee that this interception will be really used -
- * because another interceptor (registered at a later time then this one!)
+ * because another interceptor (registered at a later time than this one!)
  * will be called before this one.
  * Implementation is executed inside a new thread to prevent application
- * against possible deadlocks. This deadlocks can occur if
+ * against possible deadlocks. These deadlocks can occur if
  * synchronous/asynchronous ... normal ones and oneway calls are mixed.
- * Notifications of listener will be oneway mostly - her reactions can
+ * Notifications of listener will be oneway mostly - their reactions can
  * be synchronous then. => deadlocks are possible
  */
 public class Interceptor implements com.sun.star.frame.XFrameActionListener,
@@ -560,8 +560,8 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * call this interceptor directly without calling his masters before, IF(!)
      * following rules will be true:
      *      (1) every master supports this optional interface too
-     *      (2) nobody of these masters wish to intercept same URL then this one
-     * This interceptor wish to intercept creation of new documents.
+     *      (2) nobody of these masters wishes to intercept same URL as this one
+     * This interceptor wishes to intercept creation of new documents.
      */
     public String[] getInterceptedURLs()
     {
@@ -571,9 +571,9 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
     /*
-     * This class listen on the intercepted frame to free all used resources on closing.
+     * This class listens on the intercepted frame to free all used resources on closing.
      * We forget the reference to the frame only here. Deregistration
-     * isn't necessary here - because this frame dies and wish to be forgotten.
+     * isn't necessary here - because this frame dies and wishes to be forgotten.
      *
      * @param aSource
      *          must be our internal saved frame, on which we listen for frame action events
