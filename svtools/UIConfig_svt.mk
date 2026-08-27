@@ -30,6 +30,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/placeedit \
 	svtools/uiconfig/ui/printersetupdialog \
 	svtools/uiconfig/ui/querydeletedialog \
+	svtools/uiconfig/ui/querydialog \
 	svtools/uiconfig/ui/restartdialog \
 	svtools/uiconfig/ui/scrollbars \
 	svtools/uiconfig/ui/spinfieldcontrol \
