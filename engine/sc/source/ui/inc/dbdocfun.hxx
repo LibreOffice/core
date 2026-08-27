@@ -107,9 +107,11 @@ public:
 
     // Bake the table style into cell attributes, then drop the database range and its autofilter.
     // One undo action.
-    SC_DLLPUBLIC bool ConvertTableToRange( const ScDBData* pDBObj );
+    SC_DLLPUBLIC bool ConvertTableToRange( const ScDBData* pDBObj, bool bApi = false );
 
     void ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList );
+
+    void ShowFilteredRows( const ScDBData& rDBData, bool bRecord, bool bApi );
 
     bool RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed, SCTAB aTab = 0);
 

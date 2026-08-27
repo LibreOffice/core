@@ -45,6 +45,8 @@
 #include <tabvwsh.hxx>
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
 #include <tablestyle.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -936,6 +938,79 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsColumnsOnlyUndoRedo)
 
     pUndoManager->Redo();
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, 10, 0), getTableArea());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableFilteredRowsShownOnDrop)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // A1:B5 Table with a header row, filtered down to the single data row holding 1.
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 1, 4, /*bByRow*/ true,
+                                   /*bHasHeader*/ true, /*bHasTotals*/ false);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    rDoc.SetString(ScAddress(0, 0, 0), u"Head"_ustr);
+    for (SCROW nRow = 1; nRow <= 4; ++nRow)
+        rDoc.SetValue(0, nRow, 0, static_cast<double>(nRow));
+
+    ScQueryParam aParam;
+    pData->GetQueryParam(aParam);
+    ScQueryEntry& rEntry = aParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.nField = 0;
+    rEntry.eOp = SC_EQUAL;
+    rEntry.GetQueryItem().meType = ScQueryEntry::ByValue;
+    rEntry.GetQueryItem().mfVal = 1.0;
+    pData->SetQueryParam(aParam);
+    ScDBDocFunc(*pDocShell).Query(0, aParam, nullptr, /*bRecord*/ false, /*bApi*/ true);
+
+    CPPUNIT_ASSERT_MESSAGE("row 2 matches the filter", !rDoc.RowFiltered(1, 0));
+    CPPUNIT_ASSERT_MESSAGE("row 5 is filtered away", rDoc.RowFiltered(4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the setup filter recorded nothing", size_t(0),
+                                 pUndoManager->GetUndoActionCount());
+
+    CPPUNIT_ASSERT(ScDBDocFunc(*pDocShell).ConvertTableToRange(pData));
+    CPPUNIT_ASSERT_MESSAGE("row 5 shows again", !rDoc.RowFiltered(4, 0));
+    CPPUNIT_ASSERT_MESSAGE("row 5 is not hidden", !rDoc.RowHidden(4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("one undo entry for both halves", size_t(1),
+                                 pUndoManager->GetUndoActionCount());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_MESSAGE("undo hides row 5 again", rDoc.RowFiltered(4, 0));
+
+    // The undo re-created the range, so the old pointer is dead.
+    ScDBData* pLive = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("undo restored the Table", pLive);
+
+    // Same again through Remove Table, on the restored filter.
+    CPPUNIT_ASSERT(ScDBDocFunc(*pDocShell).DeleteDBTable(pLive, /*bRecord*/ true, /*bApi*/ true));
+    CPPUNIT_ASSERT_MESSAGE("row 5 shows again", !rDoc.RowFiltered(4, 0));
+    CPPUNIT_ASSERT_MESSAGE("row 5 is not hidden", !rDoc.RowHidden(4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("one undo entry for both halves", size_t(1),
+                                 pUndoManager->GetUndoActionCount());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_MESSAGE("undo hides row 5 again", rDoc.RowFiltered(4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("back to an empty undo stack", size_t(0),
+                                 pUndoManager->GetUndoActionCount());
+
+    pLive = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("undo restored the Table", pLive);
+
+    // A caller that asked for no recording must not get a stray Filter entry either.
+    CPPUNIT_ASSERT(ScDBDocFunc(*pDocShell).DeleteDBTable(pLive, /*bRecord*/ false, /*bApi*/ true));
+    CPPUNIT_ASSERT_MESSAGE("row 5 shows again", !rDoc.RowFiltered(4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("no undo entry when the caller asked for none", size_t(0),
+                                 pUndoManager->GetUndoActionCount());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsMultiDimUndoRedo)

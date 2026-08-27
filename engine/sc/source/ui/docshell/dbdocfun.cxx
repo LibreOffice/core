@@ -84,6 +84,18 @@ bool lcl_GetCursorPos(const ScDocShell& rDocShell, ScAddress& rPos)
     rPos = pViewSh->GetViewData().GetCurPos();
     return true;
 }
+
+bool lcl_HasFilterHiddenRows(const ScDocument& rDoc, const ScDBData& rDBData)
+{
+    ScRange aRange;
+    rDBData.GetArea(aRange);
+    if (!rDoc.HasFilteredRows(aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab()))
+        return false;
+
+    ScQueryParam aParam;
+    rDBData.GetQueryParam(aParam);
+    return aParam.bInplace; // a filter with a copy-to target never hid a row here
+}
 }
 
 bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader,
@@ -483,7 +495,8 @@ bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
             }
         }
 
-        const bool bGroup = bRecord && !aClearCols.empty();
+        const bool bShowRows = lcl_HasFilterHiddenRows(rDoc, *pDel);
+        const bool bGroup = bRecord && (!aClearCols.empty() || bShowRows);
         ScAddress aCursorPos;
         const bool bHaveCursor = bGroup && lcl_GetCursorPos(rDocShell, aCursorPos);
         if (bGroup)
@@ -511,6 +524,10 @@ bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
             aMark.SetMarkArea(ScRange(nCol, nHdrRow, nHdrTab));
             rDocShell.GetDocFunc().DeleteContents(aMark, InsertDeleteFlags::CONTENTS, bRecord, bApi);
         }
+
+        // The filter goes away with the Table, so its hidden rows have to come back.
+        if (bShowRows)
+            ShowFilteredRows(*pDel, bRecord, bApi);
 
         std::unique_ptr<ScDBCollection> pUndoColl;
         if (bRecord)
@@ -556,7 +573,7 @@ bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
     return bDone;
 }
 
-bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj)
+bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj, bool bApi)
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = rDoc.GetDBCollection();
@@ -564,7 +581,8 @@ bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj)
     auto const iter = rDBs.findByPointer(pDBObj);
     if (iter == rDBs.end())
     {
-        rDocShell.ErrorMessage(STR_TABLE_ERR_DEL);
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_TABLE_ERR_DEL);
         return false;
     }
 
@@ -599,7 +617,8 @@ bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj)
     // below) is undone last, after the table's own child has re-added the database range, so the
     // restored structured names resolve against it again. Mirrors the grouping in ResizeTable().
     SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-    const bool bGroup = bRecord && bNamesAffected;
+    const bool bShowRows = lcl_HasFilterHiddenRows(rDoc, *pDBObj);
+    const bool bGroup = bRecord && (bNamesAffected || bShowRows);
     if (bGroup)
     {
         ViewShellId nViewShellId(-1);
@@ -608,6 +627,10 @@ bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj)
         pUndoMgr->EnterListAction(ScResId(STR_UNDO_CONVERT_CALCTABLE_TO_RANGE),
                                   ScResId(STR_UNDO_CONVERT_CALCTABLE_TO_RANGE), 0, nViewShellId);
     }
+
+    // The filter goes away with the Table, so its hidden rows have to come back.
+    if (bShowRows)
+        ShowFilteredRows(*pDBObj, bRecord, bApi);
 
     // Flatten the named expressions first, while GetAreaRefRPN() still resolves against the live
     // range. ModifyAllRangeNames applies the flattened set and records the ScUndoAllRangeNames
@@ -727,6 +750,22 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
     return true;
+}
+
+void ScDBDocFunc::ShowFilteredRows(const ScDBData& rDBData, bool bRecord, bool bApi)
+{
+    ScRange aRange;
+    rDBData.GetArea(aRange);
+    ScQueryParam aParam;
+    rDBData.GetQueryParam(aParam);
+
+    // Same as switching the AutoFilter off: empty the query and run it, which shows the rows
+    // and records the ScUndoQuery that hides them again on undo.
+    for (SCCOL nCol = aParam.nCol1; nCol <= aParam.nCol2; nCol++)
+        aParam.RemoveAllEntriesByField(nCol);
+
+    aParam.bDuplicate = true;
+    Query(aRange.aStart.Tab(), aParam, nullptr, bRecord, bApi);
 }
 
 bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
