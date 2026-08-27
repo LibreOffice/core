@@ -11,6 +11,7 @@ $(eval $(call gb_PythonTest_PythonTest,sc_python))
 
 $(eval $(call gb_PythonTest_add_modules,sc_python,$(SRCDIR)/sc/qa/python,\
 	CalcRTL \
+	VbaApplication \
 ))
 
 # vim: set noet sw=4 ts=4:

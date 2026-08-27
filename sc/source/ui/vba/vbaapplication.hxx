@@ -24,6 +24,7 @@
 #include <ooo/vba/excel/XApplication.hpp>
 
 #include <vbahelper/vbaapplicationbase.hxx>
+#include <comphelper/invocationhelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -48,6 +49,8 @@ private:
     OUString getOfficePath( const OUString& sPath );
 
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
+
+    comphelper::InvocationHelper m_aInvocationHelper;
 
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;

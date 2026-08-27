@@ -165,7 +165,8 @@ ScVbaApplication::RemoveSink( sal_uInt32 nNumber )
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
     mrAppSettings( ScVbaStaticAppSettings() ),
-    m_nDialogType(0)
+    m_nDialogType(0),
+    m_aInvocationHelper( xContext )
 {
 }
 
@@ -201,7 +202,15 @@ ScVbaApplication::invoke( const OUString& FunctionName, const uno::Sequence< uno
     try
     {
         uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
-        aAny = xWSF->invoke( FunctionName, Params, OutParamIndex, OutParam );
+        if (xWSF->hasMethod(FunctionName))
+        {
+            aAny = xWSF->invoke( FunctionName, Params, OutParamIndex, OutParam );
+        }
+        else
+        {
+            aAny = m_aInvocationHelper.invoke( this, FunctionName, Params,
+                                               OutParamIndex, OutParam );
+        }
     }
     catch (const uno::Exception&)
     {
@@ -214,28 +223,34 @@ void SAL_CALL
 ScVbaApplication::setValue( const OUString& PropertyName, const uno::Any& Value )
 {
     uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
-    xWSF->setValue( PropertyName, Value );
+    if (xWSF->hasProperty(PropertyName))
+        xWSF->setValue( PropertyName, Value );
+    else
+        m_aInvocationHelper.setValue( this, PropertyName, Value );
 }
 
 uno::Any SAL_CALL
 ScVbaApplication::getValue( const OUString& PropertyName )
 {
     uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
-    return xWSF->getValue( PropertyName );
+    if (xWSF->hasProperty(PropertyName))
+        return xWSF->getValue( PropertyName );
+    else
+        return m_aInvocationHelper.getValue( this, PropertyName );
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::hasMethod( const OUString& Name )
 {
     uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
-    return xWSF->hasMethod( Name );
+    return xWSF->hasMethod( Name ) || m_aInvocationHelper.hasMethod( this, Name );
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::hasProperty( const OUString& Name )
 {
     uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
-    return xWSF->hasProperty( Name );
+    return xWSF->hasProperty( Name ) || m_aInvocationHelper.hasProperty( this, Name );
 }
 
 uno::Reference< excel::XWorkbook >
