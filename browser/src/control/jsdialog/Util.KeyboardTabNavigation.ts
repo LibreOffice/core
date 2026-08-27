@@ -82,7 +82,7 @@ function moveFocusIntoTabPage(
 			controlledDiv,
 			'next',
 		);
-		if (firstFocusableElement !== null) {
+		if (firstFocusableElement) {
 			firstFocusableElement.focus();
 		}
 	}
