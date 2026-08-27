@@ -56,6 +56,7 @@
 #include <editeng/brushitem.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <svx/xfillit0.hxx>
 #include <svx/xdef.hxx>
@@ -375,6 +376,10 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 
     if (aFontHighlight != COL_AUTO)
         DrawHighlight(rRenderContext, aFontHighlight);
+
+    LanguageType aLang = SvtSysLocaleOptions().GetRealUILanguageTag().getLanguageType();
+    if (MsLangId::isRightToLeft(aLang))
+        rRenderContext.EnableRTL();
 
     DrawText(rRenderContext);
 
