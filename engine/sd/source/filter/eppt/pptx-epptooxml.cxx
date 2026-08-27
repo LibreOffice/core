@@ -26,6 +26,11 @@
 #include "epptooxml.hxx"
 #include <oox/export/shapes.hxx>
 #include <svx/svdlayer.hxx>
+#include <svx/annotation/Annotation.hxx>
+#include <tools/Guid.hxx>
+#include <tools/datetime.hxx>
+#include <tools/datetimeutils.hxx>
+#include <o3tl/string_view.hxx>
 #include <xmloff/autolayout.hxx>
 #include <unokywds.hxx>
 #include <osl/file.hxx>
@@ -814,6 +819,8 @@ bool PowerPointExport::exportDocument()
     WritePresentationProps();
 
     WriteAuthors();
+
+    WriteModernAuthors();
 
     WriteVBA();
 
@@ -1804,6 +1811,44 @@ void PowerPointExport::WriteAuthors()
     pFS->endDocument();
 }
 
+void PowerPointExport::WriteModernAuthors()
+{
+    if (maAuthors.empty())
+        return;
+
+    FSHelperPtr pFS = openFragmentStreamWithSerializer(
+        u"ppt/authors.xml"_ustr, u"application/vnd.ms-powerpoint.authors+xml"_ustr);
+    addRelation(mPresentationFS->getOutputStream(),
+                oox::getRelationship(Relationship::MODERNCOMMENTAUTHORS), u"authors.xml");
+
+    pFS->startElementNS(XML_p188, XML_authorLst,
+                        FSNS(XML_xmlns, XML_p188), getNamespaceURL(OOX_NS(p188)));
+
+    for (const AuthorsMap::value_type& i : maAuthors)
+    {
+        if (i.second.sGuid.isEmpty())
+            continue; // no comment referred to this author by the newer identifier
+        pFS->singleElementNS(XML_p188, XML_author,
+                             XML_id, i.second.sGuid,
+                             XML_name, i.first,
+                             XML_initials, i.second.sInitials);
+    }
+
+    pFS->endElementNS(XML_p188, XML_authorLst);
+    pFS->endDocument();
+}
+
+OUString PowerPointExport::GetAuthorGuid(const OUString& sAuthor, const OUString& sInitials)
+{
+    if (maAuthors.count(sAuthor) <= 0)
+        maAuthors.emplace(sAuthor, AuthorComments(maAuthors.size(), 0, sInitials));
+
+    AuthorComments& rAuthor = maAuthors[sAuthor];
+    if (rAuthor.sGuid.isEmpty())
+        rAuthor.sGuid = tools::Guid(tools::Guid::Generate).getOUString();
+    return rAuthor.sGuid;
+}
+
 sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor,
                                                     const OUString& sInitials,
                                                     sal_Int32& nLastIndex)
@@ -1883,6 +1928,146 @@ void PowerPointExport::WritePresentationProps()
     pFS->endElementNS(XML_p, XML_presentationPr);
 
     pFS->endDocument();
+}
+
+namespace
+{
+/// The moment a threaded comment entry was written, which is what the created attribute holds. An
+/// entry that only ever had a wall clock has nothing better to offer than that. There is none
+/// when the entry has no date at all, or when personal information is left out of the file.
+std::optional<OUString> getModernCommentCreated(sdr::annotation::Annotation& rAnnotation,
+                                                bool bRemoveCommentAuthorDates)
+{
+    if (bRemoveCommentAuthorDates)
+        return std::nullopt;
+    const util::DateTime aDateTimeUTC = rAnnotation.getDateTimeUTC();
+    const util::DateTime aDate
+        = aDateTimeUTC.Year != 0 ? aDateTimeUTC : rAnnotation.getDateTime();
+    if (aDate.Year == 0)
+        return std::nullopt;
+    return DateTimeToOUString(::DateTime(aDate));
+}
+
+/// Writes the text of one threaded comment entry, a paragraph per line.
+void writeModernCommentText(const FSHelperPtr& pFS, std::u16string_view rText)
+{
+    pFS->startElementNS(XML_p188, XML_txBody);
+    pFS->singleElementNS(XML_a, XML_bodyPr);
+    pFS->singleElementNS(XML_a, XML_lstStyle);
+    sal_Int32 nIndex = 0;
+    do
+    {
+        const OUString aLine(o3tl::getToken(rText, 0, '\n', nIndex));
+        pFS->startElementNS(XML_a, XML_p);
+        pFS->startElementNS(XML_a, XML_r);
+        pFS->startElementNS(XML_a, XML_t);
+        pFS->writeEscaped(aLine);
+        pFS->endElementNS(XML_a, XML_t);
+        pFS->endElementNS(XML_a, XML_r);
+        pFS->endElementNS(XML_a, XML_p);
+    }
+    while (nIndex >= 0);
+    pFS->endElementNS(XML_p188, XML_txBody);
+}
+}
+
+bool PowerPointExport::WriteModernComments(sal_uInt32 nPageNum)
+{
+    Reference<XAnnotationAccess> xAnnotationAccess(mXDrawPage, uno::UNO_QUERY);
+    if (!xAnnotationAccess.is())
+        return false;
+
+    std::vector<rtl::Reference<sdr::annotation::Annotation>> aAnnotations;
+    Reference<XAnnotationEnumeration> xEnumeration(
+        xAnnotationAccess->createAnnotationEnumeration());
+    while (xEnumeration->hasMoreElements())
+    {
+        Reference<XAnnotation> xAnnotation(xEnumeration->nextElement());
+        rtl::Reference<sdr::annotation::Annotation> xImpl(
+            dynamic_cast<sdr::annotation::Annotation*>(xAnnotation.get()));
+        if (xImpl.is())
+            aAnnotations.push_back(xImpl);
+    }
+
+    if (aAnnotations.empty())
+        return false;
+
+    const bool bRemoveCommentAuthorDates
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(
+                 SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+
+    FSHelperPtr pFS = openFragmentStreamWithSerializer(
+        "ppt/comments/modernComment_" + OUString::number(nPageNum + 1) + ".xml",
+        u"application/vnd.ms-powerpoint.comments+xml"_ustr);
+
+    pFS->startElementNS(XML_p188, XML_cmLst,
+                        FSNS(XML_xmlns, XML_a), getNamespaceURL(OOX_NS(dml)),
+                        FSNS(XML_xmlns, XML_p188), getNamespaceURL(OOX_NS(p188)));
+
+    // The initials of an entry's author, replaced by a number derived from the author's name
+    // when personal information is left out of the file, as the author's name is.
+    auto getInitials = [&](sdr::annotation::Annotation& rAnnotation) -> OUString {
+        if (bRemoveCommentAuthorDates)
+            return "A" + OUString::number(GetInfoID(rAnnotation.getAuthor()));
+        return rAnnotation.getInitials();
+    };
+
+    std::unordered_set<sal_uInt64> aIds;
+    for (auto const& xAnnotation : aAnnotations)
+        aIds.insert(xAnnotation->GetId());
+
+    for (auto const& xAnnotation : aAnnotations)
+    {
+        // A reply is written inside the entry it answers, so only the roots start one here. A
+        // reply whose root is no longer on the page has nothing to be written inside of, so it
+        // becomes a root of its own.
+        if (xAnnotation->GetParentId() != 0 && aIds.count(xAnnotation->GetParentId()))
+            continue;
+
+        const OUString aAuthor(
+            bRemoveCommentAuthorDates
+                ? "Author" + OUString::number(GetInfoID(xAnnotation->getAuthor()))
+                : xAnnotation->getAuthor());
+        pFS->startElementNS(XML_p188, XML_cm,
+                            XML_id, tools::Guid(tools::Guid::Generate).getOUString(),
+                            XML_authorId, GetAuthorGuid(aAuthor, getInitials(*xAnnotation)),
+                            XML_created,
+                            getModernCommentCreated(*xAnnotation, bRemoveCommentAuthorDates));
+
+        const sal_uInt64 nRootId = xAnnotation->GetId();
+        bool bAnyReply = false;
+        for (auto const& xReply : aAnnotations)
+        {
+            if (xReply->GetParentId() != nRootId)
+                continue;
+            if (!bAnyReply)
+            {
+                pFS->startElementNS(XML_p188, XML_replyLst);
+                bAnyReply = true;
+            }
+            const OUString aReplyAuthor(
+                bRemoveCommentAuthorDates
+                    ? "Author" + OUString::number(GetInfoID(xReply->getAuthor()))
+                    : xReply->getAuthor());
+            pFS->startElementNS(XML_p188, XML_reply,
+                                XML_id, tools::Guid(tools::Guid::Generate).getOUString(),
+                                XML_authorId, GetAuthorGuid(aReplyAuthor, getInitials(*xReply)),
+                                XML_created,
+                                getModernCommentCreated(*xReply, bRemoveCommentAuthorDates));
+            writeModernCommentText(pFS, xReply->GetText());
+            pFS->endElementNS(XML_p188, XML_reply);
+        }
+        if (bAnyReply)
+            pFS->endElementNS(XML_p188, XML_replyLst);
+
+        writeModernCommentText(pFS, xAnnotation->GetText());
+        pFS->endElementNS(XML_p188, XML_cm);
+    }
+
+    pFS->endElementNS(XML_p188, XML_cmLst);
+    pFS->endDocument();
+    return true;
 }
 
 bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
@@ -2147,6 +2332,15 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
         addRelation(pFS->getOutputStream(),
                     oox::getRelationship(Relationship::COMMENTS),
                     Concat2View("../comments/comment" + OUString::number(nPageNum + 1) + ".xml"));
+
+    // The newer comment part goes out beside the older one: it is the only one with somewhere to
+    // put a reply and the moment a comment was written, while the older one is all a reader that
+    // predates it understands.
+    if (WriteModernComments(nPageNum))
+        addRelation(pFS->getOutputStream(),
+                    oox::getRelationship(Relationship::MODERNCOMMENTS),
+                    Concat2View("../comments/modernComment_" + OUString::number(nPageNum + 1)
+                                + ".xml"));
 
     SAL_INFO("sd.eppt", "----------------");
 }

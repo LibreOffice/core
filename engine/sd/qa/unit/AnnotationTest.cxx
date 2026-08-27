@@ -756,6 +756,116 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDateUtcOdfRoundtrip)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), aReloaded.Seconds);
 }
 
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDateUtcPptxRoundtrip)
+{
+    // A comment written in one timezone and read in another has to show the moment it was
+    // written. Only the wall clock survives a PPTX round trip today, and a wall clock with no
+    // zone read by someone elsewhere is their own clock, so the time shown is wrong by the
+    // difference between the two zones.
+    createSdImpressDoc();
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
+
+    // What an author in Europe/Copenhagen leaves behind on a August afternoon: the clock they
+    // read, and the moment it stood for, two hours behind it.
+    pPage->getAnnotations()[0]->setDateTime(util::DateTime(0, 0, 30, 14, 20, 8, 2026, false));
+    pPage->getAnnotations()[0]->setDateTimeUTC(util::DateTime(0, 0, 30, 12, 20, 8, 2026, true));
+
+    saveAndReload(TestFilter::PPTX);
+
+    auto pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pReloaded);
+    SdPage* pReloadedPage = pReloaded->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pReloadedPage->getAnnotations().size());
+    auto const& xReloaded = pReloadedPage->getAnnotations()[0];
+
+    // Without the accompanying fix in place, this test would have failed with an expected 2026
+    // and an actual 0: only the older comment part was written, which has nowhere to put a
+    // moment, so a reader in Asia/Kolkata was shown 14:30 on their own clock for a comment
+    // written at 18:00 theirs.
+    util::DateTime aDateTimeUTC = xReloaded->getDateTimeUTC();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2026), aDateTimeUTC.Year);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(12), aDateTimeUTC.Hours);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), aDateTimeUTC.Minutes);
+
+    // The author's own clock does not come back, and cannot: the part that carries the moment
+    // holds one time per comment and that time is the moment. Every reader is shown the right
+    // time on their own clock from it, so nothing is lost that a reader sees.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(12), xReloaded->getDateTime().Hours);
+}
+
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testModernCommentPptxRoundtrip)
+{
+    // A thread of comments keeps its shape through a PPTX round trip, because the newer comment
+    // part has somewhere to put the replies.
+    createSdImpressDoc("pptx/modern-comments.pptx");
+
+    saveAndReload(TestFilter::PPTX);
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+
+    // Without the accompanying fix in place, this test would have failed: the older part was the
+    // only one written, and it flattens a thread into separate comments.
+    auto const& rAnnotations = pPage->getAnnotations();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rAnnotations.size());
+    CPPUNIT_ASSERT_EQUAL(u"Make this colorful"_ustr, rAnnotations[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Nice and big"_ustr, rAnnotations[1]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Faster"_ustr, rAnnotations[2]->GetText());
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), rAnnotations[0]->GetParentId());
+    CPPUNIT_ASSERT_EQUAL(rAnnotations[0]->GetId(), rAnnotations[1]->GetParentId());
+    CPPUNIT_ASSERT_EQUAL(rAnnotations[0]->GetId(), rAnnotations[2]->GetParentId());
+
+    // The moment each entry was written comes back too.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), rAnnotations[0]->getDateTimeUTC().Minutes);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), rAnnotations[0]->getDateTimeUTC().Seconds);
+    CPPUNIT_ASSERT_EQUAL(u"Comment Author"_ustr, rAnnotations[0]->getAuthor());
+}
+
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testReplyWithoutRootPptxRoundtrip)
+{
+    // Deleting a comment leaves its replies on the page, each still naming the comment as its
+    // parent. Such a reply has to survive a PPTX round trip as a comment of its own.
+    createSdImpressDoc();
+    for (const auto& rText : { u"Root"_ustr, u"Reply"_ustr })
+    {
+        dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr,
+                        comphelper::InitPropertySequence({ { u"Text"_ustr, cpo::uno::Any(rText) } }));
+    }
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
+
+    auto xRoot = pPage->getAnnotations()[0];
+    auto xReply = pPage->getAnnotations()[1];
+    xReply->SetParentId(xRoot->GetId());
+    pPage->removeAnnotation(xRoot);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
+
+    saveAndReload(TestFilter::PPTX);
+
+    auto pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pReloaded);
+    SdPage* pReloadedPage = pReloaded->GetDoc()->GetSdPage(0, PageKind::Standard);
+
+    // Without the accompanying fix in place, this test would have failed with an expected 1 and
+    // an actual 0: the reply was only ever written inside the entry it answered, which was
+    // gone, so the newer comment part had no trace of it and the older part is not read when
+    // the newer one is there.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pReloadedPage->getAnnotations().size());
+    CPPUNIT_ASSERT_EQUAL(u"Reply"_ustr, pReloadedPage->getAnnotations()[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), pReloadedPage->getAnnotations()[0]->GetParentId());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

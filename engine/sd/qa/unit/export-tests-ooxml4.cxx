@@ -1448,6 +1448,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNotesAuthorDate)
 
         pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
         assertXPathNoAttribute(pXml, "/p:cmLst/p:cm", "dt");
+
+        // The newer comment part holds the same comments, so it leaves out the same things: the
+        // moment each was written, and the initials that would name the author.
+        pXml = parseExport(u"ppt/comments/modernComment_1.xml"_ustr);
+        assertXPathNoAttribute(pXml, "/p188:cmLst/p188:cm", "created");
+        pXml = parseExport(u"ppt/authors.xml"_ustr);
+        assertXPath(pXml, "/p188:authorLst/p188:author[@name='Author1']", "initials", u"A1");
+        assertXPath(pXml, "/p188:authorLst/p188:author[@name='Author2']", "initials", u"A2");
     }
 }
 

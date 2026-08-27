@@ -108,6 +108,11 @@ private:
                               const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
     bool WriteComments( sal_uInt32 nPageNum );
+    /** Writes the comments of one slide into the newer comment part.
+
+        Returns true when the slide had any comments.
+     */
+    bool WriteModernComments(sal_uInt32 nPageNum);
     void ImplWriteBackground( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::beans::XPropertySet >& aXBackgroundPropSet );
     void WriteTransition( const ::sax_fastparser::FSHelperPtr& pFS );
 
@@ -205,6 +210,8 @@ private:
         sal_Int32 nId;
         sal_Int32 nLastIndex;
         OUString sInitials;
+        /// Identifier of this author in the newer comment part, assigned on first use.
+        OUString sGuid;
 
         AuthorComments()
             : nId(0)
@@ -222,6 +229,14 @@ private:
     AuthorsMap maAuthors;
 
     void WriteAuthors();
+    /// Writes the author list the newer comment parts refer to.
+    void WriteModernAuthors();
+    /** The identifier of an author in the newer comment part, assigned on first use.
+
+        Creates the author entry when it is not there yet, and leaves the index the older part
+        counts alone.
+     */
+    OUString GetAuthorGuid(const OUString& sAuthor, const OUString& sInitials);
 
     void WritePresentationProps();
 

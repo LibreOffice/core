@@ -772,6 +772,37 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
                 }
             }
 
+            OUString aModernCommentPath = xSlideFragmentHandler->getFragmentPathFromFirstType(
+                getRelationship(Relationship::MODERNCOMMENTS));
+            // A file can carry both parts, so that a reader which predates the newer one still
+            // finds the comments. The newer one is the fuller record, so when it yields any
+            // comments it wins and the older one is left alone rather than adding every comment
+            // a second time. When it yields none, the older part is the only record there is.
+            if (!aModernCommentPath.isEmpty())
+            {
+                if (!mbModernCommentAuthorsRead)
+                {
+                    mbModernCommentAuthorsRead = true;
+                    OUString aAuthorsPath = getFragmentPathFromFirstType(
+                        getRelationship(Relationship::MODERNCOMMENTAUTHORS));
+                    if (!aAuthorsPath.isEmpty())
+                    {
+                        getFilter().importFragment(new ModernCommentAuthorsFragmentHandler(
+                            getFilter(), aAuthorsPath, maModernAuthorList));
+                    }
+                }
+
+                rtl::Reference<ModernCommentsFragmentHandler> xModernCommentsHandler(
+                    new ModernCommentsFragmentHandler(getFilter(), aModernCommentPath));
+                if (getFilter().importFragment(xModernCommentsHandler)
+                    && !xModernCommentsHandler->getComments().empty())
+                {
+                    lcl_insertModernComments(xModernCommentsHandler->getComments(),
+                                             maModernAuthorList, xSlide);
+                    aCommentFragmentPath.clear();
+                }
+            }
+
             if( !mbCommentAuthorsRead && !aCommentFragmentPath.isEmpty() )
             {
                 // Comments are present and commentAuthors.xml has still not been read
@@ -847,29 +878,6 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
                         xText->setString( aComment.get_text());
                     } catch( css::lang::IllegalArgumentException& ) {}
                 }
-            }
-
-            OUString aModernCommentPath = xSlideFragmentHandler->getFragmentPathFromFirstType(
-                getRelationship(Relationship::MODERNCOMMENTS));
-            if (!aModernCommentPath.isEmpty())
-            {
-                if (!mbModernCommentAuthorsRead)
-                {
-                    mbModernCommentAuthorsRead = true;
-                    OUString aAuthorsPath = getFragmentPathFromFirstType(
-                        getRelationship(Relationship::MODERNCOMMENTAUTHORS));
-                    if (!aAuthorsPath.isEmpty())
-                    {
-                        getFilter().importFragment(new ModernCommentAuthorsFragmentHandler(
-                            getFilter(), aAuthorsPath, maModernAuthorList));
-                    }
-                }
-
-                rtl::Reference<ModernCommentsFragmentHandler> xModernCommentsHandler(
-                    new ModernCommentsFragmentHandler(getFilter(), aModernCommentPath));
-                getFilter().importFragment(xModernCommentsHandler);
-                lcl_insertModernComments(xModernCommentsHandler->getComments(), maModernAuthorList,
-                                         xSlide);
             }
         }
     }
