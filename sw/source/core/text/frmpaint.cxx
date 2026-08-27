@@ -715,7 +715,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     }
 
     // We don't want to be interrupted while painting.
-    // Do that after thr Format()!
+    // Do that after the Format()!
     TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
 
     // We only paint the part of the TextFrame which changed, is within the
@@ -723,7 +723,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     // One could think that the area rRect _needs_ to be painted, although
     // rRepaint is set. Indeed, we cannot avoid this problem from a formal
     // perspective. Luckily we can assume rRepaint to be empty when we need
-    // paint the while Frame.
+    // to paint the whole Frame.
     SwParaPortion *pPara = const_cast<SwTextFrame*>(this)->EnsurePara();
 
     SwRepaint &rRepaint = pPara->GetRepaint();
@@ -737,7 +737,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
             rRepaint.SetOffset( 0 );
     }
 
-    // Ge the String for painting. The length is of special interest.
+    // Get the String for painting. The length is of special interest.
 
     // Rectangle
     OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );

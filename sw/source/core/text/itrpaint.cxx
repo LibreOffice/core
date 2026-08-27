@@ -767,12 +767,12 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
     // If current underline matches the common underline font, we continue
     // to use the common underline font.
-    // Bug 120769:Color of underline display wrongly
+    // Bug 120769: Color of underline displayed wrongly
     if ( GetInfo().GetUnderFnt() &&
         GetInfo().GetUnderFnt()->GetFont().GetUnderline() == GetFnt()->GetUnderline() &&
         GetInfo().GetFont() && GetInfo().GetFont()->GetUnderColor() != COL_AUTO )
         return;
-    //Bug 120769(End)
+    // Bug 120769 (End)
 
     OSL_ENSURE( GetFnt() && LINESTYLE_NONE != GetFnt()->GetUnderline(),
             "CheckSpecialUnderline without underlined font" );

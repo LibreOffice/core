@@ -871,7 +871,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
             nTypePos = mnHalfCharWidth * 3/4; // start label on the opening bracket
         }
 
-        // MarkKind::Point: drawn I-beam (e.g. U+2336) as overlapping ][
+        // MarkKind::Point: draw I-beam (e.g. U+2336) as overlapping ][
         if ( std::get<0>(it) == SwScriptInfo::MarkKind::Point )
         {
             aNewPos.AdjustX(-mnHalfCharWidth * 5/16);
@@ -879,7 +879,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
             rInf.DrawText( aOutString, *this );
 
             // when the overlapping vertical lines are 50 pixel width on the screen,
-            // this distance (half width * 5/8) still results precise overlapping
+            // this distance (half width * 5/8) still results in precise overlapping
             aNewPos.AdjustX(mnHalfCharWidth * 5/8);
             const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
             aOutString = OUString('[');
