@@ -72,7 +72,10 @@ struct ScNoteData
 {
     typedef std::shared_ptr< ScCaptionInitData > ScCaptionInitDataRef;
 
-    OUString     maDate;             /// Creation date of the note.
+    OUString     maDate;             /// Creation date of the note, on the author's clock.
+    /// The same moment in UTC, as an ISO 8601 string, or empty when none is recorded. maDate
+    /// alone is a wall clock with no zone, so this is what pins the note to a point in time.
+    OUString maDateUTC;
     OUString     maAuthor;           /// Author of the note.
     ScCaptionInitDataRef mxInitData;        /// Initial data for invisible notes without SdrObject.
     rtl::Reference<SdrCaptionObj> mxCaption;          /// Drawing object representing the cell note.
@@ -133,9 +136,13 @@ public:
     const ScNoteData& GetNoteData() const { return maNoteData;}
 
     /** Returns the creation date of this note. */
-    const OUString& GetDate() const { return maNoteData.maDate;}
+    SC_DLLPUBLIC const OUString& GetDate() const { return maNoteData.maDate;}
+    /** The moment the note was written, or an empty string when none is recorded. */
+    SC_DLLPUBLIC const OUString& GetDateUTC() const { return maNoteData.maDateUTC;}
     /** Sets a new creation date for this note. */
-    void SetDate( const OUString& rDate );
+    SC_DLLPUBLIC void SetDate(const OUString& rDate);
+    /** Sets the moment the note was written. */
+    SC_DLLPUBLIC void SetDateUTC(const OUString& rDate);
 
     /** Returns the author date of this note. */
     const OUString& GetAuthor() const { return maNoteData.maAuthor;}

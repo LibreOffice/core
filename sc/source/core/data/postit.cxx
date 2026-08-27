@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/datetime.hxx>
+#include <tools/datetimeutils.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
@@ -496,6 +497,11 @@ void ScPostIt::SetDate( const OUString& rDate )
     maNoteData.maDate = rDate;
 }
 
+void ScPostIt::SetDateUTC(const OUString& rDate)
+{
+    maNoteData.maDateUTC = rDate;
+}
+
 void ScPostIt::SetAuthor( const OUString& rAuthor )
 {
     maNoteData.maAuthor = rAuthor;
@@ -519,6 +525,10 @@ void ScPostIt::AutoStamp(bool bCreate)
     {
         DateTime aNow(DateTime::SYSTEM);
         maNoteData.maDate =  utl::toISO8601(aNow.GetUNODateTime());
+        // The wall clock above carries no zone, so record the same moment beside it. The marker
+        // makes it readable as an instant wherever it goes.
+        maNoteData.maDateUTC = OStringToOUString(
+            DateTimeToOString(DateTime::CreateSystemUTC()), RTL_TEXTENCODING_ASCII_US);
     }
     if (!maNoteData.maAuthor.isEmpty())
         return;
