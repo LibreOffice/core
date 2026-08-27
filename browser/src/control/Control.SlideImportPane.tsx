@@ -39,6 +39,17 @@ class SlideImportPane {
   private pressedCheckboxIndex: number = -1;
   private visibilityObserver: IntersectionObserver | null = null;
 
+  // The connected remote document whose slides the pane is showing, named by
+  // its WOPISrc, or empty when none is open. The remote's structure and
+  // thumbnails below belong to it.
+  private selectedRemote: string = '';
+  private remoteDocWidth: number = 0;
+  private remoteDocHeight: number = 0;
+  // The stable part number of each slide, in slide order. A presentation
+  // names its pages by these numbers, not by their position, so a tile
+  // request has to carry the number of the slide it wants.
+  private remoteSlideParts: number[] = [];
+
   constructor(map: any) {
     this.map = map;
     this.session = new SlideImportSession(map);
@@ -57,6 +68,7 @@ class SlideImportPane {
     app.events.on('updatepermission', this.onUpdatePermission.bind(this));
     map.on('docloaded', this.onDocLoaded, this);
     map.on('relateddocuments', this.onRelatedDocuments, this);
+    map.on('remotedoccommandresult', this.onRemoteResult, this);
   }
 
   public isVisible(): boolean {
@@ -84,6 +96,8 @@ class SlideImportPane {
     this.setGridMode(false);
     this.disconnectVisibilityObserver();
     this.session.close();
+    this.selectedRemote = '';
+    this.session.reset();
     this.panel.replaceChildren();
   }
 
@@ -158,6 +172,19 @@ class SlideImportPane {
   }
 
   private onRelatedDocuments(): void {
+    // Drop the open remote view when its link is no longer connected.
+    if (this.selectedRemote) {
+      const documents = app.relatedDocuments || [];
+      const open = documents.find(
+        (doc: { wopiSrc: string; state: string }) =>
+          doc.wopiSrc === this.selectedRemote,
+      );
+      if (!open || open.state !== 'connected') {
+        this.selectedRemote = '';
+        this.session.reset();
+      }
+    }
+
     if (this.visible) this.render();
   }
 
@@ -178,6 +205,196 @@ class SlideImportPane {
     app.socket.sendMessage(
       'remotedocsubscribe wopisrc=' + encodeURIComponent(wopiSrc),
     );
+  }
+
+  // Sends a read-only client command to a subscribed remote document. Its
+  // reply arrives as a remotedoccommandresult map event carrying the same
+  // wopiSrc.
+  private sendRemoteCommand(wopiSrc: string, inner: string): void {
+    app.socket.sendMessage(
+      'remotedoccommand wopisrc=' + encodeURIComponent(wopiSrc) + ' ' + inner,
+    );
+  }
+
+  // Opens a connected remote document in the pane and asks it for its
+  // structure. Thumbnails follow once the presentation info gives the slide
+  // count and page size.
+  private openRemoteDocument(wopiSrc: string): void {
+    // Abandon a local import still open in the kit, then empty the list so it
+    // does not show the previous file's or remote's slides.
+    this.session.close();
+    this.session.reset();
+    this.selectedRemote = wopiSrc;
+    this.remoteDocWidth = 0;
+    this.remoteDocHeight = 0;
+    this.remoteSlideParts = [];
+    // A newly opened remote document starts with every section expanded and
+    // the list focus at its first slide, like a freshly opened file.
+    this.collapsedSections.clear();
+    this.focusIndex = 0;
+    this.anchorIndex = 0;
+
+    this.sendRemoteCommand(wopiSrc, 'getpresentationinfo');
+    this.sendRemoteCommand(wopiSrc, 'getslidesections');
+    if (this.visible) this.render();
+  }
+
+  // A reply from the remote document currently open in the pane.
+  private onRemoteResult(e: {
+    wopiSrc: string;
+    textMsg: string;
+    imgBytes?: Uint8Array;
+    imgIndex?: number;
+  }): void {
+    if (!this.selectedRemote || e.wopiSrc !== this.selectedRemote) return;
+
+    const textMsg = e.textMsg || '';
+    if (textMsg.startsWith('presentationinfo:')) {
+      this.onRemotePresentationInfo(
+        textMsg.substring('presentationinfo:'.length),
+      );
+    } else if (textMsg.startsWith('slidesections:')) {
+      this.onRemoteSlideSections(textMsg.substring('slidesections:'.length));
+    } else if (textMsg.startsWith('tile:')) {
+      this.onRemoteThumbnail(textMsg, e.imgBytes, e.imgIndex ?? 0);
+    }
+  }
+
+  private onRemotePresentationInfo(json: string): void {
+    try {
+      const info = JSON.parse(json);
+      this.remoteDocWidth = info.docWidth || 0;
+      this.remoteDocHeight = info.docHeight || 0;
+      this.remoteSlideParts = Array.isArray(info.slides)
+        ? info.slides.map((s: any) => s.uniqueID || 0)
+        : [];
+      this.session.slides = this.remoteSlideParts.map((_part, index) => ({
+        index: index,
+        name: '',
+      }));
+      this.session.slideCount = this.remoteSlideParts.length;
+      this.session.size = {
+        width: this.remoteDocWidth,
+        height: this.remoteDocHeight,
+      };
+    } catch (err) {
+      app.console.error('Bad remote presentationinfo: ' + err);
+      return;
+    }
+
+    this.requestRemoteThumbnails();
+    if (this.visible) this.render();
+  }
+
+  private onRemoteSlideSections(json: string): void {
+    try {
+      const sections = JSON.parse(json);
+      this.session.sections = Array.isArray(sections)
+        ? sections.map((s: any) => ({
+            name: s.name || '',
+            startIndex: s.startIndex || 0,
+            slideCount: s.slideCount || 0,
+          }))
+        : [];
+    } catch (err) {
+      app.console.error('Bad remote slidesections: ' + err);
+      return;
+    }
+
+    if (this.visible) this.render();
+  }
+
+  // Asks the remote for a PNG preview of every slide, fitted to the pane
+  // width, keyed by part index so each reply lands in its slot.
+  private requestRemoteThumbnails(): void {
+    if (
+      !this.selectedRemote ||
+      this.remoteSlideParts.length <= 0 ||
+      this.remoteDocWidth <= 0 ||
+      this.remoteDocHeight <= 0
+    )
+      return;
+
+    const targetWidth = 160;
+    const targetHeight = Math.max(
+      1,
+      Math.round((targetWidth * this.remoteDocHeight) / this.remoteDocWidth),
+    );
+    const scale = app.roundedDpiScale || 1;
+
+    for (let slot = 0; slot < this.remoteSlideParts.length; ++slot) {
+      // The request names the slide by its stable part number, which the
+      // remote resolves to the page it paints. The slot index rides along as
+      // the preview id: it is a non-negative integer, so the remote treats
+      // the request as a preview and echoes the id back, which lands the
+      // reply in the right thumbnail slot.
+      const partNumber = this.remoteSlideParts[slot];
+      if (!(partNumber > 0)) continue;
+      this.sendRemoteCommand(
+        this.selectedRemote,
+        'tile nviewid=0 part=' +
+          partNumber +
+          ' mode=0 width=' +
+          Math.round(targetWidth * scale) +
+          ' height=' +
+          Math.round(targetHeight * scale) +
+          ' tileposx=0 tileposy=0 tilewidth=' +
+          this.remoteDocWidth +
+          ' tileheight=' +
+          this.remoteDocHeight +
+          ' id=' +
+          slot,
+      );
+    }
+  }
+
+  private onRemoteThumbnail(
+    textMsg: string,
+    imgBytes: Uint8Array | undefined,
+    imgIndex: number,
+  ): void {
+    if (!imgBytes) return;
+
+    // A preview tile echoes its slot index as the integer id. A tile with
+    // no id is not one of our thumbnails.
+    let id = '';
+    for (const token of textMsg.split(' ')) {
+      if (token.startsWith('id=')) {
+        id = token.substring('id='.length);
+        break;
+      }
+    }
+    if (id === '') return;
+
+    const slot = parseInt(id, 10);
+    if (isNaN(slot) || slot < 0 || slot >= this.remoteSlideParts.length) return;
+
+    const png = imgBytes.subarray(imgIndex);
+    this.session.thumbnails.set(slot, {
+      url: this.pngDataUrl(png),
+      width: this.remoteDocWidth,
+      height: this.remoteDocHeight,
+    });
+
+    // The slide frames already exist from the presentation info, so drop the
+    // arrived thumbnail into its slot without rebuilding the list.
+    this.updateThumbnail(slot);
+  }
+
+  // A data URL for a PNG tile, built the way the slide sorter builds its
+  // preview sources. The tile cache drops the leading 0x89 of the PNG
+  // signature, so it is put back when the bytes do not already start with it.
+  // A content security policy forbids blob URLs for images, so the bytes are
+  // carried inline as base64.
+  private pngDataUrl(data: Uint8Array): string {
+    let bytes = data[0] !== 0x89 ? String.fromCharCode(0x89) : '';
+    const chunk = 4096;
+    for (let i = 0; i < data.length; i += chunk)
+      bytes += String.fromCharCode.apply(
+        null,
+        data.subarray(i, i + chunk) as unknown as number[],
+      );
+    return 'data:image/png;base64,' + window.btoa(bytes);
   }
 
   private relatedDocumentStateLabel(state: string): string {
@@ -229,6 +446,19 @@ class SlideImportPane {
                 >
                   {_('Subscribe')}
                 </button>
+              ) : doc.state === 'connected' ? (
+                <button
+                  class="button slide-import-related-open"
+                  aria-pressed={
+                    this.selectedRemote === doc.wopiSrc ? 'true' : 'false'
+                  }
+                  aria-label={
+                    _('Open') + ' ' + this.relatedDocumentName(doc.wopiSrc)
+                  }
+                  onClick={() => this.openRemoteDocument(doc.wopiSrc)}
+                >
+                  {_('Open')}
+                </button>
               ) : (
                 <span class="slide-import-related-state">
                   {this.relatedDocumentStateLabel(doc.state)}
@@ -268,8 +498,13 @@ class SlideImportPane {
   }
 
   private onThumbnail(e: any): void {
+    this.updateThumbnail(e.detail.index);
+  }
+
+  // Drops the thumbnail that arrived for a slide into its frame, replacing
+  // the skeleton, without rebuilding the list.
+  private updateThumbnail(index: number): void {
     if (!this.visible) return;
-    const index = e.detail.index;
     const option = this.panel.querySelector(
       '.slide-import-slide[data-index="' + index + '"]',
     );
@@ -322,6 +557,10 @@ class SlideImportPane {
 
   private render(): void {
     const session = this.session;
+    // The session holds either the chosen file's slides or, when a remote
+    // document is open, the remote's; the file-only controls above the list
+    // show only for a local import.
+    const local = !this.selectedRemote;
     const list = this.panel.querySelector('.slide-import-list');
     const scrollTop = list ? list.scrollTop : 0;
     this.disconnectVisibilityObserver();
@@ -363,19 +602,21 @@ class SlideImportPane {
           </div>
         </div>
         <div class="slide-import-body">
-          <button
-            class="button slide-import-choose"
-            disabled={
-              session.state === 'staging' || session.state === 'opening'
-            }
-            onClick={() => this.chooseFile()}
-          >
-            {_('Choose file')}
-          </button>
-          {session.fileName && (
+          {local && (
+            <button
+              class="button slide-import-choose"
+              disabled={
+                session.state === 'staging' || session.state === 'opening'
+              }
+              onClick={() => this.chooseFile()}
+            >
+              {_('Choose file')}
+            </button>
+          )}
+          {local && session.fileName && (
             <div class="slide-import-filename">{session.fileName}</div>
           )}
-          {!session.fileName && !status && !session.error && (
+          {local && !session.fileName && !status && !session.error && (
             <div class="slide-import-hint">
               {_('Choose a presentation file to import slides from.')}
             </div>
@@ -402,7 +643,7 @@ class SlideImportPane {
               )}
             </div>
           )}
-          {session.slideCount > 0 && (
+          {local && session.slideCount > 0 && (
             <label class="slide-import-keepdesign">
               <input
                 type="checkbox"
@@ -414,7 +655,7 @@ class SlideImportPane {
               {_('Keep original design')}
             </label>
           )}
-          {session.slideCount > 0 && session.canLink && (
+          {local && session.slideCount > 0 && session.canLink && (
             <label class="slide-import-linksource">
               <input
                 type="checkbox"
@@ -439,7 +680,7 @@ class SlideImportPane {
               {this.renderListItems()}
             </div>
           )}
-          {session.slideCount > 0 && (
+          {local && session.slideCount > 0 && (
             <div class="slide-import-footer">
               <button
                 class="button button-primary slide-import-insert"
@@ -637,7 +878,7 @@ class SlideImportPane {
         aria-label={this.slideLabel(index)}
         tabindex={index === this.focusIndex ? 0 : -1}
         data-index={index}
-        draggable="true"
+        draggable={this.selectedRemote ? 'false' : 'true'}
         onMouseDown={(e: MouseEvent) => this.onSlideMouseDown(e, index)}
         onClick={(e: MouseEvent) => this.onSlideClick(e, index)}
         onDragStart={(e: DragEvent) => this.onSlideDragStart(e, index)}

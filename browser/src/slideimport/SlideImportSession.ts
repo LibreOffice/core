@@ -531,4 +531,11 @@ class SlideImportSession {
 		const width = Math.round(this.THUMBNAIL_CSS_WIDTH * scale);
 		return Math.min(512, Math.max(32, width));
 	}
+
+	// Empties the shown slides, their sections, sizes, thumbnails and the
+	// selection, so the list can be refilled from a source other than a local
+	// file import.
+	public reset(): void {
+		this.resetImportState();
+	}
 }

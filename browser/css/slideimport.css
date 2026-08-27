@@ -101,7 +101,8 @@
 	flex-shrink: 0;
 }
 
-.slide-import-related-subscribe {
+.slide-import-related-subscribe,
+.slide-import-related-open {
 	margin: 0;
 	min-width: 0;
 	flex-shrink: 0;
