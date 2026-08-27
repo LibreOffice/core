@@ -132,7 +132,7 @@ public class SOReportJobFactory
         }
 
         /**
-         * This method is a simple helper function to used in the static component initialisation functions as well as
+         * This method is a simple helper function to be used in the static component initialisation functions as well as
          * in getSupportedServiceNames.
          */
         private static String[] getServiceNames()

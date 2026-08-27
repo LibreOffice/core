@@ -90,7 +90,7 @@ static const char* lclDebugSubType( sal_Int32 nType )
         case XML_hdr :
             return "hdr";
         case XML_ftr :
-            return "frt";
+            return "ftr";
         case XML_sldNum :
             return "sldNum";
         case XML_sldImg :
@@ -711,7 +711,7 @@ namespace
 
 // Function to find placeholder (ph) for a shape. No idea how MSO implements this, but
 // this order seems to work quite well
-// (probably it's unnecessary complicated / wrong. i.e. tdf#104202):
+// (probably it's unnecessarily complicated / wrong. i.e. tdf#104202):
 // 1. ph with nFirstSubType and the same oSubTypeIndex
 // 2. ph with nFirstSubType
 // 3. ph with nSecondSubType and the same oSubTypeIndex
