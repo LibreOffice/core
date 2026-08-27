@@ -14,7 +14,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
-#include <com/sun/star/uno/SecurityException.hpp>
+#include <cpo/uno/SecurityException.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -509,7 +509,7 @@ PDFSignatureHelper::GetDocumentSignatureInformations(
             {
                 rExternal.CertificateStatus = xSecEnv->verifyCertificate(rExternal.Signer, {});
             }
-            catch (const uno::SecurityException&)
+            catch (const cpo::uno::SecurityException&)
             {
                 DBG_UNHANDLED_EXCEPTION("xmlsecurity.helper", "failed to verify certificate");
                 rExternal.CertificateStatus = security::CertificateValidity::INVALID;

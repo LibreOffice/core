@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module uno {
+module cpo { module uno {
 
 
 /** Base exception for all security related exceptions.
@@ -29,6 +29,6 @@ published exception SecurityException : cpo::uno::RuntimeException
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

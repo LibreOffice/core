@@ -43,7 +43,7 @@ interface XXMLEncryption : com::sun::star::uno::XInterface
         [in] com::sun::star::xml::crypto::XXMLEncryptionTemplate aTemplate ,
         [in] com::sun::star::xml::crypto::XSecurityEnvironment aEnvironment
     ) raises( com::sun::star::xml::crypto::XMLEncryptionException ,
-        com::sun::star::uno::SecurityException ) ;
+        cpo::uno::SecurityException ) ;
 
     /**
      * Perform decryption in the environment of encryption template and context.
@@ -52,7 +52,7 @@ interface XXMLEncryption : com::sun::star::uno::XInterface
         [in] com::sun::star::xml::crypto::XXMLEncryptionTemplate aTemplate ,
         [in] com::sun::star::xml::crypto::XXMLSecurityContext aContext
     ) raises( com::sun::star::xml::crypto::XMLEncryptionException ,
-        com::sun::star::uno::SecurityException ) ;
+        cpo::uno::SecurityException ) ;
 } ;
 
 } ; } ; } ; } ; } ;

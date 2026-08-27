@@ -36,7 +36,7 @@ interface XCertificateCreator : com::sun::star::uno::XInterface
      */
     com::sun::star::security::XCertificate createDERCertificateWithPrivateKey(
                 [in] sequence<byte> aDerCertificate,
-                [in] sequence<byte> aPrivateKey) raises (com::sun::star::uno::SecurityException);
+                [in] sequence<byte> aPrivateKey) raises (cpo::uno::SecurityException);
 };
 
 } ; } ; } ; } ; } ;

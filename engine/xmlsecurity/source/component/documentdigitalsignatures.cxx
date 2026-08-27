@@ -34,7 +34,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/SecurityException.hpp>
+#include <cpo/uno/SecurityException.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/time.hxx>
 #include <unotools/securityoptions.hxx>

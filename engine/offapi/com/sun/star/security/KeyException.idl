@@ -21,7 +21,7 @@
 module com { module sun { module star { module security {
 
 
-exception KeyException : com::sun::star::uno::SecurityException
+exception KeyException : cpo::uno::SecurityException
 {
 };
 

@@ -30,7 +30,7 @@
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <com/sun/star/uno/SecurityException.hpp>
+#include <cpo/uno/SecurityException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
@@ -691,7 +691,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     if ( bCertValid )
                         nValidCerts++;
 
-                } catch (css::uno::SecurityException& ) {
+                } catch (cpo::uno::SecurityException& ) {
                     OSL_FAIL("Verification of certificate failed");
                     bCertValid = false;
                 }

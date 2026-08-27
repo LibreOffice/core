@@ -88,7 +88,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
             const OUString& issuerName,
             const cpo::uno::Sequence< sal_Int8 >& serialNumber ) override;
 
-        /// @throws css::uno::SecurityException
+        /// @throws cpo::uno::SecurityException
         /// @throws cpo::uno::RuntimeException
         virtual css::uno::Reference< css::security::XCertificate > getCertificate(
             const OUString& issuerName,

@@ -29,7 +29,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/SecurityException.hpp>
+#include <cpo/uno/SecurityException.hpp>
 #include <com/sun/star/security/XCertificateExtension.hpp>
 #include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>

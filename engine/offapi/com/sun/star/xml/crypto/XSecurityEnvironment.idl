@@ -27,27 +27,27 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
     /**
      * Get personal certificates from the environment
      */
-    sequence< com::sun::star::security::XCertificate > getPersonalCertificates() raises( com::sun::star::uno::SecurityException ) ;
+    sequence< com::sun::star::security::XCertificate > getPersonalCertificates() raises( cpo::uno::SecurityException ) ;
 
     /**
      * Get certificate from the environment by issuer name and serial number
      */
-    com::sun::star::security::XCertificate getCertificate( [in] string issuerName, [in] sequence< byte > serialNumber ) raises( com::sun::star::uno::SecurityException ) ;
+    com::sun::star::security::XCertificate getCertificate( [in] string issuerName, [in] sequence< byte > serialNumber ) raises( cpo::uno::SecurityException ) ;
 
     /**
      * Build certificate path from a certain certificate
      */
-    sequence< com::sun::star::security::XCertificate > buildCertificatePath( [in] com::sun::star::security::XCertificate beginCert ) raises( com::sun::star::uno::SecurityException ) ;
+    sequence< com::sun::star::security::XCertificate > buildCertificatePath( [in] com::sun::star::security::XCertificate beginCert ) raises( cpo::uno::SecurityException ) ;
 
     /**
      * Create certificate interface from raw DER encoded certificate
      */
-    com::sun::star::security::XCertificate createCertificateFromRaw( [in] sequence< byte > rawCertificate ) raises( com::sun::star::uno::SecurityException ) ;
+    com::sun::star::security::XCertificate createCertificateFromRaw( [in] sequence< byte > rawCertificate ) raises( cpo::uno::SecurityException ) ;
 
     /**
      * Create certificate interface from a Base64 encoded certificate.
      */
-    com::sun::star::security::XCertificate createCertificateFromAscii( [in] string asciiCertificate ) raises( com::sun::star::uno::SecurityException ) ;
+    com::sun::star::security::XCertificate createCertificateFromAscii( [in] string asciiCertificate ) raises( cpo::uno::SecurityException ) ;
 
     /**
       Verify a certificate.
@@ -69,7 +69,7 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
      */
     long verifyCertificate( [in] com::sun::star::security::XCertificate xEECertificate,
         [in] sequence< com::sun::star::security::XCertificate > intermediateCertificates)
-        raises( com::sun::star::uno::SecurityException ) ;
+        raises( cpo::uno::SecurityException ) ;
 
     /**
      * Get a certificate characters.
@@ -82,7 +82,7 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
      * The certificate characters is defined as bit-wise long, please refer to
      * CertificateCharacters definition.
      */
-    long getCertificateCharacters( [in] com::sun::star::security::XCertificate xCertificate ) raises( com::sun::star::uno::SecurityException ) ;
+    long getCertificateCharacters( [in] com::sun::star::security::XCertificate xCertificate ) raises( cpo::uno::SecurityException ) ;
 
     /**
      * Get the Environment detail information
@@ -92,7 +92,7 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
     /**
      * List all certificates, private (as returned by getPersonalCertificates) as well as those of other people/orgas
      */
-    sequence< com::sun::star::security::XCertificate > getAllCertificates() raises( com::sun::star::uno::SecurityException ) ;
+    sequence< com::sun::star::security::XCertificate > getAllCertificates() raises( cpo::uno::SecurityException ) ;
 
 } ;
 

@@ -31,7 +31,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/SecurityException.hpp>
+#include <cpo/uno/SecurityException.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <certificate.hxx>
