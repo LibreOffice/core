@@ -1707,6 +1707,39 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeTotalsColumnsOnly)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeMinimumRows)
+{
+    m_pDoc->InsertTab(0, u"ResizeMinRows"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    // Table B2:D11, header row (row 2) + Total Row (row 11).
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 1, 1, 3, 10,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+
+    // The header row on its own, and the header row with the Total Row right below it, both
+    // leave no data row: refused, and the Table keeps its area.
+    CPPUNIT_ASSERT(!aFunc.ResizeTable(*pData, ScRange(1, 1, 0, 3, 1, 0), /*bApi*/ true));
+    CPPUNIT_ASSERT(!aFunc.ResizeTable(*pData, ScRange(1, 1, 0, 3, 2, 0), /*bApi*/ true));
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 3, 10, 0), getArea(*pData));
+
+    // Header + one data row + the Total Row is the smallest a Total Row Table shrinks to.
+    CPPUNIT_ASSERT(aFunc.ResizeTable(*pData, ScRange(1, 1, 0, 3, 3, 0), /*bApi*/ true));
+    ScDBData* pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 3, 3, 0), getArea(*pNow));
+
+    // Without a Total Row the header and one data row are enough.
+    ScDBData* pPlain
+        = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 5, 1, 6, 10,
+                           /*bHasHeader*/ true, /*bHasTotals*/ false, u"PlainTable"_ustr);
+    CPPUNIT_ASSERT(!aFunc.ResizeTable(*pPlain, ScRange(5, 1, 0, 6, 1, 0), /*bApi*/ true));
+    CPPUNIT_ASSERT(aFunc.ResizeTable(*pPlain, ScRange(5, 1, 0, 6, 2, 0), /*bApi*/ true));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeTotalsRowsOnly)
 {
     m_pDoc->InsertTab(0, u"ResizeTotalsRows"_ustr);

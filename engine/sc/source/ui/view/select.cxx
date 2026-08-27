@@ -28,6 +28,7 @@
 #include <transobj.hxx>
 #include <docsh.hxx>
 #include <tabprotection.hxx>
+#include <dbdata.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -636,6 +637,12 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             CreateAnchor();
         }
 
+        // A Table keeps a data row below its header, plus the Total Row.
+        SCROW nMinRowSpan = 1;
+        if (const ScDBData* pDBData
+            = rDoc.GetTableDBAtCursor(nStartX, nStartY, nTab, ScDBDataPortion::AREA))
+            nMinRowSpan = pDBData->GetMinRowSpan();
+
         if ( nPosX >= nStartX && nPosX <= nEndX &&
              nPosY >= nStartY && nPosY <= nEndY &&
              ( nPosX != nEndX || nPosY != nEndY ) )
@@ -656,8 +663,8 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             }
 
             // Header row or first row
-            if (nPosY == nStartY)
-                nPosY++;
+            if (nPosY < nStartY + nMinRowSpan)
+                nPosY = nStartY + nMinRowSpan;
 
             if ( nStartX != m_rViewData.GetRefStartX() || nStartY != m_rViewData.GetRefStartY() )
             {
@@ -712,7 +719,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             }
 
             nPosX = bNegX ? nStartX : nPosX;
-            nPosY = bNegY ? nStartY + 1 : nPosY; // Header row or first row
+            nPosY = bNegY ? nStartY + nMinRowSpan : nPosY; // Header row or first row
             if ( nStartX != m_rViewData.GetRefStartX() || nStartY != m_rViewData.GetRefStartY() )
             {
                 m_rViewData.GetView()->DoneRefMode();

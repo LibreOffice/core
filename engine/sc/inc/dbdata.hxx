@@ -371,6 +371,8 @@ public:
     /// same-width/narrower neighbour, or one reached by a right-drag). False for a shrink.
     bool WouldResizeOverlap(ScDocument& rDoc, const ScRange& rNewArea) const;
 
+    SCROW GetMinRowSpan() const { return bHasTotals ? 2 : 1; }
+
     /// Returns true if toggling Total Row on this table (bAddTotal = true to add, false
     /// to remove) would be refused because of tear-risk at the row immediately below
     /// the data combined with non-empty cells in the band.

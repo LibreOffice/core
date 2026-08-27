@@ -157,8 +157,8 @@ IMPL_LINK_NOARG(ScDbTableResizeDlg, OkBtnHdl, weld::Button&, void)
         return;
     }
 
-    // The Table must keep at least one data row below the header.
-    if (aNewRange.aEnd.Row() <= aNewRange.aStart.Row())
+    // The Table must keep at least one data row below the header, and the Total Row on top of that.
+    if (aNewRange.aEnd.Row() - aNewRange.aStart.Row() < pDBData->GetMinRowSpan())
     {
         ErrorBox(ScResId(STR_MSSG_TABLE_RESIZE_NO_DATA));
         m_xEdAssign->SelectAll();

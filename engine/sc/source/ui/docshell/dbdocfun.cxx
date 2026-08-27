@@ -981,6 +981,15 @@ bool ScDBDocFunc::ResizeTable(const ScDBData& rOldData, const ScRange& rNewArea,
         return false;
     }
 
+    // The Total Row lives inside the Table's range, so a Table that has one needs a row more
+    // than a plain one to keep a data row.
+    if (aNewRange.aEnd.Row() - aNewRange.aStart.Row() < rOldData.GetMinRowSpan())
+    {
+        if (!bApi)
+            rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_RESIZE_NO_DATA);
+        return false;
+    }
+
     // A row-span change on a Total-Row table relocates the total (DoTableSubTotals still
     // guards straddle/tear); otherwise a plain range change.
     if (aNewDBData.HasTotals()
