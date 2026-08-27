@@ -3926,7 +3926,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
     // returning array/matrix or inline arrays, though for the latter has one
     // example in 18.17.2 Syntax:
     // "SUM(SQRT({1,2,3,4})) returns 6.14 when entered normally". However,
-    // these need to be treated similar but not as ParamClass::ForceArray
+    // these need to be treated similarly but not as ParamClass::ForceArray
     // (which would contradict the example in
     // https://bugs.documentfoundation.org/show_bug.cgi?id=122301#c19 and A6 of
     // https://bugs.documentfoundation.org/show_bug.cgi?id=133260#c10 ).

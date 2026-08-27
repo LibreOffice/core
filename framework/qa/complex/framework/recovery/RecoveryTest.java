@@ -57,7 +57,7 @@ public class RecoveryTest extends ComplexTestCase {
      */
     static Point windowMaxPosition;
     /**
-     * The office windows starts in the first quarter of the screen. In this variable
+     * The office windows start in the first quarter of the screen. In this variable
      * the maximum size for the windows was stored so the windows can be placed
      * visible on the screen.
      */
@@ -65,7 +65,7 @@ public class RecoveryTest extends ComplexTestCase {
 
     /**
      * All office windows will be placed by this test on randomized positions.
-     * This positions was stored in this Hashmap. The keys are the frame names
+     * These positions were stored in this Hashmap. The keys are the frame names
      * and the values are com sun.star.awt.Rectangle.
      * @see com.sun.star.awt.Rectangle
      */
@@ -210,7 +210,7 @@ public class RecoveryTest extends ComplexTestCase {
 
     /**
      *  This function uses accessibility to handle the dialog which appears while the
-     * office is crashed. It click the button "OK" to continue.
+     * office is crashed. It clicks the button "OK" to continue.
      */
     private void handleRecoveryDialogAfterCrash(int expectedDocumentCount){
         try{
@@ -395,7 +395,7 @@ public class RecoveryTest extends ComplexTestCase {
 
     /**
      * This function uses accessibility to handle the dialog "Are you sure".
-     * It click "Yes" or "No", dependent on the value of the parameter <CODE>Yes</CODE>
+     * It clicks "Yes" or "No", dependent on the value of the parameter <CODE>Yes</CODE>
      * @param yes If value is <CODE>TRUE</CODE> the button "Yes" was clicked, otherwise the button
      * "No".
      */
@@ -413,10 +413,10 @@ public class RecoveryTest extends ComplexTestCase {
     }
 
     /**
-     * This function uses accessibility to handle the dialog "Are you sure".
-     * It click "Yes" or "No", depending on the value of the parameter <CODE>Yes</CODE>
-     * @param saveDocuments If value is <CODE>TRUE</CODE> the button "Yes" was clicked, otherwise the button
-     * "No".
+     * This function uses accessibility to handle the dialog "Save Documents".
+     * It clicks "OK" or "Cancel", depending on the value of the parameter <CODE>saveDocuments</CODE>
+     * @param saveDocuments If value is <CODE>TRUE</CODE> the documents are saved, otherwise the button
+     * "Cancel" is clicked.
      */
     private void handleSaveDocumentsDialog(boolean saveDocuments)
     {
@@ -465,7 +465,7 @@ public class RecoveryTest extends ComplexTestCase {
     }
 
     /**
-     * This function gets the current screen size and calculate the first
+     * This function gets the current screen size and calculates the first
      * quarter of it. This quarter was used to position to Office windows.
      * Further this function calculates the maximum window size so the window
      * is visible if it placed on extreme position.
@@ -530,7 +530,7 @@ public class RecoveryTest extends ComplexTestCase {
         int height = rand.nextInt(maxHeight + 1);
         int width = rand.nextInt((windowMaxSize.Width-posSize.Y) + 1);
 
-        // be sure that the new size his greater than the half of windowMaxSize
+        // be sure that the new size is greater than the half of windowMaxSize
         posSize.Height = (height < (maxHeight / 2)) ? height + (maxHeight / 2) : height;
         posSize.Width =  (width < (maxWidth / 2)) ? width + (maxWidth / 2) : width;
 

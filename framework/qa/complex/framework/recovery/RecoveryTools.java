@@ -39,7 +39,7 @@ import util.UITools;
 import util.utils;
 
 /**
- * this class supports the <CODE>RecoverTest</CODE>. You will find here some helper
+ * this class supports the <CODE>RecoveryTest</CODE>. You will find here some helper
  * functions.
  */
 public class RecoveryTools {
@@ -81,8 +81,8 @@ public class RecoveryTools {
     }
 
     /**
-     * After a crash the office start with a recovery dialog. It could be that the office
-     * is connectable but not all services to get the dialog a loaded. This function
+     * After a crash the office starts with a recovery dialog. It could be that the office
+     * is connectable but not all services to get the dialog are loaded. This function
      * tries to get the dialog until the <CODE>OfficeWatcher</CODE> kills the office.
      * @return a <CODE>XDialog</CODE> interface of the dialog
      */
@@ -90,7 +90,7 @@ public class RecoveryTools {
         // while the office starts it takes some time to get the dialog.
 
         // the dialog is accessible AFTER the office has recovered all documents.
-        // This could consumes more time then the TimeOut allow.
+        // This could consume more time than the TimeOut allows.
         int counter = 0;
         int multi = 5;
         int pause = utils.DEFAULT_SHORT_WAIT_MS * 10;
@@ -109,7 +109,7 @@ public class RecoveryTools {
     }
 
     /**
-     * remove the content of the user backup folder and removes the Recovery.xcu. This
+     * remove the content of the user backup folder and remove the Recovery.xcu. This
      * was done from the Office via XSimpleFileAccess
      * @throws com.sun.star.io.IOException the exception was thrown if something goes wrong.
      */
@@ -176,8 +176,8 @@ public class RecoveryTools {
 
 
     /**
-     * This function waits until the office is closed. If the closing time reach
-     * the value of parameter <CODE>THREAD_TIME_OUT</CODE> the office was killed.
+     * This function waits until the office is closed. If the closing time reaches
+     * the value of parameter <CODE>THREAD_TIME_OUT</CODE> the office is killed.
      */
     public void waitForClosedOffice(){
         // check for the office process
