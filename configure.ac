@@ -15053,7 +15053,7 @@ if test "$with_system_libjxl" != "yes"; then
     BUILD_TYPE="$BUILD_TYPE HIGHWAY BROTLI"
 fi
 
-libo_CHECK_SYSTEM_MODULE([libjxl],[LIBJXL],[libjxl])
+libo_CHECK_SYSTEM_MODULE([libjxl],[LIBJXL],[libjxl libjxl_threads])
 
 dnl Test whether to use liblangtag
 dnl ===================================================================
