@@ -46,7 +46,7 @@ class XMLIndexBodyContext;
  * Import all indices.
  *
  * Originally, this class would import only the TOC (table of
- * content), but now its role has been expanded to handle all
+ * contents), but now its role has been expanded to handle all
  * indices, and hence is named inappropriately. Depending on the
  * element name it decides which index source element context to create.
  */

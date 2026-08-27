@@ -54,7 +54,7 @@ namespace xmloff
     //= OPropertyExport
     /** provides export related tools for attribute handling
 
-        <p>(The name is somewhat misleading. It's not only a PropertyExport, but in real an ElementExport.
+        <p>(The name is somewhat misleading. It's not only a PropertyExport, but in reality an ElementExport.
         Anyway.)</p>
     */
     class OPropertyExport
@@ -326,7 +326,7 @@ namespace xmloff
         */
         bool shouldExportProperty( const OUString& i_propertyName ) const;
 
-        /** tries to convert an arbitrary <type scope="com.sun:star.uno">Any</type> into an string
+        /** tries to convert an arbitrary <type scope="com.sun:star.uno">Any</type> into a string
 
             <p>If the type contained in the Any is not supported, the returned string will be empty. In the
             debug version, an additional assertion occurs.</p>
@@ -345,7 +345,7 @@ namespace xmloff
                 <ul>
                     <li><b>boolean</b>: <arg>_rValue</arg> was interpreted as boolean value before converting
                         it into a string</li>
-                    <li><b>float</b>: <arg>_rValue</arg> was interpreted as 64 bit floating point 16bit integer, 32bit integer or 64 bit integer value before
+                    <li><b>float</b>: <arg>_rValue</arg> was interpreted as 64 bit floating point, 16bit integer, 32bit integer or 64 bit integer value before
                         converting it into a string</li>
                     <li><b>string</b>: <arg>_rValue</arg> did not need any conversion as it already was a string</li>
                 </ul>
