@@ -22,4 +22,9 @@
     <string name="ask_for_convert_odf">Dosya Biçimini Onayla</string>
     <string name="use_odf">ODF Biçimini Kullan</string>
     <string name="use_text">Metin Biçimini Kullan</string>
+    <string name="all_files_access_title">Salt okunur kipte açıldı</string>
+    <string name="all_files_access_message">Bu dosyayı paylaşan uygulama, yapılan değişikliklerin dosyaya kaydedilmesine izin vermedi.\n\nBu uygulamanın dosyayı bulunduğu yere yazabilmesi ve böylece dosyayı buradan düzenleyebilmeniz için \"Tüm dosyalara erişim\" izni verin.</string>
+    <string name="all_files_access_grant">Erişim izni ver</string>
+    <string name="do_not_ask_again">Tekrar sorma</string>
+    <string name="failed_to_save_file">Değişiklikler dosyaya kaydedilemedi</string>
 </resources>
