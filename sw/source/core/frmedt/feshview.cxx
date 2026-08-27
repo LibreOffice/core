@@ -404,15 +404,15 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
 }
 
 /*
- *  Description: MoveAnchor( nDir ) looked for an another Anchor for
+ *  Description: MoveAnchor( nDir ) looks for another Anchor for
  *  the selected drawing object (or fly frame) in the given direction.
- *  An object "as character" doesn't moves anyway.
+ *  An object "as character" doesn't move anyway.
  *  A page bounded object could move to the previous/next page with up/down,
  *  an object bounded "at paragraph" moves to the previous/next paragraph, too.
  *  An object bounded "at character" moves to the previous/next paragraph
  *  with up/down and to the previous/next character with left/right.
  *  If the anchor for at paragraph/character bounded objects has vertical or
- *  right_to_left text direction, the directions for up/down/left/right will
+ *  right_to_left text direction, the directions for up/down/left/right will be
  *  interpreted accordingly.
  *  An object bounded "at fly" takes the center of the actual anchor and looks
  *  for the nearest fly frame in the given direction.
@@ -836,7 +836,7 @@ void SwFEShell::EndDrag()
     // To restore consistency we should bring up the Xor again.
 
     // Reanimation from the hack #50778 to fix bug #97057
-    // May be not the best solution, but the one with lowest risc at the moment.
+    // May be not the best solution, but the one with lowest risk at the moment.
     // pView->ShowShownXor( GetOut() );
 
     pView->EndDragObj();
@@ -2490,7 +2490,7 @@ bool SwFEShell::IsGroupSelected(bool bAllowDiagams)
             {
                 if(!bAllowDiagams)
                 {
-                    // Don't allow enter Diagrams
+                    // Don't allow entering Diagrams
                     if(pObj->isDiagram())
                     {
                         return false;
