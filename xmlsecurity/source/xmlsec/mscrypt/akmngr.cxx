@@ -179,7 +179,7 @@ MSCryptoAppliedKeysMngrAdoptTrustedStore(
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
                     xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
-                    "xmlSecMSCngX509StoreAdoptKeyStore",
+                    "xmlSecMSCngX509StoreAdoptTrustedStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE);
         return -1;
@@ -214,7 +214,7 @@ MSCryptoAppliedKeysMngrAdoptUntrustedStore(
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
                     xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(x509Store)),
-                    "xmlSecMSCngX509StoreAdoptKeyStore",
+                    "xmlSecMSCngX509StoreAdoptUntrustedStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE);
         return -1;
