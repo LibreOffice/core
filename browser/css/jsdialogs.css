@@ -885,6 +885,17 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	filter: brightness(0.5);
 }
 
+@supports (content: '' / '') {
+	.ui-expander-label::before,
+	.ui-treeview-expandable.collapsed > div > .ui-treeview-expander::before,
+	.ui-treeview div[aria-expanded='false'] > div > .ui-treeview-expander::before,
+	.ui-expander-label.expanded::before,
+	.ui-treeview-expandable:not(.collapsed) > div > .ui-treeview-expander::before,
+	.ui-treeview div[aria-expanded='true'] > div > .ui-treeview-expander::before {
+		content: 'V' / '';
+	}
+}
+
 [data-theme='dark'] .ui-expander-label::before,
 [data-theme='dark'] .ui-treeview-expandable > div > .ui-treeview-expander::before,
 [data-theme='dark'] .ui-treeview div[aria-expanded] > div > .ui-treeview-expander::before {
