@@ -2228,7 +2228,7 @@ void XMLTextImportHelper::ConnectFrameChains(
             i = m_xImpl->m_xPrevFrmNames->erase(i);
             j = m_xImpl->m_xNextFrmNames->erase(j);
 
-            // There cannot be more than one previous frames
+            // There cannot be more than one previous frame
             break;
         }
     }

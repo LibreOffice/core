@@ -103,8 +103,8 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
         bIsNamed = true;
     }
 
-    // create a name that hasn't been used before. The created name has not
-    // to be added to the array, because it will never be tried again
+    // create a name that hasn't been used before. The created name does not
+    // have to be added to the array, because it will never be tried again
     do
     {
         rName++;

@@ -18,7 +18,7 @@
  */
 
 
-/** @#file
+/** @file
  *
  * This file implements XMLTextParagraphExport methods to export
  * - footnotes
