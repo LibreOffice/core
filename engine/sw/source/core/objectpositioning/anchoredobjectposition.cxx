@@ -997,12 +997,11 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     else if ( text::HoriOrientation::CENTER == eHoriOrient )
         nRelPosX += (nWidth / 2) - (nObjWidth / 2);
     else if (text::HoriOrientation::RIGHT == eHoriOrient)
-        nRelPosX
-            += nWidth
-               - (nObjWidth
-                  + (aRectFnSet.IsVert() ? _rULSpacing.GetLower() : _rLRSpacing.ResolveRight({})));
-    else
-        nRelPosX += aRectFnSet.IsVert() ? _rULSpacing.GetUpper() : _rLRSpacing.ResolveLeft({});
+    {
+        // The object sits flush at the edge it is aligned to. Its wrap spacing only keeps the
+        // surrounding text away from the object and plays no part in the position.
+        nRelPosX += nWidth - nObjWidth;
+    }
 
     // adjust relative position by distance between anchor frame and
     // the frame, the object is oriented at.

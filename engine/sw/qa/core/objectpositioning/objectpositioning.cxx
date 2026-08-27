@@ -11,6 +11,7 @@
 
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <editeng/ulspitem.hxx>
@@ -569,6 +570,45 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedOverlap)
     // Without the accompanying fix in place, this test would have failed, the content was laid out
     // on 3 pages in Writer.
     CPPUNIT_ASSERT(!pPage2->GetNext());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAlignedVmlShapesFlushAtCellEdges)
+{
+    // Given a DOCX with a table cell that holds two VML shapes with the default wrap distance
+    // of the format: a wrap-through shape aligned to the left edge of the cell text area and a
+    // tight-wrapped text frame aligned to its right edge:
+    createSwDoc("aligned-objects-in-cell.docx");
+
+    // Then make sure the shape sits flush at the left edge of the cell text area, which
+    // starts at 1824:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1823
+    // - Actual  : 2003
+    // The wrap distance of the shape pushed it 180 twips inside the edge it is aligned to,
+    // while the wrap distance of the format only keeps text away from the shape.
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "left", u"1823");
+
+    // And make sure the text frame sits flush at the right edge of the cell text area, which
+    // ends at 6809:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6809
+    // - Actual  : 6629
+    assertXPath(pXmlDoc, "//anchored/fly[1]/infos/bounds", "right", u"6809");
+
+    // And make sure both objects keep their wrap distance in the model, so a later save
+    // writes the distance back unchanged:
+    uno::Reference<text::XTextFramesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xFrames->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, u"LeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, u"RightMargin"_ustr));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
+                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"LeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"RightMargin"_ustr));
 }
 }
 
