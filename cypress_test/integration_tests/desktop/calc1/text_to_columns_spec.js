@@ -128,6 +128,12 @@ describe(['tagdesktop'], 'Text to Columns', function () {
 		// Declining the warning leaves the document alone.
 		splitA1IntoThreeColumns();
 		cy.cGet('#CheckWarningDialog').should('exist');
+		// the primary line reads as a header, with the question in regular
+		// weight right under it
+		cy.cGet('#CheckWarningDialog .static-label').eq(0)
+			.should('have.css', 'font-weight', '700');
+		cy.cGet('#CheckWarningDialog .static-label').eq(1)
+			.should('have.css', 'font-weight', '400');
 		// the "Warn me about this in the future." checkbox is not offered here,
 		// this warning is not driven by the ReplaceCellsWarning option
 		cy.cGet('#CheckWarningDialog').find('.ui-checkbox-input').should('have.length', 1);

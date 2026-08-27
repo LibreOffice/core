@@ -1509,6 +1509,13 @@ void VclMultiLineEdit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("cursor", pImpVclMEdit->GetTextWindow()->GetTextView()->IsCursorEnabled());
     if (IsReadOnly())
         rJsonWriter.put("readonly", true);
+
+    // A bold weight can be requested through the control font - the primary
+    // message of a message box that also carries a secondary text does so, see
+    // MessageDialog::SetMessagesWidths(). It is applied natively on the desktop,
+    // but the browser has no way to know about it unless we export it here.
+    if (IsControlFont() && GetControlFont().GetWeight() >= WEIGHT_BOLD)
+        rJsonWriter.put("bold", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

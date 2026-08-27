@@ -16,6 +16,9 @@
 declare var JSDialog: any;
 
 class JSDialogMessageRouter {
+	// gap between the primary and the secondary line of a message box, in pixels
+	private static readonly messageSpacing = 4;
+
 	// Per-jsontype queues for messages with target component not yet ready
 	private pendingByJsontype: Map<string, Array<() => void>> = new Map();
 
@@ -23,11 +26,22 @@ class JSDialogMessageRouter {
 	private _preProcessMessageDialog(msgData: WidgetJSON) {
 		if (!msgData.children) return;
 
+		let hasMessage = false;
 		for (var i in msgData.children) {
 			var child = msgData.children[i];
-			if (child.type === 'multilineedit') child.type = 'fixedtext';
-			else if (child.children) this._preProcessMessageDialog(child);
+			if (child.type === 'multilineedit') {
+				child.type = 'fixedtext';
+				hasMessage = true;
+			} else if (child.children) this._preProcessMessageDialog(child);
 		}
+
+		// The core spaces the box holding the messages by a whole text height,
+		// which is a lot of air between the bold primary line and the text that
+		// belongs to it - the desktop pairs that spacing with a primary line
+		// scaled up by 1.2, which we don't reproduce here.
+		if (hasMessage)
+			(msgData as ContainerWidgetJSON).spacing =
+				JSDialogMessageRouter.messageSpacing;
 	}
 
 	private isReady(jsontype: string): boolean {
