@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-21 03:03+0000\n"
+"PO-Revision-Date: 2026-08-28 01:38+0000\n"
 "Last-Translator: Alexander Gabilondo <alexgabi@openmailbox.org>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/eu/>\n"
@@ -890,10 +890,11 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1061
 msgid "Settings are only available to signed-in users."
 msgstr ""
+"Ezarpenak saioa hasi duten erabiltzaileentzat bakarrik daude eskuragarri."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1070
 msgid "Something went wrong. Please try to refresh the page."
-msgstr ""
+msgstr "Zerbait gaizki joan da. Saiatu orria freskatzen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1259
 #, fuzzy
@@ -910,7 +911,7 @@ msgstr "Interfazearen ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1275
 msgid "Set default interface preferences."
-msgstr ""
+msgstr "Ezarri interfazearen hobespen lehenetsiak."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1352
 msgid ""
@@ -929,12 +930,12 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1492
 #: admin/src/integrator/Xcu.ts:409
 msgid "Reset to default Document settings"
-msgstr ""
+msgstr "Berrezarri dokumentuaren ezarpen lehenetsietara"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1496
 #: admin/src/integrator/Xcu.ts:423
 msgid "Are you sure you want to reset Document settings?"
-msgstr ""
+msgstr "Ziur zaude dokumentuaren ezarpenak berrezarri nahi dituzula?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1513
 #: admin/src/integrator/Xcu.ts:438
@@ -942,8 +943,10 @@ msgid "Save Document settings"
 msgstr "Gorde dokumentuaren ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1816
+#, fuzzy
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr ""
+"(Abisua: Zerbitzariaren irisgarritasuna gaituta egon behar da aldatzeko)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1913
 msgid "Notebookbar view"
@@ -959,7 +962,7 @@ msgstr "Ikuspegi trinkoa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2030
 msgid "Something went wrong while uploading the file. Please try again."
-msgstr ""
+msgstr "Zerbait gaizki joan da fitxategia igotzean. Saiatu berriro."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2106
 #: src/canvas/sections/CommentSection.ts:1560
@@ -991,10 +994,12 @@ msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
+"Zotero erabiltzeko, zehaztu zure API gakoa hemen. Zure API gakoa sor "
+"dezakezu zure "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 msgid "Zotero account API settings"
-msgstr ""
+msgstr "Zotero kontuaren API ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2184
 msgid "Zotero Settings"
@@ -1010,6 +1015,8 @@ msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr ""
+"Dokumentuen sinadura erabiltzeko, zehaztu hemen sinadura-ziurtagiria, "
+"Ziurtagiri Agintaritzaren gakoa eta katea."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2241
 msgid "Document Signing Settings"
