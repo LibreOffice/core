@@ -150,7 +150,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 
         if ( nLen == 3 && !( aArguments[2] >>= xApproval ) )
             throw lang::IllegalArgumentException(
-                    u"If the third argument is provided, it must be XActionsApproval implementation!"_ustr,
+                    u"If the third argument is provided, it must be an XActionsApproval implementation!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     0 );
 

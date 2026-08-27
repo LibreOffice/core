@@ -1949,7 +1949,7 @@ public:
         rfMax = std::numeric_limits<double>::lowest();
 
         /**
-         * For each, X value, calculate Y value range
+         * For each X value, calculate Y value range
          */
         for (auto const& it : m_SeriesGroup)
         {
@@ -2225,7 +2225,7 @@ OUString VSeriesPlotter::getCategoryName( sal_Int32 nPointIndex ) const
 }
 
 namespace {
-// The following it to support rendering order for combo charts. A chart type
+// The following is to support rendering order for combo charts. A chart type
 // with a lower rendering order is rendered before (i.e., behind) a chart with a
 // higher rendering order. The rendering orders are based on rough guesses about
 // how much one chart (type) will obscure another chart (type). The intent is to
