@@ -24,7 +24,9 @@
 
 #include <cstdlib>
 
-#if defined(__linux__) && __has_include(<linux/landlock.h>)
+// configure settles whether landlock is compiled in, and has already checked that
+// linux/landlock.h is present when it is.
+#if defined(__linux__) && DISABLE_LANDLOCK == 0
 #define HAVE_LANDLOCK 1
 #else
 #define HAVE_LANDLOCK 0

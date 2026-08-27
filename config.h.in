@@ -47,6 +47,9 @@
 /* Absolute path to the top-level source directory */
 #undef DEBUG_ABSSRCDIR
 
+/* Whether to disable Landlock containment */
+#undef DISABLE_LANDLOCK
+
 /* Whether to disable SECCOMP */
 #undef DISABLE_SECCOMP
 

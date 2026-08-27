@@ -342,6 +342,11 @@ AC_ARG_ENABLE([seccomp],
               AS_HELP_STRING([--disable-seccomp],
                              [Disable use of linux/seccomp.h header when kernel on target system does not support it.
                               Beware of the security consequences!]))
+
+AC_ARG_ENABLE([landlock],
+              AS_HELP_STRING([--disable-landlock],
+                             [Disable use of linux/landlock.h header when the build host does not provide it.
+                              Beware of the security consequences!]))
 AC_ARG_WITH([lokit-path],
             AS_HELP_STRING([--with-lokit-path=<path>],
                            [Path to the "include" directory with the COKit headers.
@@ -2417,6 +2422,25 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
 
        ])
 
+dnl Landlock containment, the file-system isolation used when coolwsd runs
+dnl without capabilities. The build settles here whether it is compiled in, so
+dnl the choice appears in the configure output, and a host that cannot supply
+dnl the header stops the build.
+AS_IF([test "$enable_landlock" != "no" \
+       -a "$ENABLE_IOSAPP" != "true" \
+       -a "$ENABLE_WINDOWSAPP" != "true" \
+       -a "$ENABLE_ANDROIDAPP" != "true" \
+       -a "$ENABLE_MACOSAPP" != "true" \
+       -a "$host_os" != "emscripten" \
+       -a "`uname -s`" = "Linux"],
+      [AC_CHECK_HEADERS([linux/landlock.h],
+                        [],
+                        [AC_MSG_ERROR([critical security header linux/landlock.h not found. It comes from the kernel headers, linux-libc-dev on Debian and Ubuntu or kernel-headers on RPM distributions, and needs to be version 5.13 or newer. Only the header is needed. The build host does not need a kernel that new. If the target system cannot support landlock, you can use --disable-landlock, but mind the security consequences.])])
+       AC_DEFINE([DISABLE_LANDLOCK],0,[Whether to disable Landlock containment])
+       landlock_msg="enabled"],
+      [AC_DEFINE([DISABLE_LANDLOCK],1,[Whether to disable Landlock containment])
+       landlock_msg="disabled"])
+
 AS_IF([test `uname -s` = "Linux" -o `uname -s` = "FreeBSD" -o `uname -s` = "Darwin" -o "$enable_windowsapp" = "yes"],
       # We need npm and node unconditionally only on Linux, both in the normal Online case, and when
       # only building cool for the iOS app. When building the iOS app itself on macOS, this is
@@ -3125,6 +3149,7 @@ Configuration:
     LO path                   $LO_PATH
     LO integration tests      ${lo_msg}
     SSL support               $ssl_msg
+    Landlock containment      $landlock_msg
     Debug & low security      $debug_msg
     Experimental features     $experimental_msg
     Test assertion logging    $log_asserts_msg
