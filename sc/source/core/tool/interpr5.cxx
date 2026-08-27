@@ -2616,9 +2616,9 @@ double lcl_GetSign(double fValue)
  * For each NxK matrix A exists a decomposition A=Q*R with an orthogonal
  * NxN matrix Q and a NxK matrix R.
  * Q=H1*H2*...*Hk with Householder matrices H. Such a householder matrix can
- * be build from a vector u by H=I-(2/u'u)*(u u'). This vectors u are returned
+ * be built from a vector u by H=I-(2/u'u)*(u u'). These vectors u are returned
  * in the columns of matrix A, overwriting the old content.
- * The matrix R has a quadric upper part KxK with values in the upper right
+ * The matrix R has a quadratic upper part KxK with values in the upper right
  * triangle and zeros in all other elements. Here the diagonal elements of R
  * are stored in the vector R and the other upper right elements in the upper
  * right of the matrix A.
@@ -2997,13 +2997,13 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
         return;
     bool bConstant, bStats;
 
-    // optional forth parameter
+    // optional fourth parameter
     if (nParamCount == 4)
         bStats = GetBool();
     else
         bStats = false;
 
-    // The third parameter may not be missing in ODF, if the forth parameter
+    // The third parameter may not be missing in ODF, if the fourth parameter
     // is present. But Excel allows it with default true, we too.
     if (nParamCount >= 3)
     {
@@ -3520,14 +3520,14 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     if (!MustHaveParamCount( nParamCount, 1, 4 ))
         return;
 
-    // optional forth parameter
+    // optional fourth parameter
     bool bConstant;
     if (nParamCount == 4)
         bConstant = GetBool();
     else
         bConstant = true;
 
-    // The third parameter may be missing in ODF, although the forth parameter
+    // The third parameter may be missing in ODF, although the fourth parameter
     // is present. Default values depend on data not yet read.
     ScMatrixRef pMatNewX;
     if (nParamCount >= 3)

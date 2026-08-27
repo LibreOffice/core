@@ -222,7 +222,7 @@ void ScRangeData::GuessPosition()
     // set a position that allows "absolutizing" of all relative references
     // in CalcAbsIfRel without errors
 
-    OSL_ENSURE(aPos == ScAddress(), "position will go lost now");
+    OSL_ENSURE(aPos == ScAddress(), "position will get lost now");
 
     SCCOL nMinCol = 0;
     SCROW nMinRow = 0;

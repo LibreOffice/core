@@ -850,7 +850,7 @@ void ScInterpreter::ScGetDateDif()
         // and months from the difference of dates. Birthday-like 23 years
         // and 10 months and 19 days.
 
-        // Algorithm's roll-over behavior extracted from Excel by try and
+        // Algorithm's roll-over behavior extracted from Excel by trial and
         // error...
         // If day1 <= day2 then simply day2 - day1.
         // If day1 > day2 then set month1 to month2-1 and year1 to
@@ -2059,7 +2059,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
     // See also #i15090#
     // Newton-Raphson method: x(i+1) = x(i) - f(x(i)) / f'(x(i))
     // This solution handles integer and non-integer values of Nper different.
-    // If ODFF will constraint Nper to integer, the distinction of cases can be
+    // If ODFF will constrain Nper to integer, the distinction of cases can be
     // removed; only the integer-part is needed then.
     bool bValid = true, bFound = false;
     double fX, fXnew, fTerm, fTermDerivation;
@@ -2918,7 +2918,7 @@ void ScInterpreter::ScBase()
 #if 0
                 // =BASIS(1e308;36) => GPF with
                 // nDig = (size_t) ::rtl::math::approxFloor( fVal - fMult );
-                // in spite off previous test if fVal >= fMult
+                // in spite of previous test if fVal >= fMult
                 double fDebug1 = fVal - fMult;
                 // fVal    := 7,5975311883090e+290
                 // fMult   := 7,5975311883090e+290
