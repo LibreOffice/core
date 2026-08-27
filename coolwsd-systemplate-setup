@@ -165,6 +165,12 @@ if test "z$ENABLE_DEBUG" != "z" -a "z$HOME" != "z"; then
     echo "$0: Copying development users's fonts into systemplate"
     mkdir -p $CHROOT/$HOME
     test -d $HOME/.fonts && ${CP} -r -p -L $HOME/.fonts $CHROOT/$HOME
+    XDG_FONTS=${XDG_DATA_HOME:-$HOME/.local/share}/fonts
+    if test -d $XDG_FONTS; then
+        XDG_FONTS_PARENT=`dirname $XDG_FONTS`
+        mkdir -p $CHROOT$XDG_FONTS_PARENT
+        ${CP} -r -p -L $XDG_FONTS $CHROOT$XDG_FONTS_PARENT
+    fi
 fi
 
 # Create a mount point for /nix/store if we will need to mount it

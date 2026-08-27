@@ -4358,6 +4358,21 @@ void lokit_main(
             allowedPaths.emplace_back(tmpPath, Landlock::Access::ReadWriteDir);
             LOG_DBG("Using tmpdir [" << tmpPath << "]");
 
+#if ENABLE_DEBUG
+            // The developer's own font directories, taken while HOME still names the real home.
+            if (const char* pHome = getenv("HOME"))
+            {
+                const std::string home(pHome);
+                allowedPaths.emplace_back(home + "/.fonts", Landlock::Access::ReadOnlyDir);
+                // an XDG variable that is set but empty counts as unset
+                const char* pXdgDataHome = getenv("XDG_DATA_HOME");
+                const std::string xdgDataHome = pXdgDataHome && *pXdgDataHome
+                                                    ? std::string(pXdgDataHome)
+                                                    : home + "/.local/share";
+                allowedPaths.emplace_back(xdgDataHome + "/fonts", Landlock::Access::ReadOnlyDir);
+            }
+#endif
+
             // used by LO Migration::migrateSettingsIfNecessary() in startup code as config dir
             ::setenv("XDG_CONFIG_HOME", (tmpPath + "/.config").c_str(), 1);
             ::setenv("HOME", tmpPath.c_str(), 1);

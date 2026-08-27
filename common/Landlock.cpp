@@ -317,14 +317,6 @@ bool lock(const std::vector<Permission>& perms)
     success = success && addPerm(rulesetFd, Permission("/usr/share/ghostscript/fonts", Access::ReadOnlyDir));
     success = success && addPerm(rulesetFd, Permission("/usr/local/share/fonts", Access::ReadOnlyDir));
 
-#if ENABLE_DEBUG
-    auto const pHome = getenv("HOME");
-    if (pHome) {
-        const std::string home{pHome};
-        success = success && addPerm(rulesetFd, Permission(home + "/.fonts", Access::ReadOnlyDir));
-    }
-#endif
-
     for (const char* pattern : {
             "/lib/ld-*",
             "/lib64/ld-*",
