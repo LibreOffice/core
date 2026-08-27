@@ -27,6 +27,7 @@
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <vcl/mapmod.hxx>
 #include <vcl/vclptr.hxx>
 #include <editeng/svxenum.hxx>
 #include "viewdata.hxx"
@@ -41,6 +42,7 @@ class ScTabViewShell;
 class ScInputWindow;
 class ScPatternAttr;
 class ScEditEngineDefaulter;
+class VirtualDevice;
 struct PasteOrDropInfos;
 class EditView;
 class EditTextObject;
@@ -117,6 +119,9 @@ private:
     double                  fScaleX;                    // for ref MapMode
     double                  fScaleY;
 
+    /// The device the text of a cell in edit mode is measured on.
+    VclPtr<VirtualDevice>   mpRefDevice;
+
     ScTabViewShell*         pRefViewSh;
     ScTabViewShell*         pActiveViewSh;
 
@@ -153,6 +158,8 @@ private:
     void            UpdateFormulaMode();
     static void     InvalidateAttribs();
     void            ImplCreateEditEngine();
+    /// Reference map mode to lay the cell edit engine out with.
+    MapMode         GetRefMapMode() const;
     DECL_LINK( DelayTimer, Timer*, void );
     void            GetColData();
     void            UseColData();

@@ -1802,15 +1802,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     assertXPath(pSheet1Xml, "//x:sheetViews/x:sheetView", "zoomScale", u"150");
 }
 
-CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellEditLayoutSettingsSameForEveryView)
 {
     ScModelObj* pModelObj = createDoc("cell-edit-300zoom-settings.ods");
 
     // Set View #1 to initial 150%
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 17933, 4853));
-    // Before the fix, this zoom would leave the EditEngine reference device
-    // at the zoom level stored in the document, so normal rendering and
-    // editing rendering happened with different MapModes
     pModelObj->setClientZoom(256, 256, 1333, 1333);
 
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -1831,13 +1828,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
     EditView* pEditView1 = pViewData1->GetEditView(SC_SPLIT_BOTTOMLEFT);
     CPPUNIT_ASSERT(pEditView1);
     EditEngine& rEditEngine1 = pEditView1->getEditEngine();
-    // These must match, if they don't then text will have a different width in edit and view modes
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
-                                         pViewData1->GetZoomX(),
-                                         rEditEngine1.GetRefMapMode().GetScaleX(), 0.000001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
-                                         pViewData1->GetZoomY(),
-                                         rEditEngine1.GetRefMapMode().GetScaleY(), 0.000001);
+    // Every view shares the edit engine of the cell that is being edited, so it lays the text
+    // out at a fixed 1:1 reference scale that no single view's zoom moves. Each view scales
+    // that laid out text to its own zoom while it paints.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("The cell edit engine keeps a fixed reference scale",
+                                         1.0, rEditEngine1.GetRefMapMode().GetScaleX(), 0.000001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("The cell edit engine keeps a fixed reference scale",
+                                         1.0, rEditEngine1.GetRefMapMode().GetScaleY(), 0.000001);
 
     // Create a View #2
     KitHelper::createView();
@@ -1870,6 +1867,77 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
     // dancing for the second user as they toggle in and out of edit mode, but
     // each user should have the same settings.
     CPPUNIT_ASSERT_EQUAL(rEditEngine1.GetControlWord(), rEditEngine2.GetControlWord());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellEditSelectionSameAtEveryZoom)
+{
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    constexpr SCCOL nCol = 0;
+    constexpr SCROW nRow = 0;
+    constexpr SCTAB nTab = 0;
+
+    // The further a selection reaches into the text, the more the width of one character after
+    // another adds up, so a long text tells two layouts apart where a short one would not.
+    pDoc->SetString(nCol, nRow, nTab,
+                    u"asdasd asdaf asdasd asdaf asdasd asdaf asdasd asdaf"_ustr);
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScTestViewCallback aView;
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 17933, 4853));
+
+    // The rectangles that highlight the whole text of the cell while it is edited at the given
+    // zoom, each of them as "left, top, width, height" in print twips.
+    auto aSelectionAtZoom = [pModelObj, pView, &aView](int nTileTwips) -> OUString
+    {
+        pModelObj->setClientZoom(256, 256, nTileTwips, nTileTwips);
+        pView->SetCursor(nCol, nRow);
+        Scheduler::ProcessEventsToIdle();
+
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+        Scheduler::ProcessEventsToIdle();
+
+        aView.m_aTextSelectionResult.clear();
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_MOD1 | awt::Key::A);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, KEY_MOD1 | awt::Key::A);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT(!aView.m_aTextSelectionResult.empty());
+        OUString aSelection;
+        for (size_t nRect = 0; nRect < aView.m_aTextSelectionResult.m_aRelRects.size(); ++nRect)
+        {
+            if (nRect > 0)
+                aSelection += u"; "_ustr;
+            const tools::Rectangle aBounds = aView.m_aTextSelectionResult.getBounds(nRect);
+            aSelection += OUString::number(aBounds.Left()) + ", " + OUString::number(aBounds.Top())
+                          + ", " + OUString::number(aBounds.GetWidth()) + ", "
+                          + OUString::number(aBounds.GetHeight());
+        }
+
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::ESCAPE);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::ESCAPE);
+        Scheduler::ProcessEventsToIdle();
+
+        return aSelection;
+    };
+
+    const OUString aSelectionAtSmallZoom = aSelectionAtZoom(3185);
+    const OUString aSelectionAtLargeZoom = aSelectionAtZoom(741);
+
+    // The rectangles of a selection inside a cell that is being edited are worked out once and
+    // sent to every view, so they have to describe the same place in the document whatever the
+    // zoom of the view that edits. Without the fix the text was laid out at that view's zoom,
+    // the rectangles came out at other widths, and a view at another zoom drew the highlight
+    // over the wrong characters.
+    CPPUNIT_ASSERT_EQUAL(aSelectionAtSmallZoom, aSelectionAtLargeZoom);
+
+    SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)

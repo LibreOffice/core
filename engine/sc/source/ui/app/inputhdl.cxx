@@ -57,6 +57,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/json_writer.hxx>
 #include <formula/formulahelper.hxx>
@@ -977,6 +978,19 @@ ScInputHandler::~ScInputHandler()
 
     if ( pInputWin && pInputWin->GetInputHandler() == this )
         pInputWin->SetInputHandler( nullptr );
+
+    mpRefDevice.disposeAndClear();
+}
+
+MapMode ScInputHandler::GetRefMapMode() const
+{
+    // The edit engine of a cell in edit mode is shared between the views. Its reference scale
+    // decides where the lines of text break, so in the kit it stays a fixed 1:1 scale and every
+    // view scales the laid out text to its own zoom while it paints.
+    if ( comphelper::COKit::isActive() )
+        return MapMode( MapUnit::Map100thMM );
+
+    return MapMode( MapUnit::Map100thMM, Point(), fScaleX, fScaleY );
 }
 
 void ScInputHandler::SetRefScale( double fX, double fY )
@@ -986,10 +1000,7 @@ void ScInputHandler::SetRefScale( double fX, double fY )
         fScaleX = fX;
         fScaleY = fY;
         if (mpEditEngine)
-        {
-            MapMode aMode( MapUnit::Map100thMM, Point(), fScaleX, fScaleY );
-            mpEditEngine->SetRefMapMode( aMode );
-        }
+            mpEditEngine->SetRefMapMode( GetRefMapMode() );
     }
 }
 
@@ -998,21 +1009,28 @@ void ScInputHandler::UpdateRefDevice()
     if (!mpEditEngine)
         return;
 
-    bool bTextWysiwyg = ScModule::get()->GetInputOptions().GetTextWysiwyg();
-    if ( bTextWysiwyg && pActiveViewSh )
+    //  Outside the kit the text is measured on the printer when the user asked to be shown the
+    //  layout of the printed page.
+    const bool bPrinterRefDevice = !comphelper::COKit::isActive() && pActiveViewSh
+                                   && ScModule::get()->GetInputOptions().GetTextWysiwyg();
+    if ( bPrinterRefDevice )
         mpEditEngine->SetRefDevice( pActiveViewSh->GetViewData().GetDocument().GetPrinter() );
     else
-        mpEditEngine->SetRefDevice( nullptr );
-
-    MapMode aMode( MapUnit::Map100thMM, Point(), fScaleX, fScaleY );
-    mpEditEngine->SetRefMapMode( aMode );
-
-    //  SetRefDevice(NULL) uses VirtualDevice, SetRefMapMode forces creation of a local VDev,
-    //  so the DigitLanguage can be safely modified (might use an own VDev instead of NULL).
-    if ( !( bTextWysiwyg && pActiveViewSh ) )
     {
-        mpEditEngine->GetRefDevice()->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
+        //  The text is measured on a device of this handler's own. The printer and the device
+        //  editeng hands out instead are shared with other code that sets its own map mode on
+        //  them, and the map mode of the device decides where the lines of the text break. The
+        //  digit language is safe to change on an own device for the same reason.
+        if ( !mpRefDevice )
+            mpRefDevice = VclPtr<VirtualDevice>::Create();
+        mpRefDevice->SetMapMode( GetRefMapMode() );
+        mpEditEngine->SetRefDevice( mpRefDevice );
     }
+
+    mpEditEngine->SetRefMapMode( GetRefMapMode() );
+
+    if ( !bPrinterRefDevice )
+        mpEditEngine->GetRefDevice()->SetDigitLanguage( ScModule::GetOptDigitLanguage() );
 }
 
 void ScInputHandler::ImplCreateEditEngine()
