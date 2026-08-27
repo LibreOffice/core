@@ -198,11 +198,11 @@ Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler::getSupportedServiceNames
 void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs )
 {
     /* It's necessary to hold this object alive, till this method finishes.
-       May the outside dispatch cache (implemented by the menu/toolbar!)
-       forget this instance during de-/activation of frames (focus!).
+       Maybe the outside dispatch cache (implemented by the menu/toolbar!)
+       forgets this instance during de-/activation of frames (focus!).
 
         E.g. An open db beamer in combination with the My-Dialog
-        can force such strange situation :-(
+        can force such a strange situation :-(
      */
     Reference< XInterface > xSelfHold(static_cast< XDispatch* >(this), UNO_QUERY);
 

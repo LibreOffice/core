@@ -68,8 +68,8 @@ public class MinimalComponent {
          */
         private XMultiComponentFactory m_xMCF;
 
-        /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         * @param xCompContext A special service factory
+        /** The constructor of the inner class has an XComponentContext parameter.
+         * @param xCompContext A special component context
          * could be introduced while initializing.
          */
         public _MinimalComponent(XComponentContext xCompContext) {
@@ -104,7 +104,7 @@ public class MinimalComponent {
             return getServiceNames();
         }
 
-        /** This method is a simple helper function to used in the
+        /** This method is a simple helper function to be used in the
          * static component initialisation functions as well as in
          * getSupportedServiceNames.
          */
@@ -135,7 +135,7 @@ public class MinimalComponent {
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
      * <p>
-     * @return  returns a <code>XSingleComponentFactory</code> for creating
+     * @return  returns an <code>XSingleComponentFactory</code> for creating
      *          the component
      * @param   sImplName the name of the implementation for which a
      *          service is desired
