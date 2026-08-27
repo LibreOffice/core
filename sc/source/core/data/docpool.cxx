@@ -336,7 +336,7 @@ static bool lcl_HFPresentation
                     EditResId(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
-                    aText += unicode::formatPercent(nPropLeftMargin,
+                    aText += unicode::formatPercent(nPropRightMargin,
                         Application::GetSettings().GetUILanguageTag());
                 }
                 else
