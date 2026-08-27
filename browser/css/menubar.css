@@ -274,6 +274,7 @@ nav [id^='save'].saved img {
 	color: var(--color-text-darker);
 	border-color: var(--color-border-darker);
 	border-bottom: 1px solid var(--color-border-darker);
+	padding: var(--spacing-m);
 }
 .lo-menu > #document-header > a.document-logo,
 .lo-menu > #document-header > a.document-logo:hover,
