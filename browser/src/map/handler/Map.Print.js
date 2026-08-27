@@ -54,18 +54,31 @@ window.L.Map.Print = window.L.Handler.extend({
 		this._printIframe.src = url;
 	},
 
+	_printViaIframe: function () {
+		try {
+			this._printIframe.contentWindow.focus(); // Required for IE
+			this._printIframe.contentWindow.print();
+		} catch (e) {
+			// Some Chrome versions throw a SecurityError here even though the
+			// blob URL is same-origin, because Chrome's built-in PDF viewer
+			// renders the iframe's content in its own security context. Open
+			// the PDF in a new tab instead, where that PDF viewer provides
+			// its own print button.
+			window.open(this._printIframe.src, '_blank');
+		}
+	},
+
 	_onIframeLoaded: function () {
-		this._printIframe.contentWindow.focus(); // Required for IE
 		if (window.L.Browser.safari) {
 			// In Safari, we have to wait until the PDF iframe is rendered.
 			// Wait 2 paint cycles to be safe.
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
-					this._printIframe.contentWindow.print();
+					this._printViaIframe();
 				});
 			});
 		} else {
-			this._printIframe.contentWindow.print();
+			this._printViaIframe();
 		}
 		// couldn't find another way to remove it
 		setTimeout(window.L.bind(this._closePrintIframe, this, this._printIframe), 300 * 1000);
