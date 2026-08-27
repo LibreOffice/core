@@ -487,7 +487,7 @@ void WorkbookFragment::finalizeImport()
                          (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlIntlMacrosheet" )) )
                     eSheetType = WorksheetType::Macro;
                 else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "dialogsheet" ) ||
-                        pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT(" dialogsheet" ))
+                        pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT("dialogsheet" ))
                     eSheetType = WorksheetType::Dialog;
                 OSL_ENSURE( eSheetType != WorksheetType::Empty, "WorkbookFragment::finalizeImport - unknown sheet type" );
                 if( eSheetType != WorksheetType::Empty )

@@ -360,7 +360,7 @@ void DrawingFragment::onEndElement()
                         OUString sFragmentPath(
                             getFragmentPathFromRelId(mxShape->getExtDrawings()[0]));
 
-                        // Don't know why importFragment looses shape name and id. Rescue them.
+                        // Don't know why importFragment loses shape name and id. Rescue them.
                         const OUString sBackupName(mxShape->getName());
                         const OUString sBackupId(mxShape->getId());
 

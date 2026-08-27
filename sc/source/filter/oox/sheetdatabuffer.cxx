@@ -761,7 +761,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
                 break;
             }
             else if (pLastRange->aStart.Row() > (rMergeRange.aEnd.Row() + 1))
-                break; // Un-necessary to check with any other rows
+                break; // Unnecessary to check with any other rows
         }
     }
     // update merged ranges for 'center across selection' and 'fill'
