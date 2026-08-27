@@ -81,18 +81,6 @@ bool TextConvWrapper::ConvNext_impl()
             return true;
         }
         return false;
-
-    }
-
-    if ( m_bStartDone && m_bEndDone )
-    {
-        if ( ConvMore_impl() )  // examine another document?
-        {
-            m_bStartDone = true;
-            m_bEndDone  = false;
-            ConvStart_impl( SvxSpellArea::Body );
-            return true;
-        }
     }
     else if (!m_aConvSel.HasRange())
     {
