@@ -27,6 +27,7 @@
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <frameformats.hxx>
 #include <docsh.hxx>
 #include <edtwin.hxx>
@@ -42,6 +43,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <sortedobjs.hxx>
+#include <textboxhelper.hxx>
 #include <itabenum.hxx>
 #include <redline.hxx>
 #include <UndoRedline.hxx>
@@ -231,6 +233,39 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
     // frame in the body frame had an SwAnchoredDrawObject anchored to it, but not a fly frame, so
     // a blank square was painted, not the image.
     assertXPath(pLayout, "/root/page/body/txt/anchored/fly", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxInCellFollowTextFlow)
+{
+    // Given a table cell holding an absolutely positioned shape that has a text box:
+    createSwDoc("textbox-in-cell-follow-text-flow.docx");
+    SwDoc* pDoc = getSwDoc();
+    sw::SpzFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
+    SwFrameFormat* pShapeFormat = nullptr;
+    for (const auto& pFormat : rFormats)
+    {
+        if (pFormat->Which() == RES_DRAWFRMFMT)
+            pShapeFormat = pFormat;
+    }
+    CPPUNIT_ASSERT(pShapeFormat);
+    // The text box is the fly format linked to the shape format.
+    const SwFrameFormat* pFlyFormat
+        = SwTextBoxHelper::getOtherTextBoxFormat(pShapeFormat, RES_DRAWFRMFMT);
+    CPPUNIT_ASSERT(pFlyFormat);
+    CPPUNIT_ASSERT(pShapeFormat->GetFollowTextFlow().GetValue());
+    // Without the accompanying fix in place, this test would have failed: the fly format kept the
+    // pool default (false) while the shape format had true, so the text box was positioned
+    // against the page instead of staying inside the cell that holds its shape.
+    CPPUNIT_ASSERT(pFlyFormat->GetFollowTextFlow().GetValue());
+
+    // When the flag is changed on the shape format later, the text box follows it:
+    pDoc->SetAttr(SwFormatFollowTextFlow(false), *pShapeFormat);
+    CPPUNIT_ASSERT(!pShapeFormat->GetFollowTextFlow().GetValue());
+    CPPUNIT_ASSERT(!pFlyFormat->GetFollowTextFlow().GetValue());
+    pDoc->SetAttr(SwFormatFollowTextFlow(true), *pShapeFormat);
+    CPPUNIT_ASSERT(pShapeFormat->GetFollowTextFlow().GetValue());
+    CPPUNIT_ASSERT(pFlyFormat->GetFollowTextFlow().GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)

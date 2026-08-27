@@ -278,6 +278,8 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE, cpo::uno::Any(xShape->getSize()),
                  pObj);
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+    syncProperty(pShapeFormat, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), pObj);
     syncProperty(pShapeFormat, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
                  xShapePropertySet->getPropertyValue(UNO_NAME_ANCHOR_TYPE), pObj);
     syncProperty(pShapeFormat, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT,
@@ -939,6 +941,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
         case RES_OPAQUE:
             aPropertyName = UNO_NAME_OPAQUE;
             break;
+        case RES_FOLLOW_TEXT_FLOW:
+            aPropertyName = UNO_NAME_IS_FOLLOWING_TEXT_FLOW;
+            break;
         case RES_FRAMEDIR:
             aPropertyName = UNO_NAME_WRITING_MODE;
             break;
@@ -1084,7 +1089,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
                              cpo::uno::Any(aNewAnchorType), pObj);
                 if (bInlineAnchored || bLayoutInCell)
-                    return;
+                    break;
                 SwFormatVertOrient aOrient(pItem->StaticWhichCast(RES_VERT_ORIENT));
 
                 tools::Rectangle aRect
@@ -1114,7 +1119,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
                              cpo::uno::Any(aNewAnchorType), pObj);
                 if (bInlineAnchored || bLayoutInCell)
-                    return;
+                    break;
                 SwFormatHoriOrient aOrient(pItem->StaticWhichCast(RES_HORI_ORIENT));
 
                 tools::Rectangle aRect
@@ -1184,6 +1189,11 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 }
             }
             break;
+            case RES_FOLLOW_TEXT_FLOW:
+                // The text frame is positioned against the same area as its shape: the cell that
+                // holds the shape when the flag is set, the page otherwise.
+                aTextBoxSet.Put(*pItem);
+                break;
             default:
                 SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrameAttr: unhandled which-id: "
                                         << pItem->Which());
@@ -1547,30 +1557,35 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 const bool bMSOLayout = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) // <= MSO 2010
                                         || rIDSA.get(DocumentSettingId::TAB_OVER_SPACING); // <=2013
 
-                // Table position
+                // Table position. The offset moves a text frame that is positioned against the
+                // page to the table. A text frame that follows the text flow is positioned
+                // inside the cell already, so it keeps the cell relative position of the shape.
                 Point nTableOffset;
-                // Floating table
-                if (auto pFly
-                    = pShape->GetAnchor().GetAnchorNode()->FindTableNode()->FindFlyStartNode())
+                if (!pFormat->GetFollowTextFlow().GetValue())
                 {
-                    if (auto pFlyFormat = pFly->GetFlyFormat())
+                    // Floating table
+                    if (auto pFly
+                        = pShape->GetAnchor().GetAnchorNode()->FindTableNode()->FindFlyStartNode())
                     {
-                        nTableOffset.setX(
-                            pFlyFormat->GetHoriOrient().getPosition().as_twip<tools::Long>());
-                        nTableOffset.setY(
-                            pFlyFormat->GetVertOrient().getPosition().as_twip<tools::Long>());
+                        if (auto pFlyFormat = pFly->GetFlyFormat())
+                        {
+                            nTableOffset.setX(
+                                pFlyFormat->GetHoriOrient().getPosition().as_twip<tools::Long>());
+                            nTableOffset.setY(
+                                pFlyFormat->GetVertOrient().getPosition().as_twip<tools::Long>());
+                        }
                     }
-                }
-                else
-                // Normal table
-                {
-                    auto pTableNode = pShape->GetAnchor().GetAnchorNode()->FindTableNode();
-                    if (auto pTableFormat = pTableNode->GetTable().GetFrameFormat())
+                    else
+                    // Normal table
                     {
-                        nTableOffset.setX(
-                            pTableFormat->GetHoriOrient().getPosition().as_twip<tools::Long>());
-                        nTableOffset.setY(
-                            pTableFormat->GetVertOrient().getPosition().as_twip<tools::Long>());
+                        auto pTableNode = pShape->GetAnchor().GetAnchorNode()->FindTableNode();
+                        if (auto pTableFormat = pTableNode->GetTable().GetFrameFormat())
+                        {
+                            nTableOffset.setX(
+                                pTableFormat->GetHoriOrient().getPosition().as_twip<tools::Long>());
+                            nTableOffset.setY(
+                                pTableFormat->GetVertOrient().getPosition().as_twip<tools::Long>());
+                        }
                     }
                 }
 
