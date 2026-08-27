@@ -59,7 +59,7 @@ namespace
         double fW = aRange.getWidth(), fH = aRange.getHeight();
         if (0.0 < fW && 0.0 < fH && (fW <= 1.0 || fH <= 1.0))
         {
-            // This polygon not empty but is too small to display.  Approximate it
+            // This polygon is not empty but is too small to display.  Approximate it
             // with a rectangle large enough to be displayed.
             double nX = aRange.getMinX(), nY = aRange.getMinY();
             double nW = std::max<double>(1.0, rtl::math::round(fW));
@@ -533,7 +533,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     // For MetaFile replay (see task) it may now be necessary to take
                     // into account that the content is AntiAlialiased and needs to be masked
                     // like that. Instead of masking, i will use a copy-modify-paste cycle
-                    // here (as i already use in the VclPrimiziveRenderer with success)
+                    // here (as i already use in the VclPrimitiveRenderer with success)
                     xVDev->SetAntialiasing(GetAntialiasing());
 
                     // create MapMode for buffer (offset needed) and set
@@ -1463,7 +1463,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                 bool                                    bSomeComponentsChanged;
 
-                // now, this is unfortunate: since changing anyone of
+                // now, this is unfortunate: since changing any one of
                 // the aCCList elements (e.g. by merging or addition
                 // of an action) might generate new intersection with
                 // other aCCList elements, have to repeat the whole

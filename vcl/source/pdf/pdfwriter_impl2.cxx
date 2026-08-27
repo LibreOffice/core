@@ -455,7 +455,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     {
                         const Size aDstSizeTwip( pDummyVDev->PixelToLogic(pDummyVDev->LogicToPixel(rSize), MapMode(MapUnit::MapTwip)) );
 
-                        // i#115962# Always use at least 300 DPI for bitmap conversion of transparence gradients,
+                        // i#115962# Always use at least 300 DPI for bitmap conversion of transparency gradients,
                         // else the quality is not acceptable (see bugdoc as example)
                         sal_Int32 nMaxBmpDPI(300);
 
@@ -1009,7 +1009,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::RASTEROP:
                 case MetaActionType::REFPOINT:
                 {
-                    // !!! >>> we don't want to support this actions
+                    // !!! >>> we don't want to support these actions
                 }
                 break;
 
