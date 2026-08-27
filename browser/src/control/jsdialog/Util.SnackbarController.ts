@@ -106,6 +106,20 @@ class SnackbarController {
 
 		if (!snackbarData.action) this.writeLiveRegion(snackbarData.label);
 
+		const dismissButton = snackbarData.action
+			? {
+					id: 'snackbar-dismiss-button',
+					type: 'pushbutton',
+					text: '',
+					icon: 'lc_cancel.svg',
+					aria: { label: _('Dismiss') },
+				}
+			: {
+					id: 'snackbar-dismiss-button',
+					type: 'pushbutton',
+					text: _('Dismiss'),
+				};
+
 		var json = {
 			id: 'snackbar',
 			jsontype: 'dialog',
@@ -131,13 +145,6 @@ class SnackbarController {
 									type: 'fixedtext',
 									text: snackbarData.label,
 								},
-						snackbarData.withDismiss
-							? {
-									id: 'snackbar-dismiss-button',
-									type: 'pushbutton',
-									text: _('Dismiss'),
-								}
-							: {},
 						snackbarData.hasProgress
 							? {
 									id: 'progress',
@@ -155,6 +162,7 @@ class SnackbarController {
 									labelledBy: labelId,
 								}
 							: {},
+						snackbarData.withDismiss ? dismissButton : {},
 					],
 				},
 			],

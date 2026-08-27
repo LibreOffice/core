@@ -177,6 +177,24 @@ describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, functio
 		cy.cGet('#snackbar-live-region').should('have.text', '');
 	});
 
+	it('Snackbar with an action leaves the message to its button', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.showSnackbar(
+				'acted notification', 'Do it', function() {}, -1, false, true);
+		});
+
+		cy.cGet('#snackbar-container #button').should('have.text', 'Do it');
+		cy.cGet('#snackbar-live-region').should('have.text', '');
+
+		cy.cGet('#snackbar-dismiss-button-button')
+			.should('have.attr', 'aria-label', 'Dismiss')
+			.and('have.class', 'has-img');
+		cy.cGet('#snackbar-dismiss-button-button img').should('exist');
+
+		cy.cGet('#snackbar-dismiss-button-button').click();
+		cy.cGet('#snackbar').should('not.exist');
+	});
+
 	it('JSDialog check enable edit input', function() {
 		cy.cGet('#File-tab-label').click();
 		cy.cGet('#File-container .unodownloadas button').click();

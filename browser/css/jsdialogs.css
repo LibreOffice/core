@@ -718,7 +718,7 @@ algned to the bottom */
 	outline-offset: -2px;
 }
 
-body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not([aria-disabled='true']):hover {
+body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not([aria-disabled='true']):not(.snackbar *):hover {
 	color: rgba(var(--doc-type), 1) !important;
 	background-color: var(--color-background-darker) !important;
 }
@@ -3183,6 +3183,7 @@ button.has-img img {
 	border: none !important;
 	margin: 0 !important;
 	justify-content: center;
+	cursor: pointer;
 }
 
 .snackbar.jsdialog-container [id$='button'].ui-pushbutton.jsdialog {
@@ -3211,8 +3212,20 @@ button.has-img img {
 	display: flex;
 	align-items: center;
 }
-.snackbar.jsdialog-container [id$='button']:hover {
+.snackbar.jsdialog-container [id$='button'].ui-pushbutton.jsdialog:hover {
 	background-color: #ffffff15 !important;
+}
+
+.snackbar.jsdialog-container #snackbar-dismiss-button .ui-pushbutton.has-img {
+	border-radius: 50% !important;
+	min-width: var(--btn-size);
+	min-height: var(--btn-size);
+}
+
+.snackbar.jsdialog-container #snackbar-dismiss-button .ui-pushbutton.has-img img {
+	width: 16px;
+	height: 16px;
+	filter: brightness(0) invert(1);
 }
 
 /* toolbuttons */
