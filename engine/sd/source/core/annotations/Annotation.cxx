@@ -209,6 +209,22 @@ void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
     }
 }
 
+util::DateTime SAL_CALL Annotation::getDateTimeUTC()
+{
+    std::unique_lock g(m_aMutex);
+    return m_DateTimeUTC;
+}
+
+void SAL_CALL Annotation::setDateTimeUTC(const util::DateTime & the_value)
+{
+    prepareSet(u"DateTimeUTC"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
+    {
+        std::unique_lock g(m_aMutex);
+        createChangeUndoImpl(g);
+        m_DateTimeUTC = the_value;
+    }
+}
+
 void Annotation::createChangeUndo()
 {
     std::unique_lock g(m_aMutex);
@@ -245,6 +261,7 @@ rtl::Reference<sdr::annotation::Annotation> Annotation::clone(SdrPage* pTargetPa
     aNewAnnotation->setAuthor(getAuthor());
     aNewAnnotation->setInitials(getInitials());
     aNewAnnotation->setDateTime(getDateTime());
+    aNewAnnotation->setDateTimeUTC(getDateTimeUTC());
     aNewAnnotation->setCreationInfo(getCreationInfo());
     aNewAnnotation->SetThreaded(IsThreaded());
     aNewAnnotation->SetResolved(IsResolved());

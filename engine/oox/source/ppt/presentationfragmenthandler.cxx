@@ -209,7 +209,13 @@ void lcl_insertModernComments(const std::vector<ModernComment>& rComments,
         xAnnotation->setInitials(rAuthors.getInitials(rComment.maAuthorId));
         util::DateTime aDateTime;
         if (::sax::Converter::parseDateTime(aDateTime, rComment.maCreated))
+        {
+            // The value is a moment in UTC, so it goes in both slots: as the moment, and as the
+            // wall clock, which is the best the entry can offer for one since the file records
+            // no zone for its author.
             xAnnotation->setDateTime(aDateTime);
+            xAnnotation->setDateTimeUTC(aDateTime);
+        }
         uno::Reference<text::XText> xText(xAnnotation->getTextRange());
         xText->setString(rComment.maText);
 

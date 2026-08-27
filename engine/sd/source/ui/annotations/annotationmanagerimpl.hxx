@@ -139,6 +139,9 @@ SfxItemPool* GetAnnotationPool();
 
 css::util::DateTime getCurrentDateTime();
 
+/** Stamps the annotation with the wall clock its author reads and the moment that stands for. */
+void stampWithCurrentTime(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

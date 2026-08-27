@@ -619,7 +619,7 @@ void AnnotationWindow::SaveToDocument()
                 pOPO.reset();
 
                 // set current time to changed annotation
-                xAnnotation->setDateTime( getCurrentDateTime() );
+                stampWithCurrentTime(xAnnotation);
 
                 rtl::Reference<sdr::annotation::Annotation> xSdrAnnotation = dynamic_cast<sdr::annotation::Annotation*>(xAnnotation.get());
                 if (xSdrAnnotation && xSdrAnnotation->getCreationInfo().meType == sdr::annotation::AnnotationType::FreeText)

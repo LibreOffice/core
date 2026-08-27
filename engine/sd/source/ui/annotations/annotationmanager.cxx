@@ -155,6 +155,14 @@ css::util::DateTime getCurrentDateTime()
             aCurrentDate.GetYear(), false );
 }
 
+void stampWithCurrentTime(const uno::Reference<office::XAnnotation>& xAnnotation)
+{
+    // The wall clock the author reads, and the moment it stands for. The clock alone carries no
+    // zone, so a reader elsewhere cannot tell which moment it was.
+    xAnnotation->setDateTime(getCurrentDateTime());
+    xAnnotation->setDateTimeUTC(DateTime::CreateSystemUTC().GetUNODateTime());
+}
+
 OUString getAnnotationDateTimeString(const uno::Reference<office::XAnnotation>& xAnnotation)
 {
     OUString sRet;
@@ -631,7 +639,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText,
     // set current author to new annotation
     xAnnotation->setAuthor( sAuthor );
     // set current time to new annotation
-    xAnnotation->setDateTime( getCurrentDateTime() );
+    stampWithCurrentTime(xAnnotation);
 
     // set position
     geometry::RealPoint2D aPosition(x / 100.0, y / 100.0);
@@ -748,7 +756,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 
     xAnnotation->setAuthor( sReplyAuthor );
     // set current time to reply
-    xAnnotation->setDateTime( getCurrentDateTime() );
+    stampWithCurrentTime(xAnnotation);
 
     // Tell our COKit clients about this (comment modification)
     KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Modify, *xAnnotation);

@@ -131,6 +131,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
+#include <tools/datetimeutils.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/autolayout.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -5510,6 +5511,11 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("id", nID);
             rJsonWriter.put("author", xAnnotation->getAuthor());
             rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
+            // The moment the annotation was written in UTC, when it is known. dateTime beside it
+            // is the author's wall clock with no zone.
+            const util::DateTime aDateTimeUTC = xAnnotation->getDateTimeUTC();
+            if (aDateTimeUTC.Year != 0)
+                rJsonWriter.put("dateTimeUtc", DateTimeToOString(DateTime(aDateTimeUTC)));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             rJsonWriter.put("text", xText->getString());
             rJsonWriter.put("part", pPage->GetGuid().getString());

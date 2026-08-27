@@ -2681,6 +2681,19 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                     AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, sStringBuffer.makeStringAndClear());
                 }
 
+                // The moment the annotation was written goes beside the wall clock dc:date
+                // carries below. Plain ODF has no place for it, so it only lands in extended
+                // ODF. A year of zero means none is recorded.
+                css::util::DateTime aDateUTC(xAnnotation->getDateTimeUTC());
+                if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                    && !bRemovePersonalInfo && aDateUTC.Year != 0)
+                {
+                    aDateUTC.IsUTC = true;
+                    ::sax::Converter::convertDateTime(sStringBuffer, aDateUTC, nullptr, true);
+                    AddAttribute(XML_NAMESPACE_CO_EXT, XML_DATE_UTC,
+                                 sStringBuffer.makeStringAndClear());
+                }
+
                 // annotation element + content
                 SvXMLElementExport aElem(*this, XML_NAMESPACE_OFFICE_EXT, XML_ANNOTATION, false, true);
 

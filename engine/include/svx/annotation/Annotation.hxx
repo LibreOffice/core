@@ -87,6 +87,8 @@ struct SVXCORE_DLLPUBLIC AnnotationData
     OUString m_Author;
     OUString m_Initials;
     css::util::DateTime m_DateTime;
+    /// See Annotation::m_DateTimeUTC.
+    css::util::DateTime m_DateTimeUTC;
     OUString m_Text;
 
     /// Threaded-comment participation. Set by filters that support
@@ -126,6 +128,9 @@ protected:
     OUString m_Author;
     OUString m_Initials;
     css::util::DateTime m_DateTime;
+    /// The same moment in UTC. m_DateTime alone is a wall clock with no zone, so this is what
+    /// pins the annotation to a point in time. A year of zero means none is recorded.
+    css::util::DateTime m_DateTimeUTC;
     rtl::Reference<sdr::annotation::TextApiObject> m_TextRange;
 
     CreationInfo maCreationInfo;

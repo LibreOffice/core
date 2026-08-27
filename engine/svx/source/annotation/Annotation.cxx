@@ -14,6 +14,7 @@
 #include <tools/json_writer.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/datetime.hxx>
+#include <tools/datetimeutils.hxx>
 #include <comphelper/kit.hxx>
 #include <COKit/COKit.hxx>
 
@@ -97,6 +98,7 @@ void Annotation::toData(AnnotationData& rData)
     rData.m_Author = m_Author;
     rData.m_Initials = m_Initials;
     rData.m_DateTime = m_DateTime;
+    rData.m_DateTimeUTC = m_DateTimeUTC;
     rData.m_Text = GetTextImpl(g);
     rData.m_Threaded = m_Threaded;
     rData.m_Resolved = m_Resolved;
@@ -112,6 +114,7 @@ void Annotation::fromData(const AnnotationData& rData)
     m_Author = rData.m_Author;
     m_Initials = rData.m_Initials;
     m_DateTime = rData.m_DateTime;
+    m_DateTimeUTC = rData.m_DateTimeUTC;
     SetTextImpl(rData.m_Text, g);
     m_Threaded = rData.m_Threaded;
     m_Resolved = rData.m_Resolved;
@@ -255,6 +258,11 @@ OString Annotation::ToJSON(CommentNotificationType nType)
             aJsonWriter.put("id", id);
             aJsonWriter.put("author", m_Author);
             aJsonWriter.put("dateTime", utl::toISO8601(m_DateTime));
+            // The moment the annotation was written, when it is known. dateTime beside it is
+            // the author's wall clock with no zone; this one is the same moment in UTC. A year
+            // of zero means none is known.
+            if (m_DateTimeUTC.Year != 0)
+                aJsonWriter.put("dateTimeUtc", DateTimeToOString(DateTime(m_DateTimeUTC)));
             aJsonWriter.put("text", GetTextImpl(g));
             // The page's GUID as a braced string; an empty string stands for no page, a
             // value the identifiers never take.
