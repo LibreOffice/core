@@ -172,7 +172,7 @@ const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) cons
 const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 {
     // color <-> index fits background, but not for fonts (0 <-> 7)!
-    // *LotAttrCache::GetColor(): Index > 7, caller hast to check index!"
+    // *LotAttrCache::GetColor(): Index > 7, caller has to check index!
     assert( nLotIndex < 8 );
 
     return pColTab[ nLotIndex ];

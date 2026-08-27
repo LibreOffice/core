@@ -790,7 +790,7 @@ void ScHTMLExport::WriteTables()
                     "=\""
                     OOO_STRING_SVTOOLS_HTML_AL_left "\"");
         }
-            // ALIGN=LEFT allow text and graphics to flow around
+            // ALIGN=LEFT allows text and graphics to flow around
         // CELLSPACING
         aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
                 "=\"" +
