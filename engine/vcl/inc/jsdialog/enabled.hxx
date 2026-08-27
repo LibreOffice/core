@@ -40,6 +40,8 @@ std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString
 std::vector<OUString> completeImpressDialogList(const o3tl::sorted_vector<OUString>& entries);
 // returns vector of impress sidebar .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeImpressSidebarList(const o3tl::sorted_vector<OUString>& entries);
+// returns vector of draw dialog .ui files not seen that should be seen to have complete coverage
+std::vector<OUString> completeDrawDialogList(const o3tl::sorted_vector<OUString>& entries);
 // returns vector of common/shared dialog .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
                                                COKitDocumentType docType,

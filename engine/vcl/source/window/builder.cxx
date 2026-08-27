@@ -228,6 +228,11 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
             missingAppDialogUIs = jsdialog::completeImpressDialogList(entries);
             missingAppSidebarUIs = jsdialog::completeImpressSidebarList(entries);
             break;
+        case COKitDocumentType::DRAWING:
+            sAppName = "Draw";
+            missingAppDialogUIs = jsdialog::completeDrawDialogList(entries);
+            // no sidebar list: SidebarList has no modules/sdraw/ entry
+            break;
         default:
             sAppName = "Unknown";
             SAL_WARN("vcl", sAppName << " coverage not implemented");
