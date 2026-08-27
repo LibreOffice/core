@@ -526,7 +526,7 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
             }
             if (m_rView.IsDragResize())
             {
-                // we resize the object don't resize to above sections
+                // when we resize the object, don't resize to above sections
                 if ( aPnt.Y() < 0 )
                 {
                     aPnt.setY( 0 );
@@ -576,7 +576,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
         if (rDragStat.GetDragMethod() != nullptr)
         {
             SdrObjListIter aIter(m_pParent->getPage(),SdrIterMode::DeepNoGroups);
-            // loop through all marked objects and check if there new rect overlaps an old one.
+            // loop through all marked objects and check if their new rect overlaps an old one.
             for (;;)
             {
                 SdrObject* pObjIter = aIter.Next();
@@ -759,7 +759,7 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     {
         if ( m_rView.IsDragResize() )
         {
-            // we resize the object don't resize to above sections
+            // when we resize the object, don't resize to above sections
             if ( aPos.Y() < 0 )
             {
                 aPos.setY( 0 );
@@ -877,7 +877,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
         {
             if ( m_rView.IsDragResize() )
             {
-                // we resize the object don't resize to above sections
+                // when we resize the object, don't resize to above sections
                 if ( aPnt.Y() < 0 )
                 {
                     aPnt.setY( 0 );

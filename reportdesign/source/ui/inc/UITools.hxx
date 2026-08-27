@@ -114,7 +114,7 @@ namespace rptui
                 const css::uno::Sequence< css::beans::NamedValue >& _rSettings
             );
 
-    /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
+    /** notifySystemWindow adds or removes the given window _pToRegister at the Systemwindow found when searching _pWindow.
         @param  pWindow
             The window which is used to search for the SystemWindow.
         @param  pToRegister
@@ -157,7 +157,7 @@ namespace rptui
 
     /** ensures that no control overlaps the given one.
     *
-    * \param pControl           the control which should place in the section without overlapping
+    * \param pControl           the control which should be placed in the section without overlapping
     * \param _pReportSection    the section
     * \param _bInsert           sal_True when the control should be inserted, otherwise not.
     */

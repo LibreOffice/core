@@ -26,7 +26,7 @@ import com.sun.star.lang.DisposedException;
 /**
  * The <code>JobQueue</code> implements a queue for jobs.
  *
- * <p>For every jobs thread id exists a job queue which is registered
+ * <p>For every job's thread id exists a job queue which is registered
  * at the <code>ThreadPool</code>.</p>
  *
  * <p>A JobQueue is split into a sync job queue and an async job queue.
@@ -168,7 +168,7 @@ public class JobQueue {
         -- _ref_count;
 
         if(_ref_count <= 0) {
-            // only synchronous queues needs to be removed .
+            // only synchronous queues need to be removed.
             if( _sync_jobQueue == null )
                 _javaThreadPoolFactory.removeJobQueue(this);
 
