@@ -11,9 +11,10 @@
 
 #include <comphelper/configuration.hxx>
 #include <svtools/svtdllapi.h>
-#include <vcl/abstdlg.hxx>
+#include <svtools/querydialog.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
+
 class SVT_DLLPUBLIC ConfirmationDlg
 {
 public:
@@ -26,16 +27,15 @@ public:
 
         if (ConfigurationLocalizedProperty::get())
         {
-            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            auto pDlg = pFact->CreateQueryDialog(pParent, rTitle, rText, rQuestion, bHideShowAgain);
+            QueryDialog aDialog(pParent, rTitle, rText, rQuestion, bHideShowAgain);
             if (!rYesLabel.isEmpty())
-                pDlg->SetYesLabel(rYesLabel);
+                aDialog.SetYesLabel(rYesLabel);
             if (!rNoLabel.isEmpty())
-                pDlg->SetNoLabel(rNoLabel);
+                aDialog.SetNoLabel(rNoLabel);
 
-            short nResult = pDlg->Execute();
+            short nResult = aDialog.run();
 
-            if (pDlg->DontShowAgain() && !bHideShowAgain)
+            if (aDialog.DontShowAgain() && !bHideShowAgain)
             {
                 std::shared_ptr<comphelper::ConfigurationChanges> aBatch(
                     comphelper::ConfigurationChanges::create());
@@ -43,7 +43,6 @@ public:
                 aBatch->commit();
             }
 
-            pDlg->disposeOnce();
             return nResult == RET_YES;
         }
         else

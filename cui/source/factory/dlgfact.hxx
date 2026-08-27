@@ -224,11 +224,6 @@ public:
         weld::Window* pParent,
         SdrObjGroup& rDiagram) override;
 
-    virtual VclPtr<AbstractQueryDialog> CreateQueryDialog(
-        weld::Window* pParent,
-        const OUString& sTitle, const OUString& sText, const OUString& sQuestion,
-        bool bShowAgain) override;
-
 #ifdef _WIN32
     virtual VclPtr<VclAbstractDialog> CreateFileExtCheckDialog(weld::Window* pParent,
                                                                const OUString& sTitle,

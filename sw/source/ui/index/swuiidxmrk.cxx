@@ -41,6 +41,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/itemset.hxx>
+#include <svtools/querydialog.hxx>
 #include <editeng/langitem.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
@@ -61,8 +62,6 @@
 #include <SwRewriter.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-
-#include <vcl/abstdlg.hxx>
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
@@ -757,14 +756,9 @@ IMPL_LINK(SwIndexMarkPane, ModifyEditHdl, weld::TextWidget&, rEdit, void)
 
 short SwIndexMarkPane::ShowWarning4Modifications()
 {
-    short nresult = RET_NO;
-    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateQueryDialog(
-        m_xDialog.get(), SwResId(STR_QUERY_CLOSE_TITLE), SwResId(STR_QUERY_CLOSE_TEXT),
-        SwResId(STR_QUERY_CLOSE_QUESTION), true));
-    nresult = pDlg->Execute();
-
-    return nresult;
+    QueryDialog aQueryDialog(m_xDialog.get(), SwResId(STR_QUERY_CLOSE_TITLE), SwResId(STR_QUERY_CLOSE_TEXT),
+                             SwResId(STR_QUERY_CLOSE_QUESTION), true);
+    return aQueryDialog.run();
 }
 
 void SwIndexMarkPane::ModifyHdl(const weld::Widget& rBox)
