@@ -25,6 +25,27 @@ describe(['tagdesktop'], 'Draw sidebar accessibility tree', { testIsolation: fal
 		a11yHelper.openSidebarPropertyDeck(getWin);
 	});
 
+	it('a panel title announces its text, not the chevron glyph', function () {
+		if (!a11yHelper.axTreeAvailable()) {
+			this._runnable.title += ' (skipped: needs a chromium browser)';
+			this.skip();
+		}
+
+		helper.typeIntoDocument('{esc}');
+
+		cy.cGet('.ui-expander-label').first().then(function ($label) {
+			const button = $label[0].closest('[tabindex], button') || $label[0];
+			button.focus();
+
+			a11yHelper.getFocusedAXNode().then(function (node) {
+				// The name comes from the contents, so it has to match them: a
+				// decorative pseudo-element must not leak into it.
+				expect(node.name.trim(), 'accessible name of the panel title')
+					.to.equal($label[0].textContent.trim());
+			});
+		});
+	});
+
 	it('every stop of the deck announces a role and a name', function () {
 		if (!a11yHelper.axTreeAvailable()) {
 			this._runnable.title += ' (skipped: needs a chromium browser)';
