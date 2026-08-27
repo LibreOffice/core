@@ -294,10 +294,10 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
     auto aNonConstRange = asNonConstRange(aProperties);
 
     // Handle multiline edit character properties
-    VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAsDynamic< VclMultiLineEdit >();
-    if ( pMulitLineEdit )
+    VclPtr<VclMultiLineEdit> pMultiLineEdit = GetAsDynamic< VclMultiLineEdit >();
+    if ( pMultiLineEdit )
     {
-        ExtTextEngine* pTextEngine = pMulitLineEdit->GetTextEngine();
+        ExtTextEngine* pTextEngine = pMultiLineEdit->GetTextEngine();
         TextPaM aCursor( 0, nIndex );
         const TextAttribFontColor* pFontColor = static_cast<const TextAttribFontColor* >(pTextEngine->FindAttrib( aCursor, TEXTATTR_FONTCOLOR ));
         if ( pFontColor )
@@ -445,10 +445,10 @@ css::accessibility::TextSegment VCLXAccessibleEdit::getTextAtIndex( sal_Int32 nI
     // Override general text component behavior: MultiLineEdit can have more text portions
     if ( aTextType == AccessibleTextType::ATTRIBUTE_RUN )
     {
-        VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAsDynamic< VclMultiLineEdit >();
-        if ( pMulitLineEdit )
+        VclPtr<VclMultiLineEdit> pMultiLineEdit = GetAsDynamic< VclMultiLineEdit >();
+        if ( pMultiLineEdit )
         {
-            ExtTextEngine* pTextEngine = pMulitLineEdit->GetTextEngine();
+            ExtTextEngine* pTextEngine = pMultiLineEdit->GetTextEngine();
             TextPaM aCursor( 0, nIndex );
             TextSegment aResult;
             pTextEngine->GetTextPortionRange( aCursor, aResult.SegmentStart, aResult.SegmentEnd );
