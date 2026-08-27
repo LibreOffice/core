@@ -562,7 +562,7 @@ void SwTextFrame::SwitchHorizontalToVertical( Point& rPoint ) const
 }
 
 /**
- * Calculates the a limit value when switching from
+ * Calculates the limit value when switching from
  * horizontal to vertical layout.
  */
 tools::Long SwTextFrame::SwitchHorizontalToVertical( tools::Long nLimit ) const
@@ -653,7 +653,7 @@ void SwTextFrame::SwitchVerticalToHorizontal( Point& rPoint ) const
 }
 
 /**
- * Calculates the a limit value when switching from
+ * Calculates the limit value when switching from
  * vertical to horizontal layout.
  */
 tools::Long SwTextFrame::SwitchVerticalToHorizontal( tools::Long nLimit ) const
@@ -1686,7 +1686,7 @@ void SwTextFrame::HideFootnotes(TextFrameIndex const nStart, TextFrameIndex cons
 
 /**
  * as-character anchored graphics, which are used for a graphic bullet list.
- * As long as these graphic bullet list aren't imported, do not hide a
+ * As long as these graphic bullet lists aren't imported, do not hide a
  * at-character anchored object, if
  * (a) the document is an imported WW8 document -
  *     checked by checking certain compatibility options -
@@ -1934,7 +1934,7 @@ void SwTextFrame::InvalidateRange_( const SwCharRange &aRange, const tools::Long
     {
         // In nDelta the differences between old and new
         // linelengths are being added, that's why it's negative
-        // if chars have been added and positive, if chars have
+        // if chars have been added and positive, if chars have been
         // deleted
         pPara->SetDelta(pPara->GetDelta() + nD);
         bInv = true;
@@ -3198,7 +3198,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
 
             // If we don't overlap with anybody:
-            // did any free-flying frame overlapped _before_ the position change?
+            // did any free-flying frame overlap _before_ the position change?
             bool bFormat = pPara->HasFly();
             if( !bFormat )
             {
@@ -3270,7 +3270,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
                     bParaPossiblyInvalid = Prepare( PrepareHint::Register, nullptr, bNotify );
-                // The Frames need to be readjusted, which caused by changes
+                // The Frames need to be readjusted, which is caused by changes
                 // in position
                 else if( HasFootnote() )
                 {
@@ -3958,7 +3958,7 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
                                                    nullptr, true );
                     // i#71281
                     // Suppress wrong invalidation of printing area, if method is
-                    // called recursive.
+                    // called recursively.
                     // Thus, member <mnHeightOfLastLine> is only set directly, if
                     // no recursive call is needed.
                     const SwTwips nNewHeightOfLastLine = nAscent + nDescent;

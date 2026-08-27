@@ -1230,7 +1230,7 @@ void SwPagePreviewLayout::PaintSelectMarkAtPage(vcl::RenderContext& rRenderConte
     ::SwAlignRect( aPageRect, &mrParentViewShell, pOutputDev );
     tools::Rectangle aPxPageRect = pOutputDev->LogicToPixel( aPageRect.SVRect() );
 
-    // draw two rectangle
+    // draw two rectangles
     // OD 19.02.2003 #107369# - adjust position of select mark rectangle
     tools::Rectangle aRect( aPxPageRect.Left(), aPxPageRect.Top(),
                        aPxPageRect.Right(), aPxPageRect.Bottom() );

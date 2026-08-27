@@ -51,7 +51,7 @@
 
 // DELETE
 /*  lcl_MakeAutoFrames has to call MakeFrames for objects bounded "AtChar"
-    ( == AUTO ), if the anchor frame has be moved via MoveNodes(..) and
+    ( == AUTO ), if the anchor frame has been moved via MoveNodes(..) and
     DelFrames(..)
 */
 static void lcl_MakeAutoFrames(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwNodeOffset nMovedIndex )
@@ -167,7 +167,7 @@ static void DelFullParaMoveFrames(SwDoc & rDoc, SwUndRng const& rRange,
 //    selection has to be extended if there are sections which would become
 //    empty otherwise. BTW: sections will be moved into the UndoArray if they
 //    are complete part of the selection. Sections starting or ending outside
-//    of the selection will not be removed from the DocNodeArray even they got
+//    of the selection will not be removed from the DocNodeArray even if they got
 //    a "dummy"-copy in the UndoArray.
 // 4. We have to anticipate the joining of the two paragraphs if the start
 //    paragraph is inside a section and the end paragraph not. Then we have to
@@ -1057,7 +1057,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if( m_pHistory )
         {
             m_pHistory->TmpRollback(rDoc, m_nSetPos, false);
-            if( m_nSetPos )       // there were Footnodes/FlyFrames
+            if( m_nSetPos )       // there were Footnotes/FlyFrames
             {
                 // are there others than these ones?
                 if( m_nSetPos < m_pHistory->Count() )
@@ -1286,7 +1286,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             if( m_bTableDelLastNd )
             {
-                // than add again a Node at the end
+                // then add again a Node at the end
                 const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
                 rDoc.GetNodes().MakeTextNode( aTmpIdx.GetNode(),
                         rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
