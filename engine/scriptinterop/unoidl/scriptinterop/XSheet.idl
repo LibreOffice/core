@@ -50,6 +50,16 @@ interface XSheet : XBase
     void setColumnWidth([in] long column, [in] long pixels);
 
     void clear();
+
+    long getLastRow();
+
+    long getLastColumn();
+
+    void autoResizeColumn([in] long column);
+
+    void autoResizeColumns([in] long startColumn, [in] long numColumns);
+
+    void autoResizeRows([in] long startRow, [in] long numRows);
 };
 
 };

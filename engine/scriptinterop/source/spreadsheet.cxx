@@ -11,12 +11,15 @@
 
 #include <utility>
 
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
@@ -32,14 +35,20 @@
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 #include <com/sun/star/sheet/XViewFreezable.hpp>
 #include <com/sun/star/sheet/XViewSplitable.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableColumns.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <cpo/uno/Reference.hxx>
+#include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
@@ -342,6 +351,116 @@ public:
         return this;
     }
 
+    cpo::uno::Reference<scriptinterop::XRange>
+        SAL_CALL setFontWeight(OUString const& fontWeight) override
+    {
+        float weight = css::awt::FontWeight::NORMAL;
+        if (fontWeight == u"bold")
+        {
+            weight = css::awt::FontWeight::BOLD;
+        }
+        else if (fontWeight != u"normal")
+        {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat("setFontWeight: expected \"bold\" or \"normal\", got ")
+                + fontWeight);
+        }
+        cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+        props->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(weight));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XRange>
+        SAL_CALL setFontStyle(OUString const& fontStyle) override
+    {
+        auto slant = css::awt::FontSlant_NONE;
+        if (fontStyle == u"italic")
+        {
+            slant = css::awt::FontSlant_ITALIC;
+        }
+        else if (fontStyle != u"normal")
+        {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat("setFontStyle: expected \"italic\" or \"normal\", got ")
+                + fontStyle);
+        }
+        cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+        props->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(slant));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XRange> SAL_CALL setFontColor(OUString const& hexColor)
+        override
+    {
+        cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+        props->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(parseHexColor(hexColor)));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XRange>
+        SAL_CALL setBorder(bool top, bool left, bool bottom, bool right, OUString const& hexColor)
+        override
+    {
+        // A single fixed solid, medium-width line for every requested edge; no style or
+        // thickness parameter yet, and the internal vertical/horizontal gridlines are never
+        // touched. An edge whose flag is false is left as it already was, not cleared: this
+        // can only add borders, not remove ones a cell already has.
+        css::table::BorderLine2 line;
+        line.Color = parseHexColor(hexColor);
+        line.InnerLineWidth = 0;
+        line.OuterLineWidth = 35;
+        line.LineDistance = 0;
+        line.LineStyle = css::table::BorderLineStyle::SOLID;
+        line.LineWidth = 35;
+        css::table::TableBorder2 border;
+        border.TopLine = line;
+        border.IsTopLineValid = top;
+        border.BottomLine = line;
+        border.IsBottomLineValid = bottom;
+        border.LeftLine = line;
+        border.IsLeftLineValid = left;
+        border.RightLine = line;
+        border.IsRightLineValid = right;
+        border.IsVerticalLineValid = false;
+        border.IsHorizontalLineValid = false;
+        border.IsDistanceValid = false;
+        cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+        props->setPropertyValue(u"TableBorder2"_ustr, cpo::uno::Any(border));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XRange> SAL_CALL setNumberFormat(OUString const& format)
+        override
+    {
+        try
+        {
+            cpo::uno::Reference<css::util::XNumberFormatsSupplier> const supplier(
+                model_, cpo::uno::UNO_QUERY_THROW);
+            auto const formats = supplier->getNumberFormats();
+            // The empty locale matches the format codes a script writes literally (like "0.00%"),
+            // the same codes across every document language rather than the locale-specific ones
+            // a user would type into the Format Cells dialog.
+            css::lang::Locale const locale;
+            auto key = formats->queryKey(format, locale, false);
+            if (key == -1)
+            {
+                key = formats->addNew(format, locale);
+            }
+            cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
+                                                                       cpo::uno::UNO_QUERY_THROW);
+            props->setPropertyValue(u"NumberFormat"_ustr, cpo::uno::Any(key));
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("setNumberFormat: ") + e.Message);
+        }
+        return this;
+    }
+
 private:
     css::table::CellRangeAddress address()
     {
@@ -463,22 +582,19 @@ public:
 
     cpo::uno::Reference<scriptinterop::XRange> SAL_CALL getDataRange() override
     {
-        auto const cursor = sheet_->createCursor();
-        cpo::uno::Reference<css::sheet::XUsedAreaCursor> const used(cursor,
-                                                                    cpo::uno::UNO_QUERY_THROW);
-        used->gotoStartOfUsedArea(false);
-        used->gotoEndOfUsedArea(true);
-        cpo::uno::Reference<css::sheet::XCellRangeAddressable> const addr(
-            cursor, cpo::uno::UNO_QUERY_THROW);
-        auto const a = addr->getRangeAddress();
-        // The cursor itself cannot take bulk value reads/writes; a genuine sub-range at the same
-        // address can.
+        auto const a = usedArea();
+        // A cursor cannot take bulk value reads/writes; a genuine sub-range at the same address
+        // can.
         cpo::uno::Reference<css::table::XCellRange> const sheetRange(sheet_,
                                                                      cpo::uno::UNO_QUERY_THROW);
         auto const range
             = sheetRange->getCellRangeByPosition(a.StartColumn, a.StartRow, a.EndColumn, a.EndRow);
         return new RangeImpl(model_, range);
     }
+
+    sal_Int32 SAL_CALL getLastRow() override { return usedArea().EndRow + 1; }
+
+    sal_Int32 SAL_CALL getLastColumn() override { return usedArea().EndColumn + 1; }
 
     sal_Int32 SAL_CALL getMaxRows() override { return columnRowRange()->getRows()->getCount(); }
 
@@ -539,6 +655,65 @@ public:
                           | css::sheet::CellFlags::EDITATTR | css::sheet::CellFlags::FORMATTED);
     }
 
+    void SAL_CALL autoResizeColumn(sal_Int32 column) override
+    {
+        resizeColumnsToFit(column, 1, u"autoResizeColumn"_ustr);
+    }
+
+    void SAL_CALL autoResizeColumns(sal_Int32 startColumn, sal_Int32 numColumns) override
+    {
+        resizeColumnsToFit(startColumn, numColumns, u"autoResizeColumns"_ustr);
+    }
+
+private:
+    void resizeColumnsToFit(sal_Int32 startColumn, sal_Int32 numColumns,
+                            std::u16string_view name)
+    {
+        if (startColumn < 1 || numColumns < 1)
+        {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat(name) + ": expected a column and count of at least 1");
+        }
+        try
+        {
+            auto const columns = columnRowRange()->getColumns();
+            for (sal_Int32 i = 0; i != numColumns; ++i)
+            {
+                cpo::uno::Reference<css::beans::XPropertySet> const columnProps(
+                    columns->getByIndex(startColumn - 1 + i), cpo::uno::UNO_QUERY_THROW);
+                columnProps->setPropertyValue(u"OptimalWidth"_ustr, cpo::uno::Any(true));
+            }
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat(name) + ": " + e.Message);
+        }
+    }
+
+public:
+    void SAL_CALL autoResizeRows(sal_Int32 startRow, sal_Int32 numRows) override
+    {
+        if (startRow < 1 || numRows < 1)
+        {
+            throw cpo::uno::RuntimeException(
+                u"autoResizeRows: expected a row and count of at least 1"_ustr);
+        }
+        try
+        {
+            auto const rows = columnRowRange()->getRows();
+            for (sal_Int32 i = 0; i != numRows; ++i)
+            {
+                cpo::uno::Reference<css::beans::XPropertySet> const rowProps(
+                    rows->getByIndex(startRow - 1 + i), cpo::uno::UNO_QUERY_THROW);
+                rowProps->setPropertyValue(u"OptimalHeight"_ustr, cpo::uno::Any(true));
+            }
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("autoResizeRows: ") + e.Message);
+        }
+    }
+
 private:
     void removeRows(sal_Int32 startRow, sal_Int32 numRows, std::u16string_view name)
     {
@@ -578,6 +753,19 @@ private:
     cpo::uno::Reference<css::table::XColumnRowRange> columnRowRange()
     {
         return cpo::uno::Reference<css::table::XColumnRowRange>(sheet_, cpo::uno::UNO_QUERY_THROW);
+    }
+
+    // The bounding box of every non-empty cell on the sheet.
+    css::table::CellRangeAddress usedArea()
+    {
+        auto const cursor = sheet_->createCursor();
+        cpo::uno::Reference<css::sheet::XUsedAreaCursor> const used(cursor,
+                                                                    cpo::uno::UNO_QUERY_THROW);
+        used->gotoStartOfUsedArea(false);
+        used->gotoEndOfUsedArea(true);
+        cpo::uno::Reference<css::sheet::XCellRangeAddressable> const addr(
+            cursor, cpo::uno::UNO_QUERY_THROW);
+        return addr->getRangeAddress();
     }
 
     // The selection tracked by the controller belongs to the document, not to any one XSheet

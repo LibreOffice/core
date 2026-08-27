@@ -33,6 +33,17 @@ interface XRange : XBase
                  [in] long numColumns);
 
     XRange setBackgroundColor([in] string hexColor);
+
+    XRange setFontWeight([in] string fontWeight);
+
+    XRange setFontStyle([in] string fontStyle);
+
+    XRange setFontColor([in] string hexColor);
+
+    XRange setBorder([in] boolean top, [in] boolean left, [in] boolean bottom,
+                     [in] boolean right, [in] string hexColor);
+
+    XRange setNumberFormat([in] string format);
 };
 
 };
