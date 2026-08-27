@@ -93,6 +93,10 @@ SwWebView::~SwWebView()
 void SwWebView::SelectShell()
 {
 #if HAVE_FEATURE_DESKTOP
+    // A view about to be deleted must not create new SfxShells
+    if (IsInDtor() || IsDying())
+        return;
+
     // Decision whether UpdateTable must be called
     bool bUpdateTable = false;
     const SwFrameFormat* pCurTableFormat = GetWrtShell().GetTableFormat();

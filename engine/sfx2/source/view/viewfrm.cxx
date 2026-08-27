@@ -1117,6 +1117,10 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
 void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
 {
+    // the flushes below can re-enter: mark the view first, so nothing re-creates its shells or
+    // asks them for slot state
+    i_rViewShell.SetDying();
+
     i_rViewShell.PopSubShells_Impl();
     sal_uInt16 nLevel = m_pDispatcher->GetShellLevel( i_rViewShell );
     if ( nLevel != USHRT_MAX )
@@ -2441,9 +2445,6 @@ bool SfxViewFrame::SwitchToViewShell_Impl
 
         // save the view data of the old view, so it can be restored later on (when needed)
         SaveCurrentViewData_Impl( nViewId );
-
-        if (pOldSh)
-            pOldSh->SetDying();
 
         // create and load new ViewShell
         SfxViewShell* pNewSh = LoadViewIntoFrame_Impl(

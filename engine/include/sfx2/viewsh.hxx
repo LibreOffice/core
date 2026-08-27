@@ -227,6 +227,7 @@ private:
     bool kitReadOnlyView : 1 = false; // When true, this is a COKit readonly view
     bool allowChangeComments : 1 = false; // Allow editing comments in readonly view mode
     bool allowManageRedlines : 1 = false; // Allow accepting/rejecting changes in readonly view mode
+    bool mbDying : 1 = false; // When true, this view shell is about to be deleted
 
 public:
 
@@ -235,7 +236,9 @@ public:
 
     /// Informs the view shell that it'll be deleted before the main loop processes the next user
     /// input.
-    virtual void SetDying() {}
+    void SetDying() { mbDying = true; }
+    /// True once the view shell is marked for deletion.
+    bool IsDying() const { return mbDying; }
 
     SfxInPlaceClient*           GetIPClient() const;
     SfxInPlaceClient*           GetUIActiveClient() const;

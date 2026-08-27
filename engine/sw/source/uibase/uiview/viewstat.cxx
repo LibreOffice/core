@@ -262,11 +262,15 @@ void SwView::GetState(SfxItemSet &rSet)
                 if( !m_pShell )
                     SelectShell();
 
-                const SfxPoolItemHolder aResult(m_pShell->GetSlotState(SID_UNDO));
-                if(aResult)
-                    rSet.Put(*aResult.getItem());
-                else
-                    rSet.DisableItem(nWhich);
+                if (m_pShell) // a view being deleted selects no shell
+                {
+                    if (const SfxPoolItemHolder aResult = m_pShell->GetSlotState(SID_UNDO))
+                    {
+                        rSet.Put(*aResult.getItem());
+                        break;
+                    }
+                }
+                rSet.DisableItem(nWhich);
             }
             break;
             case FN_INSERT_OBJ_CTRL:

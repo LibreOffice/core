@@ -283,8 +283,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     bool m_bIsSpotlightParaStyles = false;
     bool m_bIsSpotlightCharStyles = false;
 
-    bool m_bDying = false;
-
     static constexpr sal_uInt16 MAX_ZOOM_PERCENT = 600;
     static constexpr sal_uInt16 MIN_ZOOM_PERCENT = 20;
 
@@ -386,6 +384,7 @@ protected:
 
     // for SwWebView
     void            SetShell( SfxShell* pS )            { m_pShell = pS; }
+    bool IsInDtor() const { return m_bInDtor; }
 
     virtual void    Activate(bool) override;
     virtual void    Deactivate(bool) override;
@@ -645,8 +644,6 @@ public:
 
     SwView(SfxViewFrame& rFrame, SfxViewShell*);
     virtual ~SwView() override;
-
-    void SetDying() override;
 
     void NotifyDBChanged();
 
