@@ -14,6 +14,7 @@
 #include <wsd/COOLWSD.hpp>
 #include <qt/CodaConfig.hpp>
 #include <qt/CODocumentBroker.hpp>
+#include <qt/CursorFix.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/Log.hpp>
@@ -181,6 +182,8 @@ int main(int argc, char** argv)
     }
 
     QApplication app(argc, argv);
+
+    installBitmapCursorFix();
 
     user_name = getUserName();
 
