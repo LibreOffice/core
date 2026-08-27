@@ -818,7 +818,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // delText must be inside a w:del or MS Word considers the document to be corrupt
-    assertXPath(pXmlDoc, "//w:delText", 1); // there is a delTree element
+    assertXPath(pXmlDoc, "//w:delText", 1); // there is a delText element
     CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:del/w:r/w:delText")); // must be in w:del
 
     // tdf#170516 drawing after plainText control
@@ -840,7 +840,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText_sdt)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // delText must be inside a w:del or MS Word considers the document to be corrupt
-    assertXPath(pXmlDoc, "//w:delText", 1); // there is only one delTree element
+    assertXPath(pXmlDoc, "//w:delText", 1); // there is only one delText element
     assertXPath(pXmlDoc, "//w:del/w:sdt/w:sdtContent/w:r/w:delText", 1); // the whole sdt is deleted
 }
 
@@ -855,7 +855,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170952_delText)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // delText must be inside a w:del or MS Word considers the document to be corrupt
-    assertXPath(pXmlDoc, "//w:delText", 3); // there are three delTree elements
+    assertXPath(pXmlDoc, "//w:delText", 3); // there are three delText elements
     CPPUNIT_ASSERT_EQUAL(3, countXPathNodes(pXmlDoc, "//w:del/w:r/w:delText")); // all are in w:del
 }
 

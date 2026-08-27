@@ -943,7 +943,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
     // Padding (brsp)
     {
         const sal_Int32 nTopPadding = getProperty<sal_Int32>(xRun, u"CharTopBorderDistance"_ustr);
-        // In the original ODT file the padding is 150, but the unit conversion round it down.
+        // In the original ODT file the padding is 150, but the unit conversion rounds it down.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(141), nTopPadding);
         CPPUNIT_ASSERT_EQUAL(nTopPadding,
                              getProperty<sal_Int32>(xRun, u"CharLeftBorderDistance"_ustr));

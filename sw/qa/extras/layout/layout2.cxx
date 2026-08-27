@@ -1851,7 +1851,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 14
     // - Actual  : 12
-    // i.e. the text of the chart legend lost.
+    // i.e. the text of the chart legend was lost.
     assertXPath(pXmlDoc, "//textarray", 14);
 }
 
@@ -1864,7 +1864,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUnusedOLEprops)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: >300
     // - Actual  : 142
-    // i.e. the formula squashed
+    // i.e. the formula was squashed
     CPPUNIT_ASSERT_GREATEREQUAL(
         double(300),
         getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/notxt/infos/bounds", "height")
@@ -1884,7 +1884,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 53
     // - Actual  : 0
-    // i.e. the chart lost.
+    // i.e. the chart was lost.
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/push[1]/push",
                 53);
 }
@@ -2146,7 +2146,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
                    "top")
               .toInt64();
 
-    // Without the fix in place these were less than they supposed to.
+    // Without the fix in place these were less than they were supposed to be.
     CPPUNIT_ASSERT_GREATEREQUAL(nCellLeft, nTextBoxFrameLeft);
     CPPUNIT_ASSERT_GREATEREQUAL(nCellTop, nTextBoxFrameTop);
 }
