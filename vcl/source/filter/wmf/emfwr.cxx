@@ -549,7 +549,7 @@ void EMFWriter::ImplCheckTextAttr()
     // dummy elfPanose
     m_rStm.WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 );
 
-    // fill record to get a record size divideable by 4
+    // fill record to get a record size divisible by 4
     m_rStm.WriteUInt16( 0 );
 
     ImplEndRecord();

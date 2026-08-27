@@ -1300,12 +1300,12 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 {
                                     aFill.getPath( aFillPath );
 
-                                    /* normally an object filling is consisting of three MetaActions:
+                                    /* normally an object filling consists of three MetaActions:
                                         MetaBitmapAction        using RasterOp xor,
                                         MetaPolyPolygonAction   using RasterOp rop_0
                                         MetaBitmapAction        using RasterOp xor
 
-                                        Because RasterOps cannot been used in Postscript, we have to
+                                        Because RasterOps cannot be used in Postscript, we have to
                                         replace these actions. The MetaComment "XPATHFILL_SEQ_BEGIN" is
                                         providing the clippath of the object. The following loop is
                                         trying to find the bitmap that is matching the clippath, so that
@@ -1809,7 +1809,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, AlphaMask const * pAlphaMaskBitm
             }
             else
             {
-                // have we to write a palette ?
+                // do we have to write a palette ?
 
                 if ( pAcc->HasPalette() )
                 {
