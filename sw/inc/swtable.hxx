@@ -121,7 +121,7 @@ protected:
     // Usually, the table node of a SwTable can be accessed by getting a box
     // out of m_TabSortContentBoxes, which know their SwStartNode. But in some rare
     // cases, we need to know the table node of a SwTable, before the table
-    // boxes have been build (SwTableNode::MakeCopy with tables in tables).
+    // boxes have been built (SwTableNode::MakeCopy with tables in tables).
     SwTableNode* m_pTableNode;
 
     // Should that be adjustable for every table?
@@ -219,9 +219,9 @@ public:
     void CreateSelection( const SwNode* pStart, const SwNode* pEnd,
         SwSelBoxes& rBoxes, const SearchType eSearchType, bool bProtect ) const;
     void ExpandSelection( SwSelBoxes& rBoxes ) const;
-    // When a table is split into two tables, the row spans which overlaps
+    // When a table is split into two tables, the row spans which overlap
     // the split have to be corrected and stored for undo
-    // SwSavRowSpan is the structure needed by Undo to undo the split operation
+    // SwSaveRowSpan is the structure needed by Undo to undo the split operation
     // CleanUpRowSpan corrects the (top of the) second table and delivers the structure
     // for Undo
     std::unique_ptr<SwSaveRowSpan> CleanUpTopRowSpan( sal_uInt16 nSplitLine );
@@ -421,7 +421,7 @@ public:
     // rRedlinePos: search from this redline index to speed up SwTable::IsDeleted().
     // bUpdateProperty: don't update HasTextChangesOnly property, if bUpdateProperty = false.
     // Set rRedlinePos after the last redline index of the table row.
-    // Return with the redline, which associated to the row change (latest deletion
+    // Return with the redline, which is associated with the row change (latest deletion
     // in the case of deleted row, the first insertion in the case of row insertion
     // or npos, if TextChangesOnly is true, i.e. the table row is not deleted or inserted).
     // Cache also the type of the redline associated to the changed table row.
@@ -512,7 +512,7 @@ public:
     // Return "value" of box (for calculating in table).
     double GetValue( SwTableCalcPara& rPara ) const;
 
-    // Computes "coordinates" of a box, used to computed selection
+    // Computes "coordinates" of a box, used to compute selection
     // width or height when inserting cols or rows
     Point GetCoordinates() const;
 

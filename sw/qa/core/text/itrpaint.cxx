@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
     CPPUNIT_ASSERT_EQUAL(u"newcontent"_ustr, aContent.copy(nIndex3, nLength3));
     aColor3 = getXPath(pXmlDoc, "(//textarray)[3]/preceding-sibling::textcolor[1]", "color");
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected greater or equal than: 49
+    // - Expected greater than or equal to: 49
     // - Actual  : 0
     // i.e. the 3rd text portion had no increased lightness from black.
     CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int16>(49), GetColorLightness(aColor3));

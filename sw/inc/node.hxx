@@ -353,7 +353,7 @@ class SAL_DLLPUBLIC_RTTI SwStartNode: public SwNode
 {
     friend class SwNode;
     friend class SwNodes;
-    friend class SwEndNode;     ///< to set the theEndOfSection !!
+    friend class SwEndNode;     ///< to set the EndOfSection !!
 
     SwEndNode* m_pEndOfSection;
     SwStartNodeType m_eStartNodeType;
@@ -382,8 +382,8 @@ private:
 class SwEndNode final : public SwNode
 {
     friend class SwNodes;
-    friend class SwTableNode;       ///< To enable creation of its EndNote.
-    friend class SwSectionNode;     ///< To enable creation of its EndNote.
+    friend class SwTableNode;       ///< To enable creation of its EndNode.
+    friend class SwSectionNode;     ///< To enable creation of its EndNode.
 
     /// for the initial StartNode
     SwEndNode( SwNodes& rNodes, SwNodeOffset nPos, SwStartNode& rSttNd );
@@ -491,7 +491,7 @@ public:
     const T* GetNoCondAttr( TypedWhichId<T> nWhich, bool bInParents ) const
     { return static_cast<const T*>(GetNoCondAttr(sal_uInt16(nWhich), bInParents)); }
 
-    /** Does node has already its own auto-attributes?
+    /** Does node have already its own auto-attributes?
      Access to SwAttrSet. */
     inline const SwAttrSet &GetSwAttrSet() const;
     const SwAttrSet *GetpSwAttrSet() const { return mpAttrSet.get(); }
