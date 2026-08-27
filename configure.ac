@@ -6410,6 +6410,7 @@ if test "$cross_compiling" = "yes"; then
         ARGON2
         AVMEDIA
         BOOST
+        BROTLI
         BZIP2
         CAIRO
         CLUCENE
@@ -6426,9 +6427,11 @@ if test "$cross_compiling" = "yes"; then
         GRAPHITE
         HARFBUZZ
         HELPTOOLS
+        HIGHWAY
         ICU
         LCMS2
         LIBJPEG_TURBO
+        LIBJXL
         LIBLANGTAG
         LibO
         LIBFFI
