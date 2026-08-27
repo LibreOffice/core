@@ -268,11 +268,8 @@ void ScTabViewShell::ExecuteOnlyActiveSheetSavedDlg()
     QueryDialog aQueryDialog(
         GetFrameWeld(), ScResId(STR_WARN_ONLYACTIVESHEET_TITLE),
         ScResId(STR_WARN_ONLYACTIVESHEET_TEXT), ScResId(STR_WARN_ONLYACTIVESHEET_QUEST), true);
-    OUString sLabel;
-    sLabel.clear();
-    aQueryDialog.SetNoLabel(sLabel); //empty to hide the button
-    sLabel = ScResId(STR_WARN_ONLYACTIVESHEET_BUTTON);
-    aQueryDialog.SetYesLabel(sLabel);
+    aQueryDialog.SetNoLabel(u""_ustr); //empty to hide the button
+    aQueryDialog.SetYesLabel(ScResId(STR_WARN_ONLYACTIVESHEET_BUTTON));
     aQueryDialog.SetTypeWarn();
     aQueryDialog.run();
 }
