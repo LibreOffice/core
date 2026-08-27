@@ -157,7 +157,7 @@ public class HelloTextTableShape {
                     XTextContent.class, bookmark );
             xText.insertTextContent ( xText.getEnd(), xTextContent, false );
 
-            //query BookmarksSupplier
+            // query BookmarksSupplier
             XBookmarksSupplier xBookmarksSupplier = (XBookmarksSupplier)UnoRuntime.queryInterface(
             XBookmarksSupplier.class, xWriterComponent);
             XNameAccess xNamedBookmarks = xBookmarksSupplier.getBookmarks();
@@ -208,7 +208,7 @@ public class HelloTextTableShape {
                 XIndexAccess.class, sheets);
             Object sheet =  xIndexedSheets.getByIndex(0);
 
-            //get cell A2 in first sheet
+            // get cell A2 in first sheet
             XCellRange xSpreadsheetCells = UnoRuntime.queryInterface(
                 XCellRange.class, sheet);
             XCell xCell = xSpreadsheetCells.getCellByPosition(0,1);
@@ -259,7 +259,7 @@ public class HelloTextTableShape {
 
     protected void useDraw() throws java.lang.Exception {
         try {
-            //create new draw document and insert rectangle shape
+            // create new draw document and insert rectangle shape
             XComponent xDrawComponent = newDocComponent("sdraw");
             XDrawPagesSupplier xDrawPagesSupplier =
                 UnoRuntime.queryInterface(

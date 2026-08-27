@@ -145,7 +145,7 @@ void useWriter()
     Reference<XTextContent> xTextContent(bookmark, UNO_QUERY_THROW);
     xText->insertTextContent(xText->getEnd(), xTextContent, false);
 
-    //query BookmarksSupplier
+    // query BookmarksSupplier
     Reference<XBookmarksSupplier> xBookmarksSupplier(xWriterComponent, UNO_QUERY_THROW);
     Reference<XNameAccess> xNamedBookmarks = xBookmarksSupplier->getBookmarks();
     Any foundBookmark = xNamedBookmarks->getByName("MyUniqueBookmarkName");
@@ -221,7 +221,7 @@ void useCalc()
 
 void useDraw()
 {
-    //create new draw document and insert rectangle shape
+    // create new draw document and insert rectangle shape
     Reference<XComponent> xDrawComponent = newDocComponent("sdraw");
     Reference<XDrawPagesSupplier> xDrawPagesSupplier(xDrawComponent, UNO_QUERY_THROW);
 

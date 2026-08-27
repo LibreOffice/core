@@ -259,7 +259,7 @@ public class DocumentHelper
 
             xReturn = UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( 0 ) );
 
-            // Note that this is no really error-proof code: If the document model does not support the
+            // Note that this is not really error-proof code: If the document model does not support the
             // XDrawPagesSupplier interface, or if the pages collection returned is empty, this will break.
         }
 
