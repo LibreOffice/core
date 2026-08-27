@@ -176,7 +176,7 @@ namespace slideshow::internal
                 }
                 else
                 {
-                    // when not completely inside aBackgroundRange clipping is needed
+                    // when not completely inside aBackgroundRange, clipping is needed
                     // subtract aClipPoly from aBackgroundRange
                     const basegfx::B2DPolyPolygon aBackgroundPolyPoly(basegfx::utils::createPolygonFromRect(aBackgroundRange));
                     aClipPoly = basegfx::utils::solvePolygonOperationDiff(aBackgroundPolyPoly, aClipPoly);

@@ -428,7 +428,7 @@ void lookForParentTable(const uno::Reference<accessibility::XAccessibleContext>&
 
 OUString truncateText(std::u16string_view sText, sal_Int32 nNewLength)
 {
-    // truncate test to given length
+    // truncate text to given length
     std::u16string_view sNewText = sText.substr(0, nNewLength);
     // try to truncate at a word
     size_t nLastPos = sNewText.rfind(u" ");

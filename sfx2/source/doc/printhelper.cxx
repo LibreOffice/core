@@ -619,7 +619,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             {
                 // it's a local file, we can use vcl without special handling
                 // And we have to use the system notation of the incoming URL.
-                // But it into the descriptor and let the slot be executed at
+                // Put it into the descriptor and let the slot be executed at
                 // the end of this method.
                 pCheckedArgs[nProps].Name = rProp.Name;
                 pCheckedArgs[nProps++].Value <<= sTemp;
@@ -634,7 +634,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // it's a ucb target. So we must use a temp. file for vcl
                 // and move it after printing by using the ucb.
                 // Create a temp file on the heap (because it must delete the
-                // real file on disk automatically if it die - bt we have to share it with
+                // real file on disk automatically if it dies - but we have to share it with
                 // some other sources ... e.g. the ImplUCBPrintWatcher).
                 // And we put the name of this temp file to the descriptor instead
                 // of the URL. The URL we save for later using separately.
