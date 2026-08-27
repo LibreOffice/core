@@ -1033,7 +1033,7 @@ inline void ScColumn::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt
 
 inline void ScColumn::SetPattern( SCROW nRow, const CellAttributeHolder& rHolder )
 {
-    return pAttrArray->SetPattern( nRow, rHolder );
+    pAttrArray->SetPattern( nRow, rHolder );
 }
 
 inline void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPattern )
