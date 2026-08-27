@@ -32,7 +32,7 @@ struct HBox;
 /**
  * etc flag
  * 0 bit : Use page columns
- * 1 bit : Use page lows
+ * 1 bit : Use page rows
  * 2 bit : Use section break
  * 3 bit : Block start
  * 4 bit : In Block
@@ -82,9 +82,9 @@ class DLLEXPORT HWPPara
         unsigned char     scflag;
 
 /**
- * If the value is 0, all characters of paragraph have same style given cshape
+ * If the value is 0, all characters of paragraph have the same style as the given cshape
  */
-        unsigned char     contain_cshape;         /* if it's 0, all the characters are representing with representative shape */
+        unsigned char     contain_cshape;         /* if it's 0, all the characters are represented with representative shape */
         unsigned char     etcflag;
 /**
  * Checks the special characters in the paragraph

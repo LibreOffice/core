@@ -320,7 +320,7 @@ public:
 typedef tools::SvRef<SbxObject> SbxObjectRef;
 typedef tools::SvRef<SbxVariable> SbxVariableRef;
 
-//tdf#59222 SbxEnsureParentVariable is a SbxVariable which keeps a reference to
+// tdf#59222 SbxEnsureParentVariable is a SbxVariable which keeps a reference to
 //its parent, ensuring it always exists while this SbxVariable exists
 class SbxEnsureParentVariable final : public SbxVariable
 {

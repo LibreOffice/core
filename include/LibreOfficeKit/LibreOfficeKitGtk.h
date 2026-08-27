@@ -131,10 +131,10 @@ LOK_DOC_VIEW_DLLPUBLIC LibreOfficeKitDocument* lok_doc_view_get_document (LOKDoc
 /**
  * lok_doc_view_set_zoom:
  * @pDocView: The #LOKDocView instance
- * @fZoom: The new zoom level that pDocView must set it into.
+ * @fZoom: The new zoom level that pDocView must set it to.
  *
  * Sets the new zoom level for the widget. Does nothing if fZoom is equal to
- * existing zoom level. Values outside the range [0.25, 5.0] are clamped into
+ * existing zoom level. Values outside the range [0.25, 5.0] are clamped to
  * the nearest allowed value in the interval.
  */
 LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_set_zoom               (LOKDocView* pDocView,
@@ -189,7 +189,7 @@ LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_set_part               (LOKDocView* 
  * @pDocView: The #LOKDocView instance
  * @nPart:
  *
- * Returns: Get current part name of loaded document. Returns null if no
+ * Returns: Gets current part name of loaded document. Returns null if no
  * document is set, or document has been destroyed using lok_doc_view_destroy_document.
  */
 LOK_DOC_VIEW_DLLPUBLIC gchar*  lok_doc_view_get_part_name          (LOKDocView* pDocView,
