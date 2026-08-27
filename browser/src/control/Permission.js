@@ -546,19 +546,28 @@ window.L.Map.include({
 		}
 	},
 
+	// Save what the user changed, for a native host that is waiting on the
+	// result.  A document with nothing to save is answered at once with
+	// nothingToSaveMessage, so the host hears back either way.  Answers
+	// whether a save was started.
+	_saveForNativeHost: function (nothingToSaveMessage) {
+		if (this._permission !== 'edit' || !this._everModified) {
+			window.postMobileMessage(nothingToSaveMessage);
+			return false;
+		}
+		this.save(true /* dontTerminateEdit */,
+			false /* dontSaveIfUnmodified */);
+		return true;
+	},
+
 	// Save any local-edit changes and then close the window.  Mirrors
 	// _saveAndSwitchToServerMode but the post-save action is window
 	// close, signalled to the native host via a CLOSE_WINDOW message
 	// in main.js's commandresult handler once the save (and, for
 	// remote docs, the subsequent integrator upload) completes.
 	_saveAndClose: function () {
-		if (this._permission === 'edit' && this._everModified) {
+		if (this._saveForNativeHost('CLOSE_WINDOW'))
 			window._closeAfterSave = true;
-			this.save(true /* dontTerminateEdit */,
-				false /* dontSaveIfUnmodified */);
-		} else {
-			window.postMobileMessage('CLOSE_WINDOW');
-		}
 	},
 
 	// Another user wants to start collaborative editing.  Save

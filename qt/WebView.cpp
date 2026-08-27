@@ -878,7 +878,7 @@ WebView::~WebView() {
     }
 }
 
-bool WebView::canDiscardView() const
+bool WebView::mayDiscardView() const
 {
     // The starter screen and the welcome page hold no document of their own. A remote
     // document is driven by the page's collab connection, which a rebuilt page does not
@@ -893,9 +893,19 @@ bool WebView::canDiscardView() const
     // A running presentation ends with the view it was started from.
     if (_webView && _webView->isPresenting())
         return false;
+    return true;
+}
+
+bool WebView::isReadyToDiscardView() const
+{
     // Only a document whose content is already on disk is dropped, so the drop can cost
     // no content at all.
     return !isDocumentModified() && !isSaveInFlight();
+}
+
+bool WebView::requestSave(std::function<void()> onComplete)
+{
+    return _bridge && _bridge->requestSave(std::move(onComplete));
 }
 
 void WebView::discardView()
@@ -989,6 +999,12 @@ void WebView::updateTitle(const QString& docTitle)
         _onTitleChange(windowTitle);
     else if (_mainWindow)
         _mainWindow->setWindowTitle(windowTitle);
+}
+
+void WebView::onDocumentUnmodified()
+{
+    if (_onUnmodified)
+        _onUnmodified();
 }
 
 QString WebView::composedWindowTitle() const

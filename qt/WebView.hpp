@@ -136,6 +136,7 @@ class WebView : public QObject
 public:
     using CloseRequestFn = std::function<void()>;
     using TitleChangeFn = std::function<void(const QString&)>;
+    using UnmodifiedFn = std::function<void()>;
 
     explicit WebView(QWebEngineProfile* profile, bool isWelcome = false);
     ~WebView() override;
@@ -154,8 +155,12 @@ public:
     // The owner installs these; Bridge calls requestClose()/updateTitle().
     void setOnCloseRequest(CloseRequestFn cb) { _onCloseRequest = std::move(cb); }
     void setOnTitleChange(TitleChangeFn cb) { _onTitleChange = std::move(cb); }
+    // Runs each time the document stops holding a change that is not on disk.
+    void setOnUnmodified(UnmodifiedFn cb) { _onUnmodified = std::move(cb); }
     void requestClose();
     void updateTitle(const QString& title);
+    /// The document reported that it holds no change that is not on disk.
+    void onDocumentUnmodified();
     QString composedWindowTitle() const;
 
     QString documentTitle() const { return _docTitle; }
@@ -226,9 +231,16 @@ public:
 
     bool isViewDiscarded() const { return _viewDiscarded; }
 
-    /// True when this view may be discarded: it shows a local document that has a file
-    /// on disk, it holds no unsaved change, and it is not presenting.
-    bool canDiscardView() const;
+    /// True when this view shows a local document that has a file on disk. This does not
+    /// change while the document is open.
+    bool mayDiscardView() const;
+
+    /// True when the document holds no change that is not on disk yet.
+    bool isReadyToDiscardView() const;
+
+    /// Ask the page to save the document, and run the callback when the save result comes
+    /// back, whether the save succeeded or not. Returns false when no save was asked for.
+    bool requestSave(std::function<void()> onComplete);
 
     bool isDocumentModified() const;
     void endPresentation();
@@ -259,6 +271,7 @@ private:
 
     CloseRequestFn _onCloseRequest;
     TitleChangeFn _onTitleChange;
+    UnmodifiedFn _onUnmodified;
 
     static std::vector<WebView*> s_instances;
 };

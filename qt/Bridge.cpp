@@ -653,6 +653,26 @@ void Bridge::onSaveComplete(std::function<void()> callback)
     _onSaveComplete = std::move(callback);
 }
 
+bool Bridge::requestSave(std::function<void()> onComplete)
+{
+    if (_saveInFlight || _onSaveComplete)
+        return false;
+
+    _onSaveComplete = std::move(onComplete);
+    // The page raises SAVESTARTED over the web channel, which can land after this call
+    // returns, so the flag is raised here as well. A close clicked in the meantime then
+    // waits for this save instead of asking about unsaved changes.
+    _saveInFlight = true;
+    LOG_TRC_NOFILE("Bridge::requestSave: _saveInFlight=true");
+    // The page answers with SAVECOMPLETED either way, when the save finishes or at once
+    // when there is nothing to save, and the fallback answers for a page that has no map,
+    // so the callback always runs.
+    evalJS("if (window.app && window.app.map)"
+           "  window.app.map._saveForNativeHost('SAVECOMPLETED');"
+           "else window.postMobileMessage('SAVECOMPLETED');");
+    return true;
+}
+
 void Bridge::saveAndClose()
 {
     evalJS(
@@ -868,8 +888,14 @@ QVariant Bridge::cool(const QString& messageStr)
         if (commandName != ".uno:ModifiedStatus")
             return {};
 
+        const bool wasModified = _modified;
         _modified = (object->get("state").toString() == "true");
         LOG_TRC_NOFILE("Document modified status changed: " << (_modified ? "modified" : "unmodified"));
+        if (wasModified && !_modified)
+        {
+            if (WebView* owner = _owner.data())
+                owner->onDocumentUnmodified();
+        }
     }
     else if (tokens.equals(0, "CLIPBOARDMIMETYPES"))
     {

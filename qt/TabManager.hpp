@@ -108,6 +108,11 @@ private:
         // closeTab), holding one override cursor that the parked callback
         // (or detachAt, if the tab leaves another way) must release.
         bool closeWaitsForSave = false;
+        // True while this tab's view waits for a save result before it is dropped.
+        bool dropWaitsForSave = false;
+        // True from the moment this tab is asked to save for a drop until it is activated
+        // again, so one drop asks for one save.
+        bool dropSaveAsked = false;
         // The value of _activationTick when this tab was last activated. The
         // higher the value, the more recently the user was on the tab.
         unsigned long long lastActiveTick = 0;
@@ -127,6 +132,12 @@ private:
     // Discard the views of every tab beyond the live-view limit, least recently used
     // first, so the number of web engine processes stays bounded as tabs are opened.
     void enforceLiveViewLimit();
+
+    // Take the view of one tab away and put a placeholder in its place in the stack.
+    void discardTabView(Entry& e);
+
+    // Ask a tab to save, and park the drop of its view on the save result.
+    void requestSaveThenDiscard(Entry& e);
 
     int registerTab(std::unique_ptr<WebView> wv, int insertAt);
     std::unique_ptr<WebView> detachAt(std::vector<Entry>::iterator it);

@@ -126,6 +126,11 @@ public:
     /// is invoked immediately.
     void onSaveComplete(std::function<void()> callback);
 
+    /// Ask the page to save the document and leave it open, and run the callback when the
+    /// save result comes back, whether the save succeeded or not. Returns false when a save
+    /// or a callback is already outstanding, in which case the callback is not taken.
+    bool requestSave(std::function<void()> onComplete);
+
     /// Announce an orderly close to the per-document collab broker
     /// by asking the page's JS to send {"type":"bye"} on its
     /// WebSocket.  Must be called from the host window's closeEvent

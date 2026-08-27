@@ -275,18 +275,54 @@ void TabManager::enforceLiveViewLimit()
         if (e->webView->isViewDiscarded())
             continue;
         ++live;
-        if (live <= limit || !e->webView->canDiscardView())
+        if (live <= limit || !e->webView->mayDiscardView())
             continue;
 
-        const int index = static_cast<int>(std::distance(_tabs.data(), e));
-        QWidget* placeholder = new QWidget();
-        // Insert before the view goes, so the tab keeps its place in the stack.
-        _stack->insertWidget(index, placeholder);
-        _stack->removeWidget(e->webView->webEngineView());
-        e->placeholder = placeholder;
-        e->webView->discardView();
+        if (!e->webView->isReadyToDiscardView())
+        {
+            requestSaveThenDiscard(*e);
+            continue;
+        }
+
+        discardTabView(*e);
         --live;
     }
+}
+
+void TabManager::discardTabView(Entry& e)
+{
+    const int index = static_cast<int>(std::distance(_tabs.data(), &e));
+    QWidget* placeholder = new QWidget();
+    // Insert before the view goes, so the tab keeps its place in the stack.
+    _stack->insertWidget(index, placeholder);
+    _stack->removeWidget(e.webView->webEngineView());
+    e.placeholder = placeholder;
+    e.webView->discardView();
+}
+
+void TabManager::requestSaveThenDiscard(Entry& e)
+{
+    if (e.dropWaitsForSave || e.dropSaveAsked || e.closeWaitsForSave)
+        return;
+
+    QPointer<TabManager> self = this;
+    const int tabId = e.id;
+    if (!e.webView->requestSave([self, tabId]() {
+            if (!self)
+                return;
+            auto entry = self->findTab(tabId);
+            if (entry == self->_tabs.end())
+                return;
+            entry->dropWaitsForSave = false;
+            // The save took time, and in that time the user can have come back to this
+            // tab. Ask the whole policy again rather than dropping this view now.
+            self->enforceLiveViewLimit();
+        }))
+        return;
+
+    LOG_TRC("TabManager::requestSaveThenDiscard: tab " << tabId << " saves before its view goes");
+    e.dropWaitsForSave = true;
+    e.dropSaveAsked = true;
 }
 
 int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
@@ -311,6 +347,9 @@ int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
             closeTab(tid);
     });
     raw->setOnTitleChange([this, raw](const QString& title) { onWebViewTitleChanged(raw, title); });
+    // A document whose content has just reached the disk can be dropped now, so the limit
+    // does not have to wait for the next tab activation to notice.
+    raw->setOnUnmodified([this]() { enforceLiveViewLimit(); });
 
     activateTab(id);
     return id;
@@ -329,6 +368,13 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
         it->webView->onSaveComplete(nullptr);
         QApplication::restoreOverrideCursor();
     }
+    // A drop parked on this tab's save names a tab id that means nothing in whichever
+    // window ends up hosting it, so drop the callback with it.
+    if (it->dropWaitsForSave)
+    {
+        it->dropWaitsForSave = false;
+        it->webView->onSaveComplete(nullptr);
+    }
     it->webView->endPresentation();
     const int detachedIndex = static_cast<int>(std::distance(_tabs.begin(), it));
     const int detachedId = it->id;
@@ -341,6 +387,7 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
     delete placeholder;
     wv->setOnCloseRequest({});
     wv->setOnTitleChange({});
+    wv->setOnUnmodified({});
 
     // activateTab() below already emits; only emit here if it did not run.
     bool reactivated = false;
@@ -521,6 +568,11 @@ void TabManager::activateTab(int tabId)
         return;
     _activeTabId = tabId;
     it->lastActiveTick = ++_activationTick;
+    // The user is on this tab again, so the limit may ask it to save once more when it
+    // next falls behind. A save that never came back is forgotten with the rest: a live
+    // save still refuses a second request on its own.
+    it->dropSaveAsked = false;
+    it->dropWaitsForSave = false;
     restoreTabView(it);
     WebView* wv = it->webView.get();
     _stack->setCurrentWidget(wv->webEngineView());
