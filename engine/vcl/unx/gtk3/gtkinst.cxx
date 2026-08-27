@@ -3258,11 +3258,6 @@ namespace
         return aColor;
     }
 
-    Color toVclColor(const GdkRGBA& rColor)
-    {
-        return Color(rColor.red * 255, rColor.green * 255, rColor.blue * 255);
-    }
-
     OUString get_label(GtkLabel* pLabel)
     {
         const gchar* pStr = gtk_label_get_label(pLabel);
