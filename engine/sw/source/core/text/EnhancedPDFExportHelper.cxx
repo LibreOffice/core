@@ -430,6 +430,8 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
     ::std::vector<SwRect> ret;
     SwRects rects;
     rShell.GetLayout()->CalcFrameRects(*rShell.GetCursor_(), rects, SwRootFrame::RectsMode::NoAnchoredFlys);
+    auto const [pStart, pEnd] = rShell.GetCursor_()->StartEnd();
+
     for (SwRect const& rRect : rects)
     {
         Point center(rRect.Center());
@@ -437,8 +439,10 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
         SwCursorMoveState cms(CursorMoveState::NONE);
         cms.m_pSpecialPos = &special;
         cms.m_bFieldInfo = true;
+        // the centre of a one-glyph rectangle falls in that glyph's second half, so the hit
+        // test below returns the character that contains the point
+        cms.m_bPosMatchesBounds = true;
         SwPosition pos(rShell.GetDoc()->GetNodes());
-        auto const [pStart, pEnd] = rShell.GetCursor_()->StartEnd();
         if (rShell.GetLayout()->GetModelPositionForViewPoint(&pos, center, &cms)
             && *pStart <= pos && pos <= *pEnd)
         {

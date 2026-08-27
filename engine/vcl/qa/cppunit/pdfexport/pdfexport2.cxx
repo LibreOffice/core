@@ -21,15 +21,23 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#include <com/sun/star/text/ReferenceFieldSource.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/XmlWalker.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -460,6 +468,99 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTocLink)
     // Without the accompanying fix in place, this test would have failed, as the page contained no
     // links.
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
+}
+
+// Inserts three cross-reference fields to a one-digit bookmark target, separated only by
+// ", ", the way consecutive caption numbers are.
+void lcl_insertAdjacentReferenceFields(const uno::Reference<lang::XComponent>& xComponent,
+                                       float fCharHeight)
+{
+    uno::Reference<text::XTextDocument> xTextDocument(xComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    xCursorProps->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(fCharHeight));
+
+    xText->insertString(xCursor, u"1"_ustr, /*bAbsorb=*/false);
+    xCursor->goLeft(1, /*bExpand=*/true);
+    uno::Reference<text::XTextContent> xBookmark(
+        xFactory->createInstance(u"com.sun.star.text.Bookmark"_ustr), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xBookmarkName(xBookmark, uno::UNO_QUERY);
+    xBookmarkName->setName(u"Target"_ustr);
+    xText->insertTextContent(xCursor, xBookmark, /*bAbsorb=*/true);
+
+    xCursor->gotoEnd(/*bExpand=*/false);
+    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK,
+                                  /*bAbsorb=*/false);
+
+    auto insertReferenceField = [&]() {
+        xCursor->gotoEnd(/*bExpand=*/false);
+        uno::Reference<text::XTextField> xField(
+            xFactory->createInstance(u"com.sun.star.text.TextField.GetReference"_ustr),
+            uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFieldProps(xField, uno::UNO_QUERY);
+        xFieldProps->setPropertyValue(
+            u"ReferenceFieldSource"_ustr,
+            cpo::uno::Any(sal_Int16(text::ReferenceFieldSource::BOOKMARK)));
+        xFieldProps->setPropertyValue(u"ReferenceFieldPart"_ustr,
+                                      cpo::uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
+        xFieldProps->setPropertyValue(u"SourceName"_ustr, cpo::uno::Any(u"Target"_ustr));
+        xField->attach(xCursor);
+    };
+
+    insertReferenceField();
+    xCursor->gotoEnd(/*bExpand=*/false);
+    xText->insertString(xCursor, u", "_ustr, /*bAbsorb=*/false);
+    insertReferenceField();
+    xCursor->gotoEnd(/*bExpand=*/false);
+    xText->insertString(xCursor, u", "_ustr, /*bAbsorb=*/false);
+    insertReferenceField();
+}
+
+int lcl_countAnnotations(const std::unique_ptr<vcl::pdf::PDFiumDocument>& pPdfDocument)
+{
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    return pPdfPage->getAnnotationCount();
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testAdjacentReferenceFieldLinks)
+{
+    // Every one of three adjacent one-digit cross-reference fields gets its own clickable
+    // area in the exported PDF, at every font size.
+    for (float fCharHeight : { 12.0f, 8.0f, 6.0f })
+    {
+        loadFromURL(u"private:factory/swriter"_ustr);
+        lcl_insertAdjacentReferenceFields(mxComponent, fCharHeight);
+
+        save(TestFilter::PDF_WRITER);
+
+        OString aMessage("font size " + OString::number(fCharHeight));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), 3, lcl_countAnnotations(parsePDFExport()));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testAdjacentReferenceFieldLinksWideCaret)
+{
+    // The width of the text caret is a desktop setting, and can be set wider than a small
+    // glyph. The clickable areas stay independent of it.
+    AllSettings aOldSettings(Application::GetSettings());
+    comphelper::ScopeGuard aSettingsGuard(
+        [&aOldSettings] { Application::SetSettings(aOldSettings); });
+    AllSettings aSettings(aOldSettings);
+    StyleSettings aStyleSettings(aSettings.GetStyleSettings());
+    // 6 pixels is 90 twips at 96 dots per inch, wider than an 8 point digit.
+    aStyleSettings.SetCursorSize(6);
+    aSettings.SetStyleSettings(aStyleSettings);
+    Application::SetSettings(aSettings);
+
+    loadFromURL(u"private:factory/swriter"_ustr);
+    lcl_insertAdjacentReferenceFields(mxComponent, 8.0f);
+
+    save(TestFilter::PDF_WRITER);
+
+    CPPUNIT_ASSERT_EQUAL(3, lcl_countAnnotations(parsePDFExport()));
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReduceSmallImage)
