@@ -132,7 +132,7 @@ namespace sdr::contact
                     rGraphicObject,
                     aLocalGrafInfo));
 
-                // embed it to a ExclusiveEditViewPrimitive2D to allow to decide in
+                // embed it in an ExclusiveEditViewPrimitive2D to allow to decide in
                 // the primitive if to visualize or not
                 const drawinglayer::primitive2d::Primitive2DReference aEmbedded(
                     new drawinglayer::primitive2d::ExclusiveEditViewPrimitive2D(

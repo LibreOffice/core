@@ -141,7 +141,7 @@ bool MaskSet::KeyInput( const KeyEvent& rKEvt )
     }
     else
     {
-        // check for keys that interests us
+        // check for keys that interest us
         switch ( aCode.GetCode() )
         {
             case KEY_SPACE:

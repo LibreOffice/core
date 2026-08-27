@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
 {
-    // Given a document with a slide what has a linked background image:
+    // Given a document with a slide that has a linked background image:
     loadFromFile(u"slide-background.odp");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
