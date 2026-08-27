@@ -1766,7 +1766,7 @@ void CairoCommon::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap, C
                            bool bAntiAlias)
 {
     /** creates an image from the given rectangle, replacing all black pixels
-     *  with nMaskColor and make all other full transparent */
+     *  with nMaskColor and making all others fully transparent */
     // MM02 here decided *against* using buffered BitmapHelper
     // because the data gets somehow 'unmultiplied'. This may also be
     // done just once, but I am not sure if this is safe to do.
