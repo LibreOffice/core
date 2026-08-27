@@ -20,12 +20,12 @@ delete pDialog;
 or:
 
 ```
-std::shared_ptr<Dialog> xDialog(new pDialog()); // old
+std::shared_ptr<Dialog> xDialog(new Dialog()); // old
 xDialog->Execute(...);
 // depending who shared the ptr this would be freed sometime
 ```
 
-In several cases this lead to rather unpleasant code, when
+In several cases this led to rather unpleasant code, when
 various `shared_ptr` wrappers were used, the lifecycle was far less than
 obvious. Where controls were wrapped by other ref-counted classes -
 such as UNO interfaces, which were also used by native Window
@@ -238,7 +238,7 @@ there is a `disposeBuilder();` method - that should be added
   work post-dispose.
 
 * Dispose functions should be audited to:
-  + not leave dangling pointsr
+  + not leave dangling pointers
   + shrink them - some work should incrementally
     migrate back to destructors.
 

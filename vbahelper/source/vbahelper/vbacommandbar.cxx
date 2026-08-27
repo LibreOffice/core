@@ -119,7 +119,7 @@ ScVbaCommandBar::setVisible( sal_Bool _visible )
     }
     catch(const uno::Exception&)
     {
-        SAL_INFO("vbahelper", "SetVisible get an exception" );
+        SAL_INFO("vbahelper", "SetVisible got an exception" );
     }
 }
 
