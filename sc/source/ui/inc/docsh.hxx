@@ -159,7 +159,7 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
 
 public:
                     SFX_DECL_INTERFACE(SCID_DOC_SHELL)
-   SC_DLLPUBLIC static SfxObjectFactory&    Factory();                                  \
+   SC_DLLPUBLIC static SfxObjectFactory&    Factory();
    virtual SfxObjectFactory&   GetFactory() const override { return Factory(); }
 
 private:

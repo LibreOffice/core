@@ -565,7 +565,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                                     if ( bContinue )    // error at import -> abort
                                     {
-                                        //  internal operations, if some where saved
+                                        //  internal operations, if some were saved
 
                                         if ( rDBData.HasQueryParam() || rDBData.HasSortParam() ||
                                              rDBData.HasSubTotalParam() )

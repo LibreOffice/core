@@ -114,7 +114,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xWndCenterWnd;
     std::unique_ptr<weld::CustomWeld> m_xWndRightWnd;
 
-    ScEditWindow * m_pEditFocus; ///one of m_pWndLeft, m_pWndCenter, m_pWndRight
+    ScEditWindow * m_pEditFocus; /// one of m_xWndLeft, m_xWndCenter, m_xWndRight
 
     DECL_LINK( ObjectSelectHdl, ScEditWindow&, void );
 
