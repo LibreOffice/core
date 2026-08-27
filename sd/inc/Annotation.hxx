@@ -75,6 +75,8 @@ public:
     virtual void SAL_CALL setInitials(const OUString & the_value) override;
     SD_DLLPUBLIC virtual css::util::DateTime SAL_CALL getDateTime() override;
     virtual void SAL_CALL setDateTime(const css::util::DateTime & the_value) override;
+    SD_DLLPUBLIC virtual css::util::DateTime SAL_CALL getDateTimeUTC() override;
+    virtual void SAL_CALL setDateTimeUTC(const css::util::DateTime & the_value) override;
 
     void createChangeUndo();
     rtl::Reference<sdr::annotation::Annotation> clone(SdrPage* pTargetPage) override;

@@ -53,6 +53,13 @@ interface XAnnotation
     /** stores the date and time this annotation was last edited. */
     [attribute] ::com::sun::star::util::DateTime DateTime;
 
+    /** stores the moment this annotation was last edited, in UTC.
+
+        DateTime beside it is a wall clock with no zone attached, so this is what
+        says which moment that was. A year of zero means no moment is recorded.
+     */
+    [attribute] ::com::sun::star::util::DateTime DateTimeUTC;
+
     /** gives access to the annotations text. */
     [attribute, readonly] ::com::sun::star::text::XText TextRange;
 };
