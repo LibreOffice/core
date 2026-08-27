@@ -1369,7 +1369,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     bool bFitPromise = false;               // If a paragraph didn't fit, but promises
                                             // with WouldFit that it would adjust accordingly,
                                             // this flag is set. If it turns out that it
-                                            // didn't keep it's promise, we can act in a
+                                            // didn't keep its promise, we can act in a
                                             // controlled fashion.
     const bool bFly = IsInFly();
     const bool bTab = IsInTab();
@@ -1760,8 +1760,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             // suppress invalidation and calculation of position, if paragraph
             // has formatted itself at least STOP_FLY_FORMAT times and
             // has anchored objects.
-            // Thus, the anchored objects get the possibility to format itself
-            // and this probably solve the layout loop.
+            // Thus, the anchored objects get the possibility to format themselves
+            // and this probably solves the layout loop.
             if ( bFootnote &&
                  nFormatCount <= STOP_FLY_FORMAT &&
                  !GetDrawObjs() )
@@ -2326,7 +2326,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                     pFrame = static_cast<SwTextFrame*>(pFrame)->GetFollow();
                 }
                 // If last follow frame of <this> text frame isn't valid,
-                // a formatting of the next content frame doesn't makes sense.
+                // a formatting of the next content frame doesn't make sense.
                 // Thus, return true.
                 if ( IsAnFollow( pFrame ) && !pFrame->isFrameAreaDefinitionValid() )
                 {

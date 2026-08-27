@@ -160,7 +160,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
             }
         }
 
-        //     Fly frame without a lower have to be subtracted from paint region.
+        //     Fly frame without a lower has to be subtracted from paint region.
         //     For checking, if fly frame contains transparent graphic or
         //     has surrounded contour, assure that fly frame has a lower
         SwFrame* pLower = pFly->Lower();
@@ -173,7 +173,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
         }
 
         //     vcl::Region of a fly frame with transparent background or a transparent
-        //     shadow have not to be subtracted from paint region
+        //     shadow does not have to be subtracted from paint region
         if ( pFly->IsBackgroundTransparent() )
         {
             continue;
@@ -342,7 +342,7 @@ void SwLayAction::SetAgain(bool bAgain)
     }
     else
     {
-        // LayAction::FormatLayout is now continue normally and will
+        // LayAction::FormatLayout will now continue normally and will
         // dereference the top SwFrame in the stack of m_aFrameStack as each
         // FormatLevel returns so disallow their deletion
         for (size_t i = 0; i < nCount; ++i)

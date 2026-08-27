@@ -616,7 +616,7 @@ SwSectionFrame* SwSectionFrame::SplitSect( SwFrame* pFrameStartAfter, SwFrame* p
 }
 
 /**
-|*  MoveContent is called for destroying a SectionFrames, due to
+|*  MoveContent is called for destroying a SectionFrame, due to
 |*  the cancellation or hiding of a section, to handle the content.
 |*  If the SectionFrame hasn't broken up another one, then the content
 |*  is moved to the Upper. Otherwise the content is moved to another
@@ -869,7 +869,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     if (!GetPrev() && !IsFollow() && IsInDocBody() && IsHiddenNow())
     {
-        // This may be the first frame on a page, and it may had moved to that page because its
+        // This may be the first frame on a page, and it may have moved to that page because its
         // content required that (a page break in the first paragraph, or a tall first line, or
         // "do not break paragraph" setting, or the like). Try to move back, to allow following
         // frames to move back, if possible. Sections cannot move back; workaround by a call to
@@ -1076,7 +1076,7 @@ bool SwSectionFrame::CalcMinDiff( SwTwips& rMinDiff ) const
 }
 
 /**
- *  CollectEndnotes looks for endnotes in the sectionfrm and his follows,
+ *  CollectEndnotes looks for endnotes in the sectionfrm and its follows,
  *  the endnotes will cut off the layout and put into the array.
  *  If the first endnote is not a master-SwFootnoteFrame, the whole sectionfrm
  *  contains only endnotes and it is not necessary to collect them.
@@ -2511,7 +2511,7 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
                     aRectFnSet.SetHeight( aPrt, nPrtHeight );
                 }
 
-                // We do not allow a section frame to shrink the its upper
+                // We do not allow a section frame to shrink its upper
                 // footer frame. This is because in the calculation of a
                 // footer frame, the content of the section frame is _not_
                 // calculated. If there is a fly frame overlapping with the
@@ -2558,8 +2558,8 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
 }
 
 /*
-|*  When are Frames within a SectionFrames moveable?
-|*  If they are not in the last column of a SectionFrames yet,
+|*  When are Frames within a SectionFrame moveable?
+|*  If they are not in the last column of a SectionFrame yet,
 |*  if there is no Follow,
 |*  if the SectionFrame cannot grow anymore, then it gets more complicated,
 |*  in that case it depends on whether the SectionFrame can find a next
