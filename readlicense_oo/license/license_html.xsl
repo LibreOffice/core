@@ -9,12 +9,14 @@
   <xsl:param name="themes" />
 
   <xsl:template match="x:div">
+    <!-- Pad with spaces on both sides so that the class matches a whole word. -->
+    <xsl:variable name="word" select="concat(' ',@class,' ')"/>
     <xsl:choose>
       <xsl:when test="(
-                not(contains($build_type,@class)) and
-                not(contains($no_mpl_subset,@class)) and
-                not(contains($os,@class)) and
-                not(contains($themes,@class)) and @class)">
+                not(contains(concat(' ',$build_type,' '),$word)) and
+                not(contains(concat(' ',$no_mpl_subset,' '),$word)) and
+                not(contains(concat(' ',$os,' '),$word)) and
+                not(contains(concat(' ',$themes,' '),$word)) and @class)">
       <!-- do not write out license text for these externals -->
       </xsl:when>
       <xsl:otherwise>
