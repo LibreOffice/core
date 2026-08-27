@@ -126,7 +126,7 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
                     m_bIsInMove       : 1,
                     m_bIsInDrag       : 1, // don't execute StartExecuteDrag twice
                     m_bOldIdle        : 1, // to stop to idle
-                    m_bOldIdleSet     : 1, // during QeueryDrop
+                    m_bOldIdleSet     : 1, // during QueryDrop
                     m_bChainMode      : 1, // connect frames
                     m_bWasShdwCursor    : 1, // ShadowCursor was on in MouseButtonDown
                     m_bLockInput      : 1, // lock while calc panel is active
@@ -180,7 +180,7 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
     void            StopDDTimer(SwWrtShell *, const Point &);
     DECL_LINK( DDHandler, Timer *, void );
 
-    // timer for ANY-KeyInut question without a following KeyInputEvent
+    // timer for ANY-KeyInput question without a following KeyInputEvent
     DECL_LINK( KeyInputFlushHandler, Timer *, void );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)

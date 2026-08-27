@@ -142,7 +142,7 @@ SwHHCWrapper::~SwHHCWrapper() COVERITY_NOEXCEPT_FALSE
 
     SwDoc *pDoc = m_rView.GetDocShell()->GetDoc();
 
-    //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
+    //!! Note: This also affects the default language of text boxes (EditEngine/EditView) !!
     pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
 
     const vcl::Font *pFont = GetTargetFont();
@@ -212,7 +212,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
         const uno::Sequence< sal_Int32 > *pOffsets,
         SwPaM *pCursor )
 {
-    //!! please see also TextConvWrapper::ChangeText with is a modified
+    //!! please see also TextConvWrapper::ChangeText which is a modified
     //!! copy of this code
 
     OSL_ENSURE( !rNewText.isEmpty(), "unexpected empty string" );
@@ -330,7 +330,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
 
         // since 'SetAttr' below functions like merging with the attributes
         // from the itemset with any existing ones we have to get rid of all
-        // all attributes now. (Those attributes that may take effect left
+        // attributes now. (Those attributes that may take effect left
         // to the position where the new text gets inserted after the old text
         // was deleted)
         m_rWrtShell.ResetAttr();
