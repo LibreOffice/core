@@ -141,7 +141,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // We have to reject double calls. Otherwise we risk,
     // that we try to close an already closed resource...
     // And it is no problem to do nothing then. The UI user will try it again, if
-    // non of these jobs was successful.
+    // none of these jobs was successful.
     if (m_xSelfHold.is())
     {
         aWriteLock.clear();
@@ -194,8 +194,8 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
 
     // OK - URLs are the right ones.
     // But we can't execute synchronously :-)
-    // May we are called from a generic key-input handler,
-    // which isn't aware that this call kill its own environment...
+    // Maybe we are called from a generic key-input handler,
+    // which isn't aware that this call kills its own environment...
     // Do it asynchronous every time!
 
     // But don't forget to hold ourselves alive.
@@ -235,9 +235,9 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
                 - close all views to the same document, if needed and possible
                 - make the current frame empty
                   ! This step is necessary to handle errors during closing the
-                    document inside the frame. May the document shows a dialog and
-                    the user ignore it. Then the state of the office can be changed
-                    during we try to close frame and document.
+                    document inside the frame. Maybe the document shows a dialog and
+                    the user ignores it. Then the state of the office can be changed
+                    while we try to close frame and document.
                 - check the environment (means count open frames - excluding our
                   current one)
                 - decide then, if we must close this frame only, establish the backing mode
@@ -467,7 +467,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
     // Inform user about modified documents or still running jobs (e.g. printing).
     {
         css::uno::Reference< css::frame::XController > xController = xFrame->getController();
-        if (xController.is()) // some views don't uses a controller .-( (e.g. the help window)
+        if (xController.is()) // some views don't use a controller .-( (e.g. the help window)
         {
             bControllerSuspended = xController->suspend(true);
             if (! bControllerSuspended)
@@ -587,9 +587,9 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         if (xTopWindowCheck.is())
         {
             // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
-            //     Be sure that these window is really a "top system window".
+            //     Be sure that this window is really a "top system window".
             //     Attention ! Checking Window->GetParent() isn't the right approach here.
-            //     Because sometimes VCL create "implicit border windows" as parents even we created
+            //     Because sometimes VCL create "implicit border windows" as parents even if we created
             //     a simple XWindow using the toolkit only .-(
             SolarMutexGuard aSolarLock;
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );

@@ -51,8 +51,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     {
         SolarMutexGuard aReadLock;
 
-        // a) first search an interceptor, which match to this URL by its URL pattern registration
-        //    Note: if it return NULL - it does not mean an empty interceptor list automatically!
+        // a) first search an interceptor, which matches to this URL by its URL pattern registration
+        //    Note: if it returns NULL - it does not mean an empty interceptor list automatically!
         InterceptorList::const_iterator pIt = m_lInterceptionRegs.findByPattern(aURL.Complete);
         if (pIt != m_lInterceptionRegs.end())
             xInterceptor = pIt->xInterceptor;
@@ -75,8 +75,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
             // patterns above)
         }
         // c) No registered interceptor => use our direct slave.
-        //    This helper exist by design and must be valid every time ...
-        //    But to be more feature proof - we should check that .-)
+        //    This helper exists by design and must be valid every time ...
+        //    But to be more future proof - we should check that .-)
         if (!xInterceptor.is() && m_xSlave.is())
             xInterceptor = m_xSlave;
     }
@@ -106,8 +106,8 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
         throw css::uno::RuntimeException(u"NULL references not allowed as in parameter"_ustr, xThis);
 
     // Fill a new info structure for new interceptor.
-    // Save his reference and try to get an additional URL/pattern list from him.
-    // If no list exist register these interceptor for all dispatch events with "*"!
+    // Save its reference and try to get an additional URL/pattern list from it.
+    // If no list exists register this interceptor for all dispatch events with "*"!
     InterceptorInfo aInfo;
 
     aInfo.xInterceptor = xInterceptor;
@@ -131,7 +131,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     }
 
     // b) OK - there is at least one interceptor already registered.
-    //    It's slave and it's master must be valid references ...
+    //    Its slave and its master must be valid references ...
     //    because we created it.
 
     // insert it before any other existing interceptor - means at the beginning of our list.
@@ -172,7 +172,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
     // If it could be located inside cache -
     // use its slave/master relations to update the interception list;
     // set empty references for it as new master and slave;
-    // and release it from out cache.
+    // and release it from our cache.
     InterceptorList::iterator pIt = m_lInterceptionRegs.findByReference(xInterceptor);
     if (pIt != m_lInterceptionRegs.end())
     {
@@ -227,8 +227,8 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     if (aEvent.Source != xOwner)
         return;
 
-    // Because every interceptor hold at least one reference to us ... and we destruct this list
-    // of interception objects ... we should hold ourself alive .-)
+    // Because every interceptor holds at least one reference to us ... and we destruct this list
+    // of interception objects ... we should hold ourselves alive .-)
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
     // We need a full copy of all currently registered interceptor objects.
