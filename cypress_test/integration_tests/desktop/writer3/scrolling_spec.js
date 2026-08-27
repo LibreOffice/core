@@ -7,6 +7,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('writer/scrolling.odt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('Check if we jump the view on new page insertion', function() {
@@ -89,9 +92,14 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 	it('Drag vertical scrollbar while mouse moves into sidebar area', function() {
 		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
 
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
+		// The notebookbar styles iconview renders its entries on demand after load, and each
+		// render can shift the layout and resize the canvas. Wait until those renders are done
+		// and the layout is idle, so the canvas rectangle measured below is the final one.
+		helper.processToIdle(this.win);
+		helper.waitForOnDemandRenders(this.win);
 
+		cy.then(() => {
+			var win = this.win;
 			var canvas = win.document.getElementById('document-canvas');
 			var rect = canvas.getBoundingClientRect();
 			var scrollProps = win.app.activeDocument.activeLayout.scrollProperties;
