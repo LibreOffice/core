@@ -2957,6 +2957,15 @@ bool isAuthorLocalTime(std::u16string_view rDateTime, const DateTime& rBefore, c
     const tools::Time aOffset = KitTimezoneSetup::GetAuthorOffset();
     return DateTime(aParsed).IsBetween(rBefore + aOffset, rAfter + aOffset);
 }
+
+/// Whether the given ISO 8601 string falls in the window the two server-clock readings bound. The
+/// server keeps UTC in these tests, so this is the test for a moment rather than a wall clock.
+bool isUtcTime(std::u16string_view rDateTime, const DateTime& rBefore, const DateTime& rAfter)
+{
+    css::util::DateTime aParsed;
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(rDateTime, aParsed));
+    return DateTime(aParsed).IsBetween(rBefore, rAfter);
+}
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoteDateTimeUsesViewTimezone)
@@ -3011,12 +3020,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDateTimeUsesViewTi
         aView.m_aCommentCallbackResult.get<std::string>("dateTime"));
     CPPUNIT_ASSERT(isAuthorLocalTime(aDateTime, aBefore, aAfter));
 
+    // The threaded entry holds the moment instead, which is what the slot it round-trips through
+    // asks for. Without the accompanying fix in place, this test would have failed: the entry
+    // carried the author's wall clock, five and a half hours ahead of the moment.
     ScDocument* pDoc = pModelObj->GetDocument();
     const ScPostIt* pNote = pDoc->GetNote(ScAddress(2, 3, 0));
     CPPUNIT_ASSERT(pNote);
     const ScThreadedCommentData* pThreaded = pNote->GetThreadedCommentData();
     CPPUNIT_ASSERT(pThreaded);
-    CPPUNIT_ASSERT(isAuthorLocalTime(pThreaded->maRoot.maDateTime, aBefore, aAfter));
+    CPPUNIT_ASSERT(isUtcTime(pThreaded->maRoot.maDateTime, aBefore, aAfter));
 }
 #endif
 

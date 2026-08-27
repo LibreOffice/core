@@ -506,6 +506,9 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.microsoft.com/office/word/2016/wordml/cid"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w16cex"),
                        BAD_CAST("http://schemas.microsoft.com/office/word/2018/wordml/cex"));
+    xmlXPathRegisterNs(
+        pXmlXpathCtx, BAD_CAST("xthreaded"),
+        BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2018/threadedcomments"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("m"),
                        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/math"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ContentType"),

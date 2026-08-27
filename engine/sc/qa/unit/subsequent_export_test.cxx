@@ -2429,6 +2429,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testThreadedCommentRoundtrip)
     // Author should be the display name after round-trip, not tc={guid}.
     CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pNote->GetAuthor());
 
+    // The moment the entry was written is a UTC instant, kept as the file had it. The file this
+    // comes from was written elsewhere, so the value is a good check that we neither shift it nor
+    // reformat it.
+    const ScThreadedCommentData* pThreaded = pNote->GetThreadedCommentData();
+    CPPUNIT_ASSERT(pThreaded);
+    CPPUNIT_ASSERT_EQUAL(u"2026-03-24T09:25:49.80"_ustr, pThreaded->maRoot.maDateTime);
+    xmlDocUniquePtr pXmlThreaded = parseExport(u"xl/threadedComments/threadedComment1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlThreaded);
+    assertXPath(pXmlThreaded, "/xthreaded:ThreadedComments/xthreaded:threadedComment[1]", "dT",
+                u"2026-03-24T09:25:49.80");
+
     const ScThreadedCommentData* pData = pNote->GetThreadedCommentData();
     CPPUNIT_ASSERT(pData);
     CPPUNIT_ASSERT_EQUAL(u"{FB8EA27E-C1B6-4481-B034-193455CC7425}"_ustr, pData->maRoot.maGuid);
