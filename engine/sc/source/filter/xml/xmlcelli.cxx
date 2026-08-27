@@ -956,6 +956,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             }
             pNote->SetDate( aDate );
         }
+        pNote->SetDateUTC(mxAnnotationData->maCreateDateUTC);
         pNote->SetAuthor( mxAnnotationData->maAuthor );
         if (mxAnnotationData->mpThreadedCommentData)
             pNote->SetThreadedCommentData(std::move(mxAnnotationData->mpThreadedCommentData));

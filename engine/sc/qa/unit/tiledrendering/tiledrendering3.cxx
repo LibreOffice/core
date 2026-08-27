@@ -2993,6 +2993,16 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoteDateTimeUsesViewTimezone)
     const OUString aDateTime = OUString::createFromAscii(
         aView.m_aCommentCallbackResult.get<std::string>("dateTime"));
     CPPUNIT_ASSERT(isAuthorLocalTime(aDateTime, aBefore, aAfter));
+
+    // The moment goes out beside it, marked as UTC, so a client can show the note on the
+    // reader's own clock rather than the author's.
+    const OUString aDateTimeUtc = OUString::createFromAscii(
+        aView.m_aCommentCallbackResult.get<std::string>("dateTimeUtc"));
+    CPPUNIT_ASSERT(aDateTimeUtc.endsWith("Z"));
+    // It carries whole seconds, so the lower bound drops its fraction.
+    DateTime aFlooredBefore = aBefore;
+    aFlooredBefore.SetNanoSec(0);
+    CPPUNIT_ASSERT(isUtcTime(aDateTimeUtc, aFlooredBefore, aAfter));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDateTimeUsesViewTimezone)

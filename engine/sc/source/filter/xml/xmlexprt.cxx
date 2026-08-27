@@ -3889,6 +3889,19 @@ void ScXMLExport::WriteAnnotation(ScDocument& rDoc, const ScMyCell& rMyCell)
     if (pNote->IsCaptionShown())
         AddAttribute(XML_NAMESPACE_OFFICE, XML_DISPLAY, XML_TRUE);
 
+    const bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(
+                 SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+
+    // The moment the note was written goes beside the wall clock dc:date carries. Plain ODF has
+    // no place for it, so it only lands in extended ODF.
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) && !bRemovePersonalInfo
+        && !pNote->GetDateUTC().isEmpty())
+    {
+        AddAttribute(XML_NAMESPACE_CO_EXT, XML_DATE_UTC, pNote->GetDateUTC());
+    }
+
     pCurrentCell = &rMyCell;
 
     SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(rMyCell.maCellAddress);

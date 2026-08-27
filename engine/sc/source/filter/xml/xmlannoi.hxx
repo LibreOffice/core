@@ -55,6 +55,8 @@ struct ScXMLAnnotationData
                         mxShapes;
     OUString     maAuthor;
     OUString     maCreateDate;
+    /// The moment the note was written, from the coext extension attribute, or empty.
+    OUString maCreateDateUTC;
     OUString     maSimpleText;
     OUString     maStyleName;
     OUString     maTextStyle;

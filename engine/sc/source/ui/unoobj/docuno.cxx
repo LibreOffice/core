@@ -1343,6 +1343,10 @@ void ScModelObj::getPostIts(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("tab", aNote.maPos.Tab());
         rJsonWriter.put("author", aNote.mpNote->GetAuthor());
         rJsonWriter.put("dateTime", aNote.mpNote->GetDate());
+        // The moment the note was written in UTC, when it is known. dateTime beside it is the
+        // author's wall clock with no zone.
+        if (!aNote.mpNote->GetDateUTC().isEmpty())
+            rJsonWriter.put("dateTimeUtc", aNote.mpNote->GetDateUTC());
         if (const auto* pData = aNote.mpNote->GetThreadedCommentData())
         {
             rJsonWriter.put("text", pData->maRoot.maText);

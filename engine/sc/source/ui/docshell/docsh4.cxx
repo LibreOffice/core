@@ -3094,6 +3094,10 @@ void ScDocShell::KitCommentNotify(KitCommentNotificationType nType, const ScDocu
         {
             aAnnotation.put("author", pNote->GetAuthor());
             aAnnotation.put("dateTime", pNote->GetDate());
+            // The moment the note was written, when it is known. dateTime beside it is the
+            // author's wall clock with no zone; this one is the same moment in UTC.
+            if (!pNote->GetDateUTC().isEmpty())
+                aAnnotation.put("dateTimeUtc", pNote->GetDateUTC());
             if (const auto* pData = pNote->GetThreadedCommentData())
             {
                 aAnnotation.put("text", pData->maRoot.maText);

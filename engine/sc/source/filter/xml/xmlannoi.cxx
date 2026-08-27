@@ -185,6 +185,11 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                 mrAnnotationData.mbShown = IsXMLToken(aIter, XML_TRUE);
             }
             break;
+            case XML_ELEMENT(CO_EXT, XML_DATE_UTC):
+            {
+                mrAnnotationData.maCreateDateUTC = aIter.toString();
+            }
+            break;
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
             case XML_ELEMENT(SVG, XML_Y):
