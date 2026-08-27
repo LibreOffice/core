@@ -108,7 +108,7 @@ class DocxExport : public MSWordExportBase
     /// ActiveX controls counter
     sal_Int32 m_nActiveXControls;
 
-    ///Footer and Header counter in Section properties
+    /// Footer and Header counter in Section properties
     sal_Int32 m_nHeadersFootersInSection;
 
     /// Exporter of the VML shapes.

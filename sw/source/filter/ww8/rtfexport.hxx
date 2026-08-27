@@ -75,7 +75,7 @@ public:
     void AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos,
                                sal_Int32 nLen) override;
 
-    //For i120928,add an interface to export graphic of bullet
+    // For i120928, add an interface to export graphic of bullet
     void ExportGrfBullet(const SwTextNode& rNd) override;
 
     void

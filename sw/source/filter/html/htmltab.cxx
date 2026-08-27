@@ -233,7 +233,7 @@ class HTMLTableCell
     sal_uInt16 m_nColSpan;           // cell COLSPAN
     sal_uInt16 m_nWidth;             // cell WIDTH
     sal_Int16 m_eVertOrient;             // vertical alignment of the cell
-    bool m_bProtected : 1;           // cell must not filled
+    bool m_bProtected : 1;           // cell must not be filled
     bool m_bRelWidth : 1;            // nWidth is given in %
     bool m_bHasNumFormat : 1;
     bool m_bHasValue : 1;
@@ -296,7 +296,7 @@ class HTMLTableRow
 
     SvxAdjust m_eAdjust;
     sal_uInt16 m_nHeight;                     // options of <TR>/<TD>
-    sal_uInt16 m_nEmptyRows;                  // number of empty rows are following
+    sal_uInt16 m_nEmptyRows;                  // number of empty rows that are following
     sal_Int16 m_eVertOri;
     bool m_bIsEndOfGroup : 1;
     bool m_bBottomBorder : 1;            // Is there a line after the row?
@@ -450,7 +450,7 @@ private:
     bool m_bHasParentSection;
     bool m_bHasToFly;
     bool m_bFixedCols;
-    bool m_bColSpec;                  // where there COL(GROUP)-elements?
+    bool m_bColSpec;                  // were there COL(GROUP)-elements?
     bool m_bPercentWidth;                 // width is declared in %
 
     SwHTMLParser *m_pParser;          // the current parser
