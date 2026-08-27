@@ -48,7 +48,7 @@ protected:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    // XPropertyHandler overriables
+    // XPropertyHandler overridables
     virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& _rPropertyName) override;
     virtual void SAL_CALL setPropertyValue(const OUString& _rPropertyName,
                                            const css::uno::Any& _rValue) override;

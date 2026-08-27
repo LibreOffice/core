@@ -145,7 +145,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::put_Name(BSTR  val)
      return S_OK;
 }
 
-// (UnoTypeWrapper-----------------------
+// IUnoTypeWrapper-----------------------
 COM_DECLSPEC_NOTHROW STDMETHODIMP UnoTypeWrapper::get_Name(BSTR  *pVal)
 {
      Lock();

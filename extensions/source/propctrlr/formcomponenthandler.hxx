@@ -73,7 +73,7 @@ namespace pcr
 
         /// the string indicating a "default" (VOID) value in list-like controls
         OUString                        m_sDefaultValueString;
-        /// all properties to whose control's we added ->m_sDefaultValueString
+        /// all properties to whose controls we added ->m_sDefaultValueString
         std::set< OUString >          m_aPropertiesWithDefListEntry;
         /// type of our component
         ComponentClassification         m_eComponentClass;
@@ -234,7 +234,7 @@ namespace pcr
         */
         void impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const;
 
-        /** let's the user chose a selection of entries from a string list, and stores this
+        /** lets the user choose a selection of entries from a string list, and stores this
             selection in the given property
             @return
                 <TRUE/> if and only if the user successfully changed the property
@@ -260,7 +260,7 @@ namespace pcr
             @precond
                 we're inspecting (sub) database form
             @return
-                <TRUE/> if and only if the user successfully enter master and slave fields
+                <TRUE/> if and only if the user successfully entered master and slave fields
         */
         bool impl_dialogLinkedFormFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
@@ -276,7 +276,7 @@ namespace pcr
         */
         bool impl_dialogFormatting_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
-        /** executes a dialog which allows to the user to change the ImageURL property
+        /** executes a dialog which allows the user to change the ImageURL property
             of our component by browsing for an image file.
             @precond
                 our component actually has an ImageURL property
