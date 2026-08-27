@@ -948,7 +948,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
         Point aTL = mrViewData.GetScrPos( nPosX, nPosY, eWhich );
         Point aBR = mrViewData.GetScrPos( nPosX+1, nPosY+1, eWhich );
 
-        //  Horizontal more tolerances as for vertical, because there is more space
+        //  Horizontal more tolerance than for vertical, because there is more space
         if ( nMouseX <= aTL.X() + 4 )
         {
             bHori = true;

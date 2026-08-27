@@ -1036,7 +1036,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"master"_ustr, aMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -1051,7 +1051,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
     OUString aNewMasterPageName = pNewMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"1_master"_ustr, aNewMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -1064,7 +1064,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
     OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
     CPPUNIT_ASSERT_EQUAL(u"2_master"_ustr, aNewMasterPageName2);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -1101,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Default"_ustr, aMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -1116,7 +1116,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
     OUString aNewMasterPageName = pNewMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"1_Default"_ustr, aNewMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
     // Copy again
@@ -1128,7 +1128,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
     OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
     CPPUNIT_ASSERT_EQUAL(u"2_Default"_ustr, aNewMasterPageName2);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
     // Copy again
@@ -1157,7 +1157,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Master3"_ustr, aMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
     // Copy and paste the master page
@@ -1170,7 +1170,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aNewMasterPageName = pNewMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"1_Master3"_ustr, aNewMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pNewMasterPage);
     // Copy again
@@ -1183,7 +1183,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
     CPPUNIT_ASSERT_EQUAL(u"2_Master3"_ustr, aNewMasterPageName2);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pNewMasterPage2);
     // Copy again
@@ -1196,7 +1196,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aNewMasterPageName3 = pNewMasterPage3->GetName();
     CPPUNIT_ASSERT_EQUAL(u"3_Master3"_ustr, aNewMasterPageName3);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pNewMasterPage);
     // Copy again
@@ -1997,7 +1997,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
         drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
         XPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
 
-        // Without the fix in place, this test would have failed with
+        // Without the fix in place, this test would have failed
         // with drawing::FillStyle_NONE != drawing::FillStyle_SOLID
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, eFillStyle);
     }
@@ -2344,7 +2344,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
 
     dispatchCommand(mxComponent, ".uno:BasicShapes.round-rectangle", aArgs);
 
-    // Then make sure the that fill color of the last shape is the accent1 color:
+    // Then make sure that the fill color of the last shape is the accent1 color:
     sal_Int32 nShapeIndex = xDrawPage->getCount() - 1;
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
     sal_Int32 nFillColor{};

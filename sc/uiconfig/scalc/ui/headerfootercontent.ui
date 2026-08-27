@@ -204,7 +204,7 @@
                 </child>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="comboLB_FONT_HEIGHT-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|comboLB_FONT_FAMILY">Selects the font height.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|comboLB_FONT_HEIGHT">Selects the font height.</property>
                   </object>
                 </child>
               </object>
