@@ -924,9 +924,11 @@ def locate_files(files_by_package, ziplist, product, filelistdirs):
 
 def filter_files(files_by_package):
     """Remove files that are not required to be in SBOM."""
+    externals_by_package = {}
     for package in files_by_package:
+        externals_by_package[package] = set([file["external"] for file in files_by_package[package]])
         files_by_package[package] = [file for file in files_by_package[package] if bool(file["flags"])]
-
+    return externals_by_package
 
 def add_dependencies(files_by_package, files_by_package_extra_deps):
     """Add required checksum and dependencies to files."""
@@ -1147,7 +1149,7 @@ def add_static_dependencies(files_by_package, externalstaticlink, with_path):
                     file["externaldeps"] = externalstaticlink[filename]
 
 
-def add_merge_module(files_by_package, install_script):
+def add_merge_module(files_by_package, externals_by_package, install_script):
     """Add any MSI merge modules as dummy files to root package."""
 
     license_spdx_id = None
@@ -1223,11 +1225,13 @@ def add_merge_module(files_by_package, install_script):
         })
 
         sbom_externals[msm_file] = (msm_elements, "License-msvcrt", "License-msvcrt")
+        externals_by_package["gid_Module_Root"].add(msm_file)
 
 
 def check_files(*fileses):
     """Sanity check for duplicates."""
     allfiles = set()
+    allexternaldeps = set()
     for files_by_package in fileses:
         for package in files_by_package:
             for file in files_by_package[package]:
@@ -1235,9 +1239,47 @@ def check_files(*fileses):
                 if instpath in allfiles:
                     raise Exception(f"Unexpected duplicate instpath: {file}")
                 allfiles.add(instpath)
+                if "externaldeps" in file:
+                    allexternaldeps = allexternaldeps.union(file["externaldeps"])
+    return allexternaldeps
+
+def check_externals(allexternaldeps, *externalses):
+    """Check all externals in license files are used."""
+
+    allexternals = allexternaldeps.copy()
+
+    # fix known peculiarities
+    for external in sbom_externals:
+        if external.startswith("dict-"):
+            # hack: assign to its dict package
+            if sys.platform == "win32" or sys.platform == "darwin":
+                externalses[0]["gid_Module_Root"].add(external)
+            else:
+                gid = "gid_Module_Root_Extension_Dictionary_" + external.replace("dict-","").replace("-spell","").replace("-hyph","").replace("-thes","").replace("-grammar","").replace("-","_").title().replace("Gug", "Gu")
+                externalses[0][gid].add(external)
+        # this is hidden in an extension
+        if external == "xsltml":
+            if sys.platform == "win32" or sys.platform == "darwin":
+                externalses[0]["gid_Module_Root"].add(external)
+            else:
+                externalses[0]["gid_Module_Optional_Extensions_MEDIAWIKI"].add(external)
+        if external == "nlpsolver":
+            if sys.platform == "win32" or sys.platform == "darwin":
+                externalses[0]["gid_Module_Root"].add(external)
+            else:
+                externalses[0]["gid_Module_Optional_Extensions_NLPSolver"].add(external)
+
+    for externals_by_package in externalses:
+        for externals in externals_by_package.values():
+            for external in externals:
+                allexternals.add(external)
+    unused = set(sbom_externals.keys()).difference(allexternals)
+    if len(unused) != 0:
+        raise Exception(f"Unused externals: {unused}")
+    # externals missing in license file will raise KeyError in get_external below
 
 
-def sbom_add_files(files_by_package):
+def sbom_add_files(files_by_package, externals_by_package):
     """Add all files to the SBOM graphs."""
 
     for package in files_by_package:
@@ -1277,6 +1319,9 @@ def sbom_add_files(files_by_package):
                     add_license(sbom_externals[external][1])
                     add_license(sbom_externals[external][2])
             return parent
+
+        for external in externals_by_package[package]:
+            add_external(external)
 
         for file in files_by_package[package]:
             file_spdx_id = make_spdx_id(f"File-{file["instpath"]}")
@@ -1374,12 +1419,12 @@ def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
     externalpackagestaticlink = read_external_staticlink(externalpackagestaticfile)
     assign_externals(files_by_package, externalfiles)
     files = locate_files(files_by_package, ziplist, product, filelistdirs)
-    filter_files(files)
+    externals_by_package = filter_files(files)
     add_dependencies(files, files_extra_deps)
     add_static_dependencies(files, externalstaticlink, False)
     add_static_dependencies(files, externalpackagestaticlink, True)
-    add_merge_module(files, install_script)
-    return files
+    add_merge_module(files, externals_by_package, install_script)
+    return (files, externals_by_package)
 
 
 if __name__ == "__main__":
@@ -1404,23 +1449,27 @@ if __name__ == "__main__":
         externalstaticfile = sys.argv[15]
         externalpackagestaticfile = sys.argv[16]
 
-        files_product = gen_product(ziplist, packinfos, install_script, languages,
+        (files_product, externals_product) = gen_product(
+            ziplist, packinfos, install_script, languages,
             externalsfile, externalstaticfile, externalpackagestaticfile,
             productname, filelistdirs)
 
         if "ODK" in os.environ.get("BUILD_TYPE").split(" "):
             packinfos_sdk = parse_packinfo(sys.argv[11])
             install_script_sdk = parse_install_script(sys.argv[12])
-            files_sdk = gen_product(ziplist, packinfos_sdk, install_script_sdk, languages,
+            (files_sdk, externals_sdk) = gen_product(
+                ziplist, packinfos_sdk, install_script_sdk, languages,
                 externalsfile, externalstaticfile, externalpackagestaticfile,
                 productname_sdk, filelistdirs_sdk, files_product)
 
-            check_files(files_product, files_sdk)
-            sbom_add_files(files_product)
-            sbom_add_files(files_sdk)
+            allexternaldeps = check_files(files_product, files_sdk)
+            check_externals(allexternaldeps, externals_product, externals_sdk)
+            sbom_add_files(files_product, externals_product)
+            sbom_add_files(files_sdk, externals_sdk)
         else:
-            check_files(files_product)
-            sbom_add_files(files_product)
+            allexternaldeps = check_files(files_product)
+            check_externals(allexternaldeps, externals_product)
+            sbom_add_files(files_product, externals_product)
 
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"

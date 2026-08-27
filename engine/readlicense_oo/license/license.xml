@@ -1888,6 +1888,7 @@
     </div>
     <div class="IODBC">
         <h2>iODBC</h2>
+        <!-- Name: iodbc, Vendor:, Source: external/iODBC/inc, URL: http://www.iodbc.org/, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: iODBC. Actually only 5 header files are used, not
         the library, in case the builder of the product does not use these headers from the system.
         Use of any of this software is governed by the terms of the license below (BSD license):</p>
@@ -2166,6 +2167,7 @@
         <hr />
         <h1><a id="a__Fonts" name="a__Fonts">Fonts</a></h1>
         <h2>Agdasima</h2>
+        <!-- Name: Agdasima, Vendor:, Source: FONT_AGDASIMA_TARBALL, URL: https://github.com/docrepair-fonts/agdasima-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Agdasima fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2023 The Agdasima Project Authors (https://github.com/docrepair-fonts/agdasima-fonts).</p>
@@ -2186,6 +2188,7 @@
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Bacasime Antique</h2>
+        <!-- Name: Bacasime, Vendor:, Source: FONT_BACASIME_ANTIQUE_TARBALL, URL: https://github.com/docrepair-fonts/bacasime-antique-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Bacasime Antique fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2023 The Bacasime Antique Project Authors (https://github.com/docrepair-fonts/bacasime-antique-fonts),
@@ -2194,6 +2197,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Belanosima</h2>
+        <!-- Name: Belanosima, Vendor:, Source: FONT_BELANOSIMA_TARBALL, URL: https://github.com/docrepair-fonts/belanosima-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Belanosima fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2023 The Belanosima Project Authors (https://github.com/docrepair-fonts/belanosima-fonts),
@@ -2207,6 +2211,7 @@
         <p>This Font Software is licensed under the Apache License, Version 2.0 as shown below.</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
         <h2>Caprasimo</h2>
+        <!-- Name: Caprasimo, Vendor:, Source: FONT_CAPRASIMO_TARBALL, URL: https://github.com/docrepair-fonts/caprasimo-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Caprasimo fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2023 The Caprasimo Project Authors (https://github.com/docrepair-fonts/caprasimo-fonts).</p>
@@ -2402,6 +2407,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Karla</h2>
+        <!-- Name: Karla, Vendor:, Source: FONT_KARLA_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Karla fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright (c) 2011, Jonathan Pinhorn (pinhorn.typedesign@gmail.com), with Reserved Font Names “Karla” and
@@ -2411,6 +2417,7 @@
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Liberation</h2>
         <!-- Name: Liberation, Vendor:, Source: FONT_LIBERATION_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: LiberationNarrow, Vendor:, Source: FONT_LIBERATION_NARROW_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Liberation fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
@@ -2537,6 +2544,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Lugrasimo</h2>
+        <!-- Name: Lugrasimo, Vendor:, Source: FONT_LUGRASIMO_TARBALL, URL: https://github.com/docrepair-fonts/lugrasimo-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Lugrasimo fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2023 The Lugrasimo Project Authors (https://github.com/docrepair-fonts/lugrasimo-fonts).</p>
@@ -2544,6 +2552,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Lumanosimo</h2>
+        <!-- Name: Lumanosimo, Vendor:, Source: FONT_LUMANOSIMO_TARBALL, URL: https://github.com/docrepair-fonts/lumanosimo-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Lumanosimo fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2023 The Lumanosimo Project Authors (https://github.com/docrepair-fonts/lumanosimo-fonts).</p>
@@ -2551,6 +2560,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Lunasima</h2>
+        <!-- Name: Lunasima, Vendor:, Source: FONT_LUNASIMA_TARBALL, URL: https://github.com/docrepair-fonts/lunasima-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Lunasima fonts. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2023 The Lunasima Project Authors (https://github.com/docrepair-fonts/lunasima-fonts).</p>
@@ -2558,19 +2568,45 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Noto</h2>
-        <!-- Name: Noto, Vendor:, Source: FONT_NOTO_SANS_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoKufiArabic, Vendor:, Source: FONT_NOTO_KUFI_ARABIC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSans, Vendor:, Source: FONT_NOTO_SANS_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerif, Vendor:, Source: FONT_NOTO_SERIF_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifHebrew, Vendor:, Source: FONT_NOTO_SERIF_HEBREW_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansArabic, Vendor:, Source: FONT_NOTO_SANS_ARABIC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoNaskhArabic, Vendor:, Source: FONT_NOTO_NASKH_ARABIC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansHebrew, Vendor:, Source: FONT_NOTO_SANS_HEBREW_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansArmenian, Vendor:, Source: FONT_NOTO_SANS_ARMENIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifArmenian, Vendor:, Source: FONT_NOTO_SERIF_ARMENIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansGeorgian, Vendor:, Source: FONT_NOTO_SANS_GEORGIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifGeorgian, Vendor:, Source: FONT_NOTO_SERIF_GEORGIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansLao, Vendor:, Source: FONT_NOTO_SANS_LAO_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifLao, Vendor:, Source: FONT_NOTO_SERIF_LAO_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansLisu, Vendor:, Source: FONT_NOTO_SANS_LISU_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <div class="NOTO_FONT">
+          <!-- Name: NotoMore, Vendor:, Source: FONT_NOTO_MORE_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSansJp, Vendor:, Source: FONT_NOTO_SANS_JP_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSansKr, Vendor:, Source: FONT_NOTO_SANS_KR_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSansSc, Vendor:, Source: FONT_NOTO_SANS_SC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSansTc, Vendor:, Source: FONT_NOTO_SANS_TC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSerifJp, Vendor:, Source: FONT_NOTO_SERIF_JP_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSerifKr, Vendor:, Source: FONT_NOTO_SERIF_KR_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSerifSc, Vendor:, Source: FONT_NOTO_SERIF_SC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+          <!-- Name: NotoSerifTc, Vendor:, Source: FONT_NOTO_SERIF_TC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        </div>
         <p>The following software may be included in this product: Google Noto fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>OpenDyslexic</h2>
+        <!-- Name: OpenDyslexic, Vendor:, Source: FONT_OPENDYSLEXIC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>Copyright (c) 2019-07-29, Abbie Gonzalez (https://abbiecod.es|support@abbiecod.es),
         with Reserved Font Name OpenDyslexic.</p>
         <p>Copyright (c) 12/2012 - 2019</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Open Sans</h2>
+        <!-- Name: OpenSans, Vendor:, Source: FONT_OPEN_SANS_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>Copyright 2020 The Open Sans Project Authors (https://github.com/googlefonts/opensans)</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
@@ -2593,6 +2629,7 @@
         <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Source Sans Pro</h2>
+        <!-- Name: SourceSans, Vendor:, Source: FONT_SOURCESANS_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Source Sans Pro fonts. Use of any of this software
         is governed by the terms of the license below:</p>
         <p>Copyright 2010, 2012 Adobe Systems Incorporated (<a href="http://www.adobe.com/">http://www.adobe.com/</a>),

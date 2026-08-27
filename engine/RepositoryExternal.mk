@@ -53,6 +53,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(SRCDIR)/external/iODBC/inc \
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),iodbc)
 
 endef
 

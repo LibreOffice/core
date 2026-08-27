@@ -69,6 +69,8 @@ $(eval $(call gb_Library_use_externals,svgfilter,\
 	libxml2 \
 ))
 
+$(eval $(call gb_Helper_LinkTarget_use_external,$(call gb_Library_get_linktarget,svgfilter),SVGPathSeg_polyfill))
+
 $(eval $(call gb_Library_add_exception_objects,svgfilter,\
 	filter/source/svg/svgfilter \
 	filter/source/svg/svgexport \

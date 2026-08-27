@@ -765,58 +765,159 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	extras_fonts \
 	$(if $(USING_X11)$(DISABLE_GUI)$(filter FONTCONFIG,$(BUILD_TYPE))$(filter ANDROID EMSCRIPTEN,$(OS)), \
 		postprocess_fontconfig) \
-	$(call gb_Helper_optional,MORE_FONTS,\
-		fonts_alef \
-		fonts_amiri \
-		fonts_caladea \
-		fonts_carlito \
-		$(if $(MPL_SUBSET),,fonts_culmus) \
-		fonts_dejavu \
-		fonts_gentium \
-		fonts_karla \
-		fonts_liberation \
-		fonts_liberation_narrow \
-		fonts_libertineg \
-		fonts_libre_hebrew \
-		fonts_noto_kufi_arabic \
-		fonts_noto_naskh_arabic \
-		fonts_noto_sans \
-		fonts_noto_sans_arabic \
-		fonts_noto_sans_armenian \
-		fonts_noto_sans_georgian \
-		fonts_noto_sans_hebrew \
-		fonts_noto_sans_lao \
-		fonts_noto_sans_lisu \
-		fonts_noto_serif \
-		fonts_noto_serif_armenian \
-		fonts_noto_serif_georgian \
-		fonts_noto_serif_hebrew \
-		fonts_noto_serif_lao \
-		fonts_opendyslexic \
-		fonts_opensans \
-		fonts_reem \
-		fonts_sourcesans \
-		fonts_scheherazade \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_agdasima,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_bacasime_antique,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_belanosima,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_caprasimo,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_lugrasimo,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_lumanosimo,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_lunasima,) \
-	) \
-	$(call gb_Helper_optional,NOTO_FONT,\
-		fonts_notomore \
-		fonts_notosansjp \
-		fonts_notosanskr \
-		fonts_notosanssc \
-		fonts_notosanstc \
-		fonts_notoserifjp \
-		fonts_notoserifkr \
-		fonts_notoserifsc \
-		fonts_notoseriftc \
-	) \
 ))
+
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_Helper_register_external_packages_for_install,Alef,ooo_fonts,\
+		fonts_alef \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Amiri,ooo_fonts,\
+		fonts_amiri \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Caladea,ooo_fonts,\
+		fonts_caladea \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Carlito,ooo_fonts,\
+		fonts_carlito \
+))
+ifeq ($(MPL_SUBSET),)
+$(eval $(call gb_Helper_register_external_packages_for_install,Culmus,ooo_fonts,\
+		fonts_culmus \
+))
+endif
+$(eval $(call gb_Helper_register_external_packages_for_install,DejaVu,ooo_fonts,\
+		fonts_dejavu \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Gentium,ooo_fonts,\
+		fonts_gentium \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Karla,ooo_fonts,\
+		fonts_karla \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Liberation,ooo_fonts,\
+		fonts_liberation \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,LiberationNarrow,ooo_fonts,\
+		fonts_liberation_narrow \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,LinuxLibertineG,ooo_fonts,\
+		fonts_libertineg \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,LibreHebrew,ooo_fonts,\
+		fonts_libre_hebrew \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoKufiArabic,ooo_fonts,\
+		fonts_noto_kufi_arabic \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoNaskhArabic,ooo_fonts,\
+		fonts_noto_naskh_arabic \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSans,ooo_fonts,\
+		fonts_noto_sans \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansArabic,ooo_fonts,\
+		fonts_noto_sans_arabic \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansArmenian,ooo_fonts,\
+		fonts_noto_sans_armenian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansGeorgian,ooo_fonts,\
+		fonts_noto_sans_georgian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansHebrew,ooo_fonts,\
+		fonts_noto_sans_hebrew \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansLao,ooo_fonts,\
+		fonts_noto_sans_lao \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansLisu,ooo_fonts,\
+		fonts_noto_sans_lisu \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerif,ooo_fonts,\
+		fonts_noto_serif \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifArmenian,ooo_fonts,\
+		fonts_noto_serif_armenian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifGeorgian,ooo_fonts,\
+		fonts_noto_serif_georgian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifHebrew,ooo_fonts,\
+		fonts_noto_serif_hebrew \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifLao,ooo_fonts,\
+		fonts_noto_serif_lao \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,OpenDyslexic,ooo_fonts,\
+		fonts_opendyslexic \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,OpenSans,ooo_fonts,\
+		fonts_opensans \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Reem_Kufi,ooo_fonts,\
+		fonts_reem \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,SourceSans,ooo_fonts,\
+		fonts_sourcesans \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Scheherazade,ooo_fonts,\
+		fonts_scheherazade \
+))
+
+ifneq ($(WITH_DOCREPAIR_FONTS),)
+$(eval $(call gb_Helper_register_external_packages_for_install,Agdasima,ooo_fonts,\
+	fonts_agdasima \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Bacasime,ooo_fonts,\
+	fonts_bacasime_antique \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Belanosima,ooo_fonts,\
+	fonts_belanosima \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Caprasimo,ooo_fonts,\
+	fonts_caprasimo \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Lugrasimo,ooo_fonts,\
+	fonts_lugrasimo \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Lumanosimo,ooo_fonts,\
+	fonts_lumanosimo \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Lunasima,ooo_fonts,\
+	fonts_lunasima \
+))
+endif # WITH_DOCREPAIR_FONTS
+
+ifneq ($(filter NOTO_FONT,$(BUILD_TYPE)),)
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoMore,ooo_fonts,\
+		fonts_notomore \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansJp,ooo_fonts,\
+		fonts_notosansjp \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansKr,ooo_fonts,\
+		fonts_notosanskr \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansSc,ooo_fonts,\
+		fonts_notosanssc \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansTc,ooo_fonts,\
+		fonts_notosanstc \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifJp,ooo_fonts,\
+		fonts_notoserifjp \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifKr,ooo_fonts,\
+		fonts_notoserifkr \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifSc,ooo_fonts,\
+		fonts_notoserifsc \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifTc,ooo_fonts,\
+		fonts_notoseriftc \
+))
+endif # NOTO_FONT
+endif # MORE_FONTS
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_images,\
 	postprocess_images \
