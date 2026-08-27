@@ -247,6 +247,10 @@ public:
     SW_DLLPUBLIC void StartAllAction();
     SW_DLLPUBLIC void EndAllAction();
 
+    /// Record the view that instigated the current change. The base view has no
+    /// cursor, so it does nothing.
+    virtual void SetInstigatingViewId(int /*nViewId*/) {}
+
     // The ActionCount for all Shells is temporarily set to zero and then
     // restored at the RootFrame via UNO.
     void    SetRestoreActions(sal_uInt16 nSet);

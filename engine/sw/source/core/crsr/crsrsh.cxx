@@ -2288,7 +2288,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
 #endif
     SwContentFrame *pPointFrame;
 
-    auto const Impl = [this, eFlags, eScrollSizeMode](::sw::VisibleCursorState & rState, SwContentFrame **const ppFrame, bool isThisShell)
+    auto const Impl = [this, eFlags, eScrollSizeMode, bIdleEnd](::sw::VisibleCursorState & rState, SwContentFrame **const ppFrame, bool isThisShell)
     {
     SwRect aOld(rState.m_aCharRect);
     bool bFirst = true;
@@ -2451,6 +2451,18 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
         }
 
     } while( eFlags & SwCursorShell::SCROLLWIN );
+
+    // Name the view that moved this cursor. A live update runs under the moving
+    // view, so name the current one. A change deferred to the layout idle no
+    // longer runs under the view that made it, so name the view that ended the
+    // change.
+    if (comphelper::COKit::isActive() && rState.m_pVisibleCursor)
+    {
+        const int nMover = (bIdleEnd && isThisShell) ? m_nInstigatingViewId
+                                                     : KitHelper::getCurrentView();
+        rState.m_pVisibleCursor->SetKitEditorViewId(nMover);
+    }
+
     *ppFrame = pFrame;
     return true;
     };
@@ -3563,6 +3575,7 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     , m_nMarkedListLevel( 0 )
     , m_oldColFrame(nullptr)
     , m_aLayoutIdle("SwCursorShell m_aLayoutIdle")
+    , m_nInstigatingViewId(-1)
 {
     CurrShell aCurr( this );
     // only keep the position of the current cursor of the copy shell
@@ -3604,6 +3617,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     , m_nMarkedListLevel( 0 )
     , m_oldColFrame(nullptr)
     , m_aLayoutIdle("SwCursorShell m_aLayoutIdle")
+    , m_nInstigatingViewId(-1)
 {
     CurrShell aCurr( this );
     // create initial cursor and set it to first content position

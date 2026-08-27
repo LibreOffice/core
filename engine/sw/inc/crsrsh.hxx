@@ -271,6 +271,10 @@ private:
 
     Idle m_aLayoutIdle; // An idle to schedule another SwViewShell::LayoutIdle call
 
+    // The view that instigated the pending layout change, sent to the client as
+    // editorViewId. It is -1 before any change records it.
+    int m_nInstigatingViewId;
+
     void MoveCursorToNum();
 
     void ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing );
@@ -338,6 +342,9 @@ protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     virtual void OnSpellWrongStatePending() override { m_bNeedLayoutOnCursorUpdate = true; }
+
+    virtual void SetInstigatingViewId(int nViewId) override
+    { m_nInstigatingViewId = nViewId; }
 
 public:
     SwCursorShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt );

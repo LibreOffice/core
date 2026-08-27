@@ -73,6 +73,9 @@ public:
     void SetDragCursor( bool bFlag = true ) { m_bIsDragCursor = bFlag; }
     SwRect SetPos();
     void SetPosAndShow(SfxViewShell const * pViewShell);
+    /// Record the view whose change moved this cursor. Set while that view is
+    /// current, at the point the cursor is repositioned.
+    void SetKitEditorViewId(int nViewId) { m_nLastKitCursorEditorViewId = nViewId; }
     const vcl::Cursor& GetTextCursor() const;
 
     std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const;

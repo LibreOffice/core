@@ -83,6 +83,7 @@
 #include <tools/UnitConversion.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKit.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <hffrm.hxx>
 
 #if !HAVE_FEATURE_DESKTOP
@@ -339,8 +340,12 @@ void SwViewShell::StartAllAction()
 
 void SwViewShell::EndAllAction()
 {
+    // Record the ending view on each shell as the instigator of this change.
+    const int nInstigatingViewId
+        = comphelper::COKit::isActive() ? KitHelper::getCurrentView() : -1;
     for (SwViewShell & rCurrentShell : GetRingContainer())
     {
+        rCurrentShell.SetInstigatingViewId(nInstigatingViewId);
         rCurrentShell.EndAction();
     }
 }
