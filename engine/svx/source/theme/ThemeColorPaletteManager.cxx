@@ -111,6 +111,7 @@ void ThemeColorPaletteManager::generateJSON(tools::JsonWriter& aTree)
 
             aTree.put("Value", rEffectData.maColor.AsRGBHexString().toUtf8());
             aTree.put("Name", rEffectData.maColorName.toUtf8());
+            aTree.put("Percentage", rEffectData.getPercentage());
 
             model::ComplexColor aComplexColor;
             aComplexColor.setThemeColor(rColorData.meThemeColorType);

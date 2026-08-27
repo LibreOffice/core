@@ -24,10 +24,43 @@ interface ColorPaletteWidgetData {
 interface ThemeColor {
 	Value: string;
 	Name: string;
+	Percentage: number;
 	Data: {
 		ThemeIndex: number;
 		Transformations: { Type: string; Value: number }[];
 	};
+}
+
+// Matches the order of model::ThemeColorType in engine/include/docmodel/theme/ThemeColorType.hxx.
+const themeColorTypeNames = [
+	_('Dark 1'),
+	_('Light 1'),
+	_('Dark 2'),
+	_('Light 2'),
+	_('Accent 1'),
+	_('Accent 2'),
+	_('Accent 3'),
+	_('Accent 4'),
+	_('Accent 5'),
+	_('Accent 6'),
+	_('Hyperlink'),
+	_('Followed Hyperlink'),
+];
+
+function getThemeColorTooltip(item: ThemeColor): string {
+	const themeName = themeColorTypeNames[item.Data.ThemeIndex];
+	if (!themeName) return item.Name;
+
+	const percentage = item.Percentage;
+	if (percentage > 0)
+		return _('%1, %2% Lighter')
+			.replace('%1', themeName)
+			.replace('%2', String(percentage));
+	if (percentage < 0)
+		return _('%1, %2% Darker')
+			.replace('%1', themeName)
+			.replace('%2', String(-percentage));
+	return themeName;
 }
 
 type ColorEntry = {
@@ -146,7 +179,7 @@ function createColor(
 			(item: ThemeColor) =>
 				item.Value.toLowerCase() === colorItem.toLowerCase(),
 		);
-		if (found) colorTooltip = found.Name;
+		if (found) colorTooltip = getThemeColorTooltip(found);
 	}
 	if (!colorTooltip && window.app.colorNames)
 		colorTooltip = findColorName(colorItem);

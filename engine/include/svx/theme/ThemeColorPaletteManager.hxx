@@ -34,7 +34,7 @@ struct SVXCORE_DLLPUBLIC ThemePaletteEffect
     sal_Int16 mnLumOff = 0;
     sal_Int16 mnLumMod = 10'000;
 
-    sal_Int16 getPercentage()
+    sal_Int16 getPercentage() const
     {
         if (mnLumOff > 0)
             return mnLumOff / 100;
