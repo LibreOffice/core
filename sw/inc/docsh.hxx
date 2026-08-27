@@ -88,7 +88,7 @@ class SW_DLLPUBLIC SwDocShell
 
     std::unique_ptr<comphelper::EmbeddedObjectContainer> m_pOLEChildList;
     sal_Int16   m_nUpdateDocMode;   ///< contains the css::document::UpdateDocMode
-    bool        m_IsATemplate;      ///< prevent nested calls of UpdateFontList
+    bool        m_IsATemplate;      ///< whether the document is a template
 
     bool m_IsRemovedInvisibleContent;
         ///< whether SID_MAIL_PREPAREEXPORT removed content that
@@ -325,7 +325,7 @@ public:
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const override;
 
     /** password protection for Writer (derived from SfxObjectShell)
-     see also:    FN_REDLINE_ON, FN_REDLINE_ON */
+     see also:    FN_REDLINE_ON */
     virtual bool    IsChangeRecording(SfxViewShell* pViewShell = nullptr, bool bRecordAllViews = true) const override;
     virtual bool    HasChangeRecordProtection() const override;
     virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic) override;
@@ -336,7 +336,7 @@ public:
     void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
     void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 
-    // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
+    // Lock all unlocked views, and return a guard object which unlocks those views when destructed
     virtual std::unique_ptr<LockAllViewsGuard> LockAllViews() override;
 
 protected:

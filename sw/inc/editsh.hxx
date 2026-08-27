@@ -254,8 +254,8 @@ public:
      * @see GetPaMParAttr()
      *
      * @param rSet
-     * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be store.
-     * The attributes aren't invalidated or cleared if the function reach the getMaxLookup limit.
+     * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be stored.
+     * The attributes aren't invalidated or cleared if the function reaches the getMaxLookup limit.
      */
     SW_DLLPUBLIC void GetCurParAttr( SfxItemSet& rSet ) const;
     /**
@@ -265,7 +265,7 @@ public:
      * input parameter - the selection where to look for the paragraph format.
      *
      * @param rSet
-     * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be store.
+     * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be stored.
      * The attributes aren't invalidated or cleared if the function reaches the getMaxLookup limit.
      */
     void GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const;
@@ -322,8 +322,8 @@ public:
      * @see GetPaMTextFormatColl()
      *
      * @return the named paragraph format of the first node that contains one.
-     * Nodes are sort by order of appearance in the selections ;
-     * selections are sort by their order of creation
+     * Nodes are sorted by order of appearance in the selections ;
+     * selections are sorted by their order of creation
      * (last created selection first, oldest selection at last).
      */
     SW_DLLPUBLIC SwTextFormatColl* GetCurTextFormatColl() const;
@@ -692,7 +692,7 @@ public:
     const SwFlyFrameFormat* FindFlyByName( const UIName& rName ) const;
 
     /** @return a ClientObject, if CurrentCursor->Point() points to a SwOLENode
-     (and mark is neither set not pointing to same ClientObject)
+     (and mark is neither set nor pointing to same ClientObject)
      else give rap on the knuckles. */
     SW_DLLPUBLIC svt::EmbeddedObjectRef& GetOLEObject() const;
 
@@ -883,7 +883,7 @@ public:
     SW_DLLPUBLIC bool IsInsRegionAvailable() const;
     SW_DLLPUBLIC const SwSection* GetCurrSection() const;
 
-    /** @return current range like Cet CurrSection(). But this function iterates
+    /** @return current range like GetCurrSection(). But this function iterates
      also over frames and catches the range even if the cursor is positioned in
      a footnote the reference of which is in a columned range.
      If bOutOfTab is set, the range comprising the table is searched

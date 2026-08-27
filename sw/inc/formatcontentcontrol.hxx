@@ -384,7 +384,7 @@ public:
 
     sal_uInt32 GetTabIndex() const { return m_nTabIndex; }
 
-    // At the design level, define how the control should be locked. No effect at implementation lvl
+    // At the design level, define how the control should be locked. No effect at implementation level
     void SetLock(bool bLockContent, bool bLockControl);
     void SetLock(const OUString& rLock) { m_aLock = rLock; }
 
