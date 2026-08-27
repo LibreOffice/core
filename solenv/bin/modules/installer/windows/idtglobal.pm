@@ -603,7 +603,7 @@ sub write_idt_header
 ##############################################################
 # Returning the name of the translation file for a
 # given language.
-# Sample: "01" order "en-US" -> "1033.txt"
+# Sample: "01" or "en-US" -> "1033.txt"
 ##############################################################
 
 sub get_languagefilename
@@ -1407,7 +1407,7 @@ sub fill_assignment_hash
     if ( $max != $#{$assignmentarray} )
     {
         my $definedparameter = $#{$assignmentarray} + 1;
-        installer::exiter::exit_program("ERROR: gid: $gid, key: $key ! Wrong parameter in scp. For table $tablename $parameter parameter are required ! You defined: $definedparameter", "fill_assignment_hash");
+        installer::exiter::exit_program("ERROR: gid: $gid, key: $key ! Wrong parameter in scp. For table $tablename $parameter parameters are required ! You defined: $definedparameter", "fill_assignment_hash");
     }
 
     for ( my $i = 0; $i <= $#{$assignmentarray}; $i++ )
@@ -1682,7 +1682,7 @@ sub addcustomactions
             # There are currently two different ways for doing this:
             # 1. Using "add_custom_action_to_install_table", which adds the CustomAction to the install sequences,
             #    which are saved in InstallE.idt and InstallU.idt
-            # 2. Using "connect_custom_action_to_control" and "connect_custom_action_to_control". The first method
+            # 2. Using "connect_custom_action_to_control" and "connect_condition_to_control". The first method
             #    connects a CustomAction to a control in ControlE.idt. The second method sets a condition for a control,
             #    which might be influenced by the CustomAction. This happens in ControlC.idt.
 
@@ -1840,8 +1840,8 @@ sub setbidiattributes
 ###############################################
 # Emit custom action 51 for setting standard
 # directory variable. Reference to a hash is
-# returned, represented the custom action.
-# This can be passed in to addcustomaction
+# returned, representing the custom action.
+# This can be passed in to addcustomactions
 # method.
 ###############################################
 

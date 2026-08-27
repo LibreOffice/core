@@ -101,10 +101,10 @@ void SmLineNode::ArrangeOpenType(OutputDevice& rDev, const SmFormat& rFormat)
     if (nSize < 1)
     {
         // provide an empty rectangle with alignment parameters for the "current"
-        // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
+        // font (in order to make "a^1 {}_2^3 a_4" work correctly, that is, have the
         // same sub-/supscript positions.)
         //! be sure to use a character that has explicitly defined HiAttribute
-        //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
+        //! line in rect.cxx such as 'a' in order to make 'vec a' look the same as
         //! 'vec {a}'.
         SmRect::operator=(SmRect(aTmpDev, &rFormat, u"a"_ustr, GetFont().GetBorderWidth()));
         // make sure that the rectangle occupies (almost) no space

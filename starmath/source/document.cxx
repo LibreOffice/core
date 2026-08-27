@@ -339,7 +339,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     // Problem: What happens to WYSIWYG? While we're active inplace, we don't have a reference
     // device and aren't aligned to that either. So now there can be a difference between the
     // VisArea (i.e. the size within the client) and the current size.
-    // Idea: The difference could be adapted with SmNod::SetSize (no long-term solution)
+    // Idea: The difference could be adapted with SmNode::SetSize (no long-term solution)
 
     rPosition.AdjustX(maFormat.GetDistance( DIS_LEFTSPACE ) );
     rPosition.AdjustY(maFormat.GetDistance( DIS_TOPSPACE  ) );
@@ -453,7 +453,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             // if it is an embedded object (without its own printer)
             // we change the MapMode temporarily.
             //!If it is a document with its own printer the MapMode should
-            //!be set correct (once) elsewhere(!), in order to avoid numerous
+            //!be set correctly (once) elsewhere(!), in order to avoid numerous
             //!superfluous pushing and popping of the MapMode when using
             //!this class.
 
@@ -481,7 +481,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     // if it is an embedded object (without its own printer)
     // we change the MapMode temporarily.
     //!If it is a document with its own printer the MapMode should
-    //!be set correct (once) elsewhere(!), in order to avoid numerous
+    //!be set correctly (once) elsewhere(!), in order to avoid numerous
     //!superfluous pushing and popping of the MapMode when using
     //!this class.
 
@@ -512,7 +512,7 @@ Printer* SmDocShell::GetPrt()
     {
         // Normally the server provides the printer. But if it doesn't provide one (e.g. because
         // there is no connection) it still can be the case that we know the printer because it
-        // has been passed on by the server in OnDocumentPrinterChanged and being kept temporarily.
+        // has been passed on by the server in OnDocumentPrinterChanged and is being kept temporarily.
         Printer* pPrt = GetDocumentPrinter();
         if (!pPrt && mpTmpPrinter)
             pPrt = mpTmpPrinter;
