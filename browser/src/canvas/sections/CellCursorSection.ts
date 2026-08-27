@@ -91,10 +91,13 @@ class CellCursorSection extends CanvasSectionObject {
 			}
 
 			if (window.prefs.getBoolean('darkTheme')) {
+				// A white line just inside the coloured border, so the cursor stays visible on a dark grid.
 				this.context.strokeStyle = 'white';
-				const diff = 1;
-				this.context.strokeRect(cursorRect.v1X + -0.5 + diff, cursorRect.v1Y - 0.5 + diff, cursorRect.pWidth - 2 * diff, cursorRect.pHeight - 2 * diff);
-				this.context.strokeRect(cursorRect.v1X + -0.5 + diff, cursorRect.v1Y - 0.5 + diff, cursorRect.pWidth - 2 * diff, cursorRect.pHeight - 2 * diff);
+				cursorRect.pX1 += 1;
+				cursorRect.pY1 += 1;
+				cursorRect.pWidth -= 2;
+				cursorRect.pHeight -= 2;
+				this.drawViewRectangle(cursorRect);
 			}
 
 			this.context.restore();
