@@ -23,4 +23,9 @@
     <string name="ask_for_convert_odf">Confirmeu el format del fitxer</string>
     <string name="use_odf">Usa el format ODF</string>
     <string name="use_text">Usa el format de text</string>
+    <string name="all_files_access_title">Obert en mode només de lectura</string>
+    <string name="all_files_access_message">L\'aplicació que ha compartit aquest fitxer no ha permés desar els canvis que se\'n facin.\n\nPermeteu «Accés a tots els fitxers» per a permetre que aquesta aplicació escrigui el fitxer on es troba emmagatzemat, perquè el pugueu editar aquí.</string>
+    <string name="all_files_access_grant">Permet l\'accés</string>
+    <string name="do_not_ask_again">No ho tornis a preguntar</string>
+    <string name="failed_to_save_file">No s\'han pogut desar els canvis en el fitxer</string>
 </resources>
