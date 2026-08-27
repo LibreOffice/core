@@ -907,7 +907,7 @@ void Printer::dispose()
         mpDisplayDev.disposeAndClear();
     else
     {
-        // OutputDevice Dtor is trying the same thing; that why we need to set
+        // OutputDevice Dtor is trying the same thing; that is why we need to set
         // the FontEntry to NULL here
         // TODO: consolidate duplicate cleanup by Printer and OutputDevice
         mpFontInstance.clear();
@@ -916,7 +916,7 @@ void Printer::dispose()
         // font list deleted by OutputDevice dtor
     }
 
-    // Add printer from the list
+    // Remove printer from the list
     ImplSVData* pSVData = ImplGetSVData();
     if ( mpPrev )
         mpPrev->mpNext = mpNext;
@@ -1316,7 +1316,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
     if(!bNeedToChange)
     {
         // #i122984# only need to change when Paper is different from PAPER_USER and
-        // the mapped Paper which will created below in the call to ImplFindPaperFormatForUserSize
+        // the mapped Paper which will be created below in the call to ImplFindPaperFormatForUserSize
         // and will replace maJobSetup.ImplGetConstData()->GetPaperFormat(). This leads to
         // unnecessary JobSetups, e.g. when printing a multi-page fax, but also with
         // normal print

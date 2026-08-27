@@ -102,7 +102,7 @@ basegfx::B2DHomMatrix CoordinateMapper::GetDeviceTransformation() const
 {
     basegfx::B2DHomMatrix aTransformation = GetViewTransformation();
 
-    // TODO: is it worth to cache the transformed result?
+    // TODO: is it worth caching the transformed result?
     if (mnOutOffX || mnOutOffY)
         aTransformation.translate(mnOutOffX, mnOutOffY);
 

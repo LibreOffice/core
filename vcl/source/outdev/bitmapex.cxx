@@ -50,7 +50,7 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
         return false;
     }
 
-    // now get discrete target pixels; start with OutDev pixel size and evtl.
+    // now get discrete target pixels; start with OutDev pixel size and possibly
     // intersect with active clipping area
     basegfx::B2DRange aOutPixel(
         0.0,
@@ -383,13 +383,13 @@ void OutputDevice::DrawTransformedBitmapEx(
     // get logic object target range
     aTargetRange.transform(rTransformation);
 
-    // get from unified/relative VisibleRange to logoc one
+    // get from unified/relative VisibleRange to logic one
     aVisibleRange.transform(
         basegfx::utils::createScaleTranslateB2DHomMatrix(
             aTargetRange.getRange(),
             aTargetRange.getMinimum()));
 
-    // extract point and size; do not remove size, the bitmap may have been prepared reduced by purpose
+    // extract point and size; do not remove size, the bitmap may have been prepared reduced on purpose
     // #i124580# the correct DestSize needs to be calculated based on MaxXY values
     const Point aDestPt(basegfx::fround<tools::Long>(aVisibleRange.getMinX()), basegfx::fround<tools::Long>(aVisibleRange.getMinY()));
     const Size aDestSize(
