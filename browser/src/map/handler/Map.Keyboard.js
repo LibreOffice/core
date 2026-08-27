@@ -622,6 +622,22 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			return;
 		}
 
+		// On macOS, Cmd+Backspace deletes back to the start of the line. The document
+		// core has no such mode for a plain Backspace with a modifier, but it does have
+		// a dedicated key for deleting back to the start of the paragraph, so send that
+		// instead of Backspace+Ctrl, which would only delete the previous word.
+		if ((window.ThisIsTheiOSApp || window.L.Browser.mac) && !ev.shiftKey && !ev.altKey
+			&& (ev.ctrlKey || ev.metaKey) && ev.keyCode === this.keyCodes.BACKSPACE) {
+			if (keyEventFn) {
+				if (ev.type === 'keydown')
+					keyEventFn('input', 0, UNOKey.DELETE_TO_BEGIN_OF_PARAGRAPH);
+				else if (ev.type === 'keyup')
+					keyEventFn('up', 0, UNOKey.DELETE_TO_BEGIN_OF_PARAGRAPH);
+			}
+			ev.preventDefault();
+			return;
+		}
+
 		this.modifier = 0;
 		var shift = ev.shiftKey ? app.UNOModifier.SHIFT : 0;
 		var ctrl = (ev.ctrlKey || ev.metaKey) ? app.UNOModifier.CTRL : 0;
@@ -661,6 +677,15 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 
 		var charCode = ev.charCode;
 		var keyCode = ev.keyCode;
+
+		if ((window.ThisIsTheiOSApp || window.L.Browser.mac) &&
+		    keyCode === this.keyCodes.BACKSPACE && this.modifier === app.UNOModifier.ALT) {
+			// On macOS, Option+Backspace is the system word-delete shortcut. The document
+			// core has no delete binding for Alt+Backspace (that combination is reserved
+			// there as an Undo accelerator this key event never reaches), but Ctrl+Backspace
+			// already deletes the previous word, so send that modifier instead.
+			this.modifier = app.UNOModifier.CTRL;
+		}
 
 		var DEFAULT =0;
 		//var MAC=1; use this when you encounter a MAC value
