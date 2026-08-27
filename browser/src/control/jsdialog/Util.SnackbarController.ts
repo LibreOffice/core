@@ -30,9 +30,22 @@ class SnackbarController {
 	snackbarTimeout: number = 10000;
 	snackbarQueue: Array<SnackbarData>;
 	showingSnackbar: boolean = false;
+	private liveRegion: HTMLElement = null;
 
 	constructor() {
 		this.snackbarQueue = new Array<SnackbarData>();
+	}
+
+	private writeLiveRegion(label: string) {
+		if (!this.liveRegion)
+			this.liveRegion = document.getElementById('snackbar-live-region');
+
+		const region = this.liveRegion;
+		if (!region) return;
+
+		app.layoutingService.appendLayoutingTask(() => {
+			region.textContent = label;
+		});
 	}
 
 	public closeSnackbar() {
@@ -47,6 +60,7 @@ class SnackbarController {
 		});
 
 		this.showingSnackbar = false;
+		this.writeLiveRegion('');
 		this.scheduleSnackbar();
 	}
 
@@ -89,6 +103,8 @@ class SnackbarController {
 	private showSnackbarImpl(snackbarData: SnackbarData) {
 		var buttonId = 'button';
 		var labelId = 'label';
+
+		if (!snackbarData.action) this.writeLiveRegion(snackbarData.label);
 
 		var json = {
 			id: 'snackbar',

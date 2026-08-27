@@ -262,6 +262,8 @@ m4_ifelse(MOBILEAPP, [true],
       </div>
     </dialog>
 
+    <div id="snackbar-live-region" class="visuallyhidden" role="status" aria-live="polite" aria-atomic="true"></div>
+
 m4_ifelse(MOBILEAPP, [true],
      [
       <input type="hidden" id="initial-variables"

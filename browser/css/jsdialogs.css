@@ -3205,7 +3205,7 @@ button.has-img img {
 
 #mobile-wizard.popup.snackbar [id$='button'],
 .snackbar.jsdialog-container [id$='button'] {
-	color: #469cff !important;
+	color: var(--color-primary-lighter) !important;
 	font-weight: 600;
 	font-size: var(--header-font-size) !important;
 	display: flex;

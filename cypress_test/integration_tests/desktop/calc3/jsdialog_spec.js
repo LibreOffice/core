@@ -162,6 +162,21 @@ describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, functio
 		cy.cGet('#snackbar').should('not.exist');
 	});
 
+	it('Snackbar without an action is announced through the live region', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.showSnackbar('announced notification', null, null, -1);
+		});
+
+		cy.cGet('#snackbar-live-region')
+			.should('have.attr', 'aria-live', 'polite')
+			.and('have.text', 'announced notification');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.closeSnackbar();
+		});
+		cy.cGet('#snackbar-live-region').should('have.text', '');
+	});
+
 	it('JSDialog check enable edit input', function() {
 		cy.cGet('#File-tab-label').click();
 		cy.cGet('#File-container .unodownloadas button').click();
