@@ -34,6 +34,7 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
 		| $(call gb_Postprocess_get_target,AllModulesButInstsetNative) \
 		  $(call gb_CustomTarget_get_target,instsetoo_native/setup) \
+		  $(if $(filter LINUX,$(OS)),$(call gb_Package_get_target,python3)) \
 		  $(gb_CustomTarget_workdir)/instsetoo_native/sbom/.dir
 	$(if $(gb_External_StaticLink),,$(error can only be invoked on top-level))
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
@@ -45,7 +46,8 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 	EXTERNALSFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Externals)) \
 	EXTERNALSTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_External_StaticLink)) \
 	EXTERNALPACKAGESTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_ExternalPackage_StaticLink)) \
-	&& $(call gb_ExternalExecutable_get_command,python) $(instsetoo_create_SBOM) \
+	&& $(if $(filter LINUX,$(OS)),$(gb_Python_PRECOMMAND) $(INSTROOT)/program/python.bin,$(call gb_ExternalExecutable_get_command,python)) \
+		$(instsetoo_create_SBOM) \
 		$(gb_CustomTarget_workdir)/instsetoo_native/sbom \
 		$(gb_CustomTarget_workdir)/readlicense_oo/license/LICENSE.html \
 		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
