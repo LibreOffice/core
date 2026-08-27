@@ -83,7 +83,7 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
     --> structure size  MUST - alignment of 4!
     int     iSize;              // size of all data, including variable length strings
     sal_Bool    bIsMap;             // For server side maps
-    sal_Int32   iWidth;             // Fixed size data correspond to fields in LO_ImageDataStruct
+    sal_Int32   iWidth;             // Fixed size data corresponds to fields in LO_ImageDataStruct
     sal_Int32   iHeight;            //   and EDT_ImageData
     sal_Int32   iHSpace;
     sal_Int32   iVSpace;

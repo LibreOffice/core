@@ -920,10 +920,10 @@ bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId,
 
         if( nLen && ( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::STRING ) )
         {
-            //JP 24.7.2001: as I know was this only for the writer application and this
+            //JP 24.7.2001: as I know this was only for the writer application and this
             //              writes now UTF16 format into the stream
-            //JP 6.8.2001:  and now it writes UTF8 because then exist no problem with
-            //              little / big endians! - Bug 88121
+            //JP 6.8.2001:  and now it writes UTF8 because then there is no problem with
+            //              little / big endian! - Bug 88121
             maAny <<= OUString( reinterpret_cast< const char* >( aSeq.getConstArray() ), nLen - 1, RTL_TEXTENCODING_UTF8 );
         }
         else
@@ -1644,7 +1644,7 @@ bool TransferableDataHelper::GetBitmap(const DataFlavor& rFlavor, Bitmap& rBmp) 
                 {
                     rBmp.SetPrefMapMode(MapMode(MapUnit::MapPixel));
 
-                    // #i122388# also adapt size by applying the mew MapMode
+                    // #i122388# also adapt size by applying the new MapMode
                     const Size aNewSize(o3tl::convert(aSize, o3tl::Length::mm100, o3tl::Length::pt));
                     rBmp.SetPrefSize(aNewSize);
                 }

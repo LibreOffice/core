@@ -71,7 +71,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_caretOffset(long* offset)
    * @param x Variant to accept x position.
    * @param y Variant to accept y position.
    * @param width Variant to accept width.
-   * @param Height Variant to accept height.
+   * @param height Variant to accept height.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_characterExtents(long offset,
