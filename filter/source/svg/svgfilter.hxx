@@ -46,7 +46,7 @@
 
 namespace com::sun::star::frame { class XController; }
 
-// Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
+// Placeholder tag used in the ImplWriteActions method to filter text placeholder fields
 inline constexpr OUString sPlaceholderTag = u"<[:isPlaceholder:]>"_ustr;
 // This tag is used for exporting a slide background made of tiled bitmaps
 inline constexpr OString sTiledBackgroundTag = "SLIDE_BACKGROUND"_ostr;
@@ -174,7 +174,7 @@ public:
 
 private:
 
-    /// Generally use members
+    /// Generally used members
 
     css::uno::Reference< css::uno::XComponentContext >      mxContext;
     SvXMLElementExport*                 mpSVGDoc;
