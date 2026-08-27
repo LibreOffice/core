@@ -103,7 +103,7 @@ import com.sun.star.view.XPrintable;
 
 
 public class TextDocuments {
-    // adjust these constant to your local printer!
+    // adjust these constants to your local printer!
     private static String sOutputDir;
 
     private static final String aPrinterName = "\\\\so-print\\xml3sof";
@@ -724,7 +724,7 @@ public class TextDocuments {
             insertIntoCell( "C1", "Third Column", xTable );
             insertIntoCell( "D1", "Results", xTable );
 
-            // Insert random numbers into the first this three cells of each
+            // Insert random numbers into the first three cells of each
             // remaining row
             xTable.getCellByName( "A2" ).setValue( getRandomDouble() );
             xTable.getCellByName( "B2" ).setValue( getRandomDouble() );
@@ -890,7 +890,7 @@ public class TextDocuments {
                         XText.class, xTable.getCellByName ( sCellName ) );
 
                     // Set the cell contents of the current cell to be
-                    //the name of the of an autotext group
+                    // the name of an autotext group
                     xCellText.setString ( aGroupNames[i] );
 
                     // Access the autotext group with this name
@@ -1518,7 +1518,7 @@ public class TextDocuments {
             xParas[1].setPropertyValue ( "NumberingLevel", Short.valueOf((short) 1));
 
             // Set the third paragraph that was inserted to a numbering level of
-            // 0 (thus it will have 'Chars Upper Letter' style numbering)
+            // 0 (thus it will have 'Roman Upper' style numbering)
             xParas[2].setPropertyValue ( "NumberingLevel", Short.valueOf((short) 0));
             }
         catch (Exception e)

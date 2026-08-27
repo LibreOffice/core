@@ -60,7 +60,7 @@ public class DataStreamComposer {
      *                          -workdir=...           (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
-     *                       running office cannot created.
+     *                       running office cannot be created.
      */
     public DataStreamComposer( String args[] ) throws java.lang.Exception {
 
