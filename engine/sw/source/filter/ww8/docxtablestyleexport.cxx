@@ -11,11 +11,23 @@
 #include "docxhelper.hxx"
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <tblafmt.hxx>
+#include <swtable.hxx>
+#include <swtblfmt.hxx>
+#include <frameformats.hxx>
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sax/fastattribs.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
+#include <filter/msfilter/util.hxx>
+#include <tools/color.hxx>
 
+#include <algorithm>
 #include <optional>
+#include <set>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -40,8 +52,18 @@ public:
     }
 
     std::vector<OUString> m_vStylesWithTblHeaderInFirstRow;
+    /// Style IDs already written to styles.xml, either from an InteropGrabBag table style or
+    /// synthesized from a live SwTableAutoFormat that has no such grab bag.
+    std::set<OUString> m_aWrittenStyleIds;
 
     void TableStyle(const cpo::uno::Sequence<beans::PropertyValue>& rStyle);
+    /// Writes a w:style block for a table style that has no InteropGrabBag definition,
+    /// derived from the live SwTableAutoFormat's 16-box grid instead.
+    void SynthesizeTableStyle(const SwTableAutoFormat& rFormat);
+    /// Export of one w:tblStylePr, built from a single flat-grid SwBoxAutoFormat.
+    void synthesizeTblStylePr(const OUString& rType, const SwBoxAutoFormat& rBoxFormat);
+    /// Export of one border side (w:top, w:left, ...) from an editeng border line.
+    void synthesizeBorderLine(sal_Int32 nToken, const editeng::SvxBorderLine* pLine);
 
     void setSerializer(sax_fastparser::FSHelperPtr pSerializer)
     {
@@ -131,6 +153,9 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
     SwDocShell* pShell = m_pImpl->getDoc().GetDocShell();
     if (!pShell)
         return;
+
+    sal_Int32 nRemaining = nCountStylesToWrite;
+
     // Do we have table styles from InteropGrabBag available?
     rtl::Reference<SwXTextDocument> xPropertySet(pShell->GetBaseModel());
     cpo::uno::Sequence<beans::PropertyValue> aInteropGrabBag;
@@ -141,17 +166,53 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
         [](const beans::PropertyValue& rProp) { return rProp.Name == "tableStyles"; });
     if (pProp != std::cend(aInteropGrabBag))
         pProp->Value >>= aTableStyles;
-    if (!aTableStyles.hasElements())
-        return;
 
-    if (nCountStylesToWrite > aTableStyles.getLength())
-        nCountStylesToWrite = aTableStyles.getLength();
-
-    for (sal_Int32 i = 0; i < nCountStylesToWrite; ++i)
+    if (aTableStyles.hasElements())
     {
-        cpo::uno::Sequence<beans::PropertyValue> aTableStyle;
-        aTableStyles[i].Value >>= aTableStyle;
-        m_pImpl->TableStyle(aTableStyle);
+        sal_Int32 nFromGrabBag = nRemaining;
+        if (nFromGrabBag > aTableStyles.getLength())
+            nFromGrabBag = aTableStyles.getLength();
+
+        for (sal_Int32 i = 0; i < nFromGrabBag; ++i)
+        {
+            cpo::uno::Sequence<beans::PropertyValue> aTableStyle;
+            aTableStyles[i].Value >>= aTableStyle;
+            m_pImpl->TableStyle(aTableStyle);
+        }
+        nRemaining -= nFromGrabBag;
+    }
+
+    // A table style that has no InteropGrabBag definition never went through a DOCX
+    // import - e.g. it originated in ODF, or was created directly in Writer. Synthesize
+    // a style for it from its live SwTableAutoFormat instead of leaving it unreferenced.
+    //
+    // GetTableStyles() also carries the built-in presets copied into every document's
+    // catalog the first time anything asks for it (SwDoc::GetTableStyles() in ndtbl.cxx),
+    // whether or not a table actually uses one, so only synthesize for a name some table
+    // in the document is actually pointing at.
+    std::set<OUString> aUsedStyleNames;
+    if (const sw::TableFrameFormats* pTableFormats = m_pImpl->getDoc().GetTableFrameFormats())
+    {
+        for (const SwTableFormat* pTableFormat : *pTableFormats)
+        {
+            if (const SwTable* pTable = SwTable::FindTable(pTableFormat))
+            {
+                const OUString& rName = pTable->GetTableStyleName().toString();
+                if (!rName.isEmpty())
+                    aUsedStyleNames.insert(rName);
+            }
+        }
+    }
+
+    const SwTableAutoFormatTable& rTableStyles = m_pImpl->getDoc().GetTableStyles();
+    for (size_t i = 0; i < rTableStyles.size() && nRemaining > 0; ++i)
+    {
+        const SwTableAutoFormat& rFormat = rTableStyles[i];
+        const OUString& rName = rFormat.GetName().toString();
+        if (!aUsedStyleNames.contains(rName) || m_pImpl->m_aWrittenStyleIds.contains(rName))
+            continue;
+        m_pImpl->SynthesizeTableStyle(rFormat);
+        --nRemaining;
     }
 }
 
@@ -738,6 +799,151 @@ void DocxTableStyleExport::Impl::TableStyle(const cpo::uno::Sequence<beans::Prop
         tableStyleTableStylePr(i);
 
     m_pSerializer->endElementNS(XML_w, XML_style);
+
+    if (!m_sCurrentStyle.isEmpty())
+        m_aWrittenStyleIds.insert(m_sCurrentStyle);
+}
+
+namespace {
+
+/// One OOXML w:tblStylePr role, mapped to the flat-grid cell in SwTableAutoFormat's 16-box
+/// table that best represents it. None of the OOXML roles are row-only or column-only in that
+/// flat grid, so a band/first/last role is represented by pairing that axis's role with the
+/// BandA role on the other axis - the same precedence StyleSheetTable.cxx's own
+/// GetLocalPropertiesFromMask already gives wholeTable/band/row-col/corner cells on import.
+struct TableStyleRolePosition
+{
+    OUString sType;
+    sal_uInt8 nRowRole;
+    sal_uInt8 nColRole;
+};
+
+}
+
+void DocxTableStyleExport::Impl::synthesizeBorderLine(sal_Int32 nToken,
+                                                       const editeng::SvxBorderLine* pLine)
+{
+    if (!pLine || pLine->isEmpty())
+        return;
+
+    OUString sVal;
+    switch (pLine->GetBorderLineStyle())
+    {
+        case SvxBorderLineStyle::DOTTED:
+            sVal = u"dotted"_ustr;
+            break;
+        case SvxBorderLineStyle::DASHED:
+            sVal = u"dashed"_ustr;
+            break;
+        case SvxBorderLineStyle::DOUBLE:
+            sVal = u"double"_ustr;
+            break;
+        default:
+            sVal = u"single"_ustr;
+            break;
+    }
+
+    const double fConverted(
+        ::editeng::ConvertBorderWidthToWord(pLine->GetBorderLineStyle(), pLine->GetWidth()));
+    const sal_Int32 nWidth = std::clamp<sal_Int32>(sal_Int32(fConverted / 2.5), 2, 96);
+
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
+        = sax_fastparser::FastSerializerHelper::createAttrList();
+    pAttributeList->add(FSNS(XML_w, XML_val), sVal);
+    pAttributeList->add(FSNS(XML_w, XML_sz), OString::number(nWidth));
+    pAttributeList->add(FSNS(XML_w, XML_color), msfilter::util::ConvertColor(pLine->GetColor()));
+    m_pSerializer->singleElementNS(XML_w, nToken, pAttributeList);
+}
+
+void DocxTableStyleExport::Impl::synthesizeTblStylePr(const OUString& rType,
+                                                       const SwBoxAutoFormat& rBoxFormat)
+{
+    const SwAutoFormatProps& rProps = rBoxFormat.GetProps();
+    const SvxBoxItem& rBox = rProps.GetBox();
+    const SvxBrushItem& rBackground = rProps.GetBackground();
+    const SvxColorItem& rColor = rProps.GetColor();
+
+    const bool bHasBorder
+        = rBox.GetTop() || rBox.GetBottom() || rBox.GetLeft() || rBox.GetRight();
+    const bool bHasBackground = !rBackground.GetColor().IsTransparent();
+    const bool bHasColor = rColor.GetValue() != COL_AUTO;
+
+    if (!bHasBorder && !bHasBackground && !bHasColor)
+        return;
+
+    m_pSerializer->startElementNS(XML_w, XML_tblStylePr, FSNS(XML_w, XML_type), rType);
+
+    if (bHasColor)
+    {
+        m_pSerializer->startElementNS(XML_w, XML_rPr);
+        m_pSerializer->singleElementNS(XML_w, XML_color, FSNS(XML_w, XML_val),
+                                       msfilter::util::ConvertColor(rColor.GetValue()));
+        m_pSerializer->endElementNS(XML_w, XML_rPr);
+    }
+
+    if (bHasBorder || bHasBackground)
+    {
+        m_pSerializer->startElementNS(XML_w, XML_tcPr);
+        if (bHasBorder)
+        {
+            m_pSerializer->startElementNS(XML_w, XML_tcBorders);
+            synthesizeBorderLine(XML_top, rBox.GetTop());
+            synthesizeBorderLine(XML_left, rBox.GetLeft());
+            synthesizeBorderLine(XML_bottom, rBox.GetBottom());
+            synthesizeBorderLine(XML_right, rBox.GetRight());
+            m_pSerializer->endElementNS(XML_w, XML_tcBorders);
+        }
+        if (bHasBackground)
+            m_pSerializer->singleElementNS(XML_w, XML_shd, FSNS(XML_w, XML_val), "clear",
+                                           FSNS(XML_w, XML_fill),
+                                           msfilter::util::ConvertColor(rBackground.GetColor()));
+        m_pSerializer->endElementNS(XML_w, XML_tcPr);
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_tblStylePr);
+}
+
+void DocxTableStyleExport::Impl::SynthesizeTableStyle(const SwTableAutoFormat& rFormat)
+{
+    const OUString& rName = rFormat.GetName().toString();
+    if (rName.isEmpty() || m_aWrittenStyleIds.contains(rName))
+        return;
+
+    using RowColRole = SwTableAutoFormat::RowColRole;
+    auto nRole = [](RowColRole eRole) { return static_cast<sal_uInt8>(eRole); };
+    const TableStyleRolePosition aRolePositions[] = {
+        { u"wholeTable"_ustr, nRole(RowColRole::BandA), nRole(RowColRole::BandA) },
+        { u"firstRow"_ustr, nRole(RowColRole::First), nRole(RowColRole::BandA) },
+        { u"lastRow"_ustr, nRole(RowColRole::Last), nRole(RowColRole::BandA) },
+        { u"firstCol"_ustr, nRole(RowColRole::BandA), nRole(RowColRole::First) },
+        { u"lastCol"_ustr, nRole(RowColRole::BandA), nRole(RowColRole::Last) },
+        { u"band1Horz"_ustr, nRole(RowColRole::BandA), nRole(RowColRole::BandA) },
+        { u"band2Horz"_ustr, nRole(RowColRole::BandB), nRole(RowColRole::BandA) },
+        { u"band1Vert"_ustr, nRole(RowColRole::BandA), nRole(RowColRole::BandA) },
+        { u"band2Vert"_ustr, nRole(RowColRole::BandA), nRole(RowColRole::BandB) },
+        { u"nwCell"_ustr, nRole(RowColRole::First), nRole(RowColRole::First) },
+        { u"neCell"_ustr, nRole(RowColRole::First), nRole(RowColRole::Last) },
+        { u"swCell"_ustr, nRole(RowColRole::Last), nRole(RowColRole::First) },
+        { u"seCell"_ustr, nRole(RowColRole::Last), nRole(RowColRole::Last) },
+    };
+
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
+        = sax_fastparser::FastSerializerHelper::createAttrList();
+    pAttributeList->add(FSNS(XML_w, XML_type), "table");
+    pAttributeList->add(FSNS(XML_w, XML_styleId), rName);
+    m_pSerializer->startElementNS(XML_w, XML_style, pAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), rName);
+
+    for (const auto& rPosition : aRolePositions)
+    {
+        const sal_uInt8 nPos = rPosition.nRowRole * SwTableAutoFormat::nRoleCount
+                              + rPosition.nColRole;
+        synthesizeTblStylePr(rPosition.sType, rFormat.GetBoxFormat(nPos));
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_style);
+
+    m_aWrittenStyleIds.insert(rName);
 }
 
 bool DocxTableStyleExport::FirstRowHasTblHeader(const OUString& rStyleId) const
