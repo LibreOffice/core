@@ -272,7 +272,7 @@ void ScHFEditPage::InitPreDefinedList()
     std::optional<Color> pFldColour;
     std::optional<FontLineStyle> pFldLineStyle;
 
-    // Get the all field values at the outset.
+    // Get all the field values at the outset.
     OUString aPageFieldValue(m_xWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour, pFldLineStyle));
     OUString aSheetFieldValue(m_xWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour, pFldLineStyle));
     OUString aFileFieldValue(m_xWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour, pFldLineStyle));

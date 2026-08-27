@@ -600,7 +600,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 
     // Fetch the document size and the tiled rendering area together,
     // because the tiled rendering area is not cheap to compute, and we want
-    // to pass it down to ScGridWindow::PaintFile to avoid computing twice.
+    // to pass it down to ScGridWindow::PaintTile to avoid computing twice.
     SCCOL nTiledRenderingAreaEndCol = 0;
     SCROW nTiledRenderingAreaEndRow = 0;
     Size aDocSize = getDocumentSize(nTiledRenderingAreaEndCol, nTiledRenderingAreaEndRow);
@@ -4473,7 +4473,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
     ScModelObj* pObj = comphelper::getFromUnoTunnel<ScModelObj>(xDocSrc);
     ScDocShell* pDocShellSrc = static_cast<ScDocShell*>(pObj->GetEmbeddedObject());
 
-    // SourceSheet Position and does srcName exists ?
+    // SourceSheet Position and does srcName exist ?
     SCTAB nIndexSrc;
     if ( !pDocShellSrc->GetDocument().GetTable( srcName, nIndexSrc ) )
         throw lang::IllegalArgumentException();
