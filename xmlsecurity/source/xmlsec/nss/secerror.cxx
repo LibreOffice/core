@@ -41,7 +41,7 @@ const ErrDesc allDesc[] = {
 
 
 /* Returns a UTF-8 encoded constant error string for "errNum".
- * Returns NULL if errNum is unknown.
+ * Returns an empty string if errNum is unknown.
  */
 const char *
 getCertError(PRErrorCode errNum)
