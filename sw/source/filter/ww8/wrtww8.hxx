@@ -412,7 +412,7 @@ class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 /** Structure that is used to save some of the WW8Export/DocxExport data.
 
     It is used to be able to recurse inside of the WW8Export/DocxExport (eg.
-    for the needs of the tables) - you need to tall WriteText() from there with
+    for the needs of the tables) - you need to call WriteText() from there with
     new values of PaM etc.
 
     It must contain all the stuff that might be saved either in WW8Export or in
@@ -658,7 +658,7 @@ public:
 
     /// List is set to restart at a particular value so for export make a
     /// completely new list based on this one and export that instead,
-    /// which duplicates words behaviour in this respect.
+    /// which duplicates Word's behaviour in this respect.
     sal_uInt16 DuplicateNumRule(const SwNumRule* pRule, sal_uInt8 nLevel, sal_uInt16 nVal);
     SwNumRule * DuplicateNumRuleImpl(const SwNumRule *pRule);
 
@@ -667,7 +667,7 @@ public:
                                SwNumRule const& rAbstractRule);
 
 
-    /// Create a overriding numbering definition (if it does not yet exist)
+    /// Create an overriding numbering definition (if it does not yet exist)
     /// @return index of the overriding numbering definition
     sal_uInt16 OverrideNumRule(SwNumRule const& rExistingRule,
                                OUString const& rListId,

@@ -59,7 +59,7 @@ namespace sw
 
             There are a number of places where the writer types are larger than
             the winword equivalents requiring a cast to silence warnings.  To
-            avoid throwing away this useful information writer_cast is used to
+            avoid throwing away this useful information msword_cast is used to
             identify where word's types are smaller than Writer's.
 
             Based on needed_cast it will compile time assert if the cast
@@ -105,7 +105,7 @@ namespace sw
         bool IsPlausableSingleWordSection(const SwFrameFormat &rTitleFormat,
             const SwFrameFormat &rFollowFormat);
 
-        /** Make export a word section top/bottom values easy
+        /** Make exporting a word section top/bottom values easy
 
             The top and bottom margins in word and writer are expressed in very
             different ways. This class provides the equivalent word values for
