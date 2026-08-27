@@ -60,6 +60,7 @@
 #include <SwRewriter.hxx>
 #include <tools/color.hxx>
 #include <unotools/datetime.hxx>
+#include <tools/datetimeutils.hxx>
 
 #include <swmodule.hxx>
 #include <strings.hrc>
@@ -188,6 +189,10 @@ namespace {
             aAnnotation.put("html", pWin->GetSimpleHtml());
             aAnnotation.put("resolved", pField->GetResolved() ? "true" : "false");
             aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
+            // The moment the comment was written, when it is known. dateTime beside it is the
+            // author's wall clock with no zone; this one is the same moment in UTC.
+            if (const std::optional<DateTime>& oDateTimeUTC = pField->GetDateTimeUTC())
+                aAnnotation.put("dateTimeUtc", DateTimeToOString(*oDateTimeUTC).getStr());
             aAnnotation.put("anchorPos", aSVRect.toString());
             aAnnotation.put("textRange", sRects.getStr());
             aAnnotation.put("layoutStatus", pItem->mLayoutStatus);

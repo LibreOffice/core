@@ -872,7 +872,11 @@ export class CommentSection extends CanvasSectionObject {
 			}
 
 			if (commentData.dateTime) {
-				const d = new Date(commentData.dateTime.replace(/,.*/, 'Z'));
+				// As on the comment card: the moment when the server sends one, the author's
+				// wall clock otherwise.
+				const d = commentData.dateTimeUtc ?
+					new Date(commentData.dateTimeUtc) :
+					new Date(commentData.dateTime.replace(/,.*/, ''));
 				const dateOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 				$(contentDate).text(isNaN(d.getTime()) ? comment.dateTime: d.toLocaleDateString((<any>String).locale, <any>dateOptions));
 			}

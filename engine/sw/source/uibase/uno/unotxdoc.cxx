@@ -73,6 +73,7 @@
 #include <unodraw.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/datetime.hxx>
+#include <tools/datetimeutils.hxx>
 #include <unocrsr.hxx>
 #include <unofieldcoll.hxx>
 #include <unoidxcoll.hxx>
@@ -3657,6 +3658,9 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("html", pWin->GetSimpleHtml());
         rJsonWriter.put("resolved", pField->GetResolved() ? "true" : "false");
         rJsonWriter.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
+        // See the comment callback: the moment, when the comment carries one.
+        if (const std::optional<DateTime>& oDateTimeUTC = pField->GetDateTimeUTC())
+            rJsonWriter.put("dateTimeUtc", DateTimeToOString(*oDateTimeUTC));
         rJsonWriter.put("anchorPos", aSVRect.toString());
         rJsonWriter.put("textRange", sRects);
         rJsonWriter.put("layoutStatus", static_cast< sal_Int16 >(pWin->GetLayoutStatus()));

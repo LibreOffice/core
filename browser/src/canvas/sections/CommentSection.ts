@@ -735,8 +735,12 @@ export class Comment extends CanvasSectionObject {
 			this.sectionProperties.authorAvatartdImg.style.borderColor = color;
 		}
 
-		// dateTime is already in UTC, so we will not append Z that will create issues while converting date
-		var d = new Date(this.sectionProperties.data.dateTime.replace(/,.*/, ''));
+		// dateTimeUtc, when the server sends one, is the moment the comment was written, so the
+		// time can be shown on the viewer's own clock. dateTime beside it is the author's wall
+		// clock with no zone, which is all a comment from an older document carries.
+		const d = this.sectionProperties.data.dateTimeUtc ?
+			new Date(this.sectionProperties.data.dateTimeUtc) :
+			new Date(this.sectionProperties.data.dateTime.replace(/,.*/, ''));
 		var dateOptions: any = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'};
 		this.sectionProperties.contentDate.innerText = isNaN(d.getTime()) ? this.sectionProperties.data.dateTime: d.toLocaleDateString((<any>String).locale, dateOptions);
 

@@ -1482,6 +1482,20 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeUsesViewTimezone)
     css::util::DateTime aParsed;
     CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aNotifiedDateTime, aParsed));
     CPPUNIT_ASSERT(DateTime(aParsed).IsBetween(aExpectedFrom, aExpectedTo));
+
+    // The moment goes out beside it, marked as UTC, so a client can show the comment on the
+    // reader's own clock rather than the author's. Without the accompanying fix in place, this
+    // test would have failed: the payload carried the wall clock alone.
+    const OUString aNotifiedDateTimeUtc = OUString::createFromAscii(
+        aView.m_aComment.get_child("dateTimeUtc").get_value<std::string>());
+    CPPUNIT_ASSERT(aNotifiedDateTimeUtc.endsWith("Z"));
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aNotifiedDateTimeUtc, aParsed));
+    // The server keeps UTC in this test, so the moment falls between the two readings with no
+    // offset added, unlike the wall clock above. It carries whole seconds, so the lower bound
+    // drops its fraction.
+    DateTime aFlooredBefore = aBefore;
+    aFlooredBefore.SetNanoSec(0);
+    CPPUNIT_ASSERT(DateTime(aParsed).IsBetween(aFlooredBefore, aAfter));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeWithoutViewTimezone)
