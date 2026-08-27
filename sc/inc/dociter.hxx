@@ -281,7 +281,7 @@ public:
     const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow1, SCROW& rRow2 );
 };
 
-class ScHorizontalCellIterator      // walk through all non empty cells in an area
+class ScHorizontalCellIterator      // walk through all non-empty cells in an area
 {                                   // row by row
     struct ColParam
     {

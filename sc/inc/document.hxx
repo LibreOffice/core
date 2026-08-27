@@ -274,15 +274,15 @@ enum ScDocumentMode
 
 enum CommentCaptionState
 {
-    ALLSHOWN,                   // All comments captions are shown
-    ALLHIDDEN,                  // All comments captions are hidden
-    MIXED                       // There are comments in shown and hidden.
+    ALLSHOWN,                   // All comment captions are shown
+    ALLHIDDEN,                  // All comment captions are hidden
+    MIXED                       // There are comments in shown and hidden states.
 };
 
 enum RangeNameScope
 {
     GLOBAL,                    // A range name can be defined
-    SHEET                      // with two scope on Manage Names dialog.
+    SHEET                      // with two scopes on Manage Names dialog.
 };
 
 /// Represents the type of sheet geometry data.
