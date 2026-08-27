@@ -465,7 +465,7 @@ public class SampleHyphenator extends ComponentBase implements
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
      * <p>
-     * @return  returns a <code>XComponentServiceFactory</code> for creating the component
+     * @return  returns an <code>XSingleComponentFactory</code> for creating the component
      * @param   aImplName     the name of the implementation for which a service is desired
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
