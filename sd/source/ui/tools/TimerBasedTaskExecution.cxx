@@ -74,7 +74,7 @@ void TimerBasedTaskExecution::ReleaseTask (
     catch (const std::bad_weak_ptr&)
     {
         // When a bad_weak_ptr has been thrown then the object pointed
-        // to by rpTask has been released right after we checked that it
+        // to by rpExecution has been released right after we checked that it
         // still existed.  Too bad, but that means, that we have nothing
         // more to do.
     }

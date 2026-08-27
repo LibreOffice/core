@@ -27,4 +27,4 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignUp"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignMiddle"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignDown"/>
- /toolbar:toolbar>
+</toolbar:toolbar>
