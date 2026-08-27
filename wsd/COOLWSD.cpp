@@ -997,7 +997,7 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
     assert(mobileAppDocId > 0 && "Unexpected to have no mobileAppDocId in the mobile build");
 #endif
 
-    std::thread([&]
+    std::thread([mobileAppDocId]
                 {
                     ProcUtil::setThreadName("lokit_main_" + HexUtil::encodeId(mobileAppDocId, 3));
 
