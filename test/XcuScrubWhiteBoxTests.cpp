@@ -86,6 +86,7 @@ void XcuScrubWhiteBoxTests::testIsAllowedXcuPath()
     LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/BulletsNumbering"));
     LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/BulletsNumbering/Format"));
     LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Writer/Grid"));
+    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/I18N/CTL"));
 
     // The match stops at a path-segment boundary, so a longer sibling name is
     // not let through.

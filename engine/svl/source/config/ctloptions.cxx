@@ -26,6 +26,8 @@
 #include <unotools/syslocale.hxx>
 #include <cpo/uno/Any.h>
 #include <cpo/uno/Sequence.hxx>
+#include <cstdlib>
+#include <cstring>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -492,6 +494,22 @@ SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals()
 {
     if (comphelper::IsFuzzing())
         return SvtCTLOptions::NUMERALS_ARABIC;
+
+    // Collabora Online admins pick a server-wide default via coolwsd.xml's
+    // per_document.ctl_numerals, forwarded here as an environment variable
+    // because kit processes have no per-user profile to read a preference
+    // from otherwise.
+    static const char* pNumeralsOverride = getenv("COOL_CTL_NUMERALS");
+    if (pNumeralsOverride)
+    {
+        if (strcmp(pNumeralsOverride, "hindi") == 0)
+            return SvtCTLOptions::NUMERALS_HINDI;
+        if (strcmp(pNumeralsOverride, "system") == 0)
+            return SvtCTLOptions::NUMERALS_SYSTEM;
+        if (strcmp(pNumeralsOverride, "context") == 0)
+            return SvtCTLOptions::NUMERALS_CONTEXT;
+    }
+
     return static_cast<SvtCTLOptions::TextNumerals>(officecfg::Office::Common::I18N::CTL::CTLTextNumerals::get());
 }
 

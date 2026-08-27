@@ -2239,6 +2239,22 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
         LOG_INF("DISABLE_REDLINE set");
     }
 
+    const std::string ctlNumerals =
+        ConfigUtil::getConfigValue<std::string>(conf, "per_document.ctl_numerals", "arabic");
+    if (ctlNumerals != "arabic")
+    {
+        if (ctlNumerals == "hindi" || ctlNumerals == "system" || ctlNumerals == "context")
+        {
+            setenv("COOL_CTL_NUMERALS", ctlNumerals.c_str(), 1);
+            LOG_INF("COOL_CTL_NUMERALS set to [" << ctlNumerals << ']');
+        }
+        else
+        {
+            LOG_ERR("Invalid per_document.ctl_numerals value [" << ctlNumerals
+                    << "], expected one of: arabic, hindi, system, context. Using arabic.");
+        }
+    }
+
     // Otherwise we profile the soft-device at jail creation time.
     setenv("SAL_DISABLE_OPENCL", "true", 1);
     // Disable getting the OS print queue and default printer

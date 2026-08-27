@@ -235,6 +235,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "per_document.cleanup.limit_dirty_mem_mb", "3072" },
     { "per_document.cleanup.lost_kit_grace_period_secs", "120" },
     { "per_document.cleanup[@enable]", "true" },
+    { "per_document.ctl_numerals", "arabic" },
     { "per_document.idle_timeout_secs", "3600" },
     { "per_document.idlesave_duration_secs", "30" },
     { "per_document.limit_convert_secs", "100" },
