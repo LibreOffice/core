@@ -1348,33 +1348,54 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		let freePane = paneRectangles[paneRectangles.length - 1]; // Last pane, this should be the scrollable - not frozen one.
 
-		// Horizontal split
+		// Horizontal split.
 		if (app.calc.cellCursorRectangle.x2 > app.calc.splitCoordinate.x) {
-			if (app.calc.cellCursorRectangle.width > freePane.width)
-				return scroll; // no scroll needed.
-
-			if (app.calc.cellCursorRectangle.x1 < freePane.x1) {
-				scroll.x = app.calc.cellCursorRectangle.x1 - freePane.x1;
-			}
-			else if (app.calc.cellCursorRectangle.x2 > freePane.x2) {
-				scroll.x = app.calc.cellCursorRectangle.x2 - freePane.x2;
-			}
+			scroll.x = this._freePaneScrollForAxis(
+				app.calc.cellCursorRectangle.x1, app.calc.cellCursorRectangle.x2,
+				freePane.x1, freePane.x2);
 		}
 
-		// Vertical split
+		// Vertical split.
 		if (app.calc.cellCursorRectangle.y2 > app.calc.splitCoordinate.y) {
-			if (app.calc.cellCursorRectangle.height > freePane.height)
-				return scroll; // no scroll needed.
-
-			// try to center in free pane the top of a cell
-			if (app.calc.cellCursorRectangle.y1 < freePane.y1)
-				scroll.y = app.calc.cellCursorRectangle.y1 - freePane.y1;
-
-			// then check if end of a cell is visible
-			if (app.calc.cellCursorRectangle.y2 > freePane.y2 + scroll.y)
-				scroll.y = scroll.y + (app.calc.cellCursorRectangle.y2 - freePane.y2);
+			scroll.y = this._freePaneScrollForAxis(
+				app.calc.cellCursorRectangle.y1, app.calc.cellCursorRectangle.y2,
+				freePane.y1, freePane.y2);
 		}
 
 		return scroll;
+	},
+
+	// How far the pane past a freeze has to move on one axis to show the cell
+	// cursor, given the cursor's and the pane's start and end on that axis.
+	_freePaneScrollForAxis: function (cellStart, cellEnd, paneStart, paneEnd) {
+		if (cellEnd - cellStart > paneEnd - paneStart) {
+			// The cell is bigger than the pane, so no scroll can show all of it.
+			// Its start edge is the one worth having on screen - that is where
+			// the content of the cell begins - but only move the view when
+			// doing so gains something.
+
+			// The start edge is on screen already.
+			if (cellStart >= paneStart && cellStart <= paneEnd)
+				return 0;
+
+			// The cell covers the whole pane, so the view sits somewhere in the
+			// middle of it. Scrolling could not bring the start edge into view
+			// without leaving the cell, and the user is reading here.
+			if (cellStart <= paneStart && cellEnd >= paneEnd)
+				return 0;
+
+			// The start edge is off screen and the cell does not fill the
+			// pane, so there is room to show it. Pull it to the near edge.
+			return cellStart - paneStart;
+		}
+
+		// The cell fits, so move by as little as brings all of it into view.
+		if (cellStart < paneStart)
+			return cellStart - paneStart;
+
+		if (cellEnd > paneEnd)
+			return cellEnd - paneEnd;
+
+		return 0;
 	},
 });

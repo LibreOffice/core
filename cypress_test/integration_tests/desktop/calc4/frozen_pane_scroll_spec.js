@@ -59,4 +59,45 @@ describe(['tagdesktop'], 'Calc scrolling with a frozen row', function() {
 			expect(w.app.activeDocument.activeLayout.viewedRectangle.pY1, 'scroll after Ctrl+Home').to.equal(0);
 		});
 	});
+
+	it('Navigating onto a cell cursor wider than the free pane still scrolls', function() {
+		const win = this.win;
+
+		// A narrow viewport leaves a free pane (to the right of the
+		// frozen columns) narrower than one default-width column, so any
+		// ordinary cell the cursor lands on there does not fit. Every
+		// step below polls the state it changed directly with cy's own
+		// retry, rather than through .uno:ReportWhenIdle, which is
+		// unreliable here.
+		cy.viewport(500, 500);
+		cy.wait(500);
+
+		// Freeze column A, leaving the rest of the sheet as a free pane
+		// narrower than one more column.
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:FreezePanesColumn');
+		});
+		cy.getFrameWindow().should(function(w) {
+			const rects = w.app.getViewRectangles();
+			const freePane = rects[rects.length - 1];
+			expect(w.app.calc.splitCoordinate.x, 'frozen column split').to.be.greaterThan(0);
+			expect(freePane.width, 'free pane narrower than a column').to.be.lessThan(1275);
+		});
+
+		// Step onto a column far enough right that reaching it needs a
+		// scroll, well past the edge of the narrowed free pane.
+		helper.typeIntoDocument('{rightarrow}'.repeat(15));
+		cy.getFrameWindow().should(function(w) {
+			expect(w.app.calc.cellAddress.x, 'reached column P').to.equal(15);
+		});
+
+		// The free pane must still scroll toward the cursor instead of
+		// giving up because the cell does not fit. Without the fix,
+		// viewedRectangle.pX1 stays at 0 and column P never comes into
+		// view.
+		cy.getFrameWindow().should(function(w) {
+			expect(w.app.activeDocument.activeLayout.viewedRectangle.pX1, 'scrolled right')
+				.to.be.greaterThan(0);
+		});
+	});
 });
