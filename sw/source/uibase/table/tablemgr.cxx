@@ -88,7 +88,7 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
     if ( GetColCount() > 0 )
     {
         // The maximum width arises from the own width and
-        // the width each of the neighbor cells reduced by MINLAY.
+        // the width of each of the neighbor cells reduced by MINLAY.
         SwTwips nMax;
         if(nNum == 0)
             nMax = GetColWidth(1) - MINLAY;

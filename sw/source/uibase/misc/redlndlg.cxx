@@ -953,7 +953,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
     std::vector<SwRedlineTable::size_type> aTableParents;
 
     // show all redlines as tree list items,
-    // redlines of a tracked table (row) insertion/deletion showed as children of a single parent
+    // redlines of a tracked table (row) insertion/deletion shown as children of a single parent
     for (SwRedlineTable::size_type i = nStart; i <= nEnd; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -993,7 +993,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
                 for (size_t j = 0; j < aTableParents.size(); j++)
                 {
                     // note: CanCombine() allows a time frame to join the changes within a short
-                    // time period: this avoid of falling apart of the tracked columns inserted
+                    // time period: this avoids falling apart of the tracked columns inserted
                     // by several clicks
                     if ( pSh->GetRedline(nRowChange).GetRedlineData()
                              .CanCombine(pSh->GetRedline(aTableParents[j]).GetRedlineData()) )
@@ -1322,7 +1322,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     //#98883# don't select redlines while the dialog is not focused
     //#107938# But not only ask pTable if it has the focus. To move
     //         the selection to the selected redline any child of pParentDlg
-    //         may the focus.
+    //         may have the focus.
     if (!m_xParentDlg || m_xParentDlg->has_toplevel_focus())
     {
         weld::TreeView& rTreeView = m_pTable->GetWidget();
