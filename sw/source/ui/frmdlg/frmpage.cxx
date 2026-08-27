@@ -527,7 +527,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
-        // --> OD 2009-08-31 #monglianlayout#
+        // --> OD 2009-08-31 #mongolianlayout#
         static const StringIdPair_Impl aVertL2RIds[] =
         {
             {SwFPos::TOP,            SwFPos::LEFT },
@@ -588,7 +588,7 @@ static LB lcl_GetLBRelationsForRelations( const sal_Int16 _nRel )
     return nLBRelations;
 }
 
-// helper method on order to determine all possible
+// helper method in order to determine all possible
 // listbox relations in a relation map for a given string ID
 static LB lcl_GetLBRelationsForStrID( const FrameMap* _pMap,
                                              const SvxSwFramePosString::StringId _eStrId,
@@ -1015,7 +1015,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     m_xRelHeightRelationLB->append_text(SvxSwFramePosString::GetString(SwFPos::REL_PG_FRAME));
     if (rFrameSize.GetHeightPercent() != SwFormatFrameSize::SYNCED && rFrameSize.GetHeightPercent() != 0)
     {
-        //calculate the reference value from the with and relative width values
+        //calculate the reference value from the height and relative height values
         sal_Int32 nSpace = rFrameSize.GetHeight() * 100 / rFrameSize.GetHeightPercent();
         m_xHeightED->SetRefValue( nSpace );
 
@@ -1617,7 +1617,7 @@ void SwFramePage::FillRelLB(const FrameMap* _pMap,
         else
         {
             // special handling for map <aVCharMap>,
-            // because its ambiguous in its <eStrId>/<eMirrorStrId>.
+            // because it is ambiguous in its <eStrId>/<eMirrorStrId>.
             if ( _pMap == aVCharMap )
             {
                 nLBRelations = ::lcl_GetLBRelationsForStrID( _pMap,

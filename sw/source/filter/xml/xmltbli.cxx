@@ -1902,7 +1902,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
 
         // try to rescue broken documents with a certain pattern
         // if: 1) the cell has a default number format (number 0)
-        //     2) the call has no formula
+        //     2) the cell has no formula
         //     3) the value is 0.0
         //     4) the text doesn't look anything like 0.0
         //        [read: length > 10, or length smaller 10 and no 0 in it]
@@ -2164,9 +2164,9 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 }
                 else if ( m_bHasSubTables )
                 {
-                    // If the table resulting table fragment could be divided
+                    // If the resulting table fragment could be divided
                     // into lines if splitting behind the current column, but
-                    // this doesn't apply for thr next column, we split begind
+                    // this doesn't apply for the next column, we split behind
                     // the current column. This applies for the last column,
                     // too.
                     // If the resulting box cannot be split into rows,
