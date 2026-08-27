@@ -219,7 +219,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterCount(long* nCharac
    * @param x Variant to accept x position.
    * @param y Variant to accept y position.
    * @param width Variant to accept width.
-   * @param Height Variant to accept height.
+   * @param height Variant to accept height.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset,
@@ -273,8 +273,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset
         *x = rectangle.X;
         *y = rectangle.Y;
 
-        // pRXText->getCharacterBounds() have different implement in different acc component
-        // But we need return the width/height == 1 for every component when offset == text length.
+        // pRXText->getCharacterBounds() has different implementations in different acc components.
+        // But we need to return width/height == 1 for every component when offset == text length.
         // So we ignore the return result of pRXText->getCharacterBounds() when offset == text length.
         if (offset == pRXText->getCharacterCount())
         {
@@ -344,7 +344,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long* nSelection
 /**
    * Get offset of some special point.
    * @param x X position of one point.
-   * @param x Y position of one point.
+   * @param y Y position of one point.
    * @param coordType Type.
    * @param offset Variant to accept offset.
    * @return Result.

@@ -42,7 +42,7 @@ AccListEventListener::~AccListEventListener()
 
 /**
  *  Uno's event notifier when event is captured
- *  @param AccessibleEventObject    the event object which contains information about event
+ *  @param aEvent    the event object which contains information about event
  */
 void  AccListEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
 {
