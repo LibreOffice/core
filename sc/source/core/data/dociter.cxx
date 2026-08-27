@@ -973,7 +973,7 @@ bool ScCellIterator::getCurrent()
         }
 
         SCROW nLastRow;
-        // Skip all filtered or hidden rows, depending on mSubTotalFlags
+        // Skip all filtered or hidden rows, depending on mnSubTotalFlags
         if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
                pCol->GetDoc().RowFiltered(maCurPos.Row(), maCurPos.Tab(), nullptr, &nLastRow) ) ||
              ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&

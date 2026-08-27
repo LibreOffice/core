@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadl
 {
     // To avoid regression, in headless mode leave the bug tdf126541
     // It means Sheet based grid line visibility setting will overwrite the global setting.
-    // If there is only 1 sheet in the document, it will not result visible problems.
+    // If there is only 1 sheet in the document, it will not result in visible problems.
     createScDoc("tdf126541_GridOff.xlsx");
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT(!pDoc->GetViewOptions().GetOption(sc::ViewOption::GRID));
@@ -1524,7 +1524,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     createScDoc("tdf122232.ods");
     ScDocShell* pDocSh = getScDocShell();
 
-    //Start with from C6. Press tabulator to reach G6.
+    //Start from C6. Press tabulator to reach G6.
     checkCurrentCursorPosition(*pDocSh, u"C6");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
@@ -1971,7 +1971,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149502_HangOnDeletingSheet1)
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(0)) } }));
 
-    // Before the fix in place, this test frozen here
+    // Before the fix in place, this test froze here
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(3), pDoc->GetTableCount());
