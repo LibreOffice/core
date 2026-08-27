@@ -464,7 +464,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
-        //Check if there are an entry with the same url. This can be the case if the
+        //Check if there is an entry with the same url. This can be the case if the
         //status of an XPackage is ambiguous. In this case a call to activateExtension
         //(dp_extensionmanager.cxx), will register the package again. See also
         //Package::processPackage_impl in dp_backend.cxx.
@@ -623,7 +623,7 @@ void RegisteredDb::addEntry(OUString const & url)
             Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
 #if    OSL_DEBUG_LEVEL > 0
-            //There must not be yet an entry with the same url
+            //There must not yet be an entry with the same url
             OUString sExpression(
                 sPrefix + ":" + sEntry + "[@url = \"" + url + "\"]");
             Reference<css::xml::dom::XNode> _extensionNode =
@@ -651,6 +651,6 @@ void RegisteredDb::addEntry(OUString const & url)
     }
 }
 
-} // namespace dp_registry
+} // namespace dp_registry::backend
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

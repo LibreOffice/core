@@ -195,7 +195,7 @@ typedef ::cppu::WeakComponentImplHelper<
 class PackageRegistryBackend
     : protected cppu::BaseMutex, public t_BackendBase
 {
-    //The map held originally WeakReferences. The map entries are removed in the disposing
+    //The map originally held WeakReferences. The map entries are removed in the disposing
     //function, which is called when the XPackages are destructed or they are
     //explicitly disposed. The latter happens, for example, when an extension is
     //removed (see dp_manager.cxx). However, because of how the help systems work, now
