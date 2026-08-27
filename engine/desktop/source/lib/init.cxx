@@ -177,6 +177,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/shell.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
@@ -5550,6 +5551,21 @@ static void doc_registerCallback(COKitDocument* pThis,
 
         pDocument->mpCallbackFlushHandlers[nView]->setViewId(nView);
         pViewShell->setCOKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
+
+        // The context broadcast that fires while the document's starting cursor
+        // position is set up runs before this callback exists, so a document whose
+        // cursor starts inside a context-specific area (a table, for example) never
+        // reaches this view until the user leaves and re-enters that area. Resend it
+        // now that a callback is here to receive it, but only for a shell more specific
+        // than the view's own base shell: the base shell's own starting context needs
+        // no resend, and resending it anyway was found to race with the view's other
+        // startup notifications and leave the notebookbar stuck without its styles.
+        if (SfxDispatcher* pDispatcher = pViewShell->GetViewFrame().GetDispatcher())
+        {
+            SfxShell* pShell = pDispatcher->GetShell(0);
+            if (pShell && pShell != static_cast<SfxShell*>(pViewShell))
+                pShell->BroadcastContextForActivation(/*bIsActivated=*/true);
+        }
 
         if (!pDocument->maFontsMissing.empty())
         {

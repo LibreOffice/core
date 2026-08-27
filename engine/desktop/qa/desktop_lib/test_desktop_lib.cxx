@@ -241,6 +241,7 @@ public:
     void testNoDuplicateTableSelection();
     void testMultiViewTableSelection();
     void testColorPaletteCallback();
+    void testTableContextOnLoad();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -333,6 +334,7 @@ public:
     CPPUNIT_TEST(testNoDuplicateTableSelection);
     CPPUNIT_TEST(testMultiViewTableSelection);
     CPPUNIT_TEST(testColorPaletteCallback);
+    CPPUNIT_TEST(testTableContextOnLoad);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -2310,6 +2312,7 @@ public:
     int m_nComments = 0;
     int m_nDocSizeChanged = 0;
     int m_nTextViewSelection = 0;
+    OString m_aLastContext;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
     std::string m_searchTerm;
@@ -2382,6 +2385,11 @@ public:
         case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
         {
             ++m_nDocSizeChanged;
+        }
+        break;
+        case COKitCallbackType::CONTEXT_CHANGED:
+        {
+            m_aLastContext = aPayload;
         }
         break;
         case COKitCallbackType::TEXT_VIEW_SELECTION:
@@ -4453,6 +4461,26 @@ void DesktopKitTest::testColorPaletteCallback()
     }
 }
 
+void DesktopKitTest::testTableContextOnLoad()
+{
+    // A document whose first element is a table, so the cursor lands inside it on load,
+    // the same way it would land in a table the user just clicked into.
+    COKitDocumentImpl* pDocument = loadDoc("writer-starts-with-table.odt");
+
+    // initializeForRendering positions that starting cursor before the callback below is
+    // registered, the same order production code uses.
+    pDocument->initializeForRendering("{}");
+    ViewCallback aView1(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // The view must already know it is inside a table, without the user having to click
+    // out and back in first.
+    // Without the fix in place, this test would have failed with:
+    // - Expected: true
+    // - Actual  : false
+    // i.e. no context ever reached this view.
+    CPPUNIT_ASSERT(aView1.m_aLastContext.indexOf("Table"_ostr) != -1);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);
 
