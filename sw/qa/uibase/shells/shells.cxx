@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     };
     dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
-    // Then make sure that it's type/name is correct:
+    // Then make sure that its type/name is correct:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwCursor* pCursor = pWrtShell->GetCursor();
     pCursor->SttEndDoc(/*bSttDoc=*/true);
@@ -668,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureTransformChart)
     };
     dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
 
-    // Check transformed values of the 3 chart
+    // Check transformed values of the 3 charts
     for (int nShape = 0; nShape < 3; nShape++)
     {
         uno::Reference<text::XTextEmbeddedObjectsSupplier> xEOS(mxComponent, uno::UNO_QUERY);
@@ -1357,7 +1357,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureUnoCommand)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
 {
-    // Given a document with two refmarks, one is not interesting the other is a citation:
+    // Given a document with two refmarks, one is not interesting, the other is a citation:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
@@ -1576,7 +1576,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
 {
-    // Given a document with a bookmarks, covering "BC":
+    // Given a document with a bookmark, covering "BC":
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();

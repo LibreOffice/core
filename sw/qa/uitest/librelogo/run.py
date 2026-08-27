@@ -55,7 +55,7 @@ class LibreLogoTest(UITestCase):
             # - turtle shape: result of program start
             # - line shape: result of turtle drawing
             # b) continuous line drawing (the regression
-            # related to the fix of tdf#106792 resulted shorter line
+            # related to the fix of tdf#106792 resulted in shorter line
             # segments than the turtle path and non-continuous line
             # drawing, ie. in this example, three line shapes
             # instead of a single one. See its fix in
