@@ -211,7 +211,7 @@ namespace DOM::events {
 
         // the capture vector now holds the node path from target to root
         // first we must search for capture listeners in order root to
-        // to target. after that, any target listeners have to be called
+        // target. after that, any target listeners have to be called
         // then bubbling phase listeners are called in target to root
         // order
         // start at the root

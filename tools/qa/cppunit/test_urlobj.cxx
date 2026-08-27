@@ -432,11 +432,11 @@ namespace tools_urlobj
         CPPUNIT_TEST( testParseSmart );
         CPPUNIT_TEST( testIsExoticProtocol );
         CPPUNIT_TEST_SUITE_END(  );
-    };                          // class createPool
+    };                          // class urlobjTest
 
 
     CPPUNIT_TEST_SUITE_REGISTRATION( urlobjTest );
-}                               // namespace rtl_random
+}                               // namespace tools_urlobj
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

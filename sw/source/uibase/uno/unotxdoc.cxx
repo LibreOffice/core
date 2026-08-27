@@ -2403,7 +2403,7 @@ const rtl::Reference< SwXRedlines > & SwXTextDocument::getSwRedlines(  )
 
 void SwXTextDocument::NotifyRefreshListeners()
 {
-    // why does SwBaseShell not just call refresh? maybe because it's rSh is
+    // why does SwBaseShell not just call refresh? maybe because its rSh is
     // (sometimes) a different shell than GetWrtShell()?
     lang::EventObject const ev(getXWeak());
     std::unique_lock aGuard(m_pImpl->m_Mutex);
@@ -2772,7 +2772,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 m_pRenderData->ViewOptionAdjust( pPrtOptions, setShowPlaceHoldersInPDF );
             }
 
-            // since printing now also use the API for PDF export this option
+            // since printing now also uses the API for PDF export this option
             // should be set for printing as well ...
             pViewShell->SetPDFExportOption( true );
 
@@ -3231,7 +3231,7 @@ void SAL_CALL SwXTextDocument::render(
                             || (!pSwView && !m_pRenderData->IsViewOptionAdjust()),
                             "SwView / SwViewOptionAdjust_Impl availability mismatch" );
 
-                    // since printing now also use the API for PDF export this option
+                    // since printing now also uses the API for PDF export this option
                     // should be set for printing as well ...
                     pVwSh->SetPDFExportOption( true );
 
