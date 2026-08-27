@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <svtools/svtdllapi.h>
 #include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
@@ -25,7 +26,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Window.hxx>
 
-class QueryDialog final : public weld::GenericDialogController
+class SVT_DLLPUBLIC QueryDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Label> m_pTitle;

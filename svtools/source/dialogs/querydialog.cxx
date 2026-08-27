@@ -17,13 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <querydialog.hxx>
 #include <bitmaps.hlst>
+
+#include <svtools/querydialog.hxx>
 #include <vcl/weld/Builder.hxx>
 
 QueryDialog::QueryDialog(weld::Window* pParent, const OUString& sTitle, const OUString& sText,
                          const OUString& sQuestion, bool bHideShowAgain)
-    : GenericDialogController(pParent, u"cui/ui/querydialog.ui"_ustr, u"QueryDialog"_ustr)
+    : GenericDialogController(pParent, u"svt/ui/querydialog.ui"_ustr, u"QueryDialog"_ustr)
     , m_pTitle(m_xBuilder->weld_label(u"lbTitle"_ustr))
     , m_pText(m_xBuilder->weld_label(u"lbText"_ustr))
     , m_pQuestion(m_xBuilder->weld_label(u"lbQuestion"_ustr))
@@ -37,7 +38,7 @@ QueryDialog::QueryDialog(weld::Window* pParent, const OUString& sTitle, const OU
     m_pTitle->set_label(sTitle);
     m_pText->set_label(sText);
     m_pQuestion->set_label(sQuestion);
-    m_pImage->set_from_icon_name(RID_CUIBMP_QUERY);
+    m_pImage->set_from_icon_name(BMP_QUERY);
 
     if (bHideShowAgain)
         m_pCheckBox->hide();
@@ -57,6 +58,6 @@ void QueryDialog::SetNoLabel(const OUString& rLabel)
     m_pNo->set_visible(false);
 }
 
-void QueryDialog::SetTypeWarn() { m_pImage->set_from_icon_name(RID_CUIBMP_WARN); }
+void QueryDialog::SetTypeWarn() { m_pImage->set_from_icon_name(BMP_WARN); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -97,10 +97,11 @@
 #include <DiagramDialog.hxx>
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
-#include <querydialog.hxx>
 #include <welcomedlg.hxx>
 
 #include <MacroManagerDialog.hxx>
+
+#include <svtools/querydialog.hxx>
 
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;

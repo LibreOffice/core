@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUString BMP_IMPRESS_SC = u"res/sx03123.png"_ustr;
 inline constexpr OUString BMP_BITMAP_SC = u"res/sx03125.png"_ustr;
 inline constexpr OUString BMP_CALC_SC = u"res/sx03126.png"_ustr;
@@ -122,6 +124,8 @@ inline constexpr OUString BMP_PRIMARYKEY = u"svtools/res/ed06.png"_ustr;
 inline constexpr OUString BMP_CURRENT_PRIMARYKEY = u"svtools/res/ed07.png"_ustr;
 inline constexpr OUString BMP_FILTER = u"svtools/res/ed08.png"_ustr;
 inline constexpr OUString BMP_HEADERFOOTER = u"svtools/res/ed09.png"_ustr;
+inline constexpr OUString BMP_QUERY = u"res/query.png"_ustr;
+inline constexpr OUString BMP_WARN = u"res/warn.png"_ustr;
 
 inline constexpr OUString BMP_TAB_LOCK = u"cmd/sc_lock.png"_ustr;
 
