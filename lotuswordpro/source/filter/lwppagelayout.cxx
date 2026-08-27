@@ -812,14 +812,14 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
     //left margin in SODC: the space from the left edge of body to the left edge of header
     double left
         = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
-    if (left <= 0) //The left margin in SODC can not be minus value
+    if (left <= 0) //The left margin in SODC can not be a negative value
     {
         left = -1;
     }
-    //left margin in SODC: the space from the right edge of header to the right edge of body
+    //right margin in SODC: the space from the right edge of header to the right edge of body
     double right
         = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
-    if (right <= 0) //The right margin in SODC can not be minus value
+    if (right <= 0) //The right margin in SODC can not be a negative value
     {
         right = -1;
     }
@@ -959,7 +959,7 @@ void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
 
 void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
 {
-    //Set height: from top of header to top of body, including the spacing between header and body
+    //Set height: from bottom of footer to bottom of body, including the spacing between footer and body
     double height = GetGeometryHeight() - GetMarginsValue(MARGIN_BOTTOM);
     if (IsAutoGrowUp())
     {
@@ -974,13 +974,13 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
     LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*>(GetParent().obj().get());
     double left
         = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
-    if (left <= 0) //The left margin in SODC can not be minus value
+    if (left <= 0) //The left margin in SODC can not be a negative value
     {
         left = -1;
     }
     double right
         = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
-    if (right <= 0) //The left margin in SODC can not be minus value
+    if (right <= 0) //The right margin in SODC can not be a negative value
     {
         right = -1;
     }

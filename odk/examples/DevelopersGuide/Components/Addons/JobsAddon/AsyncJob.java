@@ -80,11 +80,11 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *              <li>generic job configuration data</li>
      *              <li>job specific configuration data</li>
      *              <li>some environment information</li>
-     *              <li>may optional arguments of a corresponding dispatch request</li>
+     *              <li>optional arguments of a corresponding dispatch request</li>
      *          </ul>
      *
-     *  @params xListener
-     *          callback to the executor of this job, which control our life time
+     *  @param  xListener
+     *          callback to the executor of this job, which controls our life time
      *
      *  @throws com.sun.star.lang.IllegalArgumentException
      *          if given argument list seems to be wrong
@@ -243,7 +243,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          is shown as title of the info box.
      *
      *  @param  sMessage
-     *          included the message body, which is shown as info.
+     *          includes the message body, which is shown as info.
      */
 
     private void showInfoModal( com.sun.star.awt.XWindow xParent  ,
@@ -258,7 +258,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
                  m_xCmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit",
                                                                          m_xCmpCtx));
 
-            // describe the info box ini its parameters
+            // describe the info box in its parameters
             com.sun.star.awt.WindowDescriptor aDescriptor = new com.sun.star.awt.WindowDescriptor();
             aDescriptor.WindowServiceName = "infobox";
             aDescriptor.Bounds            = new com.sun.star.awt.Rectangle(0,0,300,200);
@@ -334,7 +334,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          contains some environment information
      *
      *  @param  lDynamicData
-     *          contains optional data of a might corresponding dispatch() request
+     *          contains optional data of a corresponding dispatch() request
      */
 
     private String formatOutArgs(com.sun.star.beans.NamedValue[] lGenericConfig,

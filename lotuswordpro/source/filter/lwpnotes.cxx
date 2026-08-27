@@ -88,7 +88,7 @@ void LwpFribNote::RegisterNewStyle()
     {
         //register font style
         LwpFrib::RegisterStyle(m_pPara->GetFoundry());
-        //register footnote style
+        //register note style
         pLayout->SetFoundry(m_pPara->GetFoundry());
         pLayout->DoRegisterStyle();
     }
@@ -207,7 +207,7 @@ OUString LwpNoteLayout::GetAuthor()
             return m_UserName.str();
         }
     }
-    //if username is null or writerspace, get username from noteheaderlayout
+    //if username is null or whitespace, get username from noteheaderlayout
     LwpNoteHeaderLayout* pTextLayout
         = static_cast<LwpNoteHeaderLayout*>(FindChildByType(LWP_NOTEHEADER_LAYOUT));
     if (pTextLayout)
