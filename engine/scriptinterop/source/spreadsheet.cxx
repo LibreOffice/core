@@ -14,12 +14,20 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
+#include <com/sun/star/sheet/XNamedRange.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 #include <com/sun/star/sheet/XViewFreezable.hpp>
@@ -47,7 +55,12 @@
 #include <scriptinterop/XSheet.hpp>
 #include <scriptinterop/XSpreadsheet.hpp>
 
+#include "conversions.hxx"
 #include "spreadsheet.hxx"
+
+using scriptinterop::detail::extentToHundredthMm;
+using scriptinterop::detail::parseHexColor;
+using scriptinterop::detail::pixelsToHundredthMm;
 
 namespace
 {
@@ -135,17 +148,30 @@ void setCellValue(cpo::uno::Reference<css::table::XCell> const& cell, cpo::uno::
 
 class RangeImpl;
 
+cpo::uno::Reference<css::sheet::XSpreadsheets>
+documentSheets(cpo::uno::Reference<css::frame::XModel> const& model)
+{
+    cpo::uno::Reference<css::sheet::XSpreadsheetDocument> const doc(model,
+                                                                    cpo::uno::UNO_QUERY_THROW);
+    return doc->getSheets();
+}
+
 // Builds the range at a 1-based row/column/size, checked before the sheet is asked for it.
 cpo::uno::Reference<scriptinterop::XRange>
-rangeAt(cpo::uno::Reference<css::sheet::XSpreadsheet> const& sheet, sal_Int32 row, sal_Int32 column,
+rangeAt(cpo::uno::Reference<css::frame::XModel> const& model,
+        cpo::uno::Reference<css::sheet::XSpreadsheet> const& sheet, sal_Int32 row, sal_Int32 column,
         sal_Int32 numRows, sal_Int32 numColumns);
 
 class RangeImpl : public cppu::WeakImplHelper<scriptinterop::XRange>
 {
 public:
-    RangeImpl(cpo::uno::Reference<css::sheet::XSpreadsheet> const& sheet,
+    // The range keeps the document, not the sheet it happened to come from: a named range can
+    // refer to cells on a sheet other than whichever one was active when it was looked up, so the
+    // owning sheet is resolved from the range's own address instead of being trusted from the
+    // caller.
+    RangeImpl(cpo::uno::Reference<css::frame::XModel> const& model,
               cpo::uno::Reference<css::table::XCellRange> const& range)
-        : sheet_(sheet)
+        : model_(model)
         , range_(range)
     {
     }
@@ -303,8 +329,17 @@ public:
                        sal_Int32 numColumns) override
     {
         auto const a = address();
-        return rangeAt(sheet_, a.StartRow + rowOffset + 1, a.StartColumn + columnOffset + 1,
-                       numRows, numColumns);
+        return rangeAt(model_, sheetAt(a.Sheet), a.StartRow + rowOffset + 1,
+                       a.StartColumn + columnOffset + 1, numRows, numColumns);
+    }
+
+    cpo::uno::Reference<scriptinterop::XRange>
+        SAL_CALL setBackgroundColor(OUString const& hexColor) override
+    {
+        cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+        props->setPropertyValue(u"CellBackColor"_ustr, cpo::uno::Any(parseHexColor(hexColor)));
+        return this;
     }
 
 private:
@@ -317,12 +352,22 @@ private:
 
     cpo::uno::Reference<css::table::XCell> topLeftCell() { return range_->getCellByPosition(0, 0); }
 
-    cpo::uno::Reference<css::sheet::XSpreadsheet> sheet_;
+    cpo::uno::Reference<css::sheet::XSpreadsheet> sheetAt(sal_Int16 tab)
+    {
+        cpo::uno::Reference<css::container::XIndexAccess> const sheets(
+            documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::sheet::XSpreadsheet> sheet;
+        sheets->getByIndex(tab) >>= sheet;
+        return sheet;
+    }
+
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::table::XCellRange> range_;
 };
 
 cpo::uno::Reference<scriptinterop::XRange>
-rangeAt(cpo::uno::Reference<css::sheet::XSpreadsheet> const& sheet, sal_Int32 row, sal_Int32 column,
+rangeAt(cpo::uno::Reference<css::frame::XModel> const& model,
+        cpo::uno::Reference<css::sheet::XSpreadsheet> const& sheet, sal_Int32 row, sal_Int32 column,
         sal_Int32 numRows, sal_Int32 numColumns)
 {
     if (row < 1 || column < 1 || numRows < 1 || numColumns < 1)
@@ -342,7 +387,7 @@ rangeAt(cpo::uno::Reference<css::sheet::XSpreadsheet> const& sheet, sal_Int32 ro
         throw cpo::uno::RuntimeException(OUString::Concat("expected a range that fits the sheet: ")
                                          + e.Message);
     }
-    return new RangeImpl(sheet, range);
+    return new RangeImpl(model, range);
 }
 
 class SheetImpl : public cppu::WeakImplHelper<scriptinterop::XSheet>
@@ -382,38 +427,38 @@ public:
             throw cpo::uno::RuntimeException(
                 OUString::Concat("getRange: expected a valid A1-style range, got ") + a1Notation);
         }
-        return new RangeImpl(sheet_, range);
+        return new RangeImpl(model_, range);
     }
 
     cpo::uno::Reference<scriptinterop::XRange> SAL_CALL getRangeAtCell(sal_Int32 row,
                                                                        sal_Int32 column) override
     {
-        return rangeAt(sheet_, row, column, 1, 1);
+        return rangeAt(model_, sheet_, row, column, 1, 1);
     }
 
     cpo::uno::Reference<scriptinterop::XRange>
         SAL_CALL getRangeAtRows(sal_Int32 row, sal_Int32 column, sal_Int32 numRows) override
     {
-        return rangeAt(sheet_, row, column, numRows, 1);
+        return rangeAt(model_, sheet_, row, column, numRows, 1);
     }
 
     cpo::uno::Reference<scriptinterop::XRange> SAL_CALL getRangeAt(sal_Int32 row, sal_Int32 column,
                                                                    sal_Int32 numRows,
                                                                    sal_Int32 numColumns) override
     {
-        return rangeAt(sheet_, row, column, numRows, numColumns);
+        return rangeAt(model_, sheet_, row, column, numRows, numColumns);
     }
 
     cpo::uno::Reference<scriptinterop::XRange> SAL_CALL getActiveRange() override
     {
-        return new RangeImpl(sheet_, activeCellRange());
+        return new RangeImpl(model_, activeCellRange());
     }
 
     cpo::uno::Reference<scriptinterop::XRange> SAL_CALL getActiveCell() override
     {
         // The top-left cell of the first selected range stands in for "the active cell".
         auto const range = activeCellRange();
-        return new RangeImpl(sheet_, range->getCellRangeByPosition(0, 0, 0, 0));
+        return new RangeImpl(model_, range->getCellRangeByPosition(0, 0, 0, 0));
     }
 
     cpo::uno::Reference<scriptinterop::XRange> SAL_CALL getDataRange() override
@@ -432,7 +477,7 @@ public:
                                                                      cpo::uno::UNO_QUERY_THROW);
         auto const range
             = sheetRange->getCellRangeByPosition(a.StartColumn, a.StartRow, a.EndColumn, a.EndRow);
-        return new RangeImpl(sheet_, range);
+        return new RangeImpl(model_, range);
     }
 
     sal_Int32 SAL_CALL getMaxRows() override { return columnRowRange()->getRows()->getCount(); }
@@ -461,6 +506,37 @@ public:
     void SAL_CALL deleteColumns(sal_Int32 startColumn, sal_Int32 numColumns) override
     {
         removeColumns(startColumn, numColumns, u"deleteColumns"_ustr);
+    }
+
+    void SAL_CALL setColumnWidth(sal_Int32 column, sal_Int32 pixels) override
+    {
+        if (column < 1)
+        {
+            throw cpo::uno::RuntimeException(
+                u"setColumnWidth: expected a column of at least 1"_ustr);
+        }
+        auto const widthHundredthMm = pixelsToHundredthMm(pixels);
+        try
+        {
+            cpo::uno::Reference<css::beans::XPropertySet> const columnProps(
+                columnRowRange()->getColumns()->getByIndex(column - 1), cpo::uno::UNO_QUERY_THROW);
+            columnProps->setPropertyValue(u"Width"_ustr, cpo::uno::Any(widthHundredthMm));
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("setColumnWidth: ") + e.Message);
+        }
+    }
+
+    void SAL_CALL clear() override
+    {
+        cpo::uno::Reference<css::sheet::XSheetOperation> const op(sheet_,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+        op->clearContents(css::sheet::CellFlags::VALUE | css::sheet::CellFlags::DATETIME
+                          | css::sheet::CellFlags::STRING | css::sheet::CellFlags::ANNOTATION
+                          | css::sheet::CellFlags::FORMULA | css::sheet::CellFlags::HARDATTR
+                          | css::sheet::CellFlags::STYLES | css::sheet::CellFlags::OBJECTS
+                          | css::sheet::CellFlags::EDITATTR | css::sheet::CellFlags::FORMATTED);
     }
 
 private:
@@ -585,6 +661,158 @@ public:
             throw cpo::uno::RuntimeException(u"getActiveSheet: no active sheet"_ustr);
         }
         return new SheetImpl(model_, sheet);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSheet>
+        SAL_CALL getSheetByName(OUString const& name) override
+    {
+        cpo::uno::Reference<css::container::XNameAccess> const sheets(documentSheets(model_),
+                                                                       cpo::uno::UNO_QUERY_THROW);
+        // A name that no sheet carries reports as an empty reference, which a script sees as
+        // null, the way SpreadsheetApp reports it.
+        if (!sheets->hasByName(name))
+        {
+            return {};
+        }
+        cpo::uno::Reference<css::sheet::XSpreadsheet> sheet;
+        sheets->getByName(name) >>= sheet;
+        return new SheetImpl(model_, sheet);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSheet> SAL_CALL insertSheet(OUString const& name) override
+    {
+        return insertSheetNamed(name);
+    }
+
+private:
+    cpo::uno::Reference<scriptinterop::XSheet> insertSheetNamed(OUString const& name)
+    {
+        auto const sheets = documentSheets(model_);
+        cpo::uno::Reference<css::container::XIndexAccess> const indexed(sheets,
+                                                                         cpo::uno::UNO_QUERY_THROW);
+        auto const count = indexed->getCount();
+        if (count > SAL_MAX_INT16)
+        {
+            throw cpo::uno::RuntimeException(u"insertSheet: the document already has too many "
+                                             u"sheets to add another"_ustr);
+        }
+        sheets->insertNewByName(name, static_cast<sal_Int16>(count));
+        cpo::uno::Reference<css::container::XNameAccess> const byName(sheets,
+                                                                       cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::sheet::XSpreadsheet> sheet;
+        byName->getByName(name) >>= sheet;
+        return new SheetImpl(model_, sheet);
+    }
+
+    // The named ranges a sheet keeps for itself, as against the document's own list.
+    static cpo::uno::Reference<css::sheet::XNamedRanges>
+    sheetNamedRanges(cpo::uno::Reference<css::sheet::XSpreadsheet> const& sheet)
+    {
+        cpo::uno::Reference<css::beans::XPropertySet> const props(sheet, cpo::uno::UNO_QUERY);
+        if (!props.is())
+        {
+            return {};
+        }
+        cpo::uno::Reference<css::sheet::XNamedRanges> ranges;
+        props->getPropertyValue(u"NamedRanges"_ustr) >>= ranges;
+        return ranges;
+    }
+
+    static cpo::uno::Reference<css::sheet::XNamedRange>
+    namedRangeFrom(cpo::uno::Reference<css::sheet::XNamedRanges> const& ranges,
+                   OUString const& name)
+    {
+        if (!ranges.is() || !ranges->hasByName(name))
+        {
+            return {};
+        }
+        cpo::uno::Reference<css::sheet::XNamedRange> range;
+        ranges->getByName(name) >>= range;
+        return range;
+    }
+
+    cpo::uno::Reference<css::sheet::XNamedRange> findNamedRange(OUString const& name)
+    {
+        cpo::uno::Reference<css::container::XNameAccess> const byName(documentSheets(model_),
+                                                                       cpo::uno::UNO_QUERY_THROW);
+        auto const bang = name.lastIndexOf('!');
+        if (bang != -1)
+        {
+            auto const sheetName = name.copy(0, bang);
+            auto const bareName = name.copy(bang + 1);
+            if (!byName->hasByName(sheetName))
+            {
+                return {};
+            }
+            cpo::uno::Reference<css::sheet::XSpreadsheet> sheet;
+            byName->getByName(sheetName) >>= sheet;
+            return namedRangeFrom(sheetNamedRanges(sheet), bareName);
+        }
+        cpo::uno::Reference<css::beans::XPropertySet> const docProps(model_,
+                                                                      cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::sheet::XNamedRanges> documentRanges;
+        docProps->getPropertyValue(u"NamedRanges"_ustr) >>= documentRanges;
+        if (auto const range = namedRangeFrom(documentRanges, name); range.is())
+        {
+            return range;
+        }
+        cpo::uno::Reference<css::container::XIndexAccess> const indexed(byName,
+                                                                         cpo::uno::UNO_QUERY_THROW);
+        for (sal_Int32 i = 0; i != indexed->getCount(); ++i)
+        {
+            cpo::uno::Reference<css::sheet::XSpreadsheet> sheet;
+            indexed->getByIndex(i) >>= sheet;
+            if (auto const range = namedRangeFrom(sheetNamedRanges(sheet), name); range.is())
+            {
+                return range;
+            }
+        }
+        return {};
+    }
+
+public:
+
+    // The name Calc's own new-sheet command would give it: "Sheet" and the lowest number that
+    // leaves the name free across the document.
+    cpo::uno::Reference<scriptinterop::XSheet> SAL_CALL insertSheetWithDefaultName() override
+    {
+        cpo::uno::Reference<css::container::XNameAccess> const byName(documentSheets(model_),
+                                                                       cpo::uno::UNO_QUERY_THROW);
+        OUString name;
+        for (sal_Int32 n = 1;; ++n)
+        {
+            name = OUString::Concat("Sheet") + OUString::number(n);
+            if (!byName->hasByName(name))
+            {
+                break;
+            }
+        }
+        return insertSheetNamed(name);
+    }
+
+    cpo::uno::Reference<scriptinterop::XRange>
+        SAL_CALL getRangeByName(OUString const& name) override
+    {
+        // A name belongs either to the document or to one sheet, and a sheet keeps its own in a
+        // list of its own. A name may say which sheet holds it, written the way SpreadsheetApp
+        // writes it, with the sheet name unquoted in front of an exclamation mark. A plain name
+        // is looked for in the document's list first and then in each sheet's list, left to
+        // right. A name that nothing holds reports as an empty reference, which a script sees as
+        // null.
+        auto const namedRange = findNamedRange(name);
+        if (!namedRange.is())
+        {
+            return {};
+        }
+        cpo::uno::Reference<css::sheet::XCellRangeReferrer> const referrer(
+            namedRange, cpo::uno::UNO_QUERY_THROW);
+        auto const cells = referrer->getReferredCells();
+        if (!cells.is())
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("getRangeByName: ") + name
+                                             + " does not refer to a plain cell range");
+        }
+        return new RangeImpl(model_, cells);
     }
 
     // Recalculates every formula in the document, including ones a script's writes did not

@@ -46,6 +46,10 @@ interface XSheet : XBase
     void deleteColumn([in] long column);
 
     void deleteColumns([in] long startColumn, [in] long numColumns);
+
+    void setColumnWidth([in] long column, [in] long pixels);
+
+    void clear();
 };
 
 };

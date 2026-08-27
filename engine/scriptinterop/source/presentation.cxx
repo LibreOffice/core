@@ -9,7 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cmath>
 #include <vector>
 
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -40,7 +39,6 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
@@ -53,39 +51,16 @@
 #include <scriptinterop/XTextRange.hpp>
 #include <scriptinterop/XTextStyle.hpp>
 
+#include "conversions.hxx"
 #include "presentation.hxx"
+
+using scriptinterop::detail::extentToHundredthMm;
+using scriptinterop::detail::hundredthMmToPoints;
+using scriptinterop::detail::parseHexColor;
+using scriptinterop::detail::pointsToHundredthMm;
 
 namespace
 {
-// The API works in points; the UNO drawing layer works in 1/100 mm.  A value that is not a
-// finite number, or that falls outside the drawing layer's integer range after the conversion,
-// is an error.  The comparison is written so that a NaN input fails it too.
-sal_Int32 pointsToHundredthMm(double points)
-{
-    auto const hundredthMm = std::round(points * 2540.0 / 72.0);
-    if (!(hundredthMm >= SAL_MIN_INT32 && hundredthMm <= SAL_MAX_INT32))
-    {
-        throw cpo::uno::RuntimeException(
-            u"expected a length in points that fits the page coordinate range, got "_ustr
-            + OUString::number(points));
-    }
-    return static_cast<sal_Int32>(hundredthMm);
-}
-
-// A shape width or height in points.  The value must not be negative; the comparison is written
-// so that a NaN input fails it too.
-sal_Int32 extentToHundredthMm(double points)
-{
-    if (!(points >= 0))
-    {
-        throw cpo::uno::RuntimeException(u"expected a non-negative size in points, got "_ustr
-                                         + OUString::number(points));
-    }
-    return pointsToHundredthMm(points);
-}
-
-double hundredthMmToPoints(sal_Int32 hundredthMm) { return hundredthMm * 72.0 / 2540.0; }
-
 // Formatting is applied through a cursor, so it lands on the text runs themselves and survives
 // saving.  With a range the cursor spans just that range; without one it spans the whole text.
 cpo::uno::Reference<css::beans::XPropertySet>
@@ -104,29 +79,6 @@ cursorProperties(cpo::uno::Reference<css::text::XText> const& text,
         cursor->gotoEnd(true);
     }
     return cpo::uno::Reference<css::beans::XPropertySet>(cursor, cpo::uno::UNO_QUERY_THROW);
-}
-
-sal_Int32 parseHexColor(OUString const& hexColor)
-{
-    bool valid = hexColor.getLength() == 7 && hexColor[0] == '#';
-    if (valid)
-    {
-        for (sal_Int32 i = 1; i != 7; ++i)
-        {
-            auto const c = hexColor[i];
-            if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
-            {
-                valid = false;
-                break;
-            }
-        }
-    }
-    if (!valid)
-    {
-        throw cpo::uno::RuntimeException(u"expected a color in \"#rrggbb\" form, got "_ustr
-                                         + hexColor);
-    }
-    return static_cast<sal_Int32>(o3tl::toUInt32(hexColor.subView(1), 16));
 }
 
 // A page counts as one of the presentation's slides when the model's slide container holds it.

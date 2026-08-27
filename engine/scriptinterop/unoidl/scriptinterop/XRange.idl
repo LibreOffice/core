@@ -31,6 +31,8 @@ interface XRange : XBase
 
     XRange offset([in] long rowOffset, [in] long columnOffset, [in] long numRows,
                  [in] long numColumns);
+
+    XRange setBackgroundColor([in] string hexColor);
 };
 
 };
