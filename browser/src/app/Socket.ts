@@ -1423,7 +1423,8 @@ class Socket {
 			!textMsg.startsWith('delta:') &&
 			!textMsg.startsWith('slidelayer:') &&
 			!textMsg.startsWith('zstdslidelayer:') &&
-			!textMsg.startsWith('windowpaint:')
+			!textMsg.startsWith('windowpaint:') &&
+			!textMsg.startsWith('remotedoccommandresult')
 		) {
 			if (imgBytes !== undefined) {
 				try {
@@ -1527,6 +1528,19 @@ class Socket {
 	// header, then fires a remotedoccommandresult map event carrying the
 	// remote's WOPISrc and the inner frame as an ordinary (textMsg, imgBytes,
 	// imgIndex) triple, so a consumer reads it the way it reads any frame.
+	// Whether a remote reply's inner frame, named by its first token, carries
+	// binary pixels after its header line. Every other reply is plain text.
+	private _remoteReplyHasImage(innerFirstToken: string): boolean {
+		return (
+			innerFirstToken === 'tile:' ||
+			innerFirstToken === 'tilecombine:' ||
+			innerFirstToken === 'delta:' ||
+			innerFirstToken === 'slidelayer:' ||
+			innerFirstToken === 'zstdslidelayer:' ||
+			innerFirstToken === 'windowpaint:'
+		);
+	}
+
 	private _onRemoteDocCommandResult(
 		textMsg: string,
 		e: SlurpMessageEvent,
@@ -1549,13 +1563,33 @@ class Socket {
 		let innerText: string;
 		let innerImgIndex = 0;
 		if (imgBytes !== undefined) {
-			// Binary frame: the inner frame starts at imgIndex, its own header
-			// line runs up to the next newline, and the bytes follow.
+			// Binary frame. The inner frame starts at imgIndex and is read like
+			// any top-level frame: its first token decides its shape. A reply
+			// that carries pixels (tile:, delta:, ...) is one header line then
+			// the bytes; every other reply is text to the end. A text reply's
+			// own body may contain newlines, so it must be taken whole and not
+			// split at the first one.
 			const start = e.imgIndex ?? 0;
-			let newline = start;
-			while (newline < imgBytes.length && imgBytes[newline] !== 10) newline++;
-			innerText = this._utf8ToString(imgBytes.subarray(start, newline));
-			innerImgIndex = newline < imgBytes.length ? newline + 1 : imgBytes.length;
+			let tokenEnd = start;
+			while (
+				tokenEnd < imgBytes.length &&
+				imgBytes[tokenEnd] !== 32 &&
+				imgBytes[tokenEnd] !== 10
+			)
+				tokenEnd++;
+			const innerFirstToken = this._utf8ToString(
+				imgBytes.subarray(start, tokenEnd),
+			);
+			if (this._remoteReplyHasImage(innerFirstToken)) {
+				let newline = start;
+				while (newline < imgBytes.length && imgBytes[newline] !== 10) newline++;
+				innerText = this._utf8ToString(imgBytes.subarray(start, newline));
+				innerImgIndex =
+					newline < imgBytes.length ? newline + 1 : imgBytes.length;
+			} else {
+				innerText = this._utf8ToString(imgBytes.subarray(start));
+				innerImgIndex = imgBytes.length;
+			}
 		} else {
 			innerText = headerEnd >= 0 ? textMsg.substring(headerEnd + 1) : '';
 		}

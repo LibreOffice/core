@@ -43,7 +43,8 @@ namespace COOLProtocol
         "zstdvectorprimitivesdelta:",
         "zstdvectorrenderingfont:",
         "windowpaint:",
-        "urp:"
+        "urp:",
+        "remotedoccommandresult"
     };
 
     static inline bool isMessageOfType(const char* message, const std::string& type, size_t length)
