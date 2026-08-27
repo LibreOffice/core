@@ -67,7 +67,7 @@ class PresetHandler
 
     private:
 
-        /** @short  can be used to create on needed uno resources. */
+        /** @short  can be used to create needed uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** @short  knows the type of provided configuration.
@@ -87,8 +87,8 @@ class PresetHandler
                     this member is meant relative to the document root...
                     not to the share layer root!
 
-                    Further is defined, that m_xWorkingStorageUser
-                    is equals to m_xWorkingStorageShare then!
+                    Further it is defined, that m_xWorkingStorageUser
+                    is equal to m_xWorkingStorageShare then!
          */
         css::uno::Reference< css::embed::XStorage > m_xWorkingStorageShare;
 
@@ -103,8 +103,8 @@ class PresetHandler
                     this member is meant relative to the document root...
                     not to the user layer root!
 
-                    Further is defined, that m_xWorkingStorageUser
-                    is equals to m_xWorkingStorageShare then!
+                    Further it is defined, that m_xWorkingStorageUser
+                    is equal to m_xWorkingStorageShare then!
          */
         css::uno::Reference< css::embed::XStorage > m_xWorkingStorageUser;
 
@@ -134,7 +134,7 @@ class PresetHandler
         /** @short  closes all open storages ... if user forgot that .-) */
         ~PresetHandler();
 
-        /** @short  free all currently cache(!) storages. */
+        /** @short  free all currently cached(!) storages. */
         void forgetCachedStorages();
 
         /** @short  return access to the internally used and cached root storage.
@@ -144,7 +144,7 @@ class PresetHandler
                     older implementations, which base on them ...
 
                     getOrCreate...() - What does it mean?
-                    Such root storage will be created one times only and
+                    Such root storage will be created one time only and
                     cached then internally till the last instance of such PresetHandler
                     dies.
 
@@ -157,10 +157,10 @@ class PresetHandler
         /** @short  provides access to the current working storages.
 
             @descr  Working storages are the "lowest" storages, where the
-                    preset and target files exists.
+                    preset and target files exist.
 
             @return css::embed::XStorage
-                    which the current working storage.
+                    which is the current working storage.
          */
         css::uno::Reference< css::embed::XStorage > getWorkingStorageUser() const;
 
@@ -180,20 +180,20 @@ class PresetHandler
                     work on a new type of configuration sets.
 
             @param  eConfigType
-                    differ between global or module dependent configuration.
+                    differs between global or module dependent configuration.
 
             @param  sResourceType
-                    differ between menubar/toolbar/accelerator/... configuration.
+                    differs between menubar/toolbar/accelerator/... configuration.
 
             @param  sModule
                     if sResourceType is set to a module dependent configuration,
-                    it address the current application module.
+                    it addresses the current application module.
 
             @param  xDocumentRoot
                     if sResourceType is set to E_DOCUMENT, this value points to the
                     root storage inside the document, where we can save our
                     configuration files. Note: that's not the real root of the document...
-                    its only a sub storage. But we interpret it as our root storage.
+                    it's only a sub storage. But we interpret it as our root storage.
 
             @param  rLanguageTag
                     in case this configuration supports localized entries,
@@ -231,7 +231,7 @@ class PresetHandler
                     the ALIAS name of the target.
 
             @throw  css::container::NoSuchElementException
-                    if the specified preset does not exists.
+                    if the specified preset does not exist.
 
             @throw  css::io::IOException
                     if copying failed.
@@ -242,7 +242,7 @@ class PresetHandler
         /** @short  open the specified preset as stream object
                     and return it.
 
-            @descr  Note: Because presets resist inside the share
+            @descr  Note: Because presets reside inside the share
                     layer, they will be opened readonly every time.
 
             @param  sPreset
@@ -250,14 +250,14 @@ class PresetHandler
 
             Accesses the global language-independent storage instead of the preset storage
 
-            @return The opened preset stream ... or NULL if the preset does not exists.
+            @return The opened preset stream ... or NULL if the preset does not exist.
          */
         css::uno::Reference< css::io::XStream > openPreset(std::u16string_view sPreset);
 
         /** @short  open the specified target as stream object
                     and return it.
 
-            @descr  Note: Targets resist inside the user
+            @descr  Note: Targets reside inside the user
                     layer. Normally they are opened in read/write mode.
                    But it will be opened readonly automatically if that isn't possible
                     (may be the file is write protected on the system ...).
@@ -265,7 +265,7 @@ class PresetHandler
             @param  sTarget
                     the ALIAS name of the target.
 
-            @return The opened target stream ... or NULL if the target does not exists
+            @return The opened target stream ... or NULL if the target does not exist
                     or couldn't be created as new one.
          */
         css::uno::Reference< css::io::XStream > openTarget(
@@ -333,9 +333,9 @@ class PresetHandler
         /** @short  try to find the specified locale inside list of possible ones.
 
             @descr  The list of possible locale values was e.g. retrieved from the system
-                    (configuration, directory listing etcpp). The locale normally represent
-                    the current office locale. This method search for a suitable item by using
-                    different algorithm.
+                    (configuration, directory listing etcpp). The locale normally represents
+                    the current office locale. This method searches for a suitable item by using
+                    different algorithms:
                     a) exact search
                     b) search with using fallbacks
 
@@ -344,7 +344,7 @@ class PresetHandler
 
             @param  rLanguageTag
                     [IN ] the current office locale, which should be searched inside lLocalizedValues.
-                    [OUT] in case fallbacks was allowed, it contains afterwards the fallback locale.
+                    [OUT] in case fallbacks were allowed, it contains afterwards the fallback locale.
 
             @param  bAllowFallbacks
                     enable/disable using of fallbacks
@@ -359,9 +359,9 @@ class PresetHandler
         /** @short  open a config path ignoring errors (catching exceptions).
 
             @descr  We catch only normal exceptions here - no runtime exceptions.
-                    Further the path itself is tries in different versions (using locale
+                    Further the path itself is tried in different versions (using locale
                     specific attributes).
-                    e.g. "path/e-US" => "path/en" => "path/de"
+                    e.g. "path/en-US" => "path/en" => "path/de"
 
             @param  sPath
                     the configuration path, which should be opened.

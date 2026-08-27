@@ -39,8 +39,8 @@ namespace framework{
 
 /**
     @short      standard ctor
-    @descr      It initialize this new instance. But it set some generic parameters here only.
-                Specialized information (e.g. the alias or service name ofthis job) will be set
+    @descr      It initializes this new instance. But it sets some generic parameters here only.
+                Specialized information (e.g. the alias or service name of this job) will be set
                 later using the method setJobData().
 
     @param      xContext
@@ -66,8 +66,8 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 
 /**
     @short      standard ctor
-    @descr      It initialize this new instance. But it set some generic parameters here only.
-                Specialized information (e.g. the alias or service name ofthis job) will be set
+    @descr      It initializes this new instance. But it sets some generic parameters here only.
+                Specialized information (e.g. the alias or service name of this job) will be set
                 later using the method setJobData().
 
     @param      xContext
@@ -104,7 +104,7 @@ Job::~Job()
     @short  set (or delete) a listener for sending dispatch result events
     @descr  Because this object is used in a wrapped mode ... the original listener
             for such events can't be registered here directly. Because the
-            listener expect to get the original object given as source of the event.
+            listener expects to get the original object given as source of the event.
             That's why we get this source here too, to fake(!) it at sending time!
 
     @param  xListener
@@ -186,7 +186,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     css::uno::Reference< css::task::XJob >       xSJob;
     css::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
-    // It's necessary to hold us self alive!
+    // It's necessary to hold ourselves alive!
     // Otherwise we might die by ref count ...
     css::uno::Reference< css::task::XJobListener > xThis(this);
 
@@ -213,7 +213,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
             /* SAFE { */
             // Note: Result handling was already done inside the callback!
         }
-        // execute it synchron
+        // execute it synchronously
         else if (xSJob.is())
         {
             css::uno::Any aResult;
@@ -246,7 +246,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     // but we disagreed with that by throwing a veto exception...
     // and got the ownership...
     // we have to close the resource frame or model now -
-    // and to disable ourself!
+    // and to disable ourselves!
     if (m_bPendingCloseFrame)
     {
         m_bPendingCloseFrame = false;
@@ -326,11 +326,11 @@ void Job::die()
 /**
     @short  generates list of arguments for job execute
     @descr  There exist a set of information, which can be needed by a job.
-                a) it's static configuration data   (Equals for all jobs.    )
-                b) it's specific configuration data (Different for every job.)
+                a) its static configuration data   (Equal for all jobs.     )
+                b) its specific configuration data (Different for every job.)
                 c) some environment values          (e.g. the frame, for which this job was started)
                 d) any other dynamic data           (e.g. parameters of a dispatch() request)
-            We collect all this information and generate one list which include all others.
+            We collect all this information and generate one list which includes all others.
 
     @param  lDynamicArgs
                 list of dynamic arguments (given by a corresponding dispatch() call)
@@ -345,7 +345,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     /* SAFE { */
     SolarMutexClearableGuard aReadLock;
 
-    // the real structure of the returned list depends from the environment of this job!
+    // the real structure of the returned list depends on the environment of this job!
     JobData::EMode eMode = m_aJobCfg.getMode();
 
     // Create list of environment variables. This list must be part of the
@@ -456,7 +456,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     JobData::EEnvironment eEnvironment = m_aJobCfg.getEnvironment();
 
     // write back the job specific configuration data ...
-    // If the environment allow it and if this job has a configuration!
+    // If the environment allows it and if this job has a configuration!
     if (
         (m_aJobCfg.hasConfig()                            ) &&
         (aAnalyzedResult.existPart(JobResult::E_ARGUMENTS))
@@ -484,8 +484,8 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
         (aAnalyzedResult.existPart(JobResult::E_DISPATCHRESULT))
        )
     {
-        // Attention: Because the listener expect that the original object send this event ...
-        // and we nor the job are the right ones ...
+        // Attention: Because the listener expects that the original object sends this event ...
+        // and neither we nor the job are the right ones ...
         // our user has set itself before. So we can fake this source address!
         css::frame::DispatchResultEvent aEvent        = aAnalyzedResult.getDispatchResult();
         aEvent.Source = m_xResultSourceFake;
@@ -496,13 +496,13 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
 /**
     @short  starts listening for office shutdown and closing of our
             given target frame (if it's a valid reference)
-    @descr  We will register ourself as terminate listener
+    @descr  We will register ourselves as terminate listener
             at the global desktop instance. That will hold us
-            alive and additional we get the information, if the
-            office wish to shutdown. If then an internal job
+            alive and additionally we get the information, if the
+            office wishes to shutdown. If then an internal job
             is running we will have the chance to suppress that
-            by throwing a veto exception. If our internal wrapped
-            job finished his work, we can release this listener
+            by throwing a veto exception. If our internally wrapped
+            job finished its work, we can release this listener
             connection.
 
             Further we are listener for closing of the (possible valid)
@@ -661,9 +661,9 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
         m_xJob.clear();
     }
 
-    // And let the start method "execute()" finishing it's job.
+    // And let the start method "execute()" finish its job.
     // But do it every time. So any outside blocking code can finish
-    // his work too.
+    // its work too.
     m_aAsyncWait.set();
 }
 
@@ -720,7 +720,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& )
 void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& )
 {
     die();
-    // Do nothing else here. Our internal resources was released ...
+    // Do nothing else here. Our internal resources were released ...
 }
 
 /**
@@ -786,7 +786,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     {
         // analyze event source - to find out, which resource called queryClosing() at this
         // job wrapper. We must bind a "pending close" request to this resource.
-        // Closing of the corresponding resource will be done if our internal job finish it's work.
+        // Closing of the corresponding resource will be done if our internal job finishes its work.
         m_bPendingCloseFrame = (m_xFrame.is() && aEvent.Source == m_xFrame);
         m_bPendingCloseModel = (m_xModel.is() && aEvent.Source == m_xModel);
 
@@ -798,8 +798,8 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     // No veto ...
     // But don't call die() here or free our internal member.
     // This must be done inside notifyClosing() only. Otherwise the
-    // might stopped job has no chance to return its results or
-    // call us back. We must give him the chance to finish it's work successfully.
+    // maybe stopped job has no chance to return its results or
+    // call us back. We must give it the chance to finish its work successfully.
 }
 
 /**
@@ -813,7 +813,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
 void SAL_CALL Job::notifyClosing( const css::lang::EventObject& )
 {
     die();
-    // Do nothing else here. Our internal resources was released ...
+    // Do nothing else here. Our internal resources were released ...
 }
 
 /**
@@ -822,7 +822,7 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& )
                 running processes hardly.
 
     @param      aEvent
-                describe the broadcaster
+                describes the broadcaster
 */
 void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent )
 {
@@ -849,7 +849,7 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent )
     /* } SAFE */
 
     die();
-    // Do nothing else here. Our internal resources was released ...
+    // Do nothing else here. Our internal resources were released ...
 }
 
 } // namespace framework

@@ -75,7 +75,7 @@ public:
                 model-controller-view paradigm can be loaded into a frame.
                 Such contents are classified as E_CAN_BE_LOADED.
 
-                But e.g. for the dispatch framework exists special ContentHandler
+                But e.g. for the dispatch framework exist special ContentHandler
                 objects, which can load a content in "non visible" mode ...
                 and do not need a target frame for its operation. Such
                 ContentHandler e.g. plays sounds.
@@ -99,7 +99,7 @@ private:
     mutable osl::Mutex m_mutex;
 
     /** @short  reference to a uno service manager, which must be used
-                to created on needed services on demand.
+                to create needed services on demand.
      */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
@@ -112,9 +112,9 @@ private:
 
         @descr  Note: This reference will be empty if loading failed
                 or a non visible content was loaded!
-                It can be the same frame as m_xBaseFrame it describe, in case
+                It can be the same frame as m_xBaseFrame it describes, in case
                 the target "_self", "" or the search flag "SELF" was used.
-                Otherwise it's the new created or recycled frame, which was
+                Otherwise it's the newly created or recycled frame, which was
                 used for loading and contains further the new component.
 
                 Please use method getTarget() or getTargetComponent()
@@ -128,7 +128,7 @@ private:
      */
     OUString m_sTarget;
 
-    /** @short  if m_sTarget is not a special one, this flags regulate searching
+    /** @short  if m_sTarget is not a special one, these flags regulate searching
                 of a suitable one.
      */
     sal_Int32 m_nSearchFlags;
@@ -152,7 +152,7 @@ private:
     /** @short  classify the content, which should be loaded by this instance. */
     EContentType m_eContentType;
 
-    /** @short  it indicates, that the member m_xTargetFrame was new created for this
+    /** @short  it indicates, that the member m_xTargetFrame was newly created for this
                 load request and must be closed in case loading (not handling!)
                 operation failed. The default value is sal_False!
      */
@@ -160,13 +160,13 @@ private:
 
     /** @short  it indicates, that the old document (which was located inside m_xBaseFrame
                 in combination with the m_sTarget value "_self") was suspended.
-                Normally it will be replaced by the new loaded document. But in case
+                Normally it will be replaced by the newly loaded document. But in case
                 loading (not handling!) failed, it must be reactivated.
                 The default value is sal_False!
      */
     bool m_bReactivateControllerOnError;
 
-    /** @short  it holds one (!) asynchronous used contenthandler or frameloader
+    /** @short  it holds one (!) asynchronously used contenthandler or frameloader
                 alive, till the asynchronous operation will be finished.
      */
     css::uno::Reference< css::uno::XInterface > m_xAsynchronousJob;
@@ -199,7 +199,7 @@ public:
 
         @param  xContext
                 reference to a uno service manager, which can be used internally
-                to create on needed services on demand.
+                to create needed services on demand.
 
         @throw  Currently there is no reason to throw such exception!
 
@@ -232,12 +232,12 @@ public:
                 synchronisation methods or callbacks.
 
                 There is no direct return value possible here. Because it depends
-                from the usage of this instance! E.g. for loading a "visible component"
+                on the usage of this instance! E.g. for loading a "visible component"
                 a frame with a controller/model inside can be possible. For loading
-                of a "non visible component" only an information about a successfully start
+                of a "non visible component" only an information about a successful start
                 can be provided.
                 Further it can't be guaranteed, that the internal process runs synchronous.
-                that's why we prefer using of specialized methods afterwards e.g. to:
+                That's why we prefer using of specialized methods afterwards e.g. to:
                     - wait till the internal job will be finished
                       and get the results
                     - or to let it run without any further control from outside.
@@ -252,18 +252,18 @@ public:
                 points to the frame which must be used as start point for target search.
 
         @param  sTarget
-                regulate searching/creating of frames, which should contain the
+                regulates searching/creating of frames, which should contain the
                 new loaded component afterwards.
 
         @param  nSearchFlags
-                regulate searching of targets, if sTarget is not a special one.
+                regulates searching of targets, if sTarget is not a special one.
 
         @param  eFeature
-                flag field, which enable/disable special features of this
+                flag field, which enables/disables special features of this
                 new instance for following load call.
 
-        @throw  A LoadEnvException e.g. if another load operation is till in progress
-                or initialization of a new one fail by other reasons.
+        @throw  A LoadEnvException e.g. if another load operation is still in progress
+                or initialization of a new one fails for other reasons.
                 The real reason, a suitable message and ID will be given here immediately.
 
         @throw  A RuntimeException in case any internal process indicates, that
@@ -286,7 +286,7 @@ public:
 
         @param  nTimeout
                 specify a timeout in [ms].
-                A value 0 let it wait forever!
+                A value 0 lets it wait forever!
 
         @return sal_True if the started load process could be finished in time;
                 sal_False if the specified time was over.
@@ -349,14 +349,14 @@ public:
     /** TODO document me ... */
     css::uno::Reference< css::uno::XInterface > impl_searchLoader();
 
-    /** @short  it means; show the frame, bring it to front,
+    /** @short  it means: show the frame, bring it to front,
                 might set the right icon etcpp. in case loading was
-                successfully or reactivate a might existing old document or
+                successful or reactivate a might existing old document or
                 close the frame if it was created before in case loading failed.
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
                 that the complete load environment seems to be not usable in general.
-                In such cases a RuntimeException would be to hard for the outside code :-)
+                In such cases a RuntimeException would be too hard for the outside code :-)
 
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
@@ -368,14 +368,14 @@ private:
 
     /** @short  tries to detect the type and the filter of the specified content.
 
-        @descr  This method update the available media descriptor of this instance,
-                so it contains the right type, a corresponding filter, may a
+        @descr  This method updates the available media descriptor of this instance,
+                so it contains the right type, a corresponding filter, maybe a
                 valid frame loader etc. In case detection failed, this descriptor
                 is corrected first, before a suitable exception will be thrown.
                 (Excepting a RuntimeException occurrence!)
 
         @attention  Not all types we know, are supported by filters. So it does not
-                    indicates an error, if no suitable filter(loader etcpp will be found
+                    indicate an error, if no suitable filter/loader etcpp will be found
                     for a type. But a type must be detected for the specified content.
                     Otherwise it's an error and loading can't be finished successfully.
 
@@ -391,9 +391,9 @@ private:
         @descr  It searches for a suitable content handler object, registered
                 for the detected content type (must be done before by calling
                 impl_detectTypeAndFilter()). Because such handler does not depend
-                from a real target frame, location of such frame will be
+                on a real target frame, location of such frame will be
                 suppressed here.
-                In case handle failed all new created resources will be
+                In case handling failed all newly created resources will be
                 removed before a suitable exception is thrown.
                 (Excepting a RuntimeException occurrence!)
 
@@ -426,13 +426,13 @@ private:
 
     /** @short  checks if the specified content is already loaded.
 
-        @descr  It depends from the set target information, if such
+        @descr  It depends on the set target information, if such
                 search is allowed or not! So this method checks first,
                 if the target is the special one "_default".
                 If not it returns with an empty result immediately!
                 In case search is allowed, an existing document with the
                 same URL is searched. If it could be found, the corresponding
-                view will get the focus and this method return the corresponding frame.
+                view will get the focus and this method returns the corresponding frame.
                 Optional jumpmarks will be accepted here too. So the
                 view of the document will be updated to show the position
                 inside the document, which is related to the jumpmark.
@@ -442,7 +442,7 @@ private:
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
                 that the complete load environment seems to be not usable in general.
-                In such cases a RuntimeException would be to hard for the outside code :-)
+                In such cases a RuntimeException would be too hard for the outside code :-)
 
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
@@ -453,9 +453,9 @@ private:
                 for this load request.
 
         @descr  Because this special feature is bound to the target specifier "_default"
-                its checked inside first. If it's not set => this method return an empty
+                it's checked inside first. If it's not set => this method returns an empty
                 reference. Otherwise any currently existing frame will be analyzed, if
-                it can be used here. The following rules exists:
+                it can be used here. The following rules exist:
 
                 <ul>
                     <li>The frame must be empty ...</li>
@@ -468,11 +468,11 @@ private:
                 If a suitable target is located it will be locked. That's why the last rule
                 exists! If this method returns a valid frame reference, it was locked to be usable
                 for this load request only. (Don't forget to reset this state later!)
-                Concurrent LoadEnv instances can synchronize her work be using such locks :-) HOPEFULLY
+                Concurrent LoadEnv instances can synchronize their work by using such locks :-) HOPEFULLY
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
                 that the complete load environment seems to be not usable in general.
-                In such cases a RuntimeException would be to hard for the outside code :-)
+                In such cases a RuntimeException would be too hard for the outside code :-)
 
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
@@ -488,9 +488,9 @@ private:
                    visible frames only!
                 b) If the document was already shown (e.g. by our progress implementation)
                    we do nothing here. The reason behind: The document was already shown...
-                   and it was already make a top window...
-                   If the user activated another frame inbetween (because loading needed some time)
-                   it's not allowed to disturb the user again. Then the frame must resists in the background.
+                   and it was already made a top window...
+                   If the user activated another frame in between (because loading needed some time)
+                   it's not allowed to disturb the user again. Then the frame must reside in the background.
                 c) If the frame was not shown before... but loading of a visible document into this frame
                    was finished... we need both actions: setVisible() and toFront().
 
@@ -498,10 +498,10 @@ private:
                 points to the container window of a frame.
 
         @param  bForceToFront
-                if it's set to sal_False... showing of the window is done more intelligent.
+                if it's set to sal_False... showing of the window is done more intelligently.
                 setVisible() is called only if the window was not shown before.
                 This mode is needed by b) and c)
-                If it's set to sal_True... both actions has to be done: setVisible(), toFront()!
+                If it's set to sal_True... both actions have to be done: setVisible(), toFront()!
                 This mode is needed by a)
      */
     static void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
