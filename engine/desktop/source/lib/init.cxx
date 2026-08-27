@@ -3686,6 +3686,19 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         }
 
         // After loading the document, its initial view is the "current" view.
+        if (!aLanguage.isEmpty() && LanguageTag::isValidBcp47(aLanguage, nullptr))
+        {
+            if (const SfxViewShell* pInitialViewShell = SfxViewShell::Current())
+            {
+                // Store the language and locale on this view too, so that switching
+                // back to it later restores its own language instead of whichever
+                // other view's language was set most recently.
+                const int nInitialViewId = KitHelper::getView(*pInitialViewShell);
+                KitHelper::setViewLanguage(nInitialViewId, aLanguage);
+                KitHelper::setViewLocale(nInitialViewId, aLanguage);
+            }
+        }
+
         if (pLib->mpCallback)
         {
             int nState = doc_getSignatureState(pDocument);
@@ -8408,18 +8421,19 @@ static int doc_createViewWithOptions(COKitDocument* pThis,
     OUString aOptions = getUString(pOptions);
     const OUString aLanguage = extractParameter(aOptions, u"Language");
 
-    if (!aLanguage.isEmpty())
-    {
-        // Set the COKit language tag, used for dialog tunneling.
-        comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
-        comphelper::COKit::setLocale(LanguageTag(aLanguage));
-    }
-
     const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
     KitHelper::setDeviceFormFactor(aDeviceFormFactor);
 
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     const int nId = KitHelper::createView(pDocument->mnDocumentId);
+
+    if (!aLanguage.isEmpty())
+    {
+        // Store the language and locale on this view, so that switching back to it
+        // later restores its own language instead of the document's default one.
+        KitHelper::setViewLanguage(nId, aLanguage);
+        KitHelper::setViewLocale(nId, aLanguage);
+    }
 
     vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
 
