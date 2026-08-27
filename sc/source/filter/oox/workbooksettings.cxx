@@ -80,7 +80,7 @@ WorkbookSettingsModel::WorkbookSettingsModel() :
     mnUpdateLinksMode( XML_userSet ),
     mnDefaultThemeVer( -1 ),
     mbDateMode1904( false ),
-    mbDateCompatibility ( false ),
+    mbDateCompatibility( false ),
     mbSaveExtLinkValues( true )
 {
 }

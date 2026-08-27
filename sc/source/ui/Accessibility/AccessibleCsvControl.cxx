@@ -1379,7 +1379,7 @@ css::awt::Rectangle ScAccessibleCsvCell::implGetBounds()
         aClipRect.SetRight( rGrid.GetLastX() );
     }
     if( mnLine != CSV_LINE_HEADER )
-         aClipRect.SetTop( rGrid.GetHdrHeight() );
+        aClipRect.SetTop( rGrid.GetHdrHeight() );
 
     tools::Rectangle aRect( implGetRealPos(), implGetRealSize() );
     aRect.Intersection( aClipRect );

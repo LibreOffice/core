@@ -786,7 +786,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         else
                         {
                             // switching to shared mode has failed, the document should be opened readonly
-                            // TODO/LATER: And error message should be shown here probably
+                            // TODO/LATER: An error message should be shown here probably
                             SetReadOnlyUI();
                         }
                     }
