@@ -345,8 +345,7 @@ def invoke(object, methodname, argTuple):
 # -----------------------------------------------------------------------------
 _builtin_import = __import__
 
-def _uno_try_import(name, class_name):
-    RuntimeException = pyuno.getClass("com.sun.star.uno.RuntimeException")
+def _uno_try_import(RuntimeException, name, class_name):
 
     # check for structs, exceptions, interfaces, services or singletons
     try:
@@ -403,13 +402,15 @@ def _uno_import(name, *optargs, **kwargs):
 
     for class_name in fromlist:
         if class_name not in d:
-            clazz = _uno_try_import(name, class_name)
+            RuntimeException = pyuno.getClass("com.sun.star.uno.RuntimeException")
+            clazz = _uno_try_import(RuntimeException, name, class_name)
             # Since we moved most of the UNO types from com::sun::star to cpo,
             # attempt to allow importing using the old names.
             if clazz is None:
-                if name.startswith("com.sun.star"):
-                    compat_name = "cpo" + name[12:]
-                    clazz = _uno_try_import(compat_name, class_name)
+                css_prefix = "com.sun.star."
+                if name.startswith(css_prefix):
+                    compat_name = "cpo." + name[len(css_prefix):]
+                    clazz = _uno_try_import(RuntimeException, compat_name, class_name)
 
             if clazz is not None:
                 d[class_name] = clazz;
