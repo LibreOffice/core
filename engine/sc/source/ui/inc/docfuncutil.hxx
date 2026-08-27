@@ -17,6 +17,7 @@ class ScDocShell;
 class ScMarkData;
 class ScRange;
 enum class InsertDeleteFlags : sal_Int32;
+namespace tools { class Rectangle; }
 
 namespace sc {
 
@@ -58,6 +59,11 @@ public:
     /// repaints only the base sheet), so that view is refreshed too.
     static void invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefaultViewTab,
                                          bool bIncludeViewShownPart = false);
+
+    /// A rectangle larger than any sheet, so it covers every tile of a part regardless of
+    /// that part's actual size. Pass it to KitHelper::notifyInvalidationAllViews to invalidate
+    /// a whole part by its index rather than by a specific area.
+    static tools::Rectangle wholePartInvalidationRectangle();
 };
 
 }

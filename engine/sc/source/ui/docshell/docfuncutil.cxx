@@ -160,16 +160,19 @@ void DocFuncUtil::invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefault
 
     const bool bSkipViewShowingPart = !bIncludeViewShownPart;
 
-    // Invalidate the whole part. The rectangle is larger than any sheet, so it
-    // covers every tile of the part. The sheet view holder tables and the base
-    // sheet share the same part index space that ScModelObj::getPartInfo
-    // exposes to the client, which is the table number.
-    tools::Rectangle aWholePart(0, 0, 1000000000, 1000000000);
+    // The sheet view holder tables and the base sheet share the same part index space that
+    // ScModelObj::getPartInfo exposes to the client, which is the table number.
+    tools::Rectangle aWholePart = wholePartInvalidationRectangle();
     KitHelper::notifyInvalidationAllViews(pModel, static_cast<int>(nDefaultViewTab), &aWholePart,
                                           bSkipViewShowingPart);
     for (auto& rSheetView : pManager->iterateValidSheetViews())
         KitHelper::notifyInvalidationAllViews(pModel, static_cast<int>(rSheetView.getTableNumber()),
                                               &aWholePart, bSkipViewShowingPart);
+}
+
+tools::Rectangle DocFuncUtil::wholePartInvalidationRectangle()
+{
+    return tools::Rectangle(0, 0, 1000000000, 1000000000);
 }
 
 }

@@ -538,6 +538,43 @@ CPPUNIT_TEST_FIXTURE(Test, testClear)
         CPPUNIT_ASSERT_EQUAL(nDefaultColor, nColor);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testWritesOnNonActiveSheet)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    xSpreadsheet->insertSheet(u"Other"_ustr);
+    // "Other" is not the active sheet for the rest of the test.
+    cpo::uno::Reference<css::frame::XModel> const xModel(mxComponent, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XSpreadsheetView> const xView(xModel->getCurrentController(),
+                                                                  cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XSpreadsheetDocument> const xDoc(mxComponent,
+                                                                     cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XNameAccess> const xSheetsByName(xDoc->getSheets(),
+                                                                         cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XSpreadsheet> xSheet1;
+    xSheetsByName->getByName(u"Sheet1"_ustr) >>= xSheet1;
+    xView->setActiveSheet(xSheet1);
+
+    auto const xOther = xSpreadsheet->getSheetByName(u"Other"_ustr);
+    xOther->getRangeAt(1, 1, 1, 1)->setValue(cpo::uno::Any(5.0));
+    xOther->getRangeAt(1, 1, 1, 1)->setBackgroundColor(u"#ff0000"_ustr);
+    xOther->setColumnWidth(2, 96);
+
+    // Re-fetch by name, the way a second script invocation would, rather than reusing the same
+    // wrapper - this rules out anything cached on the wrapper instead of committed to the model.
+    auto const xOtherAgain = xSpreadsheet->getSheetByName(u"Other"_ustr);
+    double d = 0;
+    CPPUNIT_ASSERT(xOtherAgain->getRangeAt(1, 1, 1, 1)->getValue() >>= d);
+    CPPUNIT_ASSERT_EQUAL(5.0, d);
+    cpo::uno::Reference<css::beans::XPropertySet> const xProps(
+        xOtherAgain->getRangeAt(1, 1, 1, 1)->getuno(), cpo::uno::UNO_QUERY_THROW);
+    sal_Int32 nColor = 0;
+    xProps->getPropertyValue(u"CellBackColor"_ustr) >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), nColor);
+
+    xOtherAgain->clear();
+    CPPUNIT_ASSERT(!xOther->getRangeAt(1, 1, 1, 1)->getValue().hasValue());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
