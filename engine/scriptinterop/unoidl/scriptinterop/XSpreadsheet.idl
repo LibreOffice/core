@@ -13,6 +13,9 @@ module scriptinterop {
 
 interface XSpreadsheet : XBase
 {
+    XSheet getActiveSheet();
+
+    void flush();
 };
 
 };

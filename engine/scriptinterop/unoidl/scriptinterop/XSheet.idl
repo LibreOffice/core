@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module scriptinterop {
+
+interface XSheet : XBase
+{
+    string getName();
+
+    [overload getRange] XRange getRange([in] string a1Notation);
+
+    [overload getRange] XRange getRangeAtCell([in] long row, [in] long column);
+
+    [overload getRange] XRange getRangeAtRows([in] long row, [in] long column,
+                                              [in] long numRows);
+
+    [overload getRange] XRange getRangeAt([in] long row, [in] long column, [in] long numRows,
+                                          [in] long numColumns);
+
+    XRange getActiveRange();
+
+    XRange getActiveCell();
+
+    XRange getDataRange();
+
+    long getMaxRows();
+
+    long getMaxColumns();
+
+    long getFrozenRows();
+
+    long getFrozenColumns();
+
+    void deleteRow([in] long row);
+
+    void deleteRows([in] long startRow, [in] long numRows);
+
+    void deleteColumn([in] long column);
+
+    void deleteColumns([in] long startColumn, [in] long numColumns);
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

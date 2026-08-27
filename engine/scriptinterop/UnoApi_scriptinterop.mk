@@ -45,10 +45,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XPage \
     XParagraph \
     XPresentation \
+    XRange \
     XRangeBuilder \
     XRangeElement \
     XSelection \
     XShape \
+    XSheet \
     XSlide \
     XSlideSelection \
     XSpreadsheet \
