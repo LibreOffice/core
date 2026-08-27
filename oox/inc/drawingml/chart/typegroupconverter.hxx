@@ -156,7 +156,7 @@ public:
     /** Returns series title, if the chart type group contains only one single series. */
     OUString            getSingleSeriesTitle() const;
 
-    /** Returns true, if the chart contains only one series and have title textbox (even empty). */
+    /** Returns true, if the chart contains only one series and has a title textbox (even empty). */
     bool                isSingleSeriesTitle() const;
 
     /** Creates a coordinate system according to the contained chart type. */

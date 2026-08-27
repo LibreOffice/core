@@ -230,7 +230,7 @@ XmlFilterBase::~XmlFilterBase()
     // their stuff (creating objects, setting attributes, ...) on being destroyed.
     // They get destroyed by setting a new DocumentHandler. This also happens in
     // the following implicit destruction chain of ~XmlFilterBaseImpl, but in that
-    // case it's member RelationsMap maRelationsMap will be destroyed, but maybe
+    // case its member RelationsMap maRelationsMap will be destroyed, but maybe
     // still be used by ~FragmentHandler -> crash.
     mxImpl->maFastParser.clearDocumentHandler();
 }
@@ -346,7 +346,7 @@ OUString getStrictRelationshipOfficeDocType(std::u16string_view rPart)
 
 OUString XmlFilterBase::getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_view rPart )
 {
-    // importRelations() caches the relations map for subsequence calls
+    // importRelations() caches the relations map for subsequent calls
     const OUString aTransitionalRelationshipType = getTransitionalRelationshipOfficeDocType(rPart);
     OUString aFragment = importRelations( OUString() )->getFragmentPathFromFirstType( aTransitionalRelationshipType );
     if(aFragment.isEmpty())
@@ -1223,7 +1223,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
 
     std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomList;
     std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomPropsList;
-    //FIXME: Ideally, we should get these the relations, but it seems that is not consistently set.
+    //FIXME: Ideally, we should get these from the relations, but it seems that is not consistently set.
     // In some cases it's stored in the workbook relationships, which is unexpected. So we discover them directly.
     for (int i = 1; ; ++i)
     {

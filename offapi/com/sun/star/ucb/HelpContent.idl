@@ -67,7 +67,7 @@ published service HelpContent
         <ul>
         <li>
         string ContentType ( read-only,
-        ""application/vnd.sun.star.help" )
+        "application/vnd.sun.star.help" )
         </li>
         <li>
         boolean IsReadOnly ( read-only, always "true" )
@@ -82,7 +82,7 @@ published service HelpContent
         string Title ( read-only, content title )
         </li>
         <li>
-        string MediaType ( read only, either "image/gif", "text/plain",
+        string MediaType ( read-only, either "image/gif", "text/plain",
         "text/html" or "text/css" )
         </li>
         <li>
@@ -98,15 +98,15 @@ published service HelpContent
         contains the anchor names belonging to the index )
         </li>
         <li>
-        sequence&lt;sequence&lt;string&gt;&gt; KeywordTitleForRef ( read-only, , only if IsFolder is true,
+        sequence&lt;sequence&lt;string&gt;&gt; KeywordTitleForRef ( read-only, only if IsFolder is true,
         contains the titles of the documents in which the keywords are found. )
         </li>
         <li>
-        sequence&lt;string&gt; SearchScopes ( read only, , only if IsFolder is true,
+        sequence&lt;string&gt; SearchScopes ( read-only, only if IsFolder is true,
         contains the scopes in which to search ).
         </li>
         <li>
-        string AnchorName ( readonly, only if content has media type "text/html" ).
+        string AnchorName ( read-only, only if content has media type "text/html" ).
         </li>
         </ul>
 
