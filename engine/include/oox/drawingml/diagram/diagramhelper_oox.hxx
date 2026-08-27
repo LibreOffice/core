@@ -57,9 +57,12 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
 
     bool hasDiagramData() const;
 
+    // Hands the fill, line and text attributes of xOldShape, and its text, to xNewShape. The
+    // shape geometry is not changed. nOldHeight is the height that xOldShapehad
+    // sizes alone.
     static void moveDiagramModelDataFromOldToNewXShape(
         const css::uno::Reference<css::drawing::XShape>& xOldShape,
-        const css::uno::Reference<css::drawing::XShape>& xNewShape);
+        const css::uno::Reference<css::drawing::XShape>& xNewShape, tools::Long nOldHeight);
 
 protected:
     // access associated SdrObjGroup/XShape/RootShape
@@ -92,7 +95,8 @@ public:
     virtual bool canHoldChildNode(std::u16string_view rNodeId) const override;
 
     // add/remove new top-level node to data model, returns its id
-    virtual OUString addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel) override;
+    virtual OUString addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel,
+                                    std::u16string_view rAnchorNode, bool bAsChild) override;
     virtual bool removeDiagramNode(std::u16string_view rNodeId, SdrModel& rDrawModel) override;
     virtual void TextInformationChange() override;
     virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) override;

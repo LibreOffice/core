@@ -678,6 +678,9 @@ public:
     void SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject);
     virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight = true);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
+
+    // Multiplies the size of every letter of the text by fScale
+    void scaleText(double fScale, bool bUndo);
     virtual void NbcReformatText();
 
     void BurnInStyleSheetAttributes();

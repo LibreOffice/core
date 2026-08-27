@@ -183,6 +183,9 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
                     // check for fill
                     xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
                     bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
+
+                    // check for line, BGShapes can have that
+                    bWriteLine = xProps->getPropertyValue(u"LineStyle"_ustr) != drawing::LineStyle_NONE;
                 }
             }
             else

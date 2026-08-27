@@ -413,7 +413,7 @@ DiagramFrameHdl::DiagramFrameHdl(const basegfx::B2DHomMatrix& rTransformation)
 
 DiagramHelper_svx::DiagramHelper_svx()
 : msSelectedModelID()
-, mbUseDiagramThemeData(false)
+, mbUseDiagramThemeData(true)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
 , mbDiagramObjectsLocked(false)

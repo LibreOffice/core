@@ -71,7 +71,7 @@ private:
     // aka mxThemeDocument - if it exists - will be used to create the style
     // attributes for the to-be-created XShapes (theoretically allows re-creation
     // with other Theme)
-    bool mbUseDiagramThemeData; // false
+    bool mbUseDiagramThemeData; // true
 
     // If true, the UNO API form of attributes per Point as Key/value list
     // that was secured after initial XShape creation is used to create the
@@ -120,8 +120,12 @@ public:
     // true for a node that can take a node below it, which depends on what the layout draws
     virtual bool canHoldChildNode(std::u16string_view rNodeId) const = 0;
 
-    // add/remove new top-level node to data model, returns its id
-    virtual OUString addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel) = 0;
+    // Adds a node holding rText next to the node that rAnchorNode adresses and gives back the id of
+    // the new node. An empty rAnchorNode puts the new node in front of the ones at the top level.
+    // With bAsChild the new node is created below the anchor
+    virtual OUString addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel,
+                                    std::u16string_view rAnchorNode, bool bAsChild) = 0;
+    // remove a node from the data model
     virtual bool removeDiagramNode(std::u16string_view rNodeId, SdrModel& rDrawModel) = 0;
     virtual void TextInformationChange() = 0;
     virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) = 0;

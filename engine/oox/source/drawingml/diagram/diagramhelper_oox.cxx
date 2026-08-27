@@ -28,6 +28,10 @@
 #include <svx/svditer.hxx>
 #include <svx/diagram/DomMapFlag.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/sdasitm.hxx>
+#include <editeng/outlobj.hxx>
+#include <unordered_map>
+#include <svx/svddef.hxx>
 #include <comphelper/processfactory.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -89,7 +93,7 @@ DiagramHelper_oox::~DiagramHelper_oox() {}
 
 void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
     const uno::Reference<drawing::XShape>& xOldShape,
-    const uno::Reference<drawing::XShape>& xNewShape)
+    const uno::Reference<drawing::XShape>& xNewShape, tools::Long nOldHeight)
 {
     SdrObject* pOldShape(SdrObject::getSdrObjectFromXShape(xOldShape));
     SdrObject* pNewShape(SdrObject::getSdrObjectFromXShape(xNewShape));
@@ -97,13 +101,29 @@ void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
     if (nullptr == pOldShape || nullptr == pNewShape)
         return;
 
-    // copy attributes
-    pNewShape->SetMergedItemSet(pOldShape->GetMergedItemSet(), false, true);
+    // copy attributes. We need to remove SdrCustomShapeGeometryItem here, this
+    // carries geometry info and would destroy the just re-created geometry - a
+    // bad trap.
+    SfxItemSet aAttributes(pOldShape->GetMergedItemSet());
+    aAttributes.ClearItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+    pNewShape->SetMergedItemSet(aAttributes, false, true);
 
-    // copy Text/OutlinerParaObject
+    // copy Text/OutlinerParaObject, with the sizes of the letters following the height that the
+    // shape around them ends up with
     OutlinerParaObject* pParaObject(pOldShape->GetOutlinerParaObject());
+
     if (nullptr != pParaObject)
+    {
         pNewShape->SetOutlinerParaObject(*pParaObject);
+
+        const tools::Long nNewHeight(xNewShape->getSize().Height);
+
+        // Now scale the text sizes
+        if (nOldHeight > 0 && nNewHeight > 0)
+            pNewShape->scaleText(static_cast<double>(nNewHeight) / static_cast<double>(nOldHeight),
+                                 /*bUndo=*/false);
+    }
+
 
     // maybe copy more stuff...
 }
@@ -152,6 +172,10 @@ void DiagramHelper_oox::reLayout()
     // Also important is to do this as XShapes, the content of the Group will delete the
     // SdrObjects in the process of re-creation, but the XShapes will survive
     std::vector<uno::Reference<drawing::XShape>> xOldXShapes;
+
+    // Secure the height that each object covers to be able to later scale the text.
+    // Text is currently linear scaled to the size changes of the hosting frame.
+    std::unordered_map<OUString, tools::Long> aOldHeightForModelID;
     const bool bNewNodeMode(!msNewNodeId.isEmpty());
     uno::Reference<drawing::XShape> xNewShapeTemplate;
 
@@ -172,6 +196,8 @@ void DiagramHelper_oox::reLayout()
             {
                 uno::Reference<drawing::XShape> xCandidate(pCandidate->getUnoShape());
                 xOldXShapes.push_back(xCandidate);
+                aOldHeightForModelID[pCandidate->getDiagramDataModelID()]
+                    = xCandidate->getSize().Height;
 
                 if (bNewNodeMode)
                 {
@@ -266,6 +292,9 @@ void DiagramHelper_oox::reLayout()
     // Re-apply remembered geometry
     pTarget->TRSetBaseGeometry(aTransformation, aPolyPolygon);
 
+    // let the shapes that share a font size choose the smallest
+    mpDiagramPtr->syncDiagramFontHeights();
+
     // new SdrObjects created, re-apply geometry change locks as needed
     // and reset SubSelection
     applyLocksToDiagramObjects(true);
@@ -297,7 +326,7 @@ void DiagramHelper_oox::reLayout()
     if (xOldBGShape && xNewBGShape)
     {
         // we have old and new BGShapes, copy necessary data
-        moveDiagramModelDataFromOldToNewXShape(xOldBGShape, xNewBGShape);
+        moveDiagramModelDataFromOldToNewXShape(xOldBGShape, xNewBGShape, 0);
     }
 
     for (const auto& rNewShape : xNewXShapes)
@@ -323,7 +352,10 @@ void DiagramHelper_oox::reLayout()
                     if (rNewModelID == pOldShape->getDiagramDataModelID())
                     {
                         // we have old and new version of this shape, copy necessary data
-                        moveDiagramModelDataFromOldToNewXShape(rOldShape, rNewShape);
+                        const auto aOldHeight(aOldHeightForModelID.find(rNewModelID));
+                        moveDiagramModelDataFromOldToNewXShape(
+                            rOldShape, rNewShape,
+                            aOldHeightForModelID.end() == aOldHeight ? 0 : aOldHeight->second);
                         break;
                     }
                 }
@@ -338,19 +370,18 @@ void DiagramHelper_oox::reLayout()
             // a shape was added in DomTree model and the model counter part in XShapes
             // is not filled yet
             SdrObject* pOldShape(SdrObject::getSdrObjectFromXShape(xNewShapeTemplate));
-            SdrObject* pNewShape(SdrObject::getSdrObjectFromXShape(xNewShape));
 
-            if (nullptr != pOldShape && nullptr != pNewShape)
+            if (nullptr != pOldShape)
             {
-                // copy attributes
-                pNewShape->SetMergedItemSet(pOldShape->GetMergedItemSet(), false, true);
+                // take the look of the template, text included
+                const auto aTemplateHeight(aOldHeightForModelID.find(msNewNodeTemplateId));
+                moveDiagramModelDataFromOldToNewXShape(
+                    xNewShapeTemplate, xNewShape,
+                    aOldHeightForModelID.end() == aTemplateHeight ? 0 : aTemplateHeight->second);
 
-                // copy text, mainly to get a copy with attributes from the template,
-                // and replace text completely with target text
-                OutlinerParaObject* pParaObject(pOldShape->GetOutlinerParaObject());
-                if (nullptr != pParaObject)
+                // the text that came with the template gives way to the text of the new node
+                if (nullptr != pOldShape->GetOutlinerParaObject())
                 {
-                    pNewShape->SetOutlinerParaObject(*pParaObject);
                     uno::Reference<text::XText> xText(xNewShape, uno::UNO_QUERY);
                     if (xText)
                         xText->setString(msNewNodeText);
@@ -425,7 +456,29 @@ OUString readShapeIdOfNode(const svx::diagram::DiagramData_svx& rData, std::u16s
 }
 }
 
-OUString DiagramHelper_oox::addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel)
+namespace
+{
+// The node that a new node is relative to.
+OUString readAnchorNode(const svx::diagram::DiagramData_svx& rData,
+                        std::u16string_view rAnchorNode)
+{
+    if (rAnchorNode.empty())
+        return OUString();
+
+    if (rData.isPresentationOfDataNode(rAnchorNode))
+        return OUString(rAnchorNode);
+
+    const rtl::Reference<svx::diagram::Point> xPoint(rData.getPointByModelID(rAnchorNode));
+
+    if (xPoint.is() && svx::diagram::TypeConstant::XML_node == xPoint->mnXMLType)
+        return OUString(rAnchorNode);
+
+    return OUString();
+}
+}
+
+OUString DiagramHelper_oox::addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel,
+                                           std::u16string_view rAnchorNode, bool bAsChild)
 {
     OUString aRetval;
 
@@ -440,16 +493,10 @@ OUString DiagramHelper_oox::addDiagramNode(std::u16string_view rText, SdrModel& 
             aStartState = extractDiagramDataState();
         }
 
-        // Only a shape that represents a node of the Diagram names the node. The background
-        // shape of a layout and a shape that represents the step from one node to the next name none,
-        // and with nothing to go by the Diagram puts the new node in front of all of them.
-        const OUString aTargetNode(
-            mpDiagramPtr->getData()->isPresentationOfDataNode(getSelectedModelID())
-                ? getSelectedModelID()
-                : OUString());
+        const OUString aTargetNode(readAnchorNode(*mpDiagramPtr->getData(), rAnchorNode));
 
         const svx::diagram::AddedDiagramNode aResult(
-            mpDiagramPtr->getData()->addDiagramNode(aTargetNode, false));
+            mpDiagramPtr->getData()->addDiagramNode(aTargetNode, bAsChild));
         aRetval = aResult.msNewNodeId;
 
         if (!aRetval.isEmpty())
@@ -468,7 +515,7 @@ OUString DiagramHelper_oox::addDiagramNode(std::u16string_view rText, SdrModel& 
             // aRetval represents the data node, the XShapes carry the ModelId of the presentation
             // Point that draws it
             msNewNodeId = readShapeIdOfNode(*mpDiagramPtr->getData(), aRetval);
-            msNewNodeText = rText;
+            msNewNodeText = OUString(rText);
 
             // The Diagram defines which node handed over what the new node is represents with, and the
             // shape that represents

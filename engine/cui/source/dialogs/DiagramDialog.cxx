@@ -61,20 +61,40 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
         return;
 
     OUString sText = mpTextAdd->get_text();
+
+    // A dash in front of the text asks for the new node to go below the node that is selected
+    OUString sTextBehindMark;
+    const bool bAsChild(sText.startsWith(u"-", &sTextBehindMark));
+    if (bAsChild)
+        sText = sTextBehindMark;
+
     const std::shared_ptr< svx::diagram::DiagramHelper_svx >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
     if (pDiagramHelper && !sText.isEmpty())
     {
+        // The node that is picked in the tree is the one the new node gets anchored to
+        std::unique_ptr<weld::TreeIter> pAnchor(mpTreeDiagram->make_iterator());
+        const OUString sAnchorNode(mpTreeDiagram->get_selected(pAnchor.get())
+                                       ? mpTreeDiagram->get_id(*pAnchor)
+                                       : OUString());
+
         SdrModel& rDrawModel(m_rDiagram.getSdrModelFromSdrObject());
-        OUString sNodeId = pDiagramHelper->addDiagramNode(sText, rDrawModel);
+        OUString sNodeId
+            = pDiagramHelper->addDiagramNode(sText, rDrawModel, sAnchorNode, bAsChild);
 
         if (!sNodeId.isEmpty())
         {
             if (rDrawModel.IsUndoEnabled())
                 m_nUndos++;
 
+            // A node below another one joins the tree under the node that is selected, and it
+            // comes first among the nodes there.
+            std::unique_ptr<weld::TreeIter> pParent(mpTreeDiagram->make_iterator());
+            const bool bBelowSelected(bAsChild && mpTreeDiagram->get_selected(pParent.get()));
+
             std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
-            mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
+            mpTreeDiagram->insert(bBelowSelected ? pParent.get() : nullptr, bBelowSelected ? 0 : -1,
+                                  &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
             mpTreeDiagram->select(*pEntry);
             comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
         }

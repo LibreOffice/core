@@ -59,7 +59,10 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
         return;
     }
 
-    if (rAtom.iterator().mbHideLastTrans && !rAtom.iterator().maAxis.empty() && rAtom.iterator().maAxis[0] == XML_followSib)
+    const IteratorAttr& rIterator(rAtom.iterator());
+
+    if (rIterator.mbHideLastTrans && !rIterator.maAxis.empty()
+        && rIterator.maAxis[0] == XML_followSib)
     {
         // If last transition is hidden and the axis is the follow sibling,
         // then the last atom should not be visited.
@@ -68,33 +71,39 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
     }
 
     // cool#15967. Connectors are not independent but siblings of current node.
-    if (rAtom.iterator().mnPtType == XML_sibTrans)
+    if (rIterator.mnPtType == XML_sibTrans)
     {
         defaultVisit(rAtom);
         return;
     }
 
-    sal_Int32 nChildren = 1;
-    // Approximate the non-assistant type with the node type.
-    if (rAtom.iterator().mnPtType == XML_node || rAtom.iterator().mnPtType == XML_nonAsst)
+    // The self axis names the current data node, so the body applies once and keeps
+    // the position that an enclosing loop has reached.
+    if (rIterator.maAxis.size() == 1 && rIterator.maAxis[0] == XML_self)
     {
-        // count child data nodes - check all child Atoms for "name"
-        // attribute that is contained in diagram's
-        // getPointsPresNameMap()
-        ShallowPresNameVisitor aVisitor(mrDgm, mxCurrentNode);
-        for (const auto& pAtom : rAtom.getChildren())
-            pAtom->accept(aVisitor);
-        nChildren = aVisitor.getCount();
+        defaultVisit(rAtom);
+        return;
     }
+
+    // Every other axis leads from the current data node to a set of data nodes, and the body
+    // applies once per node of that set. The presentation Points that carry the layout node names
+    // of the body reference for these nodes, so their number is the number of passes
+    ShallowPresNameVisitor aVisitor(mrDgm, mxCurrentNode);
+    for (const auto& pAtom : rAtom.getChildren())
+        pAtom->accept(aVisitor);
+
+    // A body that carries no layout node of its own applies once.
+    const sal_Int32 nFound(static_cast<sal_Int32>(aVisitor.getCount()));
+    const sal_Int32 nChildren(nFound > 0 ? nFound : 1);
 
     const sal_Int32 nCnt = std::min(
         nChildren,
-        rAtom.iterator().mnCnt==-1 ? nChildren : rAtom.iterator().mnCnt);
+        rIterator.mnCnt==-1 ? nChildren : rIterator.mnCnt);
 
     const sal_Int32 nOldIdx = mnCurrIdx;
     const sal_Int32 nOldStep = mnCurrStep;
     const sal_Int32 nOldCnt = mnCurrCnt;
-    const sal_Int32 nStep = rAtom.iterator().mnStep;
+    const sal_Int32 nStep = rIterator.mnStep;
     mnCurrStep = nStep;
     mnCurrCnt = nCnt;
     for( mnCurrIdx=0; mnCurrIdx<nCnt && nStep>0; mnCurrIdx+=nStep )

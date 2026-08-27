@@ -34,6 +34,50 @@ using namespace ::oox::core;
 
 namespace oox::drawingml {
 
+namespace
+{
+// Reads the shape of a layout node, the adjustment list of that shape included. A Diagram states
+// each adjustment as a part of one, where a shape of its own states them in 100/1000th.
+class DiagramShapeContext final : public ShapeContext
+{
+public:
+    DiagramShapeContext(::oox::core::ContextHandler2Helper const& rParent,
+                        const ShapePtr& rShapePtr)
+        : ShapeContext(rParent, ShapePtr(), rShapePtr)
+        , mpShape(rShapePtr)
+    {
+    }
+
+    ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                   const AttributeList& rAttribs) override
+    {
+        switch (nElement)
+        {
+            case DGM_TOKEN(adjLst):
+                return this;
+            case DGM_TOKEN(adj):
+            {
+                const sal_Int32 nIndex(rAttribs.getInteger(XML_idx, 1));
+                const double fValue(rAttribs.getDouble(XML_val, 0.0));
+                const sal_Int32 nScaled(static_cast<sal_Int32>(fValue * 100000.0));
+                mpShape->getCustomShapeProperties()->getAdjustmentGuideList().push_back(
+                    { "adj" + OUString::number(nIndex),
+                                      OUString::number(nScaled) });
+                return nullptr;
+            }
+            default:
+                break;
+        }
+
+        return ShapeContext::onCreateContext(nElement, rAttribs);
+    }
+
+private:
+    ShapePtr mpShape;
+};
+}
+
+
 namespace {
 
 class IfContext
@@ -248,7 +292,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
 
         ShapeAtomPtr pAtom = std::make_shared<ShapeAtom>(mpNode->getLayoutNode(), pShape);
         LayoutAtom::connect(mpNode, pAtom);
-        return new ShapeContext( *this, ShapePtr(), std::move(pShape) );
+        return new DiagramShapeContext( *this, pShape );
     }
     case DGM_TOKEN( extLst ):
         return nullptr;

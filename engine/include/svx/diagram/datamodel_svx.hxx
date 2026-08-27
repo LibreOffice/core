@@ -185,6 +185,9 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
     Connections maConnections;
     Points maPoints;
     std::vector<css::uno::Reference<css::drawing::XShape>> mxShapes;
+
+    // The saved Transformation of the shapes
+    std::vector<basegfx::B2DHomMatrix> maShapeTransformations;
     basegfx::B2DHomMatrix maTransformation;
 
 public:
@@ -193,6 +196,7 @@ public:
     const Connections& getConnections() const { return maConnections; }
     const Points& getPoints() const { return maPoints; }
     const std::vector<css::uno::Reference<css::drawing::XShape>>& getXShapes() const { return mxShapes;}
+    const std::vector<basegfx::B2DHomMatrix>& getShapeTransformations() const { return maShapeTransformations; }
     const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
 };
 

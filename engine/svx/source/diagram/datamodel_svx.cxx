@@ -1462,6 +1462,7 @@ DiagramDataState::DiagramDataState(const Connections& aConnections, const Points
 : maConnections(copyConnections(aConnections))
 , maPoints(copyPoints(aPoints))
 , mxShapes()
+, maShapeTransformations()
 , maTransformation()
 {
     SdrObjGroup* pSource(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rRootShape)));
@@ -1478,6 +1479,11 @@ DiagramDataState::DiagramDataState(const Connections& aConnections, const Points
             {
                 uno::Reference<drawing::XShape> xCandidate(pCandidate->getUnoShape());
                 mxShapes.push_back(xCandidate);
+
+                basegfx::B2DHomMatrix aCandidateTransformation;
+                basegfx::B2DPolyPolygon aCandidatePolyPolygon;
+                pCandidate->TRGetBaseGeometry(aCandidateTransformation, aCandidatePolyPolygon);
+                maShapeTransformations.push_back(aCandidateTransformation);
             }
         }
     }
@@ -1515,6 +1521,22 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
 
             basegfx::B2DPolyPolygon aPolyPolygon;
             pTarget->TRSetBaseGeometry(rState->getTransformation(), aPolyPolygon);
+
+            // Each shape shall cover again what it covered before. This comes after
+            // the Group getting it set, because that one reaches every shape inside it.
+            const std::vector<basegfx::B2DHomMatrix>& rShapeTransformations(
+                rState->getShapeTransformations());
+
+            for (size_t a(0); a < rXShapes.size() && a < rShapeTransformations.size(); a++)
+            {
+                SdrObject* pShape(SdrObject::getSdrObjectFromXShape(rXShapes[a]));
+
+                if (nullptr != pShape)
+                {
+                    basegfx::B2DPolyPolygon aShapePolyPolygon;
+                    pShape->TRSetBaseGeometry(rShapeTransformations[a], aShapePolyPolygon);
+                }
+            }
         }
 
         // Reset temporary buffered ModelData association lists & rebuild them
@@ -1534,8 +1556,10 @@ void DiagramData_svx::getDiagramChildrenString(
 
     if (nLevel > 0)
     {
+        // One dash for each step down from the top level. Before a tab was used, but that
+        // cannot be typed into an edit field in a dialog, would select next control
         for (sal_Int32 i = 0; i < nLevel-1; i++)
-            rBuf.append('\t');
+            rBuf.append('-');
         rBuf.append('+');
         rBuf.append(' ');
         const OUString aText(getTextForPoint(*xPoint));

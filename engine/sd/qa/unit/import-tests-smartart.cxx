@@ -11,6 +11,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -90,6 +91,20 @@ public:
 
         // prevent showing warning message box
         osl_setEnvironment(u"OOX_NO_SMARTART_WARNING"_ustr.pData, u"1"_ustr.pData);
+    }
+
+protected:
+    /// Lays the Diagram on the first page out again and hands back its root shape.
+    uno::Reference<drawing::XShape> reLayoutDiagram()
+    {
+        uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+        SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+        CPPUNIT_ASSERT(nullptr != pDiagram);
+        CPPUNIT_ASSERT(pDiagram->isDiagram());
+
+        pDiagram->getDiagramHelper()->reLayout();
+
+        return uno::Reference<drawing::XShape>(getShapeFromPage(0, 0), uno::UNO_QUERY);
     }
 };
 
@@ -1807,7 +1822,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddNodeTakesLookFromANode)
     CPPUNIT_ASSERT_EQUAL(size_t(3), rIDiagramHelper->getDiagramChildren(OUString()).size());
 
     const OUString aAddedId(
-        rIDiagramHelper->addDiagramNode(u"D"_ustr, pObj->getSdrModelFromSdrObject()));
+        rIDiagramHelper->addDiagramNode(u"D"_ustr, pObj->getSdrModelFromSdrObject(),
+                                        /*rAnchorNode=*/EMPTY_OUSTRING, /*bAsChild=*/false));
     CPPUNIT_ASSERT(!aAddedId.isEmpty());
     rIDiagramHelper->reLayout();
 
@@ -1881,7 +1897,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddNodeKeepsTheDrawingOrder)
     CPPUNIT_ASSERT_EQUAL(u"C"_ustr, aBefore[2]);
 
     const OUString aAddedId(
-        rIDiagramHelper->addDiagramNode(u"D"_ustr, pObj->getSdrModelFromSdrObject()));
+        rIDiagramHelper->addDiagramNode(u"D"_ustr, pObj->getSdrModelFromSdrObject(),
+                                        /*rAnchorNode=*/EMPTY_OUSTRING, /*bAsChild=*/false));
     CPPUNIT_ASSERT(!aAddedId.isEmpty());
     rIDiagramHelper->reLayout();
 
@@ -1912,10 +1929,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddNodeBehindOneKeepsTheDrawingOr
     SdrObject* pFirstNode(
         SdrObject::getSdrObjectFromXShape(findChildShapeByText(xGroup, u"A"_ustr)));
     CPPUNIT_ASSERT(nullptr != pFirstNode);
-    rIDiagramHelper->setSelectedModelID(pFirstNode->getDiagramDataModelID());
 
-    const OUString aAddedId(
-        rIDiagramHelper->addDiagramNode(u"D"_ustr, pObj->getSdrModelFromSdrObject()));
+    const OUString aAddedId(rIDiagramHelper->addDiagramNode(
+        u"D"_ustr, pObj->getSdrModelFromSdrObject(), pFirstNode->getDiagramDataModelID(),
+        /*bAsChild=*/false));
     CPPUNIT_ASSERT(!aAddedId.isEmpty());
     rIDiagramHelper->reLayout();
 
@@ -1925,6 +1942,343 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddNodeBehindOneKeepsTheDrawingOr
     CPPUNIT_ASSERT_EQUAL(u"D"_ustr, aAfter[1]);
     CPPUNIT_ASSERT_EQUAL(u"B"_ustr, aAfter[2]);
     CPPUNIT_ASSERT_EQUAL(u"C"_ustr, aAfter[3]);
+}
+
+namespace
+{
+/// The place and the size that a shape covers, in 1/100 mm.
+struct ShapeBox
+{
+    sal_Int32 nX = 0;
+    sal_Int32 nY = 0;
+    sal_Int32 nWidth = 0;
+    sal_Int32 nHeight = 0;
+
+    sal_Int32 getRight() const { return nX + nWidth; }
+    sal_Int32 getBottom() const { return nY + nHeight; }
+    sal_Int32 getMiddleY() const { return nY + nHeight / 2; }
+};
+
+// The layout counts in whole units of 1/100 mm and rounds at several steps along the way, so a
+// handful of units apart is as near as two runs of it place the same shape.
+bool isNear(sal_Int32 nOne, sal_Int32 nOther)
+{
+    const sal_Int32 nTolerance = 15;
+    return nOne - nOther <= nTolerance && nOther - nOne <= nTolerance;
+}
+
+ShapeBox getShapeBox(const uno::Reference<drawing::XShape>& xShape)
+{
+    CPPUNIT_ASSERT(xShape.is());
+    const awt::Point aPosition(xShape->getPosition());
+    const awt::Size aSize(xShape->getSize());
+    return { aPosition.X, aPosition.Y, aSize.Width, aSize.Height };
+}
+
+/// The box of the shape below xShape that carries rText.
+ShapeBox getShapeBoxByText(const uno::Reference<drawing::XShape>& xShape, const OUString& rText)
+{
+    const uno::Reference<drawing::XShape> xFound(findChildShapeByText(xShape, rText));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), xFound.is());
+    return getShapeBox(xFound);
+}
+
+/// Every shape below xShape, xShape itself included, that is drawn with the named geometry.
+void collectShapesWithGeometry(const uno::Reference<drawing::XShape>& xShape,
+                               const OUString& rGeometry,
+                               std::vector<uno::Reference<drawing::XShape>>& rShapes)
+{
+    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+    if (xProperties.is()
+        && xProperties->getPropertySetInfo()->hasPropertyByName(u"CustomShapeGeometry"_ustr))
+    {
+        // A shape drawn with no geometry at all names no type, and it is none that is looked for.
+        comphelper::SequenceAsHashMap aGeometry(
+            xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+        const cpo::uno::Any aType(aGeometry[u"Type"_ustr]);
+
+        if (aType.has<OUString>() && aType.get<OUString>() == rGeometry)
+            rShapes.push_back(xShape);
+    }
+
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    if (!xGroup.is())
+        return;
+
+    for (sal_Int32 i = 0; i < xGroup->getCount(); i++)
+        collectShapesWithGeometry(
+            uno::Reference<drawing::XShape>(xGroup->getByIndex(i), uno::UNO_QUERY), rGeometry,
+            rShapes);
+}
+
+void assertSameBox(std::string_view rWhat, const ShapeBox& rExpected, const ShapeBox& rActual)
+{
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(OString(OString::Concat(rWhat) + " x").getStr(),
+                                         static_cast<double>(rExpected.nX),
+                                         static_cast<double>(rActual.nX), 15.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(OString(OString::Concat(rWhat) + " y").getStr(),
+                                         static_cast<double>(rExpected.nY),
+                                         static_cast<double>(rActual.nY), 15.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(OString(OString::Concat(rWhat) + " width").getStr(),
+                                         static_cast<double>(rExpected.nWidth),
+                                         static_cast<double>(rActual.nWidth), 15.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(OString(OString::Concat(rWhat) + " height").getStr(),
+                                         static_cast<double>(rExpected.nHeight),
+                                         static_cast<double>(rActual.nHeight), 15.0);
+}
+
+/// Reads the box of each named node, so that the places they hold can be compared with the places
+/// they hold after something has moved them.
+std::vector<std::pair<OUString, ShapeBox>>
+readNodeBoxes(const uno::Reference<drawing::XShape>& xShape, const std::vector<OUString>& rTexts)
+{
+    std::vector<std::pair<OUString, ShapeBox>> aBoxes;
+    for (const OUString& rText : rTexts)
+        aBoxes.emplace_back(rText, getShapeBoxByText(xShape, rText));
+    return aBoxes;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRelayoutKeepsEveryNodeOfATwoParentHierarchy)
+{
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    // Two parents carrying two children each. Laying the Diagram out again once left the second
+    // parent and both of its children undrawn.
+    const uno::Reference<drawing::XShape> xLaidOut(reLayoutDiagram());
+
+    for (const OUString& rText : { u"ParentA"_ustr, u"ChildA1"_ustr, u"ChildA2"_ustr,
+                                   u"ParentB"_ustr, u"ChildB1"_ustr, u"ChildB2"_ustr })
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                               findChildShapeByText(xLaidOut, rText).is());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRelayoutPlacesHierarchyNodesWhereTheImportDid)
+{
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    // The drawing that arrives with the document is where each node belongs.
+    const std::vector<OUString> aNodes{ u"ParentA"_ustr, u"ChildA1"_ustr, u"ChildA2"_ustr,
+                                        u"ParentB"_ustr, u"ChildB1"_ustr, u"ChildB2"_ustr };
+    const uno::Reference<drawing::XShape> xImported(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    const std::vector<std::pair<OUString, ShapeBox>> aImported(readNodeBoxes(xImported, aNodes));
+
+    const uno::Reference<drawing::XShape> xLaidOut(reLayoutDiagram());
+
+    for (const auto& rNode : aImported)
+        assertSameBox(OUStringToOString(rNode.first, RTL_TEXTENCODING_UTF8), rNode.second,
+                      getShapeBoxByText(xLaidOut, rNode.first));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRelayoutDrawsABentConnectorToEachChild)
+{
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    const uno::Reference<drawing::XShape> xLaidOut(reLayoutDiagram());
+
+    std::vector<uno::Reference<drawing::XShape>> aElbowShapes;
+    collectShapesWithGeometry(xLaidOut, u"ooxml-bentConnector3"_ustr, aElbowShapes);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aElbowShapes.size());
+
+    std::vector<ShapeBox> aElbows;
+    for (const uno::Reference<drawing::XShape>& rElbow : aElbowShapes)
+        aElbows.push_back(getShapeBox(rElbow));
+
+    const struct
+    {
+        OUString aParent;
+        OUString aChild;
+    } aBranches[] = { { u"ParentA"_ustr, u"ChildA1"_ustr }, { u"ParentA"_ustr, u"ChildA2"_ustr },
+                      { u"ParentB"_ustr, u"ChildB1"_ustr }, { u"ParentB"_ustr, u"ChildB2"_ustr } };
+
+    for (const auto& rBranch : aBranches)
+    {
+        const ShapeBox aParent(getShapeBoxByText(xLaidOut, rBranch.aParent));
+        const ShapeBox aChild(getShapeBoxByText(xLaidOut, rBranch.aChild));
+        const OString aWhat(OUStringToOString(rBranch.aChild, RTL_TEXTENCODING_UTF8) + " elbow");
+
+        // The elbow reaches the left side of the child at the height of its middle.
+        bool bReachesTheChild = false;
+        for (const ShapeBox& rElbow : aElbows)
+        {
+            if (!isNear(rElbow.getBottom(), aChild.getMiddleY())
+                || !isNear(rElbow.getRight(), aChild.nX))
+                continue;
+
+            bReachesTheChild = true;
+
+            // It starts where the parent ends, and runs down the lane between the two.
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(aWhat.getStr(),
+                                                 static_cast<double>(aParent.getBottom()),
+                                                 static_cast<double>(rElbow.nY), 15.0);
+            const bool bElbowPosCompare(rElbow.nX > aParent.nX && rElbow.nX < aChild.nX);
+            CPPUNIT_ASSERT_MESSAGE(aWhat.getStr(), bElbowPosCompare);
+            break;
+        }
+
+        CPPUNIT_ASSERT_MESSAGE(aWhat.getStr(), bReachesTheChild);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRelayoutPlacesProcessNodesWhereTheImportDid)
+{
+    createSdImpressDoc("pptx/smartart-hprocess9-four-nodes.pptx");
+
+    // Four boxes standing in a row. The gaps between them came out wider than the layout asks for,
+    // which carried every box further to the right than the one before it.
+    const std::vector<OUString> aNodes{ u"Aaaa"_ustr, u"This\nIs a\nLink"_ustr, u"Cccc"_ustr,
+                                        u"Dddd"_ustr };
+    const uno::Reference<drawing::XShape> xImported(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    const std::vector<std::pair<OUString, ShapeBox>> aImported(readNodeBoxes(xImported, aNodes));
+
+    const uno::Reference<drawing::XShape> xLaidOut(reLayoutDiagram());
+
+    for (const auto& rNode : aImported)
+        assertSameBox(OUStringToOString(rNode.first, RTL_TEXTENCODING_UTF8), rNode.second,
+                      getShapeBoxByText(xLaidOut, rNode.first));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddedChildGetsTheSameConnectorLineAsItsSiblings)
+{
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xGroup));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    CPPUNIT_ASSERT(pDiagram->isDiagram());
+
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+
+    // a node below the first of the two parents, which the shape that draws it names
+    SdrObject* pParent(
+        SdrObject::getSdrObjectFromXShape(findChildShapeByText(xGroup, u"ParentA"_ustr)));
+    CPPUNIT_ASSERT(nullptr != pParent);
+
+    CPPUNIT_ASSERT(!rHelper
+                        ->addDiagramNode(u"NEW"_ustr, pDiagram->getSdrModelFromSdrObject(),
+                                         pParent->getDiagramDataModelID(), /*bAsChild=*/true)
+                        .isEmpty());
+    rHelper->reLayout();
+
+    // The elbow that reaches the node that was added is drawn like the ones that were there
+    // already. A layout leaves the colour of a line to the Diagram and only the width and the
+    // dash to the theme, so a shape that draws no line at all is what a Diagram that hands over
+    // no colour ends up with.
+    uno::Reference<drawing::XShape> xLaidOut(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    std::vector<uno::Reference<drawing::XShape>> aElbows;
+    collectShapesWithGeometry(xLaidOut, u"ooxml-bentConnector3"_ustr, aElbows);
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aElbows.size());
+
+    for (const uno::Reference<drawing::XShape>& rElbow : aElbows)
+    {
+        uno::Reference<beans::XPropertySet> xProperties(rElbow, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xProperties.is());
+
+        drawing::LineStyle eLineStyle(drawing::LineStyle_NONE);
+        xProperties->getPropertyValue(u"LineStyle"_ustr) >>= eLineStyle;
+        CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, eLineStyle);
+
+        CPPUNIT_ASSERT_EQUAL(aElbows.front()->getSize().Width, rElbow->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL(xProperties->getPropertyValue(u"LineWidth"_ustr),
+                             uno::Reference<beans::XPropertySet>(aElbows.front(), uno::UNO_QUERY_THROW)
+                                 ->getPropertyValue(u"LineWidth"_ustr));
+        CPPUNIT_ASSERT_EQUAL(xProperties->getPropertyValue(u"LineColor"_ustr),
+                             uno::Reference<beans::XPropertySet>(aElbows.front(), uno::UNO_QUERY_THROW)
+                                 ->getPropertyValue(u"LineColor"_ustr));
+    }
+}
+
+namespace
+{
+/// The height of a shape and the size of the letters of the text it holds.
+struct BoxAndText
+{
+    sal_Int32 mnHeight = 0;
+    float mfCharHeight = 0.0;
+};
+
+/// The layout lands a unit or two apart each time it runs, so heights are compared with that room.
+void assertSameHeight(sal_Int32 nExpected, sal_Int32 nActual)
+{
+    CPPUNIT_ASSERT_MESSAGE(OString("expected height near "
+                                   + OString::number(nExpected) + ", got "
+                                   + OString::number(nActual)).getStr(),
+                           std::abs(nExpected - nActual) <= 4);
+}
+
+BoxAndText readBoxAndText(const uno::Reference<drawing::XShape>& xDiagram, const OUString& rText)
+{
+    uno::Reference<drawing::XShape> xShape(findChildShapeByText(xDiagram, rText));
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xProperties.is());
+
+    BoxAndText aRetval;
+    aRetval.mnHeight = xShape->getSize().Height;
+    xProperties->getPropertyValue(u"CharHeight"_ustr) >>= aRetval.mfCharHeight;
+
+    return aRetval;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testUndoOfAnAddedNodeBringsBackBoxesAndTextSizes)
+{
+    // A node that is added leaves the Diagram with one row more, so every row grows shorter and
+    // the text in it smaller. Going back to the state before must undo both of those.
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    CPPUNIT_ASSERT(pDiagram->isDiagram());
+
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+
+    // The state is taken from the Diagram as it comes out of the file, which is where adding a
+    // node takes it from as well.
+    const BoxAndText aParentBefore(readBoxAndText(xDiagram, u"ParentA"_ustr));
+    const BoxAndText aChildBefore(readBoxAndText(xDiagram, u"ChildB1"_ustr));
+
+    // the state that going back lands on
+    const std::shared_ptr<svx::diagram::DiagramDataState> aStateBefore(
+        rHelper->extractDiagramDataState());
+
+    SdrObject* pAnchor(
+        SdrObject::getSdrObjectFromXShape(findChildShapeByText(xDiagram, u"ChildB1"_ustr)));
+    CPPUNIT_ASSERT(nullptr != pAnchor);
+    CPPUNIT_ASSERT(!rHelper
+                        ->addDiagramNode(u"NEW"_ustr, pDiagram->getSdrModelFromSdrObject(),
+                                         pAnchor->getDiagramDataModelID(), /*bAsChild=*/false)
+                        .isEmpty());
+
+    uno::Reference<drawing::XShape> xAdded(reLayoutDiagram());
+
+    // The row that came along made every row shorter, and the text went with it. The node that was
+    // added holds text of the same size as the ones beside it.
+    const BoxAndText aParentAfterAdd(readBoxAndText(xAdded, u"ParentA"_ustr));
+    const BoxAndText aChildAfterAdd(readBoxAndText(xAdded, u"ChildB1"_ustr));
+    const BoxAndText aNewAfterAdd(readBoxAndText(xAdded, u"NEW"_ustr));
+
+    CPPUNIT_ASSERT_LESS(aParentBefore.mnHeight, aParentAfterAdd.mnHeight);
+    CPPUNIT_ASSERT_LESS(aChildBefore.mfCharHeight, aChildAfterAdd.mfCharHeight);
+    CPPUNIT_ASSERT_EQUAL(aChildAfterAdd.mfCharHeight, aNewAfterAdd.mfCharHeight);
+
+    // what undoing the node that was added does
+    rHelper->applyDiagramDataState(aStateBefore);
+    uno::Reference<drawing::XShape> xUndone(reLayoutDiagram());
+
+    // Every shape covers what it covered before and holds text of the size it held, so that going
+    // back and forth over the same node leaves the Diagram as it was.
+    const BoxAndText aParentAfterUndo(readBoxAndText(xUndone, u"ParentA"_ustr));
+    const BoxAndText aChildAfterUndo(readBoxAndText(xUndone, u"ChildB1"_ustr));
+
+    assertSameHeight(aParentBefore.mnHeight, aParentAfterUndo.mnHeight);
+    assertSameHeight(aChildBefore.mnHeight, aChildAfterUndo.mnHeight);
+    CPPUNIT_ASSERT_EQUAL(aParentBefore.mfCharHeight, aParentAfterUndo.mfCharHeight);
+    CPPUNIT_ASSERT_EQUAL(aChildBefore.mfCharHeight, aChildAfterUndo.mfCharHeight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

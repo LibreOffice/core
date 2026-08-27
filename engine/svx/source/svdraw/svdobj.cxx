@@ -39,6 +39,12 @@
 #include <comphelper/sequence.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/section.hxx>
+#include <svx/svdoutl.hxx>
+#include <cmath>
 #include <o3tl/deleter.hxx>
 #include <math.h>
 #include <svl/grabbagitem.hxx>
@@ -2046,6 +2052,84 @@ void SdrObject::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> /*pTe
 OutlinerParaObject* SdrObject::GetOutlinerParaObject() const
 {
     return nullptr;
+}
+
+void SdrObject::scaleText(double fScale, bool bUndo)
+{
+    OutlinerParaObject* pParaObject(GetOutlinerParaObject());
+
+    // limit change for extreme cases
+    static constexpr double fSmallestChange(0.005);
+
+    if (nullptr == pParaObject || fScale <= 0.0 || std::abs(fScale - 1.0) < fSmallestChange)
+        return;
+
+    SdrModel& rModel(getSdrModelFromSdrObject());
+
+    // Two things change, the text of the object and the sizes the object holds. The one for the
+    // text reads the text it replaces and the text that replaced it further down
+    std::unique_ptr<SdrUndoObjSetText> pTextUndo;
+
+    if (bUndo)
+    {
+        rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoAttrObject(*this));
+
+        std::unique_ptr<SdrUndoAction> pAction(
+            rModel.GetSdrUndoFactory().CreateUndoObjectSetText(*this, 0));
+
+        if (dynamic_cast<SdrUndoObjSetText*>(pAction.get()))
+            pTextUndo.reset(static_cast<SdrUndoObjSetText*>(pAction.release()));
+    }
+
+    // The sizes are part of the runs of the text, so we need an outliner and comes back
+    // with the changed sizes
+    SdrOutliner& rOutliner(getSdrModelFromSdrObject().GetDrawOutliner());
+    rOutliner.SetText(*pParaObject);
+
+    std::vector<editeng::Section> aSections;
+    pParaObject->GetTextObject().GetAllSections(aSections);
+
+    for (const editeng::Section& rSection : aSections)
+        for (const SfxPoolItem* pItem : rSection.maAttributes)
+        {
+            const sal_uInt16 nWhich(pItem->Which());
+
+            if (EE_CHAR_FONTHEIGHT != nWhich && EE_CHAR_FONTHEIGHT_CJK != nWhich
+                && EE_CHAR_FONTHEIGHT_CTL != nWhich)
+                continue;
+
+            const SvxFontHeightItem& rHeight(static_cast<const SvxFontHeightItem&>(*pItem));
+            SfxItemSet aScaled(rOutliner.GetEmptyItemSet());
+            aScaled.Put(SvxFontHeightItem(
+                static_cast<sal_uInt32>(std::lround(rHeight.GetHeight() * fScale)), 100, nWhich));
+            rOutliner.QuickSetAttribs(aScaled, ESelection(rSection.mnParagraph, rSection.mnStart,
+                                                          rSection.mnParagraph, rSection.mnEnd));
+        }
+
+    SetOutlinerParaObject(rOutliner.CreateParaObject());
+    rOutliner.Clear();
+
+    if (pTextUndo)
+    {
+        pTextUndo->AfterSetText();
+
+        if (pTextUndo->IsDifferent())
+            rModel.AddUndo(std::move(pTextUndo));
+    }
+
+    // the size the object holds for text that carries none of its own
+    for (const sal_uInt16 nWhich :
+         { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL })
+    {
+        const SfxItemSet& rSet(GetMergedItemSet());
+
+        if (SfxItemState::SET != rSet.GetItemState(nWhich, false))
+            continue;
+
+        const SvxFontHeightItem& rHeight(static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich)));
+        SetMergedItem(SvxFontHeightItem(
+            static_cast<sal_uInt32>(std::lround(rHeight.GetHeight() * fScale)), 100, nWhich));
+    }
 }
 
 void SdrObject::NbcReformatText()
