@@ -25,10 +25,10 @@
 #include <svx/svdview.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <svtools/querydialog.hxx>
 #include <basic/sbxcore.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
@@ -265,17 +265,16 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 
 void ScTabViewShell::ExecuteOnlyActiveSheetSavedDlg()
 {
-    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    auto pDlg(pFact->CreateQueryDialog(
+    QueryDialog aQueryDialog(
         GetFrameWeld(), ScResId(STR_WARN_ONLYACTIVESHEET_TITLE),
-        ScResId(STR_WARN_ONLYACTIVESHEET_TEXT), ScResId(STR_WARN_ONLYACTIVESHEET_QUEST), true));
+        ScResId(STR_WARN_ONLYACTIVESHEET_TEXT), ScResId(STR_WARN_ONLYACTIVESHEET_QUEST), true);
     OUString sLabel;
     sLabel.clear();
-    pDlg->SetNoLabel(sLabel); //empty to hide the button
+    aQueryDialog.SetNoLabel(sLabel); //empty to hide the button
     sLabel = ScResId(STR_WARN_ONLYACTIVESHEET_BUTTON);
-    pDlg->SetYesLabel(sLabel);
-    pDlg->SetTypeWarn();
-    pDlg->Execute();
+    aQueryDialog.SetYesLabel(sLabel);
+    aQueryDialog.SetTypeWarn();
+    aQueryDialog.run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
