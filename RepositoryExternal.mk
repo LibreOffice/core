@@ -53,6 +53,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(SRCDIR)/external/unixODBC/inc \
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),unixodbc)
 
 endef
 
@@ -3751,6 +3752,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
        -LIBPATH:$(gb_UnpackedTarball_workdir)/libgpg-error/src/.libs libgpg-error.lib \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),libgpg-error)
 
 endef
 
@@ -3764,6 +3766,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
        -LIBPATH:$(gb_UnpackedTarball_workdir)/libassuan/src/.libs libassuan.lib \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),libassuan)
 
 endef
 

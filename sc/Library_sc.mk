@@ -735,6 +735,9 @@ $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/op_spreadsheet \
     sc/source/core/opencl/utils \
 )))
+$(eval $(call gb_Helper_optional,OPENCL,\
+	$(call gb_Helper_LinkTarget_use_external,$(call gb_Library_get_linktarget,sc),Random123) \
+))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,sc,\

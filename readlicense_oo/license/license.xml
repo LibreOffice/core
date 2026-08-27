@@ -2606,6 +2606,7 @@
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Liberation</h2>
         <!-- Name: Liberation, Vendor:, Source: FONT_LIBERATION_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: LiberationNarrow, Vendor:, Source: FONT_LIBERATION_NARROW_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Liberation fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
@@ -2732,7 +2733,20 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Noto</h2>
-        <!-- Name: Noto, Vendor:, Source: FONT_NOTO_SANS_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoKufiArabic, Vendor:, Source: FONT_NOTO_KUFI_ARABIC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSans, Vendor:, Source: FONT_NOTO_SANS_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerif, Vendor:, Source: FONT_NOTO_SERIF_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifHebrew, Vendor:, Source: FONT_NOTO_SERIF_HEBREW_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansArabic, Vendor:, Source: FONT_NOTO_SANS_ARABIC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoNaskhArabic, Vendor:, Source: FONT_NOTO_NASKH_ARABIC_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansHebrew, Vendor:, Source: FONT_NOTO_SANS_HEBREW_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansArmenian, Vendor:, Source: FONT_NOTO_SANS_ARMENIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifArmenian, Vendor:, Source: FONT_NOTO_SERIF_ARMENIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansGeorgian, Vendor:, Source: FONT_NOTO_SANS_GEORGIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifGeorgian, Vendor:, Source: FONT_NOTO_SERIF_GEORGIAN_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansLao, Vendor:, Source: FONT_NOTO_SANS_LAO_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSerifLao, Vendor:, Source: FONT_NOTO_SERIF_LAO_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
+        <!-- Name: NotoSansLisu, Vendor:, Source: FONT_NOTO_SANS_LISU_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Google Noto fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,

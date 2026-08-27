@@ -65,6 +65,8 @@ $(eval $(call gb_Library_use_externals,UAccCOM,\
 	boost_headers \
 ))
 
+$(eval $(call gb_Helper_LinkTarget_use_external,$(call gb_Library_get_linktarget,UAccCOM),iaccessible2))
+
 $(eval $(call gb_Library_use_system_win32_libs,UAccCOM,\
 	oleacc \
 	advapi32 \

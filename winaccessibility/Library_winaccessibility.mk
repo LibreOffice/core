@@ -51,6 +51,8 @@ $(eval $(call gb_Library_use_externals,winaccessibility,\
 	boost_headers \
 ))
 
+$(eval $(call gb_Helper_LinkTarget_use_external,$(call gb_Library_get_linktarget,winaccessibility),iaccessible2))
+
 $(eval $(call gb_Library_use_libraries,winaccessibility,\
 	UAccCOM \
 	comphelper \

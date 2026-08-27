@@ -87,6 +87,7 @@ ifneq ($(SYSTEM_LIBFIXMATH),TRUE)
 $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/misc/fix16 \
 ))
+$(eval $(call gb_Helper_LinkTarget_use_external,$(call gb_Library_get_linktarget,tl),libfixmath))
 endif
 
 ifeq ($(OS),WNT)

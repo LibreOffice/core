@@ -1034,36 +1034,91 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	extras_fonts \
 	$(if $(USING_X11)$(DISABLE_GUI)$(filter ANDROID EMSCRIPTEN,$(OS)), \
 		postprocess_fontconfig) \
-	$(call gb_Helper_optional,MORE_FONTS,\
-		fonts_alef \
-		fonts_amiri \
-		fonts_caladea \
-		fonts_carlito \
-		$(if $(MPL_SUBSET),,fonts_culmus) \
-		fonts_dejavu \
-		fonts_gentium \
-		fonts_liberation \
-		fonts_liberation_narrow \
-		fonts_libertineg \
-		fonts_libre_hebrew \
-		fonts_noto_kufi_arabic \
-		fonts_noto_naskh_arabic \
-		fonts_noto_sans \
-		fonts_noto_sans_arabic \
-		fonts_noto_sans_armenian \
-		fonts_noto_sans_georgian \
-		fonts_noto_sans_hebrew \
-		fonts_noto_sans_lao \
-		fonts_noto_sans_lisu \
-		fonts_noto_serif \
-		fonts_noto_serif_armenian \
-		fonts_noto_serif_georgian \
-		fonts_noto_serif_hebrew \
-		fonts_noto_serif_lao \
-		fonts_reem \
-		fonts_scheherazade \
-	) \
 ))
+
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_Helper_register_external_packages_for_install,Alef,ooo_fonts,\
+		fonts_alef \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Amiri,ooo_fonts,\
+		fonts_amiri \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Caladea,ooo_fonts,\
+		fonts_caladea \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Carlito,ooo_fonts,\
+		fonts_carlito \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Culmus,ooo_fonts,\
+		$(if $(MPL_SUBSET),,fonts_culmus) \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,DejaVu,ooo_fonts,\
+		fonts_dejavu \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Gentium,ooo_fonts,\
+		fonts_gentium \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Liberation,ooo_fonts,\
+		fonts_liberation \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,LiberationNarrow,ooo_fonts,\
+		fonts_liberation_narrow \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,LinuxLibertineG,ooo_fonts,\
+		fonts_libertineg \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,LibreHebrew,ooo_fonts,\
+		fonts_libre_hebrew \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoKufiArabic,ooo_fonts,\
+		fonts_noto_kufi_arabic \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoNaskhArabic,ooo_fonts,\
+		fonts_noto_naskh_arabic \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSans,ooo_fonts,\
+		fonts_noto_sans \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansArabic,ooo_fonts,\
+		fonts_noto_sans_arabic \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansArmenian,ooo_fonts,\
+		fonts_noto_sans_armenian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansGeorgian,ooo_fonts,\
+		fonts_noto_sans_georgian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansHebrew,ooo_fonts,\
+		fonts_noto_sans_hebrew \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansLao,ooo_fonts,\
+		fonts_noto_sans_lao \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSansLisu,ooo_fonts,\
+		fonts_noto_sans_lisu \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerif,ooo_fonts,\
+		fonts_noto_serif \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifArmenian,ooo_fonts,\
+		fonts_noto_serif_armenian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifGeorgian,ooo_fonts,\
+		fonts_noto_serif_georgian \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifHebrew,ooo_fonts,\
+		fonts_noto_serif_hebrew \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,NotoSerifLao,ooo_fonts,\
+		fonts_noto_serif_lao \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Reem_Kufi,ooo_fonts,\
+		fonts_reem \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,Scheherazade,ooo_fonts,\
+		fonts_scheherazade \
+))
+endif
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_images,\
 	postprocess_images \
