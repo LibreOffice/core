@@ -807,6 +807,6 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
     }
 }
 
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

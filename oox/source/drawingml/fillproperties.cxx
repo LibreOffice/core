@@ -506,7 +506,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 }
 
                 // prepare BGradient with some defaults
-                // CAUTION: This used awt::Gradient2 before who's empty constructor
+                // CAUTION: This used awt::Gradient2 before whose empty constructor
                 //          (see workdir/UnoApiHeadersTarget/offapi/normal/com/sun/
                 //          star/awt/Gradient.hpp) initializes all to zeros, so reflect
                 //          this here. OTOH set all that were set, e.g. Start/EndIntens
@@ -665,7 +665,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                                 aGraphCrop.Bottom = o3tl::convert(aFillRect.Y2, aOriginalSize.Height, MAX_PERCENT);
 
                             bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
-                            // Negative GraphicCrop values means "crop" here.
+                            // Negative GraphicCrop values mean "crop" here.
                             bool bNeedCrop = aGraphCrop.Left <= 0 && aGraphCrop.Right <= 0 && aGraphCrop.Top <= 0 && aGraphCrop.Bottom <= 0;
 
                             if (bHasCropValues)
@@ -873,7 +873,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
 
                 if(mbIsCustomShape)
                 {
-                    // Positive GraphicCrop values means "crop" here.
+                    // Positive GraphicCrop values mean "crop" here.
                     if (aGraphCrop.Left > 0 || aGraphCrop.Right > 0 || aGraphCrop.Top > 0 || aGraphCrop.Bottom > 0)
                         xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromSrcRect(oClipRect));
                 }
@@ -887,7 +887,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             rPropMap.setProperty(PROP_FillBitmapMode, BitmapMode_STRETCH);
 
             // It is a bitmap filled and rotated graphic.
-            // When custom shape is rotated, bitmap have to be rotated too.
+            // When custom shape is rotated, bitmap has to be rotated too.
             // Only in extruded mode the bitmap is transformed together with the shape
             if(rPropMap.hasProperty(PROP_RotateAngle) && !mbIsExtruded)
             {
@@ -895,7 +895,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                 xGraphic = lclRotateGraphic(xGraphic, Degree10(nAngle/10) );
             }
 
-            // We have not core feature that flips graphic in the shape.
+            // We have no core feature that flips graphic in the shape.
             // Here we are applying flip property to bitmap directly.
             if((bFlipH || bFlipV) && !mbIsExtruded)
                 xGraphic = lclMirrorGraphic(xGraphic, bFlipH, bFlipV );

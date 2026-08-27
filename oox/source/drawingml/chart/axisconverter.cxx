@@ -114,7 +114,7 @@ sal_Int32 lclGetTickMark( sal_Int32 nToken )
 }
 
 /**
- * The groups is of percent type only when all of its members are of percent
+ * The group is of percent type only when all of its members are of percent
  * type.
  */
 bool isPercent( const RefVector<TypeGroupConverter>& rTypeGroups )
@@ -447,7 +447,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                 }
                 else if( !mrModel.mofMinorUnit.has_value() )
                 {
-                    // tdf#114168 If minor unit is not set then set interval to 5, as MS Excel do.
+                    // tdf#114168 If minor unit is not set then set interval to 5, as MS Excel does.
                     rIntervalCount <<= static_cast< sal_Int32 >( 5 );
                 }
             }
