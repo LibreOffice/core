@@ -501,7 +501,7 @@ void GraphicFormatDetectorTest::testMatchArray()
     CPPUNIT_ASSERT_EQUAL(119, int(pMatchPointer - pCompleteStringPointer));
     CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "/svg>"));
 
-    // Check that non-existing search string
+    // Check non-existing search string
     pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "none"_ostr);
     CPPUNIT_ASSERT(pMatchPointer == nullptr);
 }

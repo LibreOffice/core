@@ -116,7 +116,7 @@ protected:
     /**
      * @brief Retrieves the string representation of an enumeration value
      * @param gt The @c GType for the enumeration
-     * @param value The enumeration value for which to get the name for
+     * @param value The enumeration value for which to get the name
      * @param fallback Fallback value in case @p value falls outside the enumeration
      * @returns A string representing @p value
      */

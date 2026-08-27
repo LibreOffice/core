@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testEmfToWmfConversion)
     OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "to-wmf.emf";
     SvFileStream aStream(aURL, StreamMode::READ);
     Graphic aGraphic;
-    // This similar to an application/x-openoffice-wmf mime type in manifest.xml in the ODF case.
+    // This is similar to an application/x-openoffice-wmf mime type in manifest.xml in the ODF case.
     sal_uInt16 nFormatEMF = aGraphicFilter.GetImportFormatNumberForShortName(u"EMF");
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
                          aGraphicFilter.ImportGraphic(aGraphic, u"", aStream, nFormatEMF));
