@@ -2881,7 +2881,10 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     if ((bColumn && aNewArea.getOpenWidth()) || (!bColumn && aNewArea.getOpenHeight()))
     {
         rTabView.UpdateSelectionOverlay();
-        KitHelper::notifyInvalidation(rViewData.GetViewShell(), &aNewArea);
+        // The newly tiled area is in print twips, from column widths and row
+        // heights rather than any one view's pixel grid, so every view - not
+        // just this one - can use the same rectangle regardless of its own zoom.
+        KitHelper::notifyInvalidationAllViews(pModelObj, rViewData.GetViewShell()->getPart(), &aNewArea, false);
     }
 
     // Provide size in the payload, so clients don't have to query for that.

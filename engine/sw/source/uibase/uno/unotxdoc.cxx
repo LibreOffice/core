@@ -3692,7 +3692,9 @@ void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
             (*pFieldBM->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nSelection;
             pFieldBM->Invalidate();
             m_pDocShell->GetWrtShell()->SetModified();
-            m_pDocShell->GetView()->GetEditWin().LogicInvalidate(nullptr);
+            // Every view showing this document has the dropdown's new value now,
+            // not just the one that made the selection.
+            KitHelper::notifyInvalidationAllViews(this, m_pDocShell->GetView()->getPart(), nullptr, false);
         }
     }
 }

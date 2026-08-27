@@ -1375,14 +1375,15 @@ void Document::trimAfterInactivity()
         return;
     }
 
-    // merge various callback types together if possible
-    if (eType == COKitCallbackType::INVALIDATE_TILES)
-    {
-        // all views have to be in sync; FIXME: calc an issue here ?
-        queue->putCallback(-1, eType, payload);
-    }
-    else
-        queue->putCallback(descriptor->getViewId(), eType, payload);
+    // The core already delivers this to every view that needs it: either
+    // naturally, since each view's own window reacts to the same document
+    // change and reports its own invalidation, or explicitly, when a change
+    // is not tied to any one view's zoom and the core calls back once per
+    // view on purpose. Broadcasting it to every session here on top of that
+    // duplicated the delivery, and in Calc, where the affected area is in
+    // per-view zoomed screen coordinates, delivered one view's rectangle to
+    // views it did not apply to.
+    queue->putCallback(descriptor->getViewId(), eType, payload);
 
     LOG_TRC("Document::ViewCallback end.");
 }

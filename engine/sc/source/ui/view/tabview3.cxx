@@ -465,16 +465,21 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     // excluding overlapping area with aNewColArea
     tools::Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
 
+    // The newly tiled area is in print twips, from column widths and row heights
+    // rather than any one view's pixel grid, so every view - not just this one -
+    // can use the same rectangle regardless of its own zoom.
+    const int nPart = aViewData.GetViewShell()->getPart();
+
     // Only invalidate if spreadsheet extended to the right
     if (aNewColArea.getOpenWidth())
     {
-        KitHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewColArea);
+        KitHelper::notifyInvalidationAllViews(pModelObj, nPart, &aNewColArea, false);
     }
 
     // Only invalidate if spreadsheet extended to the bottom
     if (aNewRowArea.getOpenHeight())
     {
-        KitHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewRowArea);
+        KitHelper::notifyInvalidationAllViews(pModelObj, nPart, &aNewRowArea, false);
     }
 
     // Provide size in the payload, so clients don't have to

@@ -885,7 +885,7 @@ private:
 
 bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
                                  const std::string& rImageUrl, const OUString& rAltText,
-                                 SfxViewShell* pViewShell, int nPartId)
+                                 int nPartId)
 {
     OUString aURL = OStringToOUString(rImageUrl, RTL_TEXTENCODING_UTF8);
 
@@ -917,7 +917,10 @@ bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
 
     pPage->ReplaceObject(pNewGrafObj.get(), pPickObj->GetOrdNum());
 
-    KitHelper::notifyInvalidation(pViewShell, nPartId, nullptr);
+    // Every view showing this page has the replaced image now, not just the
+    // one that made the request.
+    rtl::Reference<SdXImpressDocument> xModel(pDoc->getUnoModel());
+    KitHelper::notifyInvalidationAllViews(xModel.get(), nPartId, nullptr, false);
     return true;
 }
 
@@ -941,7 +944,6 @@ struct SlideCommandContext
     SdDrawDocument* mpDoc;
     DrawView* mpDrawView;
     ::sd::View* mpView;
-    ViewShellBase* mpViewShellBase;
     SfxUndoManager* mpUndoManager;
     bool mbUndo;
     sal_uInt16 mnPageCount = 0;
@@ -1439,7 +1441,7 @@ void handleInsertImage(SlideCommandContext& rCtx, const std::string& rKey,
     {
         std::string aImageUrl = rValue.get_value<std::string>();
         if (lcl_ReplaceWithImage(rCtx.mpDoc, pPageStandard, nObjId, aImageUrl, OUString(),
-                                 rCtx.mpViewShellBase, rCtx.mnActPageId))
+                                 rCtx.mnActPageId))
             rCtx.touch(pPageStandard);
     }
 }
@@ -1503,7 +1505,7 @@ void handleInsertImageAt(SlideCommandContext& rCtx, const std::string& rKey,
     }
 
     if (lcl_ReplaceWithImage(rCtx.mpDoc, pPage, nObjId, aImageUrl, aAltText,
-                             rCtx.mpViewShellBase, nSlideId))
+                             nSlideId))
         rCtx.touch(pPage);
 }
 
@@ -2097,8 +2099,7 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
 
     // The state the slide-command handlers share, including the design-template
     // URL that is applied after the command loop.
-    SlideCommandContext aCtx{ GetDoc(), mpDrawView.get(), GetView(), &GetViewShellBase(),
-                              pUndoManager, bUndo };
+    SlideCommandContext aCtx{ GetDoc(), mpDrawView.get(), GetView(), pUndoManager, bUndo };
 
     // Iterate through the JSON data loaded into a tree structure
     for (const auto& aItem : aTree)
