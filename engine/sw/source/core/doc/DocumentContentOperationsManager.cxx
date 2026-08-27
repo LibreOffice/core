@@ -3568,7 +3568,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
     }
 
     const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-    pContentStore->Save( m_rDoc, rPos.GetNodeIndex(), rPos.GetContentIndex(), true );
+    pContentStore->Save( m_rDoc, rPos.GetNodeIndex(), rPos.GetContentIndex(), true, /*bCheckCoincidentCursors=*/true );
     assert(pNode->IsTextNode());
     std::function<void (SwTextNode *, sw::mark::RestoreMode, bool bAtStart)> restoreFunc(
         [&](SwTextNode *const, sw::mark::RestoreMode const eMode, bool const bAtStart)

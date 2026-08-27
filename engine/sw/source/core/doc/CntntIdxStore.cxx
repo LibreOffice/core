@@ -131,13 +131,14 @@ namespace
         {
             return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCursorEntries.empty() && m_aShellCursorEntries.empty();
         }
-        virtual void Save(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent, bool bSaveFlySplit=false) override
+        virtual void Save(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent, bool bSaveFlySplit=false,
+                          bool bCheckCoincidentCursors = false) override
         {
             SaveBkmks(rDoc, nNode, nContent);
             SaveRedlines(rDoc, nNode, nContent);
             SaveFlys(rDoc, nNode, nContent, bSaveFlySplit);
             SaveUnoCursors(rDoc, nNode, nContent);
-            SaveShellCursors(rDoc, nNode, nContent);
+            SaveShellCursors(rDoc, nNode, nContent, bCheckCoincidentCursors);
         }
         virtual void Restore(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nOffset=0, bool bAuto = false, bool bAtStart = false, RestoreMode eMode = RestoreMode::All) override
         {
@@ -182,26 +183,32 @@ namespace
             void RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto, bool bAtStart);
             void SaveUnoCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent);
             void RestoreUnoCursors(updater_t const & rUpdater);
-            void SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent);
+            void SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent, bool bCheckCoincidentCursors);
             void RestoreShellCursors(updater_t const & rUpdater);
             static const SwPosition& GetRightMarkPos(::sw::mark::MarkBase const * pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             static void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
-    void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const SwNodeOffset nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bGetPoint, bool bSetMark)
+    // A position exactly at nContent belongs to the view whose own edit is causing this split
+    // when bOtherView is false: that cursor still has to move on with the split. A coincident
+    // position that belongs to a different view (bOtherView true) stays behind on the original
+    // node instead, the same way a coincident bookmark already does.
+    void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const SwNodeOffset nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bGetPoint, bool bSetMark, bool bCheckCoincidentCursors = false, bool bOtherView = false)
     {
         const SwPosition* pPos = &rPaM.GetBound(bGetPoint);
-        if( pPos->GetNodeIndex() == nNode && pPos->GetContentIndex() < nContent )
+        if( pPos->GetNodeIndex() == nNode &&
+            ( pPos->GetContentIndex() < nContent ||
+              ( bCheckCoincidentCursors && pPos->GetContentIndex() == nContent && bOtherView ) ) )
         {
             const PaMEntry aEntry = { &rPaM, bSetMark, pPos->GetContentIndex() };
             rPaMEntries.push_back(aEntry);
         }
     }
-    void lcl_ChkPaMBoth( std::vector<PaMEntry>& rPaMEntries, const SwNodeOffset nNode, const sal_Int32 nContent, SwPaM& rPaM)
+    void lcl_ChkPaMBoth( std::vector<PaMEntry>& rPaMEntries, const SwNodeOffset nNode, const sal_Int32 nContent, SwPaM& rPaM, bool bCheckCoincidentCursors, bool bOtherView)
     {
-        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true, true);
-        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false, false);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true, true, bCheckCoincidentCursors, bOtherView);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false, false, bCheckCoincidentCursors, bOtherView);
     }
     void lcl_ChkUnoCrsrPaMBoth(std::vector<PaMEntry>& rPaMEntries, const SwNodeOffset nNode, const sal_Int32 nContent, SwPaM& rPaM)
     {
@@ -426,20 +433,24 @@ void ContentIdxStoreImpl::RestoreUnoCursors(updater_t const & rUpdater)
     }
 }
 
-void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent)
+void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent, bool bCheckCoincidentCursors)
 {
     SwCursorShell* pShell = rDoc.GetEditShell();
     if (!pShell)
         return;
+    const SwViewShell* pActingViewShell
+        = bCheckCoincidentCursors ? rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() : nullptr;
     for(SwViewShell& rCurShell : pShell->GetRingContainer())
     {
         if( auto pCursorShell = dynamic_cast<SwCursorShell *>(&rCurShell) )
         {
+            const bool bOtherView
+                = bCheckCoincidentCursors && pActingViewShell && &rCurShell != pActingViewShell;
             SwPaM *_pStackCursor = pCursorShell->GetStackCursor();
             if( _pStackCursor )
                 for (;;)
                 {
-                    lcl_ChkPaMBoth( m_aShellCursorEntries, nNode, nContent, *_pStackCursor);
+                    lcl_ChkPaMBoth( m_aShellCursorEntries, nNode, nContent, *_pStackCursor, bCheckCoincidentCursors, bOtherView);
                     if (!_pStackCursor)
                         break;
                     _pStackCursor = _pStackCursor->GetNext();
@@ -449,7 +460,7 @@ void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_
 
             for(SwPaM& rPaM : pCursorShell->GetCursor_()->GetRingContainer())
             {
-                lcl_ChkPaMBoth( m_aShellCursorEntries, nNode, nContent, rPaM);
+                lcl_ChkPaMBoth( m_aShellCursorEntries, nNode, nContent, rPaM, bCheckCoincidentCursors, bOtherView);
             }
         }
     }

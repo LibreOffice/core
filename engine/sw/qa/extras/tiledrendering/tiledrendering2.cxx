@@ -568,6 +568,49 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewDelete)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell2->GetRedlineCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testEnterAtCoincidentCursorLeavesOtherCursorBehind)
+{
+    // Given 2 views with their cursors at exactly the same position in a paragraph:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    int nView1 = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell1->Insert(u"Hello World"_ustr);
+    KitHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    KitHelper::setView(nView1);
+    pWrtShell1->SttEndDoc(/*bStt=*/true);
+    pWrtShell1->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    KitHelper::setView(nView2);
+    pWrtShell2->SttEndDoc(/*bStt=*/true);
+    pWrtShell2->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+
+    const SwNodeOffset nOldNode = pWrtShell1->GetCursor()->GetPoint()->GetNodeIndex();
+    CPPUNIT_ASSERT_EQUAL(nOldNode, pWrtShell2->GetCursor()->GetPoint()->GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pWrtShell1->GetCursor()->GetPoint()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pWrtShell2->GetCursor()->GetPoint()->GetContentIndex());
+
+    // When view 1 presses Enter, splitting the paragraph where both cursors sit:
+    KitHelper::setView(nView1);
+    pWrtShell1->SplitNode();
+
+    // Then view 1's own cursor moves on to the new, second paragraph:
+    CPPUNIT_ASSERT_EQUAL(nOldNode + SwNodeOffset(1), pWrtShell1->GetCursor()->GetPoint()->GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pWrtShell1->GetCursor()->GetPoint()->GetContentIndex());
+
+    // View 2's cursor stays on the original paragraph, at its new, shorter end.
+    // Without the fix, this failed with:
+    // - Expected: nOldNode
+    // - Actual  : nOldNode + 1
+    // i.e. view 2's cursor was carried into the new paragraph along with view 1's.
+    CPPUNIT_ASSERT_EQUAL(nOldNode, pWrtShell2->GetCursor()->GetPoint()->GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pWrtShell2->GetCursor()->GetPoint()->GetContentIndex());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerDocInsert)
 {
     // Given 2 views, view 1 turns on per-doc change recording:
