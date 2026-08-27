@@ -780,7 +780,12 @@ class Dispatcher {
 
 		// sheets toolbar
 		this.actionsMap['insertsheet'] = function () {
-			var nPos = $('#spreadsheet-tab-scroll')[0].childElementCount;
+			// The tab strip's DOM only catches up with the true sheet count once
+			// the engine's status round-trip for a previous insert comes back, so
+			// a burst of clicks would all read the same stale count. The part
+			// count the map already tracks is incremented synchronously on every
+			// insertPage() call, so it stays correct across a rapid burst.
+			var nPos = app.map.getNumberOfParts();
 			app.map.insertPage(nPos);
 			app.map.insertPage.scrollToEnd = true;
 		};
