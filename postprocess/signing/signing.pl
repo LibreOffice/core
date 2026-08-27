@@ -184,7 +184,7 @@ sub exec_single_sign        #11.07.2007 09:05
 sub exec_multi_sign     #11.07.2007 08:56
 ############################################################################
  {
-    # sign multiple file with one command line
+    # sign multiple files with one command line
     my $files_to_sign    = shift;
     my $commandline_base = shift;                 # contains whole stuff without the file name
     my $commandline = $commandline_base;          # contains stuff which will be executed
@@ -242,7 +242,7 @@ sub usage       #09.07.2007 08:39
     print "\t -e filename\t\t\tFile which contains a list of files which don't have to be signed.\n";
     print "\t -f pfx_filename\t\t\"Personal Information Exchange\" file.\n";
     print "\t -p password\t\t\tPassword for \"Personal Information Exchange\" file.\n";
-    print "\t -t timestamp\t\t\tTimestamp URL e.g. \"http://timestamp.verisign.com/scripts/timstamp.dll\"\n";
+    print "\t -t timestamp\t\t\tTimestamp URL e.g. \"http://timestamp.verisign.com/scripts/timestamp.dll\"\n";
     print "\t -l log_filename\t\tFile for logging.\n";
     print "\t -v\t\t\t\tVerbose.\n";
 }   ##usage

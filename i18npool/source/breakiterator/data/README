@@ -6,7 +6,7 @@ dict_word is used for dictionary word break, edit_word is for cursor
 travelling, while count_word is for word count.
 
 At various stages these copies have been customized and are now horribly out of
-sync. It unclear which diffs from the base versions are deliberate and which
+sync. It is unclear which diffs from the base versions are deliberate and which
 are now accidental :-(
 
 The various issues and customizations have been reviewed, with tests written for

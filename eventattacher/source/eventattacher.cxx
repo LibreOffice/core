@@ -123,7 +123,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 {
     Any aRet;
 
-    // Check if to firing or approveFiring has to be called
+    // Check if firing or approveFiring has to be called
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( FunctionName );
     bool bApproveFiring = false;
     if( !xMethod.is() )
@@ -385,7 +385,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter()
 
 namespace {
 
-// Implementation of an EventAttacher-related AllListeners, which brings
+// Implementation of an EventAttacher-related AllListener, which brings
 // a few Events to a general AllListener
 class FilterAllListenerImpl : public WeakImplHelper< XAllListener  >
 {
@@ -737,7 +737,7 @@ void EventAttacherImpl::removeListener
     if( !xIntrospection.is() )
         throw IntrospectionException();
 
-    //Inspect Introspection
+    // Inspect Introspection
     Any aObjAny( &xObject, cppu::UnoType<XInterface>::get());
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     if( !xAccess.is() )

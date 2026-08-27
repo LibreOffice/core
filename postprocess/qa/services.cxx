@@ -317,7 +317,7 @@ void Test::createInstance(
         CPPUNIT_FAIL(
             OString(
                 "instantiating \"" + msg(implementationName) + "\" via \""
-                + msg(name) + "\"  caused " + msg(a.getValueTypeName()) + " \""
+                + msg(name) + "\" caused " + msg(a.getValueTypeName()) + " \""
                 + msg(e.Message) + "\"")
             .getStr());
     }

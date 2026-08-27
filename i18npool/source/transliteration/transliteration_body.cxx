@@ -248,7 +248,7 @@ static OUString transliterate_titlecase_Impl(
         rtl::Reference< CharacterClassificationImpl > xCharClassImpl( new CharacterClassificationImpl( xContext ) );
 
         // because xCharClassImpl.toTitle does not handle ligatures or Beta but will raise
-        // an exception we need to handle the first char manually...
+        // an exception we need to handle the first character manually...
 
         // we don't want to change surrogates by accident, thus we use proper code point iteration
         sal_uInt32 cFirstChar = aText.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
