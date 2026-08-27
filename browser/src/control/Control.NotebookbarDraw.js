@@ -526,7 +526,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 								'type': 'checkbox',
 								'command': 'showruler',
 								'text': _('Ruler'),
-								'accessibility': { focusBack: true, combination: 'U', de: 'L' }
+								'accessibility': { focusBack: true, combination: 'RU', de: 'L' }
 							}
 						]
 					},
@@ -604,7 +604,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'type': 'bigtoolitem',
 				'text': _UNO('.uno:Sidebar'),
 				'command': '.uno:SidebarDeck.PropertyDeck',
-				'accessibility': { focusBack: true, combination: 'SB', de: null }
+				'accessibility': { focusBack: true, combination: 'SD', de: null }
 			},
 			{
 				'id': 'view-navigator',
@@ -1307,7 +1307,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 										'class': 'unoselectbackground',
 										'type': 'customtoolitem',
 										'text': _UNO('.uno:SelectBackground', 'presentation'),
-										'accessibility': { focusBack: true, combination: 'SB', de: null }
+										'accessibility': { focusBack: true, combination: 'SG', de: null }
 									}
 								]
 							}
