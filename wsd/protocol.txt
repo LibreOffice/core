@@ -104,6 +104,17 @@ remotedocunsubscribe wopisrc=<encoded-WOPISrc> [tag=<t>]
     drops every link of this document to the given WOPISrc when the tag is
     left out or 0.
 
+remotedoccommand wopisrc=<encoded-WOPISrc> <inner client command>
+
+    Routes a read-only client command to the remote document the current
+    document is subscribed to, named by its WOPISrc. The inner command is an
+    ordinary client command line, for example "getslidesections" or
+    "tilecombine ...". The command is handled inside wsd and sent to the
+    remote over the headless session; it is never given to this document's
+    kit. Only non-modifying commands are accepted. The remote's replies come
+    back as remotedoccommandresult: messages. Requires a live subscription to
+    the WOPISrc.
+
 getchildid
 
     Requests the child id so that it knows where the files needs to be sent when it is
@@ -714,6 +725,15 @@ remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [valu
     * 'failed': the connection is given up until a new subscription
     * 'unsubscribed': the link was dropped on request
     * 'error': the subscription failed; <kind> names the reason
+
+remotedoccommandresult wopisrc=<encoded-WOPISrc>\n<inner server frame>
+
+    A reply from a remote document to a remotedoccommand. The header line
+    names the remote by its WOPISrc; everything after the first newline is
+    the frame the remote node sent, verbatim, text or binary (for example
+    slidesections:, status:, tile:, sendthumbnail:). The frame is delivered
+    only to the view that issued commands to that remote, so several remote
+    documents can be driven in parallel and told apart by the WOPISrc.
 
 error: cmd=<command> kind=<kind> [code=<error_code>] [params=1,2,3,...,N]
 <freeErrorText>

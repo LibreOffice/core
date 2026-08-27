@@ -475,6 +475,17 @@ public:
     void sendRemoteDocumentEvent(const std::string& tag, const std::string& encodedWopiSrc,
                                  const std::string& eventArguments);
 
+    /// Routes a read-only client command from one browser view to the remote
+    /// document with the given WOPISrc.
+    void sendRemoteDocumentCommand(const std::string& sessionId, const std::string& wopiSrc,
+                                   const std::string& command);
+
+    /// Delivers a wrapped remote document reply to the browser view that
+    /// asked for it, if that view is still connected.
+    void sendRemoteDocumentCommandResult(const std::string& sessionId,
+                                         const std::string& encodedWopiSrc,
+                                         const std::vector<char>& payload);
+
     /// Records the docKeys from a comma-separated chain as linked to this
     /// document through headless sessions.
     void addToIncomingDocKeyChain(const std::string& docKeyChain);

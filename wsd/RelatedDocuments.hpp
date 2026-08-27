@@ -54,6 +54,11 @@ public:
     /// Drops every remote document subscription the document holds.
     void unsubscribeAll(DocumentBroker& docBroker);
 
+    /// Routes a read-only client command from one browser view to the remote
+    /// document with the given WOPISrc, when a live subscription to it exists.
+    void sendCommand(DocumentBroker& docBroker, const std::string& sessionId,
+                     const std::string& wopiSrc, const std::string& command);
+
     /// Records the docKeys from a comma-separated chain as linked to the
     /// document through headless sessions.
     void addToIncomingDocKeyChain(DocumentBroker& docBroker, const std::string& docKeyChain);

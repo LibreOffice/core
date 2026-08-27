@@ -229,6 +229,41 @@ void RelatedDocuments::unsubscribeAll(DocumentBroker& docBroker)
     _subscriptions.clear();
 }
 
+void RelatedDocuments::sendCommand(DocumentBroker& docBroker, const std::string& sessionId,
+                                   const std::string& wopiSrc, const std::string& command)
+{
+    docBroker.assertCorrectThread();
+
+    if (!RemoteDocumentBroker::isEnabled() || !RemoteDocumentBroker::isInitialized())
+        return;
+
+    std::string remoteDocKey;
+    try
+    {
+        remoteDocKey = RequestDetails::getDocKey(wopiSrc);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Invalid remote document WOPISrc for a command: " << exc.what());
+        return;
+    }
+
+    // A command is only routed to a remote the document is subscribed to.
+    for (const auto& it : _subscriptions)
+    {
+        if (RequestDetails::getDocKey(std::get<0>(it)) == remoteDocKey)
+        {
+            RemoteDocumentBroker::instance().sendCommandAsync(std::get<0>(it), std::get<1>(it),
+                                                              docBroker.getDocKey(), sessionId,
+                                                              command);
+            return;
+        }
+    }
+
+    LOG_DBG("Ignoring a remote document command for [" << remoteDocKey
+                                                       << "]: no live subscription");
+}
+
 void RelatedDocuments::addToIncomingDocKeyChain(DocumentBroker& docBroker,
                                                 const std::string& docKeyChain)
 {

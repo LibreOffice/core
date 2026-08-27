@@ -832,11 +832,133 @@ public:
     }
 };
 
+/// A read-only client command sent to a subscribed remote document travels
+/// over the headless session and its reply comes back to the originating
+/// view, stamped with the remote's WOPISrc; a modifying command is refused.
+class UnitRemoteDocumentCommand : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitConnected, WaitResult, Done) _phase;
+
+    std::string remoteWopiSrc() const
+    {
+        return helpers::getTestServerURI() + "/wopi/files/2";
+    }
+
+    std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+
+public:
+    UnitRemoteDocumentCommand()
+        : WopiTestServer("UnitRemoteDocumentCommand")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
+        {
+            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
+            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+            entry->set("WOPISrc", remoteWopiSrc());
+            entry->set("AccessToken", "remotetoken");
+            relatedDocuments->add(entry);
+            fileInfo->set("RelatedDocuments", relatedDocuments);
+        }
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitLoadStatus)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitConnected);
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("remotedocevent:"))
+        {
+            if (message.find("event=connected") != std::string_view::npos &&
+                _phase == Phase::WaitConnected)
+            {
+                TRANSITION_STATE(_phase, Phase::WaitResult);
+
+                // A modifying command must be refused by the read-only filter
+                // and never reach the remote.
+                WSD_CMD("remotedoccommand wopisrc=" + encodedRemoteWopiSrc() +
+                        " key type=input char=97 key=0");
+
+                // A read-only command round-trips to the remote and back.
+                WSD_CMD("remotedoccommand wopisrc=" + encodedRemoteWopiSrc() +
+                        " getslidesections");
+            }
+            else if (message.find("event=modified value=true") != std::string_view::npos)
+            {
+                failTest("A read-only command modified the remote document");
+            }
+            else if (message.find("event=error") != std::string_view::npos)
+            {
+                failTest("Unexpected remote document error: " + std::string(message));
+            }
+
+            return false;
+        }
+
+        // The remote streams several frames once a command channel is open;
+        // the test passes on the getslidesections reply and ignores the rest.
+        if (message.starts_with("remotedoccommandresult") && _phase == Phase::WaitResult &&
+            message.find("slidesections:") != std::string_view::npos)
+        {
+            TST_LOG("Got: [" << message << ']');
+            LOK_ASSERT_MESSAGE("The reply names the remote by its WOPISrc",
+                               message.find(encodedRemoteWopiSrc()) != std::string_view::npos);
+
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("A read-only command round-tripped to the remote and back");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/1?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
                               new UnitRemoteDocumentTags(), new UnitRelatedDocumentPost(),
-                              new UnitRemoteDocumentMutual(), nullptr };
+                              new UnitRemoteDocumentMutual(), new UnitRemoteDocumentCommand(),
+                              nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,6 +26,8 @@
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/RequestDetails.hpp>
 
+#include <algorithm>
+#include <iterator>
 #include <sstream>
 
 std::unique_ptr<RemoteDocumentBroker> RemoteDocumentBroker::Instance;
@@ -126,7 +128,8 @@ bool HeadlessClientSession::sendCommand(const std::string& command)
     // Only commands that cannot modify the remote document.
     static const std::vector<std::string> allowedPrefixes = {
         "status", "commandvalues ", "setclientpart ", "selectclientpart ",
-        "clientvisiblearea ", "clientzoom ", "ping"
+        "clientvisiblearea ", "clientzoom ", "ping",
+        "getslidesections", "getpresentationinfo", "getthumbnail ", "tile ", "tilecombine "
     };
 
     bool allowed = false;
@@ -230,9 +233,14 @@ void HeadlessClientSession::handleMessage(const std::vector<char>& data)
     }
     else
     {
-        LOG_TRC("RemoteDoc: dropping message [" << COOLProtocol::getAbbreviatedMessage(firstLine)
-                                                << ']');
+        LOG_TRC("RemoteDoc: passing through message ["
+                << COOLProtocol::getAbbreviatedMessage(firstLine) << ']');
     }
+
+    // Every remote frame, including the ones translated into events above, is
+    // offered to the views driving commands so they can render the remote
+    // document (its structure, invalidations and rendered pixels).
+    remoteDocument->forwardCommandResult(data);
 }
 
 void HeadlessClientSession::onDisconnect()
@@ -281,16 +289,32 @@ bool RemoteDocument::removeConsumer(const std::string& localDocKey, const std::s
                                              << " from the remote document [" << _docKey
                                              << "], have " << _consumers.size());
 
+    bool removedAny = false;
     for (auto it = _consumers.begin(); it != _consumers.end();)
     {
         if (it->first.first == localDocKey && (tag == "0" || it->first.second == tag))
         {
             sendEvent(it->second, _wopiSrc, "event=unsubscribed");
             it = _consumers.erase(it);
+            removedAny = true;
         }
         else
         {
             ++it;
+        }
+    }
+
+    // When the document has no more links to this remote, its views stop
+    // driving commands too.
+    if (removedAny)
+    {
+        const bool docKeyRemains =
+            std::any_of(_consumers.begin(), _consumers.end(),
+                        [&](const auto& it) { return it.first.first == localDocKey; });
+        if (!docKeyRemains)
+        {
+            for (auto it = _commandSubscribers.begin(); it != _commandSubscribers.end();)
+                it = (it->first == localDocKey) ? _commandSubscribers.erase(it) : std::next(it);
         }
     }
 
@@ -449,6 +473,47 @@ void RemoteDocument::sendEvent(const Consumer& consumer, const std::string& wopi
         { docBroker->sendRemoteDocumentEvent(tag, encodedWopiSrc, eventArguments); });
 }
 
+void RemoteDocument::sendCommand(const std::string& localDocKey, const std::string& sessionId,
+                                 const std::string& command)
+{
+    // Remember the requesting view so the remote's replies reach it.
+    _commandSubscribers.emplace(localDocKey, sessionId);
+
+    if (!_session || !_session->sendCommand(command))
+        LOG_DBG("RemoteDoc: command [" << COOLProtocol::getAbbreviatedMessage(command)
+                                       << "] to [" << _docKey << "] was not sent");
+}
+
+void RemoteDocument::forwardCommandResult(const std::vector<char>& data)
+{
+    if (_commandSubscribers.empty())
+        return;
+
+    const std::string encodedWopiSrc = Uri::encode(_wopiSrc);
+    for (const auto& subscriber : _commandSubscribers)
+    {
+        // Reach the requesting view's DocumentBroker through any consumer
+        // entry that shares its docKey; all its links point at one broker.
+        std::shared_ptr<DocumentBroker> docBroker;
+        for (const auto& it : _consumers)
+        {
+            if (it.first.first == subscriber.first)
+            {
+                docBroker = it.second.docBroker.lock();
+                break;
+            }
+        }
+
+        if (!docBroker)
+            continue;
+
+        docBroker->addCallback(
+            [docBroker, sessionId = subscriber.second, encodedWopiSrc,
+             payload = data]()
+            { docBroker->sendRemoteDocumentCommandResult(sessionId, encodedWopiSrc, payload); });
+    }
+}
+
 void RemoteDocument::dumpState(std::ostream& os) const
 {
     os << "\n    docKey: " << _docKey
@@ -457,6 +522,9 @@ void RemoteDocument::dumpState(std::ostream& os) const
        << "\n    consumers: " << _consumers.size();
     for (const auto& it : _consumers)
         os << "\n      " << it.first.first << " tag: " << it.first.second;
+    os << "\n    commandSubscribers: " << _commandSubscribers.size();
+    for (const auto& it : _commandSubscribers)
+        os << "\n      " << it.first << " session: " << it.second;
     os << "\n    everConnected: " << _everConnected
        << "\n    reconnectAttempts: " << _reconnectAttempts
        << "\n    modified: " << _modified
@@ -542,6 +610,19 @@ void RemoteDocumentBroker::unsubscribeAsync(std::string wopiSrc, std::string acc
     addCallback([this, wopiSrc = std::move(wopiSrc), accessToken = std::move(accessToken),
                  localDocKey = std::move(localDocKey), tag = std::move(tag)]()
                 { unsubscribe(wopiSrc, accessToken, localDocKey, tag); });
+}
+
+void RemoteDocumentBroker::sendCommandAsync(std::string wopiSrc, std::string accessToken,
+                                            std::string localDocKey, std::string sessionId,
+                                            std::string command)
+{
+    if (!_threadStarted)
+        return;
+
+    addCallback([this, wopiSrc = std::move(wopiSrc), accessToken = std::move(accessToken),
+                 localDocKey = std::move(localDocKey), sessionId = std::move(sessionId),
+                 command = std::move(command)]()
+                { sendCommand(wopiSrc, accessToken, localDocKey, sessionId, command); });
 }
 
 void RemoteDocumentBroker::pollingThread()
@@ -696,6 +777,23 @@ void RemoteDocumentBroker::unsubscribe(const std::string& wopiSrc, const std::st
         it->second->shutdown();
         _remoteDocuments.erase(it);
     }
+}
+
+void RemoteDocumentBroker::sendCommand(const std::string& wopiSrc, const std::string& accessToken,
+                                       const std::string& localDocKey,
+                                       const std::string& sessionId, const std::string& command)
+{
+    ASSERT_CORRECT_THREAD();
+
+    const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+    const auto it = _remoteDocuments.find(makeKey(docKey, accessToken));
+    if (it == _remoteDocuments.end())
+    {
+        LOG_DBG("RemoteDoc: no remote document [" << docKey << "] to send a command to");
+        return;
+    }
+
+    it->second->sendCommand(localDocKey, sessionId, command);
 }
 
 void RemoteDocumentBroker::reject(const RemoteDocumentRequest& request, const std::string& kind)

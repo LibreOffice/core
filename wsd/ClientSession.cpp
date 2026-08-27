@@ -1478,6 +1478,25 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         docBroker->switchMode(client_from_this(), tokens[1]);
         return true;
     }
+    else if (tokens.equals(0, "remotedoccommand"))
+    {
+        // A read-only command for a subscribed remote document. It is routed
+        // to that remote's headless session inside wsd and never sent to the
+        // kit; the remote's reply comes back as remotedoccommandresult.
+        std::string encodedWopiSrc;
+        if (tokens.size() < 3 || !COOLProtocol::getTokenString(tokens[1], "wopisrc", encodedWopiSrc)
+            || encodedWopiSrc.empty())
+        {
+            sendTextFrameAndLogError("error: cmd=remotedoccommand kind=syntax");
+            return false;
+        }
+
+        // The inner command is everything after the wopisrc token.
+        const std::string prefix = tokens[0] + ' ' + tokens[1] + ' ';
+        const std::string inner = firstLine.substr(prefix.size());
+        docBroker->sendRemoteDocumentCommand(getId(), Uri::decode(encodedWopiSrc), inner);
+        return true;
+    }
 #endif // !MOBILEAPP && !WASMAPP
     else if (tokens.equals(0, "outlinestate") ||
              tokens.equals(0, "downloadas") ||

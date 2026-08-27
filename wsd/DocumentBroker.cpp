@@ -5029,6 +5029,32 @@ void DocumentBroker::sendRemoteDocumentEvent(const std::string& tag,
     _relatedDocuments.sendEvent(*this, tag, encodedWopiSrc, eventArguments);
 }
 
+void DocumentBroker::sendRemoteDocumentCommand(const std::string& sessionId,
+                                               const std::string& wopiSrc,
+                                               const std::string& command)
+{
+    _relatedDocuments.sendCommand(*this, sessionId, wopiSrc, command);
+}
+
+void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& sessionId,
+                                                     const std::string& encodedWopiSrc,
+                                                     const std::vector<char>& payload)
+{
+    ASSERT_CORRECT_THREAD();
+
+    const auto it = _sessions.find(sessionId);
+    if (it == _sessions.end())
+    {
+        LOG_DBG("No session [" << sessionId << "] for a remote document reply on [" << _docKey
+                               << ']');
+        return;
+    }
+
+    std::string frame = "remotedoccommandresult wopisrc=" + encodedWopiSrc + '\n';
+    frame.append(payload.begin(), payload.end());
+    it->second->sendBinaryFrame(frame.data(), frame.size());
+}
+
 void DocumentBroker::addToIncomingDocKeyChain(const std::string& docKeyChain)
 {
     _relatedDocuments.addToIncomingDocKeyChain(*this, docKeyChain);

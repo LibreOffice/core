@@ -70,6 +70,11 @@ public:
     /// Close the WebSocket. The remote node then reaps its session normally.
     void shutdownSession();
 
+    /// Sends a command to the remote document. Only commands that cannot
+    /// modify the document are allowed; anything else is dropped with a log.
+    /// Returns false when refused or when the session is not live.
+    bool sendCommand(const std::string& command);
+
     State state() const { return _state; }
 
     static std::string_view name(State state)
@@ -98,10 +103,6 @@ private:
     void onDisconnect() override;
 
     void sendHandshake();
-
-    /// Sends a command to the remote document. Only commands that cannot
-    /// modify the document are allowed; anything else is dropped with a log.
-    bool sendCommand(const std::string& command);
 
     std::weak_ptr<RemoteDocument> _remoteDocument;
 
@@ -141,6 +142,16 @@ public:
     /// of that docKey when the tag is "0", sending each an unsubscribed
     /// event. Returns true when the last consumer was removed.
     bool removeConsumer(const std::string& localDocKey, const std::string& tag);
+
+    /// Sends a read-only client command to the remote document on behalf of
+    /// one browser view, and remembers that view so the remote's replies are
+    /// routed back to it.
+    void sendCommand(const std::string& localDocKey, const std::string& sessionId,
+                     const std::string& command);
+
+    /// Forwards a raw frame from the remote document to every view that has
+    /// issued a command, wrapped as a remotedoccommandresult.
+    void forwardCommandResult(const std::vector<char>& data);
 
     size_t getConsumerCount() const { return _consumers.size(); }
 
@@ -186,6 +197,11 @@ private:
     /// Keyed by (consumer's docKey, link tag): one document may hold several
     /// links to the same remote document.
     std::map<std::pair<std::string, std::string>, Consumer> _consumers;
+
+    /// The browser views that have sent a command to this remote document,
+    /// as (consumer's docKey, session id) pairs. The remote's replies go back
+    /// to these views.
+    std::set<std::pair<std::string, std::string>> _commandSubscribers;
 
     std::shared_ptr<HeadlessClientSession> _session;
 
@@ -259,6 +275,12 @@ public:
     void unsubscribeAsync(std::string wopiSrc, std::string accessToken, std::string localDocKey,
                           std::string tag);
 
+    /// Routes a read-only client command from one browser view to the remote
+    /// document identified by the WOPISrc and access token. Callable from any
+    /// thread.
+    void sendCommandAsync(std::string wopiSrc, std::string accessToken, std::string localDocKey,
+                          std::string sessionId, std::string command);
+
     void dumpState(std::ostream& os) const override;
 
     /// How long invalidations are coalesced before one event is sent.
@@ -278,6 +300,9 @@ private:
     void subscribe(const RemoteDocumentRequest& request);
     void unsubscribe(const std::string& wopiSrc, const std::string& accessToken,
                      const std::string& localDocKey, const std::string& tag);
+    void sendCommand(const std::string& wopiSrc, const std::string& accessToken,
+                     const std::string& localDocKey, const std::string& sessionId,
+                     const std::string& command);
 
     /// Returns true when a subscription of the given consumer to the given
     /// target would close a loop through the links already in the registry.

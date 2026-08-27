@@ -1476,6 +1476,9 @@ class Socket {
 			this._map.fire('relateddocuments', {
 				documents: app.relatedDocuments,
 			});
+		} else if (textMsg.startsWith('remotedoccommandresult')) {
+			this._onRemoteDocCommandResult(textMsg, e as SlurpMessageEvent);
+			return;
 		} else if (textMsg.startsWith('presetconfigid:')) {
 			app.presetConfigId = textMsg.substring('presetconfigid:'.length).trim();
 		} else if (textMsg.startsWith('userpresetconfigid:')) {
@@ -1517,6 +1520,52 @@ class Socket {
 		} else {
 			this._map._docLayer._onMessage(textMsg, (e as SlurpMessageEvent).image);
 		}
+	}
+
+	// A reply from a remote document, wrapped as
+	// "remotedoccommandresult wopisrc=<enc>\n<inner frame>". Unwraps the
+	// header, then fires a remotedoccommandresult map event carrying the
+	// remote's WOPISrc and the inner frame as an ordinary (textMsg, imgBytes,
+	// imgIndex) triple, so a consumer reads it the way it reads any frame.
+	private _onRemoteDocCommandResult(
+		textMsg: string,
+		e: SlurpMessageEvent,
+	): void {
+		const imgBytes: Uint8Array | undefined = e.imgBytes;
+
+		// The header is the first line; it is all of textMsg for a text frame
+		// and just the wrapper line for a binary one.
+		const headerEnd = textMsg.indexOf('\n');
+		const header = headerEnd >= 0 ? textMsg.substring(0, headerEnd) : textMsg;
+
+		let wopiSrc = '';
+		for (const token of header.split(' ')) {
+			if (token.startsWith('wopisrc=')) {
+				wopiSrc = decodeURIComponent(token.substring('wopisrc='.length));
+				break;
+			}
+		}
+
+		let innerText: string;
+		let innerImgIndex = 0;
+		if (imgBytes !== undefined) {
+			// Binary frame: the inner frame starts at imgIndex, its own header
+			// line runs up to the next newline, and the bytes follow.
+			const start = e.imgIndex ?? 0;
+			let newline = start;
+			while (newline < imgBytes.length && imgBytes[newline] !== 10) newline++;
+			innerText = this._utf8ToString(imgBytes.subarray(start, newline));
+			innerImgIndex = newline < imgBytes.length ? newline + 1 : imgBytes.length;
+		} else {
+			innerText = headerEnd >= 0 ? textMsg.substring(headerEnd + 1) : '';
+		}
+
+		this._map.fire('remotedoccommandresult', {
+			wopiSrc: wopiSrc,
+			textMsg: innerText,
+			imgBytes: imgBytes,
+			imgIndex: innerImgIndex,
+		});
 	}
 
 	private _extractTextImg(e: SlurpMessageEvent): void {
