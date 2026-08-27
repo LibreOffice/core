@@ -548,7 +548,7 @@ bool checkOutput(
     SCROW nOutRowSize = e.Row() - s.Row() + 1;
     SCCOL nOutColSize = e.Col() - s.Col() + 1;
 
-    // Check if expected size iz smaller than actual size (and prevent a crash)
+    // Check if expected size is smaller than actual size (and prevent a crash)
     if (aCheck.size() < o3tl::make_unsigned(nOutRowSize) || aCheck[0].size() < o3tl::make_unsigned(nOutColSize))
     {
         // Dump the arrays to console, so we can compare

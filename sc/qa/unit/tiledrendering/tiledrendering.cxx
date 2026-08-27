@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPartHash)
         CPPUNIT_ASSERT(!pModelObj->getPartHash(it).isEmpty());
     }
 
-    // check part that it does not exists
+    // check part that it does not exist
     CPPUNIT_ASSERT(pModelObj->getPartHash(100).isEmpty());
 }
 
@@ -481,7 +481,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
     Scheduler::ProcessEventsToIdle();
 
-    // check that text edit view in view #1 has not be killed
+    // check that text edit view in view #1 has not been killed
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
 }
 
@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     Scheduler::ProcessEventsToIdle();
 
     // text edit a cell in view #1 inside the new tile and
-    // check that view #2 receive a tile invalidate message
+    // check that view #2 receives a tile invalidate message
     aView2.m_bInvalidateTiles = false;
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
