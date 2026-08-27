@@ -44,6 +44,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \
 			/p:opensslOutDir=$(gb_UnpackedTarball_workdir)/openssl \
 			/p:IncludeExternals=true \
+			/p:KillPython=false \
 			/p:zlibLib=$(gb_StaticLibrary_WORKDIR)/zlib.lib \
 			/p:zlibNgDir=$(gb_UnpackedTarball_workdir)/zlib \
 			/p:sqlite3Dir=$(gb_UnpackedTarball_workdir)/sqlite3 \
