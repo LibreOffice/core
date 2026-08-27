@@ -111,7 +111,7 @@ public class ToDo {
         private static final String STRING_SEPARATOR = "/";
 
 
-        /** The constructor of the inner class has a XComponenContext parameter.
+        /** The constructor of the inner class has an XComponentContext parameter.
          * @param xCompContext the initial component context
          */
         public ToDoImpl(XComponentContext xCompContext) {
@@ -559,8 +559,8 @@ public class ToDo {
                                                    intRow,ToDoImpl.INT_COLUMN_ENDDATE));
                                     }
                                     else {
-                                        // Set the start date with the absolute s
-                                        // tart date
+                                        // Set the start date with the absolute
+                                        // start date
                                         gregCalStartDate = (GregorianCalendar)
                                             gregCalAbsoluteStartDate.clone();
                                     }
@@ -912,7 +912,7 @@ public class ToDo {
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
      * <p>
-     * @return  returns a <code>XSingleComponentFactory</code> for creating
+     * @return  returns an <code>XSingleComponentFactory</code> for creating
      *          the component
      * @param   sImplName the name of the implementation for which a
      *          service is desired

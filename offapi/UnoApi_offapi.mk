@@ -611,7 +611,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart2,\
 	ChartDocumentWrapper \
 	ChartType \
 	ChartTypeManager \
-	ChartTypeTemplate\
+	ChartTypeTemplate \
 	CoordinateSystem \
 	CoordinateSystemType \
 	DataPoint \
@@ -3378,7 +3378,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	FunctionArgument \
 	FunctionCategory \
 	GeneralFunction \
-       GeneralFunction2 \
+	GeneralFunction2 \
 	GoalResult \
 	IconSetFormatEntry \
 	IconSetType \
