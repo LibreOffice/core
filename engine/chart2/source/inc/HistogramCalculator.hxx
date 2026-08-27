@@ -14,6 +14,9 @@
 
 namespace chart
 {
+/** Largest number of bins a histogram is partitioned into. Higher counts are capped. */
+constexpr sal_Int32 MAX_HISTOGRAM_BINS = 10000;
+
 enum class HistogramBinType
 {
     Normal,
