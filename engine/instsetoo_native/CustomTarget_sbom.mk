@@ -45,7 +45,8 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 	EXTERNALSFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Externals)) \
 	EXTERNALSTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_External_StaticLink)) \
 	EXTERNALPACKAGESTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_ExternalPackage_StaticLink)) \
-	&& $(call gb_ExternalExecutable_get_command,python) $(instsetoo_create_SBOM) \
+	&& $(if $(filter LINUX,$(OS_FOR_BUILD)),$(gb_Python_PRECOMMAND) $(INSTROOT_FOR_BUILD)/program/python.bin,$(call gb_ExternalExecutable_get_command,python)) \
+		$(instsetoo_create_SBOM) \
 		$(gb_CustomTarget_workdir)/instsetoo_native/sbom \
 		$(gb_CustomTarget_workdir)/readlicense_oo/license/LICENSE.html \
 		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
