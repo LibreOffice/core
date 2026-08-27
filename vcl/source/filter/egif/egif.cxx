@@ -359,7 +359,7 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
 
 void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
 {
-    // writer PrefSize in 100th-mm as ApplicationExtension
+    // write PrefSize in 100th-mm as ApplicationExtension
     if( rSize100.Width() && rSize100.Height() )
     {
         m_rGIF.WriteUChar( 0x21 );
@@ -473,7 +473,7 @@ void GIFWriter::WriteAccess()
     if( !bNative )
         pBuffer.reset(new sal_uInt8[ nWidth ]);
 
-    assert(bStatus && "should not calling here if status is bad");
+    assert(bStatus && "should not be calling here if status is bad");
     assert( 8 == m_pAcc->GetBitCount() && m_pAcc->HasPalette()
             && "by the time we get here, the image should be in palette format");
     if( !(bStatus && ( 8 == m_pAcc->GetBitCount() ) && m_pAcc->HasPalette()) )

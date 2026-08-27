@@ -2266,7 +2266,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, TestGetOpenTypeMathConstant)
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
 
-    // Source Han Sans Font doesn't returns OpenType Math Constant
+    // Source Han Sans Font doesn't return OpenType Math Constant
     bool bAdded = addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans");
     CPPUNIT_ASSERT_MESSAGE("Failed to load Source Han Sans Font", bAdded);
 

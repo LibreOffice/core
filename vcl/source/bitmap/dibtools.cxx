@@ -968,7 +968,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
         // some clipboard entries have alpha mask on zero to say that there is
         // no alpha; do only use this when the other masks are set. The MS docu
         // says that masks are only to be set when bV5Compression is set to
-        // BI_BITFIELDS, but there seem to exist a wild variety of usages...
+        // BI_BITFIELDS, but there seems to exist a wild variety of usages...
         if((bRedSet || bGreenSet || bBlueSet) && (0 == aHeader.nV5AlphaMask))
         {
             bAlphaPossible = false;
@@ -1692,7 +1692,7 @@ bool ReadRawDIB(
 {
     if (rTarget.HasAlpha())
     {
-        // Need to preserve the targets alpha information
+        // Need to preserve the target's alpha information
         auto [ aTmp, aTmpMask ] = rTarget.SplitIntoColorAndAlpha();
         {
             BitmapScopedWriteAccess pWriteAccess(aTmp);
