@@ -14,6 +14,23 @@
 
 namespace chart
 {
+namespace
+{
+/** Bins of the given width needed to span the given range, capped at MAX_HISTOGRAM_BINS and
+    at least one. Dividing in double saturates at the cap instead of overflowing the cast. */
+sal_Int32 lcl_binCountForWidth(double fRange, double fBinWidth)
+{
+    if (!(fRange > 0.0) || !(fBinWidth > 0.0))
+        return 1;
+
+    const double fBins = std::ceil(fRange / fBinWidth);
+    if (!(fBins >= 1.0))
+        return 1;
+
+    return sal_Int32(std::min(fBins, double(MAX_HISTOGRAM_BINS)));
+}
+}
+
 HistogramCalculator::HistogramCalculator() = default;
 
 void HistogramCalculator::computeBinFrequencyHistogram(
@@ -112,13 +129,12 @@ void HistogramCalculator::computeBinFrequencyHistogram(
         if (nFrequencyType == 1 && fFixedBinWidth > 0.0)
         {
             mfBinWidth = fFixedBinWidth;
-            mnBins
-                = static_cast<sal_Int32>(std::ceil((fEffectiveMax - fEffectiveMin) / mfBinWidth));
+            mnBins = lcl_binCountForWidth(fEffectiveMax - fEffectiveMin, mfBinWidth);
             bResolved = true;
         }
         else if (nFrequencyType == 2 && nFixedBinCount > 0)
         {
-            mnBins = nFixedBinCount;
+            mnBins = std::min<sal_Int32>(nFixedBinCount, MAX_HISTOGRAM_BINS);
             mfBinWidth = (fEffectiveMax - fEffectiveMin) / mnBins;
             bResolved = true;
         }
@@ -131,11 +147,12 @@ void HistogramCalculator::computeBinFrequencyHistogram(
             double fStdDev = std::sqrt(fVariance);
 
             mfBinWidth = (3.5 * fStdDev) / std::cbrt(nValidCount);
-            mnBins
-                = static_cast<sal_Int32>(std::ceil((fEffectiveMax - fEffectiveMin) / mfBinWidth));
+            mnBins = lcl_binCountForWidth(fEffectiveMax - fEffectiveMin, mfBinWidth);
         }
 
-        mnBins = std::max<sal_Int32>(mnBins, 1); // Ensure at least one bin
+        // A capped count or a zero width no longer spans the range, so divide it evenly.
+        if (!(mfBinWidth > 0.0) || mnBins == MAX_HISTOGRAM_BINS)
+            mfBinWidth = (fEffectiveMax - fEffectiveMin) / mnBins;
 
         maBinRanges.reserve(mnBins + (bEffectiveUnderflow ? 1 : 0) + (bEffectiveOverflow ? 1 : 0));
         maBinTypes.reserve(mnBins + (bEffectiveUnderflow ? 1 : 0) + (bEffectiveOverflow ? 1 : 0));

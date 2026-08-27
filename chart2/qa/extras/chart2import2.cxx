@@ -1297,6 +1297,37 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountLiveUpdate)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aUpdatedLabels.getLength());
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinWidthFarBelowRangeIsBounded)
+{
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    chart2::ScaleData aScaleData = xXAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xAxisCategories(
+        aScaleData.Categories->getValues(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisCategories.is());
+
+    Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
+    xProperties->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(1)));
+
+    // The values span roughly eight units, so bins a millionth wide would number in the
+    // millions. The count stays within the limit the calculator caps it at.
+    xProperties->setPropertyValue(u"BinWidth"_ustr, uno::Any(0.000001));
+
+    const Sequence<OUString> aLabels = xAxisCategories->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10000), aLabels.getLength());
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_ODS)
 {
     // ODF: fixed number of bins survives export/reload at the model level.
