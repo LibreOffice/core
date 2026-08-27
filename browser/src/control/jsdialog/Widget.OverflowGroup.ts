@@ -57,10 +57,15 @@ function createMoreButton(
 	more: MoreOptions,
 	groupLabel: HTMLElement,
 ): HTMLElement {
+	// The group's own label, not its id: a screen reader read out
+	// "More options for home-font".
+	const groupName = groupLabel?.textContent?.trim() || id;
+	const moreOptionsLabel = _('More options for {1}').replace('{1}', groupName);
+
 	const moreOptionsButton = document.createElement('button');
 	moreOptionsButton.className = 'ui-content unobutton';
 	moreOptionsButton.id = `${id}-more-button`;
-	moreOptionsButton.setAttribute('aria-label', `More options for ${id}`);
+	moreOptionsButton.setAttribute('aria-label', moreOptionsLabel);
 	moreOptionsButton.setAttribute('aria-haspopup', 'dialog');
 
 	const img = document.createElement('img');
@@ -72,7 +77,7 @@ function createMoreButton(
 	unoToolButtonDiv.id = `${id}-more`;
 	unoToolButtonDiv.className = 'unotoolbutton ui-overflow-group-more';
 	unoToolButtonDiv.tabIndex = -1;
-	unoToolButtonDiv.setAttribute('data-cooltip', `More options for ${id}`);
+	unoToolButtonDiv.setAttribute('data-cooltip', moreOptionsLabel);
 	unoToolButtonDiv.appendChild(moreOptionsButton);
 
 	const expanderIconRightDiv = document.createElement('div');
