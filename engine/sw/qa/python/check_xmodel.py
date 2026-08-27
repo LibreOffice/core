@@ -38,16 +38,17 @@ class TestXModel(unittest.TestCase):
         p8 = PropertyValue(Name="Replaceable", Value=True)
         xDoc.setArgs([p1, p2, p3, p4, p5, p6, p7, p8])
 
-        # Make sure that all properties are returned with getArgs()
+        # Make sure that all properties are returned with getArgs(); a media descriptor is
+        # only a name and a value, so its PropertyValue's Handle and State mean nothing
         args = xDoc.getArgs()
-        self.assertTrue(p1 in args)
-        self.assertTrue(p2 in args)
-        self.assertTrue(p3 in args)
-        self.assertTrue(p4 in args)
-        self.assertTrue(p5 in args)
-        self.assertTrue(p6 in args)
-        self.assertTrue(p7 in args)
-        self.assertTrue(p8 in args)
+        self.assertTrue(any(p1.Name == arg.Name and p1.Value == arg.Value for arg in args))
+        self.assertTrue(any(p2.Name == arg.Name and p2.Value == arg.Value for arg in args))
+        self.assertTrue(any(p3.Name == arg.Name and p3.Value == arg.Value for arg in args))
+        self.assertTrue(any(p4.Name == arg.Name and p4.Value == arg.Value for arg in args))
+        self.assertTrue(any(p5.Name == arg.Name and p5.Value == arg.Value for arg in args))
+        self.assertTrue(any(p6.Name == arg.Name and p6.Value == arg.Value for arg in args))
+        self.assertTrue(any(p7.Name == arg.Name and p7.Value == arg.Value for arg in args))
+        self.assertTrue(any(p8.Name == arg.Name and p8.Value == arg.Value for arg in args))
 
         xDoc.close(True)
 
