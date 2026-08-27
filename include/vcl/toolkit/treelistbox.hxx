@@ -237,9 +237,9 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox : public Control,
     bool mbHoverSelection; // Make mouse over a row "select" a row like a single-click normally does
     bool mbSelectingByHover; // true during "Select" if it was due to hover
     bool mbIsTextColumEnabled; // true if the property name text-column is enabled
-    sal_Int8        mnClicksToToggle; // 0 == Click on a row not toggle its checkbox.
-                                      // 1 == Every click on row toggle its checkbox.
-                                      // 2 == First click select, second click toggle.
+    sal_Int8        mnClicksToToggle; // 0 == Click on a row does not toggle its checkbox.
+                                      // 1 == Every click on row toggles its checkbox.
+                                      // 2 == First click selects, second click toggles.
 
     SvTreeListEntry* m_pHdlEntry;
 
@@ -722,7 +722,7 @@ public:
     void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }
     bool            GetHoverSelection() const { return mbHoverSelection; }
 
-    // to get enable or disable the text-column
+    // to enable or disable the text-column
     void           SetTextColumnEnabled(bool bEnable) { mbIsTextColumEnabled = bEnable; }
 
     // only true during Select if the Select is due to a Hover

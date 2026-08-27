@@ -212,7 +212,7 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
 }
 
 /**
- * @descr  Get division which footnote table contains current footnote content, copy from lwp source code
+ * @descr  Get division whose footnote table contains current footnote content, copy from lwp source code
  */
 LwpDocument* LwpFootnote::GetFootnoteTableDivision()
 {
@@ -287,7 +287,7 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
 }
 
 /**
- * @descr  Get division which endnote table contains current endnote content, copy from lwp source code
+ * @descr  Get division whose endnote table contains current endnote content, copy from lwp source code
  */
 LwpDocument* LwpFootnote::GetEndnoteDivision(LwpDocument* pPossible)
 {
@@ -378,7 +378,7 @@ LwpContent* LwpFootnote::FindFootnoteContent()
 {
     LwpContent* pContent = dynamic_cast<LwpContent*>(m_Content.obj().get());
     //if the content has layout, the content has footnote contents;
-    //or looking for the celllayout and return the footnote contents.
+    //or look for the celllayout and return the footnote contents.
     if (pContent && pContent->GetLayout(nullptr).is())
         return pContent;
 
