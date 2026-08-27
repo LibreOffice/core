@@ -560,6 +560,8 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.microsoft.com/office/powerpoint/2010/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("p15"),
                        BAD_CAST("http://schemas.microsoft.com/office/powerpoint/2012/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("p188"),
+                       BAD_CAST("http://schemas.microsoft.com/office/powerpoint/2018/8/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dgm"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/diagram"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c15"),
