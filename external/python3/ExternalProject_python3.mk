@@ -45,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \
 			/p:opensslOutDir=$(gb_UnpackedTarball_workdir)/openssl \
 			/p:zlibDir=$(gb_UnpackedTarball_workdir)/zlib \
+			/p:KillPython=false \
 			/p:sqlite3Dir=$(gb_UnpackedTarball_workdir)/sqlite3 \
 			/p:lzmaDir=$(gb_UnpackedTarball_workdir)/lzma/ \
 			/p:mpdecimalDir=$(gb_UnpackedTarball_workdir)/python3/Modules/_decimal/ \
