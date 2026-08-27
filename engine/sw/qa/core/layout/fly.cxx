@@ -9,12 +9,21 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <editeng/lrspitem.hxx>
+
 #include <IDocumentLayoutAccess.hxx>
 #include <anchoredobject.hxx>
 #include <flyfrms.hxx>
+#include <fmtfsize.hxx>
+#include <fmtornt.hxx>
+#include <frameformats.hxx>
+#include <frmatr.hxx>
+#include <frmmgr.hxx>
+#include <itabenum.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <sortedobjs.hxx>
+#include <swtblfmt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <bodyfrm.hxx>
@@ -112,6 +121,61 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyRelWithRounding)
     // - Actual  : 5714
     // i.e. 5714.88 was truncated, not rounded.
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(5715), nFlyWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFlyAutoWidthManuallyAlignedTable)
+{
+    // Given a text frame with an automatic width that contains a manually aligned table:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->GoPrevCell();
+    pWrtShell->Insert(u"A1"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"A2"_ustr);
+    // The table is 2880 twips wide and manually aligned 1440 twips from the left:
+    SwTableFormat* pTableFormat = (*pDoc->GetTableFrameFormats())[0];
+    SwFormatFrameSize aTableSize(pTableFormat->GetFrameSize());
+    aTableSize.SetWidth(2880);
+    aTableSize.SetWidthPercent(0);
+    SvxLRSpaceItem aLRSpace(pTableFormat->GetLRSpace());
+    aLRSpace.SetLeft(SvxIndentValue::twips(1440));
+    SwAttrSet aSet(pTableFormat->GetAttrSet());
+    aSet.Put(aTableSize);
+    aSet.Put(SwFormatHoriOrient(0, css::text::HoriOrientation::NONE));
+    aSet.Put(aLRSpace);
+    pDoc->SetAttr(aSet, *pTableFormat);
+    // Select cell:
+    pWrtShell->SelAll();
+    // Select table:
+    pWrtShell->SelAll();
+    // When wrapping the table in a text frame whose width comes from its content:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    SwFormatFrameSize aFlySize(SwFrameSize::Minimum, aMgr.GetSize().Width(),
+                               aMgr.GetSize().Height());
+    aFlySize.SetWidthSizeType(SwFrameSize::Variable);
+    aMgr.GetAttrSet().Put(aFlySize);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+
+    // Then make sure the text frame is wide enough for the table's left offset plus the table:
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage->GetSortedObjs());
+    SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pFlyFrame = rPageObjs[0]->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pFlyFrame);
+    SwTwips nFlyWidth = pFlyFrame->getFramePrintArea().Width();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4320
+    // - Actual  : 9972
+    // i.e. the text frame became as wide as the page text area.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(2880 + 1440), nFlyWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testShapeLeftPaddingOffPage)
