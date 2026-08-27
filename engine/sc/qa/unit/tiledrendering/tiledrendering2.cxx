@@ -40,6 +40,8 @@
 #include <editeng/editview.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
@@ -761,6 +763,51 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkOverSelectionSavedToOOXM
     // the whole cell carries the link now, and the text it displays is unchanged
     CPPUNIT_ASSERT_EQUAL(u"[Docs and references](http://www.example.com/)"_ustr,
                          lcl_getCellTextWithLinks(*pReloadedDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellAllowsCursorInTheMiddle)
+{
+    // A cell whose whole content is a hyperlink holds that content as one field, and a
+    // field takes up a single character, with no positions between its start and its end.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("foo@example.com", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    lcl_selectInCell(pView, 0, 15);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"foo@example.com"_ustr, u"mailto:foo@example.com"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    CPPUNIT_ASSERT_EQUAL(u"[foo@example.com](mailto:foo@example.com)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+
+    // When editing that cell again:
+    lcl_selectInCell(pView, 0, 0);
+
+    // Then its text is plain again, one character per letter of the address, so the cursor
+    // can be placed anywhere in it, not just before or after one field character.
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 15
+    // - Actual  : 1
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetEditActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15), pEditView->getEditEngine().GetTextLen(0));
+
+    const SfxItemSet aAttribs = pEditView->getEditEngine().GetAttribs(ESelection::All());
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, aAttribs.GetItemState(EE_FEATURE_FIELD, false));
+
+    // Committing unchanged re-creates the field, the same way committing a freshly typed
+    // address already does.
+    ScModule::get()->InputEnterHandler();
+    CPPUNIT_ASSERT_EQUAL(u"[foo@example.com](mailto:foo@example.com)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
 }
 
 // The automatic font color of a shape being edited has to be resolved against the fill of

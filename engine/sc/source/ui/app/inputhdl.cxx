@@ -35,6 +35,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
@@ -2775,6 +2776,14 @@ bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInp
             //  -> also call if attributes are unchanged
             UpdateSpellSettings( true ); // uses pLastPattern
 
+            // A cell recognized as an email or web address holds its whole content as one
+            // field, and a field has no cursor positions inside it, only before and after,
+            // so the user could never place the cursor in the middle of the address to edit
+            // it. Turn any field back into plain text before editing starts, the same text
+            // CompleteAutoCorrect() already produces when it turns plain text into a field,
+            // so committing the edit re-creates the field if the address is still intact.
+            RemoveURLFieldsFromEditEngine();
+
             // Fill EditEngine
             OUString aStr;
             if (bTextValid)
@@ -4779,6 +4788,50 @@ Size ScInputHandler::GetTextSize()
         aSize = Size( mpEditEngine->CalcTextWidth(), mpEditEngine->GetTextHeight() );
 
     return aSize;
+}
+
+void ScInputHandler::RemoveURLFieldsFromEditEngine()
+{
+    if (!mpEditEngine)
+        return;
+
+    SfxItemSet aSet = mpEditEngine->GetAttribs(ESelection::All());
+    if (aSet.GetItemState(EE_FEATURE_FIELD, false) == SfxItemState::DEFAULT)
+        return;
+
+    sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
+    for (sal_Int32 nPar = 0; nPar < nParCnt; ++nPar)
+    {
+        std::vector<sal_Int32> aPortionEnds;
+        mpEditEngine->GetPortions( nPar, aPortionEnds );
+
+        // Replace from the last portion back to the first, so an earlier portion's
+        // position is not shifted by a field replaced with a differently sized text.
+        sal_Int32 nPortionStart = 0;
+        std::vector<std::pair<sal_Int32, sal_Int32>> aPortionRanges;
+        for (sal_Int32 nPortionEnd : aPortionEnds)
+        {
+            aPortionRanges.emplace_back( nPortionStart, nPortionEnd );
+            nPortionStart = nPortionEnd;
+        }
+
+        for (auto aRangeIt = aPortionRanges.rbegin(); aRangeIt != aPortionRanges.rend(); ++aRangeIt)
+        {
+            if (aRangeIt->second - aRangeIt->first != 1)
+                continue; // a field is always exactly one character wide
+
+            SfxItemSet aPortionSet = mpEditEngine->GetAttribs( nPar, aRangeIt->first, aRangeIt->second );
+            const SvxFieldItem* pFieldItem = aPortionSet.GetItemIfSet( EE_FEATURE_FIELD );
+            if (!pFieldItem)
+                continue;
+
+            if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField()))
+            {
+                mpEditEngine->QuickInsertText( pUrlField->GetRepresentation(),
+                    ESelection( nPar, aRangeIt->first, nPar, aRangeIt->second ) );
+            }
+        }
+    }
 }
 
 bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )

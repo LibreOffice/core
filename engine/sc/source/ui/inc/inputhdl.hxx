@@ -153,6 +153,7 @@ private:
      */
     bool            StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
                                ScEditEngineDefaulter* pTopEngine, const ErrorHdl& errorHdl);
+    void            RemoveURLFieldsFromEditEngine();
     void            RemoveSelection();
     bool            StartsLikeFormula( std::u16string_view rStr ) const;
     void            UpdateFormulaMode();
