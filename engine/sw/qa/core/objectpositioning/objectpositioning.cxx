@@ -610,6 +610,32 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignedVmlShapesFlushAtCellEdges)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"LeftMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, u"RightMargin"_ustr));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFlyAutoWidthKeptInsideCell)
+{
+    // A table cell holds a grow-with-content frame that follows the text flow and is aligned
+    // to the right edge of the cell text area. The content of the frame is a table that is
+    // wider than the cell.
+    createSwDoc("aligned-objects-in-cell.docx");
+    uno::Reference<text::XTextFramesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xFrames->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(getProperty<bool>(xFrame, u"IsFollowingTextFlow"_ustr));
+
+    // The frame stays inside the cell text area, which runs from 1824 to 6810, keeps a margin
+    // of its own border and padding width (262 twips) on the left, and stays aligned to the
+    // right edge of the cell text area.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4724
+    // - Actual  : 5248
+    // Only the content area of the frame was limited to the cell text area, so the frame
+    // overshot the cell by its own border and padding width and was clipped and moved off
+    // the edge it is aligned to.
+    assertXPath(pXmlDoc, "(//fly[infos])[1]/infos/bounds", "width", u"4724");
+    assertXPath(pXmlDoc, "(//fly[infos])[1]/infos/bounds", "right", u"6809");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

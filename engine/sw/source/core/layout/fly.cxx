@@ -162,7 +162,7 @@ SwTwips GetFlyAnchorBottom(const SwFlyFrame& rFly, const SwFrame& rAnchor)
 }
 }
 
-static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame );
+static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame, SwTwips nBorderAndPadding );
 
 SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch, bool bFollow ) :
     SwLayoutFrame( pFormat, pSib ),
@@ -1667,7 +1667,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
             {
                 // #i9046# Autowidth for fly frames
-                const SwTwips nAutoWidth = lcl_CalcAutoWidth( *this );
+                const SwTwips nAutoWidth = lcl_CalcAutoWidth( *this, nLR );
                 if ( nAutoWidth )
                 {
                     if( SwFrameSize::Minimum == rFrameSz.GetWidthSizeType() )
@@ -2686,7 +2686,7 @@ bool SwFlyFrame::IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize)
     if (bAutosizeWidth)
     {
         const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
-        const SwTwips nAutoWidth = lcl_CalcAutoWidth( *this );
+        const SwTwips nAutoWidth = lcl_CalcAutoWidth( *this, nLR );
         nMinFrameWidth = nAutoWidth + nLR;
 
         if (aTargetSize.Width() < nMinFrameWidth)
@@ -3176,7 +3176,7 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
     return aRet;
 }
 
-static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
+static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame, SwTwips nBorderAndPadding )
 {
     SwTwips nRet = 0;
     SwTwips nMin = 0;
@@ -3191,7 +3191,7 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     {
         if ( pFrame->IsSctFrame() )
         {
-            nMin = lcl_CalcAutoWidth( *static_cast<const SwSectionFrame*>(pFrame) );
+            nMin = lcl_CalcAutoWidth( *static_cast<const SwSectionFrame*>(pFrame), 0 );
         }
         if ( pFrame->IsTextFrame() )
         {
@@ -3241,8 +3241,33 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     if (rFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA))
     {
         const SwFrame* pFrameRect = nullptr;
+        // The width that is taken off the parent width when the frame is kept inside a table
+        // cell. It covers the border and padding of the frame itself, so that the whole frame
+        // fits the cell text area, and a margin of the same size between the frame and the
+        // edge of the cell text area on the side away from the alignment.
+        SwTwips nReserved = 0;
         if (rFrame.IsFlyFrame())
-            pFrameRect = static_cast<const SwFlyFrame*>(&rFrame)->GetAnchorFrame();
+        {
+            const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(&rFrame);
+            pFrameRect = pFly->GetAnchorFrame();
+            // A frame that follows the text flow inside a table cell is kept inside the cell
+            // text area. The anchor frame is the anchor paragraph, whose print area leaves out
+            // the paragraph indents, so the enclosing cell frame provides the width instead.
+            if (pFrameRect && pFrameRect->IsInTab()
+                && pFly->GetFormat()->GetFollowTextFlow().GetValue())
+            {
+                const SwFrame* pCellFrame = pFrameRect->GetUpper();
+                while (pCellFrame && !pCellFrame->IsCellFrame())
+                    pCellFrame = pCellFrame->GetUpper();
+                if (pCellFrame)
+                {
+                    pFrameRect = pCellFrame;
+                    // One copy is the frame's own border and padding, the other is the margin
+                    // that the frame keeps inside the cell text area.
+                    nReserved = 2 * nBorderAndPadding;
+                }
+            }
+        }
         else
         {
             if (const SwFrame* pLower = rFrame.Lower())
@@ -3251,6 +3276,10 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
         if (pFrameRect)
         {
             SwTwips nParentWidth = rFrame.IsVertical() ? pFrameRect->getFramePrintArea().Height() : pFrameRect->getFramePrintArea().Width();
+            // Inside a cell the reserve is taken off the cell width. A width of zero outside a
+            // cell stays zero and means that there is no automatic width.
+            if (nReserved > 0)
+                nParentWidth = std::max<SwTwips>(nParentWidth - nReserved, MINFLY);
             if (nParagraphCount > 1 || nRet > nParentWidth)
             {
                 return nParentWidth;
