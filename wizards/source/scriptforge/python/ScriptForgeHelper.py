@@ -253,8 +253,9 @@ def _SF_Session__OpenURLInBrowser(url: str):    # Used by SF_Session.OpenURLInBr
     """
     try:
         webbrowser.open(url, new = 2)
-    finally:
-        return None
+    except Exception:   # whatever happened, continue the execution ...
+        pass
+    return None
 
 
 # #################################################################
