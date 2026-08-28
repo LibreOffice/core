@@ -30,6 +30,7 @@
 
 #include <map>
 #include <memory>
+#include <patattr.hxx>
 #include <unordered_map>
 #include <o3tl/sorted_vector.hxx>
 
@@ -723,6 +724,8 @@ public:
     sal_uInt16   GetXFIndex() const { return maXFId.mnXFIndex; }
     /** Returns the number of columns represented by this record. */
     sal_uInt16   GetColCount() const { return mnLastXclCol - mnFirstXclCol + 1; }
+    /** Returns the most used cell format of the column(s), which is its default format. */
+    const ScPatternAttr* GetDefPattern() const { return maDefPattern.getScPatternAttr(); }
 
     /** Returns true, if the column has default format and width. Also sets mbCustomWidth */
     bool                IsDefault( const XclExpDefcolwidth& rDefColWidth );
@@ -735,6 +738,7 @@ private:
 
 private:
     XclExpXFId          maXFId;             /// The XF identifier for column default format.
+    CellAttributeHolder maDefPattern;       /// The cell format the XF identifier was made from.
     bool                mbCustomWidth;      /// True = Column width is different from default width
     sal_uInt16          mnWidth;            /// Excel width of the column.
     sal_uInt16          mnScWidth;          /// Calc width of the column.
@@ -768,6 +772,10 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
     sal_uInt8           GetHighestOutlineLevel() const { return mnHighestOutlineLevel; }
     double              GetDefColWidth() const { return maDefcolwidth.GetValue(); }
+    /** Returns the default cell format of the passed column. One record per column exists
+        until Finalize() merges columns that share a format, so before that the passed column
+        is the record index. */
+    const ScPatternAttr* GetDefPattern( SCCOL nScCol ) const;
 
 private:
     typedef XclExpRecordList< XclExpColinfo >   XclExpColinfoList;
@@ -918,6 +926,9 @@ public:
     void                AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase );
     /** Forces insertion of all ROW records before the passed row. */
     void                CreateRows( SCROW nFirstFreeScRow );
+    /** Records that the passed row exists and holds no cell. A ROW record is inserted only
+        where the row settings differ from the row before it. */
+    void                CreateEmptyRow( SCROW nScRow );
 
     /** Converts all XF identifiers into the Excel XF indexes and calculates default formats.
         @param rDefRowData  (out-param) The default row format is returned here.

@@ -1695,8 +1695,8 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     SCTAB nScTab = GetCurrScTab();
 
     // column default format
-    maXFId.mnXFId = GetXFBuffer().Insert(
-        rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ), GetDefApiScript() );
+    maDefPattern.setScPatternAttr( rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ) );
+    maXFId.mnXFId = GetXFBuffer().Insert( maDefPattern.getScPatternAttr(), GetDefApiScript() );
 
     // column width. If column is hidden then we should return real value (not zero)
     sal_uInt16 nScWidth = rDoc.GetColWidth( nScCol, nScTab, false );
@@ -1801,6 +1801,12 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
            mnHighestOutlineLevel = maOutlineBfr.GetLevel();
         }
     }
+}
+
+const ScPatternAttr* XclExpColinfoBuffer::GetDefPattern( SCCOL nScCol ) const
+{
+    const XclExpColinfo* pColInfo = maColInfos.GetRecord( static_cast< size_t >( nScCol ) );
+    return pColInfo ? pColInfo->GetDefPattern() : nullptr;
 }
 
 void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
@@ -2271,6 +2277,11 @@ void XclExpRowBuffer::AppendCell( XclExpCellRef const & xCell, bool bIsMergedBas
     GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell, bIsMergedBase );
 }
 
+void XclExpRowBuffer::CreateEmptyRow( SCROW nScRow )
+{
+    GetOrCreateRow( static_cast< sal_uInt32 >( nScRow ), true );
+}
+
 void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
 {
     if( nFirstFreeScRow > 0 )
@@ -2575,6 +2586,13 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
 
 namespace {
 
+/** The reach of a column's default format, and whether that format merges cells. */
+struct XclExpColDefault
+{
+    SCCOL               nLastEqualScCol;    /// Last column whose default format is the same one.
+    bool                bMergeFree;         /// True = the format holds no merge and no overlap.
+};
+
 /** One area of the used area of a sheet: a range of columns of one row that share a format,
     with the cell at its start. */
 struct XclExpUsedArea
@@ -2584,6 +2602,48 @@ struct XclExpUsedArea
     ScRefCellValue      aScCell;
     CellAttributeHolder aPattern;
 };
+
+/** Reads the default format of every column from 0 to nMaxScCol, and works out how far to the
+    right each of those formats stays the same. */
+std::vector< XclExpColDefault > lcl_GetColumnDefaults(
+        const XclExpColinfoBuffer& rColInfoBuffer, SCCOL nMaxScCol )
+{
+    std::vector< XclExpColDefault > aColDefaults( nMaxScCol + 1, { nMaxScCol, false } );
+    for( SCCOL nScCol = nMaxScCol; nScCol >= 0; --nScCol )
+    {
+        const ScPatternAttr* pDefPattern = rColInfoBuffer.GetDefPattern( nScCol );
+        aColDefaults[ nScCol ].nLastEqualScCol =
+            (nScCol < nMaxScCol) && ScPatternAttr::areSame( pDefPattern, rColInfoBuffer.GetDefPattern( nScCol + 1 ) )
+                ? aColDefaults[ nScCol + 1 ].nLastEqualScCol
+                : nScCol;
+        if( pDefPattern )
+        {
+            const SfxItemSet& rItemSet = pDefPattern->GetItemSet();
+            aColDefaults[ nScCol ].bMergeFree = !rItemSet.Get( ATTR_MERGE ).IsMerged()
+                && !rItemSet.Get( ATTR_MERGE_FLAG ).IsOverlapped();
+        }
+    }
+    return aColDefaults;
+}
+
+/** True, if every area of the passed row is a blank cell that carries the default format of
+    its own columns. XclExpRow::Finalize drops the records of such cells again, so the row can
+    go without any. */
+bool lcl_RowWritesNoCell( const std::vector< XclExpUsedArea >& rRowAreas,
+        const std::vector< XclExpColDefault >& rColDefaults, const XclExpColinfoBuffer& rColInfoBuffer )
+{
+    for( const XclExpUsedArea& rArea : rRowAreas )
+    {
+        if( (rArea.aScCell.getType() != CELLTYPE_NONE)
+            || !rArea.aPattern
+            || !rColDefaults[ rArea.nScCol ].bMergeFree
+            || (rColDefaults[ rArea.nScCol ].nLastEqualScCol < rArea.nLastScCol)
+            || !ScPatternAttr::areSame( rArea.aPattern.getScPatternAttr(),
+                                        rColInfoBuffer.GetDefPattern( rArea.nScCol ) ) )
+            return false;
+    }
+    return true;
+}
 
 } // namespace
 
@@ -2670,8 +2730,15 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     // activate the correct segment and sub segment at the progress bar
     GetProgressBar().ActivateCreateRowsSegment();
 
-    // the areas of one row are collected first, so that the row can be looked at as a whole
+    const std::vector< XclExpColDefault > aColDefaults = lcl_GetColumnDefaults( maColInfoBfr, nMaxScCol );
+
+    // a row is judged as a whole, so its areas are collected before any record is made
     std::vector< XclExpUsedArea > aRowAreas;
+
+    /*  The last row of a block of rows that write no cell record. Such rows still take part in
+        the default row format, and one call for the last of them inserts the few ROW records
+        that the block needs. */
+    SCROW nPendingEmptyScRow = -1;
 
     for( bool bIt = aIt.GetNext(); bIt; )
     {
@@ -2683,6 +2750,28 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             bIt = aIt.GetNext();
         }
         while( bIt && (aIt.GetRow() == nScRow) );
+
+        if( lcl_RowWritesNoCell( aRowAreas, aColDefaults, maColInfoBfr ) )
+        {
+            nPendingEmptyScRow = nScRow;
+            // the cells still belong to the data validation ranges that their columns carry
+            for( const XclExpUsedArea& rArea : aRowAreas )
+            {
+                const SfxItemSet& rItemSet = rArea.aPattern.getScPatternAttr()->GetItemSet();
+                if( ScfTools::CheckItem( rItemSet, ATTR_VALIDDATA, false ) )
+                {
+                    ScRange aScRange( rArea.nScCol, nScRow, nScTab, rArea.nLastScCol, nScRow, nScTab );
+                    mxDval->InsertCellRange( aScRange, rItemSet.Get( ATTR_VALIDDATA ).GetValue() );
+                }
+            }
+            continue;
+        }
+
+        if( nPendingEmptyScRow >= 0 )
+        {
+            maRowBfr.CreateEmptyRow( nPendingEmptyScRow );
+            nPendingEmptyScRow = -1;
+        }
 
         for( const XclExpUsedArea& rArea : aRowAreas )
         {
@@ -2864,6 +2953,9 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             }
         }
     }
+
+    if( nPendingEmptyScRow >= 0 )
+        maRowBfr.CreateEmptyRow( nPendingEmptyScRow );
 
     // create missing row settings for rows anyhow flagged or with outlines
     maRowBfr.CreateRows( ::std::max( nFirstUnflaggedScRow, nFirstUngroupedScRow ) );
