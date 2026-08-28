@@ -78,6 +78,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -177,6 +178,24 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(navigationDrawer)) {
+                    drawerLayout.closeDrawer(navigationDrawer);
+                    collapseFabMenu();
+                } else if (isFabMenuOpen) {
+                    collapseFabMenu();
+                } else {
+                    // call the next handler in the chain (presumably exiting the app)
+                    // ideally we'd probably set this in a handler where we update isDrawerOpen/isFabMenuOpen and skip this clause entirely but that's a less trivial change
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
     }
 
     private String[] getRecentDocuments() {
@@ -485,19 +504,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         // close drawer if it was open
         drawerLayout.closeDrawer(navigationDrawer);
         collapseFabMenu();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(navigationDrawer)) {
-            drawerLayout.closeDrawer(navigationDrawer);
-            collapseFabMenu();
-        } else if (isFabMenuOpen) {
-            collapseFabMenu();
-        } else {
-            // exit the app
-            super.onBackPressed();
-        }
     }
 
     @Override
