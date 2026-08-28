@@ -440,6 +440,10 @@ public:
     /// @see vcl::ITiledRenderable::breakSlideLink().
     SD_DLLPUBLIC bool breakSlideLink(sal_Int32 nIndex) override;
 
+    /// @see vcl::ITiledRenderable::exportPages().
+    SD_DLLPUBLIC bool exportPages(const std::vector<sal_Int32>& rPages,
+                                  const OUString& rFileUrl) override;
+
     SD_DLLPUBLIC rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
 
     // XComponent

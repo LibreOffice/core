@@ -2596,6 +2596,17 @@ struct COKitDocument
      */
     virtual bool breakSlideLink(const char* pPart) = 0;
 
+    /**
+     * Writes the given pages out as a document of their own, in the order they are given.
+     *
+     * @param pParts a comma separated list of the pages to write, named the way this document
+     *        names its parts; an empty list writes every page.
+     * @param pUrl the file the document is written to, as a URL, whose extension chooses the
+     *        filter it is written with.
+     * @return whether the document was written.
+     */
+    virtual bool exportPages(const char* pParts, const char* pUrl) = 0;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

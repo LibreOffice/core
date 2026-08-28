@@ -8,6 +8,7 @@
  */
 
 #include <config_pdfimport.h>
+#include <unotools/tempfile.hxx>
 #include <sdtiledrenderingtest.hxx>
 
 #include <sfx2/sidebar/Sidebar.hxx>
@@ -738,6 +739,64 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
     pView->MoveMarkedObj(Size(500, 500));
     CPPUNIT_ASSERT_EQUAL(u"file:///decks/q3.odp"_ustr, pPathLinked->GetFileName());
     CPPUNIT_ASSERT_EQUAL(u"Slide 1"_ustr, pPathLinked->GetBookmarkName());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testExportPages)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const sal_uInt16 nPages = pDoc->GetSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT(nPages > 1);
+
+    // Two of the pages are written out as a presentation of their own.
+    utl::TempFileNamed aWritten(u"", true, u".odp");
+    aWritten.EnableKillingFile();
+    CPPUNIT_ASSERT(pXImpressDocument->exportPages({ 1, 0 }, aWritten.GetURL()));
+
+    // The document that was written holds those pages, in the order they were asked for, and
+    // the document they came from is as it was.
+    CPPUNIT_ASSERT_EQUAL(nPages, pDoc->GetSdPageCount(PageKind::Standard));
+
+    uno::Reference<lang::XComponent> xWritten(loadFromDesktop(aWritten.GetURL()));
+    SdXImpressDocument* pWrittenDocument = dynamic_cast<SdXImpressDocument*>(xWritten.get());
+    CPPUNIT_ASSERT(pWrittenDocument);
+    SdDrawDocument* pWritten = pWrittenDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), pWritten->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(getSlideText(*pDoc, 1), getSlideText(*pWritten, 0));
+    CPPUNIT_ASSERT_EQUAL(getSlideText(*pDoc, 0), getSlideText(*pWritten, 1));
+
+    // A slide is a standard page and the notes page that belongs to it, so the written
+    // document holds one notes page per slide and each slide finds its own.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), pWritten->GetSdPageCount(PageKind::Notes));
+    for (sal_uInt16 nPage = 0; nPage < 2; ++nPage)
+    {
+        const SdPage* pSlide = pWritten->GetSdPage(nPage, PageKind::Standard);
+        const SdPage* pNotes = pWritten->GetSdPage(nPage, PageKind::Notes);
+        CPPUNIT_ASSERT(pSlide);
+        CPPUNIT_ASSERT(pNotes);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(pSlide->GetPageNum() + 1),
+                             pNotes->GetPageNum());
+    }
+
+    xWritten->dispose();
+
+    // A page the document does not hold is written by nobody.
+    utl::TempFileNamed aRefused(u"", true, u".odp");
+    aRefused.EnableKillingFile();
+    CPPUNIT_ASSERT(!pXImpressDocument->exportPages({ 0, nPages }, aRefused.GetURL()));
+
+    // An empty list writes every page.
+    utl::TempFileNamed aWhole(u"", true, u".odp");
+    aWhole.EnableKillingFile();
+    CPPUNIT_ASSERT(pXImpressDocument->exportPages({}, aWhole.GetURL()));
+    uno::Reference<lang::XComponent> xWhole(loadFromDesktop(aWhole.GetURL()));
+    SdXImpressDocument* pWholeDocument = dynamic_cast<SdXImpressDocument*>(xWhole.get());
+    CPPUNIT_ASSERT(pWholeDocument);
+    CPPUNIT_ASSERT_EQUAL(nPages, pWholeDocument->GetDoc()->GetSdPageCount(PageKind::Standard));
+    xWhole->dispose();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

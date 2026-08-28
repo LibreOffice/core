@@ -18,6 +18,7 @@
 #include <vcl/vclptr.hxx>
 #include <map>
 #include <string_view>
+#include <vector>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <basegfx/range/b2drange.hxx>
 
@@ -526,6 +527,16 @@ public:
         which keeps the content it holds, and returns whether that page was linked to a source
         (Impress only function) */
     virtual bool breakSlideLink(sal_Int32 /*nIndex*/) { return false; }
+
+    /** Writes the given pages out as a document of their own, in the order they are given.
+        The pages are named by their index in the page list of the standard pages, and an
+        empty list writes every page. rFileUrl names the file to write and its extension
+        chooses the filter (Impress only function) */
+    virtual bool exportPages(const std::vector<sal_Int32>& /*rPages*/,
+                             const OUString& /*rFileUrl*/)
+    {
+        return false;
+    }
 };
 } // namespace vcl
 

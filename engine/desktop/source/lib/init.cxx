@@ -1364,6 +1364,7 @@ static char* doc_getSlideLinks(COKitDocument* pThis);
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl);
 
 static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart);
+static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char* pUrl);
 
 namespace {
 ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
@@ -1919,6 +1920,11 @@ int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pU
 bool COKitDocumentImpl::breakSlideLink(const char* pPart)
 {
     return doc_breakSlideLink(this, pPart);
+}
+
+bool COKitDocumentImpl::exportPages(const char* pParts, const char* pUrl)
+{
+    return doc_exportPages(this, pParts, pUrl);
 }
 
 COKitDocumentImpl::~COKitDocumentImpl()
@@ -7158,6 +7164,46 @@ static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart)
         return false;
 
     return pDoc->breakSlideLink(nIndex);
+}
+
+static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char* pUrl)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return false;
+    }
+
+    // The pages are written to a file of the caller's own and to nothing else, so that a UNO
+    // or package location names nothing that can be written to.
+    if (!pUrl || !std::string_view(pUrl).starts_with("file://"))
+    {
+        SetLastExceptionMsg(u"Pages are written to a file and to nowhere else"_ustr);
+        return false;
+    }
+
+    // The pages are named the way the boundary names the parts of this document, which for a
+    // presentation is the page identifier of each page. A token that names no page of the
+    // document names no page at all.
+    std::vector<sal_Int32> aPages;
+    const std::string_view aParts(pParts ? pParts : "");
+    sal_Int32 nTokenPos = aParts.empty() ? -1 : 0;
+    while (nTokenPos >= 0)
+    {
+        const std::string_view aPart = o3tl::getToken(aParts, 0, ',', nTokenPos);
+
+        const int nIndex = pDoc->getPartIndex(aPart, 0);
+        if (nIndex < 0)
+            return false;
+
+        aPages.push_back(nIndex);
+    }
+
+    return pDoc->exportPages(aPages, getUString(pUrl));
 }
 
 static bool getFromTransferable(

@@ -154,6 +154,7 @@
 #include <CustomAnimationPreset.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
 #include <UndoSlideSection.hxx>
@@ -6608,6 +6609,66 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
             = nInsertPos == 0xFFFF ? nSlidesBefore : static_cast<sal_uInt16>(nAt);
         clearInsertedPageLinks(*mpDoc, nFirstSlide,
                                mpDoc->GetSdPageCount(PageKind::Standard) - nSlidesBefore);
+    }
+
+    return true;
+}
+
+bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const OUString& rFileUrl)
+{
+    if (!mpDoc || !mpDocShell || rFileUrl.isEmpty())
+        return false;
+
+    // The pages are named to the copy below the way an insert from a file names them, by the
+    // name each page carries in this document.
+    std::vector<OUString> aPageNames;
+    if (!collectPageNames(*mpDoc, rPages, aPageNames))
+        return false;
+
+    // The pages go into a presentation of their own, which starts out with the one page a new
+    // document holds and loses it once the pages of this one are in.
+    rtl::Reference<::sd::DrawDocShell> xShell(
+        new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, false, mpDoc->GetDocumentType()));
+    SfxObjectShellLock xLock(xShell.get());
+    xShell->DoInitNew();
+    // The shell serves this one write and is closed again whichever way the function ends.
+    comphelper::ScopeGuard aCloseShell([&xShell] { xShell->DoClose(); });
+
+    SdDrawDocument* pTarget = xShell->GetDoc();
+    if (!pTarget)
+        return false;
+
+    pTarget->CreateFirstPages();
+    pTarget->StopWorkStartupDelay();
+
+    const sal_uInt16 nPagesBefore = pTarget->GetSdPageCount(PageKind::Standard);
+    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForSlideImport(/*bKeepDesign=*/true);
+    if (!pTarget->InsertFileAsPage(aPageNames, /*pExchangeList=*/nullptr, aOptions,
+                                   /*nInsertPos=*/0xFFFF, mpDocShell, /*oScaleObjects=*/true))
+        return false;
+
+    // The pages a new document starts with sit before the ones that were inserted, and the
+    // written presentation holds the pages that were asked for and no others. A slide is a
+    // standard page and the notes page that follows it, so both go: the notes page moves into
+    // the place the standard page left.
+    for (sal_uInt16 nPage = nPagesBefore; nPage > 0; --nPage)
+    {
+        const sal_uInt16 nPageNum
+            = pTarget->GetSdPage(nPage - 1, PageKind::Standard)->GetPageNum();
+        pTarget->RemovePage(nPageNum);
+        if (nPageNum < pTarget->GetPageCount())
+            pTarget->RemovePage(nPageNum);
+    }
+
+    try
+    {
+        uno::Reference<frame::XStorable> xStorable(xShell->GetModel(), uno::UNO_QUERY_THROW);
+        xStorable->storeToURL(rFileUrl, {});
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sd", "writing the pages of a presentation out failed");
+        return false;
     }
 
     return true;
