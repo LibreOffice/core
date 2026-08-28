@@ -38,11 +38,12 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 			aichatHelper.closeAIChat();
 		});
 
-		it('Shows snackbar when AI is not configured', function() {
+		it('Offers the AI settings when AI is not configured', function() {
 			this.win.app.map.isAIConfigured = false;
+			cy.stub(this.win.app.map.settings, 'showSettingsDialog').as('showSettingsDialog');
 			this.win.app.dispatcher.dispatch('aichat');
 			helper.waitUntilLayoutingIsIdle(this.win);
-			cy.cGet('#snackbar-container').should('be.visible');
+			cy.get('@showSettingsDialog').should('be.calledWith', 'ai-section');
 			cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
 		});
 	});
