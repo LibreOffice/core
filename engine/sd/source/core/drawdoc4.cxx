@@ -978,44 +978,6 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, void)
     mbHasOnlineSpellErrors = bool(nStat & EditStatusFlags::WRONGWORDCHANGED);
 }
 
-// Callback for ExecuteSpellPopup()
-
-// removed link and replaced with Imp method
-void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, SdrObject* pObj, SdrOutliner const * pOutl)
-{
-    mpOnlineSearchItem.reset();
-
-    SpellCallbackCommand nCommand = pInfo->nCommand;
-
-    if (nCommand == SpellCallbackCommand::IGNOREWORD
-        // restart when add to dictionary takes place, too.
-        || nCommand == SpellCallbackCommand::ADDTODICTIONARY)
-    {
-        if(pOutl)
-            if (auto pTextObj = DynCastSdrTextObj( pObj ))
-            {
-                bool bModified(IsChanged());
-                pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject());
-                SetChanged(bModified);
-                pObj->BroadcastObjectChange();
-            }
-
-        mpOnlineSearchItem.reset(new SvxSearchItem( SID_SEARCH_ITEM ) );
-        mpOnlineSearchItem->SetSearchString(pInfo->aWord);
-        StartOnlineSpelling();
-    }
-    else if (nCommand == SpellCallbackCommand::STARTSPELLDLG)
-    {
-        if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
-            pViewFrame->GetDispatcher()->Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
-    }
-    else if (nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
-    {
-        if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
-            pViewFrame->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
-    }
-}
-
 // Return formatted page number (1, I, i, a, etc.)
 OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 {

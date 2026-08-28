@@ -1340,10 +1340,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
         bool bUsedSpellPopup = false;
         if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
         {
-            // Popup for Online-Spelling now handled by DrawDocShell
-            Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
-
-            bUsedSpellPopup = pOLV->ExecuteSpellPopup(aPos, aLink);
+            bUsedSpellPopup = pOLV->ExecuteSpellPopup(aPos);
             pOLV->GetEditView().Invalidate();
         }
         if (!bUsedSpellPopup)

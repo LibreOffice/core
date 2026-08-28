@@ -447,14 +447,6 @@ bool SidebarTextControl::MouseMove(const MouseEvent& rMEvt)
     return WeldEditView::MouseMove(rMEvt);
 }
 
-IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void )
-{
-    if ( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
-    {
-        mrDocView.GetViewFrame().GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
-    }
-}
-
 bool SidebarTextControl::Command( const CommandEvent& rCEvt )
 {
     EditView* pEditView = GetEditView();
@@ -469,8 +461,7 @@ bool SidebarTextControl::Command( const CommandEvent& rCEvt )
              pEditView &&
              pEditView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
-            Link<SpellCallbackInfo&,void> aLink = LINK(this, SidebarTextControl, OnlineSpellCallback);
-            bUsedSpellPopup = pEditView->ExecuteSpellPopup(rCEvt.GetMousePosPixel(), aLink);
+            bUsedSpellPopup = pEditView->ExecuteSpellPopup(rCEvt.GetMousePosPixel());
         }
         if (!bUsedSpellPopup)
         {

@@ -37,7 +37,6 @@ class FontList;
 class SdDrawDocument;
 class SdPage;
 class SfxPrinter;
-struct SpellCallbackInfo;
 class AbstractSvxNameDialog;
 class SfxUndoManager;
 
@@ -198,9 +197,6 @@ public:
     virtual OutputDevice* GetDocumentRefDev() override;
 
     DECL_DLLPRIVATE_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
-
-    // ExecuteSpellPopup now handled by DrawDocShell
-    DECL_DLLPRIVATE_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
 
     void                    ClearUndoBuffer();
 

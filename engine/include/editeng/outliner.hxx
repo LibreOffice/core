@@ -409,7 +409,7 @@ public:
 
     bool        IsCursorAtWrongSpelledWord();
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel );
-    bool        ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void>& rCallBack);
+    bool        ExecuteSpellPopup(const Point& rPosPixel);
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16  GetInvalidateMore() const;

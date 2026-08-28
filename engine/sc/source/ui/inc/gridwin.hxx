@@ -58,7 +58,6 @@ class ScNoteOverlay;
 class SdrHdlList;
 class ScTransferObj;
 class ScInvertMerger;
-struct SpellCallbackInfo;
 class ScKitRTLContext;
 
         //  mouse status (nMouseStatus)
@@ -239,7 +238,6 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScGridWindow : public vcl::DocWindow,
     bool                    bInitialPageBreaks:1;
 
     DECL_DLLPRIVATE_LINK( PopupModeEndHdl, weld::Popover&, void );
-    DECL_DLLPRIVATE_LINK( PopupSpellingHdl, SpellCallbackInfo&, void );
 
     bool            TestMouse( const MouseEvent& rMEvt, bool bAction );
 

@@ -113,33 +113,6 @@ public:
     EEControlBits& GetControlWord()            { return nControlBits; }
 };
 
-enum class SpellCallbackCommand
-{
-    IGNOREWORD          = 0x0001,
-    STARTSPELLDLG       = 0x0002,
-    ADDTODICTIONARY     = 0x0003,
-    WORDLANGUAGE        = 0x0004,
-    PARALANGUAGE        = 0x0005,
-    AUTOCORRECT_OPTIONS = 0x0006,
-};
-
-struct SpellCallbackInfo
-{
-    SpellCallbackCommand nCommand;
-    OUString        aWord;
-
-    SpellCallbackInfo( SpellCallbackCommand nCMD, OUString _aWord )
-        : aWord(std::move( _aWord ))
-    {
-        nCommand = nCMD;
-    }
-
-    SpellCallbackInfo( SpellCallbackCommand nCMD )
-    {
-        nCommand = nCMD;
-    }
-};
-
 #endif // INCLUDED_EDITENG_EDITSTAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

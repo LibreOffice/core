@@ -23,7 +23,6 @@
 
 class SwView;
 class SwPostItMgr;
-struct SpellCallbackInfo;
 namespace sw::annotation { class SwAnnotationWin; }
 
 namespace sw::sidebarwindows {
@@ -76,8 +75,6 @@ class SidebarTextControl : public WeldEditView
             OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
             rDevice.SetMapMode(rNewMapMode);
         }
-
-        DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
 
         void DrawForPage(OutputDevice* pDev, const Point& rPos);
 };

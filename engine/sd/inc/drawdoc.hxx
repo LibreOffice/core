@@ -54,7 +54,6 @@ class SvxSearchItem;
 class EditStatus;
 class Point;
 class SdTransferable;
-struct SpellCallbackInfo;
 class SdCustomShowList;
 class SdUndoGroup;
 class SdrObject;
@@ -850,8 +849,6 @@ public:
     SAL_DLLPRIVATE bool                GetOnlineSpell() const { return mbOnlineSpell; }
     SAL_DLLPRIVATE void                StopOnlineSpelling();
     SAL_DLLPRIVATE void                StartOnlineSpelling(bool bForceSpelling=true);
-
-    SAL_DLLPRIVATE void                ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, SdrObject* pObj, SdrOutliner const * pOutl);
 
     SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj);
     SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj);

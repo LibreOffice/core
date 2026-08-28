@@ -333,8 +333,7 @@ public:
 
     SAL_DLLPRIVATE bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    bool ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&, void>& rCallBack,
-                           bool bAddOtherOption = false);
+    bool ExecuteSpellPopup(const Point& rPosPixel, bool bAddOtherOption = false);
     OUString        SpellIgnoreWord();
 
     void                InsertField( const SvxFieldItem& rFld );

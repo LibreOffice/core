@@ -672,9 +672,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
                                 ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
                             {
-                                // Popup for Online-Spelling now handled by DrawDocShell
-                                Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
-
                                 if( !rCEvt.IsMouseEvent() )
                                 {
                                     aPos = GetActiveWindow()->LogicToPixel( pOutlinerView->GetEditView().GetCursor()->GetPos() );
@@ -687,7 +684,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 // first release the mouse.
                                 GetActiveWindow()->ReleaseMouse();
                                 LockInput();
-                                bUsedSpellPopup = pOutlinerView->ExecuteSpellPopup(aPos, aLink);
+                                bUsedSpellPopup = pOutlinerView->ExecuteSpellPopup(aPos);
                                 pOutlinerView->GetEditView().Invalidate();
                                 UnlockInput();
                             }

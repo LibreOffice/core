@@ -507,21 +507,6 @@ IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl, weld::Popover&, void)
     GrabFocus();
 }
 
-IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
-{
-    if( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
-        mrViewData.GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
-    else if (rInfo.nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
-        mrViewData.GetDispatcher().Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
-    else //IGNOREWORD, ADDTODICTIONARY, WORDLANGUAGE, PARALANGUAGE
-    {
-        // The spelling status of the word has changed. Close the cell to reset the caches
-        ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
-        if (pHdl)
-            pHdl->EnterHandler();
-    }
-}
-
 namespace {
 
 struct AutoFilterData : public ScCheckListMenuControl::ExtendedData
@@ -3612,8 +3597,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             const OUString sOldText = pHdl ? pHdl->GetEditString() : u""_ustr;
 
             // Only done/shown if a misspelled word is actually under the mouse pointer.
-            Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
-            bDone = pEditView->ExecuteSpellPopup(aMenuPos, aLink, true);
+            bDone = pEditView->ExecuteSpellPopup(aMenuPos, true);
             if (pHdl && bDone)
                 pHdl->SetModified();
 

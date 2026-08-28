@@ -1080,7 +1080,6 @@ static void KitSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
 }
 
 bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
-                                 const Link<SpellCallbackInfo&, void>& /*rCallBack*/,
                                  bool /*bAddOtherOption*/)
 {
     if (IsSelectionAtPoint(rPosPixel))
