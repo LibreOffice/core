@@ -100,7 +100,7 @@ namespace cool {
 
 		private drawSeparator(y: number): void {
 			this.context.save();
-			this.context.strokeStyle = window.prefs.getBoolean('darkTheme')
+			this.context.strokeStyle = app.map.uiManager.isBackgroundDark()
 				? '#ffffff'
 				: '#000000';
 			this.context.lineWidth = this.getLineWidth();
