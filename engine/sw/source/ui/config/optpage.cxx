@@ -170,38 +170,6 @@ std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( weld::Container* pPage,
     return std::make_unique<SwAddPrinterTabPage>(pPage, pController, *rAttrSet);
 }
 
-OUString SwAddPrinterTabPage::GetAllStrings()
-{
-    OUStringBuffer sAllStrings;
-    OUString labels[] = { u"label2"_ustr, u"label10"_ustr, u"label1"_ustr, u"label5"_ustr, u"4"_ustr };
-
-    for (const auto& label : labels)
-    {
-        if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    OUString checkButton[]
-        = { u"graphics"_ustr,  u"formcontrols"_ustr, u"background"_ustr, u"inblack"_ustr, u"hiddentext"_ustr, u"textplaceholder"_ustr,
-            u"leftpages"_ustr, u"rightpages"_ustr,   u"brochure"_ustr,   u"rtl"_ustr,     u"blankpages"_ustr, u"papertray"_ustr };
-
-    for (const auto& check : checkButton)
-    {
-        if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    OUString radioButton[] = { u"none"_ustr, u"only"_ustr, u"end"_ustr, u"endpage"_ustr, u"inmargins"_ustr };
-
-    for (const auto& radio : radioButton)
-    {
-        if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    return sAllStrings.toString().replaceAll("_", "");
-}
-
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     if ( m_bAttrModified )

@@ -294,20 +294,6 @@ bool SvxAreaTabPage::FillItemSet_Impl( SfxItemSet* rAttrs)
     return static_cast<TTabPage&>( *m_xFillTabPage ).FillItemSet( rAttrs );
 }
 
-OUString SvxAreaTabPage::GetAllStrings()
-{
-    OUString sAllStrings;
-    OUString tabLabels[] = { u"None"_ustr,  u"Color"_ustr,   u"Gradient"_ustr, u"Hatch"_ustr,
-                             u"Image"_ustr, u"Pattern"_ustr, u"Use Background"_ustr };
-
-    for (const auto& label : tabLabels)
-    {
-        sAllStrings += label + " ";
-    }
-
-    return sAllStrings.replaceAll("_", "");
-}
-
 bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     OUString sCurrentPage = m_xNotebook->get_current_page_ident();

@@ -129,16 +129,6 @@ std::unique_ptr<SfxTabPage> DbRegistrationOptionsPage::Create( weld::Container* 
     return std::make_unique<DbRegistrationOptionsPage>(pPage, pController, *rAttrSet);
 }
 
-OUString DbRegistrationOptionsPage::GetAllStrings()
-{
-    OUString sAllStrings;
-
-    if (const auto pString = m_xBuilder->weld_label(u"label1"_ustr))
-        sAllStrings += pString->get_label() + " ";
-
-    return sAllStrings.replaceAll("_", "");
-}
-
 bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     // the settings for the single drivers

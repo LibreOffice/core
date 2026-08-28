@@ -59,8 +59,6 @@ public:
     virtual ~SvxJSearchOptionsPage() override;
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
-    virtual OUString GetAllStrings() override;
-
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 

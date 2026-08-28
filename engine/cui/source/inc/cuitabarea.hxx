@@ -246,8 +246,6 @@ public:
                               const SfxItemSet*);
     static const WhichRangesContainer & GetRanges() { return pAreaRanges; }
 
-    virtual OUString GetAllStrings() override;
-
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
     virtual void ActivatePage( const SfxItemSet& rSet ) override;

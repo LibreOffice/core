@@ -90,45 +90,6 @@ std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(weld::Container
     return std::make_unique<SfxCommonPrintOptionsTabPage>(pPage, pController, *rAttrSet);
 }
 
-OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
-{
-    OUStringBuffer sAllStrings;
-    OUString labels[] = { u"label4"_ustr, u"label6"_ustr, u"label2"_ustr, u"label3"_ustr, u"label1"_ustr, u"label5"_ustr };
-
-    for (const auto& label : labels)
-    {
-        if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    OUString checkButton[] = { u"converttogray"_ustr, u"reducebitmaptrans"_ustr, u"reducebitmap"_ustr, u"reducetrans"_ustr,
-                               u"papersize"_ustr,     u"paperorient"_ustr,       u"trans"_ustr,        u"reducegrad"_ustr };
-
-    for (const auto& check : checkButton)
-    {
-        if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    OUString radioButton[] = { u"printer"_ustr,
-                               u"file"_ustr,
-                               u"reducebitmapresol"_ustr,
-                               u"reducebitmapnormal"_ustr,
-                               u"reducebitmapoptimal"_ustr,
-                               u"reducetransauto"_ustr,
-                               u"reducetransnone"_ustr,
-                               u"reducegradstripes"_ustr,
-                               u"reducegradcolor"_ustr };
-
-    for (const auto& radio : radioButton)
-    {
-        if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings.append( pString->get_label() + " ");
-    }
-
-    return sAllStrings.toString().replaceAll("_", "");
-}
-
 bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

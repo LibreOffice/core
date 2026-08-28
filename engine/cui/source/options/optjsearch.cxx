@@ -200,46 +200,6 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet* )
     m_xIgnoreMiddleDot         ->save_state();
 }
 
-OUString SvxJSearchOptionsPage::GetAllStrings()
-{
-    OUStringBuffer sAllStrings;
-    OUString labels[] = { u"label1"_ustr, u"label2"_ustr };
-
-    for (const auto& label : labels)
-    {
-        if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    OUString checkButton[] = { u"matchcase"_ustr,
-                               u"matchfullhalfwidth"_ustr,
-                               u"matchhiraganakatakana"_ustr,
-                               u"matchcontractions"_ustr,
-                               u"matchminusdashchoon"_ustr,
-                               u"matchrepeatcharmarks"_ustr,
-                               u"matchvariantformkanji"_ustr,
-                               u"matcholdkanaforms"_ustr,
-                               u"ignorepunctuation"_ustr,
-                               u"ignorewhitespace"_ustr,
-                               u"matchdiziduzu"_ustr,
-                               u"matchbavahafa"_ustr,
-                               u"matchtsithichidhizi"_ustr,
-                               u"matchhyuiyubyuvyu"_ustr,
-                               u"matchseshezeje"_ustr,
-                               u"matchiaiya"_ustr,
-                               u"matchkiku"_ustr,
-                               u"matchprolongedsoundmark"_ustr,
-                               u"ignoremiddledot"_ustr };
-
-    for (const auto& check : checkButton)
-    {
-        if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    return sAllStrings.toString().replaceAll("_", "");
-}
-
 bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet* )
 {
     TransliterationFlags nOldVal = nTransliterationFlags;

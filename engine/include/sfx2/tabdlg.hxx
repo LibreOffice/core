@@ -293,7 +293,6 @@ public:
         return static_cast<const T*>(GetItem(rSet, sal_uInt16(nSlot), bDeep));
     }
 
-    virtual OUString GetAllStrings();
     void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
     css::uno::Reference< css::frame::XFrame > GetFrame() const;
 

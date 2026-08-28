@@ -677,25 +677,6 @@ std::unique_ptr<SfxTabPage> SwCaptionOptPage::Create(weld::Container* pPage, wel
     return std::make_unique<SwCaptionOptPage>(pPage, pController, *rAttrSet);
 }
 
-OUString SwCaptionOptPage::GetAllStrings()
-{
-    OUStringBuffer sAllStrings;
-    OUString labels[] = { u"label1"_ustr,         u"label13"_ustr,     u"label2"_ustr,  u"label7"_ustr,  u"numberingft"_ustr,
-                          u"numseparatorft"_ustr, u"separatorft"_ustr, u"label18"_ustr, u"label11"_ustr, u"label4"_ustr,
-                          u"label6"_ustr,         u"label10"_ustr,     u"label3"_ustr };
-
-    for (const auto& label : labels)
-    {
-        if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings.append(pString->get_label() + " ");
-    }
-
-    if (const auto pString = m_xBuilder->weld_check_button(u"applyborder"_ustr))
-        sAllStrings.append(pString->get_label() + " ");
-
-    return sAllStrings.toString().replaceAll("_", "");
-}
-
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
