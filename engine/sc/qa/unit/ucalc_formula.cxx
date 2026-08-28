@@ -4491,6 +4491,34 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncCOUNT)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula, testFuncTYPEofRangeAsSingleCellMatrix)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, u"Formula"_ustr);
+
+    // Fill a 3x2 block the TYPE() argument will span.
+    for (SCROW nRow = 0; nRow < 2; ++nRow)
+        for (SCCOL nCol = 1; nCol < 4; ++nCol)
+            m_pDoc->SetValue(ScAddress(nCol, nRow, 0), 1.0);
+
+    // Enter TYPE(B1:D2) as a dynamic-array matrix formula targeting a single
+    // cell, F1, the same as an XLSX array formula whose ref attribute names
+    // one cell and whose cell metadata marks it as a dynamic array.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(5, 0, 5, 0, aMark, u"=TYPE(B1:D2)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, /*bDynamicArrayMaster*/ true);
+
+    // TYPE() describes the whole range with one number (64 for an array),
+    // so only the declared single cell should hold a result.
+    CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(6, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(7, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(5, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula, testFuncCOUNTBLANK)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

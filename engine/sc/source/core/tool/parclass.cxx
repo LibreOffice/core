@@ -285,6 +285,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocTrend,           {{ Reference, Reference, Reference, Value               }, 0, Value }},
     { ocTrimMean,        {{ Reference, Value                                     }, 0, Value }},
     { ocTrue,            {{ Bounds                                               }, 0, Value }},
+    { ocType,            {{ Array                                                }, 0, Value }},
     { ocUnion,           {{ Reference, Reference                                 }, 0, Reference }},
     { ocUnique,          {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
     { ocVLookup,         {{ Value, ReferenceOrForceArray, Value, Value           }, 0, Value }},
