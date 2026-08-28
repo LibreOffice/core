@@ -211,19 +211,13 @@ class Dispatcher {
 				app.map.fire('postMessage', { msgId: 'UI_InsertGraphic' });
 			};
 
-		this.actionsMap['localimportslides'] = function () {
+		// Opens the import pane and the integration's file chooser with it, filtered to
+		// presentations. The chooser replies with the picked file in an Action_InsertSlides
+		// message, and the pane shows the slides of it.
+		this.actionsMap['importslides'] = function () {
 			const pane = app.map.slideImportPane;
 			if (!pane) return;
 			pane.open();
-			window.app.console.log('local slide import not implemented yet');
-		};
-		this.actionsMap['remoteimportslides'] = function () {
-			const pane = app.map.slideImportPane;
-			if (!pane) return;
-			pane.open();
-			// The integration's generic remote file picker: it shows a file
-			// chooser filtered to presentations and replies with the picked
-			// file's location in an Action_InsertSlides message.
 			if (pane.isVisible())
 				app.map.fire('postMessage', {
 					msgId: 'UI_InsertFile',
@@ -232,14 +226,6 @@ class Dispatcher {
 						mimeTypeFilter: app.LOUtil.presentationMimeFilter,
 					},
 				});
-		};
-		// Opens the import pane with the integration's file picker when the
-		// host offers remote file insertion, with the local file picker
-		// otherwise.
-		this.actionsMap['importslides'] = function () {
-			if (app.LOUtil.hostOffersFileChooser(app.map['wopi']))
-				app.dispatcher.dispatch('remoteimportslides');
-			else app.dispatcher.dispatch('localimportslides');
 		};
 		this.actionsMap['closeimportslides'] = function () {
 			if (app.map.slideImportPane) app.map.slideImportPane.close();

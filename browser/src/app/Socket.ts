@@ -1767,6 +1767,18 @@ class Socket {
 		return strBytes;
 	}
 
+	// A data URL for PNG bytes as tiles carry them: the leading 0x89 of the
+	// PNG signature is put back when it was stripped (TileCache::appendBlob
+	// removes it). A content security policy forbids blob URLs for images, so
+	// the bytes travel inline as base64.
+	public pngDataUrl(data: Uint8Array): string {
+		let prefix = '';
+		if (data[0] != 0x89) prefix = String.fromCharCode(0x89);
+		return (
+			'data:image/png;base64,' + window.btoa(this._strFromUint8(prefix, data))
+		);
+	}
+
 	private _extractImage(e: SlurpMessageEvent): string {
 		if (!e.imgBytes) {
 			console.assert(
@@ -1782,11 +1794,7 @@ class Socket {
 		}
 
 		const data = e.imgBytes.subarray(e.imgIndex);
-		let prefix = '';
-		// FIXME: so we prepend the PNG pre-byte here having removed it in TileCache::appendBlob
-		if (data[0] != 0x89) prefix = String.fromCharCode(0x89);
-		const img =
-			'data:image/png;base64,' + window.btoa(this._strFromUint8(prefix, data));
+		const img = this.pngDataUrl(data);
 		if (
 			window.L.Browser.cypressTest &&
 			window.prefs.getBoolean('image_validation_test')
