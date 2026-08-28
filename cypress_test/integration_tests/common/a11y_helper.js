@@ -756,6 +756,173 @@ const sidebarKeyboard = {
 };
 
 module.exports.assertFocusWithin = assertFocusWithin;
+/**
+ * The accessibility tree the browser exposes to assistive technology, read over
+ * the Chrome DevTools Protocol. runA11yValidation checks the markup; this is
+ * the name and role computed from it, so it catches a label that resolves to
+ * nothing. Chromium-family browsers only.
+ */
+function cdp(command, params) {
+	return Cypress.automation('remote:debugger:protocol', {
+		command: command,
+		params: params || {},
+	});
+}
+
+function axTreeAvailable() {
+	return Cypress.browser.family === 'chromium';
+}
+
+/// The document lives in its own frame, and getFullAXTree defaults to the top
+/// one, which is the cypress runner.
+const COOL_FRAME_ATTEMPTS = 20;
+
+function coolFrameId(attempt) {
+	const at = attempt || 1;
+
+	return cy.then(function () {
+		return cdp('Page.enable');
+	}).then(function () {
+		return cdp('Page.getFrameTree');
+	}).then(function (tree) {
+		const urls = [];
+		(function walk(node) {
+			urls.push(node.frame.url ? node.frame.url : '');
+			if (node.frame.url && node.frame.url.indexOf('cool.html') !== -1)
+				urls.cool = node.frame.id;
+			(node.childFrames || []).forEach(walk);
+		})(tree.frameTree);
+
+		if (urls.cool) return urls.cool;
+
+		// The tree can be asked before the document frame is in it. Retrying
+		// keeps that from failing every accessibility assertion at once, with
+		// a message that names none of it.
+		if (at < COOL_FRAME_ATTEMPTS) {
+			return cy.wait(250, { log: false }).then(function () {
+				return coolFrameId(at + 1);
+			});
+		}
+
+		expect(urls.join(', '),
+			'no cool.html frame after ' + at + ' tries; the frames seen were')
+			.to.contain('cool.html');
+	});
+}
+
+/// Every node of the document's accessibility tree, in one round trip. Use
+/// this to sweep a container; getFocusedAXNode is for a single widget.
+function getAXNodes() {
+	return coolFrameId().then(function (frameId) {
+		return cdp('Accessibility.enable').then(function () {
+			return cdp('Accessibility.getFullAXTree', { depth: -1, frameId: frameId });
+		});
+	}).then(function (res) {
+		return ((res && res.nodes) || []).map(function (node) {
+			const props = {};
+			(node.properties || []).forEach(function (p) {
+				props[p.name] = p.value && p.value.value;
+			});
+			return {
+				role: node.role && node.role.value,
+				roleType: node.role && node.role.type,
+				name: (node.name && node.name.value) || '',
+				description: (node.description && node.description.value) || '',
+				ignored: node.ignored,
+				properties: props,
+			};
+		});
+	});
+}
+
+/// {role, name, ignored, properties} of the widget holding the focus, or null.
+/// The document root reports itself as focused too, so take the deepest one.
+function getFocusedAXNode() {
+	return coolFrameId().then(function (frameId) {
+		return cdp('Accessibility.enable').then(function () {
+			return cdp('Accessibility.getFullAXTree', { depth: -1, frameId: frameId });
+		});
+	}).then(function (res) {
+		const focused = (res.nodes || []).filter(function (n) {
+			return (n.properties || []).some(function (p) {
+				return p.name === 'focused' && p.value && p.value.value === true;
+			});
+		});
+		const node = focused[focused.length - 1];
+		if (!node) return null;
+		const props = {};
+		(node.properties || []).forEach(function (p) {
+			props[p.name] = p.value && p.value.value;
+		});
+		return {
+			role: node.role && node.role.value,
+			roleType: node.role && node.role.type,
+			name: (node.name && node.name.value) || '',
+			nameSources: ((node.name && node.name.sources) || []).map(function (src) {
+				return src.attribute || src.nativeSource || src.type;
+			}),
+			ignored: node.ignored,
+			properties: props,
+		};
+	});
+}
+
+/**
+ * A toolbutton shows it is on with the selected class; what a screen reader is
+ * told is the pressed state of its node in the accessibility tree. Assert the
+ * two never disagree over a container, reading the tree rather than the
+ * attribute the browser built it from.
+ */
+function assertToggleStatesAgree(win, container, when) {
+	const root = win.document.querySelector(container);
+	expect(root, container + ' exists').to.not.equal(null);
+
+	const shown = Array.prototype.map.call(
+		root.querySelectorAll('button'),
+		function (button) {
+			return {
+				id: button.id,
+				name: (button.getAttribute('aria-label') ||
+					button.textContent || '').trim(),
+				looksPressed: button.classList.contains('selected'),
+			};
+		}).filter(function (button) {
+			return button.name;
+		});
+
+	getAXNodes().then(function (nodes) {
+		const byName = {};
+		nodes.forEach(function (node) {
+			if (node.role !== 'button') return;
+			const key = node.name.trim();
+			if (key) byName[key] = node;
+		});
+
+		const silent = [];
+		const mismatched = [];
+
+		shown.forEach(function (button) {
+			const node = byName[button.name];
+			if (!node) return;
+			const says = node.properties.pressed;
+
+			if (button.looksPressed && says === undefined) {
+				silent.push(button.id + ' (' + button.name + ')');
+			} else if (says !== undefined &&
+					(says === 'true') !== button.looksPressed) {
+				mismatched.push(button.id + ' looks ' +
+					(button.looksPressed ? 'pressed' : 'unpressed') +
+					' but the tree says ' + says);
+			}
+		});
+
+		expect(silent, 'buttons that look pressed and announce nothing ' + when)
+			.to.be.empty;
+		expect(mismatched, 'buttons whose announced state disagrees ' + when)
+			.to.be.empty;
+	});
+}
+
 module.exports.enableUICoverage = enableUICoverage;
 module.exports.reportUICoverage = reportUICoverage;
 module.exports.resetState = resetState;
@@ -776,3 +943,7 @@ module.exports.sidebarTabOrder = sidebarTabOrder;
 module.exports.describeFocusable = describeFocusable;
 module.exports.openSidebarPropertyDeck = openSidebarPropertyDeck;
 module.exports.sidebarKeyboard = sidebarKeyboard;
+module.exports.axTreeAvailable = axTreeAvailable;
+module.exports.getFocusedAXNode = getFocusedAXNode;
+module.exports.assertToggleStatesAgree = assertToggleStatesAgree;
+module.exports.getAXNodes = getAXNodes;
