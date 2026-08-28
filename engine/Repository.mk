@@ -864,7 +864,6 @@ $(eval $(call gb_Helper_register_external_packages_for_install,Scheherazade,ooo_
 		fonts_scheherazade \
 ))
 
-ifneq ($(WITH_DOCREPAIR_FONTS),)
 $(eval $(call gb_Helper_register_external_packages_for_install,Agdasima,ooo_fonts,\
 	fonts_agdasima \
 ))
@@ -886,7 +885,6 @@ $(eval $(call gb_Helper_register_external_packages_for_install,Lumanosimo,ooo_fo
 $(eval $(call gb_Helper_register_external_packages_for_install,Lunasima,ooo_fonts,\
 	fonts_lunasima \
 ))
-endif # WITH_DOCREPAIR_FONTS
 
 ifneq ($(filter NOTO_FONT,$(BUILD_TYPE)),)
 $(eval $(call gb_Helper_register_external_packages_for_install,NotoMore,ooo_fonts,\
