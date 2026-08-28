@@ -82,8 +82,8 @@
 using namespace formula;
 using namespace ::com::sun::star;
 
-const CharClass*                    ScCompiler::pCharClassEnglish = nullptr;
-const CharClass*                    ScCompiler::pCharClassLocalized = nullptr;
+std::optional<CharClass>            ScCompiler::goCharClassEnglish;
+std::optional<CharClass>            ScCompiler::goCharClassLocalized;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 namespace {
@@ -391,16 +391,8 @@ static std::mutex gCharClassMutex;
 void ScCompiler::DeInit()
 {
     std::scoped_lock aGuard(gCharClassMutex);
-    if (pCharClassEnglish)
-    {
-        delete pCharClassEnglish;
-        pCharClassEnglish = nullptr;
-    }
-    if (pCharClassLocalized)
-    {
-        delete pCharClassLocalized;
-        pCharClassLocalized = nullptr;
-    }
+    goCharClassEnglish.reset();
+    goCharClassLocalized.reset();
 }
 
 bool ScCompiler::IsEnglishSymbol( const OUString& rName )
@@ -429,12 +421,12 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
 const CharClass* ScCompiler::GetCharClassEnglish()
 {
     std::scoped_lock aGuard(gCharClassMutex);
-    if (!pCharClassEnglish)
+    if (!goCharClassEnglish)
     {
-        pCharClassEnglish = new CharClass( ::comphelper::getProcessComponentContext(),
+        goCharClassEnglish.emplace( ::comphelper::getProcessComponentContext(),
                 LanguageTag( LANGUAGE_ENGLISH_US));
     }
-    return pCharClassEnglish;
+    return &*goCharClassEnglish;
 }
 
 const CharClass* ScCompiler::GetCharClassLocalized()
@@ -442,12 +434,12 @@ const CharClass* ScCompiler::GetCharClassLocalized()
     // Switching UI language requires restart; if not, we would have to
     // keep track of that.
     std::scoped_lock aGuard(gCharClassMutex);
-    if (!pCharClassLocalized)
+    if (!goCharClassLocalized)
     {
-        pCharClassLocalized = new CharClass( ::comphelper::getProcessComponentContext(),
+        goCharClassLocalized.emplace( ::comphelper::getProcessComponentContext(),
                 Application::GetSettings().GetUILanguageTag());
     }
-    return pCharClassLocalized;
+    return &*goCharClassLocalized;
 }
 
 void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
