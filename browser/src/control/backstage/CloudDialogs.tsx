@@ -153,16 +153,15 @@ namespace BackstageTemplates {
 
   function providerPreviewRow(props: {
     typeName: string;
-    iconName: string;
+    kind: CloudProviderKind;
     userName: string;
   }): HTMLElement {
-    const svg = BackstageSVGIcons[props.iconName];
     return (
       <div class="backstage-modal-provider-row" aria-hidden="true">
         <span
-          class="backstage-modal-provider-row-icon"
-          dangerouslySetInnerHTML={
-            svg ? { __html: app.LOUtil.sanitize(svg, 'svg') } : undefined
+          class={
+            'backstage-modal-provider-row-icon ' +
+            BackstageCloudKinds.iconClasses(props.kind)
           }
         />
         <div class="backstage-modal-provider-row-text">
@@ -201,7 +200,7 @@ namespace BackstageTemplates {
 
   export interface CloudAddedDialogProps {
     typeName: string;
-    iconName: string;
+    kind: CloudProviderKind;
     userName: string;
     onClose: () => void;
     onOpen: () => void;
@@ -221,7 +220,7 @@ namespace BackstageTemplates {
           <div class="backstage-modal-preview">
             {openTile({
               label: props.typeName,
-              iconName: props.iconName,
+              iconClass: BackstageCloudKinds.iconClasses(props.kind),
               subtitle: props.userName,
               extraClass: 'is-cloud-provider is-preview',
               inert: true,
@@ -253,7 +252,7 @@ namespace BackstageTemplates {
 
   export interface RemoveConfirmDialogProps {
     typeName: string;
-    iconName: string;
+    kind: CloudProviderKind;
     userName: string;
     onCancel: () => void;
     onConfirm: () => void;
@@ -274,7 +273,7 @@ namespace BackstageTemplates {
           </p>
           {providerPreviewRow({
             typeName: props.typeName,
-            iconName: props.iconName,
+            kind: props.kind,
             userName: props.userName,
           })}
           <div class="backstage-modal-actions">
@@ -312,14 +311,13 @@ namespace BackstageTemplates {
     initialValue: CloudProviderKind,
     labelledBy?: string,
   ): { element: HTMLElement; getValue: () => CloudProviderKind } {
-    const kinds: { value: CloudProviderKind; label: string }[] = [
-      { value: 'nextcloud', label: _('Nextcloud') },
-      { value: 'opencloud', label: _('OpenCloud') },
-      { value: 'seafile', label: _('Seafile') },
-      { value: 'other', label: _('Other') },
-    ];
+    const kinds = BackstageCloudKinds.list();
 
-    let currentValue: CloudProviderKind = initialValue;
+    // An account stored while another branding was in place names a service that is no
+    // longer on offer. It reads as Other everywhere else, so editing it starts there too,
+    // and saving keeps the type the user was shown.
+    let currentValue: CloudProviderKind =
+      BackstageCloudKinds.offeredKind(initialValue);
     let isOpen = false;
     let wrapperEl: HTMLElement;
     let toggleEl: HTMLButtonElement;
@@ -327,15 +325,11 @@ namespace BackstageTemplates {
     let toggleIconEl: HTMLElement;
     const optionEls: HTMLElement[] = [];
 
-    const setIconContent = (el: HTMLElement, kind: CloudProviderKind) => {
-      const svg = BackstageSVGIcons[iconForKind(kind)];
-      el.innerHTML = app.LOUtil.sanitize(svg || '', 'svg');
-    };
-
     const updateToggle = () => {
-      const k = kinds.find((entry) => entry.value === currentValue);
-      toggleLabelEl.textContent = k ? k.label : '';
-      setIconContent(toggleIconEl, currentValue);
+      toggleLabelEl.textContent = BackstageCloudKinds.label(currentValue);
+      toggleIconEl.className =
+        'backstage-modal-dropdown-icon ' +
+        BackstageCloudKinds.iconClasses(currentValue);
     };
 
     const onDocMouseDown = (e: MouseEvent) => {
@@ -418,35 +412,32 @@ namespace BackstageTemplates {
           </span>
         </button>
         <ul class="backstage-modal-dropdown-list" role="listbox">
-          {kinds.map((k) => {
-            const optIconHtml = BackstageSVGIcons[iconForKind(k.value)] || '';
-            return (
-              <li
-                class="backstage-modal-dropdown-option"
-                role="option"
-                data-value={k.value}
-                tabindex="0"
-                aria-selected={String(k.value === currentValue)}
-                ref={(el: HTMLElement) => optionEls.push(el)}
-                onClick={() => select(k.value)}
-                onKeydown={(e: KeyboardEvent) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    select(k.value);
-                  }
-                }}
-              >
-                <span
-                  class="backstage-modal-dropdown-icon"
-                  aria-hidden="true"
-                  dangerouslySetInnerHTML={{
-                    __html: app.LOUtil.sanitize(optIconHtml, 'svg'),
-                  }}
-                />
-                <span>{k.label}</span>
-              </li>
-            );
-          })}
+          {kinds.map((k) => (
+            <li
+              class="backstage-modal-dropdown-option"
+              role="option"
+              data-value={k.kind}
+              tabindex="0"
+              aria-selected={String(k.kind === currentValue)}
+              ref={(el: HTMLElement) => optionEls.push(el)}
+              onClick={() => select(k.kind)}
+              onKeydown={(e: KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  select(k.kind);
+                }
+              }}
+            >
+              <span
+                class={
+                  'backstage-modal-dropdown-icon ' +
+                  BackstageCloudKinds.iconClasses(k.kind)
+                }
+                aria-hidden="true"
+              />
+              <span>{k.label}</span>
+            </li>
+          ))}
         </ul>
       </div>
     );
@@ -457,18 +448,5 @@ namespace BackstageTemplates {
       element,
       getValue: () => currentValue,
     };
-  }
-
-  function iconForKind(kind: CloudProviderKind): string {
-    switch (kind) {
-      case 'nextcloud':
-        return 'nextcloud.svg';
-      case 'opencloud':
-        return 'opencloud.svg';
-      case 'seafile':
-        return 'seafile.svg';
-      case 'other':
-        return 'generic.svg';
-    }
   }
 }

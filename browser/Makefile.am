@@ -210,11 +210,7 @@ BACKSTAGE_SVG_NAMES = \
 	lc_signature.svg \
 	lc_printlayout.svg \
 	lc_exportto.svg \
-	lc_edit.svg \
-	cloud-providers/nextcloud.svg \
-	cloud-providers/opencloud.svg \
-	cloud-providers/seafile.svg \
-	cloud-providers/generic.svg
+	lc_edit.svg
 
 BACKSTAGE_SVGS = $(addprefix $(icons_dir)/,$(BACKSTAGE_SVG_NAMES))
 
@@ -714,6 +710,7 @@ COOL_JS_LST =\
 	src/control/Control.NotebookbarBuilder.js \
 	$(icons_js) \
 	src/control/backstage/Types.ts \
+	src/control/backstage/CloudProviderKinds.ts \
 	src/control/backstage/Common.tsx \
 	src/control/backstage/Sidebar.tsx \
 	src/control/backstage/TemplatesView.tsx \
@@ -1577,6 +1574,7 @@ pot:
 		src/control/Control.AIChatSidebar.ts \
 		src/control/Control.AlertDialog.js \
 		src/control/Control.BackstageView.ts \
+		src/control/backstage/CloudProviderKinds.ts \
 		src/control/backstage/Common.tsx \
 		src/control/backstage/Sidebar.tsx \
 		src/control/backstage/HomeView.tsx \

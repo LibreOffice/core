@@ -817,6 +817,28 @@
 	height: 100%;
 }
 
+/* Cloud service logos. These are fixed-colour artwork drawn as a background
+ * image, so a branding can point them at its own logo. The bare class draws the
+ * generic cloud; each service adds its own image on top of it. */
+.backstage-cloud-icon {
+	background-image: url('images/cloud-providers/generic.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.backstage-cloud-icon-nextcloud {
+	background-image: url('images/cloud-providers/nextcloud.svg');
+}
+
+.backstage-cloud-icon-opencloud {
+	background-image: url('images/cloud-providers/opencloud.svg');
+}
+
+.backstage-cloud-icon-seafile {
+	background-image: url('images/cloud-providers/seafile.svg');
+}
+
 .backstage-open-tile-label {
 	font-size: 14px;
 	font-weight: 500;

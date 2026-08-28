@@ -506,8 +506,8 @@ class BackstageView extends window.L.Class {
 				onOpenLocal: () => this.executeOpen(),
 				cloudTiles: this.getRegisteredCloudProviders().map((p) => ({
 					id: p.id,
-					typeName: this.getCloudProviderDisplayName(p.kind),
-					iconName: this.getCloudProviderIcon(p.kind),
+					typeName: BackstageCloudKinds.label(p.kind),
+					kind: p.kind,
 					userName: p.name,
 					onClick: () => this.openCloudProvider(p),
 					onEdit: () => this.showAddCloudDialog(p),
@@ -528,7 +528,7 @@ class BackstageView extends window.L.Class {
 		this.mountDialog((close) =>
 			BackstageTemplates.addCloudDialog({
 				isEdit: !!provider,
-				initialKind: provider?.kind ?? 'nextcloud',
+				initialKind: provider?.kind ?? BackstageCloudKinds.defaultKind(),
 				initialDomain: provider?.url ?? '',
 				initialName: provider?.name ?? '',
 				onCancel: close,
@@ -559,8 +559,8 @@ class BackstageView extends window.L.Class {
 	private showCloudAddedDialog(provider: CloudProvider): void {
 		this.mountDialog((close) =>
 			BackstageTemplates.cloudAddedDialog({
-				typeName: this.getCloudProviderDisplayName(provider.kind),
-				iconName: this.getCloudProviderIcon(provider.kind),
+				typeName: BackstageCloudKinds.label(provider.kind),
+				kind: provider.kind,
 				userName: provider.name,
 				onClose: close,
 				onOpen: () => {
@@ -577,8 +577,8 @@ class BackstageView extends window.L.Class {
 	): void {
 		this.mountDialog((close) =>
 			BackstageTemplates.removeConfirmDialog({
-				typeName: this.getCloudProviderDisplayName(provider.kind),
-				iconName: this.getCloudProviderIcon(provider.kind),
+				typeName: BackstageCloudKinds.label(provider.kind),
+				kind: provider.kind,
 				userName: provider.name,
 				onCancel: close,
 				onConfirm: () => {
@@ -600,19 +600,15 @@ class BackstageView extends window.L.Class {
 			if (!raw) return [];
 			const parsed = JSON.parse(raw);
 			if (!Array.isArray(parsed)) return [];
-			const validKinds: CloudProviderKind[] = [
-				'nextcloud',
-				'opencloud',
-				'seafile',
-				'other',
-			];
+			// An account stored while another branding was in place names a service that is
+			// no longer on offer, and is kept: it reads as Other with the generic icon.
 			return parsed.filter(
 				(p: any): p is CloudProvider =>
 					p &&
 					typeof p.id === 'string' &&
 					typeof p.name === 'string' &&
 					typeof p.url === 'string' &&
-					validKinds.includes(p.kind),
+					BackstageCloudKinds.isValidKind(p.kind),
 			);
 		} catch (e) {
 			console.error('Failed to read cloud providers:', e);
@@ -674,32 +670,6 @@ class BackstageView extends window.L.Class {
 			);
 		} catch (e) {
 			console.error('Failed to remove cloud provider:', e);
-		}
-	}
-
-	private getCloudProviderDisplayName(kind: CloudProviderKind): string {
-		switch (kind) {
-			case 'nextcloud':
-				return 'Nextcloud';
-			case 'opencloud':
-				return 'OpenCloud';
-			case 'seafile':
-				return 'Seafile';
-			case 'other':
-				return _('Other');
-		}
-	}
-
-	private getCloudProviderIcon(kind: CloudProviderKind): string {
-		switch (kind) {
-			case 'nextcloud':
-				return 'nextcloud.svg';
-			case 'opencloud':
-				return 'opencloud.svg';
-			case 'seafile':
-				return 'seafile.svg';
-			case 'other':
-				return 'generic.svg';
 		}
 	}
 

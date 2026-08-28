@@ -89,7 +89,12 @@ interface ExportSections {
 	downloadAs: ExportOptionItem[];
 }
 
-type CloudProviderKind = 'nextcloud' | 'opencloud' | 'seafile' | 'other';
+/*
+ * A cloud service identifier, in lower-case letters, digits and dashes:
+ * 'other' for any server that speaks the protocol, otherwise one of the
+ * services this build ships with or one a branding declares.
+ */
+type CloudProviderKind = string;
 
 interface CloudProvider {
 	id: string;
