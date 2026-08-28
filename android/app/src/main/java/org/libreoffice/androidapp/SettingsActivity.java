@@ -94,16 +94,12 @@ public class SettingsActivity extends AppCompatActivity {
                     group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                            switch (i) {
-                                case R.id.radioBtn_dark:
-                                    dayNightMode = AppCompatDelegate.MODE_NIGHT_YES;
-                                    break;
-                                case R.id.radioBtn_light:
-                                    dayNightMode = AppCompatDelegate.MODE_NIGHT_NO;
-                                    break;
-                                case R.id.radioBtn_default:
-                                    dayNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-                                    break;
+                            if (i == R.id.radioBtn_dark) {
+                                dayNightMode = AppCompatDelegate.MODE_NIGHT_YES;
+                            } else if (i == R.id.radioBtn_light) {
+                                dayNightMode = AppCompatDelegate.MODE_NIGHT_NO;
+                            } else {
+                                dayNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
                             }
                             AppCompatDelegate.setDefaultNightMode(dayNightMode);
                             prefs.edit().putInt(LibreOfficeUIActivity.NIGHT_MODE_KEY, dayNightMode).commit();
