@@ -32,6 +32,9 @@
 #include <editeng/outlobj.hxx>
 #include <unordered_map>
 #include <svx/svddef.hxx>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <svx/sdooitm.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <comphelper/processfactory.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -292,9 +295,6 @@ void DiagramHelper_oox::reLayout()
     // Re-apply remembered geometry
     pTarget->TRSetBaseGeometry(aTransformation, aPolyPolygon);
 
-    // let the shapes that share a font size choose the smallest
-    mpDiagramPtr->syncDiagramFontHeights();
-
     // new SdrObjects created, re-apply geometry change locks as needed
     // and reset SubSelection
     applyLocksToDiagramObjects(true);
@@ -393,6 +393,10 @@ void DiagramHelper_oox::reLayout()
         msNewNodeText.clear();
         msNewNodeTemplateId.clear();
     }
+
+    // make DiagramNodes use FitSize in edit mode
+    applyTextFitToSizeToDiagramNodes(accessRootShape(), /*bKeepFontScale*/false);
+    mpDiagramPtr->syncDiagramFontHeights();
 }
 
 OUString DiagramHelper_oox::getDiagramString() const
@@ -647,6 +651,61 @@ void DiagramHelper_oox::applyDiagramDataState(const DiagramDataStatePtr& rState)
     }
 
     mpDiagramPtr->getData()->applyDiagramDataState(rState);
+}
+
+void DiagramHelper_oox::applyTextFitToSizeToDiagramNodes(
+    const uno::Reference<drawing::XShape>& rTarget, bool bKeepFontScale)
+{
+    SdrObjGroup* pGroup(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rTarget)));
+
+    if (nullptr == pGroup || !hasDiagramData())
+        return;
+
+    SdrObjListIter aIter(*pGroup, SdrIterMode::DeepNoGroups);
+
+    while (aIter.IsMore())
+    {
+        SdrObject* pCandidate(aIter.Next());
+
+        if (nullptr == pCandidate || nullptr == pCandidate->GetOutlinerParaObject())
+            continue;
+
+        const OUString& rModelID(pCandidate->getDiagramDataModelID());
+
+        if (rModelID.isEmpty())
+            continue;
+
+        const rtl::Reference<svx::diagram::Point> xDataNode(
+            mpDiagramPtr->getData()->getDataNodeForModelID(rModelID));
+
+        // A node whose text the file marks as one of its own keeps what it came with
+        if (!xDataNode.is() || xDataNode->mbCustomText)
+            continue;
+
+        // set AutoGrowHeight and TextFitToSize, need to rescue
+        // some stuff when doing this
+        uno::Reference<beans::XPropertySet> xShapeProperties(pCandidate->getUnoShape(),
+                                                             uno::UNO_QUERY);
+        double fFontScale(0.0);
+        double fSpacingScale(0.0);
+
+        if (bKeepFontScale && xShapeProperties.is())
+        {
+            xShapeProperties->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fFontScale;
+            xShapeProperties->getPropertyValue(u"TextFitToSizeSpacingScale"_ustr) >>= fSpacingScale;
+        }
+
+        pCandidate->SetMergedItem(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false));
+        pCandidate->SetMergedItem(SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_AUTOFIT));
+
+        if (fFontScale > 0.0 && fSpacingScale > 0.0)
+        {
+            xShapeProperties->setPropertyValue(u"TextFitToSizeFontScale"_ustr,
+                                               cpo::uno::Any(fFontScale));
+            xShapeProperties->setPropertyValue(u"TextFitToSizeSpacingScale"_ustr,
+                                               cpo::uno::Any(fSpacingScale));
+        }
+    }
 }
 
 void DiagramHelper_oox::doAnchor(uno::Reference<drawing::XShape>& rTarget)

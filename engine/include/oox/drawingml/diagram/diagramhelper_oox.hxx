@@ -106,6 +106,10 @@ public:
     virtual void applyDiagramDataState(const std::shared_ptr< svx::diagram::DiagramDataState >& rState) override;
 
     void doAnchor(css::uno::Reference<css::drawing::XShape>& rTarget);
+
+    // make DiagramNodes use FitSize in edit mode
+    void applyTextFitToSizeToDiagramNodes(const css::uno::Reference<css::drawing::XShape>& rTarget,
+                                          bool bKeepFontScale);
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 

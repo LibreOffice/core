@@ -21,6 +21,11 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdtagitm.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/process.h>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -2279,6 +2284,39 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testUndoOfAnAddedNodeBringsBackBoxesA
     assertSameHeight(aChildBefore.mnHeight, aChildAfterUndo.mnHeight);
     CPPUNIT_ASSERT_EQUAL(aParentBefore.mfCharHeight, aParentAfterUndo.mfCharHeight);
     CPPUNIT_ASSERT_EQUAL(aChildBefore.mfCharHeight, aChildAfterUndo.mfCharHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeTextShrinksToItsBoxOnAFreshlyLoadedDiagram)
+{
+    createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObjGroup* pGroup(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xDiagram)));
+    CPPUNIT_ASSERT(nullptr != pGroup);
+
+    SdrObjListIter aIter(*pGroup, SdrIterMode::DeepNoGroups);
+    sal_Int32 nNodes(0);
+
+    while (aIter.IsMore())
+    {
+        SdrObject* pCandidate(aIter.Next());
+
+        if (nullptr == pCandidate || nullptr == pCandidate->GetOutlinerParaObject()
+            || pCandidate->getDiagramDataModelID().isEmpty())
+            continue;
+
+        ++nNodes;
+
+        // A Diagram that comes straight out of a file gives the same answer about its text as one
+        // whose shapes were just built again, so text shrinks to its box while it is typed in
+        // either case. The drawing that the file carries as a fallback states no such thing.
+        CPPUNIT_ASSERT_EQUAL(
+            static_cast<sal_Int32>(drawing::TextFitToSizeType_AUTOFIT),
+            static_cast<sal_Int32>(pCandidate->GetMergedItem(SDRATTR_TEXT_FITTOSIZE).GetValue()));
+        CPPUNIT_ASSERT(!pCandidate->GetMergedItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nNodes);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

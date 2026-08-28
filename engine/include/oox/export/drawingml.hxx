@@ -322,6 +322,7 @@ protected:
     /// True when DiagramReplacementVisualization is exported
     bool mbDiagaramExport;
     bool mbDiagaramReplacementExport;
+    bool mbDiagramModelTextExport;
 
     bool mbEmbedFonts = false;
 
@@ -391,6 +392,10 @@ public:
     /// get/set mbDiagaramExport
     void setDiagaramExport(bool bNew) { mbDiagaramExport = bNew; }
     bool isDiagaramExport() const { return mbDiagaramExport;}
+
+    // True while the text of the data model of a Diagram is written
+    void setDiagramModelTextExport(bool bNew) { mbDiagramModelTextExport = bNew; }
+    bool isDiagramModelTextExport() const { return mbDiagramModelTextExport; }
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
 

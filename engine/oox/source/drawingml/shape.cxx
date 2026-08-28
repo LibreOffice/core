@@ -297,6 +297,21 @@ void Shape::propagateDiagramHelper()
         delete mpDiagramHelper;
         mpDiagramHelper = nullptr;
     }
+
+    // evtl. make DiagramNodes use FitSize in edit mode
+    if (FRAMETYPE_DIAGRAM == meFrameType && mxShape)
+    {
+        SdrObject* pRootObject(SdrObject::getSdrObjectFromXShape(mxShape));
+
+        if (nullptr != pRootObject)
+        {
+            DiagramHelper_oox* pHelper(
+                dynamic_cast<DiagramHelper_oox*>(pRootObject->getDiagramHelper().get()));
+
+            if (nullptr != pHelper)
+                pHelper->applyTextFitToSizeToDiagramNodes(mxShape, /*bKeepFontScale*/true);
+        }
+    }
 }
 
 void Shape::migrateDiagramHelperToNewShape(const ShapePtr& pTarget)
