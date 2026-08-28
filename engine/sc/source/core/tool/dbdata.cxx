@@ -1202,13 +1202,20 @@ std::vector<TableColumnAttributes> ScDBData::GetTotalRowAttributes(formula::Form
                 while ((pCell = aIter.GetNext(nCol, nRow)) != nullptr)
                 {
                     TableColumnAttributes aNameAttr;
-                    if (pCell->getType() != CELLTYPE_FORMULA)
+                    aNameAttr.mbHasContent = true;
+                    CellType eCellType = pCell->getType();
+                    if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
                     {
+                        // A totals row label describes text content, so only cells that
+                        // actually hold text qualify. A plain number in the totals row is
+                        // exported as a number and carries no label, since declaring it as
+                        // a label would leave the exported table column and its underlying
+                        // cell disagreeing about the cell's type.
                         OUString aStr = pCell->getString(rDoc);
                         if (!aStr.isEmpty())
                             aNameAttr.maTotalsRowLabel = aStr;
                     }
-                    else
+                    else if (eCellType == CELLTYPE_FORMULA)
                     {
                         if (ScFormulaCell* pFC = pCell->getFormula())
                         {
