@@ -20,7 +20,6 @@
 #include <vcl/toolboxid.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/EnumContext.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 
 #include <memory>
 #include <map>
@@ -55,8 +54,7 @@ public:
                OUString sID = {},
                css::uno::Reference<css::frame::XFrame> xFrame
                = css::uno::Reference<css::frame::XFrame>(),
-               bool bLegacy = true,
-               std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem = nullptr);
+               bool bLegacy = true);
     virtual ~VclBuilder();
     ///releases references and disposes all children.
     void disposeBuilder();
@@ -90,8 +88,6 @@ private:
     //are collected here and need to be set afterwards, e.g. during
     //Show or Execute
     stringmap      m_aDeferredProperties;
-
-    std::unique_ptr<NotebookBarAddonsItem> m_pNotebookBarAddonsItem;
 
     struct PackingData
     {

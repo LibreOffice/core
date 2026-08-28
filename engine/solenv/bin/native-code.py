@@ -761,7 +761,6 @@ constructor_map = {
     }
 
 custom_widgets = [
-    'NotebookbarTabControl',
     'NotebookbarToolBox',
     ]
 

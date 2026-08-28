@@ -210,8 +210,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/menuwindow \
     vcl/source/window/mnemonic \
     vcl/source/window/mouse \
-    vcl/source/window/NotebookBarAddonsMerger \
-    vcl/source/window/OptionalBox \
     vcl/source/window/printdlg \
     vcl/source/window/scrwnd \
     vcl/source/window/seleng \
@@ -235,8 +233,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/calendar \
     vcl/source/control/combobox \
     vcl/source/control/ctrl \
-    vcl/source/control/ContextVBox \
-    vcl/source/control/DropdownBox \
     vcl/source/control/edit \
     vcl/source/control/field2 \
     vcl/source/control/field \
@@ -253,11 +249,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/longcurr \
     vcl/source/control/imp_listbox \
     vcl/source/control/listbox \
-    vcl/source/control/managedmenubutton \
     vcl/source/control/MenuButton \
-    vcl/source/control/NotebookbarPopup \
-    vcl/source/control/PriorityHBox \
-    vcl/source/control/PriorityMergedHBox \
     vcl/source/control/notebookbar \
     vcl/source/control/WeldedTabbedNotebookbar \
     vcl/source/control/quickselectionengine \

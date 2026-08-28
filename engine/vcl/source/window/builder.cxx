@@ -39,8 +39,8 @@
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/headbar.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/customwidget.hxx>
@@ -66,13 +66,7 @@
 #include <iconview.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
-#include <managedmenubutton.hxx>
 #include <messagedialog.hxx>
-#include <ContextVBox.hxx>
-#include <DropdownBox.hxx>
-#include <OptionalBox.hxx>
-#include <PriorityMergedHBox.hxx>
-#include <PriorityHBox.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <calendar.hxx>
@@ -618,9 +612,8 @@ void BuilderBase::resetParserState() { m_pParserState.reset(); }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
-                       bool bLegacy, std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem)
+                       bool bLegacy)
     : WidgetBuilder(sUIDir, sUIFile, bLegacy)
-    , m_pNotebookBarAddonsItem(std::move(pNotebookBarAddonsItem))
     , m_sID(std::move(sID))
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
@@ -1408,11 +1401,9 @@ extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* na
 // that. So cheat and duplicate the code from an existing generated
 // native-code.h. It's just a handful of lines anyway.
 
-extern "C" void makeNotebookbarTabControl(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, VclBuilder::stringmap &rVec);
 extern "C" void makeNotebookbarToolBox(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, VclBuilder::stringmap &rVec);
 
 static struct { const char *name; VclBuilder::customMakeWidget func; } const custom_widgets[] = {
-    { "makeNotebookbarTabControl", makeNotebookbarTabControl },
     { "makeNotebookbarToolBox", makeNotebookbarToolBox },
 };
 
@@ -1753,41 +1744,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     {
         xWindow = VclPtr<VclCustomWidget>::Create(pParent);
     }
-    else if (name == "VclOptionalBox" || name == "sfxlo-OptionalBox")
-    {
-        // tdf#135495 fallback sfxlo-OptionalBox to VclOptionalBox as a stopgap
-        xWindow = VclPtr<OptionalBox>::Create(pParent);
-    }
-    else if (name == "svtlo-ManagedMenuButton")
-    {
-        // like tdf#135495 keep the name svtlo-ManagedMenuButton even though it's a misnomer
-        // and is not dlsymed from the svt library
-        xWindow = VclPtr<ManagedMenuButton>::Create(pParent, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON);
-        OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
-        if (!sMenu.isEmpty())
-            m_pVclParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
-        setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
-    }
-    else if (name == "sfxlo-PriorityMergedHBox")
-    {
-        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
-        xWindow = VclPtr<PriorityMergedHBox>::Create(pParent);
-    }
-    else if (name == "sfxlo-PriorityHBox")
-    {
-        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
-        xWindow = VclPtr<PriorityHBox>::Create(pParent);
-    }
-    else if (name == "sfxlo-DropdownBox")
-    {
-        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
-        xWindow = VclPtr<DropdownBox>::Create(pParent);
-    }
-    else if (name == "sfxlo-ContextVBox")
-    {
-        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
-        xWindow = VclPtr<ContextVBox>::Create(pParent);
-    }
     else if (name == "GtkIconView")
     {
         assert(rMap.contains(u"model"_ustr) && "GtkIconView must have a model");
@@ -2050,13 +2006,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     else if (name == "GtkToolbar")
     {
         xWindow = VclPtr<ToolBox>::Create(pParent, WB_3DLOOK | WB_TABSTOP);
-    }
-    else if(name == "NotebookBarAddonsToolMergePoint")
-    {
-        customMakeWidget pFunction = GetCustomMakeWidget(u"sfxlo-NotebookbarToolBox"_ustr);
-        if(pFunction != nullptr)
-            NotebookBarAddonsMerger::MergeNotebookBarAddons(pParent, pFunction, m_xFrame, *m_pNotebookBarAddonsItem, rMap);
-        return nullptr;
     }
     else if (isToolbarItemClass(name))
     {
@@ -2979,12 +2928,9 @@ void VclBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUStr
     }
 }
 
-void VclBuilder::setPriority(vcl::Window* pWindow, int nPriority)
+void VclBuilder::setPriority(vcl::Window* /*pWindow*/, int /*nPriority*/)
 {
-    vcl::IPrioritable* pPrioritable = dynamic_cast<vcl::IPrioritable*>(pWindow);
-    SAL_WARN_IF(!pPrioritable, "vcl", "priority set for not supported item");
-    if (pPrioritable)
-        pPrioritable->SetPriority(nPriority);
+    SAL_WARN("vcl", "priority set for not supported item");
 }
 void VclBuilder::setContext(vcl::Window* pWindow, std::vector<vcl::EnumContext::Context>&& aContext)
 {
@@ -3177,15 +3123,7 @@ void VclBuilder::insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const
     sal_uInt16 nOldCount = pParent->GetItemCount();
     sal_uInt16 nNewId = ++m_pVclParserState->m_nLastMenuItemId;
 
-    if(rClass == "NotebookBarAddonsMenuMergePoint")
-    {
-        if (!comphelper::COKit::isActive())
-        {
-            NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_xFrame, *m_pNotebookBarAddonsItem);
-        }
-        m_pVclParserState->m_nLastMenuItemId = pParent->GetItemCount();
-    }
-    else if (rClass == "GtkMenuItem")
+    if (rClass == "GtkMenuItem")
     {
         OUString sLabel(BuilderUtils::convertMnemonicMarkup(extractLabel(rProps)));
         OUString aCommand(extractActionName(rProps));

@@ -3141,11 +3141,6 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     bool bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
                     if ( bNewFullScreenMode != pWork->IsFullScreenMode() )
                     {
-                        if ( bNewFullScreenMode )
-                            sfx2::SfxNotebookBar::LockNotebookBar();
-                        else
-                            sfx2::SfxNotebookBar::UnlockNotebookBar();
-
                         Reference< css::beans::XPropertySet > xLMPropSet( xLayoutManager, UNO_QUERY );
                         if ( xLMPropSet.is() )
                         {

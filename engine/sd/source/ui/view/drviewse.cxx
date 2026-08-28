@@ -59,7 +59,6 @@
 #include <avmedia/mediawindow.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <osl/diagnose.h>
 #include <svl/cryptosign.hxx>
 #include <tools/debug.hxx>

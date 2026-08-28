@@ -55,7 +55,6 @@ inline constexpr OUString SV_RESID_BITMAP_SCROLLV = u"vcl/res/scrollv.png"_ustr;
 inline constexpr OUString SV_RESID_BITMAP_SCROLLH = u"vcl/res/scrollh.png"_ustr;
 inline constexpr OUString SV_RESID_BITMAP_CLOSEDOC = u"vcl/res/closedoc.png"_ustr;
 inline constexpr OUString SV_RESID_BITMAP_REFRESH = u"res/reload.png"_ustr;
-inline constexpr OUString SV_RESID_BITMAP_NOTEBOOKBAR = u"res/notebookbar.png"_ustr;
 
 inline constexpr OUString SV_DISCLOSURE_PLUS = u"res/plus.png"_ustr;
 inline constexpr OUString SV_DISCLOSURE_MINUS = u"res/minus.png"_ustr;

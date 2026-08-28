@@ -24,7 +24,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/EnumContext.hxx>
-#include <vcl/NotebookbarContextControl.hxx>
 
 class ImplTabItem;
 struct ImplTabCtrlData;
@@ -171,38 +170,6 @@ public:
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-};
-
-class NotebookBar;
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NotebookbarTabControlBase : public TabControl,
-                                            public NotebookbarContextControl
-{
-public:
-    NotebookbarTabControlBase( vcl::Window* pParent );
-    ~NotebookbarTabControlBase() override;
-    void dispose() override;
-
-    void SetContext( vcl::EnumContext::Context eContext ) override;
-    void SetIconClickHdl( Link<NotebookBar*, void> aHdl );
-    void SetToolBox( ToolBox* pToolBox );
-    ToolBox* GetToolBox() { return m_pShortcuts; }
-    Control* GetOpenMenu();
-
-    virtual Size        calculateRequisition() const override;
-
-protected:
-    virtual bool ImplPlaceTabs( tools::Long nWidth ) override;
-    virtual void ImplActivateTabPage( bool bNext ) override;
-
-private:
-    bool bLastContextWasSupported;
-    vcl::EnumContext::Context eLastContext;
-    Link<NotebookBar*,void> m_aIconClickHdl;
-    static sal_uInt16 m_nHeaderHeight;
-    VclPtr<ToolBox> m_pShortcuts;
-    VclPtr<PushButton> m_pOpenMenu;
-    DECL_DLLPRIVATE_LINK(OpenMenu, Button*, void);
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX

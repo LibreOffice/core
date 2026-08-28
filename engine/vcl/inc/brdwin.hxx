@@ -19,14 +19,10 @@
 
 #pragma once
 
-#include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
-
 class ImplBorderWindowView;
-struct NotebookBarAddonsItem;
 enum class DrawButtonFlags;
 
 enum class BorderWindowStyle {
@@ -83,7 +79,6 @@ class ImplBorderWindow final : public vcl::Window
 private:
     std::unique_ptr<ImplBorderWindowView> mpBorderView;
     VclPtr<vcl::Window>     mpMenuBarWindow;
-    VclPtr<NotebookBar>     mpNotebookBar;
     tools::Long                    mnMinWidth;
     tools::Long                    mnMinHeight;
     tools::Long                    mnMaxWidth;
@@ -149,12 +144,6 @@ public:
     void                    UpdateMenuHeight();
     void                    SetMenuBarWindow( vcl::Window* pWindow );
     void                    SetMenuBarMode( bool bHide );
-
-    void SetNotebookBar(const OUString& rUIXMLDescription,
-                        const css::uno::Reference<css::frame::XFrame>& rFrame,
-                        std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem);
-    void CloseNotebookBar();
-    const VclPtr<NotebookBar>& GetNotebookBar() const { return mpNotebookBar; }
 
     void                    SetMinOutputSize( tools::Long nWidth, tools::Long nHeight )
                                 { mnMinWidth = nWidth; mnMinHeight = nHeight; }

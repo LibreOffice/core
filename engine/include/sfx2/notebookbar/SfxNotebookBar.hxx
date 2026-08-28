@@ -53,13 +53,6 @@ public:
                             const css::uno::Reference<css::frame::XFrame>& xFrame,
                             std::u16string_view rUIFile, bool bReloadNotebookbar = false);
 
-    /// Method temporarily blocks showing of the NotebookBar
-    static void LockNotebookBar();
-    /// Method restores normal behaviour of the Notebookbar
-    static void UnlockNotebookBar();
-
-    static void RemoveListeners(SystemWindow const* pSysWindow);
-
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
     /** Show menu bar only in current frame */
@@ -69,7 +62,6 @@ public:
 
 private:
     static bool m_bLock;
-    static bool m_bHide;
 
     static void ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp);
     static void RemoveCurrentKitWrapper();

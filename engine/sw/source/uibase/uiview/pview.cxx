@@ -73,7 +73,6 @@
 #include <algorithm>
 #include <memory>
 #include <vcl/EnumContext.hxx>
-#include <vcl/notebookbar/notebookbar.hxx>
 
 using namespace ::com::sun::star;
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")

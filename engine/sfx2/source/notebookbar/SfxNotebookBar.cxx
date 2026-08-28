@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/builder.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -26,8 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
-#include <framework/addonsoptions.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/weldutils.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -46,10 +43,7 @@ using namespace css;
 
 constexpr OUString MENUBAR_STR = u"private:resource/menubar/menubar"_ustr;
 
-const char MERGE_NOTEBOOKBAR_URL[] = "URL";
-
 bool SfxNotebookBar::m_bLock = false;
-bool SfxNotebookBar::m_bHide = false;
 
 namespace
 {
@@ -167,39 +161,6 @@ public:
 
 } // end anonymous namespace
 
-static void NotebookbarAddonValues(
-    std::vector<Image>& aImageValues,
-    std::vector<cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>>&
-        aExtensionValues)
-{
-    if (comphelper::COKit::isActive())
-        return;
-
-    framework::AddonsOptions aAddonsItems;
-
-    for (int nIdx = 0; nIdx < aAddonsItems.GetAddonsNotebookBarCount(); nIdx++)
-    {
-        const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& aExtension
-            = aAddonsItems.GetAddonsNotebookBarPart(nIdx);
-        for (const cpo::uno::Sequence<css::beans::PropertyValue>& rExtensionVal : aExtension)
-        {
-            Image aImage;
-            bool isBigImage = true;
-            for (const auto& rProp : rExtensionVal)
-            {
-                if (rProp.Name == MERGE_NOTEBOOKBAR_URL)
-                {
-                    OUString sImage;
-                    rProp.Value >>= sImage;
-                    aImage = Image(aAddonsItems.GetImageFromURL(sImage, isBigImage));
-                }
-            }
-            aImageValues.push_back(std::move(aImage));
-        }
-        aExtensionValues.push_back(aExtension);
-    }
-}
-
 static Reference<frame::XLayoutManager> lcl_getLayoutManager( const Reference<frame::XFrame>& xFrame )
 {
     css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
@@ -261,63 +222,6 @@ static void lcl_setNotebookbarFileName( vcl::EnumContext::Application eApp, cons
     aBatch->commit();
 }
 
-static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
-{
-    switch ( eApp )
-    {
-        case vcl::EnumContext::Application::Writer:
-            return officecfg::Office::UI::ToolbarMode::ActiveWriter::get();
-        case vcl::EnumContext::Application::Calc:
-            return officecfg::Office::UI::ToolbarMode::ActiveCalc::get();
-        case vcl::EnumContext::Application::Impress:
-            return officecfg::Office::UI::ToolbarMode::ActiveImpress::get();
-        case vcl::EnumContext::Application::Draw:
-            return officecfg::Office::UI::ToolbarMode::ActiveDraw::get();
-
-        default:
-            break;
-    }
-    return OUString();
-}
-
-static utl::OConfigurationTreeRoot lcl_getCurrentImplConfigRoot()
-{
-    return utl::OConfigurationTreeRoot(::comphelper::getProcessComponentContext(),
-                                       u"org.openoffice.Office.UI.ToolbarMode/"_ustr,
-                                       true);
-}
-
-static utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css::frame::XFrame>& xFrame,
-                                                                  utl::OConfigurationTreeRoot const & rNotebookbarNode )
-{
-    if (!rNotebookbarNode.isValid())
-        return utl::OConfigurationNode();
-
-    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
-
-    vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
-    OUString aActive = lcl_getNotebookbarFileName( eApp );
-
-    const utl::OConfigurationNode aImplsNode = rNotebookbarNode.openNode("Applications/" + lcl_getAppName( eApp) + "/Modes");
-    const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
-
-    for ( const auto& rModeNodeName : aModeNodeNames )
-    {
-        utl::OConfigurationNode aImplNode( aImplsNode.openNode( rModeNodeName ) );
-        if ( !aImplNode.isValid() )
-            continue;
-
-        OUString aCommandArg = comphelper::getString( aImplNode.getNodeValue( u"CommandArg"_ustr ) );
-
-        if ( aCommandArg == aActive )
-        {
-            return aImplNode;
-        }
-    }
-
-    return utl::OConfigurationNode();
-}
-
 void SfxNotebookBar::RemoveCurrentKitWrapper()
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -337,40 +241,14 @@ void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
     CloseMethod(rFrame.GetSystemWindow());
 }
 
-void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
+void SfxNotebookBar::CloseMethod(SystemWindow* /*pSysWindow*/)
 {
     if (comphelper::COKit::isActive())
-    {
         RemoveCurrentKitWrapper();
-        return;
-    }
-
-    if (pSysWindow)
-    {
-        if(pSysWindow->GetNotebookBar())
-            pSysWindow->CloseNotebookBar();
-        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
-            SfxNotebookBar::ShowMenubar(pViewFrm, true);
-    }
-}
-
-void SfxNotebookBar::LockNotebookBar()
-{
-    m_bHide = true;
-    m_bLock = true;
-}
-
-void SfxNotebookBar::UnlockNotebookBar()
-{
-    m_bHide = false;
-    m_bLock = false;
 }
 
 bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
 {
-    if (m_bHide)
-        return false;
-
     vcl::EnumContext::Application eApp = vcl::EnumContext::Application::Any;
 
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
@@ -487,8 +365,11 @@ bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, std::u16string_view rUI
 
 bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                  const Reference<css::frame::XFrame>& xFrame,
-                                 std::u16string_view rUIFile, bool bReloadNotebookbar)
+                                 std::u16string_view rUIFile, bool /*bReloadNotebookbar*/)
 {
+    if (!comphelper::COKit::isActive())
+        return false;
+
     if (!pSysWindow)
     {
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
@@ -502,163 +383,82 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     auto& rViewData = NotebookBarViewManager::get().getViewData(pViewShell);
     bool hasWeldedWrapper = bool(rViewData.m_pWeldedWrapper);
 
-    if (IsActive())
-    {
-        const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
-        const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
-        OUString aModuleName = xModuleManager->identify( xFrame );
-        vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
-        bool bIsKit = comphelper::COKit::isActive();
-
-        OUString sFile;
-        if (bIsKit)
-            sFile = u"notebookbar_online.ui"_ustr;
-        else
-            sFile = lcl_getNotebookbarFileName( eApp );
-
-        OUString sNewFile = rUIFile + sFile;
-        OUString sCurrentFile;
-        VclPtr<NotebookBar> pNotebookBar = pSysWindow->GetNotebookBar();
-        if ( pNotebookBar )
-            sCurrentFile = pNotebookBar->GetUIFilePath();
-
-        bool bChangedFile = sNewFile != sCurrentFile;
-
-        if ((!bIsKit && (
-                (!sFile.isEmpty() && bChangedFile) ||
-                (!pNotebookBar || !pNotebookBar->IsVisible()) ||
-                bReloadNotebookbar)
-            ) || (bIsKit && !hasWeldedWrapper))
-        {
-            OUString aBuf = rUIFile + sFile;
-
-            //Addons For Notebookbar
-            std::vector<Image> aImageValues;
-            std::vector<cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
-            std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem;
-            if (!bIsKit)
-            {
-                pNotebookBarAddonsItem = std::make_unique<NotebookBarAddonsItem>();
-                NotebookbarAddonValues(aImageValues , aExtensionValues);
-                pNotebookBarAddonsItem->aAddonValues = std::move(aExtensionValues);
-                pNotebookBarAddonsItem->aImageValues = std::move(aImageValues);
-            }
-
-            if (bIsKit)
-            {
-                if (!pViewShell)
-                    return false;
-
-                // Notebookbar was loaded too early what caused:
-                //   * in COKit: Paste Special feature was incorrectly initialized
-                // Skip first request so Notebookbar will be initialized after document was loaded
-                static std::map<const void*, bool> bSkippedFirstInit;
-                if (eApp == vcl::EnumContext::Application::Writer
-                    && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
-                {
-                    bSkippedFirstInit[pViewShell] = true;
-                    ResetActiveToolbarModeToDefault(eApp);
-                    return false;
-                }
-
-                // update the current COKit language and locale for the dialog tunneling
-                comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
-                comphelper::COKit::setLocale(pViewShell->GetKitLocale());
-
-                pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, u"NotebookBar"_ustr, aBuf, xFrame, std::move(pNotebookBarAddonsItem));
-                rViewData.m_pNotebookBar = pNotebookBar;
-                assert(pNotebookBar->IsWelded());
-
-                sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
-
-                const std::vector<WeldedTabbedNotebookbar::ExtraPanel> aExtraPanels{
-                    { u"svx/ui/notebookbarshapeline.ui", u"LineWeldedToolbar",
-                      u"com.sun.star.svx.NotebookbarLineController" },
-                    { u"svx/ui/notebookbarpictureline.ui", u"PictureLineWeldedToolbar", u"" },
-                };
-
-                rViewData.m_pWeldedWrapper.reset(
-                        new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
-                                                    pNotebookBar->GetUIFilePath(),
-                                                    xFrame, nWindowId, aExtraPanels));
-                pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
-
-                rViewData.m_pToolbarUnoDispatcher.reset(
-                    new ToolbarUnoDispatcher(rViewData.m_pWeldedWrapper->getWeldedToolbar(),
-                                             rViewData.m_pWeldedWrapper->getBuilder(), xFrame));
-
-                // Wire a UNO dispatcher for each present welded sub-toolbar
-                for (auto& rExtra : rViewData.m_pWeldedWrapper->getExtraPanels())
-                {
-                    if (!rExtra.m_xToolbar || !rExtra.m_xBuilder)
-                        continue;
-
-                    rViewData.m_aExtraToolbarUnoDispatchers.push_back(
-                        std::make_unique<ToolbarUnoDispatcher>(*rExtra.m_xToolbar,
-                                                               *rExtra.m_xBuilder, xFrame));
-
-                    if (rExtra.m_aControllerService.empty())
-                        continue;
-
-                    if (css::uno::Reference<css::lang::XComponent> xController
-                        = CreateExtraPanelController(OUString(rExtra.m_aControllerService), xFrame,
-                                                     pViewShell->GetViewFrame().GetBindings(),
-                                                     *rExtra.m_xToolbar, *rExtra.m_xBuilder))
-                        rViewData.m_aExtraPanelControllers.push_back(std::move(xController));
-                }
-
-                return true;
-            }
-
-            // tdf#164899 don't call SystemWindow::SetNotebookBar recursively
-            // if NoteBookBar is in process of getting set
-            if (pSysWindow->isSettingUpNoteBookBar())
-                return false;
-
-            RemoveListeners(pSysWindow);
-
-            pSysWindow->SetNotebookBar(aBuf, xFrame, std::move(pNotebookBarAddonsItem), bReloadNotebookbar);
-            pNotebookBar = pSysWindow->GetNotebookBar();
-            pNotebookBar->Show();
-
-            pNotebookBar->GetParent()->Resize();
-
-            utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
-            const utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
-            SfxNotebookBar::ShowMenubar( comphelper::getBOOL( aModeNode.getNodeValue( u"HasMenubar"_ustr ) ) );
-
-            SfxViewFrame* pView = SfxViewFrame::Current();
-
-            if(pView)
-            {
-                pNotebookBar->SetupListener(true);
-            }
-        }
-
-        return true;
-    }
-    else if (comphelper::COKit::isActive())
+    if (!IsActive())
     {
         // don't do anything to not close notebookbar of other session
         return hasWeldedWrapper;
     }
-    else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
+
+    if (hasWeldedWrapper)
+        return true;
+
+    if (!pViewShell)
+        return false;
+
+    const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
+    OUString aModuleName = xModuleManager->identify( xFrame );
+    vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
+
+    // Notebookbar was loaded too early what caused:
+    //   * in COKit: Paste Special feature was incorrectly initialized
+    // Skip first request so Notebookbar will be initialized after document was loaded
+    static std::map<const void*, bool> bSkippedFirstInit;
+    if (eApp == vcl::EnumContext::Application::Writer
+        && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
     {
-        vcl::Window* pParent = pNotebookBar->GetParent();
-        pSysWindow->CloseNotebookBar();
-        pParent->Resize();
-        SfxNotebookBar::ShowMenubar(true);
+        bSkippedFirstInit[pViewShell] = true;
+        ResetActiveToolbarModeToDefault(eApp);
+        return false;
     }
 
-    return false;
-}
+    // update the current COKit language and locale for the dialog tunneling
+    comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
+    comphelper::COKit::setLocale(pViewShell->GetKitLocale());
 
-void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
-{
-    if (const auto& pNotebookBar = pSysWindow->GetNotebookBar())
+    OUString aBuf = rUIFile + u"notebookbar_online.ui"_ustr;
+    VclPtr<NotebookBar> pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, aBuf);
+    rViewData.m_pNotebookBar = pNotebookBar;
+
+    sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
+
+    const std::vector<WeldedTabbedNotebookbar::ExtraPanel> aExtraPanels{
+        { u"svx/ui/notebookbarshapeline.ui", u"LineWeldedToolbar",
+          u"com.sun.star.svx.NotebookbarLineController" },
+        { u"svx/ui/notebookbarpictureline.ui", u"PictureLineWeldedToolbar", u"" },
+    };
+
+    rViewData.m_pWeldedWrapper.reset(
+            new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
+                                        pNotebookBar->GetUIFilePath(),
+                                        xFrame, nWindowId, aExtraPanels));
+    pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
+
+    rViewData.m_pToolbarUnoDispatcher.reset(
+        new ToolbarUnoDispatcher(rViewData.m_pWeldedWrapper->getWeldedToolbar(),
+                                 rViewData.m_pWeldedWrapper->getBuilder(), xFrame));
+
+    // Wire a UNO dispatcher for each present welded sub-toolbar
+    for (auto& rExtra : rViewData.m_pWeldedWrapper->getExtraPanels())
     {
-        pNotebookBar->SetupListener(false);
+        if (!rExtra.m_xToolbar || !rExtra.m_xBuilder)
+            continue;
+
+        rViewData.m_aExtraToolbarUnoDispatchers.push_back(
+            std::make_unique<ToolbarUnoDispatcher>(*rExtra.m_xToolbar,
+                                                   *rExtra.m_xBuilder, xFrame));
+
+        if (rExtra.m_aControllerService.empty())
+            continue;
+
+        if (css::uno::Reference<css::lang::XComponent> xController
+            = CreateExtraPanelController(OUString(rExtra.m_aControllerService), xFrame,
+                                         pViewShell->GetViewFrame().GetBindings(),
+                                         *rExtra.m_xToolbar, *rExtra.m_xBuilder))
+            rViewData.m_aExtraPanelControllers.push_back(std::move(xController));
     }
+
+    return true;
 }
 
 void SfxNotebookBar::ShowMenubar(bool bShow)
@@ -749,25 +549,12 @@ void SfxNotebookBar::ToggleMenubar()
     const Reference<frame::XLayoutManager> xLayoutManager =
                                             lcl_getLayoutManager(xFrame);
 
-    bool bShow = true;
     if (xLayoutManager.is() && xLayoutManager->getElement(MENUBAR_STR).is())
     {
         if (xLayoutManager->isElementVisible(MENUBAR_STR))
-        {
             SfxNotebookBar::ShowMenubar(false);
-            bShow = false;
-        }
         else
             SfxNotebookBar::ShowMenubar(true);
-    }
-
-    // Save menubar settings
-    if (IsActive())
-    {
-        utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
-        utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
-        aModeNode.setNodeValue( u"HasMenubar"_ustr, toAny<bool>( bShow ) );
-        aRoot.commit();
     }
 }
 

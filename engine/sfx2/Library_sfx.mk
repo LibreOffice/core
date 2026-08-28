@@ -248,7 +248,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/explorer/nochaos \
     sfx2/source/inet/inettbc \
     sfx2/source/notebookbar/SfxNotebookBar \
-    sfx2/source/notebookbar/NotebookbarTabControl \
     sfx2/source/notify/eventsupplier \
     sfx2/source/notify/globalevents \
     sfx2/source/notify/hintpost \
