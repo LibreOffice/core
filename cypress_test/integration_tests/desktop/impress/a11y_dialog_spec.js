@@ -37,6 +37,9 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
         cy.getFrameWindow().then(function (frameWindow) {
             win = frameWindow;
             a11yHelper.enableUICoverage(win);
+
+            // a copy of a table selection falls back and offers this notice
+            win.JSDialog.setShowAgain('copy_paste_warning', false);
         });
 
         cy.cGet('.jsdialog-window').should('not.exist');
@@ -57,6 +60,11 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
     });
 
     after(function () {
+        cy.then(() => {
+            // leave the clipboard notice on for whatever runs next
+            win.prefs.remove('UIShowAgain_copy_paste_warning');
+        });
+
         a11yHelper.reportUICoverage(win, hasLinguisticData);
 
         cy.get('@uicoverageResult').then(result => {
