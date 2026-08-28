@@ -2092,10 +2092,14 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
         XclAddress aXclPos( ScAddress::UNINITIALIZED );
         ConvertRefData( aRefData, aXclPos, false, false, false );
 
-        // store external cell contents in CRN records
+        // Store external cell contents in CRN records. A chart series is not
+        // a cell formula, but still needs its referenced external value
+        // cached here: it is the only thing that keeps the cache from
+        // exporting empty once nothing else in the sheet uses the same
+        // external range.
         sal_uInt16 nFileId = pESRToken->GetFileId();
         OUString aTabName = pESRToken->GetTableName().getString();
-        if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
+        if( (mxData->mrCfg.mbFromCell || mxData->mrCfg.meType == EXC_FMLATYPE_CHART) && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCell(nFileId, aTabName, aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
@@ -2129,10 +2133,11 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
         XclRange aXclRange( ScAddress::UNINITIALIZED );
         ConvertRefData( aRefData, aXclRange, false );
 
-        // store external cell contents in CRN records
+        // Store external cell contents in CRN records, for the same reason
+        // as in ProcessExternalCellRef above.
         sal_uInt16 nFileId = pEDRToken->GetFileId();
         OUString aTabName = pEDRToken->GetTableName().getString();
-        if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
+        if( (mxData->mrCfg.mbFromCell || mxData->mrCfg.meType == EXC_FMLATYPE_CHART) && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCellRange(nFileId, aTabName, aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
