@@ -576,7 +576,6 @@ void ScGlobal::Clear()
     xStarCalcFunctionList.clear(); // Destroy before ResMgr!
     xStarCalcFunctionMgr.clear();
     maInputHandlerFunctionNames.clear();
-    ScParameterClassification::Exit();
     ScCompiler::DeInit();
 
     xEmptyBrushItem.reset();

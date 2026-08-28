@@ -49,8 +49,6 @@ public:
                                 /// MUST be called once before any other method.
     static  void                Init();
 
-    static  void                Exit();
-
                                 /** Get one parameter type for function eOp.
                                     @param nParameter
                                         Which parameter, 0-based.
@@ -65,7 +63,7 @@ public:
                                     {
                                         return 0 <= static_cast<short>(eOp) &&
                                             eOp <= ocLastOpcodeId &&
-                                            pData[eOp].bHasForceArray;
+                                            gData[eOp].bHasForceArray;
                                     }
 
 private:
@@ -95,7 +93,8 @@ private:
     };
 
     static  const RawData       pRawData[];
-    static  RunData*            pData;
+    static  RunData             gData[ocLastOpcodeId + 1];
+    static  bool                gbDataInitialised;
 
     // ocExternal AddIns
     static  formula::ParamClass GetExternalParameterType(
