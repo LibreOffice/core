@@ -1492,9 +1492,8 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         }
 
         // The inner command is everything after the wopisrc token.
-        const std::string prefix = tokens[0] + ' ' + tokens[1] + ' ';
-        const std::string inner = firstLine.substr(prefix.size());
-        docBroker->sendRemoteDocumentCommand(getId(), Uri::decode(encodedWopiSrc), inner);
+        docBroker->sendRemoteDocumentCommand(getId(), Uri::decode(encodedWopiSrc),
+                                             tokens.cat(' ', 2));
         return true;
     }
 #endif // !MOBILEAPP && !WASMAPP

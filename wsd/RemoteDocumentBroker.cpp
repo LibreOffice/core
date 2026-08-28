@@ -490,6 +490,8 @@ void RemoteDocument::forwardCommandResult(const std::vector<char>& data)
         return;
 
     const std::string encodedWopiSrc = Uri::encode(_wopiSrc);
+    // One copy of the frame, shared by every view it is delivered to.
+    const auto payload = std::make_shared<const std::vector<char>>(data);
     for (const auto& subscriber : _commandSubscribers)
     {
         // Reach the requesting view's DocumentBroker through any consumer
@@ -508,9 +510,8 @@ void RemoteDocument::forwardCommandResult(const std::vector<char>& data)
             continue;
 
         docBroker->addCallback(
-            [docBroker, sessionId = subscriber.second, encodedWopiSrc,
-             payload = data]()
-            { docBroker->sendRemoteDocumentCommandResult(sessionId, encodedWopiSrc, payload); });
+            [docBroker, sessionId = subscriber.second, encodedWopiSrc, payload]()
+            { docBroker->sendRemoteDocumentCommandResult(sessionId, encodedWopiSrc, *payload); });
     }
 }
 
