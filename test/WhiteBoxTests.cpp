@@ -147,6 +147,10 @@ void WhiteBoxTests::testCOOLProtocolFunctions()
     LOK_ASSERT(COOLProtocol::getTokenStringFromMessage(message, "bar", bar));
     LOK_ASSERT_EQUAL_STR("hello-sailor", bar);
 
+    // An insert of slides adds pages to the document.
+    LOK_ASSERT(COOLProtocol::tokenIndicatesDocumentModification(
+        StringVector::tokenize("slideimport insert file=source.odp slides=0,1 at=2")));
+
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), Util::trimmed("A").size());
     LOK_ASSERT_EQUAL_STR("A", Util::trimmed("A"));
 

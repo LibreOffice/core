@@ -190,6 +190,7 @@ private:
     void postInsertCommand(const std::string& type, const std::string& url, int multimedia_width,
                            int multimedia_height);
     bool insertFile(const StringVector& tokens);
+    bool slideImportInsert(const StringVector& tokens);
     bool keyEvent(const StringVector& tokens, LokEventTargetEnum target);
     bool extTextInputEvent(const StringVector& tokens);
     bool dialogKeyEvent(const char* buffer, int length, const std::vector<std::string>& tokens);

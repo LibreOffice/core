@@ -189,6 +189,34 @@ selectbackground name=<name>
 
     Inserts a graphic file with the name <name> into the document as background.
 
+slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
+                   [at=<S>] [keepdesign=<0|1>] [link=<0|1>]
+
+    Inserts pages of a presentation staged in the jail into the open document.
+    Only Impress documents are served. The staged name is the file a related
+    document wrote when it was asked to exportslides, which the server put in
+    the staging area of this document's jail; the insert takes it, so the file
+    leaves the staging area whether the pages are inserted or not. Slide
+    indices are 0-based standard-page indices, and no list at all inserts every
+    page of the file.
+
+    The pages are inserted before slide <S>; a missing or out-of-range <S>
+    appends them at the end. keepdesign=1 copies the design of the file along;
+    keepdesign=0 makes the inserted pages adopt the design of this document.
+
+    <source> names the source document as the user knows it, percent-encoded
+    like the staged name: a document name holding no path. link=1 keeps the
+    inserted pages bound to it, so that they can be refreshed from it later;
+    link=0, or no link at all, inserts plain copies. The reply is
+        slideimport: {"status":"inserted","count":<K>}
+
+    Errors are reported as
+        error: cmd=slideimport kind=<syntax|cantload|failure|nosource>
+    where cantload means no file is staged under that name, failure covers an
+    insert the document refused, including one a view that cannot edit asked
+    for, and nosource means an insert that asks for links without naming a
+    source document.
+
 key type=<type> char=<charcode> key=<keycode>
 
     <type> is 'input' or 'up', <charcode> and <keycode> are numbers.

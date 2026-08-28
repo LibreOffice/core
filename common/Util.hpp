@@ -908,6 +908,22 @@ int main(int argc, char**argv)
     /// either for a URL or for a file path
     std::string cleanupFilename(const std::string &filename);
 
+    /// Whether a name is one file of a directory: a name holding no path separator
+    /// and naming no directory of its own.
+    inline bool isPlainFileName(const std::string& name)
+    {
+        return !name.empty() && name != "." && name != ".." &&
+               name.find('/') == std::string::npos && name.find('\\') == std::string::npos;
+    }
+
+    /// Whether a string holds a character that a document name never holds and
+    /// that a JSON string carries escaped: a control character of the ASCII range.
+    inline bool holdsControlCharacter(const std::string& value)
+    {
+        return std::any_of(value.begin(), value.end(), [](const char character)
+                           { return static_cast<unsigned char>(character) < 0x20; });
+    }
+
     //// Return current time in HTTP format.
     std::string getHttpTimeNow();
 

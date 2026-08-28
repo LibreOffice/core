@@ -641,6 +641,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setclipboard") ||
                tokens.equals(0, "paste") ||
                tokens.equals(0, "insertfile") ||
+               tokens.equals(0, "slideimport") ||
                tokens.equals(0, "key") ||
                tokens.equals(0, "textinput") ||
                tokens.equals(0, "windowkey") ||
@@ -734,6 +735,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "insertfile"))
         {
             return insertFile(tokens);
+        }
+        else if (tokens.equals(0, "slideimport"))
+        {
+            return slideImportInsert(tokens);
         }
         else if (tokens.equals(0, "key"))
         {
@@ -2201,6 +2206,185 @@ bool ChildSession::insertFile(const StringVector& tokens)
     }
 
     return true;
+}
+
+namespace
+{
+/// Parses a comma separated list of 0-based slide indices. Returns false on
+/// an empty list or a non-numeric entry.
+bool parseSlideIndexList(const std::string& list, std::vector<int>& indices)
+{
+    const StringVector entries = StringVector::tokenize(list, ',');
+    if (entries.empty())
+        return false;
+
+    indices.reserve(entries.size());
+    for (std::size_t i = 0; i < entries.size(); ++i)
+    {
+        const auto [index, valid] = NumUtil::i32FromString(entries[i]);
+        if (!valid)
+            return false;
+        indices.push_back(index);
+    }
+
+    return true;
+}
+
+/// Joins 0-based slide indices into a comma separated list.
+std::string joinSlideIndexList(const std::vector<int>& indices)
+{
+    std::ostringstream list;
+    for (std::size_t i = 0; i < indices.size(); ++i)
+        list << (i ? "," : "") << indices[i];
+    return list.str();
+}
+
+}
+
+bool ChildSession::slideImportInsert(const StringVector& tokens)
+{
+    // The one subcommand of the family is insert.
+    if (tokens.size() < 2 || !tokens.equals(1, "insert"))
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
+        return false;
+    }
+
+    std::string encodedName;
+    std::string encodedSource;
+    std::string slideList;
+    int at = -1;
+    bool keepDesign = false;
+    bool link = false;
+    bool haveName = false;
+    bool haveSource = false;
+    bool malformed = false;
+    for (std::size_t i = 2; i < tokens.size() && !malformed; ++i)
+    {
+        // Each option is given once, and an insert carries nothing else.
+        std::string value;
+        int number = 0;
+        if (getTokenString(tokens[i], "file", value))
+        {
+            malformed = std::exchange(haveName, true);
+            encodedName = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "source", value))
+        {
+            malformed = std::exchange(haveSource, true);
+            encodedSource = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "slides", value))
+        {
+            slideList = std::move(value);
+        }
+        else if (getTokenInteger(tokens[i], "at", number))
+        {
+            at = number;
+        }
+        else if (getTokenInteger(tokens[i], "keepdesign", number))
+        {
+            keepDesign = number != 0;
+        }
+        else if (getTokenInteger(tokens[i], "link", number))
+        {
+            link = number != 0;
+        }
+        else
+        {
+            malformed = true;
+        }
+    }
+
+    std::vector<int> slides;
+    if (!slideList.empty() && !parseSlideIndexList(slideList, slides))
+        malformed = true;
+
+    std::string name;
+    std::string source;
+    if (!malformed && haveName)
+    {
+        try
+        {
+            URI::decode(encodedName, name);
+            URI::decode(encodedSource, source);
+        }
+        catch (const Poco::Exception& exc)
+        {
+            LOG_ERR("slideimport insert: cannot decode the command: " << exc.displayText());
+            malformed = true;
+        }
+    }
+
+    // The pages come from a file staged in the jail, picked out of the staging area by name,
+    // so the name is a plain file name: no path separator and not a directory reference.
+    if (malformed || !haveName || !Util::isPlainFileName(name))
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
+        return false;
+    }
+
+    // The source is the document the inserted pages record as the one they came from, as the
+    // user knows it. A name holding a path or a control character is refused.
+    if (haveSource && (!Util::isPlainFileName(source) || Util::holdsControlCharacter(source)))
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
+        return false;
+    }
+
+    // Pages are linked to the source document the insert names, so a link insert needs one.
+    if (link && !haveSource)
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=nosource");
+        return false;
+    }
+
+    // The file was staged for this one insert, so it leaves the staging area now, whether the
+    // insert runs or not.
+    const std::string sharedStagedPath = getJailDocRoot() + "insertfile/" + name;
+
+    // An insert adds pages to the document, which a view that cannot edit does not do.
+    if (isReadOnly())
+    {
+        FileUtil::removeFile(sharedStagedPath, true);
+        LOG_ERR("slideimport insert: a read-only view does not insert slides");
+        sendTextFrameAndLogError("error: cmd=slideimport kind=failure");
+        return false;
+    }
+
+    if (!FileUtil::Stat(sharedStagedPath).exists())
+    {
+        LOG_ERR("slideimport insert: no file staged as [" << name << ']');
+        sendTextFrameAndLogError("error: cmd=slideimport kind=cantload");
+        return false;
+    }
+
+    SigUtil::addActivity(getId(), "slideimport insert");
+
+    getLOKitDocument()->setView(_viewId);
+
+    std::ostringstream options;
+    options << "{\"slides\":[" << joinSlideIndexList(slides)
+            << "],\"at\":" << at << ",\"keepDesign\":" << (keepDesign ? "true" : "false")
+            << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
+            << JsonUtil::escapeJSONValue(source) << "\"}";
+
+    // The document reads the staged file within this call, so the file goes as soon as it
+    // returns: the pages of it belong to the document from then on.
+    const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
+    const bool inserted =
+        getLOKitDocument()->insertPagesFromFile(url.c_str(), options.str().c_str());
+
+    FileUtil::removeFile(sharedStagedPath, true);
+
+    if (!inserted)
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=failure");
+        return false;
+    }
+
+    return sendTextFrame("slideimport: {\"status\":\"inserted\",\"count\":" +
+                         std::to_string(slides.size()) + '}');
 }
 
 bool ChildSession::extTextInputEvent(const StringVector& tokens)
