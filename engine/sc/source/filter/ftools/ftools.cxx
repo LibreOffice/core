@@ -33,6 +33,7 @@
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <compiler.hxx>
+#include <tablestyle.hxx>
 
 #include <orcusfiltersimpl.hxx>
 
@@ -145,6 +146,27 @@ OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
         if( !ScCompiler::IsCharFlagAllConventions( sName, nPos, ScCharFlags::Name ) )
             sName = sName.replaceAt( nPos, 1, u"_" );
     return sName;
+}
+
+const char* ScfTools::GetTableStyleElementOOXMLName( ScTableStyleElement eElement )
+{
+    switch (eElement)
+    {
+        case ScTableStyleElement::WholeTable:            return "wholeTable";
+        case ScTableStyleElement::FirstColumnStripe:     return "firstColumnStripe";
+        case ScTableStyleElement::SecondColumnStripe:    return "secondColumnStripe";
+        case ScTableStyleElement::FirstRowStripe:        return "firstRowStripe";
+        case ScTableStyleElement::SecondRowStripe:       return "secondRowStripe";
+        case ScTableStyleElement::LastColumn:            return "lastColumn";
+        case ScTableStyleElement::FirstColumn:           return "firstColumn";
+        case ScTableStyleElement::HeaderRow:             return "headerRow";
+        case ScTableStyleElement::TotalRow:              return "totalRow";
+        case ScTableStyleElement::FirstHeaderCell:       return "firstHeaderCell";
+        case ScTableStyleElement::LastHeaderCell:        return "lastHeaderCell";
+        case ScTableStyleElement::FirstTotalCell:        return "firstTotalCell";
+        case ScTableStyleElement::LastTotalCell:         return "lastTotalCell";
+    }
+    return nullptr;
 }
 
 // *** streams and storages *** -----------------------------------------------

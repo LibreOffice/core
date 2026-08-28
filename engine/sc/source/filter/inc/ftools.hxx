@@ -114,6 +114,7 @@ class ScStyleSheetPool;
 class SvStream;
 class SotStorage;
 class SotStorageStream;
+enum class ScTableStyleElement;
 
 /** Contains static methods used anywhere in the filters. */
 class ScfTools
@@ -148,6 +149,9 @@ public:
         colons (*), question marks, and dollar signs.
         (*) = not allowed at first position. */
     static OUString  ConvertToScDefinedName( const OUString& rName );
+
+    /** Returns the OOXML tableStyleElement type name of a Table Style element. */
+    static const char* GetTableStyleElementOOXMLName( ScTableStyleElement eElement );
 
 // *** streams and storages *** -----------------------------------------------
 

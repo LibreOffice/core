@@ -60,6 +60,7 @@
 #include <tools/UnitConversion.hxx>
 #include <utility>
 #include <vcl/unohelp.hxx>
+#include <o3tl/enumrange.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -2578,35 +2579,22 @@ void TableStyle::setName(const OUString& rName)
 
 void TableStyle::importTableStyleElement(const AttributeList& rAttribs)
 {
-    TableStyleElementInfo aInfo;
-    aInfo.mnDxfID = rAttribs.getInteger(XML_dxfId, -1);
     OUString aTableStyleElementName = rAttribs.getString(XML_type, OUString());
-    static const std::unordered_map<OUString, ScTableStyleElement> aTableStyleElementMap
-        = { { u"wholeTable"_ustr, ScTableStyleElement::WholeTable },
-            { u"firstColumnStripe"_ustr, ScTableStyleElement::FirstColumnStripe },
-            { u"secondColumnStripe"_ustr, ScTableStyleElement::SecondColumnStripe },
-            { u"firstRowStripe"_ustr, ScTableStyleElement::FirstRowStripe },
-            { u"secondRowStripe"_ustr, ScTableStyleElement::SecondRowStripe },
-            { u"firstColumn"_ustr, ScTableStyleElement::FirstColumn },
-            { u"lastColumn"_ustr, ScTableStyleElement::LastColumn },
-            { u"headerRow"_ustr, ScTableStyleElement::HeaderRow },
-            { u"totalRow"_ustr, ScTableStyleElement::TotalRow },
-            { u"firstHeaderCell"_ustr, ScTableStyleElement::FirstHeaderCell },
-            { u"lastHeaderCell"_ustr, ScTableStyleElement::LastHeaderCell },
-            { u"firstTotalCell"_ustr, ScTableStyleElement::FirstTotalCell },
-            { u"lastTotalCell"_ustr, ScTableStyleElement::LastTotalCell }
-        };
-    auto aElementItr = aTableStyleElementMap.find(aTableStyleElementName);
-    if (aElementItr == aTableStyleElementMap.end())
+    for (ScTableStyleElement eElement : o3tl::enumrange<ScTableStyleElement>())
     {
-        SAL_WARN("sc", "TableStyle::importTableStyleElement - unknown Table Style Element");
+        const char* pElementName = ScfTools::GetTableStyleElementOOXMLName(eElement);
+        if (!pElementName || !aTableStyleElementName.equalsAscii(pElementName))
+            continue;
+
+        TableStyleElementInfo aInfo;
+        aInfo.mnDxfID = rAttribs.getInteger(XML_dxfId, -1);
+        aInfo.mnStripeCount = rAttribs.getInteger(XML_size, 1);
+
+        maTableStyleElements.insert({eElement, aInfo});
         return;
     }
 
-    ScTableStyleElement eElement = aElementItr->second;
-    aInfo.mnStripeCount = rAttribs.getInteger(XML_size, 1);
-
-    maTableStyleElements.insert({eElement, aInfo});
+    SAL_WARN("sc", "TableStyle::importTableStyleElement - unknown Table Style Element");
 }
 
 void TableStyle::finalizeImport(const DxfVector& rDxfs)

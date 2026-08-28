@@ -49,6 +49,7 @@
 #include <conditio.hxx>
 #include <dbdata.hxx>
 #include <tablestyle.hxx>
+#include <ftools.hxx>
 #include <filterentries.hxx>
 #include <export/ExportTools.hxx>
 #include <dpobject.hxx>
@@ -3397,37 +3398,13 @@ XclExpXmlTableStyle::XclExpXmlTableStyle(const XclExpRoot& rRoot, const ScTableS
     }
 }
 
-namespace
-{
-const char* lcl_tableStyleElementToOOXML( ScTableStyleElement eElement )
-{
-    switch (eElement)
-    {
-        case ScTableStyleElement::WholeTable:            return "wholeTable";
-        case ScTableStyleElement::FirstColumnStripe:     return "firstColumnStripe";
-        case ScTableStyleElement::SecondColumnStripe:    return "secondColumnStripe";
-        case ScTableStyleElement::FirstRowStripe:        return "firstRowStripe";
-        case ScTableStyleElement::SecondRowStripe:       return "secondRowStripe";
-        case ScTableStyleElement::LastColumn:            return "lastColumn";
-        case ScTableStyleElement::FirstColumn:           return "firstColumn";
-        case ScTableStyleElement::HeaderRow:             return "headerRow";
-        case ScTableStyleElement::TotalRow:              return "totalRow";
-        case ScTableStyleElement::FirstHeaderCell:       return "firstHeaderCell";
-        case ScTableStyleElement::LastHeaderCell:        return "lastHeaderCell";
-        case ScTableStyleElement::FirstTotalCell:        return "firstTotalCell";
-        case ScTableStyleElement::LastTotalCell:         return "lastTotalCell";
-    }
-    return nullptr;
-}
-}
-
 void XclExpXmlTableStyle::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_tableStyle, XML_count, OString::number(maTableElements.size()), XML_name, maStyleName.toUtf8());
     for (auto& rTableStyleElement : maTableElements)
     {
-        const char* pElementType = lcl_tableStyleElementToOOXML(rTableStyleElement.first);
+        const char* pElementType = ScfTools::GetTableStyleElementOOXMLName(rTableStyleElement.first);
         if (!pElementType)
         {
             SAL_WARN("sc", "XclExpXmlTableStyle::SaveXml - unknown Table Style Element");

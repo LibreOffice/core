@@ -38,10 +38,10 @@ enum class ScTableStyleElement
     FirstColumn,
     HeaderRow,
     TotalRow,
-    FirstHeaderCell,
-    LastHeaderCell,
-    FirstTotalCell,
-    LastTotalCell,
+    FirstHeaderCell, // header row, first column
+    LastHeaderCell, // header row, last column
+    FirstTotalCell, // total row, first column
+    LastTotalCell, // total row, last column
     LAST = LastTotalCell // keep on the last element
 };
 

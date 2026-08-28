@@ -604,34 +604,48 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleStripeSizes)
     const ScTableStyle* pStyle = pDoc->GetTableStyles()->GetTableStyle(pParam->maStyleID);
     CPPUNIT_ASSERT(pStyle);
 
-    auto aFill = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
+    auto getFillItem = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
         return pStyle->GetFillItem(*pDBData, nCol, nRow, nRow - 1);
     };
+    auto getFill = [&getFillItem](SCCOL nCol, SCROW nRow) {
+        const SvxBrushItem* pFill = getFillItem(nCol, nRow);
+        CPPUNIT_ASSERT(pFill);
+        return pFill->GetColor();
+    };
 
-    const SvxBrushItem* pColumnStripe = aFill(0, 3);
-    CPPUNIT_ASSERT(pColumnStripe);
-    const Color aFirstColStripe = pColumnStripe->GetColor();
-    CPPUNIT_ASSERT(aFirstColStripe != COL_YELLOW);
-    CPPUNIT_ASSERT(aFirstColStripe != COL_LIGHTRED);
+    const Color aRowStripe = COL_YELLOW;
+    const Color aFirstColStripe(0x4E, 0xA7, 0x2E);
+    const Color aSecondColStripe = COL_LIGHTRED;
 
-    for (SCROW nRow = 1; nRow <= 16; ++nRow)
-    {
-        const bool bBandedRow = ((nRow - 1) % 3) < 2;
-        for (SCCOL nCol = 0; nCol <= 8; ++nCol)
-        {
-            const SvxBrushItem* pFill = aFill(nCol, nRow);
-            CPPUNIT_ASSERT(pFill);
+    // The row stripe is two rows tall and covers every column.
+    CPPUNIT_ASSERT_EQUAL(aRowStripe, getFill(0, 1));
+    CPPUNIT_ASSERT_EQUAL(aRowStripe, getFill(4, 1));
+    CPPUNIT_ASSERT_EQUAL(aRowStripe, getFill(8, 1));
+    CPPUNIT_ASSERT_EQUAL(aRowStripe, getFill(0, 2));
+    CPPUNIT_ASSERT_EQUAL(aRowStripe, getFill(8, 2));
 
-            const Color aExpected
-                = bBandedRow ? COL_YELLOW : ((nCol % 4) < 1 ? aFirstColStripe : COL_LIGHTRED);
-            CPPUNIT_ASSERT_EQUAL(aExpected, pFill->GetColor());
-        }
-    }
+    // The third row is left to the column stripes: one column, then three.
+    CPPUNIT_ASSERT_EQUAL(aFirstColStripe, getFill(0, 3));
+    CPPUNIT_ASSERT_EQUAL(aSecondColStripe, getFill(1, 3));
+    CPPUNIT_ASSERT_EQUAL(aSecondColStripe, getFill(2, 3));
+    CPPUNIT_ASSERT_EQUAL(aSecondColStripe, getFill(3, 3));
+    CPPUNIT_ASSERT_EQUAL(aFirstColStripe, getFill(4, 3));
+    CPPUNIT_ASSERT_EQUAL(aSecondColStripe, getFill(5, 3));
+    CPPUNIT_ASSERT_EQUAL(aSecondColStripe, getFill(6, 3));
+    CPPUNIT_ASSERT_EQUAL(aSecondColStripe, getFill(7, 3));
+    CPPUNIT_ASSERT_EQUAL(aFirstColStripe, getFill(8, 3));
 
-    CPPUNIT_ASSERT(!aFill(0, 0));
-    CPPUNIT_ASSERT(!aFill(1, 0));
-    CPPUNIT_ASSERT(!aFill(0, 17));
-    CPPUNIT_ASSERT(!aFill(1, 17));
+    // Both patterns start over further down the table.
+    CPPUNIT_ASSERT_EQUAL(aRowStripe, getFill(0, 4));
+    CPPUNIT_ASSERT_EQUAL(aRowStripe, getFill(0, 5));
+    CPPUNIT_ASSERT_EQUAL(aFirstColStripe, getFill(0, 6));
+    CPPUNIT_ASSERT_EQUAL(aSecondColStripe, getFill(1, 6));
+
+    // Neither stripe reaches the header row or the total row.
+    CPPUNIT_ASSERT(!getFillItem(0, 0));
+    CPPUNIT_ASSERT(!getFillItem(1, 0));
+    CPPUNIT_ASSERT(!getFillItem(0, 17));
+    CPPUNIT_ASSERT(!getFillItem(1, 17));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleCornerCells)
@@ -654,27 +668,27 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleCornerCells)
     const Color aHeaderRow(0x00, 0x70, 0xC0);
     const Color aTotalRow(0x00, 0xB0, 0xF0);
 
-    auto aFill = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
+    auto getFill = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
         const SvxBrushItem* pFill = pStyle->GetFillItem(*pDBData, nCol, nRow, nRow - 1);
         CPPUNIT_ASSERT(pFill);
         return pFill->GetColor();
     };
 
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFill(0, 0));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aFill(4, 0));
-    CPPUNIT_ASSERT_EQUAL(aHeaderRow, aFill(2, 0));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFill(0, 9));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aFill(4, 9));
-    CPPUNIT_ASSERT_EQUAL(aTotalRow, aFill(2, 9));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFill(0, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getFill(4, 0));
+    CPPUNIT_ASSERT_EQUAL(aHeaderRow, getFill(2, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFill(0, 9));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getFill(4, 9));
+    CPPUNIT_ASSERT_EQUAL(aTotalRow, getFill(2, 9));
 
     ScTableStyleParam aNoColumns(*pParam);
     aNoColumns.mbFirstColumn = false;
     aNoColumns.mbLastColumn = false;
     pDBData->SetTableStyleInfo(aNoColumns);
-    CPPUNIT_ASSERT_EQUAL(aHeaderRow, aFill(0, 0));
-    CPPUNIT_ASSERT_EQUAL(aHeaderRow, aFill(4, 0));
-    CPPUNIT_ASSERT_EQUAL(aTotalRow, aFill(0, 9));
-    CPPUNIT_ASSERT_EQUAL(aTotalRow, aFill(4, 9));
+    CPPUNIT_ASSERT_EQUAL(aHeaderRow, getFill(0, 0));
+    CPPUNIT_ASSERT_EQUAL(aHeaderRow, getFill(4, 0));
+    CPPUNIT_ASSERT_EQUAL(aTotalRow, getFill(0, 9));
+    CPPUNIT_ASSERT_EQUAL(aTotalRow, getFill(4, 9));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleFontEffects)
@@ -692,72 +706,73 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleFontEffects)
     const ScTableStyle* pStyle = pDoc->GetTableStyles()->GetTableStyle(pParam->maStyleID);
     CPPUNIT_ASSERT(pStyle);
 
-    auto aResolve = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
+    auto getFontSet = [pStyle, pDBData](SCCOL nCol, SCROW nRow) {
         return pStyle->GetFontItemSet(*pDBData, nCol, nRow, nRow - 1);
     };
-    auto aWeight = [](const SfxItemSet* pSet) {
+    auto getWeight = [](const SfxItemSet* pSet) {
         const SvxWeightItem* pItem = pSet->GetItemIfSet(ATTR_FONT_WEIGHT, false);
         return pItem ? pItem->GetWeight() : WEIGHT_DONTKNOW;
     };
-    auto aPosture = [](const SfxItemSet* pSet) {
+    auto getPosture = [](const SfxItemSet* pSet) {
         const SvxPostureItem* pItem = pSet->GetItemIfSet(ATTR_FONT_POSTURE, false);
         return pItem ? pItem->GetPosture() : ITALIC_DONTKNOW;
     };
-    auto aUnderline = [](const SfxItemSet* pSet) {
+    auto getUnderline = [](const SfxItemSet* pSet) {
         const SvxUnderlineItem* pItem = pSet->GetItemIfSet(ATTR_FONT_UNDERLINE, false);
         return pItem ? pItem->GetLineStyle() : LINESTYLE_DONTKNOW;
     };
-    auto aColor = [](const SfxItemSet* pSet) {
+    auto getColor = [](const SfxItemSet* pSet) {
         const SvxColorItem* pItem = pSet->GetItemIfSet(ATTR_FONT_COLOR, false);
         return pItem ? pItem->GetValue() : COL_AUTO;
     };
 
-    const SfxItemSet* pSet = aResolve(0, 0);
+    const SfxItemSet* pSet = getFontSet(0, 0);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor(pSet));
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
-    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aPosture(pSet));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getColor(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, getWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, getPosture(pSet));
 
-    pSet = aResolve(1, 0);
+    pSet = getFontSet(1, 0);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor(pSet));
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aWeight(pSet));
-    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPosture(pSet));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getColor(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, getWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, getPosture(pSet));
 
-    pSet = aResolve(4, 0);
+    pSet = getFontSet(4, 0);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor(pSet));
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
-    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPosture(pSet));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getColor(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, getWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, getPosture(pSet));
 
-    pSet = aResolve(0, 1);
+    pSet = getFontSet(0, 1);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
-    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aPosture(pSet));
-    pSet = aResolve(1, 1);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, getWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, getPosture(pSet));
+    pSet = getFontSet(1, 1);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, getWeight(pSet));
 
-    pSet = aResolve(0, 9);
+    pSet = getFontSet(0, 9);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aUnderline(pSet));
-    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aPosture(pSet));
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, getUnderline(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, getPosture(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, getWeight(pSet));
 
-    pSet = aResolve(1, 9);
+    pSet = getFontSet(1, 9);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aUnderline(pSet));
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, getUnderline(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, getWeight(pSet));
 
-    pSet = aResolve(4, 9);
+    pSet = getFontSet(4, 9);
     CPPUNIT_ASSERT(pSet);
-    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aUnderline(pSet));
-    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aWeight(pSet));
-    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPosture(pSet));
+    CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, getUnderline(pSet));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, getWeight(pSet));
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, getPosture(pSet));
 
     ScPatternAttr aCellPattern(pDoc->getCellAttributeHelper());
     SfxItemSet aEditSet(*pDoc->GetEditEnginePool());
-    ScPatternAttr::FillToEditItemSet(aEditSet, aCellPattern.GetItemSet(), nullptr, aResolve(0, 9));
+    ScPatternAttr::FillToEditItemSet(aEditSet, aCellPattern.GetItemSet(), nullptr,
+                                     getFontSet(0, 9));
     CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aEditSet.Get(EE_CHAR_ITALIC).GetPosture());
     CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aEditSet.Get(EE_CHAR_UNDERLINE).GetLineStyle());
 }
