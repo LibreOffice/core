@@ -1425,13 +1425,11 @@ class Socket {
 		} else if (textMsg.startsWith('sliderenderingcomplete:')) {
 			this._onSlideRenderingCompleteMsg(textMsg, e);
 			return;
+		} else if (textMsg.startsWith('remotedoccommandresult:')) {
+			this._onRemoteDocCommandResult(textMsg, e as SlurpMessageEvent);
+			return;
 		} else if (
-			!textMsg.startsWith('tile:') &&
-			!textMsg.startsWith('delta:') &&
-			!textMsg.startsWith('slidelayer:') &&
-			!textMsg.startsWith('zstdslidelayer:') &&
-			!textMsg.startsWith('windowpaint:') &&
-			!textMsg.startsWith('remotedoccommandresult:')
+			!Socket.pixelFramePrefixes.some((prefix) => textMsg.startsWith(prefix))
 		) {
 			if (imgBytes !== undefined) {
 				try {
@@ -1484,9 +1482,6 @@ class Socket {
 			this._map.fire('relateddocuments', {
 				documents: app.relatedDocuments,
 			});
-		} else if (textMsg.startsWith('remotedoccommandresult:')) {
-			this._onRemoteDocCommandResult(textMsg, e as SlurpMessageEvent);
-			return;
 		} else if (textMsg.startsWith('presetconfigid:')) {
 			app.presetConfigId = textMsg.substring('presetconfigid:'.length).trim();
 		} else if (textMsg.startsWith('userpresetconfigid:')) {
@@ -1530,24 +1525,21 @@ class Socket {
 		}
 	}
 
+	// The message names whose frames carry binary pixels after their header
+	// line. Every other frame is text through to the end.
+	private static readonly pixelFramePrefixes = [
+		'tile:',
+		'delta:',
+		'slidelayer:',
+		'zstdslidelayer:',
+		'windowpaint:',
+	];
+
 	// A reply from a remote document, wrapped as
 	// "remotedoccommandresult: wopisrc=<enc>\n<inner frame>". Unwraps the
 	// header, then fires a remotedoccommandresult map event carrying the
 	// remote's WOPISrc and the inner frame as an ordinary (textMsg, imgBytes,
 	// imgIndex) triple, so a consumer reads it the way it reads any frame.
-	// Whether a remote reply's inner frame, named by its first token, carries
-	// binary pixels after its header line. Every other reply is plain text.
-	private _remoteReplyHasImage(innerFirstToken: string): boolean {
-		return (
-			innerFirstToken === 'tile:' ||
-			innerFirstToken === 'tilecombine:' ||
-			innerFirstToken === 'delta:' ||
-			innerFirstToken === 'slidelayer:' ||
-			innerFirstToken === 'zstdslidelayer:' ||
-			innerFirstToken === 'windowpaint:'
-		);
-	}
-
 	private _onRemoteDocCommandResult(
 		textMsg: string,
 		e: SlurpMessageEvent,
@@ -1577,22 +1569,23 @@ class Socket {
 			// own body may contain newlines, so it must be taken whole and not
 			// split at the first one.
 			const start = e.imgIndex ?? 0;
-			let tokenEnd = start;
-			while (
-				tokenEnd < imgBytes.length &&
-				imgBytes[tokenEnd] !== 32 &&
-				imgBytes[tokenEnd] !== 10
-			)
-				tokenEnd++;
+			const newlineAt = imgBytes.indexOf(10, start);
+			const spaceAt = imgBytes.indexOf(32, start);
+			let tokenEnd = imgBytes.length;
+			if (spaceAt >= 0) tokenEnd = spaceAt;
+			if (newlineAt >= 0 && newlineAt < tokenEnd) tokenEnd = newlineAt;
 			const innerFirstToken = this._utf8ToString(
 				imgBytes.subarray(start, tokenEnd),
 			);
-			if (this._remoteReplyHasImage(innerFirstToken)) {
-				let newline = start;
-				while (newline < imgBytes.length && imgBytes[newline] !== 10) newline++;
-				innerText = this._utf8ToString(imgBytes.subarray(start, newline));
+			if (Socket.pixelFramePrefixes.includes(innerFirstToken)) {
+				const innerHeaderEnd = newlineAt >= 0 ? newlineAt : imgBytes.length;
+				innerText = this._utf8ToString(
+					imgBytes.subarray(start, innerHeaderEnd),
+				);
 				innerImgIndex =
-					newline < imgBytes.length ? newline + 1 : imgBytes.length;
+					innerHeaderEnd < imgBytes.length
+						? innerHeaderEnd + 1
+						: imgBytes.length;
 			} else {
 				innerText = this._utf8ToString(imgBytes.subarray(start));
 				innerImgIndex = imgBytes.length;
