@@ -379,8 +379,11 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	};
 
 	if (data.enabled === false) {
+		container.setAttribute('disabled', 'true');
 		container.disabled = true;
+		content.setAttribute('disabled', 'true');
 		content.disabled = true;
+		button.setAttribute('disabled', 'true');
 		button.disabled = true;
 	}
 
