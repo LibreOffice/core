@@ -22,4 +22,9 @@
     <string name="use_text">Úsáid Formáid Téacs</string>
     <string name="use_odf">Úsáid ODF Formáid</string>
     <string name="ask_for_convert_odf">Deimhnigh Formáid Comhaid</string>
+    <string name="all_files_access_title">Oscailte i mód léite amháin</string>
+    <string name="all_files_access_message">Níor cheadaigh an aip a roinn an comhad seo athruithe a shábháil ar ais ann.\n\nDeonaigh \"Rochtain ar gach comhad\" chun ligean don aip seo an comhad a scríobh san áit a bhfuil sé stóráilte, ionas gur féidir leat é a chur in eagar anseo.</string>
+    <string name="all_files_access_grant">Ceadaigh rochtain</string>
+    <string name="do_not_ask_again">Ná fiafraigh arís</string>
+    <string name="failed_to_save_file">Níorbh fhéidir na hathruithe ar an gcomhad a shábháil</string>
 </resources>
