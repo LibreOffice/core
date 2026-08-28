@@ -875,6 +875,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf87973_externalLinkSkipUnuseds)
     CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool14390_ChartExternalRef)
+{
+    createScDoc("xlsx/cool14390_chart_external_ref.xlsx");
+    save(TestFilter::XLSX);
+
+    // The only reference to rows 38-43 of the external workbook's sheet is
+    // the chart's own series formula, not a cell formula. Without the fix,
+    // ProcessExternalRangeRef never caches those cells for export, and the
+    // exported file's external link keeps them out of its cache.
+    xmlDocUniquePtr pExtLink = parseExport(u"xl/externalLinks/externalLink1.xml"_ustr);
+    CPPUNIT_ASSERT(pExtLink);
+    assertXPath(pExtLink, "/x:externalLink/x:externalBook/x:sheetDataSet/x:sheetData[@sheetId='2']/x:row", 6);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf51022_lostPrintRange)
 {
     createScDoc("ods/tdf87973_externalLinkSkipUnuseds.ods");
