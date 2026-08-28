@@ -92,7 +92,6 @@ SW_DLLPUBLIC FieldUnit  GetDfltMetric(bool bWeb);
 void        SetDfltMetric(FieldUnit eMetric, bool bWeb);
 
 bool HasCharUnit( bool bWeb );
-void SetApplyCharUnit(bool bApplyChar, bool bWeb);
 
 // fill ListBox with all char style templates, except the standard ones
 SW_DLLPUBLIC void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);

@@ -155,18 +155,6 @@ namespace
     };
 }
 
-/*static*/ const vcl::IconThemeInfo&
-IconThemeInfo::FindIconThemeById(const std::vector<vcl::IconThemeInfo>& themes, const OUString& themeId)
-{
-    std::vector<vcl::IconThemeInfo>::const_iterator it = std::find_if(themes.begin(), themes.end(),
-               SameTheme(themeId));
-    if (it == themes.end())
-    {
-        throw std::runtime_error("Could not find theme id in theme vector.");
-    }
-    return *it;
-}
-
 /*static*/ bool
 IconThemeInfo::IconThemeIsInVector(const std::vector<vcl::IconThemeInfo>& themes, const OUString& themeId)
 {

@@ -552,8 +552,6 @@ public:
     void SetDraw( bool b )
     { m_nCoreOptions.bDraw = b; }
 
-    bool IsControl() const
-    { return m_nCoreOptions.bControl; }
     void SetControl( bool b )
     { m_nCoreOptions.bControl = b; }
 

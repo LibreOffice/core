@@ -206,8 +206,6 @@ public:
 
     virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 
-    virtual bool hasNativeFileSelection() const override { return true; }
-
     virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
         createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
     virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 >

@@ -49,7 +49,6 @@ public:
     void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
     bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
 
-    void SetWriteCalcConfig( bool bVal ) { mbWriteCalcConfig = bVal; }
     bool GetWriteCalcConfig() const { return mbWriteCalcConfig; }
 
     void SetFormulaSepArg(const OUString& rSep) { aFormulaSepArg = rSep; }
@@ -77,29 +76,6 @@ public:
 
     bool               operator== ( const ScFormulaOptions& rOpt ) const;
     bool               operator!= ( const ScFormulaOptions& rOpt ) const;
-};
-
-// item for the dialog / options page
-
-class SC_DLLPUBLIC ScTpFormulaItem final : public SfxPoolItem
-{
-public:
-    DECLARE_ITEM_TYPE_FUNCTION(ScTpFormulaItem)
-    ScTpFormulaItem( ScFormulaOptions aOpt );
-    virtual ~ScTpFormulaItem() override;
-
-    ScTpFormulaItem(ScTpFormulaItem const &) = default;
-    ScTpFormulaItem(ScTpFormulaItem &&) = default;
-    ScTpFormulaItem & operator =(ScTpFormulaItem const &) = delete; // due to SfxPoolItem
-    ScTpFormulaItem & operator =(ScTpFormulaItem &&) = delete; // due to SfxPoolItem
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual ScTpFormulaItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    const ScFormulaOptions& GetFormulaOptions() const { return theOptions; }
-
-private:
-    ScFormulaOptions theOptions;
 };
 
 // config item

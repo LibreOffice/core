@@ -194,11 +194,6 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
     }
 }
 
-css::uno::Reference<css::awt::XPopupMenu> UnoWrapper::CreateMenuInterface( PopupMenu* pPopupMenu )
-{
-    return new VCLXPopupMenu(pPopupMenu);
-}
-
 css::uno::Reference< css::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )
 {
     rtl::Reference<VCLXGraphics> pGrf = new VCLXGraphics;

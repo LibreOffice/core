@@ -27,11 +27,6 @@ Size getPreviewStripSize(const OutputDevice& rReference)
     return rReference.LogicToPixel(Size(70, 40), MapMode(MapUnit::MapAppFont));
 }
 
-Size getPreviewOptionsSize(const OutputDevice& rReference)
-{
-    return rReference.LogicToPixel(Size(70, 27), MapMode(MapUnit::MapAppFont));
-}
-
 OUString getWidestDateTime(const LocaleDataWrapper& rWrapper, bool bWithSec)
 {
     Date aDate(22, 12, 2000);

@@ -554,18 +554,6 @@ void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& r
     Invalidate();
 }
 
-void SvxFontPrevWindow::SetColor(const Color &rColor)
-{
-    m_pImpl->mxColor = rColor;
-    Invalidate();
-}
-
-void SvxFontPrevWindow::ResetColor()
-{
-    m_pImpl->mxColor.reset();
-    Invalidate();
-}
-
 void SvxFontPrevWindow::SetTextLineColor(const Color &rColor)
 {
     m_pImpl->mxTextLineColor = rColor;

@@ -59,24 +59,6 @@ public:
     bool        GetGridVisible( ) const {  return m_bGridVisible; }
 };
 
-class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
-{
-    // #i9076#
-
-public:
-    DECLARE_ITEM_TYPE_FUNCTION(SvxGridItem)
-    SvxGridItem( TypedWhichId<SvxGridItem> _nWhich)
-        : SfxPoolItem(_nWhich){};
-
-    virtual SvxGridItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                  MapUnit eCoreMetric,
-                                  MapUnit ePresMetric,
-                                  OUString &rText, const IntlWrapper& ) const override;
-
-};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

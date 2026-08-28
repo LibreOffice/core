@@ -54,12 +54,6 @@ public:
     /** Check whether an IconThemeInfo can be constructed from a URL */
     static bool UrlCanBeParsed(std::u16string_view url);
 
-    /** Find an icon theme by its id in a vector.
-     * Throws a runtime_error if the theme is not contained in the vector
-     */
-    static const vcl::IconThemeInfo&
-    FindIconThemeById(const std::vector<vcl::IconThemeInfo>& themes, const OUString& themeId);
-
     /** Check whether a theme with a specified id is in a vector of IconThemeInfo */
     static bool IconThemeIsInVector(const std::vector<vcl::IconThemeInfo>& themes,
                                     const OUString& themeId);

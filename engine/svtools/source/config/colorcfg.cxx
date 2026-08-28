@@ -728,11 +728,6 @@ EditableColorConfig::~EditableColorConfig()
         m_pImpl->Commit();
 }
 
-cpo::uno::Sequence< OUString >  EditableColorConfig::GetSchemeNames() const
-{
-    return m_pImpl->GetSchemeNames();
-}
-
 void EditableColorConfig::DeleteScheme(const OUString& rScheme )
 {
     m_pImpl->RemoveScheme(rScheme);
@@ -753,11 +748,6 @@ void EditableColorConfig::LoadScheme(const OUString& rScheme )
     m_pImpl->Load(rScheme);
     //the name of the loaded scheme has to be committed separately
     m_pImpl->CommitCurrentSchemeName();
-}
-
-void EditableColorConfig::SetupTheme()
-{
-    m_pImpl->SetupTheme();
 }
 
 const OUString& EditableColorConfig::GetCurrentSchemeName()const
@@ -789,20 +779,6 @@ void EditableColorConfig::SetColorValue(
 void EditableColorConfig::SetModified()
 {
     m_bModified = true;
-}
-
-void EditableColorConfig::Commit()
-{
-    if(m_bModified)
-        m_pImpl->SetModified();
-    if(m_pImpl->IsModified())
-        m_pImpl->Commit();
-    m_bModified = false;
-}
-
-void EditableColorConfig::DisableBroadcast()
-{
-    m_pImpl->BlockBroadcasts(true);
 }
 
 void EditableColorConfig::EnableBroadcast()

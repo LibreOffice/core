@@ -1043,16 +1043,6 @@ void SwEditShell::SetLineNumberInfo(const SwLineNumberInfo& rInfo)
     EndAllAction();
 }
 
-sal_uInt16 SwEditShell::GetLinkUpdMode() const
-{
-    return getIDocumentSettingAccess().getLinkUpdateMode( false );
-}
-
-void SwEditShell::SetLinkUpdMode( sal_uInt16 nMode )
-{
-    getIDocumentSettingAccess().setLinkUpdateMode( nMode );
-}
-
 // Interface for TextInputData - (for text input of japanese/chinese characters)
 void SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
 {

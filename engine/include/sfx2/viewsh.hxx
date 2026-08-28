@@ -499,8 +499,6 @@ public:
     const LanguageTag& GetKitLocale() const { return maKitLocale; }
     /// Get the COKit calendar of this view.
     CalendarWrapper& GetKitCalendar();
-    /// Get the form factor of the device where the Kit client is running.
-    KitDeviceFormFactor GetKitDeviceFormFactor() const { return maKitDeviceFormFactor; }
     /// Check if the Kit client is running on a desktop machine.
     bool isKitDesktop() const { return maKitDeviceFormFactor == KitDeviceFormFactor::DESKTOP; }
     /// Check if the Kit client is running on a tablet.

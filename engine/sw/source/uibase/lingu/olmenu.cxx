@@ -691,12 +691,6 @@ void SwSpellPopup::checkRedline()
     }
 }
 
-void SwSpellPopup::Execute( const tools::Rectangle& rWordPos, vcl::Window* pWin )
-{
-    sal_uInt16 nRet = m_xPopupMenu->Execute(pWin, pWin->LogicToPixel(rWordPos));
-    Execute( nRet );
-}
-
 void SwSpellPopup::Execute( sal_uInt16 nId )
 {
     if (nId == USHRT_MAX)

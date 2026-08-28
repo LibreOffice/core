@@ -297,7 +297,6 @@ public:
                                const OUString& rStr);
     /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
-    void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
 
@@ -337,7 +336,6 @@ public:
     void SetNoSelection();
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
-    Image           GetItemImage( sal_uInt16 nItemId ) const;
     void            SetItemColor( sal_uInt16 nItemId, const Color& rColor );
     Color           GetItemColor( sal_uInt16 nItemId ) const;
     void            SetItemData( sal_uInt16 nItemId, void* pData );
@@ -345,17 +343,12 @@ public:
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     const OUString & GetItemText( sal_uInt16 nItemId ) const;
     void            SetColor( const Color& rColor );
-    void            SetColor()
-    {
-        SetColor(COL_TRANSPARENT);
-    }
     bool            IsColor() const
     {
         return !maColor.IsTransparent();
     }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
-    void            SetMargin( sal_uInt16 nNewMargin );
 
     void            Format(vcl::RenderContext const & rRenderContext);
     void            SetFormat();

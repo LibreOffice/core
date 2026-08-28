@@ -109,9 +109,6 @@ public:
         void
         SetIconTheme(const OUString &theme, SetModifiedFlag setModified );
 
-        bool IconThemeWasSetAutomatically() const
-        {return m_bIconThemeWasSetAutomatically;}
-
         void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
         void RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
         void CallListeners();
@@ -352,17 +349,6 @@ sal_Int16 SvtMiscOptions::GetSymbolsSize()
     return officecfg::Office::Common::Misc::SymbolSet::get();
 }
 
-void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
-{
-    if (!officecfg::Office::Common::Misc::SymbolSet::isReadOnly())
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::SymbolSet::set(nSet, batch);
-        batch->commit();
-        m_pImpl->CallListeners();
-    }
-}
-
 sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize()
 {
     sal_Int16 eOptSymbolsSize = GetSymbolsSize();
@@ -393,11 +379,6 @@ OUString SvtMiscOptions::GetIconTheme()
     return SvtMiscOptions_Impl::GetIconTheme();
 }
 
-void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
-{
-    m_pImpl->SetIconTheme(iconTheme, SvtMiscOptions_Impl::SetModifiedFlag::SET);
-}
-
 void SvtMiscOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
     m_pImpl->AddListenerLink( rLink );
@@ -406,12 +387,6 @@ void SvtMiscOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
 void SvtMiscOptions::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
     m_pImpl->RemoveListenerLink( rLink );
-}
-
-bool
-SvtMiscOptions::IconThemeWasSetAutomatically() const
-{
-    return m_pImpl->IconThemeWasSetAutomatically();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

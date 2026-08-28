@@ -52,7 +52,6 @@ public:
 
     // ConfigItem methods
 
-            bool                IsModified() const;
             void                Commit();
 
                                 /** Add a listener to react on config changes
@@ -98,17 +97,14 @@ public:
 
     /// The config string may be empty to denote the default currency of the locale
             const OUString&     GetCurrencyConfigString() const;
-            void                SetCurrencyConfigString( const OUString& rStr );
 
     /** The config string may be empty to denote the default
         DateAcceptancePatterns of the locale */
             const OUString&     GetDatePatternsConfigString() const;
-            void                SetDatePatternsConfigString( const OUString& rStr );
 
     // determine whether the decimal separator defined in the keyboard layout is used
     // or the one appropriate to the locale
             bool                IsDecimalSeparatorAsLocale() const;
-            void                SetDecimalSeparatorAsLocale( bool bSet);
 
     // determine whether to ignore changes to the system keyboard/locale/language when
     // determining the language for newly entered text
@@ -122,11 +118,6 @@ public:
                                     OUString& rAbbrev,
                                     LanguageType& eLang,
                                     const OUString& rConfigString );
-
-    /// Create an USD-en-US or EUR-de-DE string
-    static  OUString            CreateCurrencyConfigString(
-                                    const OUString& rAbbrev,
-                                    LanguageType eLang );
 
             void                GetCurrencyAbbrevAndLanguage(
                                         OUString& rAbbrev,
@@ -144,9 +135,6 @@ public:
      */
     static  void                SetCurrencyChangeLink( const Link<LinkParamNone*,void>& rLink );
     static  const Link<LinkParamNone*,void>&       GetCurrencyChangeLink();
-
-    /** return the readonly state of the queried option. */
-            bool                IsReadOnly( EOption eOption ) const;
 };
 
 #endif // INCLUDED_UNOTOOLS_SYSLOCALEOPTIONS_HXX

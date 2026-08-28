@@ -127,8 +127,6 @@ public:
 
     virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const override;
 
-    virtual void UpdateRedlineAttr() override;
-
     virtual std::size_t GetRedlineAuthor() override;
 
     virtual std::size_t InsertRedlineAuthor(const OUString& rAuthor) override;

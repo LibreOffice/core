@@ -522,12 +522,6 @@ void ScTabView::DrawMarkListHasChanged()
         pDrawView->MarkListHasChanged();
 }
 
-void ScTabView::UpdateAnchorHandles()
-{
-    if ( pDrawView )
-        pDrawView->AdjustMarkHdl();
-}
-
 void ScTabView::UpdateIMap( SdrObject* pObj )
 {
     if ( pDrawView )

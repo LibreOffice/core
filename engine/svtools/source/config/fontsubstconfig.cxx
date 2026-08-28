@@ -88,44 +88,6 @@ std::vector<SubstitutionStruct> GetFontSubstitutions()
     return aSubstArr;
 }
 
-void SetFontSubstitutions(bool bIsEnabled, std::vector<SubstitutionStruct> const & aSubstArr)
-{
-    Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.Common/Font/Substitution");
-    utl::ConfigItem::PutProperties(xHierarchyAccess, {cReplacement}, {cpo::uno::Any(bIsEnabled)}, /*bAllLocales*/false);
-
-    OUString sNode(cFontPairs);
-    if(aSubstArr.empty())
-    {
-        utl::ConfigItem::ClearNodeSet(xHierarchyAccess, sNode);
-        return;
-    }
-
-    Sequence<PropertyValue> aSetValues(4 * aSubstArr.size());
-    PropertyValue* pSetValues = aSetValues.getArray();
-    sal_Int32 nSetValue = 0;
-
-    const OUString sReplaceFont(cReplaceFont);
-    const OUString sSubstituteFont(cSubstituteFont);
-    const OUString sAlways(cAlways);
-    const OUString sOnScreenOnly(cOnScreenOnly);
-
-    for(size_t i = 0; i < aSubstArr.size(); i++)
-    {
-        OUString sPrefix = sNode + "/_" + OUString::number(i) + "/";
-
-        const SubstitutionStruct& rSubst = aSubstArr[i];
-        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;
-        pSetValues[nSetValue++].Value <<= rSubst.sFont;
-        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sSubstituteFont;
-        pSetValues[nSetValue++].Value <<= rSubst.sReplaceBy;
-        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sAlways;
-        pSetValues[nSetValue++].Value <<= rSubst.bReplaceAlways;
-        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sOnScreenOnly;
-        pSetValues[nSetValue++].Value <<= rSubst.bReplaceOnScreenOnly;
-    }
-    utl::ConfigItem::ReplaceSetProperties(xHierarchyAccess, sNode, aSetValues, /*bAllLocales*/false);
-}
-
 void ApplyFontSubstitutionsToVcl()
 {
     OutputDevice::BeginFontSubstitution();

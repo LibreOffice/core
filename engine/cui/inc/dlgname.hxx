@@ -71,32 +71,6 @@ public:
     void SetEditHelpId(const OUString& aHelpId) { m_xEdtName->set_help_id(aHelpId); }
 };
 
-/// Dialog for editing a number
-class SvxNumberDialog final : public weld::GenericDialogController
-{
-private:
-    std::unique_ptr<weld::SpinButton> m_xEdtNumber;
-    std::unique_ptr<weld::Label> m_xFtDescription;
-
-public:
-    SvxNumberDialog(weld::Window* pWindow, const OUString& rDesc, sal_Int64 nValue, sal_Int64 nMin,
-                    sal_Int64 nMax);
-
-    sal_Int64 GetNumber() const { return m_xEdtNumber->get_value(); }
-};
-
-class SvxDecimalNumberDialog final : public weld::GenericDialogController
-{
-private:
-    std::unique_ptr<weld::FormattedSpinButton> m_xEdtNumber;
-    std::unique_ptr<weld::Label> m_xFtDescription;
-
-public:
-    SvxDecimalNumberDialog(weld::Window* pWindow, const OUString& rDesc, double fValue);
-
-    double GetNumber() const { return m_xEdtNumber->GetFormatter().GetValue(); }
-};
-
 /** #i68101#
     Dialog for editing Object name
     plus uniqueness-callback-linkHandler */
@@ -150,43 +124,6 @@ public:
     OUString GetTitle() const { return m_xEdtTitle->get_text(); }
     OUString GetDescription() const { return m_xEdtDescription->get_text(); }
     bool IsDecorative() const { return m_xDecorativeCB->get_active(); }
-};
-
-enum class ListMode
-{
-    String,
-    Int64,
-    Int32,
-    Int16,
-    Double
-};
-
-/** Generic dialog to edit lists */
-class SvxListDialog : public weld::GenericDialogController
-{
-private:
-    ListMode m_aMode;
-    std::unique_ptr<weld::TreeView> m_xList;
-    std::unique_ptr<weld::Button> m_xAddBtn;
-    std::unique_ptr<weld::Button> m_xRemoveBtn;
-    std::unique_ptr<weld::Button> m_xEditBtn;
-
-    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
-    DECL_LINK(DblClickHdl_Impl, weld::TreeView&, bool);
-    DECL_LINK(AddHdl_Impl, weld::Button&, void);
-    DECL_LINK(RemoveHdl_Impl, weld::Button&, void);
-    DECL_LINK(EditHdl_Impl, weld::Button&, void);
-
-    void SelectionChanged();
-
-public:
-    explicit SvxListDialog(weld::Window* pParent);
-    virtual ~SvxListDialog() override;
-
-    std::vector<OUString> GetEntries();
-    void SetEntries(std::vector<OUString> const& rParams);
-    void EditEntry();
-    void SetMode(ListMode aMode);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

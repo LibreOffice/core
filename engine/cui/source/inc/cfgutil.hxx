@@ -62,9 +62,6 @@ public:
         SfxStylesInfo_Impl();
         void init(const OUString& rModuleName, const css::uno::Reference< css::frame::XModel >& xModel);
 
-        static bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
-        void getLabel4Style(SfxStyleInfo_Impl& aStyle);
-
         std::vector< SfxStyleInfo_Impl > getStyleFamilies() const;
         std::vector< SfxStyleInfo_Impl > getStyles(const OUString& sFamily);
 
@@ -121,30 +118,13 @@ public:
     {
         m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, nullptr);
     }
-    std::unique_ptr<weld::TreeIter> tree_append(const OUString& rId, const OUString& rStr, const weld::TreeIter* pParent = nullptr)
-    {
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, xIter.get());
-        return xIter;
-    }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage, const weld::TreeIter* pParent = nullptr)
     {
         m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, m_xScratchIter.get());
         m_xTreeView->set_image(*m_xScratchIter, rImage);
     }
-    void append(const OUString& rId, const OUString& rStr, const css::uno::Reference<css::graphic::XGraphic>& rImage, const weld::TreeIter* pParent = nullptr)
-    {
-        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, m_xScratchIter.get());
-        m_xTreeView->set_image(*m_xScratchIter, rImage, -1);
-    }
-    void remove(int nPos) { m_xTreeView->remove(nPos); }
-    void scroll_to_row(int pos) { m_xTreeView->scroll_to_row(pos); }
-    void remove(const weld::TreeIter& rIter) { m_xTreeView->remove(rIter); }
-    void expand_row(const weld::TreeIter& rIter) { m_xTreeView->expand_row(rIter); }
     int n_children() const { return m_xTreeView->n_children(); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
-    bool iter_has_child(const weld::TreeIter& rIter) const { return m_xTreeView->iter_has_child(rIter); }
-    OUString get_text(int nPos) const { return m_xTreeView->get_text(nPos); }
     OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
     OUString get_selected_text() const
@@ -160,8 +140,6 @@ public:
         return m_xTreeView->get_id(*m_xScratchIter);
     }
     void select(int pos) { m_xTreeView->select(pos); }
-    void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
-    Size get_size_request() const { return m_xTreeView->get_size_request(); }
     weld::TreeView& get_widget() { return *m_xTreeView; }
 
     ~CuiConfigFunctionListBox();
@@ -169,8 +147,6 @@ public:
     void          ClearAll();
     OUString      GetSelectedScriptURI() const;
     OUString      GetCommandHelpText();
-    OUString      GetCurCommand() const;
-    OUString      GetCurLabel() const;
 
     DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
 };
@@ -210,7 +186,6 @@ public:
     {
         m_xTreeView->connect_selection_changed(rLink);
     }
-    void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
     weld::TreeView& get_widget() { return *m_xTreeView; }
     ~CuiConfigGroupListBox();
     void                ClearAll();

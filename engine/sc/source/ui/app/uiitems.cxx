@@ -290,11 +290,6 @@ ScUserListItem* ScUserListItem::Clone( SfxItemPool * ) const
     return new ScUserListItem( *this );
 }
 
-void ScUserListItem::SetUserList( const ScUserList& rUserList )
-{
-    pUserList.reset( new ScUserList( rUserList ) );
-}
-
 /**
  * Data for the Consolidate dialog
  */

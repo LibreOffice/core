@@ -1247,11 +1247,6 @@ namespace comphelper
         }
     }
 
-    const OUString& BackupFileHelper::getUserProfileURL()
-    {
-        return maUserConfigBaseURL;
-    }
-
     /////////////////// helpers ///////////////////////
 
     OUString BackupFileHelper::getPackURL()

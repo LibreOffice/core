@@ -337,7 +337,6 @@ public:
 
     void            DrawDeselectAll();
     void            DrawMarkListHasChanged();
-    void            UpdateAnchorHandles();
 
     ScPageBreakData* GetPageBreakData()     { return pPageBreakData.get(); }
     const std::vector<ScHighlightEntry>& GetHighlightRanges() const { return maHighlightRanges; }

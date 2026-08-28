@@ -156,25 +156,6 @@ FloatingWindow::FloatingWindow(vcl::Window* pParent, WinBits nStyle) :
     ImplInitFloating(pParent, nStyle);
 }
 
-FloatingWindow::FloatingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : SystemWindow(WindowType::FLOATINGWINDOW, "vcl::FloatingWindow maLayoutIdle")
-    , mpNextFloat(nullptr)
-    , mpFirstPopupModeWin(nullptr)
-    , mnPostId(nullptr)
-    , mnPopupModeFlags(FloatWinPopupFlags::NONE)
-    , mnTitle(FloatWinTitleType::Unknown)
-    , mnOldTitle(FloatWinTitleType::Unknown)
-    , mbInPopupMode(false)
-    , mbPopupMode(false)
-    , mbPopupModeCanceled(false)
-    , mbPopupModeTearOff(false)
-    , mbMouseDown(false)
-    , mbGrabFocus(false)
-    , mbInCleanUp(false)
-{
-    loadUI(pParent, rID, rUIXMLDescription, rFrame);
-}
-
 void FloatingWindow::ImplDeferredInit(vcl::Window* pParent, WinBits nBits)
 {
     ImplInitFloating(pParent, nBits);

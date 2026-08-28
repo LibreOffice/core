@@ -40,16 +40,12 @@ public:
 
     static bool IsCTLFontEnabled();
 
-    void SetCTLVerticalText(bool bVertical);
     static bool IsCTLVerticalText();
 
-    void        SetCTLSequenceChecking( bool _bEnabled );
     static bool IsCTLSequenceChecking();
 
-    void        SetCTLSequenceCheckingRestricted( bool _bEnable );
     static bool IsCTLSequenceCheckingRestricted();
 
-    void        SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
     static bool IsCTLSequenceCheckingTypeAndReplace();
 
     enum CursorMovement
@@ -57,7 +53,6 @@ public:
         MOVEMENT_LOGICAL = 0,
         MOVEMENT_VISUAL
     };
-    void            SetCTLCursorMovement( CursorMovement _eMovement );
     static CursorMovement GetCTLCursorMovement();
 
     enum TextNumerals
@@ -67,7 +62,6 @@ public:
         NUMERALS_SYSTEM,
         NUMERALS_CONTEXT
     };
-    void            SetCTLTextNumerals( TextNumerals _eNumerals );
     static TextNumerals GetCTLTextNumerals();
 };
 

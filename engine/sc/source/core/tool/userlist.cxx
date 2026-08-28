@@ -51,12 +51,6 @@ ScUserListData::ScUserListData(OUString _aStr) :
     InitTokens();
 }
 
-void ScUserListData::SetString( const OUString& rStr )
-{
-    aStr = rStr;
-    InitTokens();
-}
-
 bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bool& bMatchCase) const
 {
     // First, case sensitive search.

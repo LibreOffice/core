@@ -65,7 +65,6 @@ public:
                                 { aLibName = r; }
     const BasicManager*     GetBasicManager() const
                             { return pBasicManager; }
-    const OUString& GetLocation() const { return aLocationName; }
 };
 
 #endif

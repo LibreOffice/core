@@ -43,34 +43,18 @@ enum class CharCompressType {
 class SVL_DLLPUBLIC SvxAsianConfig {
 public:
     SvxAsianConfig();
-    ~SvxAsianConfig();
     SvxAsianConfig(const SvxAsianConfig&) = delete;
     SvxAsianConfig& operator=( const SvxAsianConfig& ) = delete;
 
-    void Commit();
-
     static bool IsKerningWesternTextOnly();
 
-    void SetKerningWesternTextOnly(bool value);
-
     static CharCompressType GetCharDistanceCompression();
-
-    void SetCharDistanceCompression(CharCompressType value);
 
     static cpo::uno::Sequence< css::lang::Locale > GetStartEndCharLocales();
 
     static bool GetStartEndChars(
         css::lang::Locale const & locale, OUString & startChars,
         OUString & endChars);
-
-    void SetStartEndChars(
-        css::lang::Locale const & locale,
-        OUString const * startChars, OUString const * endChars);
-
-private:
-    struct Impl;
-
-    std::unique_ptr< Impl > impl_;
 };
 
 #endif

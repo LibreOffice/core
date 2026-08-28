@@ -284,66 +284,6 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb 
     }
 }
 
-//set the usrpref 's char unit attribute and set rulers unit as char if the "apply char unit" is checked
-void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
-{
-    SwMasterUsrPref* pPref;
-    if(bWeb)
-    {
-        if(!m_pWebUsrPref)
-            GetUsrPref(true);
-        pPref = m_pWebUsrPref.get();
-    }
-    else
-    {
-        if(!m_pUsrPref)
-            GetUsrPref(false);
-        pPref = m_pUsrPref.get();
-    }
-    assert(pPref && "pPref is set by here");
-    bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
-    bool bHasChanged = false;
-    if(bOldApplyCharUnit != bApplyChar)
-    {
-        pPref->SetApplyCharUnit(bApplyChar);
-        bHasChanged = true;
-    }
-
-    if( !bHasChanged )
-        return;
-
-    FieldUnit eHScrollMetric = pPref->IsHScrollMetric() ? pPref->GetHScrollMetric() : pPref->GetMetric();
-    FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : pPref->GetMetric();
-    if(bApplyChar)
-    {
-        eHScrollMetric = FieldUnit::CHAR;
-        eVScrollMetric = FieldUnit::LINE;
-    }
-    else
-    {
-        if ( !SvtCJKOptions::IsAsianTypographyEnabled() && ( eHScrollMetric == FieldUnit::CHAR ))
-            eHScrollMetric = FieldUnit::INCH;
-        else if ( eHScrollMetric == FieldUnit::CHAR )
-            eHScrollMetric = FieldUnit::CM;
-        if ( !SvtCJKOptions::IsAsianTypographyEnabled() && ( eVScrollMetric == FieldUnit::LINE ))
-            eVScrollMetric = FieldUnit::INCH;
-        else if ( eVScrollMetric == FieldUnit::LINE )
-            eVScrollMetric = FieldUnit::CM;
-    }
-    SwView* pTmpView = SwModule::GetFirstView();
-    // switch rulers for all MDI-Windows
-    while(pTmpView)
-    {
-        if(bWeb == (dynamic_cast<SwWebView*>( pTmpView) !=  nullptr) )
-        {
-            pTmpView->ChangeVRulerMetric(eVScrollMetric);
-            pTmpView->ChangeTabMetric(eHScrollMetric);
-        }
-
-        pTmpView = SwModule::GetNextView(pTmpView);
-    }
-}
-
 SwNavigationConfig*  SwModule::GetNavigationConfig()
 {
     if(!m_pNavigationConfig)
@@ -646,22 +586,6 @@ SwFieldUpdateFlags SwModule::GetFieldUpdateFlags() const
     return m_pUsrPref->GetFieldUpdateFlags();
 }
 
-void SwModule::ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags)
-{
-    if (!m_pUsrPref)
-        GetUsrPref(false);
-    assert(m_pUsrPref && "m_pUsrPref is set by here");
-    m_pUsrPref->SetFieldUpdateFlags(eFieldFlags);
-}
-
-void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
-{
-    if (!m_pUsrPref)
-        GetUsrPref(false);
-    assert(m_pUsrPref && "m_pUsrPref is set by here");
-    m_pUsrPref->SetUpdateLinkMode(nNewLinkMode);
-}
-
 void SwModule::CheckSpellChanges( bool bOnlineSpelling,
         bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags )
 {
@@ -683,14 +607,6 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
                 pViewShell->GetWin()->Invalidate();
         }
     }
-}
-
-void SwModule::ApplyDefaultPageMode(bool bIsSquaredPageMode)
-{
-    if (!m_pUsrPref)
-        GetUsrPref(false);
-    assert(m_pUsrPref && "pPref is set by here");
-    m_pUsrPref->SetDefaultPageMode(bIsSquaredPageMode);
 }
 
 SwCompareMode SwModule::GetCompareMode() const

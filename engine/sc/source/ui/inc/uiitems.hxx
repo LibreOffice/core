@@ -196,7 +196,6 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual ScUserListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    void        SetUserList ( const ScUserList& rUserList );
     ScUserList* GetUserList () const { return pUserList.get(); }
 
 private:

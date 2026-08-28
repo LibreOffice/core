@@ -1362,9 +1362,4 @@ OUString SfxHelp::GetCurrentModuleIdentifier()
     return getCurrentModuleIdentifier_Impl();
 }
 
-bool SfxHelp::IsHelpInstalled()
-{
-    return impl_hasHelpInstalled();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

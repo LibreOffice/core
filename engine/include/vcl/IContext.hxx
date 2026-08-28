@@ -27,14 +27,6 @@ public:
         maContext = std::move(aContext);
     }
 
-    bool HasContext(const vcl::EnumContext::Context eContext) const
-    {
-        auto aFind = std::find(maContext.begin(), maContext.end(), eContext);
-        if (aFind == maContext.end())
-            return false;
-        return true;
-    }
-
 private:
     std::vector<vcl::EnumContext::Context> maContext;
 };

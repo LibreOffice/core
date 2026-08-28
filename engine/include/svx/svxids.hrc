@@ -47,7 +47,6 @@ class SvxColumnItem;
 class SvxDashListItem;
 class SvxDoubleItem;
 class SvxGradientListItem;
-class SvxGridItem;
 class SvxHatchListItem;
 class SvxLineEndListItem;
 class SvxLineItem;
@@ -417,7 +416,7 @@ class XFillGradientItem;
 #define SID_SET_SUB_SCRIPT                              ( SID_SVX_START + 295 )
 #define SID_CHAR_DLG                                    ( SID_SVX_START + 296 )
 #define SID_PARA_DLG                                    TypedWhichId<SfxStringItem>( SID_SVX_START + 297 )
-#define SID_ATTR_GRID_OPTIONS                           TypedWhichId<SvxGridItem>( SID_SVX_START + 298 )
+//
 #define SID_ATTR_FILL_SHADOW                            ( SID_SVX_START + 299 )
 
 // CAUTION! Range <300 .. 300> used by EditEngine (!)

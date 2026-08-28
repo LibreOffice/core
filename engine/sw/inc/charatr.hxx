@@ -124,10 +124,6 @@ inline const SvxFontHeightItem             &SwFormat::GetSize(bool bInP) const
     {   return m_aSet.GetSize(bInP); }
 inline const SvxFontItem             &SwFormat::GetFont(bool bInP) const
     {   return m_aSet.GetFont(bInP); }
-inline const SvxFontItem         &SwFormat::GetCJKFont(bool bInP) const
-    {   return m_aSet.GetCJKFont(bInP); }
-inline const SvxFontItem         &SwFormat::GetCTLFont(bool bInP) const
-    {   return m_aSet.GetCTLFont(bInP); }
 inline const SvxColorItem            &SwFormat::GetColor(bool bInP) const
     {   return m_aSet.GetColor(bInP); }
 

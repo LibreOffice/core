@@ -2255,31 +2255,4 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
 
 }
 
-void SwFEShell::AlignAllFormulasToBaseline()
-{
-    StartAllAction();
-
-    SwStartNode *pStNd;
-    SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-    while ( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
-    {
-        ++aIdx;
-        SwOLENode *pOleNode = aIdx.GetNode().GetOLENode();
-        if ( pOleNode )
-        {
-            const uno::Reference < embed::XEmbeddedObject > & xObj( pOleNode->GetOLEObj().GetOleRef() );
-            if (xObj.is())
-            {
-                SvGlobalName aCLSID( xObj->getClassID() );
-                if ( SotExchange::IsMath( aCLSID ) )
-                    AlignFormulaToBaseline( xObj );
-            }
-        }
-
-        aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
-    }
-
-    EndAllAction();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

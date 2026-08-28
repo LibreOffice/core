@@ -77,7 +77,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/confignode \
     unotools/source/config/configpaths \
     unotools/source/config/configvaluecontainer \
-    unotools/source/config/defaultoptions \
     unotools/source/config/docinfohelper \
     unotools/source/config/dynamicmenuoptions \
     unotools/source/config/eventcfg \
@@ -117,7 +116,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/misc/syslocale \
     unotools/source/misc/wincodepage \
     unotools/source/misc/ServiceDocumenter \
-    unotools/source/misc/ZipPackageHelper \
     unotools/source/streaming/streamwrap \
     unotools/source/ucbhelper/localfilehelper \
     unotools/source/ucbhelper/progresshandlerwrap \

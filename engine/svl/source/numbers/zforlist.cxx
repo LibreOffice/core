@@ -4183,24 +4183,6 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
 
 
 // static
-const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(std::u16string_view rAbbrev, LanguageType eLang )
-{
-    eLang = MsLangId::getRealLanguage( eLang );
-    const NfCurrencyTable& rTable = GetTheCurrencyTable();
-    sal_uInt16 nCount = rTable.size();
-    for ( sal_uInt16 j = 0; j < nCount; j++ )
-    {
-        if ( rTable[j].GetLanguage() == eLang &&
-             rTable[j].GetBankSymbol() == rAbbrev )
-        {
-            return &rTable[j];
-        }
-    }
-    return nullptr;
-}
-
-
-// static
 const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( std::u16string_view rSymbol,
                                                                       std::u16string_view rAbbrev )
 {

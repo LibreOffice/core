@@ -267,11 +267,6 @@ void SvxMacroTabPage_::Reset( const SfxItemSet* )
     DisplayAppEvents(bAppEvents, 0);
 }
 
-void SvxMacroTabPage_::SetReadOnly( bool bSet )
-{
-    mpImpl->bReadOnly = bSet;
-}
-
 bool SvxMacroTabPage_::IsReadOnly() const
 {
     return mpImpl->bReadOnly;

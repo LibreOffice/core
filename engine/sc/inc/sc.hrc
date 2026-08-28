@@ -66,11 +66,6 @@ class SvxZoomSliderItem;
 #define SID_SC_INPUT_LEGACY_CELL_SELECTION TypedWhichId<SfxBoolItem>(SC_VIEW_START + 15)
 #define SID_SC_OPT_SORT_REF_UPDATE         TypedWhichId<SfxBoolItem>(SC_VIEW_START + 16)
 
-// Format options
-#define SID_SCFORMULAOPTIONS    TypedWhichId<ScTpFormulaItem>(SC_VIEW_START + 20)
-#define SID_SCDEFAULTSOPTIONS   TypedWhichId<ScTpDefaultsItem>(SC_VIEW_START + 21)
-
-
 #define SID_DATA_PROVIDER       (SC_VIEW_START + 31)
 #define SID_DATA_PROVIDER_REFRESH (SC_VIEW_START + 32)
 #define SID_DATA_STREAMS_PLAY   (SC_VIEW_START + 33)
@@ -83,8 +78,8 @@ class SvxZoomSliderItem;
 // other slot-IDs:
 #define SID_SCUSERLISTS         (SC_VIEW_START + 37)    // user defined lists
     // free
-#define SID_SCVIEWOPTIONS       TypedWhichId<ScTpViewItem>(SC_VIEW_START + 39)
-#define SID_SCDOCOPTIONS        TypedWhichId<ScTpCalcItem>(SC_VIEW_START + 40)
+    // free
+    // free
 
 // cursor movements as properties:
 #define SID_CURRENTCELL         TypedWhichId<SfxStringItem>(SC_VIEW_START + 41)

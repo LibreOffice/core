@@ -93,19 +93,15 @@ public:
 
             const OUString&     GetCurrencyString() const
                                     { return m_aCurrencyString; }
-            void                SetCurrencyString( const OUString& rStr );
 
             const OUString&     GetDatePatternsString() const
                                     { return m_aDatePatternsString; }
-            void                SetDatePatternsString( const OUString& rStr );
 
             bool                IsDecimalSeparatorAsLocale() const { return m_bDecimalSeparator;}
-            void                SetDecimalSeparatorAsLocale( bool bSet);
 
             bool                IsIgnoreLanguageChange() const { return m_bIgnoreLanguageChange;}
             void                SetIgnoreLanguageChange( bool bSet);
 
-            bool                IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
             const LanguageTag&  GetRealLocale() const { return m_aRealLocale; }
             const LanguageTag&  GetRealUILocale() const { return m_aRealUILocale; }
 };
@@ -281,40 +277,6 @@ void SvtSysLocaleOptions_Impl::MakeRealUILocale()
     }
 }
 
-bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const
-{
-    bool bReadOnly = CFG_READONLY_DEFAULT;
-    switch(eOption)
-    {
-        case SvtSysLocaleOptions::EOption::Locale :
-            {
-                bReadOnly = m_bROLocale;
-                break;
-            }
-        case SvtSysLocaleOptions::EOption::Currency :
-            {
-                bReadOnly = m_bROCurrency;
-                break;
-            }
-        case SvtSysLocaleOptions::EOption::DatePatterns :
-            {
-                bReadOnly = m_bRODatePatterns;
-                break;
-            }
-        case SvtSysLocaleOptions::EOption::DecimalSeparator:
-            {
-                bReadOnly = m_bRODecimalSeparator;
-                break;
-            }
-        case SvtSysLocaleOptions::EOption::IgnoreLanguageChange:
-            {
-                bReadOnly = m_bROIgnoreLanguageChange;
-                break;
-            }
-    }
-    return bReadOnly;
-}
-
 void SvtSysLocaleOptions_Impl::ImplCommit()
 {
     const Sequence< OUString > aOrgNames = GetPropertyNames();
@@ -430,48 +392,6 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
     NotifyListeners( ConfigurationHints::UiLocale );
 }
 
-void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
-{
-    {
-        MutexGuard aGuard( GetMutex() );
-        if (m_bROCurrency || rStr == m_aCurrencyString )
-        {
-            return;
-        }
-        m_aCurrencyString = rStr;
-        SetModified();
-    }
-    NotifyListeners( ConfigurationHints::Currency );
-}
-
-void SvtSysLocaleOptions_Impl::SetDatePatternsString( const OUString& rStr )
-{
-    {
-        MutexGuard aGuard( GetMutex() );
-        if (m_bRODatePatterns || rStr == m_aDatePatternsString )
-        {
-            return;
-        }
-        m_aDatePatternsString = rStr;
-        SetModified();
-    }
-    NotifyListeners( ConfigurationHints::DatePatterns );
-}
-
-void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( bool bSet)
-{
-    {
-        MutexGuard aGuard( GetMutex() );
-        if(bSet == m_bDecimalSeparator)
-        {
-            return;
-        }
-        m_bDecimalSeparator = bSet;
-        SetModified();
-    }
-    NotifyListeners( ConfigurationHints::DecSep );
-}
-
 void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( bool bSet)
 {
     {
@@ -562,12 +482,6 @@ SvtSysLocaleOptions::~SvtSysLocaleOptions()
     pImpl.reset();
 }
 
-bool SvtSysLocaleOptions::IsModified() const
-{
-    MutexGuard aGuard( GetMutex() );
-    return pImpl->IsModified();
-}
-
 void SvtSysLocaleOptions::Commit()
 {
     MutexGuard aGuard( GetMutex() );
@@ -596,31 +510,16 @@ const OUString& SvtSysLocaleOptions::GetCurrencyConfigString() const
     return pImpl->GetCurrencyString();
 }
 
-void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
-{
-    pImpl->SetCurrencyString( rStr );
-}
-
 const OUString& SvtSysLocaleOptions::GetDatePatternsConfigString() const
 {
     MutexGuard aGuard( GetMutex() );
     return pImpl->GetDatePatternsString();
 }
 
-void SvtSysLocaleOptions::SetDatePatternsConfigString( const OUString& rStr )
-{
-    pImpl->SetDatePatternsString( rStr );
-}
-
 bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
 {
     MutexGuard aGuard( GetMutex() );
     return pImpl->IsDecimalSeparatorAsLocale();
-}
-
-void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( bool bSet)
-{
-    pImpl->SetDecimalSeparatorAsLocale(bSet);
 }
 
 bool SvtSysLocaleOptions::IsIgnoreLanguageChange() const
@@ -632,12 +531,6 @@ bool SvtSysLocaleOptions::IsIgnoreLanguageChange() const
 void SvtSysLocaleOptions::SetIgnoreLanguageChange( bool bSet)
 {
     pImpl->SetIgnoreLanguageChange(bSet);
-}
-
-bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
-{
-    MutexGuard aGuard( GetMutex() );
-    return pImpl->IsReadOnly( eOption );
 }
 
 // static
@@ -657,19 +550,6 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
         rAbbrev = rConfigString;
         eLang = (rAbbrev.isEmpty() ? LANGUAGE_SYSTEM : LANGUAGE_NONE);
     }
-}
-
-// static
-OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
-        const OUString& rAbbrev, LanguageType eLang )
-{
-    OUString aIsoStr( LanguageTag::convertToBcp47( eLang ) );
-    if ( !aIsoStr.isEmpty() )
-    {
-        return rAbbrev + "-" + aIsoStr;
-    }
-    else
-        return rAbbrev;
 }
 
 // static

@@ -46,13 +46,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibility
 public:
     // Read access
     explicit SvtCompatibility(const OUString& itemName);
-    // Write access
-    SvtCompatibility(const std::shared_ptr<comphelper::ConfigurationChanges>& batch,
-                     const OUString& itemName);
-    void set(const OUString& option, bool value);
     bool get(const OUString& option) const;
-
-    bool getPropertyReadOnly(const OUString& option) const;
 
 private:
     css::uno::Reference<css::container::XNameAccess> root;
@@ -64,10 +58,6 @@ class SvtCompatibilityDefault : public SvtCompatibility
 public:
     SvtCompatibilityDefault()
         : SvtCompatibility(u"_default"_ustr)
-    {
-    }
-    SvtCompatibilityDefault(const std::shared_ptr<comphelper::ConfigurationChanges>& batch)
-        : SvtCompatibility(batch, u"_default"_ustr)
     {
     }
 };

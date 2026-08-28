@@ -297,13 +297,6 @@ public:
     /// Invalidate all Content, Size or PrtArea
     void InvalidateAllContent( SwInvalidateFlags nInvalidate );
 
-    /**
-     * Invalidate/re-calculate the position of all floating
-     * screen objects (Writer fly frames and drawing objects), which are
-     * anchored to paragraph or to character.
-    */
-    void InvalidateAllObjPos();
-
     /// Remove superfluous Pages
     void SetSuperfluous()      { mbCheckSuperfluous = true; }
     bool IsSuperfluous() const { return mbCheckSuperfluous; }

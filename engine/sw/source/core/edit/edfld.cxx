@@ -366,16 +366,6 @@ bool SwEditShell::IsExpFieldsLocked() const
     return GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked();
 }
 
-void SwEditShell::SetFieldUpdateFlags( SwFieldUpdateFlags eFlags )
-{
-    getIDocumentSettingAccess().setFieldUpdateFlags( eFlags );
-}
-
-SwFieldUpdateFlags SwEditShell::GetFieldUpdateFlags() const
-{
-    return getIDocumentSettingAccess().getFieldUpdateFlags( false );
-}
-
 void SwEditShell::SetLabelDoc( bool bFlag )
 {
     GetDoc()->GetDocumentSettingManager().set(DocumentSettingId::LABEL_DOCUMENT, bFlag );

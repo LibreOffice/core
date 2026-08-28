@@ -701,23 +701,6 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 }
 
 
-SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XSearchableDictionaryList > _xDicList ) :
-    xDicList    (std::move( _xDicList ))
-{
-    if (xDicList.is())
-    {
-        xDicList->beginCollectEvents();
-    }
-}
-
-SvxDicListChgClamp::~SvxDicListChgClamp()
-{
-    if (xDicList.is())
-    {
-        xDicList->endCollectEvents();
-    }
-}
-
 short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError)
 {
     short nRes = 0;

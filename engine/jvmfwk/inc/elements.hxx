@@ -190,29 +190,12 @@ public:
      */
     void setEnabled(bool bEnabled);
 
-    /** sets m_sUserClassPath. See setEnabled.
-     */
-    void setUserClassPath(const OUString& sClassPath);
-
     /** sets m_aInfo. See setEnabled.
         @param bAutoSelect
         true- called by jfw_setSelectedJRE
         false called by jfw_findAndSelectJRE
      */
     void setJavaInfo(const JavaInfo* pInfo, bool bAutoSelect);
-
-    /** sets the /java/vmParameters/param elements.
-        When this method all previous values are removed and replaced
-        by those in arParameters.
-        /java/vmParameters@xsi:nil will be set to true when write() is
-        called.
-     */
-    void setVmParameters(std::vector<OUString> const& arParameters);
-
-    /** adds a location to the already existing locations.
-        Note: call load() before, then add the location and then call write().
-    */
-    void addJRELocation(OUString const& sLocation);
 
     /** writes the data to user settings.
      */
@@ -310,8 +293,6 @@ public:
      */
     bool getJavaInfoAttrAutoSelect() const;
 #endif
-
-    void getVmParametersArray(std::vector<OUString>* parParameters) const;
 
     const ::std::vector<OUString>& getJRELocations() const { return m_JRELocations; }
 };

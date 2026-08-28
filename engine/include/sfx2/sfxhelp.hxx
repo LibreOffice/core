@@ -52,8 +52,6 @@ public:
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
     static OUString         GetDefaultHelpModule();
     static OUString         GetCurrentModuleIdentifier();
-    // Check for built-in help
-    static bool             IsHelpInstalled();
 
     static OUString GetURLHelpText(std::u16string_view);
 };

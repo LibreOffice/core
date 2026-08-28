@@ -52,24 +52,8 @@ OUString toString(css::lang::Locale const & locale) {
 
 }
 
-struct SvxAsianConfig::Impl {
-    Impl():
-        batch(comphelper::ConfigurationChanges::create())
-    {}
 
-    Impl(const Impl&) = delete;
-    Impl& operator=(const Impl&) = delete;
-
-    std::shared_ptr< comphelper::ConfigurationChanges > batch;
-};
-
-SvxAsianConfig::SvxAsianConfig(): impl_(new Impl) {}
-
-SvxAsianConfig::~SvxAsianConfig() {}
-
-void SvxAsianConfig::Commit() {
-    impl_->batch->commit();
-}
+SvxAsianConfig::SvxAsianConfig() {}
 
 // static
 bool SvxAsianConfig::IsKerningWesternTextOnly() {
@@ -77,19 +61,9 @@ bool SvxAsianConfig::IsKerningWesternTextOnly() {
         officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::get();
 }
 
-void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
-    officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::set(
-        value, impl_->batch);
-}
-
 // static
 CharCompressType SvxAsianConfig::GetCharDistanceCompression() {
     return static_cast<CharCompressType>(officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get());
-}
-
-void SvxAsianConfig::SetCharDistanceCompression(CharCompressType value) {
-    officecfg::Office::Common::AsianLayout::CompressCharacterDistance::set(
-        static_cast<sal_uInt16>(value), impl_->batch);
 }
 
 // static
@@ -124,52 +98,6 @@ bool SvxAsianConfig::GetStartEndChars(
     startChars = el->getPropertyValue(u"StartCharacters"_ustr).get< OUString >();
     endChars = el->getPropertyValue(u"EndCharacters"_ustr).get< OUString >();
     return true;
-}
-
-void SvxAsianConfig::SetStartEndChars(
-    css::lang::Locale const & locale, OUString const * startChars,
-    OUString const * endChars)
-{
-    assert((startChars == nullptr) == (endChars == nullptr));
-    css::uno::Reference< css::container::XNameContainer > set(
-        officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
-            impl_->batch));
-    OUString name(toString(locale));
-    if (startChars == nullptr) {
-        try {
-            set->removeByName(name);
-        } catch (css::container::NoSuchElementException &) {}
-    } else {
-        bool found;
-        cpo::uno::Any v;
-        try {
-            v = set->getByName(name);
-            found = true;
-        } catch (css::container::NoSuchElementException &) {
-            found = false;
-        }
-        if (found) {
-            css::uno::Reference< css::beans::XPropertySet > el(
-                v.get< css::uno::Reference< css::beans::XPropertySet > >(),
-                css::uno::UNO_SET_THROW);
-            el->setPropertyValue(u"StartCharacters"_ustr, cpo::uno::Any(*startChars));
-            el->setPropertyValue(u"EndCharacters"_ustr, cpo::uno::Any(*endChars));
-        } else {
-            css::uno::Reference< css::beans::XPropertySet > el(
-                (css::uno::Reference< css::lang::XSingleServiceFactory >(
-                    set, css::uno::UNO_QUERY_THROW)->
-                 createInstance()),
-                css::uno::UNO_QUERY_THROW);
-            el->setPropertyValue(u"StartCharacters"_ustr, cpo::uno::Any(*startChars));
-            el->setPropertyValue(u"EndCharacters"_ustr, cpo::uno::Any(*endChars));
-            cpo::uno::Any v2(el);
-            try {
-                set->insertByName(name, v2);
-            } catch (css::container::ElementExistException &) {
-                SAL_INFO("svl", "Concurrent update race for \"" << name << '"');
-            }
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

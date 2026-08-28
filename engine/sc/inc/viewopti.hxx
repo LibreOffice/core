@@ -71,7 +71,6 @@ class ScGridOptions : public SvxOptionsGrid
 {
 public:
                 ScGridOptions()  {}
-                ScGridOptions( const SvxOptionsGrid& rOpt ) : SvxOptionsGrid( rOpt ) {}
 
     void                    SetDefaults();
     bool                    operator== ( const ScGridOptions& rOpt ) const;
@@ -131,7 +130,6 @@ public:
 
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
-    std::unique_ptr<SvxGridItem> CreateGridItem() const;
 
     ScViewOptions&          operator=  ( const ScViewOptions& rCpy );
     bool                    operator== ( const ScViewOptions& rOpt ) const;
@@ -142,29 +140,6 @@ private:
     Color           aGridCol;
     OUString        aGridColName;
     ScGridOptions   aGridOpt;
-};
-
-// Item for the options dialog - View
-
-class SC_DLLPUBLIC ScTpViewItem final : public SfxPoolItem
-{
-public:
-                ScTpViewItem( const ScViewOptions& rOpt );
-                virtual ~ScTpViewItem() override;
-
-    DECLARE_ITEM_TYPE_FUNCTION(ScTpViewItem)
-    ScTpViewItem(ScTpViewItem const &) = default;
-    ScTpViewItem(ScTpViewItem &&) = default;
-    ScTpViewItem & operator =(ScTpViewItem const &) = delete; // due to SfxPoolItem
-    ScTpViewItem & operator =(ScTpViewItem &&) = delete; // due to SfxPoolItem
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual ScTpViewItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    const ScViewOptions&    GetViewOptions() const { return theOptions; }
-
-private:
-    ScViewOptions   theOptions;
 };
 
 // CfgItem for View options
@@ -190,8 +165,6 @@ class ScViewCfg : public ScViewOptions
 
 public:
             ScViewCfg();
-
-    void            SetOptions( const ScViewOptions& rNew );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

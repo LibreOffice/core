@@ -239,33 +239,6 @@ void XSecController::setX509Certificate(
     }
 }
 
-void XSecController::setGpgCertificate(
-        sal_Int32 nSecurityId,
-        const OUString& ouKeyDigest,
-        const OUString& ouCert,
-        const OUString& ouOwner)
-{
-    int index = findSignatureInfor( nSecurityId );
-
-    if ( index == -1 )
-    {
-        InternalSignatureInformation isi(nSecurityId, nullptr);
-        isi.signatureInfor.ouGpgCertificate = ouCert;
-        isi.signatureInfor.ouGpgOwner = ouOwner;
-        isi.signatureInfor.ouGpgKeyID = ouKeyDigest;
-        m_vInternalSignatureInformations.push_back(std::move(isi));
-    }
-    else
-    {
-        SignatureInformation &si
-            = m_vInternalSignatureInformations[index].signatureInfor;
-        si.X509Datas.clear(); // it is a PGP signature now
-        si.ouGpgCertificate = ouCert;
-        si.ouGpgOwner = ouOwner;
-        si.ouGpgKeyID = ouKeyDigest;
-    }
-}
-
 void XSecController::setDate(
     sal_Int32 nSecurityId,
     const css::util::DateTime& rDateTime )

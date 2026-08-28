@@ -524,31 +524,6 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
     m_bLock = false;
 }
 
-void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
-{
-    if (m_bLock)
-        return;
-
-    m_bLock = true;
-
-    Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
-    if (xFrame.is())
-    {
-        const Reference<frame::XLayoutManager> xLayoutManager = lcl_getLayoutManager(xFrame);
-        if (xLayoutManager.is())
-        {
-            if (xLayoutManager->getElement(MENUBAR_STR).is())
-            {
-                if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
-                    xLayoutManager->hideElement(MENUBAR_STR);
-                else if (!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
-                    xLayoutManager->showElement(MENUBAR_STR);
-            }
-        }
-    }
-    m_bLock = false;
-}
-
 void SfxNotebookBar::ToggleMenubar()
 {
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();

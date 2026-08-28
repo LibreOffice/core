@@ -62,29 +62,6 @@ bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
         && rOpt.bJumboSheets == bJumboSheets;
 }
 
-ScTpDefaultsItem::ScTpDefaultsItem( ScDefaultsOptions aOpt ) :
-    SfxPoolItem ( SID_SCDEFAULTSOPTIONS ),
-    theOptions  (std::move( aOpt ))
-{
-}
-
-ScTpDefaultsItem::~ScTpDefaultsItem()
-{
-}
-
-bool ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-
-    const ScTpDefaultsItem& rPItem = static_cast<const ScTpDefaultsItem&>(rItem);
-    return ( theOptions == rPItem.theOptions );
-}
-
-ScTpDefaultsItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
-{
-    return new ScTpDefaultsItem( *this );
-}
-
 #define SCDEFAULTSOPT_TAB_COUNT  0
 #define SCDEFAULTSOPT_TAB_PREFIX 1
 #define SCDEFAULTSOPT_JUMBO_SHEETS 2

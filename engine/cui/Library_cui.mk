@@ -126,8 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/postdlg \
     cui/source/dialogs/querydialog \
     cui/source/dialogs/QrCodeGenDialog \
-    cui/source/dialogs/GraphicTestsDialog \
-    cui/source/dialogs/ImageViewerDialog \
     cui/source/dialogs/scriptdlg \
     $(call gb_Helper_optional,SCRIPTING, \
         cui/source/dialogs/MacroManagerDialog) \
@@ -145,7 +143,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/factory/cuiresmgr \
     cui/source/factory/dlgfact \
     cui/source/factory/init \
-    cui/source/options/connpoolsettings \
     cui/source/options/cuisrchdlg \
     cui/source/options/dbregister \
     cui/source/options/dbregisterednamesconfig \
@@ -156,7 +153,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optjsearch \
     cui/source/options/optlingu \
     cui/source/options/securityoptions \
-    cui/source/options/tsaurls \
     cui/source/tabpages/align \
     cui/source/tabpages/autocdlg \
     cui/source/tabpages/backgrnd \

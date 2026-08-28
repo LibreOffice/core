@@ -135,7 +135,6 @@
 #include <condformatmgr.hxx>
 #include <conditio.hxx>
 #include <corodlg.hxx>
-#include <crdlg.hxx>
 #include <csvtablebox.hxx>
 #include <dapidata.hxx>
 #include <dapitype.hxx>

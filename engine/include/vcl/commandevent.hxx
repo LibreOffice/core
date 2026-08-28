@@ -89,7 +89,6 @@ public:
     const CommandWheelData*             GetWheelData() const;
     const CommandScrollData*            GetAutoScrollData() const;
     const CommandModKeyData*            GetModKeyData() const;
-    const CommandDialogData*            GetDialogData() const;
           CommandMediaData*             GetMediaData() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
     const CommandGesturePanData*        GetGesturePanData() const;

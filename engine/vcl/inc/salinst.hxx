@@ -198,7 +198,6 @@ public:
     CreateDropTarget(const SystemEnvData& rSysEnv);
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
-    virtual bool            hasNativeFileSelection() const { return false; }
     // if you override this, make sure to override hasNativeFileSelection too.
     virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& )
         { return css::uno::Reference< css::ui::dialogs::XFilePicker2 >(); }

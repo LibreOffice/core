@@ -939,11 +939,6 @@ bool HasCharUnit( bool bWeb)
     return SwModule::get()->GetUsrPref(bWeb)->IsApplyCharUnit();
 }
 
-void SetApplyCharUnit(bool bApplyChar, bool bWeb)
-{
-    SwModule::get()->ApplyUserCharUnit(bApplyChar, bWeb);
-}
-
 bool ExecuteMenuCommand(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, const SfxViewFrame& rViewFrame, sal_uInt16 nId)
 {
     bool bRet = false;

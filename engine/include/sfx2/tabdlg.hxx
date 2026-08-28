@@ -300,7 +300,6 @@ public:
 
     OUString        GetHelpId() const;
     OUString        GetConfigId() const { return GetHelpId(); }
-    bool            IsVisible() const { return m_xContainer->get_visible(); }
 
     weld::Window*   GetFrameWeld() const;
 

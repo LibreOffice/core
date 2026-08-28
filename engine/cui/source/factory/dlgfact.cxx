@@ -792,24 +792,6 @@ VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxOb
 
 namespace
 {
-class AbstractSvxMultiPathDialog_Impl final
-    : public vcl::AbstractDialogImpl_Sync<AbstractSvxMultiPathDialog, SvxMultiPathDialog>
-{
-public:
-    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
-    OUString GetPath() const override { return m_pDlg->GetPath(); }
-    void SetPath(const OUString& rPath) override { m_pDlg->SetPath(rPath); }
-    void SetTitle(const OUString& rNewTitle) override { m_pDlg->SetTitle(rNewTitle); }
-};
-}
-
-VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(weld::Window* pParent)
-{
-    return VclPtr<AbstractSvxMultiPathDialog_Impl>::Create(pParent);
-}
-
-namespace
-{
 class AbstractSvxPathSelectDialog_Impl final
     : public vcl::AbstractDialogImpl_Sync<AbstractSvxMultiPathDialog, SvxPathSelectDialog>
 {
@@ -817,7 +799,6 @@ public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetPath() const override { return m_pDlg->GetPath(); }
     void SetPath(const OUString& rPath) override { m_pDlg->SetPath(rPath); }
-    void SetTitle(const OUString& rNewTitle) override { m_pDlg->SetTitle(rNewTitle); }
 };
 }
 

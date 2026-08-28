@@ -150,46 +150,6 @@ bool ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     return bEqual;
 }
 
-std::unique_ptr<SvxGridItem> ScViewOptions::CreateGridItem() const
-{
-    std::unique_ptr<SvxGridItem> pItem(new SvxGridItem( SID_ATTR_GRID_OPTIONS ));
-
-    pItem->SetFieldDrawX      ( aGridOpt.GetFieldDrawX() );
-    pItem->SetFieldDivisionX  ( aGridOpt.GetFieldDivisionX() );
-    pItem->SetFieldDrawY      ( aGridOpt.GetFieldDrawY() );
-    pItem->SetFieldDivisionY  ( aGridOpt.GetFieldDivisionY() );
-    pItem->SetUseGridSnap   ( aGridOpt.GetUseGridSnap() );
-    pItem->SetSynchronize   ( aGridOpt.GetSynchronize() );
-    pItem->SetGridVisible   ( aGridOpt.GetGridVisible() );
-
-    return pItem;
-}
-
-//      ScTpViewItem - data for the ViewOptions TabPage
-
-ScTpViewItem::ScTpViewItem( const ScViewOptions& rOpt )
-    :   SfxPoolItem ( SID_SCVIEWOPTIONS ),
-        theOptions  ( rOpt )
-{
-}
-
-ScTpViewItem::~ScTpViewItem()
-{
-}
-
-bool ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-
-    const ScTpViewItem& rPItem = static_cast<const ScTpViewItem&>(rItem);
-
-    return ( theOptions == rPItem.theOptions );
-}
-
-ScTpViewItem* ScTpViewItem::Clone( SfxItemPool * ) const
-{
-    return new ScTpViewItem( *this );
-}
 
 //  Config Item containing view options
 
@@ -607,14 +567,6 @@ IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl, ScLinkConfigItem&, void)
         }
     }
     aGridItem.PutProperties(aNames, aValues);
-}
-
-void ScViewCfg::SetOptions( const ScViewOptions& rNew )
-{
-    *static_cast<ScViewOptions*>(this) = rNew;
-    aLayoutItem.SetModified();
-    aDisplayItem.SetModified();
-    aGridItem.SetModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

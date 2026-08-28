@@ -827,16 +827,6 @@ void MacroChooser::SetMode (Mode nM)
     CheckButtons();
 }
 
-OUString MacroChooser::GetInfo( SbxVariable* pVar )
-{
-    OUString aComment;
-    SbxInfoRef xInfo = pVar->GetInfo();
-    if ( xInfo.is() )
-        aComment = xInfo->GetComment();
-    return aComment;
-}
-
-
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

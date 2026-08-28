@@ -535,12 +535,6 @@ void NodeJava::setEnabled(bool bEnabled)
     m_enabled =  std::optional<bool>(bEnabled);
 }
 
-
-void NodeJava::setUserClassPath(const OUString & sClassPath)
-{
-    m_userClassPath = std::optional<OUString>(sClassPath);
-}
-
 void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
 {
     if (!m_javaInfo)
@@ -566,23 +560,6 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
         m_javaInfo->nRequirements = 0;
         m_javaInfo->arVendorData = rtl::ByteSequence();
     }
-}
-
-void NodeJava::setVmParameters(std::vector<OUString> const & arOptions)
-{
-    m_vmParameters = std::optional<std::vector<OUString> >(arOptions);
-}
-
-void NodeJava::addJRELocation(OUString const & sLocation)
-{
-    if (!m_JRELocations)
-        m_JRELocations = std::optional<std::vector<OUString> >(
-            std::vector<OUString> ());
-     //only add the path if not already present
-    std::vector<OUString>::const_iterator it =
-        std::find(m_JRELocations->begin(), m_JRELocations->end(), sLocation);
-    if (it == m_JRELocations->end())
-        m_JRELocations->push_back(sLocation);
 }
 
 jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL)
@@ -958,14 +935,6 @@ bool MergedSettings::getJavaInfoAttrAutoSelect() const
     return m_javaInfo.bAutoSelect;
 }
 #endif
-void MergedSettings::getVmParametersArray(std::vector<OUString> * parParams)
-    const
-{
-    assert(parParams != nullptr);
-    osl::MutexGuard guard(FwkMutex());
-
-    *parParams = m_vmParams;
-}
 
 }
 

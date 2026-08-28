@@ -148,14 +148,6 @@ const CommandModKeyData* CommandEvent::GetModKeyData() const
         return nullptr;
 }
 
-const CommandDialogData* CommandEvent::GetDialogData() const
-{
-    if( mnCommand == CommandEventId::ShowDialog )
-        return static_cast<const CommandDialogData*>(mpData);
-    else
-        return nullptr;
-}
-
 CommandMediaData* CommandEvent::GetMediaData() const
 {
     if( mnCommand == CommandEventId::Media )

@@ -120,7 +120,6 @@ modules/scalc/ui/validationcriteriapage.ui
 modules/scalc/ui/validationhelptabpage.ui
 modules/scalc/ui/erroralerttabpage.ui
 modules/scalc/ui/conflictsdialog.ui
-modules/scalc/ui/colorrowdialog.ui
 modules/scalc/ui/filldlg.ui
 modules/scalc/ui/ungroupdialog.ui
 modules/scalc/ui/groupdialog.ui

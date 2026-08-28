@@ -227,9 +227,6 @@ public:
 
     virtual void AcceptAllRedline(/*[in]*/bool bAcceptReject) = 0;
 
-    // Representation has changed, invalidate all Redlines.
-    virtual void UpdateRedlineAttr() = 0;
-
     // Create a new Author if required.
     virtual std::size_t GetRedlineAuthor() = 0;
 

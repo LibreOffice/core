@@ -1036,24 +1036,6 @@ public:
     */
     SAL_DLLPRIVATE static void  RemoveAccel( Accelerator const * pAccel );
 
-    /** Get the number of reserved key codes used by the application.
-
-     @returns number of reserved key codes
-
-     @see GetReservedKeyCode
-    */
-    static size_t               GetReservedKeyCodeCount();
-
-    /** Get the reserved key code.
-
-     @param     i               The keycode number to retrieve
-
-     @returns Const pointer to a KeyCode object
-
-     @see GetReservedKeyCodeCount
-    */
-    static const vcl::KeyCode*  GetReservedKeyCode( size_t i );
-
     ///@}
 
     /** @name Application Help
@@ -1269,12 +1251,6 @@ public:
 
     /** Update main thread identifier */
     static void                 UpdateMainThread();
-
-    /** Do we have a native / system file selector available?
-
-     @returns True if native file selector is available, false otherwise.
-     */
-    static bool                 hasNativeFileSelection();
 
     /** Create a platform specific file picker, if one is available, otherwise return an
      empty reference.

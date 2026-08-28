@@ -34,7 +34,6 @@ namespace svtools
 {
     SVT_DLLPUBLIC bool                        IsFontSubstitutionsEnabled();
     SVT_DLLPUBLIC std::vector<SubstitutionStruct> GetFontSubstitutions();
-    SVT_DLLPUBLIC void                        SetFontSubstitutions(bool bIsEnabled, std::vector<SubstitutionStruct> const &);
     SVT_DLLPUBLIC void                        ApplyFontSubstitutionsToVcl();
 };
 

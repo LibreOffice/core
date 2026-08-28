@@ -53,13 +53,10 @@ class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::O
         void        RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
 
         static sal_Int16 GetSymbolsSize();
-        void        SetSymbolsSize( sal_Int16 eSet );
         static sal_Int16 GetCurrentSymbolsSize();
         static bool AreCurrentSymbolsLarge();
 
         static OUString GetIconTheme();
-        void        SetIconTheme(const OUString&);
-        bool        IconThemeWasSetAutomatically() const;
 
     private:
         std::shared_ptr<SvtMiscOptions_Impl> m_pImpl;

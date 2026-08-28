@@ -602,9 +602,6 @@ public:
      changing the previous vertical orientation */
     void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj );
 
-    /// aligns all formulas with anchor 'as char' to baseline
-    void AlignAllFormulasToBaseline();
-
     /// Provide information about content situated closes to given Point.
     Point GetContentPos( const Point& rPoint, bool bNext ) const;
 

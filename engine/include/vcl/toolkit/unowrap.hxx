@@ -60,9 +60,6 @@ public:
     virtual void                SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XVclWindowPeer > & xIFace ) = 0;
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) = 0;
 
-    // PopupMenu
-    virtual css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface( PopupMenu* pPopupMenu ) = 0;
-
     virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;
 
     /** Get the application's UNO wrapper object.

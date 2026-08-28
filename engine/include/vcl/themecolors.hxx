@@ -74,16 +74,12 @@ public:
     static bool IsThemeDisabled() { return GetThemeState() == ThemeState::DISABLED; };
     static bool IsThemeEnabled() { return GetThemeState() == ThemeState::ENABLED; };
     static bool IsThemeReset() { return GetThemeState() == ThemeState::RESET; }
-    static void ResetTheme() { SetThemeState(ThemeState::RESET); }
 
     static bool UseOnlyWhiteDocBackground();
-    static void SetUseOnlyWhiteDocBackground(bool bFlag);
 
     static bool UseBmpForAppBack();
     static OUString GetAppBackBmpFileName();
     static OUString GetAppBackBmpDrawType();
-    static void SetAppBackBmpFileName(const OUString& rFileName);
-    static void SetAppBackBmpDrawType(const OUString& rDrawType);
     static void SetUseBmpForAppBack(bool bUseBmp);
 
     // !IsThemeCached means that the ThemeColors object doesn't have the colors from the registry yet.

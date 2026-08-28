@@ -45,7 +45,6 @@
 #include <globals.hrc>
 #include <strings.hrc>
 #include <optload.hrc>
-#include <swwrtshitem.hxx>
 
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>

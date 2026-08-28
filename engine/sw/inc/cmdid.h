@@ -826,9 +826,6 @@ class SwUINumRuleItem;
 #define FN_PARAM_MOVE_SELECTION     TypedWhichId<SfxBoolItem>(FN_PARAM+3)
 
 #define FN_PARAM_ADDPRINTER         TypedWhichId<SwAddPrinterItem>(FN_PARAM+18)
-#define FN_PARAM_DOCDISP            TypedWhichId<SwDocDisplayItem>(FN_PARAM+20)
-#define FN_PARAM_ELEM               TypedWhichId<SwElemItem>(FN_PARAM+21)
-#define FN_PARAM_SWTEST             TypedWhichId<SwTestItem>(FN_PARAM+22)
 
 #define FN_PARAM_FTN_INFO           TypedWhichId<SwPageFootnoteInfoItem>(FN_PARAM+23)
 
@@ -860,14 +857,11 @@ class SwUINumRuleItem;
 
 #define FN_PARAM_NUM_PRESET             TypedWhichId<SfxBoolItem>(FN_PARAM2+5) /* predefined numbering */
 
-#define FN_PARAM_SHADOWCURSOR           TypedWhichId<SwShadowCursorItem>(FN_PARAM2+8) /* for ShadowCursor options */
-
 #define FN_TEXT_RANGE                   (FN_PARAM2+12) /* TextRange Property*/
 
 #define FN_PARAM_CRSR_IN_PROTECTED      TypedWhichId<SfxBoolItem>(FN_PARAM2+13) /* Cursor in protected areas */
 #define FN_PARAM_TOX_TYPE               TypedWhichId<SfxUInt16Item>(FN_PARAM2+14) /* TOX type in tox dialog*/
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
-#define FN_PARAM_FMT_AIDS_AUTOCOMPL     TypedWhichId<SwFmtAidsAutoComplItem>(FN_PARAM2+16) /* Formatting aids autocomplete options */
 #define FN_PARAM_CONTOUR_PP             (FN_PARAM2+17) /* contour PolyPolygon*/
 
 #define FN_ANCHOR_POSITION              (FN_PARAM2+18) /* AnchorPosition property */

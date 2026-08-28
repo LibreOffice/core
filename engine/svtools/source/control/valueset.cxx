@@ -530,27 +530,6 @@ void ValueSet::QueueReformat()
         Invalidate();
 }
 
-void ValueSet::RemoveItem( sal_uInt16 nItemId )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
-
-    mItemList.erase( mItemList.begin() + nPos );
-
-    // reset variables
-    if (mnHighItemId == nItemId || mnSelItemId == nItemId)
-    {
-        mnCurCol        = 0;
-        mnHighItemId    = 0;
-        mnSelItemId     = 0;
-        mbNoSelection   = true;
-    }
-
-    QueueReformat();
-}
-
 bool ValueSet::TurnOffScrollBar()
 {
     if (mxScrolledWindow->get_vpolicy() == VclPolicyType::NEVER)
@@ -1833,12 +1812,6 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
     }
 }
 
-void ValueSet::SetMargin( sal_uInt16 nNewMargin )
-{
-    mnMargin = nNewMargin;
-    QueueReformat();
-}
-
 void ValueSet::SetFormat()
 {
     mbFormat = true;
@@ -1952,16 +1925,6 @@ void ValueSet::SetOptimalSize()
     aLargestSize.setHeight(std::max(aLargestSize.Height(), mnUserItemHeight));
     Size aPrefSize(CalcWindowSizePixel(aLargestSize));
     GetDrawingArea()->set_size_request(aPrefSize.Width(), aPrefSize.Height());
-}
-
-Image ValueSet::GetItemImage(sal_uInt16 nItemId) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->maImage;
-    else
-        return Image();
 }
 
 void ValueSet::SetColor(const Color& rColor)

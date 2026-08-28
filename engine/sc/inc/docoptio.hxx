@@ -43,7 +43,6 @@ class SC_DLLPUBLIC ScDocOptions
     bool       bLookUpColRowNames;      ///< determine column-/row titles automagically
     mutable bool bFormulaRegexEnabled;    ///< regular expressions in formulas enabled, only when reading settings
     mutable bool bFormulaWildcardsEnabled;///< wildcards in formulas enabled, only when reading settings
-    bool       bWriteCalcConfig;        ///< (subset of) Calc config will be written to user's profile
 
 public:
                 ScDocOptions();
@@ -96,9 +95,6 @@ public:
 
     void    SetFormulaWildcardsEnabled( bool bVal );
     bool    IsFormulaWildcardsEnabled() const   { return GetFormulaSearchType() == utl::SearchParam::SearchType::Wildcard; }
-
-    void    SetWriteCalcConfig( bool bVal ) { bWriteCalcConfig = bVal; }
-    bool    IsWriteCalcConfig() const       { return bWriteCalcConfig; }
 };
 
 inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
@@ -120,7 +116,6 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
             &&  rOpt.bFormulaWildcardsEnabled == bFormulaWildcardsEnabled
             &&  rOpt.eFormulaSearchType     == eFormulaSearchType
-            &&  rOpt.bWriteCalcConfig       == bWriteCalcConfig
             );
 }
 
@@ -128,30 +123,6 @@ inline bool ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 {
     return !(operator==(rOpt));
 }
-
-// Item for preferences dialog - calculation
-
-class SC_DLLPUBLIC ScTpCalcItem final : public SfxPoolItem
-{
-public:
-                ScTpCalcItem( sal_uInt16 nWhich,
-                              const ScDocOptions& rOpt );
-                virtual ~ScTpCalcItem() override;
-
-    DECLARE_ITEM_TYPE_FUNCTION(ScTpCalcItem)
-    ScTpCalcItem(ScTpCalcItem const &) = default;
-    ScTpCalcItem(ScTpCalcItem &&) = default;
-    ScTpCalcItem & operator =(ScTpCalcItem const &) = delete; // due to SfxPoolItem
-    ScTpCalcItem & operator =(ScTpCalcItem &&) = delete; // due to SfxPoolItem
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual ScTpCalcItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    const ScDocOptions& GetDocOptions() const { return theOptions; }
-
-private:
-    ScDocOptions theOptions;
-};
 
 //  Config Item containing document options
 

@@ -40,29 +40,6 @@ public:
 
 };
 
-// item for the dialog / options page
-
-class SC_DLLPUBLIC ScTpDefaultsItem final : public SfxPoolItem
-{
-public:
-    DECLARE_ITEM_TYPE_FUNCTION(ScTpDefaultsItem)
-    ScTpDefaultsItem( ScDefaultsOptions aOpt );
-    virtual ~ScTpDefaultsItem() override;
-
-    ScTpDefaultsItem(ScTpDefaultsItem const &) = default;
-    ScTpDefaultsItem(ScTpDefaultsItem &&) = default;
-    ScTpDefaultsItem & operator =(ScTpDefaultsItem const &) = delete; // due to SfxPoolItem
-    ScTpDefaultsItem & operator =(ScTpDefaultsItem &&) = delete; // due to SfxPoolItem
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual ScTpDefaultsItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    const ScDefaultsOptions& GetDefaultsOptions() const { return theOptions; }
-
-private:
-    ScDefaultsOptions theOptions;
-};
-
 // config item
 
 class ScDefaultsCfg final : public ScDefaultsOptions, public utl::ConfigItem

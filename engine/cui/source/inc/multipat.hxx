@@ -20,30 +20,6 @@
 
 #include <vcl/weld.hxx>
 
-class SvxMultiPathDialog : public weld::GenericDialogController
-{
-private:
-    std::unique_ptr<weld::TreeView> m_xRadioLB;
-    std::unique_ptr<weld::Button> m_xAddBtn;
-    std::unique_ptr<weld::Button> m_xDelBtn;
-
-    void AppendEntry(const OUString& rText, const OUString& rId);
-    void HandleEntryChecked(int nRow);
-
-    DECL_LINK(AddHdl_Impl, weld::Button&, void);
-    DECL_LINK(DelHdl_Impl, weld::Button&, void);
-    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
-    DECL_LINK(CheckHdl_Impl, const weld::TreeView::iter_col&, void);
-
-public:
-    SvxMultiPathDialog(weld::Window* pParent);
-    virtual ~SvxMultiPathDialog() override;
-
-    OUString        GetPath() const;
-    void            SetPath(std::u16string_view rPath);
-    void            SetTitle(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-};
-
 class SvxPathSelectDialog : public weld::GenericDialogController
 {
 private:
@@ -60,7 +36,6 @@ public:
 
     OUString        GetPath() const;
     void            SetPath( std::u16string_view rPath );
-    void            SetTitle(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

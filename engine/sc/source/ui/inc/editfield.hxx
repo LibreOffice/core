@@ -37,7 +37,6 @@ public:
 
     void grab_focus() { m_xEntry->grab_focus(); }
     bool get_sensitive() const { return m_xEntry->get_sensitive(); }
-    void set_sensitive(bool bSensitive) { m_xEntry->set_sensitive(bSensitive); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

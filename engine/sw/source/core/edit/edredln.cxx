@@ -342,19 +342,6 @@ const SwRangeRedline* SwEditShell::GetCurrRedline() const
     return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCursor()->GetMark(), nullptr );
 }
 
-void SwEditShell::UpdateRedlineAttr()
-{
-    if( IDocumentRedlineAccess::IsShowChanges(GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags()) )
-    {
-        CurrShell aCurr( this );
-        StartAllAction();
-
-        GetDoc()->getIDocumentRedlineAccess().UpdateRedlineAttr();
-
-        EndAllAction();
-    }
-}
-
 /** Search the Redline of the data given
  *
  * @return Returns the Pos of the Array, or SwRedlineTable::npos if not present

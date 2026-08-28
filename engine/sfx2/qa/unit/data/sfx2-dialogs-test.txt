@@ -41,7 +41,6 @@ sfx/ui/custominfopage.ui
 sfx/ui/cmisinfopage.ui
 sfx/ui/documentfontspage.ui
 sfx/ui/managestylepage.ui
-sfx/ui/optprintpage.ui
 sfx/ui/securityinfopage.ui
 sfx/ui/helpcontentpage.ui
 sfx/ui/helpindexpage.ui

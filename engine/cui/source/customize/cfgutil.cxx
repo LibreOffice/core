@@ -73,10 +73,6 @@ void SfxStylesInfo_Impl::init(const OUString& rModuleName, const css::uno::Refer
     m_xDoc = xModel;
 }
 
-const char CMDURL_STYLEPROT_ONLY[] = ".uno:StyleApply?";
-const char CMDURL_SPART_ONLY    [] = "Style:string=";
-const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
-
 constexpr OUString STYLEPROP_UINAME = u"DisplayName"_ustr;
 constexpr OUString MACRO_SELECTOR_CONFIGNAME = u"MacroSelectorDialog"_ustr;
 constexpr OUString LAST_RUN_MACRO_INFO = u"LastRunMacro"_ustr;
@@ -88,72 +84,6 @@ OUString SfxStylesInfo_Impl::generateCommand(
            + sStyle
            + "&FamilyName:string="
            + sFamily;
-}
-
-bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
-{
-    static const sal_Int32 LEN_STYLEPROT = strlen(CMDURL_STYLEPROT_ONLY);
-    static const sal_Int32 LEN_SPART     = strlen(CMDURL_SPART_ONLY);
-    static const sal_Int32 LEN_FPART     = strlen(CMDURL_FPART_ONLY);
-
-    if (!aStyle.sCommand.startsWith(CMDURL_STYLEPROT_ONLY))
-        return false;
-
-    aStyle.sFamily.clear();
-    aStyle.sStyle.clear();
-
-    sal_Int32       nCmdLen  = aStyle.sCommand.getLength();
-    OUString sCmdArgs = aStyle.sCommand.copy(LEN_STYLEPROT, nCmdLen-LEN_STYLEPROT);
-    sal_Int32       i        = sCmdArgs.indexOf('&');
-    if (i<0)
-        return false;
-
-    OUString sArg = sCmdArgs.copy(0, i);
-    if (sArg.startsWith(CMDURL_SPART_ONLY))
-        aStyle.sStyle = sArg.copy(LEN_SPART);
-    else if (sArg.startsWith(CMDURL_FPART_ONLY))
-        aStyle.sFamily = sArg.copy(LEN_FPART);
-
-    sArg = sCmdArgs.copy(i+1, sCmdArgs.getLength()-i-1);
-    if (sArg.startsWith(CMDURL_SPART_ONLY))
-        aStyle.sStyle = sArg.copy(LEN_SPART);
-    else if (sArg.startsWith(CMDURL_FPART_ONLY))
-        aStyle.sFamily = sArg.copy(LEN_FPART);
-
-    return !(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty());
-}
-
-void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
-{
-    try
-    {
-        css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
-
-        css::uno::Reference< css::container::XNameAccess > xFamilies;
-        if (xModel.is())
-            xFamilies = xModel->getStyleFamilies();
-
-        css::uno::Reference< css::container::XNameAccess > xStyleSet;
-        if (xFamilies.is())
-            xFamilies->getByName(aStyle.sFamily) >>= xStyleSet;
-
-        css::uno::Reference< css::beans::XPropertySet > xStyle;
-        if (xStyleSet.is())
-            xStyleSet->getByName(aStyle.sStyle) >>= xStyle;
-
-        aStyle.sLabel.clear();
-        if (xStyle.is())
-            xStyle->getPropertyValue(STYLEPROP_UINAME) >>= aStyle.sLabel;
-    }
-    catch(const cpo::uno::RuntimeException&)
-        { throw; }
-    catch(const cpo::uno::Exception&)
-        { aStyle.sLabel.clear(); }
-
-    if (aStyle.sLabel.isEmpty())
-    {
-        aStyle.sLabel = aStyle.sCommand;
-    }
 }
 
 std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies() const
@@ -257,24 +187,6 @@ OUString CuiConfigFunctionListBox::GetCommandHelpText()
         }
     }
     return OUString();
-}
-
-OUString CuiConfigFunctionListBox::GetCurCommand() const
-{
-    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
-    if (!pData)
-        return OUString();
-    return pData->sCommand;
-}
-
-OUString CuiConfigFunctionListBox::GetCurLabel() const
-{
-    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
-    if (!pData)
-        return OUString();
-    if (!pData->sLabel.isEmpty())
-        return pData->sLabel;
-    return pData->sCommand;
 }
 
 CuiConfigFunctionListBox::CuiConfigFunctionListBox(std::unique_ptr<weld::TreeView> xTreeView)

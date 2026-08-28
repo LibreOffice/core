@@ -122,7 +122,6 @@ enum class SfxItemType : sal_uInt16
     DatabaseMapItemType,
     DbuTypeCollectionItemType,
     DisabledItemType,
-    DriverPoolingSettingsItemType,
     InvalidItemType,
     MediaItemType,
     NameOrIndexType,
@@ -152,16 +151,10 @@ enum class SfxItemType : sal_uInt16
     ScSortItemType,
     ScSubTotalItemType,
     ScTabOpItemType,
-    ScTpCalcItemType,
-    ScTpDefaultsItemType,
-    ScTpFormulaItemType,
     ScTpPrintItemType,
-    ScTpViewItemType,
     ScUserListItemType,
     ScVerticalStackCellType,
     ScViewObjectModeItemType,
-    SdOptionsGridItemType,
-    SdOptionsMiscItemType,
     SdOptionsPrintItemType,
     SdrAllPositionXItemType,
     SdrAllPositionYItemType,
@@ -356,7 +349,6 @@ enum class SfxItemType : sal_uInt16
     SvxGradientListItemType,
     SvxGraphicItemType,
     SvxGrfCropType,
-    SvxGridItemType,
     SvxGutterLeftMarginItemType,
     SvxGutterRightMarginItemType,
     SvxHangingPunctuationItemType,
@@ -437,16 +429,13 @@ enum class SfxItemType : sal_uInt16
     SwCondCollItemType,
     SwContrastGrfType,
     SwCropGrfType,
-    SwDocDisplayItemType,
     SwDrawModeGrfType,
-    SwElemItemType,
     SwEnvItemType,
     SwFltAnchorType,
     SwFltBookmarkType,
     SwFltRDFMarkType,
     SwFltRedlineType,
     SwFltTOXType,
-    SwFmtAidsAutoComplItemType,
     SwFormatAnchorType,
     SwFormatAutoFormatType,
     SwFormatChainType,
@@ -497,7 +486,6 @@ enum class SfxItemType : sal_uInt16
     SwPtrItemType,
     SwRegisterItemType,
     SwRotationGrfType,
-    SwShadowCursorItemType,
     SwTableBoxFormulaType,
     SwTableBoxNumFormatType,
     SwTableBoxValueType,
@@ -553,9 +541,6 @@ enum class SfxItemType : sal_uInt16
     XLineTransparenceItemType,
     XLineWidthItemType,
     XSecondaryFillColorItemType
-#ifdef DBG_UTIL
-    , SwTestItemType
-#endif
 };
 
 

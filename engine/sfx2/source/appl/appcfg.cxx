@@ -111,19 +111,6 @@ IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Timer*, pAsyncIdle, void)
 
 namespace
 {
-template <class Cfg, class Item> bool toSet(SfxItemSet& rSet, TypedWhichId<Item> wid)
-{
-    return rSet.Put(Item(wid, Cfg::get()));
-}
-template <class Cfg, class Item, class Val>
-bool toSet_withDefault(SfxItemSet& rSet, TypedWhichId<Item> wid, Val&& defVal)
-{
-    return rSet.Put(Item(wid, Cfg::get().value_or(std::move(defVal))));
-}
-template <class Cfg, class Item> bool toSet_ifRW(SfxItemSet& rSet, TypedWhichId<Item> wid)
-{
-    return Cfg::isReadOnly() || toSet<Cfg>(rSet, wid);
-}
 
 template <class Cfg, class Item>
 void toCfg_ifSet(const SfxItemSet& rSet, TypedWhichId<Item> wid,
@@ -132,87 +119,6 @@ void toCfg_ifSet(const SfxItemSet& rSet, TypedWhichId<Item> wid,
     if (const auto* pItem = rSet.GetItemIfSet(wid))
         Cfg::set(pItem->GetValue(), batch);
 }
-}
-
-void SfxApplication::GetOptions( SfxItemSet& rSet )
-{
-    SfxWhichIter iter(rSet);
-    for (auto nWhich = iter.FirstWhich(); nWhich; nWhich = iter.NextWhich())
-    {
-        bool bRet = false;
-        switch(nWhich)
-        {
-            case SID_ATTR_BACKUP:
-                bRet = true;
-                if (!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly())
-                    if (!rSet.Put( SfxBoolItem( SID_ATTR_BACKUP,
-                            (officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::COKit::isActive()) )))
-                        bRet = false;
-                break;
-            case SID_ATTR_BACKUP_BESIDE_ORIGINAL:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder>(
-                    rSet, SID_ATTR_BACKUP_BESIDE_ORIGINAL);
-                break;
-            case SID_ATTR_PRETTYPRINTING:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::PrettyPrinting>(
-                    rSet, SID_ATTR_PRETTYPRINTING);
-                break;
-            case SID_ATTR_WARNALIENFORMAT:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::WarnAlienFormat>(
-                    rSet, SID_ATTR_WARNALIENFORMAT);
-                break;
-            case SID_ATTR_AUTOSAVE:
-                bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::Enabled>(
-                    rSet, SID_ATTR_AUTOSAVE);
-                break;
-            case SID_ATTR_AUTOSAVEMINUTE:
-                bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::TimeIntervall>(
-                    rSet, SID_ATTR_AUTOSAVEMINUTE);
-                break;
-            case SID_ATTR_USERAUTOSAVE:
-                bRet = toSet_ifRW<officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled>(
-                    rSet, SID_ATTR_USERAUTOSAVE);
-                break;
-            case SID_ATTR_DOCINFO:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::EditProperty>(
-                    rSet, SID_ATTR_DOCINFO);
-                break;
-            case SID_SAVEREL_INET:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::URL::Internet>(
-                    rSet, SID_SAVEREL_INET);
-                break;
-            case SID_SAVEREL_FSYS:
-                bRet = toSet_ifRW<officecfg::Office::Common::Save::URL::FileSystem>(
-                    rSet, SID_SAVEREL_FSYS);
-                break;
-            case SID_SECURE_URL:
-                bRet = true;
-                if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::SecureUrls))
-                {
-                    std::vector< OUString > seqURLs = SvtSecurityOptions::GetSecureURLs();
-
-                    if( !rSet.Put( SfxStringListItem( SID_SECURE_URL, &seqURLs ) ) )
-                        bRet = false;
-                }
-                break;
-            case SID_INET_HTTP_PROXY_NAME:
-                bRet = toSet<officecfg::Inet::Settings::ooInetHTTPProxyName>(
-                    rSet, SID_INET_HTTP_PROXY_NAME);
-                break;
-            case SID_INET_HTTP_PROXY_PORT:
-                bRet = toSet_withDefault<officecfg::Inet::Settings::ooInetHTTPProxyPort>(
-                    rSet, SID_INET_HTTP_PROXY_PORT, 0);
-                break;
-            case SID_INET_NOPROXY:
-                bRet = toSet<officecfg::Inet::Settings::ooInetNoProxy>(rSet, SID_INET_NOPROXY);
-                break;
-
-            default:
-                SAL_INFO( "sfx.appl", "W1:Wrong ID while getting Options!" );
-                break;
-        }
-        SAL_WARN_IF(!bRet, "sfx.appl", "Putting options failed!");
-    }
 }
 
 void SfxApplication::SetOptions(const SfxItemSet &rSet)

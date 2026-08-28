@@ -394,15 +394,6 @@ public:
      */
     static const NfCurrencyEntry& GetCurrencyEntry(LanguageType);
 
-    /** Return a NfCurrencyEntry pointer matching a language/country
-        and currency abbreviation (AKA banking symbol).
-        This method is meant for the configuration of the default currency.
-        @return
-            <NULL/> if not found
-            else pointer to NfCurrencyEntry
-     */
-    static const NfCurrencyEntry* GetCurrencyEntry(std::u16string_view rAbbrev, LanguageType eLang);
-
     /** Return a NfCurrencyEntry pointer matching the symbol
         combination of a LegacyOnly currency. Note that this means only that
         the currency matching both symbols was once used in the Office, but is

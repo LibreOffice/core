@@ -67,7 +67,6 @@ void ScDocOptions::ResetDocOptions()
     bFormulaRegexEnabled= false;
     bFormulaWildcardsEnabled= true;
     eFormulaSearchType  = utl::SearchParam::SearchType::Wildcard;
-    bWriteCalcConfig    = true;
     bIgnoreLineBreaks   = false;
 }
 
@@ -103,32 +102,6 @@ void ScDocOptions::SetFormulaWildcardsEnabled( bool bVal )
         bFormulaWildcardsEnabled = false;
         eFormulaSearchType = utl::SearchParam::SearchType::Unknown;
     }
-}
-
-//      ScTpCalcItem - data for the CalcOptions TabPage
-
-ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
-    :   SfxPoolItem ( nWhichP ),
-        theOptions  ( rOpt )
-{
-}
-
-ScTpCalcItem::~ScTpCalcItem()
-{
-}
-
-bool ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-
-    const ScTpCalcItem& rPItem = static_cast<const ScTpCalcItem&>(rItem);
-
-    return ( theOptions == rPItem.theOptions );
-}
-
-ScTpCalcItem* ScTpCalcItem::Clone( SfxItemPool * ) const
-{
-    return new ScTpCalcItem( *this );
 }
 
 //  Config Item containing document options

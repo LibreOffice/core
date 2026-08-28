@@ -4456,18 +4456,6 @@ std::size_t DocumentRedlineManager::InsertRedlineAuthor( const OUString& rNew )
     return SwModule::get()->InsertRedlineAuthor(rNew);
 }
 
-void DocumentRedlineManager::UpdateRedlineAttr()
-{
-    const SwRedlineTable& rTable = GetRedlineTable();
-    for(SwRangeRedline* pRedl : rTable)
-    {
-        if( pRedl->IsVisible() )
-            pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
-    }
-
-    // #TODO - add 'SwExtraRedlineTable' also ?
-}
-
 const cpo::uno::Sequence <sal_Int8>& DocumentRedlineManager::GetRedlinePassword() const
 {
     return maRedlinePasswd;

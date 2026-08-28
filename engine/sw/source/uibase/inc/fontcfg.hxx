@@ -60,17 +60,6 @@ class SW_DLLPUBLIC SwStdFontConfig final : public utl::ConfigItem
 
     SAL_DLLPRIVATE static cpo::uno::Sequence<OUString> const & GetPropertyNames();
 
-    void ChangeString(sal_uInt16 nFontType, const OUString& rSet)
-        {
-            if(m_sDefaultFonts[nFontType] != rSet)
-            {
-                SetModified();
-                m_sDefaultFonts[nFontType] = rSet;
-            }
-        }
-
-    void ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight );
-
     virtual void    ImplCommit() override;
 
 public:
@@ -79,29 +68,8 @@ public:
 
     virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
-    const OUString&   GetFontStandard(sal_uInt8 nFontGroup) const {return m_sDefaultFonts[FONT_STANDARD + FONT_PER_GROUP * nFontGroup];}
-    const OUString&   GetFontOutline(sal_uInt8 nFontGroup)  const {return m_sDefaultFonts[FONT_OUTLINE + FONT_PER_GROUP * nFontGroup];}
-    const OUString&   GetFontList   (sal_uInt8 nFontGroup)  const {return m_sDefaultFonts[FONT_LIST + FONT_PER_GROUP * nFontGroup];}
-    const OUString&   GetFontCaption(sal_uInt8 nFontGroup)  const {return m_sDefaultFonts[FONT_CAPTION + FONT_PER_GROUP * nFontGroup];}
-    const OUString&   GetFontIndex  (sal_uInt8 nFontGroup)  const {return m_sDefaultFonts[FONT_INDEX + FONT_PER_GROUP * nFontGroup];}
-
     const OUString&   GetFontFor(sal_uInt16 nFontType)  const {return m_sDefaultFonts[nFontType];}
     bool            IsFontDefault(sal_uInt16 nFontType) const;
-
-    void     SetFontStandard(const OUString& rSet, sal_uInt8 nFontGroup)
-                    {ChangeString(FONT_STANDARD + FONT_PER_GROUP * nFontGroup, rSet);}
-
-    void     SetFontOutline(const OUString& rSet, sal_uInt8 nFontGroup)
-                    {    ChangeString(FONT_OUTLINE + FONT_PER_GROUP * nFontGroup, rSet);}
-    void     SetFontList   (const OUString& rSet, sal_uInt8 nFontGroup)
-                    {    ChangeString(FONT_LIST + FONT_PER_GROUP * nFontGroup, rSet);}
-    void     SetFontCaption(const OUString& rSet, sal_uInt8 nFontGroup)
-                    {    ChangeString(FONT_CAPTION + FONT_PER_GROUP * nFontGroup, rSet);}
-    void     SetFontIndex  (const OUString& rSet, sal_uInt8 nFontGroup)
-                    {    ChangeString(FONT_INDEX + FONT_PER_GROUP * nFontGroup, rSet);}
-
-    void     SetFontHeight( sal_Int32 nHeight, sal_uInt8 nFont, sal_uInt8 nScriptType )
-                    {    ChangeInt(nFont + FONT_PER_GROUP * nScriptType, nHeight);}
 
     sal_Int32 GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang );
 

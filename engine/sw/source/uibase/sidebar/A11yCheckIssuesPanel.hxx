@@ -123,8 +123,6 @@ private:
                           std::vector<std::vector<sal_Int32>>& rIndices,
                           std::shared_ptr<sfx::AccessibilityIssue> const& pIssue);
 
-    SfxBindings* GetBindings() { return mpBindings; }
-
     SfxBindings* mpBindings;
     SwDoc* mpDoc;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;

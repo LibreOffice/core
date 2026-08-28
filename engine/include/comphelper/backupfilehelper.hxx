@@ -120,9 +120,6 @@ namespace comphelper
         void tryPush();
         void tryPushExtensionInfo();
 
-        /** Return the profile url */
-        static const OUString& getUserProfileURL();
-
     private:
         // internal helper methods
         static OUString getPackURL();

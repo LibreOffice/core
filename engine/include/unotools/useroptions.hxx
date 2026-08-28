@@ -76,8 +76,6 @@ public:
     OUString GetTelephoneWork  () const;
     OUString GetFax            () const;
     OUString GetEmail          () const;
-    OUString GetSigningKey     () const;
-    OUString GetEncryptionKey  () const;
     bool GetEncryptToSelf      () const;
     OUString GetSigningKeyDisplayName () const;
     OUString GetEncryptionKeyDisplayName () const;

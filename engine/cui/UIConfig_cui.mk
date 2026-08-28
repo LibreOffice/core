@@ -72,9 +72,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/gallerythemeiddialog \
 	cui/uiconfig/ui/gallerytitledialog \
 	cui/uiconfig/ui/galleryupdateprogress \
-	cui/uiconfig/ui/graphictestdlg \
 	cui/uiconfig/ui/graphictestentry \
-	cui/uiconfig/ui/imageviewer \
 	cui/uiconfig/ui/hangulhanjaadddialog \
 	cui/uiconfig/ui/hangulhanjaeditdictdialog \
 	cui/uiconfig/ui/hangulhanjaconversiondialog \
@@ -101,11 +99,9 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
         cui/uiconfig/ui/macromanagerdialog \
 	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/mosaicdialog \
-	cui/uiconfig/ui/multipathdialog \
 	cui/uiconfig/ui/namedialog \
 	cui/uiconfig/ui/newlibdialog \
 	cui/uiconfig/ui/newtabledialog \
-	cui/uiconfig/ui/numberdialog \
 	cui/uiconfig/ui/numberingformatpage \
 	cui/uiconfig/ui/numberingoptionspage \
 	cui/uiconfig/ui/numberingpositionpage \
@@ -175,7 +171,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/textflowpage \
 	cui/uiconfig/ui/thesaurus \
 	cui/uiconfig/ui/transparencytabpage \
-	cui/uiconfig/ui/tsaurldialog \
 	cui/uiconfig/ui/twolinespage \
 	cui/uiconfig/ui/wordcompletionpage \
 	cui/uiconfig/ui/spinbox \

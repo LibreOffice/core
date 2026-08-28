@@ -307,8 +307,6 @@ OUString SvtUserOptions::GetTelephoneHome  () const { return GetToken(UserOptTok
 OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(UserOptToken::TelephoneWork); }
 OUString SvtUserOptions::GetFax            () const { return GetToken(UserOptToken::Fax); }
 OUString SvtUserOptions::GetEmail          () const { return GetToken(UserOptToken::Email); }
-OUString SvtUserOptions::GetSigningKey     () const { return GetToken(UserOptToken::SigningKey); }
-OUString SvtUserOptions::GetEncryptionKey  () const { return GetToken(UserOptToken::EncryptionKey); }
 OUString SvtUserOptions::GetSigningKeyDisplayName () const { return GetToken(UserOptToken::SigningKeyDisplayName); }
 OUString SvtUserOptions::GetEncryptionKeyDisplayName () const { return GetToken(UserOptToken::EncryptionKeyDisplayName); }
 

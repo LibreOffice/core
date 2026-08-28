@@ -45,36 +45,4 @@ SvxOptionsGrid::SvxOptionsGrid() :
 {
 }
 
-SvxGridItem* SvxGridItem::Clone( SfxItemPool* ) const
-{
-    return new SvxGridItem( *this );
-}
-
-bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    assert(SfxPoolItem::operator==(rAttr));
-
-    const SvxGridItem& rItem = static_cast<const SvxGridItem&>(rAttr);
-
-    return (    m_bUseGridsnap == rItem.m_bUseGridsnap &&
-                m_bSynchronize == rItem.m_bSynchronize &&
-                m_bGridVisible == rItem.m_bGridVisible &&
-                m_nFldDrawX    == rItem.m_nFldDrawX    &&
-                m_nFldDivisionX== rItem.m_nFldDivisionX&&
-                m_nFldDrawY    == rItem.m_nFldDrawY    &&
-                m_nFldDivisionY== rItem.m_nFldDivisionY );
-}
-
-bool  SvxGridItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper&
-)   const
-{
-    rText = u"SvxGridItem"_ustr;
-    return true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

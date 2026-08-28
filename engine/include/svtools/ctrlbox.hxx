@@ -487,7 +487,6 @@ public:
     void set_value(int nValue);
     void save_value() { nSavedValue = get_value(); }
     int get_saved_value() const { return nSavedValue; }
-    bool get_value_changed_from_saved() const { return get_value() != get_saved_value(); }
     int get_count() const { return m_xComboBox->get_count(); }
     OUString get_text(int i) const { return m_xComboBox->get_text(i); }
     bool has_focus() const { return m_xComboBox->has_focus(); }

@@ -220,44 +220,20 @@ public:
     SwModuleOptions();
 
     TableChgMode  GetTableMode() const { return m_aTableConfig.m_eTableChgMode;}
-    void        SetTableMode( TableChgMode  eSet ) { m_aTableConfig.m_eTableChgMode = eSet;
-                                                     m_aTableConfig.SetModified();}
 
     sal_uInt16      GetTableHMove() const { return m_aTableConfig.m_nTableHMove;}
-    void        SetTableHMove( sal_uInt16 nSet ) {    m_aTableConfig.m_nTableHMove = nSet;
-                                                      m_aTableConfig.SetModified();}
 
     sal_uInt16      GetTableVMove() const { return m_aTableConfig.m_nTableVMove;}
-    void        SetTableVMove( sal_uInt16 nSet ) {    m_aTableConfig.m_nTableVMove = nSet;
-                                                      m_aTableConfig.SetModified();}
-
-    sal_uInt16      GetTableHInsert() const {return m_aTableConfig.m_nTableHInsert;}
-    void        SetTableHInsert( sal_uInt16 nSet ) {  m_aTableConfig.m_nTableHInsert = nSet;
-                                                      m_aTableConfig.SetModified();}
-
-    sal_uInt16      GetTableVInsert() const {return m_aTableConfig.m_nTableVInsert;}
-    void        SetTableVInsert( sal_uInt16 nSet ) {  m_aTableConfig.m_nTableVInsert = nSet;
-                                                      m_aTableConfig.SetModified();}
 
     const AuthorCharAttr    &GetInsertAuthorAttr() const { return m_aRevisionConfig.m_aInsertAttr; }
-    void        SetInsertAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.m_aInsertAttr = rAttr;
-                                                                      m_aRevisionConfig.SetModified();}
 
     const AuthorCharAttr    &GetDeletedAuthorAttr() const { return m_aRevisionConfig.m_aDeletedAttr; }
-    void        SetDeletedAuthorAttr( AuthorCharAttr const &rAttr ) { m_aRevisionConfig.m_aDeletedAttr = rAttr;
-                                                                      m_aRevisionConfig.SetModified();}
 
     const AuthorCharAttr    &GetFormatAuthorAttr() const { return m_aRevisionConfig.m_aFormatAttr; }
-    void        SetFormatAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.m_aFormatAttr = rAttr;
-                                                                      m_aRevisionConfig.SetModified();}
 
     sal_uInt16          GetMarkAlignMode()  const               { return m_aRevisionConfig.m_nMarkAlign; }
-    void            SetMarkAlignMode(sal_uInt16 nMode)          { m_aRevisionConfig.m_nMarkAlign = nMode;
-                                                                  m_aRevisionConfig.SetModified();}
 
     const Color&    GetMarkAlignColor() const               { return m_aRevisionConfig.m_aMarkColor; }
-    void            SetMarkAlignColor(const Color &rColor)  { m_aRevisionConfig.m_aMarkColor = rColor;
-                                                              m_aRevisionConfig.SetModified();}
 
     bool        IsInsWithCaption(bool bHTML) const
                         { return !bHTML && m_aInsertConfig.m_bInsWithCaption; }
@@ -285,24 +261,12 @@ public:
 
     bool        IsInsTableChangeNumFormat(bool bHTML) const
                     { return bHTML ? m_aWebTableConfig.m_bInsTableChangeNumFormat : m_aTableConfig.m_bInsTableChangeNumFormat; }
-    void        SetInsTableChangeNumFormat( bool bHTML, bool b )
-                    { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
-                      config.m_bInsTableChangeNumFormat = b;
-                      config.SetModified();}
 
     bool        IsInsTableAlignNum(bool bHTML) const
                     { return bHTML ? m_aWebTableConfig.m_bInsTableAlignNum : m_aTableConfig.m_bInsTableAlignNum; }
-    void        SetInsTableAlignNum( bool bHTML, bool b )
-                    { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
-                      config.m_bInsTableAlignNum = b;
-                      config.SetModified();}
 
     const SwInsertTableOptions& GetInsTableFlags(bool bHTML) const
                     { return bHTML ? m_aWebInsertConfig.m_aInsTableOpts : m_aInsertConfig.m_aInsTableOpts;}
-    void        SetInsTableFlags( bool bHTML, const SwInsertTableOptions& rOpts ) {
-                    auto & config = bHTML ? m_aWebInsertConfig : m_aInsertConfig;
-                    config.m_aInsTableOpts = rOpts;
-                    config.SetModified();}
 
     bool        IsSplitVerticalByDefault(bool bHTML) const
                     { return bHTML ? m_aWebTableConfig.m_bSplitVerticalByDefault : m_aTableConfig.m_bSplitVerticalByDefault; }
@@ -362,22 +326,12 @@ public:
                     {m_aMiscConfig.m_bShowIndexPreview = bSet;
                      m_aMiscConfig.SetModified();}
 
-    void        SetDefaultFontInCurrDocOnly(bool bSet)
-                    {
-                        m_aMiscConfig.m_bDefaultFontsInCurrDocOnly = bSet;
-                        m_aMiscConfig.SetModified();
-                    }
-
     bool    IsHideFieldTips() const {return m_bHideFieldTips;}
     void        SetHideFieldTips(bool bSet) {m_bHideFieldTips = bSet;}
 
     SwCompareMode  GetCompareMode() const { return m_aCompareConfig.m_eCmpMode; }
-    void            SetCompareMode( SwCompareMode eMode ) { m_aCompareConfig.m_eCmpMode = eMode;
-                                                            m_aCompareConfig.SetModified(); }
 
     bool    IsUseRsid() const { return m_aCompareConfig.m_bUseRsid; }
-    void        SetUseRsid( bool b ) { m_aCompareConfig.m_bUseRsid = b;
-                                       m_aCompareConfig.SetModified(); }
 
     bool    IsIgnorePieces() const { return m_aCompareConfig.m_bIgnorePieces; }
 

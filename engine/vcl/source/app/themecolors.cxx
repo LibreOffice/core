@@ -29,13 +29,6 @@ bool ThemeColors::UseOnlyWhiteDocBackground()
     return officecfg::Office::Common::Appearance::UseOnlyWhiteDocBackground::get();
 }
 
-void ThemeColors::SetUseOnlyWhiteDocBackground(bool bFlag)
-{
-    auto pChange(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::UseOnlyWhiteDocBackground::set(bFlag, pChange);
-    pChange->commit();
-}
-
 bool ThemeColors::UseBmpForAppBack()
 {
     return officecfg::Office::Common::Appearance::UseBmpForAppBack::get();
@@ -49,20 +42,6 @@ OUString ThemeColors::GetAppBackBmpFileName()
 OUString ThemeColors::GetAppBackBmpDrawType()
 {
     return officecfg::Office::Common::Appearance::AppBackBmpDrawType::get();
-}
-
-void ThemeColors::SetAppBackBmpFileName(const OUString& rFileName)
-{
-    auto pChange(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::AppBackBmpFileName::set(rFileName, pChange);
-    pChange->commit();
-}
-
-void ThemeColors::SetAppBackBmpDrawType(const OUString& rDrawType)
-{
-    auto pChange(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::AppBackBmpDrawType::set(rDrawType, pChange);
-    pChange->commit();
 }
 
 void ThemeColors::SetUseBmpForAppBack(bool bUseBmp)

@@ -283,22 +283,16 @@ public:
     EditableColorConfig();
     ~EditableColorConfig();
 
-    cpo::uno::Sequence< OUString >  GetSchemeNames() const;
     void                        DeleteScheme(const OUString& rScheme );
     void                        AddScheme(const OUString& rScheme );
     void                        LoadScheme(const OUString& rScheme );
-    void                        SetupTheme();
     const OUString&             GetCurrentSchemeName() const;
     void                        SetCurrentSchemeName(const OUString& rScheme);
 
     const ColorConfigValue&     GetColorValue(ColorConfigEntry eEntry) const;
     void                        SetColorValue(ColorConfigEntry eEntry, const ColorConfigValue& rValue);
     void                        SetModified();
-    void                        ClearModified() {m_bModified = false;}
-    bool                        IsModified() const {return m_bModified;}
-    void                        Commit();
 
-    void                        DisableBroadcast();
     void                        EnableBroadcast();
 };
 }//namespace svtools

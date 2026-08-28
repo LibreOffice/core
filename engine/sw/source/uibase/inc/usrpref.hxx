@@ -216,11 +216,6 @@ public:
     bool IsUpdateFields()const {return m_eFieldUpdateFlags != AUTOUPD_OFF; }
 
     SwFieldUpdateFlags   GetFieldUpdateFlags()const {return m_eFieldUpdateFlags;}
-    void        SetFieldUpdateFlags(SwFieldUpdateFlags eSet)
-        {
-            m_eFieldUpdateFlags = eSet;
-            m_aContentConfig.SetModified();
-        }
 
     void SetUpdateCharts(bool bSet)
         {

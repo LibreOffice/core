@@ -107,8 +107,6 @@ public:
 
 public:
     explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle);
-    SAL_DLLPRIVATE explicit FloatingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
-                                   const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~FloatingWindow() override;
     virtual void dispose() override;
 

@@ -132,7 +132,6 @@ public:
 
     rtl::Reference<VCLXPopupMenu> CreateMenuInterface() { return new VCLXPopupMenu(m_xPopupMenu); }
 
-    void Execute( const tools::Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );
 };
 

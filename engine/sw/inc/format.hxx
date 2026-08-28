@@ -225,8 +225,6 @@ public:
     inline const SvxFontHeightItem   &GetSize( bool = true ) const;
     inline const SvxFontItem         &GetFont( bool = true ) const;
     inline const SvxColorItem        &GetColor( bool = true ) const;
-    inline const SvxFontItem         &GetCJKFont( bool = true ) const;
-    inline const SvxFontItem         &GetCTLFont( bool = true ) const;
 
     /// Frame-attributes - implemented in frmatr.hxx.
     inline const SwFormatFillOrder           &GetFillOrder( bool = true ) const;

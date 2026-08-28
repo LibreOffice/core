@@ -108,22 +108,6 @@ inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
 EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
         const css::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord );
 
-
-class EDITENG_DLLPUBLIC SvxDicListChgClamp
-{
-private:
-    css::uno::Reference<
-        css::linguistic2::XSearchableDictionaryList >    xDicList;
-
-    SvxDicListChgClamp(const SvxDicListChgClamp &) = delete;
-    SvxDicListChgClamp & operator = (const SvxDicListChgClamp &) = delete;
-
-public:
-    SvxDicListChgClamp( css::uno::Reference<
-        css::linguistic2::XSearchableDictionaryList > xDicList );
-    ~SvxDicListChgClamp();
-};
-
 EDITENG_DLLPUBLIC short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError);
 
 

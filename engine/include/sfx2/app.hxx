@@ -162,7 +162,6 @@ public:
     void                        SaveBasicAndDialogContainer() const;
 
     // misc.
-    static void                 GetOptions(SfxItemSet &);
     static void                 SetOptions(const SfxItemSet &);
     SAL_DLLPRIVATE virtual void Invalidate(sal_uInt16 nId = 0) override;
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );

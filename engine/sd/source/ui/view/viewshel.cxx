@@ -1161,25 +1161,6 @@ void ViewShell::ArrangeGUIElements()
     mpImpl->mbArrangeActive = false;
 }
 
-void ViewShell::SetUIUnit(FieldUnit eUnit)
-{
-    // Set unit at horizontal and vertical rulers.
-    if (mpHorizontalRuler)
-        mpHorizontalRuler->SetUnit(eUnit);
-
-    if (mpVerticalRuler)
-        mpVerticalRuler->SetUnit(eUnit);
-}
-
-/**
- * set DefTab at horizontal rulers
- */
-void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
-{
-    if (mpHorizontalRuler)
-        mpHorizontalRuler->SetDefTabDist( nDefTab );
-}
-
 /** Tell the FmFormShell that the view shell is closing.  Give it the
     opportunity to prevent that.
 */

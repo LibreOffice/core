@@ -527,8 +527,6 @@ public:
     virtual void SelectItem(sal_uInt16 nId) override;
     void SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
 
-    css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface();
-
     static PopupMenu* GetActivePopupMenu();
 
     PopupMenu& operator=( const PopupMenu& rMenu );

@@ -96,14 +96,11 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
         OUString GetFactoryStandardTemplate(       EFactory         eFactory   ) const;
         OUString GetFactoryEmptyDocumentURL(       EFactory         eFactory   ) const;
         OUString GetFactoryDefaultFilter   (       EFactory         eFactory   ) const;
-        bool        IsDefaultFilterReadonly   (       EFactory         eFactory   ) const;
         sal_Int32       GetFactoryIcon            (       EFactory         eFactory   ) const;
         static bool ClassifyFactoryByName     ( std::u16string_view sName      ,
                                                           EFactory&        eFactory   );
         void            SetFactoryStandardTemplate(       EFactory         eFactory   ,
                                                     const OUString& sTemplate  );
-        void            SetFactoryDefaultFilter   (       EFactory         eFactory   ,
-                                                    const OUString& sFilter    );
 
         /** @short  return the corresponding application ID for the given
                     document service name.

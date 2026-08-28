@@ -206,7 +206,6 @@ public:
 
     void    SetStartWithTemplate( bool bOn ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( bool bOn ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
-    void    SetMoveOnlyDragging( bool bOn ) { if( bMoveOnlyDragging != bOn ) { OptionsChanged(); bMoveOnlyDragging = bOn; } }
     void    SetCrookNoContortion( bool bOn ) { if( bCrookNoContortion != bOn ) { OptionsChanged(); bCrookNoContortion = bOn; } }
     void    SetQuickEdit( bool bOn ) { if( bQuickEdit != bOn ) { OptionsChanged(); bQuickEdit = bOn; } }
     void    SetMasterPagePaintCaching( bool bOn ) { if( bMasterPageCache != bOn ) { OptionsChanged(); bMasterPageCache = bOn; } }
@@ -235,25 +234,6 @@ public:
 
     bool    IsShowComments() const { Init(); return bShowComments; }
     void    SetShowComments( bool bShow )  { if( bShowComments != bShow ) { OptionsChanged(); bShowComments = bShow; } }
-};
-
-class SD_DLLPUBLIC SdOptionsMiscItem final : public SfxPoolItem
-{
-public:
-
-                            DECLARE_ITEM_TYPE_FUNCTION(SdOptionsMiscItem)
-                            explicit SdOptionsMiscItem();
-                            SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
-
-    virtual SdOptionsMiscItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    void                    SetOptions( SdOptions* pOpts ) const;
-
-    SdOptionsMisc&          GetOptionsMisc() { return maOptionsMisc; }
-    const SdOptionsMisc&    GetOptionsMisc() const { return maOptionsMisc; }
-private:
-    SdOptionsMisc           maOptionsMisc;
 };
 
 class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
@@ -286,16 +266,6 @@ public:
     void    SetUseGridSnap( bool bSet ) { if( bSet != SvxOptionsGrid::GetUseGridSnap() ) { OptionsChanged(); SvxOptionsGrid::SetUseGridSnap( bSet ); } }
     void    SetSynchronize( bool bSet ) { if( bSet != SvxOptionsGrid::GetSynchronize() ) { OptionsChanged(); SvxOptionsGrid::SetSynchronize( bSet ); } }
     void    SetGridVisible( bool bSet ) { if( bSet != SvxOptionsGrid::GetGridVisible() ) { OptionsChanged(); SvxOptionsGrid::SetGridVisible( bSet ); } }
-};
-
-class SdOptionsGridItem final : public SvxGridItem
-{
-
-public:
-    DECLARE_ITEM_TYPE_FUNCTION(SdOptionsGridItem)
-    explicit                SdOptionsGridItem( SdOptions const * pOpts );
-
-    void                    SetOptions( SdOptions* pOpts ) const;
 };
 
 class SD_DLLPUBLIC SdOptionsPrint : public SdOptionsGeneric

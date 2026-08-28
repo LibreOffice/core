@@ -161,13 +161,6 @@ public:
                                      SvViewOpt nDest = SvViewOpt::DestView );
     void ApplyUserMetric( FieldUnit eMetric, bool bWeb );
     void ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb );
-    SW_DLLPUBLIC void ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags);
-    SW_DLLPUBLIC void ApplyLinkMode(sal_Int32 nNewLinkMode);
-
-    // Default page mode for text grid.
-    SW_DLLPUBLIC void ApplyDefaultPageMode(bool bIsSquaredPageMode);
-
-    void ApplyUserCharUnit(bool bApplyChar, bool bWeb);  // apply_char_unit
 
     // Create ConfigItems.
     SwModuleOptions*    GetModuleConfig()       { return m_pModuleConfig.get();}

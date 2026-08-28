@@ -131,9 +131,6 @@ public:
 
     void AddEncapsulatedX509Certificate(const OUString& ouEncapsulatedX509Certificate);
 
-    void SetGpgCertificate(sal_Int32 nSecurityId, const OUString& ouGpgCertDigest,
-        const OUString& ouGpgCert, const OUString& ouGpgOwner);
-
     void        SetDateTime( sal_Int32 nSecurityId, const DateTime& rDateTime );
     void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
     void SetSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId);

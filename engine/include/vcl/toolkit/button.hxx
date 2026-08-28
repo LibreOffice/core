@@ -78,7 +78,6 @@ public:
 
     /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
     SAL_DLLPRIVATE void SetCommandHandler(const OUString& aCommand, const css::uno::Reference<css::frame::XFrame>& rFrame);
-    OUString const &    GetCommand() const { return maCommand; }
 
     void                SetModeImage( const Image& rImage );
     SAL_DLLPRIVATE Image const & GetModeImage( ) const;

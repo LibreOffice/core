@@ -62,7 +62,6 @@ cui/ui/textanimtabpage.ui
 cui/ui/textattrtabpage.ui
 cui/ui/textflowpage.ui
 cui/ui/transparencytabpage.ui
-cui/ui/tsaurldialog.ui
 cui/ui/twolinespage.ui
 cui/ui/wordcompletionpage.ui
 cui/ui/zoomdialog.ui

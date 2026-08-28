@@ -431,65 +431,6 @@ public:
     void UpdateAllCharts();
     bool HasCharts() const;
 
-    // DOCUMENT COMPATIBILITY FLAGS START
-
-    // Add or maximize paragraph spacing?
-    SW_DLLPUBLIC void SetParaSpaceMax( bool bNew );
-
-    // Add or maximize paragraph spacing?
-    SW_DLLPUBLIC void SetParaSpaceMaxAtPages( bool bNew );
-
-    // Compatible behaviour of tabs.
-    SW_DLLPUBLIC void SetTabCompat( bool bNew );
-
-    // Font metric attribute "External Leading" should be considered.
-    SW_DLLPUBLIC void SetAddExtLeading( bool bNew );
-
-    // Adding paragraph and table spacing at bottom
-    // of table cells.
-    SW_DLLPUBLIC void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );
-
-    // Former object positioning.
-    SW_DLLPUBLIC void SetUseFormerObjectPositioning( bool _bUseFormerObjPos );
-
-    SW_DLLPUBLIC void SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos );
-
-    SW_DLLPUBLIC void SetUseFormerTextWrapping( bool _bUseFormerTextWrapping );
-
-    SW_DLLPUBLIC void SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak );
-
-    SW_DLLPUBLIC void SetProtectForm( bool _bProtectForm );
-
-    SW_DLLPUBLIC void SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks );
-
-    SW_DLLPUBLIC void SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys);
-
-    SW_DLLPUBLIC void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
-
-    SW_DLLPUBLIC void SetNoGapAfterNoteNumber(bool bNew);
-
-    SW_DLLPUBLIC void SetTabsRelativeToIndent(bool bNew);
-
-    SW_DLLPUBLIC void SetTabOverMargin(bool bNew);
-
-    SW_DLLPUBLIC void SetDoNotMirrorRtlDrawObjs(bool bDoNotMirrorRtlDrawObjs);
-
-    SW_DLLPUBLIC void SetContinuousEndnotes(bool bContinuousEndnotes);
-
-    SW_DLLPUBLIC void SetMsWordCompGridMetrics(bool bMsWordCompGridMetrics);
-
-    SW_DLLPUBLIC void SetIgnoreTabsAndBlanksForLineCalculation(bool bIgnoreTabsAndBlanksForLineCalculation);
-
-    SW_DLLPUBLIC void SetLineSpacingAsGapBelow(bool bValue);
-
-    SW_DLLPUBLIC void SetMsWordUlTrailSpace(bool val);
-
-    SW_DLLPUBLIC void SetBalanceSpacesAndIdeographicSpaces(bool bValue);
-
-    SW_DLLPUBLIC void SetAdjustTableLineHeightsToGridHeight(bool bValue);
-
-    // DOCUMENT COMPATIBILITY FLAGS END
-
     // Calls Idle-formatter of Layout.
     SW_DLLPUBLIC void LayoutIdle();
 

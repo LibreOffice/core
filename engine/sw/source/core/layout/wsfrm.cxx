@@ -4430,42 +4430,6 @@ void SwRootFrame::InvalidateAllContent( SwInvalidateFlags nInv )
     }
 }
 
-/**
- * Invalidate/re-calculate the position of all floating screen objects (Writer fly frames and
- * drawing objects), that are anchored to paragraph or to character. (2004-03-16 #i11860#)
- */
-void SwRootFrame::InvalidateAllObjPos()
-{
-    const SwPageFrame* pPageFrame = static_cast<const SwPageFrame*>(Lower());
-    while( pPageFrame )
-    {
-        pPageFrame->InvalidateFlyLayout();
-
-        if ( pPageFrame->GetSortedObjs() )
-        {
-            const SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
-            for (SwAnchoredObject* pAnchoredObj : rObjs)
-            {
-                const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat()->GetAnchor();
-                if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA) &&
-                    (rAnch.GetAnchorId() != RndStdIds::FLY_AT_CHAR))
-                {
-                    // only to paragraph and to character anchored objects are considered.
-                    continue;
-                }
-                // #i28701# - special invalidation for anchored
-                // objects, whose wrapping style influence has to be considered.
-                if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
-                    pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
-                else
-                    pAnchoredObj->InvalidateObjPos();
-            }
-        }
-
-        pPageFrame = static_cast<const SwPageFrame*>(pPageFrame->GetNext());
-    }
-}
-
 static void AddRemoveFlysForNode(
         SwTextFrame & rFrame, SwTextNode & rTextNode,
         std::set<SwNodeOffset> *const pSkipped,

@@ -47,7 +47,6 @@ public:
     ScUserListData(OUString aStr);
 
     const OUString& GetString() const { return aStr; }
-    void SetString(const OUString& rStr);
     size_t GetSubCount() const { return maSubStrings.size(); }
     bool GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bool& bMatchCase) const;
     const OUString& GetSubStr(sal_uInt16 nIndex) const;
@@ -68,7 +67,6 @@ public:
     ScUserList(const ScUserList& r) = default;
 
     void AddDefaults();
-    void EraseData(size_t nIndex) { maData.erase(maData.cbegin() + nIndex); }
 
     const ScUserListData* GetData(const OUString& rSubStr) const;
     /// If the list in rStr is already inserted

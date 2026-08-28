@@ -51,89 +51,6 @@ bool g_bEnabledSwitchedOn = false;
 
 JavaVM * g_pJavaVM = nullptr;
 
-bool areEqualJavaInfo(
-    JavaInfo const * pInfoA,JavaInfo const * pInfoB)
-{
-    return jfw_areEqualJavaInfo(pInfoA, pInfoB);
-}
-
-}
-
-javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparInfo)
-{
-    assert(pparInfo != nullptr);
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex());
-
-        jfw::VendorSettings aVendorSettings;
-        std::vector<std::unique_ptr<JavaInfo>> vecInfo;
-
-        //Use all plug-in libraries to get Java installations.
-        std::vector<std::unique_ptr<JavaInfo>> arInfos;
-        std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
-        javaPluginError plerr = jfw_plugin_getAllJavaInfos(
-            true,
-            aVendorSettings,
-            & arInfos,
-            infos);
-
-        if (plerr != javaPluginError::NONE)
-            return JFW_E_ERROR;
-
-        for (auto & j: arInfos)
-            vecInfo.push_back(std::move(j));
-
-        // direct mode disregards Java settings, so only retrieve
-        // JREs from settings when application mode is used
-        if (jfw::getMode() == jfw::JFW_MODE_APPLICATION)
-        {
-            //get the list of paths to jre locations which have been
-            //added manually
-            const jfw::MergedSettings settings;
-            const std::vector<OUString>& vecJRELocations =
-                settings.getJRELocations();
-            //Check if any plugin can detect JREs at the location
-            // of the paths added by jfw_addJRELocation
-            //Check every manually added location
-            for (auto const & ii: vecJRELocations)
-            {
-                std::unique_ptr<JavaInfo> aInfo;
-                plerr = jfw_plugin_getJavaInfoByPath(
-                    ii,
-                    aVendorSettings,
-                    &aInfo);
-                if (plerr == javaPluginError::NoJre)
-                    continue;
-                if (plerr == javaPluginError::FailedVersion)
-                    continue;
-                if (plerr == javaPluginError::WrongArch)
-                    continue;
-                else if (plerr != javaPluginError::NONE)
-                    return JFW_E_ERROR;
-
-                // Was this JRE already added?
-                if (std::none_of(
-                        vecInfo.begin(), vecInfo.end(),
-                        [&aInfo](std::unique_ptr<JavaInfo> const & info) {
-                            return areEqualJavaInfo(
-                                info.get(), aInfo.get());
-                        }))
-                {
-                    vecInfo.push_back(std::move(aInfo));
-                }
-            }
-        }
-
-        *pparInfo = std::move(vecInfo);
-
-        return JFW_E_NONE;
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        SAL_WARN( "jfw", e.message);
-        return e.errorCode;
-    }
 }
 
 std::vector<OUString> jfw_convertUserPathList(std::u16string_view sUserPath)
@@ -485,23 +402,6 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
     return errcode;
 }
 
-bool jfw_areEqualJavaInfo(JavaInfo const * pInfoA,JavaInfo const * pInfoB)
-{
-    if (pInfoA == pInfoB)
-        return true;
-    if (pInfoA == nullptr || pInfoB == nullptr)
-        return false;
-    if (pInfoA->sVendor == pInfoB->sVendor
-        && pInfoA->sLocation == pInfoB->sLocation
-        && pInfoA->sVersion == pInfoB->sVersion
-        && pInfoA->nRequirements == pInfoB->nRequirements
-        && pInfoA->arVendorData == pInfoB->arVendorData)
-    {
-        return true;
-    }
-    return false;
-}
-
 javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
 {
     assert(ppInfo != nullptr);
@@ -550,12 +450,6 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
     return errcode;
 }
 
-bool jfw_isVMRunning()
-{
-    osl::MutexGuard guard(jfw::FwkMutex());
-    return g_pJavaVM != nullptr;
-}
-
 javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr<JavaInfo> *ppInfo)
 {
     assert(ppInfo != nullptr);
@@ -593,36 +487,6 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
 }
 
 
-javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-        //check if pInfo is the selected JRE
-        std::unique_ptr<JavaInfo> currentInfo;
-        errcode = jfw_getSelectedJRE( & currentInfo);
-        if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
-            return errcode;
-
-        if (!jfw_areEqualJavaInfo(currentInfo.get(), pInfo))
-        {
-            jfw::NodeJava node(jfw::NodeJava::USER);
-            node.setJavaInfo(pInfo, false);
-            node.write();
-            //remember that the JRE was selected in this process
-            jfw::setJavaSelected();
-        }
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        SAL_WARN( "jfw", e.message );
-    }
-    return errcode;
-}
 javaFrameworkError jfw_setEnabled(bool bEnabled)
 {
     javaFrameworkError errcode = JFW_E_NONE;
@@ -676,111 +540,6 @@ javaFrameworkError jfw_getEnabled(bool *pbEnabled)
     return errcode;
 }
 
-
-javaFrameworkError jfw_setVMParameters(std::vector<OUString> const & arOptions)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node(jfw::NodeJava::USER);
-        node.setVmParameters(arOptions);
-        node.write();
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        SAL_WARN( "jfw", e.message );
-    }
-
-    return errcode;
-}
-
-javaFrameworkError jfw_getVMParameters(std::vector<OUString> * parOptions)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-
-        const jfw::MergedSettings settings;
-        settings.getVmParametersArray(parOptions);
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        SAL_WARN( "jfw", e.message );
-    }
-    return errcode;
-}
-
-javaFrameworkError jfw_setUserClassPath(OUString const & pCp)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node(jfw::NodeJava::USER);
-        node.setUserClassPath(pCp);
-        node.write();
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        SAL_WARN( "jfw", e.message );
-    }
-    return errcode;
-}
-
-javaFrameworkError jfw_getUserClassPath(OUString * ppCP)
-{
-    assert(ppCP != nullptr);
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-        const jfw::MergedSettings settings;
-        *ppCP = settings.getUserClassPath();
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        SAL_WARN( "jfw", e.message );
-    }
-    return errcode;
-}
-
-javaFrameworkError jfw_addJRELocation(OUString const & sLocation)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node(jfw::NodeJava::USER);
-        node.load();
-        node.addJRELocation(sLocation);
-        node.write();
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        SAL_WARN( "jfw", e.message );
-    }
-
-    return errcode;
-
-}
-
 javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist)
 {
     javaPluginError plerr = jfw_plugin_existJRE(pInfo, exist);
@@ -798,16 +557,6 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist)
         ret = JFW_E_ERROR;
     }
     return ret;
-}
-
-void jfw_lock()
-{
-    jfw::FwkMutex().acquire();
-}
-
-void jfw_unlock()
-{
-    jfw::FwkMutex().release();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

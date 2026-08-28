@@ -67,8 +67,6 @@ private:
 
     void                EnableButton(weld::Button& rButton, bool bEnable);
 
-    static OUString     GetInfo( SbxVariable* pVar );
-
     void                StoreMacroDescription();
     void                RestoreMacroDescription();
 

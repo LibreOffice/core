@@ -238,45 +238,6 @@ struct JavaInfo
     rtl::ByteSequence arVendorData;
 };
 
-/** compares two <code>JavaInfo</code> objects for equality.
-
-   <p>Two <code>JavaInfo</code> objects are said to be equal if the contained
-   members of the first <code>JavaInfo</code> are equal to their counterparts
-   in the second <code>JavaInfo</code> object. The equality of the
-   <code>OUString</code> members is determined
-   by <code>operator ==</code>.
-   Similarly the equality of the <code>rtl::ByteSequence</code> is
-   also determined by a comparison
-   function (see <code>rtl::ByteSequence::operator ==</code>). </p>
-   <p>
-   Both argument pointers  must be valid.</p>
-   @param pInfoA
-   the first argument.
-   @param pInfoB
-   the second argument which is compared with the first.
-   @return
-   true - both object represent the same JRE.</br>
-   false - the objects represent different JREs
- */
-JVMFWK_DLLPUBLIC bool jfw_areEqualJavaInfo(JavaInfo const* pInfoA, JavaInfo const* pInfoB);
-
-/** determines if a Java Virtual Machine is already running.
-
-    <p>As long as the office and the JREs only support one
-    Virtual Machine per process the Java settings, particularly the
-    selected Java, are not effective immediately after changing when
-    a VM has already been running. That is, if a JRE A was used to start
-    a VM and then a JRE B is selected, then JRE B will only be used
-    after a restart of the office.</p>
-    <p>
-    By determining if a VM is running, the user can be presented a message,
-    that the changed setting may not be effective immediately.</p>
-
-    @return
-    true iff a VM is running.
-*/
-JVMFWK_DLLPUBLIC bool jfw_isVMRunning();
-
 /** detects a suitable JRE and configures the framework to use it.
 
     <p>Which JREs can be used is determined by the file javavendors.xml,
@@ -321,29 +282,6 @@ JVMFWK_DLLPUBLIC bool jfw_isVMRunning();
     were not met.
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo>* pInfo);
-
-/** provides information about all available JRE installations.
-
-    <p>The function determines dynamically what JREs are available. It uses
-    the plug-in libraries to provide lists of available <code>JavaInfo</code>
-    objects where each object represents a JRE (see vendorplugin.h,
-    getAllJavaInfos). It also uses a list of paths, which have been registered
-    by <code>jfw_addJRELocation</code>.
-    It is checked if the path still contains a valid JRE and if so the respective
-    <code>JavaInfo</code> object will be appended to the array unless there is
-    already an equal object.</p>
-
-    @param parInfo
-    [out] on returns it contains a vector of <code>JavaInfo</code> pointers.
-
-    @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_ERROR an error occurred. <br/>
-    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.
-*/
-JVMFWK_DLLPUBLIC javaFrameworkError
-jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>>* parInfo);
 
 /**
  * Convert colon-separated userClassPath which might contain bootstrap variables
@@ -451,34 +389,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_startVM(JavaInfo const* pInfo,
                                                 std::vector<OUString> const& arOptions,
                                                 JavaVM** ppVM, JNIEnv** ppEnv);
 
-/** determines the JRE that is to be used.
-
-    <p>When calling <code>jfw_startVM</code> then a VM is started from
-    the JRE that is determined by this function.<br/>
-    It is not verified if the JRE represented by the <code>JavaInfo</code>
-    argument meets the requirements as specified by the javavendors.xml file.
-    However, usually one obtains the <code>JavaInfo</code> object from the
-    functions <code>jfw_findAllJREs</code> or <code>jfw_getJavaInfoByPath</code>,
-    which do verify the JREs and pass out only <code>JavaInfo</code> objects
-    which comply with the version requirements.</p>
-    <p>
-    If <code>pInfo</code> is NULL then the meaning is that no JRE will be
-    selected. <code>jfw_startVM</code> will then return
-    <code>JFW_E_NO_SELECT</code>.</p>
-
-    @param pInfo
-      [in] pointer to <code>JavaInfo</code> structure, containing data about a
-      JRE. The caller must still free <code>pInfo</code>.
-
-    @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-    JFW_E_DIRECT_MODE the function cannot be used in this mode.
- */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_setSelectedJRE(JavaInfo const* pInfo);
-
 /** provides information about the JRE that is to be used.
 
     <p>If no JRE is currently selected then <code>ppInfo</code> will contain
@@ -538,103 +448,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setEnabled(bool bEnabled);
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool* pbEnabled);
 
-/** determines parameters which are passed to VM during its creation.
-
-    <p>The strings must be exactly as they are passed on the command line.
-    For example, one could pass<br/>
-    -Xdebug <br/>
-    -Xrunjdw:transport=dt_socket,server=y,address=8000<br/>
-    in order to enable debugging support.
-    </p>
-
-    @param arParameters
-    [in] contains the arguments.
-
-    @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-    JFW_E_DIRECT_MODE the function cannot be used in this mode.
- */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_setVMParameters(std::vector<OUString> const& arArgs);
-
-/** obtains the currently used start parameters.
-
-    @param parParameters
-    [out] on returns contains a pointer to the array of the start arguments.
-
-    @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-    JFW_E_DIRECT_MODE the function cannot be used in this mode.
- */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getVMParameters(std::vector<OUString>* parParameters);
-
-/** sets the user class path.
-
-   <p>When the VM is started then it is passed the class path. The
-   class path also contains the user class path set by this function.
-   The paths contained in <code>pCP</code> must be separated with a
-   system dependent path separator.</p>
-
-   @param pCP
-   [in] the user class path.
-
-   @return
-   JFW_E_NONE function ran successfully.<br/>
-   JFW_E_ERROR An error occurred.<br/>
-   JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-   JFW_E_DIRECT_MODE the function cannot be used in this mode.
- */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(OUString const& pCP);
-/** provides the value of the current user class path.
-
-   <p>The function returns an empty string if no user class path is set.
-   </p>
-
-   @param ppCP
-   [out] contains the user class path on return.
-
-   @return
-   JFW_E_NONE function ran successfully.<br/>
-   JFW_E_ERROR An error occurred.<br/>
-   JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-   JFW_E_DIRECT_MODE the function cannot be used in this mode.
- */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(OUString* ppCP);
-
-/** saves the location of a JRE.
-
-    <p>When <code>jfw_findAllJREs</code> is called then the paths added by this
-    function are evaluated. If the location still represents a
-    JRE then a <code>JavaInfo</code> object is created which is returned along
-    with all other <code>JavaInfo</code> objects by
-    <code>jfw_findAllJREs</code>. If the location
-    cannot be recognized then the location string is ignored. </p>
-    <p>
-    A validation if <code>sLocation</code> points to a JRE is not
-    performed. To do that one has to use <code>jfw_getJavaInfoByPath</code>.
-    </p>
-    <p>
-    Adding a path that is already stored causes no error.</p>
-
-    @param sLocation
-    [in] file URL to a directory which contains a JRE.
-
-    @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-    JFW_E_DIRECT_MODE the function cannot be used in this mode.
- */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(OUString const& sLocation);
-
 /** checks if the installation of the jre still exists.
 
     This function checks if the JRE described by pInfo still
@@ -652,30 +465,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(OUString const& sLocation
     JFW_E_ERROR an error occurred during execution.</br>
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo* pInfo, bool* exist);
-
-/** locks this API so that it cannot be used by other threads.
-
-    <p>If a different thread called this function before then the
-    current call is blocked until the other thread has called
-    <code>jfw_unlock()</code>. The function should be called if one
-    needs an exact snapshot of the current settings. Then the settings
-    are retrieved one by one without risk that the settings may be changed
-    by a different thread. Similarity if one needs to make settings which
-    should become effective at the same time then <code>jfw_lock</code>
-    should be called. That is, <code>jfw_startVM</code> which uses the
-    settings cannot be called before all settings have be made.</p>
-    <p>
-    The only functions which is not effected by <code>jfw_lock</code> is
-    <code>jfw_areEqualJavaInfo</code>.
- */
-JVMFWK_DLLPUBLIC void jfw_lock();
-
-/** unlocks this API.
-
-    <p>This function is called after <code>jfw_lock</code>. It allows other
-    threads to use this API concurrently.</p>
-*/
-JVMFWK_DLLPUBLIC void jfw_unlock();
 
 #endif
 

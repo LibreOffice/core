@@ -72,19 +72,6 @@ public:
     void            Load();
 
     bool            IsLoaded() const { return m_bIsLoaded; }
-
-    void SetCTLVerticalText(bool bVertical);
-
-    void            SetCTLSequenceChecking( bool _bEnabled );
-
-    void            SetCTLSequenceCheckingRestricted( bool _bEnable );
-
-    void            SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
-
-    void            SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement );
-
-    void            SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals );
-
 };
 namespace
 {
@@ -326,60 +313,6 @@ void SvtCTLOptions_Impl::Load()
 
     m_bIsLoaded = true;
 }
-void SvtCTLOptions_Impl::SetCTLVerticalText(bool bVertical)
-{
-    if (!m_bROCTLVerticalText && m_bCTLVerticalText != bVertical)
-    {
-        m_bCTLVerticalText = bVertical;
-        SetModified();
-        NotifyListeners(ConfigurationHints::NONE);
-    }
-}
-void SvtCTLOptions_Impl::SetCTLSequenceChecking( bool _bEnabled )
-{
-    if(!m_bROCTLSequenceChecking && m_bCTLSequenceChecking != _bEnabled)
-    {
-        SetModified();
-        m_bCTLSequenceChecking = _bEnabled;
-        NotifyListeners(ConfigurationHints::NONE);
-    }
-}
-void SvtCTLOptions_Impl::SetCTLSequenceCheckingRestricted( bool _bEnabled )
-{
-    if(!m_bROCTLRestricted && m_bCTLRestricted != _bEnabled)
-    {
-        SetModified();
-        m_bCTLRestricted = _bEnabled;
-        NotifyListeners(ConfigurationHints::NONE);
-    }
-}
-void  SvtCTLOptions_Impl::SetCTLSequenceCheckingTypeAndReplace( bool _bEnabled )
-{
-    if(!m_bROCTLTypeAndReplace && m_bCTLTypeAndReplace != _bEnabled)
-    {
-        SetModified();
-        m_bCTLTypeAndReplace = _bEnabled;
-        NotifyListeners(ConfigurationHints::NONE);
-    }
-}
-void SvtCTLOptions_Impl::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
-{
-    if (!m_bROCTLCursorMovement && m_eCTLCursorMovement != _eMovement )
-    {
-        SetModified();
-        m_eCTLCursorMovement = _eMovement;
-        NotifyListeners(ConfigurationHints::NONE);
-    }
-}
-void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
-{
-    if (!m_bROCTLTextNumerals && m_eCTLTextNumerals != _eNumerals )
-    {
-        SetModified();
-        m_eCTLTextNumerals = _eNumerals;
-        NotifyListeners(ConfigurationHints::NONE);
-    }
-}
 
 namespace {
 
@@ -428,22 +361,10 @@ bool SvtCTLOptions::IsCTLFontEnabled()
     return true;
 }
 
-void SvtCTLOptions::SetCTLVerticalText(bool bVertical)
-{
-    assert(m_pImpl->IsLoaded());
-    m_pImpl->SetCTLVerticalText(bVertical);
-}
-
 bool SvtCTLOptions::IsCTLVerticalText()
 {
     // tdf#168719: The CTL font can no longer be disabled
     return true;
-}
-
-void SvtCTLOptions::SetCTLSequenceChecking( bool _bEnabled )
-{
-    assert(m_pImpl->IsLoaded());
-    m_pImpl->SetCTLSequenceChecking(_bEnabled);
 }
 
 bool SvtCTLOptions::IsCTLSequenceChecking()
@@ -451,21 +372,9 @@ bool SvtCTLOptions::IsCTLSequenceChecking()
     return officecfg::Office::Common::I18N::CTL::CTLSequenceChecking::get();
 }
 
-void SvtCTLOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
-{
-    assert(m_pImpl->IsLoaded());
-    m_pImpl->SetCTLSequenceCheckingRestricted(_bEnable);
-}
-
 bool SvtCTLOptions::IsCTLSequenceCheckingRestricted()
 {
     return officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingRestricted::get();
-}
-
-void SvtCTLOptions::SetCTLSequenceCheckingTypeAndReplace( bool _bEnable )
-{
-    assert(m_pImpl->IsLoaded());
-    m_pImpl->SetCTLSequenceCheckingTypeAndReplace(_bEnable);
 }
 
 bool SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace()
@@ -473,21 +382,9 @@ bool SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace()
     return officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingTypeAndReplace::get();
 }
 
-void SvtCTLOptions::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
-{
-    assert(m_pImpl->IsLoaded());
-    m_pImpl->SetCTLCursorMovement( _eMovement );
-}
-
 SvtCTLOptions::CursorMovement SvtCTLOptions::GetCTLCursorMovement()
 {
     return static_cast<SvtCTLOptions::CursorMovement>(officecfg::Office::Common::I18N::CTL::CTLCursorMovement::get());
-}
-
-void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
-{
-    assert(m_pImpl->IsLoaded());
-    m_pImpl->SetCTLTextNumerals( _eNumerals );
 }
 
 SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals()
