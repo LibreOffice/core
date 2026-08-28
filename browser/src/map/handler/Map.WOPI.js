@@ -805,27 +805,6 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				});
 			}
 		}
-		else if (msg.MessageId === 'Action_RefreshSlideSource') {
-			// The file picked for the source of a linked-slide update. The
-			// server reads the source from a location, so the url is the part
-			// of the reply a refresh can use; content marks a reply that
-			// carried the file itself instead. Either reply ends the wait for
-			// this source.
-			app.events.fire('slidelink:picked', {
-				url: msg.Values && msg.Values.url ? msg.Values.url : '',
-				content: !!(msg.Values && (msg.Values.File instanceof Blob))
-			});
-		}
-		else if (msg.MessageId === 'Action_ResolveSlideSource') {
-			// A location the host resolved on its own for a source it named
-			// earlier, which is how linked slides are refreshed with no gesture.
-			if (msg.Values && msg.Values.SourceId && msg.Values.Url) {
-				app.events.fire('slidelink:resolved', {
-					source: msg.Values.SourceId,
-					url: msg.Values.Url
-				});
-			}
-		}
 		else if (msg.MessageId == 'Action_Paste') {
 			if (msg.Values && msg.Values.Mimetype && msg.Values.Data) {
 				var blob = new Blob(['paste mimetype=' + msg.Values.Mimetype + '\n', msg.Values.Data]);

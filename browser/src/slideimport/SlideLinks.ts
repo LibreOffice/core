@@ -15,19 +15,16 @@
  *
  * Holds the link list the document reports - which source document and
  * which slide of it each linked page came from - and runs the updates: it
- * asks the integration for a location, once per source, and sends the
- * refresh the server carries out.
+ * names a source and the server refreshes the pages of it.
  *
- * A location comes from the integration in one of two ways. The user picks
- * the source file again, which every host offering a file chooser answers,
- * and which is what the Update Linked Slides command does. Or the host
- * resolves a source it was told about earlier, with no gesture, which is
- * what a document asks for when it opens; a host that does not answer
- * leaves the document showing the slides it holds.
+ * A source is a document the storage named as a related document of this
+ * one, and the server holds the access token to read it with, so an update
+ * needs nothing of the user beyond asking for it. A source the server knows
+ * no related document by is reported as one that cannot be updated.
  *
- * A view reads one location at a time and a refresh that would end a read
- * in flight is refused as busy, so the refreshes of a view go one after
- * another: the next location is asked for only once the refresh in hand is
+ * A document reads a few sources at once at the most, and a refresh that
+ * arrives past that is refused as busy, so the refreshes of a view go one
+ * after another: the next source is sent only once the refresh in hand is
  * reported done.
  */
 
@@ -47,13 +44,9 @@ interface SlideLinkSource {
 	slides: SlideLinkPage[];
 }
 
-// A refresh with a location in hand, waiting for its turn.
+// A refresh waiting for its turn.
 interface SlideLinkRefresh {
 	source: string;
-	url: string;
-	// Whether this refresh is one the user asked for or one a host offered a
-	// location for on its own.
-	quiet: boolean;
 	// Whether the server has taken this refresh on, which it reports before
 	// it reads anything.
 	accepted: boolean;
@@ -65,28 +58,22 @@ class SlideLinks {
 	private pages: Map<string, { source: string; name: string }> = new Map();
 	// The sources the document links to, in the order the list reports them.
 	private sources: string[] = [];
-	// Whether the first link list of this load has been handled.
-	private askedHost: boolean = false;
 	// Whether the link list of this load has been asked for.
 	private loaded: boolean = false;
 	private queue: SlideLinkRefresh[] = [];
 	// The refresh the server is running, or null.
 	private running: SlideLinkRefresh | null = null;
-	// The sources of an update the user asked for that are still to be
-	// picked, and the one the user is picking a file for.
-	private toPick: string[] = [];
-	private picking: string = '';
 
 	constructor(map: any) {
 		this.map = map;
 
 		map.on('docloaded', this.onDocLoaded, this);
 		map.on('slidelinks', this.onList, this);
-		map.on('slidelinkstatus', this.onStatus, this);
+		map.on('slidelink', this.onUpdated, this);
+		map.on('remotedoccommandresult', this.onRemoteResult, this);
+		map.on('relateddocuments', this.onRelatedDocuments, this);
 		map.on('slidelinkerror', this.onError, this);
-
-		app.events.on('slidelink:picked', this.onPicked.bind(this));
-		app.events.on('slidelink:resolved', this.onResolved.bind(this));
+		map.on('slideimport', this.onImportMessage, this);
 	}
 
 	public hasLinks(): boolean {
@@ -100,29 +87,23 @@ class SlideLinks {
 		return link ? link : null;
 	}
 
-	// Refreshes the pages of every source of this document, asking for each
-	// source to be picked again and refreshing the pages of it from the file
-	// the user picks.
+	// Refreshes the pages of every source of this document. The server reads
+	// each source as a related document of this one, so nothing is asked of
+	// the user beyond the command itself.
 	public updateAll(): void {
 		if (!this.map.isEditMode()) return;
 		if (!this.hasLinks()) {
 			this.say(_('No slide of this presentation is linked to another file.'));
 			return;
 		}
-		// A location for a source comes from the host, so an integration
-		// without a file chooser cannot update linked slides at all.
-		if (!app.LOUtil.hostOffersFileChooser(this.map['wopi'])) {
-			this.say(
-				_(
-					'Updating linked slides needs the file chooser of the integration, which this one does not offer.',
-				),
-			);
-			return;
+		// This run covers the sources the document holds now. One that is
+		// already waiting for its turn is left where it is, so asking twice
+		// refreshes each source once.
+		for (const source of this.sources) {
+			if (this.running && this.running.source === source) continue;
+			if (this.queue.some((refresh) => refresh.source === source)) continue;
+			this.enqueue(source);
 		}
-		// This run asks for the sources the document holds now, so asking
-		// again is how a run the user left half way through is started over.
-		this.toPick = this.sources.slice();
-		this.pickNext();
 	}
 
 	private say(message: string): void {
@@ -140,19 +121,24 @@ class SlideLinks {
 		}
 		if (!this.map.isPresentationOrDrawing()) return;
 		// Every status update of the open document fires this event again,
-		// so the once-per-load state is reset only the first time.
+		// so the list is read once per load.
 		if (this.loaded) return;
 		this.loaded = true;
-		this.askedHost = false;
+		app.socket.sendMessage('slidelink list');
 	}
 
-	// Drops the update in hand: the refresh being run, the locations waiting
-	// for their turn, and the sources still to be picked.
+	// Drops the update in hand: the refresh being run and the sources waiting
+	// for their turn.
 	private abandonUpdate(): void {
 		this.queue = [];
 		this.running = null;
-		this.toPick = [];
-		this.picking = '';
+	}
+
+	// Slides inserted from another file can be links to it, so the list is
+	// read again once an insert is done.
+	private onImportMessage(e: any): void {
+		if (e.message && e.message.status === 'inserted')
+			app.socket.sendMessage('slidelink list');
 	}
 
 	private onList(e: any): void {
@@ -171,20 +157,6 @@ class SlideLinks {
 		}
 		app.events.fire('slidelink:changed', {});
 		this.showUpdateCommand();
-
-		// A source a host can resolve by itself is refreshed as the document
-		// opens, so a meta presentation shows what its sources hold now. The
-		// first list of a load is the one asked about: the links a later
-		// list brings were just made from content that was read to make
-		// them, and are current already.
-		if (!this.askedHost && this.map.isEditMode()) {
-			this.askedHost = true;
-			for (const source of this.sources)
-				this.map.fire('postMessage', {
-					msgId: 'UI_ResolveSlideSource',
-					args: { SourceId: source },
-				});
-		}
 	}
 
 	// The command that updates the linked slides is offered by a document
@@ -201,140 +173,129 @@ class SlideLinks {
 		}
 	}
 
-	// Asks the integration for the file of the next source of an update.
-	private pickNext(): void {
-		this.picking = '';
-		const next = this.toPick.shift();
-		if (next === undefined) return;
-		this.picking = next;
-		this.say(
-			_('Choose the file to update the slides of {0} from.').replace(
-				'{0}',
-				() => next,
-			),
-		);
-		this.map.fire('postMessage', {
-			msgId: 'UI_InsertFile',
-			args: {
-				callback: 'Action_RefreshSlideSource',
-				mimeTypeFilter: app.LOUtil.presentationMimeFilter,
-			},
-		});
-	}
-
-	// The file the user picked for the source of an update. The pages of
-	// that source are refreshed from it whatever the picked file is called,
-	// since the pick is the answer to a question naming the source.
-	private onPicked(e: any): void {
-		if (this.picking === '') return;
-		const source = this.picking;
-		this.picking = '';
-		const url = e.detail ? e.detail.url : '';
-		if (url) {
-			this.enqueue(source, url, false);
-			return;
-		}
-		// A reply that carries the file itself rather than a location would
-		// come back the same way for every source, so the run ends on the
-		// first one.
-		if (e.detail && e.detail.content) {
-			this.toPick = [];
-			this.say(
-				_(
-					'This integration hands over the picked file itself rather than a link to it, so linked slides cannot be updated here.',
-				),
-			);
-			return;
-		}
-		this.say(
-			_('Updating the slides of {0} failed.').replace('{0}', () => source),
-		);
-		this.pickNext();
-	}
-
-	// A location the host resolved for a source by itself.
-	private onResolved(e: any): void {
-		const source = e.detail ? e.detail.source : '';
-		const url = e.detail ? e.detail.url : '';
-		if (!source || !url) return;
-		if (!this.map.isEditMode()) return;
-		// A location for a source this document holds no page of refreshes
-		// nothing.
-		if (this.sources.indexOf(source) < 0) return;
-		this.enqueue(source, url, true);
-	}
-
-	private enqueue(source: string, url: string, quiet: boolean): void {
-		this.queue.push({
-			source: source,
-			url: url,
-			quiet: quiet,
-			accepted: false,
-		});
+	private enqueue(source: string): void {
+		this.queue.push({ source: source, accepted: false });
 		this.sendNext();
 	}
 
+	// The related document a source names, as the storage announced it, or null when this
+	// document is related to no document of that name.
+	private relatedDocument(
+		source: string,
+	): { wopiSrc: string; state: string } | null {
+		for (const doc of app.relatedDocuments || []) {
+			if (SlideImportSession.relatedDocumentName(doc.wopiSrc) === source)
+				return doc;
+		}
+		return null;
+	}
+
+	// A source writes its pages out over the live link this document holds to it, so a source
+	// nothing is linked to yet is subscribed to first and asked once it answers.
 	private sendNext(): void {
 		if (this.running !== null) return;
 		const next = this.queue.shift();
 		if (next === undefined) return;
+
+		const related = this.relatedDocument(next.source);
+		if (!related) {
+			this.say(
+				_(
+					'{0} is not one of the documents this one is related to, so the server cannot read it.',
+				).replace('{0}', () => next.source),
+			);
+			this.sendNext();
+			return;
+		}
+
 		this.running = next;
+		if (related.state === 'connected') this.askForPages(related.wopiSrc);
+		else SlideImportSession.subscribeRelatedDocument(related.wopiSrc);
+	}
+
+	private askForPages(wopiSrc: string): void {
+		if (this.running === null) return;
+		this.running.accepted = true;
+		SlideImportSession.sendRemoteCommand(wopiSrc, 'exportslides');
+	}
+
+	// A source this run is waiting on has come up, so it is asked for its pages.
+	private onRelatedDocuments(): void {
+		if (this.running === null || this.running.accepted) return;
+		const related = this.relatedDocument(this.running.source);
+		if (related && related.state === 'connected')
+			this.askForPages(related.wopiSrc);
+	}
+
+	// The pages the source wrote, staged in this document's jail by the server. The document
+	// reads the pages of that source from the file.
+	private onRemoteResult(e: any): void {
+		if (this.running === null) return;
+		const textMsg = e.textMsg || '';
+		if (!textMsg.startsWith('exportslides:')) return;
+
+		const stagedName = SlideImportSession.stagedExportName(
+			textMsg.substring('exportslides:'.length),
+		);
+		if (!stagedName) {
+			const refresh = this.running;
+			this.running = null;
+			this.say(
+				_(
+					'The slides of {0} could not be read into this presentation.',
+				).replace('{0}', () => refresh.source),
+			);
+			this.sendNext();
+			return;
+		}
+
 		app.socket.sendMessage(
-			'slidelink refresh source=' +
-				encodeURIComponent(next.source) +
-				' url=' +
-				encodeURIComponent(next.url),
+			'slidelink update source=' +
+				encodeURIComponent(this.running.source) +
+				' file=' +
+				encodeURIComponent(stagedName),
 		);
 	}
 
-	// Continues an update once the refresh in hand has ended: the next
-	// location already in hand is sent, and the next source is asked for
-	// only when none is waiting and no pick is already out with the user.
-	private continueAfterEnd(): void {
-		this.sendNext();
-		if (this.running === null && this.queue.length === 0 && this.picking === '')
-			this.pickNext();
-	}
+	// What the document made of the pages it was given.
+	private onUpdated(e: any): void {
+		const message = e.message;
+		if (!message || message.status !== 'updated' || this.running === null)
+			return;
+		if (message.source !== this.running.source) return;
 
-	private onStatus(e: any): void {
-		const sources =
-			e.message && Array.isArray(e.message.sources) ? e.message.sources : [];
-		for (const entry of sources) {
-			if (!entry || !this.running || entry.source !== this.running.source)
-				continue;
-			if (entry.state === 'refreshing') {
-				this.running.accepted = true;
-				continue;
-			}
-			this.report(entry, this.running.quiet);
-			this.running = null;
-		}
-		this.continueAfterEnd();
-	}
-
-	// An error answers a refresh the server would not take on at all. Once it
-	// has taken one on, the errors that reach the client are the ones the
-	// document raised, and the state of the refresh follows in a status
-	// message of its own.
-	private onError(e: any): void {
-		window.app.console.warn('slidelink error of kind ' + (e.kind || ''));
-		if (this.running === null || this.running.accepted) return;
 		const refresh = this.running;
 		this.running = null;
-		if (!refresh.quiet)
-			this.say(
-				_('Updating the slides of {0} failed.').replace(
-					'{0}',
-					() => refresh.source,
-				),
-			);
-		this.continueAfterEnd();
+		this.report({
+			source: refresh.source,
+			state: 'ok',
+			slides: typeof message.count === 'number' ? message.count : 0,
+		});
+		this.sendNext();
 	}
 
-	// What a source came to, said to the user. A refresh nobody asked for
-	// says what it updated and leaves a failure to the log. Substitutions
-	// take a function, which puts a name in as it is.
-	private report(entry: any, quiet: boolean): void {
+	// An error ends the refresh in hand. An answer that names a page belongs to a break, and
+	// one that names another source to a refresh of that source; the refresh in hand is
+	// answered by an error that names it and by one that names nothing.
+	private onError(e: any): void {
+		window.app.console.warn('slidelink error of kind ' + (e.kind || ''));
+		if (e.part) return;
+		if (this.running === null) return;
+		if (e.source && e.source !== this.running.source) return;
+		const refresh = this.running;
+		this.running = null;
+		this.say(
+			_('Updating the slides of {0} failed.').replace(
+				'{0}',
+				() => refresh.source,
+			),
+		);
+		this.sendNext();
+	}
+
+	// What a source came to, said to the user. Substitutions take a function,
+	// which puts a name in as it is.
+	private report(entry: any): void {
 		if (entry.state === 'ok') {
 			const count = typeof entry.slides === 'number' ? entry.slides : 0;
 			if (count === 0)
@@ -360,19 +321,20 @@ class SlideLinks {
 				' were not updated: ' +
 				(entry.reason || ''),
 		);
-		if (!quiet) this.say(this.failureText(entry));
+		this.say(this.failureText(entry));
 	}
 
 	private failureText(entry: any): string {
 		switch (entry.reason) {
+			case 'nosource':
+				return _(
+					'{0} is not one of the documents this one is related to, so the server cannot read it.',
+				).replace('{0}', () => entry.source);
 			case 'cantread':
-				return _('The file chosen for {0} could not be read.').replace(
-					'{0}',
-					() => entry.source,
-				);
+				return _('{0} could not be read.').replace('{0}', () => entry.source);
 			case 'unreadable':
 				return _(
-					'The file chosen for {0} holds no slides that can be read.',
+					'The slides of {0} could not be read into this presentation.',
 				).replace('{0}', () => entry.source);
 			case 'notlinked':
 				return _('No slide of this presentation is linked to {0}.').replace(
