@@ -393,7 +393,14 @@ function toggleComments(resolved = false) {
 	var mode = Cypress.env('USER_INTERFACE');
 	if (mode === 'notebookbar') {
 		cy.cGet('#Review-tab-label').click();
-		if (resolved) getNbIcon('ShowResolvedAnnotations', 'Review').click();
+		if (resolved) {
+			// A click is acted on only while the item holding the icon carries no
+			// disabled attribute, and the engine takes that attribute away again
+			// once it is done with the document. Wait for that, so the click is
+			// not dropped without a trace.
+			getNbItem('ShowResolvedAnnotations', 'Review').should('not.have.attr', 'disabled');
+			getNbIcon('ShowResolvedAnnotations', 'Review').click();
+		}
 		else cy.cGet('#showannotations').click();
 		// to avoid notebookbar collapse in subsequent calls to toggleComments.
 		cy.cGet('#Home-tab-label').click();

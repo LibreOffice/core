@@ -2318,8 +2318,7 @@ class Menubar extends window.L.Control {
 					} else if (id === 'showresolved') {
 						var section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 						if (section) {
-							if (section.sectionProperties.commentList.length === 0 ||
-								!section.sectionProperties.show) {
+							if (section.sectionProperties.commentList.length === 0) {
 								$(aItem).addClass('disabled');
 							} else if (section.sectionProperties.showResolved) {
 								$(aItem).removeClass('disabled');

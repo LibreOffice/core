@@ -165,6 +165,14 @@ window.L.Map.include({
 	},
 
 	showResolvedComments: function(on: boolean = false) {
+		// A resolved comment is shown only while comments as a whole are shown,
+		// so choosing them turns the comments on as well.
+		if (on) {
+			const shown = this.stateChangeHandler.getItemValue('showannotations');
+			if (shown !== 'true' && shown !== true)
+				this.showComments(true);
+		}
+
 		const unoCommand = '.uno:ShowResolvedAnnotations';
 		this.sendUnoCommand(unoCommand);
 		app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).setViewResolved(on);
@@ -172,6 +180,14 @@ window.L.Map.include({
 	},
 
 	showComments: function(on: boolean = false) {
+		// Resolved comments are a part of the comments, so their own choice is
+		// switched off along with them.
+		if (!on) {
+			const resolved = this.stateChangeHandler.getItemValue('.uno:ShowResolvedAnnotations');
+			if (resolved === 'true' || resolved === true)
+				this.showResolvedComments(false);
+		}
+
 		app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).setView(on);
 		this.uiManager.setDocTypePref('ShowAnnotations', on);
 		this.fire('commandstatechanged', {commandName : 'showannotations', state : on ? 'true': 'false'});

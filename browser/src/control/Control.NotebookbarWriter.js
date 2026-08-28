@@ -2351,7 +2351,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'id': 'review-show-resolved-annotations',
-										'type': 'toolitem',
+										'type': 'customtoolitem',
 										'text': _UNO('.uno:ShowResolvedAnnotations', 'text'),
 										'command': '.uno:ShowResolvedAnnotations',
 										'accessibility': { focusBack: true, combination: 'RA', de: null }

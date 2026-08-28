@@ -201,30 +201,35 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('.cool-annotation-content-resolved').should('exist');
 
 		/* scenario 1:
-		 *   - hide all comments -> all hidden
-		 *   - show all comments -> all visible
+		 *   - hide all comments -> both hidden, and the resolved choice goes off
+		 *                          with them
+		 *   - show all comments -> only the unresolved comment comes back
 		 */
 		desktopHelper.toggleComments();
 		cy.cGet('#comment-container-1').should('be.not.visible');
 		cy.cGet('#comment-container-2').should('be.not.visible');
 		desktopHelper.toggleComments();
 		cy.cGet('#comment-container-1').should('be.visible');
-		cy.cGet('#comment-container-2').should('be.visible');
+		cy.cGet('#comment-container-2').should('be.not.visible');
 
 		/* scenario 2:
-		 *   - hide resolved comments -> resolved comment hidden
-		 *   - hide all comments 	  -> both hidden
-		 *   - show all comments 	  -> resolved comment hidden
+		 *   - show resolved comments -> both visible
 		 */
 		desktopHelper.toggleComments(/*resolved = */ true);
 		cy.cGet('#comment-container-1').should('be.visible');
-		cy.cGet('#comment-container-2').should('be.not.visible');
+		cy.cGet('#comment-container-2').should('be.visible');
+
+		/* scenario 3:
+		 *   - hide all comments      -> both hidden
+		 *   - show resolved comments -> the comments come back on with them, so
+		 *                              both are visible
+		 */
 		desktopHelper.toggleComments();
 		cy.cGet('#comment-container-1').should('be.not.visible');
 		cy.cGet('#comment-container-2').should('be.not.visible');
-		desktopHelper.toggleComments();
+		desktopHelper.toggleComments(/*resolved = */ true);
 		cy.cGet('#comment-container-1').should('be.visible');
-		cy.cGet('#comment-container-2').should('be.not.visible');
+		cy.cGet('#comment-container-2').should('be.visible');
 	});
 
 	it('Visibility at Different Zoom Levels', function() {
