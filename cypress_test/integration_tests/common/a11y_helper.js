@@ -252,6 +252,7 @@ function testNameDialog(win, level) {
 function traverseTabs(getContainer, win, level, command, isNested = false) {
 	const TABLIST = '[role="tablist"]';
 	const TAB = '[role="tab"]';
+	const SHOWN = ':not(.hidden)';
 
 	return getContainer().then($container => {
 		let $tabLists;
@@ -270,7 +271,9 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 
 		return Cypress._.reduce($tabLists, (chain, tabListEl, tabListIndex) => {
 			return chain.then(() => {
-				const $tabs = Cypress.$(tabListEl).find(TAB);
+				// A tab carrying the hidden class is one the dialog does not offer, such as
+				// the None fill type that the rail carries as a checkbox.
+				const $tabs = Cypress.$(tabListEl).find(TAB + SHOWN);
 
 				const clickTabByIndex = (index) => {
 					if (index >= $tabs.length) return cy.wrap(null);
@@ -281,8 +284,23 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 
 					return getContainer()
 						.find(TABLIST).eq(tabListIndex)
-						.find(TAB).eq(index)
-						.click({ force: true })
+						.find(TAB + SHOWN).eq(index)
+						.then(($liveTab) => {
+							// The tab of a page with no fill is disabled until the checkbox
+							// beside it is set, so set it and let the rail rebuild.
+							if ($liveTab.attr('aria-disabled') !== 'true')
+								return cy.wrap(null);
+
+							cy.cGet('#' + CSS.escape(tabId) + '-fill-input')
+								.check({ force: true });
+							return helper.processToIdle(win);
+						})
+						.then(() => {
+							return getContainer()
+								.find(TABLIST).eq(tabListIndex)
+								.find(TAB + SHOWN).eq(index)
+								.click({ force: true });
+						})
 						.then(() => {
 							return helper.processToIdle(win);
 						})

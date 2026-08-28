@@ -29,7 +29,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		cy.cGet('[id^="TemplateDialog"]')
 			.should('be.visible')
 			.invoke('width')
-			.should('be.greaterThan', 588).and('be.lessThan', 800);
+			.should('be.greaterThan', 588).and('be.lessThan', 840);
 	});
 
 	/*

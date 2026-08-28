@@ -350,6 +350,11 @@ void SvxAreaTabPage::Reset_Impl( const SfxItemSet* rAttrs )
 void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 {
     m_bBtnClicked = false;
+
+    // Show the fill that the item set holds, before the page is first shown.
+    if (rAttrs)
+        ActivatePage(*rAttrs);
+
     OUString sCurrentPage = m_xNotebook->get_current_page_ident();
     auto it = maFillTypeMap.find(sCurrentPage);
     if (it == maFillTypeMap.end())
