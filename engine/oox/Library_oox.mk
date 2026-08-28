@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     i18nlangtag \
     msfilter \
     sal \
+    salhelper \
     sax \
     sfx \
     svl \
