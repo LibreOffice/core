@@ -1619,15 +1619,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._saveMessageForReplay(textMsg, viewId);
 	},
 
+	hideCellCursor: function () {
+		app.calc.cellCursorVisible = false;
+		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
+		if (cellfillMarkerSection)
+			cellfillMarkerSection.calculatePositionViaCellCursor(null);
+	},
+
 	_onCellCursorMsg: function (textMsg) {
 		var cellfillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.CellFillMarker.name);
 
 		var oldCursorAddress = app.calc.cellAddress.clone();
 
 		if (textMsg.match('EMPTY')) {
-			app.calc.cellCursorVisible = false;
-			if (cellfillMarkerSection)
-				cellfillMarkerSection.calculatePositionViaCellCursor(null);
+			this.hideCellCursor();
 			if (this._map._clip)
 				this._map._clip.clearSelection();
 		}

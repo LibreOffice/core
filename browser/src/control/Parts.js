@@ -58,6 +58,9 @@ window.L.Map.include({
 			// Drop the validity input help of the sheet we are leaving. The engine
 			// sends a fresh one for the new sheet when its active cell has input help.
 			app.definitions.validityInputHelpSection.removeValidityInputHelp();
+			// The cursor rectangle is in document coordinates, so the old one
+			// would land on unrelated cells of the new sheet.
+			docLayer.hideCellCursor();
 		}
 
 		docLayer._clearMsgReplayStore(true /* notOtherMsg*/);
