@@ -316,12 +316,11 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                     : css::i18n::ScriptType::WEAK;
                 nWhich = GetWhichOfScript( nWhich, nScript );
 
-                // item from attribute set
-                if( pTextNd->HasSwAttrSet() )
-                {
-                    pItem = pTextNd->GetSwAttrSet().GetItem( nWhich );
-                    vItem.emplace_back( pItem, std::make_unique<SwPaM>(*pNd, nStt, *pNd, nEnd) );
-                }
+                // The attributes that apply to the whole of the selected part of this node.
+                // A node without its own attribute set resolves them through its paragraph
+                // style, so there is a value to report either way.
+                pItem = pTextNd->GetSwAttrSet().GetItem( nWhich );
+                vItem.emplace_back( pItem, std::make_unique<SwPaM>(*pNd, nStt, *pNd, nEnd) );
 
                 if( !pTextNd->HasHints() )
                     continue;
@@ -369,12 +368,6 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                                     vItem.emplace_back( pItem, std::make_unique<SwPaM>(*pNd, nStart, *pNd, nStop) );
                                     break;
                                 }
-                            }
-                            // default item
-                            if( !pItem && !pTextNd->HasSwAttrSet() )
-                            {
-                                pItem = pAutoSet->GetPool()->GetUserDefaultItem( nWhich );
-                                vItem.emplace_back( pItem,  std::make_unique<SwPaM>(*pNd, nStt, *pNd, nEnd) );
                             }
                         }
                     }
