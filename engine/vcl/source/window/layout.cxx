@@ -2410,15 +2410,19 @@ void MessageDialog::create_message_area()
     {
         case VclMessageType::Info:
             m_pImage->SetImage(GetStandardInfoBoxImage());
+            m_pImage->set_id(u"infobox"_ustr);
             break;
         case VclMessageType::Warning:
             m_pImage->SetImage(GetStandardWarningBoxImage());
+            m_pImage->set_id(u"warningbox"_ustr);
             break;
         case VclMessageType::Question:
             m_pImage->SetImage(GetStandardQueryBoxImage());
+            m_pImage->set_id(u"querybox"_ustr);
             break;
         case VclMessageType::Error:
             m_pImage->SetImage(GetStandardErrorBoxImage());
+            m_pImage->set_id(u"errorbox"_ustr);
             break;
         case VclMessageType::Other:
             break;

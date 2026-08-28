@@ -414,6 +414,12 @@ interface MenuButtonWidgetJSON extends WidgetJSON {
 	noLabel?: boolean; // suppress text label, show icon only
 }
 
+// type: 'image'
+interface ImageWidgetJSON extends WidgetJSON {
+	// the picture itself, either a base64 bitmap or the address of one of our SVGs
+	image?: string;
+}
+
 // type: 'buttonbox'
 interface ButtonBoxWidget extends WidgetJSON {
 	layoutstyle: string;

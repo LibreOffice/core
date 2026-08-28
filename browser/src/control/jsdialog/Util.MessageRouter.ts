@@ -19,6 +19,10 @@ class JSDialogMessageRouter {
 	// gap between the primary and the secondary line of a message box, in pixels
 	private static readonly messageSpacing = 4;
 
+	private static readonly messageImages: Record<string, string> = {
+		warningbox: 'warningbox.svg',
+	};
+
 	// Per-jsontype queues for messages with target component not yet ready
 	private pendingByJsontype: Map<string, Array<() => void>> = new Map();
 
@@ -32,6 +36,11 @@ class JSDialogMessageRouter {
 			if (child.type === 'multilineedit') {
 				child.type = 'fixedtext';
 				hasMessage = true;
+			} else if (child.type === 'image') {
+				const asset = JSDialogMessageRouter.messageImages[child.id];
+				if (asset)
+					(child as ImageWidgetJSON).image = app.LOUtil.getImageURL(asset);
+				else child.id = '';
 			} else if (child.children) this._preProcessMessageDialog(child);
 		}
 
