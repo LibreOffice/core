@@ -12,12 +12,18 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cpo/uno/Sequence.hxx>
+#include <string_view>
 #include <vector>
 #include "sddllapi.h"
 
 #include <COKit/COKit.hxx>
 
 class SdDrawDocument;
+
+namespace tools
+{
+class JsonWriter;
+}
 
 namespace sd
 {
@@ -51,6 +57,11 @@ public:
 
     sal_Int32 GetSectionCount() const;
     const SlideSection& GetSection(sal_Int32 nIndex) const;
+
+    /// Write the sections as a JSON array under the given key. Each entry
+    /// carries the section's name, its id when it has one, the 0-based
+    /// index of its first slide and the number of slides it spans.
+    void WriteSectionsJson(::tools::JsonWriter& rJsonWriter, std::string_view aArrayName) const;
 
     /// Returns the section index that contains the given slide, or -1.
     sal_Int32 GetSectionIndexForSlide(sal_Int32 nSlideIndex) const;
