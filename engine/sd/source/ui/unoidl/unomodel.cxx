@@ -152,6 +152,8 @@
 #include <A11yObjectName.hxx>
 #include <Annotation.hxx>
 #include <CustomAnimationPreset.hxx>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
 #include <UndoSlideSection.hxx>
@@ -175,6 +177,7 @@
 #include <ViewShell.hxx>
 #include <Window.hxx>
 #include <optsitem.hxx>
+#include <SlideLink.hxx>
 #include <SlideshowLayerRenderer.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
@@ -6452,6 +6455,130 @@ bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsB
     }
 
     return bDone;
+}
+
+namespace
+{
+/// Names the standard pages the given indices ask for, by the name each carries in the
+/// document. An empty list names every page, which is what an insert of a whole deck and a
+/// write of a whole document both ask for. False when an index names no page of it, or when
+/// the document holds no page at all.
+bool collectPageNames(SdDrawDocument& rDoc, const std::vector<sal_Int32>& rPages,
+                      std::vector<OUString>& rNames)
+{
+    const sal_uInt16 nPageCount = rDoc.GetSdPageCount(PageKind::Standard);
+    if (rPages.empty())
+    {
+        for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+            rNames.push_back(rDoc.GetSdPage(nPage, PageKind::Standard)->GetName());
+    }
+    else
+    {
+        for (const sal_Int32 nPage : rPages)
+        {
+            if (nPage < 0 || nPage >= static_cast<sal_Int32>(nPageCount))
+                return false;
+
+            rNames.push_back(
+                rDoc.GetSdPage(static_cast<sal_uInt16>(nPage), PageKind::Standard)->GetName());
+        }
+    }
+
+    return !rNames.empty();
+}
+
+/// Takes the source document off the pages of a run, which a plain insert leaves as pages of
+/// this document alone.
+void clearInsertedPageLinks(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uInt16 nSlideCount)
+{
+    for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
+    {
+        SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
+        if (!pPage)
+            continue;
+
+        pPage->DisconnectLink();
+        pPage->SetFileName(OUString());
+        pPage->SetBookmarkName(OUString());
+    }
+}
+} // namespace
+
+bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OString& rJsonOptions)
+{
+    if (!mpDoc || rFileUrl.isEmpty())
+        return false;
+
+    sal_Int32 nAt = -1;
+    bool bKeepDesign = false;
+    bool bLink = false;
+    OUString aSourceName;
+    std::vector<sal_Int32> aPages;
+    try
+    {
+        std::stringstream aStream((std::string(rJsonOptions)));
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        nAt = aTree.get<sal_Int32>("at", -1);
+        bKeepDesign = aTree.get<bool>("keepDesign", false);
+        bLink = aTree.get<bool>("link", false);
+        aSourceName = OStringToOUString(aTree.get<std::string>("source", ""),
+                                        RTL_TEXTENCODING_UTF8);
+        if (auto oPages = aTree.get_child_optional("slides"))
+        {
+            for (const auto& rPage : *oPages)
+                aPages.push_back(rPage.second.get_value<sal_Int32>());
+        }
+    }
+    catch (const boost::property_tree::ptree_error&)
+    {
+        return false;
+    }
+
+    // A page keeps its link by the name of the source document, so an insert that asks for
+    // links needs one to record: a document name, holding no path.
+    if (bLink
+        && (aSourceName.isEmpty() || aSourceName.indexOf('/') >= 0
+            || aSourceName.indexOf('\\') >= 0))
+        return false;
+
+    SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl);
+    if (!pSource)
+        return false;
+
+    comphelper::ScopeGuard aCloseSource([this] { mpDoc->CloseBookmarkDoc(); });
+
+    std::vector<OUString> aBookmarkList;
+    if (!collectPageNames(*pSource, aPages, aBookmarkList))
+        return false;
+
+    // The standard page of slide S sits at page position 2*S+1; a position past the last page
+    // appends at the end.
+    sal_uInt16 nInsertPos = 0xFFFF;
+    if (nAt >= 0 && nAt < mpDoc->GetSdPageCount(PageKind::Standard))
+        nInsertPos = static_cast<sal_uInt16>(2 * nAt + 1);
+
+    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForSlideImport(bKeepDesign);
+    if (bLink)
+    {
+        aOptions.bLink = true;
+        aOptions.aLinkSourceUrl = sd::SlideLink::MakeSourceReference(aSourceName);
+    }
+
+    const sal_uInt16 nSlidesBefore = mpDoc->GetSdPageCount(PageKind::Standard);
+    if (!mpDoc->InsertFileAsPage(aBookmarkList, /*pExchangeList=*/nullptr, aOptions, nInsertPos,
+                                 pSource->GetDocSh(), /*oScaleObjects=*/true))
+        return false;
+
+    if (!bLink)
+    {
+        const sal_uInt16 nFirstSlide
+            = nInsertPos == 0xFFFF ? nSlidesBefore : static_cast<sal_uInt16>(nAt);
+        clearInsertedPageLinks(*mpDoc, nFirstSlide,
+                               mpDoc->GetSdPageCount(PageKind::Standard) - nSlidesBefore);
+    }
+
+    return true;
 }
 
 SdrModel& SdXImpressDocument::getSdrModelFromUnoModel() const

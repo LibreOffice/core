@@ -429,6 +429,9 @@ public:
         bool bRenderBackground, bool bRenderMasterPage) override;
     /// @see vcl::ITiledRenderable::renderNextSlideLayer().
     SD_DLLPUBLIC bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, std::string& rJsonMsg) override;
+    /// @see vcl::ITiledRenderable::insertPagesFromFile().
+    SD_DLLPUBLIC bool insertPagesFromFile(const OUString& rFileUrl,
+                                          const OString& rJsonOptions) override;
 
     SD_DLLPUBLIC rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
 

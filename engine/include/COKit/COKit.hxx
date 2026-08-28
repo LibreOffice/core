@@ -2531,6 +2531,18 @@ struct COKitDocument
      */
     virtual int getPartIndex(const char* pPart, int nMode) = 0;
 
+    /**
+     * Inserts pages of the presentation at pUrl into this document.
+     *
+     * @param pUrl the presentation to take the pages from, as a URL.
+     * @param pJsonOptions names the pages to take as "slides", an empty list taking every
+     *        page, the slide to insert before as "at", whether the pages keep the design of
+     *        the file they came from as "keepDesign", and whether they stay linked to the
+     *        document named by "source" as "link".
+     * @return whether the pages were inserted.
+     */
+    virtual bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) = 0;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

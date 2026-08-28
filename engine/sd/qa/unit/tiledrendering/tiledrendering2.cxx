@@ -323,6 +323,59 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertChartAtClientVisibleCenter)
                                  double(aObject.Center().Y()), 2.0);
 }
 
+// The slide-import fixtures live in the shared sd data directory, next to
+// the ones the misc-tests suite uses, rather than being copied per suite.
+constexpr OUString gSlideImportDataDir = u"/sd/qa/unit/data/"_ustr;
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // The file the slides are read from is one thing and the source document
+    // they belong to is another: here the file stands in for a document the
+    // user knows by a name that carries characters a reference has to escape.
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+
+    // A slide inserted as a link reports the source document and the slide of
+    // it that it came from.
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":1,\"keepDesign\":false,\"link\":true,"
+                    "\"source\":\"Q3 #1 100%.odp\"}"_ostr));
+    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20%231%20100%25.odp"_ustr,
+                         pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+
+    // A slide inserted from the same file without asking for a link is a plain copy, and
+    // names no source.
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl,
+        "{\"slides\":[0],\"at\":2,\"keepDesign\":false,\"source\":\"Q3 #1 100%.odp\"}"_ostr));
+    SdPage* pCopied = pDoc->GetSdPage(2, PageKind::Standard);
+    CPPUNIT_ASSERT(pCopied);
+    CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetBookmarkName());
+
+    // An insert that names no source document has nothing for a link to record, so one that
+    // asks for links inserts nothing at all.
+    const int nPartsBefore = pXImpressDocument->getParts();
+    CPPUNIT_ASSERT(
+        !pXImpressDocument->insertPagesFromFile(aSourceUrl, "{\"slides\":[0],\"link\":true}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
+
+    // A name holding a path names a location rather than a document, so an insert that asks
+    // for links to it is in the same position as one that names no source at all.
+    CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"link\":true,\"source\":\"/tmp/staged/Q3.odp\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

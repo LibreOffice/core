@@ -1356,6 +1356,9 @@ static void doc_setViewOption(COKitDocument* pDoc, const char* pOption, const ch
 
 static void doc_setColorPreviewState(COKitDocument* pThis, int nId, bool bEnabled);
 
+static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
+                                    const char* pJsonOptions);
+
 namespace {
 ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
 {
@@ -1890,6 +1893,11 @@ void COKitDocumentImpl::transferClipboardFromView(int nSourceViewId)
 void COKitDocumentImpl::flushClipboard()
 {
     doc_flushClipboard(this);
+}
+
+bool COKitDocumentImpl::insertPagesFromFile(const char* pUrl, const char* pJsonOptions)
+{
+    return doc_insertPagesFromFile(this, pUrl, pJsonOptions);
 }
 
 COKitDocumentImpl::~COKitDocumentImpl()
@@ -7025,6 +7033,46 @@ static void doc_setViewOption(COKitDocument* pThis, const char* pOption, const c
             pDoc->setPageZoom(nZoom);
         }
     }
+}
+
+/// Whether the location is one of the schemes pages may be read from: a file of the caller's
+/// own or a document of the web. Any other scheme is refused, so that the loader does not read
+/// what a UNO or package location names.
+static bool isReadablePagesUrl(const char* pUrl)
+{
+    if (!pUrl || !*pUrl)
+        return false;
+
+    const std::string_view aUrl(pUrl);
+    return aUrl.starts_with("file://") || aUrl.starts_with("http://")
+           || aUrl.starts_with("https://");
+}
+
+static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
+                                    const char* pJsonOptions)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return false;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return false;
+    }
+
+    if (!isReadablePagesUrl(pUrl))
+    {
+        SetLastExceptionMsg(
+            u"Pages are read from a file or from the web and from nowhere else"_ustr);
+        return false;
+    }
+
+    return pDoc->insertPagesFromFile(getUString(pUrl),
+                                     pJsonOptions ? OString(pJsonOptions) : OString());
 }
 
 static bool getFromTransferable(
