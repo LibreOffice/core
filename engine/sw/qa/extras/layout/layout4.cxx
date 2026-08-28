@@ -1728,6 +1728,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf146081)
     CPPUNIT_ASSERT_EQUAL(nTotalHeight, nHeight1 * 4);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf173259)
+{
+    // Three paragraphs with 50% proportional line spacing, each holding an as-character picture
+    // 3766twip tall: the first fills the text width and so lands on a second line, the second is
+    // alone on its line, the third is narrow enough to share the line with the text before it.
+    createSwDoc("tdf173259-prop-spacing-image.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The cut comes off the text height and off the top, so the picture keeps its lower edge.
+    auto sSecond = "/root/page/body/txt[2]"_ostr;
+    assertXPath(pXmlDoc, sSecond + "/SwParaPortion/SwLineLayout[2]", "height", u"3628");
+    OUString aParaBottom = getXPath(pXmlDoc, sSecond + "/infos/bounds", "bottom");
+    OUString aPictureBottom = getXPath(pXmlDoc, sSecond + "/anchored/fly/infos/bounds", "bottom");
+    // without the fix their gap was 726twip
+    CPPUNIT_ASSERT_EQUAL(aParaBottom, aPictureBottom);
+
+    auto sThird = "/root/page/body/txt[3]"_ostr;
+    // without the fix the line was 1883, half the height of the picture
+    assertXPath(pXmlDoc, sThird + "/SwParaPortion/SwLineLayout[1]", "height", u"3628");
+    aParaBottom = getXPath(pXmlDoc, sThird + "/infos/bounds", "bottom");
+    aPictureBottom = getXPath(pXmlDoc, sThird + "/anchored/fly/infos/bounds", "bottom");
+    // without the fix their gap was 377twip
+    CPPUNIT_ASSERT_EQUAL(aParaBottom, aPictureBottom);
+
+    // Sharing the line with text leaves the text descent below the picture
+    auto sFourth = "/root/page/body/txt[4]"_ostr;
+    // without the fix the line was 1909
+    assertXPath(pXmlDoc, sFourth + "/SwParaPortion/SwLineLayout[1]", "height", u"3680");
+    aParaBottom = getXPath(pXmlDoc, sFourth + "/infos/bounds", "bottom");
+    aPictureBottom = getXPath(pXmlDoc, sFourth + "/anchored/fly/infos/bounds", "bottom");
+    // without the fix this gap was 382twip
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(52), aParaBottom.toInt32() - aPictureBottom.toInt32());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf155229RowAtLeast)
 {
     createSwDoc("tdf155229_row_height_at_least.docx");
