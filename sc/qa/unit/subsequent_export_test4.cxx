@@ -1519,6 +1519,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool15769MinimalDBRanges)
     CPPUNIT_ASSERT(xNameAccess->hasByName(u"xl/tables/table3.xml"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool15780TotalsRowNeedsContent)
+{
+    createScDoc("ods/cool15780_totals_row_content.ods");
+    save(TestFilter::XLSX);
+
+    // threewheadertotals has a header row, but its only column's totals row cell
+    // holds a plain value with no aggregate function or label, so without the fix
+    // it exported as a totals row Excel refused to open.
+    xmlDocUniquePtr pTable3 = parseExport(u"xl/tables/table3.xml"_ustr);
+    CPPUNIT_ASSERT(pTable3);
+    assertXPath(pTable3, "/x:table", "totalsRowCount", u"0");
+
+    // twowtotals has a totals row but no header row at all.
+    xmlDocUniquePtr pTable6 = parseExport(u"xl/tables/table6.xml"_ustr);
+    CPPUNIT_ASSERT(pTable6);
+    assertXPath(pTable6, "/x:table", "headerRowCount", u"0");
+    assertXPath(pTable6, "/x:table", "totalsRowCount", u"0");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleOperatorXlsxRoundTrip)
 {
     // The @ operator round-trips through XLSX as _xlfn.SINGLE.

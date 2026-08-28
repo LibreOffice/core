@@ -89,6 +89,11 @@ struct TableColumnAttributes
     std::optional<OUString> maTotalsRowLabel = std::nullopt;
     std::optional<OUString> maTotalsFunction = std::nullopt;
     std::optional<OUString> maCustomFunction = std::nullopt;
+    // Whether the totals row cell for this column holds any value at all, whether or
+    // not that value ended up producing a label or a function above. A column whose
+    // totals row cell is empty is not the same as a column whose cell holds content
+    // that this class chose not to describe as a label or a function.
+    bool mbHasContent = false;
 };
 
 // xmlColumnPr attributes
