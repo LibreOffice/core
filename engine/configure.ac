@@ -2136,9 +2136,9 @@ AC_ARG_ENABLE(opencl,
 ,enable_opencl=yes)
 
 libo_FUZZ_ARG_ENABLE(librelogo,
-    AS_HELP_STRING([--disable-librelogo],
-        [Do not build LibreLogo.]),
-,enable_librelogo=yes)
+    AS_HELP_STRING([--enable-librelogo],
+        [Build LibreLogo. Disabled by default.]),
+,enable_librelogo=no)
 
 AC_ARG_ENABLE(wasm-strip,
     AS_HELP_STRING([--enable-wasm-strip],
