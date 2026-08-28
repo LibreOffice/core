@@ -15,14 +15,21 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/cryptosign.hxx>
+#include <svl/undo.hxx>
+#include <svx/svdotext.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <tools/json_writer.hxx>
 
 #include <vcl/virdev.hxx>
 
 #include <tools/UnitConversion.hxx>
 
 #include <DrawDocShell.hxx>
+#include <SlideSectionManager.hxx>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
@@ -327,6 +334,86 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertChartAtClientVisibleCenter)
 // the ones the misc-tests suite uses, rather than being copied per suite.
 constexpr OUString gSlideImportDataDir = u"/sd/qa/unit/data/"_ustr;
 
+namespace
+{
+/// The links rDocument reports, parsed.
+boost::property_tree::ptree readLinks(SdXImpressDocument& rDocument)
+{
+    tools::JsonWriter aJsonWriter;
+    const bool bWritten = rDocument.getSlideLinks(aJsonWriter);
+    const OString aLinks = aJsonWriter.finishAndGetAsOString();
+    CPPUNIT_ASSERT(bWritten);
+    std::stringstream aStream((std::string(aLinks)));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree;
+}
+
+/// The text the slide at nIndex of rDoc shows, taking its shapes in order.
+OUString getSlideText(SdDrawDocument& rDoc, sal_uInt16 nIndex)
+{
+    SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+    OUStringBuffer aText;
+    for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+    {
+        auto* pTextObject = dynamic_cast<SdrTextObj*>(pPage->GetObj(nObject));
+        if (pTextObject && !pTextObject->IsEmptyPresObj() && pTextObject->GetOutlinerParaObject())
+            aText.append(pTextObject->GetOutlinerParaObject()->GetTextObject().GetText(0));
+    }
+    return aText.makeStringAndClear();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkList)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // A document whose slides are all its own reports no links at all.
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("links").empty());
+
+    // Two slides of one source and one of another are inserted as links, and one slide is inserted
+    // as a plain copy.
+    const OUString aFirstUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aFirstUrl, "{\"slides\":[0,1],\"at\":0,\"link\":true,\"source\":\"Q3 #1 100%.odp\"}"_ostr));
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aFirstUrl, "{\"slides\":[0],\"at\":0,\"source\":\"Q3 #1 100%.odp\"}"_ostr));
+
+    const OUString aSecondUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSecondUrl, "{\"slides\":[0],\"link\":true,\"source\":\"Support deck.odp\"}"_ostr));
+
+    // Each source is reported once, under the name the pages were linked to, with the pages it
+    // holds in document order. The plain copy belongs to no source and is left out.
+    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
+    std::vector<boost::property_tree::ptree> aSources;
+    for (const auto& rSource : aLinks.get_child("links"))
+        aSources.push_back(rSource.second);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSources.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("Q3 #1 100%.odp"), aSources[0].get<std::string>("source"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Support deck.odp"), aSources[1].get<std::string>("source"));
+
+    std::vector<boost::property_tree::ptree> aSlides;
+    for (const auto& rSlide : aSources[0].get_child("slides"))
+        aSlides.push_back(rSlide.second);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSlides.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("SourceA"), aSlides[0].get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string("TargetOne"), aSlides[1].get<std::string>("name"));
+
+    // A page is named by the identifier it keeps for the whole session, not by its position. The
+    // plain copy landed before the linked pages, so the first of them is the second slide.
+    const OString aPartId = pDoc->GetSdPage(1, PageKind::Standard)->GetGuid().getString();
+    CPPUNIT_ASSERT_EQUAL(std::string(aPartId.getStr(), aPartId.getLength()),
+                         aSlides[0].get<std::string>("part"));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
 {
     loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
@@ -374,6 +461,146 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"link\":true,\"source\":\"/tmp/staged/Q3.odp\"}"_ostr));
     CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // One slide of the source deck is inserted as a link and the same slide as a plain copy.
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":2,\"source\":\"Q3 deck.odp\"}"_ostr));
+
+    // The linked slide is given a name of its own, so that keeping the name of the slide in this
+    // document rather than the name of the slide it came from is what the refresh has to do.
+    pDoc->GetSdPage(1, PageKind::Standard)->SetName(u"Q3 numbers"_ustr);
+    const int nParts = pXImpressDocument->getParts();
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
+
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    // The source deck changed, and the file staged for the refresh holds the changed slides.
+    const OUString aChangedUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl));
+
+    // The linked slide shows the new content, and it kept its position, its name and its link.
+    CPPUNIT_ASSERT_EQUAL(u"Source title, revised"_ustr, getSlideText(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(nParts, pXImpressDocument->getParts());
+    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 numbers"_ustr, pLinked->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+
+    // The plain copy of the same slide belongs to no source and keeps what it holds.
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 2));
+
+    // The whole refresh is one undo step, and undoing it brings the old content back with the link.
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(nParts, pXImpressDocument->getParts());
+    pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 numbers"_ustr, pLinked->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+
+    // A source no page of this document is linked to refreshes nothing at all.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
+                         pXImpressDocument->refreshSlideLinks(u"Other deck.odp"_ustr, aChangedUrl));
+
+    // The slides are read from a local file, so a location that would have to be fetched is
+    // refused.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
+                         pXImpressDocument->refreshSlideLinks(
+                             u"Q3 deck.odp"_ustr, u"https://example.com/deck.odp"_ustr));
+
+    // A file that holds no slide of the recorded name leaves the linked slide as it is, and a
+    // refresh that changes nothing is no undo step of its own.
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0),
+        pXImpressDocument->refreshSlideLinks(
+            u"Q3 deck.odp"_ustr,
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp")));
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSections)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // Two slides of one source are inserted as links, so a refresh reads them as one run of pages.
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"at\":0,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+
+    // A section starts on each of the two linked slides.
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+    rSections.AddSection(0, u"Opening"_ustr);
+    rSections.AddSection(1, u"Details"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+
+    // Both linked slides are refreshed together, and every section still starts on the slide it
+    // did.
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(2),
+        pXImpressDocument->refreshSlideLinks(
+            u"Q3 deck.odp"_ustr,
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp")));
+    CPPUNIT_ASSERT_EQUAL(u"Source title, revised"_ustr, getSlideText(*pDoc, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, rSections.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(u"Details"_ustr, rSections.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(1).mnStartIndex);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+
+    // A page holds its link with the sfx2 link manager once the document is loaded again, so the
+    // test registers it here to reach the same state in one session.
+    pDoc->GetSdPage(1, PageKind::Standard)->ConnectLink();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    CPPUNIT_ASSERT(pLinkManager);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pLinkManager->GetLinks().size());
+
+    // Updating the links reads the file staged for each source document, so a source that has no
+    // staged file leaves its page the content it holds, with its link.
+    pLinkManager->UpdateAllLinks(/*bAskUpdate=*/false, u""_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
+    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

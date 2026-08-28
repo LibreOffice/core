@@ -432,6 +432,11 @@ public:
     /// @see vcl::ITiledRenderable::insertPagesFromFile().
     SD_DLLPUBLIC bool insertPagesFromFile(const OUString& rFileUrl,
                                           const OString& rJsonOptions) override;
+    /// @see vcl::ITiledRenderable::getSlideLinks().
+    SD_DLLPUBLIC bool getSlideLinks(tools::JsonWriter& rJsonWriter) override;
+    /// @see vcl::ITiledRenderable::refreshSlideLinks().
+    SD_DLLPUBLIC sal_Int32 refreshSlideLinks(const OUString& rSourceName,
+                                             const OUString& rFileUrl) override;
 
     SD_DLLPUBLIC rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
 

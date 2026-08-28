@@ -259,11 +259,11 @@ static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBoo
 }
 
 // Opens a bookmark document
-SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
+SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium, bool bNoDialogs)
 {
     std::unique_ptr<SfxMedium> xMedium(pMedium);
     OUString aBookmarkName = xMedium->GetName();
-    if (!xMedium->GetFilter())
+    if (!xMedium->GetFilter() && !bNoDialogs)
         xMedium->UseInteractionHandler(true);
 
     bool bReadError = false;
@@ -284,9 +284,12 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
 
     if (bReadError)
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
-                                                       VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
-        xErrorBox->run();
+        if (!bNoDialogs)
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
+            xErrorBox->run();
+        }
 
         CloseBookmarkDoc();
         return nullptr;
@@ -296,14 +299,14 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
 }
 
 // Opens a bookmark document
-SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const OUString& rBookmarkFile)
+SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const OUString& rBookmarkFile, bool bNoDialogs)
 {
     SdDrawDocument* pBookmarkDoc = nullptr;
 
     if (!rBookmarkFile.isEmpty() && maBookmarkFile != rBookmarkFile)
     {
         std::unique_ptr<SfxMedium> xMedium(new SfxMedium(rBookmarkFile, StreamMode::READ));
-        pBookmarkDoc = OpenBookmarkDoc(xMedium.release());
+        pBookmarkDoc = OpenBookmarkDoc(xMedium.release(), bNoDialogs);
     }
     else if (mxBookmarkDocShRef.is())
     {
@@ -516,6 +519,11 @@ bool SdDrawDocument::determineScaleObjects(bool bNoDialogs,
 
 SfxUndoManager* SdDrawDocument::beginUndoAction()
 {
+    return beginUndoAction(SdResId(STR_UNDO_INSERTPAGES));
+}
+
+SfxUndoManager* SdDrawDocument::beginUndoAction(const OUString& rComment)
+{
     SfxUndoManager* pUndoMgr = nullptr;
     if ( mpDocSh )
     {
@@ -523,7 +531,7 @@ SfxUndoManager* SdDrawDocument::beginUndoAction()
         ViewShellId nViewShellId(-1);
         if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
             nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
-        pUndoMgr->EnterListAction(SdResId(STR_UNDO_INSERTPAGES), u""_ustr, 0, nViewShellId);
+        pUndoMgr->EnterListAction(rComment, u""_ustr, 0, nViewShellId);
     }
     return pUndoMgr;
 }
@@ -1416,6 +1424,21 @@ void SdDrawDocument::CloseBookmarkDoc()
 
     mxBookmarkDocShRef.clear();
     maBookmarkFile.clear();
+}
+
+void SdDrawDocument::SetStagedLinkSourceFile(const OUString& rSourceReference,
+                                             const OUString& rFileUrl)
+{
+    if (rFileUrl.isEmpty())
+        maStagedLinkSourceFiles.erase(rSourceReference);
+    else
+        maStagedLinkSourceFiles[rSourceReference] = rFileUrl;
+}
+
+OUString SdDrawDocument::GetStagedLinkSourceFile(const OUString& rSourceReference) const
+{
+    const auto it = maStagedLinkSourceFiles.find(rSourceReference);
+    return it == maStagedLinkSourceFiles.end() ? OUString() : it->second;
 }
 
 // Is this document read-only?
@@ -2393,11 +2416,13 @@ bool SdDrawDocument::ResolvePageLinks(
     const PageNameList &rBookmarkList,
     sal_uInt16 nInsertPos,
     bool bNoDialogs,
-    bool bCopy)
+    bool bCopy,
+    const OUString& rLinkSourceUrl)
 {
     // Use predefined options for page link resolution
     InsertBookmarkOptions options = InsertBookmarkOptions::ForPageLinks(bCopy, bNoDialogs);
     options.bMergeMasterPagesOnly = /*bMergeMasterPagesOnly*/false;
+    options.aLinkSourceUrl = rLinkSourceUrl;
 
     // Create insertion parameters
     PageInsertionParams aInsertParams(nInsertPos);

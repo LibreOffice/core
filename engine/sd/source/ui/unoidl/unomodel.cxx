@@ -6457,6 +6457,24 @@ bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsB
     return bDone;
 }
 
+bool SdXImpressDocument::getSlideLinks(tools::JsonWriter& rJsonWriter)
+{
+    if (!mpDoc)
+        return false;
+
+    sd::SlideLink::WriteLinks(*mpDoc, rJsonWriter);
+    return true;
+}
+
+sal_Int32 SdXImpressDocument::refreshSlideLinks(const OUString& rSourceName,
+                                                const OUString& rFileUrl)
+{
+    if (!mpDoc)
+        return -1;
+
+    return sd::SlideLink::Refresh(*mpDoc, rSourceName, rFileUrl);
+}
+
 namespace
 {
 /// Names the standard pages the given indices ask for, by the name each carries in the

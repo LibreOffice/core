@@ -424,6 +424,8 @@ namespace desktop {
         std::string getPartId(int nPart, int nMode) override;
         int getPartIndex(const char* pPart, int nMode) override;
         bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) override;
+        char* getSlideLinks() override;
+        int refreshSlideLinks(const char* pSourceName, const char* pUrl) override;
     };
 
     struct DESKTOP_DLLPUBLIC COKitImpl : public COKit

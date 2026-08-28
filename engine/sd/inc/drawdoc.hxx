@@ -387,6 +387,12 @@ private:
     OUString            maBookmarkFile;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef;
 
+    /** The local file the pages of one source document are read from, by the reference the pages
+        linked to that source record. Each entry is a file: URL of a file staged for this document,
+        holding the source pages to read. Session state, never saved with the document.
+    */
+    std::map<OUString, OUString> maStagedLinkSourceFiles;
+
     sd::PresentationSettings maPresentationSettings;
 
     rtl::Reference< sd::SlideShow > mxPresentation;
@@ -541,6 +547,11 @@ public:
     SfxUndoManager* beginUndoAction();
 
     /**
+     * Begin an undoable action for page operations, reported under rComment
+     */
+    SfxUndoManager* beginUndoAction(const OUString& rComment);
+
+    /**
      * End an undoable action for page operations
      */
     void endUndoAction(bool bUndo, SfxUndoManager* pUndoMgr);
@@ -658,8 +669,14 @@ public:
     void   SetMasterPage(sal_uInt16 nSdPageNum, std::u16string_view rLayoutName,
                                       SdDrawDocument* pSourceDoc, bool bMaster, bool bCheckMasters);
 
-    SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
-    SAL_DLLPRIVATE SdDrawDocument* OpenBookmarkDoc(SfxMedium* pMedium);
+    /** Opens rBookmarkFile as the document pages are inserted from, and keeps it open until
+        CloseBookmarkDoc.
+
+        With bNoDialogs the file is read without any interaction, and a file that cannot be read is
+        reported by an empty result alone.
+    */
+    SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile, bool bNoDialogs = false);
+    SAL_DLLPRIVATE SdDrawDocument* OpenBookmarkDoc(SfxMedium* pMedium, bool bNoDialogs = false);
 
     /** Load an external drawing or presentation file into a fresh document
      * shell.
@@ -794,13 +811,18 @@ public:
      * @param nInsertPos Position where resolved pages should be inserted
      * @param bNoDialogs Whether to suppress dialogs during operation
      * @param bCopy Whether to copy the linked pages
+     * @param rLinkSourceUrl The reference the resolved pages record as their source, or empty for
+     *                       the name of the medium they are read from. A reference given here is
+     *                       what keeps the pages linked to a source document when the medium is a
+     *                       file staged for one resolution and means nothing later.
      * @return true if operation was successful
      */
     bool ResolvePageLinks(
         const PageNameList &rBookmarkList,
         sal_uInt16 nInsertPos,
         bool bNoDialogs,
-        bool bCopy);
+        bool bCopy,
+        const OUString& rLinkSourceUrl);
 
     /**
      * Copy or move pages within the same document
@@ -844,6 +866,19 @@ public:
                                     Point const * pObjPos, bool bCalcObjCount);
 
     void   CloseBookmarkDoc();
+
+    /** Names the local file the pages linked to one source document are read from.
+
+        rSourceReference is the reference those pages record and rFileUrl a file: URL of a file
+        staged for this document, holding the source pages. An empty rFileUrl takes the source's
+        file away again.
+    */
+    void SetStagedLinkSourceFile(const OUString& rSourceReference, const OUString& rFileUrl);
+
+    /** The local file the pages linked to rSourceReference are read from, or empty when no file is
+        staged for that source.
+    */
+    OUString GetStagedLinkSourceFile(const OUString& rSourceReference) const;
 
     SAL_DLLPRIVATE SdrObject*          GetObj(std::u16string_view rObjName) const;
 

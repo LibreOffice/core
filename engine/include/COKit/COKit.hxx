@@ -2543,6 +2543,34 @@ struct COKitDocument
      */
     virtual bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) = 0;
 
+    /**
+     * Get the pages of the document that are linked to a source document, grouped by the source
+     * they were made from.
+     *
+     * @return JSON of the form {"links":[{"source":"<source document>","slides":[{"part":<part>,
+     *         "name":"<source page>"},...]},...]}, where a source document is named as the user
+     *         knows it, a part is the unique identifier the linked page holds now and a source page
+     *         is named as the user sees it in the source document. A document that links to nothing
+     *         reports an empty array. The caller owns the returned string and frees it. nullptr for
+     *         a document that holds no pages, which is anything but a presentation or a drawing.
+     */
+    virtual char* getSlideLinks() = 0;
+
+    /**
+     * Refresh the pages linked to one source document.
+     *
+     * @param pSourceName the source document as the user knows it, as getSlideLinks reports it.
+     * @param pUrl a file: URL of a file on this machine holding the source pages to read. It is a
+     *        file staged for this one refresh, so the pages keep the source document they record
+     *        and stay linked to it, and they keep their position and their name as well. A page
+     *        whose source page the file does not hold keeps the content it holds. Each refreshed
+     *        page is the page read for it, so its part changes and a caller holding the parts of
+     *        that source asks for the list again.
+     * @return the number of pages refreshed, or -1 when no page is linked to that source document,
+     *         when the URL is not a file on this machine, or when the file could not be read.
+     */
+    virtual int refreshSlideLinks(const char* pSourceName, const char* pUrl) = 0;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

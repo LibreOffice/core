@@ -1359,6 +1359,10 @@ static void doc_setColorPreviewState(COKitDocument* pThis, int nId, bool bEnable
 static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
                                     const char* pJsonOptions);
 
+static char* doc_getSlideLinks(COKitDocument* pThis);
+
+static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl);
+
 namespace {
 ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
 {
@@ -1898,6 +1902,16 @@ void COKitDocumentImpl::flushClipboard()
 bool COKitDocumentImpl::insertPagesFromFile(const char* pUrl, const char* pJsonOptions)
 {
     return doc_insertPagesFromFile(this, pUrl, pJsonOptions);
+}
+
+char* COKitDocumentImpl::getSlideLinks()
+{
+    return doc_getSlideLinks(this);
+}
+
+int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl)
+{
+    return doc_refreshSlideLinks(this, pSourceName, pUrl);
 }
 
 COKitDocumentImpl::~COKitDocumentImpl()
@@ -7073,6 +7087,47 @@ static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
 
     return pDoc->insertPagesFromFile(getUString(pUrl),
                                      pJsonOptions ? OString(pJsonOptions) : OString());
+}
+
+static char* doc_getSlideLinks(COKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return nullptr;
+    }
+
+    tools::JsonWriter aJsonWriter;
+    const bool bWritten = pDoc->getSlideLinks(aJsonWriter);
+    // A JsonWriter checks at destruction that its data was extracted, so finish it even when
+    // nothing was written; the partial data is discarded.
+    OString aLinks = aJsonWriter.finishAndGetAsOString();
+    if (!bWritten)
+        return nullptr;
+
+    return convertOString(aLinks);
+}
+
+static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return -1;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return -1;
+    }
+
+    return pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl));
 }
 
 static bool getFromTransferable(

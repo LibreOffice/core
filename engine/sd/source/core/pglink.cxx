@@ -19,6 +19,7 @@
 
 #include <sfx2/linkmgr.hxx>
 
+#include <SlideLink.hxx>
 #include <pglink.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
@@ -74,7 +75,14 @@ SdPageLink::~SdPageLink()
         pPage->SetFileName(aFileName);
         pPage->SetBookmarkName(aBookmarkName);
 
-        SdDrawDocument* pBookmarkDoc = pDoc->OpenBookmarkDoc(aFileName);
+        // A page is read from the file that holds the slides of its source document. A source that
+        // nothing reads leaves the page the content it holds.
+        const OUString aSourceFile = sd::SlideLink::GetSourceFile(*pDoc, aFileName);
+        if (aSourceFile.isEmpty())
+            return SUCCESS;
+
+        const bool bStaged = aSourceFile != aFileName;
+        SdDrawDocument* pBookmarkDoc = pDoc->OpenBookmarkDoc(aSourceFile, /*bNoDialogs=*/bStaged);
 
         if (pBookmarkDoc)
         {
@@ -90,7 +98,8 @@ SdPageLink::~SdPageLink()
 
             std::vector<OUString> aBookmarkList { aBookmarkName };
             sal_uInt16 nInsertPos = pPage->GetPageNum();
-            bool bNoDialogs = false;
+            // A file staged for one refresh was chosen for it, so reading it asks nothing.
+            bool bNoDialogs = bStaged;
             bool bCopy = false;
 
             if (SdDrawDocument::s_pDocLockedInsertingLinks)
@@ -100,7 +109,9 @@ SdPageLink::~SdPageLink()
                 bCopy = true;
             }
 
-            pDoc->ResolvePageLinks(aBookmarkList, nInsertPos, bNoDialogs, bCopy);
+            // The page keeps the source it records, so it stays linked to that source whichever
+            // file its slides were read from.
+            pDoc->ResolvePageLinks(aBookmarkList, nInsertPos, bNoDialogs, bCopy, aFileName);
 
             if (!SdDrawDocument::s_pDocLockedInsertingLinks)
                 pDoc->CloseBookmarkDoc();

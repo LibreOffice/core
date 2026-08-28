@@ -287,7 +287,7 @@ public:
     void            SetBookmarkName(const OUString& aName) { maBookmarkName = aName; }
     const OUString& GetBookmarkName() const       { return maBookmarkName; }
 
-    void            ConnectLink();
+    SD_DLLPUBLIC void ConnectLink();
     void            DisconnectLink();
 
     void            ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rNewBorderRect,
