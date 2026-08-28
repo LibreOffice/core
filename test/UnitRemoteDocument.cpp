@@ -919,7 +919,7 @@ public:
 
         // The remote streams several frames once a command channel is open;
         // the test passes on the getslidesections reply and ignores the rest.
-        if (message.starts_with("remotedoccommandresult") && _phase == Phase::WaitResult &&
+        if (message.starts_with("remotedoccommandresult:") && _phase == Phase::WaitResult &&
             message.find("slidesections:") != std::string_view::npos)
         {
             TST_LOG("Got: [" << message << ']');

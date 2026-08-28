@@ -1424,7 +1424,7 @@ class Socket {
 			!textMsg.startsWith('slidelayer:') &&
 			!textMsg.startsWith('zstdslidelayer:') &&
 			!textMsg.startsWith('windowpaint:') &&
-			!textMsg.startsWith('remotedoccommandresult')
+			!textMsg.startsWith('remotedoccommandresult:')
 		) {
 			if (imgBytes !== undefined) {
 				try {
@@ -1477,7 +1477,7 @@ class Socket {
 			this._map.fire('relateddocuments', {
 				documents: app.relatedDocuments,
 			});
-		} else if (textMsg.startsWith('remotedoccommandresult')) {
+		} else if (textMsg.startsWith('remotedoccommandresult:')) {
 			this._onRemoteDocCommandResult(textMsg, e as SlurpMessageEvent);
 			return;
 		} else if (textMsg.startsWith('presetconfigid:')) {
@@ -1524,7 +1524,7 @@ class Socket {
 	}
 
 	// A reply from a remote document, wrapped as
-	// "remotedoccommandresult wopisrc=<enc>\n<inner frame>". Unwraps the
+	// "remotedoccommandresult: wopisrc=<enc>\n<inner frame>". Unwraps the
 	// header, then fires a remotedoccommandresult map event carrying the
 	// remote's WOPISrc and the inner frame as an ordinary (textMsg, imgBytes,
 	// imgIndex) triple, so a consumer reads it the way it reads any frame.

@@ -5050,7 +5050,7 @@ void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& sessionI
         return;
     }
 
-    std::string frame = "remotedoccommandresult wopisrc=" + encodedWopiSrc + '\n';
+    std::string frame = "remotedoccommandresult: wopisrc=" + encodedWopiSrc + '\n';
     frame.append(payload.begin(), payload.end());
     it->second->sendBinaryFrame(frame.data(), frame.size());
 }

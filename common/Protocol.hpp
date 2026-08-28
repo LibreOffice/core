@@ -44,7 +44,7 @@ namespace COOLProtocol
         "zstdvectorrenderingfont:",
         "windowpaint:",
         "urp:",
-        "remotedoccommandresult"
+        "remotedoccommandresult:"
     };
 
     static inline bool isMessageOfType(const char* message, const std::string& type, size_t length)

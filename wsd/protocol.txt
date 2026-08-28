@@ -726,7 +726,7 @@ remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [valu
     * 'unsubscribed': the link was dropped on request
     * 'error': the subscription failed; <kind> names the reason
 
-remotedoccommandresult wopisrc=<encoded-WOPISrc>\n<inner server frame>
+remotedoccommandresult: wopisrc=<encoded-WOPISrc>\n<inner server frame>
 
     A reply from a remote document to a remotedoccommand. The header line
     names the remote by its WOPISrc; everything after the first newline is
