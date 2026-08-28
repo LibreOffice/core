@@ -1115,9 +1115,13 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	},
 
 	// True for instances that render as their own native window in the Qt
-	// shell: real dialogs, modal or non-modal.
+	// shell: real dialogs, modal or non-modal. The feature is turned off:
+	// nothing in the application sets enablePopoutDialogs, so every dialog
+	// renders in the page. The Qt app tests set the flag to keep the
+	// separate-window path working while it is off.
 	canPopout: function(instance) {
-		return window.ThisIsTheQtApp
+		return window.enablePopoutDialogs
+			&& window.ThisIsTheQtApp
 			&& !instance.isDropdown
 			&& !instance.isSnackbar
 			&& !instance.isDocumentAreaPopup

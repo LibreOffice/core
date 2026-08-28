@@ -64,6 +64,13 @@ describe('Popped-out jsdialogs', () => {
 			'popout-dialog.odt',
 		);
 		await enterEditMode();
+
+		// Separate-window dialogs are turned off in the application; the
+		// flag is read each time a dialog opens, so turning it on here
+		// keeps the feature exercised by this suite.
+		await browser.webEngine.execute(() => {
+			window.enablePopoutDialogs = true;
+		});
 	});
 
 	// A dialog command issued while a dialog is already open opens no window, so
@@ -74,6 +81,37 @@ describe('Popped-out jsdialogs', () => {
 			await closeOpenDialogs();
 		} catch {
 			// The failure the test itself reported is the one worth reading.
+		}
+	});
+
+	it('renders the dialog in the page when popout dialogs are off', async function () {
+		const beforeHandles = await browser.webEngine.getWindowHandles();
+
+		await browser.webEngine.switchToWindow(documentHandle);
+		try {
+			await browser.webEngine.execute(() => {
+				window.enablePopoutDialogs = false;
+				app.map.sendUnoCommand('.uno:HyperlinkDialog');
+			});
+
+			// The dialog appears in the main document window itself.
+			await browser.webEngine.waitForCondition(
+				() => document.querySelector('.jsdialog-container') !== null,
+				{
+					timeout: 10000,
+					timeoutMsg: 'No dialog container in the document window',
+				},
+			);
+
+			const afterHandles = await browser.webEngine.getWindowHandles();
+			expect(afterHandles.length).toBe(beforeHandles.length);
+		} finally {
+			// The rest of the suite tests the separate-window path, so put
+			// the flag back even when this test fails part way through.
+			await browser.webEngine.switchToWindow(documentHandle);
+			await browser.webEngine.execute(() => {
+				window.enablePopoutDialogs = true;
+			});
 		}
 	});
 

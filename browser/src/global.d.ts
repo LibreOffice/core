@@ -379,6 +379,9 @@ interface Window {
 	deviceFormFactor?: string;
 	enableAccessibility: boolean;
 	enableExperimentalFeatures: boolean;
+	// True when jsdialogs in the Qt shell render as their own native
+	// windows. Left unset in the application, so the value is false.
+	enablePopoutDialogs?: boolean;
 	enableDebug: boolean;
 	simulateError: (name: string) => boolean;
 	enableMacrosExecution: boolean;

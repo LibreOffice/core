@@ -26,6 +26,9 @@ declare const browser: {
 // Globals available inside browser.execute() callbacks (browser-side).
 interface Window {
 	postMobileMessage(msg: string): void;
+	// True when jsdialogs in the Qt shell render as their own native
+	// windows; the application leaves it unset.
+	enablePopoutDialogs?: boolean;
 	// True once a .uno:CopySlide command has reported completion through
 	// the map's 'commandresult' event; false while one is in flight.
 	__slideCopyResultSeen?: boolean;
