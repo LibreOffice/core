@@ -3394,6 +3394,7 @@ class SettingIframe {
 				block: 'start',
 				inline: 'start',
 			} as ScrollIntoViewOptions);
+			if (!element.hasAttribute('tabindex')) element.tabIndex = -1;
 			element.focus({ preventScroll: true });
 
 			/* change the object's opacity from 0.2 to 1.0 to grab user's attention. */
