@@ -2118,7 +2118,6 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
 
     // the document is not modified currently, so it can not become modified after signing
     EnableSetModified( false );
-    pImpl->m_bAllowModifiedBackAfterSigning = true;
 
     // we have to store to the original document, the original medium should be closed for this time
     if ( ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
@@ -2301,11 +2300,9 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(svl::crypto::SigningCon
     }
 
     // the document is not modified currently, so it can not become modified after signing
-    pImpl->m_bAllowModifiedBackAfterSigning = false;
     if ( IsEnableSetModified() )
     {
         EnableSetModified( false );
-        pImpl->m_bAllowModifiedBackAfterSigning = true;
     }
 
     // we have to store to the original document, the original medium should be closed for this time

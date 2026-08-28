@@ -238,7 +238,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_nModifyPasswordHash( 0 )
     ,m_bModifyPasswordEntered( false )
     ,m_bSavingForSigning( false )
-    ,m_bAllowModifiedBackAfterSigning( false )
 {
     SfxObjectShell* pDoc = &_rDocShell;
     std::vector<SfxObjectShell*> &rArr = SfxGetpApp()->GetObjectShells_Impl();
