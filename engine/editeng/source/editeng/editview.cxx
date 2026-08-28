@@ -1242,7 +1242,6 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
                     xVirDev->DrawImage(Point(0, 0), aImage);
                     xInsertMenu->append(OUString::number(MN_DICTSTART + i), xDicTmp->getName(), *xVirDev);
                 }
-                getImpl().maDicNameSingle = xDicTmp->getName();
             }
         }
     }

@@ -275,8 +275,6 @@ private:
 
     rtl::Reference<vcl::unohelper::DragAndDropWrapper> mxDnDListener;
 
-    OUString maDicNameSingle;
-
     tools::Long mnInvalidateMore;
     EVControlBits mnControl;
     sal_uInt32 mnTravelXPos;
