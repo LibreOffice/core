@@ -65,7 +65,7 @@ public:
 
 class StyleItemController
 {
-    static constexpr unsigned LEFT_MARGIN = 8;
+    static constexpr unsigned LEFT_MARGIN = 3;
 
     SfxStyleFamily m_eStyleFamily;
     StylePreviewDescriptor m_aStyleName;

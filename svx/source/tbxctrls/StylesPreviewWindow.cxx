@@ -546,7 +546,7 @@ Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& 
     else
     {
         ScopedVclPtrInstance<VirtualDevice> pImg;
-        const Size aSize(100, 30);
+        const Size aSize(100, 24);
         pImg->SetOutputSizePixel(aSize);
 
         StyleItemController aStyleController(rStyle);
