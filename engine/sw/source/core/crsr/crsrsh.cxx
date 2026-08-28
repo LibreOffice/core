@@ -2455,11 +2455,14 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     // Name the view that moved this cursor. A live update runs under the moving
     // view, so name the current one. A change deferred to the layout idle no
     // longer runs under the view that made it, so name the view that ended the
-    // change.
+    // change. IsIdleAction covers the whole idle pass, while bIdleEnd only tells
+    // whether the caret was off screen before it.
     if (comphelper::COKit::isActive() && rState.m_pVisibleCursor)
     {
-        const int nMover = (bIdleEnd && isThisShell) ? m_nInstigatingViewId
-                                                     : KitHelper::getCurrentView();
+        const bool bDeferred = isThisShell && (bIdleEnd || Imp()->IsIdleAction());
+        const int nMover = (bDeferred && m_nInstigatingViewId != -1)
+                               ? m_nInstigatingViewId
+                               : KitHelper::getCurrentView();
         rState.m_pVisibleCursor->SetKitEditorViewId(nMover);
     }
 
