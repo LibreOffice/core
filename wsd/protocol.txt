@@ -217,6 +217,69 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     for, and nosource means an insert that asks for links without naming a
     source document.
 
+slidelink list
+slidelink break part=<part>
+slidelink update source=<source name> file=<staged name>
+
+    Reads the pages of the document that are linked to a source document,
+    refreshes the pages of one source, and takes the source off one page. Only
+    Impress and Draw documents hold such pages. A source name is the source
+    document as the user knows it, and it is the name a page records rather than
+    a location: nothing resolves it, and a refresh reads the related document it
+    names. A source name holds no path and no control character. The source name,
+    the WOPISrc and the staged name are all percent-encoded.
+
+    A client sends all three. An update names a file the server staged in the
+    jail, which is what an exportslides of a related document comes to, so the
+    kit reads only a file of its own jail and never a location.
+
+    list: the reply is
+        slidelinks: {"links":[{"source":"<source document>",
+                     "slides":[{"part":"<part>","name":"<source slide>"},...]},...]}
+    with the sources in the order their first page appears and the pages of one
+    source in slide order. <part> is the linked page and <source slide> the
+    slide of the source it was made from, named as the user sees it there. A
+    page linked to a file by its path names no source document and is left out,
+    since a refresh has no way to reach it. A document that links to nothing
+    reports an empty array.
+
+    The kit sends that same list on its own, to every view of the document, when a
+    page loses the source it records, which is what an edit of a linked page does,
+    and when an undo or a redo gives that source back. A client therefore learns of
+    a link that went or came back without asking for the list again. Other ways the
+    list changes, such as a view deleting a linked page or inserting more of them,
+    reach the view they happened in alone.
+
+    break: takes the source document off the page <part>, which keeps the content
+    it holds and becomes a page of this document alone, so a later refresh of
+    that source leaves it as it is. This is one undo step, and undoing it gives
+    the page its source back. The reply is
+        slidelink: {"status":"broken","part":"<part>"}
+    A page that is linked to nothing is answered kind=notlinked, and a view that
+    cannot edit kind=failed. The fresh link list arrives on its own, as above.
+
+    update: refreshes every page linked to <source name> from <staged name>, a
+    file previously uploaded using the insertfile POST that holds the slides of
+    that source. This is the message wsd sends the kit once it has the content
+    of a source as a local file. The kit reads only the staged file, never a
+    location, and removes the file once the refresh is done. A page whose slide the file does not hold keeps the
+    content it holds. The whole refresh is one undo step. Each refreshed page is
+    the page read for it, so it holds a new part; the reply is therefore the
+    fresh link list followed by
+        slidelink: {"status":"updated","source":"<source document>","count":<K>}
+    where <K> counts the pages refreshed.
+
+    Errors are reported as
+        error: cmd=slidelink kind=<syntax|notlinked|failed> [source=<source name>]
+        error: cmd=slidelink kind=<syntax|notlinked|failed> [part=<part>]
+    where notlinked means no page of the document is linked to that source, or
+    that the page a break names is linked to nothing, and failed means the staged
+    file could not be read, or the view cannot edit. An answer of an update names
+    the source it was sent for and an answer of a break names the page it was
+    asked for, both percent-encoded as the command was, so that a reader of these
+    messages tells the answers of one command of the family from those of
+    another. A command too malformed to say what it was for names neither.
+
 key type=<type> char=<charcode> key=<keycode>
 
     <type> is 'input' or 'up', <charcode> and <keycode> are numbers.

@@ -1524,6 +1524,23 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         return true;
     }
 #endif // !MOBILEAPP && !WASMAPP
+    else if (tokens.equals(0, "slidelink"))
+    {
+        // A client reads the links its own document holds, takes the source off one page of
+        // it, and refreshes the pages of one source from a presentation that source wrote and
+        // the server staged in the jail.
+        const bool readsLinks = tokens.size() == 2 && tokens.equals(1, "list");
+        const bool breaksLink = tokens.size() == 3 && tokens.equals(1, "break");
+        const bool updatesLinks = tokens.size() == 4 && tokens.equals(1, "update");
+        if (!readsLinks && !breaksLink && !updatesLinks)
+        {
+            LOG_ERR("Bad syntax for: " << firstLine);
+            sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
+            return false;
+        }
+
+        return forwardToChild(firstLine, docBroker);
+    }
     else if (tokens.equals(0, "outlinestate") ||
              tokens.equals(0, "downloadas") ||
              tokens.equals(0, "getchildid") ||

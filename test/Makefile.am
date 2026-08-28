@@ -66,6 +66,7 @@ all_la_unit_tests = \
 	unit-wopi-save-on-exit.la \
 	unit-initial-load-fail.la \
 	unit-insert-delete.la \
+	unit-slidelink.la \
 	unit-uno-command.la \
 	unit-collab.la \
 	unit-collab-protocol.la \
@@ -463,6 +464,8 @@ unit_calc_la_SOURCES = UnitCalc.cpp
 unit_calc_la_LIBADD = $(CPPUNIT_LIBS)
 unit_insert_delete_la_SOURCES = UnitInsertDelete.cpp
 unit_insert_delete_la_LIBADD = $(CPPUNIT_LIBS)
+unit_slidelink_la_SOURCES = UnitSlideLink.cpp
+unit_slidelink_la_LIBADD = $(CPPUNIT_LIBS)
 unit_close_la_SOURCES = UnitClose.cpp
 unit_close_la_LIBADD = $(CPPUNIT_LIBS)
 unit_bad_doc_load_la_SOURCES = UnitBadDocLoad.cpp

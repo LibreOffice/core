@@ -32,6 +32,7 @@
 #include <tools/COOLWebSocket.hpp>
 #include <wsd/TileDesc.hpp>
 
+#include <Poco/JSON/Parser.h>
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/NetException.h>
@@ -130,6 +131,13 @@ std::vector<char> readDataFromFile(const std::string& filename)
     std::istream_iterator<char> start(ifs);
     std::istream_iterator<char> end;
     return std::vector<char>(start, end);
+}
+
+/// The content of a file of the test data directory, as a string.
+inline std::string readFileAsString(const std::string& filename)
+{
+    const std::vector<char> data = readDataFromFile(filename);
+    return std::string(data.data(), data.size());
 }
 
 inline
@@ -646,6 +654,70 @@ std::string assertNotInResponse(T& ws, const std::string_view prefix,
     return res;
 }
 
+/// Parse the JSON body of a prefixed message such as "slideimport: {...}". A
+/// reply that never arrived has no body to read, and says so as the exception a
+/// malformed body raises, so that one catch covers both.
+inline Poco::JSON::Object::Ptr parseJsonReply(const std::string& reply, const std::string& prefix)
+{
+    if (reply.empty())
+        throw Poco::JSON::JSONException("did not receive a " + prefix + " reply as expected");
+
+    Poco::JSON::Parser parser;
+    return parser.parse(reply.substr(prefix.size() + 1)).extract<Poco::JSON::Object::Ptr>();
+}
+
+/// Send a command and check the error reply it provokes.
+/// Sends a command and asserts the error it is answered with. named is what the
+/// answer says the command was for, such as " part=3", and is empty for an answer
+/// that names nothing.
+inline void assertErrorReply(const std::shared_ptr<http::WebSocketSession>& ws,
+                             const std::string& command, const std::string& expectedCommand,
+                             const std::string& expectedKind, const std::string& testname,
+                             const std::string& named = std::string())
+{
+    sendTextFrame(ws, command, testname);
+    const std::string error = getResponseString(ws, "error:", testname);
+    LOK_ASSERT_EQUAL("error: cmd=" + expectedCommand + " kind=" + expectedKind + named, error);
+}
+
+/// The id of the child process the session's document is served by.
+inline std::string getChildId(const std::shared_ptr<http::WebSocketSession>& socket,
+                              const std::string& testname)
+{
+    sendTextFrame(socket, "getchildid", testname);
+    const std::string response = getResponseString(socket, "getchildid:", testname);
+    std::string childId;
+    LOK_ASSERT_MESSAGE("did not receive the child id",
+                       COOLProtocol::getTokenStringFromMessage(response, "id", childId));
+    LOK_ASSERT_MESSAGE("empty child id", !childId.empty());
+    return childId;
+}
+
+/// Stage a file for the document of documentURL over the insertfile endpoint,
+/// under the given name, and return the response status code.
+inline http::StatusCode postToInsertFile(const std::string& documentURL, const std::string& childId,
+                                         const std::string& name, const std::string& content)
+{
+    // documentURL is "cool/<encoded document URI>/ws"; the upload goes to
+    // the sibling insertfile endpoint of the same document.
+    std::string path = '/' + documentURL;
+    path.replace(path.rfind("/ws"), 3, "/insertfile");
+
+    auto httpSession = http::Session::create(getTestServerURI());
+    http::Request request(path, http::Request::VERB_POST);
+    MultipartFormBody form;
+    form.addField("name", name);
+    form.addField("childid", childId);
+    form.addStringPart("file", content, "application/octet-stream", name);
+    form.applyTo(request);
+
+    const std::shared_ptr<const http::Response> response = httpSession->syncRequest(request);
+    if (!response || response->state() == http::Response::State::Timeout)
+        throw Poco::TimeoutException("no response from the insertfile endpoint");
+
+    return response->statusCode();
+}
+
 inline bool getProgressWithIdValue(const std::string_view msg, const std::string_view idValue)
 {
     static constexpr std::string_view prefix = "progress:";
@@ -1059,6 +1131,17 @@ inline void drain(const std::shared_ptr<http::WebSocketSession>& ws, const std::
 
     while (!getResponseString(ws, "", testname, timeoutDrain).empty())
         ; // Skip.
+}
+
+/// Drain pending messages, then ask for the document status and return the
+/// number of parts it reports.
+inline std::size_t getPartCount(const std::shared_ptr<http::WebSocketSession>& ws,
+                                const std::string& testname)
+{
+    drain(ws, testname);
+    sendTextFrame(ws, "status", testname);
+    const std::string response = getResponseString(ws, "status:", testname);
+    return parseJsonReply(response, "status:")->getArray("parts")->size();
 }
 
 /// Sends a command and drain an event in response.

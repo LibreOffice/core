@@ -191,6 +191,14 @@ private:
                            int multimedia_height);
     bool insertFile(const StringVector& tokens);
     bool slideImportInsert(const StringVector& tokens);
+    bool slideLink(const StringVector& tokens);
+    bool slideLinkList();
+    bool slideLinkUpdate(const StringVector& tokens);
+    bool slideLinkBreak(const StringVector& tokens);
+    /// The pages of the document that are linked to a source document, as the
+    /// JSON body of a slidelinks: message; an empty list for a document that
+    /// reports none.
+    std::string getSlideLinksJson();
     bool keyEvent(const StringVector& tokens, LokEventTargetEnum target);
     bool extTextInputEvent(const StringVector& tokens);
     bool dialogKeyEvent(const char* buffer, int length, const std::vector<std::string>& tokens);

@@ -642,6 +642,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "paste") ||
                tokens.equals(0, "insertfile") ||
                tokens.equals(0, "slideimport") ||
+               tokens.equals(0, "slidelink") ||
                tokens.equals(0, "key") ||
                tokens.equals(0, "textinput") ||
                tokens.equals(0, "windowkey") ||
@@ -739,6 +740,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "slideimport"))
         {
             return slideImportInsert(tokens);
+        }
+        else if (tokens.equals(0, "slidelink"))
+        {
+            return slideLink(tokens);
         }
         else if (tokens.equals(0, "key"))
         {
@@ -2385,6 +2390,197 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     return sendTextFrame("slideimport: {\"status\":\"inserted\",\"count\":" +
                          std::to_string(slides.size()) + '}');
+}
+
+namespace
+{
+/// Whether a link list holds an entry for the named source document.
+bool linksToSource(const std::string& linksJson, const std::string& source)
+{
+    Object::Ptr object;
+    if (!JsonUtil::parseJSON(linksJson, object))
+        return false;
+
+    const Poco::JSON::Array::Ptr links = object->getArray("links");
+    if (!links)
+        return false;
+
+    for (std::size_t i = 0; i < links->size(); ++i)
+    {
+        const Object::Ptr entry = links->getObject(i);
+        if (entry && JsonUtil::getJSONValue<std::string>(entry, "source") == source)
+            return true;
+    }
+
+    return false;
+}
+}
+
+bool ChildSession::slideLink(const StringVector& tokens)
+{
+    if (tokens.size() >= 2)
+    {
+        if (tokens.equals(1, "list"))
+            return slideLinkList();
+        if (tokens.equals(1, "update"))
+            return slideLinkUpdate(tokens);
+        if (tokens.equals(1, "break"))
+            return slideLinkBreak(tokens);
+    }
+
+    sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
+    return false;
+}
+
+std::string ChildSession::getSlideLinksJson()
+{
+    getLOKitDocument()->setView(_viewId);
+
+    const std::string links = getLOKitDocument()->getSlideLinks();
+    if (links.empty())
+        return "{\"links\":[]}";
+
+    return links;
+}
+
+bool ChildSession::slideLinkList() { return sendTextFrame("slidelinks: " + getSlideLinksJson()); }
+
+bool ChildSession::slideLinkUpdate(const StringVector& tokens)
+{
+    std::string encodedSource;
+    std::string encodedFile;
+    if (tokens.size() != 4 || !getTokenString(tokens[2], "source", encodedSource) ||
+        !getTokenString(tokens[3], "file", encodedFile))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
+        return false;
+    }
+
+    std::string source;
+    std::string file;
+    try
+    {
+        URI::decode(encodedSource, source);
+        URI::decode(encodedFile, file);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("slidelink update: cannot decode the source or the file: " << exc.displayText());
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
+        return false;
+    }
+
+    // A refresh covers the pages of one source document, named by the document
+    // name the pages record.
+    if (!Util::isPlainFileName(source) || Util::holdsControlCharacter(source))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
+        return false;
+    }
+
+    // Every answer of an update names the source it was sent for, so that a
+    // reader of these messages tells the answers of one command of the family
+    // from those of another.
+    const std::string named = " source=" + encodedSource;
+
+    // The pages are read from a file staged in the jail, picked out of the
+    // staging area by name, so the name is a plain file name: no path separator
+    // and not a directory reference.
+    if (!Util::isPlainFileName(file))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
+    // The file was staged for this one refresh, so it leaves the staging area
+    // now, whether the refresh runs or not.
+    const std::string sharedStagedPath = getJailDocRoot() + "insertfile/" + file;
+
+    // A refresh replaces pages of the document, which is an edit.
+    if (isReadOnly())
+    {
+        FileUtil::removeFile(sharedStagedPath, true);
+        LOG_ERR("slidelink update: a read-only view does not refresh links");
+        sendTextFrameAndLogError("error: cmd=slidelink kind=failed" + named);
+        return false;
+    }
+
+    if (!FileUtil::Stat(sharedStagedPath).exists())
+    {
+        LOG_ERR("slidelink update: no file staged as [" << file << ']');
+        sendTextFrameAndLogError("error: cmd=slidelink kind=failed" + named);
+        return false;
+    }
+
+    SigUtil::addActivity(getId(), "slidelink update");
+
+    getLOKitDocument()->setView(_viewId);
+
+    // The document reads the staged file within this call, so the file goes as soon as it
+    // returns. Each page records the source document it belongs to, and a later refresh of
+    // that source reads the file it is given then.
+    const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
+    const int count = getLOKitDocument()->refreshSlideLinks(source.c_str(), url.c_str());
+
+    FileUtil::removeFile(sharedStagedPath, true);
+
+    if (count < 0)
+    {
+        // The document reports only that it refreshed nothing. A source no page
+        // of the document is linked to is a different matter from a file whose
+        // pages could not be read, and a caller can act on the second one.
+        const bool linked = linksToSource(getSlideLinksJson(), source);
+        sendTextFrameAndLogError(std::string("error: cmd=slidelink kind=") +
+                                 (linked ? "failed" : "notlinked") + named);
+        return false;
+    }
+
+    // Each refreshed page is the page read for it, so the parts of that source are new ones
+    // for every view of the document, and the list goes out before the reply that reports
+    // them.
+    if (!_docManager->notifyAll("slidelinks: " + getSlideLinksJson()))
+        return false;
+
+    return sendTextFrame("slidelink: {\"status\":\"updated\",\"source\":\"" +
+                         JsonUtil::escapeJSONValue(source) +
+                         "\",\"count\":" + std::to_string(count) + '}');
+}
+
+bool ChildSession::slideLinkBreak(const StringVector& tokens)
+{
+    std::string part;
+    if (tokens.size() != 3 || !getTokenString(tokens[2], "part", part) || !isValidPartId(part))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
+        return false;
+    }
+
+    // Every answer of a break names the page it was asked for, the way an
+    // update names its source, so that a reader of these messages tells the
+    // answers of one command of the family from those of another.
+    const std::string named = " part=" + part;
+
+    // Taking the source off a page changes the document.
+    if (isReadOnly())
+    {
+        LOG_ERR("slidelink break: a read-only view does not change links");
+        sendTextFrameAndLogError("error: cmd=slidelink kind=failed" + named);
+        return false;
+    }
+
+    SigUtil::addActivity(getId(), "slidelink break");
+
+    getLOKitDocument()->setView(_viewId);
+
+    // A break makes the document report its links again, so the fresh list goes out on its own
+    // and the reply names the page alone.
+    if (!getLOKitDocument()->breakSlideLink(part.c_str()))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=notlinked" + named);
+        return false;
+    }
+
+    return sendTextFrame("slidelink: {\"status\":\"broken\",\"part\":\"" + part + "\"}");
 }
 
 bool ChildSession::extTextInputEvent(const StringVector& tokens)
@@ -4272,6 +4468,13 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         // command uses, so the frame and the media-URL rewrite in wsd are
         // identical to the pull path.
         getPresentationInfo();
+        break;
+    case COKitCallbackType::SLIDE_LINKS_CHANGED:
+        // The engine signalled that the pages linked to a source document are
+        // not what they were. Read the list and send it the way a slidelink
+        // list is answered, so a client learns of the change through the
+        // message it already knows.
+        slideLinkList();
         break;
     case COKitCallbackType::INVALIDATE_TILES:
         {
