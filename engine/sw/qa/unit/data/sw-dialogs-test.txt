@@ -139,7 +139,6 @@ modules/swriter/ui/mmsalutationpage.ui
 modules/swriter/ui/mmselectpage.ui
 modules/swriter/ui/mmsendmails.ui
 modules/swriter/ui/newuserindexdialog.ui
-modules/swriter/ui/notebookbar.ui
 modules/swriter/ui/numberingnamedialog.ui
 modules/swriter/ui/numparapage.ui
 modules/swriter/ui/optcaptionpage.ui

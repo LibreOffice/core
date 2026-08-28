@@ -25,7 +25,6 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swriter,\
 	sw/uiconfig/swriter/popupmenu/graphic \
 	sw/uiconfig/swriter/popupmenu/insertfield \
 	sw/uiconfig/swriter/popupmenu/media \
-	sw/uiconfig/swriter/popupmenu/notebookbar \
 	sw/uiconfig/swriter/popupmenu/oleobject \
 	sw/uiconfig/swriter/popupmenu/preview \
 	sw/uiconfig/swriter/popupmenu/table \
@@ -71,7 +70,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/mailmerge \
 	sw/uiconfig/swriter/toolbar/mediaobjectbar \
 	sw/uiconfig/swriter/toolbar/navigationobjectbar \
-	sw/uiconfig/swriter/toolbar/notebookbarshortcuts \
 	sw/uiconfig/swriter/toolbar/numobjectbar \
 	sw/uiconfig/swriter/toolbar/oleobjectbar \
 	sw/uiconfig/swriter/toolbar/optimizetablebar \
@@ -237,12 +235,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/navigatorcontextmenu \
 	sw/uiconfig/swriter/ui/navigatordraginsertmenu \
 	sw/uiconfig/swriter/ui/navigatorpanel \
-	sw/uiconfig/swriter/ui/notebookbar \
-	sw/uiconfig/swriter/ui/notebookbar_compact \
-	sw/uiconfig/swriter/ui/notebookbar_single \
-	sw/uiconfig/swriter/ui/notebookbar_groups \
-	sw/uiconfig/swriter/ui/notebookbar_groupedbar_full \
-	sw/uiconfig/swriter/ui/notebookbar_groupedbar_compact \
 	sw/uiconfig/swriter/ui/notebookbar_online \
 	sw/uiconfig/swriter/ui/pagecolumncontrol \
 	sw/uiconfig/swriter/ui/pagemargincontrol \

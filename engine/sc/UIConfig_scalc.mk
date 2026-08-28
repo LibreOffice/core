@@ -31,7 +31,6 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/freezepanes \
 	sc/uiconfig/scalc/popupmenu/graphic \
 	sc/uiconfig/scalc/popupmenu/media \
-	sc/uiconfig/scalc/popupmenu/notebookbar \
 	sc/uiconfig/scalc/popupmenu/oleobject \
 	sc/uiconfig/scalc/popupmenu/pagebreak \
 	sc/uiconfig/scalc/popupmenu/pivot \
@@ -79,7 +78,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 	sc/uiconfig/scalc/toolbar/insertcellsbar \
 	sc/uiconfig/scalc/toolbar/linesbar \
 	sc/uiconfig/scalc/toolbar/mediaobjectbar \
-	sc/uiconfig/scalc/toolbar/notebookbarshortcuts \
 	sc/uiconfig/scalc/toolbar/previewbar \
 	sc/uiconfig/scalc/toolbar/singlemode \
 	sc/uiconfig/scalc/toolbar/standardbar \
@@ -166,11 +164,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/listmenu \
 	sc/uiconfig/scalc/ui/namerangesdialog \
 	sc/uiconfig/scalc/ui/newtablestyle \
-	sc/uiconfig/scalc/ui/notebookbar \
-	sc/uiconfig/scalc/ui/notebookbar_compact \
-	sc/uiconfig/scalc/ui/notebookbar_groups \
-	sc/uiconfig/scalc/ui/notebookbar_groupedbar_full \
-	sc/uiconfig/scalc/ui/notebookbar_groupedbar_compact \
 	sc/uiconfig/scalc/ui/notebookbar_online \
 	sc/uiconfig/scalc/ui/numberbox \
 	sc/uiconfig/scalc/ui/managenamesdialog \

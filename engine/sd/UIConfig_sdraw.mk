@@ -33,7 +33,6 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sdraw,\
 	sd/uiconfig/sdraw/popupmenu/measure \
 	sd/uiconfig/sdraw/popupmenu/media \
 	sd/uiconfig/sdraw/popupmenu/multiselect \
-	sd/uiconfig/sdraw/popupmenu/notebookbar \
 	sd/uiconfig/sdraw/popupmenu/objectalign \
 	sd/uiconfig/sdraw/popupmenu/oleobject \
 	sd/uiconfig/sdraw/popupmenu/pagepanemaster \
@@ -83,7 +82,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/sdraw,\
 	sd/uiconfig/sdraw/toolbar/linesbar \
 	sd/uiconfig/sdraw/toolbar/masterviewtoolbar \
 	sd/uiconfig/sdraw/toolbar/mediaobjectbar \
-	sd/uiconfig/sdraw/toolbar/notebookbarshortcuts \
 	sd/uiconfig/sdraw/toolbar/optimizetablebar \
 	sd/uiconfig/sdraw/toolbar/optionsbar \
 	sd/uiconfig/sdraw/toolbar/positionbar \
@@ -116,10 +114,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/insertslidesdialog \
 	sd/uiconfig/sdraw/ui/namedesign \
 	sd/uiconfig/sdraw/ui/navigatorcontextmenu \
-	sd/uiconfig/sdraw/ui/notebookbar \
-	sd/uiconfig/sdraw/ui/notebookbar_compact \
-	sd/uiconfig/sdraw/ui/notebookbar_single \
-	sd/uiconfig/sdraw/ui/notebookbar_groupedbar_compact \
 	sd/uiconfig/sdraw/ui/notebookbar_online \
 	sd/uiconfig/sdraw/ui/paranumberingtab \
 	sd/uiconfig/sdraw/ui/queryunlinkimagedialog \

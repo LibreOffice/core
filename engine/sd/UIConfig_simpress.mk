@@ -32,7 +32,6 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/simpress,\
 	sd/uiconfig/simpress/popupmenu/measure \
 	sd/uiconfig/simpress/popupmenu/media \
 	sd/uiconfig/simpress/popupmenu/multiselect \
-	sd/uiconfig/simpress/popupmenu/notebookbar \
 	sd/uiconfig/simpress/popupmenu/objectalign \
 	sd/uiconfig/simpress/popupmenu/oleobject \
 	sd/uiconfig/simpress/popupmenu/outline \
@@ -87,7 +86,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 	sd/uiconfig/simpress/toolbar/linesbar \
 	sd/uiconfig/simpress/toolbar/masterviewtoolbar \
 	sd/uiconfig/simpress/toolbar/mediaobjectbar \
-	sd/uiconfig/simpress/toolbar/notebookbarshortcuts \
 	sd/uiconfig/simpress/toolbar/optimizetablebar \
 	sd/uiconfig/simpress/toolbar/optionsbar \
 	sd/uiconfig/simpress/toolbar/outlinetoolbar \
@@ -144,12 +142,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/masterpagepanelall \
 	sd/uiconfig/simpress/ui/masterpagepanelrecent \
 	sd/uiconfig/simpress/ui/navigatorpanel \
-	sd/uiconfig/simpress/ui/notebookbar \
-	sd/uiconfig/simpress/ui/notebookbar_compact \
-	sd/uiconfig/simpress/ui/notebookbar_single \
-	sd/uiconfig/simpress/ui/notebookbar_groups \
-	sd/uiconfig/simpress/ui/notebookbar_groupedbar_full \
-	sd/uiconfig/simpress/ui/notebookbar_groupedbar_compact \
 	sd/uiconfig/simpress/ui/notebookbar_online \
 	sd/uiconfig/simpress/ui/noteschildwindow \
 	sd/uiconfig/simpress/ui/notespanelcontextmenu \

@@ -9712,23 +9712,7 @@ void activateNotebookbar(std::u16string_view rApp)
 
     if (aAppNode.isValid())
     {
-        static constexpr OUString sNoteBookbarName(u"notebookbar_online.ui"_ustr);
-        aAppNode.setNodeValue(u"Active"_ustr, Any(sNoteBookbarName));
-
-        const utl::OConfigurationNode aImplsNode = aAppNode.openNode(u"Modes"_ustr);
-        const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
-
-        for (const auto& rModeNodeName : aModeNodeNames)
-        {
-            const utl::OConfigurationNode aImplNode(aImplsNode.openNode(rModeNodeName));
-            if (!aImplNode.isValid())
-                continue;
-
-            OUString aCommandArg = comphelper::getString(aImplNode.getNodeValue(u"CommandArg"_ustr));
-            if (aCommandArg == "notebookbar.ui")
-                aImplNode.setNodeValue(u"CommandArg"_ustr, Any(sNoteBookbarName));
-        }
-
+        aAppNode.setNodeValue(u"Active"_ustr, Any(u"notebookbar_online.ui"_ustr));
         aAppNode.commit();
     }
 }
