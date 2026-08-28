@@ -2573,6 +2573,20 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
 
 // Cell Table
 
+namespace {
+
+/** One area of the used area of a sheet: a range of columns of one row that share a format,
+    with the cell at its start. */
+struct XclExpUsedArea
+{
+    SCCOL               nScCol;
+    SCCOL               nLastScCol;
+    ScRefCellValue      aScCell;
+    CellAttributeHolder aPattern;
+};
+
+} // namespace
+
 XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maColInfoBfr( rRoot ),
@@ -2656,183 +2670,197 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     // activate the correct segment and sub segment at the progress bar
     GetProgressBar().ActivateCreateRowsSegment();
 
-    for( bool bIt = aIt.GetNext(); bIt; bIt = aIt.GetNext() )
+    // the areas of one row are collected first, so that the row can be looked at as a whole
+    std::vector< XclExpUsedArea > aRowAreas;
+
+    for( bool bIt = aIt.GetNext(); bIt; )
     {
-        SCCOL nScCol = aIt.GetStartCol();
-        SCROW nScRow = aIt.GetRow();
-        SCCOL nLastScCol = aIt.GetEndCol();
-        ScAddress aScPos( nScCol, nScRow, nScTab );
-
-        XclAddress aXclPos( static_cast< sal_uInt16 >( nScCol ), static_cast< sal_uInt32 >( nScRow ) );
-        sal_uInt16 nLastXclCol = static_cast< sal_uInt16 >( nLastScCol );
-
-        const ScRefCellValue& rScCell = aIt.GetCell();
-        XclExpCellRef xCell;
-
-        const ScPatternAttr* pPattern = aIt.GetPattern();
-
-        // handle overlapped merged cells before creating the cell record
-        sal_uInt32 nMergeBaseXFId = EXC_XFID_NOTFOUND;
-        bool bIsMergedBase = false;
-        if( pPattern )
+        const SCROW nScRow = aIt.GetRow();
+        aRowAreas.clear();
+        do
         {
-            const SfxItemSet& rItemSet = pPattern->GetItemSet();
-            // base cell in a merged range
-            const ScMergeAttr& rMergeItem = rItemSet.Get( ATTR_MERGE );
-            bIsMergedBase = rMergeItem.IsMerged();
-            /*  overlapped cell in a merged range; in Excel all merged cells
-                must contain same XF index, for correct border */
-            const ScMergeFlagAttr& rMergeFlagItem = rItemSet.Get( ATTR_MERGE_FLAG );
-            if( rMergeFlagItem.IsOverlapped() )
-                nMergeBaseXFId = mxMergedcells->GetBaseXFId( aScPos );
+            aRowAreas.push_back( { aIt.GetStartCol(), aIt.GetEndCol(), aIt.GetCell(), aIt.GetPattern() } );
+            bIt = aIt.GetNext();
         }
+        while( bIt && (aIt.GetRow() == nScRow) );
 
-        OUString aAddNoteText;    // additional text to be appended to a note
-
-        switch (rScCell.getType())
+        for( const XclExpUsedArea& rArea : aRowAreas )
         {
-            case CELLTYPE_VALUE:
+            const SCCOL nScCol = rArea.nScCol;
+            const SCCOL nLastScCol = rArea.nLastScCol;
+            ScAddress aScPos( nScCol, nScRow, nScTab );
+
+            XclAddress aXclPos( static_cast< sal_uInt16 >( nScCol ), static_cast< sal_uInt32 >( nScRow ) );
+            sal_uInt16 nLastXclCol = static_cast< sal_uInt16 >( nLastScCol );
+
+            const ScRefCellValue& rScCell = rArea.aScCell;
+            XclExpCellRef xCell;
+
+            const ScPatternAttr* pPattern = rArea.aPattern.getScPatternAttr();
+
+            // handle overlapped merged cells before creating the cell record
+            sal_uInt32 nMergeBaseXFId = EXC_XFID_NOTFOUND;
+            bool bIsMergedBase = false;
+            if( pPattern )
             {
-                double fValue = rScCell.getDouble();
-
-                // If the cell is in a table header row, force export as shared string
-                if (std::any_of(aTableHeaderRanges.begin(), aTableHeaderRanges.end(),
-                        [&aScPos](const ScRange& rRange) { return rRange.Contains(aScPos); }))
-                {
-                    OUString aStr;
-                    const Color* pColor = nullptr;
-                    sal_uInt32 nScNumFmt = pPattern
-                        ? pPattern->GetItem(ATTR_VALUE_FORMAT).GetValue() : 0;
-                    rFormatter.GetOutputString(fValue, nScNumFmt, aStr, &pColor);
-                    xCell = new XclExpLabelCell(
-                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, aStr);
-                    break;
-                }
-
-                if (pPattern)
-                {
-                    OUString aUrl = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
-                    if (!aUrl.isEmpty())
-                    {
-                        rtl::Reference<XclExpHyperlink> aLink =
-                            new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos);
-                        mxHyperlinkList->AppendRecord(aLink);
-                    }
-                }
-
-                // try to create a Boolean cell
-                if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
-                {
-                    sal_uInt32 nScNumFmt = pPattern->GetItem( ATTR_VALUE_FORMAT ).GetValue();
-                    if( rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL )
-                        xCell = new XclExpBooleanCell(
-                            GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 );
-                }
-
-                // try to create an RK value (compressed floating-point number)
-                sal_Int32 nRkValue;
-                if( !xCell && XclTools::GetRKFromDouble( nRkValue, fValue ) )
-                    xCell = new XclExpRkCell(
-                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, nRkValue );
-
-                // else: simple floating-point number cell
-                if( !xCell )
-                    xCell = new XclExpNumberCell(
-                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue );
-            }
-            break;
-
-            case CELLTYPE_STRING:
-            {
-                xCell = new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.getSharedString()->getString());
-            }
-            break;
-
-            case CELLTYPE_EDIT:
-            {
-                XclExpHyperlinkHelper aLinkHelper( GetRoot(), aScPos );
-                xCell = new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.getEditText(), aLinkHelper);
-
-                // add a single created HLINK record to the record list
-                if( aLinkHelper.HasLinkRecord() )
-                    mxHyperlinkList->AppendRecord( aLinkHelper.GetLinkRecord() );
-                // add list of multiple URLs to the additional cell note text
-                if( aLinkHelper.HasMultipleUrls() )
-                    aAddNoteText = ScGlobal::addToken( aAddNoteText, aLinkHelper.GetUrlList(), '\n', 2 );
-            }
-            break;
-
-            case CELLTYPE_FORMULA:
-            {
-                if (pPattern)
-                {
-                    OUString aUrl = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
-                    if (!aUrl.isEmpty())
-                    {
-                        rtl::Reference<XclExpHyperlink> aLink =
-                            new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos);
-                        mxHyperlinkList->AppendRecord(aLink);
-                    }
-                }
-
-                xCell = new XclExpFormulaCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
-                    *rScCell.getFormula(), maArrayBfr, maShrfmlaBfr, maTableopBfr);
-            }
-            break;
-
-            default:
-                OSL_FAIL( "XclExpCellTable::XclExpCellTable - unknown cell type" );
-                [[fallthrough]];
-            case CELLTYPE_NONE:
-            {
-                xCell = new XclExpBlankCell(
-                    GetRoot(), aXclPos, nLastXclCol, pPattern, nMergeBaseXFId );
-            }
-            break;
-        }
-
-        assert(xCell && "can only reach here with xCell set");
-
-        // insert the cell into the current row
-        maRowBfr.AppendCell( xCell, bIsMergedBase );
-
-        if ( !aAddNoteText.isEmpty()  )
-            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, nullptr, aAddNoteText ) );
-
-        // other sheet contents
-        if( pPattern )
-        {
-            const SfxItemSet& rItemSet = pPattern->GetItemSet();
-
-            // base cell in a merged range
-            if( bIsMergedBase )
-            {
+                const SfxItemSet& rItemSet = pPattern->GetItemSet();
+                // base cell in a merged range
                 const ScMergeAttr& rMergeItem = rItemSet.Get( ATTR_MERGE );
-                ScRange aScRange( aScPos );
-                aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
-                aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
-                sal_uInt32 nXFId = xCell->GetFirstXFId();
-                // blank cells merged vertically may occur repeatedly
-                OSL_ENSURE( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
-                    "XclExpCellTable::XclExpCellTable - invalid repeated blank merged cell" );
-                for( SCCOL nIndex = nScCol; nIndex <= nLastScCol; ++nIndex )
-                {
-                    mxMergedcells->AppendRange( aScRange, nXFId );
-                    aScRange.aStart.IncCol();
-                    aScRange.aEnd.IncCol();
-                }
+                bIsMergedBase = rMergeItem.IsMerged();
+                /*  overlapped cell in a merged range; in Excel all merged cells
+                    must contain same XF index, for correct border */
+                const ScMergeFlagAttr& rMergeFlagItem = rItemSet.Get( ATTR_MERGE_FLAG );
+                if( rMergeFlagItem.IsOverlapped() )
+                    nMergeBaseXFId = mxMergedcells->GetBaseXFId( aScPos );
             }
 
-            // data validation
-            if( ScfTools::CheckItem( rItemSet, ATTR_VALIDDATA, false ) )
+            OUString aAddNoteText;    // additional text to be appended to a note
+
+            switch (rScCell.getType())
             {
-                sal_uInt32 nScHandle = rItemSet.Get( ATTR_VALIDDATA ).GetValue();
-                ScRange aScRange( aScPos );
-                aScRange.aEnd.SetCol( nLastScCol );
-                mxDval->InsertCellRange( aScRange, nScHandle );
+                case CELLTYPE_VALUE:
+                {
+                    double fValue = rScCell.getDouble();
+
+                    // If the cell is in a table header row, force export as shared string
+                    if (std::any_of(aTableHeaderRanges.begin(), aTableHeaderRanges.end(),
+                            [&aScPos](const ScRange& rRange) { return rRange.Contains(aScPos); }))
+                    {
+                        OUString aStr;
+                        const Color* pColor = nullptr;
+                        sal_uInt32 nScNumFmt = pPattern
+                            ? pPattern->GetItem(ATTR_VALUE_FORMAT).GetValue() : 0;
+                        rFormatter.GetOutputString(fValue, nScNumFmt, aStr, &pColor);
+                        xCell = new XclExpLabelCell(
+                            GetRoot(), aXclPos, pPattern, nMergeBaseXFId, aStr);
+                        break;
+                    }
+
+                    if (pPattern)
+                    {
+                        OUString aUrl = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
+                        if (!aUrl.isEmpty())
+                        {
+                            rtl::Reference<XclExpHyperlink> aLink =
+                                new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos);
+                            mxHyperlinkList->AppendRecord(aLink);
+                        }
+                    }
+
+                    // try to create a Boolean cell
+                    if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
+                    {
+                        sal_uInt32 nScNumFmt = pPattern->GetItem( ATTR_VALUE_FORMAT ).GetValue();
+                        if( rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL )
+                            xCell = new XclExpBooleanCell(
+                                GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 );
+                    }
+
+                    // try to create an RK value (compressed floating-point number)
+                    sal_Int32 nRkValue;
+                    if( !xCell && XclTools::GetRKFromDouble( nRkValue, fValue ) )
+                        xCell = new XclExpRkCell(
+                            GetRoot(), aXclPos, pPattern, nMergeBaseXFId, nRkValue );
+
+                    // else: simple floating-point number cell
+                    if( !xCell )
+                        xCell = new XclExpNumberCell(
+                            GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue );
+                }
+                break;
+
+                case CELLTYPE_STRING:
+                {
+                    xCell = new XclExpLabelCell(
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.getSharedString()->getString());
+                }
+                break;
+
+                case CELLTYPE_EDIT:
+                {
+                    XclExpHyperlinkHelper aLinkHelper( GetRoot(), aScPos );
+                    xCell = new XclExpLabelCell(
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.getEditText(), aLinkHelper);
+
+                    // add a single created HLINK record to the record list
+                    if( aLinkHelper.HasLinkRecord() )
+                        mxHyperlinkList->AppendRecord( aLinkHelper.GetLinkRecord() );
+                    // add list of multiple URLs to the additional cell note text
+                    if( aLinkHelper.HasMultipleUrls() )
+                        aAddNoteText = ScGlobal::addToken( aAddNoteText, aLinkHelper.GetUrlList(), '\n', 2 );
+                }
+                break;
+
+                case CELLTYPE_FORMULA:
+                {
+                    if (pPattern)
+                    {
+                        OUString aUrl = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
+                        if (!aUrl.isEmpty())
+                        {
+                            rtl::Reference<XclExpHyperlink> aLink =
+                                new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos);
+                            mxHyperlinkList->AppendRecord(aLink);
+                        }
+                    }
+
+                    xCell = new XclExpFormulaCell(
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
+                        *rScCell.getFormula(), maArrayBfr, maShrfmlaBfr, maTableopBfr);
+                }
+                break;
+
+                default:
+                    OSL_FAIL( "XclExpCellTable::XclExpCellTable - unknown cell type" );
+                    [[fallthrough]];
+                case CELLTYPE_NONE:
+                {
+                    xCell = new XclExpBlankCell(
+                        GetRoot(), aXclPos, nLastXclCol, pPattern, nMergeBaseXFId );
+                }
+                break;
+            }
+
+            assert(xCell && "can only reach here with xCell set");
+
+            // insert the cell into the current row
+            maRowBfr.AppendCell( xCell, bIsMergedBase );
+
+            if ( !aAddNoteText.isEmpty()  )
+                mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, nullptr, aAddNoteText ) );
+
+            // other sheet contents
+            if( pPattern )
+            {
+                const SfxItemSet& rItemSet = pPattern->GetItemSet();
+
+                // base cell in a merged range
+                if( bIsMergedBase )
+                {
+                    const ScMergeAttr& rMergeItem = rItemSet.Get( ATTR_MERGE );
+                    ScRange aScRange( aScPos );
+                    aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
+                    aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
+                    sal_uInt32 nXFId = xCell->GetFirstXFId();
+                    // blank cells merged vertically may occur repeatedly
+                    OSL_ENSURE( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
+                        "XclExpCellTable::XclExpCellTable - invalid repeated blank merged cell" );
+                    for( SCCOL nIndex = nScCol; nIndex <= nLastScCol; ++nIndex )
+                    {
+                        mxMergedcells->AppendRange( aScRange, nXFId );
+                        aScRange.aStart.IncCol();
+                        aScRange.aEnd.IncCol();
+                    }
+                }
+
+                // data validation
+                if( ScfTools::CheckItem( rItemSet, ATTR_VALIDDATA, false ) )
+                {
+                    sal_uInt32 nScHandle = rItemSet.Get( ATTR_VALIDDATA ).GetValue();
+                    ScRange aScRange( aScPos );
+                    aScRange.aEnd.SetCol( nLastScCol );
+                    mxDval->InsertCellRange( aScRange, nScHandle );
+                }
             }
         }
     }
