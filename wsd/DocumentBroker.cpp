@@ -5134,6 +5134,28 @@ void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
         return;
     }
 
+#if !MOBILEAPP
+    // The pages a source wrote are the one reply the client is not handed as it stands. They
+    // are written into the staging area of this document's jail, and the client is told the
+    // name they were staged under, which is what an insert or a link update then names. A
+    // path of another jail is nothing a client is given, and the presentation itself has no
+    // business travelling on to the browser.
+    static constexpr std::string_view ExportPrefix = "exportslides: ";
+    if (COOLProtocol::matchPrefix(ExportPrefix, payload))
+    {
+        const std::string stagedName = stageExportedSlides(
+            std::string_view(payload.data() + ExportPrefix.size(),
+                             payload.size() - ExportPrefix.size()));
+        const std::string answer =
+            "remotedoccommandresult: wopisrc=" + encodedWopiSrc + "\nexportslides: " +
+            (stagedName.empty() ? std::string("{\"status\":\"failed\"}")
+                                : "{\"status\":\"staged\",\"name\":\"" +
+                                      JsonUtil::escapeJSONValue(stagedName) + "\"}");
+        it->second->sendTextFrame(answer);
+        return;
+    }
+#endif // !MOBILEAPP
+
     std::string frame = "remotedoccommandresult: wopisrc=" + encodedWopiSrc + '\n';
     frame.append(payload.begin(), payload.end());
     it->second->sendBinaryFrame(frame.data(), frame.size());
@@ -5414,6 +5436,71 @@ void DocumentBroker::unregisterDownloadId(const std::string& downloadId)
 }
 
 /// Handles input from the prisoner / child kit process
+#if !MOBILEAPP
+std::string DocumentBroker::jailStagingPath(const std::string& name) const
+{
+    const std::string jailRoot = getJailRoot();
+    if (jailRoot.empty() || name.empty())
+        return std::string();
+
+    try
+    {
+        return FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces, jailRoot,
+                                              JAILED_DOCUMENT_ROOT + std::string("insertfile")) +
+               '/' + name;
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Failed to reach the staging area of the jail of [" << _docKey
+                                                                    << "]: " << exc.what());
+    }
+
+    return std::string();
+}
+
+std::string DocumentBroker::stageExportedSlides(const std::string_view answer)
+{
+    ASSERT_CORRECT_THREAD();
+
+    // The answer is a header line and then the presentation the source wrote. It is written
+    // into the staging area of this document's jail, under a name of wsd's own, so that the
+    // source is read wherever it is being served from and no jail of another document is
+    // reached into.
+    const std::size_t header = answer.find('\n');
+    Poco::JSON::Object::Ptr written;
+    if (header == std::string_view::npos ||
+        !JsonUtil::parseJSON(answer.substr(0, header), written) ||
+        JsonUtil::getJSONValue<std::string>(written, "status") != "written")
+    {
+        LOG_ERR("A source document of [" << _docKey << "] wrote no pages to take");
+        return std::string();
+    }
+
+    const std::string stagedName = "sourceslides-" + Util::rng::getHexString(8) + ".odp";
+    const std::string stagedPath = jailStagingPath(stagedName);
+    if (stagedPath.empty())
+        return std::string();
+
+    const std::size_t size = answer.size() - header - 1;
+    std::ofstream staged(stagedPath, std::ios::binary);
+    staged.write(answer.data() + header + 1, size);
+    staged.close();
+
+    if (!staged || size == 0)
+    {
+        LOG_ERR("Failed to stage the " << size << " bytes of pages a source of [" << _docKey
+                                       << "] wrote");
+        FileUtil::removeFile(stagedPath);
+        return std::string();
+    }
+
+    LOG_DBG("Staged " << size << " bytes of pages a source of [" << _docKey << "] wrote as ["
+                      << stagedName << ']');
+    return stagedName;
+}
+
+#endif // !MOBILEAPP
+
 bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
 {
     LOG_TRC("DocumentBroker handling child message: [" << message->abbr() << ']');

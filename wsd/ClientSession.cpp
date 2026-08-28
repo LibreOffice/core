@@ -1541,6 +1541,23 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 
         return forwardToChild(firstLine, docBroker);
     }
+#if !MOBILEAPP
+    else if (tokens.equals(0, "exportslides"))
+    {
+        // Writing pages out puts the content of the document in a file of its own. A host
+        // that allows no export, or that has what leaves the document watermarked, is
+        // answered here, before any page is written. This holds for the session a browser
+        // drives and for the one another document reads a source through alike.
+        if (!allowsCleanExport())
+        {
+            LOG_WRN("Refusing to write the pages of a document out: the host allows no export");
+            sendTextFrameAndLogError("error: cmd=exportslides kind=failed");
+            return false;
+        }
+
+        return forwardToChild(firstLine, docBroker);
+    }
+#endif // !MOBILEAPP
     else if (tokens.equals(0, "outlinestate") ||
              tokens.equals(0, "downloadas") ||
              tokens.equals(0, "getchildid") ||
@@ -2743,8 +2760,7 @@ bool ClientSession::filterDownloadAs(const std::string& id) const
             allowed = false;
             LOG_WRN("WOPI host has disabled export for this session");
         }
-        else if (id == "slideshow" && _wopiFileInfo &&
-                 (_wopiFileInfo->getDisableExport() || !_wopiFileInfo->getWatermarkText().empty()))
+        else if (id == "slideshow" && !allowsCleanExport())
         {
             allowed = false;
             LOG_WRN("WOPI host has disabled slideshow for this session");

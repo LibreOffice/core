@@ -217,6 +217,29 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     for, and nosource means an insert that asks for links without naming a
     source document.
 
+exportslides [slides=<p0,p1,...>]
+
+    Writes the given pages of this document out as a presentation of their own,
+    named by the part identifiers a presentationinfo: reports. No list at all writes
+    every page out. The reply is the presentation itself, as a binary frame
+        exportslides: {"status":"written"}\n<the file>
+    so a document is reached the same way whichever node serves it.
+
+    A client of this document sends it through remotedoccommand, to a document
+    this one is related to, and wsd takes the reply: it writes the file into the
+    staging area of this document's jail and answers the client with the name it
+    was staged under alone,
+        exportslides: {"status":"staged","name":"<staged name>"}
+    or {"status":"failed"} when it could not be staged. A path of another jail
+    is nothing a client is given. The staged name is what a slideimport insert
+    or a slidelink update then names.
+
+    Writing pages out takes the content of the document into a file of its own,
+    so a host that allows no export, or that has what leaves the document
+    watermarked, is answered
+        error: cmd=exportslides kind=failed
+    before any page is written.
+
 slidelink list
 slidelink break part=<part>
 slidelink update source=<source name> file=<staged name>

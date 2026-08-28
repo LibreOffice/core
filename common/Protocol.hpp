@@ -33,6 +33,7 @@ namespace COOLProtocol
     constexpr unsigned ProtocolMinorVersionNumber = 1;
 
     constexpr const char* binaryMessageTypes[] {
+        "exportslides:",
         "tile:",
         "tilecombine:",
         "delta:",

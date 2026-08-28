@@ -677,6 +677,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "geta11ycaretposition") ||
                tokens.equals(0, "toggletiledumping") ||
                tokens.equals(0, "getpresentationinfo") ||
+               tokens.equals(0, "exportslides") ||
                tokens.equals(0, "executescript") ||
                tokens.equals(0, "proxyreturn") ||
                tokens.equals(0, "getslidesections"));
@@ -1033,6 +1034,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "toggletiledumping"))
         {
             setDumpTiles(tokens[1] == "true");
+        }
+        else if (tokens.equals(0, "exportslides"))
+        {
+            return exportSlides(tokens);
         }
         else if (tokens.equals(0, "getpresentationinfo"))
         {
@@ -2244,6 +2249,89 @@ std::string joinSlideIndexList(const std::vector<int>& indices)
     return list.str();
 }
 
+/// Parses a comma separated list of part identifiers. Returns false on an
+/// empty list or an entry that names no part.
+bool parsePartIdList(const std::string& list, std::vector<std::string>& parts)
+{
+    const StringVector entries = StringVector::tokenize(list, ',');
+    if (entries.empty())
+        return false;
+
+    parts.reserve(entries.size());
+    for (std::size_t i = 0; i < entries.size(); ++i)
+    {
+        const std::string entry = entries[i];
+        if (!isValidPartId(entry))
+            return false;
+
+        parts.push_back(entry);
+    }
+
+    return true;
+}
+
+/// Joins part identifiers into a comma separated list.
+std::string joinPartIdList(const std::vector<std::string>& parts)
+{
+    std::ostringstream list;
+    for (std::size_t i = 0; i < parts.size(); ++i)
+        list << (i ? "," : "") << parts[i];
+    return list.str();
+}
+
+}
+
+bool ChildSession::exportSlides(const StringVector& tokens)
+{
+    std::string slideList;
+    if (tokens.size() > 2 ||
+        (tokens.size() == 2 && !getTokenString(tokens[1], "slides", slideList)))
+    {
+        sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
+        return false;
+    }
+
+    // No list of pages at all writes every page of the document out.
+    std::vector<std::string> slides;
+    if (!slideList.empty() && !parsePartIdList(slideList, slides))
+    {
+        sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
+        return false;
+    }
+
+    // The presentation is written in a directory of this document's own and travels back as
+    // the answer, so that whoever asked for it reads no file of this jail and needs to be on
+    // no particular machine to have it.
+    const std::string directory = FileUtil::createRandomTmpDir();
+    const std::string path = directory + "/sourceslides.odp";
+
+    SigUtil::addActivity(getId(), "exportslides");
+
+    getLOKitDocument()->setView(_viewId);
+
+    const std::string url = Poco::URI(Poco::Path(path)).toString();
+    const bool written =
+        getLOKitDocument()->exportPages(joinPartIdList(slides).c_str(), url.c_str());
+
+    std::vector<char> answer;
+    if (written)
+    {
+        static constexpr std::string_view Header = "exportslides: {\"status\":\"written\"}\n";
+        answer.assign(Header.begin(), Header.end());
+        // A presentation that could not be read back, or that holds nothing, is no answer.
+        if (FileUtil::readFile(path, answer, INT_MAX) <= 0)
+            answer.clear();
+    }
+
+    FileUtil::removeFile(directory, true);
+
+    if (answer.empty())
+    {
+        sendTextFrameAndLogError("error: cmd=exportslides kind=failed");
+        return false;
+    }
+
+    return sendBinaryFrame(answer.data(), answer.size());
 }
 
 bool ChildSession::slideImportInsert(const StringVector& tokens)

@@ -517,6 +517,14 @@ private:
     /// Returns true if the download message of type 'id' should be allowed or not
     bool filterDownloadAs(const std::string& id) const;
 
+    /// Whether the host lets the content of the document leave in a file of its own,
+    /// unwatermarked.
+    bool allowsCleanExport() const
+    {
+        return !_wopiFileInfo ||
+               (!_wopiFileInfo->getDisableExport() && _wopiFileInfo->getWatermarkText().empty());
+    }
+
     void dumpState(std::ostream& os) override;
 
     /// Handle invalidation message coming from a kit and transfer it to a tile request.

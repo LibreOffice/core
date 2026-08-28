@@ -190,6 +190,8 @@ private:
     void postInsertCommand(const std::string& type, const std::string& url, int multimedia_width,
                            int multimedia_height);
     bool insertFile(const StringVector& tokens);
+    /// Writes the given pages of this document out as a presentation staged in its own jail.
+    bool exportSlides(const StringVector& tokens);
     bool slideImportInsert(const StringVector& tokens);
     bool slideLink(const StringVector& tokens);
     bool slideLinkList();
