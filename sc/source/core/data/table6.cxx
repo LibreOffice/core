@@ -777,18 +777,19 @@ bool ScTable::ReplaceAllStyle(
     ScDocument* pUndoDoc)
 {
     bool bRet = SearchAllStyle(rSearchItem, rMark, rMatchedRanges);
+    if (pUndoDoc && (bRet || rSearchItem.IsAllTables()))
+    {
+        rDocument.CopyToDocument(0, 0 ,nTab, rDocument.MaxCol(), rDocument.MaxRow(), nTab,
+                                 InsertDeleteFlags::ATTRIB, false, *pUndoDoc, &rMark);
+    }
+
     if (bRet)
     {
         const ScStyleSheet* pReplaceStyle = static_cast<const ScStyleSheet*>(
                                         rDocument.GetStyleSheetPool()->Find(
                                         rSearchItem.GetReplaceString(), SfxStyleFamily::Para ));
-
         if (pReplaceStyle)
         {
-            if (pUndoDoc)
-                rDocument.CopyToDocument(0, 0 ,nTab, rDocument.MaxCol(),rDocument.MaxRow(),nTab,
-                                          InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &rMark);
-
             const ScRange aThisTab(0, 0, nTab, rDocument.MaxCol(), rDocument.MaxRow(), nTab);
             const ScMarkData aThisMark(rDocument.GetSheetLimits(),
                                        rMatchedRanges.GetIntersectedRange(aThisTab));
