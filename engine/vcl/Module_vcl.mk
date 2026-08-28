@@ -22,7 +22,6 @@ $(eval $(call gb_Module_Module,vcl))
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
     Package_theme_definitions \
-    Package_toolbarmode \
     UIConfig_vcl \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         Package_skia_denylist ) \

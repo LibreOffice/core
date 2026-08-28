@@ -729,7 +729,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	) \
 	$(call gb_Helper_optional,SCRIPTING,scripting_scriptbindinglib) \
 	$(if $(filter $(OS),MACOSX),sysui_osxicons) \
-	toolbarmode_images \
 	vcl_theme_definitions \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 		vcl_skia_denylist ) \

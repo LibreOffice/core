@@ -83,7 +83,6 @@
       <menu:menuitem menu:id=".uno:Draw"/>
       <menu:menuitem menu:id=".uno:RedrawAutomatic"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ToolbarMode"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
       <menu:menuseparator/>

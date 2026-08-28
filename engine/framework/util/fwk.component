@@ -286,10 +286,6 @@
     constructor="framework_ServiceHandler_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ToolbarModeMenuController"
-    constructor="framework_ToolbarModeMenuController_get_implementation">
-    <service name="com.sun.star.frame.PopupMenuController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.ToolBarsMenuController"
     constructor="framework_ToolbarsMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>

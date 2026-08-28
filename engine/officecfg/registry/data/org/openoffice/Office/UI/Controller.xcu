@@ -347,17 +347,6 @@
           <value>anchor</value>
         </prop>
       </node>
-      <node oor:name="c29" oor:op="replace">
-        <prop oor:name="Command">
-          <value>.uno:Notebookbar</value>
-        </prop>
-        <prop oor:name="Module">
-          <value/>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.ToolbarModeMenuController</value>
-        </prop>
-      </node>
       <node oor:name="c30" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ColumnOperations</value>
@@ -384,17 +373,6 @@
         </prop>
         <prop oor:name="Value">
           <value>row_operations</value>
-        </prop>
-      </node>
-      <node oor:name="c32" oor:op="replace">
-        <prop oor:name="Command">
-          <value>.uno:ToolbarMode</value>
-        </prop>
-        <prop oor:name="Module">
-          <value/>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.ToolbarModeMenuController</value>
         </prop>
       </node>
       <node oor:name="c33" oor:op="replace">

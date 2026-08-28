@@ -4830,14 +4830,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Select Comment In The Navigator Window/Sidebar</value>
         </prop>
       </node>
-      <node oor:name=".uno:Notebookbar" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Notebookbar</value>
-        </prop>
-        <prop oor:name="IsExperimental" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
-      </node>
       <node oor:name=".uno:Sidebar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sidebar</value>
@@ -6690,14 +6682,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       <node oor:name=".uno:ShowToolbar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Toolbars</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ToolbarMode" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">User ~Interface</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
