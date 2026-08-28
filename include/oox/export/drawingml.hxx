@@ -321,6 +321,7 @@ protected:
     /// True when DiagramReplacementVisualization is exported
     bool mbDiagaramExport;
     bool mbDiagaramReplacementExport;
+    bool mbDiagramModelTextExport;
 
     bool mbEmbedFonts = false;
 
@@ -399,6 +400,10 @@ public:
     bool isDiagaramExport() const { return mbDiagaramExport;}
 
     void SetParent(const css::uno::Reference<css::drawing::XShape>& xShape) { m_xParent = xShape; }
+
+    // True while the text of the data model of a Diagram is written
+    void setDiagramModelTextExport(bool bNew) { mbDiagramModelTextExport = bNew; }
+    bool isDiagramModelTextExport() const { return mbDiagramModelTextExport; }
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
 

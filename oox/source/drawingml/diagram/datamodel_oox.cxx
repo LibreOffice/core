@@ -235,7 +235,9 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, const sax_
             if (bWriteText)
             {
                 rTarget->startElementNS(XML_dgm, XML_t);
+                aShapeExport->setDiagramModelTextExport(true);
                 aShapeExport->WriteText(xAssociatedShape, false, true, XML_a);
+                aShapeExport->setDiagramModelTextExport(false);
                 rTarget->endElementNS(XML_dgm, XML_t);
             }
             else
