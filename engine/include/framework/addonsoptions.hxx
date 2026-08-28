@@ -69,19 +69,6 @@ struct FWK_DLLPUBLIC MergeToolbarInstruction
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
-struct FWK_DLLPUBLIC MergeNotebookBarInstruction
-{
-    OUString     aMergeNotebookBar;
-    OUString     aMergePoint;
-    OUString     aMergeCommand;
-    OUString     aMergeCommandParameter;
-    OUString     aMergeFallback;
-    OUString     aMergeContext;
-    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > aMergeNotebookBarItems;
-};
-
-typedef ::std::vector< MergeNotebookBarInstruction >    MergeNotebookBarInstructionContainer;
-
 struct FWK_DLLPUBLIC MergeStatusbarInstruction
 {
     OUString     aMergePoint;
@@ -131,14 +118,6 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
         sal_Int32   GetAddonsToolBarCount() const ;
 
         /*-****************************************************************************************************
-            @short      returns number of addons notebookbar
-            @descr      Call to retrieve the number of addons notebookbar
-
-            @return     number of addons notebookar
-        *//*-*****************************************************************************************************/
-        sal_Int32   GetAddonsNotebookBarCount() const ;
-
-        /*-****************************************************************************************************
             @short      returns the  complete addons menu
             @descr      Call it to get all entries of the addon menu.
                         We return a list of all nodes with its names and properties.
@@ -177,24 +156,6 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
         OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
-            @short      Gets a NotebookBar part of a single addon
-            @return     A complete
-
-            @onerror    We return false
-        *//*-*****************************************************************************************************/
-
-        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& GetAddonsNotebookBarPart( sal_uInt32 nIndex ) const;
-
-        /*-****************************************************************************************************
-            @short      Gets a unique NotebookBar resource name of a single addon
-            @return     A complete
-
-            @onerror    We return false
-        *//*-*****************************************************************************************************/
-
-        OUString GetAddonsNotebookBarResourceName( sal_uInt32    ) const;
-
-        /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for the Office menu bar
             @return     The filled MergeMenuDefinitionContainer
 
@@ -210,14 +171,6 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @onerror    We return false
         *//*-*****************************************************************************************************/
         bool GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
-
-        /*-****************************************************************************************************
-            @short      Retrieves all available merge instructions for Notebookbar
-            @return     The filled
-
-            @onerror    We return false
-        *//*-*****************************************************************************************************/
-        bool GetMergeNotebookBarInstructions( const OUString& rNotebookBarName, MergeNotebookBarInstructionContainer& rNotebookBar ) const;
 
         /*-****************************************************************************************************
             @short      Gets the Add-On help menu part of all addon components registered
