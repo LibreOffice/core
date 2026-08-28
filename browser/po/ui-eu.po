@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-16 13:56+0200\n"
-"PO-Revision-Date: 2026-08-28 01:38+0000\n"
+"PO-Revision-Date: 2026-08-29 11:52+0000\n"
 "Last-Translator: Alexander Gabilondo <alexgabi@openmailbox.org>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/eu/>\n"
@@ -855,17 +855,19 @@ msgstr "Igo hiztegia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:950
 msgid "Document themes"
-msgstr ""
+msgstr "Dokumentuetarako gaiak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:952
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Igo dokumentuen gai pertsonalizatuak (.theme). Hauek Formatua > Gaia atalean "
+"eskuragarri dauden kolore paletak definitzen dituzte."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:958
 msgid "Upload Theme"
-msgstr ""
+msgstr "Igo Gaia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:964
 #: src/control/Control.Menubar.ts:436 src/control/Control.Menubar.ts:652
@@ -882,10 +884,12 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Igo paketatutako luzapena .zip gisa; bere edukiak (manifest.json, ...) "
+"zerbitzarian zabaltzen dira."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:972
 msgid "Upload Extension"
-msgstr ""
+msgstr "Igo Luzapena"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1061
 msgid "Settings are only available to signed-in users."
@@ -918,14 +922,17 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Aktibatuta dagoenean, Writer-ek dokumentua irekita dagoen bista-zabalerara "
+"egokitzen du. Desaktibatuta dagoenean, dokumentua behean ezarritako Zoom-"
+"maila lehenetsian irekiko da."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1463
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Ez dago ezarpen erabilgarririk {0}rentzat"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1475
 msgid "Select a tab to browser settings."
-msgstr ""
+msgstr "Hautatu fitxa bat ezarpenak ikusteko."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1492
 #: admin/src/integrator/Xcu.ts:409
@@ -1042,6 +1049,8 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Konfiguratu AA hornitzailearen kredentzialak eta eredua. Ereduak "
+"automatikoki eguneratzen dira kredentzialak aldatzen direnean."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2384
 msgid "Text Generation"
@@ -1054,7 +1063,7 @@ msgstr "adib."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2445
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Utzi hutsik zure zerbitzariak behar ez badu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2464
 msgid ""
@@ -1062,6 +1071,10 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Dokumentu-ekintzetarako (ikuskatu eta editatu), aukeratu jatorrizko tresna/"
+"funtzio-deia duen eredu bat, hala nola gpt-4o, llama3.1 edo qwen2.5. Ez "
+"duten ereduek (adibidez, llama3 base, gemma) txateatu dezakete oraindik, "
+"baina ezin dituzte dokumentazio tresnak erabili."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Image Generation"
@@ -1069,53 +1082,55 @@ msgstr "Irudi sorkuntza"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2507
 msgid "Same as Text AI"
-msgstr ""
+msgstr "AA Testuaren berdina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2577
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Utzi hutsik AA Testua tekla erabiltzeko"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2882
 #: admin/src/integrator/AdminIntegratorSettings.ts:3000
 msgid "Fetching models..."
-msgstr ""
+msgstr "Ereduak eskuratzen..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2929
 #: admin/src/integrator/AdminIntegratorSettings.ts:2944
 #: admin/src/integrator/AdminIntegratorSettings.ts:3042
 #: admin/src/integrator/AdminIntegratorSettings.ts:3056
 msgid "No models found"
-msgstr ""
+msgstr "Ez da eredurik aurkitu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2954
 #: admin/src/integrator/AdminIntegratorSettings.ts:3066
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Ereduak behar bezala eskuratu dira"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2960
 #: admin/src/integrator/AdminIntegratorSettings.ts:3072
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Ezin izan dira ereduak eskuratu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2970
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Hornitzailearen konfigurazio baliogabea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3107
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Bat ere ez (desgaitu irudiak sortzea)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3124
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Eskuratu ereduak hautatzeko"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3175
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "API kuota gainditu da - egiaztatu zure plana eta fakturazio xehetasunak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3180
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Ezin izan dira ereduak eskuratu (HTTP {0}). Egiaztatu hornitzailearen URLa "
+"eta API gakoa."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3297
 #: admin/src/integrator/Xcu.ts:345
@@ -1124,7 +1139,7 @@ msgstr "Dokumentuen ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3439
 msgid "Upload Xcu"
-msgstr ""
+msgstr "Igo Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3600
 msgid "Enter {0}"
@@ -1136,27 +1151,27 @@ msgstr "Berrezarri"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3659
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Berrezarri {0} lehenetsira"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3663
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Ziur {0} berrezarri nahi duzula?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3679
 msgid "Save {0}"
-msgstr ""
+msgstr "Gorde {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
-msgstr ""
+msgstr "Hiztegi arrunta"
 
 #: admin/src/integrator/WordBook.ts:118
 msgid "Words are ignored by the spell checker"
-msgstr ""
+msgstr "Zuzentzaile ortografikoak hitz hauei ez die jaramonik egin"
 
 #: admin/src/integrator/WordBook.ts:122
 msgid "Dictionary of exceptions"
-msgstr ""
+msgstr "Salbuespenen hiztegia"
 
 #: admin/src/integrator/WordBook.ts:123
 msgid "Exception words are underlined while checking spelling"
