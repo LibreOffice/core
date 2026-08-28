@@ -2311,6 +2311,7 @@ bool SdDrawDocument::PasteBookmarkAsPage(
 {
     // Use predefined options for paste operation
     InsertBookmarkOptions options = InsertBookmarkOptions::ForPaste(bMergeMasterPages, bMergeMasterPagesOnly);
+    KeepPageLinks aKeepLinks(*this);
 
     // Create insertion parameters
     PageInsertionParams aInsertParams(nInsertPos, /*pExchangeList*/nullptr);
@@ -2423,6 +2424,7 @@ bool SdDrawDocument::ResolvePageLinks(
     InsertBookmarkOptions options = InsertBookmarkOptions::ForPageLinks(bCopy, bNoDialogs);
     options.bMergeMasterPagesOnly = /*bMergeMasterPagesOnly*/false;
     options.aLinkSourceUrl = rLinkSourceUrl;
+    KeepPageLinks aKeepLinks(*this);
 
     // Create insertion parameters
     PageInsertionParams aInsertParams(nInsertPos);
@@ -2532,6 +2534,7 @@ bool SdDrawDocument::ImportDocumentPages(
 {
     // Use predefined options for document import
     InsertBookmarkOptions options = InsertBookmarkOptions::ForDocumentImport(bMergeMasterPagesOnly);
+    KeepPageLinks aKeepLinks(*this);
 
     // Create parameter object for page insertion
     PageInsertionParams aInsertParams(nInsertPos);
@@ -2648,6 +2651,7 @@ bool SdDrawDocument::InsertFileAsPage(
 {
     // Page position 0 holds the handout page; the first slide position is 1.
     nInsertPos = std::max<sal_uInt16>(nInsertPos, 1);
+    KeepPageLinks aKeepLinks(*this);
 
     // Create parameter object for page insertion
     PageInsertionParams aInsertParams(nInsertPos, pExchangeList);
@@ -2753,6 +2757,7 @@ bool SdDrawDocument::DropBookmarkAsPage(
 {
     // Use predefined options for drag and drop operation
     InsertBookmarkOptions options = InsertBookmarkOptions::ForDragDrop(bMergeMasterPages, /*bMergeMasterPagesOnly*/false);
+    KeepPageLinks aKeepLinks(*this);
 
     // Create parameter object for page insertion
     PageInsertionParams aInsertParams(nInsertPos);
@@ -2851,6 +2856,7 @@ bool SdDrawDocument::CopyOrMovePagesWithinDocument(
 {
     // Use predefined options for internal document operations
     InsertBookmarkOptions options = InsertBookmarkOptions::ForInternalOps(bPreservePageNames, /*bMergeMasterPagesOnly*/false);
+    KeepPageLinks aKeepLinks(*this);
 
     // Create parameter object for page insertion
     // When copying within document, source and target are the same

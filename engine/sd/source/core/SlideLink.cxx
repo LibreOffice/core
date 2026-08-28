@@ -12,6 +12,7 @@
 #include <SlideLink.hxx>
 
 #include <algorithm>
+#include <memory>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -20,13 +21,16 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svl/undo.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/urlobj.hxx>
 
+#include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
+#include <sdundo.hxx>
 #include <strings.hrc>
 
 namespace sd
@@ -60,6 +64,90 @@ std::vector<sal_uInt16> getLinkedPages(const SdDrawDocument& rDoc, std::u16strin
     return aPages;
 }
 
+/// The undo manager of rDoc, or nothing for a document that is served without one.
+SfxUndoManager* getUndoManager(const SdDrawDocument& rDoc)
+{
+    ::sd::DrawDocShell* pDocShell = rDoc.GetDocSh();
+    return pDocShell ? pDocShell->GetUndoManager() : nullptr;
+}
+
+/// Tells every view of rDoc that the pages linked to a source document are not what they were.
+void notifyLinksChanged(const SdDrawDocument& rDoc)
+{
+    const SfxObjectShell* pDocShell = rDoc.GetDocSh();
+    if (!pDocShell)
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst(false);
+    while (pViewShell)
+    {
+        if (pViewShell->GetObjectShell() == pDocShell)
+            pViewShell->viewCallback(COKitCallbackType::SLIDE_LINKS_CHANGED, OString());
+        pViewShell = SfxViewShell::GetNext(*pViewShell, false);
+    }
+}
+
+/// Puts the source document and the source page of one page as they are given, link and all.
+void setPageLink(SdPage& rPage, const OUString& rReference, const OUString& rSourcePage)
+{
+    rPage.DisconnectLink();
+    rPage.SetFileName(rReference);
+    rPage.SetBookmarkName(rSourcePage);
+    rPage.ConnectLink();
+}
+
+/// Gives a page back the source document it recorded before that source was taken off.
+class UndoSlideLinkBreak final : public SdUndoAction
+{
+public:
+    UndoSlideLinkBreak(SdDrawDocument& rDoc, SdPage& rPage)
+        : SdUndoAction(rDoc)
+        , mpPage(&rPage)
+        , maReference(rPage.GetFileName())
+        , maSourcePage(rPage.GetBookmarkName())
+    {
+        SetComment(SdResId(STR_UNDO_BREAK_SLIDE_LINK));
+    }
+
+    virtual void Undo() override
+    {
+        setPageLink(*mpPage, maReference, maSourcePage);
+        notifyLinksChanged(mrDoc);
+    }
+
+    virtual void Redo() override
+    {
+        setPageLink(*mpPage, OUString(), OUString());
+        notifyLinksChanged(mrDoc);
+    }
+
+private:
+    SdPage* mpPage;
+    OUString maReference;
+    OUString maSourcePage;
+};
+
+/// Takes the source document off rPage, recording an undo action for it. Reports whether it did.
+bool breakPageLink(SdDrawDocument& rDoc, SdPage& rPage)
+{
+    // The page names a source document, which is the reference this feature writes and the one a
+    // refresh reads. A page linked to a file by its path belongs to the older linked-page feature
+    // and keeps what it records.
+    if (SlideLink::GetSourceName(rPage.GetFileName()).isEmpty())
+        return false;
+
+    // The action reads the source off the page, so it is made while the page still records one.
+    std::unique_ptr<SfxUndoAction> pUndoAction = std::make_unique<UndoSlideLinkBreak>(rDoc, rPage);
+
+    setPageLink(rPage, OUString(), OUString());
+
+    if (SfxUndoManager* pUndoManager = getUndoManager(rDoc))
+        pUndoManager->AddUndoAction(std::move(pUndoAction));
+
+    rDoc.SetChanged();
+    notifyLinksChanged(rDoc);
+    return true;
+}
 }
 
 OUString SlideLink::MakeSourceReference(const OUString& rSourceName)
@@ -238,6 +326,37 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
     rDoc.CloseBookmarkDoc();
 
     return nRefreshed;
+}
+
+bool SlideLink::Break(SdDrawDocument& rDoc, sal_Int32 nIndex)
+{
+    if (nIndex < 0 || nIndex >= rDoc.GetSdPageCount(PageKind::Standard))
+        return false;
+
+    SdPage* pPage = rDoc.GetSdPage(static_cast<sal_uInt16>(nIndex), PageKind::Standard);
+    if (!pPage)
+        return false;
+
+    return breakPageLink(rDoc, *pPage);
+}
+
+void SlideLink::BreakOnEdit(SdDrawDocument& rDoc, sal_Int32 nIndex)
+{
+    if (rDoc.ArePageLinksKept())
+        return;
+
+    SfxUndoManager* pUndoManager = getUndoManager(rDoc);
+    if (!pUndoManager)
+        return;
+
+    // The source comes off as part of the edit that changed the page, so there has to be an undo
+    // step in hand to record that in. A change outside a step is the engine's own work on the
+    // page: an undo or a redo putting it back the way it was, a document being read, a linked
+    // graphic given fresh content, an embedded object reporting the size it wants.
+    if (!pUndoManager->IsUndoEnabled() || !pUndoManager->IsInListAction())
+        return;
+
+    Break(rDoc, nIndex);
 }
 
 } // namespace sd

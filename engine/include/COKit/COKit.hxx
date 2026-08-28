@@ -1209,7 +1209,18 @@ enum class COKitCallbackType
      * pages changes. The payload is a JSON object naming the reason and the
      * changed part, for example { "reason": "gifupdate", "part": 3 }.
      */
-    PRESENTATION_INFO = 77
+    PRESENTATION_INFO = 77,
+
+    /**
+     * The pages of an Impress or Draw document that are linked to a source
+     * document are not the same as they were.
+     *
+     * Pushed to every view of the document when a page loses the source it
+     * records, which is what an edit of a linked page does, and when an undo
+     * or a redo gives that source back. The payload is empty; the receiving
+     * view reads the link list for itself.
+     */
+    SLIDE_LINKS_CHANGED = 78
 };
 
 enum class COKitKeyEventType
@@ -1391,6 +1402,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA";
     case COKitCallbackType::PRESENTATION_INFO:
         return "KIT_CALLBACK_PRESENTATION_INFO";
+    case COKitCallbackType::SLIDE_LINKS_CHANGED:
+        return "KIT_CALLBACK_SLIDE_LINKS_CHANGED";
     }
 
     assert(!"Unknown COKitCallbackType type.");
@@ -2570,6 +2583,18 @@ struct COKitDocument
      *         when the URL is not a file on this machine, or when the file could not be read.
      */
     virtual int refreshSlideLinks(const char* pSourceName, const char* pUrl) = 0;
+
+    /**
+     * Take the source document off one linked page.
+     *
+     * The page keeps the content it holds and becomes a page of this document alone, so a refresh
+     * of the source it came from leaves it as it is. This is one undo action, and undoing it gives
+     * the page its source back.
+     *
+     * @param pPart the page, as getSlideLinks reports it.
+     * @return true when the page was linked to a source document and is not any more.
+     */
+    virtual bool breakSlideLink(const char* pPart) = 0;
 
 };
 

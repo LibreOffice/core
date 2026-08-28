@@ -426,6 +426,7 @@ namespace desktop {
         bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) override;
         char* getSlideLinks() override;
         int refreshSlideLinks(const char* pSourceName, const char* pUrl) override;
+        bool breakSlideLink(const char* pPart) override;
     };
 
     struct DESKTOP_DLLPUBLIC COKitImpl : public COKit

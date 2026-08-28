@@ -521,6 +521,11 @@ public:
     {
         return -1;
     }
+
+    /** Takes the source document off the page at nIndex in the page list of the standard pages,
+        which keeps the content it holds, and returns whether that page was linked to a source
+        (Impress only function) */
+    virtual bool breakSlideLink(sal_Int32 /*nIndex*/) { return false; }
 };
 } // namespace vcl
 

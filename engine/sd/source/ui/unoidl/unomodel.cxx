@@ -2408,6 +2408,12 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         else if (pPage->GetPageNum() > 0)
                         {
                             const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
+
+                            // A page holds the content its source gave it until somebody edits
+                            // it, and this change is such an edit, so the page becomes the
+                            // document's own.
+                            sd::SlideLink::BreakOnEdit(*mpDoc, nPart);
+
                             recordObjectChange(maVectorParts[{ nPart, constVectorModeSlides }],
                                                pObject, eKind);
                             notifyViewsVectorPartChanged(mpDocShell, nPart, constVectorModeSlides);
@@ -6473,6 +6479,14 @@ sal_Int32 SdXImpressDocument::refreshSlideLinks(const OUString& rSourceName,
         return -1;
 
     return sd::SlideLink::Refresh(*mpDoc, rSourceName, rFileUrl);
+}
+
+bool SdXImpressDocument::breakSlideLink(sal_Int32 nIndex)
+{
+    if (!mpDoc)
+        return false;
+
+    return sd::SlideLink::Break(*mpDoc, nIndex);
 }
 
 namespace

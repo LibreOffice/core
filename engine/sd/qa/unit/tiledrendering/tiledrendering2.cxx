@@ -30,6 +30,7 @@
 
 #include <DrawDocShell.hxx>
 #include <SlideSectionManager.hxx>
+#include <View.hxx>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
@@ -601,6 +602,142 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)
     CPPUNIT_ASSERT(pLinked);
     CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
     CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreak)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // Two slides of one source are inserted as links, so that taking the source off one of them
+    // leaves the other linked.
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"at\":0,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    // The first of the two keeps the content it holds and belongs to no source any more, and the
+    // second is still linked to the source both came from.
+    CPPUNIT_ASSERT(pXImpressDocument->breakSlideLink(0));
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
+    SdPage* pBroken = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pBroken);
+    CPPUNIT_ASSERT_EQUAL(OUString(), pBroken->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pBroken->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+
+    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
+    std::vector<boost::property_tree::ptree> aSlides;
+    for (const auto& rSource : aLinks.get_child("links"))
+        for (const auto& rSlide : rSource.second.get_child("slides"))
+            aSlides.push_back(rSlide.second);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSlides.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("TargetOne"), aSlides[0].get<std::string>("name"));
+
+    // A page that belongs to no source, and an index that names no page at all, leave the document
+    // as it is.
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(0));
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(-1));
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(pXImpressDocument->getParts()));
+
+    // A refresh of the source reads the slide of the page that is still linked and leaves the other
+    // one alone.
+    const OUString aChangedUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl));
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
+
+    // Undoing the refresh and then the break gives the page the source and the slide it recorded
+    // back.
+    pUndoManager->Undo();
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
+    pBroken = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pBroken);
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pBroken->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pBroken->GetBookmarkName());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // One slide of the source deck is inserted as a link, and the whole insertion leaves it linked.
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         readLinks(*pXImpressDocument).get_child("links").size());
+
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    sd::ViewShell* pViewShell = pDoc->GetDocSh()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::View* pView = pViewShell->GetView();
+    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT(pLinked->GetObjCount() > 0);
+    SdrObject* pObject = pLinked->GetObj(0);
+
+    // A change with no undo step in hand is the engine's own work on the page, the shape a link
+    // update or an embedded object gives it, so the page keeps its source.
+    pObject->Move(Size(100, 100));
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
+
+    // A shape of the linked slide is moved by somebody editing it.
+    pXImpressDocument->setPart(1);
+    const Point aStart = pObject->GetSnapRect().TopLeft();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->MoveMarkedObj(Size(500, 500));
+
+    // The slide became this document's own, and a refresh of the source it came from has no page
+    // left to read.
+    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->GetBookmarkName());
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("links").empty());
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(-1),
+        pXImpressDocument->refreshSlideLinks(
+            u"Q3 deck.odp"_ustr,
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp")));
+
+    // The edit and the source it took off are one undo step, so one undo puts the shape back where
+    // it was and the slide back with its source.
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(aStart, pObject->GetSnapRect().TopLeft());
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         readLinks(*pXImpressDocument).get_child("links").size());
+
+    // A page linked to a file by its path belongs to the older linked-page feature, which no
+    // refresh of a source document reaches, so an edit of it leaves what it records alone.
+    SdPage* pPathLinked = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPathLinked);
+    CPPUNIT_ASSERT(pPathLinked->GetObjCount() > 0);
+    pPathLinked->SetFileName(u"file:///decks/q3.odp"_ustr);
+    pPathLinked->SetBookmarkName(u"Slide 1"_ustr);
+    pXImpressDocument->setPart(0);
+    pView->MarkObj(pPathLinked->GetObj(0), pView->GetSdrPageView());
+    pView->MoveMarkedObj(Size(500, 500));
+    CPPUNIT_ASSERT_EQUAL(u"file:///decks/q3.odp"_ustr, pPathLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"Slide 1"_ustr, pPathLinked->GetBookmarkName());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1363,6 +1363,8 @@ static char* doc_getSlideLinks(COKitDocument* pThis);
 
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl);
 
+static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart);
+
 namespace {
 ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
 {
@@ -1912,6 +1914,11 @@ char* COKitDocumentImpl::getSlideLinks()
 int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl)
 {
     return doc_refreshSlideLinks(this, pSourceName, pUrl);
+}
+
+bool COKitDocumentImpl::breakSlideLink(const char* pPart)
+{
+    return doc_breakSlideLink(this, pPart);
 }
 
 COKitDocumentImpl::~COKitDocumentImpl()
@@ -7128,6 +7135,29 @@ static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, 
     }
 
     return pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl));
+}
+
+static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return false;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return false;
+    }
+
+    // A linked page is a standard page, and the boundary names it by its page identifier.
+    const int nIndex = pPart ? pDoc->getPartIndex(pPart, 0) : -1;
+    if (nIndex < 0)
+        return false;
+
+    return pDoc->breakSlideLink(nIndex);
 }
 
 static bool getFromTransferable(

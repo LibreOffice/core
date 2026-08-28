@@ -393,6 +393,9 @@ private:
     */
     std::map<OUString, OUString> maStagedLinkSourceFiles;
 
+    /// How many page operations of the document are running now, see KeepPageLinks.
+    sal_Int32 mnPageLinksKept = 0;
+
     sd::PresentationSettings maPresentationSettings;
 
     rtl::Reference< sd::SlideShow > mxPresentation;
@@ -879,6 +882,33 @@ public:
         staged for that source.
     */
     OUString GetStagedLinkSourceFile(const OUString& rSourceReference) const;
+
+    /** Whether a page operation of the document is running now, see KeepPageLinks. */
+    bool ArePageLinksKept() const { return mnPageLinksKept > 0; }
+
+    /** Marks a page operation of the document, one that reads pages into it or moves them about.
+
+        While one of these is alive the pages of the document keep the source documents they record,
+        whatever else changes about them. Such an operation writes that record itself and then goes
+        on to change the page it wrote.
+    */
+    class KeepPageLinks
+    {
+    public:
+        explicit KeepPageLinks(SdDrawDocument& rDoc)
+            : mrDoc(rDoc)
+        {
+            ++mrDoc.mnPageLinksKept;
+        }
+
+        ~KeepPageLinks() { --mrDoc.mnPageLinksKept; }
+
+        KeepPageLinks(const KeepPageLinks&) = delete;
+        KeepPageLinks& operator=(const KeepPageLinks&) = delete;
+
+    private:
+        SdDrawDocument& mrDoc;
+    };
 
     SAL_DLLPRIVATE SdrObject*          GetObj(std::u16string_view rObjName) const;
 

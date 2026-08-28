@@ -86,6 +86,29 @@ public:
     */
     static sal_Int32 Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
                              const OUString& rFileUrl);
+
+    /** Takes the source document off the page at nIndex in the standard page list of rDoc.
+
+        The page keeps the content it holds and becomes a page of this document alone, so a refresh
+        of the source it came from leaves it as it is. Taking the source off is one undo action, and
+        undoing it gives the page its source back. Only a page that names a source document, one
+        WriteLinks reports, has a source to take off; a page linked to a file by its path keeps what
+        it records.
+
+        @return true when the page named a source document and does not any more, false for every
+                other page and for an index that names no page.
+    */
+    static bool Break(SdDrawDocument& rDoc, sal_Int32 nIndex);
+
+    /** Takes the source document off the page at nIndex, which somebody just changed.
+
+        A page holds the content its source gave it until somebody edits it, and an edited page is
+        the document's own. The undo action goes with the edit being recorded, so one undo gives the
+        page both its old content and its source back. A change with no undo step in hand is the
+        engine's own work on the page rather than an edit, and leaves the source alone, as does any
+        change while the document is reading pages or moving them about.
+    */
+    static void BreakOnEdit(SdDrawDocument& rDoc, sal_Int32 nIndex);
 };
 
 } // namespace sd

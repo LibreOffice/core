@@ -1526,6 +1526,7 @@ callback (gpointer pData)
     case COKitCallbackType::SHAPE_DRAG_PREVIEW:
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
     case COKitCallbackType::PRESENTATION_INFO:
+    case COKitCallbackType::SLIDE_LINKS_CHANGED:
     {
         // TODO: Implement me
         break;
