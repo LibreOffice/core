@@ -1425,6 +1425,19 @@ class Socket {
 		} else if (textMsg.startsWith('sliderenderingcomplete:')) {
 			this._onSlideRenderingCompleteMsg(textMsg, e);
 			return;
+		} else if (textMsg.startsWith('slideimport:')) {
+			this._onSlideImportMsg(textMsg);
+			return;
+		} else if (textMsg.startsWith('slidelinks:')) {
+			this._map.fire('slidelinks', {
+				message: JSON.parse(textMsg.substring('slidelinks:'.length + 1)),
+			});
+			return;
+		} else if (textMsg.startsWith('slidelink:')) {
+			this._map.fire('slidelink', {
+				message: JSON.parse(textMsg.substring('slidelink:'.length + 1)),
+			});
+			return;
 		} else if (textMsg.startsWith('remotedoccommandresult:')) {
 			this._onRemoteDocCommandResult(textMsg, e as SlurpMessageEvent);
 			return;
@@ -2601,6 +2614,29 @@ class Socket {
 				this._map.uiManager.showInfoModal('cool_alert', '', msg, '', _('OK'));
 			}
 			return true; // caller should exit immediately.
+		} else if (
+			textMsg.startsWith('error:') &&
+			command.errorCmd === 'slideimport'
+		) {
+			this._map.fire('slideimporterror', {
+				kind: command.errorKind ? command.errorKind : '',
+			});
+			return true; // caller should exit immediately.
+		} else if (
+			textMsg.startsWith('error:') &&
+			command.errorCmd === 'slidelink'
+		) {
+			// An answer of an update names the source it was sent for and an
+			// answer of a break names the page it was asked for, so the two
+			// travel on and a reader takes the answers it is waiting for.
+			const named = textMsg.match(/\bsource=(\S+)/);
+			const page = textMsg.match(/\bpart=(\d+)/);
+			this._map.fire('slidelinkerror', {
+				kind: command.errorKind ? command.errorKind : '',
+				source: named ? decodeURIComponent(named[1]) : '',
+				part: page ? parseInt(page[1], 10) : 0,
+			});
+			return true; // caller should exit immediately.
 		} else if (textMsg.startsWith('error:') && !this._map._docLayer) {
 			textMsg = textMsg.substring(6);
 			if (command.errorKind === 'hardlimitreached') {
@@ -2762,6 +2798,12 @@ class Socket {
 				imgBytes: event.imgBytes.subarray(event.imgIndex),
 			});
 		else window.app.console.warn('zstdslidelayer with no image');
+	}
+
+	// 'slideimport: ' message: a JSON status reply for the slide import.
+	private _onSlideImportMsg(textMsg: string): void {
+		const content = JSON.parse(textMsg.substring('slideimport:'.length + 1));
+		this._map.fire('slideimport', { message: content });
 	}
 
 	// 'zstdvectorprimitives:' message: a zstd-compressed .uno:VectorPrimitives response.
