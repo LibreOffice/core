@@ -2099,6 +2099,15 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testThreadedCommentImport)
     // Author should be the display name, not the tc={guid} placeholder.
     CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pNote->GetAuthor());
 
+    // The note takes its date from the root entry, because the legacy comment part holds none.
+    // Without the accompanying fix in place, this test would have failed with an empty string:
+    // the note had no date of its own, so a client had nothing to put on the comment card.
+    CPPUNIT_ASSERT_EQUAL(u"2026-03-24T09:25:49Z"_ustr, pNote->GetDateUTC());
+    CPPUNIT_ASSERT(!pNote->GetDate().isEmpty());
+    // The moment carries the marker that says it is one. Read without it, a client in another
+    // zone would take it for the author's wall clock and show the wrong time.
+    CPPUNIT_ASSERT(pNote->GetDateUTC().endsWith("Z"));
+
     // Threaded comment data should be attached.
     const ScThreadedCommentData* pData = pNote->GetThreadedCommentData();
     CPPUNIT_ASSERT(pData);

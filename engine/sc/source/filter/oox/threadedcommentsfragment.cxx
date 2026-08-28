@@ -18,6 +18,9 @@
 #include <addressconverter.hxx>
 #include <document.hxx>
 #include <postit.hxx>
+#include <tools/datetime.hxx>
+#include <tools/datetimeutils.hxx>
+#include <unotools/datetime.hxx>
 
 #include <map>
 
@@ -127,6 +130,19 @@ void ThreadedCommentsFragment::attachToNotes()
         const ScPersonData* pPerson = rDoc.GetPersonById(pRoot->maPersonId);
         if (pPerson)
             pNote->SetAuthor(pPerson->maDisplayName);
+
+        // Give the note the date the root entry carries. The legacy comment part holds none, so
+        // without this the note has no date of its own and a client has nothing to put on the
+        // comment card.
+        css::util::DateTime aDateTime;
+        if (::utl::ISO8601parseDateTime(pRoot->maDateTime, aDateTime))
+        {
+            // dT is a moment in UTC. It is recorded as one, with the marker that says so, and
+            // stands in for the wall clock as well: the file records no zone for its author.
+            pNote->SetDateUTC(OStringToOUString(DateTimeToOString(DateTime(aDateTime)),
+                                                RTL_TEXTENCODING_ASCII_US));
+            pNote->SetDate(::utl::toISO8601(aDateTime));
+        }
 
         pNote->SetThreadedCommentData(std::move(pData));
     }
