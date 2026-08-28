@@ -24,7 +24,6 @@ officecfg_XCSFILES := \
     Office/Embedding \
     Office/Events \
     Office/ExtensionDependencies \
-    Office/ExtensionManager \
     Office/Histories \
     Office/Impress \
     Office/Java \
