@@ -553,6 +553,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163178_columnbreakInTable)
     assertXPath(pXmlDoc, "//w:br", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138027_pageBreakAfterShape, "tdf138027_pageBreakAfterShape.docx")
+{
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    // The image and the textbox are on page 1, not after the page break on page 2
+    assertXPath(pDump, "/root/page[1]/sorted_objs/fly", 2);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -123,8 +123,7 @@ DomainMapper::DomainMapper( const uno::Reference< cpo::uno::XComponentContext >&
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),
     m_pImpl(new DomainMapper_Impl(*this, xContext, xModel, eDocumentType, rMediaDesc)),
-    mbHasControls(false),
-    mbWasShapeInPara(false)
+    mbHasControls(false)
 {
     if (m_pImpl->IsNewDoc())
     {
@@ -1705,7 +1704,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             assert(!m_pImpl->GetTopContext());
             assert(m_pImpl->GetIsFirstParagraphInShape());
-            assert(mbWasShapeInPara);
             assert(m_pImpl->GetIsFirstParagraphInSection());
             assert(m_pImpl->IsOutsideAParagraph());
             if (m_pImpl->GetSettingsTable()->GetDisplayBackgroundShape())
@@ -1751,7 +1749,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             xComponent->dispose();
 
             m_pImpl->SetIsFirstParagraphInShape(false);
-            mbWasShapeInPara = false;
         }
         return;
     }
@@ -4141,8 +4138,6 @@ void DomainMapper::lcl_startParagraphGroup()
                     pContext->Insert(PROP_PARA_TOP_MARGIN, cpo::uno::Any(sal_uInt32(0)));
                 }
             }
-
-            mbWasShapeInPara = false;
         }
         m_pImpl->clearDeferredBreaks();
     }
@@ -4218,7 +4213,6 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
     }
 
     m_pImpl->SetIsFirstParagraphInShape(true);
-    mbWasShapeInPara = true;
 }
 
 void DomainMapper::lcl_endShape( )
@@ -4237,6 +4231,7 @@ void DomainMapper::lcl_endShape( )
     m_pImpl->PopShapeContext( );
     // A shape is always inside a paragraph (anchored or inline).
     m_pImpl->SetIsOutsideAParagraph(false);
+    m_pImpl->SetIsFirstRun(false);
 }
 
 void DomainMapper::lcl_startTextBoxContent()
@@ -4921,7 +4916,7 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                 }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
-                    if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() || mbWasShapeInPara)
+                    if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
                     {
                         m_pImpl->m_bIsSplitPara = true;
                         finishParagraph();
