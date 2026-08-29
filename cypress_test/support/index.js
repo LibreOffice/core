@@ -25,24 +25,15 @@ afterEach(function() {
 			if (result.code === 0)
 				Cypress.log({ name: 'loadavg', message: result.stdout });
 		});
-		// Dump app.Log on test failure for debugging
-		cy.getFrameWindow().then((win) => {
-			if (win && win.app && win.app.Log && win.app.Log._logs) {
-				var logs = win.app.Log._logs;
-				Cypress.log({name: 'app.Log', message: 'Dumping ' + logs.length + ' log entries'});
-				for (var i = 0; i < logs.length; i++) {
-					var entry = logs[i];
-					Cypress.log({name: entry.direction, message: entry.msg});
-				}
-			}
+		cy.then(() => {
+			dumpApplicationLog();
+
 			// Skip remaining tests in this spec once a test has definitively
 			// failed, but only after all retries are exhausted.
 			var retries = this.currentTest._retries || 0;
 			var currentRetry = this.currentTest._currentRetry || 0;
-			if (currentRetry >= retries) {
+			if (currentRetry >= retries)
 				Cypress.stop();
-				return;
-			}
 		});
 	}
 });
@@ -206,6 +197,39 @@ Cypress.Commands.add('cGet', function(selector, options) {
 			.its('0.contentDocument', {log: false});
 	}
 });
+
+// Print the log the document frame collected. A test can fail with its frame already
+// reloaded or closed, so every step here reports what it could not reach and returns.
+function dumpApplicationLog() {
+	var frameID = cy.cActiveFrame;
+	if (!frameID) {
+		Cypress.log({name: 'app.Log', message: 'no active frame is set'});
+		return;
+	}
+
+	try {
+		var frame = cy.$$(frameID);
+		if (!frame.length) {
+			Cypress.log({name: 'app.Log', message: 'frame ' + frameID + ' is gone'});
+			return;
+		}
+
+		var win = frame[0].contentWindow;
+		var logs = win && win.app && win.app.Log && win.app.Log._logs;
+		if (!logs) {
+			Cypress.log({name: 'app.Log', message: 'frame ' + frameID + ' holds no log'});
+			return;
+		}
+
+		Cypress.log({name: 'app.Log', message: 'Dumping ' + logs.length + ' log entries'});
+		for (var i = 0; i < logs.length; i++) {
+			var entry = logs[i];
+			Cypress.log({name: entry.direction, message: entry.msg});
+		}
+	} catch (error) {
+		Cypress.log({name: 'app.Log', message: 'frame ' + frameID + ' is unreachable: ' + error.message});
+	}
+}
 
 function getFullTestName() {
 	return Cypress.spec.relative + ' / ' + Cypress.currentTest.titlePath.join(' / ');
