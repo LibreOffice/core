@@ -773,6 +773,30 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTableFilterButtonsOn)
     assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testTableHiddenButtonWithCriteria)
+{
+    createScDoc("xlsx/tableHiddenButtonWithCriteria.xlsx");
+
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn", 3);
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='0']", 1);
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='1']", 1);
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='2']", 1);
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='0']", "hiddenButton", u"1");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='1']", "hiddenButton", u"1");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='2']", "hiddenButton", u"1");
+
+    // the criteria have to stay on that one column
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='0']/x:filters/x:filter", 2);
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='0']/x:filters/x:filter[1]",
+                "val", u"4");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[@colId='0']/x:filters/x:filter[2]",
+                "val", u"5");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testAutofilterShowButton)
 {
     createScDoc("xlsx/autofilterShowButton.xlsx");

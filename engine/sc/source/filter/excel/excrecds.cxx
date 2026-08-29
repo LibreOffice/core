@@ -1030,8 +1030,9 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
                 bool bFilterFound = false;
                 for( size_t nPos = 0, nSize = maFilterList.GetSize(); nPos < nSize; ++nPos )
                 {
+                    // the filters above are keyed by colId, not by sheet column
                     xFilter = maFilterList.GetRecord( nPos );
-                    if( xFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
+                    if( xFilter->GetCol() == nColId )
                     {
                         bFilterFound = true;
                         break;
