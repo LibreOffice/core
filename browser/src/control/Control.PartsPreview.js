@@ -341,9 +341,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._addDnDHandlers(frame);
 		window.L.DomUtil.create('span', 'preview-helper', frame);
 
-		// The visible digit comes from a CSS counter keyed off DOM order (see
-		// partsPreviewControl.css), so it always matches the frame's current
-		// position without any renumbering when frames are inserted or removed.
+		// Holds the slide's 1-based position as its text.
 		const slideNumber = window.L.DomUtil.create('span', 'preview-slide-number', frame);
 		slideNumber.setAttribute('aria-hidden', 'true');
 
@@ -675,13 +673,16 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		return img;
 	},
 
-	// Unlike the visible digit, the alt text and tooltip are plain
-	// attribute strings, so they only ever hold the position they were
-	// given here. Callers that move a preview to a different position
-	// must call this again with the new position.
+	// The visible digit, the alt text and the tooltip are plain position
+	// strings, valid whether or not the slide renders. Callers that move
+	// a preview to a different position must call this again.
 	_setPreviewPositionLabels: function (img, i) {
 		img.setAttribute('alt', _('preview of page %1').replace('%1', String(i + 1)));
 		img.setAttribute('data-cooltip', _('Slide %1').replace('%1', String(i + 1)));
+		const slideNumber = img.parentNode &&
+			img.parentNode.querySelector('.preview-slide-number');
+		if (slideNumber)
+			slideNumber.textContent = String(i + 1);
 	},
 
 	// Relabels every preview from startIndex onward to match its current
@@ -2279,7 +2280,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._previewTiles.indexOf(anchorTile) : this._previewTiles.length;
 		Array.prototype.splice.apply(this._previewTiles, [insertAt, 0].concat(draggedTiles));
 
-		// The slide numbers in the alt text and tooltip are positional,
+		// The visible digit, the alt text and the tooltip are positional,
 		// so renumber every preview after the previews change order.
 		this._updatePreviewPositionLabelsFrom(0);
 	},
