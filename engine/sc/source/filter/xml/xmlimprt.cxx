@@ -72,6 +72,12 @@
 #include "editattributemap.hxx"
 #include <documentimport.hxx>
 #include "pivotsource.hxx"
+#include "xmldrani.hxx"
+#include <dbdata.hxx>
+#include <globalnames.hxx>
+#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
+#include <sortparam.hxx>
 #include <unonames.hxx>
 #include <numformat.hxx>
 #include <sizedev.hxx>
@@ -1329,6 +1335,79 @@ void ScXMLImport::SetSheetNamedRanges()
     }
 }
 
+void ScXMLImport::ApplySheetViews()
+{
+    if (!mpDoc || maSheetViews.empty())
+        return;
+
+    bool bRestored = false;
+    for (const ScXMLSheetViewData& rData : maSheetViews)
+    {
+        SCTAB nTab = -1;
+        if (!mpDoc->GetTable(rData.maTableName, nTab) || mpDoc->IsSheetViewHolder(nTab))
+            continue;
+
+        auto [nSheetViewID, nViewTab] = mpDoc->CreateNewSheetView(nTab);
+        if (nSheetViewID == sc::InvalidSheetViewID)
+            continue;
+        bRestored = true;
+
+        if (std::shared_ptr<sc::SheetViewManager> pManager = mpDoc->GetSheetViewManager(nTab))
+        {
+            if (std::shared_ptr<sc::SheetView> pSheetView = pManager->get(nSheetViewID))
+            {
+                pSheetView->SetName(rData.maName);
+                pSheetView->SetGUID(rData.maGUID);
+                pSheetView->SetFilterGUID(rData.maFilterGUID);
+            }
+        }
+
+        // The copy took over the hidden columns of its sheet. A sheet view hides its own set.
+        mpDoc->SetColHidden(0, mpDoc->MaxCol(), nViewTab, false);
+        for (const auto& rHiddenRange : rData.maHiddenColumns)
+            mpDoc->SetColHidden(rHiddenRange.first, rHiddenRange.second, nViewTab, true);
+
+        if (!rData.mbHasFilterRange)
+            continue;
+
+        ScQueryParam aQueryParam(rData.maQueryParam);
+        aQueryParam.nTab = nViewTab;
+        ScRange aRange(aQueryParam.nCol1, aQueryParam.nRow1, nViewTab, aQueryParam.nCol2,
+                       aQueryParam.nRow2, nViewTab);
+
+        ScDBData* pDBData = mpDoc->GetAnonymousDBData(nViewTab);
+        if (!pDBData)
+        {
+            auto pNewData = std::make_unique<ScDBData>(
+                STR_DB_LOCAL_NONAME, nViewTab, aRange.aStart.Col(), aRange.aStart.Row(),
+                aRange.aEnd.Col(), aRange.aEnd.Row(), true, aQueryParam.bHasHeader);
+            pDBData = pNewData.get();
+            mpDoc->SetAnonymousDBData(nViewTab, std::move(pNewData));
+        }
+        pDBData->SetArea(aRange);
+        pDBData->SetAutoFilter(true);
+
+        // Sorting moves the rows, so the filter runs on the rows in their final order.
+        if (rData.mbHasSort)
+        {
+            pDBData->SetSortParam(
+                convertSortSequence(rData.maSortSequence, aQueryParam.bByRow, aRange));
+            ScSortParam aSortParam;
+            pDBData->GetSortParam(aSortParam);
+            mpDoc->Sort(nViewTab, aSortParam, false, false, nullptr, nullptr);
+        }
+
+        mpDoc->PrepareQuery(nViewTab, aQueryParam);
+        pDBData->SetQueryParam(aQueryParam);
+        mpDoc->Query(nViewTab, aQueryParam, false, false);
+    }
+
+    // The stream positions of unchanged sheets are kept by table index. Each holder table that
+    // was made above moved the sheets after it by one, so every sheet is written out afresh.
+    if (bRestored)
+        mpDoc->InvalidateStreamOnSave();
+}
+
 void ScXMLImport::SetStringRefSyntaxIfMissing()
 {
     if (!mpDoc)
@@ -1466,6 +1545,9 @@ void SAL_CALL ScXMLImport::endDocument()
         }
 
         aTables.FixupOLEs();
+
+        // A sheet view is a copy of its sheet, so it is made once the sheet is complete.
+        ApplySheetViews();
     }
     if (GetScModel())
     {

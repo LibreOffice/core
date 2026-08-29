@@ -1768,6 +1768,73 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
     assertXPath(pXmlDoc, "//office:spreadsheet/coext:sheet-views/coext:sheet-view", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOdfRoundtripKeepsHeaderAndFilterButtons)
+{
+    // A filtered sheet view keeps its header row, and the filter buttons on it, over an ODS
+    // round trip.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+
+    {
+        ScDocument& rDocument = pDocShell->GetDocument();
+        ScTestViewCallback aView;
+        ScTabViewShell* pTabView = aView.getTabViewShell();
+
+        // A two-column table: a header row and three data rows.
+        rDocument.SetString(ScAddress(0, 0, 0), u"Name"_ustr);
+        rDocument.SetString(ScAddress(1, 0, 0), u"Value"_ustr);
+        rDocument.SetString(ScAddress(0, 1, 0), u"one"_ustr);
+        rDocument.SetValue(ScAddress(1, 1, 0), 1.0);
+        rDocument.SetString(ScAddress(0, 2, 0), u"two"_ustr);
+        rDocument.SetValue(ScAddress(1, 2, 0), 2.0);
+        rDocument.SetString(ScAddress(0, 3, 0), u"one"_ustr);
+        rDocument.SetValue(ScAddress(1, 3, 0), 3.0);
+
+        gotoCell(u"A1");
+        dispatchCommand(mxComponent, u".uno:DataFilterAutoFilter"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+
+        createNewSheetViewInCurrentView();
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView->GetViewData().GetTabNumber());
+
+        // Keep the two "one" rows in the sheet view.
+        filterOnColumn(rDocument, pTabView, 0, u"one");
+        CPPUNIT_ASSERT(!rDocument.RowHidden(0, 1));
+        CPPUNIT_ASSERT(rDocument.RowHidden(2, 1));
+    }
+
+    saveAndReload(TestFilter::ODS);
+
+    pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDocument = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDocument);
+
+    CPPUNIT_ASSERT(pDocument->IsSheetViewHolder(1));
+
+
+    // The view shows the header row and the two matching rows.
+    CPPUNIT_ASSERT(!pDocument->RowHidden(0, 1));
+    CPPUNIT_ASSERT(!pDocument->RowHidden(1, 1));
+    CPPUNIT_ASSERT(pDocument->RowHidden(2, 1));
+    CPPUNIT_ASSERT(!pDocument->RowHidden(3, 1));
+
+    // The filter buttons sit on the header row of the view.
+    ScDBData* pDBData = pDocument->GetAnonymousDBData(1);
+    CPPUNIT_ASSERT(pDBData);
+    CPPUNIT_ASSERT(pDBData->HasAutoFilter());
+    CPPUNIT_ASSERT(pDBData->HasHeader());
+    ScMF nFlag = pDocument->GetAttr(0, 0, 1, ATTR_MERGE_FLAG).GetValue();
+    CPPUNIT_ASSERT(bool(nFlag & ScMF::Auto));
+    nFlag = pDocument->GetAttr(1, 0, 1, ATTR_MERGE_FLAG).GetValue();
+    CPPUNIT_ASSERT(bool(nFlag & ScMF::Auto));
+
+    // The sheet itself stays unfiltered.
+    CPPUNIT_ASSERT(!pDocument->RowHidden(2, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)
 {
     // Check if sheet view holder table is saved into the OOXML document

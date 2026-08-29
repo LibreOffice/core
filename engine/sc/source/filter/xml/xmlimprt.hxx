@@ -22,6 +22,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include "xmlsubti.hxx"
+#include "xmlsheetviewi.hxx"
 #include <formula/grammar.hxx>
 #include <vcl/svapp.hxx>
 #include <dociter.hxx>
@@ -142,6 +143,8 @@ class ScXMLImport: public SvXMLImport
 
     ScMyLabelRanges            maMyLabelRanges;
     ScMyImportValidations      maValidations;
+    /// The sheet views read so far. They are created once every sheet is complete.
+    std::vector<ScXMLSheetViewData> maSheetViews;
     std::unique_ptr<ScMyImpDetectiveOpArray>    pDetectiveOpArray;
     std::optional<SolarMutexGuard> moSolarMutexGuard;
 
@@ -234,6 +237,11 @@ public:
         maMyLabelRanges.push_back(std::move(aMyLabelRange));
     }
 
+    void AddSheetView(ScXMLSheetViewData aSheetView)
+    {
+        maSheetViews.push_back(std::move(aSheetView));
+    }
+
     void AddValidation(const ScMyImportValidation& rValidation) { maValidations.push_back(rValidation); }
     bool GetValidation(const OUString& sName, ScMyImportValidation& aValidation);
 
@@ -304,6 +312,7 @@ public:
     void SetSheetNamedRanges();
     void SetLabelRanges();
     void SetStringRefSyntaxIfMissing();
+    void ApplySheetViews();
 
     /** Extracts the formula string, the formula grammar namespace URL, and a
         grammar enum value from the passed formula attribute value.

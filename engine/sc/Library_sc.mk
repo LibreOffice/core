@@ -367,6 +367,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/filter/xml/xmlnexpi \
     sc/source/filter/xml/xmlrowi \
     sc/source/filter/xml/xmlsceni \
+    sc/source/filter/xml/xmlsheetviewi \
     sc/source/filter/xml/xmlsorti \
     sc/source/filter/xml/xmlstyle \
     sc/source/filter/xml/xmlstyli \

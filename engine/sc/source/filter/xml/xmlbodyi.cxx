@@ -31,6 +31,7 @@
 #include "xmlcvali.hxx"
 #include "xmllabri.hxx"
 #include "xmlmappingi.hxx"
+#include "xmlsheetviewi.hxx"
 #include "XMLConsolidationContext.hxx"
 #include "XMLDDELinksContext.hxx"
 #include "XMLCalculationSettingsContext.hxx"
@@ -227,6 +228,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
     case XML_ELEMENT( CALC_EXT, XML_DATA_STREAM_SOURCE ):
         pContext = new ScXMLDataStreamContext(GetScImport(), pAttribList);
+        break;
+    case XML_ELEMENT( CO_EXT, XML_SHEET_VIEWS ):
+        pContext = new ScXMLSheetViewsContext(GetScImport());
         break;
     }
 
