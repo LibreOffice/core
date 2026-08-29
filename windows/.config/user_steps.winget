@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
 
 # configuration to setup the dependencies in ~/co and add make, jom and clang-format to ~/bin
-# and install a wsl distro with the required packages
+# and install the MSYS2 packages the engine and online configure steps need
 # this configuration is meant to be applied as the build user, and after the admin_deps one
 # has been applied. It also creates a ~/co/autogen.input with some sensible defaults that can be
 # used as a template for own modifications
@@ -26,11 +26,11 @@ properties:
           "")
           !(($files | foreach {Test-Path "$env:PUBLIC/Downloads/$_"}) -contains $false)
     - resource: xPSDesiredStateConfiguration/xScript
-      id: wsl-check
+      id: msys2-check
       directives:
-        description: check that wsl utility is available/working - i.e. whether wsl is installed
+        description: check that MSYS2 is installed (by the admin_deps step)
       settings:
-        TestScript: wsl.exe --status ; return ![bool]$LASTEXITCODE
+        TestScript: Test-Path -Path "C:/msys64/usr/bin/bash.exe"
         GetScript: return $false
         SetScript: return $false
   resources:
@@ -156,58 +156,16 @@ properties:
           #--with-lang=fr ja
           "
     - resource: xPSDesiredStateConfiguration/xScript
-      id: cloud-init-dir
+      id: msys2-packages
       directives:
-        description: create the ~/.cloud-init directory
+        description: install the MSYS2 packages the engine and online configure steps and the browser bundle need (autotools, flex, bison, gperf, nasm, zip, gettext, python with lxml and polib)
       settings:
-        TestScript: Test-Path -Path "$env:UserProfile/.cloud-init" -PathType "Container"
-        GetScript:  Test-Path -Path "$env:UserProfile/.cloud-init" -PathType "Container"
-        SetScript: New-Item -ItemType "directory" -Path "$env:UserProfile" -Name ".cloud-init"
-    - resource: xPSDesiredStateConfiguration/xScript
-      id: cloud-init-config
-      dependsOn:
-        - cloud-init-dir
-      directives:
-        description: create a cloud-init configuration to automate the installation of Ubuntu 24.04
-      settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/.cloud-init/Ubuntu-24.04.user-data"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/.cloud-init/Ubuntu-24.04.user-data"
+        TestScript: |
+          C:\msys64\usr\bin\bash.exe -lc 'command -v autoconf && command -v aclocal && command -v libtoolize && command -v m4 && command -v make && command -v flex && command -v bison && command -v gperf && command -v nasm && command -v zip && command -v unzip && command -v msgfmt && command -v gcc && test -f /usr/share/aclocal/pkg.m4 && python3 -c "import lxml, polib"' > $null 2>&1
+          return ![bool]$LASTEXITCODE
+        GetScript: |
+          C:\msys64\usr\bin\bash.exe -lc 'command -v autoconf' > $null 2>&1
+          return ![bool]$LASTEXITCODE
         SetScript: |
-          New-Item -Path "$env:USERPROFILE/.cloud-init" -Name "Ubuntu-24.04.user-data" -ItemType "file" -Value '#cloud-config
-          users:
-            - name: ubuntu
-              # ubuntu
-              passwd: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
-              lock_passwd: false
-              groups: [user, adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev]
-              shell: /bin/bash
-
-          write_files:
-          - path: /etc/wsl.conf
-            append: true
-            content: |
-              [user]
-              default=ubuntu
-
-          packages: [pkg-config, automake, autoconf, libtool, build-essential, make, gperf, bison, nasm, flex, zip, git, ca-certificates, curl, gnupg, libfont-ttf-perl, python3-lxml, python3-polib]
-
-          # Ubuntu 24.04 ships Node.js 18, but Collabora Online needs >= 20 (with npm >= 9),
-          # so install it from NodeSource after the apt packages above are in place.
-          runcmd:
-            - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-            - apt-get install -y nodejs
-          '
-    - resource: xPSDesiredStateConfiguration/xScript
-      id: install-Ubuntu
-      dependsOn:
-        - cloud-init-config
-      directives:
-        description: installs Ubuntu with help of the cloud-init file
-      settings:
-        TestScript: wsl.exe --list ; return ![bool]$LASTEXITCODE
-        GetScript:  wsl.exe --list ; return ![bool]$LASTEXITCODE
-        SetScript: |
-          wsl.exe --install --no-launch --distribution Ubuntu-24.04
-          ubuntu2404.exe install --root
-          ubuntu2404.exe run cloud-init status --wait
+          C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed autoconf automake libtool m4 make gcc bison flex gperf nasm zip unzip gettext gettext-devel patch pkgconf python python-lxml python-pip perl && python3 -m pip install --break-system-packages polib'
   configurationVersion: 0.2.0

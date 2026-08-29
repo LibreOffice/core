@@ -6,7 +6,8 @@ This is the Collabora Office Windows desktop app (`windows/`).
 ## Requirements
 
 Collabora Office for Windows is built with **Visual Studio 2026**, plus a
-Unix-style toolchain reached through WSL and Git Bash. The `windows/.config/`
+Unix-style toolchain provided by Git Bash and an MSYS2 installation — no WSL
+needed. The `windows/.config/`
 directory in the repo ships
 [WinGet configuration](https://learn.microsoft.com/windows/package-manager/configuration/)
 files that set up a build machine for you; apply them, or follow them as a
@@ -26,12 +27,13 @@ winget configure windows/.config/configuration.winget
 (`windows/.config/2026_cross.vsconfig` lists the extra components for
 cross-compiling to ARM64.)
 
-### Build tools and WSL
+### Build tools and MSYS2
 
 Two more WinGet configurations finish the setup. The first must be run **as
 administrator** — it downloads `jom`, `make`, `clang-format`, `pkgconf` and
-Strawberry Perl Portable, makes sure WSL is installed, and enables Developer
-Mode (so `tar` can create native symlinks while unpacking tarballs):
+Strawberry Perl Portable, installs MSYS2 (to `C:\msys64`) and Node.js LTS, and
+enables Developer Mode (so `tar` can create native symlinks while unpacking
+tarballs):
 
 ```
 winget configure windows/.config/admin_deps.winget
@@ -41,9 +43,9 @@ The second runs as your normal user. It places `make`, `jom`, `clang-format`
 and `pkgconf` in `~\bin`, extracts Strawberry Perl Portable to `~\co\spp`, sets
 the git options the build needs (`protocol.version=2`, `core.autocrlf=false`)
 and `MSYS=winsymlinks:nativestrict`, drops a sample `~\co\autogen.input`, and
-installs an Ubuntu 24.04 WSL distro with the packages the engine and online
-build need (autotools, `build-essential`, the Python `lxml`/`polib` helpers, and
-Node.js 20 from NodeSource, since 24.04 only ships Node.js 18):
+installs the MSYS2 packages the engine and online build need (autotools,
+`pkgconf`, `gcc`, `flex`, `bison`, `gperf`, `nasm`, `zip`, gettext, and Python
+with the `lxml`/`polib` helpers):
 
 ```
 winget configure windows/.config/user_steps.winget
@@ -82,7 +84,7 @@ make
 
 `autogen.sh` configures the engine; `make` then builds the engine, configures
 and builds the online part, and builds the Visual Studio solution, dispatching
-the steps that need a Unix environment to WSL automatically. The build is
+the steps that need a Unix environment to MSYS2 automatically. The build is
 incremental, and editing `autogen.input` reconfigures the engine on the next
 `make`. It is out-of-tree only, and the engine configure flags must live in
 `autogen.input` (they are not accepted as command-line arguments).
@@ -95,6 +97,11 @@ The app is built in the Debug configuration by default; pass `make CONFIG=Releas
 for a Release build. This has to match the engine: a Debug app needs an engine
 built with `--enable-dbgutil` or `--enable-msvc-debug-runtime`, so choose the
 engine flags in `autogen.input` to suit (see the note under "Build the engine").
+
+The online configure options are make variables: `APP_NAME`, `VENDOR`,
+`INFO_URL`, plus `ONLINE_CONFIGURE_ARGS` for anything else, e.g.
+`make CONFIG=Release APP_NAME='Collabora Office Preview' VENDOR='Collabora Productivity Limited'`.
+Changing any of them re-runs the online configure on the next `make`.
 
 The sections below describe the same build done by hand, which you still want
 when running or debugging the pieces individually.
@@ -120,12 +127,13 @@ Studio 2026 configuration looks like:
 ```
 
 Adjust the paths to match where Strawberry Perl Portable was extracted and where
-you keep downloaded tarballs. Then run autogen through WSL and build with `make`
-from Git Bash:
+you keep downloaded tarballs. Then, from Git Bash, run autogen through MSYS2
+(the `run-msys2` helper starts an MSYS2 shell with the right environment) and
+build with `make`:
 
 ```bash
 cd engine
-wsl ./autogen.sh
+./solenv/bin/run-msys2 ./autogen.sh
 make
 ```
 
@@ -142,24 +150,24 @@ positives.
 
 ### Configure
 
-From the top of the clone, run autogen and configure through WSL. POCO, libpng
+From the top of the clone, run autogen and configure through MSYS2. POCO, libpng
 and zstd are built as part of the engine and linked from its workdir by the
 Visual Studio project, so they no longer need to be built or passed separately
 (zlib likewise comes from the engine):
 
 ```bash
-wsl --exec bash -c "./autogen.sh"
-wsl --exec bash -c "./configure --enable-windowsapp --with-app-name='Collabora Office' --with-lo-builddir='/mnt/c/Users/<you>/collabora-office/engine' --with-lo-path='C:\Users\<you>\collabora-office\engine\instdir' --with-info-url=https://example.com/coda/info.html"
+./engine/solenv/bin/run-msys2 ./autogen.sh
+./engine/solenv/bin/run-msys2 ./configure --enable-windowsapp --with-app-name='Collabora Office' --with-lo-builddir='/c/Users/<you>/collabora-office/engine' --with-lo-path='C:\Users\<you>\collabora-office\engine\instdir' --with-info-url=https://example.com/coda/info.html
 ```
 
-`--with-lo-builddir` is a WSL (Unix) path, while `--with-lo-path` is a Windows
-path — this matters. Change `--with-info-url` as appropriate; that is the web
-page shown when clicking the leftmost button in the toolbar.
+`--with-lo-builddir` is a Unix (`/c/...`) path, while `--with-lo-path` is a
+Windows path — this matters. Change `--with-info-url` as appropriate; that is
+the web page shown when clicking the leftmost button in the toolbar.
 
 ### Build the JavaScript bits
 
 ```bash
-wsl --exec bash -c "(cd browser && make clean && make)"
+./engine/solenv/bin/run-msys2 make -C browser
 ```
 
 ### Build the app
@@ -171,9 +179,10 @@ fetches the NuGet/.NET dependencies):
 msbuild /restore /p:Configuration=Release /p:Platform=x64 windows\coda\CODA.sln
 ```
 
-To clean first, run the same command with `/t:Clean`. You can also build from a
-WSL shell, as long as PATH has what is needed and you quote the msbuild
-parameters.
+To clean first, run the same command with `/t:Clean`. You can also build from
+Git Bash, as long as PATH has what is needed and you use `-` instead of `/` for
+the msbuild switches (the MSYS argument conversion would rewrite `/nologo` and
+friends into paths).
 
 ## Pre-built download
 
