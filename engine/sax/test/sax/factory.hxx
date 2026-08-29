@@ -22,7 +22,7 @@
 #include <rtl/strbuf.hxx>
 
 namespace sax_test {
-Reference< XInterface > SAL_CALL OSaxWriterTest_CreateInstance(
+Reference< XInterface > OSaxWriterTest_CreateInstance(
     const Reference< XMultiServiceFactory > & rSMgr ) throw ( Exception );
 OUString    OSaxWriterTest_getServiceName( ) throw();
 OUString    OSaxWriterTest_getImplementationName( ) throw();

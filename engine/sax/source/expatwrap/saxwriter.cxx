@@ -1016,7 +1016,7 @@ public:
     }
 
 public: // XActiveDataSource
-    virtual void SAL_CALL setOutputStream(const Reference<XOutputStream>& aStream) override
+    virtual void setOutputStream(const Reference<XOutputStream>& aStream) override
     {
         try
         {
@@ -1038,39 +1038,39 @@ public: // XActiveDataSource
                                                            e.WrappedException);
         }
     }
-    virtual Reference<XOutputStream> SAL_CALL getOutputStream() override { return m_out; }
+    virtual Reference<XOutputStream> getOutputStream() override { return m_out; }
 
 public: // XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
+    virtual void startDocument() override;
 
-    virtual void SAL_CALL endDocument() override;
+    virtual void endDocument() override;
 
-    virtual void SAL_CALL startElement(const OUString& aName,
+    virtual void startElement(const OUString& aName,
                                        const Reference<XAttributeList>& xAttribs) override;
 
-    virtual void SAL_CALL endElement(const OUString& aName) override;
+    virtual void endElement(const OUString& aName) override;
 
-    virtual void SAL_CALL characters(const OUString& aChars) override;
+    virtual void characters(const OUString& aChars) override;
 
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
-    virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+    virtual void ignorableWhitespace(const OUString& aWhitespaces) override;
+    virtual void processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override;
-    virtual void SAL_CALL setDocumentLocator(const Reference<XLocator>& xLocator) override;
-    virtual void SAL_CALL setCustomEntityNames(
+    virtual void setDocumentLocator(const Reference<XLocator>& xLocator) override;
+    virtual void setCustomEntityNames(
         const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
             replacements) override;
 
 public: // XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA() override;
-    virtual void SAL_CALL endCDATA() override;
-    virtual void SAL_CALL comment(const OUString& sComment) override;
-    virtual void SAL_CALL unknown(const OUString& sString) override;
-    virtual void SAL_CALL allowLineBreak() override;
+    virtual void startCDATA() override;
+    virtual void endCDATA() override;
+    virtual void comment(const OUString& sComment) override;
+    virtual void unknown(const OUString& sString) override;
+    virtual void allowLineBreak() override;
 
 public: // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString getImplementationName() override;
+    Sequence<OUString> getSupportedServiceNames() override;
+    bool supportsService(const OUString& ServiceName) override;
 
 private:
     sal_Int32 getIndentPrefixLength(sal_Int32 nFirstLineBreakOccurrence) noexcept;

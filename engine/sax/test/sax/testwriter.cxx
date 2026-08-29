@@ -54,11 +54,11 @@ public:
 
 
 public:
-    virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
+    virtual void writeBytes(const Sequence< sal_Int8 >& aData)
         throw  (NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual void SAL_CALL flush()
+    virtual void flush()
         throw  (NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual void SAL_CALL closeOutput()
+    virtual void closeOutput()
         throw  (NotConnectedException, BufferSizeExceededException, RuntimeException);
 private:
     char m_pcFile[256];
@@ -103,23 +103,23 @@ public:
 
 
 public:
-    virtual void SAL_CALL testInvariant(
+    virtual void testInvariant(
         const OUString& TestName,
         const Reference < XInterface >& TestObject)
         throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual sal_Int32 SAL_CALL test(
+    virtual sal_Int32 test(
         const OUString& TestName,
         const Reference < XInterface >& TestObject,
         sal_Int32 hTestHandle)
         throw  (    IllegalArgumentException,RuntimeException);
 
-    virtual bool SAL_CALL testPassed()
+    virtual bool testPassed()
         throw  (    RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings()             throw  (RuntimeException);
+    virtual Sequence< OUString > getErrors()               throw  (RuntimeException);
+    virtual Sequence< Any > getErrorExceptions()       throw  (RuntimeException);
+    virtual Sequence< OUString > getWarnings()             throw  (RuntimeException);
 
 private:
     void testSimple( const Reference< XExtendedDocumentHandler > &r );
@@ -151,12 +151,12 @@ public:
     ~AttributeListImpl();
 
 public:
-    virtual sal_Int16 SAL_CALL getLength() throw  (RuntimeException);
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw  (RuntimeException);
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw  (RuntimeException);
-    virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw  (RuntimeException);
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw  (RuntimeException);
-    virtual OUString SAL_CALL getValueByName(const OUString& aName) throw  (RuntimeException);
+    virtual sal_Int16 getLength() throw  (RuntimeException);
+    virtual OUString getNameByIndex(sal_Int16 i) throw  (RuntimeException);
+    virtual OUString getTypeByIndex(sal_Int16 i) throw  (RuntimeException);
+    virtual OUString getTypeByName(const OUString& aName) throw  (RuntimeException);
+    virtual OUString getValueByIndex(sal_Int16 i) throw  (RuntimeException);
+    virtual OUString getValueByName(const OUString& aName) throw  (RuntimeException);
 
 public:
     void addAttribute( const OUString &sName ,
@@ -285,7 +285,7 @@ void AttributeListImpl::clear()
 *
 *
 **/
-Reference < XInterface > SAL_CALL OSaxWriterTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw (Exception)
+Reference < XInterface > OSaxWriterTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw (Exception)
 {
     OSaxWriterTest *p = new OSaxWriterTest( rSMgr );
     Reference < XInterface > xService = *p;

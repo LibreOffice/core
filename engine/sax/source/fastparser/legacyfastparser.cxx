@@ -57,8 +57,8 @@ public:
     void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList > const & rAttrList );
 
     //XFastNamespaceHandler
-    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
-    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix ) override;
+    virtual void registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
+    virtual OUString getNamespaceURI( const OUString& rNamespacePrefix ) override;
 };
 
 NamespaceHandler::NamespaceHandler()
@@ -100,20 +100,20 @@ public:
     SaxLegacyFastParser();
 
 // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any> const& rArguments) override;
+    virtual void initialize(cpo::uno::Sequence<cpo::uno::Any> const& rArguments) override;
 
 // The SAX-Parser-Interface
-    virtual void SAL_CALL parseStream(  const InputSource& structSource) override;
-    virtual void SAL_CALL setDocumentHandler(const Reference< XDocumentHandler > & xHandler) override;
-    virtual void SAL_CALL setErrorHandler(const Reference< XErrorHandler > & xHandler) override;
-    virtual void SAL_CALL setDTDHandler(const Reference < XDTDHandler > & xHandler) override;
-    virtual void SAL_CALL setEntityResolver(const Reference<  XEntityResolver >& xResolver) override;
-    virtual void SAL_CALL setLocale( const Locale &locale ) override;
+    virtual void parseStream(  const InputSource& structSource) override;
+    virtual void setDocumentHandler(const Reference< XDocumentHandler > & xHandler) override;
+    virtual void setErrorHandler(const Reference< XErrorHandler > & xHandler) override;
+    virtual void setDTDHandler(const Reference < XDTDHandler > & xHandler) override;
+    virtual void setEntityResolver(const Reference<  XEntityResolver >& xResolver) override;
+    virtual void setLocale( const Locale &locale ) override;
 
 // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString getImplementationName() override;
+    Sequence< OUString > getSupportedServiceNames() override;
+    bool supportsService(const OUString& ServiceName) override;
 
 private:
     Reference< XFastParser > m_xParser;
@@ -141,19 +141,19 @@ public:
                              Reference< XFastTokenHandler > const & xTokenHandler);
 
     // XFastDocumentHandler
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
-    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
+    virtual void startDocument() override;
+    virtual void endDocument() override;
+    virtual void processingInstruction( const OUString& rTarget, const OUString& rData ) override;
+    virtual void setDocumentLocator( const Reference< XLocator >& xLocator ) override;
 
     // XFastContextHandler
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
-    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
-    virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
-    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
+    virtual void startFastElement( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual void startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual void endFastElement( sal_Int32 Element ) override;
+    virtual void endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
+    virtual Reference< XFastContextHandler > createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual Reference< XFastContextHandler > createUnknownChildContext( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual void characters( const OUString& aChars ) override;
 
 };
 
@@ -185,38 +185,38 @@ CallbackDocumentHandler::CallbackDocumentHandler( Reference< XDocumentHandler > 
    m_xTokenHandler.set( xTokenHandler );
 }
 
-void SAL_CALL CallbackDocumentHandler::startDocument()
+void CallbackDocumentHandler::startDocument()
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->startDocument();
 }
 
-void SAL_CALL CallbackDocumentHandler::endDocument()
+void CallbackDocumentHandler::endDocument()
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->endDocument();
 }
 
-void SAL_CALL CallbackDocumentHandler::processingInstruction( const OUString& rTarget, const OUString& rData )
+void CallbackDocumentHandler::processingInstruction( const OUString& rTarget, const OUString& rData )
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->processingInstruction( rTarget, rData );
 }
 
-void SAL_CALL CallbackDocumentHandler::setDocumentLocator( const Reference< XLocator >& xLocator )
+void CallbackDocumentHandler::setDocumentLocator( const Reference< XLocator >& xLocator )
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->setDocumentLocator( xLocator );
 }
 
-void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& Attribs  )
+void CallbackDocumentHandler::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& Attribs  )
 {
     const OUString aPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
     const OUString aLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
     startUnknownElement( aDefaultNamespace, (aPrefix.isEmpty())? aLocalName : aPrefix + aNamespaceSeparator + aLocalName, Attribs );
 }
 
-void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Namespace*/, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
+void CallbackDocumentHandler::startUnknownElement( const OUString& /*Namespace*/, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
 {
     if ( !m_xDocumentHandler.is() )
         return;
@@ -248,7 +248,7 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Na
     m_xDocumentHandler->startElement( Name, rAttrList );
 }
 
-void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
+void CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
 {
     const OUString aPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
     const OUString aLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
@@ -256,7 +256,7 @@ void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
 }
 
 
-void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& /*Namespace*/, const OUString& Name )
+void CallbackDocumentHandler::endUnknownElement( const OUString& /*Namespace*/, const OUString& Name )
 {
     if ( m_xDocumentHandler.is() )
     {
@@ -264,18 +264,18 @@ void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& /*Name
     }
 }
 
-Reference< XFastContextHandler > SAL_CALL CallbackDocumentHandler::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* Attribs */ )
+Reference< XFastContextHandler > CallbackDocumentHandler::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* Attribs */ )
 {
     return this;
 }
 
 
-Reference< XFastContextHandler > SAL_CALL CallbackDocumentHandler::createUnknownChildContext( const OUString&/* Namespace */, const OUString&/* Name */, const Reference< XFastAttributeList >&/* Attribs */ )
+Reference< XFastContextHandler > CallbackDocumentHandler::createUnknownChildContext( const OUString&/* Namespace */, const OUString&/* Name */, const Reference< XFastAttributeList >&/* Attribs */ )
 {
     return this;
 }
 
-void SAL_CALL CallbackDocumentHandler::characters( const OUString& aChars )
+void CallbackDocumentHandler::characters( const OUString& aChars )
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->characters( aChars );
@@ -287,7 +287,7 @@ SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new Namespace
     m_xParser->setNamespaceHandler( m_aNamespaceHandler );
 }
 
-void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
+void SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
 {
     if (!rArguments.hasElements())
         return;

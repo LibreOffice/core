@@ -27,48 +27,48 @@ namespace sax
     {
     public:
         // XDocumentHandler
-        virtual void SAL_CALL
+        virtual void
         startDocument() override
         {
             m_handler->startDocument();
         }
 
-        virtual void SAL_CALL
+        virtual void
         endDocument() override
         {
             m_handler->endDocument();
         }
 
-        virtual void SAL_CALL
+        virtual void
         startElement(const OUString& aName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override
         {
             m_handler->startElement(aName, xAttribs);
         }
 
-        virtual void SAL_CALL
+        virtual void
         endElement(const OUString& aName) override
         {
             m_handler->endElement(aName);
         }
 
-        virtual void SAL_CALL
+        virtual void
         characters(const OUString& aChars) override
         {
             m_handler->characters(aChars);
         }
 
-        virtual void SAL_CALL
+        virtual void
         ignorableWhitespace(const OUString& aWhitespaces) override
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
-        virtual void SAL_CALL
+        virtual void
         processingInstruction(const OUString& aTarget, const OUString& aData) override
         {
             m_handler->processingInstruction(aTarget, aData);
         }
-        virtual void SAL_CALL
+        virtual void
         setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override
         {
             m_handler->setDocumentLocator(xLocator);
@@ -112,74 +112,74 @@ namespace sax
 
     public:
         // XDocumentHandler
-        virtual void SAL_CALL
+        virtual void
         startDocument() override
         {
             m_handler->startDocument();
         }
 
-        virtual void SAL_CALL
+        virtual void
         endDocument() override
         {
             m_handler->endDocument();
         }
 
-        virtual void SAL_CALL
+        virtual void
         startElement(const OUString& aName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override
         {
             m_handler->startElement(aName, xAttribs);
         }
 
-        virtual void SAL_CALL
+        virtual void
         endElement(const OUString& aName) override
         {
             m_handler->endElement(aName);
         }
 
-        virtual void SAL_CALL
+        virtual void
         characters(const OUString& aChars) override
         {
             m_handler->characters(aChars);
         }
 
-        virtual void SAL_CALL
+        virtual void
         ignorableWhitespace(const OUString& aWhitespaces) override
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
-        virtual void SAL_CALL
+        virtual void
         processingInstruction(const OUString& aTarget, const OUString& aData) override
         {
             m_handler->processingInstruction(aTarget, aData);
         }
-        virtual void SAL_CALL
+        virtual void
         setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override
         {
             m_handler->setDocumentLocator(xLocator);
         }
         // XExtendedDocumentHandler
-        virtual void SAL_CALL
+        virtual void
         startCDATA() override
         {
             m_handler->startCDATA();
         }
-        virtual void SAL_CALL
+        virtual void
         endCDATA() override
         {
             m_handler->endCDATA();
         }
-        virtual void SAL_CALL
+        virtual void
         comment(const OUString& sComment) override
         {
             m_handler->comment(sComment);
         }
-        virtual void SAL_CALL
+        virtual void
         unknown(const OUString& sString) override
         {
             m_handler->unknown(sString);
         }
-        virtual void SAL_CALL
+        virtual void
         allowLineBreak() override
         {
             m_handler->allowLineBreak();

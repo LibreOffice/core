@@ -82,14 +82,14 @@ public:
     const OUStringBuffer & getString() const { return m_aStr; }
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
+    virtual void startDocument() override;
+    virtual void endDocument() override;
+    virtual void startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
+    virtual void endElement( const OUString& aName ) override;
+    virtual void characters( const OUString& aChars ) override;
+    virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
+    virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+    virtual void setDocumentLocator( const Reference< XLocator >& xLocator ) override;
 };
 
 OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUString &sValue, bool isElement)
@@ -133,7 +133,7 @@ OUString TestDocumentHandler::getNamespace(std::u16string_view sName)
     return OUString();
 }
 
-void SAL_CALL TestDocumentHandler::startDocument()
+void TestDocumentHandler::startDocument()
 {
     m_aStr.setLength(0);
     m_aNamespaceStack.clear();
@@ -143,11 +143,11 @@ void SAL_CALL TestDocumentHandler::startDocument()
 }
 
 
-void SAL_CALL TestDocumentHandler::endDocument()
+void TestDocumentHandler::endDocument()
 {
 }
 
-void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
+void TestDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
 {
     OUStringBuffer sAttributes;
     m_aCountStack.push(0);
@@ -163,7 +163,7 @@ void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Re
 }
 
 
-void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
+void TestDocumentHandler::endElement( const OUString& aName )
 {
     m_aStr.append(canonicalform(aName, u""_ustr, true));
     sal_uInt16 nPopQty = m_aCountStack.top();
@@ -173,25 +173,25 @@ void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
 }
 
 
-void SAL_CALL TestDocumentHandler::characters( const OUString& aChars )
+void TestDocumentHandler::characters( const OUString& aChars )
 {
     m_aStr.append(aChars);
 }
 
 
-void SAL_CALL TestDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
+void TestDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
 {
     m_aStr.append(aWhitespaces);
 }
 
 
-void SAL_CALL TestDocumentHandler::processingInstruction( const OUString& aTarget, const OUString& aData )
+void TestDocumentHandler::processingInstruction( const OUString& aTarget, const OUString& aData )
 {
     m_aStr.append(aTarget + aData);
 }
 
 
-void SAL_CALL TestDocumentHandler::setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
+void TestDocumentHandler::setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
 {
 }
 
@@ -201,14 +201,14 @@ public:
     NSDocumentHandler() {}
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() override {}
-    virtual void SAL_CALL endDocument() override {}
-    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
-    virtual void SAL_CALL endElement( const OUString& /* aName */ ) override {}
-    virtual void SAL_CALL characters( const OUString& /* aChars */ ) override {}
-    virtual void SAL_CALL ignorableWhitespace( const OUString& /* aWhitespaces */ ) override {}
-    virtual void SAL_CALL processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ ) override {}
-    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& /* xLocator */ ) override {}
+    virtual void startDocument() override {}
+    virtual void endDocument() override {}
+    virtual void startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
+    virtual void endElement( const OUString& /* aName */ ) override {}
+    virtual void characters( const OUString& /* aChars */ ) override {}
+    virtual void ignorableWhitespace( const OUString& /* aWhitespaces */ ) override {}
+    virtual void processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ ) override {}
+    virtual void setDocumentLocator( const Reference< XLocator >& /* xLocator */ ) override {}
 };
 
 OUString getNamespaceValue( std::u16string_view rNamespacePrefix )
@@ -238,7 +238,7 @@ OUString resolveNamespace( const OUString& aName )
     return aName;
 }
 
-void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >&/* xAttribs */ )
+void NSDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >&/* xAttribs */ )
 {
     if (! (aName == "office:document" || aName == "office:body" || aName == "office:text" ||
         aName == "text:p" || aName == "note:p") )
@@ -260,8 +260,8 @@ public:
     const static std::string_view namespacePrefixes[];
 
     // XFastTokenHandler
-    virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
+    virtual Sequence< sal_Int8 > getUTF8Identifier( sal_Int32 nToken ) override;
+    virtual sal_Int32 getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
     //FastTokenHandlerBase
     virtual sal_Int32 getTokenDirect(std::string_view sToken) const override;
 };

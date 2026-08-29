@@ -373,34 +373,34 @@ public:
     void checkDispose() const { if( !mpParser ) throw DisposedException(); }
 
     //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber() override;
-    virtual sal_Int32 SAL_CALL getLineNumber() override;
-    virtual OUString SAL_CALL getPublicId() override;
-    virtual OUString SAL_CALL getSystemId() override;
+    virtual sal_Int32 getColumnNumber() override;
+    virtual sal_Int32 getLineNumber() override;
+    virtual OUString getPublicId() override;
+    virtual OUString getSystemId() override;
 
 private:
     FastSaxParserImpl *mpParser;
 };
 
-sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber()
+sal_Int32 FastLocatorImpl::getColumnNumber()
 {
     checkDispose();
     return xmlSAX2GetColumnNumber( mpParser->getEntity().mpParser );
 }
 
-sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber()
+sal_Int32 FastLocatorImpl::getLineNumber()
 {
     checkDispose();
     return xmlSAX2GetLineNumber( mpParser->getEntity().mpParser );
 }
 
-OUString SAL_CALL FastLocatorImpl::getPublicId()
+OUString FastLocatorImpl::getPublicId()
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sPublicId;
 }
 
-OUString SAL_CALL FastLocatorImpl::getSystemId()
+OUString FastLocatorImpl::getSystemId()
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sSystemId;
@@ -1461,7 +1461,7 @@ FastSaxParser::~FastSaxParser()
 {
 }
 
-void SAL_CALL
+void
 FastSaxParser::initialize(cpo::uno::Sequence< cpo::uno::Any > const& rArguments)
 {
     if (!rArguments.hasElements())

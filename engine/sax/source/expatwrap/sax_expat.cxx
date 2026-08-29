@@ -109,22 +109,22 @@ public:
     SaxExpatParser();
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any> const& rArguments) override;
+    virtual void initialize(cpo::uno::Sequence<cpo::uno::Any> const& rArguments) override;
 
     // The SAX-Parser-Interface
-    virtual void SAL_CALL parseStream(  const InputSource& structSource) override;
-    virtual void SAL_CALL setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler) override;
+    virtual void parseStream(  const InputSource& structSource) override;
+    virtual void setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler) override;
 
-    virtual void SAL_CALL setErrorHandler(const css::uno::Reference< XErrorHandler > & xHandler) override;
-    virtual void SAL_CALL setDTDHandler(const css::uno::Reference < XDTDHandler > & xHandler) override;
-    virtual void SAL_CALL setEntityResolver(const css::uno::Reference<  XEntityResolver >& xResolver) override;
+    virtual void setErrorHandler(const css::uno::Reference< XErrorHandler > & xHandler) override;
+    virtual void setDTDHandler(const css::uno::Reference < XDTDHandler > & xHandler) override;
+    virtual void setEntityResolver(const css::uno::Reference<  XEntityResolver >& xResolver) override;
 
-    virtual void SAL_CALL setLocale( const Locale &locale ) override;
+    virtual void setLocale( const Locale &locale ) override;
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() override;
-    cpo::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString                     getImplementationName() override;
+    cpo::uno::Sequence< OUString >         getSupportedServiceNames() override;
+    bool                     supportsService(const OUString& ServiceName) override;
 
 private:
     std::unique_ptr<SaxExpatParser_Impl>   m_pImpl;
@@ -313,33 +313,33 @@ public:
     }
 
 public: //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber() override
+    virtual sal_Int32 getColumnNumber() override
     {
         return XML_GetCurrentColumnNumber( m_pParser->getEntity().pParser );
     }
-    virtual sal_Int32 SAL_CALL getLineNumber() override
+    virtual sal_Int32 getLineNumber() override
     {
         return XML_GetCurrentLineNumber( m_pParser->getEntity().pParser );
     }
-    virtual OUString SAL_CALL getPublicId() override
+    virtual OUString getPublicId() override
     {
         return m_pParser->getEntity().structSource.sPublicId;
     }
-    virtual OUString SAL_CALL getSystemId() override
+    virtual OUString getSystemId() override
     {
         return m_pParser->getEntity().structSource.sSystemId;
     }
 
     // XSeekable (only for getPosition)
 
-    virtual void SAL_CALL seek( sal_Int64 ) override
+    virtual void seek( sal_Int64 ) override
     {
     }
-    virtual sal_Int64 SAL_CALL getPosition() override
+    virtual sal_Int64 getPosition() override
     {
         return XML_GetCurrentByteIndex( m_pParser->getEntity().pParser );
     }
-    virtual ::sal_Int64 SAL_CALL getLength() override
+    virtual ::sal_Int64 getLength() override
     {
         return 0;
     }
@@ -365,7 +365,7 @@ SaxExpatParser::SaxExpatParser(  )
 }
 
 // css::lang::XInitialization:
-void SAL_CALL
+void
 SaxExpatParser::initialize(cpo::uno::Sequence< cpo::uno::Any > const& rArguments)
 {
     // possible arguments: a string "DoSmeplease"

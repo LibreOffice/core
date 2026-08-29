@@ -124,16 +124,16 @@ public:
     sal_Int32 getValueTokenByIndex(sal_Int32 nTokenIndex) const;
 
     // XFastAttributeList
-    virtual bool SAL_CALL hasAttribute( ::sal_Int32 Token ) override;
-    virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) override;
-    virtual ::sal_Int32 SAL_CALL getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) override;
-    virtual OUString SAL_CALL getValue( ::sal_Int32 Token ) override;
-    virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) override;
-    virtual cpo::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) override;
-    virtual cpo::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
+    virtual bool hasAttribute( ::sal_Int32 Token ) override;
+    virtual ::sal_Int32 getValueToken( ::sal_Int32 Token ) override;
+    virtual ::sal_Int32 getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) override;
+    virtual OUString getValue( ::sal_Int32 Token ) override;
+    virtual OUString getOptionalValue( ::sal_Int32 Token ) override;
+    virtual cpo::uno::Sequence< css::xml::Attribute > getUnknownAttributes(  ) override;
+    virtual cpo::uno::Sequence< css::xml::FastAttribute > getFastAttributes() override;
 
     // XCloneable
-    virtual ::css::uno::Reference< ::css::util::XCloneable > SAL_CALL createClone() override;
+    virtual ::css::uno::Reference< ::css::util::XCloneable > createClone() override;
 
     sal_Int32 getAttributeIndex( ::sal_Int32 Token )
     {
