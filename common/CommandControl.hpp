@@ -134,18 +134,14 @@ public:
 class RestrictionManager
 {
     static std::unordered_set<std::string> RestrictedCommandList;
-    static bool _isRestrictedUser;
     static std::string RestrictedCommandListString;
+
+    static void setRestrictedCommandList(const std::string& commandListString);
 
 public:
     RestrictionManager();
-    static void setRestrictedCommandList(const std::string& commandListString);
     static const std::unordered_set<std::string>& getRestrictedCommandList();
     static std::string getRestrictedCommandListString();
-
-    static bool isRestrictedUser() { return _isRestrictedUser; }
-
-    static void setRestrictedUser(bool isRestrictedUser) { _isRestrictedUser = isRestrictedUser; }
 };
 } // namespace CommandControl
 

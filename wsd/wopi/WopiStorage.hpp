@@ -89,6 +89,8 @@ public:
         bool getUserCanRename() const { return _userCanRename; }
         bool getUserCanOnlyComment() const { return _userCanOnlyComment; }
         bool getUserCanOnlyManageRedlines() const { return _userCanOnlyManageRedlines; }
+        bool getIsUserRestricted() const { return _isUserRestricted; }
+        const std::string& getRestrictedCommands() const { return _restrictedCommands; }
 
         std::optional<bool> getIsAdminUser() const { return _isAdminUser; }
         const std::string& getIsAdminUserError() const { return _isAdminUserError; }
@@ -191,6 +193,11 @@ public:
         bool _userCanOnlyComment = false;
         /// If user is limited to only managing redlines (accept/reject)
         bool _userCanOnlyManageRedlines = false;
+        /// True when the host reports this user as one whose commands are restricted
+        bool _isUserRestricted = false;
+        /// Space separated UNO commands the host restricts for this user. A release build leaves
+        /// it empty and the restricted commands come from the deployment configuration instead.
+        std::string _restrictedCommands;
         /// Used for directly starting follow me presentation
         std::string _presentationLeader;
     };

@@ -162,7 +162,6 @@ void LockManager::mapUnlockLink(const std::string& host, const std::string& path
     }
 }
 
-bool RestrictionManager::_isRestrictedUser = false;
 std::unordered_set<std::string> RestrictionManager::RestrictedCommandList;
 std::string RestrictionManager::RestrictedCommandListString;
 

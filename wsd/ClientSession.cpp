@@ -2488,13 +2488,22 @@ void ClientSession::sendLockedInfo()
 void ClientSession::sendRestrictionInfo()
 {
     Poco::JSON::Object::Ptr restrictionInfo = new Poco::JSON::Object();
-    restrictionInfo->set("IsRestrictedUser",
-                         CommandControl::RestrictionManager::isRestrictedUser());
+    restrictionInfo->set("IsRestrictedUser", _wopiFileInfo && _wopiFileInfo->getIsUserRestricted());
 
     // Poco:Dynamic:Var does not support std::unordred_set so converted to std::vector
     std::vector<std::string> restrictedCommandList(
         CommandControl::RestrictionManager::getRestrictedCommandList().begin(),
         CommandControl::RestrictionManager::getRestrictedCommandList().end());
+#if ENABLE_DEBUG
+    // Enable testing feature restriction
+    if (_wopiFileInfo)
+    {
+        const StringVector testCommands =
+            StringVector::tokenize(_wopiFileInfo->getRestrictedCommands());
+        for (std::size_t i = 0; i < testCommands.size(); ++i)
+            restrictedCommandList.emplace_back(testCommands[i]);
+    }
+#endif
     restrictionInfo->set("RestrictedCommandList", restrictedCommandList);
 
     std::ostringstream ossRestrictionInfo;
@@ -3321,14 +3330,14 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
     {
         std::ostringstream blockingCommandStatus;
         blockingCommandStatus << "blockingcommandstatus isRestrictedUser="
-                              << (CommandControl::RestrictionManager::isRestrictedUser() ? "true"
-                                                                                         : "false")
+                              << (_wopiFileInfo && _wopiFileInfo->getIsUserRestricted() ? "true"
+                                                                                        : "false")
                               << " isLockedUser="
                               << (CommandControl::LockManager::isLockedUser() ? "true" : "false");
 #if ENABLE_DEBUG
         // Enable testing feature restriction
         const std::string restrictedCmds =
-            CommandControl::RestrictionManager::getRestrictedCommandListString();
+            _wopiFileInfo ? _wopiFileInfo->getRestrictedCommands() : std::string();
         if (!restrictedCmds.empty())
             blockingCommandStatus << " test_restrictedCommands=" << restrictedCmds;
 #endif
