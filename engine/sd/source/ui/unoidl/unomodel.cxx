@@ -2789,7 +2789,13 @@ public:
     {
         SdPage* pPage = resolveCurrentPage();
         if (!pPage)
+        {
+            // A delta with nothing to say writes nothing, and a page that is not there has
+            // nothing to say. A full request gets the header, so the client can drop it.
+            if (!isDelta())
+                writeMissingPage(rWriter);
             return;
+        }
 
         setupProcessor(rWriter, pPage);
 
@@ -2830,6 +2836,16 @@ public:
     }
 
 private:
+    /// Answer a request for a page the document does not hold with the header alone. A client
+    /// whose page list has not caught up with a mode switch asks for a part that is not there,
+    /// and an answer it can read lets it drop the request and ask again.
+    void writeMissingPage(tools::JsonWriter& rWriter)
+    {
+        rWriter.put("type", "vectorprimitives");
+        rWriter.put("part", mnPart);
+        rWriter.put("mode", mnMode);
+    }
+
     /// The page the request names, or nullptr for a mode this writer does
     /// not serve.
     SdPage* resolveCurrentPage()

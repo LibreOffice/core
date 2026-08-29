@@ -231,6 +231,9 @@ class RenderManagerBase {
 	handleVectorPrimitivesDelta(_values: cool.VectorPrimitivesResponse): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	partListChanged(): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	clearCachedPart(_part: number, _mode: number): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function

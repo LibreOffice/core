@@ -287,6 +287,10 @@ class RenderManager {
 		RenderManager.ensureInstance().handleVectorPrimitivesDelta(values);
 	}
 
+	static partListChanged(): void {
+		RenderManager.ensureInstance().partListChanged();
+	}
+
 	static clearCachedPart(part: number, mode: number): void {
 		RenderManager.ensureInstance().clearCachedPart(part, mode);
 	}

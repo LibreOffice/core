@@ -930,15 +930,41 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPageIsServedInItsOwnMode)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aSlide.getSize("/objects").value_or(0));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMissingPageStillAnswers)
+{
+    // A client whose page list has not caught up with a mode switch asks for
+    // a master that is not there. The answer carries the header, so the
+    // client can tell the request was seen instead of waiting forever.
+    createBlankDoc();
+
+    tools::JsonWriter aJsonWriter;
+    SdXImpressDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+    static constexpr OString aCommand = ".uno:VectorPrimitives?part=12&mode=1"_ostr;
+    pDoc->getCommandValues(aJsonWriter, std::string_view(aCommand.getStr(), aCommand.getLength()));
+    const OString aResult = aJsonWriter.finishAndGetAsOString();
+
+    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
+    CPPUNIT_ASSERT_MESSAGE("JSON parse error", oJson.has_value());
+    assertJsonPath(*oJson, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(12), oJson->getInt("/part").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), oJson->getInt("/mode").value_or(-1));
+    // No page means no content, so nothing describes one.
+    CPPUNIT_ASSERT(!oJson->has("/order"));
+    CPPUNIT_ASSERT(!oJson->has("/objects"));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
 {
-    // A mode outside the page lists the command serves gets an empty response
-    // rather than the slide at that index.
+    // A mode outside the page lists the command serves names no page, so the
+    // answer carries the header and no content rather than the slide at that
+    // index.
     createBlankDoc();
     addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
 
     auto aJson = getVectorPrimitives(u"testUnservedMode", -1, 3);
-    CPPUNIT_ASSERT(!aJson.has("/type"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), aJson.getInt("/mode").value_or(-1));
+    CPPUNIT_ASSERT(!aJson.has("/order"));
     CPPUNIT_ASSERT(!aJson.has("/objects"));
 }
 

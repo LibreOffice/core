@@ -257,7 +257,16 @@ class VectorManager extends RenderManagerBase {
 
 		this._inFlightParts.delete(partId);
 
-		const received = values.objects || [];
+		// A response with no objects names a part the document does not
+		// hold. It happens while the page list is catching up with a mode
+		// switch, so nothing is cached, the previews queued for a page that
+		// is not there are dropped, and the next draw asks again.
+		if (values.objects === undefined) {
+			this._pendingPreviews.delete(partId);
+			return;
+		}
+
+		const received = values.objects;
 		const objects = new Map<number, cool.SlideObject>();
 		const arrived: number[] = [];
 		for (const object of received) {
@@ -466,6 +475,15 @@ class VectorManager extends RenderManagerBase {
 		const bytes = new Uint8Array(binary.length);
 		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 		return bytes.buffer;
+	}
+
+	/// The page list the part indexes address has been replaced, so a
+	/// request made against the old list names a page that may not exist.
+	/// Drop what is in flight and tell the views, which then ask again for
+	/// the part they now want.
+	partListChanged(): void {
+		this._inFlightParts.clear();
+		this._fireChanged();
 	}
 
 	/// Drop cached data for a part and any in-flight state.

@@ -523,6 +523,38 @@ describe('VectorManager', function () {
 		(app as any).socket.sendMessage = function () {};
 	});
 
+	// A part the document does not hold is answered with the header alone.
+	// The manager must drop the request rather than hold it open, so the next
+	// draw asks again once the page list has caught up.
+	it('retries a part the document did not have', function () {
+		const sent: string[] = [];
+		(app as any).socket.sendMessage = function (message: string) {
+			sent.push(message);
+		};
+
+		const manager = new VectorManager();
+		nodeassert.strictEqual(
+			manager.requestPart(4, cool.VectorMode.MasterPages),
+			undefined,
+		);
+		nodeassert.strictEqual(sent.length, 1, 'the part is asked for once');
+
+		// The engine answers that it holds no such page.
+		manager.handleVectorPrimitivesResponse({
+			part: 4,
+			mode: cool.VectorMode.MasterPages,
+		});
+
+		// Asking again sends a fresh request instead of waiting on the first.
+		nodeassert.strictEqual(
+			manager.requestPart(4, cool.VectorMode.MasterPages),
+			undefined,
+		);
+		nodeassert.strictEqual(sent.length, 2, 'the part is asked for again');
+
+		(app as any).socket.sendMessage = function () {};
+	});
+
 	// A response that names no mode is filed as the slide at that index.
 	it('treats a response with no mode as a slide', function () {
 		const manager = new VectorManager();

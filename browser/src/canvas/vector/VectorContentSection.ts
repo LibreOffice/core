@@ -42,6 +42,9 @@ namespace cool {
 		// Part whose pixels are in the offscreen canvas, so a blit reuses
 		// them only for that same part.
 		private _offscreenPart: cool.VectorPartId = '';
+		// Part the last draw reported, so the report comes once per page
+		// rather than once per frame.
+		private _reportedPartId: cool.VectorPartId = '';
 
 		constructor() {
 			super(app.CSections.VectorContent.name);
@@ -88,6 +91,17 @@ namespace cool {
 			const mode = app.activeDocument.activeModes[0];
 			const partId = cool.vectorPartId(part, mode);
 			const cached = RenderManager.requestPart(part, mode);
+			if (partId !== this._reportedPartId) {
+				this._reportedPartId = partId;
+				window.app.console.log(
+					'vector view: part=' +
+						part +
+						' mode=' +
+						mode +
+						' ' +
+						(cached ? 'objects=' + cached.objects.size : 'not ready'),
+				);
+			}
 			if (!cached) {
 				// Data not ready. Blit the prior frame only when it holds
 				// the part we want, so the view keeps the current part
