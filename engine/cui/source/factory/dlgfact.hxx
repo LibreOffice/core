@@ -203,8 +203,6 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 
-    virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* pParent) override;
-
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         SdrObjGroup& rDiagram) override;

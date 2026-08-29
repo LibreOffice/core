@@ -163,8 +163,6 @@ public:
 
     virtual void ShowAsyncScriptErrorDialog( weld::Window* pParent, const cpo::uno::Any& rException ) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* _pParent) = 0;
-
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* _pParent) = 0;
 
     virtual VclPtr<AbstractNewStyleDialog>     CreateNewStyleDialog(weld::Container* pParent,

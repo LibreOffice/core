@@ -145,9 +145,6 @@ inline constexpr TabData RID_TAB_CHART_LAYOUT{ NC_("RID_TAB_CHART_LAYOUT", "Layo
 inline constexpr TabData RID_TAB_CHART_PERSPECTIVE{ NC_("RID_TAB_CHART_PERSPECTIVE", "Perspective"), u"window3d.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_APPEARANCE{ NC_("RID_TAB_CHART_APPEARANCE", "Appearance"), u"shell3d.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_ILLUMINATION{ NC_("RID_TAB_CHART_ILLUMINATION", "Illumination"), u"grafluminance.png"_ustr };
-// customization
-inline constexpr TabData RID_TAB_TOOLBARS{ NC_("RID_TAB_TOOLBARS", "Toolbars"), u"showtoolbar.png"_ustr };
-// ui mode
 // envelope
 inline constexpr TabData RID_TAB_ENVELOPE{ NC_("RID_TAB_ENVELOPE", "Envelope"), u"insertenvelope.png"_ustr };
 inline constexpr TabData RID_TAB_ENV_FORMAT{ NC_("RID_TAB_ENV_FORMAT", "Format"), u"distributeverttop.png"_ustr };

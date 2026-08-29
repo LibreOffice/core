@@ -1041,15 +1041,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
-        case SID_UI_PICKER:
-        {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(
-                pFact->CreateUIPickerDialog(rReq.GetFrameWeld()));
-            pDlg->Execute();
-            bDone = true;
-            break;
-        }
         case SID_AVAILABLE_TOOLBARS:
         {
             const SfxStringItem* pToolbarName = rReq.GetArg<SfxStringItem>(SID_AVAILABLE_TOOLBARS);

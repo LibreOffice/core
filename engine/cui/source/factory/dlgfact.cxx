@@ -89,7 +89,6 @@
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
 #include <widgettestdlg.hxx>
-#include <uipickerdlg.hxx>
 #include <DiagramDialog.hxx>
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
@@ -1486,12 +1485,6 @@ AbstractDialogFactory_Impl::CreateWidgetTestDialog(weld::Window* pParent)
     using CuiAbstractWidgetTestControllerAsync_Impl
         = vcl::AbstractDialogImpl_Async<VclAbstractDialog, WidgetTestDialog>;
     return VclPtr<CuiAbstractWidgetTestControllerAsync_Impl>::Create(pParent);
-}
-
-VclPtr<VclAbstractDialog>
-AbstractDialogFactory_Impl::CreateUIPickerDialog(weld::Window* pParent)
-{
-    return VclPtr<CuiAbstractController_Impl<UIPickerDialog>>::Create(pParent);
 }
 
 VclPtr<AbstractDiagramDialog>

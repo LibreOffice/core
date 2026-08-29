@@ -190,7 +190,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:UIPicker" menu:style="text"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars" menu:style="text"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
       <menu:menuseparator/>
