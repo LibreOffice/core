@@ -970,12 +970,15 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:zeroOrMore>
     </rng:define>
 
-    <!-- Override spreadsheet epilogue to allow loext:persons -->
+    <!-- Override spreadsheet epilogue to allow loext:persons and coext:sheet-views -->
     <rng:define name="office-spreadsheet-content-epilogue">
       <rng:optional>
         <rng:ref name="loext-persons"/>
       </rng:optional>
       <rng:ref name="table-functions"/>
+      <rng:optional>
+        <rng:ref name="coext-sheet-views"/>
+      </rng:optional>
     </rng:define>
 
     <!-- Override office-annotation to add loext:threaded-comment child element -->
@@ -2236,6 +2239,61 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
           <rng:optional><rng:attribute name="loext:person-id"><rng:ref name="string"/></rng:attribute></rng:optional>
           <rng:optional>
             <rng:element name="loext:text"><rng:text/></rng:element>
+          </rng:optional>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
+  <!-- A sheet view is a filtered, sorted view of one sheet that other readers of the same
+       document do not see. The sheet it belongs to is named by coext:table-name. The filter
+       range, filter and sort are written the way a table:database-range writes them, with
+       field numbers relative to the range. -->
+  <rng:define name="coext-sheet-views">
+    <rng:element name="coext:sheet-views">
+      <rng:zeroOrMore>
+        <rng:element name="coext:sheet-view">
+          <rng:attribute name="coext:name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:attribute name="coext:table-name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="coext:guid">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:optional>
+            <rng:attribute name="coext:filter-guid">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:optional>
+            <rng:attribute name="coext:target-range-address">
+              <rng:ref name="cellRangeAddress"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:optional>
+            <rng:attribute name="coext:contains-header">
+              <rng:ref name="boolean"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:zeroOrMore>
+            <rng:element name="coext:hidden-columns">
+              <rng:attribute name="coext:start-column">
+                <rng:ref name="nonNegativeInteger"/>
+              </rng:attribute>
+              <rng:attribute name="coext:end-column">
+                <rng:ref name="nonNegativeInteger"/>
+              </rng:attribute>
+            </rng:element>
+          </rng:zeroOrMore>
+          <rng:optional>
+            <rng:ref name="table-filter"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="table-sort"/>
           </rng:optional>
         </rng:element>
       </rng:zeroOrMore>

@@ -3637,6 +3637,11 @@ namespace xmloff::token {
         TOKEN( "guid",                            XML_GUID ),
         TOKEN("date-utc", XML_DATE_UTC),
 
+        TOKEN( "sheet-views",                     XML_SHEET_VIEWS ),
+        TOKEN( "sheet-view",                      XML_SHEET_VIEW ),
+        TOKEN( "hidden-columns",                  XML_HIDDEN_COLUMNS ),
+        TOKEN( "filter-guid",                     XML_FILTER_GUID ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else

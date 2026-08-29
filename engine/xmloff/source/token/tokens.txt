@@ -3371,4 +3371,8 @@ quickstyle
 horizontal-rule
 guid
 date-utc
+sheet-views
+sheet-view
+hidden-columns
+filter-guid
 TOKEN_END_DUMMY

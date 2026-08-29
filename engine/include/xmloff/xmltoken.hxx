@@ -3635,6 +3635,11 @@ namespace xmloff::token {
         XML_GUID,
         XML_DATE_UTC,
 
+        XML_SHEET_VIEWS,
+        XML_SHEET_VIEW,
+        XML_HIDDEN_COLUMNS,
+        XML_FILTER_GUID,
+
         XML_TOKEN_END
     };
 
