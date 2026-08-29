@@ -139,7 +139,7 @@ void SAL_CALL ScXMLFilterContext::endFastElement( sal_Int32 /*nElement*/ )
         mrQueryParam.nDestTab = aOutputPosition.Tab();
     }
 
-    if (bConditionSourceRange)
+    if (bConditionSourceRange && pDatabaseRangeContext)
         pDatabaseRangeContext->SetFilterConditionSourceRangeAddress(aConditionSourceRangeAddress);
 }
 

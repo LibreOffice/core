@@ -127,6 +127,288 @@ void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& 
     }
 }
 
+namespace {
+
+OUString getOperatorXML(const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSearchType)
+{
+    switch (rEntry.eOp)
+    {
+        case SC_BEGINS_WITH:
+            return GetXMLToken(XML_BEGINS_WITH);
+        case SC_BOTPERC:
+            return GetXMLToken(XML_BOTTOM_PERCENT);
+        case SC_BOTVAL:
+            return GetXMLToken(XML_BOTTOM_VALUES);
+        case SC_CONTAINS:
+            return GetXMLToken(XML_CONTAINS);
+        case SC_DOES_NOT_BEGIN_WITH:
+            return GetXMLToken(XML_DOES_NOT_BEGIN_WITH);
+        case SC_DOES_NOT_CONTAIN:
+            return GetXMLToken(XML_DOES_NOT_CONTAIN);
+        case SC_DOES_NOT_END_WITH:
+            return GetXMLToken(XML_DOES_NOT_END_WITH);
+        case SC_ENDS_WITH:
+            return GetXMLToken(XML_ENDS_WITH);
+        case SC_EQUAL:
+        {
+            if (rEntry.IsQueryByEmpty())
+                return GetXMLToken(XML_TOKEN_EMPTY);
+            else if (rEntry.IsQueryByNonEmpty())
+                return GetXMLToken(XML_NOEMPTY);
+
+            if (eSearchType == utl::SearchParam::SearchType::Regexp)
+                return GetXMLToken(XML_MATCH);
+            else
+                return u"="_ustr;
+        }
+        case SC_GREATER:
+            return u">"_ustr;
+        case SC_GREATER_EQUAL:
+            return u">="_ustr;
+        case SC_LESS:
+            return u"<"_ustr;
+        case SC_LESS_EQUAL:
+            return u"<="_ustr;
+        case SC_NOT_EQUAL:
+            if (eSearchType == utl::SearchParam::SearchType::Regexp)
+                return GetXMLToken(XML_NOMATCH);
+            else
+                return u"!="_ustr;
+        case SC_TOPPERC:
+            return GetXMLToken(XML_TOP_PERCENT);
+        case SC_TOPVAL:
+            return GetXMLToken(XML_TOP_VALUES);
+        default:
+            ;
+    }
+    return u"="_ustr;
+}
+
+class WriteSetItem
+{
+    ScXMLExport& rExport;
+public:
+    explicit WriteSetItem(ScXMLExport& r) : rExport(r) {}
+    void operator() (const ScQueryEntry::Item& rItem) const
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+        SvXMLElementExport aElem(rExport, XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, true, true);
+    }
+};
+
+void writeCondition(ScXMLExport& rExport, const ScQueryEntry& rEntry, SCCOLROW nFieldStart,
+                    bool bCaseSens, utl::SearchParam::SearchType eSearchType)
+{
+    const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+    if (rItems.empty())
+    {
+        OSL_FAIL("Query entry has no items at all!  It must have at least one!");
+        return;
+    }
+
+    if (rItems.size() == 1)
+    {
+        // Single item condition.
+        const ScQueryEntry::Item& rItem = rItems.front();
+        if (rItem.meType == ScQueryEntry::ByString)
+        {
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+        }
+        else if (rItem.meType == ScQueryEntry::ByDate)
+        {
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+        }
+        else if (rItem.meType == ScQueryEntry::ByTextColor
+                 || rItem.meType == ScQueryEntry::ByBackgroundColor)
+        {
+            if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+            {
+                if (rItem.meType == ScQueryEntry::ByTextColor)
+                    rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE, XML_TEXT_COLOR);
+                else
+                    rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE,
+                                          XML_BACKGROUND_COLOR);
+            }
+
+            OUString colorValue;
+            if (rItem.maColor == COL_AUTO) // tdf#142965
+            {
+                colorValue = rItem.meType == ScQueryEntry::ByTextColor
+                                 ? GetXMLToken(XML_WINDOW_FONT_COLOR)
+                                 : GetXMLToken(XML_TRANSPARENT);
+            }
+            else
+            {
+                OUStringBuffer buffer;
+                sax::Converter::convertColor(buffer, rItem.maColor);
+                colorValue = buffer.makeStringAndClear();
+            }
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, colorValue);
+        }
+        else
+        {
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, OUString::number(rItem.mfVal));
+        }
+
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, eSearchType));
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
+        if (bCaseSens)
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
+    }
+    else
+    {
+        // Multi-item condition.
+        assert( rItems.size() > 1 && "rItems should have more than 1 element");
+
+        // Store the 1st value for backward compatibility.
+        const ScQueryEntry::Item& rItem = rItems.front();
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, u"="_ustr);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
+        if (bCaseSens)
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
+
+        std::for_each(rItems.begin(), rItems.end(), WriteSetItem(rExport));
+    }
+}
+
+}
+
+void writeFilter(ScXMLExport& rExport, const ScDocument& rDoc, const ScDBData& rData)
+{
+    ScQueryParam aParam;
+    rData.GetQueryParam(aParam);
+    size_t nCount = 0;
+    for (size_t n = aParam.GetEntryCount(); nCount < n; ++nCount)
+    {
+        if (!aParam.GetEntry(nCount).bDoQuery)
+            break;
+    }
+
+    if (!nCount)
+        // No filter criteria to save. Bail out.
+        return;
+
+    if (!aParam.bInplace)
+    {
+        OUString aAddrStr;
+        ScRangeStringConverter::GetStringFromAddress(
+            aAddrStr, ScAddress(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab), &rDoc, ::formula::FormulaGrammar::CONV_OOO);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aAddrStr);
+    }
+
+    ScRange aAdvSource;
+    if (rData.GetAdvancedQuerySource(aAdvSource))
+    {
+        OUString aAddrStr;
+        ScRangeStringConverter::GetStringFromRange(
+            aAddrStr, aAdvSource, &rDoc, ::formula::FormulaGrammar::CONV_OOO);
+        if (!aAddrStr.isEmpty())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, aAddrStr);
+    }
+
+    if (!aParam.bDuplicate)
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES, XML_FALSE);
+
+    SvXMLElementExport aElemF(rExport, XML_NAMESPACE_TABLE, XML_FILTER, true, true);
+
+    bool bAnd = false;
+    bool bOr = false;
+
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        const ScQueryEntry& rEntry = aParam.GetEntry(i);
+        if (rEntry.eConnect == SC_AND)
+            bAnd = true;
+        else
+            bOr = true;
+    }
+
+    // Note that export field index values are relative to the first field.
+    ScRange aRange;
+    rData.GetArea(aRange);
+    SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+
+    if (bOr && !bAnd)
+    {
+        SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
+        for (size_t i = 0; i < nCount; ++i)
+            writeCondition(rExport, aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+    }
+    else if (bAnd && !bOr)
+    {
+        SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
+        for (size_t i = 0; i < nCount; ++i)
+            writeCondition(rExport, aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+    }
+    else if (nCount == 1)
+    {
+        writeCondition(rExport, aParam.GetEntry(0), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+    }
+    else
+    {
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
+        ScQueryEntry aPrevEntry = aParam.GetEntry(0);
+        ScQueryConnect eConnect = aParam.GetEntry(1).eConnect;
+        bool bOpenAndElement = false;
+        OUString aName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
+
+        if (eConnect == SC_AND)
+        {
+            rExport.StartElement(aName, true);
+            bOpenAndElement = true;
+        }
+        else
+            bOpenAndElement = false;
+
+        for (size_t i = 1; i < nCount; ++i)
+        {
+            const ScQueryEntry& rEntry = aParam.GetEntry(i);
+            if (eConnect != rEntry.eConnect)
+            {
+                eConnect = rEntry.eConnect;
+                if (rEntry.eConnect == SC_AND)
+                {
+                    rExport.StartElement(aName, true );
+                    bOpenAndElement = true;
+                    writeCondition(rExport, aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+                    aPrevEntry = rEntry;
+                    if (i == nCount - 1)
+                    {
+                        writeCondition(rExport, aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+                        rExport.EndElement(aName, true);
+                        bOpenAndElement = false;
+                    }
+                }
+                else
+                {
+                    writeCondition(rExport, aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+                    aPrevEntry = rEntry;
+                    if (bOpenAndElement)
+                    {
+                        rExport.EndElement(aName, true);
+                        bOpenAndElement = false;
+                    }
+                    if (i == nCount - 1)
+                        writeCondition(rExport, aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+                }
+            }
+            else
+            {
+                writeCondition(rExport, aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+                aPrevEntry = rEntry;
+                if (i == nCount - 1)
+                    writeCondition(rExport, aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
+            }
+        }
+        if(bOpenAndElement)
+            rExport.EndElement(aName, true);
+    }
+}
+
 ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
     : rExport(rTempExport)
 {
@@ -278,7 +560,7 @@ private:
         rData.GetSortParam(aParam);
 
         writeImport(rData);
-        writeFilter(rData);
+        writeFilter(mrExport, mrDoc, rData);
         writeSort(mrExport, aParam, aRange, mrDoc);
         writeSubtotals(rData);
     }
@@ -361,284 +643,6 @@ private:
             {
                 // added to avoid warnings
             }
-        }
-    }
-
-    static OUString getOperatorXML(const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSearchType)
-    {
-        switch (rEntry.eOp)
-        {
-            case SC_BEGINS_WITH:
-                return GetXMLToken(XML_BEGINS_WITH);
-            case SC_BOTPERC:
-                return GetXMLToken(XML_BOTTOM_PERCENT);
-            case SC_BOTVAL:
-                return GetXMLToken(XML_BOTTOM_VALUES);
-            case SC_CONTAINS:
-                return GetXMLToken(XML_CONTAINS);
-            case SC_DOES_NOT_BEGIN_WITH:
-                return GetXMLToken(XML_DOES_NOT_BEGIN_WITH);
-            case SC_DOES_NOT_CONTAIN:
-                return GetXMLToken(XML_DOES_NOT_CONTAIN);
-            case SC_DOES_NOT_END_WITH:
-                return GetXMLToken(XML_DOES_NOT_END_WITH);
-            case SC_ENDS_WITH:
-                return GetXMLToken(XML_ENDS_WITH);
-            case SC_EQUAL:
-            {
-                if (rEntry.IsQueryByEmpty())
-                    return GetXMLToken(XML_TOKEN_EMPTY);
-                else if (rEntry.IsQueryByNonEmpty())
-                    return GetXMLToken(XML_NOEMPTY);
-
-                if (eSearchType == utl::SearchParam::SearchType::Regexp)
-                    return GetXMLToken(XML_MATCH);
-                else
-                    return u"="_ustr;
-            }
-            case SC_GREATER:
-                return u">"_ustr;
-            case SC_GREATER_EQUAL:
-                return u">="_ustr;
-            case SC_LESS:
-                return u"<"_ustr;
-            case SC_LESS_EQUAL:
-                return u"<="_ustr;
-            case SC_NOT_EQUAL:
-                if (eSearchType == utl::SearchParam::SearchType::Regexp)
-                    return GetXMLToken(XML_NOMATCH);
-                else
-                    return u"!="_ustr;
-            case SC_TOPPERC:
-                return GetXMLToken(XML_TOP_PERCENT);
-            case SC_TOPVAL:
-                return GetXMLToken(XML_TOP_VALUES);
-            default:
-                ;
-        }
-        return u"="_ustr;
-    }
-
-    class WriteSetItem
-    {
-        ScXMLExport& mrExport;
-    public:
-        explicit WriteSetItem(ScXMLExport& r) : mrExport(r) {}
-        void operator() (const ScQueryEntry::Item& rItem) const
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
-            SvXMLElementExport aElem(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, true, true);
-        }
-    };
-
-    void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens,
-            utl::SearchParam::SearchType eSearchType)
-    {
-        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-        if (rItems.empty())
-        {
-            OSL_FAIL("Query entry has no items at all!  It must have at least one!");
-            return;
-        }
-
-        if (rItems.size() == 1)
-        {
-            // Single item condition.
-            const ScQueryEntry::Item& rItem = rItems.front();
-            if (rItem.meType == ScQueryEntry::ByString)
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
-            }
-            else if (rItem.meType == ScQueryEntry::ByDate)
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
-            }
-            else if (rItem.meType == ScQueryEntry::ByTextColor
-                     || rItem.meType == ScQueryEntry::ByBackgroundColor)
-            {
-                if (mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
-                {
-                    if (rItem.meType == ScQueryEntry::ByTextColor)
-                        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE, XML_TEXT_COLOR);
-                    else
-                        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE,
-                                              XML_BACKGROUND_COLOR);
-                }
-
-                OUString colorValue;
-                if (rItem.maColor == COL_AUTO) // tdf#142965
-                {
-                    colorValue = rItem.meType == ScQueryEntry::ByTextColor
-                                     ? GetXMLToken(XML_WINDOW_FONT_COLOR)
-                                     : GetXMLToken(XML_TRANSPARENT);
-                }
-                else
-                {
-                    OUStringBuffer buffer;
-                    sax::Converter::convertColor(buffer, rItem.maColor);
-                    colorValue = buffer.makeStringAndClear();
-                }
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, colorValue);
-            }
-            else
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, OUString::number(rItem.mfVal));
-            }
-
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, eSearchType));
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
-            if (bCaseSens)
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-            SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
-        }
-        else
-        {
-            // Multi-item condition.
-            assert( rItems.size() > 1 && "rItems should have more than 1 element");
-
-            // Store the 1st value for backward compatibility.
-            const ScQueryEntry::Item& rItem = rItems.front();
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, u"="_ustr);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
-            if (bCaseSens)
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-            SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
-
-            std::for_each(rItems.begin(), rItems.end(), WriteSetItem(mrExport));
-        }
-    }
-
-    void writeFilter(const ScDBData& rData)
-    {
-        ScQueryParam aParam;
-        rData.GetQueryParam(aParam);
-        size_t nCount = 0;
-        for (size_t n = aParam.GetEntryCount(); nCount < n; ++nCount)
-        {
-            if (!aParam.GetEntry(nCount).bDoQuery)
-                break;
-        }
-
-        if (!nCount)
-            // No filter criteria to save. Bail out.
-            return;
-
-        if (!aParam.bInplace)
-        {
-            OUString aAddrStr;
-            ScRangeStringConverter::GetStringFromAddress(
-                aAddrStr, ScAddress(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab), &mrDoc, ::formula::FormulaGrammar::CONV_OOO);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aAddrStr);
-        }
-
-        ScRange aAdvSource;
-        if (rData.GetAdvancedQuerySource(aAdvSource))
-        {
-            OUString aAddrStr;
-            ScRangeStringConverter::GetStringFromRange(
-                aAddrStr, aAdvSource, &mrDoc, ::formula::FormulaGrammar::CONV_OOO);
-            if (!aAddrStr.isEmpty())
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, aAddrStr);
-        }
-
-        if (!aParam.bDuplicate)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES, XML_FALSE);
-
-        SvXMLElementExport aElemF(mrExport, XML_NAMESPACE_TABLE, XML_FILTER, true, true);
-
-        bool bAnd = false;
-        bool bOr = false;
-
-        for (size_t i = 0; i < nCount; ++i)
-        {
-            const ScQueryEntry& rEntry = aParam.GetEntry(i);
-            if (rEntry.eConnect == SC_AND)
-                bAnd = true;
-            else
-                bOr = true;
-        }
-
-        // Note that export field index values are relative to the first field.
-        ScRange aRange;
-        rData.GetArea(aRange);
-        SCCOLROW nFieldStart = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
-
-        if (bOr && !bAnd)
-        {
-            SvXMLElementExport aElemOr(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
-            for (size_t i = 0; i < nCount; ++i)
-                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-        }
-        else if (bAnd && !bOr)
-        {
-            SvXMLElementExport aElemAnd(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
-            for (size_t i = 0; i < nCount; ++i)
-                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-        }
-        else if (nCount == 1)
-        {
-            writeCondition(aParam.GetEntry(0), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-        }
-        else
-        {
-            SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
-            ScQueryEntry aPrevEntry = aParam.GetEntry(0);
-            ScQueryConnect eConnect = aParam.GetEntry(1).eConnect;
-            bool bOpenAndElement = false;
-            OUString aName = mrExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
-
-            if (eConnect == SC_AND)
-            {
-                mrExport.StartElement(aName, true);
-                bOpenAndElement = true;
-            }
-            else
-                bOpenAndElement = false;
-
-            for (size_t i = 1; i < nCount; ++i)
-            {
-                const ScQueryEntry& rEntry = aParam.GetEntry(i);
-                if (eConnect != rEntry.eConnect)
-                {
-                    eConnect = rEntry.eConnect;
-                    if (rEntry.eConnect == SC_AND)
-                    {
-                        mrExport.StartElement(aName, true );
-                        bOpenAndElement = true;
-                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-                        aPrevEntry = rEntry;
-                        if (i == nCount - 1)
-                        {
-                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-                            mrExport.EndElement(aName, true);
-                            bOpenAndElement = false;
-                        }
-                    }
-                    else
-                    {
-                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-                        aPrevEntry = rEntry;
-                        if (bOpenAndElement)
-                        {
-                            mrExport.EndElement(aName, true);
-                            bOpenAndElement = false;
-                        }
-                        if (i == nCount - 1)
-                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-                    }
-                }
-                else
-                {
-                    writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-                    aPrevEntry = rEntry;
-                    if (i == nCount - 1)
-                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
-                }
-            }
-            if(bOpenAndElement)
-                mrExport.EndElement(aName, true);
         }
     }
 

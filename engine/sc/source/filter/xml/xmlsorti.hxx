@@ -19,6 +19,7 @@
 #pragma once
 
 #include <xmloff/languagetagodf.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include "importcontext.hxx"
@@ -27,11 +28,20 @@ namespace com::sun::star::util { struct SortField; }
 namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLImport;
-class ScXMLDatabaseRangeContext;
+
+/** Receives the sort descriptor a table:sort element describes, once the element is complete. */
+class ScXMLSortSequenceReceiver
+{
+public:
+    virtual void SetSortSequence(const cpo::uno::Sequence<css::beans::PropertyValue>& rSortSequence) = 0;
+
+protected:
+    ~ScXMLSortSequenceReceiver() = default;
+};
 
 class ScXMLSortContext : public ScXMLImportContext
 {
-    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
+    ScXMLSortSequenceReceiver* pSortSequenceReceiver;
 
     cpo::uno::Sequence <css::util::SortField> aSortFields;
     css::table::CellAddress aOutputPosition;
@@ -48,7 +58,7 @@ public:
 
     ScXMLSortContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
+                        ScXMLSortSequenceReceiver* pReceiver);
 
     virtual ~ScXMLSortContext() override;
 

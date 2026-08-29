@@ -22,12 +22,19 @@
 #include <address.hxx>
 
 struct ScSortParam;
+class ScDBData;
 class ScXMLExport;
 class ScDocument;
 class ScMyEmptyDatabaseRangesContainer;
 
 void writeSort(ScXMLExport& rExport, const ScSortParam& rParam, const ScRange& rRange,
                const ScDocument& rDoc);
+
+/** Writes the filter element for the query the database range holds. Writes nothing when the
+ *  query has no active condition. Field numbers are relative to the first column (or row) of
+ *  the range.
+ */
+void writeFilter(ScXMLExport& rExport, const ScDocument& rDoc, const ScDBData& rData);
 
 class ScXMLExportDatabaseRanges
 {

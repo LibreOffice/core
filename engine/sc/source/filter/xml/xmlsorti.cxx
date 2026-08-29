@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xmldrani.hxx"
 #include "xmlsorti.hxx"
 #include "xmlimprt.hxx"
 #include <convuno.hxx>
@@ -36,9 +35,9 @@ using namespace xmloff::token;
 
 ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
+                                      ScXMLSortSequenceReceiver* pReceiver) :
     ScXMLImportContext( rImport ),
-    pDatabaseRangeContext(pTempDatabaseRangeContext),
+    pSortSequenceReceiver(pReceiver),
     nUserListIndex(0),
     bCopyOutputData(false),
     bBindFormatsToContent(true),
@@ -174,7 +173,8 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
         pSortDescriptor[7 + i].Name = SC_UNONAME_COLLALG;
         pSortDescriptor[7 + i].Value <<= sAlgorithm;
     }
-    pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
+    if (pSortSequenceReceiver)
+        pSortSequenceReceiver->SetSortSequence(aSortDescriptor);
 }
 
 void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, std::u16string_view sDataType, std::u16string_view sOrder)

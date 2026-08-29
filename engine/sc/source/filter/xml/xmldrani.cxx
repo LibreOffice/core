@@ -47,6 +47,31 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
+ScSortParam convertSortSequence(const cpo::uno::Sequence<beans::PropertyValue>& rSortSequence,
+                                bool bByRow, const ScRange& rRange)
+{
+    cpo::uno::Sequence<beans::PropertyValue> aSortSequence(rSortSequence);
+    size_t nOldSize = aSortSequence.getLength();
+    aSortSequence.realloc(nOldSize + 1);
+    beans::PropertyValue aProperty;
+    aProperty.Name = SC_UNONAME_ORIENT;
+    table::TableOrientation eOrient = bByRow ?
+        table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
+    aProperty.Value <<= eOrient;
+    aSortSequence.getArray()[nOldSize] = std::move(aProperty);
+    ScSortParam aParam;
+    ScSortDescriptor::FillSortParam(aParam, aSortSequence);
+
+    SCCOLROW nStartPos = aParam.bByRow ? rRange.aStart.Col() : rRange.aStart.Row();
+    for (size_t i = 0; i < aParam.GetSortKeyCount(); ++i)
+    {
+        if (!aParam.maKeyState[i].bDoSort)
+            break;
+        aParam.maKeyState[i].nField += nStartPos;
+    }
+    return aParam;
+}
+
 ScXMLDatabaseRangesContext::ScXMLDatabaseRangesContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )
 {
@@ -304,28 +329,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
     }
 
     if (bContainsSort)
-    {
-        size_t nOldSize = aSortSequence.getLength();
-        aSortSequence.realloc(nOldSize + 1);
-        beans::PropertyValue aProperty;
-        aProperty.Name = SC_UNONAME_ORIENT;
-        table::TableOrientation eOrient = mpQueryParam->bByRow ?
-            table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
-        aProperty.Value <<= eOrient;
-        aSortSequence.getArray()[nOldSize] = std::move(aProperty);
-        ScSortParam aParam;
-        ScSortDescriptor::FillSortParam(aParam, aSortSequence);
-
-        SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
-        for (size_t i = 0; i < aParam.GetSortKeyCount(); ++i)
-        {
-            if (!aParam.maKeyState[i].bDoSort)
-                break;
-            aParam.maKeyState[i].nField += nStartPos;
-        }
-
-        pData->SetSortParam(aParam);
-    }
+        pData->SetSortParam(convertSortSequence(aSortSequence, mpQueryParam->bByRow, maRange));
 
     if (bContainsSubTotal)
     {

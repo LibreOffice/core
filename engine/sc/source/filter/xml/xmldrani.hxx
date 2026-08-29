@@ -24,12 +24,21 @@
 
 #include <dbdata.hxx>
 #include "importcontext.hxx"
+#include "xmlsorti.hxx"
 
 #include <memory>
 
 namespace sax_fastparser { class FastAttributeList; }
 
 struct ScQueryParam;
+struct ScSortParam;
+
+/** Builds the sort parameters a table:sort element describes for a range. The field numbers in
+ *  the sequence are relative to the range, and come back as absolute columns (or rows for a
+ *  sort by columns).
+ */
+ScSortParam convertSortSequence(const cpo::uno::Sequence<css::beans::PropertyValue>& rSortSequence,
+                                bool bByRow, const ScRange& rRange);
 
 class ScXMLDatabaseRangesContext : public ScXMLImportContext
 {
@@ -50,7 +59,7 @@ struct ScSubTotalRule
     cpo::uno::Sequence <css::sheet::SubTotalColumn> aSubTotalColumns;
 };
 
-class ScXMLDatabaseRangeContext : public ScXMLImportContext
+class ScXMLDatabaseRangeContext : public ScXMLImportContext, public ScXMLSortSequenceReceiver
 {
     std::unique_ptr<ScQueryParam> mpQueryParam;
     ScRange         maRange;
@@ -114,7 +123,7 @@ public:
     void SetSubTotalsAscending(const bool bTemp) { bSubTotalsAscending = bTemp; }
     void SetSubTotalsSortGroups(const bool bTemp) { bSubTotalsSortGroups = bTemp; }
     void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
-    void SetSortSequence(const cpo::uno::Sequence <css::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
+    virtual void SetSortSequence(const cpo::uno::Sequence <css::beans::PropertyValue>& aTempSortSequence) override { aSortSequence = aTempSortSequence; }
     void SetFilterConditionSourceRangeAddress(const ScRange& aRange) { aFilterConditionSourceRangeAddress = aRange;
                                                                        bFilterConditionSourceRange = true; }
 };
