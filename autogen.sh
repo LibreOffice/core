@@ -16,14 +16,17 @@ EOF
     exit 1
 }
 
-if test `uname -s` = Linux -o `uname -s` = FreeBSD; then
+case `uname -s` in
+Linux|FreeBSD|MINGW*|MSYS*)
     libtoolize || failed "libtool"
-elif test `uname -s` = Darwin; then
+    ;;
+Darwin)
     libtoolize 2>/dev/null || glibtoolize 2>/dev/null || {
         echo "Can't find libtoolize or glibtoolize. Use lode or install it yourself." >&2
         failed libtoolize
     }
-fi
+    ;;
+esac
 
 aclocal || failed "aclocal"
 

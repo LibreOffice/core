@@ -30,7 +30,13 @@ L10N_MAPS_STAMP = $(DIST_FOLDER)/.l10n-maps.stamp
 # from Langs.conf when the engine is present, else from the shipped map.
 L10N_LANGS = $(shell if test -f "$(LANGS_CONF)"; then sed -n 's/^--with-lang=//p' "$(LANGS_CONF)" | tr ' ' '\n' | grep -vx en-US | tr '-' '_'; else sed -n 's@.*/ui-\([A-Za-z_]*\)\.json.*@\1@p' "$(srcdir)/l10n/localizations.json" 2>/dev/null | sort -u; fi)
 
-export NODE_PATH=$(abs_builddir)/node_modules
+# A directory in the form node understands: under Git Bash/MSYS2 ($(MSYSTEM)
+# set) node is a native Windows program that cannot resolve POSIX paths, so
+# convert; the NODE_PATH list separator is ';' there too.
+node_module_dir = $(if $(MSYSTEM),$(shell cygpath -m '$(1)'),$(1))
+NODE_PATH_SEP = $(if $(MSYSTEM),;,:)
+
+export NODE_PATH=$(call node_module_dir,$(abs_builddir)/node_modules)
 
 if !ENABLE_MOBILEAPP
 # Only convert the po files for languages in Langs.conf (and only when a po
@@ -960,7 +966,7 @@ define run_eslint_check
 endef
 
 define run_prettier_check
-	$(QUIET_PRETTIER) $(NODE) node_modules/.bin/prettier \
+	$(QUIET_PRETTIER) $(NODE) node_modules/prettier/bin/prettier.cjs \
 		--ignore-path $(srcdir)/.prettierignore \
 		--ignore-path $(srcdir)/.beforeprettier \
 		--log-level warn \
@@ -1133,7 +1139,7 @@ $(DIST_FOLDER)/images/templates/preview/%.png: $(srcdir)/images/templates/previe
 $(DIST_FOLDER)/admin-bundle.js: $(COOL_ADMIN_DST) \
 	$(srcdir)/admin/main-admin.js $(srcdir)/js/plural.js \
 	$(INTERMEDIATE_DIR)/admin-src.js
-	@NODE_PATH=$(abs_builddir)/node_modules:$(INTERMEDIATE_DIR) $(NODE) node_modules/browserify/bin/cmd.js -g browserify-css $(if $(IS_SEPARATE),--debug,) -o $@ $(srcdir)/admin/main-admin.js
+	@NODE_PATH="$(call node_module_dir,$(abs_builddir)/node_modules)$(NODE_PATH_SEP)$(call node_module_dir,$(INTERMEDIATE_DIR))" $(NODE) node_modules/browserify/bin/cmd.js -g browserify-css $(if $(IS_SEPARATE),--debug,) -o $@ $(srcdir)/admin/main-admin.js
 	$(if $(IS_SEPARATE),,@$(NODE) node_modules/esbuild-wasm/bin/esbuild --minify --charset=utf8 --outfile=$@.tmp $@ && mv $@.tmp $@)
 
 $(INTERMEDIATE_DIR)/admin-src.js: $(COOL_ADMIN_TS_JS) $(COOL_ADMIN_JS)
@@ -1401,7 +1407,7 @@ tsc-emit.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	@touch $@
 
 tsc-strict.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
-	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json --tsBuildInfoFile $(DIST_FOLDER)/strict.tsbuildinfo $(AllowJs)
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript-strict-plugin/dist/cli/tsc-strict/index.js --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json --tsBuildInfoFile $(DIST_FOLDER)/strict.tsbuildinfo $(AllowJs)
 	@touch $@
 
 tscompile.done: tsc-emit.done tsc-strict.done
@@ -1740,7 +1746,7 @@ DUPLICATION_TEST_LOG = "`pwd`/duplication.log"
 check-local: $(MOCHA_JS_DIR)/main.js
 	@echo "Running mocha tests..."
 	@echo > ${MOCHA_TEST_LOG}
-	@if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(abs_builddir)/node_modules" ENGINE_WORKDIR="$(ENGINE_WORKDIR)" npm test) 2> ${MOCHA_TEST_LOG} 1>&2; then \
+	@if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(call node_module_dir,$(abs_builddir)/node_modules)" ENGINE_WORKDIR="$(ENGINE_WORKDIR)" npm test) 2> ${MOCHA_TEST_LOG} 1>&2; then \
 		echo "Mocha tests finished successfully. Results in ${MOCHA_TEST_LOG}"; \
 	else \
 		cat ${MOCHA_TEST_LOG}; \
@@ -1748,7 +1754,7 @@ check-local: $(MOCHA_JS_DIR)/main.js
 	fi
 
 	@echo > ${DUPLICATION_TEST_LOG}
-	$(QUIET_JSCPCD) if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(abs_builddir)/node_modules" npm run duplication) 2> ${DUPLICATION_TEST_LOG} 1>&2; then \
+	$(QUIET_JSCPCD) if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(call node_module_dir,$(abs_builddir)/node_modules)" npm run duplication) 2> ${DUPLICATION_TEST_LOG} 1>&2; then \
 		echo "Code duplication tests finished successfully."; \
 	else \
 		cat ${DUPLICATION_TEST_LOG}; \

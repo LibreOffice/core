@@ -126,12 +126,29 @@ for MODULE in lxml polib; do
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])
-        AS_IF([test `uname -s` = Linux -o `uname -s` = FreeBSD -o `uname -s` = Darwin],
+        # The Windows app builds the JS bits in this tree, so the modules are
+        # needed there just like on Linux.
+        AS_IF([test `uname -s` = Linux -o `uname -s` = FreeBSD -o `uname -s` = Darwin -o "$enable_windowsapp" = yes],
               [AC_MSG_ERROR([${MODULE} for python3 is needed. It might be in a package called python3-${MODULE}.])],
               [AC_MSG_WARN([${MODULE} for python3 is needed. It might be in a package called python3-${MODULE}. But
                if you are building the JS bits on another (Linux) machine, that doesn't matter])])
     fi
 done
+
+# Print the Windows forward-slash form of an existing Unix directory, for the
+# Windows app build. Under Git Bash/MSYS2 cygpath does the conversion; under
+# WSL there is no cygpath, but cmd.exe started in the directory reports its
+# native path. The directory is entered first so a symlink (e.g. a symlink
+# left by an out-of-tree engine build) is resolved at the OS level into a
+# plain native path that msbuild/clang-cl can traverse.
+UnixDirToWindows()
+{
+    if command -v cygpath >/dev/null 2>&1; then
+        (cd "$1" && cygpath -m "`pwd -P`")
+    else
+        (cd "$1" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r')
+    fi
+}
 
 # On some platforms, std::atomic needs a helper library
 if test "$external_toolchain_app" != "yes"; then
@@ -193,9 +210,9 @@ AC_ARG_ENABLE([macosapp],
 
 AC_ARG_ENABLE([windowsapp],
               AS_HELP_STRING([--enable-windowsapp],
-                             [Use in WSL2 on a Windows PC where you will build the Windows app that works
-                              similarly to the iOS app, from the JavaScript and the pseudo WebSocket
-                              message plumbing point of view.]))
+                             [Use in Git Bash/MSYS2 (or WSL2) on a Windows PC where you will build the
+                              Windows app that works similarly to the iOS app, from the JavaScript and
+                              the pseudo WebSocket message plumbing point of view.]))
 
 AC_ARG_WITH([wasm-fallback],
               AS_HELP_STRING([--with-wasm-fallback=<path>],
@@ -332,7 +349,8 @@ AC_ARG_WITH([lo-path],
                            Overrides the value derived from --with-lo-builddir.
 
                            For CODA-W, a *Windows* format path to the core build instdir, used at build-time.
-                           All other configure script arguments that are paths are Unix (WSL) paths.]))
+                           All other configure script arguments that are paths are Unix (Git Bash/MSYS2
+                           or WSL) paths.]))
 
 AC_ARG_WITH([lo-sourcedir],
             AS_HELP_STRING([--with-lo-sourcedir=<path>],
@@ -945,13 +963,12 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
    fi
 
    if test "$enable_windowsapp" = "yes" ; then
-      LOBUILDDIR_WINDOWS=`cd "$LOBUILDDIR" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
+      LOBUILDDIR_WINDOWS=`UnixDirToWindows "$LOBUILDDIR"`
 
-      # $LOBUILDDIR/include may be a symlink (e.g. a WSL/DrvFs symlink left by an
-      # out-of-tree engine build) that native msbuild/clang-cl cannot follow. cd
-      # resolves it at the OS level, so cmd.exe reports the real target as a
-      # plain native path that the Windows app build can traverse.
-      LOINCLUDE_WINDOWS=`cd "$LOBUILDDIR/include" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
+      # $LOBUILDDIR/include may be a symlink (left by an out-of-tree engine
+      # build) that native msbuild/clang-cl cannot follow; UnixDirToWindows
+      # resolves it into the real target.
+      LOINCLUDE_WINDOWS=`UnixDirToWindows "$LOBUILDDIR/include"`
 
       # The Windows app's C++ projects build with the clang-cl (ClangCL)
       # platform toolset. Confirm Visual Studio has both the Clang compiler
@@ -960,10 +977,22 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
       # (Platform Toolset = 'ClangCL') cannot be found". vswhere lives at a
       # fixed location regardless of where VS itself is installed.
       AC_MSG_CHECKING([for the Visual Studio clang-cl (ClangCL) toolset])
-      # Resolve vswhere to a WSL path and run the .exe directly: going through
+      # Resolve vswhere to a Unix path and run the .exe directly: going through
       # cmd.exe mangles the quotes the spaced path needs, so it would not run.
-      VSWHERE_DIR=`cmd.exe /c 'echo %ProgramFiles(x86)%' 2>/dev/null | tr -d '\r'`
-      VSWHERE=`wslpath -u "$VSWHERE_DIR" 2>/dev/null`/"Microsoft Visual Studio/Installer/vswhere.exe"
+      if command -v cygpath >/dev/null 2>&1; then
+         # printenv avoids cmd.exe, whose /c switch the MSYS argument
+         # conversion would rewrite into a path - but the parenthesized
+         # variable name does not always survive into an MSYS2 shell, so
+         # fall back to the well-known default location.
+         VSWHERE_DIR=`printenv 'ProgramFiles(x86)' 2>/dev/null`
+         if test -z "$VSWHERE_DIR"; then
+            VSWHERE_DIR="C:\\Program Files (x86)"
+         fi
+         VSWHERE=`cygpath -u "$VSWHERE_DIR" 2>/dev/null`/"Microsoft Visual Studio/Installer/vswhere.exe"
+      else
+         VSWHERE_DIR=`cmd.exe /c 'echo %ProgramFiles(x86)%' 2>/dev/null | tr -d '\r'`
+         VSWHERE=`wslpath -u "$VSWHERE_DIR" 2>/dev/null`/"Microsoft Visual Studio/Installer/vswhere.exe"
+      fi
       CLANGCL_VS=`"$VSWHERE" -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Llvm.Clang Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset -property installationPath 2>/dev/null | tr -d '\r'`
       if test -n "$CLANGCL_VS"; then
          AC_MSG_RESULT([$CLANGCL_VS])
@@ -1026,7 +1055,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
    CHK_FILE_VAR(POCOINCLUDE,Poco/Poco.h,Poco include,_X86_64)
 
    if test "$enable_windowsapp" = "yes" ; then
-      POCOINCLUDE_WINDOWS=`cd "$POCOINCLUDE" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
+      POCOINCLUDE_WINDOWS=`UnixDirToWindows "$POCOINCLUDE"`
    fi
 
    # Sanity checks; the engine builds undecorated static libraries
@@ -1041,7 +1070,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
    fi
 
    if test "$enable_windowsapp" = "yes" ; then
-      POCOLIB_WINDOWS=`cd "$POCOLIB" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
+      POCOLIB_WINDOWS=`UnixDirToWindows "$POCOLIB"`
    fi
 
    # zstd comes from the engine workdir too.  The Windows app links it via the
@@ -2383,10 +2412,11 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
 
        ])
 
-AS_IF([test `uname -s` = "Linux" -o `uname -s` = "FreeBSD" -o `uname -s` = "Darwin"],
+AS_IF([test `uname -s` = "Linux" -o `uname -s` = "FreeBSD" -o `uname -s` = "Darwin" -o "$enable_windowsapp" = "yes"],
       # We need npm and node unconditionally only on Linux, both in the normal Online case, and when
       # only building cool for the iOS app. When building the iOS app itself on macOS, this is
       # optional. If node and npm are not available, cool will have to be built on a Linux box.
+      # The Windows app builds cool in this tree, so it needs them too.
       [AC_PATH_PROG(NODE, node, no)
        if test "$NODE" = "no"; then
             AC_MSG_ERROR([node required to build cool, but not installed])
@@ -2414,6 +2444,16 @@ AS_IF([test `uname -s` = "Linux" -o `uname -s` = "FreeBSD" -o `uname -s` = "Darw
            if test "$CHROME" = "no"; then
                AC_MSG_ERROR([chrome or chromium is required to run the JS tests, but not installed])
            fi
+       fi
+
+       # A native Windows node lives under "C:\Program Files"; convert to a
+       # space-free 8.3 short path so $(NODE)/$(NPM) survive make/shell word
+       # splitting. node is node.exe (found through the MSYS .exe magic, which
+       # cygpath does not apply), while npm is an extensionless shell script.
+       if test "$enable_windowsapp" = "yes" && command -v cygpath >/dev/null 2>&1; then
+           test -f "$NODE.exe" && NODE="$NODE.exe"
+           NODE=`cygpath -ms "$NODE"`
+           NPM=`cygpath -ms "$NPM"`
        fi
        ])
 
@@ -2457,7 +2497,7 @@ if test "$srcdir" != '.'; then
        mkdir -p $dirname ||
              as_fn_error $? "cannot create directory $dirname"
 
-       rm -f "$dst_dir"
+       rm -rf "$dst_dir"
        case $srcdir in
          /*)
            src_dir=$srcdir/$dst_dir
@@ -2473,7 +2513,7 @@ if test "$srcdir" != '.'; then
        echo "linking $src_dir to $dst_dir"
        ln -s "$src_dir" "$dst_dir" 2>/dev/null ||
           ln "$src_dir" "$dst_dir" 2>/dev/null ||
-             cp -p "$srcdir/$dst_dir" "$dst_dir" ||
+             cp -pR "$srcdir/$dst_dir" "$dst_dir" ||
                 as_fn_error $? "cannot link or copy $src_dir to $dst_dir"
    done
 fi])

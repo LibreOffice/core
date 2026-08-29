@@ -136,14 +136,24 @@ sub check_prettier()
     return unless @staged;
 
     if (-e "browser/Makefile") {
-        # The browser tree is configured for WSL/Linux: the prettier target runs
-        # node at the path autoconf detected there (e.g. /usr/bin/node), which does
-        # not exist under Git Bash/MSYS. Committing from there can't run the check,
-        # so skip it instead of failing the commit - the WSL/Linux build and CI
-        # still enforce formatting.
+        # Under Git Bash/MSYS the prettier target only works if this tree was
+        # configured there too, so browser/Makefile records a native node. A
+        # tree configured under WSL/Linux records a node path (e.g.
+        # /usr/bin/node) that does not exist here; committing from Git Bash
+        # can't run the check then, so skip it instead of failing the commit -
+        # the WSL/Linux build and CI still enforce formatting.
         if ($^O =~ /^(?:msys|MSWin32|cygwin)$/i) {
-            print "Skipping code formatting check (Git Bash/MSYS; prettier needs the WSL toolchain)\n";
-            return;
+            my $node = '';
+            if (open my $mk, '<', 'browser/Makefile') {
+                while (<$mk>) {
+                    if (/^NODE = (.+?)\s*$/) { $node = $1; last; }
+                }
+                close $mk;
+            }
+            unless ($node ne '' && $node ne 'no' && (-x $node || -x "$node.exe")) {
+                print "Skipping code formatting check (no native node configured in browser/Makefile)\n";
+                return;
+            }
         }
 
         # the prettier target wants paths relative to browser/
