@@ -62,6 +62,28 @@ std::u16string_view getNameForTypeConstant(TypeConstant aTypeConstant)
     return u"";
 }
 
+static OUString getNameForOOXToken(sal_Int32 nToken)
+{
+    // values for XML_hierBranch
+    if (oox::XML_init == nToken)
+        return u"init"_ustr;
+    else if (oox::XML_hang == nToken)
+        return u"hang"_ustr;
+    else if (oox::XML_l == nToken)
+        return u"l"_ustr;
+    else if (oox::XML_r == nToken)
+        return u"r"_ustr;
+    else if (oox::XML_std == nToken)
+        return u"std"_ustr;
+    // values for XML_dir
+    else if (oox::XML_rev == nToken)
+        return u"rev"_ustr;
+    else if (oox::XML_norm == nToken)
+        return u"norm"_ustr;
+    else
+        return u""_ustr;
+}
+
 void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint)
 {
     if (TypeConstant::XML_none == aTypeConstant)
@@ -203,8 +225,8 @@ void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
         rTarget->startElementNS(XML_dgm, XML_prSet, pAttributeList);
         rTarget->startElementNS(XML_dgm, XML_presLayoutVars);
 
-        if (mbBulletEnabled)
-            rTarget->singleElementNS(XML_dgm, XML_bulletEnabled, XML_val, aStrTrue);
+        if (mbOrgChartEnabled)
+            rTarget->singleElementNS(XML_dgm, XML_orgChart, XML_val, aStrTrue);
 
         if (-1 != mnMaxChildren)
             rTarget->singleElementNS(XML_dgm, XML_chMax, XML_val, OUString::number(mnMaxChildren));
@@ -212,14 +234,18 @@ void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
         if (-1 != mnPreferredChildren)
             rTarget->singleElementNS(XML_dgm, XML_chPref, XML_val, OUString::number(mnPreferredChildren));
 
+        if (mbBulletEnabled)
+            rTarget->singleElementNS(XML_dgm, XML_bulletEnabled, XML_val, aStrTrue);
+
         if (XML_norm != mnDirection)
-            rTarget->singleElementNS(XML_dgm, XML_dir, XML_val, OString::number(mnDirection));
+            rTarget->singleElementNS(XML_dgm, XML_dir, XML_val, getNameForOOXToken(mnDirection));
 
         if (moHierarchyBranch.has_value())
-            rTarget->singleElementNS(XML_dgm, XML_hierBranch, XML_val, OString::number(moHierarchyBranch.value()));
+            rTarget->singleElementNS(XML_dgm, XML_hierBranch, XML_val, getNameForOOXToken(moHierarchyBranch.value()));
 
-        if (mbOrgChartEnabled)
-            rTarget->singleElementNS(XML_dgm, XML_orgChart, XML_val, aStrTrue);
+        // ToDo: animOne not implemented
+
+        // ToDo: animLvl not implemented
 
         if (!msResizeHandles.isEmpty())
             rTarget->singleElementNS(XML_dgm, XML_resizeHandles, XML_val, msResizeHandles);

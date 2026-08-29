@@ -1104,6 +1104,39 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testGraphicClipPolyPolygonODFRoundTrip)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4000), aReloaded.Coordinates[1][2].X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), aReloaded.Coordinates[1][2].Y);
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testValidOrganizationChartExport)
+{
+    // The document contains a smartart diagram based on template "Horizontal Organization Chart".
+    // When the document was saved with our own version of data.xml, the exported file was invalid
+    // in regard to OOXML.
+
+    // load document
+    loadFromFile(u"cool16158_Horizontal_Organization_Chart.pptx");
+
+    // We need to make a change to the diagram to force creating an own data.xml file instead of
+    // using the GrabBag. When the implementation is changed to always write our own data.xml,
+    // this part can be removed from the test.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // Get the 1st text shape. There is a BGShape in indices before.
+    uno::Reference<drawing::XShape> xShape(xSmartArt->getByIndex(1), uno::UNO_QUERY);
+    // TextEdit: Insert a char at the start
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+    pSdrView->SdrBeginTextEdit(pObject);
+    EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.InsertText(u"A"_ustr);
+    pSdrView->SdrEndTextEdit();
+
+    // Save the file. That will run validate(). Without fix validation failed.
+    save(TestFilter::PPTX);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
