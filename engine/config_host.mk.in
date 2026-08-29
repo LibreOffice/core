@@ -722,3 +722,6 @@ KEEP_AWAKE_CMD:=@KEEP_AWAKE_CMD@
 export MSYS_NO_PATHCONV=1
 STRAWBERRY_PERL=@STRAWBERRY_PERL@
 WSL=@WSL@
+UNIX_HELPER=@UNIX_HELPER@
+# used by solenv/bin/run-msys2 for msys2-as-helper builds
+export MSYS2_BASH=@MSYS2_BASH@

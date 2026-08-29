@@ -50,8 +50,9 @@ sub sanity_checks($)
        $autoconf    => "autoconf is required",
        $aclocal     => "$aclocal is required",
       );
-    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) {
-        # for wsl-as-helper build we only need the m4 macros like for macOS
+    if (($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) || $system =~ /^(?:MSYS|MINGW)/) {
+        # for wsl-as-helper and msys2-as-helper builds we only need the m4
+        # macros like for macOS
         delete $required{'pkg-config'};
     }
     for my $elem (@path) {
@@ -169,7 +170,7 @@ my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
 $aclocal_flags .= " -I $src_path/m4";
 # the m4/mac directory provides the pkg-config macros used in configure
-$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin' || ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/));
+$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin' || ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) || $system =~ /^(?:MSYS|MINGW)/);
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
@@ -178,7 +179,9 @@ if ($src_path ne $build_path)
     system ("ln -sf $src_path/configure.ac configure.ac");
     system ("ln -sf $src_path/g g");
     my $src_path_win=$src_path;
-    if ($system =~ /CYGWIN.*/) {
+    # msys2-as-helper method: autogen.sh/configure runs within an MSYS2 shell
+    # and the build runs from git-bash in the same Windows-native realm
+    if ($system =~ /CYGWIN|MSYS|MINGW/) {
         $src_path_win=`cygpath -m $src_path`;
         chomp $src_path_win;
     }

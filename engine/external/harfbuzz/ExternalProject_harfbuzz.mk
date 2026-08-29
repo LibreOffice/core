@@ -70,7 +70,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 			-Dicu=enabled \
 			-Dicu_builtin=true \
 			-Dgraphite2=enabled \
-			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
+			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(UNIX_HELPER),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir libs \
 			$(gb_MESON_LOAD_AVERAGE) \
 			$(if $(verbose),--verbose) \

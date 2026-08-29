@@ -109,7 +109,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 			$(if $(CROSS_COMPILING),--cross-file cross-file.txt) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter LINUX FREEBSD,$(OS)),--prefix=$(gb_UnpackedTarball_workdir)/cairo/inst --libdir=lib) \
-			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
+			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(UNIX_HELPER),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir \
 			$(gb_MESON_LOAD_AVERAGE) \
 			$(if $(verbose),--verbose) \

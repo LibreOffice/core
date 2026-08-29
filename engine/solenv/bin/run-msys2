@@ -1,0 +1,27 @@
+#!/bin/sh
+# -*- tab-width: 4; indent-tabs-mode: nil -*-
+#
+# Copyright the Collabora Office contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Run a command inside the MSYS2 installation, for msys2-as-helper builds
+# (the WSL-free way to build for Windows from git-bash). Not a login shell:
+# MSYS2's /etc/profile would replace the caller's PATH with its own minimal
+# one (hiding e.g. the native node and ~/bin) and point CONFIG_SITE at
+# /etc/config.site, which presets the build triplet to cygwin. Instead keep
+# the caller's PATH - it survives the realm hop correctly - and just prepend
+# MSYS2's own bin directories so its unix tools (autoconf, perl, m4, ...)
+# come first. MSYS2_BASH is exported by config_host.mk; without it (e.g. when
+# this script is run by hand), MSYS2_ROOT or the default install location
+# names the MSYS2 to use.
+# MSYS=winsymlinks:nativestrict: configure creates real symlinks (e.g. the
+# include link); force it here so the MSYS2 side does not depend on the
+# user's environment (the configure mklink probe guarantees the privilege).
+exec env MSYSTEM=MSYS MSYS=winsymlinks:nativestrict "${MSYS2_BASH:-${MSYS2_ROOT:-C:/msys64}/usr/bin/bash.exe}" --noprofile --norc -c 'export PATH="/usr/local/bin:/usr/bin:/bin:/opt/bin:$PATH" CONFIG_SITE=/dev/null; exec "$@"' -- "$@"
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

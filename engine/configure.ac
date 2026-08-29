@@ -225,6 +225,18 @@ PathFormat()
         formatted_path_unix=$(wslpath -u "$(cd /mnt/c; cmd.exe /c $shortpath_cmd "$formatted_path" | tr -d '\r')")
         # WSL can't run Windows binaries from Windows pathnames so we need a separate return value in Unix format
         formatted_path=$(wslpath -m "$formatted_path_unix")
+    elif test -n "$MSYS_ONLY_AS_HELPER"; then
+        # tool output (vswhere, reg.exe, ...) can carry a trailing CR
+        formatted_path=$(echo "$formatted_path" | tr -d '\r')
+        # cygpath handles both unix and windows input, and -s shortens the
+        # components that have 8.3 names; for a path that does not exist (yet)
+        # -s errors out, so fall back to the plain long-form conversion then
+        pf_path=$(cygpath -sm "$formatted_path" 2>/dev/null)
+        if test -z "$pf_path"; then
+            pf_path=$(cygpath -m "$formatted_path")
+        fi
+        formatted_path="$pf_path"
+        formatted_path_unix=$(cygpath -u "$formatted_path")
     fi
 }
 
@@ -341,11 +353,25 @@ dnl ===================================================================
 # if so, we aim to run nearly everything in the Windows realm, and only run autogen/configure
 # in wsl and run a few tools via wsl
 WSL_ONLY_AS_HELPER=
+# the same idea without WSL: autogen/configure run in an MSYS2 shell ($MSYSTEM is set there,
+# and in git-bash), the build runs from git-bash with native tools, and the few unix-only
+# tools (autoconf, flex, bison, gperf, nasm, zip, gettext) come from the MSYS2 installation.
+# Any MSYS-runtime shell triggers this on purpose, plain git-bash included: configure run
+# there needs exactly these conventions (cygpath, Windows-realm build); solenv/bin/run-msys2
+# and the CODA-W front-end always start configure in a real MSYS2 shell, and a plain git-bash
+# has no autotools, so autogen.sh stops early there with a clear message anyway
+MSYS_ONLY_AS_HELPER=
 if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q -e mingw64 -e clangarm64); then
     WSL_ONLY_AS_HELPER=TRUE
     shortpath_cmd=$(wslpath -m $srcdir/solenv/bin/shortpath.cmd)
+elif test -n "$MSYSTEM"; then
+    MSYS_ONLY_AS_HELPER=TRUE
+fi
+# for the guards that apply to both helper flavors
+UNIX_ONLY_AS_HELPER="$WSL_ONLY_AS_HELPER$MSYS_ONLY_AS_HELPER"
+if test -n "$UNIX_ONLY_AS_HELPER"; then
     if test -n "$PKG_CONFIG"; then
-        # make sure it is specified in a unix form/a path that wsl can access
+        # make sure it is specified in a unix form/a path that the helper shell can access
         PathFormat "$PKG_CONFIG"
         PKG_CONFIG="$formatted_path_unix"
     fi
@@ -368,7 +394,9 @@ if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q -e mingw64 -e clangarm64)
              for example: wsl.exe -d MyDistro -u NonDefaultUser])],
         [],
         [with_wsl_command="wsl.exe"])
-    WSL="$with_wsl_command"
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        WSL="$with_wsl_command"
+    fi
 fi
 AC_SUBST([STRAWBERRY_PERL])
 AC_SUBST([WSL])
@@ -652,7 +680,7 @@ fi
 win_short_path_for_make()
 {
     local short_path="$1"
-    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" -o -n "$MSYS_ONLY_AS_HELPER"; then
         cygpath -sm "$short_path"
     elif test -n "$WSL_ONLY_AS_HELPER"; then
         # when already unix-style path, wslpath doesn't return anything
@@ -700,7 +728,7 @@ if test -z "$SED"; then
     AC_MSG_ERROR([install sed to run this script])
 fi
 
-if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
+if test "$build_os" = "cygwin" -o -n "$UNIX_ONLY_AS_HELPER"; then
     # convenience check for a custom pkgconf used by meson - needs to be a version that uses windows
     # style paths. Needs to be checked before the configure-switches that use PKG_CHECK_MODULES as
     # that would already set the PKG_CONFIG var and then bypass/skip this autoselection
@@ -719,7 +747,7 @@ if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
     AC_MSG_CHECKING([whether symbolic links can be created])
     rm -f conftest.symlink conftest.symtarget
     echo conftest > conftest.symtarget
-    cmd.exe /c "mklink conftest.symlink conftest.symtarget" >/dev/null 2>&1
+    MSYS2_ARG_CONV_EXCL="*" cmd.exe /c "mklink conftest.symlink conftest.symtarget" >/dev/null 2>&1
     symlink_ok=$?
     rm -f conftest.symlink conftest.symtarget
     if test "$symlink_ok" = 0; then
@@ -3813,8 +3841,13 @@ reg_get_value()
     if test "$build_os" = "wsl"; then
         regvalue=$($WSL_LO_HELPER --read-registry $1 "$2/$3" 2>/dev/null)
         return
-    elif test -n "$WSL_ONLY_AS_HELPER"; then
-        regvalue=$(reg.exe query "$(echo $2 | tr '/' '\\')" /v "$3" /reg:$1 |sed -ne "s|\s*$3.*REG_SZ\s*\(.*\)[\s\r]*$|\1|p")
+    elif test -n "$UNIX_ONLY_AS_HELPER"; then
+        # MSYS2_ARG_CONV_EXCL: keep the MSYS argument conversion from turning
+        # the /v and /reg: switches into paths (no effect under WSL).
+        # Capture to the end of the line and strip the CR separately: under
+        # WSL the value line ends in a CR, under MSYS2 the runtime already
+        # translated CRLF away, and the value itself may end in a backslash.
+        regvalue=$(MSYS2_ARG_CONV_EXCL="*" reg.exe query "$(echo $2 | tr '/' '\\')" /v "$3" /reg:$1 |sed -ne "s|\s*$3.*REG_SZ\s*\(.*\)$|\1|p" | tr -d '\r')
         return
     fi
 
@@ -3849,6 +3882,11 @@ reg_list_values()
     if test "$build_os" = "wsl"; then
         reglist=$($WSL_LO_HELPER --list-registry $1 "$2" 2>/dev/null | tr -d '\r')
         return
+    elif test -n "$UNIX_ONLY_AS_HELPER"; then
+        # the subkey names: reg.exe prints the queried key first and then one
+        # full subkey path per line; values are indented, so ^HKEY_ skips them
+        reglist=$(MSYS2_ARG_CONV_EXCL="*" reg.exe query "$(echo $2 | tr '/' '\\')" /reg:$1 2>/dev/null | tr -d '\r' | sed -ne 's|^HKEY_.*\\||p' | sed -e '1d')
+        return
     fi
 
     reglist=$(ls "/proc/registry${1}/${2}")
@@ -3871,7 +3909,7 @@ cygwin*|wsl*)
     COM=MSC
     OS=WNT
     RTL_OS=Windows
-    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" -o -n "$WSL_ONLY_AS_HELPER" ; then
+    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" -o -n "$UNIX_ONLY_AS_HELPER" ; then
         P_SEP=";"
     else
         P_SEP=:
@@ -4138,8 +4176,18 @@ find_msvc()
         if test -z "$vswhere"; then
             vswhere="c:\\Program Files (x86)"
         fi
-    elif test -n "$WSL_ONLY_AS_HELPER"; then
-        vswhere="$(perl.exe -e 'print $ENV{"ProgramFiles(x86)"}')"
+    elif test -n "$UNIX_ONLY_AS_HELPER"; then
+        # under WSL perl.exe is a Windows perl seeing the real Windows
+        # environment; under MSYS2 the parenthesized name may not survive the
+        # environment hops, so fall back to autogen.sh's PROGRAMFILESX86
+        # re-export and finally to the well-known default
+        vswhere="$(perl.exe -e 'print $ENV{"ProgramFiles(x86)"}' 2>/dev/null)"
+        if test -z "$vswhere"; then
+            vswhere="$PROGRAMFILESX86"
+        fi
+        if test -z "$vswhere"; then
+            vswhere="c:\\Program Files (x86)"
+        fi
     else
         vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
     fi
@@ -6753,7 +6801,7 @@ perl_use_string="use Cwd ; use Digest::MD5"
 perl_use_string_spp="use Cwd ; use Digest::MD5"
 if test "$enable_openssl" = "yes" -a "$with_system_openssl" != "yes"; then
     # OpenSSL needs that to build
-    if test -n "$WSL_ONLY_AS_HELPER"; then
+    if test -n "$UNIX_ONLY_AS_HELPER"; then
         # OpenSSL is built via spp, FindBin is provided by default, but deps might change in future
         perl_use_string_spp="$perl_use_string_spp ; use FindBin ; use Time::Piece"
     else
@@ -6764,7 +6812,7 @@ dnl in WSL_ONLY_AS_HELPER case the test should be done with git-bash-provided-pe
 dnl the wsl container, but that can wait until we require a module that's not provided by default
 if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
-    if test -n "$WSL_ONLY_AS_HELPER"; then
+    if test -n "$UNIX_ONLY_AS_HELPER"; then
         AC_MSG_CHECKING([for required Perl modules in Strawberry Perl])
         if $STRAWBERRY_PERL_UNIX -e "$perl_use_string_spp">/dev/null 2>&1; then
             AC_MSG_RESULT([all modules found])
@@ -7001,7 +7049,7 @@ dnl Check for the Windows  SDK.
 dnl =========================================
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for Windows SDK])
-    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
         find_winsdk
         WINDOWS_SDK_HOME=$winsdktest
 
@@ -7082,7 +7130,7 @@ the  Windows SDK are installed.])
     PathFormat "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME="$formatted_path"
     WINDOWS_SDK_HOME_unix="$formatted_path_unix"
-    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/Include"
         if test -d "$WINDOWS_SDK_HOME_unix/include/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
@@ -7101,7 +7149,7 @@ AC_SUBST(WINDOWS_SDK_HOME)
 AC_SUBST(WINDOWS_SDK_LIB_SUBDIR)
 AC_SUBST(WINDOWS_SDK_VERSION)
 
-if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
+if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
     dnl Check midl.exe; this being the first check for a tool in the SDK bin
     dnl dir, it also determines that dir's path w/o an arch segment if any,
     dnl WINDOWS_SDK_BINDIR_NO_ARCH:
@@ -8841,7 +8889,7 @@ dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
 
     # Windows-specific tests
-    if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
+    if test "$build_os" = "cygwin" -o -n "$UNIX_ONLY_AS_HELPER"; then
         if test -z "$with_jdk_home"; then
             dnl See <https://docs.oracle.com/javase/9/migrate/toc.htm#JSMIG-GUID-EEED398E-AE37-4D12-
             dnl AB10-49F82F720027> section "Windows Registry Key Changes":
@@ -10680,7 +10728,7 @@ if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$w
     AC_MSG_RESULT([external])
     SYSTEM_ODBC_HEADERS=TRUE
 
-    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
         save_CPPFLAGS=$CPPFLAGS
         find_winsdk
         PathFormat "$winsdktest"
@@ -12976,7 +13024,7 @@ EOF
         </project>
 EOF
 
-        if test -n "$WSL_ONLY_AS_HELPER"; then
+        if test -n "$UNIX_ONLY_AS_HELPER"; then
             # need to set it directly, since ant only tries java, not java.exe from JAVA_HOME
             export JAVACMD="$JAVAINTERPRETER"
             # similarly it doesn't expect to be called from wsl, so it uses the wsl-realm path when
@@ -13633,7 +13681,7 @@ AC_SUBST(LOADLIMIT)
 # Set up ILIB for MSVC build
 #
 ILIB1=
-if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
+if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
     ILIB="."
     if test -n "$JAVA_HOME"; then
         ILIB="$ILIB;$JAVA_HOME/lib"
@@ -14049,7 +14097,7 @@ AC_MSG_NOTICE([setting up the build environment variables...])
 
 AC_SUBST(COMPATH)
 
-if test "$build_os" = "cygwin" -o "$build_os" = wsl -o -n "$WSL_ONLY_AS_HELPER"; then
+if test "$build_os" = "cygwin" -o "$build_os" = wsl -o -n "$UNIX_ONLY_AS_HELPER"; then
     if test -d "$COMPATH_unix/atlmfc/lib/spectre"; then
         ATL_LIB="$COMPATH/atlmfc/lib/spectre"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
@@ -14206,10 +14254,17 @@ CFLAGS=$my_original_CFLAGS
 CXXFLAGS=$my_original_CXXFLAGS
 CPPFLAGS=$my_original_CPPFLAGS
 
+# A previous configure run without symlink support leaves a plain-directory
+# copy of include/ behind (config.status falls back to cp when ln -s fails),
+# and config.status's rm -f cannot remove a directory on the next run. Clear
+# such a copy here; leave an actual symlink (or an in-tree build) alone.
+if test "$srcdir" != "." -a -d include -a ! -h include; then
+    rm -rf include
+fi
 AC_CONFIG_LINKS([include:include])
 
-if test -n "$WSL_ONLY_AS_HELPER"; then
-    # while we configure in linux, we actually compile in "cygwin" (close enough at least)
+if test -n "$UNIX_ONLY_AS_HELPER"; then
+    # while we configure in linux or MSYS2, we actually compile in "cygwin" (close enough at least)
     build=$build_cpu-$host_vendor-$host_os
     PathFormat "$SRC_ROOT"
     SRC_ROOT="$formatted_path"
@@ -14238,13 +14293,33 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
     # TODO: maybe switch to strawberry-perl right away?
     # only openssl seems to actually require it (for Pod/Usage.pm and maybe more)
     PERL="perl.exe"
-    # use flex, gperf and nasm from wsl-container
-    # if using absolute path, would need to use double-leading slash for the msys path mangling
-    FLEX="$WSL $FLEX"
-    NASM="$WSL $NASM"
-    # some externals (libebook) check for it with AC_PATH_PROGS, and that only accepts overrides
-    # with an absolute path/requires the value to begin with a slash
-    GPERF="/c/Windows/system32/$WSL gperf"
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        # use flex, gperf and nasm from wsl-container
+        # if using absolute path, would need to use double-leading slash for the msys path mangling
+        FLEX="$WSL $FLEX"
+        NASM="$WSL $NASM"
+        # some externals (libebook) check for it with AC_PATH_PROGS, and that only accepts overrides
+        # with an absolute path/requires the value to begin with a slash
+        GPERF="/c/Windows/system32/$WSL gperf"
+    else
+        # flex, bison, gperf and the archive tools come from the MSYS2 installation; they
+        # are plain Windows programs, so refer to them by Windows-realm paths that the
+        # recipes run from git-bash can spawn directly (autoconf treats a DOS-style path
+        # as absolute where an absolute path is required)
+        FLEX=$(cygpath -m "$FLEX")
+        BISON=$(cygpath -m "$BISON")
+        GPERF=$(cygpath -m "$GPERF")
+        test -n "$BSDTAR" && BSDTAR=$(cygpath -m "$BSDTAR")
+        test -n "$UNZIP" && UNZIP=$(cygpath -m "$UNZIP")
+        test -n "$ZIP" && ZIP=$(cygpath -m "$ZIP")
+        # nasm, zip, msgfmt/msguniq and autoconf are found through PATH: append the MSYS2
+        # tools at the end, so they only fill in what git-bash does not provide itself
+        LO_PATH="$LO_PATH:$(cygpath -m /usr/bin)"
+        # the build is driven from git-bash, where plain "make" is the native
+        # Win32 make - not MSYS2's /usr/bin/make that configure detected; only
+        # the closing "to build, run" message uses this
+        GNUMAKE="make"
+    fi
     # append strawberry tools dir to PATH (for e.g. windres, ar)
     LO_PATH="$LO_PATH:$STRAWBERRY_TOOLS"
     # temp-dir needs to be in windows realm, hardcode for now
@@ -14253,6 +14328,20 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
         TEMP_DIRECTORY="$BUILDDIR/tmp"
     fi
 fi
+
+# The command prefix that runs its arguments inside the unix helper environment, for the
+# few build steps that need a whole unix toolchain (e.g. regenerating icu's configure
+# with autoconf). Empty on platforms that need no helper, so the tools run directly.
+UNIX_HELPER=
+MSYS2_BASH=
+if test -n "$WSL_ONLY_AS_HELPER"; then
+    UNIX_HELPER="$WSL"
+elif test -n "$MSYS_ONLY_AS_HELPER"; then
+    MSYS2_BASH=$(cygpath -m /usr/bin/bash.exe)
+    UNIX_HELPER="$SRC_ROOT/solenv/bin/run-msys2"
+fi
+AC_SUBST([UNIX_HELPER])
+AC_SUBST([MSYS2_BASH])
 
 # Keep in sync with list of files far up, at AC_MSG_CHECKING([for
 # BUILD platform configuration] - otherwise breaks cross building
@@ -14272,11 +14361,24 @@ AC_CONFIG_FILES([
                  extensions/source/macosx/quicklookthumbnail/appex/Info.plist
                  ])
 # map unix-style mount dirs to windows directories: /mnt/c/foobar -> C:/foobar
+# (or /c/foobar under MSYS2) - the variables computed before the final path
+# conversion (WORKDIR, INSTDIR, ...) still carry the configure realm's form.
 # easier to do it in a postprocessing command than to modify every single variable
 AC_CONFIG_FILES([config_host.mk], [
     if test -n "$WSL_ONLY_AS_HELPER"; then
         sed -i -e 's#/mnt/\([[:alpha:]]\)/#\u\1:/#g' config_host.mk
-    fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER])
+    fi
+    if test -n "$MSYS_ONLY_AS_HELPER"; then
+        # only at a value boundary (start of line/word, after a make construct
+        # like $(gb_SPACE), or an -I/-L flag), so that a single-letter
+        # directory inside a path is left alone, whether unix (/foo/b/bar) or
+        # Windows (C:/D/lo, where the drive's colon precedes it). For the same
+        # reason ':' is not a boundary: in a unix-style colon-separated list
+        # the /x/ entries stay as they are - the shells of the build realm
+        # resolve them natively, and inserting drive colons would corrupt the
+        # list structure.
+        sed -i -e 's#\(^\|[ =;"(),]\|-I\|-L\)/\([[:alpha:]]\)/#\1\u\2:/#g' config_host.mk
+    fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER MSYS_ONLY_AS_HELPER=$MSYS_ONLY_AS_HELPER])
 # also use windows paths in the vs-code workspace file (esp. for the launch configurations that use
 # INSTROOT) and also change the default shell from Cygwin to Git Bash
 AC_CONFIG_FILES([vs-code.code-workspace.template:.vscode/vs-code-template.code-workspace.in], [

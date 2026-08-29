@@ -77,6 +77,7 @@ $(subst $(TARFILE_LOCATION)/,$(TARFILE_LOCATION_CYG)/,$(subst $(SRCDIR)/,$(SRCDI
 endef
 
 ifneq ($(MSYSTEM),)
+ifneq ($(WSL),)
 # paths to reach into windows realm from within wsl
 SRCDIR_WSL := $(shell $(WSL) wslpath -u $(SRCDIR))
 BUILDDIR_WSL := $(shell $(WSL) wslpath -u $(BUILDDIR))
@@ -88,7 +89,12 @@ define gb_Helper_wsl_path
 $(subst $(TARFILE_LOCATION)/,$(TARFILE_LOCATION_WSL)/,$(subst $(SRCDIR)/,$(SRCDIR_WSL)/,$(subst $(BUILDDIR)/,$(BUILDDIR_WSL)/,$(subst $(INSTDIR)/,$(INSTDIR_WSL)/,$(subst $(WORKDIR)/,$(WORKDIR_WSL)/,$(1))))))
 endef
 else
-# not needed for cygwin
+# msys2-as-helper: the MSYS2 tools (zip, msgfmt, ...) want /c/... paths,
+# which is exactly the cygwin-style conversion
+gb_Helper_wsl_path=$(call gb_Helper_cyg_path,$(1))
+endif
+else
+# not needed for cygwin: the tools there take the C:/... paths as they are
 gb_Helper_wsl_path=$(1)
 endif
 

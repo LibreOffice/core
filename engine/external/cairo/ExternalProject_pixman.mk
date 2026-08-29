@@ -61,7 +61,7 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 			$(if $(filter ARM,$(RTL_ARCH)),-Darm-simd=enabled -Dneon=enabled) \
 			-Dtests=disabled \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
+			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(UNIX_HELPER),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir \
 			$(gb_MESON_LOAD_AVERAGE) \
 			$(if $(verbose),--verbose) \
