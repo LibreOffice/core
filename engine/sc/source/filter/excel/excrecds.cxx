@@ -919,7 +919,9 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
     if (pData)
     {
         bAdvanced = pData->GetAdvancedQuerySource( aAdvRange );
-        bFound = (pData->HasQueryParam() || pData->HasAutoFilter() || bAdvanced);
+        // A table keeps its autoFilter element with the buttons switched off,
+        // its columns then carry hiddenButton="1".
+        bFound = (pDefinedData || pData->HasQueryParam() || pData->HasAutoFilter() || bAdvanced);
     }
     if( !bFound )
         return;

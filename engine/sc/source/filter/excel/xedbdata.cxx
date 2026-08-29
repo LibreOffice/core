@@ -253,17 +253,13 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         // OOXTODO: XML_totalsRowDxfId, ...
     );
 
-    if (rData.HasAutoFilter())
-    {
-        /* TODO: in OOXML  12.3.21 Table Definition Part  has information
-         * that an applied autoFilter has child elements
-         * <af:filterColumn><af:filters><af:filter>.
-         * When not applied but buttons hidden, Excel writes, for example,
-         * <filterColumn colId="0" hiddenButton="1"/> */
-
-        ExcAutoFilterRecs aAutoFilter( rStrm.GetRoot(), aRange.aStart.Tab(), &rData);
-        aAutoFilter.SaveXml( rStrm);
-    }
+    /* TODO: in OOXML  12.3.21 Table Definition Part  has information
+     * that an applied autoFilter has child elements
+     * <af:filterColumn><af:filters><af:filter>.
+     * A table keeps its autoFilter element when the buttons are switched off,
+     * every column then carries <filterColumn colId="0" hiddenButton="1"/>. */
+    ExcAutoFilterRecs aAutoFilter( rStrm.GetRoot(), aRange.aStart.Tab(), &rData);
+    aAutoFilter.SaveXml( rStrm);
 
     const std::vector< OUString >& rColNames = rData.GetTableColumnNames();
     const std::vector< TableColumnModel >& rTableColumnModel = rData.GetTableColumnModel();

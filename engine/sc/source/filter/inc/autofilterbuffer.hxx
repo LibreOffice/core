@@ -200,6 +200,7 @@ public:
         settings of this column. */
     ApiFilterSettings   finalizeImport();
     bool                isButtonHidden();
+    bool                getHiddenButton() const { return mbHiddenButton; }
     sal_Int32           getColumnId() const { return mnColId; }
 
 private:
@@ -249,6 +250,8 @@ public:
     /** Applies the filter to the passed filter descriptor. */
     void                finalizeImport( const css::uno::Reference< css::sheet::XDatabaseRange >& rxDatabaseRange,
                                         sal_Int16 nSheet );
+
+    bool                areAllButtonsHidden() const;
 
     css::uno::Reference< css::sheet::XDatabaseRange > createDatabaseObject(sal_Int16 nSheet);
 

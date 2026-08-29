@@ -718,6 +718,23 @@ void AutoFilter::setRange(const ScRange& rRange)
     maRange = rRange;
 }
 
+bool AutoFilter::areAllButtonsHidden() const
+{
+    const sal_Int32 nWidth = maRange.aEnd.Col() - maRange.aStart.Col() + 1;
+    if( nWidth <= 0 )
+        return false;
+
+    std::set< sal_Int32 > aHiddenColIds;
+    for( const auto& rxFilterColumn : maFilterColumns )
+        if( rxFilterColumn->getHiddenButton() )
+            aHiddenColIds.insert( rxFilterColumn->getColumnId() );
+
+    for( sal_Int32 nColId = 0; nColId < nWidth; ++nColId )
+        if( !aHiddenColIds.count( nColId ) )
+            return false;
+    return true;
+}
+
 FilterColumn& AutoFilter::createFilterColumn()
 {
     FilterColumnVector::value_type xFilterColumn = std::make_shared<FilterColumn>( *this );
@@ -982,9 +999,11 @@ bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxData
     AutoFilter* pAutoFilter = getActiveAutoFilter();
     if( pAutoFilter && rxDatabaseRange.is() ) try
     {
-        // the property 'AutoFilter' enables the drop-down buttons
+        /* The property 'AutoFilter' enables the drop-down buttons. A range that
+           hides the button of every one of its columns has no auto filter at
+           all - that is how a table stores a switched off filter. */
         PropertySet aRangeProps( rxDatabaseRange );
-        aRangeProps.setProperty( PROP_AutoFilter, true );
+        aRangeProps.setProperty( PROP_AutoFilter, !pAutoFilter->areAllButtonsHidden() );
 
         pAutoFilter->finalizeImport( rxDatabaseRange, nSheet );
 

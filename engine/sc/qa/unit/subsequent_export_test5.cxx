@@ -12,6 +12,7 @@
 #include "helper/qahelper.hxx"
 
 #include <docsh.hxx>
+#include <dbdata.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <stlpool.hxx>
@@ -721,6 +722,55 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testAutofilterHiddenButton)
             = OString::Concat("/x:table/x:autoFilter/x:filterColumn[") + OString::number(i) + "]";
         assertXPath(pDocXml, sPath, "hiddenButton", u"1");
     }
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testTableFilterButtonsOff)
+{
+    createScDoc("xlsx/tableFilterButtonsOff.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    CPPUNIT_ASSERT(!pDBData->HasAutoFilter());
+
+    saveAndReload(TestFilter::XLSX);
+
+    pDoc = getScDoc();
+    pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    CPPUNIT_ASSERT(!pDBData->HasAutoFilter());
+
+    // the hidden buttons have to survive the export, not drop the whole element
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    assertXPath(pDocXml, "/x:table/x:autoFilter", "ref", u"H6:J10");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn", 3);
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[1]", "colId", u"0");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[1]", "hiddenButton", u"1");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[2]", "colId", u"1");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[2]", "hiddenButton", u"1");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[3]", "colId", u"2");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[3]", "hiddenButton", u"1");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testTableFilterButtonsOn)
+{
+    createScDoc("xlsx/tableFilterButtonsOn.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    CPPUNIT_ASSERT(pDBData->HasAutoFilter());
+
+    saveAndReload(TestFilter::XLSX);
+
+    pDoc = getScDoc();
+    pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    CPPUNIT_ASSERT(pDBData->HasAutoFilter());
+
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    assertXPath(pDocXml, "/x:table/x:autoFilter", "ref", u"H6:J10");
+    assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testAutofilterShowButton)
