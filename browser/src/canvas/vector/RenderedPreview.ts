@@ -10,11 +10,12 @@
  */
 
 namespace cool {
-	/// Snapshot of a thumbnail render. part is the slide the preview
-	/// points to, maxWidth and maxHeight are the size the consumer
-	/// asked for at the last render in CSS pixels.
+	/// Snapshot of a thumbnail render. part and mode name the page the
+	/// preview points to, maxWidth and maxHeight are the size requested at
+	/// the last render in CSS pixels.
 	export interface RenderedPreview {
 		part: number;
+		mode: number;
 		maxWidth: number;
 		maxHeight: number;
 	}

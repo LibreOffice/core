@@ -47,7 +47,7 @@ describe('VectorManager', function () {
 			],
 		});
 
-		const data = manager.requestPart(0);
+		const data = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.ok(data, 'part 0 is cached after its response');
 		nodeassert.deepStrictEqual(data.order, [11, 22]);
 		nodeassert.strictEqual(data.objects.get(11)?.id, 11);
@@ -66,7 +66,7 @@ describe('VectorManager', function () {
 			objects: [],
 		});
 
-		const data = manager.requestPart(0);
+		const data = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.ok(data, 'part 0 is cached after its response');
 		nodeassert.strictEqual(data.version, 7);
 	});
@@ -95,7 +95,7 @@ describe('VectorManager', function () {
 		};
 		manager.handleVectorPrimitivesDelta(delta);
 
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.strictEqual(data.version, 2);
 		nodeassert.deepStrictEqual(data.order, [22, 11]);
 		nodeassert.strictEqual(data.objects.get(22).primitives.length, 1);
@@ -123,7 +123,7 @@ describe('VectorManager', function () {
 		};
 		manager.handleVectorPrimitivesDelta(delta);
 
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.deepStrictEqual(data.order, [11, 22]);
 		nodeassert.strictEqual(data.objects.get(22).primitives.length, 1);
 		nodeassert.strictEqual(data.objects.get(11).primitives.length, 0);
@@ -145,7 +145,7 @@ describe('VectorManager', function () {
 		const delta: any = { part: 0, version: 2, order: [11], objects: [] };
 		manager.handleVectorPrimitivesDelta(delta);
 
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.strictEqual(data.objects.size, 1);
 		nodeassert.ok(!data.objects.has(22), 'the removed object is gone');
 		nodeassert.deepStrictEqual(data.order, [11]);
@@ -166,7 +166,10 @@ describe('VectorManager', function () {
 
 		// The cache was dropped, so the next request starts a fresh full
 		// fetch and has nothing to return yet.
-		nodeassert.strictEqual(manager.requestPart(0), undefined);
+		nodeassert.strictEqual(
+			manager.requestPart(0, cool.VectorMode.Slides),
+			undefined,
+		);
 	});
 
 	// A delta computed against an older version can arrive after a newer
@@ -187,7 +190,7 @@ describe('VectorManager', function () {
 		const delta: any = { part: 0, version: 3, order: [11], objects: [] };
 		manager.handleVectorPrimitivesDelta(delta);
 
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.strictEqual(data.version, 5);
 		nodeassert.strictEqual(data.objects.size, 2);
 	});
@@ -206,7 +209,7 @@ describe('VectorManager', function () {
 			],
 		});
 
-		let data: any = manager.requestPart(0);
+		let data: any = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.strictEqual(data.slideWidth, 1000);
 		nodeassert.strictEqual(data.slideHeight, 800);
 
@@ -219,7 +222,7 @@ describe('VectorManager', function () {
 			],
 		});
 
-		data = manager.requestPart(0);
+		data = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.strictEqual(data.slideWidth, 2000);
 		nodeassert.strictEqual(data.slideHeight, 1600);
 	});
@@ -248,7 +251,7 @@ describe('VectorManager', function () {
 		};
 		manager.handleVectorPrimitivesDelta(delta);
 
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.strictEqual(data.version, 2);
 		nodeassert.strictEqual(data.objects.get(5).kind, 'page');
 		nodeassert.strictEqual(data.objects.get(5).primitives.length, 1);
@@ -279,7 +282,7 @@ describe('VectorManager', function () {
 			],
 		});
 
-		const data = manager.requestPart(0);
+		const data = manager.requestPart(0, cool.VectorMode.Slides);
 		nodeassert.ok(data, 'part 0 is cached after its response');
 		const member = data.objects.get(22);
 		nodeassert.ok(member, 'the member is cached under its own id');
@@ -305,7 +308,7 @@ describe('VectorManager', function () {
 				{ id: 22, layer: 5, primitives: [hairline] },
 			],
 		});
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 
 		manager.setLayerVisible(5, false);
 		let recorder = new CanvasRecorder();
@@ -347,7 +350,7 @@ describe('VectorManager', function () {
 				},
 			],
 		});
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 
 		let recorder = new CanvasRecorder();
 		manager.renderInto(recorder as any, data);
@@ -375,7 +378,7 @@ describe('VectorManager', function () {
 				{ id: 11, primitives: [prompt] },
 			],
 		});
-		const data: any = manager.requestPart(0);
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 
 		let recorder = new CanvasRecorder();
 		manager.renderInto(recorder as any, data);
@@ -428,7 +431,10 @@ describe('VectorManager', function () {
 		});
 		manager.discardAllCache();
 
-		nodeassert.strictEqual(manager.requestPart(0), undefined);
+		nodeassert.strictEqual(
+			manager.requestPart(0, cool.VectorMode.Slides),
+			undefined,
+		);
 		nodeassert.ok(
 			sent.some(
 				(message) => message.indexOf('.uno:VectorPrimitives?part=0') >= 0,
@@ -453,7 +459,80 @@ describe('VectorManager', function () {
 		manager.reclaimGraphicsMemory();
 
 		nodeassert.ok(notified > 0, 'listeners hear about the drop');
-		nodeassert.strictEqual(manager.requestPart(0), undefined);
+		nodeassert.strictEqual(
+			manager.requestPart(0, cool.VectorMode.Slides),
+			undefined,
+		);
+	});
+
+	// The same index names a different page in each mode, so slide 0 and
+	// master page 0 are cached apart and each keeps its own content.
+	it('caches the same index in two modes as separate pages', function () {
+		const manager = new VectorManager();
+
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [{ id: 11, primitives: [] }],
+		});
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.MasterPages,
+			version: 1,
+			objects: [
+				{ id: 22, primitives: [] },
+				{ id: 33, primitives: [] },
+			],
+		});
+
+		const slide = manager.requestPart(0, cool.VectorMode.Slides);
+		const master = manager.requestPart(0, cool.VectorMode.MasterPages);
+		nodeassert.deepStrictEqual(slide.order, [11]);
+		nodeassert.deepStrictEqual(master.order, [22, 33]);
+	});
+
+	// A master page and the slide at the same index are cached apart, so
+	// the slide is still requested after the master page arrives.
+	it('does not let one mode satisfy a request for the other', function () {
+		const sent: string[] = [];
+		(app as any).socket.sendMessage = function (message: string) {
+			sent.push(message);
+		};
+
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.MasterPages,
+			version: 1,
+			objects: [],
+		});
+
+		nodeassert.strictEqual(
+			manager.requestPart(0, cool.VectorMode.Slides),
+			undefined,
+		);
+		nodeassert.ok(
+			sent.some(
+				(message) =>
+					message.indexOf('.uno:VectorPrimitives?part=0&mode=0') >= 0,
+			),
+			'the slide at the same index is fetched on its own',
+		);
+
+		(app as any).socket.sendMessage = function () {};
+	});
+
+	// A response that names no mode is filed as the slide at that index.
+	it('treats a response with no mode as a slide', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 2,
+			version: 1,
+			objects: [{ id: 11, primitives: [] }],
+		});
+
+		nodeassert.ok(manager.requestPart(2, cool.VectorMode.Slides));
 	});
 
 	// Two views can edit the same text box at once, each with an entry of its
@@ -490,9 +569,13 @@ describe('VectorManager', function () {
 			let manager = new VectorManager();
 			manager.handleVectorPrimitivesResponse(response);
 			let recorder = new CanvasRecorder();
-			manager.renderInto(recorder as any, manager.requestPart(0) as any, {
-				editView: true,
-			});
+			manager.renderInto(
+				recorder as any,
+				manager.requestPart(0, cool.VectorMode.Slides) as any,
+				{
+					editView: true,
+				},
+			);
 			nodeassert.strictEqual(countCalls(recorder, 'stroke'), 2);
 
 			// A view that is not editing the box draws the first entry.
@@ -500,7 +583,10 @@ describe('VectorManager', function () {
 			manager = new VectorManager();
 			manager.handleVectorPrimitivesResponse(response);
 			recorder = new CanvasRecorder();
-			manager.renderInto(recorder as any, manager.requestPart(0) as any);
+			manager.renderInto(
+				recorder as any,
+				manager.requestPart(0, cool.VectorMode.Slides) as any,
+			);
 			nodeassert.strictEqual(countCalls(recorder, 'stroke'), 1);
 		} finally {
 			(app as any).map = originalMap;

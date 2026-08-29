@@ -182,12 +182,16 @@ class RenderManagerBase {
 	requestThumbnail(
 		_id: cool.PreviewId,
 		_part: number,
+		_mode: number,
 		_maxWidth: number,
 		_maxHeight: number,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
 
-	requestPart(_part: number): cool.VectorPrimitivesData | undefined {
+	requestPart(
+		_part: number,
+		_mode: number,
+	): cool.VectorPrimitivesData | undefined {
 		return undefined;
 	}
 
@@ -227,7 +231,7 @@ class RenderManagerBase {
 	handleVectorPrimitivesDelta(_values: cool.VectorPrimitivesResponse): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	clearCachedPart(_part: number): void {}
+	clearCachedPart(_part: number, _mode: number): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	clearAllParts(): void {}

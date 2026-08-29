@@ -221,19 +221,24 @@ class RenderManager {
 	static requestThumbnail(
 		id: cool.PreviewId,
 		part: number,
+		mode: number,
 		maxWidth: number,
 		maxHeight: number,
 	): void {
 		RenderManager.ensureInstance().requestThumbnail(
 			id,
 			part,
+			mode,
 			maxWidth,
 			maxHeight,
 		);
 	}
 
-	static requestPart(part: number): cool.VectorPrimitivesData | undefined {
-		return RenderManager.ensureInstance().requestPart(part);
+	static requestPart(
+		part: number,
+		mode: number,
+	): cool.VectorPrimitivesData | undefined {
+		return RenderManager.ensureInstance().requestPart(part, mode);
 	}
 
 	static renderInto(
@@ -282,8 +287,8 @@ class RenderManager {
 		RenderManager.ensureInstance().handleVectorPrimitivesDelta(values);
 	}
 
-	static clearCachedPart(part: number): void {
-		RenderManager.ensureInstance().clearCachedPart(part);
+	static clearCachedPart(part: number, mode: number): void {
+		RenderManager.ensureInstance().clearCachedPart(part, mode);
 	}
 
 	static clearAllParts(): void {

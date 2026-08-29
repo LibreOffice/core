@@ -125,6 +125,7 @@
 /// <reference path="../src/canvas/vector/VectorScratchCanvases.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitiveRenderer.ts" />
 /// <reference path="../src/canvas/vector/PreviewId.ts" />
+/// <reference path="../src/canvas/vector/VectorPartId.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitivesData.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitivesResponse.ts" />
 /// <reference path="../src/canvas/vector/VectorRenderingGraphicsResponse.ts" />

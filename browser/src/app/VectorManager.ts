@@ -27,14 +27,15 @@ class VectorManager extends RenderManagerBase {
 			(fontId) => this._fonts.has(fontId),
 		);
 
-	// Cached parsed JSON primitive tree keyed by part number.
-	private _cache: Map<number, cool.VectorPrimitivesData> = new Map();
+	// Cached parsed JSON primitive tree keyed by part id.
+	private _cache: Map<cool.VectorPartId, cool.VectorPrimitivesData> = new Map();
 
-	// Previews waiting for a JSON primitive tree response, keyed by part.
-	private _pendingPreviews: Map<number, cool.PendingPreview[]> = new Map();
+	// Previews waiting for a JSON primitive tree response, keyed by part id.
+	private _pendingPreviews: Map<cool.VectorPartId, cool.PendingPreview[]> =
+		new Map();
 
 	// Parts for which a JSON primitive tree request is in flight.
-	private _inFlightParts: Set<number> = new Set();
+	private _inFlightParts: Set<cool.VectorPartId> = new Set();
 
 	// Decoded bitmap images keyed by their checksum.
 	private _bitmaps = new VectorResourceTracker<number, HTMLImageElement>(
@@ -95,13 +96,17 @@ class VectorManager extends RenderManagerBase {
 	/// Return the cached primitive tree for a part, or undefined while a
 	/// request is sent. Subscribers registered with onVectorChanged are
 	/// notified once the data arrives.
-	requestPart(part: number): cool.VectorPrimitivesData | undefined {
-		const cached = this._cache.get(part);
+	requestPart(
+		part: number,
+		mode: number,
+	): cool.VectorPrimitivesData | undefined {
+		const partId = cool.vectorPartId(part, mode);
+		const cached = this._cache.get(partId);
 		if (cached) return cached;
 
-		if (!this._inFlightParts.has(part)) {
-			this._inFlightParts.add(part);
-			this._sendVectorPrimitivesRequest(part);
+		if (!this._inFlightParts.has(partId)) {
+			this._inFlightParts.add(partId);
+			this._sendVectorPrimitivesRequest(part, mode);
 		}
 		return undefined;
 	}
@@ -183,62 +188,74 @@ class VectorManager extends RenderManagerBase {
 	requestThumbnail(
 		id: cool.PreviewId,
 		part: number,
+		mode: number,
 		maxWidth: number,
 		maxHeight: number,
 	): void {
-		const cached = this._cache.get(part);
+		const partId = cool.vectorPartId(part, mode);
+		const cached = this._cache.get(partId);
 		if (cached) {
-			this._renderAndFire(id, part, maxWidth, maxHeight, cached);
+			this._renderAndFire(id, part, mode, maxWidth, maxHeight, cached);
 			return;
 		}
 
-		let queue = this._pendingPreviews.get(part);
+		let queue = this._pendingPreviews.get(partId);
 		if (!queue) {
 			queue = [];
-			this._pendingPreviews.set(part, queue);
+			this._pendingPreviews.set(partId, queue);
 		}
 		queue.push({ id: id, maxWidth: maxWidth, maxHeight: maxHeight });
 
-		if (!this._inFlightParts.has(part)) {
-			this._inFlightParts.add(part);
-			this._sendVectorPrimitivesRequest(part);
+		if (!this._inFlightParts.has(partId)) {
+			this._inFlightParts.add(partId);
+			this._sendVectorPrimitivesRequest(part, mode);
 		}
 	}
 
-	private _sendVectorPrimitivesRequest(part: number): void {
+	private _sendVectorPrimitivesRequest(part: number, mode: number): void {
 		app.socket.sendMessage(
-			'commandvalues command=.uno:VectorPrimitives?part=' + String(part),
+			'commandvalues command=.uno:VectorPrimitives?part=' +
+				String(part) +
+				'&mode=' +
+				String(mode),
 		);
 	}
 
-	/// Part a response applies to: the one it names, or the selected
-	/// part when it names none.
-	private _partFor(values: cool.VectorPrimitivesResponse): number {
-		return values.part !== undefined
-			? values.part
-			: this._docLayer._selectedPart;
+	/// Page a response applies to: the part it names, or the selected
+	/// part when it names none, in the mode it names. A response that
+	/// names no mode is for the slides.
+	private _pageFor(values: cool.VectorPrimitivesResponse): {
+		part: number;
+		mode: number;
+	} {
+		return {
+			part:
+				values.part !== undefined ? values.part : this._docLayer._selectedPart,
+			mode: values.mode !== undefined ? values.mode : cool.VectorMode.Slides,
+		};
 	}
 
 	/// Collect the bitmap checksums and font ids the walk visits,
 	/// remember the part uses them and request the missing ones.
 	private _collectResources(
-		part: number,
+		partId: cool.VectorPartId,
 		walk: (walker: cool.VectorResourceWalker) => void,
 	): void {
 		const checksums = new Set<number>();
 		const fontIds = new Set<string>();
 		walk(new cool.VectorResourceWalker(checksums, fontIds));
-		this._bitmaps.indexForPart(part, checksums);
+		this._bitmaps.indexForPart(partId, checksums);
 		this._bitmaps.requestMissing(checksums);
-		this._fonts.indexForPart(part, fontIds);
+		this._fonts.indexForPart(partId, fontIds);
 		this._fonts.requestMissing(fontIds);
 	}
 
 	/// Handle a vector primitives response.
 	handleVectorPrimitivesResponse(values: cool.VectorPrimitivesResponse): void {
-		const part = this._partFor(values);
+		const { part, mode } = this._pageFor(values);
+		const partId = cool.vectorPartId(part, mode);
 
-		this._inFlightParts.delete(part);
+		this._inFlightParts.delete(partId);
 
 		const received = values.objects || [];
 		const objects = new Map<number, cool.SlideObject>();
@@ -259,13 +276,13 @@ class VectorManager extends RenderManagerBase {
 			// they arrive in is the order they are drawn in.
 			order: values.order || arrived,
 		};
-		this._cache.set(part, data);
+		this._cache.set(partId, data);
 
-		this._collectResources(part, (walker) => {
+		this._collectResources(partId, (walker) => {
 			walker.walkObjects(received);
 		});
 
-		this._drainPending(part, data);
+		this._drainPending(partId, part, mode, data);
 		this._fireChanged();
 		this.setVisualsReady();
 	}
@@ -275,9 +292,10 @@ class VectorManager extends RenderManagerBase {
 	/// the cache is ignored. A part that is not cached, or an order that
 	/// names content the client never had, falls back to a full re-fetch.
 	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
-		const part = this._partFor(values);
+		const { part, mode } = this._pageFor(values);
+		const partId = cool.vectorPartId(part, mode);
 
-		const cached = this._cache.get(part);
+		const cached = this._cache.get(partId);
 		if (!cached) return;
 
 		// A delta computed against an older version can arrive after a
@@ -309,7 +327,7 @@ class VectorManager extends RenderManagerBase {
 		if (values.order) {
 			for (const id of values.order) {
 				if (!cached.objects.has(id)) {
-					this.clearCachedPart(part);
+					this.clearCachedPart(part, mode);
 					return;
 				}
 			}
@@ -324,11 +342,11 @@ class VectorManager extends RenderManagerBase {
 
 		cached.version = values.version;
 
-		this._collectResources(part, (walker) => {
+		this._collectResources(partId, (walker) => {
 			walker.walkObjects(carried);
 		});
 
-		this._redrawRenderedPreviews(part);
+		this._redrawRenderedPreviews(partId);
 		this._fireChanged();
 	}
 
@@ -384,21 +402,28 @@ class VectorManager extends RenderManagerBase {
 		this._bitmaps.setUnavailable(checksum);
 	}
 
-	private _redrawPartsUsing(parts: Set<number> | undefined): void {
+	private _redrawPartsUsing(parts: Set<cool.VectorPartId> | undefined): void {
 		if (!parts) return;
-		for (const part of parts) {
-			this._redrawRenderedPreviews(part);
+		for (const partId of parts) {
+			this._redrawRenderedPreviews(partId);
 		}
 	}
 
 	/// Re-render every preview already shown for a part against its
 	/// current cached data.
-	private _redrawRenderedPreviews(part: number): void {
-		const data = this._cache.get(part);
+	private _redrawRenderedPreviews(partId: cool.VectorPartId): void {
+		const data = this._cache.get(partId);
 		if (!data) return;
 		for (const [id, info] of this._renderedPreviews) {
-			if (info.part !== part) continue;
-			this._renderAndFire(id, part, info.maxWidth, info.maxHeight, data);
+			if (cool.vectorPartId(info.part, info.mode) !== partId) continue;
+			this._renderAndFire(
+				id,
+				info.part,
+				info.mode,
+				info.maxWidth,
+				info.maxHeight,
+				data,
+			);
 		}
 	}
 
@@ -444,9 +469,10 @@ class VectorManager extends RenderManagerBase {
 	}
 
 	/// Drop cached data for a part and any in-flight state.
-	clearCachedPart(part: number): void {
-		this._cache.delete(part);
-		this._inFlightParts.delete(part);
+	clearCachedPart(part: number, mode: number): void {
+		const partId = cool.vectorPartId(part, mode);
+		this._cache.delete(partId);
+		this._inFlightParts.delete(partId);
 		this._fireChanged();
 	}
 
@@ -482,15 +508,21 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged();
 	}
 
-	private _drainPending(part: number, data: cool.VectorPrimitivesData): void {
-		const queue = this._pendingPreviews.get(part);
+	private _drainPending(
+		partId: cool.VectorPartId,
+		part: number,
+		mode: number,
+		data: cool.VectorPrimitivesData,
+	): void {
+		const queue = this._pendingPreviews.get(partId);
 		if (!queue) return;
-		this._pendingPreviews.delete(part);
+		this._pendingPreviews.delete(partId);
 
 		for (const pending of queue) {
 			this._renderAndFire(
 				pending.id,
 				part,
+				mode,
 				pending.maxWidth,
 				pending.maxHeight,
 				data,
@@ -502,6 +534,7 @@ class VectorManager extends RenderManagerBase {
 	private _renderAndFire(
 		id: cool.PreviewId,
 		partIndex: number,
+		mode: number,
 		maxWidth: number,
 		maxHeight: number,
 		data: cool.VectorPrimitivesData,
@@ -510,6 +543,7 @@ class VectorManager extends RenderManagerBase {
 
 		this._renderedPreviews.set(id, {
 			part: partIndex,
+			mode: mode,
 			maxWidth: maxWidth,
 			maxHeight: maxHeight,
 		});
@@ -542,7 +576,7 @@ class VectorManager extends RenderManagerBase {
 			height: maxHeight,
 			part: app.impress.partList?.[partIndex]?.part,
 			partIndex: partIndex,
-			mode: 0,
+			mode: mode,
 			docType: this._docLayer._docType,
 		});
 	}

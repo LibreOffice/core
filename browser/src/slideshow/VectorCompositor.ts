@@ -102,7 +102,7 @@ class VectorCompositor extends SlideCompositor {
 	private _fetchAllSlides(): void {
 		this._metaPresentation.getMetaSlides().forEach((_metaSlide, hash) => {
 			const info = this._metaPresentation.getSlideInfo(hash);
-			if (info) RenderManager.requestPart(info.index);
+			if (info) RenderManager.requestPart(info.index, cool.VectorMode.Slides);
 		});
 	}
 
@@ -114,7 +114,10 @@ class VectorCompositor extends SlideCompositor {
 
 	private _runWhenReady(slideNumber: number, ready: VoidFunction): void {
 		const part = this._partForSlide(slideNumber);
-		if (part !== null && RenderManager.requestPart(part)) {
+		if (
+			part !== null &&
+			RenderManager.requestPart(part, cool.VectorMode.Slides)
+		) {
 			ready();
 			return;
 		}
@@ -127,7 +130,11 @@ class VectorCompositor extends SlideCompositor {
 		if (this.pendingReady === null) return;
 
 		const part = this._partForSlide(this.pendingSlideNumber);
-		if (part === null || !RenderManager.requestPart(part)) return;
+		if (
+			part === null ||
+			!RenderManager.requestPart(part, cool.VectorMode.Slides)
+		)
+			return;
 
 		const ready = this.pendingReady;
 		this.pendingReady = null;
@@ -143,7 +150,7 @@ class VectorCompositor extends SlideCompositor {
 		const part = this._partForSlide(slideNumber);
 		if (part === null) return null;
 
-		const data = RenderManager.requestPart(part);
+		const data = RenderManager.requestPart(part, cool.VectorMode.Slides);
 		if (!data || data.slideWidth <= 0 || data.slideHeight <= 0) return null;
 
 		const context = this.offscreenContext;

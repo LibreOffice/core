@@ -79,13 +79,16 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		const docLayer = app.map._docLayer;
 		if (!docLayer || app.file.fileBasedView) return;
+		Util.ensureValue(app.activeDocument);
 
-		const data = RenderManager.requestPart(docLayer._selectedPart);
+		const data = RenderManager.requestPart(
+			docLayer._selectedPart,
+			app.activeDocument.activeModes[0],
+		);
 		if (!data) return;
 
 		// The section container has translated the context to the document anchor, so the scroll
 		// offset alone maps the part origin into place, as it does for the page itself.
-		Util.ensureValue(app.activeDocument);
 		const viewedRectangle = app.activeDocument.activeLayout.viewedRectangle;
 		const xDiff = -viewedRectangle.pX1;
 		const yDiff = -viewedRectangle.pY1;

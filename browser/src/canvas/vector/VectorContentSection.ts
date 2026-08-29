@@ -41,7 +41,7 @@ namespace cool {
 		private _lastRenderKey: string = '';
 		// Part whose pixels are in the offscreen canvas, so a blit reuses
 		// them only for that same part.
-		private _offscreenPart: number = -1;
+		private _offscreenPart: cool.VectorPartId = '';
 
 		constructor() {
 			super(app.CSections.VectorContent.name);
@@ -83,12 +83,16 @@ namespace cool {
 			}
 
 			const part = this._docLayer._selectedPart;
-			const cached = RenderManager.requestPart(part);
+			// The mode says which page list the selected part indexes, so a
+			// switch to master view draws the master page at that index.
+			const mode = app.activeDocument.activeModes[0];
+			const partId = cool.vectorPartId(part, mode);
+			const cached = RenderManager.requestPart(part, mode);
 			if (!cached) {
 				// Data not ready. Blit the prior frame only when it holds
 				// the part we want, so the view keeps the current part
 				// until its fresh data arrives.
-				if (this._offscreen && this._offscreenPart === part) {
+				if (this._offscreen && this._offscreenPart === partId) {
 					this.context.drawImage(this._offscreen, 0, 0);
 				}
 				return;
@@ -107,7 +111,17 @@ namespace cool {
 			this._ensureOffscreen(w, h);
 
 			const renderKey =
-				part + ':' + scale + ':' + offsetX + ':' + offsetY + ':' + w + ':' + h;
+				partId +
+				':' +
+				scale +
+				':' +
+				offsetX +
+				':' +
+				offsetY +
+				':' +
+				w +
+				':' +
+				h;
 			if (renderKey !== this._lastRenderKey) {
 				this._offscreenCtx.clearRect(0, 0, w, h);
 				this._offscreenCtx.save();
@@ -118,7 +132,7 @@ namespace cool {
 				});
 				this._offscreenCtx.restore();
 				this._lastRenderKey = renderKey;
-				this._offscreenPart = part;
+				this._offscreenPart = partId;
 			}
 			this.context.drawImage(this._offscreen, 0, 0);
 		}
@@ -143,7 +157,8 @@ namespace cool {
 			const offsetX = -viewedRectangle.pX1;
 
 			for (let part = topVisible; part <= bottomVisible; part++) {
-				const cached = RenderManager.requestPart(part);
+				// The file-based view scrolls the slides, never a master page.
+				const cached = RenderManager.requestPart(part, cool.VectorMode.Slides);
 				if (!cached) continue;
 
 				const offsetY = -viewedRectangle.pY1 + part * partHeightPixels;

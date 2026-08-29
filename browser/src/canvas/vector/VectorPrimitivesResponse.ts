@@ -13,6 +13,9 @@ namespace cool {
 	/// Interface for the vector primitives response from core.
 	export interface VectorPrimitivesResponse {
 		part?: number;
+		/// The page list the part index addresses: 0 the slides, 1 the
+		/// master pages, 2 the notes pages. Defaults to the slides.
+		mode?: number;
 		version?: number;
 		/// Every painted object in paint order in a full response, the
 		/// entry for the page itself first. In a delta only the changed

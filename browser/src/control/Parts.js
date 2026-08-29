@@ -262,7 +262,8 @@ window.L.Map.include({
 			// For Impress/Draw, route thumbnails through the vector renderer.
 			// The slideshow path is using the server rendered bitmaps.
 			if (!isSlideshow && RenderManager.isVectorRendering()) {
-				RenderManager.requestThumbnail(id, part, maxWidth, maxHeight);
+				const vectorMode = app.activeDocument.activeModes[0];
+				RenderManager.requestThumbnail(id, part, vectorMode, maxWidth, maxHeight);
 			} else {
 				var mode = app.activeDocument.activeModes[0];
 				// The request names the part by its part identifier, so it

@@ -504,6 +504,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorRenderingConfig.ts \
 	src/canvas/vector/VectorRenderingGraphicsResponse.ts \
 	src/canvas/vector/VectorRenderingFontResponse.ts \
+	src/canvas/vector/VectorPartId.ts \
 	src/canvas/vector/VectorPrimitivesData.ts \
 	src/canvas/vector/VectorPrimitivesResponse.ts \
 	src/canvas/vector/VectorContentSection.ts \
