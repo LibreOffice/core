@@ -3668,8 +3668,8 @@ $(gb_CustomTarget_workdir)/extras/source/autotext/share/%.bau : \
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(dir $<) && \
 		$(call gb_Helper_wsl_path,\
-		$(WSL) zip -q0X --filesync --must-match $@ mimetype && \
-		$(WSL) zip -qrX --must-match $@ $(call extras_AUTOTEXTSHARE_XMLFILES_RELATIVE,$*)) \
+		$(WSL) zip -q0X -b . --filesync --must-match $@ mimetype && \
+		$(WSL) zip -qrX -b . --must-match $@ $(call extras_AUTOTEXTSHARE_XMLFILES_RELATIVE,$*)) \
 	)
 	$(call gb_Trace_EndRange,autotext/$*.bau,ZIP)
 

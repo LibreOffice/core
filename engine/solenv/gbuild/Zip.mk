@@ -50,7 +50,7 @@ $(call gb_Zip_get_target,%) :
                         $(FILES)) && \
 			cd $(LOCATION) && \
 			cat $${RESPONSEFILE} | tr "[:space:]" "\n" | \
-				$(call gb_Helper_wsl_path,$(WSL) $(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match \
+				$(call gb_Helper_wsl_path,$(WSL) $(gb_Zip_ZIPCOMMAND) -@rX -b $(dir $@) --filesync --must-match \
 					$(call gb_Zip_get_target,$*)) && \
 			rm -f $${RESPONSEFILE} && \
 			touch $@\

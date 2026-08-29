@@ -16,8 +16,8 @@ $(call gb_Output_announce,$(subst $(gb_CustomTarget_workdir)/extras/source/,,$@)
 $(call gb_Trace_StartRange,$(subst $(gb_CustomTarget_workdir)/extras/source/,,$@),ZIP)
 cd $(dir $<) && \
 $(call gb_Helper_wsl_path,\
-$(WSL) zip -q0X --filesync --must-match $@ mimetype && \
-$(WSL) zip -qrX --must-match $@ $(subst $(dir $<),,$^)) -x mimetype
+$(WSL) zip -q0X -b . --filesync --must-match $@ mimetype && \
+$(WSL) zip -qrX -b . --must-match $@ $(subst $(dir $<),,$^)) -x mimetype
 $(call gb_Trace_EndRange,$(subst $(gb_CustomTarget_workdir)/extras/source/,,$@),ZIP)
 endef
 
