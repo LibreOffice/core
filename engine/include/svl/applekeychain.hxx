@@ -13,7 +13,9 @@
 
 #ifdef MACOSX
 
+#include <premac.h>
 #include <Security/Security.h>
+#include <postmac.h>
 
 #include <vector>
 

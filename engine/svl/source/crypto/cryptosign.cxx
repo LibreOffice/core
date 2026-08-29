@@ -67,7 +67,9 @@
 
 #if USE_CRYPTO_APPLE
 // Apple Security framework, used to sign with Keychain-backed private keys
+#include <premac.h>
 #include <Security/Security.h>
+#include <postmac.h>
 #include <svl/applekeychain.hxx>
 #include <cstdio>
 #include <cstring>
