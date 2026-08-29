@@ -195,7 +195,7 @@ void FSStorage::CopyContentToStorage_Impl(ucbhelper::Content& rContent,
 
 //  XInterface
 
-cpo::uno::Any SAL_CALL FSStorage::queryInterface( const cpo::uno::Type& rType )
+cpo::uno::Any FSStorage::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
@@ -213,19 +213,19 @@ cpo::uno::Any SAL_CALL FSStorage::queryInterface( const cpo::uno::Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL FSStorage::acquire() noexcept
+void FSStorage::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL FSStorage::release() noexcept
+void FSStorage::release() noexcept
 {
     OWeakObject::release();
 }
 
 //  XTypeProvider
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL FSStorage::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > FSStorage::getTypes()
 {
     static const cpo::uno::Sequence<cpo::uno::Type> aTypes {
         cppu::UnoType<lang::XTypeProvider>::get(),
@@ -235,14 +235,14 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL FSStorage::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL FSStorage::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > FSStorage::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 //  XStorage
 
-void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >& xDest )
+void FSStorage::copyToStorage( const uno::Reference< embed::XStorage >& xDest )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -282,7 +282,7 @@ void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >&
     }
 }
 
-uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
+uno::Reference< io::XStream > FSStorage::openStreamElement(
     const OUString& aStreamName, sal_Int32 nOpenMode )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -380,13 +380,13 @@ uno::Reference< io::XStream > FSStorage::openStreamElementImpl(
     return xResult;
 }
 
-uno::Reference< io::XStream > SAL_CALL FSStorage::openEncryptedStreamElement(
+uno::Reference< io::XStream > FSStorage::openEncryptedStreamElement(
     const OUString&, sal_Int32, const OUString& )
 {
     throw packages::NoEncryptionException();
 }
 
-uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
+uno::Reference< embed::XStorage > FSStorage::openStorageElement(
             const OUString& aStorName, sal_Int32 nStorageMode )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -470,7 +470,7 @@ uno::Reference< embed::XStorage > FSStorage::openStorageElementImpl(
     return xResult;
 }
 
-uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUString& aStreamName )
+uno::Reference< io::XStream > FSStorage::cloneStreamElement( const OUString& aStreamName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -527,20 +527,20 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
     return xTempResult;
 }
 
-uno::Reference< io::XStream > SAL_CALL FSStorage::cloneEncryptedStreamElement(
+uno::Reference< io::XStream > FSStorage::cloneEncryptedStreamElement(
     const OUString&,
     const OUString& )
 {
     throw packages::NoEncryptionException();
 }
 
-void SAL_CALL FSStorage::copyLastCommitTo(
+void FSStorage::copyLastCommitTo(
             const uno::Reference< embed::XStorage >& xTargetStorage )
 {
     copyToStorage( xTargetStorage );
 }
 
-void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
+void FSStorage::copyStorageElementLastCommitTo(
             const OUString& aStorName,
             const uno::Reference< embed::XStorage >& xTargetStorage )
 {
@@ -551,7 +551,7 @@ void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
     xSourceStor->copyToStorage( xTargetStorage );
 }
 
-bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
+bool FSStorage::isStreamElement( const OUString& aElementName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -561,7 +561,7 @@ bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
     return !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
-bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
+bool FSStorage::isStorageElement( const OUString& aElementName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -571,7 +571,7 @@ bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
     return ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
-void SAL_CALL FSStorage::removeElement( const OUString& aElementName )
+void FSStorage::removeElement( const OUString& aElementName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -585,7 +585,7 @@ void SAL_CALL FSStorage::removeElement( const OUString& aElementName )
     ::utl::UCBContentHelper::Kill( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
-void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUString& aNewName )
+void FSStorage::renameElement( const OUString& aElementName, const OUString& aNewName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -718,7 +718,7 @@ void FSStorage::copyElementToImpl(std::unique_lock<std::mutex>& /*rGuard*/,
     }
 }
 
-void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
+void FSStorage::copyElementTo( const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
@@ -726,7 +726,7 @@ void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
     copyElementToImpl(aGuard, aElementName, xDest, aNewName);
 }
 
-void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
+void FSStorage::moveElementTo( const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
@@ -741,7 +741,7 @@ void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
 
 //  XNameAccess
 
-cpo::uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
+cpo::uno::Any FSStorage::getByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -790,7 +790,7 @@ cpo::uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
+cpo::uno::Sequence< OUString > FSStorage::getElementNames()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -841,7 +841,7 @@ cpo::uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     return aResult;
 }
 
-bool SAL_CALL FSStorage::hasByName( const OUString& aName )
+bool FSStorage::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -855,13 +855,13 @@ bool SAL_CALL FSStorage::hasByName( const OUString& aName )
       || ::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
 }
 
-cpo::uno::Type SAL_CALL FSStorage::getElementType()
+cpo::uno::Type FSStorage::getElementType()
 {
     // it is a multitype container
     return cpo::uno::Type();
 }
 
-bool SAL_CALL FSStorage::hasElements()
+bool FSStorage::hasElements()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -886,7 +886,7 @@ bool SAL_CALL FSStorage::hasElements()
 }
 
 //  XDisposable
-void SAL_CALL FSStorage::dispose()
+void FSStorage::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
     disposeImpl(aGuard);
@@ -901,7 +901,7 @@ void FSStorage::disposeImpl(std::unique_lock<std::mutex>& rGuard)
     }
 }
 
-void SAL_CALL FSStorage::addEventListener(
+void FSStorage::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -909,7 +909,7 @@ void SAL_CALL FSStorage::addEventListener(
     m_aListenersContainer.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL FSStorage::removeEventListener(
+void FSStorage::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -919,14 +919,14 @@ void SAL_CALL FSStorage::removeEventListener(
 
 //  XPropertySet
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL FSStorage::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > FSStorage::getPropertySetInfo()
 {
     //TODO:
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
 
-void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& )
+void FSStorage::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& )
 {
     if ( aPropertyName == "URL" || aPropertyName == "OpenMode" )
         throw beans::PropertyVetoException(); // TODO
@@ -935,7 +935,7 @@ void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const 
 }
 
 
-cpo::uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any FSStorage::getPropertyValue( const OUString& aPropertyName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -948,7 +948,7 @@ cpo::uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyNam
 }
 
 
-void SAL_CALL FSStorage::addPropertyChangeListener(
+void FSStorage::addPropertyChangeListener(
             const OUString& /*aPropertyName*/,
             const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
 {
@@ -956,7 +956,7 @@ void SAL_CALL FSStorage::addPropertyChangeListener(
 }
 
 
-void SAL_CALL FSStorage::removePropertyChangeListener(
+void FSStorage::removePropertyChangeListener(
             const OUString& /*aPropertyName*/,
             const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
 {
@@ -964,7 +964,7 @@ void SAL_CALL FSStorage::removePropertyChangeListener(
 }
 
 
-void SAL_CALL FSStorage::addVetoableChangeListener(
+void FSStorage::addVetoableChangeListener(
             const OUString& /*PropertyName*/,
             const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
@@ -972,7 +972,7 @@ void SAL_CALL FSStorage::addVetoableChangeListener(
 }
 
 
-void SAL_CALL FSStorage::removeVetoableChangeListener(
+void FSStorage::removeVetoableChangeListener(
             const OUString& /*PropertyName*/,
             const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
@@ -980,7 +980,7 @@ void SAL_CALL FSStorage::removeVetoableChangeListener(
 }
 
 //  XHierarchicalStorageAccess
-uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamElementByHierarchicalName( const OUString& sStreamPath, ::sal_Int32 nOpenMode )
+uno::Reference< embed::XExtendedStorageStream > FSStorage::openStreamElementByHierarchicalName( const OUString& sStreamPath, ::sal_Int32 nOpenMode )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -1084,12 +1084,12 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
     return uno::Reference< embed::XExtendedStorageStream >( xResult, uno::UNO_QUERY_THROW );
 }
 
-uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openEncryptedStreamElementByHierarchicalName( const OUString& /*sStreamName*/, ::sal_Int32 /*nOpenMode*/, const OUString& /*sPassword*/ )
+uno::Reference< embed::XExtendedStorageStream > FSStorage::openEncryptedStreamElementByHierarchicalName( const OUString& /*sStreamName*/, ::sal_Int32 /*nOpenMode*/, const OUString& /*sPassword*/ )
 {
     throw packages::NoEncryptionException();
 }
 
-void SAL_CALL FSStorage::removeStreamElementByHierarchicalName( const OUString& sStreamPath )
+void FSStorage::removeStreamElementByHierarchicalName( const OUString& sStreamPath )
 {
     std::unique_lock aGuard( m_aMutex );
 

@@ -58,7 +58,7 @@ OFSStreamContainer::~OFSStreamContainer()
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL OFSStreamContainer::queryInterface( const cpo::uno::Type& rType )
+cpo::uno::Any OFSStreamContainer::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
@@ -120,20 +120,20 @@ cpo::uno::Any SAL_CALL OFSStreamContainer::queryInterface( const cpo::uno::Type&
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL OFSStreamContainer::acquire()
+void OFSStreamContainer::acquire()
         noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL OFSStreamContainer::release()
+void OFSStreamContainer::release()
         noexcept
 {
     OWeakObject::release();
 }
 
 //  XTypeProvider
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OFSStreamContainer::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > OFSStreamContainer::getTypes()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_aTypes.hasElements() )
@@ -160,13 +160,13 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OFSStreamContainer::getTypes()
     return m_aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL OFSStreamContainer::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > OFSStreamContainer::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XStream
-uno::Reference< io::XInputStream > SAL_CALL OFSStreamContainer::getInputStream()
+uno::Reference< io::XInputStream > OFSStreamContainer::getInputStream()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -182,7 +182,7 @@ uno::Reference< io::XInputStream > SAL_CALL OFSStreamContainer::getInputStream()
     return uno::Reference< io::XInputStream >();
 }
 
-uno::Reference< io::XOutputStream > SAL_CALL OFSStreamContainer::getOutputStream()
+uno::Reference< io::XOutputStream > OFSStreamContainer::getOutputStream()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -199,7 +199,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OFSStreamContainer::getOutputStream
 }
 
 // XComponent
-void SAL_CALL OFSStreamContainer::dispose()
+void OFSStreamContainer::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -226,7 +226,7 @@ void SAL_CALL OFSStreamContainer::dispose()
     m_bDisposed = true;
 }
 
-void SAL_CALL OFSStreamContainer::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void OFSStreamContainer::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -236,7 +236,7 @@ void SAL_CALL OFSStreamContainer::addEventListener( const uno::Reference< lang::
     m_aListenersContainer.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL OFSStreamContainer::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void OFSStreamContainer::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -248,7 +248,7 @@ void SAL_CALL OFSStreamContainer::removeEventListener( const uno::Reference< lan
 
 
 // XSeekable
-void SAL_CALL OFSStreamContainer::seek( sal_Int64 location )
+void OFSStreamContainer::seek( sal_Int64 location )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -261,7 +261,7 @@ void SAL_CALL OFSStreamContainer::seek( sal_Int64 location )
     m_xSeekable->seek( location );
 }
 
-sal_Int64 SAL_CALL OFSStreamContainer::getPosition()
+sal_Int64 OFSStreamContainer::getPosition()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -274,7 +274,7 @@ sal_Int64 SAL_CALL OFSStreamContainer::getPosition()
     return m_xSeekable->getPosition();
 }
 
-sal_Int64 SAL_CALL OFSStreamContainer::getLength()
+sal_Int64 OFSStreamContainer::getLength()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -289,7 +289,7 @@ sal_Int64 SAL_CALL OFSStreamContainer::getLength()
 
 
 // XInputStream
-sal_Int32 SAL_CALL OFSStreamContainer::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 OFSStreamContainer::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -302,7 +302,7 @@ sal_Int32 SAL_CALL OFSStreamContainer::readBytes( cpo::uno::Sequence< sal_Int8 >
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
 
-sal_Int32 SAL_CALL OFSStreamContainer::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 OFSStreamContainer::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -315,7 +315,7 @@ sal_Int32 SAL_CALL OFSStreamContainer::readSomeBytes( cpo::uno::Sequence< sal_In
     return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
-void SAL_CALL OFSStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
+void OFSStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -328,7 +328,7 @@ void SAL_CALL OFSStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
     m_xInputStream->skipBytes( nBytesToSkip );
 }
 
-sal_Int32 SAL_CALL OFSStreamContainer::available()
+sal_Int32 OFSStreamContainer::available()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -341,7 +341,7 @@ sal_Int32 SAL_CALL OFSStreamContainer::available()
     return m_xInputStream->available();
 }
 
-void SAL_CALL OFSStreamContainer::closeInput()
+void OFSStreamContainer::closeInput()
 {
     {
         std::scoped_lock aGuard( m_aMutex );
@@ -365,7 +365,7 @@ void SAL_CALL OFSStreamContainer::closeInput()
 }
 
 // XOutputStream
-void SAL_CALL OFSStreamContainer::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
+void OFSStreamContainer::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -378,7 +378,7 @@ void SAL_CALL OFSStreamContainer::writeBytes( const cpo::uno::Sequence< sal_Int8
     return m_xOutputStream->writeBytes( aData );
 }
 
-void SAL_CALL OFSStreamContainer::flush()
+void OFSStreamContainer::flush()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -391,7 +391,7 @@ void SAL_CALL OFSStreamContainer::flush()
     return m_xOutputStream->flush();
 }
 
-void SAL_CALL OFSStreamContainer::closeOutput()
+void OFSStreamContainer::closeOutput()
 {
     {
         std::scoped_lock aGuard( m_aMutex );
@@ -415,7 +415,7 @@ void SAL_CALL OFSStreamContainer::closeOutput()
 
 
 // XTruncate
-void SAL_CALL OFSStreamContainer::truncate()
+void OFSStreamContainer::truncate()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -430,7 +430,7 @@ void SAL_CALL OFSStreamContainer::truncate()
 
 
 // XAsyncOutputMonitor
-void SAL_CALL OFSStreamContainer::waitForCompletion()
+void OFSStreamContainer::waitForCompletion()
 {
     std::scoped_lock aGuard( m_aMutex );
 

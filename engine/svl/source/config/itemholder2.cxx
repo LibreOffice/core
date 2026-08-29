@@ -67,7 +67,7 @@ void ItemHolder2::holdConfigItem(EItem eItem)
     pHolder->impl_addItem(eItem);
 }
 
-void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject&)
+void ItemHolder2::disposing(const css::lang::EventObject&)
 {
     impl_releaseAllItems();
 }

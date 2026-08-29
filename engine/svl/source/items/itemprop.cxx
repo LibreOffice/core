@@ -256,7 +256,7 @@ SfxItemPropertySetInfo::SfxItemPropertySetInfo(std::span<const SfxItemPropertyMa
 {
 }
 
-Sequence< Property > SAL_CALL SfxItemPropertySetInfo::getProperties(  )
+Sequence< Property > SfxItemPropertySetInfo::getProperties(  )
 {
     return m_aOwnMap.getProperties();
 }
@@ -265,12 +265,12 @@ SfxItemPropertySetInfo::~SfxItemPropertySetInfo()
 {
 }
 
-Property SAL_CALL SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )
+Property SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )
 {
     return m_aOwnMap.getPropertyByName( rName );
 }
 
-bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
+bool SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
 {
     return m_aOwnMap.hasPropertyByName( rName );
 }
@@ -300,7 +300,7 @@ SfxExtItemPropertySetInfo::~SfxExtItemPropertySetInfo()
 {
 }
 
-Sequence< Property > SAL_CALL SfxExtItemPropertySetInfo::getProperties(  )
+Sequence< Property > SfxExtItemPropertySetInfo::getProperties(  )
 {
     if( !m_aPropSeq.hasElements() )
     {
@@ -321,7 +321,7 @@ Sequence< Property > SAL_CALL SfxExtItemPropertySetInfo::getProperties(  )
     return m_aPropSeq;
 }
 
-Property SAL_CALL SfxExtItemPropertySetInfo::getPropertyByName( const OUString& rPropertyName )
+Property SfxExtItemPropertySetInfo::getPropertyByName( const OUString& rPropertyName )
 {
     const SfxItemPropertyMapEntry* pEntry = getByName(rPropertyName);
     if( !pEntry )
@@ -334,7 +334,7 @@ Property SAL_CALL SfxExtItemPropertySetInfo::getPropertyByName( const OUString& 
     return aProp;
 }
 
-bool SAL_CALL SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
+bool SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
 {
     return getByName(rPropertyName) != nullptr;
 }

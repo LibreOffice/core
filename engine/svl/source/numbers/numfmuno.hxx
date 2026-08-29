@@ -49,34 +49,34 @@ public:
     virtual             ~SvNumberFormatterServiceObj() override;
 
     // XNumberFormatter
-    virtual void SAL_CALL attachNumberFormatsSupplier(
+    virtual void attachNumberFormatsSupplier(
                             const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier ) override;
     virtual css::uno::Reference< css::util::XNumberFormatsSupplier >
-                            SAL_CALL getNumberFormatsSupplier() override;
-    virtual sal_Int32 SAL_CALL detectNumberFormat( sal_Int32 nKey, const OUString& aString ) override;
-    virtual double SAL_CALL convertStringToNumber( sal_Int32 nKey, const OUString& aString ) override;
-    virtual OUString SAL_CALL convertNumberToString( sal_Int32 nKey, double fValue ) override;
-    virtual sal_Int32 SAL_CALL queryColorForNumber( sal_Int32 nKey,
+                            getNumberFormatsSupplier() override;
+    virtual sal_Int32 detectNumberFormat( sal_Int32 nKey, const OUString& aString ) override;
+    virtual double convertStringToNumber( sal_Int32 nKey, const OUString& aString ) override;
+    virtual OUString convertNumberToString( sal_Int32 nKey, double fValue ) override;
+    virtual sal_Int32 queryColorForNumber( sal_Int32 nKey,
                             double fValue, sal_Int32 aDefaultColor ) override;
-    virtual OUString SAL_CALL formatString( sal_Int32 nKey, const OUString& aString ) override;
-    virtual sal_Int32 SAL_CALL queryColorForString( sal_Int32 nKey,
+    virtual OUString formatString( sal_Int32 nKey, const OUString& aString ) override;
+    virtual sal_Int32 queryColorForString( sal_Int32 nKey,
                                 const OUString& aString,
                                 sal_Int32 aDefaultColor ) override;
-    virtual OUString SAL_CALL getInputString( sal_Int32 nKey, double fValue ) override;
+    virtual OUString getInputString( sal_Int32 nKey, double fValue ) override;
 
     // XNumberFormatPreviewer
-    virtual OUString SAL_CALL convertNumberToPreviewString(
+    virtual OUString convertNumberToPreviewString(
                             const OUString& aFormat, double fValue,
                             const css::lang::Locale& nLocale, bool bAllowEnglish ) override;
-    virtual sal_Int32 SAL_CALL queryPreviewColorForNumber(
+    virtual sal_Int32 queryPreviewColorForNumber(
                             const OUString& aFormat, double fValue,
                             const css::lang::Locale& nLocale, bool bAllowEnglish,
                             sal_Int32 aDefaultColor ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 
@@ -95,36 +95,36 @@ public:
 
 
     // XNumberFormats
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySet >
                             getByKey( sal_Int32 nKey ) override;
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL queryKeys( sal_Int16 nType,
+    virtual cpo::uno::Sequence< sal_Int32 > queryKeys( sal_Int16 nType,
                             const css::lang::Locale& nLocale, bool bCreate ) override;
-    virtual sal_Int32 SAL_CALL queryKey( const OUString& aFormat,
+    virtual sal_Int32 queryKey( const OUString& aFormat,
                             const css::lang::Locale& nLocale, bool bScan ) override;
-    virtual sal_Int32 SAL_CALL addNew( const OUString& aFormat,
+    virtual sal_Int32 addNew( const OUString& aFormat,
                             const css::lang::Locale& nLocale ) override;
-    virtual sal_Int32 SAL_CALL addNewConverted( const OUString& aFormat,
+    virtual sal_Int32 addNewConverted( const OUString& aFormat,
                             const css::lang::Locale& nLocale,
                             const css::lang::Locale& nNewLocale ) override;
-    virtual void SAL_CALL removeByKey( sal_Int32 nKey ) override;
-    virtual OUString SAL_CALL generateFormat( sal_Int32 nBaseKey,
+    virtual void removeByKey( sal_Int32 nKey ) override;
+    virtual OUString generateFormat( sal_Int32 nBaseKey,
                             const css::lang::Locale& nLocale, bool bThousands,
                             bool bRed, sal_Int16 nDecimals, sal_Int16 nLeading ) override;
 
     // XNumberFormatTypes
-    virtual sal_Int32 SAL_CALL getStandardIndex( const css::lang::Locale& nLocale ) override;
-    virtual sal_Int32 SAL_CALL getStandardFormat( sal_Int16 nType,
+    virtual sal_Int32 getStandardIndex( const css::lang::Locale& nLocale ) override;
+    virtual sal_Int32 getStandardFormat( sal_Int16 nType,
                             const css::lang::Locale& nLocale ) override;
-    virtual sal_Int32 SAL_CALL getFormatIndex( sal_Int16 nIndex,
+    virtual sal_Int32 getFormatIndex( sal_Int16 nIndex,
                             const css::lang::Locale& nLocale ) override;
-    virtual bool SAL_CALL isTypeCompatible( sal_Int16 nOldType, sal_Int16 nNewType ) override;
-    virtual sal_Int32 SAL_CALL getFormatForLocale( sal_Int32 nKey,
+    virtual bool isTypeCompatible( sal_Int16 nOldType, sal_Int16 nNewType ) override;
+    virtual sal_Int32 getFormatForLocale( sal_Int32 nKey,
                             const css::lang::Locale& nLocale ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 
@@ -145,34 +145,34 @@ public:
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo(  ) override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference<
                                         css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference<
                                         css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XPropertyAccess
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
                             getPropertyValues() override;
-    virtual void SAL_CALL   setPropertyValues( const cpo::uno::Sequence<
+    virtual void   setPropertyValues( const cpo::uno::Sequence<
                                 css::beans::PropertyValue >& aProps ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 
@@ -192,28 +192,28 @@ public:
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo(  ) override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference<
                                         css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference<
                                         css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 

@@ -48,30 +48,30 @@ public:
     virtual ~SvNumberFormatsSupplierServiceObject() override;
 
     // XInterface
-    virtual void SAL_CALL acquire() noexcept override { SvNumberFormatsSupplierObj::acquire(); }
-    virtual void SAL_CALL release() noexcept override { SvNumberFormatsSupplierObj::release(); }
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& _rType ) override
+    virtual void acquire() noexcept override { SvNumberFormatsSupplierObj::acquire(); }
+    virtual void release() noexcept override { SvNumberFormatsSupplierObj::release(); }
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& _rType ) override
         { return SvNumberFormatsSupplierObj::queryInterface(_rType); }
 
     // XAggregation
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XNumberFormatsSupplier
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySet >
                 getNumberFormatSettings() override;
-    virtual css::uno::Reference< css::util::XNumberFormats > SAL_CALL
+    virtual css::uno::Reference< css::util::XNumberFormats >
                 getNumberFormats() override;
 
     // XUnoTunneler
-    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 };
 
 

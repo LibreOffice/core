@@ -67,34 +67,34 @@ public:
     explicit Content(
         css::uno::Reference< css::ucb::XContentIdentifier > const & identifier);
 
-    virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XContentIdentifier >
     getIdentifier() override {
         return m_identifier;
     }
 
-    virtual OUString SAL_CALL getContentType() override
+    virtual OUString getContentType() override
     {
         return OUString();
     }
 
-    virtual void SAL_CALL addContentEventListener(
+    virtual void addContentEventListener(
         css::uno::Reference< css::ucb::XContentEventListener > const &) override
     {}
 
-    virtual void SAL_CALL removeContentEventListener(
+    virtual void removeContentEventListener(
         css::uno::Reference< css::ucb::XContentEventListener > const &) override
     {}
 
-    virtual sal_Int32 SAL_CALL createCommandIdentifier() override
+    virtual sal_Int32 createCommandIdentifier() override
     {
         return 0;
     }
 
-    virtual cpo::uno::Any SAL_CALL execute(
+    virtual cpo::uno::Any execute(
         css::ucb::Command const & command, sal_Int32 commandId,
         css::uno::Reference< css::ucb::XCommandEnvironment > const &) override;
 
-    virtual void SAL_CALL abort(sal_Int32) override {}
+    virtual void abort(sal_Int32) override {}
 
 private:
     static char const m_prefix[];
@@ -155,13 +155,13 @@ cpo::uno::Any Content::execute(
 
 class Provider: public cppu::WeakImplHelper< css::ucb::XContentProvider > {
 public:
-    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
+    virtual css::uno::Reference< css::ucb::XContent > queryContent(
         css::uno::Reference< css::ucb::XContentIdentifier > const & identifier) override
     {
         return new Content(identifier);
     }
 
-    virtual sal_Int32 SAL_CALL compareContentIds(
+    virtual sal_Int32 compareContentIds(
         css::uno::Reference< css::ucb::XContentIdentifier > const & id1,
         css::uno::Reference< css::ucb::XContentIdentifier > const & id2) override
     {

@@ -40,38 +40,38 @@ public:
     PathService()
         {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
         {
             return u"com.sun.star.comp.svl.PathService"_ustr;
         }
 
-    virtual bool SAL_CALL supportsService (
+    virtual bool supportsService (
         const OUString & rName) override
         {
             return cppu::supportsService(this, rName);
         }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override
         {
             cpo::uno::Sequence< OUString > aRet { u"com.sun.star.config.SpecialConfigManager"_ustr };
             return aRet;
         }
 
-    virtual OUString SAL_CALL substituteVariables (
+    virtual OUString substituteVariables (
         const OUString& sText) override
         {
             return m_aOptions.SubstituteVariable( sText );
         }
 
-    virtual void SAL_CALL addPropertyChangeListener (
+    virtual void addPropertyChangeListener (
         const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &) override
         {}
 
-    virtual void SAL_CALL removePropertyChangeListener (
+    virtual void removePropertyChangeListener (
         const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &) override
         {}
 
-    virtual void SAL_CALL flush() override
+    virtual void flush() override
         {}
 };
 

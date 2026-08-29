@@ -159,13 +159,13 @@ public:
     SfxItemPropertySetInfo(std::span<const SfxItemPropertyMapEntry> pEntries );
     virtual ~SfxItemPropertySetInfo() override;
 
-    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::Property >
         getProperties(  ) override;
 
-    virtual css::beans::Property SAL_CALL
+    virtual css::beans::Property
         getPropertyByName( const OUString& aName ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
         hasPropertyByName( const OUString& Name ) override;
 
 };
@@ -189,13 +189,13 @@ public:
                                 const cpo::uno::Sequence<css::beans::Property>& rPropSeq );
                             virtual ~SfxExtItemPropertySetInfo() override;
 
-    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::Property >
         getProperties(  ) override;
 
-    virtual css::beans::Property SAL_CALL
+    virtual css::beans::Property
         getPropertyByName( const OUString& aName ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
         hasPropertyByName( const OUString& Name ) override;
 
 private:
