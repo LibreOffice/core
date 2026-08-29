@@ -718,6 +718,9 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(ScDocument& rDoc)
     std::map<SCTAB, const ScDBData*> aSheetDBs;
     for (SCTAB i = 0; i < nTabCount; ++i)
     {
+        // A sheet view holder table is not written, so its range has no sheet to refer to.
+        if (rDoc.IsSheetViewHolder(i))
+            continue;
         const ScDBData* p = rDoc.GetAnonymousDBData(i);
         if (p)
             aSheetDBs.emplace(i, p);
