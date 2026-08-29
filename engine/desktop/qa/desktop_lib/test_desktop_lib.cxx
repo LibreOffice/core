@@ -1809,12 +1809,12 @@ void DesktopKitTest::testVectorDeltaPushCoalescing()
     std::unique_ptr<CallbackFlushHandler> handler(
         new CallbackFlushHandler(pDocument, callbackCompressionTest, &aNotificationList));
     handler->setViewId(KitHelper::getCurrentView());
-    handler->setVectorRendering();
+    handler->setVectorRendering(0);
 
     tools::Rectangle aRectangle1(Point(10, 10), Size(20, 10));
     handler->viewInvalidateTilesCallback(&aRectangle1, 0, 0);
-    handler->viewVectorPartChanged(0);
-    handler->viewVectorPartChanged(0);
+    handler->viewVectorPartChanged(0, 0);
+    handler->viewVectorPartChanged(0, 0);
 
     Scheduler::ProcessEventsToIdle();
 

@@ -263,17 +263,18 @@ protected:
                && pProbeDevice->GetFontMetric().GetWeight() >= WEIGHT_SEMIBOLD;
     }
 
-    /// Request for the first slide. The raw JSON is written as a
-    /// reference. A non-negative nSince asks for a delta against that
-    /// version instead of the full slide.
-    tools::JsonPath getVectorPrimitives(std::u16string_view sName, sal_Int64 nSince = -1)
+    /// Request for part 0 of the page list nMode names. The raw JSON is
+    /// written as a reference. A non-negative nSince asks for a delta against
+    /// that version instead of the full page.
+    tools::JsonPath getVectorPrimitives(std::u16string_view sName, sal_Int64 nSince = -1,
+                                        sal_Int32 nMode = 0)
     {
         SdXImpressDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pDoc);
 
         tools::JsonWriter aJsonWriter;
-        // Explicitly get only part 0 -> first slide.
-        OString aCommand = ".uno:VectorPrimitives?part=0"_ostr;
+        // Explicitly get only part 0 -> first page of the mode's list.
+        OString aCommand = ".uno:VectorPrimitives?part=0&mode=" + OString::number(nMode);
         if (nSince >= 0)
             aCommand = aCommand + "&since=" + OString::number(nSince);
         pDoc->getCommandValues(aJsonWriter,
@@ -381,6 +382,18 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnMasterChange)
         = getVectorPrimitives(u"testMasterVersion").getInt("/version").value_or(-1);
 
     CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
+{
+    // A mode outside the page lists the command serves gets an empty response
+    // rather than the slide at that index.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+
+    auto aJson = getVectorPrimitives(u"testUnservedMode", -1, 3);
+    CPPUNIT_ASSERT(!aJson.has("/type"));
+    CPPUNIT_ASSERT(!aJson.has("/objects"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnBackgroundChange)

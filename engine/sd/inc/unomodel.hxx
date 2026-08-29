@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
@@ -120,19 +121,42 @@ public:
         return maVectorFontFaceByKey;
     }
 
-    /// Content version of a vector-rendering part (0-based slide index),
-    /// counted up each time an object on that part changes. A part that
-    /// has not changed since the document was opened reports 0.
-    sal_uInt64 getVectorPartVersion(sal_Int32 nPart) const;
+    /// Names one vector-rendering part: a 0-based index, and the mode that
+    /// says which page list the index addresses.
+    struct VectorPartKey
+    {
+        sal_Int32 mnPart = 0;
+        sal_Int32 mnMode = 0;
+
+        bool operator==(const VectorPartKey& rOther) const
+        {
+            return mnPart == rOther.mnPart && mnMode == rOther.mnMode;
+        }
+
+        struct Hash
+        {
+            size_t operator()(const VectorPartKey& rKey) const
+            {
+                size_t nSeed = 0;
+                o3tl::hash_combine(nSeed, rKey.mnPart);
+                o3tl::hash_combine(nSeed, rKey.mnMode);
+                return nSeed;
+            }
+        };
+    };
+
+    /// Content version of a part, counted up on each object change. 0 when
+    /// nothing changed since the document was opened.
+    sal_uInt64 getVectorPartVersion(sal_Int32 nPart, sal_Int32 nMode) const;
 
     /// True when the object with the given unique id last changed on the
     /// part at a version later than nSince.
-    bool isVectorObjectChangedSince(sal_Int32 nPart, sal_uInt64 nObjectId,
+    bool isVectorObjectChangedSince(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId,
                                     sal_uInt64 nSince) const;
 
     /// True when the part's master page last changed at a version later
     /// than nSince.
-    bool isVectorMasterChangedSince(sal_Int32 nPart, sal_uInt64 nSince) const;
+    bool isVectorMasterChangedSince(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nSince) const;
 
     /// Content state of one vector-rendering part: its current version,
     /// the version at which its master page last changed, and, per object
@@ -165,13 +189,13 @@ private:
     /// Extracted animated GIF files, keyed by the graphic object's unique id.
     mutable std::unordered_map<sal_uInt64, AnimatedGifTempFile> maAnimatedGifCache;
 
-    /// Vector content state, keyed by 0-based slide index.
-    std::unordered_map<sal_Int32, VectorPartState> maVectorParts;
+    /// Vector content state, keyed by part index and mode.
+    std::unordered_map<VectorPartKey, VectorPartState, VectorPartKey::Hash> maVectorParts;
 
-    /// Last vector-primitives version pushed to each view, keyed by view
-    /// id then 0-based slide index. A push computes its delta since this
-    /// and then advances it.
-    std::unordered_map<sal_Int32, std::unordered_map<sal_Int32, sal_uInt64>>
+    /// Last version pushed to each view, keyed by view id then part and mode.
+    /// A push takes its delta since this, then advances it.
+    std::unordered_map<sal_Int32,
+                       std::unordered_map<VectorPartKey, sal_uInt64, VectorPartKey::Hash>>
         maVectorPushedVersions;
 
     css::uno::Reference<css::uno::XInterface> create(

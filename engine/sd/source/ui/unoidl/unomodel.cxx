@@ -2223,19 +2223,16 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL SdXImpressDocument::getImplementationId(
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-sal_uInt64 SdXImpressDocument::getVectorPartVersion(sal_Int32 nPart) const
+sal_uInt64 SdXImpressDocument::getVectorPartVersion(sal_Int32 nPart, sal_Int32 nMode) const
 {
-    auto aIterator = maVectorParts.find(nPart);
+    auto aIterator = maVectorParts.find({ nPart, nMode });
     return aIterator != maVectorParts.end() ? aIterator->second.mnVersion : 0;
 }
 
-bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_uInt64 nObjectId,
-                                                    sal_uInt64 nSince) const
+bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_Int32 nMode,
+                                                    sal_uInt64 nObjectId, sal_uInt64 nSince) const
 {
-    auto aPartIterator = maVectorParts.find(nPart);
+    auto aPartIterator = maVectorParts.find({ nPart, nMode });
     if (aPartIterator == maVectorParts.end())
         return false;
     const auto& rObjectVersions = aPartIterator->second.maObjectChangeVersions;
@@ -2245,16 +2242,19 @@ bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_uInt64 
 
 namespace
 {
+/// The page list a vector-rendering part index addresses.
+constexpr sal_Int32 constVectorModeSlides = 0;
+
 /// The views render the changed part from vector primitives only if
 /// they asked for them, so each view's callback handler decides itself
 /// whether to push a delta.
-void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, sal_Int32 nPart)
+void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, sal_Int32 nPart, sal_Int32 nMode)
 {
     SfxViewShell* pShell = SfxViewShell::GetFirst(false);
     while (pShell)
     {
         if (pShell->GetObjectShell() == pDocShell)
-            pShell->viewVectorPartChanged(nPart);
+            pShell->viewVectorPartChanged(nPart, nMode);
         pShell = SfxViewShell::GetNext(*pShell, false);
     }
 }
@@ -2286,7 +2286,8 @@ void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell, sal_Int
 /// list, so it names no slide.
 void bumpMasterChangeForUsers(
     SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
-    std::unordered_map<sal_Int32, SdXImpressDocument::VectorPartState>& rVectorParts,
+    std::unordered_map<SdXImpressDocument::VectorPartKey, SdXImpressDocument::VectorPartState,
+                       SdXImpressDocument::VectorPartKey::Hash>& rVectorParts,
     const SdPage* pMasterPage)
 {
     const sal_uInt16 nPageCount = rDocument.GetSdPageCount(PageKind::Standard);
@@ -2296,18 +2297,20 @@ void bumpMasterChangeForUsers(
         if (pStandardPage && pStandardPage->TRG_HasMasterPage()
             && &pStandardPage->TRG_GetMasterPage() == pMasterPage)
         {
-            SdXImpressDocument::VectorPartState& rState = rVectorParts[nPage];
+            SdXImpressDocument::VectorPartState& rState
+                = rVectorParts[{ nPage, constVectorModeSlides }];
             ++rState.mnVersion;
             rState.mnMasterChangeVersion = rState.mnVersion;
-            notifyViewsVectorPartChanged(pDocShell, nPage);
+            notifyViewsVectorPartChanged(pDocShell, nPage, constVectorModeSlides);
         }
     }
 }
 }
 
-bool SdXImpressDocument::isVectorMasterChangedSince(sal_Int32 nPart, sal_uInt64 nSince) const
+bool SdXImpressDocument::isVectorMasterChangedSince(sal_Int32 nPart, sal_Int32 nMode,
+                                                    sal_uInt64 nSince) const
 {
-    auto aIterator = maVectorParts.find(nPart);
+    auto aIterator = maVectorParts.find({ nPart, nMode });
     return aIterator != maVectorParts.end() && aIterator->second.mnMasterChangeVersion > nSince;
 }
 
@@ -2345,7 +2348,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         else if (pPage->GetPageNum() > 0)
                         {
                             const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
-                            VectorPartState& rState = maVectorParts[nPart];
+                            VectorPartState& rState
+                                = maVectorParts[{ nPart, constVectorModeSlides }];
                             ++rState.mnVersion;
 
                             // A change inside a group redraws the whole
@@ -2366,7 +2370,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             else
                                 rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
 
-                            notifyViewsVectorPartChanged(mpDocShell, nPart);
+                            notifyViewsVectorPartChanged(mpDocShell, nPart, constVectorModeSlides);
 
                             // An animated image was added, moved, resized,
                             // replaced or removed on the slide, so re-send the
@@ -2399,10 +2403,10 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     else if (pPage->GetPageNum() > 0)
                     {
                         const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
-                        VectorPartState& rState = maVectorParts[nPart];
+                        VectorPartState& rState = maVectorParts[{ nPart, constVectorModeSlides }];
                         ++rState.mnVersion;
                         rState.mnMasterChangeVersion = rState.mnVersion;
-                        notifyViewsVectorPartChanged(mpDocShell, nPart);
+                        notifyViewsVectorPartChanged(mpDocShell, nPart, constVectorModeSlides);
                     }
                 }
             }
@@ -2441,8 +2445,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 namespace
 {
-/// Serializes Draw/Impress slide to JSON primitives.
-/// nPart selects the page (0-based); when -1, the current view page is used.
+/// Serializes a Draw or Impress page to JSON primitives. nPart is the 0-based
+/// index in the page list nMode names, or -1 for the current view page.
 class VectorContentWriter
 {
     static constexpr double constTwipConversionFactor
@@ -2450,10 +2454,11 @@ class VectorContentWriter
 
 public:
     VectorContentWriter(SdDrawDocument* pDocument, SdXImpressDocument* pModel, sal_Int32 nPart = -1,
-                        sal_Int64 nSinceVersion = -1)
+                        sal_Int32 nMode = constVectorModeSlides, sal_Int64 nSinceVersion = -1)
         : mpDocument(pDocument)
         , mpModel(pModel)
         , mnPart(nPart)
+        , mnMode(nMode)
         , mnSinceVersion(nSinceVersion)
     {
     }
@@ -2476,7 +2481,8 @@ public:
             // The master page is not an object on the slide, so a delta
             // carries its content whenever it changed after the client's
             // version.
-            if (mpModel->isVectorMasterChangedSince(mnResolvedPage, sal_uInt64(mnSinceVersion)))
+            if (mpModel->isVectorMasterChangedSince(mnResolvedPage, mnMode,
+                                                    sal_uInt64(mnSinceVersion)))
                 writeMasterPage(rWriter, pPage);
         }
         else
@@ -2485,8 +2491,13 @@ public:
     }
 
 private:
+    /// The page the request names, or nullptr for a mode this writer does
+    /// not serve.
     SdPage* resolveCurrentPage()
     {
+        if (mnMode != constVectorModeSlides)
+            return nullptr;
+
         sal_uInt16 nCurrentPage = 0;
         if (mnPart >= 0)
         {
@@ -2503,8 +2514,7 @@ private:
                 SdPage* pActualPage = pViewSh->GetActualPage();
                 if (pActualPage)
                 {
-                    // In Impress there are slide and then notes pages interleaved.
-                    // We are interested only in slides for now.
+                    // Slide and notes pages are interleaved; this is the slides.
                     nCurrentPage = (pActualPage->GetPageNum() - 1) / 2;
                 }
             }
@@ -2517,7 +2527,8 @@ private:
     {
         rWriter.put("type", isDelta() ? "vectorprimitivesdelta" : "vectorprimitives");
         rWriter.put("part", sal_Int32(mnResolvedPage));
-        rWriter.put("version", sal_Int64(mpModel->getVectorPartVersion(mnResolvedPage)));
+        rWriter.put("mode", mnMode);
+        rWriter.put("version", sal_Int64(mpModel->getVectorPartVersion(mnResolvedPage, mnMode)));
 
         // A delta reuses the slide size the client already has, so only a
         // full response carries it.
@@ -2671,9 +2682,9 @@ private:
             {
                 const bool bBeingEdited = hasActiveTextEdit(pObject);
                 if (!bBeingEdited
-                    && !mpModel->isVectorObjectChangedSince(
-                           mnResolvedPage, pObject->GetUniqueID(),
-                           sal_uInt64(mnSinceVersion)))
+                    && !mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
+                                                            pObject->GetUniqueID(),
+                                                            sal_uInt64(mnSinceVersion)))
                 {
                     continue;
                 }
@@ -2700,6 +2711,7 @@ private:
     SdDrawDocument* mpDocument;
     SdXImpressDocument* mpModel;
     sal_Int32 mnPart;
+    sal_Int32 mnMode;
     sal_Int64 mnSinceVersion;
     sal_uInt16 mnResolvedPage = 0;
     std::optional<drawinglayer::Primitive2dJsonProcessor> maProcessor;
@@ -2949,6 +2961,12 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         if (it != aMap.end())
             nPart = it->second.toInt32();
 
+        // No mode named means the slides.
+        sal_Int32 nMode = constVectorModeSlides;
+        auto aModeIterator = aMap.find(u"mode"_ustr);
+        if (aModeIterator != aMap.end())
+            nMode = aModeIterator->second.toInt32();
+
         // A "since" version asks for a delta: only the objects that
         // changed after that version, plus the current object order.
         sal_Int64 nSinceVersion = -1;
@@ -2966,7 +2984,8 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             auto aViewIterator = aMap.find(u"viewid"_ustr);
             if (aViewIterator != aMap.end())
                 nViewId = aViewIterator->second.toInt32();
-            nSinceVersion = static_cast<sal_Int64>(maVectorPushedVersions[nViewId][nPart]);
+            nSinceVersion
+                = static_cast<sal_Int64>(maVectorPushedVersions[nViewId][{ nPart, nMode }]);
         }
 
         if (mpDoc)
@@ -2980,12 +2999,13 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             comphelper::ScopeGuard aVectorRenderingGuard(
                 [] { comphelper::COKit::setVectorRendering(false); });
 
-            VectorContentWriter aContentWriter(mpDoc, this, nPart, nSinceVersion);
+            VectorContentWriter aContentWriter(mpDoc, this, nPart, nMode, nSinceVersion);
             aContentWriter.write(rJsonWriter);
 
             if (bPushDelta)
             {
-                maVectorPushedVersions[nViewId][nPart] = getVectorPartVersion(nPart);
+                maVectorPushedVersions[nViewId][{ nPart, nMode }]
+                    = getVectorPartVersion(nPart, nMode);
 
                 // Views come and go over the document's life, so drop the
                 // push marks of views that no longer exist.
@@ -3009,7 +3029,8 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                 if (const SfxViewShell* pCurrentView = SfxViewShell::Current())
                 {
                     const sal_Int32 nCurrentViewId = sal_Int32(pCurrentView->GetViewShellId().get());
-                    maVectorPushedVersions[nCurrentViewId][nPart] = getVectorPartVersion(nPart);
+                    maVectorPushedVersions[nCurrentViewId][{ nPart, nMode }]
+                        = getVectorPartVersion(nPart, nMode);
                 }
             }
         }

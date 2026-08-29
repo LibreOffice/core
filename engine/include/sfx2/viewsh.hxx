@@ -410,8 +410,8 @@ public:
     virtual void viewUpdatedCallback(COKitCallbackType eType) const override;
     virtual void viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) const override;
     // Tells the view's callback handler that the vector content of the
-    // given slide part changed.
-    void viewVectorPartChanged(int nPart) const;
+    // given part changed, in the page list the mode names.
+    void viewVectorPartChanged(int nPart, int nMode) const;
     // Performs any pending calls to viewInvalidateTilesCallback() as necessary.
     virtual void flushPendingKitInvalidateTiles();
     virtual void viewAddPendingInvalidateTiles() override;

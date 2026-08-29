@@ -15,6 +15,7 @@
 #include <mutex>
 #include <set>
 #include <string_view>
+#include <utility>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/variant.hpp>
@@ -114,8 +115,12 @@ namespace desktop {
         void setViewId( int viewId ) { m_viewId = viewId; }
 
         // True for a view that renders from vector primitives rather than
-        // painting bitmap tiles.
-        void setVectorRendering() { m_bVectorRendering = true; }
+        // painting bitmap tiles. A view asks in each mode it renders.
+        void setVectorRendering(int nMode)
+        {
+            m_bVectorRendering = true;
+            m_aVectorRenderingModes.insert(nMode);
+        }
         bool isVectorRendering() const { return m_bVectorRendering; }
 
         DESKTOP_DLLPUBLIC void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
@@ -137,7 +142,7 @@ namespace desktop {
         virtual void viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) override;
         /// Records that a slide part changed, so the next flush pushes
         /// that part's vector-primitives delta to the client.
-        DESKTOP_DLLPUBLIC virtual void viewVectorPartChanged(int nPart) override;
+        DESKTOP_DLLPUBLIC virtual void viewVectorPartChanged(int nPart, int nMode) override;
         virtual void viewAddPendingInvalidateTiles() override;
         virtual void dumpState(rtl::OStringBuffer &rState) override;
 
@@ -257,9 +262,12 @@ namespace desktop {
         OString m_aViewRenderState;
         int m_viewId = -1; // view id of the associated SfxViewShell
         bool m_bVectorRendering = false;
-        /// Slide parts whose vector-primitives delta is still to be
-        /// pushed, collected between two flushes.
-        std::set<int> m_vectorDeltaParts;
+        /// Modes the view asked for primitives in. A change in another mode
+        /// pushes nothing.
+        std::set<int> m_aVectorRenderingModes;
+        /// Parts whose vector-primitives delta is still to be pushed,
+        /// collected between two flushes.
+        std::set<std::pair<int, int>> m_vectorDeltaParts;
         COKitCallback m_pCallback;
         ImplSVEvent* m_pFlushEvent;
         void *m_pData;

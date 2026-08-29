@@ -12,6 +12,7 @@
 #include <app.hrc>
 #include <test/helper/transferable.hxx>
 #include <tools/JsonPath.hxx>
+#include <tools/json_writer.hxx>
 #include <test/JsonTestTools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <functional>
@@ -5459,6 +5460,55 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnnotationDateTimeUsesViewTimezon
         aView.m_aCommentCallbackResult.get<std::string>("dateTime"));
     CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTime, aParsed));
     CPPUNIT_ASSERT(DateTime(aParsed).IsBetween(aExpectedFrom, aAfterReply + aAuthorOffset));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOpenEditRaisesTheVectorVersion)
+{
+    // A reader that draws from the model hears nothing from the view object
+    // contacts, so a change made while the text edit is still open has to raise
+    // the part's version. Beginning the edit raises it anyway, so what matters is
+    // that a further change inside the same edit raises it too.
+
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+
+    auto aPartVersion = [pXImpressDocument]() -> sal_Int64 {
+        tools::JsonWriter aJsonWriter;
+        pXImpressDocument->getCommandValues(aJsonWriter, ".uno:VectorPrimitives?part=0");
+        const OString aResult = aJsonWriter.finishAndGetAsOString();
+        auto oJson
+            = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
+        CPPUNIT_ASSERT(oJson.has_value());
+        return oJson->getInt("/version").value_or(-1);
+    };
+
+    // The first pull is what marks the model as drawn from.
+    aPartVersion();
+
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
+
+    // The text edit announces a change only once its update timer runs out,
+    // which takes longer than EDIT_UPDATEDATA_TIMEOUT.
+    osl::Thread::wait(std::chrono::milliseconds(500));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("the edit ended on its own", pView->GetTextEditObject());
+    const sal_Int64 nAfterFirst = aPartVersion();
+
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u" there"_ustr);
+    osl::Thread::wait(std::chrono::milliseconds(500));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("the edit ended on its own", pView->GetTextEditObject());
+    const sal_Int64 nAfterSecond = aPartVersion();
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT_GREATER(nAfterFirst, nAfterSecond);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

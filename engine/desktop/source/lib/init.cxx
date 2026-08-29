@@ -2110,15 +2110,18 @@ void CallbackFlushHandler::viewCallbackWithViewId(COKitCallbackType eType, const
     queue(eType, callbackData);
 }
 
-void CallbackFlushHandler::viewVectorPartChanged(int nPart)
+void CallbackFlushHandler::viewVectorPartChanged(int nPart, int nMode)
 {
-    // Only a view that renders from vector primitives consumes deltas.
+    // Only a vector-rendering view consumes deltas, and only in a mode it
+    // asked in.
     if (!m_bVectorRendering || nPart < 0)
+        return;
+    if (m_aVectorRenderingModes.find(nMode) == m_aVectorRenderingModes.end())
         return;
 
     // Repeated changes of the same part between two flushes collapse
     // into a single delta, computed at flush time.
-    m_vectorDeltaParts.insert(nPart);
+    m_vectorDeltaParts.insert({ nPart, nMode });
     scheduleFlush();
 }
 
@@ -2127,14 +2130,14 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
     if (m_vectorDeltaParts.empty())
         return;
 
-    std::set<int> aParts;
+    std::set<std::pair<int, int>> aParts;
     aParts.swap(m_vectorDeltaParts);
 
     ITiledRenderable* pDocument = getTiledRenderable(m_pDocument);
     if (!pDocument)
         return;
 
-    for (const int nPart : aParts)
+    for (const auto& [nPart, nMode] : aParts)
     {
         // Computing the delta at delivery time reads the document after
         // the change that triggered the invalidation has fully landed.
@@ -2142,6 +2145,7 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
         // returns the delta since it, so the mark advances only for a
         // delta that is handed to the client.
         const OString aCommand = ".uno:VectorPrimitives?part=" + OString::number(nPart)
+                                 + "&mode=" + OString::number(nMode)
                                  + "&pushdelta=1&viewid=" + OString::number(m_viewId);
         tools::JsonWriter aJsonWriter;
         pDocument->getCommandValues(aJsonWriter,
@@ -8234,14 +8238,20 @@ static std::string doc_getCommandValues(COKitDocument* pThis, const char* pComma
 
     if (aCommand.starts_with(".uno:VectorPrimitives"))
     {
-        // The requesting view renders from vector primitives rather than
-        // bitmap tiles; record that on its callback handler.
+        // Record on the view's callback handler that it renders from vector
+        // primitives, and in which mode. No mode named means the slides.
+        const std::map<OUString, OUString> aParameters
+            = KitHelper::parseCommandParameters(OUString::fromUtf8(aCommand));
+        sal_Int32 nRequestedMode = 0;
+        if (auto aModeIterator = aParameters.find(u"mode"_ustr); aModeIterator != aParameters.end())
+            nRequestedMode = aModeIterator->second.toInt32();
+
         COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
         if (const SfxViewShell* pViewShell = SfxViewShell::Current())
         {
             auto it = pDocument->mpCallbackFlushHandlers.find(pViewShell->GetViewShellId().get());
             if (it != pDocument->mpCallbackFlushHandlers.end() && it->second)
-                it->second->setVectorRendering();
+                it->second->setVectorRendering(nRequestedMode);
         }
     }
 
