@@ -219,8 +219,16 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
     });
 
     it('PasteSpecial Dialog', function () {
-        // Select some text
+        // The table cell holding the caret is empty, so there is nothing to select.
+        helper.typeIntoDocument('Lorem ipsum');
+
         helper.selectAllText();
+
+        // Copying an empty selection raises the limited-clipboard modal, whose overlay
+        // then covers the dialog.
+        cy.wrap(null).should(() => {
+            expect(win.app.map._clip._selectionType, 'clipboard selection type').to.equal('text');
+        });
 
         helper.copy().then(() => {
             return helper.processToIdle(win);
