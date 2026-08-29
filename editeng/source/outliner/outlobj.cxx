@@ -27,10 +27,9 @@
 #include <o3tl/safeint.hxx>
 #include <libxml/xmlwriter.h>
 
-OutlinerParaObjData::OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, ParagraphDataVector&& rParagraphDataVector, bool bIsEditDoc ) :
+OutlinerParaObjData::OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, ParagraphDataVector&& rParagraphDataVector ) :
     mpEditTextObject(std::move(pEditTextObject)),
-    maParagraphDataVector(std::move(rParagraphDataVector)),
-    mbIsEditDoc(bIsEditDoc)
+    maParagraphDataVector(std::move(rParagraphDataVector))
 {
     if( maParagraphDataVector.empty() && (mpEditTextObject->GetParagraphCount() != 0) )
         maParagraphDataVector.resize(mpEditTextObject->GetParagraphCount());
@@ -38,8 +37,7 @@ OutlinerParaObjData::OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditT
 
 OutlinerParaObjData::OutlinerParaObjData( const OutlinerParaObjData& r ):
     mpEditTextObject(new EditTextObject(*r.mpEditTextObject)),
-    maParagraphDataVector(r.maParagraphDataVector),
-    mbIsEditDoc(r.mbIsEditDoc)
+    maParagraphDataVector(r.maParagraphDataVector)
 {
 }
 
@@ -50,8 +48,7 @@ OutlinerParaObjData::~OutlinerParaObjData()
 bool OutlinerParaObjData::operator==(const OutlinerParaObjData& rCandidate) const
 {
     return (*mpEditTextObject == *rCandidate.mpEditTextObject
-        && maParagraphDataVector == rCandidate.maParagraphDataVector
-        && mbIsEditDoc == rCandidate.mbIsEditDoc);
+        && maParagraphDataVector == rCandidate.maParagraphDataVector);
 }
 
 bool OutlinerParaObjData::isWrongListEqual(const OutlinerParaObjData& rCompare) const
@@ -60,13 +57,13 @@ bool OutlinerParaObjData::isWrongListEqual(const OutlinerParaObjData& rCompare) 
 }
 
 OutlinerParaObject::OutlinerParaObject(
-    std::unique_ptr<EditTextObject> xTextObj, ParagraphDataVector&& rParagraphDataVector, bool bIsEditDoc ) :
-    mpImpl(OutlinerParaObjData(std::move(xTextObj), std::move(rParagraphDataVector), bIsEditDoc))
+    std::unique_ptr<EditTextObject> xTextObj, ParagraphDataVector&& rParagraphDataVector ) :
+    mpImpl(OutlinerParaObjData(std::move(xTextObj), std::move(rParagraphDataVector)))
 {
 }
 
 OutlinerParaObject::OutlinerParaObject( std::unique_ptr<EditTextObject> pTextObj ) :
-    mpImpl(OutlinerParaObjData(std::move(pTextObj), ParagraphDataVector(), true))
+    mpImpl(OutlinerParaObjData(std::move(pTextObj), ParagraphDataVector()))
 {
 }
 

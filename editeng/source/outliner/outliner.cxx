@@ -374,7 +374,6 @@ std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPa
         return std::nullopt;
 
     std::unique_ptr<EditTextObject> xText = pEditEngine->CreateTextObject( nStartPara, nCount );
-    const bool bIsEditDoc(OutlinerMode::TextObject == GetOutlinerMode());
     ParagraphDataVector aParagraphDataVector(nCount);
     const sal_Int32 nLastPara(nStartPara + nCount - 1);
 
@@ -384,7 +383,7 @@ std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPa
     }
 
     xText->ClearPortionInfo(); // tdf#147166 the PortionInfo is unwanted here
-    OutlinerParaObject aPObj(std::move(xText), std::move(aParagraphDataVector), bIsEditDoc);
+    OutlinerParaObject aPObj(std::move(xText), std::move(aParagraphDataVector));
     aPObj.SetOutlinerMode(GetOutlinerMode());
 
     return aPObj;

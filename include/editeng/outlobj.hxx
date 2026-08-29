@@ -41,10 +41,9 @@ struct EDITENG_DLLPUBLIC OutlinerParaObjData
     // data members
     std::unique_ptr<EditTextObject>  mpEditTextObject;
     ParagraphDataVector              maParagraphDataVector;
-    bool                             mbIsEditDoc;
 
     // constructor
-    OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, ParagraphDataVector&& rParagraphDataVector, bool bIsEditDoc );
+    OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, ParagraphDataVector&& rParagraphDataVector );
 
     OutlinerParaObjData( const OutlinerParaObjData& r );
 
@@ -74,7 +73,7 @@ friend class std::optional<OutlinerParaObject>;
 
 public:
     // constructors/destructor
-    OutlinerParaObject(std::unique_ptr<EditTextObject>, ParagraphDataVector&&, bool bIsEditDoc);
+    OutlinerParaObject(std::unique_ptr<EditTextObject>, ParagraphDataVector&&);
     OutlinerParaObject( std::unique_ptr<EditTextObject> );
     OutlinerParaObject( const OutlinerParaObject&);
     OutlinerParaObject(OutlinerParaObject&&) noexcept;
