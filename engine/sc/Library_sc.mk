@@ -331,6 +331,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/filter/xml/XMLExportDataPilot \
     sc/source/filter/xml/XMLExportDatabaseRanges \
     sc/source/filter/xml/XMLExportIterator \
+    sc/source/filter/xml/XMLExportSheetViews \
     sc/source/filter/xml/XMLExportSharedData \
     sc/source/filter/xml/XMLStylesExportHelper \
     sc/source/filter/xml/XMLStylesImportHelper \

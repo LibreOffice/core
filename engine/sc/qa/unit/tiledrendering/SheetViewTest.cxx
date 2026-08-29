@@ -1753,7 +1753,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
 {
-    // Check if sheet view holder table is saved into the ODF document
+    // The ODF document holds one table, and the sheet view as a coext element beside it
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
     pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
@@ -1764,6 +1764,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "//table:table", 1);
+    // The view itself is kept as an extension element of the spreadsheet body.
+    assertXPath(pXmlDoc, "//office:spreadsheet/coext:sheet-views/coext:sheet-view", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)

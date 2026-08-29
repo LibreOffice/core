@@ -33,6 +33,7 @@
 #include "XMLExportDataPilot.hxx"
 #include "XMLExportDatabaseRanges.hxx"
 #include "XMLExportDDELinks.hxx"
+#include "XMLExportSheetViews.hxx"
 #include "XMLColumnRowGroupExport.hxx"
 #include "XMLStylesExportHelper.hxx"
 #include "XMLChangeTrackingExportHelper.hxx"
@@ -1960,6 +1961,12 @@ void ScXMLExport::ExportContent_()
     WriteConsolidation(*pDoc);
     ScXMLExportDDELinks aExportDDELinks(*pDoc, *this);
     aExportDDELinks.WriteDDELinks(xSpreadDoc);
+    // Plain ODF has no place for a sheet view, so the coext element only lands in extended ODF.
+    if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+    {
+        ScXMLExportSheetViews aExportSheetViews(*this);
+        aExportSheetViews.WriteSheetViews(*pDoc);
+    }
     IncrementProgressBar(true, 0);
     GetProgressBarHelper()->SetValue(GetProgressBarHelper()->GetReference());
 }

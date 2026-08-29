@@ -348,6 +348,43 @@ CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testMultiSheetViewsRoundtr
     }
 }
 
+CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testOdfExportSheetViews)
+{
+    loadFromFile(u"xlsx/NamedSheetViews.xlsx");
+
+    save(TestFilter::ODS);
+
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+
+    // The holder tables stay out of the file: one sheet, one auto-filter range on it.
+    assertXPath(pContent, "//table:table", 1);
+    assertXPath(pContent, "//table:database-range", 1);
+
+    OString sViews = "//office:spreadsheet/coext:sheet-views"_ostr;
+    assertXPath(pContent, sViews, 1);
+    assertXPath(pContent, sViews + "/coext:sheet-view", 2);
+
+    // View1: sorted on the third column of the range, no filter condition.
+    OString sView1 = sViews + "/coext:sheet-view[1]";
+    assertXPath(pContent, sView1, "name", u"View1");
+    assertXPath(pContent, sView1, "table-name", u"Sheet1");
+    CPPUNIT_ASSERT(!getXPath(pContent, sView1, "guid").isEmpty());
+    CPPUNIT_ASSERT(!getXPath(pContent, sView1, "filter-guid").isEmpty());
+    CPPUNIT_ASSERT(getXPath(pContent, sView1, "target-range-address").startsWith(u"Sheet1."));
+    assertXPath(pContent, sView1 + "/table:filter", 0);
+    assertXPath(pContent, sView1 + "/table:sort/table:sort-by", 1);
+    assertXPath(pContent, sView1 + "/table:sort/table:sort-by", "field-number", u"2");
+
+    // View2: two filtered columns, sorted on the first column of the range.
+    OString sView2 = sViews + "/coext:sheet-view[2]";
+    assertXPath(pContent, sView2, "name", u"View2");
+    assertXPath(pContent, sView2, "table-name", u"Sheet1");
+    assertXPath(pContent, sView2 + "/table:filter", 1);
+    assertXPath(pContent, sView2 + "/table:filter/table:filter-and/table:filter-condition", 2);
+    assertXPath(pContent, sView2 + "/table:sort/table:sort-by", "field-number", u"0");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
