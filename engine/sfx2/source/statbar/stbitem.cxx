@@ -158,19 +158,19 @@ SfxStatusBarControl::~SfxStatusBarControl()
 
 
 // XInterface
-void SAL_CALL SfxStatusBarControl::acquire() noexcept
+void SfxStatusBarControl::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SfxStatusBarControl::release() noexcept
+void SfxStatusBarControl::release() noexcept
 {
     OWeakObject::release();
 }
 
 
 // XStatusListener
-void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
+void SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     SfxViewFrame* pViewFrame = nullptr;
     uno::Reference < frame::XController > xController;
@@ -265,7 +265,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
 }
 
 // XStatusbarController
-bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
+bool SfxStatusBarControl::mouseButtonDown(
     const awt::MouseEvent& rMouseEvent )
 {
     SolarMutexGuard aGuard;
@@ -280,7 +280,7 @@ bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     return MouseButtonDown( aMouseEvent );
 }
 
-bool SAL_CALL SfxStatusBarControl::mouseMove(
+bool SfxStatusBarControl::mouseMove(
     const awt::MouseEvent& rMouseEvent )
 {
     SolarMutexGuard aGuard;
@@ -294,7 +294,7 @@ bool SAL_CALL SfxStatusBarControl::mouseMove(
     return MouseMove( aMouseEvent );
 }
 
-bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
+bool SfxStatusBarControl::mouseButtonUp(
     const ::awt::MouseEvent& rMouseEvent )
 {
     SolarMutexGuard aGuard;
@@ -308,7 +308,7 @@ bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     return MouseButtonUp( aMouseEvent );
 }
 
-void SAL_CALL SfxStatusBarControl::command(
+void SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
     bool /*bMouseEvent*/,
@@ -321,7 +321,7 @@ void SAL_CALL SfxStatusBarControl::command(
     Command( aCmdEvent );
 }
 
-void SAL_CALL SfxStatusBarControl::paint(
+void SfxStatusBarControl::paint(
     const uno::Reference< awt::XGraphics >& xGraphics,
     const awt::Rectangle& rOutputRectangle,
     ::sal_Int32 /*nStyle*/ )
@@ -337,13 +337,13 @@ void SAL_CALL SfxStatusBarControl::paint(
     }
 }
 
-void SAL_CALL SfxStatusBarControl::click( const awt::Point& )
+void SfxStatusBarControl::click( const awt::Point& )
 {
     SolarMutexGuard aGuard;
     Click();
 }
 
-void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
+void SfxStatusBarControl::doubleClick( const awt::Point& )
 {
 }
 

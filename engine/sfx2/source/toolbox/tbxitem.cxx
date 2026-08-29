@@ -276,7 +276,7 @@ void SfxToolBoxControl::Dispatch( const OUString& aCommand, cpo::uno::Sequence< 
 }
 
 // XStatusListener
-void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
+void SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
 {
     SfxViewFrame* pViewFrame = nullptr;
     Reference < XController > xController;
@@ -385,32 +385,32 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
 }
 
 // XToolbarController
-void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier )
+void SfxToolBoxControl::execute( sal_Int16 KeyModifier )
 {
     SolarMutexGuard aGuard;
     Select( static_cast<sal_uInt16>(KeyModifier) );
 }
 
-void SAL_CALL SfxToolBoxControl::click()
+void SfxToolBoxControl::click()
 {
     SolarMutexGuard aGuard;
     Click();
 }
 
-void SAL_CALL SfxToolBoxControl::doubleClick()
+void SfxToolBoxControl::doubleClick()
 {
     SolarMutexGuard aGuard;
     DoubleClick();
 }
 
-Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow()
+Reference< css::awt::XWindow > SfxToolBoxControl::createPopupWindow()
 {
     SolarMutexGuard aGuard;
     CreatePopupWindow();
     return nullptr;
 }
 
-Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< css::awt::XWindow >& rParent )
+Reference< css::awt::XWindow > SfxToolBoxControl::createItemWindow( const Reference< css::awt::XWindow >& rParent )
 {
     SolarMutexGuard aGuard;
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));

@@ -103,10 +103,10 @@ class SfxPrintJob_Impl : public cppu::WeakImplHelper
 
 public:
     explicit SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData );
-    virtual Sequence< css::beans::PropertyValue > SAL_CALL getPrintOptions(  ) override;
-    virtual Sequence< css::beans::PropertyValue > SAL_CALL getPrinter(  ) override;
-    virtual Reference< css::view::XPrintable > SAL_CALL getPrintable(  ) override;
-    virtual void SAL_CALL cancelJob() override;
+    virtual Sequence< css::beans::PropertyValue > getPrintOptions(  ) override;
+    virtual Sequence< css::beans::PropertyValue > getPrinter(  ) override;
+    virtual Reference< css::view::XPrintable > getPrintable(  ) override;
+    virtual void cancelJob() override;
 };
 
 }
@@ -116,12 +116,12 @@ SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData )
 {
 }
 
-Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrintOptions()
+Sequence< css::beans::PropertyValue > SfxPrintJob_Impl::getPrintOptions()
 {
     return m_pData->m_aPrintOptions;
 }
 
-Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter()
+Sequence< css::beans::PropertyValue > SfxPrintJob_Impl::getPrinter()
 {
     if( m_pData->m_pObjectShell.is() )
     {
@@ -132,13 +132,13 @@ Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter()
     return Sequence< css::beans::PropertyValue >();
 }
 
-Reference< css::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable()
+Reference< css::view::XPrintable > SfxPrintJob_Impl::getPrintable()
 {
     Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.is() ? m_pData->m_pObjectShell->GetModel() : nullptr, UNO_QUERY );
     return xPrintable;
 }
 
-void SAL_CALL SfxPrintJob_Impl::cancelJob()
+void SfxPrintJob_Impl::cancelJob()
 {
     // FIXME: how to cancel PrintJob via API?!
     if( m_pData->m_pObjectShell.is() )
@@ -150,7 +150,7 @@ SfxPrintHelper::SfxPrintHelper()
     m_pData.reset(new IMPL_PrintListener_DataContainer());
 }
 
-void SAL_CALL SfxPrintHelper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void SfxPrintHelper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     if ( !aArguments.hasElements() )
         return;
@@ -249,7 +249,7 @@ namespace
 //  XPrintable
 
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
+cpo::uno::Sequence< beans::PropertyValue > SfxPrintHelper::getPrinter()
 {
     // object already disposed?
     SolarMutexGuard aGuard;
@@ -415,7 +415,7 @@ void SfxPrintHelper::impl_setPrinter(const cpo::uno::Sequence< beans::PropertyVa
         Application::Yield();
 }
 
-void SAL_CALL SfxPrintHelper::setPrinter(const cpo::uno::Sequence< beans::PropertyValue >& rPrinter)
+void SfxPrintHelper::setPrinter(const cpo::uno::Sequence< beans::PropertyValue >& rPrinter)
 {
     // object already disposed?
     SolarMutexGuard aGuard;
@@ -460,7 +460,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
            Note: Starting of the job is done outside this thread!
            But we have to free some of the given resources on heap!
          */
-        void SAL_CALL run() override
+        void run() override
         {
             osl_setThreadName("ImplUCBPrintWatcher");
 
@@ -483,7 +483,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
         /* nobody wait for this thread. We must kill ourself ...
          */
-        void SAL_CALL onTerminated() override
+        void onTerminated() override
         {
             delete this;
         }
@@ -537,7 +537,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
 //  XPrintable
 
-void SAL_CALL SfxPrintHelper::print(const cpo::uno::Sequence< beans::PropertyValue >& rOptions)
+void SfxPrintHelper::print(const cpo::uno::Sequence< beans::PropertyValue >& rOptions)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
@@ -790,13 +790,13 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
         pIterator.next()->printJobEvent( aEvent );
 }
 
-void SAL_CALL SfxPrintHelper::addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
+void SfxPrintHelper::addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
 {
     std::unique_lock aGuard(m_pData->m_aMutex);
     m_pData->m_aJobListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL SfxPrintHelper::removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
+void SfxPrintHelper::removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
 {
     std::unique_lock aGuard(m_pData->m_aMutex);
     m_pData->m_aJobListeners.removeInterface( aGuard, xListener );

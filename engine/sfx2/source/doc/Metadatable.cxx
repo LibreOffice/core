@@ -1525,13 +1525,13 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 // XMetadatable mixin
 
 // css::rdf::XNode:
-OUString SAL_CALL MetadatableMixin::getStringValue()
+OUString MetadatableMixin::getStringValue()
 {
     return getNamespace() + getLocalName();
 }
 
 // css::rdf::XURI:
-OUString SAL_CALL MetadatableMixin::getLocalName()
+OUString MetadatableMixin::getLocalName()
 {
     SolarMutexGuard aGuard;
     beans::StringPair mdref( getMetadataReference() );
@@ -1543,7 +1543,7 @@ OUString SAL_CALL MetadatableMixin::getLocalName()
     return mdref.First + "#" + mdref.Second;
 }
 
-OUString SAL_CALL MetadatableMixin::getNamespace()
+OUString MetadatableMixin::getNamespace()
 {
     SolarMutexGuard aGuard;
     const uno::Reference< frame::XModel > xModel( GetModel() );
@@ -1552,7 +1552,7 @@ OUString SAL_CALL MetadatableMixin::getNamespace()
 }
 
 // css::rdf::XMetadatable:
-beans::StringPair SAL_CALL
+beans::StringPair
 MetadatableMixin::getMetadataReference()
 {
     SolarMutexGuard aGuard;
@@ -1567,7 +1567,7 @@ MetadatableMixin::getMetadataReference()
     return pObject->GetMetadataReference();
 }
 
-void SAL_CALL
+void
 MetadatableMixin::setMetadataReference(
     const beans::StringPair & i_rReference)
 {
@@ -1583,7 +1583,7 @@ MetadatableMixin::setMetadataReference(
     return pObject->SetMetadataReference(i_rReference);
 }
 
-void SAL_CALL MetadatableMixin::ensureMetadataReference()
+void MetadatableMixin::ensureMetadataReference()
 {
     SolarMutexGuard aGuard;
 

@@ -47,13 +47,13 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper<css::util::XRefreshList
         }
 
         // util.XRefreshListener
-        virtual void SAL_CALL refreshed( const css::lang::EventObject& rEvent ) override
+        virtual void refreshed( const css::lang::EventObject& rEvent ) override
         {
             m_pOwner->refreshed(rEvent);
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+        virtual void disposing(const css::lang::EventObject& rEvent) override
         {
             m_pOwner->disposing(rEvent);
         }

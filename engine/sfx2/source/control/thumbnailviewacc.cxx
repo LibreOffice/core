@@ -45,7 +45,7 @@ ThumbnailViewAcc::~ThumbnailViewAcc()
 {
 }
 
-sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
+sal_Int64 ThumbnailViewAcc::getAccessibleChildCount()
 {
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
@@ -53,7 +53,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
     return mpThumbnailView->ImplGetVisibleItemCount();
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleChild( sal_Int64 i )
+uno::Reference< accessibility::XAccessible > ThumbnailViewAcc::getAccessibleChild( sal_Int64 i )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -70,14 +70,14 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
     return xRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleParent()
+uno::Reference< accessibility::XAccessible > ThumbnailViewAcc::getAccessibleParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     return mpThumbnailView->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
+sal_Int16 ThumbnailViewAcc::getAccessibleRole()
 {
     ThrowIfDisposed();
     // #i73746# As the Java Access Bridge (v 2.0.1) uses "managesDescendants"
@@ -85,13 +85,13 @@ sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
     return accessibility::AccessibleRole::LIST;
 }
 
-OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
+OUString ThumbnailViewAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
     return u"ThumbnailView"_ustr;
 }
 
-OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
+OUString ThumbnailViewAcc::getAccessibleName()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -105,13 +105,13 @@ OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewAcc::getAccessibleRelationSet()
+uno::Reference< accessibility::XAccessibleRelationSet > ThumbnailViewAcc::getAccessibleRelationSet()
 {
     ThrowIfDisposed();
     return uno::Reference< accessibility::XAccessibleRelationSet >();
 }
 
-sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleStateSet()
+sal_Int64 ThumbnailViewAcc::getAccessibleStateSet()
 {
     ThrowIfDisposed();
     sal_Int64 nStateSet = 0;
@@ -127,7 +127,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleStateSet()
     return nStateSet;
 }
 
-lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
+lang::Locale ThumbnailViewAcc::getLocale()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -145,7 +145,7 @@ lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleAtPoint( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > ThumbnailViewAcc::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -178,28 +178,28 @@ awt::Rectangle ThumbnailViewAcc::implGetBounds()
     return aRet;
 }
 
-void SAL_CALL ThumbnailViewAcc::grabFocus()
+void ThumbnailViewAcc::grabFocus()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     mpThumbnailView->GrabFocus();
 }
 
-sal_Int32 SAL_CALL ThumbnailViewAcc::getForeground(  )
+sal_Int32 ThumbnailViewAcc::getForeground(  )
 {
     ThrowIfDisposed();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL ThumbnailViewAcc::getBackground(  )
+sal_Int32 ThumbnailViewAcc::getBackground(  )
 {
     ThrowIfDisposed();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int64 nChildIndex )
+void ThumbnailViewAcc::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -215,7 +215,7 @@ void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int64 nChildIndex )
     mpThumbnailView->SelectItem(pItem->mnId);
 }
 
-bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -231,18 +231,18 @@ bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildIndex
     return mpThumbnailView->IsItemSelected(pItem->mnId);
 }
 
-void SAL_CALL ThumbnailViewAcc::clearAccessibleSelection()
+void ThumbnailViewAcc::clearAccessibleSelection()
 {
     ThrowIfDisposed();
 }
 
-void SAL_CALL ThumbnailViewAcc::selectAllAccessibleChildren()
+void ThumbnailViewAcc::selectAllAccessibleChildren()
 {
     ThrowIfDisposed();
     // unsupported due to single selection only
 }
 
-sal_Int64 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
+sal_Int64 ThumbnailViewAcc::getSelectedAccessibleChildCount()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -259,7 +259,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
     return nRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+uno::Reference< accessibility::XAccessible > ThumbnailViewAcc::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -277,7 +277,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelec
     return xRet;
 }
 
-void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int64 nChildIndex)
+void ThumbnailViewAcc::deselectAccessibleChild( sal_Int64 nChildIndex)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;

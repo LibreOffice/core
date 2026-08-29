@@ -87,97 +87,97 @@ public:
     SAL_DLLPRIVATE void ReleaseShell_Impl();
     SAL_DLLPRIVATE void BorderWidthsChanged_Impl();
 
-    css::uno::Reference< css::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) override;
+    css::uno::Reference< css::task::XStatusIndicator > getStatusIndicator(  ) override;
 
 
     //  XController2
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() override;
-    virtual OUString SAL_CALL getViewControllerName() override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() override;
+    virtual css::uno::Reference< css::awt::XWindow > getComponentWindow() override;
+    virtual OUString getViewControllerName() override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getCreationArguments() override;
 
-    virtual css::uno::Reference< css::ui::XSidebarProvider > SAL_CALL getSidebar() override;
+    virtual css::uno::Reference< css::ui::XSidebarProvider > getSidebar() override;
 
 
     //  XController
 
 
-    virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override ;
+    virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override ;
 
-    virtual bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override ;
+    virtual bool attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override ;
 
-    virtual bool SAL_CALL suspend( bool bSuspend ) override ;
+    virtual bool suspend( bool bSuspend ) override ;
 
-    cpo::uno::Any SAL_CALL getViewData() override ;
+    cpo::uno::Any getViewData() override ;
 
-    void SAL_CALL restoreViewData( const cpo::uno::Any& aValue ) override ;
+    void restoreViewData( const cpo::uno::Any& aValue ) override ;
 
-    css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() override ;
+    css::uno::Reference< css::frame::XFrame > getFrame() override ;
 
-    css::uno::Reference< css::frame::XModel > SAL_CALL getModel() override ;
+    css::uno::Reference< css::frame::XModel > getModel() override ;
 
 
     //  XDispatchProvider
 
 
-    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &    aURL            ,
+    virtual css::uno::Reference< css::frame::XDispatch > queryDispatch(  const   css::util::URL &    aURL            ,
                                                                                   const   OUString &   sTargetFrameName,
                                                                                   sal_Int32            eSearchFlags    ) override ;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
 
 
     //  XControllerBorder
 
 
-    virtual css::frame::BorderWidths SAL_CALL getBorder() override;
-    virtual void SAL_CALL addBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
-    virtual void SAL_CALL removeBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
-    virtual css::awt::Rectangle SAL_CALL queryBorderedArea( const css::awt::Rectangle& aPreliminaryRectangle ) override;
+    virtual css::frame::BorderWidths getBorder() override;
+    virtual void addBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
+    virtual void removeBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
+    virtual css::awt::Rectangle queryBorderedArea( const css::awt::Rectangle& aPreliminaryRectangle ) override;
 
 
     //  XComponent
 
 
-    virtual void SAL_CALL dispose() override ;
+    virtual void dispose() override ;
 
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override ;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override ;
 
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override ;
-    virtual void SAL_CALL registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
-    virtual void SAL_CALL releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override ;
+    virtual void registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
+    virtual void releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
 
-    virtual void SAL_CALL addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-    virtual void SAL_CALL removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-    virtual void SAL_CALL addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
-    virtual void SAL_CALL removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
+    virtual void addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
+    virtual void removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
+    virtual void addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
+    virtual void removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
 
 
     //  XDispatchInformationProvider
-    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
-    virtual cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) override;
+    virtual cpo::uno::Sequence< sal_Int16 > getSupportedCommandGroups() override;
+    virtual cpo::uno::Sequence< css::frame::DispatchInformation > getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) override;
 
     // css::frame::XTitle
-    virtual OUString SAL_CALL getTitle(  ) override;
-    virtual void SAL_CALL setTitle( const OUString& sTitle ) override;
+    virtual OUString getTitle(  ) override;
+    virtual void setTitle( const OUString& sTitle ) override;
 
     // css::frame::XTitleChangeBroadcaster
-    virtual void SAL_CALL addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+    virtual void addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+    virtual void removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
     // css::lang::XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XInfobarProvider
-    virtual void SAL_CALL
+    virtual void
     appendInfobar(const OUString& sId, const OUString& sPrimaryMessage,
                   const OUString& sSecondaryMessage, sal_Int32 aInfobarType,
                   const cpo::uno::Sequence<css::beans::StringPair>& actionButtons,
                   bool bShowCloseButton) override;
-    virtual void SAL_CALL updateInfobar(const OUString& sId, const OUString& sPrimaryMessage,
+    virtual void updateInfobar(const OUString& sId, const OUString& sPrimaryMessage,
                                         const OUString& sSecondaryMessage,
                                         sal_Int32 aInfobarType) override;
-    virtual void SAL_CALL removeInfobar(const OUString& sId) override;
-    virtual bool SAL_CALL hasInfobar(const OUString& sId) override;
+    virtual void removeInfobar(const OUString& sId) override;
+    virtual bool hasInfobar(const OUString& sId) override;
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API

@@ -178,38 +178,38 @@ static OUString DecodeSpaces_Impl( const OUString& rSource );
 // FileDialogHelper_Impl
 
 // XFilePickerListener Methods
-void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& )
+void FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& )
 {
     SolarMutexGuard aGuard;
     mpAntiImpl->FileSelectionChanged();
 }
 
-void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& )
+void FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& )
 {
     SolarMutexGuard aGuard;
     mpAntiImpl->DirectoryChanged();
 }
 
-OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent )
+OUString FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent )
 {
     SolarMutexGuard aGuard;
     return sfx2::FileDialogHelper::HelpRequested( aEvent );
 }
 
-void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent )
+void FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent )
 {
     SolarMutexGuard aGuard;
     mpAntiImpl->ControlStateChanged( aEvent );
 }
 
-void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged()
+void FileDialogHelper_Impl::dialogSizeChanged()
 {
     SolarMutexGuard aGuard;
     mpAntiImpl->DialogSizeChanged();
 }
 
 // XDialogClosedListener Methods
-void SAL_CALL FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEvent )
+void FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
     mpAntiImpl->DialogClosed( _rEvent );
@@ -324,7 +324,7 @@ void FileDialogHelper_Impl::handleDialogSizeChanged()
 }
 
 // XEventListener Methods
-void SAL_CALL FileDialogHelper_Impl::disposing( const EventObject& )
+void FileDialogHelper_Impl::disposing( const EventObject& )
 {
     SolarMutexGuard aGuard;
     dispose();

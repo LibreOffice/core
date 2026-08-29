@@ -97,7 +97,7 @@ bool HelpInterceptor_Impl::HasHistorySucc() const
 
 // XDispatchProvider
 
-Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
+Reference< XDispatch > HelpInterceptor_Impl::queryDispatch(
 
     const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 
@@ -118,7 +118,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 }
 
 
-Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatches(
+Sequence < Reference < XDispatch > > HelpInterceptor_Impl::queryDispatches(
 
     const Sequence< DispatchDescriptor >& aDescripts )
 
@@ -133,28 +133,28 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
 
 // XDispatchProviderInterceptor
 
-Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchProvider()
+Reference< XDispatchProvider > HelpInterceptor_Impl::getSlaveDispatchProvider()
 
 {
     return m_xSlaveDispatcher;
 }
 
 
-void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
+void HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
 
 {
     m_xSlaveDispatcher = xNewSlave;
 }
 
 
-Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchProvider()
+Reference< XDispatchProvider > HelpInterceptor_Impl::getMasterDispatchProvider()
 
 {
     return m_xMasterDispatcher;
 }
 
 
-void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
+void HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
 
 {
     m_xMasterDispatcher = xNewMaster;
@@ -163,7 +163,7 @@ void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< 
 
 // XInterceptorInfo
 
-Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
+Sequence< OUString > HelpInterceptor_Impl::getInterceptedURLs()
 
 {
     Sequence<OUString> aURLList { u"vnd.sun.star.help://*"_ustr };
@@ -173,7 +173,7 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
 // XDispatch
 
-void SAL_CALL HelpInterceptor_Impl::dispatch(
+void HelpInterceptor_Impl::dispatch(
     const URL& aURL, const Sequence< css::beans::PropertyValue >& )
 {
     bool bBack = aURL.Complete == ".uno:Backward";
@@ -197,7 +197,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
 }
 
 
-void SAL_CALL HelpInterceptor_Impl::addStatusListener(
+void HelpInterceptor_Impl::addStatusListener(
     const Reference< XStatusListener >& xControl, const URL& )
 {
     DBG_ASSERT( !m_xListener.is(), "listener already exists" );
@@ -205,7 +205,7 @@ void SAL_CALL HelpInterceptor_Impl::addStatusListener(
 }
 
 
-void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
+void HelpInterceptor_Impl::removeStatusListener(
     const Reference< XStatusListener >&, const URL&)
 {
     m_xListener = nullptr;
@@ -220,7 +220,7 @@ HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
 }
 
 
-void SAL_CALL HelpListener_Impl::statusChanged( const css::frame::FeatureStateEvent& Event )
+void HelpListener_Impl::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
     INetURLObject aObj( Event.FeatureURL.Complete );
     aFactory = aObj.GetHost();
@@ -228,7 +228,7 @@ void SAL_CALL HelpListener_Impl::statusChanged( const css::frame::FeatureStateEv
 }
 
 
-void SAL_CALL HelpListener_Impl::disposing( const css::lang::EventObject& )
+void HelpListener_Impl::disposing( const css::lang::EventObject& )
 {
     pInterceptor->removeStatusListener( this, css::util::URL() );
     pInterceptor = nullptr;

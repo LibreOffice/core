@@ -45,7 +45,7 @@ public:
 
     ~SelectionChangeHandler() { mpDockingWindow.disposeAndClear(); }
 
-    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& /*rEvent*/) override
+    virtual void selectionChanged(const css::lang::EventObject& /*rEvent*/) override
     {
         css::uno::Reference<css::view::XSelectionSupplier> xSupplier(mxController,
                                                                      css::uno::UNO_QUERY);
@@ -64,7 +64,7 @@ public:
         xSupplier->removeSelectionChangeListener(this);
     }
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& /*rEvent*/) override {}
+    virtual void disposing(const css::lang::EventObject& /*rEvent*/) override {}
     using comphelper::WeakComponentImplHelperBase::disposing;
 
 private:

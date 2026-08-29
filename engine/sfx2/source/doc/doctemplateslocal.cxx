@@ -124,17 +124,17 @@ std::vector< beans::StringPair > const & DocTemplLocaleHelper::GetParsingResult(
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::startDocument()
+void DocTemplLocaleHelper::startDocument()
 {
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::endDocument()
+void DocTemplLocaleHelper::endDocument()
 {
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+void DocTemplLocaleHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
 {
     if ( aName == g_sGroupListElement )
     {
@@ -177,7 +177,7 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::endElement( const OUString& aName )
+void DocTemplLocaleHelper::endElement( const OUString& aName )
 {
     if ( m_aElementsSeq.empty() )
         throw xml::sax::SAXException(); // TODO: no other end elements expected!
@@ -189,22 +189,22 @@ void SAL_CALL DocTemplLocaleHelper::endElement( const OUString& aName )
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::characters( const OUString& /*aChars*/ )
+void DocTemplLocaleHelper::characters( const OUString& /*aChars*/ )
 {
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
+void DocTemplLocaleHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
 {
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
+void DocTemplLocaleHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
 {
 }
 
 
-void SAL_CALL DocTemplLocaleHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
+void DocTemplLocaleHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
 {
 }
 

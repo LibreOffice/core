@@ -222,21 +222,21 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::acquire() noexcept
+    void DocumentUndoManager::acquire() noexcept
     {
         OWeakObject::acquire();
         SfxModelSubComponent::acquireModel();
     }
 
 
-    void SAL_CALL DocumentUndoManager::release() noexcept
+    void DocumentUndoManager::release() noexcept
     {
         SfxModelSubComponent::releaseModel();
         OWeakObject::release();
     }
 
 
-    void SAL_CALL DocumentUndoManager::enterUndoContext( const OUString& i_title )
+    void DocumentUndoManager::enterUndoContext( const OUString& i_title )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -246,7 +246,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::enterHiddenUndoContext(  )
+    void DocumentUndoManager::enterHiddenUndoContext(  )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -256,7 +256,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::leaveUndoContext(  )
+    void DocumentUndoManager::leaveUndoContext(  )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -266,7 +266,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::addUndoAction( const Reference< XUndoAction >& i_action )
+    void DocumentUndoManager::addUndoAction( const Reference< XUndoAction >& i_action )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -276,7 +276,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::undo(  )
+    void DocumentUndoManager::undo(  )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -286,7 +286,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::redo(  )
+    void DocumentUndoManager::redo(  )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -296,49 +296,49 @@ namespace sfx2
     }
 
 
-    bool SAL_CALL DocumentUndoManager::isUndoPossible(  )
+    bool DocumentUndoManager::isUndoPossible(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isUndoPossible();
     }
 
 
-    bool SAL_CALL DocumentUndoManager::isRedoPossible(  )
+    bool DocumentUndoManager::isRedoPossible(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isRedoPossible();
     }
 
 
-    OUString SAL_CALL DocumentUndoManager::getCurrentUndoActionTitle(  )
+    OUString DocumentUndoManager::getCurrentUndoActionTitle(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getCurrentUndoActionTitle();
     }
 
 
-    OUString SAL_CALL DocumentUndoManager::getCurrentRedoActionTitle(  )
+    OUString DocumentUndoManager::getCurrentRedoActionTitle(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getCurrentRedoActionTitle();
     }
 
 
-    Sequence< OUString > SAL_CALL DocumentUndoManager::getAllUndoActionTitles(  )
+    Sequence< OUString > DocumentUndoManager::getAllUndoActionTitles(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getAllUndoActionTitles();
     }
 
 
-    Sequence< OUString > SAL_CALL DocumentUndoManager::getAllRedoActionTitles(  )
+    Sequence< OUString > DocumentUndoManager::getAllRedoActionTitles(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getAllRedoActionTitles();
     }
 
 
-    void SAL_CALL DocumentUndoManager::clear(  )
+    void DocumentUndoManager::clear(  )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -348,7 +348,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::clearRedo(  )
+    void DocumentUndoManager::clearRedo(  )
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -358,7 +358,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::reset()
+    void DocumentUndoManager::reset()
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -368,49 +368,49 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::lock(  )
+    void DocumentUndoManager::lock(  )
     {
         UndoManagerGuard aGuard( *this );
         m_pImpl->aUndoHelper.lock();
     }
 
 
-    void SAL_CALL DocumentUndoManager::unlock(  )
+    void DocumentUndoManager::unlock(  )
     {
         UndoManagerGuard aGuard( *this );
         m_pImpl->aUndoHelper.unlock();
     }
 
 
-    bool SAL_CALL DocumentUndoManager::isLocked(  )
+    bool DocumentUndoManager::isLocked(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isLocked();
     }
 
 
-    void SAL_CALL DocumentUndoManager::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
+    void DocumentUndoManager::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.addUndoManagerListener( i_listener );
     }
 
 
-    void SAL_CALL DocumentUndoManager::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
+    void DocumentUndoManager::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.removeUndoManagerListener( i_listener );
     }
 
 
-    Reference< XInterface > SAL_CALL DocumentUndoManager::getParent(  )
+    Reference< XInterface > DocumentUndoManager::getParent(  )
     {
         UndoManagerGuard aGuard( *this );
         return static_cast< XModel* >( &getBaseModel() );
     }
 
 
-    void SAL_CALL DocumentUndoManager::setParent( const Reference< XInterface >& )
+    void DocumentUndoManager::setParent( const Reference< XInterface >& )
     {
         throw NoSupportException( OUString(), m_pImpl->getThis() );
     }

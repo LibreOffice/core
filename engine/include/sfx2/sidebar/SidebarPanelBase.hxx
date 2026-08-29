@@ -68,28 +68,28 @@ public:
                                                            const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
+    virtual void notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
+    virtual void disposing (const css::lang::EventObject& rEvent) override;
 
     // XUIElement
-    virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame() override;
-    virtual OUString SAL_CALL getResourceURL() override;
-    virtual sal_Int16 SAL_CALL getType() override;
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getRealInterface() override;
+    virtual css::uno::Reference<css::frame::XFrame> getFrame() override;
+    virtual OUString getResourceURL() override;
+    virtual sal_Int16 getType() override;
+    virtual css::uno::Reference<css::uno::XInterface> getRealInterface() override;
 
     // XToolPanel
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible(
+    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessible(
                 const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible) override;
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow() override;
+    virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
 
     // XSidebarPanel
-    virtual css::ui::LayoutSize SAL_CALL getHeightForWidth(sal_Int32 nWidth) override;
-    virtual sal_Int32 SAL_CALL getMinimalWidth() override;
+    virtual css::ui::LayoutSize getHeightForWidth(sal_Int32 nWidth) override;
+    virtual sal_Int32 getMinimalWidth() override;
 
     // XUpdateModel
-    virtual void SAL_CALL updateModel(const css::uno::Reference<css::frame::XModel>& xModel) override;
+    virtual void updateModel(const css::uno::Reference<css::frame::XModel>& xModel) override;
 
     void SetParentPanel(sfx2::sidebar::Panel* pPanel);
 

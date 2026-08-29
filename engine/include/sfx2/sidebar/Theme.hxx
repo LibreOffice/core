@@ -98,29 +98,29 @@ public:
     static css::uno::Reference<css::beans::XPropertySet> GetPropertySet();
 
     // beans::XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue (
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual void setPropertyValue (
         const OUString& rsPropertyName,
         const cpo::uno::Any& rValue) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue (
+    virtual cpo::uno::Any getPropertyValue (
         const OUString& rsPropertyName) override;
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
         const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
         const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
         const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
         const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
     // beans::XPropertySetInfo
-    virtual cpo::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override;
-    virtual css::beans::Property SAL_CALL getPropertyByName (const OUString& rsName) override;
-    virtual bool SAL_CALL hasPropertyByName (const OUString& rsName) override;
+    virtual cpo::uno::Sequence<css::beans::Property> getProperties() override;
+    virtual css::beans::Property getPropertyByName (const OUString& rsName) override;
+    virtual bool hasPropertyByName (const OUString& rsName) override;
 
 private:
     static Theme& GetCurrentTheme();

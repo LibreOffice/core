@@ -174,12 +174,12 @@ Reference<beans::XPropertySet> Theme::GetPropertySet()
         return Reference<beans::XPropertySet>();
 }
 
-Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> Theme::getPropertySetInfo()
 {
     return Reference<beans::XPropertySetInfo>(this);
 }
 
-void SAL_CALL Theme::setPropertyValue (
+void Theme::setPropertyValue (
     const OUString& rsPropertyName,
     const cpo::uno::Any& rValue)
 {
@@ -224,7 +224,7 @@ void SAL_CALL Theme::setPropertyValue (
     BroadcastPropertyChange(GetChangeListeners(eItem, false), aEvent);
 }
 
-Any SAL_CALL Theme::getPropertyValue (
+Any Theme::getPropertyValue (
     const OUString& rsPropertyName)
 {
     SolarMutexGuard aGuard;
@@ -242,7 +242,7 @@ Any SAL_CALL Theme::getPropertyValue (
     return maRawValues[eItem];
 }
 
-void SAL_CALL Theme::addPropertyChangeListener(
+void Theme::addPropertyChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
@@ -266,7 +266,7 @@ void SAL_CALL Theme::addPropertyChangeListener(
         pListeners->push_back(rxListener);
 }
 
-void SAL_CALL Theme::removePropertyChangeListener(
+void Theme::removePropertyChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
@@ -300,7 +300,7 @@ void SAL_CALL Theme::removePropertyChangeListener(
     }
 }
 
-void SAL_CALL Theme::addVetoableChangeListener(
+void Theme::addVetoableChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
@@ -324,7 +324,7 @@ void SAL_CALL Theme::addVetoableChangeListener(
         pListeners->push_back(rxListener);
 }
 
-void SAL_CALL Theme::removeVetoableChangeListener(
+void Theme::removeVetoableChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
@@ -357,7 +357,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
     }
 }
 
-cpo::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
+cpo::uno::Sequence<css::beans::Property> Theme::getProperties()
 {
     SolarMutexGuard aGuard;
 
@@ -384,7 +384,7 @@ cpo::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
         aProperties.size());
 }
 
-beans::Property SAL_CALL Theme::getPropertyByName (const OUString& rsPropertyName)
+beans::Property Theme::getPropertyByName (const OUString& rsPropertyName)
 {
     SolarMutexGuard aGuard;
 
@@ -405,7 +405,7 @@ beans::Property SAL_CALL Theme::getPropertyByName (const OUString& rsPropertyNam
         0);
 }
 
-bool SAL_CALL Theme::hasPropertyByName (const OUString& rsPropertyName)
+bool Theme::hasPropertyByName (const OUString& rsPropertyName)
 {
     SolarMutexGuard aGuard;
 

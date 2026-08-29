@@ -48,15 +48,15 @@ class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
         virtual void StateChangedAtStatusListener( SfxItemState eState, const SfxPoolItem* pState );
 
         // XComponent
-        virtual void SAL_CALL dispose() override;
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void dispose() override;
+        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void disposing(const css::lang::EventObject& Source) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
+        virtual void statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
     private:
         SfxStatusListener( const SfxStatusListener& ) = delete;

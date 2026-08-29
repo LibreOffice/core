@@ -162,19 +162,19 @@ class LayoutManagerListener final : public ::cppu::WeakImplHelper<
 
         //  XComponent
 
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
-        virtual void SAL_CALL dispose() override;
+        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void dispose() override;
 
 
         //  XEventListener
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+        virtual void disposing( const css::lang::EventObject& aEvent ) override;
 
 
         // XLayoutManagerEventListener
 
-        virtual void SAL_CALL layoutEvent( const css::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const cpo::uno::Any& aInfo ) override;
+        virtual void layoutEvent( const css::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const cpo::uno::Any& aInfo ) override;
 
     private:
         bool                                             m_bHasFrame;

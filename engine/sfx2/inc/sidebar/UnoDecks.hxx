@@ -28,21 +28,21 @@ public:
 
 // XNameAccess
 
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
 // XIndexAccess
 
-    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual sal_Int32 getCount() override;
 
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
 // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
 private:
 

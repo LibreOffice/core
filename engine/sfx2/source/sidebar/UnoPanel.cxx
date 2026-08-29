@@ -42,14 +42,14 @@ SidebarController* SfxUnoPanel::getSidebarController()
     return SidebarController::GetSidebarControllerForFrame(xFrame);
 }
 
-OUString SAL_CALL SfxUnoPanel::getId()
+OUString SfxUnoPanel::getId()
 {
     SolarMutexGuard aGuard;
 
     return mPanelId;
 }
 
-OUString SAL_CALL SfxUnoPanel::getTitle()
+OUString SfxUnoPanel::getTitle()
 {
     SolarMutexGuard aGuard;
 
@@ -61,7 +61,7 @@ OUString SAL_CALL SfxUnoPanel::getTitle()
         return OUString();
 }
 
-void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
+void SfxUnoPanel::setTitle( const OUString& newTitle )
 {
     SolarMutexGuard aGuard;
 
@@ -78,7 +78,7 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
     }
 }
 
-bool SAL_CALL SfxUnoPanel::isExpanded()
+bool SfxUnoPanel::isExpanded()
 {
     SolarMutexGuard aGuard;
 
@@ -87,7 +87,7 @@ bool SAL_CALL SfxUnoPanel::isExpanded()
 }
 
 
-void SAL_CALL SfxUnoPanel::expand( const bool bCollapseOther )
+void SfxUnoPanel::expand( const bool bCollapseOther )
 {
 
     SolarMutexGuard aGuard;
@@ -111,7 +111,7 @@ void SAL_CALL SfxUnoPanel::expand( const bool bCollapseOther )
 
 }
 
-void SAL_CALL SfxUnoPanel::collapse()
+void SfxUnoPanel::collapse()
 {
     SolarMutexGuard aGuard;
 
@@ -122,7 +122,7 @@ void SAL_CALL SfxUnoPanel::collapse()
     pSidebarController->NotifyResize();
 }
 
-uno::Reference<awt::XWindow> SAL_CALL SfxUnoPanel::getDialog()
+uno::Reference<awt::XWindow> SfxUnoPanel::getDialog()
 {
     SolarMutexGuard aGuard;
 
@@ -130,7 +130,7 @@ uno::Reference<awt::XWindow> SAL_CALL SfxUnoPanel::getDialog()
     return xPanel ? xPanel->GetElementWindow() : nullptr;
 }
 
-sal_Int32 SAL_CALL SfxUnoPanel::getOrderIndex()
+sal_Int32 SfxUnoPanel::getOrderIndex()
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL SfxUnoPanel::getOrderIndex()
     return index;
 }
 
-void SAL_CALL SfxUnoPanel::setOrderIndex( const sal_Int32 newOrderIndex )
+void SfxUnoPanel::setOrderIndex( const sal_Int32 newOrderIndex )
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -154,7 +154,7 @@ void SAL_CALL SfxUnoPanel::setOrderIndex( const sal_Int32 newOrderIndex )
     }
 }
 
-void SAL_CALL SfxUnoPanel::moveFirst()
+void SfxUnoPanel::moveFirst()
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -177,7 +177,7 @@ void SAL_CALL SfxUnoPanel::moveFirst()
     }
 }
 
-void SAL_CALL SfxUnoPanel::moveLast()
+void SfxUnoPanel::moveLast()
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -200,7 +200,7 @@ void SAL_CALL SfxUnoPanel::moveLast()
     }
 }
 
-void SAL_CALL SfxUnoPanel::moveUp()
+void SfxUnoPanel::moveUp()
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -231,7 +231,7 @@ void SAL_CALL SfxUnoPanel::moveUp()
     }
 }
 
-void SAL_CALL SfxUnoPanel::moveDown()
+void SfxUnoPanel::moveDown()
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();

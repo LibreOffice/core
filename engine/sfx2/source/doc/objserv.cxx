@@ -156,11 +156,11 @@ public:
 
     void SetPreventClose( bool bPrevent ) { m_bPreventClose = bPrevent; }
 
-    virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, bool bDeliverOwnership ) override;
+    virtual void queryClosing( const lang::EventObject& aEvent, bool bDeliverOwnership ) override;
 
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) override ;
+    virtual void notifyClosing( const lang::EventObject& aEvent ) override ;
 
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override ;
+    virtual void disposing( const lang::EventObject& aEvent ) override ;
 
 } ;
 
@@ -172,7 +172,7 @@ SfxClosePreventer_Impl::SfxClosePreventer_Impl()
 {
 }
 
-void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject&, bool bDeliverOwnership )
+void SfxClosePreventer_Impl::queryClosing( const lang::EventObject&, bool bDeliverOwnership )
 {
     if ( m_bPreventClose )
     {
@@ -183,10 +183,10 @@ void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject&, bo
     }
 }
 
-void SAL_CALL SfxClosePreventer_Impl::notifyClosing( const lang::EventObject& )
+void SfxClosePreventer_Impl::notifyClosing( const lang::EventObject& )
 {}
 
-void SAL_CALL SfxClosePreventer_Impl::disposing( const lang::EventObject& )
+void SfxClosePreventer_Impl::disposing( const lang::EventObject& )
 {}
 
 namespace {

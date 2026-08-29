@@ -78,19 +78,19 @@ private:
 public:
 
     using comphelper::WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+    virtual void disposing(const css::lang::EventObject&) override
     {
     }
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+    virtual void queryTermination(const css::lang::EventObject&) override
     {
         closewarningdialogs();
         Application::PostUserEvent(LINK(this, WarningDialogsParent, TerminateDesktop));
         throw css::frame::TerminationVetoException();
     }
 
-    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+    virtual void notifyTermination(const css::lang::EventObject&) override
     {
     }
 
@@ -201,7 +201,7 @@ class PreventDuplicateInteraction final :
     // uno interface
     public:
 
-        virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+        virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
         /**
             @interface  XInteractionHandler
@@ -213,7 +213,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual void SAL_CALL handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
+        virtual void handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
 
 
         /**
@@ -226,7 +226,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) override;
+        virtual bool handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) override;
 
 
         /**
@@ -236,7 +236,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
 
     // c++ interface
     public:

@@ -48,7 +48,7 @@ HelpDispatch_Impl::~HelpDispatch_Impl()
 
 // XDispatch
 
-void SAL_CALL HelpDispatch_Impl::dispatch(
+void HelpDispatch_Impl::dispatch(
 
     const URL& aURL, const Sequence< PropertyValue >& aArgs )
 
@@ -85,7 +85,7 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
 }
 
 
-void SAL_CALL HelpDispatch_Impl::addStatusListener(
+void HelpDispatch_Impl::addStatusListener(
 
     const Reference< XStatusListener >& xControl, const URL& aURL )
 
@@ -95,7 +95,7 @@ void SAL_CALL HelpDispatch_Impl::addStatusListener(
 }
 
 
-void SAL_CALL HelpDispatch_Impl::removeStatusListener(
+void HelpDispatch_Impl::removeStatusListener(
 
     const Reference< XStatusListener >& xControl, const URL& aURL )
 

@@ -285,11 +285,11 @@ class CheckReadOnlyTaskTerminateListener
 {
 public:
     // XEventListener
-    void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    void disposing(const css::lang::EventObject& Source) override;
 
     // XTerminateListener
-    void SAL_CALL queryTermination(const css::lang::EventObject& aEvent) override;
-    void SAL_CALL notifyTermination(const css::lang::EventObject& aEvent) override;
+    void queryTermination(const css::lang::EventObject& aEvent) override;
+    void notifyTermination(const css::lang::EventObject& aEvent) override;
 
     bool bIsTerminated = false;
     std::condition_variable mCond;
@@ -339,17 +339,17 @@ CheckReadOnlyTask::~CheckReadOnlyTask()
 
 namespace
 {
-void SAL_CALL
+void
 CheckReadOnlyTaskTerminateListener::disposing(const css::lang::EventObject& /*Source*/)
 {
 }
 
-void SAL_CALL
+void
 CheckReadOnlyTaskTerminateListener::queryTermination(const css::lang::EventObject& /*aEvent*/)
 {
 }
 
-void SAL_CALL
+void
 CheckReadOnlyTaskTerminateListener::notifyTermination(const css::lang::EventObject& /*aEvent*/)
 {
     std::unique_lock<std::mutex> lock(mMutex);
@@ -1335,7 +1335,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL handle(uno::Reference<task::XInteractionRequest> const& xRequest) override
+    virtual void handle(uno::Reference<task::XInteractionRequest> const& xRequest) override
     {
         ucb::InteractiveNetworkWriteException readException;
         ucb::InteractiveNetworkReadException writeException;

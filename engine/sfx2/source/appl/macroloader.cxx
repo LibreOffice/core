@@ -54,17 +54,17 @@ SfxMacroLoader::SfxMacroLoader(const cpo::uno::Sequence< cpo::uno::Any >& aArgum
     }
 }
 
-OUString SAL_CALL SfxMacroLoader::getImplementationName()
+OUString SfxMacroLoader::getImplementationName()
 {
     return u"com.sun.star.comp.sfx2.SfxMacroLoader"_ustr;
 }
 
-bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
+bool SfxMacroLoader::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SfxMacroLoader::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ProtocolHandler"_ustr };
 }
@@ -95,7 +95,7 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
     return SfxMacroLoader::GetObjectShell(xFrame);
 }
 
-uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
+uno::Reference<frame::XDispatch> SfxMacroLoader::queryDispatch(
     const util::URL&   aURL            ,
     const OUString&               /*sTargetFrameName*/,
     sal_Int32                            /*nSearchFlags*/    )
@@ -107,7 +107,7 @@ uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
 }
 
 
-cpo::uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
+cpo::uno::Sequence< uno::Reference<frame::XDispatch> >
                 SfxMacroLoader::queryDispatches( const cpo::uno::Sequence < frame::DispatchDescriptor >& seqDescriptor )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
@@ -119,7 +119,7 @@ cpo::uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
 }
 
 
-void SAL_CALL SfxMacroLoader::dispatchWithNotification(
+void SfxMacroLoader::dispatchWithNotification(
     const util::URL& aURL, const cpo::uno::Sequence<beans::PropertyValue>& /*lArgs*/,
     const uno::Reference<frame::XDispatchResultListener>& xListener )
 {
@@ -143,7 +143,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
     xListener->dispatchFinished( aEvent ) ;
 }
 
-cpo::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
+cpo::uno::Any SfxMacroLoader::dispatchWithReturnValue(
     const util::URL& aURL, const cpo::uno::Sequence<beans::PropertyValue>& )
 {
     cpo::uno::Any aRet;
@@ -167,7 +167,7 @@ cpo::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
     return aRet;
 }
 
-void SAL_CALL SfxMacroLoader::dispatch(
+void SfxMacroLoader::dispatch(
     const util::URL& aURL, const cpo::uno::Sequence<beans::PropertyValue>& /*lArgs*/ )
 {
     SolarMutexGuard aGuard;
@@ -176,7 +176,7 @@ void SAL_CALL SfxMacroLoader::dispatch(
     loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
 }
 
-void SAL_CALL SfxMacroLoader::addStatusListener(
+void SfxMacroLoader::addStatusListener(
     const uno::Reference< frame::XStatusListener >& ,
     const util::URL&                                                    )
 {
@@ -187,7 +187,7 @@ void SAL_CALL SfxMacroLoader::addStatusListener(
 }
 
 
-void SAL_CALL SfxMacroLoader::removeStatusListener(
+void SfxMacroLoader::removeStatusListener(
     const uno::Reference< frame::XStatusListener >&,
     const util::URL&                                                  )
 {

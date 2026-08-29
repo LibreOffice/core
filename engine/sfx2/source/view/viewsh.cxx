@@ -136,10 +136,10 @@ public:
     SfxClipboardChangeListener( SfxViewShell* pView, uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClpbrdNtfr );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& rEventObject ) override;
+    virtual void disposing( const lang::EventObject& rEventObject ) override;
 
     // XClipboardListener
-    virtual void SAL_CALL changedContents( const datatransfer::clipboard::ClipboardEvent& rEventObject ) override;
+    virtual void changedContents( const datatransfer::clipboard::ClipboardEvent& rEventObject ) override;
 
     void DisconnectViewShell() { m_pViewShell = nullptr; }
     void ChangedContents();
@@ -216,7 +216,7 @@ IMPL_STATIC_LINK( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, void*, p, vo
     delete pAsyncExecuteInfo;
 }
 
-void SAL_CALL SfxClipboardChangeListener::disposing( const lang::EventObject& /*rEventObject*/ )
+void SfxClipboardChangeListener::disposing( const lang::EventObject& /*rEventObject*/ )
 {
     // Either clipboard or ViewShell is going to be destroyed -> no interest in listening anymore
     uno::Reference< lang::XComponent > xCtrl( m_xCtrl );
@@ -236,7 +236,7 @@ void SAL_CALL SfxClipboardChangeListener::disposing( const lang::EventObject& /*
         delete pInfo;
 }
 
-void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::clipboard::ClipboardEvent& )
+void SfxClipboardChangeListener::changedContents( const datatransfer::clipboard::ClipboardEvent& )
 {
     // Make asynchronous call to avoid locking SolarMutex which is the
     // root for many deadlocks, especially in conjunction with the "Windows"
@@ -815,10 +815,10 @@ public:
     static uno::Reference< accessibility::XAccessible > getAccessible(const lang::EventObject& aEvent );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
+    virtual void disposing( const lang::EventObject& Source ) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
+    virtual void notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
 
     void notifyEditingInSelectionState(bool bParagraph = true);
     void notifyFocusedParagraphChanged(bool force = false);

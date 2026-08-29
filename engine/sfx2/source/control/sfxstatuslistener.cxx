@@ -98,7 +98,7 @@ void SfxStatusListener::ReBind()
 }
 
 // new UNO API
-void SAL_CALL SfxStatusListener::dispose()
+void SfxStatusListener::dispose()
 {
     if ( m_xDispatch.is() && !m_aCommand.Complete.isEmpty() )
     {
@@ -116,17 +116,17 @@ void SAL_CALL SfxStatusListener::dispose()
     m_xDispatchProvider.clear();
 }
 
-void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& )
+void SfxStatusListener::addEventListener( const Reference< XEventListener >& )
 {
     // do nothing - this is a wrapper class which does not support listeners
 }
 
-void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& )
+void SfxStatusListener::removeEventListener( const Reference< XEventListener >& )
 {
     // do nothing - this is a wrapper class which does not support listeners
 }
 
-void SAL_CALL SfxStatusListener::disposing( const EventObject& Source )
+void SfxStatusListener::disposing( const EventObject& Source )
 {
     SolarMutexGuard aGuard;
 
@@ -136,7 +136,7 @@ void SAL_CALL SfxStatusListener::disposing( const EventObject& Source )
         m_xDispatchProvider.clear();
 }
 
-void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
+void SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
 {
     SolarMutexGuard aGuard;
 

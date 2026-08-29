@@ -83,22 +83,22 @@ public:
     void unregisterSidebarForFrame(const css::uno::Reference<css::frame::XController>& xFrame);
 
     // ui::XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
+    virtual void notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEventObject) override;
+    virtual void disposing (const css::lang::EventObject& rEventObject) override;
 
     // beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange (const css::beans::PropertyChangeEvent& rEvent) override;
+    virtual void propertyChange (const css::beans::PropertyChangeEvent& rEvent) override;
 
     // frame::XStatusListener
-    virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent) override;
+    virtual void statusChanged (const css::frame::FeatureStateEvent& rEvent) override;
 
     // frame::XFrameActionListener
-    virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent) override;
+    virtual void frameAction (const css::frame::FrameActionEvent& rEvent) override;
 
     // ui::XSidebar
-    virtual void SAL_CALL requestLayout() override;
+    virtual void requestLayout() override;
 
     void NotifyResize();
 

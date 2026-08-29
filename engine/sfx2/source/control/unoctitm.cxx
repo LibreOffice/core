@@ -141,11 +141,11 @@ void SfxStatusDispatcher::sendStatusChanged(const OUString& rURL, const css::fra
     );
 }
 
-void SAL_CALL SfxStatusDispatcher::dispatch( const css::util::URL&, const cpo::uno::Sequence< css::beans::PropertyValue >& )
+void SfxStatusDispatcher::dispatch( const css::util::URL&, const cpo::uno::Sequence< css::beans::PropertyValue >& )
 {
 }
 
-void SAL_CALL SfxStatusDispatcher::dispatchWithNotification(
+void SfxStatusDispatcher::dispatchWithNotification(
     const css::util::URL&,
     const cpo::uno::Sequence< css::beans::PropertyValue >&,
     const css::uno::Reference< css::frame::XDispatchResultListener >& )
@@ -156,7 +156,7 @@ SfxStatusDispatcher::SfxStatusDispatcher()
 {
 }
 
-void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
+void SfxStatusDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     {
         std::unique_lock aGuard(maMutex);
@@ -173,7 +173,7 @@ void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< 
     }
 }
 
-void SAL_CALL SfxStatusDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL )
+void SfxStatusDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL )
 {
     std::unique_lock aGuard(maMutex);
     maListeners.removeInterface( aGuard, aURL.Complete, aListener );
@@ -231,7 +231,7 @@ std::unique_ptr< cpo::uno::ContextLayer > EnsureJavaContext()
 }
 #endif
 
-void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs )
+void SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     // ControllerItem is the Impl class
     if ( pImpl )
@@ -260,7 +260,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const cpo
     }
 }
 
-void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL& aURL,
+void SfxOfficeDispatch::dispatchWithNotification( const css::util::URL& aURL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
@@ -274,7 +274,7 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
     }
 }
 
-void SAL_CALL SfxOfficeDispatch::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
+void SfxOfficeDispatch::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     {
         std::unique_lock aGuard(maMutex);

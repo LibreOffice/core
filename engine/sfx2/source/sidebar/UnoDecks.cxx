@@ -37,7 +37,7 @@ SidebarController* SfxUnoDecks::getSidebarController()
 
 // XNameAccess
 
-cpo::uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
+cpo::uno::Any SfxUnoDecks::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -49,7 +49,7 @@ cpo::uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
+cpo::uno::Sequence< OUString > SfxUnoDecks::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -75,7 +75,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
 
 }
 
-bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
+bool SfxUnoDecks::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -103,7 +103,7 @@ bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL SfxUnoDecks::getCount()
+sal_Int32 SfxUnoDecks::getCount()
 {
     SolarMutexGuard aGuard;
 
@@ -111,7 +111,7 @@ sal_Int32 SAL_CALL SfxUnoDecks::getCount()
     return decks.getLength();
 }
 
-cpo::uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
+cpo::uno::Any SfxUnoDecks::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
     cpo::uno::Any aRet;
@@ -128,12 +128,12 @@ cpo::uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SfxUnoDecks::getElementType()
+cpo::uno::Type SfxUnoDecks::getElementType()
 {
     return cpo::uno::Type();
 }
 
-bool SAL_CALL SfxUnoDecks::hasElements()
+bool SfxUnoDecks::hasElements()
 {
     SolarMutexGuard aGuard;
 

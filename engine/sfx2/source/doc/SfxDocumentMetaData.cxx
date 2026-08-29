@@ -141,112 +141,112 @@ public:
     SfxDocumentMetaData& operator=(const SfxDocumentMetaData&) = delete;
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(
         const OUString & ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
     // css::lang::XComponent:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // css::document::XDocumentProperties:
-    virtual OUString SAL_CALL getAuthor() override;
-    virtual void SAL_CALL setAuthor(const OUString & the_value) override;
-    virtual OUString SAL_CALL getGenerator() override;
-    virtual void SAL_CALL setGenerator(const OUString & the_value) override;
-    virtual css::util::DateTime SAL_CALL getCreationDate() override;
-    virtual void SAL_CALL setCreationDate(const css::util::DateTime & the_value) override;
-    virtual OUString SAL_CALL getTitle() override;
-    virtual void SAL_CALL setTitle(const OUString & the_value) override;
-    virtual OUString SAL_CALL getSubject() override;
-    virtual void SAL_CALL setSubject(const OUString & the_value) override;
-    virtual OUString SAL_CALL getDescription() override;
-    virtual void SAL_CALL setDescription(const OUString & the_value) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getKeywords() override;
-    virtual void SAL_CALL setKeywords(
+    virtual OUString getAuthor() override;
+    virtual void setAuthor(const OUString & the_value) override;
+    virtual OUString getGenerator() override;
+    virtual void setGenerator(const OUString & the_value) override;
+    virtual css::util::DateTime getCreationDate() override;
+    virtual void setCreationDate(const css::util::DateTime & the_value) override;
+    virtual OUString getTitle() override;
+    virtual void setTitle(const OUString & the_value) override;
+    virtual OUString getSubject() override;
+    virtual void setSubject(const OUString & the_value) override;
+    virtual OUString getDescription() override;
+    virtual void setDescription(const OUString & the_value) override;
+    virtual cpo::uno::Sequence< OUString > getKeywords() override;
+    virtual void setKeywords(
         const cpo::uno::Sequence< OUString > & the_value) override;
-    virtual css::lang::Locale SAL_CALL getLanguage() override;
-    virtual void SAL_CALL setLanguage(const css::lang::Locale & the_value) override;
-    virtual OUString SAL_CALL getModifiedBy() override;
-    virtual void SAL_CALL setModifiedBy(const OUString & the_value) override;
-    virtual css::util::DateTime SAL_CALL getModificationDate() override;
-    virtual void SAL_CALL setModificationDate(
+    virtual css::lang::Locale getLanguage() override;
+    virtual void setLanguage(const css::lang::Locale & the_value) override;
+    virtual OUString getModifiedBy() override;
+    virtual void setModifiedBy(const OUString & the_value) override;
+    virtual css::util::DateTime getModificationDate() override;
+    virtual void setModificationDate(
             const css::util::DateTime & the_value) override;
-    virtual OUString SAL_CALL getPrintedBy() override;
-    virtual void SAL_CALL setPrintedBy(const OUString & the_value) override;
-    virtual css::util::DateTime SAL_CALL getPrintDate() override;
-    virtual void SAL_CALL setPrintDate(const css::util::DateTime & the_value) override;
-    virtual OUString SAL_CALL getTemplateName() override;
-    virtual void SAL_CALL setTemplateName(const OUString & the_value) override;
-    virtual OUString SAL_CALL getTemplateURL() override;
-    virtual void SAL_CALL setTemplateURL(const OUString & the_value) override;
-    virtual css::util::DateTime SAL_CALL getTemplateDate() override;
-    virtual void SAL_CALL setTemplateDate(const css::util::DateTime & the_value) override;
-    virtual OUString SAL_CALL getAutoloadURL() override;
-    virtual void SAL_CALL setAutoloadURL(const OUString & the_value) override;
-    virtual ::sal_Int32 SAL_CALL getAutoloadSecs() override;
-    virtual void SAL_CALL setAutoloadSecs(::sal_Int32 the_value) override;
-    virtual OUString SAL_CALL getDefaultTarget() override;
-    virtual void SAL_CALL setDefaultTarget(const OUString & the_value) override;
-    virtual cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL
+    virtual OUString getPrintedBy() override;
+    virtual void setPrintedBy(const OUString & the_value) override;
+    virtual css::util::DateTime getPrintDate() override;
+    virtual void setPrintDate(const css::util::DateTime & the_value) override;
+    virtual OUString getTemplateName() override;
+    virtual void setTemplateName(const OUString & the_value) override;
+    virtual OUString getTemplateURL() override;
+    virtual void setTemplateURL(const OUString & the_value) override;
+    virtual css::util::DateTime getTemplateDate() override;
+    virtual void setTemplateDate(const css::util::DateTime & the_value) override;
+    virtual OUString getAutoloadURL() override;
+    virtual void setAutoloadURL(const OUString & the_value) override;
+    virtual ::sal_Int32 getAutoloadSecs() override;
+    virtual void setAutoloadSecs(::sal_Int32 the_value) override;
+    virtual OUString getDefaultTarget() override;
+    virtual void setDefaultTarget(const OUString & the_value) override;
+    virtual cpo::uno::Sequence< css::beans::NamedValue >
         getDocumentStatistics() override;
-    virtual void SAL_CALL setDocumentStatistics(
+    virtual void setDocumentStatistics(
         const cpo::uno::Sequence< css::beans::NamedValue > & the_value) override;
-    virtual ::sal_Int16 SAL_CALL getEditingCycles() override;
-    virtual void SAL_CALL setEditingCycles(::sal_Int16 the_value) override;
-    virtual ::sal_Int32 SAL_CALL getEditingDuration() override;
-    virtual void SAL_CALL setEditingDuration(::sal_Int32 the_value) override;
-    virtual void SAL_CALL resetUserData(const OUString & the_value) override;
-    virtual css::uno::Reference< css::beans::XPropertyContainer > SAL_CALL
+    virtual ::sal_Int16 getEditingCycles() override;
+    virtual void setEditingCycles(::sal_Int16 the_value) override;
+    virtual ::sal_Int32 getEditingDuration() override;
+    virtual void setEditingDuration(::sal_Int32 the_value) override;
+    virtual void resetUserData(const OUString & the_value) override;
+    virtual css::uno::Reference< css::beans::XPropertyContainer >
         getUserDefinedProperties() override;
-    virtual void SAL_CALL loadFromStorage(
+    virtual void loadFromStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
-    virtual void SAL_CALL loadFromMedium(const OUString & URL,
+    virtual void loadFromMedium(const OUString & URL,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
-    virtual void SAL_CALL storeToStorage(
+    virtual void storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
-    virtual void SAL_CALL storeToMedium(const OUString & URL,
+    virtual void storeToMedium(const OUString & URL,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getContributor() override;
-    virtual void SAL_CALL setContributor(const cpo::uno::Sequence< OUString >& the_value) override;
-    virtual OUString SAL_CALL getCoverage() override;
-    virtual void SAL_CALL setCoverage(const OUString & the_value) override;
-    virtual OUString SAL_CALL getIdentifier() override;
-    virtual void SAL_CALL setIdentifier(const OUString & the_value) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getPublisher() override;
-    virtual void SAL_CALL setPublisher(const cpo::uno::Sequence< OUString > & the_value) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getRelation() override;
-    virtual void SAL_CALL setRelation(const cpo::uno::Sequence< OUString > & the_value) override;
-    virtual OUString SAL_CALL getRights() override;
-    virtual void SAL_CALL setRights(const OUString & the_value) override;
-    virtual OUString SAL_CALL getSource() override;
-    virtual void SAL_CALL setSource(const OUString& the_value) override;
-    virtual OUString SAL_CALL getType() override;
-    virtual void SAL_CALL setType(const OUString& the_value) override;
+    virtual cpo::uno::Sequence< OUString > getContributor() override;
+    virtual void setContributor(const cpo::uno::Sequence< OUString >& the_value) override;
+    virtual OUString getCoverage() override;
+    virtual void setCoverage(const OUString & the_value) override;
+    virtual OUString getIdentifier() override;
+    virtual void setIdentifier(const OUString & the_value) override;
+    virtual cpo::uno::Sequence< OUString > getPublisher() override;
+    virtual void setPublisher(const cpo::uno::Sequence< OUString > & the_value) override;
+    virtual cpo::uno::Sequence< OUString > getRelation() override;
+    virtual void setRelation(const cpo::uno::Sequence< OUString > & the_value) override;
+    virtual OUString getRights() override;
+    virtual void setRights(const OUString & the_value) override;
+    virtual OUString getSource() override;
+    virtual void setSource(const OUString& the_value) override;
+    virtual OUString getType() override;
+    virtual void setType(const OUString& the_value) override;
 
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::util::XCloneable:
-    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
 
     // css::util::XModifiable:
-    virtual bool SAL_CALL isModified(  ) override;
-    virtual void SAL_CALL setModified( bool bModified ) override;
+    virtual bool isModified(  ) override;
+    virtual void setModified( bool bModified ) override;
 
     // css::util::XModifyBroadcaster:
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener) override;
 
     // css::xml::sax::XSAXSerializable
-    virtual void SAL_CALL serialize(
+    virtual void serialize(
         const css::uno::Reference<css::xml::sax::XDocumentHandler>& i_xHandler,
         const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces) override;
 
@@ -334,25 +334,25 @@ public:
     explicit CompatWriterDocPropsImpl( css::uno::Reference< css::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
 
 // XCompatWriterDocPropsImpl
-    virtual OUString SAL_CALL getManager() override { return msManager; }
-    virtual void SAL_CALL setManager( const OUString& _manager ) override { msManager = _manager; }
-    virtual OUString SAL_CALL getCategory() override { return msCategory; }
-    virtual void SAL_CALL setCategory( const OUString& _category ) override { msCategory = _category; }
-    virtual OUString SAL_CALL getCompany() override { return msCompany; }
-    virtual void SAL_CALL setCompany( const OUString& _company ) override { msCompany = _company; }
+    virtual OUString getManager() override { return msManager; }
+    virtual void setManager( const OUString& _manager ) override { msManager = _manager; }
+    virtual OUString getCategory() override { return msCategory; }
+    virtual void setCategory( const OUString& _category ) override { msCategory = _category; }
+    virtual OUString getCompany() override { return msCompany; }
+    virtual void setCompany( const OUString& _company ) override { msCompany = _company; }
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override
+    virtual OUString getImplementationName(  ) override
     {
         return u"CompatWriterDocPropsImpl"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override
+    virtual bool supportsService( const OUString& ServiceName ) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override
     {
         cpo::uno::Sequence<OUString> aServiceNames { u"com.sun.star.writer.DocumentProperties"_ustr };
         return aServiceNames;
@@ -1342,19 +1342,19 @@ SfxDocumentMetaData::SfxDocumentMetaData(
 }
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getImplementationName()
 {
     return u"SfxDocumentMetaData"_ustr;
 }
 
-bool SAL_CALL
+bool
 SfxDocumentMetaData::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 SfxDocumentMetaData::getSupportedServiceNames()
 {
     cpo::uno::Sequence< OUString > s { u"com.sun.star.document.DocumentProperties"_ustr };
@@ -1377,91 +1377,91 @@ void SfxDocumentMetaData::disposing(std::unique_lock<std::mutex>& rGuard)
 
 
 // css::document::XDocumentProperties:
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getAuthor()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "meta:initial-creator");
 }
 
-void SAL_CALL SfxDocumentMetaData::setAuthor(const OUString & the_value)
+void SfxDocumentMetaData::setAuthor(const OUString & the_value)
 {
     setMetaTextAndNotify(u"meta:initial-creator"_ustr, the_value);
 }
 
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getGenerator()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "meta:generator");
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setGenerator(const OUString & the_value)
 {
     setMetaTextAndNotify(u"meta:generator"_ustr, the_value);
 }
 
-css::util::DateTime SAL_CALL
+css::util::DateTime
 SfxDocumentMetaData::getCreationDate()
 {
     std::unique_lock g(m_aMutex);
     return textToDateTimeDefault(getMetaText(g, "meta:creation-date"));
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setCreationDate(const css::util::DateTime & the_value)
 {
     setMetaTextAndNotify(u"meta:creation-date"_ustr, dateTimeToText(the_value));
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getTitle()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:title");
 }
 
-void SAL_CALL SfxDocumentMetaData::setTitle(const OUString & the_value)
+void SfxDocumentMetaData::setTitle(const OUString & the_value)
 {
     setMetaTextAndNotify(u"dc:title"_ustr, the_value);
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getSubject()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:subject");
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setSubject(const OUString & the_value)
 {
     setMetaTextAndNotify(u"dc:subject"_ustr, the_value);
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getDescription()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:description");
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setDescription(const OUString & the_value)
 {
     setMetaTextAndNotify(u"dc:description"_ustr, the_value);
 }
 
 cpo::uno::Sequence< OUString >
-SAL_CALL SfxDocumentMetaData::getKeywords()
+SfxDocumentMetaData::getKeywords()
 {
     std::unique_lock g(m_aMutex);
     return getMetaList(g, "meta:keyword");
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setKeywords(
         const cpo::uno::Sequence< OUString > & the_value)
 {
@@ -1473,13 +1473,13 @@ SfxDocumentMetaData::setKeywords(
 }
 
 // css::document::XDocumentProperties2
-cpo::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getContributor()
+cpo::uno::Sequence<OUString> SfxDocumentMetaData::getContributor()
 {
     std::unique_lock g(m_aMutex);
     return getMetaList(g, "dc:contributor");
 }
 
-void SAL_CALL SfxDocumentMetaData::setContributor(const cpo::uno::Sequence<OUString>& the_value)
+void SfxDocumentMetaData::setContributor(const cpo::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaList(g, u"dc:contributor"_ustr, the_value, nullptr))
@@ -1489,35 +1489,35 @@ void SAL_CALL SfxDocumentMetaData::setContributor(const cpo::uno::Sequence<OUStr
     }
 }
 
-OUString SAL_CALL SfxDocumentMetaData::getCoverage()
+OUString SfxDocumentMetaData::getCoverage()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:coverage");
 }
 
-void SAL_CALL SfxDocumentMetaData::setCoverage(const OUString& the_value)
+void SfxDocumentMetaData::setCoverage(const OUString& the_value)
 {
     setMetaTextAndNotify(u"dc:coverage"_ustr, the_value);
 }
 
-OUString SAL_CALL SfxDocumentMetaData::getIdentifier()
+OUString SfxDocumentMetaData::getIdentifier()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:identifier");
 }
 
-void SAL_CALL SfxDocumentMetaData::setIdentifier(const OUString& the_value)
+void SfxDocumentMetaData::setIdentifier(const OUString& the_value)
 {
     setMetaTextAndNotify(u"dc:identifier"_ustr, the_value);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getPublisher()
+cpo::uno::Sequence<OUString> SfxDocumentMetaData::getPublisher()
 {
     std::unique_lock g(m_aMutex);
     return getMetaList(g, "dc:publisher");
 }
 
-void SAL_CALL SfxDocumentMetaData::setPublisher(const cpo::uno::Sequence<OUString>& the_value)
+void SfxDocumentMetaData::setPublisher(const cpo::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaList(g, u"dc:publisher"_ustr, the_value, nullptr))
@@ -1527,13 +1527,13 @@ void SAL_CALL SfxDocumentMetaData::setPublisher(const cpo::uno::Sequence<OUStrin
     }
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getRelation()
+cpo::uno::Sequence<OUString> SfxDocumentMetaData::getRelation()
 {
     std::unique_lock g(m_aMutex);
     return getMetaList(g, "dc:relation");
 }
 
-void SAL_CALL SfxDocumentMetaData::setRelation(const cpo::uno::Sequence<OUString>& the_value)
+void SfxDocumentMetaData::setRelation(const cpo::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaList(g, u"dc:relation"_ustr, the_value, nullptr))
@@ -1543,40 +1543,40 @@ void SAL_CALL SfxDocumentMetaData::setRelation(const cpo::uno::Sequence<OUString
     }
 }
 
-OUString SAL_CALL SfxDocumentMetaData::getRights()
+OUString SfxDocumentMetaData::getRights()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:rights");
 }
 
-void SAL_CALL SfxDocumentMetaData::setRights(const OUString& the_value)
+void SfxDocumentMetaData::setRights(const OUString& the_value)
 {
     setMetaTextAndNotify(u"dc:rights"_ustr, the_value);
 }
 
-OUString SAL_CALL SfxDocumentMetaData::getSource()
+OUString SfxDocumentMetaData::getSource()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:source");
 }
 
-void SAL_CALL SfxDocumentMetaData::setSource(const OUString& the_value)
+void SfxDocumentMetaData::setSource(const OUString& the_value)
 {
     setMetaTextAndNotify(u"dc:source"_ustr, the_value);
 }
 
-OUString SAL_CALL SfxDocumentMetaData::getType()
+OUString SfxDocumentMetaData::getType()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:type");
 }
 
-void SAL_CALL SfxDocumentMetaData::setType(const OUString& the_value)
+void SfxDocumentMetaData::setType(const OUString& the_value)
 {
     setMetaTextAndNotify(u"dc:type"_ustr, the_value);
 }
 
-css::lang::Locale SAL_CALL
+css::lang::Locale
         SfxDocumentMetaData::getLanguage()
 {
     std::unique_lock g(m_aMutex);
@@ -1584,66 +1584,66 @@ css::lang::Locale SAL_CALL
     return loc;
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
 {
     OUString text( LanguageTag::convertToBcp47( the_value, false));
     setMetaTextAndNotify(u"dc:language"_ustr, text);
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getModifiedBy()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "dc:creator");
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setModifiedBy(const OUString & the_value)
 {
     setMetaTextAndNotify(u"dc:creator"_ustr, the_value);
 }
 
-css::util::DateTime SAL_CALL
+css::util::DateTime
 SfxDocumentMetaData::getModificationDate()
 {
     std::unique_lock g(m_aMutex);
     return textToDateTimeDefault(getMetaText(g, "dc:date"));
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setModificationDate(const css::util::DateTime & the_value)
 {
     setMetaTextAndNotify(u"dc:date"_ustr, dateTimeToText(the_value));
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getPrintedBy()
 {
     std::unique_lock g(m_aMutex);
     return getMetaText(g, "meta:printed-by");
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setPrintedBy(const OUString & the_value)
 {
     setMetaTextAndNotify(u"meta:printed-by"_ustr, the_value);
 }
 
-css::util::DateTime SAL_CALL
+css::util::DateTime
 SfxDocumentMetaData::getPrintDate()
 {
     std::unique_lock g(m_aMutex);
     return textToDateTimeDefault(getMetaText(g, "meta:print-date"));
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setPrintDate(const css::util::DateTime & the_value)
 {
     setMetaTextAndNotify(u"meta:print-date"_ustr, dateTimeToText(the_value));
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getTemplateName()
 {
     std::unique_lock g(m_aMutex);
@@ -1651,7 +1651,7 @@ SfxDocumentMetaData::getTemplateName()
     return m_TemplateName;
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setTemplateName(const OUString & the_value)
 {
     std::unique_lock g(m_aMutex);
@@ -1663,7 +1663,7 @@ SfxDocumentMetaData::setTemplateName(const OUString & the_value)
     }
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getTemplateURL()
 {
     std::unique_lock g(m_aMutex);
@@ -1671,7 +1671,7 @@ SfxDocumentMetaData::getTemplateURL()
     return m_TemplateURL;
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setTemplateURL(const OUString & the_value)
 {
     std::unique_lock g(m_aMutex);
@@ -1683,7 +1683,7 @@ SfxDocumentMetaData::setTemplateURL(const OUString & the_value)
     }
 }
 
-css::util::DateTime SAL_CALL
+css::util::DateTime
 SfxDocumentMetaData::getTemplateDate()
 {
     std::unique_lock g(m_aMutex);
@@ -1691,7 +1691,7 @@ SfxDocumentMetaData::getTemplateDate()
     return m_TemplateDate;
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setTemplateDate(const css::util::DateTime & the_value)
 {
     std::unique_lock g(m_aMutex);
@@ -1703,7 +1703,7 @@ SfxDocumentMetaData::setTemplateDate(const css::util::DateTime & the_value)
     }
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getAutoloadURL()
 {
     std::unique_lock g(m_aMutex);
@@ -1711,7 +1711,7 @@ SfxDocumentMetaData::getAutoloadURL()
     return m_AutoloadURL;
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setAutoloadURL(const OUString & the_value)
 {
     std::unique_lock g(m_aMutex);
@@ -1723,7 +1723,7 @@ SfxDocumentMetaData::setAutoloadURL(const OUString & the_value)
     }
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 SfxDocumentMetaData::getAutoloadSecs()
 {
     std::unique_lock g(m_aMutex);
@@ -1731,7 +1731,7 @@ SfxDocumentMetaData::getAutoloadSecs()
     return m_AutoloadSecs;
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
 {
     if (the_value < 0)
@@ -1747,7 +1747,7 @@ SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
     }
 }
 
-OUString SAL_CALL
+OUString
 SfxDocumentMetaData::getDefaultTarget()
 {
     std::unique_lock g(m_aMutex);
@@ -1755,7 +1755,7 @@ SfxDocumentMetaData::getDefaultTarget()
     return m_DefaultTarget;
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setDefaultTarget(const OUString & the_value)
 {
     std::unique_lock g(m_aMutex);
@@ -1767,7 +1767,7 @@ SfxDocumentMetaData::setDefaultTarget(const OUString & the_value)
     }
 }
 
-cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL
+cpo::uno::Sequence< css::beans::NamedValue >
 SfxDocumentMetaData::getDocumentStatistics()
 {
     std::unique_lock g(m_aMutex);
@@ -1790,7 +1790,7 @@ SfxDocumentMetaData::getDocumentStatistics()
     return ::comphelper::containerToSequence(stats);
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setDocumentStatistics(
         const cpo::uno::Sequence< css::beans::NamedValue > & the_value)
 {
@@ -1821,7 +1821,7 @@ SfxDocumentMetaData::setDocumentStatistics(
     setModified(true);
 }
 
-::sal_Int16 SAL_CALL
+::sal_Int16
 SfxDocumentMetaData::getEditingCycles()
 {
     std::unique_lock g(m_aMutex);
@@ -1835,7 +1835,7 @@ SfxDocumentMetaData::getEditingCycles()
     }
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
 {
     if (the_value < 0)
@@ -1845,14 +1845,14 @@ SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
     setMetaTextAndNotify(u"meta:editing-cycles"_ustr, OUString::number(the_value));
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 SfxDocumentMetaData::getEditingDuration()
 {
     std::unique_lock g(m_aMutex);
     return textToDuration(getMetaText(g, "meta:editing-duration"));
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
 {
     if (the_value < 0)
@@ -1862,7 +1862,7 @@ SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
     setMetaTextAndNotify(u"meta:editing-duration"_ustr, durationToText(the_value));
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::resetUserData(const OUString & the_value)
 {
     std::unique_lock g(m_aMutex);
@@ -1888,7 +1888,7 @@ SfxDocumentMetaData::resetUserData(const OUString & the_value)
 }
 
 
-css::uno::Reference< css::beans::XPropertyContainer > SAL_CALL
+css::uno::Reference< css::beans::XPropertyContainer >
 SfxDocumentMetaData::getUserDefinedProperties()
 {
     std::unique_lock g(m_aMutex);
@@ -1898,7 +1898,7 @@ SfxDocumentMetaData::getUserDefinedProperties()
 }
 
 
-void SAL_CALL
+void
 SfxDocumentMetaData::loadFromStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
@@ -1971,7 +1971,7 @@ SfxDocumentMetaData::loadFromStorage(
     checkInit(g);
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
@@ -2042,7 +2042,7 @@ SfxDocumentMetaData::storeToStorage(
     }
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::loadFromMedium(const OUString & URL,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
@@ -2084,7 +2084,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
     loadFromStorage(xStorage, md.getAsConstPropertyValueList());
 }
 
-void SAL_CALL
+void
 SfxDocumentMetaData::storeToMedium(const OUString & URL,
         const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
@@ -2130,7 +2130,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 }
 
 // css::lang::XInitialization:
-void SAL_CALL SfxDocumentMetaData::initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
+void SfxDocumentMetaData::initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     // possible arguments:
     // - no argument: default initialization (empty DOM)
@@ -2163,7 +2163,7 @@ void SAL_CALL SfxDocumentMetaData::initialize( const cpo::uno::Sequence< cpo::un
 }
 
 // css::util::XCloneable:
-css::uno::Reference<css::util::XCloneable> SAL_CALL
+css::uno::Reference<css::util::XCloneable>
 SfxDocumentMetaData::createClone()
 {
     std::unique_lock g(m_aMutex);
@@ -2196,7 +2196,7 @@ SfxDocumentMetaData::createClone()
 }
 
 // css::util::XModifiable:
-bool SAL_CALL SfxDocumentMetaData::isModified(  )
+bool SfxDocumentMetaData::isModified(  )
 {
     std::unique_lock g(m_aMutex);
     checkInit(g);
@@ -2205,7 +2205,7 @@ bool SAL_CALL SfxDocumentMetaData::isModified(  )
     return m_isModified || (xMB.is() && xMB->isModified());
 }
 
-void SAL_CALL SfxDocumentMetaData::setModified( bool bModified )
+void SfxDocumentMetaData::setModified( bool bModified )
 {
     css::uno::Reference<css::util::XModifiable> xMB;
     { // do not lock mutex while notifying (#i93514#) to prevent deadlock
@@ -2240,7 +2240,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( bool bModified )
 }
 
 // css::util::XModifyBroadcaster:
-void SAL_CALL SfxDocumentMetaData::addModifyListener(
+void SfxDocumentMetaData::addModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
 {
     std::unique_lock g(m_aMutex);
@@ -2253,7 +2253,7 @@ void SAL_CALL SfxDocumentMetaData::addModifyListener(
     }
 }
 
-void SAL_CALL SfxDocumentMetaData::removeModifyListener(
+void SfxDocumentMetaData::removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
 {
     std::unique_lock g(m_aMutex);
@@ -2267,7 +2267,7 @@ void SAL_CALL SfxDocumentMetaData::removeModifyListener(
 }
 
 // css::xml::sax::XSAXSerializable
-void SAL_CALL SfxDocumentMetaData::serialize(
+void SfxDocumentMetaData::serialize(
     const css::uno::Reference<css::xml::sax::XDocumentHandler>& i_xHandler,
     const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces)
 {

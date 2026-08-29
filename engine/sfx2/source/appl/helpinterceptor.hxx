@@ -68,27 +68,27 @@ public:
     bool                HasHistorySucc() const;     // is there a successor for the current in the history
 
     // XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL
+    virtual css::uno::Reference< css::frame::XDispatch >
                             queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
                             queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
     // XDispatchProviderInterceptor
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    virtual css::uno::Reference< css::frame::XDispatchProvider >
                             getSlaveDispatchProvider(  ) override;
-    virtual void SAL_CALL   setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlave ) override;
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    virtual void   setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlave ) override;
+    virtual css::uno::Reference< css::frame::XDispatchProvider >
                             getMasterDispatchProvider(  ) override;
-    virtual void SAL_CALL   setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMaster ) override;
+    virtual void   setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMaster ) override;
 
     // XInterceptorInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
                             getInterceptedURLs(  ) override;
 
     // XDispatch
-    virtual void SAL_CALL   dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void SAL_CALL   addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
-    virtual void SAL_CALL   removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void   dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+    virtual void   addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void   removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
     // extras
     void                    InitWaiter( SfxHelpWindow_Impl* pWindow )
@@ -108,8 +108,8 @@ private:
 public:
     explicit HelpListener_Impl( HelpInterceptor_Impl* pInter );
 
-    virtual void SAL_CALL   statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-    virtual void SAL_CALL   disposing( const css::lang::EventObject& obj ) override;
+    virtual void   statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void   disposing( const css::lang::EventObject& obj ) override;
 
     void                    SetChangeHdl( const Link<HelpListener_Impl&,void>& rLink ) { aChangeLink = rLink; }
     const OUString&         GetFactory() const { return aFactory; }
@@ -128,8 +128,8 @@ public:
         css::util::URL const & rURL);
     virtual ~HelpStatusListener_Impl() override;
 
-    virtual void SAL_CALL   statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-    virtual void SAL_CALL   disposing( const css::lang::EventObject& obj ) override;
+    virtual void   statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void   disposing( const css::lang::EventObject& obj ) override;
     const css::frame::FeatureStateEvent&
                             GetStateEvent() const {return aStateEvent;}
 };

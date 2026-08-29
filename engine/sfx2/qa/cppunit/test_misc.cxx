@@ -95,8 +95,8 @@ public:
 private:
     bool bCalled;
 
-    virtual void SAL_CALL disposing(const lang::EventObject&) noexcept override {}
-    virtual void SAL_CALL modified(const lang::EventObject&) noexcept override { bCalled = true; }
+    virtual void disposing(const lang::EventObject&) noexcept override {}
+    virtual void modified(const lang::EventObject&) noexcept override { bCalled = true; }
 };
 
 CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)

@@ -54,25 +54,25 @@ class SfxAppDispatchProvider : public ::cppu::WeakImplHelper< css::frame::XAppDi
 public:
     SfxAppDispatchProvider() {}
 
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         cpo::uno::Sequence<cpo::uno::Any> const & aArguments) override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
+    virtual css::uno::Reference < css::frame::XDispatch > queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
             sal_Int32 eSearchFlags ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
+    virtual cpo::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > queryDispatches(
             const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
-    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
+    virtual cpo::uno::Sequence< sal_Int16 > getSupportedCommandGroups() override;
 
-    virtual cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 ) override;
+    virtual cpo::uno::Sequence< css::frame::DispatchInformation > getConfigurableDispatchInformation( sal_Int16 ) override;
 };
 
 void SfxAppDispatchProvider::initialize(
@@ -87,22 +87,22 @@ void SfxAppDispatchProvider::initialize(
     m_xFrame = f;
 }
 
-OUString SAL_CALL SfxAppDispatchProvider::getImplementationName()
+OUString SfxAppDispatchProvider::getImplementationName()
 {
     return u"com.sun.star.comp.sfx2.AppDispatchProvider"_ustr;
 }
 
-bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName )
+bool SfxAppDispatchProvider::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SfxAppDispatchProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ProtocolHandler"_ustr, u"com.sun.star.frame.AppDispatchProvider"_ustr };
 }
 
-Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
+Reference < XDispatch > SfxAppDispatchProvider::queryDispatch(
     const util::URL& aURL,
     const OUString& /*sTargetFrameName*/,
     sal_Int32 /*eSearchFlags*/ )
@@ -141,7 +141,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     return pDispatch;
 }
 
-Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
+Sequence< Reference < XDispatch > > SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     cpo::uno::Sequence< uno::Reference < frame::XDispatch > > lDispatcher(nCount);
@@ -151,7 +151,7 @@ Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispat
     return lDispatcher;
 }
 
-Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups()
+Sequence< sal_Int16 > SfxAppDispatchProvider::getSupportedCommandGroups()
 {
     SolarMutexGuard aGuard;
 
@@ -180,7 +180,7 @@ Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups
     return comphelper::containerToSequence( aGroupList );
 }
 
-Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
+Sequence< frame::DispatchInformation > SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 {
     std::vector< frame::DispatchInformation > aCmdVector;
 

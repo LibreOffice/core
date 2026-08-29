@@ -32,23 +32,23 @@ public:
 
     SfxUnoPanel(css::uno::Reference<css::frame::XFrame>, OUString, OUString );
 
-    virtual OUString SAL_CALL getId() override;
+    virtual OUString getId() override;
 
-    virtual OUString SAL_CALL  getTitle() override;
-    virtual void SAL_CALL setTitle( const OUString& newTitle ) override;
+    virtual OUString  getTitle() override;
+    virtual void setTitle( const OUString& newTitle ) override;
 
-    virtual bool SAL_CALL isExpanded() override;
-    virtual void SAL_CALL expand( const bool bCollapseOther ) override;
-    virtual void SAL_CALL collapse( ) override;
+    virtual bool isExpanded() override;
+    virtual void expand( const bool bCollapseOther ) override;
+    virtual void collapse( ) override;
 
-    virtual sal_Int32 SAL_CALL getOrderIndex() override;
-    virtual void SAL_CALL setOrderIndex( const sal_Int32 newOrderIndex ) override;
-    virtual void SAL_CALL moveFirst() override;
-    virtual void SAL_CALL moveLast() override;
-    virtual void SAL_CALL moveUp() override;
-    virtual void SAL_CALL moveDown() override;
+    virtual sal_Int32 getOrderIndex() override;
+    virtual void setOrderIndex( const sal_Int32 newOrderIndex ) override;
+    virtual void moveFirst() override;
+    virtual void moveLast() override;
+    virtual void moveUp() override;
+    virtual void moveDown() override;
 
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getDialog() override;
+    virtual css::uno::Reference<css::awt::XWindow> getDialog() override;
 
 private:
 

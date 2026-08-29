@@ -79,10 +79,10 @@ public:
         PrepareListener_Impl();
 
         // css.frame.XStatusListener
-        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent) override;
+        virtual void statusChanged(const css::frame::FeatureStateEvent& aEvent) override;
 
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
         bool IsSet() const {return m_bState;}
 };

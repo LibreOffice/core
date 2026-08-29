@@ -81,51 +81,51 @@ public:
     explicit BackingComp();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
-    virtual void          SAL_CALL acquire       (                             ) noexcept override;
-    virtual void          SAL_CALL release       (                             ) noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
+    virtual void          acquire       (                             ) noexcept override;
+    virtual void          release       (                             ) noexcept override;
 
     // XTypeProvide
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes           () override;
-    virtual cpo::uno::Sequence< sal_Int8 >       SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes           () override;
+    virtual cpo::uno::Sequence< sal_Int8 >       getImplementationId() override;
 
     // XServiceInfo
-    virtual OUString                       SAL_CALL getImplementationName   (                                     ) override;
-    virtual bool                              SAL_CALL supportsService         ( const OUString& sServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(                                     ) override;
+    virtual OUString                       getImplementationName   (                                     ) override;
+    virtual bool                              supportsService         ( const OUString& sServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(                                     ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArgs ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArgs ) override;
 
     // XController
-    virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-    virtual bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
-    virtual bool SAL_CALL suspend( bool bSuspend ) override;
-    virtual cpo::uno::Any SAL_CALL getViewData() override;
-    virtual void SAL_CALL restoreViewData( const cpo::uno::Any& aData ) override;
-    virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel() override;
-    virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() override;
+    virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+    virtual bool attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
+    virtual bool suspend( bool bSuspend ) override;
+    virtual cpo::uno::Any getViewData() override;
+    virtual void restoreViewData( const cpo::uno::Any& aData ) override;
+    virtual css::uno::Reference< css::frame::XModel > getModel() override;
+    virtual css::uno::Reference< css::frame::XFrame > getFrame() override;
 
     // XKeyListener
-    virtual void SAL_CALL keyPressed ( const css::awt::KeyEvent& aEvent ) override;
-    virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent ) override;
+    virtual void keyPressed ( const css::awt::KeyEvent& aEvent ) override;
+    virtual void keyReleased( const css::awt::KeyEvent& aEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+    virtual void disposing( const css::lang::EventObject& aEvent ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose            (                                                                   ) override;
-    virtual void SAL_CALL addEventListener   ( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void dispose            (                                                                   ) override;
+    virtual void addEventListener   ( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
     // XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
+    virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
-    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
-    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
+    virtual void dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+    virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
+    virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
 };
 
 BackingComp::BackingComp()
@@ -147,7 +147,7 @@ BackingComp::BackingComp()
             Note: There exist two possible results ... this instance itself and her window member!
  */
 
-cpo::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const cpo::uno::Type& aType )
+cpo::uno::Any BackingComp::queryInterface( /*IN*/ const cpo::uno::Type& aType )
 {
     // first look for own supported interfaces
     cpo::uno::Any aResult = ::cppu::queryInterface(
@@ -185,7 +185,7 @@ cpo::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const cpo::uno::Type&
 /** increase ref count of this instance.
  */
 
-void SAL_CALL BackingComp::acquire()
+void BackingComp::acquire()
     noexcept
 {
     OWeakObject::acquire();
@@ -195,7 +195,7 @@ void SAL_CALL BackingComp::acquire()
 /** decrease ref count of this instance.
  */
 
-void SAL_CALL BackingComp::release()
+void BackingComp::release()
     noexcept
 {
     OWeakObject::release();
@@ -213,7 +213,7 @@ void SAL_CALL BackingComp::release()
     @return A list of all supported interface types.
 */
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL BackingComp::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > BackingComp::getTypes()
 {
     static cppu::OTypeCollection aTypeCollection = [this]() {
         SolarMutexGuard aGuard;
@@ -246,22 +246,22 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL BackingComp::getTypes()
     @return A byte array, which represent the unique id.
 */
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > BackingComp::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-OUString SAL_CALL BackingComp::getImplementationName()
+OUString BackingComp::getImplementationName()
 {
     return u"com.sun.star.comp.sfx2.BackingComp"_ustr;
 }
 
-bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
+bool BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BackingComp::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.StartModule"_ustr, u"com.sun.star.frame.ProtocolHandler"_ustr };
 }
@@ -320,7 +320,7 @@ cpo::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
                 reparenting of our component window on demand!
 */
 
-void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame )
+void BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     /* SAFE */
     SolarMutexGuard aGuard;
@@ -408,7 +408,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     return  <FALSE/> every time.
  */
 
-bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
+bool BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
 {
     return false;
 }
@@ -422,7 +422,7 @@ bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::f
     return  An empty reference every time.
  */
 
-css::uno::Reference< css::frame::XModel > SAL_CALL BackingComp::getModel()
+css::uno::Reference< css::frame::XModel > BackingComp::getModel()
 {
     return css::uno::Reference< css::frame::XModel >();
 }
@@ -433,7 +433,7 @@ css::uno::Reference< css::frame::XModel > SAL_CALL BackingComp::getModel()
     return  An empty value.
  */
 
-cpo::uno::Any SAL_CALL BackingComp::getViewData()
+cpo::uno::Any BackingComp::getViewData()
 {
     return cpo::uno::Any();
 }
@@ -445,7 +445,7 @@ cpo::uno::Any SAL_CALL BackingComp::getViewData()
                 not used.
  */
 
-void SAL_CALL BackingComp::restoreViewData( /*IN*/ const cpo::uno::Any& )
+void BackingComp::restoreViewData( /*IN*/ const cpo::uno::Any& )
 {
 }
 
@@ -458,7 +458,7 @@ void SAL_CALL BackingComp::restoreViewData( /*IN*/ const cpo::uno::Any& )
             Can be null, if attachFrame() was not called before.
  */
 
-css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
+css::uno::Reference< css::frame::XFrame > BackingComp::getFrame()
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
@@ -480,7 +480,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     @return true if the request could be finished successfully; false otherwise.
  */
 
-bool SAL_CALL BackingComp::suspend( /*IN*/ bool )
+bool BackingComp::suspend( /*IN*/ bool )
 {
     /* FIXME ... implemented by using default :-( */
     return true;
@@ -502,7 +502,7 @@ bool SAL_CALL BackingComp::suspend( /*IN*/ bool )
                 if the broadcaster doesn't represent the expected window reference.
 */
 
-void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEvent )
+void BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEvent )
 {
     // Attention: don't free m_pAccExec here! see comments inside dtor and
     // keyPressed() for further details.
@@ -529,7 +529,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
 */
 
-void SAL_CALL BackingComp::dispose()
+void BackingComp::dispose()
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
@@ -571,7 +571,7 @@ void SAL_CALL BackingComp::dispose()
                 We must inform it about this unsupported feature.
  */
 
-void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
+void BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
 {
     throw css::uno::RuntimeException(
             u"not supported"_ustr,
@@ -587,7 +587,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
                 not used.
  */
 
-void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
+void BackingComp::removeEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
@@ -610,7 +610,7 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
                 Means if may be attachedFrame() wasn't called before.
  */
 
-void SAL_CALL BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno::Any >& lArgs )
+void BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno::Any >& lArgs )
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
@@ -652,12 +652,12 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno
 }
 
 
-void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
+void BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
 {
 }
 
 
-void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
+void BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
 {
     /* Attention
         Please use keyPressed() instead of this method. Otherwise it would be possible, that
@@ -669,7 +669,7 @@ void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
 }
 
 // XDispatchProvider
-css::uno::Reference< css::frame::XDispatch > SAL_CALL BackingComp::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ )
+css::uno::Reference< css::frame::XDispatch > BackingComp::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
     if ( aURL.Protocol == "vnd.org.libreoffice.recentdocs:" )
@@ -678,7 +678,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL BackingComp::queryDispatch
     return xDispatch;
 }
 
-cpo::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL BackingComp::queryDispatches( const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts )
+cpo::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > BackingComp::queryDispatches( const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts )
 {
     sal_Int32 nCount = seqDescripts.getLength();
     cpo::uno::Sequence < css::uno::Reference < XDispatch > > lDispatcher( nCount );
@@ -691,7 +691,7 @@ cpo::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Bac
 }
 
 // XDispatch
-void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ )
+void BackingComp::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ )
 {
     // vnd.org.libreoffice.recentdocs:ClearRecentFileList  - clear recent files
     if ( aURL.Path != "ClearRecentFileList" )
@@ -715,11 +715,11 @@ void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const cpo::uno:
     }
 }
 
-void SAL_CALL BackingComp::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
+void BackingComp::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
 {
 }
 
-void SAL_CALL BackingComp::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
+void BackingComp::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
 {
 }
 

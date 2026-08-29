@@ -46,13 +46,13 @@ public:
     explicit OwnSubFilterService(const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     // XFilter
-    virtual bool SAL_CALL filter( const cpo::uno::Sequence< beans::PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel() override;
+    virtual bool filter( const cpo::uno::Sequence< beans::PropertyValue >& aDescriptor ) override;
+    virtual void cancel() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 OwnSubFilterService::OwnSubFilterService(const cpo::uno::Sequence< cpo::uno::Any >& aArguments)
@@ -74,7 +74,7 @@ OwnSubFilterService::OwnSubFilterService(const cpo::uno::Sequence< cpo::uno::Any
         throw lang::IllegalArgumentException();
 }
 
-bool SAL_CALL OwnSubFilterService::filter( const cpo::uno::Sequence< beans::PropertyValue >& aDescriptor )
+bool OwnSubFilterService::filter( const cpo::uno::Sequence< beans::PropertyValue >& aDescriptor )
 {
     if ( !m_pObjectShell )
         throw uno::RuntimeException();
@@ -82,22 +82,22 @@ bool SAL_CALL OwnSubFilterService::filter( const cpo::uno::Sequence< beans::Prop
     return m_pObjectShell->ImportFromGeneratedStream_Impl( m_xStream, aDescriptor );
 }
 
-void SAL_CALL OwnSubFilterService::cancel()
+void OwnSubFilterService::cancel()
 {
     // not implemented
 }
 
-OUString SAL_CALL OwnSubFilterService::getImplementationName()
+OUString OwnSubFilterService::getImplementationName()
 {
     return u"com.sun.star.comp.document.OwnSubFilter"_ustr;
 }
 
-bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceName )
+bool OwnSubFilterService::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OwnSubFilterService::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.OwnSubFilter"_ustr, u"com.sun.star.comp.document.OwnSubFilter"_ustr };
 }

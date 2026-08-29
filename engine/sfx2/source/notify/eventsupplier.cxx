@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 
     //  --- XNameReplace ---
 
-void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const cpo::uno::Any & rElement )
+void SfxEvents_Impl::replaceByName( const OUString & aName, const cpo::uno::Any & rElement )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -109,7 +109,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const cpo::
 
 //  --- XNameAccess ---
 
-cpo::uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
+cpo::uno::Any SfxEvents_Impl::getByName( const OUString& aName )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -123,13 +123,13 @@ cpo::uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames()
+cpo::uno::Sequence< OUString > SfxEvents_Impl::getElementNames()
 {
     return maEventNames;
 }
 
 
-bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
+bool SfxEvents_Impl::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -141,14 +141,14 @@ bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
 
 //  --- XElementAccess ( parent of XNameAccess ) ---
 
-cpo::uno::Type SAL_CALL SfxEvents_Impl::getElementType()
+cpo::uno::Type SfxEvents_Impl::getElementType()
 {
     cpo::uno::Type aElementType = cppu::UnoType<cpo::uno::Sequence < beans::PropertyValue >>::get();
     return aElementType;
 }
 
 
-bool SAL_CALL SfxEvents_Impl::hasElements()
+bool SfxEvents_Impl::hasElements()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -278,7 +278,7 @@ void SfxEvents_Impl::Execute( cpo::uno::Sequence < css::beans::PropertyValue > c
 
 // --- ::document::XEventListener ---
 
-void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEvent& aEvent )
+void SfxEvents_Impl::documentEventOccured( const document::DocumentEvent& aEvent )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -296,7 +296,7 @@ void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEven
 
 // --- ::lang::XEventListener ---
 
-void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ )
+void SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ )
 {
     std::unique_lock aGuard( maMutex );
 

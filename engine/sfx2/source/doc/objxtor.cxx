@@ -131,15 +131,15 @@ class SfxModelListener_Impl : public ::cppu::WeakImplHelper< css::util::XCloseLi
     SfxObjectShell* mpDoc;
 public:
     explicit SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& aEvent, bool bDeliverOwnership ) override ;
-    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent ) override ;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override ;
+    virtual void queryClosing( const css::lang::EventObject& aEvent, bool bDeliverOwnership ) override ;
+    virtual void notifyClosing( const css::lang::EventObject& aEvent ) override ;
+    virtual void disposing( const css::lang::EventObject& aEvent ) override ;
 
 };
 
 } // namespace
 
-void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , bool bDeliverOwnership)
+void SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , bool bDeliverOwnership)
 {
     if (mpDoc->Get_Impl()->m_nClosingLockLevel)
     {
@@ -149,13 +149,13 @@ void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject&
     }
 }
 
-void SAL_CALL SfxModelListener_Impl::notifyClosing( const css::lang::EventObject& )
+void SfxModelListener_Impl::notifyClosing( const css::lang::EventObject& )
 {
     SolarMutexGuard aSolarGuard;
     mpDoc->Broadcast( SfxHint(SfxHintId::Deinitializing) );
 }
 
-void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _rEvent )
+void SfxModelListener_Impl::disposing( const css::lang::EventObject& _rEvent )
 {
     // am I ThisComponent in AppBasic?
     SolarMutexGuard aSolarGuard;

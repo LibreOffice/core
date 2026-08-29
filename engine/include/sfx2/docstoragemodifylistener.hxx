@@ -62,10 +62,10 @@ namespace sfx2
         void dispose();
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
+        virtual void modified( const css::lang::EventObject& aEvent ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
     private:
         virtual ~DocumentStorageModifyListener() override;

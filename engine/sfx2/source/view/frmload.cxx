@@ -105,17 +105,17 @@ class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper< css::frame::XSynchron
 public:
     explicit SfxFrameLoader_Impl( const css::uno::Reference < css::uno::XComponentContext >& _rxContext );
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 
     // XSynchronousFrameLoader
 
-    virtual bool SAL_CALL load( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
-    virtual void SAL_CALL cancel() override;
+    virtual bool load( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
+    virtual void cancel() override;
 
 protected:
     virtual                 ~SfxFrameLoader_Impl() override;
@@ -625,7 +625,7 @@ std::shared_ptr<const SfxFilter> getEmptyURLFilter(std::u16string_view sURL)
     return pFilter;
 }
 
-bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
+bool SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
                                              const Reference< XFrame >& _rTargetFrame )
 {
     ENSURE_OR_THROW( _rTargetFrame.is(), "illegal NULL frame" );
@@ -860,19 +860,19 @@ void SfxFrameLoader_Impl::cancel()
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName()
+OUString SfxFrameLoader_Impl::getImplementationName()
 {
     return u"com.sun.star.comp.office.FrameLoader"_ustr;
 }
 
 /* XServiceInfo */
-bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sServiceName )
+bool SfxFrameLoader_Impl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames()
+Sequence< OUString > SfxFrameLoader_Impl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.SynchronousFrameLoader"_ustr, u"com.sun.star.frame.OfficeFrameLoader"_ustr };
 }

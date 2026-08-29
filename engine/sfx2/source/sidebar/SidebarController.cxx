@@ -346,7 +346,7 @@ void SidebarController::disposing(std::unique_lock<std::mutex>&)
     unregisterSidebarForFrame(xController);
 }
 
-void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
+void SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -374,12 +374,12 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     }
 }
 
-void SAL_CALL SidebarController::disposing (const css::lang::EventObject& )
+void SidebarController::disposing (const css::lang::EventObject& )
 {
     dispose();
 }
 
-void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChangeEvent& )
+void SidebarController::propertyChange (const css::beans::PropertyChangeEvent& )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -388,7 +388,7 @@ void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChang
                                              // solarmutex
 }
 
-void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEvent& rEvent)
+void SidebarController::statusChanged (const css::frame::FeatureStateEvent& rEvent)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -410,7 +410,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
     }
 }
 
-void SAL_CALL SidebarController::requestLayout()
+void SidebarController::requestLayout()
 {
     SolarMutexGuard aSolarMutexGuard;
 

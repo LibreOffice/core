@@ -85,56 +85,56 @@ public:
     virtual ~DocumentMetadataAccess() override;
 
     // css::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue() override;
+    virtual OUString getStringValue() override;
 
     // css::rdf::XURI:
-    virtual OUString SAL_CALL getNamespace() override;
-    virtual OUString SAL_CALL getLocalName() override;
+    virtual OUString getNamespace() override;
+    virtual OUString getLocalName() override;
 
     // css::rdf::XRepositorySupplier:
     virtual css::uno::Reference<
-        css::rdf::XRepository > SAL_CALL getRDFRepository() override;
+        css::rdf::XRepository > getRDFRepository() override;
 
     // css::rdf::XDocumentMetadataAccess:
     virtual css::uno::Reference<
-                css::rdf::XMetadatable > SAL_CALL
+                css::rdf::XMetadatable >
         getElementByMetadataReference(
             const css::beans::StringPair & i_rReference) override;
-    virtual css::uno::Reference< css::rdf::XMetadatable > SAL_CALL
+    virtual css::uno::Reference< css::rdf::XMetadatable >
         getElementByURI(const css::uno::Reference< css::rdf::XURI > & i_xURI) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > SAL_CALL getMetadataGraphsWithType(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > getMetadataGraphsWithType(
             const css::uno::Reference< css::rdf::XURI > & i_xType) override;
-    virtual css::uno::Reference< css::rdf::XURI> SAL_CALL
+    virtual css::uno::Reference< css::rdf::XURI>
         addMetadataFile(const OUString & i_rFileName,
             const cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
-    virtual css::uno::Reference< css::rdf::XURI> SAL_CALL
+    virtual css::uno::Reference< css::rdf::XURI>
         importMetadataFile(::sal_Int16 i_Format,
             const css::uno::Reference< css::io::XInputStream > & i_xInStream,
             const OUString & i_rFileName,
             const css::uno::Reference< css::rdf::XURI > & i_xBaseURI,
             const cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
-    virtual void SAL_CALL removeMetadataFile(
+    virtual void removeMetadataFile(
             const css::uno::Reference<
                 css::rdf::XURI > & i_xGraphName) override;
-    virtual void SAL_CALL addContentOrStylesFile(
+    virtual void addContentOrStylesFile(
             const OUString & i_rFileName) override;
-    virtual void SAL_CALL removeContentOrStylesFile(
+    virtual void removeContentOrStylesFile(
             const OUString & i_rFileName) override;
 
-    virtual void SAL_CALL loadMetadataFromStorage(
+    virtual void loadMetadataFromStorage(
             const css::uno::Reference<
                 css::embed::XStorage > & i_xStorage,
             const css::uno::Reference<
                 css::rdf::XURI > & i_xBaseURI,
             const css::uno::Reference<
                 css::task::XInteractionHandler> & i_xHandler) override;
-    virtual void SAL_CALL storeMetadataToStorage(
+    virtual void storeMetadataToStorage(
             const css::uno::Reference<
                 css::embed::XStorage > & i_xStorage) override;
-    virtual void SAL_CALL loadMetadataFromMedium(
+    virtual void loadMetadataFromMedium(
             const cpo::uno::Sequence<
                 css::beans::PropertyValue > & i_rMedium) override;
-    virtual void SAL_CALL storeMetadataToMedium(
+    virtual void storeMetadataToMedium(
             const cpo::uno::Sequence<
                 css::beans::PropertyValue > & i_rMedium) override;
 

@@ -1677,13 +1677,13 @@ SfxUnoArguments TransformItems(sal_uInt16 nSlotId, const SfxItemSet& rSet, const
     return aSequ;
 }
 
-void SAL_CALL FilterOptionsContinuation::setFilterOptions(
+void FilterOptionsContinuation::setFilterOptions(
                 const cpo::uno::Sequence<beans::PropertyValue>& rProps )
 {
     rProperties = rProps;
 }
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL
+cpo::uno::Sequence< beans::PropertyValue >
     FilterOptionsContinuation::getFilterOptions()
 {
     return rProperties;
@@ -1705,13 +1705,13 @@ RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > cons
     m_xOptions = new FilterOptionsContinuation;
 }
 
-cpo::uno::Any SAL_CALL RequestFilterOptions::getRequest()
+cpo::uno::Any RequestFilterOptions::getRequest()
 {
     return m_aRequest;
 }
 
 cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-    SAL_CALL RequestFilterOptions::getContinuations()
+    RequestFilterOptions::getContinuations()
 {
     return { m_xAbort, m_xOptions };
 }
@@ -1726,8 +1726,8 @@ class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper< task::XInte
 public:
     explicit RequestPackageReparation_Impl( const OUString& aName );
     bool    isApproved() const;
-    virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Any getRequest() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > getContinuations() override;
 };
 
 RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aName )
@@ -1744,13 +1744,13 @@ bool RequestPackageReparation_Impl::isApproved() const
     return m_xApprove->wasSelected();
 }
 
-cpo::uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
+cpo::uno::Any RequestPackageReparation_Impl::getRequest()
 {
     return m_aRequest;
 }
 
 cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-    SAL_CALL RequestPackageReparation_Impl::getContinuations()
+    RequestPackageReparation_Impl::getContinuations()
 {
     return { m_xApprove, m_xDisapprove };
 }
@@ -1782,8 +1782,8 @@ class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper< task::XInteracti
 
 public:
     explicit NotifyBrokenPackage_Impl(const OUString& rName);
-    virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Any getRequest() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > getContinuations() override;
 };
 
 NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
@@ -1794,13 +1794,13 @@ NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
     m_xAbort = new comphelper::OInteractionAbort;
 }
 
-cpo::uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
+cpo::uno::Any NotifyBrokenPackage_Impl::getRequest()
 {
     return m_aRequest;
 }
 
 cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-    SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
+    NotifyBrokenPackage_Impl::getContinuations()
 {
     return { m_xAbort };
 }

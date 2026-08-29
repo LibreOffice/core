@@ -47,12 +47,12 @@ public:
     SfxPrintHelper() ;
     virtual ~SfxPrintHelper() override ;
 
-    void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
-    virtual void SAL_CALL addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
-    virtual void SAL_CALL removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter() override;
-    virtual void SAL_CALL setPrinter( const cpo::uno::Sequence< css::beans::PropertyValue >& seqPrinter ) override;
-    virtual void SAL_CALL print( const cpo::uno::Sequence< css::beans::PropertyValue >& seqOptions ) override;
+    void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
+    virtual void removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getPrinter() override;
+    virtual void setPrinter( const cpo::uno::Sequence< css::beans::PropertyValue >& seqPrinter ) override;
+    virtual void print( const cpo::uno::Sequence< css::beans::PropertyValue >& seqOptions ) override;
 
 private:
 

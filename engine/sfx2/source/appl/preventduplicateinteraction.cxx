@@ -60,7 +60,7 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
     // <- SAFE
 }
 
-cpo::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const cpo::uno::Type& aType )
+cpo::uno::Any PreventDuplicateInteraction::queryInterface( const cpo::uno::Type& aType )
 {
     if ( aType.equals( cppu::UnoType<XInteractionHandler2>::get() ) )
     {
@@ -72,7 +72,7 @@ cpo::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const cpo::u
     return ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>::queryInterface(aType);
 }
 
-void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+void PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     cpo::uno::Any aRequest  = xRequest->getRequest();
     bool          bHandleIt = true;
@@ -115,7 +115,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     }
 }
 
-bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+bool PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {
     cpo::uno::Any aRequest  = xRequest->getRequest();
     bool      bHandleIt = true;
@@ -198,7 +198,7 @@ bool PreventDuplicateInteraction::getInteractionInfo(const cpo::uno::Type&      
     return false;
 }
 
-void SAL_CALL PreventDuplicateInteraction::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
+void PreventDuplicateInteraction::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     std::unique_lock aLock(m_aLock);
     // If we're re-initialized to set a specific new window as a parent then drop our temporary

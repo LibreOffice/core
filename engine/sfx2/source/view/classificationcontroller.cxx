@@ -79,19 +79,19 @@ public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(const OUString& rServiceName) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
     using ClassificationCategoriesControllerBase::disposing;
     void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XToolbarController
-    uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
+    uno::Reference<awt::XWindow> createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
 
     // XStatusListener
-    void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) override;
+    void statusChanged(const frame::FeatureStateEvent& rEvent) override;
 
     void removeEntries();
 };

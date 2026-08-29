@@ -92,14 +92,14 @@ public:
 
     // new controller API
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     // XToolbarController
-    virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
-    virtual void SAL_CALL click() override;
-    virtual void SAL_CALL doubleClick() override;
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) override;
+    virtual void execute( sal_Int16 KeyModifier ) override;
+    virtual void click() override;
+    virtual void doubleClick() override;
+    virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
+    virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) override;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();

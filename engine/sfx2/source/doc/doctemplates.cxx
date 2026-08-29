@@ -162,10 +162,10 @@ public:
                                 : m_xInteractionHandler(std::move( xInteractionHandler ))
                             {}
 
-    virtual uno::Reference<task::XInteractionHandler> SAL_CALL getInteractionHandler() override
+    virtual uno::Reference<task::XInteractionHandler> getInteractionHandler() override
     { return m_xInteractionHandler; }
 
-    virtual uno::Reference<ucb::XProgressHandler> SAL_CALL    getProgressHandler() override
+    virtual uno::Reference<ucb::XProgressHandler>    getProgressHandler() override
     { return uno::Reference<ucb::XProgressHandler>(); }
 };
 
@@ -175,17 +175,17 @@ public:
     explicit SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
     virtual ~SfxDocTplService() override;
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.sfx2.DocumentTemplates"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.DocumentTemplates"_ustr };
         return aSeq;
@@ -193,27 +193,27 @@ public:
 
 
     // --- XLocalizable ---
-    void SAL_CALL                   setLocale( const css::lang::Locale & eLocale ) override;
-    css::lang::Locale SAL_CALL              getLocale() override;
+    void                   setLocale( const css::lang::Locale & eLocale ) override;
+    css::lang::Locale              getLocale() override;
 
     // --- XDocumentTemplates ---
-    css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() override;
-    bool SAL_CALL               storeTemplate( const OUString& GroupName,
+    css::uno::Reference< css::ucb::XContent >  getContent() override;
+    bool               storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
                                                    const css::uno::Reference< css::frame::XStorable >& Storable ) override;
-    bool SAL_CALL               addTemplate( const OUString& GroupName,
+    bool               addTemplate( const OUString& GroupName,
                                                  const OUString& TemplateName,
                                                  const OUString& SourceURL ) override;
-    bool SAL_CALL               removeTemplate( const OUString& GroupName,
+    bool               removeTemplate( const OUString& GroupName,
                                                     const OUString& TemplateName ) override;
-    bool SAL_CALL               renameTemplate( const OUString& GroupName,
+    bool               renameTemplate( const OUString& GroupName,
                                                     const OUString& OldTemplateName,
                                                     const OUString& NewTemplateName ) override;
-    bool SAL_CALL               addGroup( const OUString& GroupName ) override;
-    bool SAL_CALL               removeGroup( const OUString& GroupName ) override;
-    bool SAL_CALL               renameGroup( const OUString& OldGroupName,
+    bool               addGroup( const OUString& GroupName ) override;
+    bool               removeGroup( const OUString& GroupName ) override;
+    bool               renameGroup( const OUString& OldGroupName,
                                                  const OUString& NewGroupName ) override;
-    void SAL_CALL                   update() override;
+    void                   update() override;
 
 private:
     bool                        init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
@@ -2113,7 +2113,7 @@ bool SfxDocTplService::renameTemplate( const OUString& rGroupName,
 
 //--- XDocumentTemplates ---
 
-uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
+uno::Reference< ucb::XContent > SfxDocTplService::getContent()
 {
     if ( init() )
         return maRootContent.get();

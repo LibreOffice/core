@@ -191,19 +191,19 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
 
 //  XComponent
 
-void SAL_CALL LayoutManagerListener::addEventListener(
+void LayoutManagerListener::addEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing, only internal class
 }
 
-void SAL_CALL LayoutManagerListener::removeEventListener(
+void LayoutManagerListener::removeEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing, only internal class
 }
 
-void SAL_CALL LayoutManagerListener::dispose()
+void LayoutManagerListener::dispose()
 {
     SolarMutexGuard aGuard;
 
@@ -247,7 +247,7 @@ void SAL_CALL LayoutManagerListener::dispose()
 
 //  XEventListener
 
-void SAL_CALL LayoutManagerListener::disposing(
+void LayoutManagerListener::disposing(
     const css::lang::EventObject& )
 {
     SolarMutexGuard aGuard;
@@ -259,7 +259,7 @@ void SAL_CALL LayoutManagerListener::disposing(
 
 // XLayoutManagerEventListener
 
-void SAL_CALL LayoutManagerListener::layoutEvent(
+void LayoutManagerListener::layoutEvent(
     const css::lang::EventObject&,
     ::sal_Int16                   eLayoutEvent,
     const cpo::uno::Any&                        )

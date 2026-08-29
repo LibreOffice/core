@@ -143,46 +143,46 @@ public:
     uno::Reference < frame::XFrame > const & GetFrame() const;
 
     // XEmbeddedClient
-    virtual void SAL_CALL saveObject() override;
-    virtual void SAL_CALL visibilityChanged( bool bVisible ) override;
+    virtual void saveObject() override;
+    virtual void visibilityChanged( bool bVisible ) override;
 
     // XInplaceClient
-    virtual bool SAL_CALL canInplaceActivate() override;
-    virtual void SAL_CALL activatingInplace() override;
-    virtual void SAL_CALL activatingUI() override;
-    virtual void SAL_CALL deactivatedInplace() override;
-    virtual void SAL_CALL deactivatedUI() override;
-    virtual uno::Reference< css::frame::XLayoutManager > SAL_CALL getLayoutManager() override;
-    virtual uno::Reference< frame::XDispatchProvider > SAL_CALL getInplaceDispatchProvider() override;
-    virtual awt::Rectangle SAL_CALL getPlacement() override;
-    virtual awt::Rectangle SAL_CALL getClipRectangle() override;
-    virtual void SAL_CALL translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& aKeys ) override;
-    virtual void SAL_CALL scrollObject( const awt::Size& aOffset ) override;
-    virtual void SAL_CALL changedPlacement( const awt::Rectangle& aPosRect ) override;
+    virtual bool canInplaceActivate() override;
+    virtual void activatingInplace() override;
+    virtual void activatingUI() override;
+    virtual void deactivatedInplace() override;
+    virtual void deactivatedUI() override;
+    virtual uno::Reference< css::frame::XLayoutManager > getLayoutManager() override;
+    virtual uno::Reference< frame::XDispatchProvider > getInplaceDispatchProvider() override;
+    virtual awt::Rectangle getPlacement() override;
+    virtual awt::Rectangle getClipRectangle() override;
+    virtual void translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& aKeys ) override;
+    virtual void scrollObject( const awt::Size& aOffset ) override;
+    virtual void changedPlacement( const awt::Rectangle& aPosRect ) override;
 
     // XComponentSupplier
-    virtual uno::Reference< util::XCloseable > SAL_CALL getComponent() override;
+    virtual uno::Reference< util::XCloseable > getComponent() override;
 
     // XWindowSupplier
-    virtual uno::Reference< awt::XWindow > SAL_CALL getWindow() override;
+    virtual uno::Reference< awt::XWindow > getWindow() override;
 
     // document::XEventListener
-    virtual void SAL_CALL       notifyEvent( const document::EventObject& aEvent ) override;
+    virtual void       notifyEvent( const document::EventObject& aEvent ) override;
 
     // XStateChangeListener
-    virtual void SAL_CALL changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
-    virtual void SAL_CALL stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+    virtual void changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+    virtual void stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+    virtual void disposing( const css::lang::EventObject& aEvent ) override;
 };
 
-void SAL_CALL SfxInPlaceClient_Impl::changingState(
+void SfxInPlaceClient_Impl::changingState(
     const css::lang::EventObject& /*aEvent*/,
     ::sal_Int32 /*nOldState*/,
     ::sal_Int32 /*nNewState*/ )
 {
 }
 
-void SAL_CALL SfxInPlaceClient_Impl::stateChanged(
+void SfxInPlaceClient_Impl::stateChanged(
     const css::lang::EventObject& /*aEvent*/,
     ::sal_Int32 nOldState,
     ::sal_Int32 nNewState )
@@ -197,7 +197,7 @@ void SAL_CALL SfxInPlaceClient_Impl::stateChanged(
     }
 }
 
-void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent )
+void SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -209,7 +209,7 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
     }
 }
 
-void SAL_CALL SfxInPlaceClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
+void SfxInPlaceClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
 {
     delete m_pClient;
     m_pClient = nullptr;
@@ -224,7 +224,7 @@ uno::Reference < frame::XFrame > const & SfxInPlaceClient_Impl::GetFrame() const
     return m_pClient->GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
 }
 
-void SAL_CALL SfxInPlaceClient_Impl::saveObject()
+void SfxInPlaceClient_Impl::saveObject()
 {
     if (!m_bStoreObject || (m_pClient && m_pClient->IsProtected()))
         // client wants to discard the object (usually it means the container document is closed while an object is active
@@ -315,7 +315,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( bool bVisible )
+void SfxInPlaceClient_Impl::visibilityChanged( bool bVisible )
 {
     SolarMutexGuard aGuard;
 
@@ -330,7 +330,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( bool bVisible )
 
 // XInplaceClient
 
-bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
+bool SfxInPlaceClient_Impl::canInplaceActivate()
 {
     if ( !m_xObject.is() )
         throw uno::RuntimeException();
@@ -343,7 +343,7 @@ bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
+void SfxInPlaceClient_Impl::activatingInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -368,7 +368,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
+void SfxInPlaceClient_Impl::activatingUI()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -379,7 +379,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
+void SfxInPlaceClient_Impl::deactivatedInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -393,7 +393,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
+void SfxInPlaceClient_Impl::deactivatedUI()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -403,7 +403,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
 }
 
 
-uno::Reference< css::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::getLayoutManager()
+uno::Reference< css::frame::XLayoutManager > SfxInPlaceClient_Impl::getLayoutManager()
 {
     uno::Reference < beans::XPropertySet > xFrame( GetFrame(), uno::UNO_QUERY_THROW );
 
@@ -424,13 +424,13 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::get
 }
 
 
-uno::Reference< frame::XDispatchProvider > SAL_CALL SfxInPlaceClient_Impl::getInplaceDispatchProvider()
+uno::Reference< frame::XDispatchProvider > SfxInPlaceClient_Impl::getInplaceDispatchProvider()
 {
     return uno::Reference < frame::XDispatchProvider >( GetFrame(), uno::UNO_QUERY_THROW );
 }
 
 
-awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
+awt::Rectangle SfxInPlaceClient_Impl::getPlacement()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -465,7 +465,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
 }
 
 
-awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
+awt::Rectangle SfxInPlaceClient_Impl::getClipRectangle()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -495,7 +495,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
+void SfxInPlaceClient_Impl::translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -504,14 +504,14 @@ void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const cpo::uno::Sequ
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
+void SfxInPlaceClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
+void SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
 {
     uno::Reference< embed::XInplaceObject > xInplace( m_xObject, uno::UNO_QUERY_THROW );
     if ( !m_pClient || !m_pClient->GetEditWin() || !m_pClient->GetViewShell() )
@@ -560,7 +560,7 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
 
 // XComponentSupplier
 
-uno::Reference< util::XCloseable > SAL_CALL SfxInPlaceClient_Impl::getComponent()
+uno::Reference< util::XCloseable > SfxInPlaceClient_Impl::getComponent()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -577,7 +577,7 @@ uno::Reference< util::XCloseable > SAL_CALL SfxInPlaceClient_Impl::getComponent(
 
 // XWindowSupplier
 
-uno::Reference< awt::XWindow > SAL_CALL SfxInPlaceClient_Impl::getWindow()
+uno::Reference< awt::XWindow > SfxInPlaceClient_Impl::getWindow()
 {
     if ( !m_pClient || !m_pClient->GetEditWin() )
         throw uno::RuntimeException();

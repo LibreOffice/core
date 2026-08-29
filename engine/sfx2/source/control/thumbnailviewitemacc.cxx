@@ -51,17 +51,17 @@ void ThumbnailViewItemAcc::ThumbnailViewItemDestroyed()
     mpThumbnailViewItem = nullptr;
 }
 
-sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleChildCount()
+sal_Int64 ThumbnailViewItemAcc::getAccessibleChildCount()
 {
     return 0;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleChild( sal_Int64 )
+uno::Reference< accessibility::XAccessible > ThumbnailViewItemAcc::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException();
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleParent()
+uno::Reference< accessibility::XAccessible > ThumbnailViewItemAcc::getAccessibleParent()
 {
     const SolarMutexGuard aSolarGuard;
 
@@ -70,7 +70,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getA
     return mpThumbnailViewItem->mrParent.getAccessible();
 }
 
-sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
+sal_Int64 ThumbnailViewItemAcc::getAccessibleIndexInParent()
 {
     const SolarMutexGuard aSolarGuard;
     // The index defaults to -1 to indicate the child does not belong to its
@@ -107,17 +107,17 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
     return nIndexInParent;
 }
 
-sal_Int16 SAL_CALL ThumbnailViewItemAcc::getAccessibleRole()
+sal_Int16 ThumbnailViewItemAcc::getAccessibleRole()
 {
     return accessibility::AccessibleRole::LIST_ITEM;
 }
 
-OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleDescription()
+OUString ThumbnailViewItemAcc::getAccessibleDescription()
 {
     return OUString();
 }
 
-OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleName()
+OUString ThumbnailViewItemAcc::getAccessibleName()
 {
     const SolarMutexGuard aSolarGuard;
     OUString aRet;
@@ -135,12 +135,12 @@ OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleName()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewItemAcc::getAccessibleRelationSet()
+uno::Reference< accessibility::XAccessibleRelationSet > ThumbnailViewItemAcc::getAccessibleRelationSet()
 {
     return uno::Reference< accessibility::XAccessibleRelationSet >();
 }
 
-sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
+sal_Int64 ThumbnailViewItemAcc::getAccessibleStateSet()
 {
     const SolarMutexGuard aSolarGuard;
     sal_Int64 nStateSet = 0;
@@ -166,7 +166,7 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
     return nStateSet;
 }
 
-lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
+lang::Locale ThumbnailViewItemAcc::getLocale()
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
@@ -183,7 +183,7 @@ lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleAtPoint( const awt::Point& )
+uno::Reference< accessibility::XAccessible > ThumbnailViewItemAcc::getAccessibleAtPoint( const awt::Point& )
 {
     uno::Reference< accessibility::XAccessible > xRet;
     return xRet;
@@ -222,18 +222,18 @@ awt::Rectangle ThumbnailViewItemAcc::implGetBounds()
     return aRet;
 }
 
-void SAL_CALL ThumbnailViewItemAcc::grabFocus()
+void ThumbnailViewItemAcc::grabFocus()
 {
     // nothing to do
 }
 
-sal_Int32 SAL_CALL ThumbnailViewItemAcc::getForeground(  )
+sal_Int32 ThumbnailViewItemAcc::getForeground(  )
 {
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground(  )
+sal_Int32 ThumbnailViewItemAcc::getBackground(  )
 {
     return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetWindowColor());
 }

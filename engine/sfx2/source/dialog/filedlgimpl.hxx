@@ -141,17 +141,17 @@ namespace sfx2
 
     public:
         // XFilePickerListener methods
-        virtual void SAL_CALL               fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
-        virtual void SAL_CALL               directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
-        virtual OUString SAL_CALL           helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
-        virtual void SAL_CALL               controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
-        virtual void SAL_CALL               dialogSizeChanged() override;
+        virtual void               fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual void               directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual OUString           helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual void               controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual void               dialogSizeChanged() override;
 
         // XDialogClosedListener methods
-        virtual void SAL_CALL               dialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent ) override;
+        virtual void               dialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent ) override;
 
         // XEventListener methods
-        virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) override;
+        virtual void       disposing( const css::lang::EventObject& Source ) override;
 
         // handle XFilePickerListener events
         void                    handleFileSelectionChanged();

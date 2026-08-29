@@ -848,7 +848,7 @@ DocumentMetadataAccess::~DocumentMetadataAccess()
 }
 
 // css::rdf::XRepositorySupplier:
-uno::Reference< rdf::XRepository > SAL_CALL
+uno::Reference< rdf::XRepository >
 DocumentMetadataAccess::getRDFRepository()
 {
     OSL_ENSURE(m_pImpl->m_xRepository.is(), "repository not initialized");
@@ -856,27 +856,27 @@ DocumentMetadataAccess::getRDFRepository()
 }
 
 // css::rdf::XNode:
-OUString SAL_CALL
+OUString
 DocumentMetadataAccess::getStringValue()
 {
     return m_pImpl->m_xBaseURI->getStringValue();
 }
 
 // css::rdf::XURI:
-OUString SAL_CALL
+OUString
 DocumentMetadataAccess::getNamespace()
 {
     return m_pImpl->m_xBaseURI->getNamespace();
 }
 
-OUString SAL_CALL
+OUString
 DocumentMetadataAccess::getLocalName()
 {
     return m_pImpl->m_xBaseURI->getLocalName();
 }
 
 // css::rdf::XDocumentMetadataAccess:
-uno::Reference< rdf::XMetadatable > SAL_CALL
+uno::Reference< rdf::XMetadatable >
 DocumentMetadataAccess::getElementByMetadataReference(
     const css::beans::StringPair & i_rReference)
 {
@@ -889,7 +889,7 @@ DocumentMetadataAccess::getElementByMetadataReference(
     return pReg->GetElementByMetadataReference(i_rReference);
 }
 
-uno::Reference< rdf::XMetadatable > SAL_CALL
+uno::Reference< rdf::XMetadatable >
 DocumentMetadataAccess::getElementByURI(
     const uno::Reference< rdf::XURI > & i_xURI )
 {
@@ -912,7 +912,7 @@ DocumentMetadataAccess::getElementByURI(
     return getElementByMetadataReference( beans::StringPair(path, idref) );
 }
 
-cpo::uno::Sequence<uno::Reference<rdf::XURI>> SAL_CALL
+cpo::uno::Sequence<uno::Reference<rdf::XURI>>
 DocumentMetadataAccess::getMetadataGraphsWithType(const uno::Reference<rdf::XURI>& i_xType)
 {
     if (!i_xType.is())
@@ -925,7 +925,7 @@ DocumentMetadataAccess::getMetadataGraphsWithType(const uno::Reference<rdf::XURI
     return ::comphelper::containerToSequence(getAllParts(*m_pImpl, i_xType));
 }
 
-uno::Reference<rdf::XURI> SAL_CALL
+uno::Reference<rdf::XURI>
 DocumentMetadataAccess::addMetadataFile(const OUString & i_rFileName,
     const cpo::uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
 {
@@ -963,7 +963,7 @@ DocumentMetadataAccess::addMetadataFile(const OUString & i_rFileName,
     return xGraphName;
 }
 
-uno::Reference<rdf::XURI> SAL_CALL
+uno::Reference<rdf::XURI>
 DocumentMetadataAccess::importMetadataFile(::sal_Int16 i_Format,
     const uno::Reference< io::XInputStream > & i_xInStream,
     const OUString & i_rFileName,
@@ -1006,7 +1006,7 @@ DocumentMetadataAccess::importMetadataFile(::sal_Int16 i_Format,
     return xGraphName;
 }
 
-void SAL_CALL
+void
 DocumentMetadataAccess::removeMetadataFile(
     const uno::Reference< rdf::XURI > & i_xGraphName)
 {
@@ -1024,7 +1024,7 @@ DocumentMetadataAccess::removeMetadataFile(
     removeFile(*m_pImpl, i_xGraphName);
 }
 
-void SAL_CALL
+void
 DocumentMetadataAccess::addContentOrStylesFile(
     const OUString & i_rFileName)
 {
@@ -1042,7 +1042,7 @@ DocumentMetadataAccess::addContentOrStylesFile(
     }
 }
 
-void SAL_CALL
+void
 DocumentMetadataAccess::removeContentOrStylesFile(
     const OUString & i_rFileName)
 {
@@ -1080,7 +1080,7 @@ DocumentMetadataAccess::removeContentOrStylesFile(
     }
 }
 
-void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
+void DocumentMetadataAccess::loadMetadataFromStorage(
     const uno::Reference< embed::XStorage > & i_xStorage,
     const uno::Reference<rdf::XURI> & i_xBaseURI,
     const uno::Reference<task::XInteractionHandler> & i_xHandler)
@@ -1181,7 +1181,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
         importFile(*m_pImpl, i_xStorage, baseURI, i_xHandler, aMfstMetadataFile);
 }
 
-void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
+void DocumentMetadataAccess::storeMetadataToStorage(
     const uno::Reference< embed::XStorage > & i_xStorage)
 {
     if (!i_xStorage.is()) {
@@ -1250,7 +1250,7 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
     }
 }
 
-void SAL_CALL
+void
 DocumentMetadataAccess::loadMetadataFromMedium(
     const cpo::uno::Sequence< beans::PropertyValue > & i_rMedium)
 {
@@ -1308,7 +1308,7 @@ DocumentMetadataAccess::loadMetadataFromMedium(
     loadMetadataFromStorage(xStorage, xBaseURI, xIH);
 }
 
-void SAL_CALL
+void
 DocumentMetadataAccess::storeMetadataToMedium(
     const cpo::uno::Sequence< beans::PropertyValue > & i_rMedium)
 {

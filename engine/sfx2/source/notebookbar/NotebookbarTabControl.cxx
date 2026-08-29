@@ -75,7 +75,7 @@ public:
     }
 
     // XUIConfigurationListener
-    virtual void SAL_CALL elementInserted( const ConfigurationEvent& rEvent ) override
+    virtual void elementInserted( const ConfigurationEvent& rEvent ) override
     {
         if( rEvent.ResourceURL == TOOLBAR_STR )
         {
@@ -84,17 +84,17 @@ public:
         }
     }
 
-    virtual void SAL_CALL elementRemoved( const ConfigurationEvent& rEvent ) override
+    virtual void elementRemoved( const ConfigurationEvent& rEvent ) override
     {
         elementInserted( rEvent );
     }
 
-    virtual void SAL_CALL elementReplaced( const ConfigurationEvent& rEvent ) override
+    virtual void elementReplaced( const ConfigurationEvent& rEvent ) override
     {
         elementInserted( rEvent );
     }
 
-    virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override
+    virtual void disposing(const ::css::lang::EventObject&) override
     {
         try
         {
