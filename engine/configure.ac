@@ -13931,7 +13931,11 @@ if test $_os = WINNT -a -f "$SRC_ROOT/antivirusDetection.vbs" ; then
             if [ [ "$EICAR_STRING" != "$EICAR_TEMP_FILE_CONTENTS" ] ]; then
                 AC_MSG_ERROR([Exclude the build and source directories associated with Collabora Office in the following Antivirus software: $ANTIVIRUS_LIST])
             fi
-            add_warning "To speed up builds and avoid failures in unit tests, it is highly recommended that you exclude the build and source directories associated with Collabora Office in the following Antivirus software: $ANTIVIRUS_LIST"
+            # Both EICAR probes survived, so the source and build directories
+            # are effectively excluded from on-write scanning and no warning
+            # is warranted. A scanner that only checks files on execution
+            # could still slow the build down, hence a notice, not silence.
+            AC_MSG_NOTICE([active Antivirus software found ($ANTIVIRUS_LIST), but the source and build directories appear to be excluded from scanning])
         else
             AC_MSG_RESULT([not found])
         fi
