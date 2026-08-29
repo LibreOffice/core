@@ -61,6 +61,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124398_groupshapeChart)
     assertXPath(pXmlDoc, "//wpg:graphicFrame/wpg:xfrm", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138027_pageBreakAfterShape, "tdf138027_pageBreakAfterShape.docx")
+{
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    // The image and the textbox are on page 1, not after the page break on page 2
+    assertXPath(pDump, "/root/page[1]/sorted_objs/fly", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf168607_tabstopZero)
 {
     // Given a 1 page document, where the default tab-stop length is zero

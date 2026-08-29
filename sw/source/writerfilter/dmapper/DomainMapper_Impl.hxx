@@ -278,6 +278,7 @@ struct SubstreamContext
     bool bIsInFootnoteProperties = false;
     RubyInfo aRubyInfo;
     bool bTextFrameInserted = false;
+    // IsFirstRun: probably better termed as 'IsBeforeContent'. Becomes false before first </w:r>
     bool bIsFirstRun = false;
     bool bIsOutsideAParagraph = true;
     bool bDummyParaAddedForTableInSection = false; // tdf#161631

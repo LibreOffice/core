@@ -195,7 +195,6 @@ private:
     static css::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     static sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     bool mbHasControls;
-    bool mbWasShapeInPara;
     bool mbIsLastPara = false;
     std::unique_ptr< GraphicZOrderHelper > m_zOrderHelper;
     OUString m_sGlossaryEntryName;
