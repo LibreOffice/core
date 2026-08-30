@@ -200,7 +200,8 @@
 	text-align: center;
 	padding: 0;
 	position: fixed;
-	bottom: 0;
+	/* Anchored to the bottom of the visual viewport */
+	bottom: var(--viewport-bottom-inset, 0px);
 	z-index: 1000;
 	border-top: 1px solid var(--color-border);
 	display: none;

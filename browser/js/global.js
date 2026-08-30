@@ -2948,11 +2948,19 @@ function showWelcomeSVG() {
 		global.app.socket.connect(ws);
 	};
 
-	function handleViewportChange(event) {
-		var visualViewport = event.target;
+	function handleViewportChange() {
+		const visualViewport = window.visualViewport;
+
+		// --viewport-bottom-inset is the height of the part of the layout viewport that
+		// lies below the visual viewport (the area covered by the on-screen keyboard).
+		const bottomInset = Math.max(0,
+			document.documentElement.clientHeight
+			- visualViewport.offsetTop - visualViewport.height);
 
 		window.scroll(0, 0);
 		document.body.style.height = visualViewport.height + 'px';
+		document.documentElement.style.setProperty(
+			'--viewport-bottom-inset', bottomInset + 'px');
 	}
 
 	if (window.visualViewport !== undefined) {
