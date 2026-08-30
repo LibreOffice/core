@@ -37,6 +37,8 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 	$(if $(gb_External_StaticLink),,$(error can only be invoked on top-level))
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PY )
+# documents of packages that no longer exist would otherwise linger forever
+	rm -f $(gb_CustomTarget_workdir)/instsetoo_native/sbom/*.json
 	$(foreach v, \
 		$(filter MPL_SUBSET PRODUCTNAME_WITHOUT_SPACES LIBO_VERSION% %TARBALL %SHA256SUM, $(.VARIABLES)), \
 		$(eval export $(v)=$($v)) \
@@ -62,6 +64,7 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 		$${EXTERNALSTATICFILE} \
 		$${EXTERNALPACKAGESTATICFILE} \
 	&& rm -f $${EXTERNALSFILE} $${EXTERNALSTATICFILE} $${EXTERNALPACKAGESTATICFILE}
+	rm -rf $(instsetoo_SBOM_DIR)
 	mkdir -p $(instsetoo_SBOM_DIR)
 	cp $(gb_CustomTarget_workdir)/instsetoo_native/sbom/*sbom.spdx.json $(instsetoo_SBOM_DIR)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )
