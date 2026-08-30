@@ -1,0 +1,234 @@
+{
+    "_comment": [
+        "Metadata for third-party components of Collabora Online that cannot be",
+        "discovered mechanically, consumed by scripts/create-sbom.py.",
+        "engine_externals: statically linked C++ libraries built in the engine tree;",
+        "  version and source tarball sha256 come from the engine's download.lst",
+        "  (tarball_var names the variable prefix there).",
+        "bundled: components contained in another component (parent).",
+        "vendored: sources checked into this repository; 'compiled' means the code",
+        "  is compiled into our binaries (concluded license follows the engine",
+        "  convention of MPL-2.0 for permissive code compiled into the product).",
+        "npm_thirdparty: direct npm dependencies that ship to the browser, mapped to",
+        "  the heading text used in THIRDPARTYLICENSES (policy: direct dependencies",
+        "  are listed in THIRDPARTYLICENSES, transitive ones only in the SBOM).",
+        "'thirdparty' strings are verified against THIRDPARTYLICENSES by --check."
+    ],
+    "engine_externals": {
+        "poco": {
+            "tarball_var": "POCO",
+            "vendor": "pocoproject",
+            "url": "https://pocoproject.org/",
+            "declared": "BSL-1.0",
+            "concluded": "MPL-2.0",
+            "thirdparty": "POCO C++ Libraries"
+        },
+        "openssl": {
+            "tarball_var": "OPENSSL",
+            "vendor": "openssl",
+            "url": "https://www.openssl.org/",
+            "declared": "Apache-2.0",
+            "concluded": "MPL-2.0",
+            "thirdparty": "OpenSSL"
+        },
+        "zlib": {
+            "tarball_var": "ZLIB",
+            "vendor": "zlib",
+            "url": "http://www.zlib.net/",
+            "declared": "Zlib",
+            "concluded": "MPL-2.0",
+            "thirdparty": "zlib"
+        },
+        "zstd": {
+            "tarball_var": "ZSTD",
+            "vendor": "facebook",
+            "url": "https://facebook.github.io/zstd/",
+            "declared": "BSD-3-Clause OR GPL-2.0-only",
+            "concluded": "MPL-2.0",
+            "thirdparty": "Zstandard"
+        },
+        "libpng": {
+            "tarball_var": "LIBPNG",
+            "vendor": "libpng",
+            "url": "http://www.libpng.org/",
+            "declared": "Libpng",
+            "concluded": "MPL-2.0",
+            "thirdparty": "libpng"
+        },
+        "expat": {
+            "tarball_var": "EXPAT",
+            "vendor": "libexpat_project",
+            "url": "https://libexpat.github.io/",
+            "declared": "MIT",
+            "concluded": "MPL-2.0",
+            "thirdparty": "Expat"
+        }
+    },
+    "bundled": [
+        {
+            "name": "pcre2",
+            "parent": "poco",
+            "vendor": "pcre",
+            "url": "https://www.pcre.org/",
+            "declared": "BSD-3-Clause",
+            "concluded": "MPL-2.0"
+        },
+        {
+            "name": "v8_double_conversion",
+            "display_name": "double-conversion",
+            "parent": "poco",
+            "vendor": "google",
+            "url": "https://github.com/google/double-conversion",
+            "declared": "BSD-3-Clause",
+            "concluded": "MPL-2.0"
+        },
+        {
+            "name": "utf8proc",
+            "parent": "poco",
+            "vendor": "julia",
+            "url": "https://juliastrings.github.io/utf8proc/",
+            "declared": "MIT",
+            "concluded": "MPL-2.0"
+        },
+        {
+            "name": "pdjson",
+            "parent": "poco",
+            "vendor": "skeeto",
+            "url": "https://github.com/skeeto/pdjson",
+            "declared": "MIT",
+            "concluded": "MPL-2.0"
+        },
+        {
+            "name": "wepoll",
+            "parent": "poco",
+            "vendor": "bert_belder",
+            "url": "https://github.com/piscisaureus/wepoll",
+            "declared": "BSD-2-Clause",
+            "concluded": "MPL-2.0",
+            "platforms": ["WNT"]
+        }
+    ],
+    "vendored": [
+        {
+            "name": "Macaron",
+            "vendor": "tomykaira",
+            "source": "common/base64.hpp",
+            "url": "https://gist.github.com/tomykaira/f0fd86b6c73063283afe550bc5d77594",
+            "declared": "MIT",
+            "concluded": "MPL-2.0",
+            "compiled": true,
+            "thirdparty": "Macaron"
+        },
+        {
+            "name": "SpookyHash",
+            "vendor": "bob_jenkins",
+            "version": "2",
+            "source": "common/SpookyV2.cpp",
+            "url": "https://burtleburtle.net/bob/hash/spooky.html",
+            "declared": "LicenseRef-PublicDomain",
+            "concluded": "MPL-2.0",
+            "compiled": true,
+            "thirdparty": "SpookyHash"
+        },
+        {
+            "name": "cairo-png",
+            "vendor": "cairographics",
+            "source": "common/Png.hpp",
+            "url": "https://www.cairographics.org/",
+            "declared": "LGPL-2.1-only OR MPL-1.1",
+            "concluded": "LGPL-2.1-only OR MPL-1.1",
+            "compiled": true,
+            "thirdparty": "cairo"
+        },
+        {
+            "name": "Leaflet",
+            "vendor": "leaflet",
+            "version": "0.8-dev",
+            "source": "browser/src",
+            "url": "https://leafletjs.com/",
+            "declared": "BSD-2-Clause",
+            "concluded": "BSD-2-Clause",
+            "comment": "browser/src is a heavily modified fork of Leaflet; the version is the fork baseline",
+            "thirdparty": "Leaflet"
+        },
+        {
+            "name": "Autolinker.js",
+            "vendor": "gregory_jacobs",
+            "version": "3.14.1",
+            "source": "browser/js/Autolinker.js",
+            "url": "https://github.com/gregjacobs/Autolinker.js",
+            "declared": "MIT",
+            "concluded": "MIT",
+            "thirdparty": "Autolinker.js"
+        },
+        {
+            "name": "l10n.js",
+            "vendor": "eli_grey",
+            "version": "2016-05-17",
+            "source": "browser/js/l10n.js",
+            "url": "https://github.com/eligrey/l10n.js",
+            "declared": "MIT",
+            "concluded": "MIT",
+            "thirdparty": "l10n.js"
+        },
+        {
+            "name": "sanitize-url",
+            "vendor": "braintree",
+            "version": "6.0.2",
+            "source": "browser/js/sanitize-url.js",
+            "url": "https://github.com/braintree/sanitize-url",
+            "declared": "MIT",
+            "concluded": "MIT",
+            "thirdparty": "sanitize-url"
+        },
+        {
+            "name": "Base.js",
+            "vendor": "dean_edwards",
+            "version": "1.1a",
+            "source": "browser/admin/src/Base.js",
+            "url": "https://dean.edwards.name/weblog/2006/03/base/",
+            "declared": "MIT",
+            "concluded": "MIT",
+            "thirdparty": "Base.js"
+        },
+        {
+            "name": "Bulma",
+            "vendor": "jgthms",
+            "version": "0.8.2",
+            "source": "browser/admin/css/bulma.min.css",
+            "url": "https://bulma.io/",
+            "declared": "MIT",
+            "concluded": "MIT",
+            "comment": "CSS framework used by the admin console",
+            "thirdparty": "Bulma"
+        },
+        {
+            "name": "Montserrat",
+            "vendor": "the_montserrat_project",
+            "version": "7.200",
+            "source": "browser/admin/font/Montserrat-Regular.ttf",
+            "url": "https://github.com/JulietaUla/Montserrat",
+            "declared": "OFL-1.1",
+            "concluded": "OFL-1.1",
+            "thirdparty": "Montserrat"
+        }
+    ],
+    "npm_thirdparty": {
+        "hammerjs": "hammer.js",
+        "dompurify": "DOMPurify",
+        "jquery": "jQuery JavaScript Library",
+        "jquery-ui": "jQuery UI",
+        "smartmenus": "SmartMenus",
+        "fzstd": "fzstd",
+        "marked": "Marked",
+        "gl-matrix": "gl-matrix",
+        "d3": "D3.js",
+        "l10n-for-node": "l10n.js"
+    },
+    "custom_licenses": {
+        "LicenseRef-PublicDomain": {
+            "name": "Public Domain",
+            "text": "SpookyHash: a 128-bit noncryptographic hash function. By Bob Jenkins, public domain."
+        }
+    }
+}

@@ -101,17 +101,17 @@ dist_doc_DATA = wsd/README.vars \
                 wsd/healthchecks.txt \
                 THIRDPARTYLICENSES
 
-if !ENABLE_FUZZERS
-# The SBOM rule pulls in coolforkit-ns (via collabora-online-sbom.spdx.json:
-# coolforkit-ns), so gate it out of fuzzer builds where the binary is not
-# wanted.
-doc_DATA = collabora-online-sbom.spdx.json
-endif
-
 coolwsddatadir = @COOLWSD_DATADIR@
 
 coolwsddata_DATA = discovery.xml \
                    favicon.ico
+
+if !ENABLE_FUZZERS
+# The SBOM generator hashes the installed binaries (via
+# collabora-online-sbom.spdx.json: $(GBUILD_EXES)), so gate it out of fuzzer
+# builds where those are not wanted.
+coolwsddata_DATA += collabora-online-sbom.spdx.json
+endif
 
 coolwsdconfigdir = @COOLWSD_CONFIGDIR@
 
@@ -489,7 +489,6 @@ EXTRA_DIST = \
              $(gbuild_sources) \
              README.md \
              THIRDPARTYLICENSES \
-             cool-sbom-template.spdx.json \
              coolkitconfig.xcu.in \
              coolwsd.service \
              coolwsd.spec \
@@ -539,6 +538,7 @@ EXTRA_DIST = \
              gbuild/StaticLibrary_simd.mk \
              gbuild/StaticLibrary_wsdglobals.mk \
              scripts/create-sbom.py \
+             scripts/sbom-externals.json \
              scripts/genlangmaps.py \
              scripts/refresh-git-hooks \
              scripts/unocommands.py \
@@ -1004,5 +1004,26 @@ czech: all-local presets-dir
 	@echo "Running unit-tests only"
 	$(MAKE) check -C test
 
-collabora-online-sbom.spdx.json: coolforkit-ns
-	$(QUIET_SBOM) python3 $(abs_top_srcdir)/scripts/create-sbom.py $(abs_top_builddir)
+collabora-online-sbom.spdx.json: $(GBUILD_EXES) coolwsd.xml coolkitconfig.xcu \
+		$(abs_top_srcdir)/scripts/create-sbom.py \
+		$(abs_top_srcdir)/scripts/sbom-externals.json \
+		$(abs_top_srcdir)/browser/npm-shrinkwrap.json
+	@$(MAKE) $(AM_MAKEFLAGS) -C browser sbom-shipped-js.txt
+	$(QUIET_SBOM) python3 $(abs_top_srcdir)/scripts/create-sbom.py \
+		--srcdir $(abs_top_srcdir) \
+		--builddir $(abs_top_builddir) \
+		--engine-builddir $(ENGINE_BUILDDIR) \
+		--version $(PACKAGE_VERSION)
+
+# Consistency checks for the SBOM inputs: annotations in
+# scripts/sbom-externals.json vs gbuild, POCO's bundled sources, the npm
+# shrinkwrap, and the direct-dependency policy for THIRDPARTYLICENSES.
+sbom-check:
+	@$(MAKE) $(AM_MAKEFLAGS) -C browser sbom-shipped-js.txt
+	python3 $(abs_top_srcdir)/scripts/create-sbom.py \
+		--srcdir $(abs_top_srcdir) \
+		--builddir $(abs_top_builddir) \
+		--engine-builddir $(ENGINE_BUILDDIR) \
+		--check
+
+.PHONY: sbom-check

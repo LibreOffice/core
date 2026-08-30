@@ -79,7 +79,7 @@ echo "account    required     pam_unix.so" >>  %{buildroot}/etc/pam.d/coolwsd
 /usr/share/doc/coolwsd/metrics.txt
 /usr/share/doc/coolwsd/protocol.txt
 /usr/share/doc/coolwsd/THIRDPARTYLICENSES
-/usr/share/doc/coolwsd/collabora-online-sbom.spdx.json
+/usr/share/coolwsd/collabora-online-sbom.spdx.json
 /usr/share/man/man1/coolwsd.1.gz
 /usr/share/man/man1/coolforkit-ns.1.gz
 /usr/share/man/man1/coolconvert.1.gz

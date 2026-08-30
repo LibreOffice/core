@@ -345,6 +345,12 @@ endif
 NODE_MODULES_JS_SRC = $(patsubst %.js,$(builddir)/%.js,$(NODE_MODULES_JS))
 NODE_MODULES_JS_DST = $(patsubst %.js,$(DIST_FOLDER)/%.js,$(NODE_MODULES_JS))
 
+# Manifest of the npm-supplied files we ship, the seed of the runtime npm
+# dependency closure in the SBOM (consumed by scripts/create-sbom.py).
+sbom-shipped-js.txt: Makefile
+	@rm -f $@
+	@for f in $(NODE_MODULES_JS) $(WORKER_NODE_MODULES_JS); do echo "$$f"; done | sort -u > $@
+
 COOL_LIBS_JS_SRC = $(patsubst %.js,$(srcdir)/js/%.js,$(COOL_LIBS_JS))
 COOL_LIBS_JS_DST = $(patsubst %.js,$(DIST_FOLDER)/%.js,$(COOL_LIBS_JS))
 
@@ -1729,7 +1735,7 @@ clean-local:
 		$(srcdir)/l10n/uno-localizations.json
 	@test ! -d "$(ENGINE_UI_XCU_DIR)" || rm -rf $(srcdir)/l10n/uno
 
-CLEANFILES = tscompile.done tsc-emit.done tsc-strict.done admin-tsc.done $(DIST_FOLDER)/strict.tsbuildinfo eslint.done prettier.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
+CLEANFILES = sbom-shipped-js.txt tscompile.done tsc-emit.done tsc-strict.done admin-tsc.done $(DIST_FOLDER)/strict.tsbuildinfo eslint.done prettier.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
 
 $(abs_srcdir)/jsconfig.json:
 	@printf "{\n \

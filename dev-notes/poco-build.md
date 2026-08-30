@@ -38,9 +38,10 @@ After an engine build the artefacts live at:
 POCO is not on the LibreOffice tarball mirror, so it has its own fetch bucket in
 `engine/Makefile.fetch` (`fetch_POCO_TARBALLS`), downloaded from
 `https://pocoproject.org/releases/poco-<version>`. Bumping the POCO version
-therefore means editing three places: `engine/download.lst` (`POCO_TARBALL` +
-`POCO_SHA256SUM`), the version in the `Makefile.fetch` download URL, and the
-version in `cool-sbom-template.spdx.json`. (`make fetch-names` must list the
+therefore means editing two places: `engine/download.lst` (`POCO_TARBALL` +
+`POCO_SHA256SUM`) and the version in the `Makefile.fetch` download URL; the
+SBOM picks the version up from `download.lst` automatically.
+(`make fetch-names` must list the
 tarball, otherwise the CI tarball cache via `bin/cached-fetch.sh` won't include
 it and the build fails with "No rule to make target .../poco-...tar.bz2".)
 
@@ -187,5 +188,6 @@ it consumes a prebuilt engine-assets tarball (no engine workdir) and still
 installs a system POCO, so it relies on configure's **system-POCO fallback**
 (engine-workdir lookup fails, system POCO is used). It keeps working unchanged;
 to migrate it fully, the engine-assets tarball would need to ship the POCO
-workdir. The SBOM template (`cool-sbom-template.spdx.json`) records the bundled
-POCO version (now 1.15.3).
+workdir. The SBOM generator (`scripts/create-sbom.py`) reads the POCO version
+from the engine's `download.lst` and the bundled third-party versions from the
+unpacked poco tarball in the engine workdir.
