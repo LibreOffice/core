@@ -197,9 +197,6 @@ public:
 
     FormulaDlg_Impl(weld::Dialog& rDialog,
                     weld::Builder& rBuilder,
-                    bool _bSupportFunctionResult,
-                    bool _bSupportResult,
-                    bool _bSupportMatrix,
                     IFormulaEditorHelper* _pHelper,
                     const IFunctionManager* _pFunctionMgr,
                     IControlReferenceHandler* _pDlg);
@@ -208,9 +205,6 @@ public:
 
 FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
                                  weld::Builder& rBuilder,
-                                 bool _bSupportFunctionResult,
-                                 bool _bSupportResult,
-                                 bool _bSupportMatrix,
                                  IFormulaEditorHelper* _pHelper,
                                  const IFunctionManager* _pFunctionMgr,
                                  IControlReferenceHandler* _pDlg)
@@ -294,16 +288,13 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     m_xBtnFavorites->connect_clicked(LINK(this, FormulaDlg_Impl, FavToggleHdl));
     m_xBtnFavorites->hide();
 
-    m_xFtResult->set_visible( _bSupportResult );
-    m_xWndResult->set_visible( _bSupportResult );
+    m_xFtResult->set_visible( true );
+    m_xWndResult->set_visible( true );
 
-    m_xFtFormResult->set_visible( _bSupportFunctionResult );
-    m_xWndFormResult->set_visible( _bSupportFunctionResult );
+    m_xFtFormResult->set_visible( true );
+    m_xWndFormResult->set_visible( true );
 
-    if ( _bSupportMatrix )
-        m_xBtnMatrix->connect_toggled( LINK( this, FormulaDlg_Impl, MatrixHdl ) );
-    else
-        m_xBtnMatrix->hide();
+    m_xBtnMatrix->connect_toggled( LINK( this, FormulaDlg_Impl, MatrixHdl ) );
 
     m_xBtnCancel->connect_clicked( LINK( this, FormulaDlg_Impl, BtnHdl ) );
     m_xBtnEnd->connect_clicked( LINK( this, FormulaDlg_Impl, BtnHdl ) );
@@ -1789,10 +1780,8 @@ FormulaDlg::FormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
                        weld::Window* pParent,
                        IFunctionManager const * _pFunctionMgr, IControlReferenceHandler* _pDlg)
     : SfxModelessDialogController( pB, pCW, pParent, u"formula/ui/formuladialog.ui"_ustr, u"FormulaDialog"_ustr)
-    , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, true/*_bSupportFunctionResult*/
-                                             , true/*_bSupportResult*/
-                                             , true/*_bSupportMatrix*/
-                                             , this, _pFunctionMgr, _pDlg))
+    , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder,
+                                             this, _pFunctionMgr, _pDlg))
 {
     m_xDialog->set_title(m_pImpl->m_aTitle1);
 }
