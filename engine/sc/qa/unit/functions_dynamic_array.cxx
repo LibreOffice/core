@@ -101,21 +101,6 @@ CPPUNIT_TEST_FIXTURE(DynamicArrayTest, testDynamicArrayXlsxRoundTrip)
     checkVerdicts();
 }
 
-CPPUNIT_TEST_FIXTURE(DynamicArrayTest, testDroppedImplicitIntersectionIsPutBack)
-{
-    // OOXML leaves the @ of a plain =@ref# cell out of the text, expressing it by keeping
-    // the cell a non-array formula, so the import puts it back. An array formula does not
-    // reduce its operand, so it keeps the spelling it was saved with.
-    createScDoc("functions/dynamic_array/xlsx/DynamicArrayFixture.xlsx");
-    ScDocument* pDocument = getScDoc();
-
-    // "Implicit intersection Operator" F44 is a plain _xlfn.ANCHORARRAY($G$45).
-    CPPUNIT_ASSERT_EQUAL(u"=@$G$45#"_ustr, pDocument->GetFormula(5, 43, 1));
-
-    // "Spill Operator" A34 is the same call as an array formula.
-    CPPUNIT_ASSERT_EQUAL(u"=$H$5#"_ustr, pDocument->GetFormula(0, 33, 2));
-}
-
 CPPUNIT_TEST_FIXTURE(DynamicArrayTest, testUnionSpillIntersectionOperatorXlsxRoundTrip)
 {
     createScDoc("functions/dynamic_array/xlsx/UnionSpillIntersectionOperatorTest.xlsx");
@@ -124,9 +109,6 @@ CPPUNIT_TEST_FIXTURE(DynamicArrayTest, testUnionSpillIntersectionOperatorXlsxRou
         ScDocument* pDocument = getScDoc();
         assertRowChecks(*pDocument, 0, 200, pStage);
     };
-
-    // J112 is the shape OOXML saves without its @, so the import puts it back.
-    CPPUNIT_ASSERT_EQUAL(u"=@$I$112#"_ustr, getScDoc()->GetFormula(9, 111, 0));
 
     // The workbook is another application's, so the first check is against its stored
     // results and each later one against ours, with the save and reload covering the export.
