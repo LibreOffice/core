@@ -18,7 +18,7 @@
     "browserify": "16.5.1",
     "browserify-css": "0.15.0",
     "d3": "6.7.0",
-    "dompurify": "3.4.9",
+    "dompurify": "3.4.14",
     "esbuild-wasm": "^0.28.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",

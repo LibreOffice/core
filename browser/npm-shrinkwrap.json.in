@@ -28,7 +28,7 @@
         "browserify": "16.5.1",
         "browserify-css": "0.15.0",
         "d3": "6.7.0",
-        "dompurify": "3.4.9",
+        "dompurify": "3.4.14",
         "esbuild-wasm": "^0.28.1",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^9.1.0",
@@ -3542,9 +3542,9 @@
       }
     },
     "node_modules/dompurify": {
-      "version": "3.4.9",
-      "resolved": "file:node_shrinkpack/dompurify-3.4.9.tar",
-      "integrity": "sha512-4dPSRMRDqHvs0V4YDFCsaIZo4if5u0xM+llyxiM2fwuZFdKArUBAF3VtI2+n8NKg9P870WMdYk0UhqQNoWXbfQ== sha512-9kv+IDl9jaeyJg4bdtpUVlPWXkjKlngS4nEzaeP4rgTCwCA1sNNXU+PyL6ojJsKY19dMLFtpDoxoTMWFb09y2g==",
+      "version": "3.4.14",
+      "resolved": "file:node_shrinkpack/dompurify-3.4.14.tar",
+      "integrity": "sha512-dVoH9z+MY+C9IilgGCk3YfFqjLi3fChm2OiKJMzh6axrJ5qwxqWaZamgmHrpv22CN/KdbZJuGEGgfQoL00LTdg== sha512-YcW3IEXo5o9+TmodVRw9JB55OAObWsG/Zqy/mGIS6aE+tBQ+ZIBuLGH5dQwkPU593+FyTdJFmuXEtckt+N1JEA==",
       "dev": true,
       "license": "(MPL-2.0 OR Apache-2.0)",
       "optionalDependencies": {
