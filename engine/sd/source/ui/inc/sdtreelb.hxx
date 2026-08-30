@@ -362,7 +362,7 @@ public:
 
     std::vector<OUString> GetSelectedEntryIds() const;
 
-    SD_DLLPUBLIC SdDrawDocument* GetBookmarkDoc(SfxMedium* pMedium = nullptr);
+    SD_DLLPUBLIC SdDrawDocument* GetBookmarkDoc();
 
     bool IsLinkableSelected() const { return m_bLinkableSelected; }
 
