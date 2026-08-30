@@ -103,8 +103,7 @@ static oslSecurityImpl * growSecurityImpl(
         }
         p = static_cast<oslSecurityImpl *>(realloc(impl, n));
         if (p != nullptr) {
-            // coverity[overrun-buffer-arg] - theoretically massive n is not due to
-            // a negative parameter being interpreted as unsigned
+            // coverity[overrun-buffer-arg : FALSE] - n is the size just passed to realloc
             memset (p, 0, n);
         }
     }
