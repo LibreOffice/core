@@ -710,6 +710,10 @@ def process_install_script(install_script, root_gids):
         lang = get_lang(module)
         files = get_files(module, lang)
         if len(files) == 0:
+            if gid in known_optional_root_gids:
+                # the scp2 module exists unconditionally but its content is
+                # makefile-disabled (e.g. Libreofficekit without gtk)
+                continue
             raise Exception(f"unexpected root module with no files: {gid}")
         result[gid] = files
 
