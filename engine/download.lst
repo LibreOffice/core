@@ -548,8 +548,8 @@ VERAPDF_JAR := verapdf-cli-1.29.0.jar
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENSSL_SHA256SUM := a8c0d28a529ca480f9f36cf5792e2cd21984552a3c8e4aa11a24aa31aeac98e8
-OPENSSL_TARBALL := openssl-3.5.7.tar.gz
+OPENSSL_SHA256SUM := a8f84a39918ec6415ce765d9b429d313ba97b8143169c172e734b9514464f5b2
+OPENSSL_TARBALL := openssl-3.5.8.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
