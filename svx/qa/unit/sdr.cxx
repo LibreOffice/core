@@ -220,7 +220,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
     SdrModel& rModel = pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage();
     sfx2::LinkManager* pLinkMgr = rModel.GetLinkManager();
     CPPUNIT_ASSERT(pLinkMgr);
-    pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
+    pLinkMgr->UpdateAllLinks(false, u""_ustr);
 
     // When rendering that document:
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence

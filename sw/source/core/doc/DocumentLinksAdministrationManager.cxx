@@ -252,7 +252,7 @@ void DocumentLinksAdministrationManager::UpdateLinks()
             rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
             SfxMedium* medium = pShell->GetMedium();
             GetLinkManager().UpdateAllLinks(
-                false, nullptr,
+                false,
                 medium == nullptr ? OUString() : medium->GetName());
         }
     }

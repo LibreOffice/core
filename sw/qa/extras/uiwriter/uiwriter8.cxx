@@ -2842,8 +2842,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
         pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
     // no way to set SwDocShell::m_nUpdateDocMode away from NO_UPDATE ?
     // pMasterDoc->getIDocumentLinksAdministration().UpdateLinks();
-    pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, nullptr,
-                                                                                  u""_ustr);
+    pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, u""_ustr);
     // note: this has called SwGetRefFieldType::UpdateGetReferences()
     SwFieldType const* const pType(
         pMasterDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef));
@@ -2905,8 +2904,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(
         size_t(1), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, nullptr,
-                                                                            u""_ustr);
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, u""_ustr);
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
@@ -2933,8 +2931,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121119)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(
         size_t(2), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, nullptr,
-                                                                            u""_ustr);
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, u""_ustr);
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
                                                                                   uno::UNO_QUERY);

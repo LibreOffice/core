@@ -1295,7 +1295,7 @@ void SdDrawDocument::UpdateAllLinks()
     if (rEmbeddedObjectContainer.getUserAllowsLinkUpdate())
     {
         s_pDocLockedInsertingLinks = this;
-        m_pLinkManager->UpdateAllLinks(false, nullptr, u""_ustr);
+        m_pLinkManager->UpdateAllLinks(false, u""_ustr);
         if (s_pDocLockedInsertingLinks == this)
             s_pDocLockedInsertingLinks = nullptr;
         return;
@@ -1337,7 +1337,7 @@ void SdDrawDocument::UpdateAllLinks()
     {
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
         s_pDocLockedInsertingLinks = this;
-        m_pLinkManager->UpdateAllLinks(false, nullptr, pMedium->GetName());
+        m_pLinkManager->UpdateAllLinks(false, pMedium->GetName());
         if (s_pDocLockedInsertingLinks == this)
             s_pDocLockedInsertingLinks = nullptr;
     }

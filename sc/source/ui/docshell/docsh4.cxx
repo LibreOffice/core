@@ -219,7 +219,7 @@ void ScDocShell::ReloadAllLinks()
     {
         registerDeferredFormImageLinks(GetDeferredFormControlImages(), *pLinkMgr);
         ClearDeferredFormControlImages();
-        pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
+        pLinkMgr->UpdateAllLinks(false, u""_ustr);
     }
 }
 

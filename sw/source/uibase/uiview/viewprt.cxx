@@ -255,7 +255,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                     medium = sh->GetMedium();
                 }
                 pSh->GetLinkManager().UpdateAllLinks(
-                    false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
+                    false, medium == nullptr ? OUString() : medium->GetName() );
             }
             SfxRequest aReq( rReq );
             SfxBoolItem aBool(SID_SELECTION, bPrintSelection);

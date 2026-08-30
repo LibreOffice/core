@@ -375,7 +375,7 @@ void DrawDocShell::PerformLinkUpdate()
         registerDeferredFormImageLinks(GetDeferredFormControlImages(), *mpDoc->GetLinkManager());
         ClearDeferredFormControlImages();
         SdDrawDocument::s_pDocLockedInsertingLinks = mpDoc;
-        mpDoc->GetLinkManager()->UpdateAllLinks(false, nullptr, u""_ustr);
+        mpDoc->GetLinkManager()->UpdateAllLinks(false, u""_ustr);
         if (SdDrawDocument::s_pDocLockedInsertingLinks == mpDoc)
             SdDrawDocument::s_pDocLockedInsertingLinks = nullptr;
     }

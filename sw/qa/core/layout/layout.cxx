@@ -551,7 +551,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testLinkedBullet)
     // is loaded before rendering
     pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
     sfx2::LinkManager& rLinkMgr = getSwDoc()->getIDocumentLinksAdministration().GetLinkManager();
-    rLinkMgr.UpdateAllLinks(false, nullptr, u""_ustr);
+    rLinkMgr.UpdateAllLinks(false, u""_ustr);
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();

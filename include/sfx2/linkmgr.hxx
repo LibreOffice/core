@@ -129,7 +129,6 @@ public:
     static SvLinkSourceRef CreateObj( SvBaseLink const * );
 
     void        UpdateAllLinks(bool bAskUpdate,
-                               weld::Window* pParentWin,
                                OUString const & referer);
 
     // Call for list of links (eg for link-dialog)
