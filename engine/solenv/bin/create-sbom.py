@@ -686,18 +686,12 @@ def process_install_script(install_script, root_gids):
 
     result = {}
 
+    # package roots declared in the packinfos whose scp2 module is only
+    # included in some configurations
     known_optional_root_gids = (
         "gid_Module_Optional_Gnome",
-        "gid_Module_Optional_Kde",
-        "gid_Module_Optional_Activexcontrol",
-        "gid_Module_Optional_Onlineupdate",
         "gid_Module_Optional_Pyuno_LibreLogo",
-        "gid_Module_Optional_PostgresqlSdbc",
-        "gid_Module_Pdfimport",
-        "gid_Module_Optional_Extensions_MEDIAWIKI",
-        "gid_Module_Optional_Extensions_NLPSolver",
-        "gid_Module_Optional_Extensions_Script_Provider_For_BS",
-        "gid_Module_Optional_Extensions_Script_Provider_For_JS")
+        "gid_Module_Pdfimport")
 
     for gid in root_gids:
         if not(gid in modules) and gid in known_optional_root_gids:

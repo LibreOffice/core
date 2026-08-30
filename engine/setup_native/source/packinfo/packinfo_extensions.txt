@@ -34,17 +34,3 @@
 # destpath
 # End
 
-Start
-module = "gid_Module_Optional_Extensions_Script_Provider_For_JS"
-solarispackagename = "%BASISPACKAGEPREFIX-extension-javascript-script-provider"
-solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX-extension-javascript-script-provider"
-requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-linuxpatchrequires = ""
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "Script provider for JavaScript extension for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End

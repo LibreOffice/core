@@ -57,21 +57,6 @@ provides = "libreoffice-evolution libreoffice-gnome"
 End
 
 Start
-module = "gid_Module_Optional_Kde"
-solarispackagename = "%BASISPACKAGEPREFIX-kde-integration"
-solarisrequires = "%BASISPACKAGEPREFIX-core"
-packagename = "%BASISPACKAGEPREFIX-kde-integration"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
-requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "KDE integration module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Root"
 solarispackagename = "%BASISPACKAGEPREFIX-core"
 packagename = "%BASISPACKAGEPREFIX-core"
@@ -191,21 +176,6 @@ copyright = "2026 Collabora Productivity Ltd."
 solariscopyright = "solariscopyrightfile"
 vendor = "Collabora Productivity Ltd."
 description = "XSLT filter samples module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
-module = "gid_Module_Optional_Activexcontrol"
-solarispackagename = "%BASISPACKAGEPREFIX-activex"
-solarisrequires = "%BASISPACKAGEPREFIX-core"
-packagename = "%BASISPACKAGEPREFIX-activex"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
-requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "ActiveX control for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
