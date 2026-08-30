@@ -1050,7 +1050,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         medium = sh->GetMedium();
                     }
                     rSh.GetLinkManager().UpdateAllLinks(
-                        false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
+                        false, medium == nullptr ? OUString() : medium->GetName() );
                     rSh.EndAllAction();
                 }
                 SfxDispatcher &rDis = *rTempView.GetViewFrame().GetDispatcher();
@@ -1572,7 +1572,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         medium = sh->GetMedium();
                     }
                     rSh.GetLinkManager().UpdateAllLinks(
-                        false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
+                        false, medium == nullptr ? OUString() : medium->GetName() );
                     rSh.EndAllAction();
                 }
             }

@@ -325,7 +325,7 @@ void Test::testGraphicShape()
         // download can proceed, then pump the event loop to let the
         // async download complete before export
         getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
-        getSwDoc()->GetEditShell()->GetLinkManager().UpdateAllLinks(false, nullptr, u""_ustr);
+        getSwDoc()->GetEditShell()->GetLinkManager().UpdateAllLinks(false, u""_ustr);
         Scheduler::ProcessEventsToIdle();
 
         // Export the document and import again for a check
@@ -333,7 +333,7 @@ void Test::testGraphicShape()
 
         // allow link updates on the reloaded document too
         getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
-        getSwDoc()->GetEditShell()->GetLinkManager().UpdateAllLinks(false, nullptr, u""_ustr);
+        getSwDoc()->GetEditShell()->GetLinkManager().UpdateAllLinks(false, u""_ustr);
         Scheduler::ProcessEventsToIdle();
 
         // Check whether graphic exported well

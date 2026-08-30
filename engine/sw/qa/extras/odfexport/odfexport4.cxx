@@ -1262,7 +1262,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121119)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(
         size_t(2), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, nullptr,
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false,
                                                                             u""_ustr);
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
@@ -1277,7 +1277,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121119)
 
     CPPUNIT_ASSERT_EQUAL(
         size_t(2), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, nullptr,
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false,
                                                                             u""_ustr);
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier2(mxComponent,
@@ -1295,10 +1295,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121119_runtime_update)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(
         size_t(2), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, nullptr,
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false,
                                                                             u""_ustr);
     // double update of the links
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, nullptr,
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false,
                                                                             u""_ustr);
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,

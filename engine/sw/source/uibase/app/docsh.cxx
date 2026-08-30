@@ -1322,7 +1322,7 @@ void SwDocShell::PerformLinkUpdate()
         = GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
     registerDeferredFormImageLinks(GetDeferredFormControlImages(), rLinkMgr);
     ClearDeferredFormControlImages();
-    rLinkMgr.UpdateAllLinks(false, nullptr,
+    rLinkMgr.UpdateAllLinks(false,
                             GetMedium() ? GetMedium()->GetName() : OUString());
 }
 
