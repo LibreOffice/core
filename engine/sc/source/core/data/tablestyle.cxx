@@ -841,11 +841,8 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
 
 namespace
 {
-// The style's font item to bake for nWhich, or nullptr to keep the cell's own value. The cell
-// wins only when it sets this attribute directly (not through a named cell style) to a
-// non-default value - for fonts the Table Style outranks a cell style. Exception: a direct
-// black font colour counts as unset (black is the Table Style's "no colour" marker), so the
-// style colour shows. See ScPatternAttr::fillFontOnly / fillColor.
+// The style's font item to bake for nWhich, or nullptr to keep the cell's own value - the same
+// rule as the render, see ScPatternAttr::CanApplyTableItemToCell.
 const SfxPoolItem* lcl_fontItemToBake(const SfxItemSet& rCellSet, const SfxItemSet& rStyleSet,
                                       sal_uInt16 nWhich)
 {
@@ -853,18 +850,7 @@ const SfxPoolItem* lcl_fontItemToBake(const SfxItemSet& rCellSet, const SfxItemS
     if (rStyleSet.GetItemState(nWhich, false, &pStyleItem) != SfxItemState::SET)
         return nullptr;
 
-    const SfxPoolItem* pDirect = nullptr;
-    if (rCellSet.GetItemState(nWhich, false, &pDirect) == SfxItemState::SET
-        && *pDirect != rCellSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
-    {
-        const bool bBlackFontColor
-            = nWhich == ATTR_FONT_COLOR
-              && static_cast<const SvxColorItem*>(pDirect)->getColor() == COL_BLACK;
-        if (!bBlackFontColor)
-            return nullptr; // direct cell font wins - nothing to bake
-    }
-
-    return pStyleItem;
+    return ScPatternAttr::CanApplyTableItemToCell(rCellSet, nWhich) ? pStyleItem : nullptr;
 }
 }
 

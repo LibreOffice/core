@@ -571,6 +571,31 @@ void ScPatternAttr::fillFont(
     rFont.SetColor(aComplexColor.getFinalColor());
 }
 
+bool ScPatternAttr::CanApplyTableItemToCell(const SfxItemSet& rItemSet, sal_uInt16 nWhich)
+{
+    const SfxPoolItem* pDirect = nullptr;
+    if (rItemSet.GetItemState(nWhich, false, &pDirect) != SfxItemState::SET)
+        return true;
+
+    if (nWhich == ATTR_BACKGROUND)
+        return *pDirect == rItemSet.GetPool()->GetUserOrPoolDefaultItem(nWhich);
+
+    const SfxItemSet* pParent = rItemSet.GetParent();
+    const SfxPoolItem& rInherited
+        = pParent ? pParent->Get(nWhich) : rItemSet.GetPool()->GetUserOrPoolDefaultItem(nWhich);
+
+    if (nWhich == ATTR_FONT_COLOR)
+    {
+        auto getFontColor = [](const SfxPoolItem& rItem) {
+            const Color& rColor = static_cast<const SvxColorItem&>(rItem).getColor();
+            return rColor == COL_AUTO ? COL_BLACK : rColor;
+        };
+        return getFontColor(*pDirect) == getFontColor(rInherited);
+    }
+
+    return *pDirect == rInherited;
+}
+
 template <class T>
 static const T* lcl_populateresult( TypedWhichId<T> nWhich, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet = nullptr )
 {
@@ -581,21 +606,10 @@ static const T* lcl_populateresult( TypedWhichId<T> nWhich, const SfxItemSet& rS
 
     if (!pItem && pTableSet)
     {
-        const SfxPoolItem* pThisItem;
-        if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
-            && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
-        {
-            // use the direct cell format value against the Table style format
-            // if it not a default one (COL_BLACK is the default in case of Table Styles)
-            // on the cell level
-            if (sal_uInt16(nWhich) == ATTR_FONT_COLOR
-                && rSrcSet.GetItem(ATTR_FONT_COLOR)->getColor() == COL_BLACK)
-                pItem = pTableSet->GetItemIfSet(nWhich);
-            else
-                pItem = &rSrcSet.Get(nWhich);
-        }
-        else
+        if (ScPatternAttr::CanApplyTableItemToCell(rSrcSet, nWhich))
             pItem = pTableSet->GetItemIfSet(nWhich);
+        else
+            pItem = &rSrcSet.Get(nWhich);
     }
 
     if (!pItem)
@@ -1012,21 +1026,10 @@ static void lcl_populate( std::optional<T>& rxItem, TypedWhichId<T> nWhich, cons
 
     if (!pItem && pTableSet)
     {
-        const SfxPoolItem* pThisItem;
-        if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
-            && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
-        {
-            // use the direct cell format value against the Table style format
-            // if it not a default one (COL_BLACK is the default in case of Table Styles)
-            // on the cell level
-            if (sal_uInt16(nWhich) == ATTR_FONT_COLOR
-                && rSrcSet.GetItem(ATTR_FONT_COLOR)->getColor() == COL_BLACK)
-                pItem = pTableSet->GetItemIfSet(nWhich);
-            else
-                pItem = &rSrcSet.Get(nWhich);
-        }
-        else
+        if (ScPatternAttr::CanApplyTableItemToCell(rSrcSet, nWhich))
             pItem = pTableSet->GetItemIfSet(nWhich);
+        else
+            pItem = &rSrcSet.Get(nWhich);
     }
 
     if (!pItem)

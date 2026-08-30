@@ -181,6 +181,9 @@ public:
     static SvxCellOrientation GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
     SvxCellOrientation GetCellOrientation( const SfxItemSet* pCondSet = nullptr ) const;
 
+    /** True when a Table Style may paint nWhich over the cell's own value. */
+    static bool CanApplyTableItemToCell(const SfxItemSet& rItemSet, sal_uInt16 nWhich);
+
     /** Static helper function to fill a font object from the passed item set. */
     SC_DLLPUBLIC static void fillFontOnly(vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         const OutputDevice* pOutDev = nullptr,

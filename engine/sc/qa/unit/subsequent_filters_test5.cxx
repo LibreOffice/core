@@ -29,6 +29,7 @@
 #include <docmodel/color/ComplexColor.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -775,6 +776,83 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleFontEffects)
                                      getFontSet(0, 9));
     CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, aEditSet.Get(EE_CHAR_ITALIC).GetPosture());
     CPPUNIT_ASSERT_EQUAL(LINESTYLE_SINGLE, aEditSet.Get(EE_CHAR_UNDERLINE).GetLineStyle());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleHeaderFontColor)
+{
+    createScDoc("xlsx/tablestyle-header-font-color.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
+    CPPUNIT_ASSERT(pParam);
+    CPPUNIT_ASSERT_EQUAL(u"TestHeaderColor"_ustr, pParam->maStyleID);
+    const ScTableStyle* pStyle = pDoc->GetTableStyles()->GetTableStyle(pParam->maStyleID);
+    CPPUNIT_ASSERT(pStyle);
+
+    // The header row is row 2, so fillinfo's row index for it is -1.
+    auto getRenderedColor = [pDoc, pDBData, pStyle](SCCOL nCol) {
+        const SfxItemSet* pTableSet = pStyle->GetFontItemSet(*pDBData, nCol, 1, -1);
+        CPPUNIT_ASSERT(pTableSet);
+
+        model::ComplexColor aComplexColor;
+        pDoc->GetPattern(nCol, 1, 0)->fillColor(aComplexColor, ScAutoFontColorMode::Raw, nullptr,
+                                                pTableSet);
+        return aComplexColor.getFinalColor();
+    };
+
+    const Color aStyleColor(0x00B0F0); // the header row dxf
+    const Color aNormalColor(0x196B24); // the Normal cell style, and the C2/D2 header cells
+    const Color aOwnColor(0xFF0000); // B2's own colour
+
+    // The cell formats are imported unchanged - what changes is who outranks them.
+    CPPUNIT_ASSERT_EQUAL(aOwnColor, pDoc->GetAttr(1, 1, 0, ATTR_FONT_COLOR).getColor());
+    CPPUNIT_ASSERT_EQUAL(aNormalColor, pDoc->GetAttr(2, 1, 0, ATTR_FONT_COLOR).getColor());
+
+    CPPUNIT_ASSERT_EQUAL(aOwnColor, getRenderedColor(1));
+    CPPUNIT_ASSERT_EQUAL(aStyleColor, getRenderedColor(2));
+    CPPUNIT_ASSERT_EQUAL(aStyleColor, getRenderedColor(3));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleHeaderFontPosture)
+{
+    createScDoc("xlsx/tablestyle-header-font-posture.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
+    CPPUNIT_ASSERT(pParam);
+    CPPUNIT_ASSERT_EQUAL(u"PostureProbe"_ustr, pParam->maStyleID);
+    const ScTableStyle* pStyle = pDoc->GetTableStyles()->GetTableStyle(pParam->maStyleID);
+    CPPUNIT_ASSERT(pStyle);
+    const SfxItemSet* pHeaderFont = pStyle->GetFontItemSet(*pDBData, 0, 0, -1);
+    CPPUNIT_ASSERT(pHeaderFont);
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE,
+                         pHeaderFont->Get(ATTR_FONT_POSTURE).GetPosture());
+
+    // A1 carries a direct font holding two values: the italic that the Normal cell style
+    // gives it anyway, and 22pt, which it does not.
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 0);
+    CPPUNIT_ASSERT(pPattern);
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NORMAL, pPattern->GetItem(ATTR_FONT_POSTURE).GetPosture());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(440), pPattern->GetItem(ATTR_FONT_HEIGHT).GetHeight());
+
+    // MSO renders that header upright at 22pt: the repeated italic yields to the style, the
+    // size the cell really chose stays.
+    vcl::Font aFont;
+    pPattern->fillFontOnly(aFont, nullptr, nullptr, nullptr, pHeaderFont);
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aFont.GetItalic());
+
+    // C1 sets no font of its own, so the style paints there whatever the rule.
+    const ScPatternAttr* pPlain = pDoc->GetPattern(2, 0, 0);
+    CPPUNIT_ASSERT(pPlain);
+    vcl::Font aPlainFont;
+    pPlain->fillFontOnly(aPlainFont, nullptr, nullptr, nullptr, pHeaderFont);
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPlainFont.GetItalic());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)
