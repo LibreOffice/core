@@ -939,6 +939,52 @@ void XclExpFormulaCell::Save( XclExpStream& rStrm )
         mxStringRec->Save( rStrm );
 }
 
+namespace
+{
+// Whether the token is a reference of any kind: a cell, a range, a name, or one of another
+// document.
+bool lcl_isReference(const formula::FormulaToken& rToken)
+{
+    switch (rToken.GetType())
+    {
+        case formula::svSingleRef:
+        case formula::svDoubleRef:
+        case formula::svIndex:
+        case formula::svExternalSingleRef:
+        case formula::svExternalDoubleRef:
+        case formula::svExternalName:
+            return true;
+        default:
+            return false;
+    }
+}
+
+// Whether everything behind the @ at the head of the array is one reference, the signs in front
+// of it and at most the spilled-range operator behind it. Nothing there computes, so the value
+// is the reference reduced to one cell, which is what a cell without the array marking means
+// anyway.
+bool lcl_isReferenceOperand(const ScTokenArray& rTokens)
+{
+    bool bSeenReference = false;
+    for (sal_uInt16 nPosition = 1; nPosition < rTokens.GetLen(); ++nPosition)
+    {
+        const formula::FormulaToken* pToken = rTokens.TokenAt(nPosition);
+        const OpCode eOp = pToken->GetOpCode();
+        if (!bSeenReference && (eOp == ocAdd || eOp == ocSub || eOp == ocNegSub))
+            continue;
+        if (!bSeenReference && lcl_isReference(*pToken))
+        {
+            bSeenReference = true;
+            continue;
+        }
+        if (bSeenReference && eOp == ocSpill)
+            continue;
+        return false;
+    }
+    return bSeenReference;
+}
+}
+
 void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
     const char* sType = nullptr;
@@ -1030,14 +1076,14 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
     if (bWriteFormula)
     {
         ScTokenArray aTokenArray(*mrScFmlaCell.GetCode());
-        // OOXML expresses the @ of a plain =@ref# cell by leaving it out and keeping the
-        // cell a non-array formula. Write it the same way, so a reader that does not know
-        // the _xlfn.SINGLE call still gets the formula.
+        // OOXML expresses the @ over a reference by leaving it out and keeping the cell a
+        // plain formula. Write it the same way, so a reader that does not know the
+        // _xlfn.SINGLE call still gets the formula. An operand that computes keeps the call,
+        // where it is the call that says the result is reduced.
         if (!bDynamicArrayMaster && mrScFmlaCell.GetMatrixFlag() == ScMatrixMode::NONE
-            && aTokenArray.GetLen() == 3
+            && aTokenArray.GetLen() > 1
             && aTokenArray.TokenAt(0)->GetOpCode() == ocSingleValue
-            && aTokenArray.TokenAt(1)->GetType() == formula::svSingleRef
-            && aTokenArray.TokenAt(2)->GetOpCode() == ocSpill)
+            && lcl_isReferenceOperand(aTokenArray))
         {
             aTokenArray.RemoveToken(0, 1);
         }

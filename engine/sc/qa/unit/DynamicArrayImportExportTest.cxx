@@ -38,10 +38,15 @@ struct StoredFormula
     bool operator==(const StoredFormula& rOther) const = default;
 };
 
-// The formulas of one sheet part, keyed by the cell reference. An f element with no text of its
-// own carries no formula: a shared-group member keeps its text in the master, and the cells a
-// spill covers get an empty one. Those are left out.
-using SheetFormulas = std::map<OUString, StoredFormula>;
+// The formulas of one sheet part, keyed by the cell reference, and the references of all its
+// cells. An f element with no text of its own carries no formula: a shared-group member keeps
+// its text in the master, and the cells a spill covers get an empty one. Those hold no formula
+// to compare, but the cell is there.
+struct SheetFormulas
+{
+    std::map<OUString, StoredFormula> aFormulas;
+    std::set<OUString> aCells;
+};
 
 OString toReport(std::u16string_view aText)
 {
@@ -62,7 +67,7 @@ OString describe(const StoredFormula& rFormula)
 // rIgnored is a difference we know about, and one that stops differing is reported too, so the
 // list keeps naming the differences that are really there.
 void assertSameStoredFormulas(const SheetFormulas& rInput, const SheetFormulas& rWritten,
-                              const OUString& rSheetPath, const std::set<OUString>& rIgnored)
+                              std::u16string_view aSheetPath, const std::set<OUString>& rIgnored)
 {
     OString aReport;
     auto appendLine = [&aReport](const OString& rLine) {
@@ -70,13 +75,13 @@ void assertSameStoredFormulas(const SheetFormulas& rInput, const SheetFormulas& 
             aReport += "\n";
         aReport += rLine;
     };
-    const OString aSheet = toReport(rSheetPath);
+    const OString aSheet = toReport(aSheetPath);
 
-    for (const auto& rEntry : rInput)
+    for (const auto& rEntry : rInput.aFormulas)
     {
         const bool bIgnored = rIgnored.find(rEntry.first) != rIgnored.end();
-        auto aWritten = rWritten.find(rEntry.first);
-        if (aWritten == rWritten.end())
+        auto aWritten = rWritten.aFormulas.find(rEntry.first);
+        if (aWritten == rWritten.aFormulas.end())
         {
             if (!bIgnored)
                 appendLine(aSheet + " " + toReport(rEntry.first) + ": no formula written, the "
@@ -94,9 +99,11 @@ void assertSameStoredFormulas(const SheetFormulas& rInput, const SheetFormulas& 
             appendLine(aSheet + " " + toReport(rEntry.first) + ": the input has "
                        + describe(rEntry.second) + ", we wrote " + describe(aWritten->second));
     }
-    for (const auto& rEntry : rWritten)
+    // A cell the input stores as a value can come out as a formula, a boolean for instance.
+    // Only a formula in a cell the input does not have at all is one we invented.
+    for (const auto& rEntry : rWritten.aFormulas)
     {
-        if (rInput.find(rEntry.first) == rInput.end()
+        if (rInput.aCells.find(rEntry.first) == rInput.aCells.end()
             && rIgnored.find(rEntry.first) == rIgnored.end())
         {
             appendLine(aSheet + " " + toReport(rEntry.first) + ": a formula appeared, "
@@ -126,7 +133,7 @@ protected:
 
 SheetFormulas DynamicArrayImportExportTest::collectStoredFormulas(const xmlDocUniquePtr& pSheet)
 {
-    SheetFormulas aFormulas;
+    SheetFormulas aSheet;
     tools::XPath aXPath(pSheet.get(),
                         [this](xmlXPathContextPtr pContext) { registerNamespaces(pContext); });
     std::unique_ptr<tools::XPathObject> pCells = aXPath.create("//x:sheetData/x:row/x:c");
@@ -134,6 +141,8 @@ SheetFormulas DynamicArrayImportExportTest::collectStoredFormulas(const xmlDocUn
     for (int nIndex = 0; nIndex < pCells->count(); ++nIndex)
     {
         const OUString aReference = pCells->at(nIndex)->attribute("r");
+        aSheet.aCells.insert(aReference);
+
         const OString aPath = "//x:sheetData/x:row/x:c[@r='"
                               + OUStringToOString(aReference, RTL_TEXTENCODING_UTF8) + "']/x:f";
         std::unique_ptr<tools::XPathObject> pFormula = aXPath.create(aPath);
@@ -150,9 +159,9 @@ SheetFormulas DynamicArrayImportExportTest::collectStoredFormulas(const xmlDocUn
         // range of an array formula is part of what the formula means.
         if (aFormula.bArray)
             aFormula.aRange = pFormula->attribute("ref");
-        aFormulas.emplace(aReference, aFormula);
+        aSheet.aFormulas.emplace(aReference, aFormula);
     }
-    return aFormulas;
+    return aSheet;
 }
 
 // The formulas one sheet part of the input file holds.
@@ -243,6 +252,34 @@ CPPUNIT_TEST_FIXTURE(DynamicArrayImportExportTest, testUnionSpillIntersectionKee
             u"L114"_ustr, u"L115"_ustr, u"M6"_ustr, u"N59"_ustr, u"N112"_ustr, u"N113"_ustr,
             u"N114"_ustr, u"N115"_ustr, u"O59"_ustr
         });
+}
+
+CPPUNIT_TEST_FIXTURE(DynamicArrayImportExportTest, testSimpleFormulasKeepNoImplicitIntersection)
+{
+    // XLS has no @ of its own, so the import adds one where the formula reads a range. The cells
+    // of this workbook are references, names and broken formulas, none of them an array or a
+    // dynamic array, so saving them as XLSX writes no _xlfn.SINGLE call anywhere.
+    createScDoc("functions/dynamic_array/xls/SimpleAndInvalidFormulaFixture.xls");
+    save(TestFilter::XLSX);
+
+    OString aReport;
+    for (const OUString& rSheetPath :
+         { u"xl/worksheets/sheet1.xml"_ustr, u"xl/worksheets/sheet2.xml"_ustr })
+    {
+        for (const auto& rEntry : collectStoredFormulas(parseExport(rSheetPath)).aFormulas)
+        {
+            if (rEntry.second.aText.indexOf(u"_xlfn.SINGLE") < 0)
+                continue;
+            if (!aReport.isEmpty())
+                aReport += "\n";
+            aReport += toReport(rSheetPath) + " " + toReport(rEntry.first) + ": "
+                       + describe(rEntry.second);
+        }
+    }
+    if (aReport.isEmpty())
+        return;
+    OString aLabel = "Formulas the export gave an implicit intersection:\n" + aReport;
+    CPPUNIT_FAIL(aLabel.getStr());
 }
 
 } // namespace sc
