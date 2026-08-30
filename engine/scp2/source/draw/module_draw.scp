@@ -18,7 +18,6 @@
 
 #include "macros.inc"
 
-#include "AutoInstall/draw_brand"
 
 Module gid_Module_Prg_Draw
     ParentID = gid_Module_Prg;
@@ -35,18 +34,6 @@ Module gid_Module_Prg_Draw_Bin
     Files = (gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,
     gid_File_Share_Registry_Draw_Xcd,
     gid_File_Tmp_Userinstall_Draw_Inf);
-End
-
-Module gid_Module_Brand_Prg_Draw
-    PackageInfo = "packinfo_brand.txt";
-    Name = "gid_Module_Brand_Prg_Draw";
-    Description = "gid_Module_Brand_Prg_Draw";
-    ParentID = gid_Module_Prg_Draw;
-    Sortkey = "100";
-    InstallOrder = "1040";
-    Default = YES;
-    Styles = (HIDDEN_ROOT);
-    Files = (auto_draw_brand_ALL);
 End
 
 Module gid_Module_Prg_Draw_MSO_Reg

@@ -19,7 +19,6 @@
 #include "macros.inc"
 
 #include "AutoInstall/calc"
-#include "AutoInstall/calc_brand"
 
 Module gid_Module_Prg_Calc
     ParentID = gid_Module_Prg;
@@ -43,18 +42,6 @@ Module gid_Module_Prg_Calc_Addins
     Sortkey = "700";
     Default = YES;
     Files = (gid_File_Zip_Addin,gid_File_Lib_Rot);
-End
-
-Module gid_Module_Brand_Prg_Calc
-    PackageInfo = "packinfo_brand.txt";
-    Name = "gid_Module_Brand_Prg_Calc";
-    Description = "gid_Module_Brand_Prg_Calc";
-    ParentID = gid_Module_Prg_Calc;
-    Sortkey = "100";
-    InstallOrder = "1040";
-    Default = YES;
-    Styles = (HIDDEN_ROOT);
-    Files = (auto_calc_brand_ALL);
 End
 
 Module gid_Module_Prg_Calc_MSO_Reg
