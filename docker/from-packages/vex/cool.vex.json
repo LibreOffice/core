@@ -1,0 +1,14 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "supplier": {
+      "name": "Collabora Productivity Ltd.",
+      "url": [
+        "https://collaboraoffice.com"
+      ]
+    }
+  },
+  "vulnerabilities": []
+}

@@ -79,6 +79,66 @@ distroless: it ships a shell and a package manager.
 Check build.sh for more build options!
 
 
+8. SBOM and publishing (from-packages)
+
+Every from-packages build generates image-level SBOMs into the image at
+/usr/share/sbom/: collabora-online.cdx.json (CycloneDX 1.6, the format the
+ZenDiS / openCode ecosystem consumes) and collabora-online-image-sbom.spdx.json
+(an SPDX 3.0.1 aggregate). They merge the base image's own SBOM, one pkg:deb
+component per shipped package, and references (path + sha256) to the rich
+per-package SPDX 3.0.1 documents inside the image: the engine's
+/opt/collaboraoffice*/<package>-sbom.spdx.json and online's
+/usr/share/coolwsd/collabora-online-sbom.spdx.json. The Collabora-published
+packages are deliberately purl'd as pkg:deb/collabora/... - no distro security
+feed covers them - and their component inventory (statically linked C++
+externals with CPEs, shipped npm packages with purls) is lifted out of those
+SPDX documents into the CycloneDX components list, so one scan of the
+image-level SBOM covers the contents of COOL itself, not just the deb layer:
+
+   trivy sbom collabora-online.cdx.json    matches the Debian packages and
+                                           the npm purls (GHSA/OSV)
+   grype sbom:collabora-online.cdx.json    additionally matches the C++
+                                           externals by CPE (NVD)
+
+CPE matching of the statically linked libraries will report CVEs that the
+engine has already fixed by backporting patches without a version bump - that
+is expected, and correcting it downstream is exactly what the VEX is for.
+
+Build args:
+
+   sbom_base=fetch    (default) pull the base SBOM from the registry
+                      attestation, fall back to probing the base's dpkg data
+   sbom_base=file     use a base-sbom*.cdx.json from the build context
+                      (air-gapped builds)
+   sbom_base=probe    for debian / gcr.io distroless base overrides
+   sbom_base=none     record the base SBOM as unavailable
+   sbom_strict=1      fail the build instead of degrading (release builds)
+
+Publishing, the same way ZenDiS publishes the hardened base images (cosign
+signature plus SBOM / VEX / scan / provenance attestations as sidecar tags on
+every per-platform digest):
+
+   docker push ... (or let publish.sh push)
+   COSIGN_KEY=... ./from-packages/scripts/publish.sh <image-ref>...
+
+This is registry-agnostic (Docker Hub, registry.opencode.de, private
+registries). The signing key is the private counterpart of docker/cosign.pub
+and lives outside this repository; from-packages/secret_key is the apt
+repository secret, never a signing key. VEX statements are maintained in
+from-packages/vex/cool.vex.json: publish.sh (with trivy installed) scans the
+SBOM and appends new findings as in_triage; update their analysis state as
+triage concludes - notably not_affected/fixed for CVEs already patched in the
+engine's bundled libraries, which version-based matching cannot see.
+
+Consumers verify with:
+
+   cosign verify --key docker/cosign.pub <image-ref>
+   cosign verify-attestation --key docker/cosign.pub --type cyclonedx <image-ref>
+
+The base image's own SBOM and VEX are published by ZenDiS, see
+https://gitlab.opencode.de/oci-community/images/zendis/base
+
+
 Usage
 
 On using the pre-made or self-built Docker images, see Collabora Online SDK:
