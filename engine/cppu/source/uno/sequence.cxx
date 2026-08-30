@@ -274,6 +274,7 @@ static bool idefaultConstructElements(
     {
         if (nAlloc >= 0)
         {
+            // coverity[suspicious_sizeof : FALSE] - the elements are uno_Sequence pointers
             pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
         }
         if (pSeq != nullptr)
@@ -523,6 +524,7 @@ static bool icopyConstructFromElements(
     }
     case typelib_TypeClass_SEQUENCE: // sequence of sequence
     {
+        // coverity[suspicious_sizeof : FALSE] - the elements are uno_Sequence pointers
         pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
         if (pSeq != nullptr)
         {

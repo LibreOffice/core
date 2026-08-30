@@ -465,6 +465,7 @@ inline uno_Sequence * icopyConstructSequence(
             }
             case typelib_TypeClass_SEQUENCE: // sequence of sequence
             {
+                // coverity[suspicious_sizeof : FALSE] - the elements are uno_Sequence pointers
                 pDest = allocSeq( sizeof (uno_Sequence *), nElements );
                 if (pDest != nullptr)
                 {

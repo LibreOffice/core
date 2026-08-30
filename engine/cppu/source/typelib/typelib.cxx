@@ -819,6 +819,7 @@ extern "C" void typelib_typedescription_newInterface(
     sal_Int32 nMembers,
     typelib_TypeDescriptionReference ** ppMembers ) noexcept
 {
+    // coverity[callee_ptr_arith : FALSE] - the count beside it is 0 or 1
     typelib_typedescription_newMIInterface(
         ppRet, pTypeName, pBaseInterface == nullptr ? 0 : 1,
         &pBaseInterface, nMembers, ppMembers);

@@ -427,6 +427,7 @@ void typelib_static_interface_type_init(
     const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType ) noexcept
 {
+    // coverity[callee_ptr_arith : FALSE] - the count beside it is 0 or 1
     typelib_static_mi_interface_type_init(
         ppRef, pTypeName, pBaseType == nullptr ? 0 : 1, &pBaseType);
 }
