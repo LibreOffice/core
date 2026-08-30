@@ -27,7 +27,7 @@
         "autoprefixer": "^10.4.20",
         "browserify": "16.5.1",
         "browserify-css": "0.15.0",
-        "d3": "6.7.0",
+        "d3": "7.9.0",
         "dompurify": "3.4.14",
         "esbuild-wasm": "^0.28.1",
         "eslint": "^7.32.0",
@@ -2571,11 +2571,14 @@
       }
     },
     "node_modules/commander": {
-      "version": "2.20.3",
-      "resolved": "file:node_shrinkpack/commander-2.20.3.tar",
-      "integrity": "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ== sha512-JQRacRejIztBHRfvOO/LuE0T0mihAP+YEX/P4hjsAcKZPTBULo1mZ1MiRdkLsPInE7akjhb/zj5kVMnmC7cCmA==",
+      "version": "7.2.0",
+      "resolved": "file:node_shrinkpack/commander-7.2.0.tar",
+      "integrity": "sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw== sha512-rZ08i6TpnOBwDMGWtOUkSbRnEFaK5eKhYi1D+Pz2uwovouvqIp2CInbFL+XsnecpUoOBBcvP08I6WadLv4PdOA==",
       "dev": true,
-      "license": "MIT"
+      "license": "MIT",
+      "engines": {
+        "node": ">= 10"
+      }
     },
     "node_modules/concat-map": {
       "version": "0.0.1",
@@ -2812,342 +2815,448 @@
       "license": "MIT"
     },
     "node_modules/d3": {
-      "version": "6.7.0",
-      "resolved": "file:node_shrinkpack/d3-6.7.0.tar",
-      "integrity": "sha512-hNHRhe+yCDLUG6Q2LwvR/WdNFPOJQ5VWqsJcwIYVeI401+d2/rrCjxSXkiAdIlpx7/73eApFB4Olsmh3YN7a6g== sha512-bP3WhEu4i3aDqaQlCPBySQNfOkFI4GFpab8DyVLUn+VvuEzuFSSurocXCwarhSKwvMbs6s/TyZyKUnCJkU41Kw==",
-      "dev": true,
-      "license": "BSD-3-Clause",
-      "dependencies": {
-        "d3-array": "2",
-        "d3-axis": "2",
-        "d3-brush": "2",
-        "d3-chord": "2",
-        "d3-color": "2",
-        "d3-contour": "2",
-        "d3-delaunay": "5",
-        "d3-dispatch": "2",
-        "d3-drag": "2",
-        "d3-dsv": "2",
-        "d3-ease": "2",
-        "d3-fetch": "2",
-        "d3-force": "2",
-        "d3-format": "2",
-        "d3-geo": "2",
-        "d3-hierarchy": "2",
-        "d3-interpolate": "2",
-        "d3-path": "2",
-        "d3-polygon": "2",
-        "d3-quadtree": "2",
-        "d3-random": "2",
-        "d3-scale": "3",
-        "d3-scale-chromatic": "2",
-        "d3-selection": "2",
-        "d3-shape": "2",
-        "d3-time": "2",
-        "d3-time-format": "3",
-        "d3-timer": "2",
-        "d3-transition": "2",
-        "d3-zoom": "2"
-      }
-    },
-    "node_modules/d3-array": {
-      "version": "2.12.1",
-      "resolved": "file:node_shrinkpack/d3-array-2.12.1.tar",
-      "integrity": "sha512-B0ErZK/66mHtEsR1TkPEEkwdy+WDesimkM5gpZr5Dsg54BiTA5RXtYW5qTLIAcekaS9xfZrzBLF/OAkB3Qn1YQ== sha512-AzRuKsDEZAZNdKeVa1dT6agkznxahrzigrtmwhtvbFl7zRnWr6bKJfWb7gaEC1meH+sON+uAsO5J1oSQUNP2ew==",
-      "dev": true,
-      "license": "BSD-3-Clause",
-      "dependencies": {
-        "internmap": "^1.0.0"
-      }
-    },
-    "node_modules/d3-axis": {
-      "version": "2.1.0",
-      "resolved": "file:node_shrinkpack/d3-axis-2.1.0.tar",
-      "integrity": "sha512-z/G2TQMyuf0X3qP+Mh+2PimoJD41VOCjViJzT0BHeL/+JQAofkiWZbWxlwFGb1N8EN+Cl/CW+MUKbVzr1689Cw== sha512-YKU2Lm8aHK/3Yjz9v/NLp0Wvci6I4pkIAhRuZNiBXQsJXsHQTI6Yso65KR09w/05zdTnUUXiPvQVEZt9nkl8Dw==",
-      "dev": true,
-      "license": "BSD-3-Clause"
-    },
-    "node_modules/d3-brush": {
-      "version": "2.1.0",
-      "resolved": "file:node_shrinkpack/d3-brush-2.1.0.tar",
-      "integrity": "sha512-cHLLAFatBATyIKqZOkk/mDHUbzne2B3ZwxkzMHvFTCZCmLaXDpZRihQSn8UNXTkGD/3lb/W2sQz0etAftmHMJQ== sha512-kGnFTCkXPGrfyDbjaqCkMLKvb3o/Sh4IKOANQBsnBBFMQpUALlPrIlL5bXwd2mV8Nl2tJYIOmOeF9S02vPB1Ig==",
-      "dev": true,
-      "license": "BSD-3-Clause",
-      "dependencies": {
-        "d3-dispatch": "1 - 2",
-        "d3-drag": "2",
-        "d3-interpolate": "1 - 2",
-        "d3-selection": "2",
-        "d3-transition": "2"
-      }
-    },
-    "node_modules/d3-chord": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-chord-2.0.0.tar",
-      "integrity": "sha512-D5PZb7EDsRNdGU4SsjQyKhja8Zgu+SHZfUSO5Ls8Wsn+jsAKUUGkcshLxMg9HDFxG3KqavGWaWkJ8EpU8ojuig== sha512-8KcKs1H2JVjmKJM8MQvw5q5+W/2bIp0Tb1lAZQO/jlCzpn2Tozxf/uxt/3vb6EQSlvH5x1AddnXYk7QTT2Z91Q==",
-      "dev": true,
-      "license": "BSD-3-Clause",
-      "dependencies": {
-        "d3-path": "1 - 2"
-      }
-    },
-    "node_modules/d3-color": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-color-2.0.0.tar",
-      "integrity": "sha512-SPXi0TSKPD4g9tw0NMZFnR95XVgUZiBH+uUTqQuDu1OsE2zomHU7ho0FISciaPvosimixwHFl3WHLGabv6dDgQ== sha512-XsZnNexBCbbvmJzM78r0nuZY2Pfm68DBJWMIBtUoyU8Fbb0Der2SkRLsHnUbDxL5KyHHxe6DF/M6wWKe9VqmBw==",
-      "dev": true,
-      "license": "BSD-3-Clause"
-    },
-    "node_modules/d3-contour": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-contour-2.0.0.tar",
-      "integrity": "sha512-9unAtvIaNk06UwqBmvsdHX7CZ+NPDZnn8TtNH1myW93pWJkhsV25JcgnYAu0Ck5Veb1DHiCv++Ic5uvJ+h50JA== sha512-iPfl0fpwPqaKNUQAslkJLVZim+sa8ODGymO04ya7Wd7PaDYHYSSaQC0Dtw7SZ5D8+RXD9Cqtb6siKd4H7r8sAw==",
-      "dev": true,
-      "license": "BSD-3-Clause",
-      "dependencies": {
-        "d3-array": "2"
-      }
-    },
-    "node_modules/d3-delaunay": {
-      "version": "5.3.0",
-      "resolved": "file:node_shrinkpack/d3-delaunay-5.3.0.tar",
-      "integrity": "sha512-amALSrOllWVLaHTnDLHwMIiz0d1bBu9gZXd1FiLfXf8sHcX9jrcj81TVZOqD4UX7MgBZZ07c8GxzEgBpJqc74w== sha512-j16WhofBhXhQKw4bIPtC7mwLYOoDdXKX+1jLO3HcsRStf7Nqrn296zI1tipxn4zMuNUnnV9LUhxKcZWSj4+p5w==",
+      "version": "7.9.0",
+      "resolved": "file:node_shrinkpack/d3-7.9.0.tar",
+      "integrity": "sha512-e1U46jVP+w7Iut8Jt8ri1YsPOvFpg46k+K8TpCb0P+zjCkjkPnV7WzfDJzMHy1LnA+wj5pLT1wjO901gLXeEhA== sha512-CrdApf/4zEWTJTU3fCKppPP62feL3iJapPOLluhggKAQjr5zS6ZCOeRgNBJgbzIMaSkeLcinQR4Dz3QcEFcZFQ==",
       "dev": true,
       "license": "ISC",
       "dependencies": {
-        "delaunator": "4"
+        "d3-array": "3",
+        "d3-axis": "3",
+        "d3-brush": "3",
+        "d3-chord": "3",
+        "d3-color": "3",
+        "d3-contour": "4",
+        "d3-delaunay": "6",
+        "d3-dispatch": "3",
+        "d3-drag": "3",
+        "d3-dsv": "3",
+        "d3-ease": "3",
+        "d3-fetch": "3",
+        "d3-force": "3",
+        "d3-format": "3",
+        "d3-geo": "3",
+        "d3-hierarchy": "3",
+        "d3-interpolate": "3",
+        "d3-path": "3",
+        "d3-polygon": "3",
+        "d3-quadtree": "3",
+        "d3-random": "3",
+        "d3-scale": "4",
+        "d3-scale-chromatic": "3",
+        "d3-selection": "3",
+        "d3-shape": "3",
+        "d3-time": "3",
+        "d3-time-format": "4",
+        "d3-timer": "3",
+        "d3-transition": "3",
+        "d3-zoom": "3"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-array": {
+      "version": "3.2.4",
+      "resolved": "file:node_shrinkpack/d3-array-3.2.4.tar",
+      "integrity": "sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg== sha512-Ss3UHHck5iVrtysgd1AqOJ4GuEVgClgJR0u1V7A+UhpKxwJSfHNRB3toZ+C8IQhekJlTf/jvJL38Fu6bYy+0Pw==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "internmap": "1 - 2"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-axis": {
+      "version": "3.0.0",
+      "resolved": "file:node_shrinkpack/d3-axis-3.0.0.tar",
+      "integrity": "sha512-IH5tgjV4jE/GhHkRV0HiVYPDtvfjHQlQfJHs0usq7M30XcSBvOotpmH1IgkcXsO/5gEQZD43B//fc7SRT5S+xw== sha512-pBGP2OvCTeE4eqdVILMrjW04hufNN2ZlyCUppVzbLmNZ4Dzyd/WRePVV6ois3y4dLrrsAwsQ9YcPrfTNhUm+Tw==",
+      "dev": true,
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-brush": {
+      "version": "3.0.0",
+      "resolved": "file:node_shrinkpack/d3-brush-3.0.0.tar",
+      "integrity": "sha512-ALnjWlVYkXsVIGlOsuWH1+3udkYFI48Ljihfnh8FZPF2QS9o+PzGLBslO0PjzVoHLZ2KCVgAM8NVkXPJB2aNnQ== sha512-YXCv9VoqIdSO3OcrSLiyrGLIDlgi0bHiIizTvAtuvHo8SfohYsKEaD4SUmFLOvlEWIBphPOFwNhTI4OCML3EpA==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "d3-dispatch": "1 - 3",
+        "d3-drag": "2 - 3",
+        "d3-interpolate": "1 - 3",
+        "d3-selection": "3",
+        "d3-transition": "3"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-chord": {
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-chord-3.0.1.tar",
+      "integrity": "sha512-VE5S6TNa+j8msksl7HwjxMHDM2yNK3XCkusIlpX5kwauBfXuyLAtNg9jCp/iHH61tgI4sb6R/EIMWCqEIdjT/g== sha512-3aRe/BhixcDJ4Dr4xLtmxcr1soW5xTiBad9hJjW1CncpLRSUd0wxhGcjFvAgGga/Og2HaGeEfEk6a04QPF5jVQ==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "d3-path": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-color": {
+      "version": "3.1.0",
+      "resolved": "file:node_shrinkpack/d3-color-3.1.0.tar",
+      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA== sha512-YbGIQg4anBJ1J0OceHK0RaamDmPteVaqon9Ks0TOCwaahI6ujIgGUs8nAUTwJ+en30TWYZCRq//gE9/22u3YFQ==",
+      "dev": true,
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-contour": {
+      "version": "4.0.2",
+      "resolved": "file:node_shrinkpack/d3-contour-4.0.2.tar",
+      "integrity": "sha512-4EzFTRIikzs47RGmdxbeUvLWtGedDUNkTcmzoeyg4sP/dvCexO47AaQL7VKy/gul85TOxw+IBgA8US2xwbToNA== sha512-GB58DfTrZzWxWJrzpQNN7JziQ3cMitydX02bh8ufZW7w+DQjmDc45seytau8pA1eM1LHOlq6c4OFbhlgrxOWCg==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "d3-array": "^3.2.0"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-delaunay": {
+      "version": "6.0.4",
+      "resolved": "file:node_shrinkpack/d3-delaunay-6.0.4.tar",
+      "integrity": "sha512-mdjtIZ1XLAM8bm/hx3WwjfHt6Sggek7qH043O8KEjDXN40xi3vx/6pYSVTwLjEgiXQTbvaouWKynLBiUZ6SK6A== sha512-4VSJHLiA7pVu3s+ER8rdnI7Wuicw9FN88YVgj7+HNlRoQYcbb2uIoo7LOcoQ488oSEhT+iy8fKL1zML0b6CDyA==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "delaunator": "5"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-dispatch": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-dispatch-2.0.0.tar",
-      "integrity": "sha512-S/m2VsXI7gAti2pBoLClFFTMOO1HTtT0j99AuXLoGFKO6deHDdnv6ZGTxSTTUTgO1zVcv82fCOtDjYK4EECmWA== sha512-M3FsrkeHAPDrq7DQFEzBerhxOF4VpXX7sNuS4ZIG1aCBxl+YCbAf/lHkSqIZ5MkOJrt0QSySSldVEMoLu3fw2Q==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-dispatch-3.0.1.tar",
+      "integrity": "sha512-rzUyPU/S7rwUflMyLc1ETDeBj0NRuHKKAcvukozwhshr6g6c5d8zh4c2gQjY2bZ0dXeGLWc1PF174P2tVvKhfg== sha512-hKypeqWIjxTFiur6kuE5d8z/2lSHCh5cysrkPB3dUCpFPso1owHHXj3NTCCSsKrLnqqyGraVK4hRsOB1Pg87jw==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-drag": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-drag-2.0.0.tar",
-      "integrity": "sha512-g9y9WbMnF5uqB9qKqwIIa/921RYWzlUDv9Jl1/yONQwxbOfszAWTCm8u7HOTgJgRDXiRZN56cHT9pd24dmXs8w== sha512-XV11NHk9AbWi0XAkSeOpN1B98Ss8S/SU37vmas0ZeySnXpCdCZ5YGiTq+yx4KsTfehCUZKPaK34CWfxQw/M55A==",
+      "version": "3.0.0",
+      "resolved": "file:node_shrinkpack/d3-drag-3.0.0.tar",
+      "integrity": "sha512-pWbUJLdETVA8lQNJecMxoXfH6x+mO2UQo8rSmZ+QqxcbyA3hfeprFgIT//HW2nlHChWeIIMwS2Fq+gEARkhTkg== sha512-O70nDxuP+xF+LCRVFKhD521+a2PC8dWH5+DK8l1NV+t7IhxzYq1RdCRKP3oEvlC0T6/zG0iZeUCt9vXf+rXsYA==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-dispatch": "1 - 2",
-        "d3-selection": "2"
+        "d3-dispatch": "1 - 3",
+        "d3-selection": "3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-dsv": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-dsv-2.0.0.tar",
-      "integrity": "sha512-E+Pn8UJYx9mViuIUkoc93gJGGYut6mSDKy2+XaPwccwkRGlR+LO97L2VCCRjQivTwLHkSnAJG7yo00BWY6QM+w== sha512-P1Z2K3AOH5JhtFLBagNJlkW9CyfKcSgxf4TfspZvGhWru2Hdwyl/EnNXZjzJixhUOX8r4tR7KOhjXu/jOtxmkw==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-dsv-3.0.1.tar",
+      "integrity": "sha512-UG6OvdI5afDIFP9w4G0mNq50dSOsXHJaRE8arAS5o9ApWnIElp8GZw1Dun8vP8OyHOZ/QJUKUJwxiiCCnUwm+Q== sha512-RPVRZva8NpIeLGYUcK9ckwxCorTT/dQuWSKo9R6zKNTYQxxwYxueyPDGwJ0CoiUIisxFcCQfSlhzz95/ztOi/Q==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "commander": "2",
-        "iconv-lite": "0.4",
+        "commander": "7",
+        "iconv-lite": "0.6",
         "rw": "1"
       },
       "bin": {
-        "csv2json": "bin/dsv2json",
-        "csv2tsv": "bin/dsv2dsv",
-        "dsv2dsv": "bin/dsv2dsv",
-        "dsv2json": "bin/dsv2json",
-        "json2csv": "bin/json2dsv",
-        "json2dsv": "bin/json2dsv",
-        "json2tsv": "bin/json2dsv",
-        "tsv2csv": "bin/dsv2dsv",
-        "tsv2json": "bin/dsv2json"
+        "csv2json": "bin/dsv2json.js",
+        "csv2tsv": "bin/dsv2dsv.js",
+        "dsv2dsv": "bin/dsv2dsv.js",
+        "dsv2json": "bin/dsv2json.js",
+        "json2csv": "bin/json2dsv.js",
+        "json2dsv": "bin/json2dsv.js",
+        "json2tsv": "bin/json2dsv.js",
+        "tsv2csv": "bin/dsv2dsv.js",
+        "tsv2json": "bin/dsv2json.js"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-dsv/node_modules/iconv-lite": {
+      "version": "0.6.3",
+      "resolved": "file:node_shrinkpack/iconv-lite-0.6.3.tar",
+      "integrity": "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw== sha512-b7DF6H4Bw9MUup4C7CuFrdU2KWsGBi05UW6BLlRTQKd7t4eIjEfZwZMNS+cfHeqWWqhHXY9qrn9XFsBlHYTvUA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "safer-buffer": ">= 2.1.2 < 3.0.0"
+      },
+      "engines": {
+        "node": ">=0.10.0"
       }
     },
     "node_modules/d3-ease": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-ease-2.0.0.tar",
-      "integrity": "sha512-68/n9JWarxXkOWMshcT5IcjbB+agblQUaIsbnXmrzejn2O82n3p2A9R2zEB9HIEFWKFwPAEDDN8gR0VdSAyyAQ== sha512-oTF2DpGqzFRe5WD+JJjUOvNpq2MhWmFjBDvjZiTtsyrXYU+rfPt6EfDCXpvwrzCc1DK62yiqUpHnxyiu6m4VyA==",
-      "dev": true,
-      "license": "BSD-3-Clause"
-    },
-    "node_modules/d3-fetch": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-fetch-2.0.0.tar",
-      "integrity": "sha512-TkYv/hjXgCryBeNKiclrwqZH7Nb+GaOwo3Neg24ZVWA3MKB+Rd+BY84Nh6tmNEMcjUik1CSUWjXYndmeO6F7sw== sha512-2WZTq3Kit4VFyLWG5BvrzNM1Eo4cL/A9qYEPxKExymGPCSm1dElagbFWwM4YXpAfZnpEtIFHMrQzzykIAAc7xQ==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-ease-3.0.1.tar",
+      "integrity": "sha512-wR/XK3D3XcLIZwpbvQwQ5fK+8Ykds1ip7A2Txe0yxncXSdq1L9skcG7blcedkOX+ZcgxGAmLX1FrRGbADwzi0w== sha512-tNhqP3vxSJ+6YkLL9kz0kRtiB6c94wt9VuFVNpTd1jpw1UD/+MHjaiUDIwcJUvmIrIgy2D6ZdNw96zuhG0Z9hA==",
       "dev": true,
       "license": "BSD-3-Clause",
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/d3-fetch": {
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-fetch-3.0.1.tar",
+      "integrity": "sha512-kpkQIM20n3oLVBKGg6oHrUchHM3xODkTzjMoj7aWQFq5QEM+R6E4WkzT5+tojDY7yjez8KgCBRoj4aEr99Fdqw== sha512-jeiMmbluz56cKlO3WGdriKAoDY2n2Ri9MyXgEHMoPjOVtJLIdyGC/0HgkC/lSYFWcbdTVEZgxztF4yOt7tc0Iw==",
+      "dev": true,
+      "license": "ISC",
       "dependencies": {
-        "d3-dsv": "1 - 2"
+        "d3-dsv": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-force": {
-      "version": "2.1.1",
-      "resolved": "file:node_shrinkpack/d3-force-2.1.1.tar",
-      "integrity": "sha512-nAuHEzBqMvpFVMf9OX75d00OxvOXdxY+xECIXjW6Gv8BRrXu6gAWbv/9XKrvfJ5i5DCokDW7RYE50LRoK092ew== sha512-9hHX4silIuoddSFjUrqEChOT4lmni7DR8ogEgJWgeqoDM2PxNW9a05JaH3JWSqbpFUsSUua64BdQB6vz/waCWg==",
+      "version": "3.0.0",
+      "resolved": "file:node_shrinkpack/d3-force-3.0.0.tar",
+      "integrity": "sha512-zxV/SsA+U4yte8051P4ECydjD/S+qeYtnaIyAs9tgHCqfguma/aAQDjo85A9Z6EKhBirHRJHXIgJUlffT4wdLg== sha512-vsIHeNZaXmgaOPG1TsKfe0jlPG2lVAgxDb/u/ADQQB6VUogQbRNruPOAFURp7eB4GhBKCvzF4Uvn14qyWL8EOQ==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-dispatch": "1 - 2",
-        "d3-quadtree": "1 - 2",
-        "d3-timer": "1 - 2"
+        "d3-dispatch": "1 - 3",
+        "d3-quadtree": "1 - 3",
+        "d3-timer": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-format": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-format-2.0.0.tar",
-      "integrity": "sha512-Ab3S6XuE/Q+flY96HXT0jOXcM4EAClYFnRGY5zsjRGNy6qCYrQsMffs7cV5Q9xejb35zxW5hf/guKw34kvIKsA== sha512-eX+BgXAXhfcOwmfnMOvNQESe3OPVvc5crbaIsbLWJ9OUISZ0BitMttb3ggeJQ96CmfhQMDzJIprtCdmoD3OVWA==",
+      "version": "3.1.2",
+      "resolved": "file:node_shrinkpack/d3-format-3.1.2.tar",
+      "integrity": "sha512-AJDdYOdnyRDV5b6ArilzCPPwc1ejkHcoyFarqlPqT7zRYjhavcT3uSrqcMvsgh2CgoPbK3RCwyHaVyxYcP2Arg== sha512-o3RPCa24L+OXazO4S66f7L7Qj5ZmTqgvvIp/T661VGPKPe6y+qn9M0hQJicVplR13igzSZBi2Ww0/XXW7jwV5g==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-geo": {
-      "version": "2.0.2",
-      "resolved": "file:node_shrinkpack/d3-geo-2.0.2.tar",
-      "integrity": "sha512-8pM1WGMLGFuhq9S+FpPURxic+gKzjluCD/CHTuUF3mXMeiCo0i6R0tO1s4+GArRFde96SLcW/kOFRjoAosPsFA== sha512-dHMEWcwV9WtkPgKa81epEuR+D+JDWGgx4AznCDn7icLNmTeJgR9quZb+E6RaerTtUlnOhJl1fEwEr1xZky+R1Q==",
+      "version": "3.1.1",
+      "resolved": "file:node_shrinkpack/d3-geo-3.1.1.tar",
+      "integrity": "sha512-637ln3gXKXOwhalDzinUgY83KzNWZRKbYubaG+fGVuc/dxO64RRljtCTnf5ecMyE1RIdtqpkVcq0IbtU2S8j2Q== sha512-Q1tDxK18aCpJVbdZN9thdfH6FZpQG+BejFN13V2frmX5HyiJrv0choV/eoDt+qXRWVyF7KvXnsK8EvW7wmlDJg==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-array": "^2.5.0"
+        "d3-array": "2.5.0 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-hierarchy": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-hierarchy-2.0.0.tar",
-      "integrity": "sha512-SwIdqM3HxQX2214EG9GTjgmCc/mbSx4mQBn+DuEETubhOw6/U3fmnji4uCVrmzOydMHSO1nZle5gh6HB/wdOzw== sha512-jX2h9T8EkO0CIa+hQY99IWlbA0fhvJGh2T8cwuCBdnyRRoq8Pv4iCHUAh2nyA5E/obXOO9oG3Ja9lqFIvi84wA==",
+      "version": "3.1.2",
+      "resolved": "file:node_shrinkpack/d3-hierarchy-3.1.2.tar",
+      "integrity": "sha512-FX/9frcub54beBdugHjDCdikxThEqjnR93Qt7PvQTOHxyiNCAlvMrHhclk3cD5VeAaq9fxmfRp+CnWw9rEMBuA== sha512-H/dIeZJkWghCIKyBqk8j6v5nUOyeU+xsdDiTZ3k+9SDQHxGKVBofd4nodr9O5xhwd1o8KWhrb8NOmtSfXQRebg==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-interpolate": {
-      "version": "2.0.1",
-      "resolved": "file:node_shrinkpack/d3-interpolate-2.0.1.tar",
-      "integrity": "sha512-c5UhwwTs/yybcmTpAVqwSFl6vrQ8JZJoT5F7xNFK9pymv5C0Ymcc9/LIJHtYIggg/yS9YHw8i8O8tgb9pupjeQ== sha512-5J5ij0tkDCCxu0LX0vRzvoy+LBOUm12EqMcy38Pa5U6yUBahe2RRaXA+cES6WdUqKh6/cmCho1Su6wZxMWMWjg==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-interpolate-3.0.1.tar",
+      "integrity": "sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g== sha512-KuRFbyvKLwvepDGOkUZtnwuCn00lxhRXXTfWMwcp9prqIa+QqnthkH8jNzUbeUFq0/jusny+IeojSpCSn1p+KQ==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-color": "1 - 2"
+        "d3-color": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-path": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-path-2.0.0.tar",
-      "integrity": "sha512-ZwZQxKhBnv9yHaiWd6ZU4x5BtCQ7pXszEV9CU6kRgwIQVQGLMv1oiL4M+MK/n79sYzsj+gcgpPQSctJUsLN7fA== sha512-HoeqGUKtE/yticxmCWoUY4RyosVwnhy4aINyJ/70KSO6KjvwceOPLC4M1bIqJ/rmcbTFtT4y3dchHtZsJz/GYw==",
+      "version": "3.1.0",
+      "resolved": "file:node_shrinkpack/d3-path-3.1.0.tar",
+      "integrity": "sha512-p3KP5HCf/bvjBSSKuXid6Zqijx7wIfNW+J/maPs+iwR35at5JCbLUT0LzF1cnjbCHWhqzQTIN2Jpe8pRebIEFQ== sha512-YQmiwe1vGYTbinCXR9PcNK/QsbmKmAcKpQLEHraKT6bbJaiFv2PjVlxnB/0Tg6YaxdabhhQV09zLBHxhYRg4MA==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-polygon": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-polygon-2.0.0.tar",
-      "integrity": "sha512-MsexrCK38cTGermELs0cO1d79DcTsQRN7IWMJKczD/2kBjzNXxLUWP33qRF6VDpiLV/4EI4r6Gs0DAWQkE8pSQ== sha512-us6dJW92BWJdhi5zcrSLSO5uiKDidMOeiUSNDtptuTaRwfmRfpHTLLKjRG5SlkHUFRNGVnYz1FgjeGRyv/GFyA==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-polygon-3.0.1.tar",
+      "integrity": "sha512-3vbA7vXYwfe1SYhED++fPUQlWSYTTGmFmQiany/gdbiWgU/iEyQzyymwL9SkJjFFuCS4902BSzewVGsHHmHtXg== sha512-SCKscNochvg2NfhujpfIh4W5jmOyCeEzHl+4IpuObzk5E6a4Ml0CttQ/pBxnN+BJf00Cupfacy35drHhI7We2Q==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-quadtree": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-quadtree-2.0.0.tar",
-      "integrity": "sha512-b0Ed2t1UUalJpc3qXzKi+cPGxeXRr4KU9YSlocN74aTzp6R/Ud43t79yLLqxHRWZfsvWXmbDWPpoENK1K539xw== sha512-iTewkKvVGtKCbHInNMy1psJuGRNvZlTXd9SeaA7XcnRjIERkicSv7+X7dsIThSV8F/ifKhOJ8aFm1cMQ9BkbZQ==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-quadtree-3.0.1.tar",
+      "integrity": "sha512-04xDrxQTDTCFwP5H6hRhsRcb9xxv2RzkcsygFzmkSIOJy3PeRJP7sNk3VRIbKXcog561P9oU0/rVH6vDROAgUw== sha512-UIYf2qoB/rlofQETFWgGkbJOoIwmFsCtyOGJntmbO0VwKRZ1C8PcM/uL3Ca7LwPLbAl7/q98lhZrhs9aXWOP0Q==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-random": {
-      "version": "2.2.2",
-      "resolved": "file:node_shrinkpack/d3-random-2.2.2.tar",
-      "integrity": "sha512-0D9P8TRj6qDAtHhRQn6EfdOtHMfsUWanl3yb/84C4DqpZ+VsgfI5iTVRNRbELCfNvRfpMr8OrqqUTQ6ANGCijw== sha512-GqOXU18xqIQZpusYS7tEM1/rxmozn/wCzWsK04nTBlNe7IBq47Gf3VnOJqqqBnndMxYMi9cODdzxrFvXKk52qQ==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-random-3.0.1.tar",
+      "integrity": "sha512-FXMe9GfxTxqd5D6jFsQ+DJ8BJS4E/fT5mqqdjovykEB2oFbTMDVdg1MGFxfQW+FBOGoB++k8swBrgwSHT1cUXQ== sha512-91m+EuV+ajgbbT3btLeUHL0M6or0LL4rcVqii1coMAvEnuOiI3KVGId99bWzml/oP/EuxvB0bqvO9xHr+ttDgQ==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-scale": {
-      "version": "3.3.0",
-      "resolved": "file:node_shrinkpack/d3-scale-3.3.0.tar",
-      "integrity": "sha512-1JGp44NQCt5d1g+Yy+GeOnZP7xHo0ii8zsQp6PGzd+C1/dl0KGsp9A7Mxwp+1D1o4unbTTxVdU/ZOIEBoeZPbQ== sha512-RU8HmnD58OSRpzpxPjmvG7qR2lh3HyiSp62U5J/Bwt/uq3nddvPaR7vo2sFrFmm+7BWMPN06xyPmidBYiRIG0Q==",
+      "version": "4.0.2",
+      "resolved": "file:node_shrinkpack/d3-scale-4.0.2.tar",
+      "integrity": "sha512-GZW464g1SH7ag3Y7hXjf8RoUuAFIqklOAq3MRl4OaWabTFJY9PN/E1YklhXLh+OQ3fM9yS2nOkCoS+WLZ6kvxQ== sha512-Hc7XTN1lHZ51ZWYE6woIneLAMgY3OOPuXVzDFF/5Syk3Ondg1wkaF1ON9GYBZvm8sNACfY9g5ywLjG/DasS4Tg==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-array": "^2.3.0",
-        "d3-format": "1 - 2",
-        "d3-interpolate": "1.2.0 - 2",
-        "d3-time": "^2.1.1",
-        "d3-time-format": "2 - 3"
+        "d3-array": "2.10.0 - 3",
+        "d3-format": "1 - 3",
+        "d3-interpolate": "1.2.0 - 3",
+        "d3-time": "2.1.1 - 3",
+        "d3-time-format": "2 - 4"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-scale-chromatic": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-scale-chromatic-2.0.0.tar",
-      "integrity": "sha512-LLqy7dJSL8yDy7NRmf6xSlsFZ6zYvJ4BcWFE4zBrOPnQERv9zj24ohnXKRbyi9YHnYV+HN1oEO3iFK971/gkzA== sha512-oO+g29N8GWmWS/7ybikc/PBvedpBtVND0S9Kj4eW3Ahk6/YiqmKe38Y12iMb49nfqLLda8qWvXEHkFxaoKWGhg==",
+      "version": "3.1.0",
+      "resolved": "file:node_shrinkpack/d3-scale-chromatic-3.1.0.tar",
+      "integrity": "sha512-A3s5PWiZ9YCXFye1o246KoscMWqf8BsD9eRiJ3He7C9OBaxKhAd5TFCdEx/7VbKtxxTsu//1mMJFrEt572cEyQ== sha512-ehoBBq/UPFQn3+L1apDXeXnRBV8qBPhficl7qrJIl3UcYopCBV2VV9FXb8MuYQDRNlnCKAemUmY2vHvP/VRWKg==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-color": "1 - 2",
-        "d3-interpolate": "1 - 2"
+        "d3-color": "1 - 3",
+        "d3-interpolate": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-selection": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-selection-2.0.0.tar",
-      "integrity": "sha512-XoGGqhLUN/W14NmaqcO/bb1nqjDAw5WtSYb2X8wiuQWvSZUsUVYsOSkOybUrNvcBjaywBdYPy03eXHMXjk9nZA== sha512-cp1ScOKKwg+6Fw1oHqcmkJR6SYdJQZ1b4g2C/RHZDrKO0fVVP42xCV3XLDMkSsMbLIglXCkt0wlXery/Ca9e2g==",
+      "version": "3.0.0",
+      "resolved": "file:node_shrinkpack/d3-selection-3.0.0.tar",
+      "integrity": "sha512-fmTRWbNMmsmWq6xJV8D19U/gw/bwrHfNXxrIN+HfZgnzqTHp9jOmKMhsTUjXOJnZOdZY9Q28y4yebKzqDKlxlQ== sha512-N48142nNPjcLSKQAH/dkQrjueaTSBkcaoaVk1rehn7XNhp1ijs64fresVNfoK/0lOnflZNiNBMNmYJNWzM0VtQ==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-shape": {
-      "version": "2.1.0",
-      "resolved": "file:node_shrinkpack/d3-shape-2.1.0.tar",
-      "integrity": "sha512-PnjUqfM2PpskbSLTJvAzp2Wv4CZsnAgTfcVRTwW03QR3MkXF8Uo7B1y/lWkAsmbKwuecto++4NlsYcvYpXpTHA== sha512-V4EwvoeC2IMwq01TZVL6vfmMy4fpgVwdTiE4BxyX3X/R0BRWGv2n/UqybEL6xZCTVRn6NsouR50CxAPOQa5vgQ==",
+      "version": "3.2.0",
+      "resolved": "file:node_shrinkpack/d3-shape-3.2.0.tar",
+      "integrity": "sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA== sha512-eKXq80TSNCxBDGhY+g2LhinxWL2n9jaxJ0jaCgpoHmiqfgU4fAaR3hk9ef93eL9LhkAOZu+kdcx6bLJh3qN81w==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-path": "1 - 2"
+        "d3-path": "^3.1.0"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-time": {
-      "version": "2.1.1",
-      "resolved": "file:node_shrinkpack/d3-time-2.1.1.tar",
-      "integrity": "sha512-/eIQe/eR4kCQwq7yxi7z4c6qEXf2IYGcjoWB5OOQy4Tq9Uv39/947qlDcN2TLkiTzQWzvnsuYPB9TrWaNfipKQ== sha512-n/JXInBVcFlwxWop1GJUMA3GtWMcz4QvGdsVP/26lVohMmMk5xwG7YEER1yTkDUIpsYCAX5u/PkETnjIAyWoeQ==",
+      "version": "3.1.0",
+      "resolved": "file:node_shrinkpack/d3-time-3.1.0.tar",
+      "integrity": "sha512-VqKjzBLejbSMT4IgbmVgDjpkYrNWUYJnbCGo874u7MMKIWsILRX+OpX/gTk8MqjpT1A/c6HY2dCA77ZN0lkQ2Q== sha512-XNukpIDCCy3VZUO3aDQ6iSBSKyB+5uSaEErrcscvT6cGtKksF0Rk3PUz8Tz6KtczYuL13mAx+4gKJgVkR7PheQ==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-array": "2"
+        "d3-array": "2 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-time-format": {
-      "version": "3.0.0",
-      "resolved": "file:node_shrinkpack/d3-time-format-3.0.0.tar",
-      "integrity": "sha512-UXJh6EKsHBTjopVqZBhFysQcoXSv/5yLONZvkQ5Kk3qbwiUYkdX17Xa1PT6U1ZWXGGfB1ey5L8dKMlFq2DO0Ag== sha512-zd/AfOgNRirMeYd+7A54U/3i5UxEMqtYo6LtLnDm5ipFe22zL+aKhiuy7cjk5gghZVNVChqLnDNGMJHjMzyC6g==",
+      "version": "4.1.0",
+      "resolved": "file:node_shrinkpack/d3-time-format-4.1.0.tar",
+      "integrity": "sha512-dJxPBlzC7NugB2PDLwo9Q8JiTR3M3e4/XANkreKSUxF8vvXKqm1Yfq4Q5dl8budlunRVlUUaDUgFt7eA8D6NLg== sha512-rFh0mYGTB120NYiwyTTLm7E0M/QtN0naPFGi3UkBPr8QXIdwXNt7AL7jFunYVaf6IEtwCSzh3FQZVrsoYHUYYQ==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-time": "1 - 2"
+        "d3-time": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/d3-timer": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-timer-2.0.0.tar",
-      "integrity": "sha512-TO4VLh0/420Y/9dO3+f9abDEFYeCUr2WZRlxJvbp4HPTQcSylXNiL6yZa9FIUvV1yRiFufl1bszTCLDqv9PWNA== sha512-S78sJFB2gIklkUZXow/QmE2t2YNN32kwOAsFR4TipOyEiJSsaClsx+c5Sso/YLE/lQdlonxpDq2prYpS/Ni3lw==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-timer-3.0.1.tar",
+      "integrity": "sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA== sha512-9kPGfnkpm0NPs2lLo5CNjeN2fXmsulkON8YgJNUf/LMdMhEoa6L01+J7RmR4JPImlasEh4/Y3suzsGrvFCud2g==",
       "dev": true,
-      "license": "BSD-3-Clause"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/d3-transition": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-transition-2.0.0.tar",
-      "integrity": "sha512-42ltAGgJesfQE3u9LuuBHNbGrI/AJjNL2OAUdclE70UE6Vy239GCBEYD38uBPoLeNsOhFStGpPI0BAOV+HMxog== sha512-/ORO2E/JL1mBpTXuHVbXsZL4qklNAZRu9ygj33OWe54OPiowyxERXf8qNb8n2c11z7/i6Nbk8lWgvDOannjteg==",
+      "version": "3.0.1",
+      "resolved": "file:node_shrinkpack/d3-transition-3.0.1.tar",
+      "integrity": "sha512-ApKvfjsSR6tg06xrL434C0WydLr7JewBB3V+/39RMHsaXTOG0zmt/OAXeng5M5LBm0ojmxJrpomQVZ1aPvBL4w== sha512-1g9MD0Y7qloIucN1G5xaKLtyiEjsxR5JMzhfQy2XkGEp7zTjeRwSdf7RCz5jjoYvgQmMu8fOT0CbF4VMTG1I+g==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-color": "1 - 2",
-        "d3-dispatch": "1 - 2",
-        "d3-ease": "1 - 2",
-        "d3-interpolate": "1 - 2",
-        "d3-timer": "1 - 2"
+        "d3-color": "1 - 3",
+        "d3-dispatch": "1 - 3",
+        "d3-ease": "1 - 3",
+        "d3-interpolate": "1 - 3",
+        "d3-timer": "1 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       },
       "peerDependencies": {
-        "d3-selection": "2"
+        "d3-selection": "2 - 3"
       }
     },
     "node_modules/d3-zoom": {
-      "version": "2.0.0",
-      "resolved": "file:node_shrinkpack/d3-zoom-2.0.0.tar",
-      "integrity": "sha512-fFg7aoaEm9/jf+qfstak0IYpnesZLiMX6GZvXtUSdv8RH2o4E2qeelgdU09eKS6wGuiGMfcnMI0nTIqWzRHGpw== sha512-r941wR2k1jaBB6gftGdtdnm7C61WN5HtB+hVDl5F7UzOqBoj3FQSFHsrwJzIB4eec5DEt/l+f5hduATnHWutsA==",
+      "version": "3.0.0",
+      "resolved": "file:node_shrinkpack/d3-zoom-3.0.0.tar",
+      "integrity": "sha512-b8AmV3kfQaqWAuacbPuNbL6vahnOJflOhexLzMMNLga62+/nh0JzvJ0aO/5a5MVgUFGS7Hu1P9P03o3fJkDCyw== sha512-JGGTXZDl8POKbNyUI/QyHuO4c9Cw3MKwlU3sH63Ia2LvrcMEHL2zGGd2Y/14rHR8WeHBwOmfpnK1qaKr2h4DlQ==",
       "dev": true,
-      "license": "BSD-3-Clause",
+      "license": "ISC",
       "dependencies": {
-        "d3-dispatch": "1 - 2",
-        "d3-drag": "2",
-        "d3-interpolate": "1 - 2",
-        "d3-selection": "2",
-        "d3-transition": "2"
+        "d3-dispatch": "1 - 3",
+        "d3-drag": "2 - 3",
+        "d3-interpolate": "1 - 3",
+        "d3-selection": "2 - 3",
+        "d3-transition": "2 - 3"
+      },
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/dash-ast": {
@@ -3308,11 +3417,14 @@
       }
     },
     "node_modules/delaunator": {
-      "version": "4.0.1",
-      "resolved": "file:node_shrinkpack/delaunator-4.0.1.tar",
-      "integrity": "sha512-WNPWi1IRKZfCt/qIDMfERkDp93+iZEmOxN2yy4Jg+Xhv8SLk2UTqqbe1sfiipn0and9QrE914/ihdx82Y/Giag== sha512-MoDbxAFUUBs8P484T8cYEl7DDBuT2vjosQqcSWIDuMjr7zxEQJT+R0aEl5wtesAaHglAg1MWz1YNc1CY70mTfg==",
+      "version": "5.1.0",
+      "resolved": "file:node_shrinkpack/delaunator-5.1.0.tar",
+      "integrity": "sha512-AGrQ4QSgssa1NGmWmLPqN5NY2KajF5MqxetNEO+o0n3ZwZZeTmt7bBnvzHWrmkZFxGgr4HdyFgelzgi06otLuQ== sha512-qiJJ8ZClSA5aDNyeMdBFTBmLz0SCE3U+qz5JsyYrvLIcYYlYNI9OyBQk3IW8Eg4huyXCHg0fFn/JrGmyLHA+6A==",
       "dev": true,
-      "license": "ISC"
+      "license": "ISC",
+      "dependencies": {
+        "robust-predicates": "^3.0.2"
+      }
     },
     "node_modules/delayed-stream": {
       "version": "1.0.0",
@@ -5338,11 +5450,14 @@
       }
     },
     "node_modules/internmap": {
-      "version": "1.0.1",
-      "resolved": "file:node_shrinkpack/internmap-1.0.1.tar",
-      "integrity": "sha512-lDB5YccMydFBtasVtxnZ3MRBHuaoE8GKsppq+EchKL2U4nK/DmEpPHNH8MZe5HkMtpSiTSOZwfN0tzYjO/lJEw== sha512-/wdfyBEmLfCFab6/G8RD+jVo+MuB1eWKrgBGQIQz4Arf7CB+bcNZudSoCbTXsk82isSjgxw6e15fWYthltoSmw==",
+      "version": "2.0.3",
+      "resolved": "file:node_shrinkpack/internmap-2.0.3.tar",
+      "integrity": "sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg== sha512-4Gy5jWcHkGrIsiWdiiDsoVsHYhZql3IwFht4IxWxCubCm22RzguVGdO1fZIFr5osx3y8ga5wngOpyjYWsyNacw==",
       "dev": true,
-      "license": "ISC"
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
+      }
     },
     "node_modules/ip-address": {
       "version": "10.2.0",
@@ -8835,6 +8950,13 @@
       "engines": {
         "node": ">= 0.8"
       }
+    },
+    "node_modules/robust-predicates": {
+      "version": "3.0.3",
+      "resolved": "file:node_shrinkpack/robust-predicates-3.0.3.tar",
+      "integrity": "sha512-NS3levdsRIUOmiJ8FZWCP7LG3QpJyrs/TE0Zpf1yvZu8cAJJ6QMW92H1c7kWpdIHo8RvmLxN/o2JXTKHp74lUA== sha512-f7SxT6Km/5rAi2OvQ5Cjh0N6uc0Xyj5p40VkaFq8hUy885kkxdS9TfbehPNRq2ocfjNPire1qQ0dD8dIjcBCVg==",
+      "dev": true,
+      "license": "Unlicense"
     },
     "node_modules/run-parallel": {
       "version": "1.2.0",
