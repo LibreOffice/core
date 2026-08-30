@@ -200,8 +200,7 @@ static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
 bool SvxXMLXTableExportComponent::save(
         const OUString& rURL,
         const uno::Reference<container::XNameContainer >& xTable,
-        const uno::Reference<embed::XStorage >& xStorage,
-        OUString *pOptName )
+        const uno::Reference<embed::XStorage >& xStorage )
 {
     bool bRet = false;
     std::unique_ptr<SfxMedium> pMedium;
@@ -210,9 +209,6 @@ bool SvxXMLXTableExportComponent::save(
     INetURLObject aURLObj( rURL );
     bool bToStorage = aURLObj.GetProtocol() == INetProtocol::NotValid; // a relative path
     bool bSaveAsStorage = xTable->getElementType() == cppu::UnoType<awt::XBitmap>::get();
-
-    if( pOptName )
-        *pOptName = rURL;
 
     try
     {
@@ -276,8 +272,6 @@ bool SvxXMLXTableExportComponent::save(
                     OSL_FAIL( "no output stream!" );
                     return false;
                 }
-                if( pOptName )
-                    *pOptName = aPath;
             }
         }
 

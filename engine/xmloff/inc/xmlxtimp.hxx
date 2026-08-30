@@ -40,8 +40,7 @@ public:
 
     static bool load( const OUString &rPath, const OUString &rReferer,
                       const css::uno::Reference < css::embed::XStorage > &xStorage,
-                      const css::uno::Reference< css::container::XNameContainer >& xTable,
-                      bool *bOptLoadedFromStorage ) noexcept;
+                      const css::uno::Reference< css::container::XNameContainer >& xTable ) noexcept;
 private:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;

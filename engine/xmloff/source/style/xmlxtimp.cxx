@@ -420,8 +420,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
 
 bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                                const uno::Reference < embed::XStorage > &xStorage,
-                               const uno::Reference< XNameContainer >& xTable,
-                               bool *bOptLoadedFromStorage ) noexcept
+                               const uno::Reference< XNameContainer >& xTable ) noexcept
 {
     bool bRet = true;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
@@ -470,8 +469,6 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                     return false;
                 aParserInput.aInputStream = xStream->getInputStream();
             }
-            if( bOptLoadedFromStorage )
-                *bOptLoadedFromStorage = true;
         }
 
         uno::Reference<XGraphicStorageHandler> xGraphicStorageHandler;

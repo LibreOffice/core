@@ -77,9 +77,9 @@ bool XPropertyTableFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>
     if (meMode == XPropertyTableFilterMode::Import)
         return SvxXMLXTableImport::load(aURL,
                                         aDescriptor.getOrDefault(u"Referer"_ustr, OUString()),
-                                        xStorage, xTable, nullptr);
+                                        xStorage, xTable);
 
-    return SvxXMLXTableExportComponent::save(aURL, xTable, xStorage, nullptr);
+    return SvxXMLXTableExportComponent::save(aURL, xTable, xStorage);
 }
 
 OUString XPropertyTableFilter::getImplementationName()
