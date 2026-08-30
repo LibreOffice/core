@@ -5,8 +5,8 @@ var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-// Each .preview-slide-number span holds the slide's 1-based position as its
-// text, so the digit a user sees can be read and checked directly.
+// The visible slide number is explicitly set via textContent
+// in _setPreviewPositionLabels(), so we can simply read the text.
 function assertSlideNumbers(items) {
 	for (var i = 0; i < items.length; i++) {
 		expect(items[i].textContent).to.equal(String(i + 1));
@@ -60,44 +60,48 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', { testI
 
 	});
 
-	it('Slide numbers track position after insert and delete', function() {
-		// Add two slides.
-		cy.cGet('#presentation-toolbar #insertpage').click();
-		cy.cGet('#presentation-toolbar #insertpage').click();
+	it('Slide number stays correct after insert and delete', function() {
+		cy.cGet('#slide-sorter .preview-frame').then((initialFrames) => {
+			const initialSlides = initialFrames.length - 1;
 
-		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
+			// Add two slides.
+			cy.cGet('#presentation-toolbar #insertpage').click();
+			cy.cGet('#presentation-toolbar #insertpage').click();
 
-		// One number span per slide - not more, not fewer - each showing
-		// the slide's position.
-		cy.cGet('#slide-sorter .preview-slide-number').should(function(items) {
-			expect(items).to.have.length(3);
-			assertSlideNumbers(items);
-		});
+			impressHelper.assertSlidePreviewCountAfterIdle(this.win, initialSlides + 2);
 
-		// Remember the slide sitting second, which the delete below moves to the front.
-		var secondFrameId;
-		cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').then(function(frames) {
-			secondFrameId = frames[1].id;
-		});
+			// One number span per slide - not more, not fewer - each still
+			// wired to the correct slide.
+			cy.cGet('#slide-sorter .preview-slide-number').should(function(items) {
+				expect(items).to.have.length(initialSlides + 2);
+				assertSlideNumbers(items);
+			});
 
-		// Delete the first slide: its number span must go with its frame,
-		// not linger and throw off every later slide's count.
-		slideFrame(0).click();
+			// Remember the slide sitting second, which the delete below moves to the front.
+			var secondFrameId;
+			cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').then(function(frames) {
+				secondFrameId = frames[1].id;
+			});
 
-		cy.cGet('#presentation-toolbar #deletepage').click();
-		cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
+			// Delete the first slide: its number span must go with its frame,
+			// not linger and throw off every later slide's count.
+			slideFrame(0).click();
 
-		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 2);
+			cy.cGet('#presentation-toolbar #deletepage').click();
+			cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
 
-		cy.cGet('#slide-sorter .preview-slide-number').should(function(items) {
-			expect(items).to.have.length(2);
-			assertSlideNumbers(items);
-		});
+			impressHelper.assertSlidePreviewCountAfterIdle(this.win, initialSlides + 1);
 
-		// The slide that used to be second is now first in DOM order, so
-		// its number reads 1.
-		cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').should(function(frames) {
-			expect(frames[0].id).to.equal(secondFrameId);
+			cy.cGet('#slide-sorter .preview-slide-number').should(function(items) {
+				expect(items).to.have.length(initialSlides + 1);
+				assertSlideNumbers(items);
+			});
+
+			// The slide that used to be second is now first in DOM order, so
+			// the label will paint it as slide 1.
+			cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').should(function(frames) {
+				expect(frames[0].id).to.equal(secondFrameId);
+			});
 		});
 	});
 
@@ -109,44 +113,48 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', { testI
 			}
 		}
 
-		// Add two slides.
-		cy.cGet('#presentation-toolbar #insertpage').click();
-		cy.cGet('#presentation-toolbar #insertpage').click();
+		cy.cGet('#slide-sorter .preview-frame').then((initialFrames) => {
+			const initialSlides = initialFrames.length - 1;
 
-		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
+			// Add two slides.
+			cy.cGet('#presentation-toolbar #insertpage').click();
+			cy.cGet('#presentation-toolbar #insertpage').click();
 
-		cy.cGet('#slide-sorter .preview-img').should(function(items) {
-			expect(items).to.have.length(3);
-			assertPositionLabels(items);
-		});
+			impressHelper.assertSlidePreviewCountAfterIdle(this.win, initialSlides + 2);
 
-		// Delete the first slide: every later slide moves up one position, so
-		// its alt text and tooltip must be relabelled to match. They are
-		// plain attributes and do not update on their own just because the
-		// frame moved in the DOM.
-		slideFrame(0).click();
+			cy.cGet('#slide-sorter .preview-img').should(function(items) {
+				expect(items).to.have.length(initialSlides + 2);
+				assertPositionLabels(items);
+			});
 
-		cy.cGet('#presentation-toolbar #deletepage').click();
-		cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
+			// Delete the first slide: every later slide moves up one position, so
+			// its alt text and tooltip must be relabelled to match, unlike the
+			// visible number, they are plain attributes and do not update on
+			// their own just because the frame moved in the DOM.
+			slideFrame(0).click();
 
-		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 2);
+			cy.cGet('#presentation-toolbar #deletepage').click();
+			cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
 
-		cy.cGet('#slide-sorter .preview-img').should(function(items) {
-			expect(items).to.have.length(2);
-			assertPositionLabels(items);
-		});
+			impressHelper.assertSlidePreviewCountAfterIdle(this.win, initialSlides + 1);
 
-		// Insert a slide after the first one: the new last slide must pick
-		// up label 2 even though it was created as label 1 in a different
-		// position earlier in the test.
-		slideFrame(1).click();
-		cy.cGet('#presentation-toolbar #insertpage').click();
+			cy.cGet('#slide-sorter .preview-img').should(function(items) {
+				expect(items).to.have.length(initialSlides + 1);
+				assertPositionLabels(items);
+			});
 
-		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
+			// Insert a slide after the first one: the new last slide must pick
+			// up label 2 even though it was created as label 1 in a different
+			// position earlier in the test.
+			slideFrame(1).click();
+			cy.cGet('#presentation-toolbar #insertpage').click();
 
-		cy.cGet('#slide-sorter .preview-img').should(function(items) {
-			expect(items).to.have.length(3);
-			assertPositionLabels(items);
+			impressHelper.assertSlidePreviewCountAfterIdle(this.win, initialSlides + 2);
+
+			cy.cGet('#slide-sorter .preview-img').should(function(items) {
+				expect(items).to.have.length(initialSlides + 2);
+				assertPositionLabels(items);
+			});
 		});
 	});
 
