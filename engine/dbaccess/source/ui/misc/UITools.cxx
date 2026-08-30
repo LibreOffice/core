@@ -1115,20 +1115,17 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
 
 bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
-                           const OUString& _sParentFolder,
-                           bool _bForm,
-                           bool _bCollection,
-                           const Reference<XContent>& _xContent,
-                           bool _bMove)
+                           bool _bForm)
 {
     OSL_ENSURE( _xNames.is(), "insertHierarchyElement: illegal name container!" );
     if ( !_xNames.is() )
         return false;
 
+    OUString sParentFolder;
     Reference<XNameAccess> xNameAccess( _xNames, UNO_QUERY );
-    if ( _xNames->hasByHierarchicalName(_sParentFolder) )
+    if ( _xNames->hasByHierarchicalName(sParentFolder) )
     {
-        Reference<XChild> xChild(_xNames->getByHierarchicalName(_sParentFolder),UNO_QUERY);
+        Reference<XChild> xChild(_xNames->getByHierarchicalName(sParentFolder),UNO_QUERY);
         xNameAccess.set(xChild,UNO_QUERY);
         if ( !xNameAccess.is() && xChild.is() )
             xNameAccess.set(xChild->getParent(),UNO_QUERY);
@@ -1138,45 +1135,25 @@ bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentCo
     if ( !xNameAccess.is() )
         return false;
 
-    OUString sNewName;
-    Reference<XPropertySet> xProp(_xContent,UNO_QUERY);
-    if ( xProp.is() )
-        xProp->getPropertyValue(PROPERTY_NAME) >>= sNewName;
+    OUString sLabel, sTargetName;
+    sTargetName = DBA_RES( STR_NEW_FOLDER );
+    sLabel = DBA_RES( STR_FOLDER_LABEL );
+    sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
 
-    if ( !_bMove || sNewName.isEmpty() )
-    {
-        if ( sNewName.isEmpty() || xNameAccess->hasByName(sNewName) )
-        {
-            OUString sLabel, sTargetName;
-            if ( !sNewName.isEmpty() )
-                sTargetName = sNewName;
-            else
-                sTargetName = DBA_RES( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT));
-            sLabel = DBA_RES( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL));
-            sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
+    // here we have everything needed to create a new query object ...
+    HierarchicalNameCheck aNameChecker( _xNames, sParentFolder );
+    // ... ehm, except a new name
+    OSaveAsDlg aAskForName(pParent,
+                           _rxContext,
+                           sTargetName,
+                           sLabel,
+                           aNameChecker,
+                           SADFlags::AdditionalDescription | SADFlags::TitlePasteAs);
+    if ( RET_OK != aAskForName.run() )
+        // cancelled by the user
+        return false;
 
-            // here we have everything needed to create a new query object ...
-            HierarchicalNameCheck aNameChecker( _xNames, _sParentFolder );
-            // ... ehm, except a new name
-            OSaveAsDlg aAskForName(pParent,
-                                   _rxContext,
-                                   sTargetName,
-                                   sLabel,
-                                   aNameChecker,
-                                   SADFlags::AdditionalDescription | SADFlags::TitlePasteAs);
-            if ( RET_OK != aAskForName.run() )
-                // cancelled by the user
-                return false;
-
-            sNewName = aAskForName.getName();
-        }
-    }
-    else if ( xNameAccess->hasByName(sNewName) )
-    {
-        OUString sError(DBA_RES(STR_NAME_ALREADY_EXISTS));
-        sError = sError.replaceFirst("#",sNewName);
-        throw SQLException(sError,nullptr,u"S1000"_ustr,0,Any());
-    }
+    OUString sNewName = aAskForName.getName();
 
     try
     {
@@ -1185,9 +1162,9 @@ bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentCo
         {
             {"Name", cpo::uno::Any(sNewName)}, // set as folder
             {"Parent", cpo::uno::Any(xNameAccess)},
-            {PROPERTY_EMBEDDEDOBJECT, cpo::uno::Any(_xContent)},
+            {PROPERTY_EMBEDDEDOBJECT, cpo::uno::Any(Reference<XContent>())},
         }));
-        OUString sServiceName(_bCollection ? (_bForm ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+        OUString sServiceName(_bForm ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION);
 
         Reference<XContent > xNew( xORB->createInstanceWithArguments( sServiceName, aArguments ), UNO_QUERY_THROW );
         Reference< XNameContainer > xNameContainer( xNameAccess, UNO_QUERY_THROW );

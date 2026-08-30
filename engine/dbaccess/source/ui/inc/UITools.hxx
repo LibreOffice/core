@@ -281,16 +281,8 @@ namespace dbaui
             a multi service factory which can be used to instantiate usual global services
         @param  _xNames
             Where to insert the new object.
-        @param  _sParentFolder
-            The name of the parent folder.
         @param  _bForm
             <TRUE/> if a form should be inserted
-        @param  _bCollection
-            A folder should be inserted
-        @param  _xContent
-            The content which should be copied.
-        @param  _bMove
-                if <TRUE/> the name of the content must be inserted without any change, otherwise not.
         @return
             <TRUE/> if the insert operation was successful, otherwise <FALSE/>.
     */
@@ -298,11 +290,7 @@ namespace dbaui
                 weld::Window* pParent,
                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::container::XHierarchicalNameContainer>& _xNames,
-                const OUString& _sParentFolder,
-                bool _bForm,
-                bool _bCollection = true,
-                const css::uno::Reference< css::ucb::XContent>& _xContent = nullptr,
-                bool _bMove = false
+                bool _bForm
             );
 
     /** creates a number formatter
