@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
 #include <editeng/adjustitem.hxx>
@@ -36,6 +37,8 @@
 #include <svx/xlnclit.hxx>
 
 #include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/viewsh.hxx>
 
@@ -246,6 +249,18 @@ protected:
         if (!oJson)
             return std::nullopt;
         return findTextPortionUnder(*oJson, rText);
+    }
+
+    /// True when the environment resolves a real bold cut. Without one the
+    /// drawing makes the weight up instead.
+    static bool familyHasBoldCut()
+    {
+        ScopedVclPtrInstance<VirtualDevice> pProbeDevice;
+        vcl::Font aProbeFont(u"Liberation Sans"_ustr, Size(0, 2000));
+        aProbeFont.SetWeight(WEIGHT_BOLD);
+        pProbeDevice->SetFont(aProbeFont);
+        return !pProbeDevice->GetCurrentFontRawData().isEmpty()
+               && pProbeDevice->GetFontMetric().GetWeight() >= WEIGHT_SEMIBOLD;
     }
 
     /// Request for the first slide. The raw JSON is written as a
@@ -664,6 +679,82 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGraphicsResponseKeepsTypeOnUnknown
     CPPUNIT_ASSERT(oJson.has_value());
     assertJsonPath(*oJson, "/type", "vectorrenderinggraphics");
     CPPUNIT_ASSERT_EQUAL(sal_Int64(12345), oJson->getInt("/checksum").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testBoldRunNamesADifferentFace)
+{
+    // Bold and regular text of one family are different faces, so they name
+    // different files. One id for both would draw the two runs alike.
+    if (!familyHasBoldCut())
+        return;
+
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(1000, 5000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
+    page(1)->GetObj(1)->SetMergedItem(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    for (size_t nObject = 0; nObject < 2; ++nObject)
+    {
+        pView->SdrBeginTextEdit(page(1)->GetObj(nObject));
+        pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
+        pView->SdrEndTextEdit();
+    }
+
+    auto aJson = getVectorPrimitives(u"testBoldRunFace");
+    const std::optional<tools::JsonPath> oPlainObject = aJson.at("/objects/0");
+    const std::optional<tools::JsonPath> oBoldObject = aJson.at("/objects/1");
+    CPPUNIT_ASSERT(oPlainObject.has_value());
+    CPPUNIT_ASSERT(oBoldObject.has_value());
+    const std::optional<tools::JsonPath> oPlain = oPlainObject->findFirst("fontId");
+    const std::optional<tools::JsonPath> oBold = oBoldObject->findFirst("fontId");
+    CPPUNIT_ASSERT(oPlain.has_value());
+    CPPUNIT_ASSERT(oBold.has_value());
+    CPPUNIT_ASSERT_MESSAGE("the bold run named the same face as the plain run",
+                           oPlain->getString() != oBold->getString());
+
+    // Which run is which, so the ids above are known to differ for the
+    // reason the test is about.
+    const std::optional<tools::JsonPath> oPlainWeight = oPlainObject->findFirst("weight");
+    const std::optional<tools::JsonPath> oBoldWeight = oBoldObject->findFirst("weight");
+    CPPUNIT_ASSERT(oPlainWeight.has_value());
+    CPPUNIT_ASSERT(oBoldWeight.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(WEIGHT_NORMAL), oPlainWeight->getInt().value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(WEIGHT_BOLD), oBoldWeight->getInt().value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRealBoldFaceNeedsNoThickening)
+{
+    // Bold text resolves to the family's own bold cut. Saying the weight has
+    // to be made up would thicken a face that is already bold.
+    if (!familyHasBoldCut())
+        return;
+
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
+
+    SdrObject* pObject = page(1)->GetObj(0);
+    pObject->SetMergedItem(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(pObject);
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
+
+    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    tools::JsonWriter aJsonWriter;
+    pDocument->getCommandValues(aJsonWriter, ".uno:VectorPrimitives?part=0");
+    const OString aResult = aJsonWriter.finishAndGetAsOString();
+
+    pView->SdrEndTextEdit();
+
+    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
+    CPPUNIT_ASSERT(oJson.has_value());
+    CPPUNIT_ASSERT_MESSAGE(aResult.getStr(), oJson->findFirst("fontId").has_value());
+    CPPUNIT_ASSERT_MESSAGE("a real bold face was marked as needing thickening",
+                           !oJson->findFirst("syntheticBold").has_value());
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextPortionCarriesFont)

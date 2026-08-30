@@ -45,6 +45,9 @@ namespace cool {
 		monospaced?: boolean;
 		dxarray?: number[];
 		fontId?: string;
+		/// Set when the face is not itself bold or italic, so the reader adds it.
+		syntheticBold?: boolean;
+		syntheticItalic?: boolean;
 	}
 
 	export namespace TextSimplePortionPrimitive {

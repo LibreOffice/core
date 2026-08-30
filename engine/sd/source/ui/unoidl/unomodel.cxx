@@ -2533,8 +2533,7 @@ private:
         maProcessor.emplace(rWriter);
         maProcessor->setScaleFactor(constTwipConversionFactor);
         maProcessor->setBitmapCache(mpModel->getBitmapCache());
-        maProcessor->setFontCache(mpModel->getVectorFontCache(),
-                                  mpModel->getVectorFontIdByKey());
+        maProcessor->setFontCache(mpModel->getVectorFontCache(), mpModel->getVectorFontFaceByKey());
 
         // Set up ViewInformation2D with visualized page
         drawinglayer::geometry::ViewInformation2D aViewInfo;

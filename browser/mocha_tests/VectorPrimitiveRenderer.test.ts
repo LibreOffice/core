@@ -1371,4 +1371,111 @@ describe('VectorPrimitiveRenderer', function () {
 		);
 	});
 
+	describe('Bold and italic text', function () {
+		// weight 8 is bold on the wire, with a face of its own.
+		const boldItalic: any = {
+			type: 'textSimplePortion',
+			text: 'Heading',
+			fontSize: 400,
+			familyname: 'Liberation Sans',
+			weight: 8,
+			italic: true,
+			fontId: 'abc123',
+			fontcolor: '#000000',
+		};
+
+		it('asks the face the engine sent for no further weight or slant', function () {
+			const recorder = new CanvasRecorder();
+			// The face has loaded, so it is the one that gets used.
+			const renderer = new cool.VectorPrimitiveRenderer(undefined, () => true);
+
+			renderer.renderPrimitive(recorder as any, boldItalic);
+
+			// The face is already the bold italic cut, so asking again would
+			// apply it twice.
+			nodeassert.strictEqual(
+				recorder.properties.font,
+				'normal 400 400px "vecfont-abc123"',
+			);
+		});
+
+		it('asks for the weight the face itself lacks', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer(undefined, () => true);
+
+			// No bold cut, so the face is the regular one and the browser
+			// has to thicken it.
+			renderer.renderPrimitive(recorder as any, {
+				...boldItalic,
+				italic: false,
+				syntheticBold: true,
+			});
+
+			nodeassert.strictEqual(
+				recorder.properties.font,
+				'normal 700 400px "vecfont-abc123"',
+			);
+		});
+
+		it('asks for the slant the face itself lacks', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer(undefined, () => true);
+
+			renderer.renderPrimitive(recorder as any, {
+				...boldItalic,
+				weight: 5,
+				syntheticItalic: true,
+			});
+
+			nodeassert.strictEqual(
+				recorder.properties.font,
+				'italic 400 400px "vecfont-abc123"',
+			);
+		});
+
+		// A family with no bold cut resolves both runs to one file, so both
+		// portions name the same face and only the flag separates them. Keying
+		// the flag to the face instead of the run would lose that.
+		it('separates two runs that share one face by the flag', function () {
+			const renderer = new cool.VectorPrimitiveRenderer(undefined, () => true);
+
+			const plain = new CanvasRecorder();
+			renderer.renderPrimitive(plain as any, {
+				...boldItalic,
+				italic: false,
+				weight: 5,
+			});
+
+			const bold = new CanvasRecorder();
+			renderer.renderPrimitive(bold as any, {
+				...boldItalic,
+				italic: false,
+				weight: 8,
+				syntheticBold: true,
+			});
+
+			nodeassert.strictEqual(
+				plain.properties.font,
+				'normal 400 400px "vecfont-abc123"',
+			);
+			nodeassert.strictEqual(
+				bold.properties.font,
+				'normal 700 400px "vecfont-abc123"',
+			);
+		});
+
+		it('asks the family for bold and italic when the face is missing', function () {
+			const recorder = new CanvasRecorder();
+			// No face has loaded, so the family name has to carry the style.
+			const renderer = new cool.VectorPrimitiveRenderer(undefined, () => false);
+
+			renderer.renderPrimitive(recorder as any, boldItalic);
+
+			nodeassert.strictEqual(
+				recorder.properties.font,
+				'italic 700 400px "Liberation Sans"',
+			);
+		});
+	});
+
 });

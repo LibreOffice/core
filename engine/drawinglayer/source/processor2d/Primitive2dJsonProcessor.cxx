@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
@@ -92,10 +93,10 @@ void Primitive2dJsonProcessor::setBitmapCache(std::unordered_map<sal_Int64, Grap
 
 void Primitive2dJsonProcessor::setFontCache(
     std::unordered_map<sal_uInt64, BinaryDataContainer>& rCache,
-    std::unordered_map<OUString, sal_uInt64>& rIdByKey)
+    std::unordered_map<OUString, ResolvedFace>& rFaceByKey)
 {
     mpFontCache = &rCache;
-    mpFontIdByKey = &rIdByKey;
+    mpFaceByKey = &rFaceByKey;
 }
 
 /// Write graphic data as base64 data URL, preferring native browser-supported formats. A graphic
@@ -442,15 +443,15 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
 
     // The exact face the engine resolved for this portion, named by a
     // content-hash id. The font command serves the bytes on demand.
-    if (mpFontCache && mpFontIdByKey)
+    if (mpFontCache && mpFaceByKey)
     {
         const OUString aFontKey = rFontAttr.getFamilyName() + u"|"_ustr + rFontAttr.getStyleName()
                                   + u"|"_ustr + OUString::number(rFontAttr.getWeight()) + u"|"_ustr
                                   + OUString::number(rFontAttr.getItalic() ? 1 : 0) + u"|"_ustr
                                   + rPrimitive.getLocale().Language;
-        auto aFound = mpFontIdByKey->find(aFontKey);
-        sal_uInt64 nFontId = aFound != mpFontIdByKey->end() ? aFound->second : 0;
-        if (aFound == mpFontIdByKey->end())
+        auto aFound = mpFaceByKey->find(aFontKey);
+        ResolvedFace aFace = aFound != mpFaceByKey->end() ? aFound->second : ResolvedFace();
+        if (aFound == mpFaceByKey->end())
         {
             // The height is arbitrary, the font file bytes do not depend
             // on it. A fresh device keeps the file the face was loaded
@@ -465,13 +466,27 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
             {
                 // The id is the content hash of the font bytes, so identical
                 // faces share one cache entry.
-                nFontId = aFontData.calculateHash();
-                mpFontCache->try_emplace(nFontId, aFontData);
+                aFace.mnFontId = aFontData.calculateHash();
+                mpFontCache->try_emplace(aFace.mnFontId, aFontData);
             }
-            mpFontIdByKey->emplace(aFontKey, nFontId);
+
+            // With no bold or italic cut the resolved face is neither and the
+            // drawing adds it. The metric describes the face that was picked.
+            const FontMetric aMetric = pFontDevice->GetFontMetric();
+            aFace.mbSyntheticBold
+                = rFontAttr.getWeight() >= WEIGHT_SEMIBOLD && aMetric.GetWeight() < WEIGHT_SEMIBOLD;
+            aFace.mbSyntheticItalic = rFontAttr.getItalic() && aMetric.GetItalic() == ITALIC_NONE;
+
+            mpFaceByKey->emplace(aFontKey, aFace);
         }
-        if (nFontId != 0)
-            mrWriter.put("fontId", OString::number(nFontId, 16));
+        if (aFace.mnFontId != 0)
+        {
+            mrWriter.put("fontId", OString::number(aFace.mnFontId, 16));
+            if (aFace.mbSyntheticBold)
+                mrWriter.put("syntheticBold", true);
+            if (aFace.mbSyntheticItalic)
+                mrWriter.put("syntheticItalic", true);
+        }
     }
 
     // Character advance widths. Round each to a whole twip: that step is

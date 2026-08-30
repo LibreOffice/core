@@ -327,8 +327,8 @@ namespace cool {
 			// A missing matrix defaults to the plain upright scale.
 			const [a = fontSize, b = 0, c = 0, d = fontSize, e = 0, f = 0] =
 				primitive.matrix ?? [];
-			const style = primitive.italic ? 'italic' : 'normal';
-			const weight =
+			let style = primitive.italic ? 'italic' : 'normal';
+			let weight =
 				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
 			// Prefer the exact face the engine sent, once it has loaded.
 			// Fall back to the family name otherwise.
@@ -337,8 +337,13 @@ namespace cool {
 				primitive.fontId !== undefined &&
 				this._fontLoaded &&
 				this._fontLoaded(primitive.fontId)
-			)
+			) {
 				family = 'vecfont-' + primitive.fontId;
+				// The face is already the right cut, so asking again would
+				// apply it twice. The engine flags a family that has no cut.
+				if (!primitive.syntheticItalic) style = 'normal';
+				if (!primitive.syntheticBold) weight = 400;
+			}
 
 			context.font = `${style} ${weight} ${fontSize}px "${family}"`;
 			// A matrix that only scales by the font size moves the

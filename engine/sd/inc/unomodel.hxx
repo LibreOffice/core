@@ -34,6 +34,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
@@ -112,11 +113,11 @@ public:
         return maVectorFontCache;
     }
 
-    /// Font ids by font key, so each distinct face is read and hashed
-    /// only once per document.
-    std::unordered_map<OUString, sal_uInt64>& getVectorFontIdByKey()
+    /// What each font key resolved to, once per document.
+    std::unordered_map<OUString, drawinglayer::Primitive2dJsonProcessor::ResolvedFace>&
+    getVectorFontFaceByKey()
     {
-        return maVectorFontIdByKey;
+        return maVectorFontFaceByKey;
     }
 
     /// Content version of a vector-rendering part (0-based slide index),
@@ -151,7 +152,8 @@ private:
     std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
     std::unordered_map<sal_Int64, Graphic> maBitmapCache;
     std::unordered_map<sal_uInt64, BinaryDataContainer> maVectorFontCache;
-    std::unordered_map<OUString, sal_uInt64> maVectorFontIdByKey;
+    std::unordered_map<OUString, drawinglayer::Primitive2dJsonProcessor::ResolvedFace>
+        maVectorFontFaceByKey;
 
     struct AnimatedGifTempFile
     {

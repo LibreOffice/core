@@ -86,11 +86,20 @@ public:
     /// processing are stored here keyed by their checksum.
     void setBitmapCache(std::unordered_map<sal_Int64, Graphic>& rCache);
 
+    /// What a font key resolved to: the id of the face, and whether it falls
+    /// short of the weight or slant asked for.
+    struct ResolvedFace
+    {
+        sal_uInt64 mnFontId = 0;
+        bool mbSyntheticBold = false;
+        bool mbSyntheticItalic = false;
+    };
+
     /// External caches: the font files text portions use, keyed by a
-    /// content hash of the bytes, and the ids already worked out for a
-    /// font key, so each distinct face is read and hashed only once.
+    /// content hash of the bytes, and what each font key resolved to, so a
+    /// face is read, hashed and measured once.
     void setFontCache(std::unordered_map<sal_uInt64, BinaryDataContainer>& rCache,
-                      std::unordered_map<OUString, sal_uInt64>& rIdByKey);
+                      std::unordered_map<OUString, ResolvedFace>& rFaceByKey);
 
 private:
     void processPrimitive(const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive);
@@ -126,7 +135,7 @@ private:
     tools::JsonWriter& mrWriter;
     std::unordered_map<sal_Int64, Graphic>* mpBitmapCache = nullptr;
     std::unordered_map<sal_uInt64, BinaryDataContainer>* mpFontCache = nullptr;
-    std::unordered_map<OUString, sal_uInt64>* mpFontIdByKey = nullptr;
+    std::unordered_map<OUString, ResolvedFace>* mpFaceByKey = nullptr;
     double mfScaleFactor = 1.0;
     drawinglayer::geometry::ViewInformation2D maViewInformation2D;
 };
