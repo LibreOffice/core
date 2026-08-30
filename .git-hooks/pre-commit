@@ -235,21 +235,28 @@ EOM
 open( FILES, "git diff --cached --name-only --diff-filter=A -z $against -- ':(top,exclude)engine/' |" ) ||  die "Cannot run git diff.";
 while (<FILES>)
 {
-    if (/\.ui$/) # .ui files can get large
+    foreach my $file (split(/\0/))
     {
-        continue;
-    }
-    if (/\.xsl$/) # XSLT
-    {
-        continue;
-    }
-    my $size = `git cat-file -s :$_`;
-    # For now let's say large is 500KB
-    my $limit = 500;
-    if ($size > $limit * 1024)
-    {
-        print "Error: Attempt to add a large file: $_, pleasy try to fit into $limit KB.\n";
-        exit( 1 );
+        if ($file =~ /\.ui$/) # .ui files can get large
+        {
+            next;
+        }
+        if ($file =~ /\.xsl$/) # XSLT
+        {
+            next;
+        }
+        if ($file =~ m{^browser/node_shrinkpack/}) # vendored npm package tarballs
+        {
+            next;
+        }
+        my $size = `git cat-file -s ":$file"`;
+        # For now let's say large is 500KB
+        my $limit = 500;
+        if ($size > $limit * 1024)
+        {
+            print "Error: Attempt to add a large file: $file, please try to fit into $limit KB.\n";
+            exit( 1 );
+        }
     }
 }
 
