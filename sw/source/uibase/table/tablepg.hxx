@@ -162,6 +162,8 @@ class SwTextFlowPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xColBrkRB;
     std::unique_ptr<weld::RadioButton> m_xPgBrkBeforeRB;
     std::unique_ptr<weld::RadioButton> m_xPgBrkAfterRB;
+    std::unique_ptr<weld::Label> m_xPgBrkTypeFT;
+    std::unique_ptr<weld::Label> m_xPgBrkPositionFT;
     std::unique_ptr<weld::CheckButton> m_xPageCollCB;
     std::unique_ptr<weld::ComboBox> m_xPageCollLB;
     std::unique_ptr<weld::CheckButton> m_xPageNoCB;

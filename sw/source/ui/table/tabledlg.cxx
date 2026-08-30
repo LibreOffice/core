@@ -1260,6 +1260,8 @@ SwTextFlowPage::SwTextFlowPage(weld::Container* pPage, weld::DialogController* p
     , m_xColBrkRB(m_xBuilder->weld_radio_button(u"column"_ustr))
     , m_xPgBrkBeforeRB(m_xBuilder->weld_radio_button(u"before"_ustr))
     , m_xPgBrkAfterRB(m_xBuilder->weld_radio_button(u"after"_ustr))
+    , m_xPgBrkTypeFT(m_xBuilder->weld_label(u"breaktype"_ustr))
+    , m_xPgBrkPositionFT(m_xBuilder->weld_label(u"breakposition"_ustr))
     , m_xPageCollCB(m_xBuilder->weld_check_button(u"pagestyle"_ustr))
     , m_xPageCollLB(m_xBuilder->weld_combo_box(u"pagestylelb"_ustr))
     , m_xPageNoCB(m_xBuilder->weld_check_button(u"pagenoft"_ustr))
@@ -1571,6 +1573,8 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_xColBrkRB->set_sensitive(false);
         m_xPgBrkBeforeRB->set_sensitive(false);
         m_xPgBrkAfterRB->set_sensitive(false);
+        m_xPgBrkTypeFT->set_sensitive(false);
+        m_xPgBrkPositionFT->set_sensitive(false);
         m_xKeepCB->set_sensitive(false);
         m_xSplitCB->set_sensitive(false);
         m_xPgBrkCB->set_sensitive(false);
@@ -1640,6 +1644,8 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, weld::Toggleable&, void)
         m_xColBrkRB->set_sensitive(true);
         m_xPgBrkBeforeRB->set_sensitive(true);
         m_xPgBrkAfterRB->set_sensitive(true);
+        m_xPgBrkTypeFT->set_sensitive(true);
+        m_xPgBrkPositionFT->set_sensitive(true);
 
         if (m_xPgBrkRB->get_active() && m_xPgBrkBeforeRB->get_active())
         {
@@ -1665,6 +1671,8 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, weld::Toggleable&, void)
         m_xColBrkRB->set_sensitive(false);
         m_xPgBrkBeforeRB->set_sensitive(false);
         m_xPgBrkAfterRB->set_sensitive(false);
+        m_xPgBrkTypeFT->set_sensitive(false);
+        m_xPgBrkPositionFT->set_sensitive(false);
     }
 }
 
@@ -1753,6 +1761,8 @@ void SwTextFlowPage::DisablePageBreak()
     m_xColBrkRB->set_sensitive(false);
     m_xPgBrkBeforeRB->set_sensitive(false);
     m_xPgBrkAfterRB->set_sensitive(false);
+    m_xPgBrkTypeFT->set_sensitive(false);
+    m_xPgBrkPositionFT->set_sensitive(false);
     m_xPageCollCB->set_sensitive(false);
     m_xPageCollLB->set_sensitive(false);
     m_xPageNoCB->set_sensitive(false);
