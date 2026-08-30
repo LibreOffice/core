@@ -178,16 +178,18 @@
       "id": "CVE-2025-15367",
       "description": "Python: POP3 command injection via user-controlled commands in poplib",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Unlike the other Python findings, shipped product code uses this module: program/mailmerge.py imports poplib. Fixed upstream only in 3.15.0a6. To assess: whether the mail-merge POP3 path is reachable at all in Collabora Online (a headless server; mail merge account configuration is a desktop feature) and whether the injected commands cross a trust boundary given the server configuration is user-supplied to begin with."
+        "state": "not_affected",
+        "justification": "code_not_present",
+        "detail": "The only shipped user of poplib was the mailmerge mail service component (program/mailmerge.py), which is no longer built or shipped: Collabora Online has no mail merge functionality, and its only consumers were Writer's desktop wizard dialogs and the UNO MailMerge service, which nothing in COOL invokes. poplib itself remains only inside the optional python-core (pyuno packages, excluded from the container unless 'withpython'), reachable solely from user macros, which are disabled by default."
       }
     },
     {
       "id": "CVE-2025-50422",
       "description": "cairo through 1.18.4: assertion failure in _cairo_ft_unscaled_font_fini (DoS)",
       "analysis": {
-        "state": "in_triage",
-        "detail": "No upstream fix yet. Impact is an assertion-failure crash; reported via Poppler's usage. To assess: whether the reported sequence is reachable through vcl's cairo usage and whether release builds compile the assertion out."
+        "state": "not_affected",
+        "justification": "code_not_reachable",
+        "detail": "The assertion failure is only known to be reachable through Poppler's cairo-ft usage ('as used in Poppler through 25.08.0'), and Poppler is not bundled - it was removed from this tree (the PDF import filter is PDFium-based, and configure/externals contain no trace of poppler). cairo's only consumer here is vcl, whose cairo-ft font lifecycle has no known path to this assertion. Worst case would be an assertion abort (DoS), as the bundled cairo is built without NDEBUG."
       }
     },
     {
