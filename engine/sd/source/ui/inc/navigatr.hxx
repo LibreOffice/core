@@ -114,7 +114,7 @@ public:
     virtual ~SdNavigatorWin() override;
 
     SD_DLLPUBLIC void           InitTreeLB( const SdDrawDocument* pDoc );
-    void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
+    void                        RefreshDocumentLB();
     void                        FirstFocus();
 
     NavigatorDragType           GetNavigatorDragType();

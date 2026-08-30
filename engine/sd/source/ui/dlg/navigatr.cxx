@@ -512,69 +512,56 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OUString&, rIdent, void )
     }
 }
 
-void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
+void SdNavigatorWin::RefreshDocumentLB()
 {
-    sal_Int32 nPos = 0;
+    sal_Int32 nPos = mxLbDocs->get_active();
+    if (nPos == -1)
+        nPos = 0;
 
-    if( pDocName )
+    OUString aStr;
+    if( mbDocImported )
+        aStr = mxLbDocs->get_text(0);
+
+    mxLbDocs->clear();
+
+    // delete list of DocInfos
+    maDocList.clear();
+
+    if( mbDocImported )
+        mxLbDocs->insert_text(0, aStr);
+
+    ::sd::DrawDocShell* pCurrentDocShell =
+          dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
+    SfxObjectShell* pSfxDocShell = SfxObjectShell::GetFirst();
+    while( pSfxDocShell )
     {
-        if( mbDocImported )
-            mxLbDocs->remove(0);
-
-        mxLbDocs->insert_text(0, *pDocName);
-        mbDocImported = true;
-    }
-    else
-    {
-        nPos = mxLbDocs->get_active();
-        if (nPos == -1)
-            nPos = 0;
-
-        OUString aStr;
-        if( mbDocImported )
-            aStr = mxLbDocs->get_text(0);
-
-        mxLbDocs->clear();
-
-        // delete list of DocInfos
-        maDocList.clear();
-
-        if( mbDocImported )
-            mxLbDocs->insert_text(0, aStr);
-
-        ::sd::DrawDocShell* pCurrentDocShell =
-              dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-        SfxObjectShell* pSfxDocShell = SfxObjectShell::GetFirst();
-        while( pSfxDocShell )
+        ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pSfxDocShell );
+        if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) )
         {
-            ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pSfxDocShell );
-            if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) )
-            {
-                NavDocInfo aInfo ;
-                aInfo.mpDocShell = pDocShell;
+            NavDocInfo aInfo ;
+            aInfo.mpDocShell = pDocShell;
 
-                SfxMedium *pMedium = pDocShell->GetMedium();
-                aStr = pMedium ? pMedium->GetName() : OUString();
-                if( !aStr.isEmpty() )
-                    aInfo.SetName( true );
-                else
-                    aInfo.SetName( false );
-                // at the moment, we use the name of the shell again (i.e.
-                // without path) since Koose thinks it is an error if the path
-                // is shown in url notation!
-                aStr = pDocShell->GetName();
+            SfxMedium *pMedium = pDocShell->GetMedium();
+            aStr = pMedium ? pMedium->GetName() : OUString();
+            if( !aStr.isEmpty() )
+                aInfo.SetName( true );
+            else
+                aInfo.SetName( false );
+            // at the moment, we use the name of the shell again (i.e.
+            // without path) since Koose thinks it is an error if the path
+            // is shown in url notation!
+            aStr = pDocShell->GetName();
 
-                mxLbDocs->append_text(aStr);
+            mxLbDocs->append_text(aStr);
 
-                if( pDocShell == pCurrentDocShell )
-                    aInfo.SetActive( true );
-                else
-                    aInfo.SetActive( false );
+            if( pDocShell == pCurrentDocShell )
+                aInfo.SetActive( true );
+            else
+                aInfo.SetActive( false );
 
-                maDocList.push_back( aInfo );
-            }
-            pSfxDocShell = SfxObjectShell::GetNext(*pSfxDocShell);
+            maDocList.push_back( aInfo );
         }
+        pSfxDocShell = SfxObjectShell::GetNext(*pSfxDocShell);
     }
     mxLbDocs->set_active(nPos);
 }
