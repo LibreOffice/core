@@ -11,14 +11,15 @@
 
 #include "AutoInstall/kit"
 
+/* LibreOfficeKit runtime data (the selection handle images), part of the
+   core package - not worth a package of its own. */
 Module gid_Module_Libreofficekit
     Name = "Libreofficekit Data";
     Description = "Libreofficekit Data";
-    PackageInfo = "packinfo_office.txt";
-    ParentID = gid_Module_Root_Brand;
+    ParentID = gid_Module_Root;
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Share_Libreofficekit);
-    Files = (auto_libreofficekit_ALL);
+    Files = (auto_kit_ALL);
 End
 
 Directory gid_Dir_Share_Libreofficekit
