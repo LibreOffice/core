@@ -27,6 +27,176 @@
         "state": "resolved_with_pedigree",
         "detail": "The upstream fix (return an empty buffer when the path length reaches 0) is backported via engine/external/redland/raptor/raptor-backport-unreleased-fixes.patch.1, and CVE-2024-57823.patch.1 additionally makes the path length sanity checks unconditional. The reported trigger, the Turtle parser, is not compiled in either (--enable-parsers=\"rdfxml\")."
       }
+    },
+    {
+      "id": "CVE-2013-2617",
+      "description": "Remote command execution in the 'curl' RUBY GEM <= 0.0.9",
+      "analysis": {
+        "state": "false_positive",
+        "detail": "Product name collision: this CVE is about the abandoned Ruby gem named 'curl', not the curl project. The bundled component is curl by the curl project (https://curl.se/)."
+      }
+    },
+    {
+      "id": "CVE-2017-5436",
+      "description": "graphite2: heap buffer overflow in lz4::decompress",
+      "analysis": {
+        "state": "false_positive",
+        "detail": "Fixed upstream in graphite2 1.3.10 (2017); the bundled 1.3.15 contains the fix. Flagged only because of a sloppy NVD version range."
+      }
+    },
+    {
+      "id": "CVE-2015-1239",
+      "description": "Double free in OpenJPEG j2k_read_ppm_v3 as bundled by 2015-era PDFium/Chrome",
+      "analysis": {
+        "state": "false_positive",
+        "detail": "Fixed upstream in OpenJPEG r2997 (2015). The bundled PDFium is the 7988 snapshot (2026), which has contained the fix for a decade."
+      }
+    },
+    {
+      "id": "CVE-2023-52356",
+      "description": "libtiff: segfault in TIFFReadRGBATileExt() (DoS)",
+      "analysis": {
+        "state": "false_positive",
+        "detail": "Fixed upstream in January 2024, first released in libtiff 4.7.0; the bundled 4.7.2 contains the fix."
+      }
+    },
+    {
+      "id": "CVE-2023-6277",
+      "description": "libtiff: out-of-memory in TIFFOpen via a crafted file (DoS)",
+      "analysis": {
+        "state": "false_positive",
+        "detail": "Fixed upstream in November 2023, first released in libtiff 4.7.0; the bundled 4.7.2 contains the fix."
+      }
+    },
+    {
+      "id": "CVE-2025-6021",
+      "description": "libxml2: integer overflow in xmlBuildQName() leading to a stack buffer overflow",
+      "analysis": {
+        "state": "false_positive",
+        "detail": "Fixed upstream in libxml2 2.13.8/2.14.2 (2025); the bundled 2.15.3 contains the fix."
+      }
+    },
+    {
+      "id": "CVE-2023-6228",
+      "description": "libtiff: heap buffer overflow in the tiffcp utility",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Only the libtiff library is built and statically linked; the tiffcp command-line utility is neither built nor shipped.",
+        "justification": "code_not_present"
+      }
+    },
+    {
+      "id": "CVE-2025-6170",
+      "description": "libxml2: stack buffer overflow in the xmllint interactive shell",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Only the libxml2 library is shipped; the xmllint utility is neither built nor shipped.",
+        "justification": "code_not_present"
+      }
+    },
+    {
+      "id": "CVE-2026-11979",
+      "description": "libxml2: stack buffer overflows in the xmlcatalog utility --shell mode",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Only the libxml2 library is shipped; the xmlcatalog utility is neither built nor shipped.",
+        "justification": "code_not_present"
+      }
+    },
+    {
+      "id": "CVE-2023-37769",
+      "description": "FPE in pixman's 'stress-test' test utility",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in pixman's stress-test test program, not in the library; the test programs are neither built nor shipped.",
+        "justification": "code_not_present"
+      }
+    },
+    {
+      "id": "CVE-2025-7425",
+      "description": "libxslt: use-after-free via attribute type corruption when processing result tree fragments",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The mitigation for this unfixed libxslt flaw lives in libxml2 >= 2.14 (per the Debian security tracker); the bundled libxml2 is 2.15.3, and libxslt only ever runs against it (both are statically linked together).",
+        "justification": "protected_by_mitigating_control"
+      }
+    },
+    {
+      "id": "CVE-2025-10911",
+      "description": "libxslt: use-after-free with key data stored cross-RVT",
+      "analysis": {
+        "state": "resolved_with_pedigree",
+        "detail": "The upstream fix (GNOME libxslt merge request !77, 'Use a dedicated node type to maintain the list of cached RVTs', the same commit RHEL backports for this CVE) is applied to the bundled 1.1.45 via engine/external/libxslt/77.patch.1."
+      }
+    },
+    {
+      "id": "CVE-2026-17084",
+      "description": "Python: stringprep.map_table_b2() deviates from RFC 3454",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
+        "justification": "requires_configuration"
+      }
+    },
+    {
+      "id": "CVE-2026-15806",
+      "description": "Python: HTTPPasswordMgr can send saved HTTPS credentials over HTTP",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
+        "justification": "requires_configuration"
+      }
+    },
+    {
+      "id": "CVE-2026-4360",
+      "description": "Python: tarfile.extract() does not fully respect the filter parameter",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
+        "justification": "requires_configuration"
+      }
+    },
+    {
+      "id": "CVE-2026-19672",
+      "description": "Python: tarfile can create directories outside the extraction path on POSIX",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
+        "justification": "requires_configuration"
+      }
+    },
+    {
+      "id": "CVE-2026-15310",
+      "description": "Python: zipfile decompresses bzip2/LZMA/zstd members without a max_length bound",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
+        "justification": "requires_configuration"
+      }
+    },
+    {
+      "id": "CVE-2025-15367",
+      "description": "Python: POP3 command injection via user-controlled commands in poplib",
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Unlike the other Python findings, shipped product code uses this module: program/mailmerge.py imports poplib. Fixed upstream only in 3.15.0a6. To assess: whether the mail-merge POP3 path is reachable at all in Collabora Online (a headless server; mail merge account configuration is a desktop feature) and whether the injected commands cross a trust boundary given the server configuration is user-supplied to begin with."
+      }
+    },
+    {
+      "id": "CVE-2025-50422",
+      "description": "cairo through 1.18.4: assertion failure in _cairo_ft_unscaled_font_fini (DoS)",
+      "analysis": {
+        "state": "in_triage",
+        "detail": "No upstream fix yet. Impact is an assertion-failure crash; reported via Poppler's usage. To assess: whether the reported sequence is reachable through vcl's cairo usage and whether release builds compile the assertion out."
+      }
+    },
+    {
+      "id": "CVE-2026-4775",
+      "description": "libtiff: signed integer overflow in putcontig8bitYCbCr44tile leading to heap overflow in YCbCr tile decoding",
+      "analysis": {
+        "state": "false_positive",
+        "detail": "The bundled tiff-4.7.2 tarball already contains the upstream fix (libtiff commit 782a11d6, 'prevent integer overflow ... in YCbCr tile decoding functions'): all four affected 'incr' computations are the fixed const tmsize_t form. Verified in the tarball source; the advisory's version range is inaccurate."
+      }
     }
   ]
 }
