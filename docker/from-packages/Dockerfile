@@ -25,6 +25,22 @@ ARG releasenotes
 ARG version
 ARG onlinetag
 
+# How the sbom stage obtains the base image's own SBOM, for merging into the
+# image-level SBOM shipped at /usr/share/sbom/:
+#   'fetch' (default) - pull the CycloneDX attestation ZenDiS publishes as the
+#                       sha256-<digest>.att sidecar tag from the registry,
+#                       falling back to probing the base's dpkg metadata
+#   'file'            - use a base-sbom*.cdx.json supplied in the build
+#                       context (air-gapped builds)
+#   'probe'           - only read the base filesystem's dpkg metadata (for
+#                       debian / gcr.io distroless base overrides)
+#   'none'            - record the base as unavailable
+ARG sbom_base
+
+# If defined, a degraded base SBOM (fetch and probe both failed) fails the
+# build instead of being recorded in the output. Set for release builds.
+ARG sbom_strict
+
 # Named alias of the runtime base, so the builder can source the jail's
 # glibc loader / NSS / resolver and the CA trust store from it (see below).
 FROM ${runtime_base} AS hardened
@@ -174,6 +190,40 @@ COPY /scripts/assemble-rootfs.sh /usr/local/bin/assemble-rootfs.sh
 RUN HARDENED_ROOT=/hardened /usr/local/bin/assemble-rootfs.sh
 
 # ---------------------------------------------------------------------------
+# SBOM stage: merge the base image's SBOM, the shipped Debian/Collabora
+# packages (from the builder's dpkg data and assemble-rootfs.sh's manifests)
+# and the per-package SPDX documents inside the rootfs into the image-level
+# SBOMs. A separate stage so python3 and any fetch residue stay out of the
+# stage /rootfs was assembled in; python3 is installed after /tmp/pkgs.added
+# was frozen, so the package bookkeeping is unaffected.
+# ---------------------------------------------------------------------------
+FROM builder AS sbom
+ARG runtime_base
+ARG version
+ARG sbom_base
+ARG sbom_strict
+# Optional pre-supplied base SBOM (sbom_base=file): Dockerfile always matches,
+# so this COPY succeeds even when no base-sbom*.cdx.json is in the context.
+COPY Dockerfile base-sbom*.cdx.json /tmp/sbom-ctx/
+COPY /scripts/fetch-base-sbom.py /scripts/generate-image-sbom.py /usr/local/bin/
+RUN (apt-get update -qq || true) && \
+    apt-get -y install python3 && \
+    python3 /usr/local/bin/fetch-base-sbom.py \
+        --ref "${runtime_base}" \
+        --mode "${sbom_base:-fetch}" \
+        --context-dir /tmp/sbom-ctx \
+        --hardened-root /hardened \
+        ${sbom_strict:+--strict} \
+        --out /tmp/base-sbom.cdx.json && \
+    python3 /usr/local/bin/generate-image-sbom.py \
+        --rootfs /rootfs \
+        --base-sbom /tmp/base-sbom.cdx.json \
+        --base-ref "${runtime_base}" \
+        --image-version "${version:-26.04.0.1}" \
+        ${sbom_strict:+--strict} \
+        --out-dir /sbom
+
+# ---------------------------------------------------------------------------
 # Capability check: the runtime stage relies on COPY --from carrying the jail's
 # file capabilities (the security.capability xattr on coolforkit-caps and
 # coolmount). That holds for modern BuildKit but not for the legacy builder and
@@ -221,6 +271,11 @@ COPY --from=builder /rootfs /
 # Force the capability check to run as part of every build: this pulls in the
 # verify-caps stage, which fails the build if the capabilities did not survive.
 COPY --from=verify-caps /caps-verified /opt/cool/.caps-verified
+
+# Image-level SBOMs (CycloneDX 1.6 and an SPDX 3.0.1 aggregate), generated in
+# the sbom stage. The per-package SPDX documents they reference arrive with
+# /rootfs above. scripts/publish.sh attests the CycloneDX one per digest.
+COPY --from=sbom /sbom/ /usr/share/sbom/
 
 # coolwsd listens on port 9980
 EXPOSE 9980

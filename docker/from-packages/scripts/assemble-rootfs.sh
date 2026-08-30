@@ -127,7 +127,8 @@ find /opt/cool >> "$FILELIST"
 # and its attack surface:
 #   - manuals, info, lintian and bug metadata
 #   - everything under /usr/share/doc EXCEPT the copyright files, which are kept
-#     for license compliance
+#     for license compliance, and SBOM documents, which the sbom stage indexes
+#     into the image-level SBOM
 #   - the systemd unit, AppArmor profile and reverse-proxy snippets: this is a
 #     distroless image started directly via coolwsd, not a service managed by
 #     systemd/apparmor or fronted by a bundled nginx/apache config
@@ -142,7 +143,7 @@ grep -vE \
     -e '^/usr/bin/(loolwsd|loolconfig|loolwsd-systemplate-setup)$' \
     -e '^/usr/bin/(coolwsd-systemplate-setup|coolconvert|coolstress|coolconfig)$' \
     "$FILELIST" \
-    | awk '!(/^\/usr\/share\/doc\// && !/\/copyright$/)' \
+    | awk '!(/^\/usr\/share\/doc\// && !/\/copyright$/ && !/sbom[^\/]*\.json$/)' \
     > "$FILELIST.trimmed"
 mv "$FILELIST.trimmed" "$FILELIST"
 sort -u "$FILELIST" -o "$FILELIST"
