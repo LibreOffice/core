@@ -25,7 +25,6 @@ $(eval $(call gb_Module_add_targets,scripting,\
 	$(if $(DISABLE_PYTHON),,\
 		Package_scriptproviderforpython \
 		Package_ScriptsPython \
-		Pyuno_mailmerge \
 	) \
 	Library_basprov \
 	Library_dlgprov \

@@ -732,9 +732,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	vcl_theme_definitions \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 		vcl_skia_denylist ) \
-	$(if $(DISABLE_PYTHON),, \
-		Pyuno/mailmerge \
-	) \
 	sfx2_classification \
 	svx_document_themes \
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
