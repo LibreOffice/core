@@ -37,6 +37,9 @@ class CanvasRecorder {
 	public readonly calls: CanvasRecorderCall[] = [];
 	public readonly properties: Record<string, any> = {};
 	public readonly canvas: { width: number; height: number };
+	// Uniform scale of the recorded calls, reported by getTransform.
+	private _scale: number = 1;
+	private _scaleStack: number[] = [];
 	private _depth: number = 0;
 
 	private static readonly _PROPS = [
@@ -161,19 +164,27 @@ class CanvasRecorder {
 		// Record at the outer depth, then nest subsequent calls
 		// one level deeper.
 		this._record('save', []);
+		this._scaleStack.push(this._scale);
 		this._depth++;
 	}
 	restore(): void {
 		// Pop the level first so the restore() entry itself sits at
 		// the outer depth, matching the save() entry that opened it.
 		if (this._depth > 0) this._depth--;
+		if (this._scaleStack.length) this._scale = this._scaleStack.pop();
 		this._record('restore', []);
 	}
 	translate(...args: any[]): void {
 		this._record('translate', args);
 	}
 	scale(...args: any[]): void {
+		this._scale *= args[0] ?? 1;
 		this._record('scale', args);
+	}
+
+	/// Only the uniform scale is tracked, the rest comes back as identity.
+	getTransform(): any {
+		return { a: this._scale, b: 0, c: 0, d: this._scale, e: 0, f: 0 };
 	}
 	rotate(...args: any[]): void {
 		this._record('rotate', args);

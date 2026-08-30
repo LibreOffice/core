@@ -1346,4 +1346,29 @@ describe('VectorPrimitiveRenderer', function () {
 		nodeassert.strictEqual(recorder.countOf('stroke'), 0);
 	});
 
+	// A hairline is one device pixel whatever the zoom. The context is in
+	// twips, so a width of 1 would come out around 0.05 pixels.
+	it('draws a hairline one device pixel wide under a scaled context', function () {
+		const renderer = new cool.VectorPrimitiveRenderer();
+		const recorder = new CanvasRecorder(200, 150);
+
+		// twips to pixels, a typical zoom
+		const scale = 0.05;
+		recorder.scale(scale, scale);
+		renderer.renderPrimitive(recorder as any, {
+			type: 'polygonHairline',
+			path: 'm0 0h1000v1000h-1000z',
+			color: '#c0c0c0',
+		} as any);
+
+		const stroke = recorder.calls.find((call: any) => call.method === 'stroke');
+		nodeassert.ok(stroke, 'nothing was stroked');
+		nodeassert.ok(
+			Math.abs(stroke.properties.lineWidth * scale - 1) < 0.001,
+			'the hairline came out ' +
+				String(stroke.properties.lineWidth * scale) +
+				' device pixels wide',
+		);
+	});
+
 });

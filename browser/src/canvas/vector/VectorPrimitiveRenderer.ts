@@ -189,6 +189,15 @@ namespace cool {
 			if (needsAlphaBracket) context.restore();
 		}
 
+		/// Width that draws as one device pixel under the current transform.
+		/// The context is in twips, so the scale has to be divided out.
+		private _hairlineWidth(context: CanvasRenderingContext2D): number {
+			if (typeof context.getTransform !== 'function') return 1;
+			const matrix = context.getTransform();
+			const scale = Math.hypot(matrix.a, matrix.b);
+			return scale > 0 ? 1 / scale : 1;
+		}
+
 		private _renderPolygonStroke(
 			context: CanvasRenderingContext2D,
 			primitive: PolygonStrokePrimitive,
@@ -200,8 +209,11 @@ namespace cool {
 
 			context.save();
 			context.strokeStyle = line.color ?? '#000000';
-			// A zero-width stroke is invisible on canvas, so clamp to one canvas pixel.
-			context.lineWidth = Math.max(line.width ?? 0, 1);
+			// Width 0 means a hairline.
+			context.lineWidth = Math.max(
+				line.width ?? 0,
+				this._hairlineWidth(context),
+			);
 			// The wire format can carry "none" and "unknown" for linejoin
 			// and linecap. Canvas has no matching option, so fall back
 			// to "miter" and "butt".
@@ -228,8 +240,7 @@ namespace cool {
 			const path = new Path2D(primitive.path);
 			context.save();
 			context.strokeStyle = primitive.color ?? '#000000';
-			// Hairlines render at one canvas pixel by definition.
-			context.lineWidth = 1;
+			context.lineWidth = this._hairlineWidth(context);
 			context.stroke(path);
 			context.restore();
 		}
@@ -256,8 +267,7 @@ namespace cool {
 			const [minX, minY, maxX, maxY] = primitive.bounds;
 			context.save();
 			context.strokeStyle = primitive.color ?? '#000000';
-			// LineRectangle is a one-canvas-pixel outline by definition.
-			context.lineWidth = 1;
+			context.lineWidth = this._hairlineWidth(context);
 			context.strokeRect(minX, minY, maxX - minX, maxY - minY);
 			context.restore();
 		}
@@ -273,8 +283,7 @@ namespace cool {
 
 			context.save();
 			context.strokeStyle = primitive.color ?? '#000000';
-			// SingleLine renders at one canvas pixel by definition.
-			context.lineWidth = 1;
+			context.lineWidth = this._hairlineWidth(context);
 			context.beginPath();
 			context.moveTo(startX, startY);
 			context.lineTo(endX, endY);
