@@ -289,7 +289,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScInputHandler* pInputHandler = pScMod->GetInputHdl(pTabViewShell);
                     if (bCommit)
                     {
-                        pTabViewShell->EnterDataToCurrentCell(aInputString, nullptr, true /*bAutoDynamicArray*/);
+                        pTabViewShell->EnterDataToCurrentCell(aInputString, true /*bAutoDynamicArray*/);
                     }
                     else if (pInputHandler)
                     {

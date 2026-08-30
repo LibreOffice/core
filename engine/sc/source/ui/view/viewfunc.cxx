@@ -659,13 +659,13 @@ void runAutoCorrectQueryAsync(const std::shared_ptr<FormulaProcessingContext>& c
 
 } // end anonymous namespace
 
-void ScViewFunc::EnterDataToCurrentCell(const OUString& rString, const EditTextObject* pData, bool bAutoDynamicArray)
+void ScViewFunc::EnterDataToCurrentCell(const OUString& rString, bool bAutoDynamicArray)
 {
     SCCOL nCol = GetViewData().GetCurX();
     SCROW nRow = GetViewData().GetCurY();
     SCTAB nTab = GetViewData().CurrentTabForData();
 
-    EnterData(nCol, nRow, nTab, rString, pData, bAutoDynamicArray);
+    EnterData(nCol, nRow, nTab, rString, /*pData*/nullptr, bAutoDynamicArray);
 }
 
 namespace
