@@ -1596,14 +1596,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSpilledRangeOperatorXlsxExport)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleOnSpilledRangeXlsxExport)
 {
-    // In =@A1# the # binds tighter than @, so the XLSX form nests
-    // as _xlfn.SINGLE(_xlfn.ANCHORARRAY(A1)).
+    // OOXML leaves the @ of a plain =@A1# cell out of the text and expresses it by keeping the
+    // cell a non-array formula, so that cell is written as a bare _xlfn.ANCHORARRAY(A1) and the
+    // import puts the @ back. An @ over a wider operand keeps the _xlfn.SINGLE call, which is
+    // what carries the meaning there.
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
     pDoc->SetFormula(ScAddress(0, 0, 0), u"=SEQUENCE(3)"_ustr,
                      formula::FormulaGrammar::GRAM_NATIVE);
     pDoc->SetFormula(ScAddress(1, 0, 0), u"=@A1#"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(2, 0, 0), u"=@(A1#*2)"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
 
     save(TestFilter::XLSX);
 
@@ -1611,7 +1614,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleOnSpilledRangeXlsxExport)
     CPPUNIT_ASSERT(pSheet);
 
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f",
-                       u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1))");
+                       u"_xlfn.ANCHORARRAY(A1)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[3]/x:f",
+                       u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1)*2)");
+
+    saveAndReload(TestFilter::XLSX);
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"=@A1#"_ustr, pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=@(A1#*2)"_ustr, pDoc->GetFormula(2, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testParenthesizedSpilledRangeXlsxRoundTrip)

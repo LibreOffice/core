@@ -1030,6 +1030,18 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
     if (bWriteFormula)
     {
         ScTokenArray aTokenArray(*mrScFmlaCell.GetCode());
+        // OOXML expresses the @ of a plain =@ref# cell by leaving it out and keeping the
+        // cell a non-array formula. Write it the same way, so a reader that does not know
+        // the _xlfn.SINGLE call still gets the formula.
+        if (!bDynamicArrayMaster && mrScFmlaCell.GetMatrixFlag() == ScMatrixMode::NONE
+            && aTokenArray.GetLen() == 3
+            && aTokenArray.TokenAt(0)->GetOpCode() == ocSingleValue
+            && aTokenArray.TokenAt(1)->GetType() == formula::svSingleRef
+            && aTokenArray.TokenAt(2)->GetOpCode() == ocSpill)
+        {
+            aTokenArray.RemoveToken(0, 1);
+        }
+
         bool bValid = true;
         // Discard formulas containing macros in XLSX export.
         if (!rStrm.IsExportVBA())
