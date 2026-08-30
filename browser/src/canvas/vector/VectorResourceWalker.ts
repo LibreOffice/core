@@ -25,6 +25,7 @@ namespace cool {
 		walkObjects(objects: SlideObject[]): void {
 			for (const obj of objects) {
 				if (obj.primitives) this.walkPrimitives(obj.primitives);
+				if (obj.aids) this.walkPrimitives(obj.aids);
 			}
 		}
 

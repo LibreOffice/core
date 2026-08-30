@@ -335,33 +335,6 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(notified, 1);
 	});
 
-	// An empty placeholder shows a dashed frame in the edit view only. A
-	// thumbnail or a slideshow renders the same data without the frame.
-	it('frames an empty placeholder in the edit view only', function () {
-		const manager = new VectorManager();
-		manager.handleVectorPrimitivesResponse({
-			part: 0,
-			objects: [
-				{
-					id: 11,
-					emptyPlaceholder: true,
-					transform: [300, 0, 0, 200, 10, 20],
-					primitives: [],
-				},
-			],
-		});
-		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
-
-		let recorder = new CanvasRecorder();
-		manager.renderInto(recorder as any, data);
-		nodeassert.strictEqual(countCalls(recorder, 'setLineDash'), 0);
-
-		recorder = new CanvasRecorder();
-		manager.renderInto(recorder as any, data, { editView: true });
-		nodeassert.strictEqual(countCalls(recorder, 'setLineDash'), 1);
-		nodeassert.ok(recorder.findCall('stroke'), 'the frame is stroked');
-	});
-
 	// A placeholder that holds no content yet carries its prompt text inside
 	// a wrapper only an editing view unfolds, so a thumbnail and a slideshow
 	// leave the prompt out and the editing view shows it.
@@ -553,6 +526,77 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(sent.length, 2, 'the part is asked for again');
 
 		(app as any).socket.sendMessage = function () {};
+	});
+
+	// Master view marks out each placeholder with the name of its area. The
+	// name travels with the aids, which the view that edits the page draws
+	// in a pass of its own, so the page content stays free of it.
+	it('paints the area name of a master placeholder', function () {
+		const response = loadVectorRenderingReference('testMasterAreaName');
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse(response);
+		const master = manager.requestPart(
+			response.part,
+			cool.VectorMode.MasterPages,
+		);
+		nodeassert.ok(master, 'the master part is cached');
+
+		const drawnText = (recorder: any): string =>
+			recorder.calls
+				.filter(
+					(call: any) =>
+						call.method === 'fillText' || call.method === 'strokeText',
+				)
+				.map((call: any) => call.args[0])
+				.join(' ');
+
+		const aids = new CanvasRecorder(400, 300);
+		manager.renderPlaceholderAids(aids as any, master);
+		nodeassert.ok(
+			drawnText(aids).indexOf('Footer Area') >= 0,
+			'the aids drew no area name',
+		);
+		nodeassert.ok(
+			aids.calls.some((call: any) => call.method === 'setLineDash'),
+			'the aids drew no dashed boundary',
+		);
+
+		const content = new CanvasRecorder(400, 300);
+		manager.renderInto(content as any, master, { editView: true });
+		nodeassert.strictEqual(
+			drawnText(content).indexOf('Footer Area'),
+			-1,
+			'the page content drew the area name',
+		);
+	});
+
+	// The aids that mark out a placeholder are an overlay of the view that
+	// edits the page, so the page content is drawn without them.
+	it('draws the placeholder aids apart from the page content', function () {
+		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.MasterPages,
+			version: 1,
+			objects: [
+				{
+					id: 1,
+					primitives: [hairline('M0 0 L1 1')],
+					aids: [hairline('M0 0 L2 2'), hairline('M0 0 L3 3')],
+				},
+			],
+		});
+		const master: any = manager.requestPart(0, cool.VectorMode.MasterPages);
+		nodeassert.ok(master, 'the master part is cached');
+
+		const content = new CanvasRecorder();
+		manager.renderInto(content as any, master, { editView: true });
+		nodeassert.strictEqual(countCalls(content, 'stroke'), 1);
+
+		const aids = new CanvasRecorder();
+		manager.renderPlaceholderAids(aids as any, master);
+		nodeassert.strictEqual(countCalls(aids, 'stroke'), 2);
 	});
 
 	// A response that names no mode is filed as the slide at that index.

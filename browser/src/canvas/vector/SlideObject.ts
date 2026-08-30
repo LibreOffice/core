@@ -15,6 +15,10 @@ namespace cool {
 		/// Stable identity of the object: the engine's SdrObject unique
 		/// id, unchanged across edits to the same object.
 		id?: number;
+		/// The aids that mark out a placeholder: a dashed boundary around
+		/// the area it occupies and, on a master page, the name of the
+		/// area. They are drawn apart from the object's own content.
+		aids?: Primitive[];
 		/// "page" for the entry that stands for the slide itself: it is
 		/// drawn first and holds the background, the page fill and the
 		/// master page content, and its box is the slide.

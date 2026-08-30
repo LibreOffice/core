@@ -136,6 +136,7 @@
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/editobj.hxx>
+#include <PlaceholderDecoration.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
@@ -3201,6 +3202,12 @@ private:
                 rObject.GetViewContact().getViewIndependentPrimitive2DContainer(
                     aContent.maPrimitives);
 
+            // The aids that mark out a placeholder, its dashed boundary and the name of the
+            // area, travel in an array of their own. A master page is only ever looked at as
+            // a page being worked on, so its thumbnail draws the prompt text of an empty
+            // placeholder while leaving the aids to the view that edits the page.
+            aContent.maAids = sd::createPlaceholderDecoration(rObject, false);
+
             for (const auto& rPrimitive : aContent.maPrimitives)
                 rPrimitive->get2DDecomposition(aContent.maDrawn, maViewInformation);
         }
@@ -3531,8 +3538,15 @@ private:
             rWriter.putSimpleValue(aTransformation.get(1, 2));
         }
 
-        auto aPrimitiveArray = rWriter.startArray("primitives");
-        maProcessor->decomposeAndWrite(rContent.maPrimitives);
+        {
+            auto aPrimitiveArray = rWriter.startArray("primitives");
+            maProcessor->decomposeAndWrite(rContent.maPrimitives);
+        }
+        if (!rContent.maAids.empty())
+        {
+            auto aAidArray = rWriter.startArray("aids");
+            maProcessor->decomposeAndWrite(rContent.maAids);
+        }
     }
 
     SdDrawDocument* mpDocument;

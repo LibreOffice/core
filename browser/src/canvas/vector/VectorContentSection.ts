@@ -144,6 +144,8 @@ namespace cool {
 				RenderManager.renderInto(this._offscreenCtx, cached, {
 					editView: true,
 				});
+				// The view edits the page, so it marks out the placeholders.
+				RenderManager.renderPlaceholderAids(this._offscreenCtx, cached);
 				this._offscreenCtx.restore();
 				this._lastRenderKey = renderKey;
 				this._offscreenPart = partId;
@@ -181,6 +183,7 @@ namespace cool {
 				this.context.translate(offsetX, offsetY);
 				this.context.scale(scale, scale);
 				RenderManager.renderInto(this.context, cached, { editView: true });
+				RenderManager.renderPlaceholderAids(this.context, cached);
 				this.context.restore();
 			}
 		}

@@ -166,6 +166,11 @@ public:
         /// changes.
         drawinglayer::primitive2d::Primitive2DContainer maDrawn;
 
+        /// The aids that mark out a placeholder: a dashed boundary around the area it occupies
+        /// and, on a master page, the name of the area. Empty for an object that is not a
+        /// placeholder. They are written apart from the primitives.
+        drawinglayer::primitive2d::Primitive2DContainer maAids;
+
         tools::Rectangle maPaintedBox;
         basegfx::B2DHomMatrix maTransformation;
         /// True while a text edit runs on the object. It is compared along with the rest so
@@ -184,7 +189,8 @@ public:
             return maPaintedBox == rOther.maPaintedBox
                    && maTransformation == rOther.maTransformation
                    && mbTextEdit == rOther.mbTextEdit && mnParentId == rOther.mnParentId
-                   && maAutoColor == rOther.maAutoColor && maDrawn == rOther.maDrawn;
+                   && maAutoColor == rOther.maAutoColor
+                   && maDrawn == rOther.maDrawn && maAids == rOther.maAids;
         }
     };
 

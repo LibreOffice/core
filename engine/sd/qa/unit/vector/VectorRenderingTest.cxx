@@ -93,6 +93,19 @@ protected:
         return pPage;
     }
 
+    /// The master of the first slide, with a placeholder of every kind that takes an area
+    /// name in master view.
+    SdPage* createMasterPlaceholders()
+    {
+        SdPage* pMasterPage = static_cast<SdPage*>(&page(1)->TRG_GetMasterPage());
+        for (PresObjKind eKind : { PresObjKind::Title, PresObjKind::Header, PresObjKind::Footer,
+                                   PresObjKind::DateTime, PresObjKind::SlideNumber })
+        {
+            pMasterPage->CreateDefaultPresObj(eKind);
+        }
+        return pMasterPage;
+    }
+
     /// The entry of the object with the given id, or nothing when the response has none.
     static std::optional<tools::JsonPath> findEntryOfObject(const tools::JsonPath& rJson,
                                                             sal_uInt64 nObjectId)
@@ -106,19 +119,6 @@ protected:
                 return oEntry;
         }
         return std::nullopt;
-    }
-
-    /// The master of the first slide, with a placeholder of every kind that takes an area
-    /// name in master view.
-    SdPage* createMasterPlaceholders()
-    {
-        SdPage* pMasterPage = static_cast<SdPage*>(&page(1)->TRG_GetMasterPage());
-        for (PresObjKind eKind : { PresObjKind::Title, PresObjKind::Header, PresObjKind::Footer,
-                                   PresObjKind::DateTime, PresObjKind::SlideNumber })
-        {
-            pMasterPage->CreateDefaultPresObj(eKind);
-        }
-        return pMasterPage;
     }
 
     /// Add a filled rectangle with a border to the first slide.
@@ -928,6 +928,34 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPageIsServedInItsOwnMode)
     // two modes really are different pages.
     auto aSlide = getVectorPrimitives(u"testNotesPageSlide");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aSlide.getSize("/objects").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterPlaceholderCarriesItsAreaName)
+{
+    // Master view marks out each placeholder with a dashed boundary and the
+    // name of the area. The aids travel apart from the page content, so a
+    // target that draws the page without them can leave them out while it
+    // still draws the prompt text of an empty placeholder.
+    createBlankDoc();
+    SdPage* pMasterPage = createMasterPlaceholders();
+    SdrObject* pFooter = pMasterPage->GetPresObj(PresObjKind::Footer);
+    CPPUNIT_ASSERT(pFooter);
+
+    auto aMaster = getVectorPrimitives(u"testMasterAreaName", -1, 1);
+    const auto oEntry = findEntryOfObject(aMaster, pFooter->GetUniqueID());
+    CPPUNIT_ASSERT_MESSAGE("the footer placeholder has no entry", oEntry.has_value());
+
+    const auto oAids = oEntry->at("aids");
+    CPPUNIT_ASSERT_MESSAGE("the placeholder carries no aids", oAids.has_value());
+    CPPUNIT_ASSERT_MESSAGE("the placeholder got no dashed boundary",
+                           findNodeOfType(*oAids, "polygonStroke"_ostr).has_value());
+    CPPUNIT_ASSERT_MESSAGE("the area name did not reach the aids",
+                           findNodeOfType(*oAids, "textSimplePortion"_ostr).has_value());
+
+    const auto oPrimitives = oEntry->at("primitives");
+    CPPUNIT_ASSERT(oPrimitives.has_value());
+    CPPUNIT_ASSERT_MESSAGE("the aids are drawn with the page content",
+                           !findNodeOfType(*oPrimitives, "polygonStroke"_ostr).has_value());
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMissingPageStillAnswers)

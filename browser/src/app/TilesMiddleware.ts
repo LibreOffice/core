@@ -249,6 +249,13 @@ class RenderManager {
 		RenderManager.ensureInstance().renderInto(context, data, options);
 	}
 
+	static renderPlaceholderAids(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+	): void {
+		RenderManager.ensureInstance().renderPlaceholderAids(context, data);
+	}
+
 	static setLayerVisible(layer: number, visible: boolean): void {
 		RenderManager.ensureInstance().setLayerVisible(layer, visible);
 	}

@@ -202,6 +202,12 @@ class RenderManagerBase {
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
 
+	renderPlaceholderAids(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setLayerVisible(_layer: number, _visible: boolean): void {}
 

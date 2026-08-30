@@ -136,8 +136,7 @@ class VectorManager extends RenderManagerBase {
 
 	/// Render a part's objects in paint order, the page entry first. The
 	/// caller sets up the context transform that maps the part's twips to
-	/// the target pixels. Objects on a hidden layer are skipped. An edit
-	/// view also frames the placeholders that hold no content yet.
+	/// the target pixels. Objects on a hidden layer are skipped.
 	renderInto(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
@@ -157,8 +156,6 @@ class VectorManager extends RenderManagerBase {
 					this._renderer.renderPrimitive(context, primitive);
 				}
 			}
-			if (options?.editView && obj.emptyPlaceholder && obj.transform)
-				this._renderer.renderPlaceholderFrame(context, obj.transform);
 		}
 	}
 
@@ -182,6 +179,26 @@ class VectorManager extends RenderManagerBase {
 			if (obj.id !== undefined) ids.add(obj.id);
 		}
 		return ids;
+	}
+
+	/// Draw the aids that mark out the placeholders on a page: the dashed
+	/// boundary of each and, on a master page, the name of the area. They
+	/// are drawn over the page content, so a later object does not cover
+	/// them, and objects on a hidden layer are skipped as ever.
+	renderPlaceholderAids(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+	): void {
+		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
+		for (const id of data.order) {
+			const obj = data.objects.get(id);
+			if (!obj || !obj.aids) continue;
+			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
+				continue;
+			for (const primitive of obj.aids) {
+				this._renderer.renderPrimitive(context, primitive);
+			}
+		}
 	}
 
 	/// Request a thumbnail for a preview.

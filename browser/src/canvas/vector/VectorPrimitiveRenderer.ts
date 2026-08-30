@@ -224,40 +224,6 @@ namespace cool {
 			if (needsAlphaBracket) context.restore();
 		}
 
-		/// Draw the dashed gray frame an edit view shows around a placeholder
-		/// that holds no content yet. The transform maps the unit square onto
-		/// the object, so the frame follows a rotated or sheared one. The
-		/// corners are mapped first and stroked in twips, which keeps the
-		/// width and the dashes even.
-		renderPlaceholderFrame(
-			context: CanvasRenderingContext2D,
-			transform: number[],
-		): void {
-			if (transform.length < 6) return;
-
-			context.save();
-			context.strokeStyle = '#808080';
-			context.lineWidth = this._hairlineWidth(context);
-			// Dash lengths in twips: the desktop's 160 and 80 in 1/100 mm.
-			context.setLineDash([91, 45]);
-			context.stroke(this._transformedUnitSquare(transform));
-			context.restore();
-		}
-
-		/// The unit square mapped through the transform, as a path in twips.
-		/// Mapping the corners here rather than on the canvas keeps a stroke's
-		/// width and dashes whatever the object's scale.
-		private _transformedUnitSquare(transform: number[]): Path2D {
-			const [a, b, c, d, e, f] = transform;
-			const path = new Path2D();
-			path.moveTo(e, f);
-			path.lineTo(a + e, b + f);
-			path.lineTo(a + c + e, b + d + f);
-			path.lineTo(c + e, d + f);
-			path.closePath();
-			return path;
-		}
-
 		/// Width that draws as one device pixel under the current transform.
 		/// The context is in twips, so the scale has to be divided out.
 		private _hairlineWidth(context: CanvasRenderingContext2D): number {
