@@ -51,7 +51,7 @@ using namespace ::com::sun::star::beans;
 
 namespace sd {
 
-FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL */)
+FrameView::FrameView(SdDrawDocument* pDrawDoc)
 :   SdrView(*pDrawDoc, nullptr), // TTTT SdDrawDocument* -> should be reference
     mnRefCount(0),
     mbIsNavigatorShowingAllShapes(false)
@@ -67,39 +67,35 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
     SetFrameDragSingles();
     SetSlidesPerRow(4);
 
-    if( nullptr == pFrameView )
+    FrameView* pFrameView = nullptr;
+    if ( DrawDocShell* pDocShell = pDrawDoc->GetDocSh() )
     {
-        DrawDocShell* pDocShell = pDrawDoc->GetDocSh();
+        // document is loaded, is there a FrameView?
+        sal_uLong nSdViewShellCount = 0;
+        SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
 
-        if ( pDocShell )
+        while (pSfxViewFrame)
         {
-            // document is loaded, is there a FrameView?
-            sal_uLong nSdViewShellCount = 0;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
+            // Count the FrameViews and remember the type of the main
+            // view shell.
+            SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
+            ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( pSfxViewSh  );
 
-            while (pSfxViewFrame)
+            if (pBase != nullptr)
             {
-                // Count the FrameViews and remember the type of the main
-                // view shell.
-                SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
-                ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( pSfxViewSh  );
+                nSdViewShellCount++;
 
-                if (pBase != nullptr)
-                {
-                    nSdViewShellCount++;
-
-                    rtl::Reference<sd::framework::AbstractView> xView (
-                        framework::FrameworkHelper::Instance(*pBase)->GetView(
-                            new sd::framework::ResourceId(
-                                framework::FrameworkHelper::msCenterPaneURL)));
-                }
-
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, pDocShell);
+                rtl::Reference<sd::framework::AbstractView> xView (
+                    framework::FrameworkHelper::Instance(*pBase)->GetView(
+                        new sd::framework::ResourceId(
+                            framework::FrameworkHelper::msCenterPaneURL)));
             }
 
-            SdDrawDocument* pDoc = pDocShell->GetDoc();
-            pFrameView = pDoc->GetFrameView(nSdViewShellCount);
+            pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, pDocShell);
         }
+
+        SdDrawDocument* pDoc = pDocShell->GetDoc();
+        pFrameView = pDoc->GetFrameView(nSdViewShellCount);
     }
 
     if (pFrameView)

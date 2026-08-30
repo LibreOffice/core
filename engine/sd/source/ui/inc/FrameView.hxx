@@ -35,7 +35,7 @@ class FrameView final
     : public SdrView
 {
 public:
-    FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = nullptr );
+    FrameView(SdDrawDocument* pDrawDoc);
     FrameView(const FrameView& rFrameView);
     virtual ~FrameView() override;
 
