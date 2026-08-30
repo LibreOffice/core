@@ -10,5 +10,23 @@
       ]
     }
   },
-  "vulnerabilities": []
+  "vulnerabilities": [
+    {
+      "id": "CVE-2024-57822",
+      "description": "Raptor RDF Syntax Library through 2.0.16: heap-based buffer over-read in the N-Triples parser when a bnode id ends in '.'",
+      "analysis": {
+        "state": "not_affected",
+        "justification": "code_not_present",
+        "detail": "The bundled raptor is built with --enable-parsers=\"rdfxml\" only (engine/external/redland/ExternalProject_raptor.mk), so the vulnerable N-Triples parser is not compiled in. The upstream fix is additionally backported via engine/external/redland/raptor/raptor-backport-unreleased-fixes.patch.1."
+      }
+    },
+    {
+      "id": "CVE-2024-57823",
+      "description": "Raptor RDF Syntax Library through 2.0.16: integer underflow when normalizing a URI in raptor_uri_normalize_path(), reported via the Turtle parser",
+      "analysis": {
+        "state": "resolved_with_pedigree",
+        "detail": "The upstream fix (return an empty buffer when the path length reaches 0) is backported via engine/external/redland/raptor/raptor-backport-unreleased-fixes.patch.1, and CVE-2024-57823.patch.1 additionally makes the path length sanity checks unconditional. The reported trigger, the Turtle parser, is not compiled in either (--enable-parsers=\"rdfxml\")."
+      }
+    }
+  ]
 }
