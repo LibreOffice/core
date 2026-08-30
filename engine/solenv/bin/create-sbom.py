@@ -1138,12 +1138,15 @@ def add_static_dependencies(files_by_package, externalstaticlink, with_path):
                 if instpath.find("python-core") != -1 and with_path:
                     if instpath.endswith(".py"):
                         continue
-                    if len(externalstaticlink[filename].difference({"bzip2", "libexpat", "libffi", "zlib"})) != 0:
+                    if len(externalstaticlink[filename].difference({"bzip2", "libexpat", "libffi", "openssl", "zlib"})) != 0:
                         raise Exception(f"Unexpected static linking in python module, please adapt: {externalstaticlink[filename]}")
                     if instpath.find("_bz2.") != -1 and "bzip2" in externalstaticlink[filename]:
                         file["externaldeps"] = {"bzip2"}
                     elif instpath.find("_ctypes.") != -1 and "libffi" in externalstaticlink[filename]:
                         file["externaldeps"] = {"libffi"}
+                    elif (instpath.find("_ssl.") != -1 or instpath.find("_hashlib.") != -1) \
+                            and "openssl" in externalstaticlink[filename]:
+                        file["externaldeps"] = {"openssl"}
                     elif instpath.find("pyexpat.") != -1 and "libexpat" in externalstaticlink[filename]:
                         file["externaldeps"] = {"libexpat"}
                 elif instpath.find("python3") + 2 == instpath.find(".dll") and with_path:
