@@ -120,6 +120,7 @@ private:
     };
 
     OpCode opCodeAt(sal_uInt16 nPosition) const;
+    sal_uInt16 endWithoutTrailingWhitespace(sal_uInt16 nBegin, sal_uInt16 nEnd) const;
     sal_uInt16 literalOffsetArgument(sal_uInt16 nPosition) const;
     bool isCallBeforeArguments(OpCode eOp, sal_uInt16 nPosition) const;
     bool isOneParenthesizedGroup(sal_uInt16 nBegin, sal_uInt16 nEnd) const;
@@ -141,6 +142,14 @@ private:
 OpCode RewriteCollector::opCodeAt(sal_uInt16 nPosition) const
 {
     return mrTokens.TokenAt(nPosition)->GetOpCode();
+}
+
+// An operand stops before the whitespace in front of the operator that ends it.
+sal_uInt16 RewriteCollector::endWithoutTrailingWhitespace(sal_uInt16 nBegin, sal_uInt16 nEnd) const
+{
+    while (nEnd > nBegin && isWhitespaceOpCode(opCodeAt(sal_uInt16(nEnd - 1))))
+        --nEnd;
+    return nEnd;
 }
 
 // Position of the first argument if the token at nPosition opens an OFFSET() call with a
@@ -260,8 +269,9 @@ void RewriteCollector::closeSingleValues(size_t nScope, sal_uInt16 nEnd)
         // An empty operand gets no wrapper.
         if (rSingle.mbHasOperand)
         {
-            mrWrappers.push_back({ rSingle.mnBegin, nEnd, ocSingleValue,
-                                   !isOneParenthesizedGroup(rSingle.mnBegin, nEnd) });
+            const sal_uInt16 nOperandEnd = endWithoutTrailingWhitespace(rSingle.mnBegin, nEnd);
+            mrWrappers.push_back({ rSingle.mnBegin, nOperandEnd, ocSingleValue,
+                                   !isOneParenthesizedGroup(rSingle.mnBegin, nOperandEnd) });
             // The wrapper now encloses the expression, so the expression starts at the
             // wrapper. Whitespace the scope start had skipped is inside the wrapper too,
             // so pull that start back as well.
@@ -291,7 +301,9 @@ void RewriteCollector::closeUnionList(sal_uInt16 nEnd, bool bMayTakeScopeParenth
     if (!(bMayTakeScopeParenthesis && rScope.mbGroupParenthesis
           && rScope.mnListStart == rScope.mnContentStart))
     {
-        mrWrappers.push_back({ rScope.mnListStart, nEnd, ocNone, true });
+        mrWrappers.push_back({ rScope.mnListStart,
+                               endWithoutTrailingWhitespace(rScope.mnListStart, nEnd), ocNone,
+                               true });
     }
     rScope.mnListStart = NO_POSITION;
 }

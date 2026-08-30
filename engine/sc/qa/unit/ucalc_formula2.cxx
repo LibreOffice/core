@@ -7667,6 +7667,11 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpilledRangeBindsTighterThanSignAndMarker
     CPPUNIT_ASSERT_EQUAL(u"SUM( _xlfn.SINGLE(_xlfn.ANCHORARRAY(A1)))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"SUM( @A1#)"_ustr));
 
+    // Whitespace before the operator that ends the operand stays outside the wrapper as well,
+    // so the operand is still one parenthesised group and that pair serves as the call's.
+    CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(A1) + 1"_ustr,
+                         compileAndPrintAsOoxml(*m_pDoc, u"@(A1) + 1"_ustr));
+
     // A # on an argument inside a wrapped call wraps just that argument.
     CPPUNIT_ASSERT_EQUAL(u"_xlfn.SINGLE(SUM(_xlfn.ANCHORARRAY(A1)))"_ustr,
                          compileAndPrintAsOoxml(*m_pDoc, u"@SUM(A1#)"_ustr));
