@@ -335,6 +335,50 @@ window.L.Map = window.L.Evented.extend({
 			else if (e.commandName === '.uno:SecurityLabel') {
 				// Initial value on load (getCommandValues).
 				this._updateSecurityLabelBanner(e.commandValues && e.commandValues.marking);
+				// Show the Security Label button only when the document's format can
+				// carry a label (OOXML). The engine reports this from the actual loading
+				// filter, which is reliable where the file extension is not. The button
+				// lives in the Writer, Calc and Impress UIs (not Draw), so gate to those.
+				var dt = this.getDocType();
+				if (this.uiManager && e.commandValues &&
+				    (dt === 'text' || dt === 'spreadsheet' || dt === 'presentation')) {
+					var supported = !!e.commandValues.supported;
+					// What the notebookbar was last built with: its builders read
+					// _securityLabelSupported, so this is the layout on screen.
+					var wasSupported = this._securityLabelSupported === true;
+					this._securityLabelSupported = supported;
+					// Record it in the shared command-visibility map the menubar and
+					// notebookbar builders consult, so later rebuilds stay correct.
+					// isCommandVisible() tests for the *presence* of the key, not its
+					// value (and showCommand() deletes it to reveal a command), so a
+					// supported command has to remove the entry: storing false here
+					// still reads back as hidden and cleanOpts drops the toolitem.
+					if (supported)
+						delete this.uiManager.hiddenCommands['.uno:SecurityLabel'];
+					else
+						this.uiManager.hiddenCommands['.uno:SecurityLabel'] = true;
+					// Toggle the classic File-menu entry live (present in classic mode).
+					if (this.menubar) {
+						if (supported)
+							this.menubar.showUnoItem('.uno:SecurityLabel');
+						else
+							this.menubar.hideUnoItem('.uno:SecurityLabel');
+					}
+					// The notebookbar builds before this flag arrives (defaulting to
+					// Properties alone). Rebuild it so the stacked Properties + Security
+					// label layout appears when supported, and Properties reclaims the
+					// column when not. Use the impl's refresh(), which re-runs the tab
+					// builders (getFullJSON); refreshNotebookbar() only re-renders the
+					// snapshot built at construction, so it would not pick up the flag.
+					// Only when the layout actually changes: a rebuild re-runs the tab
+					// builders through cleanOpts(), which drops every item hidden via
+					// showButton() (e.g. Impress' Follow Presenter, hidden at load by
+					// SlideShowPresenter), and a dropped item cannot be shown again.
+					if (this.uiManager.notebookbar && this.uiManager.notebookbar.impl &&
+					    wasSupported !== supported) {
+						this.uiManager.notebookbar.impl.refresh();
+					}
+				}
 			}
 		});
 

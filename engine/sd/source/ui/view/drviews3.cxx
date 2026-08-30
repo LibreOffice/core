@@ -22,6 +22,7 @@
 #include <DrawViewShell.hxx>
 #include <DrawController.hxx>
 #include <SdSecurityLabelTarget.hxx>
+#include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/seclabel/SecurityLabelDialog.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -287,6 +288,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_SECURITY_LABEL:
         {
+            // OOXML-only: the label rides in the customXml part, so gate on the actual
+            // format (the browser hides the button; this backstops a direct dispatch).
+            if (!svx::seclabel::modelSupportsLabel(GetDocSh()->GetModel()))
+            {
+                break;
+            }
             // The dialog lives in svx; Impress supplies the marking-placement target.
             vcl::Window* pSecWin = GetActiveWindow();
             VclPtr<VclAbstractDialog> pSecDlg(svx::seclabel::CreateSecurityLabelDialog(

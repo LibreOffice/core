@@ -1465,10 +1465,14 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         // The document's STANAG marking (empty when unlabelled), for the browser's
         // read-only classification banner. Rendered with the label's provisioned policy.
         rJsonWriter.put("commandName", ".uno:SecurityLabel");
-        const OUString aMarking
-            = pDocShell ? svx::seclabel::readMarking(pDocShell->GetModel()) : OUString();
+        const css::uno::Reference<css::frame::XModel> xModel
+            = pDocShell ? pDocShell->GetModel() : nullptr;
+        const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
         auto aValues = rJsonWriter.startNode("commandValues");
         rJsonWriter.put("marking", aMarking);
+        // Whether this document's format can carry a label; the browser hides the
+        // command and its button when false (only OOXML supports the customXml part).
+        rJsonWriter.put("supported", xModel.is() && svx::seclabel::modelSupportsLabel(xModel));
         return;
     }
     if (aCommand.startsWith(".uno:FormulaDepChain"))

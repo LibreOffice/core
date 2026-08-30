@@ -1397,13 +1397,17 @@ void GetExtractLinkTargets(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell
 /// the browser's read-only classification banner.
 void GetSecurityLabel(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell)
 {
-    const OUString aMarking
-        = pDocShell ? svx::seclabel::readMarking(pDocShell->GetModel()) : OUString();
+    const css::uno::Reference<css::frame::XModel> xModel
+        = pDocShell ? pDocShell->GetModel() : nullptr;
+    const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
     // Standard {commandName, commandValues} envelope so the browser routes it by
     // command name (the kit forwards this JSON verbatim, adding no envelope).
     rJsonWriter.put("commandName", ".uno:SecurityLabel");
     auto aValues = rJsonWriter.startNode("commandValues");
     rJsonWriter.put("marking", aMarking);
+    // Whether this document's format can carry a label; the browser hides the command
+    // and its button when false (only OOXML supports the customXml part).
+    rJsonWriter.put("supported", xModel.is() && svx::seclabel::modelSupportsLabel(xModel));
 }
 
 /// Implements getCommandValues(".uno:Sections").

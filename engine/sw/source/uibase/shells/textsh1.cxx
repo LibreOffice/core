@@ -59,6 +59,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <charfmt.hxx>
 #include <svx/SmartTagItem.hxx>
+#include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xfillit0.hxx>
@@ -1228,6 +1229,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_SECURITY_LABEL:
         {
+            // OOXML-only: the label rides in the customXml part, so gate on the actual
+            // format (the browser hides the button; this backstops a direct dispatch).
+            if (!svx::seclabel::modelSupportsLabel(GetView().GetDocShell()->GetModel()))
+            {
+                break;
+            }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             VclPtr<VclAbstractDialog> pDlg(pFact->CreateSecurityLabelDlg(GetView().GetFrameWeld(), rWrtSh));
             pDlg->StartExecuteAsync([pDlg](sal_Int32){

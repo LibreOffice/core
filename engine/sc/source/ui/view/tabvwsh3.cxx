@@ -38,6 +38,7 @@
 #include <document.hxx>
 #include <dbdata.hxx>
 #include <sc.hrc>
+#include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/seclabel/SecurityLabelDialog.hxx>
 #include <vcl/abstdlg.hxx>
 #include <helpids.h>
@@ -420,6 +421,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
     {
         case SID_SECURITY_LABEL:
             {
+                // OOXML-only: the label rides in the customXml part, so gate on the
+                // actual format (the browser hides the button; this backstops a direct
+                // dispatch).
+                if (!svx::seclabel::modelSupportsLabel(GetViewData().GetDocShell()->GetModel()))
+                {
+                    break;
+                }
                 // The dialog lives in svx; Calc supplies the marking-placement target.
                 VclPtr<VclAbstractDialog> pDlg(svx::seclabel::CreateSecurityLabelDialog(
                     GetFrameWeld(), std::make_unique<ScSecurityLabelTarget>(*this)));

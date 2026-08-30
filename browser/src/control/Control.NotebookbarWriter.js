@@ -362,8 +362,11 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			});
 		}
 
+		// Stack Properties with Security label when the format supports a label
+		// (OOXML); otherwise Properties alone as a bigtoolitem so it fills the column.
+		// The engine reports support and refreshes the notebookbar (Map.js).
 		content.push(
-			{
+			(this.map && this.map._securityLabelSupported === true) ? {
 				'type': 'container',
 				'children': [
 					{
@@ -386,12 +389,23 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'type': 'toolitem',
 								'text': _('Security label'),
 								'command': '.uno:SecurityLabel',
-								'accessibility': { focusBack: true,	combination: 'SL', de: null }
+								'accessibility': { focusBack: true, combination: 'SL', de: null }
 							}
 						]
 					}
 				],
 				'vertical': 'true'
+			} : {
+				'type': 'container',
+				'children': [
+					{
+						'id': 'properties',
+						'type': 'bigtoolitem',
+						'text': _('Properties'),
+						'command': '.uno:SetDocumentProperties',
+						'accessibility': { focusBack: true,	combination: 'FP', de: 'I' }
+					}
+				]
 		});
 		if (window.documentSigningEnabled) {
 			content.push({

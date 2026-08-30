@@ -58,6 +58,12 @@ SVXCORE_DLLPUBLIC bool readLabel(const css::uno::Reference<css::frame::XModel>& 
 /// source of the on-load banner marking, so it matches the dialog's live preview.
 SVXCORE_DLLPUBLIC OUString readMarking(const css::uno::Reference<css::frame::XModel>& xModel);
 
+/// Whether xModel's document can carry a security label: true only for the OOXML
+/// formats (docx/xlsx/pptx and their template/macro variants), since the label rides
+/// in the OOXML customXml part. Determined from the loading filter, which is
+/// authoritative regardless of the file's extension. Gates the command and its button.
+SVXCORE_DLLPUBLIC bool modelSupportsLabel(const css::uno::Reference<css::frame::XModel>& xModel);
+
 /// Resolve a SPIF colour (a W3C colour name or #RRGGBB) to an RGB value; unknown
 /// names fall back to black.
 SVXCORE_DLLPUBLIC sal_Int32 resolveColor(const OUString& rColor);

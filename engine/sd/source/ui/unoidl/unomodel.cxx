@@ -2861,10 +2861,14 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         // The document's STANAG marking (empty when unlabelled), for the browser's
         // read-only classification banner. Rendered with the label's provisioned policy.
         rJsonWriter.put("commandName", ".uno:SecurityLabel");
-        const OUString aMarking
-            = mpDocShell ? svx::seclabel::readMarking(mpDocShell->GetModel()) : OUString();
+        const css::uno::Reference<css::frame::XModel> xModel
+            = mpDocShell ? mpDocShell->GetModel() : nullptr;
+        const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
         auto aValues = rJsonWriter.startNode("commandValues");
         rJsonWriter.put("marking", aMarking);
+        // Whether this document's format can carry a label; the browser hides the
+        // command and its button when false (only OOXML supports the customXml part).
+        rJsonWriter.put("supported", xModel.is() && svx::seclabel::modelSupportsLabel(xModel));
         return;
     }
 

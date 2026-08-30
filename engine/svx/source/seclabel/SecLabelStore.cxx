@@ -28,6 +28,10 @@
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/objsh.hxx>
+
 using namespace css;
 
 namespace svx::seclabel
@@ -218,6 +222,22 @@ OUString readMarking(const uno::Reference<frame::XModel>& xModel)
     if (const SpifPolicy* pPolicy = aPolicies.findByLabel(aLabel))
         return pPolicy->deriveMarking(aLabel);
     return aLabel.summary();
+}
+
+bool modelSupportsLabel(const uno::Reference<frame::XModel>& xModel)
+{
+    // The loading filter is authoritative for the actual format (the file extension
+    // may not match). OOXML filters come in two name families -- "... 2007 ... XML"
+    // and "... Office Open XML ..." -- and the modifiers (Template, VBA, AutoPlay)
+    // land on either side, so match the markers rather than one fixed phrase:
+    // "Calc MS Excel 2007 VBA XML" (xlsm) is why. Every other format (ODF, RTF, and
+    // the binary MSO ones including "Calc MS Excel 2007 Binary") lacks a marker.
+    SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(xModel);
+    if (!pShell || !pShell->GetMedium() || !pShell->GetMedium()->GetFilter())
+        return false;
+    const OUString aName = pShell->GetMedium()->GetFilter()->GetFilterName();
+    return (aName.indexOf(u"2007") >= 0 && aName.indexOf(u"XML") >= 0)
+           || aName.indexOf(u"Office Open XML") >= 0;
 }
 
 sal_Int32 resolveColor(const OUString& rColor)
