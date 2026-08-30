@@ -340,6 +340,9 @@ public:
     virtual int getEditMode() override;
     /// @see vcl::ITiledRenderable::setEditMode().
     virtual void setEditMode(int) override;
+
+    /// @see vcl::ITiledRenderable::setDrawnFromModel().
+    virtual void setDrawnFromModel(bool bDrawnFromModel) override;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     SD_DLLPUBLIC virtual void initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().

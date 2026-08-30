@@ -5651,6 +5651,16 @@ static void doc_registerCallback(COKitDocument* pThis,
         pViewShell->setCOKitViewCallback(nullptr);
         pDocument->mpCallbackFlushHandlers[nView]->setViewId(-1);
         pDocument->mpCallbackFlushHandlers.erase(nView);
+
+        // With the last such reader gone there is nothing to broadcast for.
+        const bool bAnyDrawsFromModel = std::any_of(
+            pDocument->mpCallbackFlushHandlers.begin(), pDocument->mpCallbackFlushHandlers.end(),
+            [](const auto& rEntry) { return rEntry.second && rEntry.second->isVectorRendering(); });
+        if (!bAnyDrawsFromModel)
+        {
+            if (ITiledRenderable* pDoc = getTiledRenderable(pThis))
+                pDoc->setDrawnFromModel(false);
+        }
     }
 }
 

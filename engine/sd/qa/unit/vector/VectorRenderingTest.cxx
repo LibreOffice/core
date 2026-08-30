@@ -681,6 +681,29 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGraphicsResponseKeepsTypeOnUnknown
     CPPUNIT_ASSERT_EQUAL(sal_Int64(12345), oJson->getInt("/checksum").value_or(-1));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullMarksTheModelAsDrawnFrom)
+{
+    // Asking for the primitives is what tells the model it is drawn from.
+    createBlankDoc();
+    CPPUNIT_ASSERT(!page(1)->getSdrModelFromSdrPage().IsDrawnFromModel());
+
+    getVectorPrimitives(u"testDrawnFromModel");
+
+    CPPUNIT_ASSERT(page(1)->getSdrModelFromSdrPage().IsDrawnFromModel());
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTheLastReaderLeavingClearsTheMark)
+{
+    // The mark follows the reader, so letting the last one go clears it.
+    createBlankDoc();
+    getVectorPrimitives(u"testDrawnFromModelCleared");
+    CPPUNIT_ASSERT(page(1)->getSdrModelFromSdrPage().IsDrawnFromModel());
+
+    page(1)->getSdrModelFromSdrPage().SetDrawnFromModel(false);
+
+    CPPUNIT_ASSERT(!page(1)->getSdrModelFromSdrPage().IsDrawnFromModel());
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testBoldRunNamesADifferentFace)
 {
     // Bold and regular text of one family are different faces, so they name

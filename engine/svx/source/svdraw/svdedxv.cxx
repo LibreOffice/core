@@ -141,8 +141,9 @@ IMPL_LINK_NOARG(SdrObjEditView, TextEditUpdate, Timer*, void)
     // to get this broadcasted. We do not risk to set the model
     // unwantedly to changed, we had a text edit going on already.
     // This is needed for SlideShow since it is not (yet) using the
-    // standard schema with VC/VOC/OC
-    if (isInteractiveSlideShow())
+    // standard schema with VC/VOC/OC, and for a reader that draws from the model
+    if (isInteractiveSlideShow()
+        || mxWeakTextEditObj.get()->getSdrModelFromSdrObject().IsDrawnFromModel())
         mxWeakTextEditObj.get()->BroadcastObjectChange();
 
     // force repaint for objects with changed text in all views
@@ -1593,9 +1594,12 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             mpTextEditOutliner->SetStatusEventHdl(
                 LINK(this, SdrObjEditView, ImpOutlinerStatusEventHdl));
 
-            // IASS: start listening to ModelChanges of TextEdit
+            // IASS: start listening to ModelChanges of TextEdit. A reader that
+            // draws from the model needs the same listening, its broadcast comes
+            // from the update timer this handler starts.
             if (isInteractiveSlideShow()
-                || pTextObj->GetViewContact().hasMultipleViewObjectContacts())
+                || pTextObj->GetViewContact().hasMultipleViewObjectContacts()
+                || pTextObj->getSdrModelFromSdrObject().IsDrawnFromModel())
                 mpTextEditOutliner->SetModifyHdl(LINK(this, SdrObjEditView, ImpModifyHdl));
 
             if (pTextObj->IsChainable())

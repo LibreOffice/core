@@ -269,6 +269,7 @@ private:
     bool mbMakePageObjectsNamesUnique = true;
     bool m_bIsImpress = false;
     bool m_bShowMargin = true;
+    bool m_bDrawnFromModel = false;
 
 public:
     SVX_DLLPRIVATE virtual bool IsCreatingDataObj() const { return false; }
@@ -279,6 +280,10 @@ public:
     void     SetImpress(bool bIsImpress) { m_bIsImpress = bIsImpress; };
     bool     IsShowMargin() const { return m_bShowMargin; }
     void     SetShowMargin(bool bShowMargin) { m_bShowMargin = bShowMargin; }
+    /// True when something draws from the model, not the view object contacts,
+    /// so it only sees a change the model broadcasts.
+    bool IsDrawnFromModel() const { return m_bDrawnFromModel; }
+    void SetDrawnFromModel(bool bDrawnFromModel) { m_bDrawnFromModel = bDrawnFromModel; }
     void     SetPasteResize(bool bOn) { m_bPasteResize=bOn; }
     // If a custom Pool is put here, the class will call methods
     // on it (Put(), Remove()). On disposal of SdrModel the pool

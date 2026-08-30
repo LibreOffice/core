@@ -2971,6 +2971,9 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 
         if (mpDoc)
         {
+            // This reader draws from the model, so an open edit has to broadcast.
+            mpDoc->SetDrawnFromModel(true);
+
             // Keep the text being edited in the decomposition: vector
             // rendering has no edit-view overlay to draw it otherwise.
             comphelper::COKit::setVectorRendering(true);
@@ -5299,6 +5302,12 @@ int SdXImpressDocument::getEditMode()
         return 0;
 
     return pViewSh->GetViewShellBase().getEditMode();
+}
+
+void SdXImpressDocument::setDrawnFromModel(bool bDrawnFromModel)
+{
+    if (mpDoc)
+        mpDoc->SetDrawnFromModel(bDrawnFromModel);
 }
 
 void SdXImpressDocument::setEditMode(int nMode)

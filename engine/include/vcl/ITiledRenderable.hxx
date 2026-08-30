@@ -164,6 +164,12 @@ public:
     virtual void setEditMode(int) {}
 
     /**
+     * Say whether anything still draws from the model rather than from the
+     * view object contacts.
+     */
+    virtual void setDrawnFromModel(bool /*bDrawnFromModel*/) {}
+
+    /**
      * Setup various document properties that are needed for the document to
      * be renderable via tiled rendering.
      */
