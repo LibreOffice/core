@@ -12,29 +12,29 @@ diff -ru python3.orig/Mac/Makefile.in python3/Mac/Makefile.in
 -STRIPFLAG=-s
 +STRIPFLAG=
  CPMAC=CpMac
- 
+
  APPTEMPLATE=$(srcdir)/Resources/app
 diff -ru python3.orig/Mac/Resources/app/Info.plist.in python3/Mac/Resources/app/Info.plist.in
 --- python3.orig/Mac/Resources/app/Info.plist.in	2015-07-05 18:50:07.000000000 +0200
 +++ python3/Mac/Resources/app/Info.plist.in	2015-07-26 17:42:00.974521224 +0200
-@@ -18,7 +18,7 @@
- 		</dict>
- 	</array>
+@@ -13,7 +13,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>PytX</string>
  	<key>CFBundleExecutable</key>
 -	<string>Python</string>
 +	<string>LibreOfficePython</string>
- 	<key>CFBundleGetInfoString</key>
- 	<string>%version%, (c) 2001-2024 Python Software Foundation.</string>
- 	<key>CFBundleHelpBookFolder</key>
+ 	<key>CFBundleIconFile</key>
+ 	<string>PythonInterpreter.icns</string>
+ 	<key>CFBundleInfoDictionaryVersion</key>
 diff -ru python3.orig/Mac/Resources/framework/Info.plist.in python3/Mac/Resources/framework/Info.plist.in
 --- python3.orig/Mac/Resources/framework/Info.plist.in	2015-07-05 18:50:07.000000000 +0200
 +++ python3/Mac/Resources/framework/Info.plist.in	2015-07-26 17:41:15.996518204 +0200
-@@ -5,7 +5,7 @@
- 	<key>CFBundleDevelopmentRegion</key>
- 	<string>English</string>
+@@ -13,7 +13,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
  	<key>CFBundleExecutable</key>
 -	<string>Python</string>
 +	<string>@PYTHONFRAMEWORK@</string>
- 	<key>CFBundleGetInfoString</key>
- 	<string>Python Runtime and Library</string>
- 	<key>CFBundleIdentifier</key>
+ 	<key>CFBundleInfoDictionaryVersion</key>
+ 	<string>6.0</string>
+ 	<key>CFBundleShortVersionString</key>

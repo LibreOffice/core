@@ -19,8 +19,8 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,python3,\
 		unzip -q -d externals/pythonx86 -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(PYTHON_BOOTSTRAP_TARBALL) && \
 		chmod +x externals/pythonx86/tools/* && \
 	) \
-	unzip -q -d Lib/ -o Lib/test/wheeldata/setuptools-79.0.1-py3-none-any.whl && \
-	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/pip-26.1-py3-none-any.whl && \
+	unzip -q -d Lib/ -o Lib/test/wheeldata/setuptools-*-py3-none-any.whl && \
+	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/pip-*-py3-none-any.whl && \
 	mv Lib/setuptools/_vendor/jaraco/text/Lorem\ ipsum.txt Lib/setuptools/_vendor/jaraco/text/Lorem_ipsum.txt \
 ))
 
