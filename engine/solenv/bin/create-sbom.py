@@ -1424,8 +1424,8 @@ def gen_product(ziplist, packinfos, install_script, languages, externalsfile,
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 17:
-        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <6 packinfo> <path of install script> <packinfo> <path of install script> <languages> <externals> <externalstatic> <externalpackagestatic>")
+    if len(sys.argv) < 16:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <5 packinfo> <path of install script> <packinfo> <path of install script> <languages> <externals> <externalstatic> <externalpackagestatic>")
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
@@ -1438,12 +1438,11 @@ if __name__ == "__main__":
         packinfos += parse_packinfo(sys.argv[6])
         packinfos += parse_packinfo(sys.argv[7])
         packinfos += parse_packinfo(sys.argv[8])
-        packinfos += parse_packinfo(sys.argv[9])
-        install_script = parse_install_script(sys.argv[10])
-        languages = set(sys.argv[13].split())
-        externalsfile = sys.argv[14]
-        externalstaticfile = sys.argv[15]
-        externalpackagestaticfile = sys.argv[16]
+        install_script = parse_install_script(sys.argv[9])
+        languages = set(sys.argv[12].split())
+        externalsfile = sys.argv[13]
+        externalstaticfile = sys.argv[14]
+        externalpackagestaticfile = sys.argv[15]
 
         (files_product, externals_product) = gen_product(
             ziplist, packinfos, install_script, languages,
@@ -1451,8 +1450,8 @@ if __name__ == "__main__":
             productname, filelistdirs)
 
         if "ODK" in os.environ.get("BUILD_TYPE").split(" "):
-            packinfos_sdk = parse_packinfo(sys.argv[11])
-            install_script_sdk = parse_install_script(sys.argv[12])
+            packinfos_sdk = parse_packinfo(sys.argv[10])
+            install_script_sdk = parse_install_script(sys.argv[11])
             (files_sdk, externals_sdk) = gen_product(
                 ziplist, packinfos_sdk, install_script_sdk, languages,
                 externalsfile, externalstaticfile, externalpackagestaticfile,

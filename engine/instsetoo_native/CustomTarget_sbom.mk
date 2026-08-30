@@ -23,7 +23,6 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 		$(gb_CustomTarget_workdir)/readlicense_oo/license/LICENSE.html \
 		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_help.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_lang.txt \
@@ -55,7 +54,6 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_help.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_lang.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
-		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
 		$(call gb_InstallScript_get_target,setup_osl) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_sdkoo.txt \
 		$(call gb_InstallScript_get_target,sdkoo) \
