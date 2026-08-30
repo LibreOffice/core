@@ -146,6 +146,8 @@
 
 #include <txttxmrk.hxx>
 
+#include <IDocumentUndoRedo.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -3322,8 +3324,36 @@ IMPL_LINK(SwContentTree, EditedEntryHdl, const weld::TreeView::IterColText&, rIt
         break;
         case ContentTypeId::INDEX:
         {
-            rtl::Reference<SwXDocumentIndexes> xIdxAcc = xModel->getSwDocumentIndexes();
-            xNameAccess = xIdxAcc;
+            m_bEditing = false;
+            SwTOXBaseContent* pTOXBaseContent = static_cast<SwTOXBaseContent*>(pCnt);
+            if (const SwTOXBase* pTOXBase = pTOXBaseContent->GetTOXBase())
+            {
+                // based on code from SwTOXMgr::UpdateOrInsertTOX
+                SwDoc* pDoc = m_pActiveShell->GetDoc();
+
+                if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
+                }
+
+                SwTOXBase* pTOX = const_cast<SwTOXBase*>(pTOXBase);
+                SwTOXBase* pNewTOX = new SwTOXBase(*pTOX);
+                pNewTOX->SetTitle(sNewName);
+                m_pActiveShell->GetDoc()->ChangeTOX(*pTOX, *pNewTOX);
+
+                pTOX->DisableKeepExpression();
+                m_pActiveShell->UpdateTableOf(*pTOX);
+                pTOX->EnableKeepExpression();
+
+                if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::TOXCHANGE, nullptr);
+                }
+
+                return true;
+            }
+
+            return false;
         }
         break;
         case ContentTypeId::DRAWOBJECT:
