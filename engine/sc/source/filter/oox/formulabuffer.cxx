@@ -247,6 +247,16 @@ void applySharedFormulas(
             if (rDesc.mbDynamicArrayMaster)
                 pCell->SetDynamicArrayMaster(true);
 
+            // OOXML expresses the @ of a plain =@ref# cell by leaving it out, so put it back.
+            // The cm attribute is the cell's own, so one member of the group can be a master.
+            ScTokenArray* pCellCode = pCell->GetCode();
+            if (!rDesc.mbDynamicArrayMaster && pCellCode->GetLen() == 2
+                && pCellCode->TokenAt(0)->GetType() == formula::svSingleRef
+                && pCellCode->TokenAt(1)->GetOpCode() == ocSpill)
+            {
+                ScFormulaCell::ResolveImplicitIntersection(*pCellCode, rDoc.getDoc(), aPos);
+            }
+
             rDoc.setFormulaCell(aPos, pCell);
             const bool bNeedNumberFormat = ((rDoc.getDoc().GetNumberFormat(
                             aPos.Col(), aPos.Row(), aPos.Tab()) % SV_COUNTRY_LANGUAGE_OFFSET) == 0);

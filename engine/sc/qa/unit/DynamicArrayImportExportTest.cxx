@@ -188,6 +188,18 @@ CPPUNIT_TEST_FIXTURE(DynamicArrayImportExportTest, testDroppedImplicitIntersecti
     CPPUNIT_ASSERT_EQUAL(u"=$H$5#"_ustr, pDocument->GetFormula(0, 33, 2));
 }
 
+CPPUNIT_TEST_FIXTURE(DynamicArrayImportExportTest, testSharedFormulaGetsTheDroppedIntersection)
+{
+    // A cell that takes its formula from a shared group gets the @ of a plain =@ref# cell back
+    // as well, so every cell of the group reads the same as one written out on its own.
+    createScDoc("functions/dynamic_array/xlsx/SharedSpillReferenceTest.xlsx");
+    ScDocument* pDocument = getScDoc();
+
+    // A1 is the group master, A2 takes its formula from it.
+    CPPUNIT_ASSERT_EQUAL(u"=@$C$1#"_ustr, pDocument->GetFormula(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=@$C$1#"_ustr, pDocument->GetFormula(0, 1, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(DynamicArrayImportExportTest, testDynamicArrayFixtureKeepsFormulaSpelling)
 {
     // The export writes every formula the way the input file spells it, apart from the cells
