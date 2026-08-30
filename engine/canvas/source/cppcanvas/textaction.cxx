@@ -108,25 +108,6 @@ namespace cppcanvas
                       rState );
             }
 
-            void init( vclcanvas::RenderState&                      o_rRenderState,
-                       rtl::Reference< vclcanvas::CanvasFont >&     o_rFont,
-                       const ::basegfx::B2DPoint&                   rStartPoint,
-                       const OutDevState&                           rState,
-                       vclcanvas::Canvas& rCanvas,
-                       const ::basegfx::B2DHomMatrix&               rTextTransform )
-            {
-                init( o_rRenderState, o_rFont, rStartPoint, rState, rCanvas );
-
-                // TODO(F2): Also inversely-transform clip with
-                // rTextTransform (which is actually rather hard, as the
-                // text transform is _prepended_ to the render state)!
-
-                // prepend extra font transform to render state
-                // (prepend it, because it's interpreted in the unit
-                // rect coordinate space)
-                o_rRenderState.AffineTransform = rTextTransform * o_rRenderState.AffineTransform;
-            }
-
             void initLayoutWidth(double& rLayoutWidth, const cpo::uno::Sequence<double>& rOffsets)
             {
                 ENSURE_OR_THROW(rOffsets.hasElements(),
@@ -207,8 +188,7 @@ namespace cppcanvas
                                   const cpo::uno::Sequence< double >&            rOffsets,
                                   const cpo::uno::Sequence< bool >&          rKashidas,
                                   vclcanvas::Canvas& rCanvas,
-                                  const OutDevState&                        rState,
-                                  const ::basegfx::B2DHomMatrix*            pTextTransform )
+                                  const OutDevState&                        rState )
             {
                 ENSURE_OR_THROW( rOffsets.hasElements(),
                                   "::cppcanvas::initArrayAction(): zero-length DX array" );
@@ -218,10 +198,7 @@ namespace cppcanvas
 
                 rtl::Reference< vclcanvas::CanvasFont > xFont( rState.xFont );
 
-                if( pTextTransform )
-                    init( o_rRenderState, xFont, aLocalStartPoint, rState, rCanvas, *pTextTransform );
-                else
-                    init( o_rRenderState, xFont, aLocalStartPoint, rState, rCanvas );
+                init( o_rRenderState, xFont, aLocalStartPoint, rState, rCanvas );
 
                 o_rTextLayout = xFont->createTextLayout(
                     rendering::StringContext( rText, nStartPos, nLen ),
@@ -380,7 +357,7 @@ namespace cppcanvas
                                  rOffsets,
                                  rKashidas,
                                  rCanvas,
-                                 rState, nullptr );
+                                 rState );
             }
 
             bool TextArrayAction::render( vclcanvas::Canvas& rCanvas,
@@ -500,7 +477,7 @@ namespace cppcanvas
                                  rOffsets,
                                  rKashidas,
                                  rCanvas,
-                                 rState, nullptr );
+                                 rState );
             }
 
             basegfx::B2DPolyPolygon EffectTextArrayAction::queryTextBoundsPoly() const
