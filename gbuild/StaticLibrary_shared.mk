@@ -77,6 +77,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/Util-unix \
     kit/KitQueue \
     kit/LogUI \
+    net/FakeSocket-stub \
     net/HttpHelper \
     net/HttpRequest \
     net/NetUtil \

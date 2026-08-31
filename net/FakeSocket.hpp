@@ -10,15 +10,15 @@
  */
 
 /*
- * Socket API emulation for mobile platforms (iOS/Android).
+ * Socket API emulation for the embedded app frontends.
  * Functions: fakeSocket* family (Socket, Poll, Listen, Connect, etc.)
+ *
+ * Declared in every build. The app links net/FakeSocket.cpp, which emulates the
+ * socket calls in memory; every other build links net/FakeSocket-stub.cpp, whose
+ * entry points fail.
  */
 
 #pragma once
-
-#include <common/Util.hpp>
-
-#if MOBILEAPP
 
 #include <string>
 
@@ -70,87 +70,6 @@ int fakeSocketClose(int fd);
 
 EXTERNC
 void fakeSocketDumpState();
-
-#else
-
-inline void fakeSocketSetLoggingCallback(void (*)(const std::string&))
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-}
-
-inline int fakeSocketSocket()
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketPipe2(int[2])
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketPoll(struct pollfd*, int, int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketListen(int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketConnect(int, int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketAccept4(int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketPeer(int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline ssize_t fakeSocketAvailableDataLength(int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline ssize_t fakeSocketRead(int, void*, size_t)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline ssize_t fakeSocketWrite(int, const void*, size_t)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketShutdown(int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-inline int fakeSocketClose(int)
-{
-    assert(Util::isMobileApp() && "Never used in non-mobile builds");
-    return -1;
-}
-
-#endif // !MOBILEAPP
 
 inline ssize_t fakeSocketWriteQueue(int fd, const void *buf, size_t nbytes)
 {

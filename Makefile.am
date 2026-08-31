@@ -205,6 +205,7 @@ shared_sources = \
                  common/Util.cpp \
                  kit/KitQueue.cpp \
                  kit/LogUI.cpp \
+                 net/FakeSocket-stub.cpp \
                  net/HttpHelper.cpp \
                  net/HttpRequest.cpp \
                  net/NetUtil.cpp \
