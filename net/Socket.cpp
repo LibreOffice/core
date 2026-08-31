@@ -29,9 +29,7 @@
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
-#if !MOBILEAPP
 #include <common/Watchdog.hpp>
-#endif
 #include <common/base64.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/NetUtil.hpp>
@@ -88,9 +86,9 @@
 constexpr std::chrono::microseconds SocketPoll::DefaultPollTimeoutMicroS;
 constexpr std::chrono::microseconds WebSocketHandler::InitialPingDelayMicroS;
 
-#if !MOBILEAPP
-
 std::unique_ptr<Watchdog> SocketPoll::PollWatchdog;
+
+#if !MOBILEAPP
 
 #ifndef __APPLE__
 #define SOCKET_ABSTRACT_UNIX_NAME "coolwsd-"
@@ -338,20 +336,16 @@ SocketPoll::SocketPoll(std::string threadName)
     , _pollStartIndex(0)
     , _owner(ProcUtil::getThreadId())
     , _threadStarted(0)
-#if !MOBILEAPP
     , _watchdogTime(Watchdog::getDisableStamp())
-#endif
     , _stop(false)
     , _threadFinished(false)
     , _runOnClientThread(false)
 {
     ProfileZone profileZone("SocketPoll::SocketPoll");
 
-#if !MOBILEAPP
     static bool watchDogProfile = !!getenv("COOL_WATCHDOG");
     if (watchDogProfile && !PollWatchdog)
         PollWatchdog = std::make_unique<Watchdog>();
-#endif
 
     _wakeup[0] = -1;
     _wakeup[1] = -1;
@@ -360,20 +354,16 @@ SocketPoll::SocketPoll(std::string threadName)
 
     LOG_DBG("New " << logInfo());
 
-#if !MOBILEAPP
     if (PollWatchdog)
         PollWatchdog->addTime(&_watchdogTime, &_owner);
-#endif
 }
 
 SocketPoll::~SocketPoll()
 {
     LOG_DBG("~" << logInfo());
 
-#if !MOBILEAPP
     if (PollWatchdog)
         PollWatchdog->removeTime(&_watchdogTime);
-#endif
 
     joinThread();
 
@@ -512,16 +502,12 @@ void SocketPoll::pollingThreadEntry()
 
 void SocketPoll::disableWatchdog()
 {
-#if !MOBILEAPP
     _watchdogTime = Watchdog::getDisableStamp();
-#endif
 }
 
 void SocketPoll::enableWatchdog()
 {
-#if !MOBILEAPP
     _watchdogTime = Watchdog::getTimestamp();
-#endif
 }
 
 int SocketPoll::poll(int64_t timeoutMaxMicroS, bool justPoll)

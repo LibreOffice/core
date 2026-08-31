@@ -25,7 +25,7 @@
 #include <net/FakeSocket.hpp>
 #include <net/NetUtil.hpp>
 
-#if !MOBILEAPP
+#ifndef _WIN32
 #include <poll.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -220,10 +220,11 @@ public:
             if (!_isShutdown)
             {
                 setShutdown();
-#if !MOBILEAPP
-                ::shutdown(_fd, SHUT_RDWR);
-#else
-                fakeSocketShutdown(_fd);
+                if constexpr (Util::isMobileApp())
+                    fakeSocketShutdown(_fd);
+#ifndef _WIN32
+                else
+                    ::shutdown(_fd, SHUT_RDWR);
 #endif
             }
         }
@@ -246,10 +247,10 @@ public:
     /// Returns the total capacity of all data buffers.
     virtual std::size_t totalBufferCapacity() const { return 0; }
 
-#if !MOBILEAPP
     /// manage latency issues around packet aggregation
     void setNoDelay()
     {
+#ifndef _WIN32
         if constexpr (!Util::isMobileApp())
         {
             const int val = 1;
@@ -260,8 +261,10 @@ public:
                              << strerror(errno));
             }
         }
+#endif
     }
 
+#if !MOBILEAPP
     /// Uses peercreds to get prisoner PID if present or -1
     int getPid() const;
 
@@ -276,7 +279,12 @@ public:
     /// Returns true on success only.
     bool setSocketBufferSize([[maybe_unused]] const int size)
     {
-#if !MOBILEAPP
+#ifdef _WIN32
+        return false;
+#else
+        if constexpr (Util::isMobileApp())
+            return false;
+
         int rc = ::setsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size));
 
         _sendBufferSize = getSocketBufferSize();
@@ -298,28 +306,28 @@ public:
             LOG_TRC("Set socket buffer size to " << _sendBufferSize);
 
         return true;
-#else
-        return false;
 #endif
     }
 
     /// Gets the actual send buffer size in bytes, -1 for failure.
     [[nodiscard]] int getSocketBufferSize() const
     {
-#if !MOBILEAPP
+#ifdef _WIN32
+        return -1;
+#else
+        if constexpr (Util::isMobileApp())
+            return -1;
+
         int size;
         socklen_t len = sizeof(size);
         const int rc = ::getsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &size, &len);
         return rc == 0 ? size : -1;
-#else
-        return -1;
 #endif
     }
 
     /// Gets our fast cache of the socket buffer size
     int getSendBufferSize() const { return (Util::isMobileApp() ? INT_MAX : _sendBufferSize); }
 
-#if !MOBILEAPP
     /// Sets the receive buffer size in bytes.
     /// Note: TCP will allocate twice this size for admin purposes,
     /// so a subsequent call to getReceieveBufferSize will return
@@ -327,20 +335,28 @@ public:
     /// Note: the upper limit is set via /proc/sys/net/core/rmem_max,
     /// and there is an unconfigurable lower limit as well.
     /// Returns true on success only.
-    bool setReceiveBufferSize(const int size)
+    bool setReceiveBufferSize([[maybe_unused]] const int size)
     {
+#ifdef _WIN32
+        return false;
+#else
         constexpr unsigned int len = sizeof(size);
         const int rc = ::setsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &size, len);
         return rc == 0;
+#endif
     }
 
     /// Gets the actual receive buffer size in bytes, -1 on error.
     int getReceiveBufferSize() const
     {
+#ifdef _WIN32
+        return -1;
+#else
         int size;
         unsigned int len = sizeof(size);
         const int rc = ::getsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &size, &len);
         return rc == 0 ? size : -1;
+#endif
     }
 
     /// Gets the error code.
@@ -348,6 +364,9 @@ public:
     /// Returns -1 on failure to get the error code.
     int getError() const
     {
+#ifdef _WIN32
+        return -1;
+#else
         int error;
         unsigned int len = sizeof(error);
         const int rc = ::getsockopt(_fd, SOL_SOCKET, SO_ERROR, &error, &len);
@@ -359,8 +378,8 @@ public:
         }
 
         return rc;
-    }
 #endif
+    }
 
     // Does this socket come from the localhost ?
     bool isLocal() const;
@@ -452,10 +471,8 @@ private:
 
     void init()
     {
-#if !MOBILEAPP
         if (_type != Type::Unix && _fd >= 0)
             setNoDelay();
-#endif
         _ignoreInput = false;
         _noShutdown = false;
         _sendBufferSize = DefaultSendBufferSize;
@@ -484,10 +501,11 @@ private:
             return;
 
             // Doesn't block on sockets; no error handling needed.
-#if !MOBILEAPP
-        ::close(_fd);
-#else
-        fakeSocketClose(_fd);
+        if constexpr (Util::isMobileApp())
+            fakeSocketClose(_fd);
+#ifndef _WIN32
+        else
+            ::close(_fd);
 #endif
 
         LOG_DBG("Closed socket " << toStringImpl()); // Should be logged exactly once.
@@ -917,10 +935,11 @@ public:
         // wakeup the main-loop.
         int rc;
         do {
-#if !MOBILEAPP
-            rc = ::write(fd, "w", 1);
-#else
-            rc = fakeSocketWrite(fd, "w", 1);
+            if constexpr (Util::isMobileApp())
+                rc = fakeSocketWrite(fd, "w", 1);
+#ifndef _WIN32
+            else
+                rc = ::write(fd, "w", 1);
 #endif
         } while (rc == -1 && errno == EINTR);
 
@@ -1219,9 +1238,7 @@ private:
     ProcUtil::ThreadId _owner;
     /// Flag the thread to stop.
     std::atomic<int64_t> _threadStarted;
-#if !MOBILEAPP
     std::atomic<uint64_t> _watchdogTime;
-#endif
 
     std::atomic<bool> _stop;
     std::atomic<bool> _threadFinished;
@@ -1430,12 +1447,12 @@ public:
         return _outBuffer.empty();
     }
 
-#if !MOBILEAPP
-
     /// Sends data with file descriptor as control data.
     /// Can be used only with Unix sockets.
-    void sendFDs(const char* data, const uint64_t len, const std::vector<int>& fds)
+    void sendFDs([[maybe_unused]] const char* data, [[maybe_unused]] const uint64_t len,
+                 [[maybe_unused]] const std::vector<int>& fds)
     {
+#ifndef _WIN32
         ASSERT_CORRECT_SOCKET_THREAD(this);
 
         // Flush existing non-ancillary data
@@ -1479,8 +1496,8 @@ public:
             LOG_SYS("Failed to send message to unix socket");
         else
             LOG_TRC("Wrote " << wrote << " bytes of " << len);
+#endif
     }
-#endif // !MOBILEAPP
 
     /// Reads data by invoking readData() and buffering.
     /// Returns the last return from writeData. 0 implies socket is closed.
@@ -1982,11 +1999,14 @@ protected:
             _socketHandler->onHandshakeFail();
     }
 
-#if !MOBILEAPP
     /// Reads data with file descriptors as control data if received.
     /// Can be used only with Unix sockets.
-    int readFDs(char* buf, int len, std::vector<int>& fds)
+    int readFDs([[maybe_unused]] char* buf, [[maybe_unused]] int len,
+                [[maybe_unused]] std::vector<int>& fds)
     {
+#ifdef _WIN32
+        return -1;
+#else
         // 0 is smaps FD
         // 1 is urp FD
         const size_t maxFds = 2;
@@ -2025,8 +2045,8 @@ protected:
         }
 
         return ret;
+#endif
     }
-#endif // !MOBILEAPP
 
     /// Override to handle reading of socket data differently.
     virtual int readData(char* buf, int len)
@@ -2038,7 +2058,12 @@ protected:
         if (ignoringInput())
             return -1;
 
-#if !MOBILEAPP
+        if constexpr (Util::isMobileApp())
+            return fakeSocketRead(getFD(), buf, len);
+
+#ifdef _WIN32
+        return -1;
+#else
         if (_readType == ReadType::UseRecvmsgExpectFD)
             return readFDs(buf, len, _incomingFDs);
 
@@ -2048,8 +2073,6 @@ protected:
 #endif
 
         return ::read(getFD(), buf, len);
-#else
-        return fakeSocketRead(getFD(), buf, len);
 #endif
     }
 
@@ -2059,14 +2082,17 @@ protected:
         ASSERT_CORRECT_SOCKET_THREAD(this);
         assert((getFD() >= 0 || isShutdown()) && "Socket is closed but not marked correctly");
 
-#if !MOBILEAPP
+        if constexpr (Util::isMobileApp())
+            return fakeSocketWrite(getFD(), buf, len);
+
+#ifdef _WIN32
+        return -1;
+#else
 #if ENABLE_DEBUG
         if (simulateSocketError(false))
             return -1;
 #endif
         return ::write(getFD(), buf, len);
-#else
-        return fakeSocketWrite(getFD(), buf, len);
 #endif
     }
 
