@@ -3425,6 +3425,7 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
             auto lastSlash = path.find_last_of('/');
             auto filename = path.substr(lastSlash + 1);
             data.filenameAndUri = { filename, Poco::URI(url).toString() } ;
+            recentFiles.add(data.filenameAndUri.uri);
 
             // Connect to COOLWSD
             int rc = fakeSocketConnect(data.fakeClientFd, coolwsd_server_socket_fd);
