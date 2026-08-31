@@ -46,6 +46,7 @@
 #include <scriptinterop/ContentAlignment.hpp>
 #include <scriptinterop/PageType.hpp>
 #include <scriptinterop/PlaceholderType.hpp>
+#include <scriptinterop/PredefinedLayout.hpp>
 #include <scriptinterop/ShapeType.hpp>
 #include <scriptinterop/SlideLinkingMode.hpp>
 #include <scriptinterop/TextBaselineOffset.hpp>
@@ -79,6 +80,7 @@
 #include <scriptinterop/XTextStyle.hpp>
 #include <scriptinterop/XVideo.hpp>
 #include <scriptinterop/XWordArt.hpp>
+#include <xmloff/autolayout.hxx>
 
 #include "conversions.hxx"
 #include "presentation.hxx"
@@ -90,6 +92,29 @@ using scriptinterop::detail::pointsToHundredthMm;
 
 namespace
 {
+// Maps a predefined layout to the matching value of a page's Layout property.  Only the
+// predefined layouts with a matching page layout are accepted; the others are still awaiting an
+// implementation.
+sal_Int16 predefinedAutoLayout(scriptinterop::PredefinedLayout layout)
+{
+    switch (layout)
+    {
+        case scriptinterop::PredefinedLayout_BLANK:
+            return AUTOLAYOUT_NONE;
+        case scriptinterop::PredefinedLayout_TITLE:
+            return AUTOLAYOUT_TITLE;
+        case scriptinterop::PredefinedLayout_TITLE_AND_BODY:
+            return AUTOLAYOUT_TITLE_CONTENT;
+        case scriptinterop::PredefinedLayout_TITLE_AND_TWO_COLUMNS:
+            return AUTOLAYOUT_TITLE_2CONTENT;
+        case scriptinterop::PredefinedLayout_TITLE_ONLY:
+            return AUTOLAYOUT_TITLE_ONLY;
+        default:
+            throw cpo::uno::RuntimeException(
+                u"appendSlide with this predefined layout: not implemented"_ustr);
+    }
+}
+
 // Formatting is applied through a cursor, so it lands on the text runs themselves and survives
 // saving.  With a range the cursor spans just that range; without one it spans the whole text.
 cpo::uno::Reference<css::beans::XPropertySet>
@@ -1464,23 +1489,30 @@ public:
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL appendSlide() override
     {
-        auto const pages = drawPages();
-        // Inserting at getCount() appends; the new page is blank, without layout placeholders.
-        auto const page = pages->insertNewByIndex(pages->getCount());
-        return new SlideImpl(model_, page);
+        return appendSlideWithLayout(AUTOLAYOUT_NONE);
     }
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
-    appendSlideFrom(cpo::uno::Any const&) override
+    appendSlideFrom(cpo::uno::Any const& layoutOrSlide) override
     {
-        throw cpo::uno::RuntimeException(u"appendSlideFrom: not implemented"_ustr);
+        // The argument is checked before the slide is created, so a rejected call leaves the
+        // presentation unchanged.
+        scriptinterop::PredefinedLayout predefined;
+        if (!(layoutOrSlide >>= predefined))
+        {
+            throw cpo::uno::RuntimeException(
+                u"appendSlide with a layout argument that is not a predefined layout: not "
+                "implemented"_ustr);
+        }
+        return appendSlideWithLayout(predefinedAutoLayout(predefined));
     }
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
     appendSlideLinked(cpo::uno::Reference<scriptinterop::XSlide> const&,
                       scriptinterop::SlideLinkingMode) override
     {
-        throw cpo::uno::RuntimeException(u"appendSlideLinked: not implemented"_ustr);
+        throw cpo::uno::RuntimeException(
+            u"appendSlide with a slide linking mode: not implemented"_ustr);
     }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XLayout>> SAL_CALL getLayouts() override
@@ -1581,6 +1613,21 @@ public:
     }
 
 private:
+    cpo::uno::Reference<scriptinterop::XSlide> appendSlideWithLayout(sal_Int16 autoLayout)
+    {
+        auto const pages = drawPages();
+        // Inserting at getCount() appends; the new page is blank, without layout placeholders.
+        auto const page = pages->insertNewByIndex(pages->getCount());
+        if (autoLayout != AUTOLAYOUT_NONE)
+        {
+            // Setting the page's Layout property creates the layout's placeholder shapes.
+            cpo::uno::Reference<css::beans::XPropertySet> const props(page,
+                                                                      cpo::uno::UNO_QUERY_THROW);
+            props->setPropertyValue(u"Layout"_ustr, cpo::uno::Any(autoLayout));
+        }
+        return new SlideImpl(model_, page);
+    }
+
     // Reads the size property of the first slide.  The drawing layer stores it as a 1/100 mm
     // integer.
     double pageSizePoints(OUString const& propertyName)

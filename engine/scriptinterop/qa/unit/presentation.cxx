@@ -29,6 +29,8 @@
 #include <cool.hpp>
 #include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
+#include <scriptinterop/PredefinedLayout.hpp>
+#include <scriptinterop/SlideLinkingMode.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
 #include <scriptinterop/XSlide.hpp>
@@ -78,6 +80,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSlidesAndAppend)
     auto const xNewSlide = xPresentation->appendSlide();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPresentation->getSlides().getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xNewSlide->getShapes().getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAppendSlideWithPredefinedLayout)
+{
+    auto const xPresentation = loadPresentation();
+    // A predefined layout brings its placeholder shapes with it: a title-and-body slide starts
+    // out with the title placeholder and the body placeholder.
+    auto const xTitleBody = xPresentation->appendSlideFrom(
+        cpo::uno::Any(scriptinterop::PredefinedLayout_TITLE_AND_BODY));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTitleBody->getShapes().getLength());
+    auto const xTitleOnly
+        = xPresentation->appendSlideFrom(cpo::uno::Any(scriptinterop::PredefinedLayout_TITLE_ONLY));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTitleOnly->getShapes().getLength());
+    // The blank predefined layout gives the same empty slide as the no-argument call.
+    auto const xBlank
+        = xPresentation->appendSlideFrom(cpo::uno::Any(scriptinterop::PredefinedLayout_BLANK));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xBlank->getShapes().getLength());
+    // A predefined layout with no matching page layout is rejected.
+    CPPUNIT_ASSERT_THROW(
+        xPresentation->appendSlideFrom(cpo::uno::Any(scriptinterop::PredefinedLayout_BIG_NUMBER)),
+        cpo::uno::RuntimeException);
+    // A slide linking mode has no implementation yet, so it is rejected.
+    CPPUNIT_ASSERT_THROW(xPresentation->appendSlideLinked(xPresentation->getSlides()[0],
+                                                          scriptinterop::SlideLinkingMode_LINKED),
+                         cpo::uno::RuntimeException);
+    // A layout argument that is not a predefined layout is rejected.
+    CPPUNIT_ASSERT_THROW(xPresentation->appendSlideFrom(cpo::uno::Any(u"BLANK"_ustr)),
+                         cpo::uno::RuntimeException);
+    // The rejected calls left no slide behind.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xPresentation->getSlides().getLength());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertTextBoxGeometryRoundTrip)
