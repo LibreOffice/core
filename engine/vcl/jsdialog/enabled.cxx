@@ -746,21 +746,6 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
         // for SID_OUTLINE_REMOVE
         if (entry == u"modules/scalc/ui/ungroupdialog.ui")
             continue;
-        // Skip this one for now, it can only be seen in certain xlsx documents
-        else if (entry == u"modules/scalc/ui/definetablerangedialog.ui")
-            continue;
-        // Skip this one for now, it only opens via .uno:ResizeCalcTable on an
-        // existing table, which the coverage document doesn't set up.
-        else if (entry == u"modules/scalc/ui/resizetablerangedialog.ui")
-            continue;
-        // Skip this shared string-input dialog: it opens via .uno:RenameCalcTable (and other
-        // name prompts), none of which the a11y coverage document triggers.
-        else if (entry == u"modules/scalc/ui/inputstringdialog.ui")
-            continue;
-        // Skip this one for now, it only opens via .uno:HandleDuplicateRecords on a
-        // table/range with data, which the a11y coverage document doesn't set up.
-        else if (entry == u"modules/scalc/ui/duplicaterecordsdlg.ui")
-            continue;
         // Skip this one, I think it can only happen on loading
         // an archaic lotus 123 file
         else if (entry == u"modules/scalc/ui/imoptdialog.ui")

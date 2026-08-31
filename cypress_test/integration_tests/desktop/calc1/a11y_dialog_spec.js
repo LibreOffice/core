@@ -162,7 +162,7 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         }
     });
 
-    it('Table Design dialog', function () {
+    it('Table dialogs', function () {
         // The command is offered only for a table at the cursor, so make one first.
         calcHelper.selectCellsInRange('A1:C3');
         cy.getFrameWindow().then(function (frameWindow) {
@@ -173,6 +173,11 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         cy.cGet('#tablerangedialog').should('not.exist');
 
         a11yHelper.testDialog(win, '.uno:NewTableStyle');
+
+        // The other table tools are offered for the same table at the cursor.
+        a11yHelper.testDialog(win, '.uno:ResizeCalcTable');
+        a11yHelper.testDialog(win, '.uno:RenameCalcTable');
+        a11yHelper.testDialog(win, '.uno:HandleDuplicateRecords');
     });
 
     it('Graphic dialog', function () {
