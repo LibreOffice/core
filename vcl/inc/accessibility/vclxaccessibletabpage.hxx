@@ -28,8 +28,7 @@
 
 class TabControl;
 
-class VCLXAccessibleTabPage final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleTextHelper, css::lang::XServiceInfo>
+class VCLXAccessibleTabPage final : public comphelper::OAccessibleTextHelper
 {
     friend class VCLXAccessibleTabControl;
 
@@ -70,11 +69,6 @@ private:
 public:
     VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId );
     virtual ~VCLXAccessibleTabPage() override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

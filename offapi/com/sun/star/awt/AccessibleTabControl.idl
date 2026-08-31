@@ -34,9 +34,7 @@ service AccessibleTabControl
         <li>Name: There is no name.</li>
         <li>Description: The description of a tab control is its localized
             help text.</li>
-        <li>Children: The children of a tab control are tab pages,
-            whose accessible context supports the service
-            AccessibleTabPage.</li>
+        <li>Children: The children of a tab control are tab pages.</li>
         <li>Parent: The parent is the window that contains the
             tab control.</li>
         <li>Relations: There are no relations.</li>

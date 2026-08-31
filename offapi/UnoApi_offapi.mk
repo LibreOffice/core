@@ -495,7 +495,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt,\
 	AccessibleStatusBarItem \
 	AccessibleTabBar \
 	AccessibleTabControl \
-	AccessibleTabPage \
 	AccessibleWindow \
 	AnimatedImagesControl \
 	AnimatedImagesControlModel \

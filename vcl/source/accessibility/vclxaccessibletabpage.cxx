@@ -228,27 +228,6 @@ void VCLXAccessibleTabPage::disposing()
     m_sPageText.clear();
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleTabPage::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleTabPage"_ustr;
-}
-
-
-sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-
-Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleTabPage"_ustr };
-}
-
 // XAccessibleContext
 
 
