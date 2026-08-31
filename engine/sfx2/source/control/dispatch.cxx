@@ -54,6 +54,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -1123,12 +1124,10 @@ void SfxDispatcher::Update_Impl( bool bForce )
     if ( xLayoutManager.is() )
         xLayoutManager->unlock();
 
-    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    // create or update the online notebookbar for the current view
+    SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell && pViewShell->GetDispatcher())
-    {
-        SfxPoolItemHolder aItem;
-        pViewShell->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, aItem);
-    }
+        sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings());
 }
 
 void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwner, SfxWorkWindow *pTaskWin )

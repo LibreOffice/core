@@ -109,7 +109,6 @@
 #include <documentlinkmgr.hxx>
 #include <tablestyle.hxx>
 #include <memory>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <helpids.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
@@ -1339,16 +1338,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
         }
         break;
-        case SID_NOTEBOOKBAR:
-        {
-            const SfxStringItem* pFile = rReq.GetArg( SID_NOTEBOOKBAR );
-
-            if ( pBindings && sfx2::SfxNotebookBar::IsActive() )
-                sfx2::SfxNotebookBar::ExecMethod(*pBindings, pFile ? pFile->GetValue() : u""_ustr);
-            else if ( pBindings )
-                sfx2::SfxNotebookBar::CloseMethod(*pBindings);
-        }
-        break;
         case SID_LANGUAGE_STATUS:
         {
             OUString aLangText;
@@ -2559,16 +2548,6 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 rSet.Put( SvxFontListItem( m_pImpl->pFontList.get(), nWhich ) );
                 break;
 
-            case SID_NOTEBOOKBAR:
-                {
-                    if (SfxBindings* pBindings = GetViewBindings())
-                    {
-                        bool bVisible = sfx2::SfxNotebookBar::StateMethod(*pBindings,
-                                                                          u"modules/scalc/ui/");
-                        rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
-                    }
-                }
-                break;
 
             case SID_LANGUAGE_STATUS:
                 {

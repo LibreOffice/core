@@ -36,7 +36,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/flstitem.hxx>
@@ -1108,17 +1107,6 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 bRet = m_xDoc->HasInvisibleContent();
             }
             rSet.Put( SfxBoolItem( nWhich, bRet ) );
-        }
-        break;
-        case SID_NOTEBOOKBAR:
-        {
-            bool bVisible = false;
-            if (SfxViewShell* pViewShell = GetView() ? GetView() : SfxViewShell::Current())
-            {
-                bVisible = sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings(),
-                                                             u"modules/swriter/ui/");
-            }
-            rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
         }
         break;
         case FN_REDLINE_ACCEPT_ALL:

@@ -2552,25 +2552,6 @@ SfxBoolItem Menubar SID_MENUBAR
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem Notebookbar SID_NOTEBOOKBAR
-(SfxStringItem File SID_NOTEBOOKBAR)
-[
-    AutoUpdate = TRUE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
-
 SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
 
 [

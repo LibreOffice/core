@@ -59,7 +59,6 @@
 #include <undo/undofactory.hxx>
 #include <OutlineView.hxx>
 #include <ViewShellBase.hxx>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <comphelper/kit.hxx>
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
@@ -311,27 +310,6 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                     }
                 }
                 rSet.Put(SfxStringItem(nWhich, aLanguage));
-            }
-            break;
-
-            case SID_NOTEBOOKBAR:
-            {
-                if (mpViewShell)
-                {
-                    bool bImpress = mpDoc->GetDocumentType() == DocumentType::Impress;
-                    bool bVisible = false;
-                    if(bImpress)
-                    {
-                        bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
-                                                                     u"modules/simpress/ui/");
-                    }
-                    else
-                    {
-                        bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
-                                                                      u"modules/sdraw/ui/");
-                    }
-                    rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
-                }
             }
             break;
 

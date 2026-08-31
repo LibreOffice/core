@@ -579,7 +579,6 @@ class SvxZoomItem;
 #define SID_SEARCH_ITEM                     TypedWhichId<SvxSearchItem>(SID_SVX_START + 291)
 #define SID_SEARCH_USE_ATTR_ITEM_LIST       TypedWhichId<SfxBoolItem>(SID_SFX_START + 292)
 #define SID_SIDEBAR                         TypedWhichId<SfxBoolItem>(SID_SVX_START + 336)
-#define SID_NOTEBOOKBAR                     TypedWhichId<SfxStringItem>(SID_SVX_START + 338)
 #define SID_MENUBAR                         TypedWhichId<SfxBoolItem>(SID_SVX_START + 339)
 #define SID_HYPERLINK_GETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 361)
 #define SID_HYPERLINK_SETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 362)

@@ -56,11 +56,6 @@ interface TextDocument : BaseTextDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_NOTEBOOKBAR
-    [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-    ]
     FN_REDLINE_ACCEPT_ALL
     [
         ExecMethod = Execute;

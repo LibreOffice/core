@@ -957,10 +957,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     }
 
                     // Show/Hide the Notebookbar
-                    const SfxStringItem pItem(SID_NOTEBOOKBAR, aNewName);
-                    pViewFrame->GetDispatcher()->ExecuteList(SID_NOTEBOOKBAR, SfxCallMode::SYNCHRON, {&pItem});
-                    SfxPoolItemHolder aNbItem;
-                    pViewFrame->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, aNbItem);
+                    SfxBindings& rBindings = pViewFrame->GetBindings();
+                    if (sfx2::SfxNotebookBar::IsActive())
+                        sfx2::SfxNotebookBar::ExecMethod(rBindings, aNewName);
+                    else
+                        sfx2::SfxNotebookBar::CloseMethod(rBindings);
 
                     // Show toolbars
                     for (const OUString& rName : aMandatoryToolbars)

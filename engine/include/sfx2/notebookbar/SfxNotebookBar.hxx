@@ -15,8 +15,6 @@
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include <string_view>
-
 namespace com::sun::star::frame
 {
 class XFrame;
@@ -43,22 +41,19 @@ public:
 
     static bool IsActive(bool bConsiderSingleToolbar = false);
 
-    /// Function to be called from the sdi's ExecMethod.
+    /// Stores the notebookbar UI file name for the current module and updates the notebookbar.
     static void ExecMethod(SfxBindings& rBindings, const OUString& rUIName);
 
-    /// Function to be called from the sdi's StateMethod.
-    static bool StateMethod(SfxBindings& rBindings, std::u16string_view rUIFile,
-                            bool bReloadNotebookbar = false);
+    /// Creates the online notebookbar for the current view when it is active.
+    static bool StateMethod(SfxBindings& rBindings);
     static bool StateMethod(SystemWindow* pSysWindow,
-                            const css::uno::Reference<css::frame::XFrame>& xFrame,
-                            std::u16string_view rUIFile, bool bReloadNotebookbar = false);
+                            const css::uno::Reference<css::frame::XFrame>& xFrame);
 
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
     /** Show menu bar only in current frame */
     static void ShowMenubar(SfxViewFrame const* pViewFrame, bool bShow);
     static void ToggleMenubar();
-    static void ReloadNotebookBar(std::u16string_view sUIPath);
 
 private:
     static bool m_bLock;

@@ -13,7 +13,6 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <vcl/syswin.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/kit.hxx>
@@ -350,22 +349,17 @@ void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
         }
     }
 
-    // trigger the StateMethod
-    rBindings.Invalidate(SID_NOTEBOOKBAR);
-    rBindings.Update();
+    StateMethod(rBindings);
 }
 
-bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, std::u16string_view rUIFile,
-                                 bool bReloadNotebookbar)
+bool SfxNotebookBar::StateMethod(SfxBindings& rBindings)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
-    return StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile,
-                       bReloadNotebookbar);
+    return StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface());
 }
 
 bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
-                                 const Reference<css::frame::XFrame>& xFrame,
-                                 std::u16string_view rUIFile, bool /*bReloadNotebookbar*/)
+                                 const Reference<css::frame::XFrame>& xFrame)
 {
     if (!comphelper::COKit::isActive())
         return false;
@@ -400,6 +394,25 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     OUString aModuleName = xModuleManager->identify( xFrame );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
 
+    OUString sUIDir;
+    switch (eApp)
+    {
+        case vcl::EnumContext::Application::Writer:
+            sUIDir = u"modules/swriter/ui/"_ustr;
+            break;
+        case vcl::EnumContext::Application::Calc:
+            sUIDir = u"modules/scalc/ui/"_ustr;
+            break;
+        case vcl::EnumContext::Application::Impress:
+            sUIDir = u"modules/simpress/ui/"_ustr;
+            break;
+        case vcl::EnumContext::Application::Draw:
+            sUIDir = u"modules/sdraw/ui/"_ustr;
+            break;
+        default:
+            return false;
+    }
+
     // Notebookbar was loaded too early what caused:
     //   * in COKit: Paste Special feature was incorrectly initialized
     // Skip first request so Notebookbar will be initialized after document was loaded
@@ -416,7 +429,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
     comphelper::COKit::setLocale(pViewShell->GetKitLocale());
 
-    OUString aBuf = rUIFile + u"notebookbar_online.ui"_ustr;
+    OUString aBuf = sUIDir + "notebookbar_online.ui";
     VclPtr<NotebookBar> pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, aBuf);
     rViewData.m_pNotebookBar = pNotebookBar;
 
@@ -556,16 +569,6 @@ void SfxNotebookBar::ToggleMenubar()
         else
             SfxNotebookBar::ShowMenubar(true);
     }
-}
-
-void SfxNotebookBar::ReloadNotebookBar(std::u16string_view sUIPath)
-{
-    if (!SfxNotebookBar::IsActive())
-        return;
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (!pViewShell)
-        return;
-    sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings(), sUIPath, true);
 }
 
 IMPL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, pViewShell, void)

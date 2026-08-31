@@ -77,7 +77,6 @@ interface TableDocument
     SID_EDIT_SCENARIO       [ ExecMethod = Execute; ]
     SID_ATTR_CHAR_FONTLIST  [ StateMethod = GetState; ]
     SID_SHARE_DOC           [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_NOTEBOOKBAR         [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_LANGUAGE_STATUS     [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_SPELLCHECK_IGNORE_ALL     [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_SPELLCHECK_APPLY_SUGGESTION     [ ExecMethod = Execute; StateMethod = GetState; ]

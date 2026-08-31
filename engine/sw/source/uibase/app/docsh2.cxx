@@ -44,7 +44,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/new.hxx>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/evntconf.hxx>
@@ -1283,20 +1282,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                                                                   rBindings);
                     weld::DialogController::runAsync(xDlg, [](sal_Int32 /*nResult*/){});
                 }
-            }
-        }
-        break;
-        case SID_NOTEBOOKBAR:
-        {
-            const SfxStringItem* pFile = rReq.GetArg( SID_NOTEBOOKBAR );
-            SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
-            SfxBindings& rBindings( pViewShell->GetViewFrame().GetBindings() );
-
-            if ( SfxNotebookBar::IsActive() )
-                sfx2::SfxNotebookBar::ExecMethod( rBindings, pFile ? pFile->GetValue() : u""_ustr );
-            else
-            {
-                sfx2::SfxNotebookBar::CloseMethod( rBindings );
             }
         }
         break;

@@ -28,7 +28,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/pageids.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -129,7 +128,6 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/strings.hrc>
 #include "impviewframe.hxx"
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/cryptosign.hxx>
 #include <tools/debug.hxx>
@@ -867,19 +865,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     UpdateDocument_Impl();
 
-                    auto sModule = vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface());
-                    OUString sReloadNotebookBar;
-                    if (sModule == "com.sun.star.text.TextDocument")
-                        sReloadNotebookBar = u"modules/swriter/ui/"_ustr;
-                    else if (sModule == "com.sun.star.sheet.SpreadsheetDocument")
-                        sReloadNotebookBar = u"modules/scalc/ui/"_ustr;
-                    else if (sfx2::SfxNotebookBar::IsActive()
-                             && sModule != "presentation.PresentationDocument"
-                             && sModule != "com.sun.star.drawing.DrawingDocument")
-                    {
-                        assert(false && "SID_RELOAD Notebookbar active, but not refreshed here");
-                    }
-
                     try
                     {
                         const auto aArgs = aLoadArgs.getAsConstPropertyValueList();
@@ -918,10 +903,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     // Propagate document closure.
                     SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::CloseDoc, GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ), xOldObj ) );
-
-                    // tdf#126006 Calc needs to reload the notebookbar after closing the document
-                    if (!sReloadNotebookBar.isEmpty())
-                        sfx2::SfxNotebookBar::ReloadNotebookBar(sReloadNotebookBar);
                 }
 
                 // Record as done
@@ -1523,9 +1504,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     AppendContainsMacrosInfobar();
                 }
-
-                if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
-                    sfx2::SfxNotebookBar::ReloadNotebookBar(u"modules/swriter/ui/");
 
                 if (SfxClassificationHelper::IsClassified(m_xObjSh->getDocProperties()))
                 {
