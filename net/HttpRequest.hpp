@@ -17,6 +17,7 @@
 #pragma once
 
 #include <common/Common.hpp>
+#include <common/HexUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
 #include <common/StateEnum.hpp>
@@ -433,13 +434,22 @@ public:
                             });
     }
 
+    /// The most bytes of a refused field name or value written to the log.
+    static constexpr std::size_t MaxLoggedFieldBytes = 32;
+
     /// Add an HTTP header field. Returns false, and adds nothing, when the name or the value
     /// holds a byte a field cannot carry.
     bool add(std::string key, std::string value)
     {
         if (!hasOnlyValidFieldBytes(key) || !hasOnlyValidFieldBytes(value))
         {
-            LOG_WRN_S("Not adding HTTP header field with an invalid byte in it");
+            LOG_WRN_S("Not adding HTTP header field with an invalid byte in it: ["
+                      << HexUtil::stringifyHexLine(key, 0,
+                                                   std::min(key.size(), MaxLoggedFieldBytes))
+                      << "] ["
+                      << HexUtil::stringifyHexLine(value, 0,
+                                                   std::min(value.size(), MaxLoggedFieldBytes))
+                      << ']');
             return false;
         }
 
@@ -454,7 +464,13 @@ public:
     {
         if (!hasOnlyValidFieldBytes(key) || !hasOnlyValidFieldBytes(value))
         {
-            LOG_WRN_S("Not setting HTTP header field with an invalid byte in it");
+            LOG_WRN_S("Not setting HTTP header field with an invalid byte in it: ["
+                      << HexUtil::stringifyHexLine(key, 0,
+                                                   std::min(key.size(), MaxLoggedFieldBytes))
+                      << "] ["
+                      << HexUtil::stringifyHexLine(value, 0,
+                                                   std::min(value.size(), MaxLoggedFieldBytes))
+                      << ']');
             remove(key);
             return false;
         }
