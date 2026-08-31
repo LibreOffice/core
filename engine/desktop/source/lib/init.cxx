@@ -6299,8 +6299,11 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
         SolarMutexGuard aGuard;
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OutputDevice::ImplClearAllFontData(true);
-        pDevice->AddTempDevFont(sMagicFileName, u""_ustr);
+        const bool bAdded = pDevice->AddTempDevFont(sMagicFileName, u""_ustr);
         OutputDevice::ImplRefreshAllFontData(true);
+        if (!bAdded)
+            std::cerr << "Could not read a font from font file '" << pValue
+                      << "', so it is not in the font list" << std::endl;
     }
 #endif
 }
