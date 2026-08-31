@@ -2166,6 +2166,11 @@
     <div class="MORE_FONTS">
         <hr />
         <h1><a id="a__Fonts" name="a__Fonts">Fonts</a></h1>
+        <h2>OpenSymbol</h2>
+        <!-- Name: OpenSymbol, Vendor:, Source: extras/source/truetype/symbol, URL: https://cgit.collaboraoffice.com/c/core/tree/extras/source/truetype/symbol, Declared: LGPL-3.0-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
+        <p>The following software may be included in this product: the OpenSymbol font, the project's own symbol font,
+        maintained in extras/source/truetype/symbol. Like most of the LibreOffice-heritage source code it is available
+        under the Mozilla Public License v2.0 (see above) or the GNU Lesser General Public License v3 or later.</p>
         <h2>Agdasima</h2>
         <!-- Name: Agdasima, Vendor:, Source: FONT_AGDASIMA_TARBALL, URL: https://github.com/docrepair-fonts/agdasima-fonts, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Agdasima fonts. Use of any of this software is governed

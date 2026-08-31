@@ -741,12 +741,15 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		helpcontent2_html_icon-themes \
 		helpcontent2_html_static \
 	) \
-	resource_fonts \
 	cui \
 	$(if $(filter EMSCRIPTEN,$(OS)), \
 	    favicon \
 	    $(if $(ENABLE_EMBIND_UNO),unoembind) \
 	) \
+))
+
+$(eval $(call gb_Helper_register_external_packages_for_install,OpenSymbol,ooo,\
+	resource_fonts \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
