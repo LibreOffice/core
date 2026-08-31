@@ -54,6 +54,11 @@ class UIManager extends window.L.Control {
 	// Guards the one-time reconciliation of an integrator-forced theme with
 	// the server-stored user setting (see reconcileIntegratorThemeOverride).
 	private integratorThemeReconciled = false;
+	// The theme and the document background the engine was last given: the
+	// values the load message carried, then whatever a later change sent it.
+	// Undefined until the load message of the session is composed.
+	private themeSentToCore: boolean | undefined = undefined;
+	private backgroundSentToCore: boolean | undefined = undefined;
 	// Live OS light/dark tracking in the browser (see the constructor and
 	// followSystemDarkMode); null on native apps, which own dark mode.
 	private colorSchemeQuery: MediaQueryList | null = null;
@@ -323,7 +328,17 @@ class UIManager extends window.L.Control {
 		var cmd = { 'NewTheme': { 'type': 'string', 'value': '' } };
 		activate ? cmd.NewTheme.value = 'Dark' : cmd.NewTheme.value = 'Light';
 		app.socket.sendMessage('uno .uno:InvertBackground ' + JSON.stringify(cmd));
+		this.backgroundSentToCore = activate;
 		this.initDarkBackgroundUI(activate);
+	}
+
+	/**
+	 * Records the theme and the document background the load message carries, so
+	 * that a later answer which differs from them can be sent to the engine.
+	 */
+	rememberThemeSentWithLoad(darkTheme: boolean, darkBackground: boolean): void {
+		this.themeSentToCore = darkTheme;
+		this.backgroundSentToCore = darkBackground;
 	}
 
 	/**
@@ -531,14 +546,31 @@ class UIManager extends window.L.Control {
 			this.loadLightMode();
 		}
 
+		// The starter screen has no document, canvas or socket yet, so there is
+		// nothing to hand the engine.
+		if ((window as any).starterScreen) {
+			this.applyInvert(true);
+			return;
+		}
+
 		// On the desktop the load-time render option doesn't reliably override the
-		// engine's persisted theme, so apply it to the engine here too - but not in
-		// the starter screen, which has no document (and no socket) yet.
-		const pushToEngine =
-			window.mode.isCODesktop() && !(window as any).starterScreen;
-		if (pushToEngine)
-			this.activateDarkModeInCore(inDarkTheme);
-		this.applyInvert(!pushToEngine);
+		// engine's persisted theme, so apply it to the engine here too.
+		//
+		// In the browser the engine holds the theme the load message carried, which
+		// the browser worked out from what it had at that moment. The server-stored
+		// user settings arrive after that and win here, so this answer can be a
+		// different one, and nothing else would ever correct the engine: it would
+		// keep painting the document for a theme nobody is looking at, and put
+		// white automatic text on a light background or a dark page under a light
+		// window. Hand it the answer whenever the two differ.
+		const pushTheme =
+			window.mode.isCODesktop() || inDarkTheme !== this.themeSentToCore;
+		if (pushTheme) this.activateDarkModeInCore(inDarkTheme);
+
+		const pushBackground =
+			window.mode.isCODesktop() ||
+			this.isBackgroundDark() !== this.backgroundSentToCore;
+		this.applyInvert(!pushBackground);
 	}
 
 	/**
@@ -548,6 +580,7 @@ class UIManager extends window.L.Control {
 		var cmd = { 'NewTheme': { 'type': 'string', 'value': '' } };
 		activate ? cmd.NewTheme.value = 'Dark' : cmd.NewTheme.value = 'Light';
 		app.socket.sendMessage('uno .uno:ChangeTheme ' + JSON.stringify(cmd));
+		this.themeSentToCore = activate;
 	}
 
 	/**

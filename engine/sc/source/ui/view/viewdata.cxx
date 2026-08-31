@@ -1919,7 +1919,12 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     if ( aBackCol.IsTransparent() )
     {
-        aBackCol = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        // A cell with no background of its own sits on the document background of the view that is
+        // being edited, so an automatic text color is picked against the background this user sees
+        // rather than the one another view left behind.
+        aBackCol = GetViewShell()
+                       ? GetViewShell()->GetColorConfigColor(svtools::DOCCOLOR)
+                       : pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 

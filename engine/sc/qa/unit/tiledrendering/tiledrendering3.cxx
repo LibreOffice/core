@@ -16,6 +16,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
@@ -30,6 +31,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <vcl/virdev.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/editview.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/datetime.hxx>
@@ -1300,6 +1302,19 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvertedBackgroundLightensText)
 
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScTestViewCallback aView;
+
+    // The color configuration belongs to the process and every test in this file shares it, so put
+    // the document background back on the way out, whatever the assertions below do.
+    const Color aDocColorBefore = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    comphelper::ScopeGuard aRestoreDocColor(
+        [aDocColorBefore]
+        {
+            svtools::EditableColorConfig aRestore;
+            svtools::ColorConfigValue aValue;
+            aValue.nColor = aDocColorBefore;
+            aRestore.SetColorValue(svtools::DOCCOLOR, aValue);
+        });
+
     dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr,
                     comphelper::InitPropertySequence(
                         { { "NewTheme", cpo::uno::Any(u"Light"_ustr) } }));
@@ -1328,6 +1343,63 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvertedBackgroundLightensText)
     model::ComplexColor aRawColor;
     pDoc->GetPattern(0, 0, 0)->fillColor(aRawColor, ScAutoFontColorMode::Raw);
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, aRawColor.getFinalColor());
+}
+
+// A cell with no background of its own is edited on the document background of the view that does
+// the editing, so the background another view chose after it does not decide what an automatic
+// text color has to read on
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellEditBackgroundFollowsEditingView)
+{
+    svtools::EditableColorConfig aColorConfig;
+    aColorConfig.AddScheme(u"Dark"_ustr);
+    aColorConfig.AddScheme(u"Light"_ustr);
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTestViewCallback aView1;
+    const int nFirstViewId = KitHelper::getCurrentView();
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    pDoc->SetString(ScAddress(0, 0, 0), u"Lorem ipsum"_ustr);
+
+    // The color configuration belongs to the process and every test in this file shares it, so put
+    // the document background back on the way out, whatever the assertions below do.
+    const Color aDocColorBefore = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    comphelper::ScopeGuard aRestoreDocColor(
+        [aDocColorBefore]
+        {
+            svtools::EditableColorConfig aRestore;
+            svtools::ColorConfigValue aValue;
+            aValue.nColor = aDocColorBefore;
+            aRestore.SetColorValue(svtools::DOCCOLOR, aValue);
+        });
+
+    // A second view inverts its document background, which leaves the dark color in the color
+    // configuration of the process as well.
+    KitHelper::createView();
+    ScTestViewCallback aView2;
+    dispatchCommand(mxComponent, u".uno:InvertBackground"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { "NewTheme", cpo::uno::Any(u"Dark"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view keeps the light background it opened with.
+    KitHelper::setView(nFirstViewId);
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    CPPUNIT_ASSERT(!pViewShell->GetViewRenderingData().GetDocColor().IsDark());
+
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    ScViewData& rViewData = pViewShell->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+
+    // Without the fix both of these were read from the color configuration, which the second view
+    // had turned dark, so this view edited on a dark background and its automatic text was white.
+    CPPUNIT_ASSERT(!pEditView->GetBackgroundColor().IsDark());
+    CPPUNIT_ASSERT(!pEditView->getEditEngine().GetBackgroundColor().IsDark());
 }
 
 /*

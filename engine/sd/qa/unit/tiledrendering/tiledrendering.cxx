@@ -17,6 +17,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <functional>
 #include <set>
+#include <string_view>
 #include <vector>
 #include <COKit/COKit.hxx>
 #include <sal/log.hxx>
@@ -2311,11 +2312,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = KitHelper::getCurrentView();
     SdTestViewCallback aView1;
-    CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
     // Create a second view
     KitHelper::createView();
     SdTestViewCallback aView2;
-    CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
     // Set to dark scheme
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -2325,10 +2326,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL("SD;Dark"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXImpressDocument->getViewRenderState());
     // Switch back to the first view, and check that the options string is the same
     KitHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
 }
 
 // Helper function to send a theme command with a named theme to the current view
@@ -2341,6 +2342,57 @@ static void dispatchThemeCommand(const css::uno::Reference<css::lang::XComponent
         }
     );
     unotest::MacrosTest::dispatchCommand(xComponent, rCommand, aPropertyValues);
+}
+
+// Whether the view render state carries the letter that stands for a dark document background.
+// The letters of the states that are on come before the semicolon; the name of the color scheme
+// follows it and can hold a D of its own.
+static bool hasDarkBackgroundLetter(std::string_view aViewRenderState)
+{
+    const std::string_view aStateLetters = aViewRenderState.substr(0, aViewRenderState.find(';'));
+    return aStateLetters.find('D') != std::string_view::npos;
+}
+
+// The letter that stands for a dark document background marks the view whose background is dark.
+// Two views with different backgrounds get different states, which is what keeps their tiles apart.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewRenderStateMarksTheDarkView)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    const int nFirstViewId = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+
+    // The color configuration belongs to the process and every test in this file shares it, so put
+    // the document background back on the way out, whatever the assertions below do.
+    svtools::EditableColorConfig aColorConfig;
+    const Color aDocColorBefore = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    comphelper::ScopeGuard aRestoreDocColor(
+        [aDocColorBefore]
+        {
+            svtools::EditableColorConfig aRestore;
+            svtools::ColorConfigValue aValue;
+            aValue.nColor = aDocColorBefore;
+            aRestore.SetColorValue(svtools::DOCCOLOR, aValue);
+        });
+
+    // Start from a light background, whatever the tests before this one left behind.
+    dispatchThemeCommand(mxComponent, u".uno:InvertBackground"_ustr, u"Light"_ustr);
+    CPPUNIT_ASSERT(!hasDarkBackgroundLetter(pXImpressDocument->getViewRenderState()));
+
+    // This view inverts its document background on its own.
+    dispatchThemeCommand(mxComponent, u".uno:InvertBackground"_ustr, u"Dark"_ustr);
+    CPPUNIT_ASSERT(hasDarkBackgroundLetter(pXImpressDocument->getViewRenderState()));
+
+    // A second view goes back to a light background, which puts the light color back into the
+    // color configuration of the process as well.
+    KitHelper::createView();
+    SdTestViewCallback aView2;
+    dispatchThemeCommand(mxComponent, u".uno:InvertBackground"_ustr, u"Light"_ustr);
+    CPPUNIT_ASSERT(!hasDarkBackgroundLetter(pXImpressDocument->getViewRenderState()));
+
+    // Without the fix the letter followed the appearance mode of the process, which is one setting
+    // for every view, so it was the light view that carried it and the dark one that did not.
+    KitHelper::setView(nFirstViewId);
+    CPPUNIT_ASSERT(hasDarkBackgroundLetter(pXImpressDocument->getViewRenderState()));
 }
 
 // Helper function to paint a tile of the first slide and return it as a bitmap. The painted area

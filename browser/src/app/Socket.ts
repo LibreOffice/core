@@ -479,6 +479,11 @@ class Socket {
 			darkTheme,
 		);
 		msg += ' darkBackground=' + darkBackground;
+		// The server-stored user settings can still be on their way here, and they
+		// win over what these two were worked out from. Keep them so that the
+		// answer they are replaced with can be sent to the engine, which has no
+		// other way of hearing about it (see initDarkModeFromSettings).
+		this._map.uiManager.rememberThemeSentWithLoad(darkTheme, darkBackground);
 		this._map.uiManager.initDarkBackgroundUI(darkBackground);
 
 		msg += ' accessibilityState=' + window.getAccessibilityState();

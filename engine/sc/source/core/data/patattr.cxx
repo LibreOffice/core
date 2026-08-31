@@ -832,30 +832,11 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             || eAutoMode == ScAutoFontColorMode::IgnoreBack
             || eAutoMode == ScAutoFontColorMode::IgnoreAll)
         {
-            if (!comphelper::COKit::isActive())
-            {
-                if ( eAutoMode == ScAutoFontColorMode::Print )
-                    aBackColor = COL_WHITE;
-                else if ( pBackConfigColor )
-                {
-                    // pBackConfigColor can be used to avoid repeated lookup of the configured color
-                    aBackColor = *pBackConfigColor;
-                }
-                else
-                    aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-            }
-            else
-            {
-                // Get document color from current view instead
-                SfxViewShell* pSfxViewShell = SfxViewShell::Current();
-                ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
-                if (pViewShell)
-                {
-                    const ScViewRenderingOptions& rViewRenderingOptions = pViewShell->GetViewRenderingData();
-                    aBackColor = eAutoMode == ScAutoFontColorMode::Print ? COL_WHITE :
-                        rViewRenderingOptions.GetDocColor();
-                }
-            }
+            // A cell with no background of its own sits on the document background, which the view
+            // being painted owns. Print puts the text on paper, which is white.
+            aBackColor = eAutoMode == ScAutoFontColorMode::Print
+                             ? COL_WHITE
+                             : lcl_getViewDocBackgroundColor(pBackConfigColor);
         }
 
         //  get system text color for comparison

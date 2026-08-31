@@ -4965,8 +4965,11 @@ OString SdXImpressDocument::getViewRenderState(const SfxViewShell* pViewShell)
             aState.append('S');
         if (!ThemeColors::UseOnlyWhiteDocBackground())
         {
+            // The dark background is asked for by name. Without the index the answer follows the
+            // appearance mode of the process, which is one setting for every view, so a light view
+            // would be the one marked here.
             if (pVOpt.mnDocBackgroundColor
-                == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR))
+                == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
                 aState.append('D');
         }
         aState.append(';');

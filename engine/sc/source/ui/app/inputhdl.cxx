@@ -2753,7 +2753,14 @@ bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInp
                 ScModule* pScMod = ScModule::get();
                 if ( aBackCol.IsTransparent() ||
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                    aBackCol = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+                {
+                    // A cell with no background of its own sits on the document background of the
+                    // view that is being edited, so an automatic text color is picked against the
+                    // background this user sees rather than the one another view left behind.
+                    aBackCol = pActiveViewSh
+                                   ? pActiveViewSh->GetColorConfigColor(svtools::DOCCOLOR)
+                                   : pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+                }
                 mpEditEngine->SetBackgroundColor( aBackCol );
 
                 // Adjustment
