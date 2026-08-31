@@ -824,29 +824,98 @@ function coolFrameId(attempt) {
 	});
 }
 
-/// Every node of the document's accessibility tree, in one round trip. Use
-/// this to sweep a container; getFocusedAXNode is for a single widget.
+function axNode(node) {
+	const props = {};
+	(node.properties || []).forEach(function (p) {
+		props[p.name] = p.value && p.value.value;
+	});
+	return {
+		role: node.role && node.role.value,
+		roleType: node.role && node.role.type,
+		name: (node.name && node.name.value) || '',
+		description: (node.description && node.description.value) || '',
+		ignored: node.ignored,
+		backendDOMNodeId: node.backendDOMNodeId,
+		properties: props,
+	};
+}
+
+/// Every node of the whole document's accessibility tree, in one round trip.
+/// getAXNodesWithin sweeps one container; getFocusedAXNode is a single widget.
 function getAXNodes() {
 	return coolFrameId().then(function (frameId) {
 		return cdp('Accessibility.enable').then(function () {
 			return cdp('Accessibility.getFullAXTree', { depth: -1, frameId: frameId });
 		});
 	}).then(function (res) {
-		return ((res && res.nodes) || []).map(function (node) {
-			const props = {};
-			(node.properties || []).forEach(function (p) {
-				props[p.name] = p.value && p.value.value;
-			});
-			return {
-				role: node.role && node.role.value,
-				roleType: node.role && node.role.type,
-				name: (node.name && node.name.value) || '',
-				description: (node.description && node.description.value) || '',
-				ignored: node.ignored,
-				properties: props,
-			};
-		});
+		return ((res && res.nodes) || []).map(axNode);
 	});
+}
+
+/// The document node of the cool frame, which is what a selector is resolved
+/// against. DOM.getDocument returns the runner's document, and the cool one is
+/// two frames down from it. Document nodes carry documentURL, not frameId --
+/// that sits on the IFRAME element above them.
+function coolDocumentNodeId() {
+	return cy.then(function () {
+		return cdp('DOM.enable');
+	}).then(function () {
+		return cdp('DOM.getDocument', { depth: -1, pierce: true });
+	}).then(function (res) {
+		let found = null;
+
+		(function walk(node) {
+			if (found !== null) return;
+			if (node.nodeName === '#document' &&
+					(node.documentURL || '').indexOf('cool.html') !== -1)
+				found = node.nodeId;
+			(node.children || []).forEach(walk);
+			if (node.contentDocument) walk(node.contentDocument);
+		})(res.root);
+
+		expect(found, 'the cool.html document node in the DOM tree')
+			.to.not.equal(null);
+		return found;
+	});
+}
+
+/// The accessibility subtree of one container, so an assertion names the
+/// surface it actually read.
+function getAXNodesWithin(selector) {
+	return coolDocumentNodeId().then(function (documentNodeId) {
+		return cdp('DOM.querySelector', {
+			nodeId: documentNodeId,
+			selector: selector,
+		});
+	}).then(function (res) {
+		expect(res.nodeId, 'a node matching ' + selector).to.not.equal(0);
+
+		return cdp('Accessibility.enable').then(function () {
+			return cdp('Accessibility.queryAXTree', { nodeId: res.nodeId });
+		});
+	}).then(function (res) {
+		return ((res && res.nodes) || []).map(axNode);
+	});
+}
+
+/// role plus whatever identifies the element behind an unnamed node, so a
+/// failure names something findable instead of a bare role.
+function describeAXNode(node) {
+	if (!node.backendDOMNodeId) return node.role;
+
+	return cdp('DOM.describeNode', { backendNodeId: node.backendDOMNodeId })
+		.then(function (res) {
+			const attributes = (res.node && res.node.attributes) || [];
+			const wanted = ['id', 'class'];
+			const parts = [];
+
+			for (let at = 0; at < attributes.length; at += 2) {
+				if (wanted.indexOf(attributes[at]) !== -1 && attributes[at + 1])
+					parts.push(attributes[at] + '="' + attributes[at + 1] + '"');
+			}
+
+			return node.role + (parts.length ? ' <' + parts.join(' ') + '>' : '');
+		});
 }
 
 /// {role, name, ignored, properties} of the widget holding the focus, or null.
@@ -961,3 +1030,5 @@ module.exports.axTreeAvailable = axTreeAvailable;
 module.exports.getFocusedAXNode = getFocusedAXNode;
 module.exports.assertToggleStatesAgree = assertToggleStatesAgree;
 module.exports.getAXNodes = getAXNodes;
+module.exports.getAXNodesWithin = getAXNodesWithin;
+module.exports.describeAXNode = describeAXNode;
