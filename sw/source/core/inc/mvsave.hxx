@@ -21,6 +21,7 @@
 
 #include <vcl/keycod.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <fmtanchr.hxx>
 #include <ndindex.hxx>
 #include <deque>
 #include <optional>
@@ -160,7 +161,7 @@ void PaMCorrRel( const SwNode &rOldNode,
 class ZSortFly
 {
     const SwFrameFormat* m_pFormat;
-    const SwFormatAnchor* m_pAnchor;
+    SwFormatAnchor m_aAnchor;
     sal_uInt32 m_nOrdNum;
 
 public:
@@ -172,7 +173,7 @@ public:
         { return m_nOrdNum < rCmp.m_nOrdNum; }
 
     const SwFrameFormat* GetFormat() const              { return m_pFormat; }
-    const SwFormatAnchor* GetAnchor() const        { return m_pAnchor; }
+    const SwFormatAnchor* GetAnchor() const        { return &m_aAnchor; }
 };
 
 class SwTableNumFormatMerge
