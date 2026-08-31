@@ -65,7 +65,7 @@
 #include <scriptinterop/XParagraph.hpp>
 #include <scriptinterop/XRangeElement.hpp>
 #include <scriptinterop/XSelection.hpp>
-#include <scriptinterop/XTextRun.hpp>
+#include <scriptinterop/XText.hpp>
 
 #include "document.hxx"
 
@@ -129,59 +129,192 @@ private:
     css::uno::Reference<css::container::XIndexAccess> ranges_;
 };
 
-class TextRunImpl: public cppu::WeakImplHelper<scriptinterop::XTextRun> {
+class TextImpl: public cppu::WeakImplHelper<scriptinterop::XText> {
 public:
-    explicit TextRunImpl(css::uno::Reference<css::text::XTextRange> const & range): range_(range) {}
+    explicit TextImpl(css::uno::Reference<css::text::XTextContent> const & content):
+        content_(content)
+    {
+        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
+                content_, css::uno::UNO_QUERY})
+        {
+            auto const en = ea->createEnumeration();
+            while (en.is() && en->hasMoreElements()) {
+                css::uno::Reference<css::text::XTextRange> portion;
+                en->nextElement() >>= portion;
+                if (portion.is()) {
+                    runs_.push_back(portion);
+                }
+            }
+        }
+    }
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
 
-    sal_Int16 getEscapement() override {
+    sal_Int16 getEscapement(sal_Int32 offset) override {
         sal_Int16 esc = 0;
-        getProp(u"CharEscapement"_ustr) >>= esc;
+        getProp(runAt(offset), u"CharEscapement"_ustr) >>= esc;
         return esc > 0 ? 1 : esc < 0 ? -1 : 0;
     }
 
-    OUString getFontFamily() override {
+    OUString getFontFamily(sal_Int32 offset) override {
         OUString name;
-        getProp(u"CharFontName"_ustr) >>= name;
+        getProp(runAt(offset), u"CharFontName"_ustr) >>= name;
         return name;
     }
 
-    OUString getLinkUrl() override {
+    OUString getLinkUrl(sal_Int32 offset) override {
         OUString url;
-        getProp(u"HyperLinkURL"_ustr) >>= url;
+        getProp(runAt(offset), u"HyperLinkURL"_ustr) >>= url;
         return url;
     }
 
-    OUString getText() override { return range_.is() ? range_->getString() : u""_ustr; }
+    OUString getText() override {
+        css::uno::Reference<css::text::XTextRange> const range(content_, css::uno::UNO_QUERY);
+        return range.is() ? range->getString() : u""_ustr;
+    }
 
-    bool isBold() override {
+    cpo::uno::Sequence<sal_Int32> getTextAttributeIndices() override {
+        std::vector<sal_Int32> v;
+        v.reserve(runs_.size());
+        sal_Int32 off = 0;
+        for (auto const & r: runs_) {
+            v.push_back(off);
+            off += r->getString().getLength();
+        }
+        return cpo::uno::Sequence(v.data(), v.size());
+    }
+
+    bool isBold(sal_Int32 offset) override {
         float weight = css::awt::FontWeight::NORMAL;
-        getProp(u"CharWeight"_ustr) >>= weight;
+        getProp(runAt(offset), u"CharWeight"_ustr) >>= weight;
         return weight >= css::awt::FontWeight::BOLD;
     }
 
-    bool isItalic() override {
+    bool isItalic(sal_Int32 offset) override {
         css::awt::FontSlant slant = css::awt::FontSlant_NONE;
-        getProp(u"CharPosture"_ustr) >>= slant;
+        getProp(runAt(offset), u"CharPosture"_ustr) >>= slant;
         return slant == css::awt::FontSlant_ITALIC || slant == css::awt::FontSlant_OBLIQUE;
     }
 
-    bool isStrikethrough() override {
+    bool isStrikethrough(sal_Int32 offset) override {
         sal_Int16 strike = css::awt::FontStrikeout::NONE;
-        getProp(u"CharStrikeout"_ustr) >>= strike;
+        getProp(runAt(offset), u"CharStrikeout"_ustr) >>= strike;
         return strike != css::awt::FontStrikeout::NONE;
     }
 
-    bool isUnderline() override {
+    bool isUnderline(sal_Int32 offset) override {
         sal_Int16 underline = css::awt::FontUnderline::NONE;
-        getProp(u"CharUnderline"_ustr) >>= underline;
+        getProp(runAt(offset), u"CharUnderline"_ustr) >>= underline;
         return underline != css::awt::FontUnderline::NONE;
     }
 
+    css::uno::Reference<scriptinterop::XText> setBold(bool value) override {
+        setBoldOn(wholeRange(), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setBoldRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+    {
+        setBoldOn(subRange(startOffset, endOffsetInclusive), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setFontFamily(OUString const & fontFamilyName)
+        override
+    {
+        setFontFamilyOn(wholeRange(), fontFamilyName);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setFontFamilyRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & fontFamilyName)
+        override
+    {
+        setFontFamilyOn(subRange(startOffset, endOffsetInclusive), fontFamilyName);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setItalic(bool value) override {
+        setItalicOn(wholeRange(), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setItalicRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+    {
+        setItalicOn(subRange(startOffset, endOffsetInclusive), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setLinkUrl(OUString const & url) override {
+        setLinkUrlOn(wholeRange(), url);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setLinkUrlRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & url) override
+    {
+        setLinkUrlOn(subRange(startOffset, endOffsetInclusive), url);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setStrikethrough(bool value) override {
+        setStrikethroughOn(wholeRange(), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setStrikethroughRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+    {
+        setStrikethroughOn(subRange(startOffset, endOffsetInclusive), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setTextAlignment(
+        scriptinterop::TextAlignment textAlignment) override
+    {
+        setTextAlignmentOn(wholeRange(), textAlignment);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setTextAlignmentRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        scriptinterop::TextAlignment textAlignment) override
+    {
+        setTextAlignmentOn(subRange(startOffset, endOffsetInclusive), textAlignment);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setUnderline(bool value) override {
+        setUnderlineOn(wholeRange(), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setUnderlineRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+    {
+        setUnderlineOn(subRange(startOffset, endOffsetInclusive), value);
+        return this;
+    }
+
 private:
-    cpo::uno::Any getProp(OUString const & name) {
-        css::uno::Reference<css::beans::XPropertySet> const props(range_, css::uno::UNO_QUERY);
+    css::uno::Reference<css::text::XTextRange> runAt(sal_Int32 offset) {
+        sal_Int32 start = 0;
+        for (auto const & r: runs_) {
+            auto const len = r->getString().getLength();
+            if (offset < start + len) {
+                return r;
+            }
+            start += len;
+        }
+        return runs_.empty() ? nullptr : runs_.back();
+    }
+
+    static cpo::uno::Any getProp(
+        css::uno::Reference<css::text::XTextRange> const & range, OUString const & name)
+    {
+        css::uno::Reference<css::beans::XPropertySet> const props(range, css::uno::UNO_QUERY);
         if (!props.is()) {
             return {};
         }
@@ -192,7 +325,89 @@ private:
         return props->getPropertyValue(name);
     }
 
-    css::uno::Reference<css::text::XTextRange> range_;
+    css::uno::Reference<css::text::XTextRange> wholeRange() {
+        return css::uno::Reference<css::text::XTextRange>(content_, css::uno::UNO_QUERY_THROW);
+    }
+
+    css::uno::Reference<css::text::XTextRange> subRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive)
+    {
+        auto const whole = wholeRange();
+        auto const cursor = whole->getText()->createTextCursorByRange(whole->getStart());
+        cursor->goRight(startOffset, false);
+        cursor->goRight(endOffsetInclusive - startOffset + 1, true);
+        return cursor;
+    }
+
+    static void setProp(
+        css::uno::Reference<css::text::XTextRange> const & range, OUString const & name,
+        cpo::uno::Any const & value)
+    {
+        css::uno::Reference<css::beans::XPropertySet>(range, css::uno::UNO_QUERY_THROW)
+            ->setPropertyValue(name, value);
+    }
+
+    static void setBoldOn(css::uno::Reference<css::text::XTextRange> const & range, bool value) {
+        setProp(range, u"CharWeight"_ustr, cpo::uno::Any(
+            static_cast<float>(value ? css::awt::FontWeight::BOLD : css::awt::FontWeight::NORMAL)));
+    }
+
+    static void setFontFamilyOn(
+        css::uno::Reference<css::text::XTextRange> const & range, OUString const & fontFamilyName)
+    {
+        setProp(range, u"CharFontName"_ustr, cpo::uno::Any(fontFamilyName));
+    }
+
+    static void setItalicOn(css::uno::Reference<css::text::XTextRange> const & range, bool value) {
+        setProp(range, u"CharPosture"_ustr, cpo::uno::Any(
+            value ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE));
+    }
+
+    static void setLinkUrlOn(
+        css::uno::Reference<css::text::XTextRange> const & range, OUString const & url)
+    {
+        setProp(range, u"HyperLinkURL"_ustr, cpo::uno::Any(url));
+    }
+
+    static void setStrikethroughOn(
+        css::uno::Reference<css::text::XTextRange> const & range, bool value)
+    {
+        setProp(range, u"CharStrikeout"_ustr, cpo::uno::Any(static_cast<sal_Int16>(
+            value ? css::awt::FontStrikeout::SINGLE : css::awt::FontStrikeout::NONE)));
+    }
+
+    static void setTextAlignmentOn(
+        css::uno::Reference<css::text::XTextRange> const & range,
+        scriptinterop::TextAlignment textAlignment)
+    {
+        sal_Int16 escape = 0;
+        sal_Int8 height = 100;
+        switch (textAlignment) {
+        case scriptinterop::TextAlignment_SUPERSCRIPT:
+            escape = 33;
+            height = 58;
+            break;
+        case scriptinterop::TextAlignment_SUBSCRIPT:
+            escape = -33;
+            height = 58;
+            break;
+        case scriptinterop::TextAlignment_NORMAL:
+            break;
+        default:
+            break;
+        }
+        setProp(range, u"CharEscapement"_ustr, cpo::uno::Any(escape));
+        setProp(range, u"CharEscapementHeight"_ustr, cpo::uno::Any(height));
+    }
+
+    static void setUnderlineOn(css::uno::Reference<css::text::XTextRange> const & range, bool value)
+    {
+        setProp(range, u"CharUnderline"_ustr, cpo::uno::Any(static_cast<sal_Int16>(
+            value ? css::awt::FontUnderline::SINGLE : css::awt::FontUnderline::NONE)));
+    }
+
+    css::uno::Reference<css::text::XTextContent> content_;
+    std::vector<css::uno::Reference<css::text::XTextRange>> runs_;
 };
 
 class ParagraphImpl : public cppu::WeakImplHelper<scriptinterop::XParagraph>
@@ -204,6 +419,10 @@ public:
     }
 
     css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return content_; }
+
+    css::uno::Reference<scriptinterop::XText> asText() override {
+        return new TextImpl(content_);
+    }
 
     scriptinterop::ElementType getElementType() override {
         css::uno::Reference<css::beans::XPropertySet> const props(content_, css::uno::UNO_QUERY);
@@ -224,23 +443,6 @@ public:
     {
         css::uno::Reference<css::text::XTextRange> const range(content_, css::uno::UNO_QUERY);
         return range.is() ? range->getString() : OUString();
-    }
-
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XTextRun>> getTextRuns() override {
-        std::vector<css::uno::Reference<scriptinterop::XTextRun>> v;
-        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
-                content_, css::uno::UNO_QUERY})
-        {
-            auto const en = ea->createEnumeration();
-            while (en.is() && en->hasMoreElements()) {
-                css::uno::Reference<css::text::XTextRange> portion;
-                en->nextElement() >>= portion;
-                if (portion.is()) {
-                    v.emplace_back(new TextRunImpl(portion));
-                }
-            }
-        }
-        return cpo::uno::Sequence(v.data(), v.size());
     }
 
     bool isLeftToRight() override {

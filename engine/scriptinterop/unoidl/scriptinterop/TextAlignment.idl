@@ -11,22 +11,10 @@
 
 module scriptinterop {
 
-interface XTextRun: XBase {
-    short getEscapement(); // -1 subscript, 0 normal, 1 superscript
-
-    string getFontFamily();
-
-    string getLinkUrl();
-
-    string getText();
-
-    boolean isBold();
-
-    boolean isItalic();
-
-    boolean isStrikethrough();
-
-    boolean isUnderline();
+enum TextAlignment {
+    NORMAL,
+    SUPERSCRIPT,
+    SUBSCRIPT
 };
 
 };

@@ -130,30 +130,29 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             }
         };
 
-        // Placeholder used by appendParagraph/appendListItem when there is no real UNO paragraph
+        // Placeholders used by appendParagraph/appendListItem when there is no real UNO paragraph
         // yet:
+        const emptyText = {
+            getEscapement: function() { return 0; },
+            getFontFamily: function() { return ''; },
+            getLinkUrl: function() { return ''; },
+            getText: function() { return ''; },
+            getTextAttributeIndices: function() { return [0]; },
+            isBold: function() { return false; },
+            isItalic: function() { return false; },
+            isStrikethrough: function() { return false; },
+            isUnderline: function() { return false; }
+        };
         const emptyPara = {
+            asText: function() { return emptyText; },
             getElementType: function() { return 'PARAGRAPH'; },
             getText: function() { return ''; },
-            getTextRuns: function() { return []; },
             isLeftToRight: function() { return true; }
         };
 
         function paragraphElement(paragraph, index) {
-            const text = paragraph.getText();
-            let runs = null;
-            // Cached because callers hit getFontFamily/isBold repeatedly on the same paragraph:
-            function runAt(offset) {
-                if (runs === null) runs = paragraph.getTextRuns();
-                let start = 0;
-                for (let i = 0; i < runs.length; ++i) {
-                    const r = runs[i];
-                    const len = r.getText().length;
-                    if (offset < start + len) return r;
-                    start += len;
-                }
-                return runs.length > 0 ? runs[runs.length - 1] : null;
-            }
+            const xtext = paragraph.asText();
+            const text = xtext.getText();
             const textEl = {
                 getType: function() { return 'TEXT'; },
                 getText: function() { return text; },
@@ -164,48 +163,25 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 getAttributes: function() { return {}; },
                 // Apps Script guarantees at least one attribute index even for uniform text:
                 getTextAttributeIndices: function() {
-                    if (runs === null) runs = paragraph.getTextRuns();
-                    const offsets = [];
-                    let off = 0;
-                    for (let i = 0; i < runs.length; ++i) {
-                        offsets.push(off);
-                        off += runs[i].getText().length;
-                    }
-                    return offsets.length > 0 ? offsets : [0];
+                    const arr = xtext.getTextAttributeIndices();
+                    return arr.length > 0 ? Array.from(arr) : [0];
                 },
                 setAttributes: function() { return textEl; },
                 findText: function() { return null; },
                 getParent: function() { return null; },
-                getFontFamily: function(offset) {
-                    const r = runAt(offset);
-                    return r ? r.getFontFamily() : '';
-                },
-                isBold: function(offset) {
-                    const r = runAt(offset);
-                    return r ? r.isBold() : false;
-                },
-                isItalic: function(offset) {
-                    const r = runAt(offset);
-                    return r ? r.isItalic() : false;
-                },
-                isUnderline: function(offset) {
-                    const r = runAt(offset);
-                    return r ? r.isUnderline() : false;
-                },
-                isStrikethrough: function(offset) {
-                    const r = runAt(offset);
-                    return r ? r.isStrikethrough() : false;
-                },
+                getFontFamily: function(offset) { return xtext.getFontFamily(offset); },
+                isBold: function(offset) { return xtext.isBold(offset); },
+                isItalic: function(offset) { return xtext.isItalic(offset); },
+                isUnderline: function(offset) { return xtext.isUnderline(offset); },
+                isStrikethrough: function(offset) { return xtext.isStrikethrough(offset); },
                 getTextAlignment: function(offset) {
-                    const r = runAt(offset);
-                    const esc = r ? r.getEscapement() : 0;
+                    const esc = xtext.getEscapement(offset);
                     if (esc > 0) return 'SUPERSCRIPT';
                     if (esc < 0) return 'SUBSCRIPT';
                     return 'NORMAL';
                 },
                 getLinkUrl: function(offset) {
-                    const r = runAt(offset);
-                    const url = r ? r.getLinkUrl() : '';
+                    const url = xtext.getLinkUrl(offset);
                     return url === '' ? null : url;
                 }
             };

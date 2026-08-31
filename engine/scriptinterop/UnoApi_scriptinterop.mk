@@ -28,6 +28,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,,\
 $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     ElementType \
     ImageOptions \
+    TextAlignment \
     XBase \
     XBody \
     XClientRuntime \
@@ -45,9 +46,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XSlide \
     XSlideSelection \
     XSpreadsheet \
+    XText \
     XTextParagraph \
     XTextRange \
-    XTextRun \
     XTextStyle \
 ))
 

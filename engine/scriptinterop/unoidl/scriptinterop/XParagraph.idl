@@ -13,11 +13,11 @@ module scriptinterop {
 
 interface XParagraph : XBase
 {
+    XText asText();
+
     ElementType getElementType();
 
     string getText();
-
-    sequence<XTextRun> getTextRuns();
 
     boolean isLeftToRight();
 };
