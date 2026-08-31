@@ -85,7 +85,7 @@ public:
     bool isLocalhost() const;
 };
 
-#if !MOBILEAPP
+// Defined only by the builds that resolve names for real.
 
 /// Resolves the IP of the given hostname. On failure, returns @targetHost.
 std::string resolveHostAddress(const std::string& targetHost);
@@ -98,8 +98,6 @@ std::string canonicalHostName(const std::string& addressToCheck);
 
 /// Returns a vector containing the IPAddresses for the host.
 std::vector<std::string> resolveAddresses(const std::string& addressToCheck);
-
-#endif
 
 /// Connect to an end-point at the given host and port and return StreamSocket.
 std::shared_ptr<StreamSocket>

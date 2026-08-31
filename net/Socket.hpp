@@ -264,11 +264,9 @@ public:
 #endif
     }
 
-#if !MOBILEAPP
     /// Uses peercreds to get prisoner PID if present or -1
+    /// Defined only by the builds that have a real socket underneath.
     int getPid() const;
-
-#endif // !MOBILEAPP
 
     /// Sets the kernel socket send buffer in size bytes.
     /// Note: TCP will allocate twice this size for admin purposes,
@@ -1031,7 +1029,8 @@ public:
                            const std::shared_ptr<SocketPoll>& toPoll,
                            const std::shared_ptr<Socket>& socket);
 
-#if !MOBILEAPP
+    // Each is defined only by the builds that have that kind of socket.
+
     /// Inserts a new remote websocket to be polled.
     /// NOTE: The DNS lookup is synchronous.
     void insertNewWebSocketSync(const Poco::URI& uri,
@@ -1042,11 +1041,10 @@ public:
         const std::string &pathAndQuery,
         const std::shared_ptr<WebSocketHandler>& websocketHandler,
         const std::vector<int>* shareFDs = nullptr);
-#else
+
     bool insertNewFakeSocket(
         int peerSocket,
         const std::shared_ptr<ProtocolHandlerInterface>& websocketHandler);
-#endif
 
     using CallbackFn = std::function<void()>;
 
