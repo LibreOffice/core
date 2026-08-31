@@ -499,6 +499,12 @@ app.impress.isSlideSelected = function (index) {
 	} else return false;
 };
 
+// Slide import relies on backend export and import support that only the
+// coolwsd server build provides.
+app.impress.isSlideImportSupported = function () {
+	return !window.ThisIsAMobileApp;
+};
+
 app.enterRAF = function () {
 	if (app.map._debug) app.map._debug.enterRAF();
 };

@@ -1576,14 +1576,15 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						],
 						'vertical': 'true'
 					},
-					{
-						'id': 'insert-import-slides',
-						'type': 'bigcustomtoolitem',
-						'text': _('Import Slides'),
-						'command': 'importslides',
-						'icon': 'lc_insertcanvasslide.svg',
-						'accessibility': { focusBack: true, combination: 'IF', de: null }
-					},
+					app.impress.isSlideImportSupported() ?
+						{
+							'id': 'insert-import-slides',
+							'type': 'bigcustomtoolitem',
+							'text': _('Import Slides'),
+							'command': 'importslides',
+							'icon': 'lc_insertcanvasslide.svg',
+							'accessibility': { focusBack: true, combination: 'IF', de: null }
+						} : {},
 					{
 						'id': 'insert-update-slide-links',
 						'type': 'bigcustomtoolitem',

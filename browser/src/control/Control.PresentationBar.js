@@ -100,7 +100,7 @@ class PresentationBar {
 						command: 'importslides',
 						image: false,
 						inlineLabel: true,
-						visible: this.map.getDocType() === 'presentation'
+						visible: this.map.getDocType() === 'presentation' && app.impress.isSlideImportSupported()
 					}
 				]
 			}
@@ -170,7 +170,7 @@ class PresentationBar {
 		var presentationButtons = ['insertpage', 'duplicatepage', 'deletepage'];
 
 		if (this.map.getDocType() === 'presentation') {
-			this.showItem('importslides', e.detail.perm === 'edit');
+			this.showItem('importslides', e.detail.perm === 'edit' && app.impress.isSlideImportSupported());
 		}
 
 		if (e.detail.perm === 'edit') {

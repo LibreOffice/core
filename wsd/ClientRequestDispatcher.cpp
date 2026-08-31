@@ -3266,6 +3266,9 @@ std::string getCapabilitiesJson(bool convertToAvailable)
     // Advertise wopiAccessCheck endpoint availability
     capabilities->set("hasWopiAccessCheck", true);
 
+    // Set if this instance supports importing slides from another presentation.
+    capabilities->set("hasSlideImportSupport", true);
+
     const std::string serverName = ConfigUtil::getString("indirection_endpoint.server_name", "");
     if (const char* podName = std::getenv("POD_NAME"))
         capabilities->set("podName", podName);
