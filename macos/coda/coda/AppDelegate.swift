@@ -26,6 +26,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Initialize the COOLWSD
         COWrapper.startServer()
 
+        // The live-view limit watches for windows becoming main, so it has to exist before
+        // the first document window does.
+        LiveViewLimit.shared.schedule()
+
         // Start the WebDriver server if requested via --testDriverPort=<port>.
         // This happens early, before any window/webview is created, so the
         // test setup can wait for /status and drive the backstage from there.

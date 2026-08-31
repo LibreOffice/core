@@ -107,7 +107,12 @@ class Document: NSDocument {
             }
             // modified -> non-modified: Clear the mark unless there is an ongoing saving operation
             else if oldValue && !newValue && pendingSave == nil {
-                changeUpdate = { self.updateChangeCount(.changeCleared) }
+                changeUpdate = {
+                    self.updateChangeCount(.changeCleared)
+                    // The content is on disk, so this document's view can be dropped now
+                    // rather than waiting for the next window to become main.
+                    LiveViewLimit.shared.schedule()
+                }
             }
 
             modifiedLock.unlock()
@@ -117,6 +122,13 @@ class Document: NSDocument {
                 DispatchQueue.main.async(execute: changeUpdate)
             }
         }
+    }
+
+    /// True while a save this document asked the engine for has not come back yet.
+    var isSaveInFlight: Bool {
+        modifiedLock.lock()
+        defer { modifiedLock.unlock() }
+        return pendingSave != nil
     }
 
     /**
@@ -233,6 +245,9 @@ class Document: NSDocument {
         if let viewController = windowController.contentViewController as? ViewController {
             viewController.loadDocument(self)
         }
+
+        // One more document view holds a renderer, so the limit has something new to weigh.
+        LiveViewLimit.shared.noteDocumentOpened()
 
         // Ensure the window exists so we can apply a default if no saved frame yet
         windowController.loadWindow()
@@ -770,7 +785,8 @@ class Document: NSDocument {
 
         // Evaluate on main queue
         DispatchQueue.main.async {
-            // A document whose renderer died has no page to hand this to.
+            // A document whose view was dropped, or whose renderer died, has no page to
+            // hand this to.
             guard let webView = self.webView else {
                 COWrapper.LOG_TRC("No view for appDocId \(self.appDocId), dropping: \(truncatedJS)")
                 return

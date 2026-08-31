@@ -8,6 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import Cocoa
+
 /**
  * NSDocumentController instance to modify functionality related to the Open panel.
  */
@@ -341,5 +343,177 @@ final class DocumentController: NSDocumentController {
         } catch {
             COWrapper.LOG_ERR("Failed to open welcome-slideshow document: \(error.localizedDescription)")
         }
+    }
+}
+
+/**
+ * Caps the number of document views that hold a web content process, so the memory the app
+ * uses does not grow with every document opened. The dropped documents stay loaded in the
+ * engine, so a view built for one later rejoins it instead of reading the file again.
+ *
+ * The count is across the app, because a document on macOS is a window of its own and the
+ * renderers add up whether the windows are tabbed together or not. Only a view the user is
+ * not looking at is ever dropped.
+ */
+final class LiveViewLimit {
+
+    static let shared = LiveViewLimit()
+
+    /// How long the limit waits before it runs. A window becoming main is one of a run of
+    /// them as often as not, and the one the user stops on is the one that matters.
+    private static let defaultDelayMilliseconds = 1000
+
+    /// How many document views keep a web content process. Zero or less turns the limit
+    /// off, which is what it is by default. CODA_LIVE_VIEWS sets it, in the environment or
+    /// as a defaults key, which is what reaches an app the user launched rather than one
+    /// started from a shell.
+    private lazy var limit: Int = {
+        if let text = ProcessInfo.processInfo.environment["CODA_LIVE_VIEWS"],
+           let value = Int(text) {
+            return value
+        }
+        if UserDefaults.standard.object(forKey: "CODA_LIVE_VIEWS") != nil {
+            return UserDefaults.standard.integer(forKey: "CODA_LIVE_VIEWS")
+        }
+        return 0
+    }()
+
+    /// Counts activations. Each view records the value it saw when it was last activated.
+    private var activationTick: UInt64 = 0
+
+    /// The pending run, and when it comes due.
+    private var pendingRun: DispatchWorkItem?
+    private var pendingRunDueAt: Date?
+
+    private init() {
+        // Main is what a document window gets when the user turns to it. Key is watched too,
+        // because a window can take the keyboard in an app that is not the front one.
+        for name in [NSWindow.didBecomeMainNotification, NSWindow.didBecomeKeyNotification] {
+            NotificationCenter.default.addObserver(forName: name, object: nil,
+                                                   queue: .main) { [weak self] note in
+                guard let window = note.object as? NSWindow else { return }
+                self?.windowBecameMain(window)
+            }
+        }
+    }
+
+    /// Apply the limit after a delay, so a run of window activations settles first and only
+    /// the window the user stops on is acted on.
+    func schedule(afterMilliseconds delayMilliseconds: Int = LiveViewLimit.defaultDelayMilliseconds) {
+        DispatchQueue.main.async {
+            let dueAt = Date().addingTimeInterval(Double(delayMilliseconds) / 1000.0)
+            // A run that is already due sooner covers this one too.
+            if let pendingDueAt = self.pendingRunDueAt, pendingDueAt <= dueAt {
+                return
+            }
+
+            self.pendingRun?.cancel()
+            self.pendingRunDueAt = dueAt
+            let run = DispatchWorkItem { [weak self] in
+                self?.pendingRun = nil
+                self?.pendingRunDueAt = nil
+                self?.enforce()
+            }
+            self.pendingRun = run
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(delayMilliseconds),
+                                         execute: run)
+        }
+    }
+
+    /// A document window has just opened. It counts against the limit from now on.
+    func noteDocumentOpened() {
+        schedule()
+    }
+
+    /// The user is on this window now. Its view comes back, and the limit is asked again.
+    private func windowBecameMain(_ window: NSWindow) {
+        guard let controller = LiveViewLimit.viewController(of: window) else { return }
+
+        activationTick += 1
+        controller.lastActiveTick = activationTick
+        // The user is on this document again, so the limit may ask it to save once more when
+        // it next falls behind. A save that never came back is forgotten with the rest: a
+        // live save still refuses a second request on its own.
+        controller.dropSaveAsked = false
+        controller.dropWaitsForSave = false
+
+        controller.restoreView()
+        schedule()
+    }
+
+    /// Drop views, least recently used first, until no more than the limit are live.
+    private func enforce() {
+        if limit <= 0 { return }
+
+        let controllers = documentViewControllers()
+        var live = controllers.filter { !$0.isViewDiscarded }.count
+
+        if live <= limit { return }
+
+        // Least recently used first, and only views the user is not looking at.
+        let candidates = controllers
+            .filter { !$0.isViewDiscarded && $0.mayDiscardView && !$0.isWindowVisible }
+            .sorted { $0.lastActiveTick < $1.lastActiveTick }
+
+        var retryInMilliseconds = -1
+
+        for controller in candidates {
+            if live <= limit { break }
+
+            let settleMilliseconds = controller.msUntilViewSettled
+            if settleMilliseconds > 0 {
+                if retryInMilliseconds < 0 || settleMilliseconds < retryInMilliseconds {
+                    retryInMilliseconds = settleMilliseconds
+                }
+                continue
+            }
+
+            if !controller.isReadyToDiscardView {
+                requestSaveThenDiscard(controller)
+                continue
+            }
+
+            controller.discardView()
+            live -= 1
+        }
+
+        // A view that only has to grow older is worth asking about again once it has.
+        if retryInMilliseconds > 0 {
+            schedule(afterMilliseconds: retryInMilliseconds)
+        }
+    }
+
+    /// Ask a document to save, and park the drop of its view on the save result. The save
+    /// goes through AppKit, so the user's own file is written before the view goes.
+    private func requestSaveThenDiscard(_ controller: ViewController) {
+        if controller.dropWaitsForSave || controller.dropSaveAsked { return }
+        guard let document = controller.document,
+              let url = document.fileURL,
+              let typeName = document.fileType else { return }
+
+        NSLog("CollaboraOffice: appDocId \(document.appDocId) saves before its view goes")
+        controller.dropWaitsForSave = true
+        controller.dropSaveAsked = true
+
+        document.save(to: url, ofType: typeName, for: .saveOperation) { [weak controller] error in
+            controller?.dropWaitsForSave = false
+            if let error {
+                // The view stays, and nothing is put in front of the user. One save was
+                // asked for, so the next activation is what asks again.
+                NSLog("CollaboraOffice: the save before a view drop failed: \(error.localizedDescription)")
+            }
+            // The save took time, and in that time the user can have come back to this
+            // document. Ask the whole policy again rather than dropping this view now.
+            LiveViewLimit.shared.schedule()
+        }
+    }
+
+    /// Every document view the app has open.
+    private func documentViewControllers() -> [ViewController] {
+        return NSApp.windows.compactMap { LiveViewLimit.viewController(of: $0) }
+    }
+
+    private static func viewController(of window: NSWindow) -> ViewController? {
+        return window.windowController?.contentViewController as? ViewController
     }
 }

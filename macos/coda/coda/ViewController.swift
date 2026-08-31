@@ -180,12 +180,47 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
     /// Handle this document webview is registered under in WebDriverManager.
     private var webDriverHandle: String?
 
+    /// True while this document's view has been dropped on purpose. The document stays
+    /// loaded in the engine.
+    private(set) var isViewDiscarded = false
+
+    /// When the webview now in place was built.
+    private var viewLiveSince = Date()
+
+    /// The value of the live-view limit's counter when this document's window last became
+    /// the main one. The higher the value, the more recently the user was on it.
+    var lastActiveTick: UInt64 = 0
+
+    /// True while a drop of this view waits for the save it asked for.
+    var dropWaitsForSave = false
+
+    /// True from the moment this view is asked to save for a drop until its window is main
+    /// again, so one drop asks for one save.
+    var dropSaveAsked = false
+
     var displayConnectionObserver: AnyObject!
     var screenCount: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        buildWebView()
+
+        if isUITesting {
+            let scrollView = NSScrollView(frame: NSRect(x: -10000, y: 0, width: 100, height: 100))
+            let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 100, height: 100))
+            textView.isEditable = false
+            textView.setAccessibilityIdentifier("CODA.TestMessageLog")
+            scrollView.documentView = textView
+            self.view.addSubview(scrollView)
+            testMessageLog = textView
+        }
+    }
+
+    /**
+     * Make the webview that holds the document, and put it in this controller's view.
+     */
+    private func buildWebView() {
         // Setup jsHandler as the entry point to call back from JavaScript
         let contentController = WKUserContentController()
         contentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
@@ -219,19 +254,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             webView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
 
-        if isUITesting {
-            let scrollView = NSScrollView(frame: NSRect(x: -10000, y: 0, width: 100, height: 100))
-            let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 100, height: 100))
-            textView.isEditable = false
-            textView.setAccessibilityIdentifier("CODA.TestMessageLog")
-            scrollView.documentView = textView
-            self.view.addSubview(scrollView)
-            testMessageLog = textView
-        }
-
         // Register this webview with the WebDriver manager (no-op when
         // the WebDriver server is not running).
         webDriverHandle = WebDriverManager.shared.register(webView: webView)
+
+        viewLiveSince = Date()
     }
 
     deinit {
@@ -245,6 +272,9 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
      */
     func loadDocument(_ document: Document) {
         self.document = document
+        // The page in front of the user is a new one from here, whether this is the first
+        // load, a reload after its renderer died, or a view built again after a discard.
+        viewLiveSince = Date()
         let permission = document.isWelcome ? "view" : "edit"
         self.document.loadDocumentInWebView(webView: webView, permission: permission, isWelcome: document.isWelcome)
     }
@@ -1010,6 +1040,97 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
 
         // Bring back the menu bar and Dock.
         NSApp.presentationOptions = []
+    }
+
+    /**
+     * Destroy this document's webview, and with it the web content process that renders it.
+     * The document stays loaded in the engine with any unsaved change.
+     */
+    func discardView() {
+        if isViewDiscarded || webView == nil {
+            return
+        }
+
+        NSLog("CollaboraOffice: discarding the view of appDocId \(document?.appDocId ?? -1)")
+
+        // The presentation and console windows are extra views onto this document and they
+        // are driven by the webview that is about to go.
+        endPresentation()
+
+        // Release the connection first, which marks the document as one that is kept loaded
+        // with no view of its own.
+        document?.detachFromView()
+
+        if let handle = webDriverHandle {
+            WebDriverManager.shared.unregister(handle: handle)
+            webDriverHandle = nil
+        }
+
+        // The message handler holds this controller, and the page it belongs to is going.
+        webView.configuration.userContentController.removeAllScriptMessageHandlers()
+        webView.navigationDelegate = nil
+        webView.uiDelegate = nil
+        webView.removeFromSuperview()
+        webView = nil
+
+        isViewDiscarded = true
+    }
+
+    /**
+     * Build a webview again and rejoin the document left loaded under this document's
+     * appDocId.
+     */
+    func restoreView() {
+        guard isViewDiscarded, let document = self.document else {
+            return
+        }
+
+        NSLog("CollaboraOffice: restoring the view of appDocId \(document.appDocId)")
+
+        isViewDiscarded = false
+        buildWebView()
+        loadDocument(document)
+    }
+
+    /// True when this view is one that may be dropped at all: it shows a document with a
+    /// file of its own, and nothing else is drawing from it.
+    var mayDiscardView: Bool {
+        guard let document = self.document, !isViewDiscarded, webView != nil else {
+            return false
+        }
+        // The welcome page holds no document of its own, and a document with no file would
+        // need a Save As dialog to get one.
+        if document.isWelcome || document.fileURL == nil {
+            return false
+        }
+        return presentationController == nil && consoleController == nil
+    }
+
+    /// True while any part of this document's window is on screen. A background tab, a
+    /// minimised window and a window on another Space are all off screen by this measure.
+    var isWindowVisible: Bool {
+        guard let window = view.window else {
+            return false
+        }
+        return window.occlusionState.contains(.visible)
+    }
+
+    /// True when this view can be dropped right now, which asks only whether the document
+    /// holds a change that is not on disk yet.
+    var isReadyToDiscardView: Bool {
+        guard let document = self.document else {
+            return false
+        }
+        return !document.isModified && !document.isSaveInFlight
+    }
+
+    /// Milliseconds this view still has to stay live before it may be dropped, or 0 when it
+    /// has had its time. A view keeps its place for a few seconds after it is built, which
+    /// is long enough to load its page and rejoin its document.
+    var msUntilViewSettled: Int {
+        let settleSeconds = 5.0
+        let remaining = settleSeconds - Date().timeIntervalSince(viewLiveSince)
+        return remaining <= 0 ? 0 : Int(remaining * 1000)
     }
 
     /// The web content process that rendered this webview died. The webview is now blank
