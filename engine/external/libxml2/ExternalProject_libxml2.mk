@@ -25,11 +25,15 @@ $(eval $(call gb_ExternalProject_use_external_project,libxml2,icu))
 # workdir\UnpackedTarball\libxml2\version(1): error C2059: syntax error: 'constant
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_Trace_StartRange,libxml2,EXTERNAL)
-	$(call gb_ExternalProject_run,build,\
-		$(CMAKE) . \
-			$(if $(filter 17.%,$(VCVER)),-G "Visual Studio 17 2022") \
-			$(if $(filter 18.%,$(VCVER)),-G "Visual Studio 18 2026") \
-			-A $(gb_MSBUILD_PLATFORM) \
+	+$(call gb_ExternalProject_run,build,\
+		export INCLUDE="$(gb_ExternalProject_INCLUDE)" \
+		&& export LIB="$(ILIB)" \
+		&& $(CMAKE) . \
+			-G Ninja \
+			-DCMAKE_MAKE_PROGRAM=$(NINJA) \
+			-DCMAKE_BUILD_TYPE=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+			-DCMAKE_C_COMPILER=$(lastword $(filter-out -%,$(CC))) \
+			$(if $(CCACHE),-DCMAKE_C_COMPILER_LAUNCHER=$(CCACHE)) \
 			-DLIBXML2_WITH_TESTS=OFF \
 			-DLIBXML2_WITH_ICONV=OFF \
 			-DLIBXML2_WITH_PYTHON=OFF \
@@ -41,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			$(if $(MSVC_USE_DEBUG_RUNTIME), \
 				-DICU_UC_LIBRARY_DEBUG=$(gb_UnpackedTarball_workdir)/icu/source/lib/icuucd.lib, \
 				-DICU_UC_LIBRARY_RELEASE=$(gb_UnpackedTarball_workdir)/icu/source/lib/icuuc.lib) \
-		&& $(CMAKE) --build . --config $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		&& $(CMAKE) --build . \
 		&& rm VERSION \
 	)
 	$(call gb_Trace_EndRange,libxml2,EXTERNAL)

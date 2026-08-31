@@ -10081,9 +10081,9 @@ else
     fi
     if test "$COM" = "MSC"; then
         if test "$MSVC_USE_DEBUG_RUNTIME" = TRUE; then
-            LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/Debug/libxml2d.lib"
+            LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/libxml2d.lib"
         else
-            LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/Release/libxml2.lib"
+            LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/libxml2.lib"
         fi
     else
         LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/libxml2/.libs -lxml2"

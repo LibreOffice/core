@@ -33,7 +33,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_Trace_StartRange,xmlsec,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		powershell -ExecutionPolicy Bypass -File configure.ps1 crypto=mscng xslt=no iconv=no static=no \
-			lib=$(gb_UnpackedTarball_workdir)/libxml2/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+			lib=$(gb_UnpackedTarball_workdir)/libxml2 \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes cruntime=/MDd) \
 			cflags="$(SOLARINC) $(LIBXML_CFLAGS)" \
 		&& nmake \
