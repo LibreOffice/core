@@ -225,10 +225,10 @@ bool ApplyAttributesToCellOperation::runImplementation()
     if (aCell.getType() == CELLTYPE_EDIT)
     {
         const EditTextObject* pEditObj = aCell.getEditText();
-        pOldEditData = pEditObj->Clone();
+        pOldEditData = std::make_unique<EditTextObject>(*pEditObj);
         rDoc.RemoveEditTextCharAttribs(aPosition, mrPattern);
         pEditObj = rDoc.GetEditText(aPosition);
-        pNewEditData = pEditObj->Clone();
+        pNewEditData = std::make_unique<EditTextObject>(*pEditObj);
     }
 
     maChangeRanges.push_back(ScRange(aPosition));

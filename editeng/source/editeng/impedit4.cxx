@@ -1205,7 +1205,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
     // (Only the name and family, template itself must be in App!)
 
     const MapUnit eMapUnit = maEditDoc.GetItemPool().GetMetric(DEF_METRIC);
-    auto pTxtObj(std::make_unique<EditTextObjectImpl>(pPool, eMapUnit, GetVertical(), GetRotation(),
+    auto pTxtObj(std::make_unique<EditTextObject>(pPool, eMapUnit, GetVertical(), GetRotation(),
                                                       GetItemScriptType(aSel)));
 
     // iterate over the paragraphs ...
@@ -1370,8 +1370,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     DBG_ASSERT( !aSel.DbgIsBuggy( maEditDoc ), "InsertBibTextObject: Selection broken!(1)" );
 
     bool bUsePortionInfo = false;
-    const EditTextObjectImpl& rTextObjectImpl = toImpl(rTextObject);
-    XParaPortionList* pPortionInfo = rTextObjectImpl.GetPortionInfo();
+    XParaPortionList* pPortionInfo = rTextObject.GetPortionInfo();
 
     if (pPortionInfo && ( static_cast<tools::Long>(pPortionInfo->GetPaperWidth()) == GetColumnWidth(maPaperSize))
             && pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode()
@@ -1387,9 +1386,9 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
 
     bool bConvertMetricOfItems = false;
     MapUnit eSourceUnit = MapUnit(), eDestUnit = MapUnit();
-    if (rTextObjectImpl.HasMetric())
+    if (rTextObject.HasMetric())
     {
-        eSourceUnit = rTextObjectImpl.GetMetric();
+        eSourceUnit = rTextObject.GetMetric();
         eDestUnit = maEditDoc.GetItemPool().GetMetric( DEF_METRIC );
         if ( eSourceUnit != eDestUnit )
             bConvertMetricOfItems = true;
@@ -1398,13 +1397,13 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     // Before, paragraph count was of type sal_uInt16 so if nContents exceeded
     // 0xFFFF this wouldn't have worked anyway, given that nPara is used to
     // number paragraphs and is fearlessly incremented.
-    sal_Int32 nContents = static_cast<sal_Int32>(rTextObjectImpl.GetContents().size());
+    sal_Int32 nContents = static_cast<sal_Int32>(rTextObject.GetContents().size());
     SAL_WARN_IF( nContents < 0, "editeng", "ImpEditEngine::InsertTextObject - contents overflow " << nContents);
     sal_Int32 nPara = maEditDoc.GetPos( aPaM.GetNode() );
 
     for (sal_Int32 n = 0; n < nContents; ++n, ++nPara)
     {
-        const ContentInfo* pC = rTextObjectImpl.GetContents()[n].get();
+        const ContentInfo* pC = rTextObject.GetContents()[n].get();
         bool bNewContent = aPaM.GetNode()->Len() == 0;
         const sal_Int32 nStartPos = aPaM.GetIndex();
 

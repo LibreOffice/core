@@ -4867,7 +4867,7 @@ ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
         aStartPos   ( rStartPos ),
         aEndPos     ( rEndPos ),
         aString     (std::move( _aString )),
-        pEditData   ( pData ? pData->Clone() : nullptr )
+        pEditData   ( pData ? std::make_unique<EditTextObject>(*pData) : nullptr )
 {
 }
 
@@ -4899,7 +4899,7 @@ ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
         aString     = r.aString;
         pEditData.reset();
         if (r.pEditData)
-            pEditData = r.pEditData->Clone();
+            pEditData = std::make_unique<EditTextObject>(*r.pEditData);
     }
     return *this;
 }

@@ -37,7 +37,7 @@ OutlinerParaObjData::OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditT
 }
 
 OutlinerParaObjData::OutlinerParaObjData( const OutlinerParaObjData& r ):
-    mpEditTextObject(r.mpEditTextObject->Clone()),
+    mpEditTextObject(new EditTextObject(*r.mpEditTextObject)),
     maParagraphDataVector(r.maParagraphDataVector),
     mbIsEditDoc(r.mbIsEditDoc)
 {

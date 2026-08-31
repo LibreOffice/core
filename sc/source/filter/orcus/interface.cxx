@@ -415,7 +415,8 @@ void ScOrcusFactory::finalize()
                         maDoc.setStringCell(rToken.maPos, std::get<0>(s));
                         break;
                     case 1: // std::unique_ptr<EditTextObject>
-                        maDoc.setEditCell(rToken.maPos, std::get<1>(s)->Clone());
+                        maDoc.setEditCell(rToken.maPos,
+                                          std::make_unique<EditTextObject>(*std::get<1>(s)));
                         break;
                 }
                 ++nCellCount;

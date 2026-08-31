@@ -47,7 +47,7 @@ bool SetEditTextOperation::runImplementation()
     if (bUndo)
         aOldVal.assign(rDoc, aPosition);
 
-    rDoc.SetEditText(aPosition, mrEditObject.Clone());
+    rDoc.SetEditText(aPosition, std::make_unique<EditTextObject>(mrEditObject));
 
     ScUndoSetCell* pUndoSetCell = nullptr;
     if (bUndo)

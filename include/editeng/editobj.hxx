@@ -23,8 +23,11 @@
 #include <svl/style.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/macros.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/lineend.hxx>
+#include <tools/mapunit.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -38,69 +41,103 @@ class SvxFieldData;
 enum class OutlinerMode;
 struct EECharAttrib;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
+class ContentInfo;
+class XParaPortionList;
 
 namespace editeng {
-
 class FieldUpdater;
 struct Section;
-
 }
 
 namespace svl {
-
 class SharedString;
 class SharedStringPool;
-
 }
 
 enum class TextRotation { NONE, TOPTOBOTTOM, BOTTOMTOTOP };
 
-class EDITENG_DLLPUBLIC EditTextObject
+class XEditAttribute
+{
+private:
+    SfxPoolItemHolder   maItemHolder;
+    sal_Int32           nStart;
+    sal_Int32           nEnd;
+
+public:
+    XEditAttribute(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd );
+
+    const SfxPoolItem*      GetItem() const             { return maItemHolder.getItem(); }
+    SfxPoolItemHolder&      GetItemHolder()             { return maItemHolder; }
+
+    sal_Int32&              GetStart()                  { return nStart; }
+    sal_Int32&              GetEnd()                    { return nEnd; }
+
+    sal_Int32               GetStart() const            { return nStart; }
+    sal_Int32               GetEnd() const              { return nEnd; }
+
+    sal_Int32               GetLen() const              { return nEnd-nStart; }
+
+    bool IsFeature() const;
+    void SetItem(SfxItemPool&, const SfxPoolItem&);
+
+    inline bool operator==( const XEditAttribute& rCompare ) const;
+};
+
+
+
+class EDITENG_DLLPUBLIC EditTextObject final
 {
 public:
-    virtual ~EditTextObject();
+    typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
+
+    EditTextObject(SfxItemPool* pPool, MapUnit eDefaultMetric, bool bVertical,
+                   TextRotation eRotation, SvtScriptType eScriptType);
+    EditTextObject( const EditTextObject& r );
+    ~EditTextObject();
 
     /**
      * Set paragraph strings to the shared string pool.
      *
      * @param rPool shared string pool.
      */
-    virtual void NormalizeString( svl::SharedStringPool& rPool ) = 0;
+    void NormalizeString( svl::SharedStringPool& rPool );
 
-    virtual std::vector<svl::SharedString> GetSharedStrings() const = 0;
+    std::vector<svl::SharedString> GetSharedStrings() const;
 
-    virtual const SfxItemPool* GetPool() const = 0;
-    virtual OutlinerMode GetUserType() const = 0;    // For OutlinerMode, it can however not save in compatible format
-    virtual void SetUserType( OutlinerMode n ) = 0;
+    const SfxItemPool* GetPool() const { return mpPool.get(); }
+    SfxItemPool*       GetPool()       { return mpPool.get(); }
 
-    virtual bool IsEffectivelyVertical() const = 0;
-    virtual bool GetVertical() const = 0;
-    virtual bool IsTopToBottom() const = 0;
-    virtual void SetVertical( bool bVertical ) = 0;
-    virtual void SetRotation( TextRotation nRotation ) = 0;
-    virtual TextRotation    GetRotation() const = 0;
+    OutlinerMode GetUserType() const { return meUserType;} // For OutlinerMode, it can however not save in compatible format
+    void SetUserType( OutlinerMode n );
 
-    virtual SvtScriptType GetScriptType() const = 0;
+    bool IsEffectivelyVertical() const;
+    bool GetVertical() const;
+    bool IsTopToBottom() const;
+    void SetVertical( bool bVertical );
+    void SetRotation( TextRotation nRotation );
+    TextRotation    GetRotation() const;
 
-    virtual std::unique_ptr<EditTextObject> Clone() const = 0;
+    SvtScriptType GetScriptType() const { return meScriptType;}
 
-    virtual sal_Int32 GetParagraphCount() const = 0;
+    sal_Int32 GetParagraphCount() const;
 
-    virtual OUString GetText(sal_Int32 nPara) const = 0;
+    OUString GetText(sal_Int32 nPara) const;
 
-    virtual OUString GetText(LineEnd eEnd = LINEEND_LF) const = 0;
+    OUString GetText(LineEnd eEnd = LINEEND_LF) const;
 
-    virtual sal_Int32 GetTextLen(sal_Int32 nPara) const = 0;
+    sal_Int32 GetTextLen(sal_Int32 nPara) const;
 
     bool HasText(sal_Int32 nPara) const { return GetTextLen(nPara) > 0; }
 
-    virtual void ClearPortionInfo() = 0;
+    XParaPortionList*       GetPortionInfo() const  { return mpPortionInfo.get(); }
+    void                    SetPortionInfo( std::unique_ptr<XParaPortionList> pP );
+    void ClearPortionInfo();
 
-    virtual bool HasOnlineSpellErrors() const = 0;
+    bool HasOnlineSpellErrors() const;
 
-    virtual void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const = 0;
+    void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    virtual bool RemoveCharAttribs( sal_uInt16 nWhich ) = 0;
+    bool RemoveCharAttribs( sal_uInt16 nWhich );
 
     /**
      * Get all text sections in this content.  Sections are non-overlapping
@@ -108,36 +145,59 @@ public:
      * boundaries.  Each section object contains all applied formats and/or a
      * field item.
      */
-    virtual void GetAllSections( std::vector<editeng::Section>& rAttrs ) const = 0;
+    void GetAllSections( std::vector<editeng::Section>& rAttrs ) const;
 
-    virtual bool IsFieldObject() const = 0;
-    virtual const SvxFieldItem* GetField() const = 0;
-    virtual const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const = 0;
-    virtual bool HasField( sal_Int32 nType = css::text::textfield::Type::UNSPECIFIED ) const = 0;
+    bool IsFieldObject() const;
+    const SvxFieldItem* GetField() const;
+    const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const;
+    bool HasField( sal_Int32 nType = css::text::textfield::Type::UNSPECIFIED ) const;
 
-    virtual const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const = 0;
+    const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const;
 
-    virtual void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const = 0;
-    virtual void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily) = 0;
-    virtual bool ChangeStyleSheets(
-        std::u16string_view rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily) = 0;
-    virtual void ChangeStyleSheetName(SfxStyleFamily eFamily, std::u16string_view rOldName, const OUString& rNewName) = 0;
+    void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const;
+    void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily);
+    bool ChangeStyleSheets(
+        std::u16string_view rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
+    void ChangeStyleSheetName(SfxStyleFamily eFamily, std::u16string_view rOldName, const OUString& rNewName);
 
-    virtual editeng::FieldUpdater GetFieldUpdater() = 0;
+    editeng::FieldUpdater GetFieldUpdater();
 
-    virtual bool operator==( const EditTextObject& rCompare ) const = 0;
+    bool operator==( const EditTextObject& rCompare ) const;
 
     /** Compare, ignoring SfxItemPool pointer.
      */
     bool Equals( const EditTextObject& rCompare ) const;
 
+    bool Equals( const EditTextObject& rCompare, bool bComparePool ) const;
+
     // #i102062#
-    virtual bool isWrongListEqual(const EditTextObject& rCompare) const = 0;
+    bool isWrongListEqual(const EditTextObject& rCompare) const;
+
+    ContentInfo*            CreateAndInsertContent();
+    XEditAttribute          CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
+    ContentInfosType&       GetContents() { return maContents;}
+    const ContentInfosType& GetContents() const { return maContents;}
+
+    bool                    HasMetric() const { return meMetric != MapUnit::LASTENUMDUMMY; }
+    MapUnit                 GetMetric() const { return meMetric; }
 
 #if DEBUG_EDIT_ENGINE
-    virtual void Dump() const = 0;
+    void Dump() const;
 #endif
-    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const = 0;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+private:
+    bool ImpChangeStyleSheets( std::u16string_view rOldName, SfxStyleFamily eOldFamily,
+                               const OUString& rNewName, SfxStyleFamily eNewFamily );
+
+    ContentInfosType        maContents;
+    rtl::Reference<SfxItemPool>       mpPool;
+    std::unique_ptr<XParaPortionList> mpPortionInfo;
+    OutlinerMode            meUserType;
+    SvtScriptType           meScriptType;
+    TextRotation            meRotation;
+    MapUnit                 meMetric;
+    bool                    mbVertical;
 };
 
 #endif // INCLUDED_EDITENG_EDITOBJ_HXX
