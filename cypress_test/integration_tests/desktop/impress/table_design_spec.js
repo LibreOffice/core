@@ -3,6 +3,7 @@
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var impressHelper = require('../../common/impress_helper');
+const a11yHelper = require('../../common/a11y_helper');
 
 describe(['tagdesktop'], 'Table Design tab', function() {
 
@@ -38,6 +39,35 @@ describe(['tagdesktop'], 'Table Design tab', function() {
 			expect(call, '.uno:TableStyle was sent').to.not.be.undefined;
 			expect(call.args[1].TableStyle.type).to.equal('string');
 			expect(call.args[1].TableStyle.value).to.be.a('string').and.not.empty;
+		});
+	});
+
+	it('The gallery is announced with the name the tab asks for', function() {
+		if (!a11yHelper.axTreeAvailable()) {
+			this._runnable.title += ' (skipped: needs a chromium browser)';
+			this.skip();
+		}
+
+		impressHelper.selectTableInTheCenter(this.win);
+
+		cy.cGet('#TableDesign-tab-label').click();
+		cy.cGet('#TableDesign-tab-label').should('have.class', 'selected');
+		cy.cGet('#table-design-styles_0').should('be.visible');
+
+		cy.getFrameWindow().then(function(win) {
+			const wanted = win.app.impressTableStyles.generateTableStylesJSON().aria.label;
+			expect(wanted, 'the name the tab asks for').to.not.be.empty;
+
+			a11yHelper.getAXNodes().then(function(nodes) {
+				const names = nodes.filter(function(node) {
+					return node.role === 'radiogroup' && !node.ignored;
+				}).map(function(node) {
+					return node.name;
+				});
+
+				expect(names, 'accessible names of the exposed radiogroups')
+					.to.include(wanted);
+			});
 		});
 	});
 });
