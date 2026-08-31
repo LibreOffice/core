@@ -877,6 +877,8 @@ static char* generate_phony_line(char const * phony_target, char const * extensi
             last_dot = dest;
         }
     }
+    assert(last_dot);
+
     //fprintf(stderr, "generate_phony_line after phony_target copy: %s\n", phony_content_buffer);
     for(dest = last_dot+1, src = extension; *src != 0; ++src, ++dest)
     {
