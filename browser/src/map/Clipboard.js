@@ -532,6 +532,7 @@ window.L.Clipboard = window.L.Class.extend({
 			// first try to transfer images
 			// TODO if we have both Files and a normal mimetype, should we handle
 			// both, or prefer one or the other?
+			let handledImage = false;
 			for (var t = 0; t < types.length; ++t) {
 				window.app.console.log('\ttype' + types[t]);
 				if (types[t] === 'Files') {
@@ -542,14 +543,33 @@ window.L.Clipboard = window.L.Class.extend({
 							this._asyncReadPasteFile(files[f]);
 					} // IE / Edge
 					else this._asyncReadPasteFile(dataTransfer.items[t].getAsFile());
+					handledImage = true;
 				}
 			}
 
-			// If any paste special dialog is open, close it here, because we won't call
-			// _doInternalPaste() that would do the closing.
-			this._checkAndDisablePasteSpecial();
+			if (!handledImage) {
+				// The HTML looked like an image, but the clipboard has no image:
+				// send the image URL then.
+				const template = document.createElement('template');
+				// Parse via <template> to decode e.g. &amp; -> &.
+				template.innerHTML = htmlText;
+				const img = template.content.querySelector('img');
+				const url = img ? img.getAttribute('src') : null;
+				if (url && !url.startsWith('data:')) {
+					window.app.console.log('Sync pasting external image URL as text/uri-list: ' + url);
+					this._pasteTypedBlob('text/uri-list', new Blob([url]));
+					handledImage = true;
+				}
+			}
 
-			return;
+			if (handledImage) {
+				// If any paste special dialog is open, close it here, because we won't call
+				// _doInternalPaste() that would do the closing.
+				this._checkAndDisablePasteSpecial();
+
+				return;
+			}
+			// The <img> src was an inline 'data:' URL: normal HTML paste.
 		}
 
 		if (content == null) {
@@ -855,6 +875,8 @@ window.L.Clipboard = window.L.Class.extend({
 			image = await clipboardContent.getType('image/png');
 		} catch (error) {
 			window.app.console.log('clipboardContent.getType(image/png) failed: ' + error.message);
+			// No image blob for the <img> HTML, send it as text/uri-list.
+			this._navigatorClipboardTextCallback(text, type);
 			return;
 		}
 

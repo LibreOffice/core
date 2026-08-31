@@ -187,6 +187,68 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 		});
 	});
 
+	it('Paste of <img src="..."> HTML without an image blob', function() {
+		// Given a clipboard with just text/html referring to an image URL:
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		const imageUrl = 'https://example.com/foo.svg';
+		const html = '<img src="' + imageUrl + '"/>';
+		cy.getFrameWindow().then(function(win) {
+			const clip = win.app.map._clip;
+			const clipboardItem = {
+				types: ['text/html'],
+				getType: function(type) {
+					return {
+						then: function(resolve, reject) {
+							if (type === 'text/html') {
+								resolve(new Blob([html]));
+							} else {
+								reject({ message: 'no ' + type });
+							}
+						},
+					};
+				},
+			};
+			clip._dummyClipboard = {
+				read: function() {
+					return {
+						then: function(resolve) {
+							resolve([clipboardItem]);
+						},
+					};
+				},
+			};
+			cy.spy(win.app.socket, 'sendMessage').as('sendMessage');
+
+			// When doing async paste:
+			clip.filterExecCopyPaste('.uno:Paste');
+		});
+
+		// Then make sure that results in a 'paste' websocket message containing that URL:
+		function getPasteBlobs(spy) {
+			return spy.getCalls()
+				.map(function(call) { return call.args[0]; })
+				.filter(function(arg) { return typeof arg !== 'string'; });
+		}
+		cy.get('@sendMessage')
+			.should(function(spy) {
+				// Without the accompanying fix in place, this test would have failed with:
+				// - assert      expected **0** to be at least **1**
+				// i.e. no paste message was sent.
+				expect(getPasteBlobs(spy).length).to.be.at.least(1);
+			})
+			.then(function(spy) {
+				const blobs = getPasteBlobs(spy);
+				return cy.wrap(Promise.all(blobs.map(function(b) { return b.text(); })))
+					.then(function(texts) {
+						const matched = texts.some(function(t) {
+							return t.startsWith('paste mimetype=text/uri-list\n')
+								&& t.indexOf(imageUrl) !== -1;
+						});
+						expect(matched, 'paste message').to.be.true;
+					});
+			});
+	});
+
 	it('Cross-document paste failure shows the reason from the source stub.', function() {
 		helper.setupAndLoadDocument('writer/copy_paste.odt');
 
