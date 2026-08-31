@@ -287,22 +287,6 @@ void VCLXAccessibleTabControl::disposing()
     m_aAccessibleChildren.clear();
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleTabControl::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleTabControl"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleTabControl"_ustr };
-}
-
-
 // XAccessibleContext
 
 
