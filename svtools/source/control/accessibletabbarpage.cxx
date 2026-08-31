@@ -42,11 +42,11 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-
-AccessibleTabBarPage::AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId, const Reference< XAccessible >& rxParent )
-    :ImplInheritanceHelper( pTabBar )
-    ,m_nPageId( nPageId )
-    ,m_xParent( rxParent )
+AccessibleTabBarPage::AccessibleTabBarPage(TabBar* pTabBar, sal_uInt16 nPageId,
+                                           const Reference<XAccessible>& rxParent)
+    : AccessibleTabBarBase(pTabBar)
+    , m_nPageId(nPageId)
+    , m_xParent(rxParent)
 {
     m_bShowing  = IsShowing();
     m_bSelected = IsSelected();
@@ -189,27 +189,6 @@ void AccessibleTabBarPage::disposing()
 {
     AccessibleTabBarBase::disposing();
     m_sPageText.clear();
-}
-
-
-// XServiceInfo
-
-
-OUString AccessibleTabBarPage::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleTabBarPage"_ustr;
-}
-
-
-sal_Bool AccessibleTabBarPage::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-
-Sequence< OUString > AccessibleTabBarPage::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleTabBarPage"_ustr };
 }
 
 // XAccessibleContext

@@ -28,8 +28,7 @@
 namespace accessibility
 {
 
-class AccessibleTabBarPage final
-    : public cppu::ImplInheritanceHelper<AccessibleTabBarBase, css::lang::XServiceInfo>
+class AccessibleTabBarPage final : public AccessibleTabBarBase
 {
     friend class AccessibleTabBarPageList;
 
@@ -60,11 +59,6 @@ private:
 public:
     AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId,
                           const css::uno::Reference< css::accessibility::XAccessible >& rxParent );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
