@@ -40,20 +40,19 @@
 class WebSocketHandler : public ProtocolHandlerInterface
 {
 private:
-#if !MOBILEAPP
+    // The embedded app exchanges length-prefixed messages and leaves the framing state below at
+    // its initial values, so both flavours agree on the class layout.
+
     /// The security key. Meaningful only for clients.
     const std::string _key;
-#endif
     std::vector<char> _wsPayload;
     /// The socket that owns us (we can't own it).
     std::weak_ptr<StreamSocket> _socket;
-#if !MOBILEAPP
     std::chrono::steady_clock::time_point _lastPingSentTime;
-    int _pingTimeUs;
-    bool _isMasking;
+    [[maybe_unused]] int _pingTimeUs;
+    [[maybe_unused]] bool _isMasking;
     bool _inFragmentBlock;
-    unsigned char _lastFlags; ///< The flags in the last frame.
-#endif
+    [[maybe_unused]] unsigned char _lastFlags; ///< The flags in the last frame.
     std::atomic<bool> _shuttingDown;
     const bool _isClient;
 
@@ -79,10 +78,8 @@ public:
     /// isClient: the instance should behave like a client (true) or like a server (false)
     ///           (from websocket perspective)
     /// isMasking: a client should mask (true) or not (false) outgoing frames
-    WebSocketHandler(bool isClient, [[maybe_unused]] bool isMasking)
-        :
-#if !MOBILEAPP
-        _key(isClient ? generateKey() : std::string())
+    WebSocketHandler(bool isClient, bool isMasking)
+        : _key(isClient ? generateKey() : std::string())
         , _lastPingSentTime(std::chrono::steady_clock::now() -
                            PingFrequencyMicroS +
                            InitialPingDelayMicroS)
@@ -90,9 +87,7 @@ public:
         , _isMasking(isClient && isMasking)
         , _inFragmentBlock(false)
         , _lastFlags(0)
-        ,
-#endif
-        _shuttingDown(false)
+        , _shuttingDown(false)
         , _isClient(isClient)
         , _unit(UnitBase::isUnitTesting() ? &UnitBase::get() : nullptr)
     {
@@ -309,9 +304,7 @@ private:
         }
 
         _wsPayload.clear();
-#if !MOBILEAPP
         _inFragmentBlock = false;
-#endif
         _shuttingDown = false;
     }
     bool handleTCPStream(const std::shared_ptr<StreamSocket>& socket)
@@ -1105,11 +1098,9 @@ protected:
     {
         assert(socket && "Must have a valid socket");
         socket->setWebSocket();
-#if !MOBILEAPP
         // No need to ping right upon connection/upgrade,
         // but do reset the time to avoid pinging immediately after.
         _lastPingSentTime = std::chrono::steady_clock::now();
-#endif
     }
 
     void enableProcessInput(bool enable = true) override

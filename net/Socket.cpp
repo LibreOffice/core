@@ -73,6 +73,9 @@
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/NetException.h>
+#endif
+// The windows app build cannot compile Poco's net headers.
+#ifndef _WIN32
 #include <Poco/Net/WebSocket.h> // computeAccept
 #endif
 
@@ -1954,6 +1957,9 @@ bool StreamSocket::sniffSSL() const
             _inBuffer[5] == 0x01);  // Handshake: CLIENT_HELLO
 }
 
+#endif // !MOBILEAPP
+
+#ifndef _WIN32
 namespace {
     /// To make the protected 'computeAccept' accessible.
     class PublicComputeAccept final : public Poco::Net::WebSocket
@@ -1963,12 +1969,6 @@ namespace {
         {
             return computeAccept(key);
         }
-
-        static std::string generateKey()
-        {
-            auto random = Util::rng::getBytes(16);
-            return macaron::Base64::Encode(std::string_view(random.data(), random.size()));
-        }
     };
 }
 
@@ -1976,13 +1976,13 @@ std::string WebSocketHandler::computeAccept(const std::string &key)
 {
     return PublicComputeAccept::doComputeAccept(key);
 }
+#endif // !_WIN32
 
 std::string WebSocketHandler::generateKey()
 {
-    return PublicComputeAccept::generateKey();
+    auto random = Util::rng::getBytes(16);
+    return macaron::Base64::Encode(std::string_view(random.data(), random.size()));
 }
-
-#endif // !MOBILEAPP
 
 // Required by Android and iOS apps.
 namespace http
