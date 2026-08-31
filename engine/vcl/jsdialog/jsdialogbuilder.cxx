@@ -2000,6 +2000,10 @@ void JSTreeView::render_entry(int pos, int dpiscale)
     SvTreeListEntry* pEntry = m_xTreeView->GetEntryAtAbsPos(pos);
     if (!pEntry)
     {
+        // See JSIconView::render_entry: a stale position from a list rebuilt while this
+        // request was in flight should not be dropped silently, or the client is left
+        // waiting for an image that will never arrive.
+        sendUpdate(true);
         return;
     }
 
@@ -2091,7 +2095,15 @@ void JSIconView::render_entry(int pos, int dpiscale)
 {
     OUString sImage = m_xIconView->renderEntry(pos, dpiscale);
     if (sImage.isEmpty())
+    {
+        // The entry list can be rebuilt concurrently with a render request that is still
+        // in flight (for example a notebookbar style gallery reacting to a style sheet
+        // change), so the requested position may no longer resolve to an entry by the time
+        // this runs. Resend the current state instead of dropping the request, so the
+        // client rebuilds its placeholders and asks again for whatever is there now.
+        sendUpdate(true);
         return;
+    }
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
     (*pMap)[ACTION_TYPE ""_ostr] = u"rendered_entry"_ustr;
