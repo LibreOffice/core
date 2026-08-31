@@ -1324,8 +1324,12 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             return false;
 
         std::string value;
-        if (tokens.size() > 1 && getTokenString(tokens[1], "value", value) && value == "true" &&
-            !isLockedByPassword())
+        const bool haveValue = tokens.size() > 1 && getTokenString(tokens[1], "value", value);
+
+        if (haveValue)
+            _clientEditMode = value != "true";
+
+        if (haveValue && value == "true" && !isLockedByPassword())
         {
             // Write the modifications right away, while the view may still save; the kit's
             // read-only command filters do not dispatch .uno:Save for a read-only view
@@ -4376,6 +4380,8 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\ttile size Pixel: " << _tileWidthPixel << 'x' << _tileHeightPixel
        << "\n\t\ttile size Twips: " << _tileWidthTwips << 'x' << _tileHeightTwips
        << "\n\t\tclientZoomPercent: " << _clientZoomPercent
+       << "\n\t\tclientEditMode: "
+       << (_clientEditMode ? (*_clientEditMode ? "editing" : "viewing") : "unknown")
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument
