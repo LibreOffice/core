@@ -51,7 +51,7 @@ void OutlinerUndoChangeParaFlags::ImplChangeFlags( ParaFlag nFlags )
     Paragraph* pPara = pOutliner->GetParagraph( mnPara );
     if( pPara )
     {
-        pOutliner->nDepthChangedHdlPrevDepth = pPara->GetDepth();
+        pOutliner->nDepthChangedHdlPrevDepth = pPara->GetNumberingDepth();
         ParaFlag nPrevFlags = pPara->nFlags;
 
         pPara->nFlags = nFlags;

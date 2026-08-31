@@ -353,7 +353,6 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/overflowingtxt.hxx>
-#include <editeng/paragraphdata.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxenum.hxx>

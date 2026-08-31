@@ -424,7 +424,6 @@
 #include <editeng/memberids.h>
 #include <editeng/outlobj.hxx>
 #include <editeng/overflowingtxt.hxx>
-#include <editeng/paragraphdata.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>

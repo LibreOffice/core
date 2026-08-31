@@ -36,7 +36,6 @@
 #include <tools/link.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/svxfont.hxx>
-#include <editeng/paragraphdata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <optional>
@@ -126,7 +125,7 @@ public:
     ScalingParameters maScalingParameters;
 };
 
-class Paragraph : protected ParagraphData
+class Paragraph
 {
 private:
     friend class Outliner;
@@ -139,6 +138,9 @@ private:
 
     Paragraph& operator=(const Paragraph& rPara ) = delete;
 
+    sal_Int16           mnNumberingDepth;
+    sal_Int16           mnNumberingStartValue;
+    bool                mbNumberingRestart;
     BulletInfo maBullet;
     ParaFlag nFlags = ParaFlag::NONE;
     bool bVisible = true;
@@ -179,9 +181,9 @@ private:
         maBullet.maSize.setHeight(-1);
     }
 
-    void SetDepth(sal_Int16 nNewDepth)
+    void SetNumberingDepth(sal_Int16 nNewDepth)
     {
-        nDepth = nNewDepth;
+        mnNumberingDepth = nNewDepth;
         Invalidate();
     }
 
@@ -192,15 +194,15 @@ private:
 
                         Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& ) = delete;
-                        Paragraph( const ParagraphData& );
+                        Paragraph( sal_Int16 nDepth, sal_Int16 nNumberingStartValue, bool bParaIsNumberingRestart);
 
-    sal_Int16           GetDepth() const { return nDepth; }
+    sal_Int16           GetNumberingDepth() const { return mnNumberingDepth; }
 
     sal_Int16           GetNumberingStartValue() const { return mnNumberingStartValue; }
     void                SetNumberingStartValue( sal_Int16 nNumberingStartValue );
 
-    bool                IsParaIsNumberingRestart() const { return mbParaIsNumberingRestart; }
-    void                SetParaIsNumberingRestart( bool bParaIsNumberingRestart );
+    bool                IsNumberingRestart() const { return mbNumberingRestart; }
+    void                SetNumberingRestart( bool bRestart );
 
     void                SetFlag( ParaFlag nFlag ) { nFlags |= nFlag; }
     void                RemoveFlag( ParaFlag nFlag ) { nFlags &= ~nFlag; }

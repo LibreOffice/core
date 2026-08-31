@@ -101,6 +101,13 @@ public:
     void                    SetPortionInfo( std::unique_ptr<XParaPortionList> pP );
     void ClearPortionInfo();
 
+    sal_Int16 GetNumberingDepth(sal_Int32 nPara) const;
+    void SetNumberingDepth(sal_Int32 nPara, sal_Int16 nDepth);
+    sal_Int16 GetNumberingStartValue(sal_Int32 nPara) const;
+    void SetNumberingStartValue(sal_Int32 nPara, sal_Int16 nStartValue);
+    bool IsNumberingRestart(sal_Int32 nPara) const;
+    void SetNumberingRestart(sal_Int32 nPara, bool bRestart);
+
     bool HasOnlineSpellErrors() const;
 
     void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;

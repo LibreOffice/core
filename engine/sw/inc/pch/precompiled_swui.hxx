@@ -412,7 +412,6 @@
 #include <editeng/outliner.hxx>
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/paperinf.hxx>
-#include <editeng/paragraphdata.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxenum.hxx>

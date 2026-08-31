@@ -125,6 +125,9 @@ private:
     SfxItemSet aParaAttribs;
     std::unique_ptr<WrongList>
                         mpWrongs;
+    sal_Int16           mnNumberingDepth { -1 };
+    sal_Int16           mnNumberingStartValue { -1 };
+    bool                mbNumberingRestart { false };
 
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
@@ -160,6 +163,13 @@ public:
 
     // #i102062#
     bool isWrongListEqual(const ContentInfo& rCompare) const;
+
+    sal_Int16 GetNumberingDepth() const { return mnNumberingDepth; }
+    void SetNumberingDepth(sal_Int16 nDepth) { mnNumberingDepth = nDepth; }
+    sal_Int16 GetNumberingStartValue() const { return mnNumberingStartValue; }
+    void SetNumberingStartValue(sal_Int16 nStartValue) { mnNumberingStartValue = nStartValue; }
+    bool IsNumberingRestart() const { return mbNumberingRestart; }
+    void SetNumberingRestart(bool bRestart) { mbNumberingRestart = bRestart; }
 
 #if DEBUG_EDIT_ENGINE
     void Dump() const;

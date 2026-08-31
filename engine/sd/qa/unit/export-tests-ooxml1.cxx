@@ -769,7 +769,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo90607)
     SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(1));
     CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
     OutlinerParaObject* pOutlinerParagraphObject = pTxtObj->GetOutlinerParaObject();
-    const sal_Int16 nDepth = pOutlinerParagraphObject->GetDepth(0);
+    const sal_Int16 nDepth = pOutlinerParagraphObject->GetNumberingDepth(0);
     CPPUNIT_ASSERT_MESSAGE("not equal", nDepth != -1);
 }
 
