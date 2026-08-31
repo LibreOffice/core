@@ -46,9 +46,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-
-AccessibleTabBar::AccessibleTabBar( TabBar* pTabBar )
-    :ImplInheritanceHelper( pTabBar )
+AccessibleTabBar::AccessibleTabBar(TabBar* pTabBar)
+    : AccessibleTabBarBase(pTabBar)
 {
     if ( m_pTabBar )
         m_aAccessibleChildren.assign(m_pTabBar->GetAccessibleChildWindowCount() + 1, {});
@@ -162,27 +161,6 @@ void AccessibleTabBar::disposing()
             pChild->dispose();
     }
     m_aAccessibleChildren.clear();
-}
-
-
-// XServiceInfo
-
-
-OUString AccessibleTabBar::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleTabBar"_ustr;
-}
-
-
-sal_Bool AccessibleTabBar::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-
-Sequence< OUString > AccessibleTabBar::getSupportedServiceNames()
-{
-    return  { u"com.sun.star.awt.AccessibleTabBar"_ustr };
 }
 
 // XAccessibleContext
