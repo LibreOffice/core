@@ -152,10 +152,6 @@ private:
                                std::istream& message,
                                const std::shared_ptr<StreamSocket>& socket);
 
-    void replaceServiceRoot(const Poco::Net::HTTPRequest& request, http::Response& httpResponse,
-                            const RequestDetails& requestDetails,
-                            const std::shared_ptr<StreamSocket>& socket);
-
     static void uploadFileToIntegrator(const Poco::Net::HTTPRequest& request,
                                        std::istream& message,
                                        const std::shared_ptr<StreamSocket>& socket);
