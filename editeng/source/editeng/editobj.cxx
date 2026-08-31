@@ -383,9 +383,6 @@ sal_Int32 EditTextObject::GetParagraphCount() const
 
 OUString EditTextObject::GetText(sal_Int32 nPara) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
-        return OUString();
-
     return maContents[nPara]->GetText();
 }
 
@@ -411,9 +408,6 @@ OUString EditTextObject::GetText(LineEnd eEnd) const
 
 sal_Int32 EditTextObject::GetTextLen(sal_Int32 nPara ) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
-        return 0;
-
     return maContents[nPara]->GetTextLen();
 }
 
@@ -434,9 +428,6 @@ bool EditTextObject::HasOnlineSpellErrors() const
 
 void EditTextObject::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
-        return;
-
     rLst.clear();
     const ContentInfo& rC = *maContents[nPara];
     for (const XEditAttribute & rAttr : rC.maCharAttribs)
@@ -472,9 +463,6 @@ const SvxFieldItem* EditTextObject::GetField() const
 
 const SvxFieldData* EditTextObject::GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
-        return nullptr;
-
     const ContentInfo& rC = *maContents[nPara];
     if (nPos >= rC.maCharAttribs.size())
         // URL position is out-of-bound.
@@ -691,9 +679,6 @@ void EditTextObject::GetAllSections( std::vector<editeng::Section>& rAttrs ) con
 
 void EditTextObject::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& rFamily) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
-        return;
-
     const ContentInfo& rC = *maContents[nPara];
     rName = rC.GetStyle();
     rFamily = rC.GetFamily();
@@ -701,9 +686,6 @@ void EditTextObject::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFam
 
 void EditTextObject::SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& rFamily)
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
-        return;
-
     ContentInfo& rC = *maContents[nPara];
     rC.SetStyle(rName);
     rC.SetFamily(rFamily);

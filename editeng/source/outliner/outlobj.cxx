@@ -171,14 +171,7 @@ sal_Int32 OutlinerParaObject::Count() const
 
 sal_Int16 OutlinerParaObject::GetDepth(sal_Int32 nPara) const
 {
-    if(0 <= nPara && o3tl::make_unsigned(nPara) < mpImpl->maParagraphDataVector.size())
-    {
-        return mpImpl->maParagraphDataVector[nPara].getDepth();
-    }
-    else
-    {
-        return -1;
-    }
+    return mpImpl->maParagraphDataVector[nPara].getDepth();
 }
 
 const EditTextObject& OutlinerParaObject::GetTextObject() const
@@ -188,16 +181,7 @@ const EditTextObject& OutlinerParaObject::GetTextObject() const
 
 const ParagraphData& OutlinerParaObject::GetParagraphData(sal_Int32 nIndex) const
 {
-    if(0 <= nIndex && o3tl::make_unsigned(nIndex) < mpImpl->maParagraphDataVector.size())
-    {
-        return mpImpl->maParagraphDataVector[nIndex];
-    }
-    else
-    {
-        OSL_FAIL("OutlinerParaObject::GetParagraphData: Access out of range (!)");
-        static ParagraphData aEmptyParagraphData;
-        return aEmptyParagraphData;
-    }
+    return mpImpl->maParagraphDataVector[nIndex];
 }
 
 void OutlinerParaObject::ClearPortionInfo()
