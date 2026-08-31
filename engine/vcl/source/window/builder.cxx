@@ -2928,10 +2928,6 @@ void VclBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUStr
     }
 }
 
-void VclBuilder::setPriority(vcl::Window* /*pWindow*/, int /*nPriority*/)
-{
-    SAL_WARN("vcl", "priority set for not supported item");
-}
 void VclBuilder::setContext(vcl::Window* pWindow, std::vector<vcl::EnumContext::Context>&& aContext)
 {
     vcl::IContext* pContextControl = dynamic_cast<vcl::IContext*>(pWindow);
@@ -3384,7 +3380,7 @@ void VclBuilder::applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pPar
     }
 }
 
-std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlReader &reader, int &nPriority)
+std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlReader &reader)
 {
     std::vector<vcl::EnumContext::Context> aContext;
 
@@ -3412,10 +3408,6 @@ std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlRe
                 if (classStyle.startsWith("context-", &rest))
                 {
                     aContext.push_back(vcl::EnumContext::GetContextEnum(OUString(rest)));
-                }
-                else if (classStyle.startsWith("priority-", &rest))
-                {
-                    nPriority = o3tl::toInt32(rest);
                 }
                 else if (classStyle != "small-button" && classStyle != "destructive-action" &&
                          classStyle != "suggested-action" && classStyle != "novertpad")

@@ -102,8 +102,7 @@ protected:
     void handleActionWidget(xmlreader::XmlReader& reader);
     void handleInterfaceDomain(xmlreader::XmlReader& rReader);
     static bool isToolbarItemClass(std::u16string_view sClass);
-    static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader& reader,
-                                                              int& nPriority);
+    static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader& reader);
     static OUString getStyleClass(xmlreader::XmlReader& reader);
     static bool hasOrientationVertical(stringmap& rMap);
 

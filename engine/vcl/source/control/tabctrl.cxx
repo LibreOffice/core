@@ -2036,7 +2036,7 @@ tools::Rectangle TabControl::GetTabBounds( sal_uInt16 nPageId ) const
     return aRet;
 }
 
-Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
+Size TabControl::ImplCalculateRequisition() const
 {
     Size aOptimalPageSize(0, 0);
 
@@ -2085,10 +2085,7 @@ Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
 
             tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
             if (aTabRect.Bottom() > nTabLabelsBottom)
-            {
                 nTabLabelsBottom = aTabRect.Bottom();
-                nHeaderHeight = nTabLabelsBottom;
-            }
             if (!aTabRect.IsEmpty() && aTabRect.Right() > nTabLabelsRight)
                 nTabLabelsRight = aTabRect.Right();
         }
@@ -2106,8 +2103,7 @@ Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
 
 Size TabControl::calculateRequisition() const
 {
-    sal_uInt16 nHeaderHeight;
-    return ImplCalculateRequisition(nHeaderHeight);
+    return ImplCalculateRequisition();
 }
 
 Size TabControl::GetOptimalSize() const

@@ -238,11 +238,7 @@ protected:
                     aItems = handleItems(reader);
                 else if (name == "style")
                 {
-                    int nPriority = 0;
-                    std::vector<vcl::EnumContext::Context> aContext
-                        = handleStyle(reader, nPriority);
-                    if (nPriority != 0)
-                        setPriority(pCurrentChild, nPriority);
+                    std::vector<vcl::EnumContext::Context> aContext = handleStyle(reader);
                     if (!aContext.empty())
                         setContext(pCurrentChild, std::move(aContext));
                 }
@@ -334,8 +330,7 @@ protected:
                 }
                 else if (name == "style")
                 {
-                    int nPriority = 0;
-                    context = handleStyle(reader, nPriority);
+                    context = handleStyle(reader);
                     --nLevel;
                 }
                 else if (name == "property")
@@ -550,7 +545,6 @@ protected:
     virtual void setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId) = 0;
     virtual void setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId)
         = 0;
-    virtual void setPriority(Widget* pWidget, int nPriority) = 0;
     virtual void setContext(Widget* pWidget, std::vector<vcl::EnumContext::Context>&& aContext) = 0;
 
     // Whether the given widget is a horizontal, i.e. non-vertical tab control

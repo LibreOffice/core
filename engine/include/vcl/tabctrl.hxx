@@ -63,7 +63,7 @@ protected:
     SAL_DLLPRIVATE tools::Rectangle ImplGetTabRect(const ImplTabItem*, tools::Long nWidth, tools::Long nHeight);
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
-    virtual void                ImplActivateTabPage( bool bNext );
+    SAL_DLLPRIVATE void         ImplActivateTabPage( bool bNext );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem const * pItem,
                                              const tools::Rectangle& rCurRect, bool bFirstInGroup,
@@ -78,8 +78,8 @@ protected:
 
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
-    virtual bool                ImplPlaceTabs( tools::Long nWidth );
-    SAL_DLLPRIVATE Size ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const;
+    SAL_DLLPRIVATE bool         ImplPlaceTabs( tools::Long nWidth );
+    SAL_DLLPRIVATE Size ImplCalculateRequisition() const;
 
 public:
                         TabControl( vcl::Window* pParent,
@@ -158,7 +158,7 @@ public:
     virtual void SetSizePixel(const Size& rNewSize) override;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
 
-    virtual Size calculateRequisition() const;
+    Size calculateRequisition() const;
     void setAllocation(const Size &rAllocation);
 
     std::vector<sal_uInt16> GetPageIDs() const;
