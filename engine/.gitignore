@@ -24,6 +24,7 @@
 /instdir
 /instdir_for_build
 /workdir
+/workdir.deleting
 /workdir_for_build
 /test-install
 

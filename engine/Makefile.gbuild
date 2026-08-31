@@ -33,4 +33,9 @@ endif
 pocheck: | $(call gb_Executable_get_runtime_target,pocheck)
 	ALL_LANGS="$(ALL_LANGS)" $(call gb_Executable_get_command,pocheck) 2>&1 | tee $${POCHECK_LOG:-/tmp/pocheck.log}
 
+# The workdir that "make stage-clean" moved aside is deleted here, beside the compile jobs.
+.PHONY: finish-staged-clean
+finish-staged-clean:
+	rm -fr $(WORKDIR).deleting
+
 # vim: set noet sw=4 ts=4:

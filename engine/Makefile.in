@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch fetch-repos id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host clean-host-except-workdir stage-clean test-install distclean distro-pack-install docs download etags fetch fetch-repos id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 DISABLE_GUI := @DISABLE_GUI@
 
@@ -214,11 +214,20 @@ $(gbuild_TARGETS):
 #
 clean: clean-host clean-build
 
-clean-host:
+clean-host: clean-host-except-workdir
+	rm -fr $(WORKDIR)
+
+clean-host-except-workdir:
 	rm -fr $(TESTINSTALLDIR)
 	rm -fr $(INSTDIR)
-	rm -fr $(WORKDIR)
 	rm -fr $(SRCDIR)/rust_uno/src/generated $(SRCDIR)/rust_uno/target
+
+# Deleting the build directory takes about a minute on Windows where renaming it takes no time.
+# stage-clean does the rest of a clean and moves the workdir aside, and the build then deletes it as
+# one of its parallel jobs, so "make stage-clean check" overlaps the delete with the compile.
+stage-clean: clean-host-except-workdir clean-build
+	rm -fr $(WORKDIR).deleting
+	if test -d $(WORKDIR); then mv $(WORKDIR) $(WORKDIR).deleting; fi
 
 clean-build:
 ifneq ($(CROSS_COMPILING),)
@@ -310,7 +319,7 @@ bootstrap: check-if-root check-makefile-version compilerplugins
 #       with some translations like "check"->"unitcheck subsequentcheck uicheck" for historic reasons
 #
 build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset,install-gdb-printers)
-	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal) $(gb_Top_PIPE)
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild finish-staged-clean $(build_goal) $(gb_Top_PIPE)
 ifeq ($(OS),iOS)
 	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
