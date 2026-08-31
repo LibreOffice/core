@@ -27,8 +27,8 @@
 class SVX_DLLPUBLIC SvxZoomStatusBarControl : public SfxStatusBarControl
 {
 private:
-    sal_uInt16 nZoom;
-    SvxZoomEnableFlags nValueSet;
+    sal_uInt16 m_nZoom;
+    SvxZoomEnableFlags m_nValueSet;
 
 public:
     virtual void StateChangedAtStatusBarControl(sal_uInt16 nSID, SfxItemState eState,

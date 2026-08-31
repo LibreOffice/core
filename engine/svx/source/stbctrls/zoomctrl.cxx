@@ -114,8 +114,8 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
                                                   StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    nZoom( 100 ),
-    nValueSet( SvxZoomEnableFlags::ALL )
+    m_nZoom( 100 ),
+    m_nValueSet( SvxZoomEnableFlags::ALL )
 {
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_ZOOMTOOL_HINT));
     ImplUpdateItemText();
@@ -127,21 +127,21 @@ void SvxZoomStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16, SfxIte
     if( SfxItemState::DEFAULT != eState )
     {
         GetStatusBar().SetItemText( GetId(), u""_ustr );
-        nValueSet = SvxZoomEnableFlags::NONE;
+        m_nValueSet = SvxZoomEnableFlags::NONE;
     }
     else if ( auto pItem = dynamic_cast< const SfxUInt16Item* >(pState) )
     {
-        nZoom = pItem->GetValue();
+        m_nZoom = pItem->GetValue();
         ImplUpdateItemText();
 
         if ( auto pZoomItem = dynamic_cast<const SvxZoomItem*>(pState) )
         {
-            nValueSet = pZoomItem->GetValueSet();
+            m_nValueSet = pZoomItem->GetValueSet();
         }
         else
         {
             SAL_INFO( "svx", "use SfxZoomItem for SID_ATTR_ZOOM" );
-            nValueSet = SvxZoomEnableFlags::ALL;
+            m_nValueSet = SvxZoomEnableFlags::ALL;
         }
     }
 }
@@ -149,9 +149,9 @@ void SvxZoomStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16, SfxIte
 void SvxZoomStatusBarControl::ImplUpdateItemText()
 {
     // workaround - don't bother updating when we don't have a real zoom value
-    if (nZoom)
+    if (m_nZoom)
     {
-        OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
+        OUString aStr(unicode::formatPercent(m_nZoom, Application::GetSettings().GetUILanguageTag()));
         GetStatusBar().SetItemText( GetId(), aStr );
     }
 }
@@ -162,18 +162,18 @@ void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {
-    if ( CommandEventId::ContextMenu == rCEvt.GetCommand() && bool(nValueSet) )
+    if ( CommandEventId::ContextMenu == rCEvt.GetCommand() && bool(m_nValueSet) )
     {
         ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
         weld::Window* pPopupParent = weld::GetPopupParent(GetStatusBar(), aRect);
-        ZoomPopup_Impl aPop(pPopupParent, nZoom, nValueSet);
+        ZoomPopup_Impl aPop(pPopupParent, m_nZoom, m_nValueSet);
 
         OUString sIdent = aPop.popup_at_rect(aRect);
-        if (!sIdent.isEmpty() && (nZoom != aPop.GetZoom(sIdent) || !nZoom))
+        if (!sIdent.isEmpty() && (m_nZoom != aPop.GetZoom(sIdent) || !m_nZoom))
         {
-            nZoom = aPop.GetZoom(sIdent);
+            m_nZoom = aPop.GetZoom(sIdent);
             ImplUpdateItemText();
-            SvxZoomItem aZoom(SvxZoomType::PERCENT, nZoom, TypedWhichId<SvxZoomItem>(GetId()));
+            SvxZoomItem aZoom(SvxZoomType::PERCENT, m_nZoom, TypedWhichId<SvxZoomItem>(GetId()));
 
             if (sIdent == "optimal")
                 aZoom.SetType(SvxZoomType::OPTIMAL);
