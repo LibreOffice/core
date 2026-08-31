@@ -339,10 +339,8 @@ void Bridge::evalJS(const std::string& script)
 {
     // Ensure execution on GUI thread – queued if needed
     QMetaObject::invokeMethod(
-        // TODO: fix needless `this` captures...
-        _webView, [this, script]
-        { _webView->page()->runJavaScript(QString::fromStdString(script)); },
-        Qt::QueuedConnection);
+        _webView, [_webView = _webView, script]
+        { _webView->page()->runJavaScript(QString::fromStdString(script)); }, Qt::QueuedConnection);
 }
 
 void Bridge::showProgressSnackbar()
