@@ -28,7 +28,7 @@ CFRef<CFArrayRef> CopyKeychainSearchList()
         return CFRef<CFArrayRef>();
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH // SecKeychainOpen (macOS 10.10)
-        SecKeychainRef pKeychain
+    SecKeychainRef pKeychain
         = nullptr;
     OSStatus nStatus = SecKeychainOpen(pTestKeychain, &pKeychain);
     SAL_WNODEPRECATED_DECLARATIONS_POP
