@@ -15,6 +15,7 @@
 
 #include <Poco/URI.h>
 
+#include <QElapsedTimer>
 #include <QList>
 #include <QMainWindow>
 #include <QObject>
@@ -238,6 +239,10 @@ public:
     /// True when the document holds no change that is not on disk yet.
     bool isReadyToDiscardView() const;
 
+    /// Milliseconds this view still has to stay live before it may be discarded, or 0 when
+    /// it has had its time. A few seconds is long enough to load a page and rejoin it.
+    int millisecondsUntilViewSettled() const;
+
     /// Ask the page to save the document, and run the callback when the save result comes
     /// back, whether the save succeeded or not. Returns false when no save was asked for.
     bool requestSave(std::function<void()> onComplete);
@@ -261,6 +266,8 @@ private:
     // The cool.html URL, with its query, that this document was loaded from.
     QString _loadedUrl;
     bool _viewDiscarded;
+    // Runs from the moment this view's webview was built.
+    QElapsedTimer _viewLiveSince;
     QString _docTitle;
     QString _docType;
     bool _isWelcome;

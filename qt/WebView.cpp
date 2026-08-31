@@ -803,6 +803,7 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome)
 
 void WebView::createWebEngineView()
 {
+    _viewLiveSince.start();
     _webView = std::make_unique<CODAWebEngineView>(nullptr);
     _webView->setMainWindow(_mainWindow);
 
@@ -910,6 +911,16 @@ bool WebView::isReadyToDiscardView() const
     // Only a document whose content is already on disk is dropped, so the drop can cost
     // no content at all.
     return !isDocumentModified() && !isSaveInFlight();
+}
+
+int WebView::millisecondsUntilViewSettled() const
+{
+    // A view is kept for a few seconds after it is built, so that switching quickly
+    // between more tabs than the limit allows leaves the views it just built alone. The
+    // page needs about a second of that to load and rejoin its document.
+    constexpr qint64 settleMilliseconds = 5000;
+    const qint64 remaining = settleMilliseconds - _viewLiveSince.elapsed();
+    return remaining <= 0 ? 0 : static_cast<int>(remaining);
 }
 
 bool WebView::requestSave(std::function<void()> onComplete)

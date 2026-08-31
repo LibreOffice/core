@@ -40,6 +40,7 @@
 #include <QJsonObject>
 #include <QStackedWidget>
 #include <QString>
+#include <QTimer>
 #include <QUrl>
 #include <QWebChannel>
 #include <QWebEnginePage>
@@ -70,6 +71,10 @@ QString& currentTheme()
 // latency, while a real drag-away is human-scale older.
 constexpr qint64 kReleaseUnwindGraceMs = 250;
 
+// How long the live-view limit waits before it runs. A tab switch is one of a run of
+// them as often as not, and the tab the user stops on is the one that matters.
+constexpr int kLiveViewLimitDelayMilliseconds = 1000;
+
 // The strip page only makes tabs draggable, so the source view identifies a
 // tab drag. The text/x-coda-tab type is invisible to QMimeData: Chromium
 // pickles custom types into chromium/x-web-custom-data.
@@ -96,7 +101,11 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     , _stack(new QStackedWidget(window))
     , _shellView(new QWebEngineView(window))
     , _shellBridge(new TabShellBridge(this))
+    , _liveViewLimitTimer(new QTimer(this))
 {
+    _liveViewLimitTimer->setSingleShot(true);
+    connect(_liveViewLimitTimer, &QTimer::timeout, this, &TabManager::enforceLiveViewLimit);
+
     _shellView->setFixedHeight(kShellHeight);
     // setPage() destroys the default page, so install ours before wiring the channel.
     QWebEnginePage* page = new QWebEnginePage(profile, _shellView);
@@ -270,6 +279,7 @@ void TabManager::enforceLiveViewLimit()
               [](const Entry* a, const Entry* b) { return a->lastActiveTick > b->lastActiveTick; });
 
     int live = 0;
+    int retryInMilliseconds = -1;
     for (Entry* e : byUse)
     {
         if (e->webView->isViewDiscarded())
@@ -277,6 +287,14 @@ void TabManager::enforceLiveViewLimit()
         ++live;
         if (live <= limit || !e->webView->mayDiscardView())
             continue;
+
+        const int settleMilliseconds = e->webView->millisecondsUntilViewSettled();
+        if (settleMilliseconds > 0)
+        {
+            if (retryInMilliseconds < 0 || settleMilliseconds < retryInMilliseconds)
+                retryInMilliseconds = settleMilliseconds;
+            continue;
+        }
 
         if (!e->webView->isReadyToDiscardView())
         {
@@ -287,6 +305,18 @@ void TabManager::enforceLiveViewLimit()
         discardTabView(*e);
         --live;
     }
+
+    // A view that only has to grow older is worth asking about again once it has.
+    if (retryInMilliseconds > 0)
+        scheduleLiveViewLimit(retryInMilliseconds);
+}
+
+void TabManager::scheduleLiveViewLimit(int delayMilliseconds)
+{
+    // A run that is already due sooner covers this one too.
+    if (_liveViewLimitTimer->isActive() && _liveViewLimitTimer->remainingTime() <= delayMilliseconds)
+        return;
+    _liveViewLimitTimer->start(delayMilliseconds);
 }
 
 void TabManager::discardTabView(Entry& e)
@@ -316,7 +346,7 @@ void TabManager::requestSaveThenDiscard(Entry& e)
             entry->dropWaitsForSave = false;
             // The save took time, and in that time the user can have come back to this
             // tab. Ask the whole policy again rather than dropping this view now.
-            self->enforceLiveViewLimit();
+            self->scheduleLiveViewLimit(kLiveViewLimitDelayMilliseconds);
         }))
         return;
 
@@ -349,7 +379,7 @@ int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
     raw->setOnTitleChange([this, raw](const QString& title) { onWebViewTitleChanged(raw, title); });
     // A document whose content has just reached the disk can be dropped now, so the limit
     // does not have to wait for the next tab activation to notice.
-    raw->setOnUnmodified([this]() { enforceLiveViewLimit(); });
+    raw->setOnUnmodified([this]() { scheduleLiveViewLimit(kLiveViewLimitDelayMilliseconds); });
 
     activateTab(id);
     return id;
@@ -579,7 +609,7 @@ void TabManager::activateTab(int tabId)
     _window->setWindowTitle(wv->composedWindowTitle());
     emitTabsChangedNow();
     focusActiveDocument();
-    enforceLiveViewLimit();
+    scheduleLiveViewLimit(kLiveViewLimitDelayMilliseconds);
 }
 
 void TabManager::reorderTab(int fromIndex, int toIndex)

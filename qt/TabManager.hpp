@@ -24,6 +24,7 @@
 
 class QEvent;
 class QStackedWidget;
+class QTimer;
 class QWebEngineProfile;
 class QWebEngineView;
 class QWidget;
@@ -133,6 +134,10 @@ private:
     // first, so the number of web engine processes stays bounded as tabs are opened.
     void enforceLiveViewLimit();
 
+    // Apply the live-view limit after a delay, so a run of tab switches settles first and
+    // only the tab the user stops on is acted on.
+    void scheduleLiveViewLimit(int delayMilliseconds);
+
     // Take the view of one tab away and put a placeholder in its place in the stack.
     void discardTabView(Entry& e);
 
@@ -165,6 +170,8 @@ private:
     // Set by requestCloseAll(): after each tab finishes closing, closeTab()
     // continues with the next one until none remain.
     bool _closingAll = false;
+    // Single-shot, and holds the pending run of the live-view limit.
+    QTimer* _liveViewLimitTimer;
 
     // One drag at a time, so process-wide; the QPointers self-null if a
     // window dies mid-drag. s_lastHover* hold the strip a DragLeave demoted
