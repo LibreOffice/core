@@ -53,9 +53,7 @@
 #define COOLWSD_BUILDCONFIG
 #endif
 
-#if !MOBILEAPP
 #include <common/SigHandlerTrap.hpp>
-#endif
 
 #if defined(__GLIBC__)
 #  include <execinfo.h>
@@ -502,9 +500,6 @@ namespace Util
         return oss.str();
     }
 
-#if !MOBILEAPP
-    // These are used in test/WhiteBoxTests.cpp and thus not needed in a mobile app.
-
     std::string time_point_to_iso8601(std::chrono::system_clock::time_point tp)
     {
         const std::time_t tt = std::chrono::system_clock::to_time_t(tp);
@@ -525,6 +520,8 @@ namespace Util
         return oss.str();
     }
 
+    // strptime and timegm are not in the MSVC runtime.
+#ifndef _WIN32
     bool isIso8601(const std::string& iso8601Time)
     {
         if (iso8601Time.empty())
@@ -585,8 +582,7 @@ namespace Util
 
         return timestamp;
     }
-
-#endif // !MOBILEAPP
+#endif
 
     /// Returns the given system_clock time_point as string in GMT.
     /// Format: Thu Jan 27 03:45:27.123 2022
@@ -655,11 +651,9 @@ namespace Util
         materialize_clipboard_formats();
 #endif
 
-#if !MOBILEAPP
         /// Wait for the signal handler, if any,
         /// and prevent _Exit while collecting backtrace.
         SigUtil::SigHandlerTrap::wait();
-#endif
 
         Log::shutdown();
 
@@ -811,10 +805,8 @@ namespace Util
 
 } // namespace Util
 
-#if !MOBILEAPP
 namespace SigUtil {
     std::atomic<int> SigHandlerTrap::SigHandling;
 } // end namespace SigUtil
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

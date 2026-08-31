@@ -33,12 +33,12 @@
 
 namespace ConfigUtil
 {
-// Set by initialize(). On the apps (MOBILEAPP) COOLWSD is created and run
-// repeatedly in-process, each run owning the config it passes here, so Config
-// is re-pointed at the current run's instead of being asserted to be null; the
-// value accessors below still fall back to their defaults until the first run
-// initializes it, and the "is initialized" asserts there are therefore gated on
-// !MOBILEAPP, where a null Config really is a bug.
+// Set by initialize(). On the apps COOLWSD is created and run repeatedly
+// in-process, each run owning the config it passes here, so Config is re-pointed
+// at the current run's instead of being asserted to be null; the value accessors
+// below still fall back to their defaults until the first run initializes it, so
+// their "is initialized" asserts let a null Config pass on an app, where a null
+// Config really is a bug only on the server.
 static const Poco::Util::AbstractConfiguration* Config = nullptr;
 
 #if ENABLE_SSL
@@ -495,9 +495,7 @@ std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
 
 std::string getString(const std::string& key, const std::string& def)
 {
-#if !MOBILEAPP
-    assert(Config && "Config is not initialized.");
-#endif
+    assert((Util::isMobileApp() || Config) && "Config is not initialized.");
     return (Config != nullptr) ? Config->getString(key, def) : def;
 }
 
@@ -508,33 +506,25 @@ bool getBool(const std::string& key, const bool def)
         return def;
     }
 
-#if !MOBILEAPP
-    assert(Config && "Config is not initialized.");
-#endif
+    assert((Util::isMobileApp() || Config) && "Config is not initialized.");
     return (Config != nullptr) ? Config->getBool(key, def) : def;
 }
 
 int getInt(const std::string& key, const int def)
 {
-#if !MOBILEAPP
-    assert(Config && "Config is not initialized.");
-#endif
+    assert((Util::isMobileApp() || Config) && "Config is not initialized.");
     return (Config != nullptr) ? Config->getInt(key, def) : def;
 }
 
 bool has(const std::string& key)
 {
-#if !MOBILEAPP
-    assert(Config && "Config is not initialized.");
-#endif
+    assert((Util::isMobileApp() || Config) && "Config is not initialized.");
     return (Config != nullptr) ? Config->has(key) : false;
 }
 
 bool hasProperty(const std::string& key)
 {
-#if !MOBILEAPP
-    assert(Config && "Config is not initialized.");
-#endif
+    assert((Util::isMobileApp() || Config) && "Config is not initialized.");
     return (Config != nullptr) ? Config->hasProperty(key) : false;
 }
 

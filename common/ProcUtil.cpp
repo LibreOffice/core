@@ -143,10 +143,8 @@ static_assert(sizeof(ThreadName) >= 16,
 
 void setThreadName(const std::string& s)
 {
-#if !MOBILEAPP
     // Clear the cache - perhaps we forked
     ThreadTid = 0;
-#endif
 
     // Copy the current name.
     const std::string knownAs =

@@ -100,9 +100,7 @@ void uninitialize()
         free(old);
     }
 
-#if !MOBILEAPP
     free(VersionInfo);
-#endif
 }
 
 bool getShutdownRequestFlag() { return RunStateFlag >= RunState::ShutDown; }
