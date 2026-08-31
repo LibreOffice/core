@@ -300,8 +300,14 @@ public:
     const Util::Rectangle& getClientSelectionStart() const { return _clientSelectionStart; }
     const Util::Rectangle& getClientSelectionEnd() const { return _clientSelectionEnd; }
 
+    /// The cell the cursor of this view is on, such as "D24". Empty in a document with no cells.
+    const std::string& getClientCellAddress() const { return _clientCellAddress; }
+
     /// Tell the client, once, the zoom and the scroll offset the last view left.
     void sendLastViewPosition(const std::shared_ptr<DocumentBroker>& docBroker);
+
+    /// Put the cursor and any selection back where the last view of this document had them.
+    void restoreLastViewSelection(const std::shared_ptr<DocumentBroker>& docBroker);
     /// Visible area can have negative value as position, but we have tiles only in the positive range
     Util::Rectangle getNormalizedVisibleArea() const;
 
@@ -680,8 +686,8 @@ private:
     /// its page has loaded and again on each change, so this stays unset until then.
     std::optional<bool> _clientEditMode;
 
-    /// True once this session has been told where the last view of the document was.
-    bool _sentLastViewPosition = false;
+    /// True once this session has been put where the last view of the document was.
+    bool _restoredLastViewPosition;
 
     /// Where the text cursor of this view is, in document twips.
     Util::Rectangle _clientCursor;
@@ -689,6 +695,8 @@ private:
     /// The two ends of this view's text selection, in document twips.
     Util::Rectangle _clientSelectionStart;
     Util::Rectangle _clientSelectionEnd;
+
+    std::string _clientCellAddress;
 
     /// Read a "x, y, width, height" rectangle in twips. False when the text is not one.
     static bool parseRectangle(const std::string& text, Util::Rectangle& rectangle);

@@ -4872,6 +4872,8 @@ void DocumentBroker::rememberViewPosition(const ClientSession& session)
         _lastViewPosition.selectionStart = session.getClientSelectionStart();
         _lastViewPosition.selectionEnd = session.getClientSelectionEnd();
     }
+    if (!session.getClientCellAddress().empty())
+        _lastViewPosition.cellAddress = session.getClientCellAddress();
 
     LOG_DBG("Doc [" << _docKey << "] remembers view position: part "
                     << _lastViewPosition.part << ", zoom " << _lastViewPosition.zoomPercent
@@ -4886,7 +4888,8 @@ void DocumentBroker::rememberViewPosition(const ClientSession& session)
                     << _lastViewPosition.selectionStart.getLeft() << ','
                     << _lastViewPosition.selectionStart.getTop() << " to "
                     << _lastViewPosition.selectionEnd.getLeft() << ','
-                    << _lastViewPosition.selectionEnd.getTop());
+                    << _lastViewPosition.selectionEnd.getTop() << ", cell ["
+                    << _lastViewPosition.cellAddress << ']');
 }
 
 std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& session)
@@ -7350,7 +7353,8 @@ void DocumentBroker::dumpState(std::ostream& os)
        << ", selection " << _lastViewPosition.selectionStart.getLeft() << ','
        << _lastViewPosition.selectionStart.getTop() << " to "
        << _lastViewPosition.selectionEnd.getLeft() << ','
-       << _lastViewPosition.selectionEnd.getTop();
+       << _lastViewPosition.selectionEnd.getTop() << ", cell ["
+       << _lastViewPosition.cellAddress << ']';
     const int childPid = _childProcess ? _childProcess->getPid() : 0;
     os << "\n  child PID: " << childPid;
     os << "\n  sent: " << sent << " bytes";

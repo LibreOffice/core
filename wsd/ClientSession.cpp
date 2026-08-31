@@ -132,6 +132,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _tileWidthTwips(0)
     , _tileHeightTwips(0)
     , _clientZoomPercent(0)
+    , _restoredLastViewPosition(false)
     , _kitViewId(-1)
     , _canonicalViewId(CanonicalViewId::None)
     , _state(SessionState::DETACHED)
@@ -2367,10 +2368,6 @@ bool ClientSession::parseRectangle(const std::string& text, Util::Rectangle& rec
 
 void ClientSession::sendLastViewPosition(const std::shared_ptr<DocumentBroker>& docBroker)
 {
-    if (_sentLastViewPosition)
-        return;
-    _sentLastViewPosition = true;
-
     const DocumentBroker::ViewPosition& position = docBroker->getLastViewPosition();
     if (!position.hasZoom() && !position.hasVisibleArea() && !position.editMode)
         return;
@@ -2391,6 +2388,52 @@ void ClientSession::sendLastViewPosition(const std::shared_ptr<DocumentBroker>& 
 
     LOG_DBG("Sending the position the last view of this document left: " << oss.str());
     sendTextFrame(oss.str());
+}
+
+void ClientSession::restoreLastViewSelection(const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    const DocumentBroker::ViewPosition& position = docBroker->getLastViewPosition();
+
+    // The ends the kit reports are thin upright bars, and a corner of one can fall on the
+    // next character, so selecttext aims at the middle of the height.
+    const auto middleY = [](const Util::Rectangle& r)
+    { return r.getTop() + r.getHeight() / 2; };
+
+    if (position.hasCellAddress())
+    {
+        // Naming the cell lands on it whatever the view is showing.
+        const std::string command = "uno .uno:GoToCell {\"ToPoint\":{\"type\":\"string\","
+                                    "\"value\":\"" + position.cellAddress + "\"}}";
+        docBroker->forwardToChild(client_from_this(), command);
+        LOG_DBG("Put the cursor back on cell [" << position.cellAddress
+                                                << "] the last view of this document was on");
+        return;
+    }
+
+    if (position.hasSelection())
+    {
+        // start puts the anchor down and end drags to the far edge, leaving the cursor there.
+        docBroker->forwardToChild(client_from_this(),
+                                  "selecttext type=start x=" +
+                                      std::to_string(position.selectionStart.getLeft()) + " y=" +
+                                      std::to_string(middleY(position.selectionStart)));
+        docBroker->forwardToChild(client_from_this(),
+                                  "selecttext type=end x=" +
+                                      std::to_string(position.selectionEnd.getRight()) + " y=" +
+                                      std::to_string(middleY(position.selectionEnd)));
+        LOG_DBG("Put back the selection the last view of this document had");
+        return;
+    }
+
+    if (position.hasCursor())
+    {
+        // Both ends at one point leave a cursor there with nothing selected.
+        const std::string at = " x=" + std::to_string(position.cursor.getLeft()) + " y=" +
+                               std::to_string(middleY(position.cursor));
+        docBroker->forwardToChild(client_from_this(), "selecttext type=start" + at);
+        docBroker->forwardToChild(client_from_this(), "selecttext type=end" + at);
+        LOG_DBG("Put the cursor back where the last view of this document had it");
+    }
 }
 
 bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
@@ -3785,9 +3828,16 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         // Forward the status response to the client.
         const bool forwarded = forwardToClient(payload);
 
-        // The client places its own view, so the zoom and the scroll offset go on after
-        // the status. The part came back with the load and is already in it.
-        sendLastViewPosition(docBroker);
+        // The position the last view of this document left goes on once, after the first
+        // status. The kit sends a status again whenever the document size changes.
+        if (!_restoredLastViewPosition)
+        {
+            _restoredLastViewPosition = true;
+
+            // The client places its own view; the cursor and the selection go to the kit.
+            sendLastViewPosition(docBroker);
+            restoreLastViewSelection(docBroker);
+        }
 
         return forwarded;
     }
@@ -3892,6 +3942,12 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             _clientSelectionStart = Util::Rectangle();
         else
             _clientSelectionEnd = Util::Rectangle();
+
+        return forwardToClient(payload);
+    }
+    else if (tokens.equals(0, "celladdress:"))
+    {
+        _clientCellAddress = Util::trimmed(firstLine.substr(firstLine.find(':') + 1));
 
         return forwardToClient(payload);
     }
@@ -4504,7 +4560,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tclientZoomPercent: " << _clientZoomPercent
        << "\n\t\tclientEditMode: "
        << (_clientEditMode.has_value() ? (*_clientEditMode ? "editing" : "viewing") : "unknown")
-       << "\n\t\tsentLastViewPosition: " << _sentLastViewPosition
+       << "\n\t\trestoredLastViewPosition: " << _restoredLastViewPosition
        << "\n\t\tclientCursor: " << _clientCursor.getLeft() << ',' << _clientCursor.getTop()
        << "\n\t\tclientSelection: " << _clientSelectionStart.getLeft() << ','
        << _clientSelectionStart.getTop() << " to " << _clientSelectionEnd.getLeft() << ','

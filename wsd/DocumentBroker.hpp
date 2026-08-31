@@ -325,6 +325,8 @@ public:
         /// The two ends of the text selection, in document twips.
         Util::Rectangle selectionStart;
         Util::Rectangle selectionEnd;
+        /// The cell the cursor was on, such as "D24". Empty in a document with no cells.
+        std::string cellAddress;
 
         bool hasPart() const { return !part.empty(); }
         bool hasZoom() const { return zoomPercent > 0; }
@@ -335,6 +337,7 @@ public:
             return selectionStart.isValid() && selectionEnd.isValid() &&
                    selectionStart.getHeight() > 0 && selectionEnd.getHeight() > 0;
         }
+        bool hasCellAddress() const { return !cellAddress.empty(); }
     };
 
     /// What the last view of this document was looking at, kept for the view that opens
