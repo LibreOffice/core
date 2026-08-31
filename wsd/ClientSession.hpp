@@ -282,6 +282,10 @@ public:
 
     const Util::Rectangle& getVisibleArea() const { return _clientVisibleArea; }
 
+    /// The identifier of the part this client is showing, empty when it has not said.
+    /// Writer documents have no parts and leave it empty.
+    const std::string& getClientSelectedPart() const { return _clientSelectedPart; }
+
     /// The zoom this client is showing at, as a percentage, or 0 when it has not said.
     int getClientZoomPercent() const { return _clientZoomPercent; }
 

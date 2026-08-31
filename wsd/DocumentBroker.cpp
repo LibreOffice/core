@@ -4634,6 +4634,30 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
     }
 }
 
+void DocumentBroker::rememberViewPosition(const ClientSession& session)
+{
+    // The values arrive in separate messages, so a view that goes early has said some of
+    // them and not others. Each value the view said replaces the one from the view before
+    // it, and each value it never said is left as it was.
+    if (!session.getClientSelectedPart().empty())
+        _lastViewPosition.part = session.getClientSelectedPart();
+    if (session.getClientZoomPercent() > 0)
+        _lastViewPosition.zoomPercent = session.getClientZoomPercent();
+    if (const std::optional<bool> editMode = session.getClientEditMode())
+        _lastViewPosition.editMode = *editMode;
+    if (session.getVisibleArea().hasSurface())
+        _lastViewPosition.visibleArea = session.getVisibleArea();
+
+    LOG_DBG("Doc [" << _docKey << "] remembers view position: part "
+                    << _lastViewPosition.part << ", zoom " << _lastViewPosition.zoomPercent
+                    << ", edit mode "
+                    << _lastViewPosition.editMode << ", area "
+                    << _lastViewPosition.visibleArea.getLeft() << ','
+                    << _lastViewPosition.visibleArea.getTop() << ' '
+                    << _lastViewPosition.visibleArea.getWidth() << 'x'
+                    << _lastViewPosition.visibleArea.getHeight());
+}
+
 std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& session)
 {
     ASSERT_CORRECT_THREAD();
@@ -4660,6 +4684,11 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         // Instead, we rely on always issuing a save through forced
         // auto-save and expect Core has the correct modified flag.
         constexpr bool dontSaveIfUnmodified = true;
+
+        // A detached document is losing this view on purpose and will open another, so keep
+        // where this one was looking.
+        if (isDetached())
+            rememberViewPosition(*session);
 
         LOG_INF("Removing session [" << id << "] on docKey [" << _docKey << "] with appDocId ["
                                      << _mobileAppDocId << "]. Have "
@@ -7074,6 +7103,13 @@ void DocumentBroker::dumpState(std::ostream& os)
            << std::chrono::duration_cast<std::chrono::seconds>(now - _createTime);
     os << "\n  now: " << Util::getClockAsString(now);
     os << "\n  detached: " << isDetached();
+    os << "\n  last view position: part " << _lastViewPosition.part << ", zoom "
+       << _lastViewPosition.zoomPercent << ", edit mode "
+       << _lastViewPosition.editMode << ", area "
+       << _lastViewPosition.visibleArea.getLeft() << ','
+       << _lastViewPosition.visibleArea.getTop() << ' '
+       << _lastViewPosition.visibleArea.getWidth() << 'x'
+       << _lastViewPosition.visibleArea.getHeight();
     const int childPid = _childProcess ? _childProcess->getPid() : 0;
     os << "\n  child PID: " << childPid;
     os << "\n  sent: " << sent << " bytes";

@@ -19,6 +19,7 @@
 #include <common/Authorization.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
+#include <common/Rectangle.hpp>
 #include <common/Session.hpp>
 #include <common/SigUtil.hpp>
 #include <common/Util.hpp>
@@ -306,6 +307,31 @@ public:
 
     /// Read and written from the app's own thread as well as the polling thread.
     void setDetached(bool detached) { _detached = detached; }
+
+    /// Where a view was looking when it went away. An empty part, a zoom of zero and an
+    /// empty visible area each mean that value was never recorded.
+    struct ViewPosition
+    {
+        /// The identifier of the part, as the protocol spells it.
+        std::string part;
+        int zoomPercent = 0;
+        /// True when the view was in editing mode rather than viewing mode.
+        bool editMode = false;
+        /// The area the client had in view, in document twips.
+        Util::Rectangle visibleArea;
+
+        bool hasPart() const { return !part.empty(); }
+        bool hasZoom() const { return zoomPercent > 0; }
+        bool hasVisibleArea() const { return visibleArea.hasSurface(); }
+    };
+
+    /// What the last view of this document was looking at, kept for the view that opens
+    /// next. Empty until a view departs from a document that is staying loaded.
+    const ViewPosition& getLastViewPosition() const { return _lastViewPosition; }
+
+    /// Keep where this session was looking, so the next view of the document opens there.
+    /// A value the session never reported keeps what the session before it reported.
+    void rememberViewPosition(const ClientSession& session);
 
     virtual ~DocumentBroker();
 
@@ -2104,6 +2130,9 @@ private:
     /// True while the document has no client sessions on purpose. The app sets it from
     /// its own thread before it drops the last view, so it is read atomically.
     std::atomic<bool> _detached;
+
+    /// Where the last view to leave this document was looking.
+    ViewPosition _lastViewPosition;
 
     ChildType _type;
 
