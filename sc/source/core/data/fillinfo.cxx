@@ -525,33 +525,33 @@ void ScDocument::FillInfo(
 
                     do
                     {
-                        const ScPatternAttr* pPattern = nullptr;
+                        CellAttributeHolder aPatternHolder;
                         if ( pThisAttrArr->Count() )
                         {
                             nThisRow = pThisAttrArr->mvData[nIndex].nEndRow;              // End of range
-                            pPattern = pThisAttrArr->mvData[nIndex].getScPatternAttr();
+                            aPatternHolder.setScPatternAttr(pThisAttrArr->mvData[nIndex].getScPatternAttr());
                         }
                         else
                         {
                             nThisRow = MaxRow();
-                            pPattern = &getCellAttributeHelper().getDefaultCellAttribute();
+                            aPatternHolder.setScPatternAttr(&getCellAttributeHelper().getDefaultCellAttribute());
                         }
 
-                        const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
-                        const SvxBrushItem* pExplicitBackground = pPattern->GetItemSet().GetItemIfSet(ATTR_BACKGROUND);
-                        const SvxBoxItem* pLinesAttr = &pPattern->GetItem(ATTR_BORDER);
-                        const SvxBoxItem* pExplicitLinesAttr = pPattern->GetItemSet().GetItemIfSet(ATTR_BORDER);
+                        const SvxBrushItem* pBackground = &aPatternHolder.getScPatternAttr()->GetItem(ATTR_BACKGROUND);
+                        const SvxBrushItem* pExplicitBackground = aPatternHolder.getScPatternAttr()->GetItemSet().GetItemIfSet(ATTR_BACKGROUND);
+                        const SvxBoxItem* pLinesAttr = &aPatternHolder.getScPatternAttr()->GetItem(ATTR_BORDER);
+                        const SvxBoxItem* pExplicitLinesAttr = aPatternHolder.getScPatternAttr()->GetItemSet().GetItemIfSet(ATTR_BORDER);
 
-                        const SvxLineItem* pTLBRLine = &pPattern->GetItem( ATTR_BORDER_TLBR );
-                        const SvxLineItem* pBLTRLine = &pPattern->GetItem( ATTR_BORDER_BLTR );
+                        const SvxLineItem* pTLBRLine = &aPatternHolder.getScPatternAttr()->GetItem( ATTR_BORDER_TLBR );
+                        const SvxLineItem* pBLTRLine = &aPatternHolder.getScPatternAttr()->GetItem( ATTR_BORDER_BLTR );
 
-                        const SvxShadowItem* pShadowAttr = &pPattern->GetItem(ATTR_SHADOW);
+                        const SvxShadowItem* pShadowAttr = &aPatternHolder.getScPatternAttr()->GetItem(ATTR_SHADOW);
                         if (!SfxPoolItem::areSame(pShadowAttr, pDefShadow))
                             bAnyShadow = true;
 
-                        const ScMergeAttr* pMergeAttr = &pPattern->GetItem(ATTR_MERGE);
+                        const ScMergeAttr* pMergeAttr = &aPatternHolder.getScPatternAttr()->GetItem(ATTR_MERGE);
                         bool bMerged = !SfxPoolItem::areSame( pMergeAttr, pDefMerge );
-                        ScMF nOverlap = pPattern->GetItemSet().
+                        ScMF nOverlap = aPatternHolder.getScPatternAttr()->GetItemSet().
                                                         Get(ATTR_MERGE_FLAG).GetValue();
                         bool bHOverlapped(nOverlap & ScMF::Hor);
                         bool bVOverlapped(nOverlap & ScMF::Ver);
@@ -569,14 +569,14 @@ void ScDocument::FillInfo(
                         bool bHidden, bHideFormula;
                         if (bTabProtect)
                         {
-                            const ScProtectionAttr& rProtAttr = pPattern->GetItem(ATTR_PROTECTION);
+                            const ScProtectionAttr& rProtAttr = aPatternHolder.getScPatternAttr()->GetItem(ATTR_PROTECTION);
                             bHidden = rProtAttr.GetHideCell();
                             bHideFormula = rProtAttr.GetHideFormula();
                         }
                         else
                             bHidden = bHideFormula = false;
 
-                        const ScCondFormatIndexes& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+                        const ScCondFormatIndexes& rCondFormats = aPatternHolder.getScPatternAttr()->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                         bool bContainsCondFormat = !rCondFormats.empty();
 
                         do
@@ -612,7 +612,7 @@ void ScDocument::FillInfo(
                                 {
                                     pInfo->maBackground = SfxPoolItemHolder(*pPool, pBackground);
                                 }
-                                pInfo->pPatternAttr = pPattern;
+                                pInfo->pPatternAttr = aPatternHolder;
                                 pInfo->bMerged      = bMerged;
                                 pInfo->bHOverlapped = bHOverlapped;
                                 pInfo->bVOverlapped = bVOverlapped;
