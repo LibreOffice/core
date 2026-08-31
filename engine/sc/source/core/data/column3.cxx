@@ -1778,7 +1778,7 @@ public:
 
     void operator() (size_t nRow, const EditTextObject* p)
     {
-        miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, p->Clone().release());
+        miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, new EditTextObject(*p));
     }
 
     void operator() (size_t nRow, const ScFormulaCell* p)
@@ -1894,7 +1894,7 @@ public:
                 {
                     EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
                     miNewCellsPos = maNewCells.set(
-                            miNewCellsPos, nDestRow-mnRowOffset, pObj->Clone().release());
+                            miNewCellsPos, nDestRow-mnRowOffset, new EditTextObject(*pObj));
                 }
                 break;
                 case sc::element_type_formula:
@@ -2397,7 +2397,7 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, cons
 {
     if (GetDoc().GetEditEnginePool() == rEditText.GetPool())
     {
-        SetEditText(rBlockPos, nRow, rEditText.Clone());
+        SetEditText(rBlockPos, nRow, std::make_unique<EditTextObject>(rEditText));
         return;
     }
 
@@ -2413,7 +2413,7 @@ void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const S
 {
     if (pEditPool && GetDoc().GetEditEnginePool() == pEditPool)
     {
-        SetEditText(nRow, rEditText.Clone());
+        SetEditText(nRow, std::make_unique<EditTextObject>(rEditText));
         return;
     }
 

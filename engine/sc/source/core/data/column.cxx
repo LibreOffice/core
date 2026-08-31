@@ -1039,7 +1039,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
         {
             EditTextObject* p = sc::edittext_block::at(*it->data, aPos.second);
             if (&rDocument == &rDestCol.GetDoc())
-                rDestCol.maCells.set(nDestRow, p->Clone().release());
+                rDestCol.maCells.set(nDestRow, new EditTextObject(*p));
             else
                 rDestCol.maCells.set(nDestRow, ScEditUtil::Clone(*p, rDestCol.GetDoc()).release());
         }

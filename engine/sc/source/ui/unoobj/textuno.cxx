@@ -144,7 +144,7 @@ void ScHeaderFooterContentObj::Init( const EditTextObject* pLeft,
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
     unotools::WeakReference<ScHeaderFooterContentObj> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
-    mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
+    mpTextObj(pTextObj ? std::make_unique<EditTextObject>(*pTextObj) : nullptr),
     xContentObj(std::move( xContent )),
     nPart( nP ),
     bDataValid(false)

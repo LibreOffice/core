@@ -414,7 +414,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
 
         std::unique_ptr<EditTextObject> pOldData;
         if (pDataArray)
-            pOldData = aCell.getEditText()->Clone();
+            pOldData = std::make_unique<EditTextObject>(*aCell.getEditText());
 
         // Direct modification of cell content - something to watch out for if
         // we decide to share edit text instances in the future.
@@ -422,7 +422,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
 
         if (pDataArray)
         {
-            std::unique_ptr<EditTextObject> pNewData = aCell.getEditText()->Clone();
+            auto pNewData = std::make_unique<EditTextObject>(*aCell.getEditText());
             pDataArray->AddItem(nTab, nCol, nRow, std::move(pOldData), std::move(pNewData));
         }
     }

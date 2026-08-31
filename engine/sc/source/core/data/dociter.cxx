@@ -1017,7 +1017,7 @@ ScCellValue ScCellIterator::getCellValue() const
             return ScCellValue(maCurCell.getSharedString());
         break;
         case CELLTYPE_EDIT:
-            return ScCellValue(maCurCell.getEditText()->Clone());
+            return ScCellValue(std::make_unique<EditTextObject>(*maCurCell.getEditText()));
         break;
         case CELLTYPE_VALUE:
             return ScCellValue(maCurCell.getDouble());

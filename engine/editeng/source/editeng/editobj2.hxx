@@ -41,33 +41,6 @@ class SharedStringPool;
 
 }
 
-class XEditAttribute
-{
-private:
-    SfxPoolItemHolder   maItemHolder;
-    sal_Int32           nStart;
-    sal_Int32           nEnd;
-
-public:
-    XEditAttribute(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd );
-
-    const SfxPoolItem*      GetItem() const             { return maItemHolder.getItem(); }
-    SfxPoolItemHolder&      GetItemHolder()             { return maItemHolder; }
-
-    sal_Int32&              GetStart()                  { return nStart; }
-    sal_Int32&              GetEnd()                    { return nEnd; }
-
-    sal_Int32               GetStart() const            { return nStart; }
-    sal_Int32               GetEnd() const              { return nEnd; }
-
-    sal_Int32               GetLen() const              { return nEnd-nStart; }
-
-    bool IsFeature() const;
-    void SetItem(SfxItemPool&, const SfxPoolItem&);
-
-    inline bool operator==( const XEditAttribute& rCompare ) const;
-};
-
 inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
 {
     return  (nStart == rCompare.nStart) &&
@@ -114,7 +87,7 @@ public:
 
 class ContentInfo
 {
-    friend class EditTextObjectImpl;
+    friend class EditTextObject;
 
 private:
     svl::SharedString   maText;
@@ -165,119 +138,5 @@ public:
     void Dump() const;
 #endif
 };
-
-class EditTextObjectImpl final : public EditTextObject
-{
-public:
-    typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
-
-private:
-    ContentInfosType        maContents;
-    rtl::Reference<SfxItemPool>       mpPool;
-    std::unique_ptr<XParaPortionList> mpPortionInfo;
-
-    OutlinerMode            meUserType;
-    SvtScriptType           meScriptType;
-    TextRotation            meRotation;
-    MapUnit                 meMetric;
-
-    bool                    mbVertical;
-
-    bool ImpChangeStyleSheets( std::u16string_view rOldName, SfxStyleFamily eOldFamily,
-                               const OUString& rNewName, SfxStyleFamily eNewFamily );
-
-public:
-    EditTextObjectImpl(SfxItemPool* pPool, MapUnit eDefaultMetric, bool bVertical,
-                       TextRotation eRotation, SvtScriptType eScriptType);
-    EditTextObjectImpl( const EditTextObjectImpl& r );
-    virtual ~EditTextObjectImpl() override;
-
-    EditTextObjectImpl& operator=(const EditTextObjectImpl&) = delete;
-
-    virtual OutlinerMode GetUserType() const override { return meUserType;}
-    virtual void SetUserType( OutlinerMode n ) override;
-
-    virtual void NormalizeString( svl::SharedStringPool& rPool ) override;
-    virtual std::vector<svl::SharedString> GetSharedStrings() const override;
-
-    virtual bool                    IsEffectivelyVertical() const override;
-    virtual bool                    GetVertical() const override;
-    virtual bool                    IsTopToBottom() const override;
-    virtual void                    SetVertical( bool bVert) override;
-    virtual void                    SetRotation(TextRotation nRotation) override;
-    virtual TextRotation            GetRotation() const override;
-
-    virtual SvtScriptType           GetScriptType() const override { return meScriptType;}
-
-    virtual std::unique_ptr<EditTextObject> Clone() const override;
-
-    ContentInfo*            CreateAndInsertContent();
-    XEditAttribute CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
-
-    ContentInfosType&       GetContents() { return maContents;}
-    const ContentInfosType& GetContents() const { return maContents;}
-    SfxItemPool*            GetPool()         { return mpPool.get(); }
-    virtual const SfxItemPool* GetPool() const override { return mpPool.get(); }
-    XParaPortionList*       GetPortionInfo() const  { return mpPortionInfo.get(); }
-    void                    SetPortionInfo( std::unique_ptr<XParaPortionList> pP )
-                                { mpPortionInfo = std::move(pP); }
-
-    virtual sal_Int32 GetParagraphCount() const override;
-    virtual OUString GetText(sal_Int32 nParagraph) const override;
-    virtual OUString GetText(LineEnd eEnd = LINEEND_LF) const override;
-    virtual sal_Int32 GetTextLen(sal_Int32 nParagraph) const override;
-
-    virtual void ClearPortionInfo() override;
-
-    virtual bool HasOnlineSpellErrors() const override;
-
-    virtual void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const override;
-
-    virtual bool RemoveCharAttribs( sal_uInt16 nWhich ) override;
-
-    virtual void GetAllSections( std::vector<editeng::Section>& rAttrs ) const override;
-
-    virtual bool IsFieldObject() const override;
-    virtual const SvxFieldItem* GetField() const override;
-    virtual const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const override;
-
-    virtual bool HasField( sal_Int32 nType = css::text::textfield::Type::UNSPECIFIED ) const override;
-
-    virtual const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const override;
-
-    virtual void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const override;
-    virtual void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily) override;
-    virtual bool ChangeStyleSheets(
-        std::u16string_view rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily) override;
-    virtual void ChangeStyleSheetName(SfxStyleFamily eFamily, std::u16string_view rOldName, const OUString& rNewName) override;
-
-    virtual editeng::FieldUpdater GetFieldUpdater() override { return editeng::FieldUpdater(*this); }
-
-    bool HasMetric() const { return meMetric != MapUnit::LASTENUMDUMMY; }
-    MapUnit                  GetMetric() const           { return meMetric; }
-
-    virtual bool operator==( const EditTextObject& rCompare ) const override;
-    bool Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const;
-
-    // #i102062#
-    virtual bool isWrongListEqual(const EditTextObject& rCompare) const override;
-
-#if DEBUG_EDIT_ENGINE
-    virtual void Dump() const override;
-#endif
-    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-};
-
-inline EditTextObjectImpl& toImpl(EditTextObject& rObj)
-{
-    assert(dynamic_cast<EditTextObjectImpl*>(&rObj));
-    return static_cast<EditTextObjectImpl&>(rObj);
-}
-
-inline const EditTextObjectImpl& toImpl(const EditTextObject& rObj)
-{
-    assert(dynamic_cast<const EditTextObjectImpl*>(&rObj));
-    return static_cast<const EditTextObjectImpl&>(rObj);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

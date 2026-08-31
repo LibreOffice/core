@@ -723,7 +723,7 @@ void applyFormulaToCell(ScViewFunc& rViewFunc, SCCOL nCol, SCROW nRow, SCTAB nTa
     // a plain single-cell cell still gets implicit intersection applied at
     // runtime.
     auto xCompPtr = std::make_shared<ScCompiler>(rDoc, *xPosPtr, rDoc.GetGrammar(), !bAutoDynamicArray, false);
-    std::unique_ptr<EditTextObject> xTextObject(pData ? pData->Clone() : nullptr);
+    std::unique_ptr<EditTextObject> xTextObject(pData ? std::make_unique<EditTextObject>(*pData) : nullptr);
 
     //2do: enable/disable autoCorrection via calcoptions
     xCompPtr->SetAutoCorrection( true );
@@ -941,7 +941,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 aOldValues.push_back(aOldValue);
             }
 
-            pUndoData = rData.Clone();
+            pUndoData = std::make_unique<EditTextObject>(rData);
         }
 
         //      enter data

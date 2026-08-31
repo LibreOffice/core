@@ -609,7 +609,7 @@ void fillSortedColumnArray(
                     break;
                     case CELLTYPE_EDIT:
                         assert(rCell.mpAttr);
-                        rCellStore.push_back(rCell.maCell.getEditText()->Clone().release());
+                        rCellStore.push_back(new EditTextObject(*rCell.maCell.getEditText()));
                     break;
                     case CELLTYPE_FORMULA:
                         {

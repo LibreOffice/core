@@ -54,7 +54,6 @@ maybe merge DocumentSettingsSerializer with sd::(anonymous namespace)::DocumentS
 merge DownloadInteractionHandler with UpdateCheck
 merge E3DObjGeoData with E3DSceneGeoData
 merge E3dUndoAction with E3dRotateUndoAction
-merge EditTextObject with EditTextObjectImpl
 maybe merge ErrorContext with SfxErrorContext, in modules vcl and svtools
 maybe merge EscherExClientAnchor_Base with XclExpDffAnchorBase, in modules filter and sc
 merge EscherPersistTable with EscherEx

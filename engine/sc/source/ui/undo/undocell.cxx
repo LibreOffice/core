@@ -528,7 +528,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
         }
         break;
         case CELLTYPE_EDIT:
-            rDoc.SetEditText(maPos, rVal.getEditText()->Clone());
+            rDoc.SetEditText(maPos, std::make_unique<EditTextObject>(*rVal.getEditText()));
         break;
         case CELLTYPE_FORMULA:
             rDoc.SetFormulaCell(maPos, rVal.getFormula()->Clone());

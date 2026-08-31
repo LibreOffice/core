@@ -400,11 +400,11 @@ ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
     :   SfxPoolItem ( rItem )
 {
     if ( rItem.pLeftArea )
-        pLeftArea = rItem.pLeftArea->Clone();
+        pLeftArea = std::make_unique<EditTextObject>(*rItem.pLeftArea);
     if ( rItem.pCenterArea )
-        pCenterArea = rItem.pCenterArea->Clone();
+        pCenterArea = std::make_unique<EditTextObject>(*rItem.pCenterArea);
     if ( rItem.pRightArea )
-        pRightArea = rItem.pRightArea->Clone();
+        pRightArea = std::make_unique<EditTextObject>(*rItem.pRightArea);
 }
 
 ScPageHFItem::~ScPageHFItem()
@@ -436,17 +436,17 @@ bool ScPageHFItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /* nMemberId *
                 const EditTextObject* pImpLeft = pImp->GetLeftEditObject();
                 pLeftArea.reset();
                 if (pImpLeft)
-                    pLeftArea = pImpLeft->Clone();
+                    pLeftArea = std::make_unique<EditTextObject>(*pImpLeft);
 
                 const EditTextObject* pImpCenter = pImp->GetCenterEditObject();
                 pCenterArea.reset();
                 if (pImpCenter)
-                    pCenterArea = pImpCenter->Clone();
+                    pCenterArea = std::make_unique<EditTextObject>(*pImpCenter);
 
                 const EditTextObject* pImpRight = pImp->GetRightEditObject();
                 pRightArea.reset();
                 if (pImpRight)
-                    pRightArea = pImpRight->Clone();
+                    pRightArea = std::make_unique<EditTextObject>(*pImpRight);
 
                 if ( !pLeftArea || !pCenterArea || !pRightArea )
                 {
@@ -491,17 +491,17 @@ ScPageHFItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
-    pLeftArea = rNew.Clone();
+    pLeftArea = std::make_unique<EditTextObject>(rNew);
 }
 
 void ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
 {
-    pCenterArea = rNew.Clone();
+    pCenterArea = std::make_unique<EditTextObject>(rNew);
 }
 
 void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
 {
-    pRightArea = rNew.Clone();
+    pRightArea = std::make_unique<EditTextObject>(rNew);
 }
 void ScPageHFItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
