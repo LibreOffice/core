@@ -785,10 +785,15 @@ def main():
     external_ids = {}
     for name, entry in sorted(annotations["engine_externals"].items()):
         tarball, sha256 = tarballs[entry["tarball_var"]]
+        version = extract_version_from_filename(tarball)
+        # most tarballs come from the LibreOffice mirror; the exceptions
+        # (poco, see engine/Makefile.fetch) carry their own source_url
+        locator = entry.get(
+            "source_url", "https://dev-www.libreoffice.org/src/{tarball}"
+        ).format(tarball=tarball, version=version)
         external_ids[name] = make_component(
             graph, f"SPDXRef-{name}", name, entry["vendor"],
-            extract_version_from_filename(tarball), entry["url"],
-            f"https://dev-www.libreoffice.org/src/{tarball}", sha256,
+            version, entry["url"], locator, sha256,
             entry["declared"], entry["concluded"])
         emit_licenses(entry["declared"], entry["concluded"])
         add_contains(graph, root_spdx_id, external_ids[name])

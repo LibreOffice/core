@@ -19,6 +19,7 @@
             "tarball_var": "POCO",
             "vendor": "pocoproject",
             "url": "https://pocoproject.org/",
+            "source_url": "https://pocoproject.org/releases/poco-{version}/{tarball}",
             "declared": "BSL-1.0",
             "concluded": "MPL-2.0",
             "thirdparty": "POCO C++ Libraries"
