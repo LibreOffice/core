@@ -196,6 +196,7 @@ window.L.Map = window.L.Evented.extend({
 				this.setPermission('readonly');
 			});
 			this.on('editmode', function() {
+				app.setPermission('edit');
 				this._switchToEditMode();
 			});
 			this.on('hardwarekeyboardattached', function() {

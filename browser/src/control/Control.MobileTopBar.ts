@@ -86,18 +86,22 @@ class MobileTopBar extends JSDialog.Toolbar {
 
 	onUpdatePermission(e: any) {
 		const toolbarButtons: string[] = ['undo', 'redo', 'mobile_wizard', 'insertion_mobile_wizard', 'comment_wizard'];
+		const badgeContainer = document.getElementById('permissionmode-container');
+		if (badgeContainer) {
+			badgeContainer.replaceChildren(getPermissionModeElements(app.isReadOnly(), !app.isReadOnly(), this.map));
+		}
 		if (e.detail.perm === 'edit') {
 			toolbarButtons.forEach((id) => {
 				this.showItem(id, true);
 			});
-			this.showItem('PermissionMode', false);
+			this.showItem('permissionmode-container', false);
 		} else {
 			toolbarButtons.forEach((id) => {
 				this.showItem(id, false);
 			});
 			this.showItem('comment_wizard', true);
 			if ($('#mobile-edit-button').is(':hidden')) {
-				this.showItem('PermissionMode', true);
+				this.showItem('permissionmode-container', true);
 			}
 		}
 	}
