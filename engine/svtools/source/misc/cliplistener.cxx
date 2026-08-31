@@ -38,11 +38,11 @@ TransferableClipboardListener::~TransferableClipboardListener()
 {
 }
 
-void SAL_CALL TransferableClipboardListener::disposing( const lang::EventObject& )
+void TransferableClipboardListener::disposing( const lang::EventObject& )
 {
 }
 
-void SAL_CALL TransferableClipboardListener::changedContents(
+void TransferableClipboardListener::changedContents(
                             const datatransfer::clipboard::ClipboardEvent& rEventObject )
 {
     if ( aLink.IsSet() )

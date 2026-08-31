@@ -76,7 +76,7 @@ void ItemHolder2::holdConfigItem(EItem eItem)
 }
 
 
-void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject&)
+void ItemHolder2::disposing(const css::lang::EventObject&)
 {
     impl_releaseAllItems();
 }

@@ -69,7 +69,7 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
         void execAsync();
     private:
 
-        virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+        virtual void disposing(const css::lang::EventObject&) override
         {
             m_xFrame->removeEventListener(this);
             m_xFrame.clear();

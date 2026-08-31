@@ -76,27 +76,27 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
     public:
         // UNO
         DECLARE_UNO3_DEFAULTS(OGenericUnoDialog, OGenericUnoDialogBase)
-        virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
+        virtual cpo::uno::Any queryInterface(const cpo::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes(  ) override;
-        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override = 0;
+        virtual cpo::uno::Sequence<cpo::uno::Type> getTypes(  ) override;
+        virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override = 0;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override = 0;
-        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
+        virtual OUString getImplementationName() override = 0;
+        virtual bool supportsService(const OUString& ServiceName) override;
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override = 0;
 
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual bool convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
         // XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
-        virtual sal_Int16 SAL_CALL execute(  ) override;
+        virtual void setTitle( const OUString& aTitle ) override;
+        virtual sal_Int16 execute(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     protected:
         /** create the concrete dialog instance. Note that m_aMutex is not locked when this method get called,

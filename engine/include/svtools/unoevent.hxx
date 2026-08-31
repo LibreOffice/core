@@ -77,40 +77,40 @@ public:
 
     // XNameReplace
     /// calls replaceByName(const sal_uInt16, const SvxMacro&)
-    virtual void SAL_CALL replaceByName(
+    virtual void replaceByName(
         const OUString& rName,                /// API name of event
         const cpo::uno::Any& rElement ) /// event (PropertyValues)
              override;
 
     // XNameAccess (via XNameReplace)
     /// calls getByName(sal_uInt16)
-    virtual cpo::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any getByName(
         const OUString& rName )  /// API name of event
              override;
 
     // XNameAxcess (via XNameReplace)
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
                                                         getElementNames() override;
 
     // XNameAccess (via XNameReplace)
-    virtual bool SAL_CALL hasByName(
+    virtual bool hasByName(
         const OUString& rName ) override;
 
     // XElementAccess (via XNameReplace)
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // XElementAccess (via XNameReplace)
-    virtual bool SAL_CALL hasElements() override;
+    virtual bool hasElements() override;
 
     // XServiceInfo
     /// must be implemented in subclass
-    virtual OUString SAL_CALL getImplementationName() override = 0;
+    virtual OUString getImplementationName() override = 0;
 
     // XServiceInfo
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool supportsService(const OUString& ServiceName) override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
 protected:
@@ -216,7 +216,7 @@ public:
     virtual ~SvDetachedEventDescriptor() override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
 protected:
 

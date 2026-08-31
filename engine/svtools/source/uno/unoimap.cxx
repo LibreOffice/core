@@ -83,21 +83,21 @@ public:
     virtual void _getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) override;
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual Any queryInterface( const Type & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes(  ) override;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual Sequence< Type > getTypes(  ) override;
+    virtual Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XEventsSupplier
-    virtual Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
+    virtual Reference< css::container::XNameReplace > getEvents(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
 private:
     static rtl::Reference<PropertySetInfo> createPropertySetInfo( IMapObjectType nType );
@@ -291,7 +291,7 @@ std::unique_ptr<IMapObject> SvUnoImageMapObject::createIMapObject() const
 
 // XInterface
 
-Any SAL_CALL SvUnoImageMapObject::queryInterface( const Type & rType )
+Any SvUnoImageMapObject::queryInterface( const Type & rType )
 {
     Any aAny;
 
@@ -311,17 +311,17 @@ Any SAL_CALL SvUnoImageMapObject::queryInterface( const Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvUnoImageMapObject::acquire() noexcept
+void SvUnoImageMapObject::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SvUnoImageMapObject::release() noexcept
+void SvUnoImageMapObject::release() noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SvUnoImageMapObject::getTypes()
 {
     static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
         cppu::UnoType<XEventsSupplier>::get(),
@@ -332,18 +332,18 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SvUnoImageMapObject::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
-bool SAL_CALL SvUnoImageMapObject::supportsService( const  OUString& ServiceName )
+bool SvUnoImageMapObject::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
+Sequence< OUString > SvUnoImageMapObject::getSupportedServiceNames()
 {
     Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = u"com.sun.star.image.ImageMapObject"_ustr;
@@ -363,7 +363,7 @@ Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
     return aSNS;
 }
 
-OUString SAL_CALL SvUnoImageMapObject::getImplementationName()
+OUString SvUnoImageMapObject::getImplementationName()
 {
     switch( mnType )
     {
@@ -476,7 +476,7 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
 }
 
 
-Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
+Reference< XNameReplace > SvUnoImageMapObject::getEvents()
 {
     return mxEvents;
 }
@@ -494,24 +494,24 @@ public:
     static SvUnoImageMapObject* getObject( const Any& aElement );
 
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any& Element ) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
+    virtual void insertByIndex( sal_Int32 Index, const Any& Element ) override;
+    virtual void removeByIndex( sal_Int32 Index ) override;
 
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) override;
+    virtual void replaceByIndex( sal_Int32 Index, const Any& Element ) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount(  ) override;
+    virtual Any getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
 private:
     OUString maName;
@@ -551,7 +551,7 @@ SvUnoImageMapObject* SvUnoImageMap::getObject( const Any& aElement )
 }
 
 // XIndexContainer
-void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 nIndex, const Any& Element )
+void SvUnoImageMap::insertByIndex( sal_Int32 nIndex, const Any& Element )
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
@@ -568,7 +568,7 @@ void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 nIndex, const Any& Element
     }
 }
 
-void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 nIndex )
+void SvUnoImageMap::removeByIndex( sal_Int32 nIndex )
 {
     const sal_Int32 nCount = maObjectList.size();
     if( nIndex >= nCount )
@@ -587,7 +587,7 @@ void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 nIndex )
 }
 
 // XIndexReplace
-void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 nIndex, const Any& Element )
+void SvUnoImageMap::replaceByIndex( sal_Int32 nIndex, const Any& Element )
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
@@ -600,12 +600,12 @@ void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 nIndex, const Any& Elemen
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL SvUnoImageMap::getCount(  )
+sal_Int32 SvUnoImageMap::getCount(  )
 {
     return maObjectList.size();
 }
 
-Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 nIndex )
+Any SvUnoImageMap::getByIndex( sal_Int32 nIndex )
 {
     const sal_Int32 nCount = maObjectList.size();
     if( nIndex >= nCount )
@@ -618,28 +618,28 @@ Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 nIndex )
 }
 
 // XElementAccess
-Type SAL_CALL SvUnoImageMap::getElementType(  )
+Type SvUnoImageMap::getElementType(  )
 {
     return cppu::UnoType<XPropertySet>::get();
 }
 
-bool SAL_CALL SvUnoImageMap::hasElements(  )
+bool SvUnoImageMap::hasElements(  )
 {
     return (!maObjectList.empty());
 }
 
 // XServiceInfo
-OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
+OUString SvUnoImageMap::getImplementationName(  )
 {
     return u"org.openoffice.comp.svt.SvUnoImageMap"_ustr;
 }
 
-bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
+bool SvUnoImageMap::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
+Sequence< OUString > SvUnoImageMap::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.image.ImageMap"_ustr };
 }

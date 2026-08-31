@@ -39,15 +39,15 @@ public:
     JavaInteractionHandler();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         const cpo::uno::Type& aType ) override;
 
-    virtual void SAL_CALL acquire() noexcept override;
+    virtual void acquire() noexcept override;
 
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
     // XCurrentContext
-    virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+    virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
 private:
     oslInterlockedCount m_aRefCount;

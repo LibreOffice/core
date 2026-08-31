@@ -85,23 +85,23 @@ class SVT_DLLPUBLIC ToolboxController :
         void updateStatus();
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 
         // XUpdatable
-        virtual void SAL_CALL update() override;
+        virtual void update() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override = 0;
+        virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override = 0;
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
-        virtual void SAL_CALL click() override;
-        virtual void SAL_CALL doubleClick() override;
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+        virtual void execute( sal_Int16 KeyModifier ) override;
+        virtual void click() override;
+        virtual void doubleClick() override;
+        virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
+        virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 

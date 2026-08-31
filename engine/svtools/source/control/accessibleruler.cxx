@@ -48,7 +48,7 @@ SvtRulerAccessible::SvtRulerAccessible(uno::Reference<XAccessible> xParent, Rule
 
 //=====  XAccessibleComponent  ================================================
 
-uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
+uno::Reference< XAccessible > SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
@@ -57,7 +57,7 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint(
 }
 
 //=====  XAccessibleContext  ==================================================
-sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
+sal_Int64 SvtRulerAccessible::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
@@ -65,7 +65,7 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
     return 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleChild( sal_Int64 )
+uno::Reference< XAccessible > SvtRulerAccessible::getAccessibleChild( sal_Int64 )
 {
     SolarMutexGuard aSolarGuard;
     uno::Reference< XAccessible >   xChild ;
@@ -73,25 +73,25 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleChild( s
     return xChild;
 }
 
-uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent()
+uno::Reference< XAccessible > SvtRulerAccessible::getAccessibleParent()
 {
     SolarMutexGuard aSolarGuard;
     return mxParent;
 }
 
-sal_Int16 SAL_CALL SvtRulerAccessible::getAccessibleRole()
+sal_Int16 SvtRulerAccessible::getAccessibleRole()
 {
     SolarMutexGuard aSolarGuard;
     return AccessibleRole::RULER;
 }
 
-OUString SAL_CALL SvtRulerAccessible::getAccessibleDescription()
+OUString SvtRulerAccessible::getAccessibleDescription()
 {
     SolarMutexGuard aSolarGuard;
     return OUString();
 }
 
-OUString SAL_CALL SvtRulerAccessible::getAccessibleName()
+OUString SvtRulerAccessible::getAccessibleName()
 {
     SolarMutexGuard aSolarGuard;
     return msName;
@@ -100,14 +100,14 @@ OUString SAL_CALL SvtRulerAccessible::getAccessibleName()
 /** Return empty uno::Reference to indicate that the relation set is not
     supported.
 */
-uno::Reference< XAccessibleRelationSet > SAL_CALL SvtRulerAccessible::getAccessibleRelationSet()
+uno::Reference< XAccessibleRelationSet > SvtRulerAccessible::getAccessibleRelationSet()
 {
     SolarMutexGuard aSolarGuard;
     return uno::Reference< XAccessibleRelationSet >();
 }
 
 
-sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
+sal_Int64 SvtRulerAccessible::getAccessibleStateSet()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -131,7 +131,7 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
     return nStateSet;
 }
 
-void SAL_CALL SvtRulerAccessible::grabFocus()
+void SvtRulerAccessible::grabFocus()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -160,7 +160,7 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
     return sal_Int32(mpRepr->GetControlBackground());
 }
 
-void SAL_CALL SvtRulerAccessible::disposing()
+void SvtRulerAccessible::disposing()
 {
     mpRepr = nullptr;      // object dies with representation
 

@@ -73,7 +73,7 @@ JavaInteractionHandler::~JavaInteractionHandler()
 {
 }
 
-Any SAL_CALL JavaInteractionHandler::queryInterface(const Type& aType )
+Any JavaInteractionHandler::queryInterface(const Type& aType )
 {
     if (aType == cppu::UnoType<XInterface>::get())
         return Any( static_cast<XInterface*>(this), aType);
@@ -82,18 +82,18 @@ Any SAL_CALL JavaInteractionHandler::queryInterface(const Type& aType )
     return Any();
 }
 
-void SAL_CALL JavaInteractionHandler::acquire(  ) noexcept
+void JavaInteractionHandler::acquire(  ) noexcept
 {
     osl_atomic_increment( &m_aRefCount );
 }
 
-void SAL_CALL JavaInteractionHandler::release(  ) noexcept
+void JavaInteractionHandler::release(  ) noexcept
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
         delete this;
 }
 
-void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionRequest >& Request )
+void JavaInteractionHandler::handle( const Reference< XInteractionRequest >& Request )
 {
     Any anyExc = Request->getRequest();
     const Sequence< Reference< XInteractionContinuation > > aSeqCont = Request->getContinuations();

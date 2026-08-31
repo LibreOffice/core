@@ -82,13 +82,13 @@ public:
 
     static rtl::Reference<EmbedEventListener_Impl> Create( EmbeddedObjectRef* );
 
-    virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
-    virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, bool GetsOwnership ) override;
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) override;
-    virtual void SAL_CALL notifyEvent( const document::EventObject& aEvent ) override;
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
+    virtual void changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+    virtual void stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+    virtual void queryClosing( const lang::EventObject& Source, bool GetsOwnership ) override;
+    virtual void notifyClosing( const lang::EventObject& Source ) override;
+    virtual void notifyEvent( const document::EventObject& aEvent ) override;
+    virtual void disposing( const lang::EventObject& aEvent ) override;
+    virtual void modified( const css::lang::EventObject& aEvent ) override;
 };
 
 }
@@ -123,13 +123,13 @@ rtl::Reference<EmbedEventListener_Impl> EmbedEventListener_Impl::Create( Embedde
     return pRet;
 }
 
-void SAL_CALL EmbedEventListener_Impl::changingState( const lang::EventObject&,
+void EmbedEventListener_Impl::changingState( const lang::EventObject&,
                                                     ::sal_Int32,
                                                     ::sal_Int32 )
 {
 }
 
-void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
+void EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
                                                     ::sal_Int32 nOldState,
                                                     ::sal_Int32 nNewState )
 {
@@ -174,7 +174,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& )
+void EmbedEventListener_Impl::modified( const lang::EventObject& )
 {
     SolarMutexGuard aGuard;
     if ( !(pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON) )
@@ -197,7 +197,7 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& )
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent )
+void EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -207,7 +207,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, bool )
+void EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, bool )
 {
     // An embedded object can be shared between several objects (f.e. for undo purposes)
     // the object will not be closed before the last "customer" is destroyed
@@ -216,7 +216,7 @@ void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& So
         throw util::CloseVetoException();
 }
 
-void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& Source )
+void EmbedEventListener_Impl::notifyClosing( const lang::EventObject& Source )
 {
     if ( pObject && Source.Source == pObject->GetObject() )
     {
@@ -225,7 +225,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& S
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::disposing( const lang::EventObject& aEvent )
+void EmbedEventListener_Impl::disposing( const lang::EventObject& aEvent )
 {
     if ( pObject && aEvent.Source == pObject->GetObject() )
     {

@@ -36,7 +36,7 @@ namespace svt
     }
 
     // XDialogClosedListener methods
-    void SAL_CALL DialogClosedListener::dialogClosed( const DialogClosedEvent& aEvent )
+    void DialogClosedListener::dialogClosed( const DialogClosedEvent& aEvent )
     {
         if ( m_aDialogClosedLink.IsSet() )
         {
@@ -46,7 +46,7 @@ namespace svt
     }
 
     // XEventListener methods
-    void SAL_CALL DialogClosedListener::disposing( const EventObject& )
+    void DialogClosedListener::disposing( const EventObject& )
     {
         m_aDialogClosedLink = Link<css::ui::dialogs::DialogClosedEvent*,void>();
     }

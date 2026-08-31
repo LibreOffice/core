@@ -135,7 +135,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     return xLayoutManager;
 }
 
-void SAL_CALL ToolboxController::initialize( const Sequence< Any >& rArguments )
+void ToolboxController::initialize( const Sequence< Any >& rArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -197,7 +197,7 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& rArguments )
     }
 }
 
-void SAL_CALL ToolboxController::update()
+void ToolboxController::update()
 {
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -242,7 +242,7 @@ void ToolboxController::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 // XEventListener
-void SAL_CALL ToolboxController::disposing( const EventObject& Source )
+void ToolboxController::disposing( const EventObject& Source )
 {
     Reference< XInterface > xSource( Source.Source );
 
@@ -265,13 +265,13 @@ void SAL_CALL ToolboxController::disposing( const EventObject& Source )
 }
 
 // XStatusListener
-void SAL_CALL ToolboxController::statusChanged( const FeatureStateEvent& )
+void ToolboxController::statusChanged( const FeatureStateEvent& )
 {
     // must be implemented by sub class
 }
 
 // XToolbarController
-void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
+void ToolboxController::execute( sal_Int16 KeyModifier )
 {
     Reference< XDispatch >       xDispatch;
     OUString                     aCommandURL;
@@ -313,20 +313,20 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
     }
 }
 
-void SAL_CALL ToolboxController::click()
+void ToolboxController::click()
 {
 }
 
-void SAL_CALL ToolboxController::doubleClick()
+void ToolboxController::doubleClick()
 {
 }
 
-Reference< XWindow > SAL_CALL ToolboxController::createPopupWindow()
+Reference< XWindow > ToolboxController::createPopupWindow()
 {
     return Reference< XWindow >();
 }
 
-Reference< XWindow > SAL_CALL ToolboxController::createItemWindow( const Reference< XWindow >& )
+Reference< XWindow > ToolboxController::createItemWindow( const Reference< XWindow >& )
 {
     return Reference< XWindow >();
 }

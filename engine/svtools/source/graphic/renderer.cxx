@@ -55,25 +55,25 @@ public:
     GraphicRendererVCL();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // PropertySetHelper
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues ) override;
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue ) override;
 
     // XGraphicRenderer
-    virtual void SAL_CALL render( const css::uno::Reference< css::graphic::XGraphic >& Graphic ) override;
+    virtual void render( const css::uno::Reference< css::graphic::XGraphic >& Graphic ) override;
 
 private:
 
@@ -90,7 +90,7 @@ GraphicRendererVCL::GraphicRendererVCL() :
 {
 }
 
-cpo::uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any GraphicRendererVCL::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -113,38 +113,38 @@ cpo::uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const cpo::uno::Type 
 }
 
 
-void SAL_CALL GraphicRendererVCL::acquire()
+void GraphicRendererVCL::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL GraphicRendererVCL::release()
+void GraphicRendererVCL::release()
     noexcept
 {
     OWeakObject::release();
 }
 
 
-OUString SAL_CALL GraphicRendererVCL::getImplementationName()
+OUString GraphicRendererVCL::getImplementationName()
 {
     return u"com.sun.star.comp.graphic.GraphicRendererVCL"_ustr;
 }
 
-bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceName )
+bool GraphicRendererVCL::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GraphicRendererVCL::getSupportedServiceNames()
 {
     return { u"com.sun.star.graphic.GraphicRendererVCL"_ustr };
 }
 
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > GraphicRendererVCL::getTypes()
 {
     static const cpo::uno::Sequence< cpo::uno::Type >  aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
@@ -156,7 +156,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > GraphicRendererVCL::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
@@ -261,7 +261,7 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
     }
 }
 
-void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphic >& rxGraphic )
+void GraphicRendererVCL::render( const uno::Reference< graphic::XGraphic >& rxGraphic )
 {
     if( mpOutDev && mxDevice.is() && rxGraphic.is() )
     {

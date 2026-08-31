@@ -64,20 +64,20 @@ public:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() = 0;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override = 0;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
+    virtual OUString getImplementationName() override = 0;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override = 0;
 
     // WeakComponentImplHelperBase
     using PopupWindowController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
+    virtual void statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createPopupWindow() override;
-    virtual void SAL_CALL click() override;
+    virtual css::uno::Reference<css::awt::XWindow> createPopupWindow() override;
+    virtual void click() override;
 
 protected:
     std::unique_ptr<ToolbarPopupContainer> mxPopoverContainer;

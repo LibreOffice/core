@@ -53,20 +53,20 @@ using namespace cpo::uno;
         explicit OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
 
         // XTypeProvider
-        virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
+        virtual Sequence<sal_Int8> getImplementationId(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // XPropertySet
-        virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual Reference< XPropertySetInfo>  getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
-        virtual void SAL_CALL initialize(const Sequence< Any >& aArguments) override;
+        virtual void initialize(const Sequence< Any >& aArguments) override;
 
     protected:
     // OGenericUnoDialog overridables
@@ -86,25 +86,25 @@ using namespace cpo::uno;
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OAddressBookSourceDialogUno::getImplementationId(  )
+    Sequence<sal_Int8> OAddressBookSourceDialogUno::getImplementationId(  )
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
 
 
-    OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName()
+    OUString OAddressBookSourceDialogUno::getImplementationName()
     {
         return u"com.sun.star.comp.svtools.OAddressBookSourceDialogUno"_ustr;
     }
 
 
-    cpo::uno::Sequence<OUString> SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> OAddressBookSourceDialogUno::getSupportedServiceNames()
     {
         return { u"com.sun.star.ui.AddressBookSourceDialog"_ustr };
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OAddressBookSourceDialogUno::getPropertySetInfo()
+    Reference<XPropertySetInfo>  OAddressBookSourceDialogUno::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -130,7 +130,7 @@ using namespace cpo::uno;
             static_cast<AddressBookSourceDialog*>(m_xDialog.get())->getFieldMapping(m_aAliases);
     }
 
-    void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments)
+    void OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments)
     {
         if( rArguments.getLength() == 5 )
         {

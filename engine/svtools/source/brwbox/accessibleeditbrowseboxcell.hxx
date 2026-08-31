@@ -28,11 +28,11 @@ public:
     EditBrowseBoxTableCell(svt::ControlBase* pControl);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     // XAccessibleContext
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleParent() override;
+        getAccessibleParent() override;
 
     EditBrowseBoxTableCell(const EditBrowseBoxTableCell&) = delete;
     EditBrowseBoxTableCell& operator=(const EditBrowseBoxTableCell&) = delete;

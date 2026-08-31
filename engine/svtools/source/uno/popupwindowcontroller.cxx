@@ -164,7 +164,7 @@ PopupWindowController::~PopupWindowController()
 }
 
 // XServiceInfo
-bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName )
+bool PopupWindowController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -182,7 +182,7 @@ void PopupWindowController::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 // XStatusListener
-void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent )
+void PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     SolarMutexGuard aSolarLock;
 
@@ -210,7 +210,7 @@ VclPtr<vcl::Window> PopupWindowController::createVclPopupWindow(vcl::Window* /*p
     return nullptr;
 }
 
-Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
+Reference< awt::XWindow > PopupWindowController::createPopupWindow()
 {
     if (m_pToolbar)
     {
@@ -258,7 +258,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
     return Reference< awt::XWindow >();
 }
 
-void SAL_CALL PopupWindowController::click()
+void PopupWindowController::click()
 {
     if (m_pToolbar)
     {

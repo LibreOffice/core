@@ -50,7 +50,7 @@ FrameStatusListener::~FrameStatusListener()
 }
 
 // XInterface
-Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )
+Any FrameStatusListener::queryInterface( const Type& rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -66,18 +66,18 @@ Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL FrameStatusListener::acquire() noexcept
+void FrameStatusListener::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL FrameStatusListener::release() noexcept
+void FrameStatusListener::release() noexcept
 {
     OWeakObject::release();
 }
 
 // XComponent
-void SAL_CALL FrameStatusListener::dispose()
+void FrameStatusListener::dispose()
 {
     Reference< XComponent > xThis = this;
 
@@ -106,18 +106,18 @@ void SAL_CALL FrameStatusListener::dispose()
     m_bDisposed = true;
 }
 
-void SAL_CALL FrameStatusListener::addEventListener( const Reference< XEventListener >& )
+void FrameStatusListener::addEventListener( const Reference< XEventListener >& )
 {
     // helper class for status updates - no need to support listener
 }
 
-void SAL_CALL FrameStatusListener::removeEventListener( const Reference< XEventListener >& )
+void FrameStatusListener::removeEventListener( const Reference< XEventListener >& )
 {
     // helper class for status updates - no need to support listener
 }
 
 // XEventListener
-void SAL_CALL FrameStatusListener::disposing( const EventObject& Source )
+void FrameStatusListener::disposing( const EventObject& Source )
 {
     Reference< XInterface > xSource( Source.Source );
 

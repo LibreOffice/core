@@ -73,27 +73,27 @@ public:
     explicit SvFilterOptionsDialog( uno::Reference< uno::XComponentContext > _xORB );
 
     // XInterface
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XPropertyAccess
-    virtual cpo::uno::Sequence< beans::PropertyValue > SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< beans::PropertyValue > & aProps ) override;
+    virtual cpo::uno::Sequence< beans::PropertyValue > getPropertyValues() override;
+    virtual void setPropertyValues( const cpo::uno::Sequence< beans::PropertyValue > & aProps ) override;
 
     // XExecuteDialog
-    virtual sal_Int16 SAL_CALL execute() override;
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
+    virtual sal_Int16 execute() override;
+    virtual void setTitle( const OUString& aTitle ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const uno::Reference< lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const uno::Reference< lang::XComponent >& xDoc ) override;
 
 };
 
@@ -105,19 +105,19 @@ SvFilterOptionsDialog::SvFilterOptionsDialog( uno::Reference< uno::XComponentCon
 {
 }
 
-void SAL_CALL SvFilterOptionsDialog::acquire() noexcept
+void SvFilterOptionsDialog::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL SvFilterOptionsDialog::release() noexcept
+void SvFilterOptionsDialog::release() noexcept
 {
     OWeakObject::release();
 }
 
 // XInitialization
-void SAL_CALL SvFilterOptionsDialog::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
+void SvFilterOptionsDialog::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     for(const cpo::uno::Any& rArgument : rArguments)
     {
@@ -133,15 +133,15 @@ void SAL_CALL SvFilterOptionsDialog::initialize(const cpo::uno::Sequence<cpo::un
 }
 
 // XServiceInfo
-OUString SAL_CALL SvFilterOptionsDialog::getImplementationName()
+OUString SvFilterOptionsDialog::getImplementationName()
 {
     return u"com.sun.star.svtools.SvFilterOptionsDialog"_ustr;
 }
-bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServiceName )
+bool SvFilterOptionsDialog::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
-cpo::uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvFilterOptionsDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
 }

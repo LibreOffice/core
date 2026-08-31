@@ -63,12 +63,12 @@ protected:
 
 public:
     // XAsynchronousExecutableDialog
-    void SAL_CALL setDialogTitle(const OUString& aTitle) override
+    void setDialogTitle(const OUString& aTitle) override
     {
         OGenericUnoDialog::setTitle(aTitle);
     }
 
-    virtual void SAL_CALL startExecuteModal(
+    virtual void startExecuteModal(
         const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener) override
     {
         SolarMutexGuard aSolarGuard;

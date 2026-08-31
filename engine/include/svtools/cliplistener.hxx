@@ -44,9 +44,9 @@ public:
     void    ClearCallbackLink();
 
             // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
             // XClipboardListener
-    virtual void SAL_CALL changedContents( const css::datatransfer::clipboard::ClipboardEvent& event ) override;
+    virtual void changedContents( const css::datatransfer::clipboard::ClipboardEvent& event ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

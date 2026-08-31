@@ -57,13 +57,13 @@ public:
 
 protected:
     // XStream
-    virtual uno::Reference<io::XInputStream> SAL_CALL getInputStream() override;
-    virtual uno::Reference<io::XOutputStream> SAL_CALL getOutputStream() override;
+    virtual uno::Reference<io::XInputStream> getInputStream() override;
+    virtual uno::Reference<io::XOutputStream> getOutputStream() override;
 
     // XSeekable
-    virtual void SAL_CALL seek(sal_Int64 location) override;
-    virtual sal_Int64 SAL_CALL getPosition() override;
-    virtual sal_Int64 SAL_CALL getLength() override;
+    virtual void seek(sal_Int64 location) override;
+    virtual sal_Int64 getPosition() override;
+    virtual sal_Int64 getLength() override;
 };
 
 }
@@ -78,31 +78,31 @@ StreamSupplier::StreamSupplier(uno::Reference<io::XInputStream> xInput, uno::Ref
     OSL_ENSURE(m_xSeekable.is(), "StreamSupplier::StreamSupplier: at least one of both must be seekable!");
 }
 
-uno::Reference<io::XInputStream> SAL_CALL StreamSupplier::getInputStream()
+uno::Reference<io::XInputStream> StreamSupplier::getInputStream()
 {
     return m_xInput;
 }
 
-uno::Reference<io::XOutputStream> SAL_CALL StreamSupplier::getOutputStream()
+uno::Reference<io::XOutputStream> StreamSupplier::getOutputStream()
 {
     return m_xOutput;
 }
 
-void SAL_CALL StreamSupplier::seek(sal_Int64 nLocation)
+void StreamSupplier::seek(sal_Int64 nLocation)
 {
     if (!m_xSeekable.is())
         throw io::NotConnectedException();
     m_xSeekable->seek(nLocation);
 }
 
-sal_Int64 SAL_CALL StreamSupplier::getPosition()
+sal_Int64 StreamSupplier::getPosition()
 {
     if (!m_xSeekable.is())
         throw io::NotConnectedException();
     return m_xSeekable->getPosition();
 }
 
-sal_Int64 SAL_CALL StreamSupplier::getLength()
+sal_Int64 StreamSupplier::getLength()
 {
     if (!m_xSeekable.is())
         throw io::NotConnectedException();

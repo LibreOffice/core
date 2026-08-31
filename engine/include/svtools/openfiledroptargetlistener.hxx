@@ -56,14 +56,14 @@ class OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datat
 
     public:
         // XEventListener
-        virtual void SAL_CALL disposing        ( const css::lang::EventObject& Source ) override;
+        virtual void disposing        ( const css::lang::EventObject& Source ) override;
 
         // XDropTargetListener
-        virtual void SAL_CALL drop             ( const css::datatransfer::dnd::DropTargetDropEvent&      dtde  ) override;
-        virtual void SAL_CALL dragEnter        ( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
-        virtual void SAL_CALL dragExit         ( const css::datatransfer::dnd::DropTargetEvent&          dte   ) override;
-        virtual void SAL_CALL dragOver         ( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) override;
-        virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) override;
+        virtual void drop             ( const css::datatransfer::dnd::DropTargetDropEvent&      dtde  ) override;
+        virtual void dragEnter        ( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
+        virtual void dragExit         ( const css::datatransfer::dnd::DropTargetEvent&          dte   ) override;
+        virtual void dragOver         ( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) override;
+        virtual void dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) override;
 
     private:
         void     implts_BeginDrag( const cpo::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );

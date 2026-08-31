@@ -55,8 +55,8 @@ public:
     ToolbarPopupStatusListener( const css::uno::Reference< css::frame::XFrame >& xFrame,
                                 WeldToolbarPopup& rToolbarPopup );
 
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void dispose() override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     WeldToolbarPopup* mpPopup;
 };
@@ -71,14 +71,14 @@ ToolbarPopupStatusListener::ToolbarPopupStatusListener(
 }
 
 
-void SAL_CALL ToolbarPopupStatusListener::dispose()
+void ToolbarPopupStatusListener::dispose()
 {
     mpPopup = nullptr;
     svt::FrameStatusListener::dispose();
 }
 
 
-void SAL_CALL ToolbarPopupStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event )
+void ToolbarPopupStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
     if( mpPopup )
         mpPopup->statusChanged( Event );

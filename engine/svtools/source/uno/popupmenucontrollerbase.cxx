@@ -85,13 +85,13 @@ void  PopupMenuControllerBase::disposing(std::unique_lock<std::mutex>& /*rGuard*
 }
 
 // XServiceInfo
-bool SAL_CALL PopupMenuControllerBase::supportsService( const OUString& ServiceName )
+bool PopupMenuControllerBase::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XEventListener
-void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& )
+void PopupMenuControllerBase::disposing( const EventObject& )
 {
     std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
@@ -100,11 +100,11 @@ void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& )
 }
 
 // XMenuListener
-void SAL_CALL PopupMenuControllerBase::itemHighlighted( const awt::MenuEvent& )
+void PopupMenuControllerBase::itemHighlighted( const awt::MenuEvent& )
 {
 }
 
-void SAL_CALL PopupMenuControllerBase::itemSelected( const awt::MenuEvent& rEvent )
+void PopupMenuControllerBase::itemSelected( const awt::MenuEvent& rEvent )
 {
     std::unique_lock aLock( m_aMutex );
     throwIfDisposed(aLock);
@@ -156,15 +156,15 @@ IMPL_STATIC_LINK( PopupMenuControllerBase, ExecuteHdl_Impl, void*, p, void )
     delete pDispatchInfo;
 }
 
-void SAL_CALL PopupMenuControllerBase::itemActivated( const awt::MenuEvent& )
+void PopupMenuControllerBase::itemActivated( const awt::MenuEvent& )
 {
 }
 
-void SAL_CALL PopupMenuControllerBase::itemDeactivated( const awt::MenuEvent& )
+void PopupMenuControllerBase::itemDeactivated( const awt::MenuEvent& )
 {
 }
 
-void SAL_CALL PopupMenuControllerBase::updatePopupMenu()
+void PopupMenuControllerBase::updatePopupMenu()
 {
     {
         std::unique_lock aLock(m_aMutex);
@@ -194,7 +194,7 @@ void PopupMenuControllerBase::updateCommand( const OUString& rCommandURL )
 
 
 // XDispatchProvider
-Reference< XDispatch > SAL_CALL
+Reference< XDispatch >
 PopupMenuControllerBase::queryDispatch(
     const URL& /*aURL*/,
     const OUString& /*sTarget*/,
@@ -207,7 +207,7 @@ PopupMenuControllerBase::queryDispatch(
     return Reference< XDispatch >();
 }
 
-Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispatches( const Sequence< DispatchDescriptor >& lDescriptor )
+Sequence< Reference< XDispatch > > PopupMenuControllerBase::queryDispatches( const Sequence< DispatchDescriptor >& lDescriptor )
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!
@@ -228,7 +228,7 @@ Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispat
 }
 
 // XDispatch
-void SAL_CALL
+void
 PopupMenuControllerBase::dispatch(
     const URL& /*aURL*/,
     const Sequence< PropertyValue >& /*seqProperties*/ )
@@ -238,7 +238,7 @@ PopupMenuControllerBase::dispatch(
     throwIfDisposed(aLock);
 }
 
-void SAL_CALL
+void
 PopupMenuControllerBase::addStatusListener(
     const Reference< XStatusListener >& xControl,
     const URL& aURL )
@@ -265,7 +265,7 @@ PopupMenuControllerBase::addStatusListener(
     }
 }
 
-void SAL_CALL PopupMenuControllerBase::removeStatusListener(
+void PopupMenuControllerBase::removeStatusListener(
     const Reference< XStatusListener >& xControl,
     const URL& /*aURL*/ )
 {
@@ -293,7 +293,7 @@ OUString PopupMenuControllerBase::determineBaseURL( std::u16string_view aURL )
 }
 
 // XInitialization
-void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArguments )
+void PopupMenuControllerBase::initialize( const Sequence< Any >& aArguments )
 {
     std::unique_lock aLock( m_aMutex );
     initializeImpl(aLock, aArguments);
@@ -332,7 +332,7 @@ void PopupMenuControllerBase::initializeImpl( std::unique_lock<std::mutex>& /*rG
     }
 }
 // XPopupMenuController
-void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopupMenu >& xPopupMenu )
+void PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopupMenu >& xPopupMenu )
 {
     {
         std::unique_lock aLock( m_aMutex );

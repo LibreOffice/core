@@ -90,7 +90,7 @@ Reference< XURLTransformer > StatusbarController::getURLTransformer() const
 }
 
 // XInterface
-Any SAL_CALL StatusbarController::queryInterface( const Type& rType )
+Any StatusbarController::queryInterface( const Type& rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -107,17 +107,17 @@ Any SAL_CALL StatusbarController::queryInterface( const Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL StatusbarController::acquire() noexcept
+void StatusbarController::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL StatusbarController::release() noexcept
+void StatusbarController::release() noexcept
 {
     OWeakObject::release();
 }
 
-void SAL_CALL StatusbarController::initialize( const Sequence< Any >& aArguments )
+void StatusbarController::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -158,7 +158,7 @@ void SAL_CALL StatusbarController::initialize( const Sequence< Any >& aArguments
         m_aListenerMap.emplace( m_aCommandURL, Reference< XDispatch >() );
 }
 
-void SAL_CALL StatusbarController::update()
+void StatusbarController::update()
 {
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -171,7 +171,7 @@ void SAL_CALL StatusbarController::update()
 }
 
 // XComponent
-void SAL_CALL StatusbarController::dispose()
+void StatusbarController::dispose()
 {
     Reference< XComponent > xThis = this;
 
@@ -220,20 +220,20 @@ void SAL_CALL StatusbarController::dispose()
     m_bDisposed = true;
 }
 
-void SAL_CALL StatusbarController::addEventListener( const Reference< XEventListener >& xListener )
+void StatusbarController::addEventListener( const Reference< XEventListener >& xListener )
 {
     std::unique_lock aGuard(m_aMutex);
     m_aEventListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL StatusbarController::removeEventListener( const Reference< XEventListener >& xListener )
+void StatusbarController::removeEventListener( const Reference< XEventListener >& xListener )
 {
     std::unique_lock aGuard(m_aMutex);
     m_aEventListeners.removeInterface( aGuard, xListener );
 }
 
 // XEventListener
-void SAL_CALL StatusbarController::disposing( const EventObject& Source )
+void StatusbarController::disposing( const EventObject& Source )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -261,7 +261,7 @@ void SAL_CALL StatusbarController::disposing( const EventObject& Source )
 }
 
 // XStatusListener
-void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event )
+void StatusbarController::statusChanged( const FeatureStateEvent& Event )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -282,25 +282,25 @@ void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event
 }
 
 // XStatusbarController
-bool SAL_CALL StatusbarController::mouseButtonDown(
+bool StatusbarController::mouseButtonDown(
     const css::awt::MouseEvent& )
 {
     return false;
 }
 
-bool SAL_CALL StatusbarController::mouseMove(
+bool StatusbarController::mouseMove(
     const css::awt::MouseEvent& )
 {
     return false;
 }
 
-bool SAL_CALL StatusbarController::mouseButtonUp(
+bool StatusbarController::mouseButtonUp(
     const css::awt::MouseEvent& )
 {
     return false;
 }
 
-void SAL_CALL StatusbarController::command(
+void StatusbarController::command(
     const css::awt::Point&,
     ::sal_Int32,
     bool,
@@ -308,14 +308,14 @@ void SAL_CALL StatusbarController::command(
 {
 }
 
-void SAL_CALL StatusbarController::paint(
+void StatusbarController::paint(
     const css::uno::Reference< css::awt::XGraphics >&,
     const css::awt::Rectangle&,
     ::sal_Int32 )
 {
 }
 
-void SAL_CALL StatusbarController::click( const css::awt::Point& )
+void StatusbarController::click( const css::awt::Point& )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -326,7 +326,7 @@ void SAL_CALL StatusbarController::click( const css::awt::Point& )
     execute( aArgs );
 }
 
-void SAL_CALL StatusbarController::doubleClick( const css::awt::Point& )
+void StatusbarController::doubleClick( const css::awt::Point& )
 {
 }
 

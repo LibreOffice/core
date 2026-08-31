@@ -31,13 +31,13 @@ EditBrowseBoxTableCell::EditBrowseBoxTableCell(svt::ControlBase* pControl)
 {
 }
 
-OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName()
+OUString EditBrowseBoxTableCell::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.TableCellProxy"_ustr;
 }
 
 css::uno::Reference<css::accessibility::XAccessible>
-    SAL_CALL EditBrowseBoxTableCell::getAccessibleParent()
+    EditBrowseBoxTableCell::getAccessibleParent()
 {
     OExternalLockGuard aGuard(this);
 

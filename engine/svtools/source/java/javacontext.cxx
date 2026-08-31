@@ -39,7 +39,7 @@ JavaContext::~JavaContext()
 {
 }
 
-Any SAL_CALL JavaContext::queryInterface(const Type& aType )
+Any JavaContext::queryInterface(const Type& aType )
 {
     if (aType == cppu::UnoType<XInterface>::get())
         return Any(Reference<XInterface>(static_cast<XInterface*>(this)));
@@ -48,18 +48,18 @@ Any SAL_CALL JavaContext::queryInterface(const Type& aType )
     return Any();
 }
 
-void SAL_CALL JavaContext::acquire(  ) noexcept
+void JavaContext::acquire(  ) noexcept
 {
     osl_atomic_increment( &m_aRefCount );
 }
 
-void SAL_CALL JavaContext::release(  ) noexcept
+void JavaContext::release(  ) noexcept
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
         delete this;
 }
 
-Any SAL_CALL JavaContext::getValueByName( const OUString& Name)
+Any JavaContext::getValueByName( const OUString& Name)
 {
     Any retVal;
 

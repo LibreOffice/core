@@ -40,48 +40,48 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
-    virtual void SAL_CALL
+    virtual void
         grabFocus() override;
 
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
         getForeground(  ) override;
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
         getBackground(  ) override;
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild( sal_Int64 nIndex ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible>
         getAccessibleParent() override;
 
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
         getAccessibleRole() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleDescription() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleName() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet >
         getAccessibleRelationSet() override;
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleStateSet() override;
 
 protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
 private:
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     /// Name of this object.
     OUString                            msName;

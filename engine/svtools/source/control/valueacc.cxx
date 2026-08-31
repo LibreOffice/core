@@ -77,19 +77,19 @@ void ValueItemAcc::ValueSetItemDestroyed()
     mpValueSetItem = nullptr;
 }
 
-sal_Int64 SAL_CALL ValueItemAcc::getAccessibleChildCount()
+sal_Int64 ValueItemAcc::getAccessibleChildCount()
 {
     return 0;
 }
 
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleChild( sal_Int64 )
+uno::Reference< accessibility::XAccessible > ValueItemAcc::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleParent()
+uno::Reference< accessibility::XAccessible > ValueItemAcc::getAccessibleParent()
 {
     const SolarMutexGuard aSolarGuard;
 
@@ -99,7 +99,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
 }
 
 
-sal_Int64 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
+sal_Int64 ValueItemAcc::getAccessibleIndexInParent()
 {
     const SolarMutexGuard aSolarGuard;
     // The index defaults to -1 to indicate the child does not belong to its
@@ -146,19 +146,19 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
 }
 
 
-sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
+sal_Int16 ValueItemAcc::getAccessibleRole()
 {
     return accessibility::AccessibleRole::LIST_ITEM;
 }
 
 
-OUString SAL_CALL ValueItemAcc::getAccessibleDescription()
+OUString ValueItemAcc::getAccessibleDescription()
 {
     return OUString();
 }
 
 
-OUString SAL_CALL ValueItemAcc::getAccessibleName()
+OUString ValueItemAcc::getAccessibleName()
 {
     const SolarMutexGuard aSolarGuard;
 
@@ -174,13 +174,13 @@ OUString SAL_CALL ValueItemAcc::getAccessibleName()
 }
 
 
-uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueItemAcc::getAccessibleRelationSet()
+uno::Reference< accessibility::XAccessibleRelationSet > ValueItemAcc::getAccessibleRelationSet()
 {
     return uno::Reference< accessibility::XAccessibleRelationSet >();
 }
 
 
-sal_Int64 SAL_CALL ValueItemAcc::getAccessibleStateSet()
+sal_Int64 ValueItemAcc::getAccessibleStateSet()
 {
     const SolarMutexGuard aSolarGuard;
     sal_Int64 nStateSet = 0;
@@ -208,7 +208,7 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleStateSet()
 }
 
 
-lang::Locale SAL_CALL ValueItemAcc::getLocale()
+lang::Locale ValueItemAcc::getLocale()
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
@@ -225,7 +225,7 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& )
+uno::Reference< accessibility::XAccessible > ValueItemAcc::getAccessibleAtPoint( const awt::Point& )
 {
     uno::Reference< accessibility::XAccessible > xRet;
     return xRet;
@@ -251,18 +251,18 @@ awt::Rectangle ValueItemAcc::implGetBounds()
     return aRet;
 }
 
-void SAL_CALL ValueItemAcc::grabFocus()
+void ValueItemAcc::grabFocus()
 {
     // nothing to do
 }
 
-sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
+sal_Int32 ValueItemAcc::getForeground(  )
 {
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
+sal_Int32 ValueItemAcc::getBackground(  )
 {
     Color nColor;
     if (mpValueSetItem && mpValueSetItem->meType == VALUESETITEM_COLOR)
@@ -324,7 +324,7 @@ void ValueSetAcc::LoseFocus()
         aOldState, aNewState);
 }
 
-sal_Int64 SAL_CALL ValueSetAcc::getAccessibleChildCount()
+sal_Int64 ValueSetAcc::getAccessibleChildCount()
 {
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
@@ -336,7 +336,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getAccessibleChildCount()
 }
 
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleChild( sal_Int64 i )
+uno::Reference< accessibility::XAccessible > ValueSetAcc::getAccessibleChild( sal_Int64 i )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -353,14 +353,14 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     return xRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleParent()
+uno::Reference< accessibility::XAccessible > ValueSetAcc::getAccessibleParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     return mpValueSet->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int64 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
+sal_Int64 ValueSetAcc::getAccessibleIndexInParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -396,14 +396,14 @@ sal_Int64 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
     return nRet;
 }
 
-sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
+sal_Int16 ValueSetAcc::getAccessibleRole()
 {
     ThrowIfDisposed();
     return accessibility::AccessibleRole::LIST;
 }
 
 
-OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
+OUString ValueSetAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -418,7 +418,7 @@ OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
 }
 
 
-OUString SAL_CALL ValueSetAcc::getAccessibleName()
+OUString ValueSetAcc::getAccessibleName()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -432,14 +432,14 @@ OUString SAL_CALL ValueSetAcc::getAccessibleName()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::getAccessibleRelationSet()
+uno::Reference< accessibility::XAccessibleRelationSet > ValueSetAcc::getAccessibleRelationSet()
 {
     ThrowIfDisposed();
     SolarMutexGuard g;
     return mpValueSet->GetDrawingArea()->get_accessible_relation_set();
 }
 
-sal_Int64 SAL_CALL ValueSetAcc::getAccessibleStateSet()
+sal_Int64 ValueSetAcc::getAccessibleStateSet()
 {
     ThrowIfDisposed();
     sal_Int64 nStateSet = 0;
@@ -458,7 +458,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getAccessibleStateSet()
 }
 
 
-lang::Locale SAL_CALL ValueSetAcc::getLocale()
+lang::Locale ValueSetAcc::getLocale()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -476,7 +476,7 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleAtPoint( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > ValueSetAcc::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -519,28 +519,28 @@ awt::Rectangle ValueSetAcc::implGetBounds()
     return vcl::unohelper::ConvertToAWTRect(aBounds);
 }
 
-void SAL_CALL ValueSetAcc::grabFocus()
+void ValueSetAcc::grabFocus()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     mpValueSet->GrabFocus();
 }
 
-sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
+sal_Int32 ValueSetAcc::getForeground(  )
 {
     ThrowIfDisposed();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL ValueSetAcc::getBackground(  )
+sal_Int32 ValueSetAcc::getBackground(  )
 {
     ThrowIfDisposed();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int64 nChildIndex )
+void ValueSetAcc::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -557,7 +557,7 @@ void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int64 nChildIndex )
 }
 
 
-bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool ValueSetAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -575,7 +575,7 @@ bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
 }
 
 
-void SAL_CALL ValueSetAcc::clearAccessibleSelection()
+void ValueSetAcc::clearAccessibleSelection()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -583,14 +583,14 @@ void SAL_CALL ValueSetAcc::clearAccessibleSelection()
 }
 
 
-void SAL_CALL ValueSetAcc::selectAllAccessibleChildren()
+void ValueSetAcc::selectAllAccessibleChildren()
 {
     ThrowIfDisposed();
     // unsupported due to single selection only
 }
 
 
-sal_Int64 SAL_CALL ValueSetAcc::getSelectedAccessibleChildCount()
+sal_Int64 ValueSetAcc::getSelectedAccessibleChildCount()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -608,7 +608,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getSelectedAccessibleChildCount()
 }
 
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+uno::Reference< accessibility::XAccessible > ValueSetAcc::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -626,7 +626,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
 }
 
 
-void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int64 nChildIndex )
+void ValueSetAcc::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
