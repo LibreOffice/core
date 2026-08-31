@@ -1429,8 +1429,9 @@ tsc-emit.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(AllowJs) $(SourceMap)
 	@touch $@
 
+# tsc-strict spawns a bare "tsc"; keep the local one first
 tsc-strict.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
-	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript-strict-plugin/dist/cli/tsc-strict/index.js --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json --tsBuildInfoFile $(DIST_FOLDER)/strict.tsbuildinfo $(AllowJs)
+	$(QUIET_TSC) PATH="$(abs_builddir)/node_modules/.bin:$$PATH" $(NODE) $(builddir)/node_modules/typescript-strict-plugin/dist/cli/tsc-strict/index.js --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json --tsBuildInfoFile $(DIST_FOLDER)/strict.tsbuildinfo $(AllowJs)
 	@touch $@
 
 tscompile.done: tsc-emit.done tsc-strict.done
