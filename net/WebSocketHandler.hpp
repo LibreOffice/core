@@ -23,9 +23,7 @@
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
 #include <net/HttpHelper.hpp>
-#if !MOBILEAPP
 #include <net/HttpRequest.hpp>
-#endif
 #include <net/NetUtil.hpp>
 #include <net/Socket.hpp>
 
@@ -133,8 +131,6 @@ public:
         RESERVED_TLS_FAILURE    = 1015
     };
 
-#if !MOBILEAPP
-
     /// Returns the Web-Socket Security Key generated for this instance.
     const std::string& getWebSocketKey() const { return _key; }
 
@@ -180,7 +176,6 @@ public:
         LOG_ERR("Failed to make WebSocket request");
         return false;
     }
-#endif
 
 protected:
     /// Implementation of the ProtocolHandlerInterface.
@@ -619,7 +614,6 @@ protected:
         return events;
     }
 
-#if !MOBILEAPP
 private:
     /// Sends a native control-frame ping or pong message
     void sendPingOrPong(std::chrono::steady_clock::time_point now,
@@ -662,7 +656,6 @@ public:
             LOG_WRN("Servers should not send pongs, only clients");
         sendPingOrPong(now, data, len, WSOpCode::Pong, socket);
     }
-#endif
 
     /// Do we need to handle a timeout ?
     bool checkTimeout([[maybe_unused]] std::chrono::steady_clock::time_point now) override
@@ -751,7 +744,6 @@ public:
 
 protected:
 
-#if !MOBILEAPP
     /// Builds a websocket frame based on data and flags received as parameters.
     /// The frame is output in 'out' parameter
     void buildFrame(const char* data, const uint64_t len, unsigned char flags, Buffer &out) const
@@ -818,7 +810,6 @@ protected:
             out.append(data, len);
         }
     }
-#endif
 
     /// Sends a WebSocket frame given the data, length, and flags.
     /// Returns the number of bytes written (including frame overhead) on success,
@@ -1041,7 +1032,6 @@ protected:
         setWebSocket(socket);
     }
 
-#if !MOBILEAPP
     // Handle incoming upgrade to full socket as client WS.
     void handleClientUpgrade(const std::shared_ptr<StreamSocket>& socket)
     {
@@ -1092,7 +1082,6 @@ protected:
         // Nothing to do, not enough data to parse.
         assert(read == 0 && "Need more more data to parse.");
     }
-#endif
 
     void setWebSocket(const std::shared_ptr<StreamSocket>& socket)
     {
