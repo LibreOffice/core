@@ -131,6 +131,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _tileHeightPixel(0)
     , _tileWidthTwips(0)
     , _tileHeightTwips(0)
+    , _clientZoomPercent(0)
     , _kitViewId(-1)
     , _canonicalViewId(CanonicalViewId::None)
     , _state(SessionState::DETACHED)
@@ -1223,6 +1224,14 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         _tileHeightPixel = tilePixelHeight;
         _tileWidthTwips = tileTwipWidth;
         _tileHeightTwips = tileTwipHeight;
+
+        int zoomPercent;
+        if (tokens.size() > 6 && getTokenInteger(tokens[6], "zoompercent", zoomPercent) &&
+            zoomPercent > 0)
+        {
+            _clientZoomPercent = zoomPercent;
+        }
+
         return forwardToChild(std::string(buffer, length), docBroker);
     }
     else if (tokens.equals(0, "tileprocessed"))
@@ -4366,6 +4375,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tvisibleAreaPart: " << _visibleAreaPart
        << "\n\t\ttile size Pixel: " << _tileWidthPixel << 'x' << _tileHeightPixel
        << "\n\t\ttile size Twips: " << _tileWidthTwips << 'x' << _tileHeightTwips
+       << "\n\t\tclientZoomPercent: " << _clientZoomPercent
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument

@@ -281,6 +281,9 @@ public:
     TilePrioritizer::Priority getTilePriority(const TileDesc& tile) const;
 
     const Util::Rectangle& getVisibleArea() const { return _clientVisibleArea; }
+
+    /// The zoom this client is showing at, as a percentage, or 0 when it has not said.
+    int getClientZoomPercent() const { return _clientZoomPercent; }
     /// Visible area can have negative value as position, but we have tiles only in the positive range
     Util::Rectangle getNormalizedVisibleArea() const;
 
@@ -651,6 +654,9 @@ private:
     int _tileHeightPixel;
     int _tileWidthTwips;
     int _tileHeightTwips;
+
+    /// The zoom the client is showing at, as a percentage, or 0 before it has said.
+    int _clientZoomPercent;
 
     /// The integer id of the view in the Kit process
     int _kitViewId;
