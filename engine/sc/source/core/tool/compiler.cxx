@@ -2373,7 +2373,7 @@ Label_MaskStateMachine:
             case ssGetChar :
             {
                 // Order is important!
-                if (meLastOp == ocTableRefOpen && c != '[' && c != '#' && c != ']')
+                if (meLastOp == ocTableRefOpen && c != '[' && c != '#' && c != ']' && c != '@')
                 {
                     *pSym++ = c;
                     eState = ssGetTableRefColumn;
@@ -4374,7 +4374,7 @@ bool ScCompiler::ParseTableRefItem( const OUString& rName )
 namespace {
 OUString unescapeTableRefColumnSpecifier( const OUString& rStr )
 {
-    // '#', '[', ']' and '\'' are escaped with '\''
+    // '#', '[', ']', a leading '@' and '\'' are escaped with '\''
 
     if (rStr.indexOf( '\'' ) < 0)
         return rStr;
@@ -4407,6 +4407,14 @@ bool ScCompiler::ParseTableRefColumn( const OUString& rName )
     // accessing maTableRefs.back() is safe.
     ScTableRefToken* p = maTableRefs.back().mxToken.get();
     assert(p);  // not a ScTableRefToken can't be
+
+    // A bare [@Col] bracketed the column here, so pay that bracket's close before any early
+    // return below; an unbalanced run would report a bracket error over the name error.
+    if (maTableRefs.back().mbCloseAfterColumn)
+    {
+        maTableRefs.back().mbCloseAfterColumn = false;
+        maPendingOpCodes.push( ocTableRefClose);
+    }
 
     ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex( p->GetIndex());
     if (!pDBData)
@@ -4871,7 +4879,27 @@ Label_Rewind:
     {
         const OUString aOrg( cSymbol );
 
-        // Check for TableRef column specifier first, it may be anything.
+        // '@' is MSO's shorthand for [#This Row]. Emit the tokens the long form would
+        // produce, so that nothing downstream sees the short form.
+        if (cSymbol[0] == '@' && cSymbol[1] == 0 && !maTableRefs.empty()
+                && maTableRefs.back().mnLevel == 1)
+        {
+            TableRefEntry& rTableRef = maTableRefs.back();
+            rTableRef.mxToken->AddItem( ScTableRefToken::THIS_ROW);
+            maPendingOpCodes.push( ocTableRefItemThisRow);
+            maPendingOpCodes.push( ocTableRefClose);
+            maPendingOpCodes.push( ocSep);
+            if (nSrcPos >= aFormula.getLength() || aFormula[nSrcPos] != '[')
+            {
+                // A bare [@Col] does not bracket the column, so bracket it here.
+                maPendingOpCodes.push( ocTableRefOpen);
+                rTableRef.mbCloseAfterColumn = true;
+            }
+            maRawToken.SetOpCode( ocTableRefOpen);
+            return true;
+        }
+
+        // Check for TableRef column specifier before any name, it may be anything.
         if (cSymbol[0] != '#' && !maTableRefs.empty() && maTableRefs.back().mnLevel)
         {
             if (ParseTableRefColumn( aOrg ))
@@ -6017,6 +6045,12 @@ void escapeTableRefColumnSpecifier( OUString& rStr )
             case '#':
             case ']':
                 aBuf.append( '\'' );
+                break;
+            case '@':
+                // Only a leading '@' can be read as the [#This Row] shorthand, and MSO
+                // escapes it nowhere else either.
+                if (p == rStr.getStr())
+                    aBuf.append( '\'' );
                 break;
             default:
                 ;   // nothing

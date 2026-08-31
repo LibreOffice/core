@@ -313,6 +313,7 @@ private:
     {
         boost::intrusive_ptr<ScTableRefToken> mxToken;
         sal_uInt16  mnLevel;
+        bool        mbCloseAfterColumn = false;  /// bare [@Col] owes the column's ocTableRefClose
         TableRefEntry( ScTableRefToken* p ) : mxToken(p), mnLevel(0) {}
     };
     std::vector<TableRefEntry> maTableRefs;     /// "stack" of currently active ocTableRef tokens

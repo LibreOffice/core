@@ -3202,6 +3202,66 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                         } while (nLevel);
                     }
                 }
+                else if (t->GetOpCode() == ocTableRef && bAllowArrAdvance
+                        && FormulaGrammar::extractFormulaLanguage( meGrammar)
+                            == css::sheet::FormulaLanguage::NATIVE)
+                {
+                    // MSO's UI writes Table[[#This Row],[Col]] as Table[@Col]. Render that
+                    // run short, the inverse of the '@' the compiler expands on input.
+                    // Storage grammars keep the long form.
+                    const sal_uInt16 nSaved = maArrIterator.GetIndex();
+                    OUStringBuffer aCol1, aCol2;
+                    bool bRange = false;
+                    bool bShort = NextTokenIsOpCode(ocTableRefOpen)
+                               && NextTokenIsOpCode(ocTableRefOpen)
+                               && NextTokenIsOpCode(ocTableRefItemThisRow)
+                               && NextTokenIsOpCode(ocTableRefClose)
+                               && NextTokenIsOpCode(ocSep)
+                               && NextTokenIsOpCode(ocTableRefOpen)
+                               && NextTokenAsTableRefColumn( aCol1)
+                               && NextTokenIsOpCode(ocTableRefClose);
+                    if (bShort)
+                    {
+                        const FormulaToken* p = maArrIterator.PeekNextNoSpaces();
+                        bRange = (p && p->GetOpCode() == ocRange);
+                        if (bRange)
+                            bShort = NextTokenIsOpCode(ocRange)
+                                  && NextTokenIsOpCode(ocTableRefOpen)
+                                  && NextTokenAsTableRefColumn( aCol2)
+                                  && NextTokenIsOpCode(ocTableRefClose);
+                    }
+                    // The outer bracket, so that anything else keeps the long form.
+                    if (bShort)
+                        bShort = NextTokenIsOpCode(ocTableRefClose);
+
+                    if (bShort)
+                    {
+                        auto appendBracketed = [this, &rBuffer](const OUString& rName) {
+                            rBuffer.append( mxSymbols->getSymbol( ocTableRefOpen));
+                            rBuffer.append( rName);
+                            rBuffer.append( mxSymbols->getSymbol( ocTableRefClose));
+                        };
+
+                        rBuffer.append( mxSymbols->getSymbol( ocTableRefOpen));
+                        rBuffer.append( '@');
+                        // MSO brackets both columns of a range, and a single column only
+                        // where its name carries an escape, taking [@[a'#b]] but not
+                        // [@a'#b]. The escaping character is the only one ever added.
+                        const OUString aName1( aCol1.makeStringAndClear());
+                        if (bRange || aName1.indexOf( '\'') >= 0)
+                            appendBracketed( aName1);
+                        else
+                            rBuffer.append( aName1);
+                        if (bRange)
+                        {
+                            rBuffer.append( mxSymbols->getSymbol( ocRange));
+                            appendBracketed( aCol2.makeStringAndClear());
+                        }
+                        rBuffer.append( mxSymbols->getSymbol( ocTableRefClose));
+                    }
+                    else
+                        maArrIterator.Jump( nSaved);
+                }
                 break;
             case svExternal:
             {
@@ -3545,6 +3605,22 @@ bool FormulaCompiler::GetExcelName( OUString& /*rName*/ ) const
 formula::ParamClass FormulaCompiler::GetForceArrayParameter( const FormulaToken* /*pToken*/, sal_uInt16 /*nParam*/ ) const
 {
     return ParamClass::Unknown;
+}
+
+bool FormulaCompiler::NextTokenIsOpCode( OpCode eOpCode )
+{
+    const FormulaToken* p = maArrIterator.NextNoSpaces();
+    return p && p->GetOpCode() == eOpCode;
+}
+
+bool FormulaCompiler::NextTokenAsTableRefColumn( OUStringBuffer& rBuffer )
+{
+    const FormulaToken* p = maArrIterator.PeekNextNoSpaces();
+    if (!p || p->GetType() != svSingleRef)
+        return false;
+    maArrIterator.NextNoSpaces();
+    CreateStringFromToken( rBuffer, p);
+    return true;
 }
 
 void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )

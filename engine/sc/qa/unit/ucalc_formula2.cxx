@@ -2517,6 +2517,67 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncFORMULA)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRefEscapedAt)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+    std::unique_ptr<ScDBData> pData(new ScDBData(u"table"_ustr, 0, 0, 0, 1, 2));
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert \"table\" database range.",
+                           pDBs->getNamedDBs().insert(std::move(pData)));
+
+    const std::vector<std::vector<const char*>> aData
+        = { { "@foo", "Header2" }, { "1", "2" }, { "4", "8" } };
+    const ScAddress aTablePos(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(aTablePos, insertRangeData(m_pDoc, aTablePos, aData).aStart);
+
+    // MSO reads an unescaped '@' as its shorthand for [#This Row], so a column whose name
+    // holds one is addressed with the '@' escaped.
+    const ScAddress aPos(3, 1, 0);
+    m_pDoc->SetString(aPos, u"=SUM(table[['@foo]])"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(table[['@foo]])"_ustr, m_pDoc->GetFormula(3, 1, 0));
+
+    // '@' is normalised away on input, so both spellings store the same tokens. The UI
+    // shows MSO's shorthand, the OOXML export keeps the long form.
+    for (const char* pInput : { "=SUM(table[@Header2])", "=SUM(table[@[Header2]])",
+                                "=SUM(table[[#This Row];[Header2]])" })
+    {
+        const ScAddress aAtPos(4, 1, 0);
+        m_pDoc->SetString(aAtPos, OUString::createFromAscii(pInput));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pInput, u"2"_ustr, m_pDoc->GetString(aAtPos));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pInput, u"=SUM(table[@Header2])"_ustr,
+                                     m_pDoc->GetFormula(4, 1, 0));
+        const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aAtPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pInput, u"=SUM(table[[#This Row],[Header2]])"_ustr,
+                                     pFC->GetFormula(formula::FormulaGrammar::GRAM_OOXML));
+    }
+
+    // MSO brackets both columns of a range: =SUM(Table2[@[a b]:[a'#b]]).
+    const ScAddress aRangePos(6, 1, 0);
+    m_pDoc->SetString(aRangePos, u"=SUM(table[[#This Row];['@foo]:[Header2]])"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, m_pDoc->GetString(aRangePos));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(table[@['@foo]:[Header2]])"_ustr, m_pDoc->GetFormula(6, 1, 0));
+
+    // A column name carrying an escape has to keep its brackets, MSO rejects [@a'#b].
+    const ScAddress aEscPos(5, 1, 0);
+    m_pDoc->SetString(aEscPos, u"=SUM(table[[#This Row];['@foo]])"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, m_pDoc->GetString(aEscPos));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(table[@['@foo]])"_ustr, m_pDoc->GetFormula(5, 1, 0));
+
+    // A name that is no column of the table has to report that, the bracket the shorthand
+    // injected is closed either way.
+    const ScAddress aBadPos(7, 1, 0);
+    m_pDoc->SetString(aBadPos, u"=SUM(table[@Nosuch])"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#NAME?"_ustr, m_pDoc->GetString(aBadPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
@@ -2575,7 +2636,13 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
             { "this_row_header1", "table[[#This Row];[Header1]]", "1", "4", "16", "#VALUE!" },
             { "this_row_header2", "table[[#This Row];[Header2]]", "1", "8", "32", "#VALUE!" },
             { "this_row_range_header_1_to_2", "table[[#This Row];[Header1]:[Header2]]", "2", "12",
-              "48", "#VALUE!" } };
+              "48", "#VALUE!" },
+            // '@' is MSO's shorthand for [#This Row] and must give the same results.
+            { "at_header1", "table[@Header1]", "1", "4", "16", "#VALUE!" },
+            { "at_header2", "table[@Header2]", "1", "8", "32", "#VALUE!" },
+            { "at_bracketed_header1", "table[@[Header1]]", "1", "4", "16", "#VALUE!" },
+            { "at_range_header_1_to_2", "table[@[Header1]:[Header2]]", "2", "12", "48",
+              "#VALUE!" } };
 
     {
         // Insert named expressions.

@@ -1014,11 +1014,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf105272)
     saveAndReload(TestFilter::XLSX);
     ScDocument* pDoc = getScDoc();
     //without the fix in place,it would fail
-    //Expected: Table1[[#This Row],[Total]]/Table1[[#This Row],['# Athletes]]
-    //Actual  : table1[[#this row],[total]]/table1[[#this row],['# athletes]]
+    //Expected: Table1[@Total]/Table1[@['# Athletes]]
+    //Actual  : table1[@total]/table1[@['# athletes]]
+    // The UI shows MSO's [@Col] shorthand for [[#This Row],[Col]], bracketing the column
+    // only where its name carries an escape.
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Wrong formula", u"=Table1[[#This Row],[Total]]/Table1[[#This Row],['# Athletes]]"_ustr,
+        "Wrong formula", u"=Table1[@Total]/Table1[@['# Athletes]]"_ustr,
         pDoc->GetFormula(7, 3, 0));
 }
 

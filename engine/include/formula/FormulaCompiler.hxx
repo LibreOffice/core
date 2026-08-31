@@ -483,6 +483,10 @@ private:
 
     void ForceArrayOperator( FormulaTokenRef const & rCurr );
 
+    bool NextTokenIsOpCode( OpCode eOpCode );
+
+    bool NextTokenAsTableRefColumn( OUStringBuffer& rBuffer );
+
     class CurrentFactor
     {
         FormulaTokenRef  pPrevFac;
