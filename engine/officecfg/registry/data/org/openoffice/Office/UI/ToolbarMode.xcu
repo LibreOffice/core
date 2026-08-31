@@ -20,14 +20,8 @@
       </prop>
       <node oor:name="Modes">
         <node oor:name="Default" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Standard Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Default</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>0</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -47,14 +41,8 @@
           </prop>
         </node>
         <node oor:name="Single" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Single Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Single</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>1</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -73,14 +61,8 @@
           </prop>
         </node>
         <node oor:name="Sidebar" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Sidebar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Sidebar</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>2</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -106,14 +88,8 @@
       </prop>
       <node oor:name="Modes">
         <node oor:name="Default" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Standard Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Default</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>0</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -133,14 +109,8 @@
           </prop>
         </node>
         <node oor:name="Single" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Single Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Single</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>1</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -159,14 +129,8 @@
           </prop>
         </node>
         <node oor:name="Sidebar" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Sidebar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Sidebar</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>2</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -192,14 +156,8 @@
       </prop>
       <node oor:name="Modes">
         <node oor:name="Default" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Standard Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Default</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>0</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -220,14 +178,8 @@
           </prop>
         </node>
         <node oor:name="Single" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Single Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Single</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>1</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -253,14 +205,8 @@
       </prop>
       <node oor:name="Modes">
         <node oor:name="Default" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Standard Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Default</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>0</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -286,14 +232,8 @@
       </prop>
       <node oor:name="Modes">
         <node oor:name="Default" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Standard Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Default</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>0</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>false</value>
@@ -319,14 +259,8 @@
       </prop>
       <node oor:name="Modes">
         <node oor:name="Default" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Standard Toolbar</value>
-          </prop>
           <prop oor:name="CommandArg">
             <value>Default</value>
-          </prop>
-          <prop oor:name="MenuPosition">
-            <value>0</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value> false </value>

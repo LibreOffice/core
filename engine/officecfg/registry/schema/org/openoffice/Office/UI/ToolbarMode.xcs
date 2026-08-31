@@ -26,28 +26,10 @@
       <info>
         <desc>The container for mode description.</desc>
       </info>
-      <prop oor:name="Label" oor:type="xs:string" oor:nillable="false" oor:localized="true">
-      <info>
-        <desc>The toolbar mode label.</desc>
-      </info>
-      </prop>
       <prop oor:name="CommandArg" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>The toolbar mode name to use as a parameter in the UNO command. Must be a single word.</desc>
         </info>
-      </prop>
-      <prop oor:name="MenuPosition" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Position in the menu.</desc>
-        </info>
-      </prop>
-      <prop oor:name="IsExperimental" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Enables entry only in the experimental mode.</desc>
-        </info>
-        <value>
-          false
-        </value>
       </prop>
       <prop oor:name="HasNotebookbar" oor:type="xs:boolean" oor:nillable="false">
         <info>
@@ -64,17 +46,6 @@
           <desc>List of visible toolbars activated by user.</desc>
         </info>
       </prop>
-      <prop oor:name="UIItemProperties" oor:type="oor:string-list" oor:nillable="false">
-        <info>
-          <desc>
-          List of context descriptors.  Each context descriptor is a string that contains three comma
-          separated values (note that values are case sensitive):
-          1. UIItemID - contains the ID of uiitem(GtkToolButton/GtkMenuItem) of notebookbar
-          2. propertyName - contains the value of attribute(name) of property node.
-          3. propertyValue - contains the value of property node.
-          </desc>
-        </info>
-      </prop>
       <prop oor:name="Sidebar" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>
@@ -84,12 +55,6 @@
             Opened - sidebar fully opened
           </desc>
         </info>
-      </prop>
-      <prop oor:name="HasMenubar" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Determines if menubar is visible.</desc>
-        </info>
-        <value>false</value>
       </prop>
     </group>
     <group oor:name="Application">
