@@ -887,7 +887,7 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
                 if (!bInspectElements)
                 {
                     sal_Int32 nFirstIdx = nLower;
-                    SbxVariableRef xFirstVar = pArray->Get(&nFirstIdx);
+                    SbxVariableRef xFirstVar = pArray->Get(nFirstIdx);
                     if (xFirstVar && !xFirstVar->IsFixed())
                         bInspectElements = true;
                 }
