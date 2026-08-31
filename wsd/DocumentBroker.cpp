@@ -5543,9 +5543,25 @@ void DocumentBroker::handleTileCombinedRequest(TileCombined& tileCombined, bool 
     sendRequestedTiles(session);
 }
 
+/// Sends the messages of one slide rendering to a single view.
+static void sendSlideLayers(const std::shared_ptr<ClientSession>& session,
+                            const std::vector<std::shared_ptr<Message>>& messages)
+{
+    for (const auto& message : messages)
+    {
+        session->sendBinaryFrame(message->data().data(), message->size());
+    }
+}
+
 void DocumentBroker::handleGetSlideRequest(const StringVector& tokens,
                                            const std::shared_ptr<ClientSession>& session)
 {
+    if (!EnableExperimental)
+    {
+        forwardToChild(session, tokens.substrFromToken(0));
+        return;
+    }
+
     // cacheKey example:
     // hash=108777063986320 part=0 width=1919 height=1080 renderBackground=1 renderMasterPage=1 devicePixelRatio=1 compressedLayers=0 uniqueID=324
     std::string cacheKey = tokens.substrFromToken(1);
@@ -5553,16 +5569,77 @@ void DocumentBroker::handleGetSlideRequest(const StringVector& tokens,
     {
         LOG_INF("Slideshow: Cached slide layer reused by canonical view ID "
                 << session->getCanonicalViewId());
-        for (const auto& message : itr->second)
-        {
-            session->sendBinaryFrame(message->data().data(), message->size());
-        }
+        sendSlideLayers(session, itr->second);
         return;
     }
+
+    if (auto itr = _pendingSlideRenders.find(cacheKey); itr != _pendingSlideRenders.end())
+    {
+        LOG_INF("Slideshow: Canonical view ID "
+                << session->getCanonicalViewId()
+                << " waits for the slide layer the kit is rendering, cache key: " << cacheKey);
+        itr->second.waiters.emplace_back(session);
+        return;
+    }
+
     LOG_INF("Slideshow: Cached slide layer not found, slides layer is freshely rendered by "
             "canonical view ID "
             << session->getCanonicalViewId());
-    forwardToChild(session, tokens.substrFromToken(0));
+    std::string request = tokens.substrFromToken(0);
+    // A request that the kit never receives finishes with no message of its own, so it leaves
+    // nothing for another view to wait for.
+    if (forwardToChild(session, request))
+        _pendingSlideRenders[std::move(cacheKey)].request = std::move(request);
+}
+
+void DocumentBroker::finishPendingSlideRender(const std::string& cacheKey,
+                                              const std::shared_ptr<Message>& completion,
+                                              bool cached)
+{
+    auto itr = _pendingSlideRenders.find(cacheKey);
+    if (itr == _pendingSlideRenders.end())
+        return;
+
+    const PendingSlideRender pending = std::move(itr->second);
+    _pendingSlideRenders.erase(itr);
+
+    if (pending.waiters.empty())
+        return;
+
+    const auto entry = _slideLayerCache.find(cacheKey);
+    const bool replay = cached && entry != _slideLayerCache.end();
+
+    // A request that is sent again lands back here and starts a rendering of its own, which
+    // the other waiting views then wait for in turn.
+    const StringVector requestTokens = StringVector::tokenize(pending.request);
+
+    for (const auto& waiter : pending.waiters)
+    {
+        const std::shared_ptr<ClientSession> session = waiter.lock();
+        if (!session)
+            continue;
+
+        if (replay)
+        {
+            LOG_INF("Slideshow: Sending the rendered slide layer to waiting canonical view ID "
+                    << session->getCanonicalViewId());
+            sendSlideLayers(session, entry->second);
+        }
+        else if (cached || pending.outdated)
+        {
+            LOG_INF("Slideshow: The rendered slide layer is gone, asking for it again for "
+                    "canonical view ID "
+                    << session->getCanonicalViewId());
+            handleGetSlideRequest(requestTokens, session);
+        }
+        else
+        {
+            LOG_INF("Slideshow: Reporting the failed slide rendering to waiting canonical view "
+                    "ID "
+                    << session->getCanonicalViewId());
+            session->sendBinaryFrame(completion->data().data(), completion->size());
+        }
+    }
 }
 
 void DocumentBroker::handleSlideLayerResponse(const std::shared_ptr<Message>& message)
@@ -5578,19 +5655,31 @@ void DocumentBroker::handleSlideLayerResponse(const std::shared_ptr<Message>& me
             return;
         }
         const std::string key = JsonUtil::getJSONValue<std::string>(jsonPtr, "cacheKey");
+        const bool complete = message->firstTokenMatches("sliderenderingcomplete:");
+        const bool failed =
+            complete && JsonUtil::getJSONValue<std::string>(jsonPtr, "status") != "success";
+
+        const auto pending = _pendingSlideRenders.find(key);
+        const bool outdated =
+            pending != _pendingSlideRenders.end() && pending->second.outdated;
+
         if (key.empty())
         {
             // A rendering that fails before it parses its parameters reports no cacheKey.
             LOG_INF("Slideshow: Not caching a slide layer message without a cache key");
         }
-        else if (message->firstTokenMatches("sliderenderingcomplete:") &&
-                 JsonUtil::getJSONValue<std::string>(jsonPtr, "status") != "success")
+        else if (failed)
         {
             // The rendering failed. Throw away its layers so the next request for this key is
             // rendered afresh instead of replaying the failure.
             _slideLayerCache.erase(key);
             LOG_INF("Slideshow: Dropped the cache entry of a failed rendering, cache key: "
                     << key);
+        }
+        else if (outdated)
+        {
+            LOG_INF("Slideshow: Not caching a slide layer of a rendering that the document "
+                    "changed under, cache key: " << key);
         }
         else
         {
@@ -5599,6 +5688,9 @@ void DocumentBroker::handleSlideLayerResponse(const std::shared_ptr<Message>& me
             _slideLayerCache.insert(key, message);
             LOG_INF("Slideshow: Cached a slide layer with cache key: " << key);
         }
+
+        if (complete)
+            finishPendingSlideRender(key, message, !failed && !outdated);
     }
     forwardToClient(message);
 }

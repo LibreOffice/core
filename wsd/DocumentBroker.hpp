@@ -488,6 +488,11 @@ public:
         // Currently can't detect which slide was modified and
         // based on our key choice can't remove just cache for particular slide
         _slideLayerCache.erase_all();
+
+        // A rendering that the kit is working on drew the document as it was before the
+        // change, so its layers are out of date as soon as they arrive.
+        for (auto& pending : _pendingSlideRenders)
+            pending.second.outdated = true;
     }
 
     void handleTileRequest(const StringVector &tokens, bool forceKeyframe,
@@ -791,6 +796,13 @@ private:
     void handleDialogPaintResponse(const std::vector<char>& payload, bool child);
     void handleTileCombinedResponse(const std::shared_ptr<Message>& message);
     void handleSlideLayerResponse(const std::shared_ptr<Message>& message);
+
+    /// Gives the views that waited for a finished slide rendering what the kit produced for
+    /// it, either the cached layers, the message that reports the failure, or a fresh
+    /// rendering when the document changed while this one ran.
+    void finishPendingSlideRender(const std::string& cacheKey,
+                                  const std::shared_ptr<Message>& completion, bool cached);
+
     void handleDialogRequest(const std::string& dialogCmd);
 
     /// Invoked to issue a save before renaming the document filename.
@@ -1941,6 +1953,23 @@ private:
 
     /// Cached slide layer for slideshow
     SlideLayerCacheMap _slideLayerCache;
+
+    /// One slide rendering that the kit was asked for and has not finished yet.
+    struct PendingSlideRender
+    {
+        /// The getslide request that asked for this rendering.
+        std::string request;
+
+        /// The views that asked for the same rendering while the kit was working on it.
+        std::vector<std::weak_ptr<ClientSession>> waiters;
+
+        /// True once the document changed while the kit was working on this rendering, which
+        /// leaves its layers showing the document as it was before the change.
+        bool outdated = false;
+    };
+
+    /// The slide renderings the kit is working on, under the cache key of each rendering.
+    Util::UnorderedStringMap<PendingSlideRender> _pendingSlideRenders;
 
     std::unique_ptr<LockContext> _lockCtx;
 
