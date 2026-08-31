@@ -1601,7 +1601,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
         if (mpRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && mpRowInfo[nRotY].nRotMaxCol > nRotMax)
             nRotMax = mpRowInfo[nRotY].nRotMaxCol;
 
-    const ScPatternAttr* pPattern;
+    CellAttributeHolder  aPatternHolder;
     const SfxItemSet*    pCondSet;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -1652,21 +1652,21 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                 if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                         !pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
-                    pPattern = pInfo->getPatternAttr();
+                    aPatternHolder.setScPatternAttr(pInfo->getPatternAttr());
                     pCondSet = pInfo->pConditionSet;
-                    if (!pPattern)
+                    if (!aPatternHolder)
                     {
-                        pPattern = mpDoc->GetPattern( nX, nY, mnTab );
-                        pInfo->pPatternAttr = pPattern;
+                        aPatternHolder.setScPatternAttr(mpDoc->GetPattern( nX, nY, mnTab ));
+                        pInfo->pPatternAttr = aPatternHolder;
                         pCondSet = mpDoc->GetCondResult( nX, nY, mnTab );
                         pInfo->pConditionSet = pCondSet;
                     }
 
                     //! LastPattern etc.
 
-                    Degree100 nAttrRotate = pPattern->GetRotateVal( pCondSet );
+                    Degree100 nAttrRotate = aPatternHolder.getScPatternAttr()->GetRotateVal( pCondSet );
                     SvxRotateMode eRotMode =
-                                    pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
+                                    aPatternHolder.getScPatternAttr()->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
                     if (nAttrRotate)
                     {
@@ -1730,7 +1730,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                         const SvxBrushItem* pBackground(static_cast<const SvxBrushItem*>(pInfo->maBackground.getItem()));
                         if (!pBackground)
-                            pBackground = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+                            pBackground = &aPatternHolder.getScPatternAttr()->GetItem(ATTR_BACKGROUND, pCondSet);
                         if (bCellContrast)
                         {
                             //  high contrast for cell borders and backgrounds -> empty background
