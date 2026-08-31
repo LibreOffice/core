@@ -729,7 +729,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/document,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/drawing,\
 	AccessibleDrawDocumentView \
-	AccessibleImageBullet \
 	AppletShape \
 	Background \
 	BitmapTable \
