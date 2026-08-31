@@ -76,7 +76,7 @@ abstract class SidebarBase extends JSDialogComponent {
 
 	/// this is used to determine if we need to send uno command - only for core decks
 	isVisible(): boolean {
-		const node = $(`#${this.type}-dock-wrapper`);
+		const node = $(this.wrapper);
 		return node.hasClass('visible') && node.hasClass('coreBased');
 	}
 
@@ -87,7 +87,7 @@ abstract class SidebarBase extends JSDialogComponent {
 
 	/// shared implementation for showing/hiding sidebar
 	protected showSidebarImpl(show: boolean) {
-		const wrapper = $(`#${this.type}-dock-wrapper`);
+		const wrapper = $(this.wrapper);
 
 		if (show) {
 			wrapper.addClass('visible');

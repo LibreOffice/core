@@ -981,11 +981,11 @@ class Dispatcher {
 		};
 
 		this.actionsMap['animationdeck'] = () => {
-			app.map.sidebarFromNotebookbar.openAnimationsSidebar();
+			app.map.sidebarFromNotebookbar.toggleAnimationsSidebar();
 		};
 
 		this.actionsMap['transitiondeck'] = () => {
-			app.map.sidebarFromNotebookbar.openTransitionsSidebar();
+			app.map.sidebarFromNotebookbar.toggleTransitionsSidebar();
 		};
 	}
 

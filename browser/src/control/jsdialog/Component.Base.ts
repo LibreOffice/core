@@ -52,6 +52,30 @@ abstract class JSDialogComponent {
 	/// assign or create container for the component
 	protected abstract setupContainer(parentContainer?: HTMLElement): void;
 
+	/// The allowed JSON type of the component whose full build last filled each container.
+	/// Held as plain component state in a WeakMap, so recording an owner writes no DOM
+	/// attribute and an entry lives exactly as long as its container element.
+	private static containerContentOwner = new WeakMap<HTMLElement, string>();
+
+	/// Widgets in the container belong to the component that last built its full content.
+	/// A widget patch finds its target by id inside the container, so patches are applied
+	/// only while this component owns the content.
+	protected ownsContainerContent(): boolean {
+		if (!this.container) return false;
+
+		const owner = JSDialogComponent.containerContentOwner.get(this.container);
+		return !owner || owner === this.allowedJsonType;
+	}
+
+	/// records this component as the owner of the container content
+	protected markContainerContentOwner(): void {
+		if (this.container)
+			JSDialogComponent.containerContentOwner.set(
+				this.container,
+				this.allowedJsonType,
+			);
+	}
+
 	/// handle update message
 	protected onJSUpdate(e: { data: UpdateData }) {
 		const data = e.data;
@@ -74,6 +98,8 @@ abstract class JSDialogComponent {
 				? this.model.safeStringify(data.control)
 				: data.control.id,
 		);
+
+		if (!this.ownsContainerContent()) return false;
 
 		this.builder.updateWidget(this.container, data.control);
 
@@ -102,6 +128,8 @@ abstract class JSDialogComponent {
 				? this.model.safeStringify(data.data)
 				: data.data.control_id,
 		);
+
+		if (!this.ownsContainerContent()) return false;
 
 		this.builder.executeAction(this.container, data.data);
 

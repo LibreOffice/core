@@ -97,10 +97,38 @@ class SidebarFromNotebookbarPanel extends Sidebar {
 		return super.onJSAction(e);
 	}
 
-	public openTransitionsSidebar() {
-		// we need to clean the core based sidebars
+	/// tells whether the given panel deck currently fills the sidebar dock
+	private isShowingDeck(id: NotebookbarBasedSidebarId): boolean {
+		return (
+			this.wrapper.classList.contains('visible') &&
+			!this.wrapper.classList.contains('coreBased') &&
+			this.deckState.activeDeckId === id + '-deck'
+		);
+	}
+
+	/// closes the sidebar dock while a panel deck is showing
+	private closePanelDeck() {
+		this.closeSidebar();
+		// no panel deck is showing any more, so both panel buttons drop their highlight
+		this.updatePresentationDeckHighlight('');
+	}
+
+	/// empties the sidebar dock for a panel deck. A showing core deck is also closed in
+	/// core itself, so the deck commands keep toggling in step with what the user sees.
+	private takeOverDock() {
+		// isVisible is true exactly while a core deck fills the dock
+		if (this.isVisible()) app.socket.sendMessage('uno .uno:SidebarHide');
 		this.closeSidebar();
 		this.setupTargetDeck(null);
+	}
+
+	public toggleTransitionsSidebar() {
+		if (this.isShowingDeck(NotebookbarBasedSidebarId.Transitions)) {
+			this.closePanelDeck();
+			return;
+		}
+
+		this.takeOverDock();
 		// toolbar button highlight is updated in Sidebar.onSidebar once the
 		// transitions deck is shown, which also clears the core deck buttons
 
@@ -111,10 +139,13 @@ class SidebarFromNotebookbarPanel extends Sidebar {
 		);
 	}
 
-	public openAnimationsSidebar() {
-		// we need to clean the core based sidebars
-		this.closeSidebar();
-		this.setupTargetDeck(null);
+	public toggleAnimationsSidebar() {
+		if (this.isShowingDeck(NotebookbarBasedSidebarId.Animations)) {
+			this.closePanelDeck();
+			return;
+		}
+
+		this.takeOverDock();
 		// toolbar button highlight is updated in Sidebar.onSidebar once the
 		// animations deck is shown, which also clears the core deck buttons
 
@@ -125,13 +156,14 @@ class SidebarFromNotebookbarPanel extends Sidebar {
 		);
 	}
 
-	// reuse Sidebar container
+	// reuse Sidebar container: this panel docks in the sidebar elements even though
+	// this.type is set to notebookbar after construction
 	protected setupContainer(parentContainer?: HTMLElement) {
 		this.container = document.getElementById(
-			`${this.type}-container`,
+			'sidebar-container',
 		) as HTMLElement;
 		this.wrapper = document.getElementById(
-			`${this.type}-dock-wrapper`,
+			'sidebar-dock-wrapper',
 		) as HTMLElement;
 		this.documentContainer = document.querySelector(
 			'#document-container',

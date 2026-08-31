@@ -251,12 +251,13 @@ class Sidebar extends SidebarBase {
 	onSidebar(data: FireEvent) {
 		var sidebarData = data.data;
 
-		if (
-			sidebarData.action === 'close' ||
-			window.app.file.disableSidebar ||
-			this.map.isReadOnlyMode()
-		) {
+		if (window.app.file.disableSidebar || this.map.isReadOnlyMode()) {
 			this.closeSidebar();
+		} else if (sidebarData.action === 'close') {
+			// While a panel deck owns the dock content, closing the core decks only
+			// drops the core deck state and the dock stays as the panel left it.
+			if (this.ownsContainerContent()) this.closeSidebar();
+			else this.setDeckState({ activeDeckId: null });
 		} else if (sidebarData.children) {
 			for (var i = sidebarData.children.length - 1; i >= 0; i--) {
 				if (sidebarData.children[i].type !== 'deck') {
@@ -310,6 +311,7 @@ class Sidebar extends SidebarBase {
 				}
 
 				this.model.fullUpdate(sidebarData as JSDialogJSON);
+				this.markContainerContentOwner();
 
 				const documentFragment = new DocumentFragment(); // do not modify dom yet
 				const tempContainer = window.L.DomUtil.create(
