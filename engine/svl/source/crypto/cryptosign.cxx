@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <array>
+#include <string_view>
 
 #include <svl/cryptosign.hxx>
 #include <svl/sigstruct.hxx>
@@ -1046,7 +1047,7 @@ enum class AppleSignStatus
 */
 AppleSignStatus SignWithAppleKeychain(
     svl::crypto::SigningContext& rSigningContext, const cpo::uno::Sequence<sal_Int8>& rDerEncoded,
-    const std::vector<std::pair<const void*, sal_Int32>>& rDataBlocks, const OUString& rSignTSA,
+    const std::vector<std::pair<const void*, sal_Int32>>& rDataBlocks, std::u16string_view rSignTSA,
     OStringBuffer& rCMSHexBuffer)
 {
     using svl::crypto::CFRef;
@@ -1057,7 +1058,7 @@ AppleSignStatus SignWithAppleKeychain(
 
     SAL_INFO("svl.crypto", "SignWithAppleKeychain: signing with a Keychain identity");
 
-    if (!rSignTSA.isEmpty())
+    if (!rSignTSA.empty())
         SAL_WARN("svl.crypto", "SignWithAppleKeychain: timestamping (TSA) is not yet supported "
                                "with Keychain-backed keys, signing without a timestamp");
 
