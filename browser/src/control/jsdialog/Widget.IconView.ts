@@ -335,6 +335,8 @@ JSDialog.iconView = function (
 			? data.labelledBy.join(' ')
 			: data.labelledBy;
 		iconview.setAttribute('aria-labelledby', ids);
+	} else if (data.aria?.label) {
+		JSDialog.AddAriaLabel(iconview, data, builder);
 	}
 
 	const disabled = data.enabled === false;
