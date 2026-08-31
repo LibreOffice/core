@@ -324,7 +324,7 @@ bool generateBytes(std::vector<sal_uInt8> & rBytes, sal_Int32 nSize)
 
     size_t nMax = std::min(rBytes.size(), size_t(nSize));
 
-    rtl_random_getBytes(nullptr, rBytes.data(), nMax);
+    (void)rtl_random_getBytes(nullptr, rBytes.data(), nMax);
 
     return true;
 }
