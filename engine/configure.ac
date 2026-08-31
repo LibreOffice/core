@@ -14191,15 +14191,22 @@ AC_CONFIG_FILES([config_host.mk], [
         sed -i -e 's#/mnt/\([[:alpha:]]\)/#\u\1:/#g' config_host.mk
     fi
     if test -n "$MSYS_ONLY_AS_HELPER"; then
-        # only at a value boundary (start of line/word, after a make construct
-        # like $(gb_SPACE), or an -I/-L flag), so that a single-letter
-        # directory inside a path is left alone, whether unix (/foo/b/bar) or
-        # Windows (C:/D/lo, where the drive's colon precedes it). For the same
-        # reason ':' is not a boundary: in a unix-style colon-separated list
-        # the /x/ entries stay as they are - the shells of the build realm
-        # resolve them natively, and inserting drive colons would corrupt the
-        # list structure.
-        sed -i -e 's#\(^\|[ =;"(),]\|-I\|-L\)/\([[:alpha:]]\)/#\1\u\2:/#g' config_host.mk
+        # only at a value boundary (start of line/word, after a list
+        # separator, a make construct like $(gb_SPACE), or an -I/-L flag), so
+        # that a single-letter directory inside a path (/foo/b/bar) is left
+        # alone. ':' must stay a boundary: the entries of colon-separated
+        # lists like LO_PATH have to come out in Windows form, since the
+        # native make scans PATH for its shell and cannot read posix entries
+        # - but an existing drive colon (C:/D/lo) must not anchor a bogus
+        # conversion of a single-letter directory behind it, so mask the
+        # boundary-preceded drive colons first and restore them at the end
+        # the mask must accept every boundary the conversion accepts (-I/-L
+        # included): config.status runs these commands also when the file is
+        # unchanged, so the whole substitution has to be idempotent over
+        # already-converted content
+        sed -i -e 's#\(^\|[ =:;"(),]\|-I\|-L\)\([[:alpha:]]\):/#\1\2@GBDRIVE@/#g' \
+               -e 's#\(^\|[ =:;"(),]\|-I\|-L\)/\([[:alpha:]]\)/#\1\u\2:/#g' \
+               -e 's#@GBDRIVE@#:#g' config_host.mk
     fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER MSYS_ONLY_AS_HELPER=$MSYS_ONLY_AS_HELPER])
 # also use windows paths in the vs-code workspace file (esp. for the launch configurations that use
 # INSTROOT) and also change the default shell from Cygwin to Git Bash
