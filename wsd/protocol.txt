@@ -1040,6 +1040,13 @@ statechanged: <key>=<value>
     postMessage API). The separate on-load 'commandvalues command=.uno:SecurityLabel'
     seeds the banner without an action and is not broadcast.
 
+viewposition: [editmode=1] [zoompercent=<percent>] [x=<twips> y=<twips> width=<twips> height=<twips>]
+
+    Sent once, after the status that follows the load, when the document kept
+    the position of the view that left it before this one arrived. editmode is
+    present when that view was in editing mode. x and y are the top left corner
+    of the area it had in view, in document twips, followed by its size.
+
 textselectioncontent:
 <JSON>
 

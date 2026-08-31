@@ -292,6 +292,9 @@ public:
     /// True while the client is in editing mode rather than viewing mode, and unset until
     /// the client has said which.
     std::optional<bool> getClientEditMode() const { return _clientEditMode; }
+
+    /// Tell the client, once, the zoom and the scroll offset the last view left.
+    void sendLastViewPosition(const std::shared_ptr<DocumentBroker>& docBroker);
     /// Visible area can have negative value as position, but we have tiles only in the positive range
     Util::Rectangle getNormalizedVisibleArea() const;
 
@@ -669,6 +672,9 @@ private:
     /// True while the client is in editing mode. The client says which mode it is in when
     /// its page has loaded and again on each change, so this stays unset until then.
     std::optional<bool> _clientEditMode;
+
+    /// True once this session has been told where the last view of the document was.
+    bool _sentLastViewPosition = false;
 
     /// The integer id of the view in the Kit process
     int _kitViewId;

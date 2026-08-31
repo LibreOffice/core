@@ -2310,6 +2310,34 @@ void ClientSession::overrideDocOption()
     }
 }
 
+void ClientSession::sendLastViewPosition(const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    if (_sentLastViewPosition)
+        return;
+    _sentLastViewPosition = true;
+
+    const DocumentBroker::ViewPosition& position = docBroker->getLastViewPosition();
+    if (!position.hasZoom() && !position.hasVisibleArea() && !position.editMode)
+        return;
+
+    std::ostringstream oss;
+    oss << "viewposition:";
+    if (position.editMode)
+        oss << " editmode=1";
+    if (position.hasZoom())
+        oss << " zoompercent=" << position.zoomPercent;
+    if (position.hasVisibleArea())
+    {
+        // Document twips, as the client sends up in clientvisiblearea.
+        oss << " x=" << position.visibleArea.getLeft() << " y=" << position.visibleArea.getTop()
+            << " width=" << position.visibleArea.getWidth()
+            << " height=" << position.visibleArea.getHeight();
+    }
+
+    LOG_DBG("Sending the position the last view of this document left: " << oss.str());
+    sendTextFrame(oss.str());
+}
+
 bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                                  const StringVector& tokens,
                                  const std::shared_ptr<DocumentBroker>& docBroker)
@@ -3695,7 +3723,13 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             _kitViewId = std::atoi(statusJsonObject->get("viewid").toString().c_str());
 
         // Forward the status response to the client.
-        return forwardToClient(payload);
+        const bool forwarded = forwardToClient(payload);
+
+        // The client places its own view, so the zoom and the scroll offset go on after
+        // the status. The part came back with the load and is already in it.
+        sendLastViewPosition(docBroker);
+
+        return forwarded;
     }
     else if (tokens.equals(0, "statusupdate:"))
     {
@@ -4390,6 +4424,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tclientZoomPercent: " << _clientZoomPercent
        << "\n\t\tclientEditMode: "
        << (_clientEditMode.has_value() ? (*_clientEditMode ? "editing" : "viewing") : "unknown")
+       << "\n\t\tsentLastViewPosition: " << _sentLastViewPosition
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument
