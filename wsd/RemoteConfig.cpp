@@ -865,7 +865,9 @@ bool RemoteFontConfigPoll::finishDownload(const std::string& uri,
                    << ']');
     fonts[uri].pathName = fontFile;
 
-    COOLWSD::sendMessageToForKit("addfont " + fontFile);
+    // ForKit takes several seconds to connect back after it is launched, and a font sync that
+    // restarted it lands in that window, so hold the font until it is there to take it.
+    COOLWSD::queueMessageToPrimordialForKit("addfont " + fontFile);
 
     // The spare Kits that are already running know nothing of this font, but let
     // the whole JSON file be handled before replacing them: one round of
