@@ -80,6 +80,10 @@ public:
         if (ignoreLocation(decl))
             return true;
 
+        if (isa<ObjCIvarDecl>(decl)) {
+            return true;
+        }
+
         // The enclosing class
         auto const* parent = dyn_cast<CXXRecordDecl>(decl->getParent());
         if (!parent)
