@@ -47,6 +47,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/numformat.hxx>
+#include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -4799,6 +4800,11 @@ void ScInputHandler::RemoveURLFieldsFromEditEngine()
     if (aSet.GetItemState(EE_FEATURE_FIELD, false) == SfxItemState::DEFAULT)
         return;
 
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    if (!pAutoCorrect)
+        return;
+    CharClass& rCharClass = pAutoCorrect->GetCharClass(mpEditEngine->GetDefaultLanguage());
+
     sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
     for (sal_Int32 nPar = 0; nPar < nParCnt; ++nPar)
     {
@@ -4825,11 +4831,25 @@ void ScInputHandler::RemoveURLFieldsFromEditEngine()
             if (!pFieldItem)
                 continue;
 
-            if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField()))
-            {
-                mpEditEngine->QuickInsertText( pUrlField->GetRepresentation(),
-                    ESelection( nPar, aRangeIt->first, nPar, aRangeIt->second ) );
-            }
+            auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
+            if (!pUrlField)
+                continue;
+
+            // Only turn the field back into plain text when that text is itself the
+            // recognized address, the same text CompleteAutoCorrect() will read back
+            // into a field on commit. A field whose displayed text differs from its
+            // target, such as one set up through the Hyperlink dialog with a separate
+            // label, cannot be recreated that way, so leave it as a field.
+            const OUString& rRepresentation = pUrlField->GetRepresentation();
+            sal_Int32 nUrlStart = 0, nUrlEnd = rRepresentation.getLength();
+            OUString aFoundUrl = URIHelper::FindFirstURLInText(
+                rRepresentation, nUrlStart, nUrlEnd, rCharClass );
+            if (aFoundUrl != pUrlField->GetURL() || nUrlStart != 0
+                || nUrlEnd != rRepresentation.getLength())
+                continue;
+
+            mpEditEngine->QuickInsertText( rRepresentation,
+                ESelection( nPar, aRangeIt->first, nPar, aRangeIt->second ) );
         }
     }
 }
