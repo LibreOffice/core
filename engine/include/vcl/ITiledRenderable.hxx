@@ -363,7 +363,8 @@ public:
      * The stable identifier of one part: a nonzero integer assigned to the part
      * for the whole document session, kept over part moves, insertions and
      * deletions of other parts. nMode selects the part list the index addresses:
-     * 0 for the standard parts, 1 for the master pages, 2 for the notes pages.
+     * 0 for the standard parts, 1 for the master pages, 2 for the notes pages,
+     * 3 for the notes master pages, 4 for the handout master page.
      * Zero when there is no such part or the document has no part identifiers.
      */
     virtual sal_uInt64 getPartUniqueId(int /*nPart*/, int /*nMode*/)

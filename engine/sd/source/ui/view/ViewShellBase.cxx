@@ -1017,6 +1017,8 @@ int ViewShellBase::getEditMode() const
                     return 0;
                 case PageKind::Notes:
                     return 2;
+                case PageKind::Handout:
+                    return 4;
                 default:
                     assert(!"Unhandled page kind");
                     return 0;
@@ -1026,6 +1028,10 @@ int ViewShellBase::getEditMode() const
             {
                 case PageKind::Standard:
                     return 1;
+                case PageKind::Notes:
+                    return 3;
+                case PageKind::Handout:
+                    return 4;
                 default:
                     assert(!"Unhandled page kind");
                     return 1;
@@ -1059,6 +1065,14 @@ void ViewShellBase::setEditMode(int nMode)
         case 2:
             pDrawViewShell->SetPageKind(PageKind::Notes);
             pDrawViewShell->ChangeEditMode(EditMode::Page, false);
+            break;
+        case 3:
+            pDrawViewShell->SetPageKind(PageKind::Notes);
+            pDrawViewShell->ChangeEditMode(EditMode::MasterPage, false);
+            break;
+        case 4:
+            pDrawViewShell->SetPageKind(PageKind::Handout);
+            pDrawViewShell->ChangeEditMode(EditMode::MasterPage, false);
             break;
         }
 

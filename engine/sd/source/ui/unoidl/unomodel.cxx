@@ -5148,7 +5148,7 @@ sal_uInt64 SdXImpressDocument::getPartUniqueId(int nPart, int nMode)
 
     // The mode selects the page list the index addresses, independently of any
     // view's current edit mode: 0 the standard slides, 1 the master pages, 2 the
-    // notes pages.
+    // notes pages, 3 the notes master pages, 4 the handout master page.
     SdPage* pPage = nullptr;
     switch (nMode)
     {
@@ -5163,6 +5163,14 @@ sal_uInt64 SdXImpressDocument::getPartUniqueId(int nPart, int nMode)
         case 2:
             if (nPart < mpDoc->GetSdPageCount(PageKind::Notes))
                 pPage = mpDoc->GetSdPage(nPart, PageKind::Notes);
+            break;
+        case 3:
+            if (nPart < mpDoc->GetMasterSdPageCount(PageKind::Notes))
+                pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Notes);
+            break;
+        case 4:
+            if (nPart < mpDoc->GetMasterSdPageCount(PageKind::Handout))
+                pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Handout);
             break;
         default:
             break;
