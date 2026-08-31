@@ -166,6 +166,9 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
             bool bWriteLine(false);
             bool bWriteText(false);
 
+            // which paragraph of the shape represents this Point, -1 for all of them
+            sal_Int32 nTextParagraph(-1);
+
             if (rPoint->mnXMLType == TypeConstant::XML_doc)
             {
                 // this is the root point (see DiagramData_svx::getRootPoint())
@@ -195,7 +198,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
                 // with a Node that references this by using presAssocID. Use
                 // getMasterXShapeForPoint that uses that association and try
                 // to access the XShape containing the Text ModelData
-                xAssociatedShape = getMasterXShapeForPoint(*rPoint);
+                xAssociatedShape = getMasterXShapeForPoint(*rPoint, nTextParagraph);
 
                 if (xAssociatedShape)
                 {
@@ -235,7 +238,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
             if (bWriteText)
             {
                 rTarget->startElementNS(XML_dgm, XML_t);
-                aShapeExport->setDiagramModelTextExport(true);
+                aShapeExport->setDiagramModelTextExport(true, nTextParagraph);
                 aShapeExport->WriteText(xAssociatedShape, false, true, XML_a);
                 aShapeExport->setDiagramModelTextExport(false);
                 rTarget->endElementNS(XML_dgm, XML_t);

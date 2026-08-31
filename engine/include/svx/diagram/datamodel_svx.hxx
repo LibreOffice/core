@@ -300,7 +300,8 @@ public:
     DiagramDataStatePtr extractDiagramDataState() const;
     void applyDiagramDataState(const DiagramDataStatePtr& rState);
 
-    css::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint) const;
+    css::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint,
+                                                                      sal_Int32& rParagraph) const;
     OUString getTextForPoint(const Point& rPoint) const;
     css::uno::Reference<css::drawing::XShape> getXShapeByModelID(std::u16string_view rModelID) const;
     rtl::Reference<Point> getPointByModelID(std::u16string_view rModelID) const;

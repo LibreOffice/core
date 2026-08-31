@@ -33,6 +33,8 @@
 #include <utility>
 #include <sax/fastattribs.hxx>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
 using namespace ::oox;
@@ -1636,30 +1638,79 @@ rtl::Reference<Point> DiagramData_svx::getPointByModelID(std::u16string_view rMo
     return nullptr;
 }
 
-uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(const Point& rPoint) const
+uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(
+    const Point& rPoint, sal_Int32& rParagraph) const
 {
-    for (const rtl::Reference<Point>& rCandidate : getPoints())
+    // The presentation Points that show what a Point represents are identified by the presOf
+    // Connections that start at that Point. There is usually more than one of them, one
+    // representing the text and others representing what belongs with it. They cannot be held apart
+    // in the data: mnDestOrder is zero, a file writes them in any order, and the one representing
+    // the text needs neither a style nor own layout variables. What does diversify them is that
+    // only one of them gets a visualization, so the one that leads to a shape is the one that holds
+    // the text. Going the other way round, over the Points that represent this one in
+    // msPresentationAssociationId, sorts none of them out: a layout gives that association to every
+    // presentation Point it builds for a Point, and may not give it to one at all.
+    for (const rtl::Reference<Connection>& rCandidate : maConnections)
     {
-        if (!rCandidate->msPresentationAssociationId.isEmpty()
-            && rCandidate->msPresentationAssociationId == rPoint.msModelId)
+        if (TypeConstant::XML_presOf != rCandidate->mnXMLType
+            || rCandidate->msSourceId != rPoint.msModelId)
+            continue;
+
+        const uno::Reference<drawing::XShape> xShowingShape(
+            getXShapeByModelID(rCandidate->msDestId));
+
+        if (xShowingShape)
         {
-            const uno::Reference<drawing::XShape> xMasterText(
-                getXShapeByModelID(rCandidate->msModelId));
-            if (xMasterText)
-                return xMasterText;
+            // A shape can represent several Points, one paragraph of it each, and mnDestOrder
+            // gives which paragraph belongs to which Point. A shape that represents a single
+            // Point represents all its paragraphs, so -1 asks for the whole text.
+            sal_Int32 nRepresentedPoints(0);
+
+            for (const rtl::Reference<Connection>& rCounted : maConnections)
+                if (TypeConstant::XML_presOf == rCounted->mnXMLType
+                    && rCounted->msDestId == rCandidate->msDestId)
+                    nRepresentedPoints++;
+
+            rParagraph = nRepresentedPoints > 1 ? rCandidate->mnDestOrder : -1;
+
+            return xShowingShape;
         }
     }
+
+    rParagraph = -1;
 
     return uno::Reference<drawing::XShape>();
 }
 
 OUString DiagramData_svx::getTextForPoint(const Point& rPoint) const
 {
-    uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint));
+    sal_Int32 nParagraph(-1);
+    uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, nParagraph));
     uno::Reference<text::XText> xText(xMasterText, uno::UNO_QUERY);
 
-    if (xText)
+    if (!xText)
+        return OUString();
+
+    if (nParagraph < 0)
         return xText->getString();
+
+    uno::Reference<container::XEnumerationAccess> xAccess(xText, uno::UNO_QUERY);
+
+    if (!xAccess)
+        return xText->getString();
+
+    uno::Reference<container::XEnumeration> xParagraphs(xAccess->createEnumeration());
+    sal_Int32 nIndex(0);
+
+    while (xParagraphs.is() && xParagraphs->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+
+        if (nIndex == nParagraph)
+            return xParagraph.is() ? xParagraph->getString() : OUString();
+
+        nIndex++;
+    }
 
     return OUString();
 }

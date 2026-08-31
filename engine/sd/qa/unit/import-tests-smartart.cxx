@@ -59,6 +59,16 @@ OUString getShapeGeometryType(const uno::Reference<beans::XPropertySet>& xShape)
     return aGeometry[u"Type"_ustr].get<OUString>();
 }
 
+void collectDiagramTexts(const svx::diagram::DiagramHelper_svx& rHelper,
+                         const OUString& rParentId, std::vector<OUString>& rTexts)
+{
+    for (const std::pair<OUString, OUString>& rChild : rHelper.getDiagramChildren(rParentId))
+    {
+        rTexts.push_back(rChild.second);
+        collectDiagramTexts(rHelper, rChild.first, rTexts);
+    }
+}
+
 uno::Reference<drawing::XShape> findChildShapeByText(const uno::Reference<drawing::XShape>& xShape,
                                                      const OUString& sText)
 {
@@ -2317,6 +2327,90 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeTextShrinksToItsBoxOnAFreshly
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nNodes);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testEachNodeReadsBackTheTextItHolds)
+{
+    createSdImpressDoc("pptx/Bullet_Timeline_one_Event.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+
+    // The layout of this file builds ten shapes for the node that holds "Birth" and gives every
+    // one of them that node as its association, so a node reads back the text it holds only when
+    // the shape showing it is the one the presOf connection names.
+    const std::vector<std::pair<OUString, OUString>> aTopLevel(
+        rHelper->getDiagramChildren(EMPTY_OUSTRING));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aTopLevel.size());
+    CPPUNIT_ASSERT_EQUAL(u"Birth"_ustr, aTopLevel[0].second);
+
+    // The node below it is named in no association at all.
+    const std::vector<std::pair<OUString, OUString>> aBelow(
+        rHelper->getDiagramChildren(aTopLevel[0].first));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aBelow.size());
+    CPPUNIT_ASSERT_EQUAL(u"coming to family"_ustr, aBelow[0].second);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeReadsItsTextWhenMoreThanOneShapeIsNamedForIt)
+{
+    createSdImpressDoc("pptx/Horizontal_Organization_Chart.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+
+    std::vector<OUString> aTexts;
+    collectDiagramTexts(*rHelper, EMPTY_OUSTRING, aTexts);
+
+    // Two shapes are identified for every node here, one representing its text and one drawing
+    // the line to it, and the file writes the two in no fixed order. Every node still returns its
+    // own text, whichever of the two the file writes first.
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aTexts.size());
+
+    for (const OUString& rExpected : { u"One"_ustr, u"Two"_ustr, u"Eleven"_ustr, u"Twelve"_ustr,
+                                       u"Assistent"_ustr, u"Sekret\u00e4rin"_ustr })
+    {
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(rExpected, RTL_TEXTENCODING_UTF8).getStr(),
+                               std::find(aTexts.begin(), aTexts.end(), rExpected) != aTexts.end());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testEachNodeGetsItsOwnParagraphOfASharedShape)
+{
+    createSdImpressDoc("pptx/Bar_List.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+
+    std::vector<OUString> aTexts;
+    collectDiagramTexts(*rHelper, EMPTY_OUSTRING, aTexts);
+
+    // One shape represents four of these Points, one paragraph of it each, and two more shapes
+    // represent three each. A Point that reads the whole shape gets the text of its neighbours
+    // with it, so every Point gets the paragraph that mnDestOrder gives it. "Three" is
+    // represented by a shape of its own and keeps all of it.
+    const std::vector<OUString> aExpected{ u"One"_ustr,         u"Eleven"_ustr,
+                                           u"Twelve"_ustr,      u"Thirteen"_ustr,
+                                           u"Two"_ustr,         u"Twenty-one"_ustr,
+                                           u"Twenty-two"_ustr,  u"Three"_ustr,
+                                           u"Four"_ustr,        u"Forty-one"_ustr,
+                                           u"Forty-two"_ustr };
+
+    CPPUNIT_ASSERT_EQUAL(aExpected.size(), aTexts.size());
+
+    for (size_t a(0); a < aExpected.size(); a++)
+        CPPUNIT_ASSERT_EQUAL(aExpected[a], aTexts[a]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
