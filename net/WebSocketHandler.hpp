@@ -577,40 +577,44 @@ protected:
         if (!socket)
         {
             LOG_ERR("No socket associated with WebSocketHandler " << this);
+            return;
         }
-#if !MOBILEAPP
-        else if (_isClient && !socket->isWebSocket())
+
+        if constexpr (!Util::isMobileApp())
         {
-            try
+            if (_isClient && !socket->isWebSocket())
             {
-                handleClientUpgrade(socket);
-            }
-            catch (const std::exception& ex)
-            {
-                LOG_DBG("handleClientUpgrade exception caught: " << ex.what());
+                try
+                {
+                    handleClientUpgrade(socket);
+                }
+                catch (const std::exception& ex)
+                {
+                    LOG_DBG("handleClientUpgrade exception caught: " << ex.what());
+                }
+
+                return;
             }
         }
-#endif
-        else
-        {
-            while (socket->processInputEnabled() && handleTCPStream(socket))
-                ; // might have multiple messages in the accumulated buffer.
-        }
+
+        while (socket->processInputEnabled() && handleTCPStream(socket))
+            ; // might have multiple messages in the accumulated buffer.
     }
 
-    int getPollEvents([[maybe_unused]] std::chrono::steady_clock::time_point now,
-                      [[maybe_unused]] int64_t& timeoutMaxMicroS) override
+    int getPollEvents(std::chrono::steady_clock::time_point now,
+                      int64_t& timeoutMaxMicroS) override
     {
         ASSERT_CORRECT_THREAD();
-#if !MOBILEAPP
-        if (!_isClient)
+        if constexpr (!Util::isMobileApp())
         {
-            const auto timeSincePingMicroS
-                = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastPingSentTime);
-            timeoutMaxMicroS
-                = std::min(timeoutMaxMicroS, int64_t((PingFrequencyMicroS - timeSincePingMicroS).count()));
+            if (!_isClient)
+            {
+                const auto timeSincePingMicroS
+                    = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastPingSentTime);
+                timeoutMaxMicroS
+                    = std::min(timeoutMaxMicroS, int64_t((PingFrequencyMicroS - timeSincePingMicroS).count()));
+            }
         }
-#endif
         int events = POLLIN;
         if (_msgHandler && _msgHandler->hasQueuedMessages())
             events |= POLLOUT;
@@ -661,22 +665,23 @@ public:
     }
 
     /// Do we need to handle a timeout ?
-    bool checkTimeout([[maybe_unused]] std::chrono::steady_clock::time_point now) override
+    bool checkTimeout(std::chrono::steady_clock::time_point now) override
     {
         ASSERT_CORRECT_THREAD();
-#if !MOBILEAPP
-        if (_isClient)
-            return false;
-
-        const auto timeSincePingMicroS
-            = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastPingSentTime);
-        if (timeSincePingMicroS >= PingFrequencyMicroS)
+        if constexpr (!Util::isMobileApp())
         {
-            const std::shared_ptr<StreamSocket> socket = _socket.lock();
-            if (socket)
-                sendPing(now, socket);
+            if (_isClient)
+                return false;
+
+            const auto timeSincePingMicroS
+                = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastPingSentTime);
+            if (timeSincePingMicroS >= PingFrequencyMicroS)
+            {
+                const std::shared_ptr<StreamSocket> socket = _socket.lock();
+                if (socket)
+                    sendPing(now, socket);
+            }
         }
-#endif
         return false;
     }
 
@@ -880,20 +885,24 @@ protected:
 
         // TraceEvent::emitInstantEvent("WebSocketHandler::sendFrame", { { "length", std::to_string(len) } });
 
-#if !MOBILEAPP
-        const size_t oldSize = out.size();
+        size_t size;
+        if constexpr (!Util::isMobileApp())
+        {
+            const size_t oldSize = out.size();
 
-        buildFrame(data, len, flags, out);
+            buildFrame(data, len, flags, out);
 
-        // Return the number of bytes we wrote to the *buffer*.
-        const size_t size = out.size() - oldSize;
-#else
-        // We ignore the flush parameter and always flush in the MOBILEAPP case because there is no
-        // WebSocket framing, we put the messages as such into the FakeSocket queue.
-        flush = true;
-        out.append(data, len);
-        const size_t size = out.size();
-#endif
+            // Return the number of bytes we wrote to the *buffer*.
+            size = out.size() - oldSize;
+        }
+        else
+        {
+            // We ignore the flush parameter and always flush in the app because there is no
+            // WebSocket framing, we put the messages as such into the FakeSocket queue.
+            flush = true;
+            out.append(data, len);
+            size = out.size();
+        }
 
         assert(size >= len && "Expected to have data in outBuffer to send");
 
@@ -1001,37 +1010,38 @@ protected:
         assert(!socket->isWebSocket());
         assert(!_isClient && "Accepting upgrade requests are done by servers only.");
 
-#if !MOBILEAPP
-        // create our websocket goodness ...
-        const int wsVersion = NumUtil::stoi(req.get("Sec-WebSocket-Version", "13"));
-        const std::string wsKey = req.get("Sec-WebSocket-Key", "");
-        const std::string wsProtocol = req.get("Sec-WebSocket-Protocol", "chat");
-        // FIXME: other sanity checks ...
-        LOG_INF("WebSocket version: " << wsVersion << ", key: [" << wsKey << "], protocol: ["
-                                      << wsProtocol << ']');
-
-        /* SHOULD verify the Origin field is an origin they expect. If the origin indicated is
-         * unacceptable to the server, then it SHOULD respond ... with a reply containing HTTP
-         * 403 Forbidden status code.
-         */
-        if (!allowedOrigin)
+        if constexpr (!Util::isMobileApp())
         {
-            LOG_ERR("Rejecting WebSocket upgrade due to disallowed origin");
-            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
-            return;
-        }
+            // create our websocket goodness ...
+            const int wsVersion = NumUtil::stoi(req.get("Sec-WebSocket-Version", "13"));
+            const std::string wsKey = req.get("Sec-WebSocket-Key", "");
+            const std::string wsProtocol = req.get("Sec-WebSocket-Protocol", "chat");
+            // FIXME: other sanity checks ...
+            LOG_INF("WebSocket version: " << wsVersion << ", key: [" << wsKey << "], protocol: ["
+                                          << wsProtocol << ']');
+
+            /* SHOULD verify the Origin field is an origin they expect. If the origin indicated is
+             * unacceptable to the server, then it SHOULD respond ... with a reply containing HTTP
+             * 403 Forbidden status code.
+             */
+            if (!allowedOrigin)
+            {
+                LOG_ERR("Rejecting WebSocket upgrade due to disallowed origin");
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
+                return;
+            }
 #if ENABLE_DEBUG
-        if (std::getenv("COOL_ZERO_BUFFER_SIZE"))
-            socket->setSocketBufferSize(0);
+            if (std::getenv("COOL_ZERO_BUFFER_SIZE"))
+                socket->setSocketBufferSize(0);
 #endif
 
-        http::Response httpResponse(http::StatusCode::SwitchingProtocols, socket->getFD());
-        httpResponse.set("Upgrade", "websocket");
-        httpResponse.setConnectionToken(http::Header::ConnectionToken::Upgrade);
-        httpResponse.set("Sec-WebSocket-Accept", computeAccept(wsKey));
-        LOGA_TRC(WebSocket, "Sending WS Upgrade response: " << httpResponse.header().toString());
-        socket->send(httpResponse);
-#endif
+            http::Response httpResponse(http::StatusCode::SwitchingProtocols, socket->getFD());
+            httpResponse.set("Upgrade", "websocket");
+            httpResponse.setConnectionToken(http::Header::ConnectionToken::Upgrade);
+            httpResponse.set("Sec-WebSocket-Accept", computeAccept(wsKey));
+            LOGA_TRC(WebSocket, "Sending WS Upgrade response: " << httpResponse.header().toString());
+            socket->send(httpResponse);
+        }
         setWebSocket(socket);
     }
 
