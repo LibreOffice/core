@@ -1568,8 +1568,6 @@ namespace emfplushelper
 
             rMS.ReadUInt16(type).ReadUInt16(flags).ReadUInt32(size).ReadUInt32(dataSize);
 
-            sal_uInt64 next = rMS.Tell() + (size - 12);
-
             if (size < 12)
             {
                 SAL_WARN("drawinglayer.emf", "Size field is less than 12 bytes");
@@ -1580,6 +1578,8 @@ namespace emfplushelper
                 SAL_WARN("drawinglayer.emf", "Size field is greater than bytes left");
                 break;
             }
+
+            sal_uInt64 next = rMS.Tell() + (size - 12);
 
             if (dataSize > (size - 12))
             {
