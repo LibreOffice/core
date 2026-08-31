@@ -30,6 +30,7 @@
 #include <Poco/Net/HTTPResponse.h>
 
 #include <chrono>
+#include <cstring>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -312,203 +313,237 @@ private:
         if (len == 0)
             return false; // avoid logging.
 
-#if !MOBILEAPP
-        if (len < 2) // partial read
+        if constexpr (!Util::isMobileApp())
         {
-            LOGA_TRC(WebSocket, "Still incomplete WebSocket message, have " << len << " bytes");
-            return false;
-        }
-
-        unsigned char *p = reinterpret_cast<unsigned char*>(socket->getInBuffer().data());
-        _lastFlags = p[0];
-        const bool fin = _lastFlags & 0x80;
-        const WSOpCode code = static_cast<WSOpCode>(_lastFlags & 0x0f);
-        const bool hasMask = p[1] & 0x80;
-        size_t payloadLen = p[1] & 0x7f;
-        size_t headerLen = 2;
-
-        // normally - 7 bit length.
-        if (payloadLen == 126) // 2 byte length
-        {
-            if (len < 2 + 2)
+            if (len < 2) // partial read
             {
                 LOGA_TRC(WebSocket, "Still incomplete WebSocket message, have " << len << " bytes");
                 return false;
             }
 
-            payloadLen = (unsigned(p[2]) << 8) | unsigned(p[3]);
-            headerLen += 2;
-        }
-        else if (payloadLen == 127) // 8 byte length
-        {
-            if (len < 2 + 8)
+            unsigned char *p = reinterpret_cast<unsigned char*>(socket->getInBuffer().data());
+            _lastFlags = p[0];
+            const bool fin = _lastFlags & 0x80;
+            const WSOpCode code = static_cast<WSOpCode>(_lastFlags & 0x0f);
+            const bool hasMask = p[1] & 0x80;
+            size_t payloadLen = p[1] & 0x7f;
+            size_t headerLen = 2;
+
+            // normally - 7 bit length.
+            if (payloadLen == 126) // 2 byte length
             {
-                LOGA_TRC(WebSocket, "Still incomplete WebSocket message, have " << len << " bytes");
+                if (len < 2 + 2)
+                {
+                    LOGA_TRC(WebSocket, "Still incomplete WebSocket message, have " << len << " bytes");
+                    return false;
+                }
+
+                payloadLen = (unsigned(p[2]) << 8) | unsigned(p[3]);
+                headerLen += 2;
+            }
+            else if (payloadLen == 127) // 8 byte length
+            {
+                if (len < 2 + 8)
+                {
+                    LOGA_TRC(WebSocket, "Still incomplete WebSocket message, have " << len << " bytes");
+                    return false;
+                }
+                payloadLen = ((uint64_t(p[9]) <<  0) + (uint64_t(p[8]) <<  8) +
+                              (uint64_t(p[7]) << 16) + (uint64_t(p[6]) << 24) +
+                              (uint64_t(p[5]) << 32) + (uint64_t(p[4]) << 40) +
+                              (uint64_t(p[3]) << 48) + (uint64_t(p[2]) << 56));
+                // FIXME: crop read length to remove top / sign bits.
+                headerLen += 8;
+            }
+
+            unsigned char *mask = nullptr;
+
+            if (hasMask)
+            {
+                mask = p + headerLen;
+                headerLen += 4;
+            }
+
+            if (headerLen > len || payloadLen > len - headerLen)
+            { // partial read wait for more data.
+                LOGA_TRC(WebSocket, "Still incomplete WebSocket frame, have "
+                        << len << " bytes, frame is " << payloadLen + headerLen << " bytes");
                 return false;
             }
-            payloadLen = ((uint64_t(p[9]) <<  0) + (uint64_t(p[8]) <<  8) +
-                          (uint64_t(p[7]) << 16) + (uint64_t(p[6]) << 24) +
-                          (uint64_t(p[5]) << 32) + (uint64_t(p[4]) << 40) +
-                          (uint64_t(p[3]) << 48) + (uint64_t(p[2]) << 56));
-            // FIXME: crop read length to remove top / sign bits.
-            headerLen += 8;
-        }
 
-        unsigned char *mask = nullptr;
-
-        if (hasMask)
-        {
-            mask = p + headerLen;
-            headerLen += 4;
-        }
-
-        if (headerLen > len || payloadLen > len - headerLen)
-        { // partial read wait for more data.
-            LOGA_TRC(WebSocket, "Still incomplete WebSocket frame, have "
-                    << len << " bytes, frame is " << payloadLen + headerLen << " bytes");
-            return false;
-        }
-
-        if (hasMask && _isClient)
-        {
-            LOG_ERR("Servers should not send masked frames. Only clients");
-            shutdown(StatusCodes::PROTOCOL_ERROR);
-            return true;
-        }
-
-        LOGA_TRC(WebSocket, "Incoming WebSocket data of "
-                                << len << " bytes: "
-                                << HexUtil::stringifyHexLine(socket->getInBuffer(), 0,
-                                                             std::min(size_t(32), len)));
-
-        unsigned char *data = p + headerLen;
-
-        if (isControlFrame(code))
-        {
-            //Process control frames
-
-            std::vector<char> ctrlPayload;
-
-            readPayload(data, payloadLen, mask, ctrlPayload);
-            socket->getInBuffer().eraseFirst(headerLen + payloadLen);
-            LOGA_TRC(WebSocket, "Incoming WebSocket frame code "
-                    << static_cast<unsigned>(code) << ", fin? " << fin << ", mask? " << hasMask
-                    << ", payload length: " << payloadLen
-                    << ", residual socket data: " << socket->getInBuffer().size() << " bytes");
-
-            // All control frames MUST NOT be fragmented and MUST have a payload length of 125 bytes or less
-            if (!fin)
+            if (hasMask && _isClient)
             {
-                LOG_ERR("A control frame cannot be fragmented");
-                shutdown(StatusCodes::PROTOCOL_ERROR);
-                return true;
-            }
-            if (payloadLen > 125)
-            {
-                LOG_ERR("The payload length of a control frame must not exceed 125 bytes");
+                LOG_ERR("Servers should not send masked frames. Only clients");
                 shutdown(StatusCodes::PROTOCOL_ERROR);
                 return true;
             }
 
-            switch (code)
+            LOGA_TRC(WebSocket, "Incoming WebSocket data of "
+                                    << len << " bytes: "
+                                    << HexUtil::stringifyHexLine(socket->getInBuffer(), 0,
+                                                                 std::min(size_t(32), len)));
+
+            unsigned char *data = p + headerLen;
+
+            if (isControlFrame(code))
             {
-            case WSOpCode::Pong:
-                {
-                    if (_isClient)
-                        LOG_WRN("Servers should not send pongs, only clients");
+                //Process control frames
 
-                    _pingTimeUs = std::chrono::duration_cast<std::chrono::microseconds>
-                        (std::chrono::steady_clock::now() - _lastPingSentTime).count();
-                    LOGA_TRC(WebSocket, "Pong received: " << _pingTimeUs << " microseconds");
-                    gotPing(code, _pingTimeUs);
-                }
-                break;
-            case WSOpCode::Ping:
-                {
-                    if (!_isClient)
-                        LOG_DBG("Clients should not send pings, only servers");
+                std::vector<char> ctrlPayload;
 
-                    const auto now = std::chrono::steady_clock::now();
-                    _pingTimeUs = std::chrono::duration_cast<std::chrono::microseconds>
-                                            (now - _lastPingSentTime).count();
-                    sendPong(now, ctrlPayload.data(), payloadLen, socket);
-                    gotPing(code, _pingTimeUs);
-                }
-                break;
-            case WSOpCode::Close:
-                {
-                    std::string message;
-                    StatusCodes statusCode = StatusCodes::NORMAL_CLOSE;
-                    if (!_shuttingDown)
-                    {
-                        // Peer-initiated shutdown must be echoed.
-                        // Otherwise, this is the echo to _our_ shutdown message, which we should ignore.
-                        if (ctrlPayload.size())
-                        {
-                            statusCode = static_cast<StatusCodes>((uint64_t(static_cast<unsigned char>(ctrlPayload[0])) << 8) +
-                                                                (uint64_t(static_cast<unsigned char>(ctrlPayload[1])) << 0));
-                            if (ctrlPayload.size() > 2)
-                                message.assign(&ctrlPayload[2], &ctrlPayload[2] + ctrlPayload.size() - 2);
-                        }
+                readPayload(data, payloadLen, mask, ctrlPayload);
+                socket->getInBuffer().eraseFirst(headerLen + payloadLen);
+                LOGA_TRC(WebSocket, "Incoming WebSocket frame code "
+                        << static_cast<unsigned>(code) << ", fin? " << fin << ", mask? " << hasMask
+                        << ", payload length: " << payloadLen
+                        << ", residual socket data: " << socket->getInBuffer().size() << " bytes");
 
-                        LOG_TRC("Peer initiated socket shutdown. Code: "
-                                << static_cast<int>(statusCode));
-                    }
-                    shutdown(statusCode, message);
+                // All control frames MUST NOT be fragmented and MUST have a payload length of 125 bytes or less
+                if (!fin)
+                {
+                    LOG_ERR("A control frame cannot be fragmented");
+                    shutdown(StatusCodes::PROTOCOL_ERROR);
                     return true;
                 }
-            default:
-                    LOG_ERR("Received unknown control code");
+                if (payloadLen > 125)
+                {
+                    LOG_ERR("The payload length of a control frame must not exceed 125 bytes");
                     shutdown(StatusCodes::PROTOCOL_ERROR);
+                    return true;
+                }
+
+                switch (code)
+                {
+                case WSOpCode::Pong:
+                    {
+                        if (_isClient)
+                            LOG_WRN("Servers should not send pongs, only clients");
+
+                        _pingTimeUs = std::chrono::duration_cast<std::chrono::microseconds>
+                            (std::chrono::steady_clock::now() - _lastPingSentTime).count();
+                        LOGA_TRC(WebSocket, "Pong received: " << _pingTimeUs << " microseconds");
+                        gotPing(code, _pingTimeUs);
+                    }
                     break;
+                case WSOpCode::Ping:
+                    {
+                        if (!_isClient)
+                            LOG_DBG("Clients should not send pings, only servers");
+
+                        const auto now = std::chrono::steady_clock::now();
+                        _pingTimeUs = std::chrono::duration_cast<std::chrono::microseconds>
+                                                (now - _lastPingSentTime).count();
+                        sendPong(now, ctrlPayload.data(), payloadLen, socket);
+                        gotPing(code, _pingTimeUs);
+                    }
+                    break;
+                case WSOpCode::Close:
+                    {
+                        std::string message;
+                        StatusCodes statusCode = StatusCodes::NORMAL_CLOSE;
+                        if (!_shuttingDown)
+                        {
+                            // Peer-initiated shutdown must be echoed.
+                            // Otherwise, this is the echo to _our_ shutdown message, which we should ignore.
+                            if (ctrlPayload.size())
+                            {
+                                statusCode = static_cast<StatusCodes>((uint64_t(static_cast<unsigned char>(ctrlPayload[0])) << 8) +
+                                                                    (uint64_t(static_cast<unsigned char>(ctrlPayload[1])) << 0));
+                                if (ctrlPayload.size() > 2)
+                                    message.assign(&ctrlPayload[2], &ctrlPayload[2] + ctrlPayload.size() - 2);
+                            }
+
+                            LOG_TRC("Peer initiated socket shutdown. Code: "
+                                    << static_cast<int>(statusCode));
+                        }
+                        shutdown(statusCode, message);
+                        return true;
+                    }
+                default:
+                        LOG_ERR("Received unknown control code");
+                        shutdown(StatusCodes::PROTOCOL_ERROR);
+                        break;
+                }
+
+                return true;
             }
 
-            return true;
-        }
-
-        // Check data frames for errors
-        if (_inFragmentBlock)
-        {
-            if (code != WSOpCode::Continuation)
+            // Check data frames for errors
+            if (_inFragmentBlock)
             {
-                LOG_ERR("A fragment that is not the first fragment of a message must have the opcode "
-                        "equal to 0");
+                if (code != WSOpCode::Continuation)
+                {
+                    LOG_ERR("A fragment that is not the first fragment of a message must have the opcode "
+                            "equal to 0");
+                    shutdown(StatusCodes::PROTOCOL_ERROR);
+                    return true;
+                }
+            }
+            else if (code == WSOpCode::Continuation)
+            {
+                LOG_ERR("An unfragmented message or the first fragment of a fragmented message must "
+                        "have the opcode different than 0");
                 shutdown(StatusCodes::PROTOCOL_ERROR);
                 return true;
             }
+
+            //Process data frame
+            readPayload(data, payloadLen, mask, _wsPayload);
+
+            socket->eraseFirstInputBytes(headerLen + payloadLen);
+
+            LOGA_TRC(WebSocket, "Incoming WebSocket frame code "
+                                    << static_cast<unsigned>(code) << ", fin? " << fin << ", mask? "
+                                    << hasMask << ", payload length: " << payloadLen
+                                    << ", residual socket data: " << socket->getInBuffer().size()
+                                    << " bytes, unmasked data: " +
+                                           HexUtil::stringifyHexLine(
+                                               _wsPayload, 0, std::min(size_t(32), _wsPayload.size())));
+
+            if (fin)
+            {
+                // If is final fragment then process the accumulated message.
+
+                try
+                {
+                    handleMessage(_wsPayload);
+                }
+                catch (const Poco::Exception& ex)
+                {
+                    LOG_ERR("Error during handleMessage: " << ex.displayText());
+                }
+                catch (const std::exception& exception)
+                {
+                    LOG_ERR("Error during handleMessage: " << exception.what());
+                }
+                catch (...)
+                {
+                    LOG_ERR("Error during handleMessage");
+                }
+
+                _inFragmentBlock = false;
+            }
+            else
+            {
+                _inFragmentBlock = true;
+                // If is not final fragment then wait for next fragment.
+                return true;
+            }
         }
-        else if (code == WSOpCode::Continuation)
+        else
         {
-            LOG_ERR("An unfragmented message or the first fragment of a fragmented message must "
-                    "have the opcode different than 0");
-            shutdown(StatusCodes::PROTOCOL_ERROR);
-            return true;
-        }
+            // Unwrap what StreamSocket::readIncomingData() did
+            const size_t headerLen = sizeof(ssize_t);
+            ssize_t payloadLen;
+            memcpy(&payloadLen, socket->getInBuffer().data(), headerLen);
+            unsigned char * const p = reinterpret_cast<unsigned char*>(socket->getInBuffer().data() + headerLen);
+            _wsPayload.insert(_wsPayload.end(), p, p + payloadLen);
 
-        //Process data frame
-        readPayload(data, payloadLen, mask, _wsPayload);
-
-        socket->eraseFirstInputBytes(headerLen + payloadLen);
-
-        LOGA_TRC(WebSocket, "Incoming WebSocket frame code "
-                                << static_cast<unsigned>(code) << ", fin? " << fin << ", mask? "
-                                << hasMask << ", payload length: " << payloadLen
-                                << ", residual socket data: " << socket->getInBuffer().size()
-                                << " bytes, unmasked data: " +
-                                       HexUtil::stringifyHexLine(
-                                           _wsPayload, 0, std::min(size_t(32), _wsPayload.size())));
-
-        if (fin)
-        {
-            // If is final fragment then process the accumulated message.
+            socket->eraseFirstInputBytes(headerLen + payloadLen);
 
             try
             {
                 handleMessage(_wsPayload);
-            }
-            catch (const Poco::Exception& ex)
-            {
-                LOG_ERR("Error during handleMessage: " << ex.displayText());
             }
             catch (const std::exception& exception)
             {
@@ -518,38 +553,7 @@ private:
             {
                 LOG_ERR("Error during handleMessage");
             }
-
-            _inFragmentBlock = false;
         }
-        else
-        {
-            _inFragmentBlock = true;
-            // If is not final fragment then wait for next fragment.
-            return true;
-        }
-#else
-        // Unwrap what StreamSocket::readIncomingData() did
-        const size_t headerLen = sizeof(ssize_t);
-        ssize_t payloadLen;
-        memcpy(&payloadLen, socket->getInBuffer().data(), headerLen);
-        unsigned char * const p = reinterpret_cast<unsigned char*>(socket->getInBuffer().data() + headerLen);
-        _wsPayload.insert(_wsPayload.end(), p, p + payloadLen);
-
-        socket->eraseFirstInputBytes(headerLen + payloadLen);
-
-        try
-        {
-            handleMessage(_wsPayload);
-        }
-        catch (const std::exception& exception)
-        {
-            LOG_ERR("Error during handleMessage: " << exception.what());
-        }
-        catch (...)
-        {
-            LOG_ERR("Error during handleMessage");
-        }
-#endif
 
         _wsPayload.clear();
 
