@@ -5578,11 +5578,27 @@ void DocumentBroker::handleSlideLayerResponse(const std::shared_ptr<Message>& me
             return;
         }
         const std::string key = JsonUtil::getJSONValue<std::string>(jsonPtr, "cacheKey");
-
-        // This message has forwardToken which can cause issue if reused for forwardToClient when using cache.
-        // But we ignore it because when reusing cache we only send data from the message and not entire message
-        _slideLayerCache.insert(key, message);
-        LOG_INF("Slideshow: Cached a slide layer with cache key: " << key);
+        if (key.empty())
+        {
+            // A rendering that fails before it parses its parameters reports no cacheKey.
+            LOG_INF("Slideshow: Not caching a slide layer message without a cache key");
+        }
+        else if (message->firstTokenMatches("sliderenderingcomplete:") &&
+                 JsonUtil::getJSONValue<std::string>(jsonPtr, "status") != "success")
+        {
+            // The rendering failed. Throw away its layers so the next request for this key is
+            // rendered afresh instead of replaying the failure.
+            _slideLayerCache.erase(key);
+            LOG_INF("Slideshow: Dropped the cache entry of a failed rendering, cache key: "
+                    << key);
+        }
+        else
+        {
+            // This message has forwardToken which can cause issue if reused for forwardToClient when using cache.
+            // But we ignore it because when reusing cache we only send data from the message and not entire message
+            _slideLayerCache.insert(key, message);
+            LOG_INF("Slideshow: Cached a slide layer with cache key: " << key);
+        }
     }
     forwardToClient(message);
 }

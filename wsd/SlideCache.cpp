@@ -18,20 +18,43 @@
 
 #include "SlideCache.hpp"
 
+#include <algorithm>
+
+namespace
+{
+// The layer messages of one rendering arrive one at a time, so an entry grows message by
+// message and is whole once its last message is the closing sliderenderingcomplete.
+bool isComplete(const std::vector<std::shared_ptr<Message>>& entry)
+{
+    return !entry.empty() && entry.back()->firstTokenMatches("sliderenderingcomplete:");
+}
+}
+
 void SlideLayerCacheMap::insert(const std::string& key, std::shared_ptr<Message> cachedData)
 {
-    if (cache_map.contains(key))
+    auto it = cache_map.find(key);
+    if (it != cache_map.end())
     {
+        // The key encodes every render parameter, so a second rendering for the same key
+        // produces the same layers. Once a whole rendering is stored, keep it and drop the
+        // messages of any further rendering for this key.
+        if (isComplete(it->second))
+            return;
+
         if (insertion_order.back() != key)
         {
             auto pos = std::find(insertion_order.begin(), insertion_order.end(), key);
             std::rotate(pos, pos + 1, insertion_order.end());
         }
+
+        it->second.emplace_back(std::move(cachedData));
     }
     else
+    {
         insertion_order.push_back(key);
+        cache_map[key].emplace_back(std::move(cachedData));
+    }
 
-    cache_map[key].emplace_back(std::move(cachedData));
     reduceSizeTo(max_size);
 }
 
@@ -51,6 +74,16 @@ std::size_t SlideLayerCacheMap::reduceSizeTo(std::size_t desiredSize)
     return total_deleted_entries;
 }
 
+void SlideLayerCacheMap::erase(const std::string& key)
+{
+    if (cache_map.erase(key) > 0)
+    {
+        auto pos = std::find(insertion_order.begin(), insertion_order.end(), key);
+        if (pos != insertion_order.end())
+            insertion_order.erase(pos);
+    }
+}
+
 void SlideLayerCacheMap::erase_all()
 {
     cache_map.clear();
@@ -60,7 +93,12 @@ void SlideLayerCacheMap::erase_all()
 SlideLayerCacheMap::Map::const_iterator
 SlideLayerCacheMap::find(const std::string& key) const
 {
-    return cache_map.find(key);
+    auto it = cache_map.find(key);
+    // Only a whole rendering is found. An entry that still lacks its closing
+    // sliderenderingcomplete message holds a rendering that is still streaming in.
+    if (it != cache_map.end() && !isComplete(it->second))
+        return cache_map.end();
+    return it;
 }
 
 SlideLayerCacheMap::Map::const_iterator

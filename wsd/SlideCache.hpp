@@ -53,8 +53,12 @@ public:
 
     std::size_t reduceSizeTo(std::size_t desiredSize);
 
+    void erase(const std::string& key);
+
     void erase_all();
 
+    /// Finds the entry for the given key, provided its rendering has fully arrived, with the
+    /// closing sliderenderingcomplete message as its last message. Returns end() otherwise.
     Map::const_iterator find(const std::string& key) const;
 
     Map::const_iterator end() const;
