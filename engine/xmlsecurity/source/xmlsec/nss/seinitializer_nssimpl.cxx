@@ -26,7 +26,7 @@
 #include "securityenvironment_nssimpl.hxx"
 
 #ifdef MACOSX
-#include "apple/seinitializer_appleimpl.hxx"
+#include <apple/seinitializer_appleimpl.hxx>
 #endif
 
 #include <cert.h>

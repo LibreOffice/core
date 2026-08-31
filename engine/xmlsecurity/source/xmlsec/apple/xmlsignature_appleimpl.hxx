@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 
-#include "nss/xmlsignature_nssimpl.hxx"
+#include <nss/xmlsignature_nssimpl.hxx>
 
 /** XML-DSig implementation that can sign with Keychain-backed private keys.
 

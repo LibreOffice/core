@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 
-#include "nss/seinitializer_nssimpl.hxx"
+#include <nss/seinitializer_nssimpl.hxx>
 
 /** SEInitializer whose security contexts use the Keychain-aware security environment.
 

@@ -43,7 +43,7 @@
 #include "x509certificate_nssimpl.hxx"
 #include "secerror.hxx"
 #ifdef MACOSX
-#include "apple/securityenvironment_appleimpl.hxx"
+#include <apple/securityenvironment_appleimpl.hxx>
 #endif
 #include <prerror.h>
 #include <keyhi.h>

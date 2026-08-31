@@ -28,7 +28,7 @@
 #include "securityenvironment_nssimpl.hxx"
 #include "xmlsignature_nssimpl.hxx"
 #ifdef MACOSX
-#include "apple/xmlsignature_appleimpl.hxx"
+#include <apple/xmlsignature_appleimpl.hxx>
 #endif
 
 #include <xmlsec/xmldsig.h>

@@ -13,7 +13,7 @@
 
 #include <rtl/ref.hxx>
 
-#include "nss/securityenvironment_nssimpl.hxx"
+#include <nss/securityenvironment_nssimpl.hxx>
 
 class X509Certificate_AppleImpl;
 

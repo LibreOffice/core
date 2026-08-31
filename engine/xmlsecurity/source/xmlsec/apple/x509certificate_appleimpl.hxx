@@ -13,7 +13,7 @@
 
 #include <svl/applekeychain.hxx>
 
-#include "nss/x509certificate_nssimpl.hxx"
+#include <nss/x509certificate_nssimpl.hxx>
 
 /** A certificate whose private key lives in the macOS Keychain.
 
