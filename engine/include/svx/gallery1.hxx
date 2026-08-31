@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_GALLERY1_HXX
 #define INCLUDED_SVX_GALLERY1_HXX
 
+#include <config_features.h>
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svxdllapi.h>
@@ -100,6 +101,9 @@ private:
     INetURLObject               m_aRelURL;
     INetURLObject               m_aUserURL;
     bool                        m_bMultiPath;
+#if defined(MACOSX) && HAVE_FEATURE_READONLY_INSTALLSET
+    [[maybe_unused]]
+#endif
     bool                        m_bAssumeReadOnly;
 
     SAL_DLLPRIVATE void         ImplLoad( std::u16string_view rMultiPath );
