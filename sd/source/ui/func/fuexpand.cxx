@@ -186,7 +186,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 std::optional<OutlinerParaObject> pOutlinerParaObject = aOutliner.CreateParaObject( nParaPos, 1);
                 pOutlinerParaObject->SetOutlinerMode(OutlinerMode::TitleObject);
 
-                if( pOutlinerParaObject->GetDepth(0) != -1 )
+                if( pOutlinerParaObject->GetNumberingDepth(0) != -1 )
                 {
                     std::unique_ptr<SdrOutliner> pTempOutl = SdrMakeOutliner(OutlinerMode::TitleObject, mrDoc);
 

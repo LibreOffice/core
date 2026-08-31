@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <editeng/paragraphdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
@@ -40,10 +39,9 @@ struct EDITENG_DLLPUBLIC OutlinerParaObjData
 {
     // data members
     std::unique_ptr<EditTextObject>  mpEditTextObject;
-    ParagraphDataVector              maParagraphDataVector;
 
     // constructor
-    OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, ParagraphDataVector&& rParagraphDataVector );
+    OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject );
 
     OutlinerParaObjData( const OutlinerParaObjData& r );
 
@@ -73,8 +71,7 @@ friend class std::optional<OutlinerParaObject>;
 
 public:
     // constructors/destructor
-    OutlinerParaObject(std::unique_ptr<EditTextObject>, ParagraphDataVector&&);
-    OutlinerParaObject( std::unique_ptr<EditTextObject> );
+    OutlinerParaObject(std::unique_ptr<EditTextObject>);
     OutlinerParaObject( const OutlinerParaObject&);
     OutlinerParaObject(OutlinerParaObject&&) noexcept;
     ~OutlinerParaObject();
@@ -104,9 +101,10 @@ public:
 
     // data read access
     sal_Int32 Count() const;
-    sal_Int16 GetDepth(sal_Int32 nPara) const;
+    sal_Int16 GetNumberingDepth(sal_Int32 nPara) const;
+    sal_Int16 GetNumberingStartValue(sal_Int32 nPara) const;
+    bool IsNumberingRestart(sal_Int32 nPara) const;
     const EditTextObject& GetTextObject() const;
-    const ParagraphData& GetParagraphData(sal_Int32 nIndex) const;
 
     // portion info support
     void ClearPortionInfo();

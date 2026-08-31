@@ -249,7 +249,6 @@
 #include <editeng/ESelection.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/outlobj.hxx>
-#include <editeng/paragraphdata.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/concepts.hxx>
 #include <o3tl/cow_wrapper.hxx>

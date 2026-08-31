@@ -178,7 +178,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                     Paragraph* pPrev = rOwner.pParaList->GetParagraph(aSel.end.nPara - 1);
                     if( !pPrev->IsVisible()  )
                         return true;
-                    if( !pPara->GetDepth() )
+                    if( !pPara->GetNumberingDepth() )
                     {
                         if (!rOwner.ImpCanDeleteSelectedPages(this, aSel.end.nPara, 1))
                             return true;
@@ -197,7 +197,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                     if( !aKeyCode.IsShift() )
                     {
                         // Don't let insert empty paragraph with numbering. Instead end numbering.
-                        if (pPara->GetDepth() > -1 &&
+                        if (pPara->GetNumberingDepth() > -1 &&
                             rOwner.pEditEngine->GetTextLen( aSel.end.nPara ) == 0)
                         {
                             ToggleBullets();
@@ -217,7 +217,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                                 SAL_WARN_IF( nTemp < 0, "editeng", "OutlinerView::PostKeyEvent - overflow");
                                 if (nTemp >= 0)
                                 {
-                                    rOwner.Insert( OUString(),nTemp,pPara->GetDepth());
+                                    rOwner.Insert( OUString(),nTemp,pPara->GetNumberingDepth());
                                     // Position the cursor
                                     ESelection aTmpSel(nTemp, 0);
                                     pEditView->SetSelection( aTmpSel );
@@ -235,7 +235,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                         rOwner.UndoActionStart( OLUNDO_INSERT );
                         sal_Int32 nTemp = aSel.end.nPara;
                         nTemp++;
-                        rOwner.Insert( OUString(), nTemp, pPara->GetDepth()+1 );
+                        rOwner.Insert( OUString(), nTemp, pPara->GetNumberingDepth()+1 );
 
                         // Position the cursor
                         ESelection aTmpSel(nTemp, 0);
@@ -486,7 +486,7 @@ void OutlinerView::Indent( short nDiff )
     {
         Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
 
-        sal_Int16 nOldDepth = pPara->GetDepth();
+        sal_Int16 nOldDepth = pPara->GetNumberingDepth();
         sal_Int16 nNewDepth = nOldDepth + nDiff;
 
         if( bOutlinerView && nPara )
@@ -545,7 +545,7 @@ void OutlinerView::Indent( short nDiff )
 #endif
                 Paragraph* pPrev= rOwner.pParaList->GetParagraph( aSel.nStartPara-1 );
 
-                if( !pPrev->IsVisible() && ( pPrev->GetDepth() == nNewDepth ) )
+                if( !pPrev->IsVisible() && ( pPrev->GetNumberingDepth() == nNewDepth ) )
                 {
                     // Predecessor is collapsed and is on the same level
                     // => find next visible paragraph and expand it
@@ -581,7 +581,7 @@ void OutlinerView::Indent( short nDiff )
     for ( sal_Int32 n = aSel.nEndPara+1; n < nParas; n++ )
     {
         Paragraph* pPara = rOwner.pParaList->GetParagraph( n );
-        if ( pPara->GetDepth() < nMinDepth )
+        if ( pPara->GetNumberingDepth() < nMinDepth )
             break;
         rOwner.ImplCalcBulletText( n, false, false );
     }
@@ -1244,7 +1244,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
         for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
         {
             Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-            rOwner.ImplInitDepth( nPara, pPara->GetDepth(), false );
+            rOwner.ImplInitDepth( nPara, pPara->GetNumberingDepth(), false );
         }
     }
     rOwner.UndoActionEnd();

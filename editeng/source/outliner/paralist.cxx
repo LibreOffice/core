@@ -28,53 +28,41 @@
 #include <tools/debug.hxx>
 #include <libxml/xmlwriter.h>
 
-ParagraphData::ParagraphData()
-: nDepth( -1 )
-, mnNumberingStartValue( -1 )
-, mbParaIsNumberingRestart( false )
-{
-}
-
-bool ParagraphData::operator==(const ParagraphData& rCandidate) const
-{
-    return (nDepth == rCandidate.nDepth
-        && mnNumberingStartValue == rCandidate.mnNumberingStartValue
-        && mbParaIsNumberingRestart == rCandidate.mbParaIsNumberingRestart);
-}
-
 Paragraph::Paragraph( sal_Int16 nDDepth )
 {
     DBG_ASSERT(  ( nDDepth >= -1 ) && ( nDDepth < SVX_MAX_NUM ), "Paragraph-CTOR: nDepth invalid!" );
-    nDepth = nDDepth;
+    mnNumberingDepth = nDDepth;
+    mnNumberingStartValue = -1;
+    mbNumberingRestart = false;
 }
 
-Paragraph::Paragraph( const ParagraphData& rData )
+Paragraph::Paragraph( sal_Int16 nDepth, sal_Int16 nNumberingStartValue, bool bNumberingRestart )
 {
-    nDepth = rData.nDepth;
-    mnNumberingStartValue = rData.mnNumberingStartValue;
-    mbParaIsNumberingRestart = rData.mbParaIsNumberingRestart;
+    mnNumberingDepth = nDepth;
+    mnNumberingStartValue = nNumberingStartValue;
+    mbNumberingRestart = bNumberingRestart;
 }
 
 void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )
 {
     mnNumberingStartValue = nNumberingStartValue;
     if( mnNumberingStartValue != -1 )
-        mbParaIsNumberingRestart = true;
+        mbNumberingRestart = true;
 }
 
-void Paragraph::SetParaIsNumberingRestart( bool bParaIsNumberingRestart )
+void Paragraph::SetNumberingRestart( bool bParaIsNumberingRestart )
 {
-    mbParaIsNumberingRestart = bParaIsNumberingRestart;
-    if( !mbParaIsNumberingRestart )
+    mbNumberingRestart = bParaIsNumberingRestart;
+    if( !mbNumberingRestart )
         mnNumberingStartValue = -1;
 }
 
 void Paragraph::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Paragraph"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nDepth"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(nDepth));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nNumberingDepth"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingDepth));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingStartValue));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbParaIsNumberingRestart"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mbParaIsNumberingRestart));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbNumberingRestart"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mbNumberingRestart));
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -146,21 +134,21 @@ bool ParagraphList::HasChildren( Paragraph const * pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() );
+    return pNext && ( pNext->GetNumberingDepth() > pParagraph->GetNumberingDepth() );
 }
 
 bool ParagraphList::HasHiddenChildren( Paragraph const * pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible();
+    return pNext && ( pNext->GetNumberingDepth() > pParagraph->GetNumberingDepth() ) && !pNext->IsVisible();
 }
 
 bool ParagraphList::HasVisibleChildren( Paragraph const * pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible();
+    return pNext && ( pNext->GetNumberingDepth() > pParagraph->GetNumberingDepth() ) && pNext->IsVisible();
 }
 
 sal_Int32 ParagraphList::GetChildCount( Paragraph const * pParent ) const
@@ -168,7 +156,7 @@ sal_Int32 ParagraphList::GetChildCount( Paragraph const * pParent ) const
     sal_Int32 nChildCount = 0;
     sal_Int32 n = GetAbsPos( pParent );
     Paragraph* pPara = GetParagraph( ++n );
-    while ( pPara && ( pPara->GetDepth() > pParent->GetDepth() ) )
+    while ( pPara && ( pPara->GetNumberingDepth() > pParent->GetNumberingDepth() ) )
     {
         nChildCount++;
         pPara = GetParagraph( ++n );
@@ -180,7 +168,7 @@ Paragraph* ParagraphList::GetParent( Paragraph const * pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pPrev = GetParagraph( --n );
-    while ( pPrev && ( pPrev->GetDepth() >= pParagraph->GetDepth() ) )
+    while ( pPrev && ( pPrev->GetNumberingDepth() >= pParagraph->GetNumberingDepth() ) )
     {
         pPrev = GetParagraph( --n );
     }
