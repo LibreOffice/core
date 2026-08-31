@@ -16,10 +16,11 @@ $(eval $(call gb_UnpackedTarball_set_tarball,zxing,$(ZXING_TARBALL)))
 
 ifneq ($(MSYSTEM),)
 # the 2.3.0 tarball contains dangling symlinks (to a submodule component/experimental backend)
-# git-bash/msys tar fails when extracting since MSYS defaults to not create those
-ifeq ($(filter winsymlinks%,$(MSYS)),)
-$(call gb_UnpackedTarball_get_target,zxing): export MSYS:=$(MSYS) winsymlinks
-endif
+# git-bash/msys tar fails when extracting since MSYS defaults to not create those; the
+# nativestrict flavor cannot create them either (a native symlink to a missing target is
+# refused, at least by some msys runtime versions). Force the shortcut-style mode for this
+# one unpack: it never needs the target, and nothing in the build follows these links.
+$(call gb_UnpackedTarball_get_target,zxing): export MSYS:=$(filter-out winsymlinks%,$(MSYS)) winsymlinks
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
