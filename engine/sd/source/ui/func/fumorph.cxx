@@ -398,7 +398,7 @@ void FuMorph::ImpInsertPolygons(
             {
                 aEndProps.eFillStyle = drawing::FillStyle_SOLID;
                 aEndProps.nFillTransparence = 100;
-                aEndProps.aFillColor = aEndProps.aFillColor;
+                aEndProps.aFillColor = aStartProps.aFillColor;
             }
         }
 
