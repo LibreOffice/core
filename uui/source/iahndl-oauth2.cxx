@@ -202,7 +202,7 @@ void SAL_CALL OAuth2Request::Impl::listenHTTP(void* pThis)
 
         beast::flat_buffer buffer;
         http::request<http::string_body> req;
-        http::read(socket, buffer, req, ec);
+        (void)http::read(socket, buffer, req, ec);
         if (ec)
         {
             SAL_WARN("ucb.ucp.cmis", "HTTP read failed: " << ec.message());
