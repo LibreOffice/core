@@ -5762,7 +5762,7 @@ SfxVoidItem InvertBackground FN_INVERT_BACKGROUND
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
