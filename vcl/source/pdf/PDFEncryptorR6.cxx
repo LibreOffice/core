@@ -41,7 +41,7 @@ void generateBytes(std::vector<sal_uInt8>& rBytes, size_t nSize)
     if (rBytes.empty())
         return;
 
-    rtl_random_getBytes(nullptr, rBytes.data(), rBytes.size());
+    (void)rtl_random_getBytes(nullptr, rBytes.data(), rBytes.size());
 }
 
 } // end anonymous
