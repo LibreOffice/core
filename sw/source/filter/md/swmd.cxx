@@ -62,7 +62,6 @@
 #include <unicode/ucsdet.h>
 #include <rtl/tencinfo.h>
 #include <unotextrange.hxx>
-#include <tools/urlobj.hxx>
 
 #include "swmd.hxx"
 
