@@ -395,7 +395,7 @@ void FuMorph::ImpInsertPolygons(B2DPolyPolygonList_impl& rPolyPolyList3D, bool b
             {
                 aEndProps.eFillStyle = drawing::FillStyle_SOLID;
                 aEndProps.nFillTransparence = 100;
-                aEndProps.aFillColor = aEndProps.aFillColor;
+                aEndProps.aFillColor = aStartProps.aFillColor;
             }
         }
 
