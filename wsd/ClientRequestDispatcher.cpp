@@ -976,7 +976,7 @@ ssize_t ClientRequestDispatcher::readHeader(const std::shared_ptr<StreamSocket>&
                 << messagesize << " bytes, shutdown: " << exc.displayText() << ", delay "
                 << delayMs.count() << "ms");
         socket->asyncShutdown();
-        return 0; //FIXME: Why not -1 as we've closed the socket already?
+        return -1;
     }
     catch (const Poco::Net::UnsupportedRedirectException& exc)
     {

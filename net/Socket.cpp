@@ -1703,7 +1703,7 @@ ssize_t StreamSocket::readHeader(const std::string_view clientName, std::istream
                 << messagesize << " bytes, shutdown: " << exc.displayText() << ", delay "
                 << delayMs.count() << "ms");
         asyncShutdown();
-        return 0;
+        return -1;
     }
     catch (const Poco::Net::UnsupportedRedirectException& exc)
     {
