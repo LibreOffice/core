@@ -1898,9 +1898,9 @@ img.ui-combobox-value-preview {
 .ui-combobox-entry.ui-linewidth-212::before { height: 14px; }
 
 [id^='comment-menu-'][id$='-entries'] .ui-combobox-entry:hover,
-#jsd-context-menu-entries .ui-combobox-entry:hover,
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry:hover,
 [id^='comment-menu-'][id$='-entries'] .ui-combobox-entry.has-open-submenu,
-#jsd-context-menu-entries .ui-combobox-entry.has-open-submenu {
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry.has-open-submenu {
 	background-color: var(--color-background-darker) !important;
 	color: var(--color-text-darker) !important;
 }
