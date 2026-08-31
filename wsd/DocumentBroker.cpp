@@ -4864,6 +4864,14 @@ void DocumentBroker::rememberViewPosition(const ClientSession& session)
         _lastViewPosition.editMode = *editMode;
     if (session.getVisibleArea().hasSurface())
         _lastViewPosition.visibleArea = session.getVisibleArea();
+    // The cursor and the two selection ends describe one state, so they replace the
+    // earlier ones together.
+    if (session.getClientCursor().getHeight() > 0)
+    {
+        _lastViewPosition.cursor = session.getClientCursor();
+        _lastViewPosition.selectionStart = session.getClientSelectionStart();
+        _lastViewPosition.selectionEnd = session.getClientSelectionEnd();
+    }
 
     LOG_DBG("Doc [" << _docKey << "] remembers view position: part "
                     << _lastViewPosition.part << ", zoom " << _lastViewPosition.zoomPercent
@@ -4872,7 +4880,13 @@ void DocumentBroker::rememberViewPosition(const ClientSession& session)
                     << _lastViewPosition.visibleArea.getLeft() << ','
                     << _lastViewPosition.visibleArea.getTop() << ' '
                     << _lastViewPosition.visibleArea.getWidth() << 'x'
-                    << _lastViewPosition.visibleArea.getHeight());
+                    << _lastViewPosition.visibleArea.getHeight() << ", cursor "
+                    << _lastViewPosition.cursor.getLeft() << ','
+                    << _lastViewPosition.cursor.getTop() << ", selection "
+                    << _lastViewPosition.selectionStart.getLeft() << ','
+                    << _lastViewPosition.selectionStart.getTop() << " to "
+                    << _lastViewPosition.selectionEnd.getLeft() << ','
+                    << _lastViewPosition.selectionEnd.getTop());
 }
 
 std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& session)
@@ -7331,7 +7345,12 @@ void DocumentBroker::dumpState(std::ostream& os)
        << _lastViewPosition.visibleArea.getLeft() << ','
        << _lastViewPosition.visibleArea.getTop() << ' '
        << _lastViewPosition.visibleArea.getWidth() << 'x'
-       << _lastViewPosition.visibleArea.getHeight();
+       << _lastViewPosition.visibleArea.getHeight() << ", cursor "
+       << _lastViewPosition.cursor.getLeft() << ',' << _lastViewPosition.cursor.getTop()
+       << ", selection " << _lastViewPosition.selectionStart.getLeft() << ','
+       << _lastViewPosition.selectionStart.getTop() << " to "
+       << _lastViewPosition.selectionEnd.getLeft() << ','
+       << _lastViewPosition.selectionEnd.getTop();
     const int childPid = _childProcess ? _childProcess->getPid() : 0;
     os << "\n  child PID: " << childPid;
     os << "\n  sent: " << sent << " bytes";

@@ -320,10 +320,21 @@ public:
         bool editMode = false;
         /// The area the client had in view, in document twips.
         Util::Rectangle visibleArea;
+        /// Where the text cursor was, in document twips.
+        Util::Rectangle cursor;
+        /// The two ends of the text selection, in document twips.
+        Util::Rectangle selectionStart;
+        Util::Rectangle selectionEnd;
 
         bool hasPart() const { return !part.empty(); }
         bool hasZoom() const { return zoomPercent > 0; }
         bool hasVisibleArea() const { return visibleArea.hasSurface(); }
+        bool hasCursor() const { return cursor.isValid() && cursor.getHeight() > 0; }
+        bool hasSelection() const
+        {
+            return selectionStart.isValid() && selectionEnd.isValid() &&
+                   selectionStart.getHeight() > 0 && selectionEnd.getHeight() > 0;
+        }
     };
 
     /// What the last view of this document was looking at, kept for the view that opens

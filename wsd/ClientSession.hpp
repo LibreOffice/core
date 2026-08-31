@@ -293,6 +293,13 @@ public:
     /// the client has said which.
     std::optional<bool> getClientEditMode() const { return _clientEditMode; }
 
+    /// Where the text cursor of this view is, in document twips, empty until the kit says.
+    const Util::Rectangle& getClientCursor() const { return _clientCursor; }
+
+    /// The two ends of this view's text selection, in document twips.
+    const Util::Rectangle& getClientSelectionStart() const { return _clientSelectionStart; }
+    const Util::Rectangle& getClientSelectionEnd() const { return _clientSelectionEnd; }
+
     /// Tell the client, once, the zoom and the scroll offset the last view left.
     void sendLastViewPosition(const std::shared_ptr<DocumentBroker>& docBroker);
     /// Visible area can have negative value as position, but we have tiles only in the positive range
@@ -675,6 +682,16 @@ private:
 
     /// True once this session has been told where the last view of the document was.
     bool _sentLastViewPosition = false;
+
+    /// Where the text cursor of this view is, in document twips.
+    Util::Rectangle _clientCursor;
+
+    /// The two ends of this view's text selection, in document twips.
+    Util::Rectangle _clientSelectionStart;
+    Util::Rectangle _clientSelectionEnd;
+
+    /// Read a "x, y, width, height" rectangle in twips. False when the text is not one.
+    static bool parseRectangle(const std::string& text, Util::Rectangle& rectangle);
 
     /// The integer id of the view in the Kit process
     int _kitViewId;

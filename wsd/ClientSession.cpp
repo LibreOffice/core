@@ -2350,6 +2350,21 @@ void ClientSession::overrideDocOption()
     }
 }
 
+bool ClientSession::parseRectangle(const std::string& text, Util::Rectangle& rectangle)
+{
+    StringVector parts(StringVector::tokenize(text, ','));
+    if (parts.size() < 4)
+        return false;
+
+    int x = 0, y = 0, width = 0, height = 0;
+    if (!stringToInteger(parts[0], x) || !stringToInteger(parts[1], y) ||
+        !stringToInteger(parts[2], width) || !stringToInteger(parts[3], height))
+        return false;
+
+    rectangle = Util::Rectangle(x, y, width, height);
+    return true;
+}
+
 void ClientSession::sendLastViewPosition(const std::shared_ptr<DocumentBroker>& docBroker)
 {
     if (_sentLastViewPosition)
@@ -3856,6 +3871,25 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             docBroker->forwardToChild(client_from_this(), renderThumbnailCmd.str());
         }
     }
+    else if (tokens.equals(0, "textselectionstart:") || tokens.equals(0, "textselectionend:"))
+    {
+        // The payload is a rectangle in document twips, or "EMPTY" when nothing is selected.
+        const bool isStart = tokens.equals(0, "textselectionstart:");
+        Util::Rectangle rectangle;
+        if (parseRectangle(firstLine.substr(firstLine.find(':') + 1), rectangle))
+        {
+            if (isStart)
+                _clientSelectionStart = rectangle;
+            else
+                _clientSelectionEnd = rectangle;
+        }
+        else if (isStart)
+            _clientSelectionStart = Util::Rectangle();
+        else
+            _clientSelectionEnd = Util::Rectangle();
+
+        return forwardToClient(payload);
+    }
     else if (tokens.equals(0, "invalidatecursor:"))
     {
         assert(firstLine.size() == payload->size() &&
@@ -3880,6 +3914,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
                 }
 
                 docBroker->invalidateCursor(x, y, w, h);
+                _clientCursor = Util::Rectangle(x, y, w, h);
 
                 // session used for thumbnailing and target already was set
                 if (_thumbnailSession)
@@ -4465,6 +4500,10 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tclientEditMode: "
        << (_clientEditMode.has_value() ? (*_clientEditMode ? "editing" : "viewing") : "unknown")
        << "\n\t\tsentLastViewPosition: " << _sentLastViewPosition
+       << "\n\t\tclientCursor: " << _clientCursor.getLeft() << ',' << _clientCursor.getTop()
+       << "\n\t\tclientSelection: " << _clientSelectionStart.getLeft() << ','
+       << _clientSelectionStart.getTop() << " to " << _clientSelectionEnd.getLeft() << ','
+       << _clientSelectionEnd.getTop()
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument
