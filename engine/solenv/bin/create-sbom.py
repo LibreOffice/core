@@ -370,6 +370,36 @@ def add_license_relationship(graph, from_id, type, license_expr):
     })
 
 
+fetch_url_cache = None
+
+def get_fetch_url(variable):
+    """The URL a tarball variable is downloaded from, per Makefile.fetch.
+
+    Most tarballs are on the LibreOffice mirror, but some are not: the CJK
+    Noto fonts come from the code-assets release, OpenDyslexic and POCO from
+    their upstream releases, and the /extern bucket has its own path."""
+    global fetch_url_cache
+    if fetch_url_cache is None:
+        with open(os.environ.get('SRC_ROOT') + '/Makefile.fetch') as f:
+            content = f.read()
+        buckets = {}
+        for bucket, body in re.findall(
+                r'fetch_(\w+)_TARBALLS\s*:?=((?:[^\n]*\\\n)*[^\n]*)', content):
+            variables = re.findall(r'fetch_Optional,\w+,(\w+)', body)
+            variables += re.findall(r'(?:^|\s)([A-Z][A-Z0-9_]+)(?=\s|\\|$)',
+                                    body)
+            buckets[bucket] = variables
+        fetch_url_cache = {}
+        for bucket, url in re.findall(
+                r'foreach item,\$\(fetch_(\w+)_TARBALLS\),'
+                r'\$\(call fetch_Download_item\w*,([^,]+),', content):
+            for var in buckets.get(bucket, []):
+                fetch_url_cache[var] = url.rstrip('/')
+    if variable not in fetch_url_cache:
+        raise Exception(f"no Makefile.fetch bucket contains {variable}")
+    return fetch_url_cache[variable]
+
+
 def extract_spdx_info(line):
     """
     Extract relevant SPDX information from a line.
@@ -402,7 +432,7 @@ def extract_spdx_info(line):
             if sha256 is None:
                 raise Exception(f"No SHA256SUM for {source}")
             version = extract_version_from_filename(tarball)
-            locator = "https://dev-www.libreoffice.org/src/" + tarball
+            locator = get_fetch_url(source) + "/" + tarball
         elif name.startswith("dict"):
             # unclear how to hash these, it's an entire dir tree...
             sha256 = None
