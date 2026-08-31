@@ -1,0 +1,9 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- OldStyle is /Z7: the debug info goes into each object, not into a PDB
+       shared by the project. -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

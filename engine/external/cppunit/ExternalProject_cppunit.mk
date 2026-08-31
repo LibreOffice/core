@@ -21,9 +21,9 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 		/p:Platform=$(gb_MSBUILD_PLATFORM) \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION))" \
-		&& msbuild.exe cppunit_dll.vcxproj /p:Configuration=$${PROFILEFLAGS} $(gb_MSBUILD_DEPENDENCY_TRACKING) \
+		&& msbuild.exe cppunit_dll.vcxproj /p:Configuration=$${PROFILEFLAGS} $(gb_MSBUILD_DEPENDENCY_TRACKING) $(gb_MSBUILD_DEBUGINFO) \
 		&& cd ../DllPlugInTester \
-		&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=$${PROFILEFLAGS} $(gb_MSBUILD_DEPENDENCY_TRACKING) \
+		&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=$${PROFILEFLAGS} $(gb_MSBUILD_DEPENDENCY_TRACKING) $(gb_MSBUILD_DEBUGINFO) \
 	,src/cppunit)
 	$(call gb_Trace_EndRange,cppunit,EXTERNAL)
 else

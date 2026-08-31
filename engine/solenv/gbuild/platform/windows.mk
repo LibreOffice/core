@@ -72,6 +72,10 @@ export MSBUILDDISABLENODEREUSE := 1
 # msbuild's librarian and linker tasks log every file they open, into a .tlog beside the objects.
 gb_MSBUILD_DEPENDENCY_TRACKING := $(if $(gb_FULLDEPS),,/p:TrackFileAccess=false)
 
+# ccache cannot cache a compile that writes its debug info into a shared PDB.
+# msbuild reads the props path as a Windows path.
+gb_MSBUILD_DEBUGINFO := $(if $(ENABLE_Z7_DEBUG),/p:ForceImportBeforeCppTargets=$(shell cygpath -m $(GBUILDDIR)/platform/msbuild-debuginfo.props))
+
 gb_CONFIGURE_PLATFORMS := \
 	$(if $(and $(filter i686-pc-cygwin,$(HOST_PLATFORM)),$(filter x86_64-pc-cygwin,$(BUILD_PLATFORM))), \
 		--build=$(HOST_PLATFORM),--build=$(BUILD_PLATFORM)) --host=$(HOST_PLATFORM)

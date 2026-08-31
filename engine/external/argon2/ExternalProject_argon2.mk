@@ -23,12 +23,12 @@ $(call gb_ExternalProject_get_state_target,argon2,build):
 	$(call gb_ExternalProject_run,build,\
 		MSBuild.exe vs2015/Argon2OptDll/Argon2OptDll.vcxproj \
 			/p:SolutionDir="$(gb_UnpackedTarball_workdir)/argon2/" \
-			$(gb_MSBUILD_CONFIG_AND_PLATFORM) $(gb_MSBUILD_DEPENDENCY_TRACKING) \
+			$(gb_MSBUILD_CONFIG_AND_PLATFORM) $(gb_MSBUILD_DEPENDENCY_TRACKING) $(gb_MSBUILD_DEBUGINFO) \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 		&& MSBuild.exe vs2015/Argon2OptTestCI/Argon2OptTestCI.vcxproj \
 			/p:SolutionDir="$(gb_UnpackedTarball_workdir)/argon2/" \
-			$(gb_MSBUILD_CONFIG_AND_PLATFORM) $(gb_MSBUILD_DEPENDENCY_TRACKING) \
+			$(gb_MSBUILD_CONFIG_AND_PLATFORM) $(gb_MSBUILD_DEPENDENCY_TRACKING) $(gb_MSBUILD_DEBUGINFO) \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 		$(if $(CROSS_COMPILING),,&& vs2015/build/Argon2OptTestCI.exe) \

@@ -17,7 +17,7 @@ ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
 	$(call gb_Trace_StartRange,coinmp,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		MSBuild.exe CoinMP.sln /t:Build $(gb_MSBUILD_DEPENDENCY_TRACKING) \
+		MSBuild.exe CoinMP.sln /t:Build $(gb_MSBUILD_DEPENDENCY_TRACKING) $(gb_MSBUILD_DEBUGINFO) \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
