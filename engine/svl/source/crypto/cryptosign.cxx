@@ -1070,7 +1070,7 @@ AppleSignStatus SignWithAppleKeychain(
     {
         comphelper::Hash aHash(comphelper::HashType::SHA256);
         for (const auto& rPair : rDataBlocks)
-            aHash.update(static_cast<const unsigned char*>(rPair.first), rPair.second);
+            aHash.update(rPair.first, rPair.second);
         aContentHash = aHash.finalize();
     }
 
