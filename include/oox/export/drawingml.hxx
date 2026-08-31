@@ -322,6 +322,7 @@ protected:
     bool mbDiagaramExport;
     bool mbDiagaramReplacementExport;
     bool mbDiagramModelTextExport;
+    sal_Int32 mnDiagramModelTextParagraph;
 
     bool mbEmbedFonts = false;
 
@@ -402,7 +403,13 @@ public:
     void SetParent(const css::uno::Reference<css::drawing::XShape>& xShape) { m_xParent = xShape; }
 
     // True while the text of the data model of a Diagram is written
-    void setDiagramModelTextExport(bool bNew) { mbDiagramModelTextExport = bNew; }
+    // nParagraph gives which paragraph of the shape represents the Point being written, and -1
+    // that the shape represents the Point with all its paragraphs.
+    void setDiagramModelTextExport(bool bNew, sal_Int32 nParagraph = -1)
+    {
+        mbDiagramModelTextExport = bNew;
+        mnDiagramModelTextParagraph = nParagraph;
+    }
     bool isDiagramModelTextExport() const { return mbDiagramModelTextExport; }
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
