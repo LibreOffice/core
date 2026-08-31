@@ -186,30 +186,31 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         INetURLObject aURL( aFileName );
         // tdf#132421 - don't URL encode filename for the import ASCII dialog title
         OUString aPrivDatName(aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
-        std::unique_ptr<SvStream> pInStream;
-        if ( xInputStream.is() )
-            pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
-        // by default, we don't know what's the encoding of the csv file
-        // see sc/source/ui/dbgui/scuiasciiopt.cxx, ScImportAsciiDlg ctr
-        // there's an explanation of the different cases
-        pInStream->SetStreamEncoding(RTL_TEXTENCODING_DONTKNOW);
-
-        ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(Application::GetFrameWeld(xDialogParent), aPrivDatName,
-                                                                                  pInStream.get(), SC_IMPORTFILE));
-
-        bool bShow;
-        // The "ShowFilterDialog" flag is passed from SfxApplication::OpenDocExec_Impl
-        if (!(css::uno::getCurrentContext()->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow))
-            bShow = utl::isShowFilterOptionsDialog(aFilterString);
-        const bool bOk = !bShow || pDlg->Execute() == RET_OK;
-
-        if (bOk)
+        std::unique_ptr<SvStream> pInStream(utl::UcbStreamHelper::CreateStream( xInputStream ));
+        if ( pInStream )
         {
-            ScAsciiOptions aOptions;
-            pDlg->GetOptions( aOptions );
-            pDlg->SaveParameters();
-            aFilterOptions = aOptions.WriteToString();
-            nRet = ui::dialogs::ExecutableDialogResults::OK;
+            // by default, we don't know what's the encoding of the csv file
+            // see sc/source/ui/dbgui/scuiasciiopt.cxx, ScImportAsciiDlg ctr
+            // there's an explanation of the different cases
+            pInStream->SetStreamEncoding(RTL_TEXTENCODING_DONTKNOW);
+
+            ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(Application::GetFrameWeld(xDialogParent), aPrivDatName,
+                                                                                      pInStream.get(), SC_IMPORTFILE));
+
+            bool bShow;
+            // The "ShowFilterDialog" flag is passed from SfxApplication::OpenDocExec_Impl
+            if (!(css::uno::getCurrentContext()->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow))
+                bShow = utl::isShowFilterOptionsDialog(aFilterString);
+            const bool bOk = !bShow || pDlg->Execute() == RET_OK;
+
+            if (bOk)
+            {
+                ScAsciiOptions aOptions;
+                pDlg->GetOptions( aOptions );
+                pDlg->SaveParameters();
+                aFilterOptions = aOptions.WriteToString();
+                nRet = ui::dialogs::ExecutableDialogResults::OK;
+            }
         }
     }
     else if (aFilterString == SC_HTML_WEBQ_FILTER_NAME || aFilterString == SC_HTML_FILTER_NAME)
