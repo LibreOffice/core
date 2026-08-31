@@ -35,9 +35,7 @@ service AccessibleTabBar
         <li>Description: The description of a tabbar is its localized
             help text.</li>
         <li>Children: The children of a tabbar are tabbar buttons,
-            the tabbar sizer and the tabbar page list,
-            whose accessible context supports the service
-            AccessibleTabBarPageList.</li>
+            the tabbar sizer and the tabbar page list.</li>
         <li>Parent: The parent is the window that contains the
             tabbar.</li>
         <li>Relations: There are no relations.</li>

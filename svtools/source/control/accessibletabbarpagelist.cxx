@@ -325,27 +325,6 @@ void AccessibleTabBarPageList::disposing()
     m_aAccessibleChildren.clear();
 }
 
-
-// XServiceInfo
-
-
-OUString AccessibleTabBarPageList::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleTabBarPageList"_ustr;
-}
-
-
-sal_Bool AccessibleTabBarPageList::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-
-Sequence< OUString > AccessibleTabBarPageList::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleTabBarPageList"_ustr };
-}
-
 // XAccessibleContext
 
 sal_Int64 AccessibleTabBarPageList::getAccessibleChildCount()
