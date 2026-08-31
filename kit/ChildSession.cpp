@@ -2934,9 +2934,22 @@ bool ChildSession::renderNextSlideLayer(SlideCompressor& scomp, const unsigned w
 
 bool ChildSession::renderSlide(const StringVector& tokens)
 {
+    // A view that asked for a slide waits for the rendering to report that it ended, so every
+    // way out of this function reports it, and names the rendering that ended.
+    const auto sendRenderingFailed = [this, &tokens]()
+    {
+        std::ostringstream msg;
+        msg << "sliderenderingcomplete: " R"({"status": "fail")";
+        if (EnableExperimental)
+            msg << R"(, "cacheKey": ")" << tokens.substrFromToken(1) << '"';
+        msg << '}';
+        sendTextFrame(msg.str());
+    };
+
     if (tokens.size() < 5)
     {
         sendTextFrameAndLogError("error: cmd=getslide kind=syntax");
+        sendRenderingFailed();
         return false;
     }
 
@@ -2961,6 +2974,7 @@ bool ChildSession::renderSlide(const StringVector& tokens)
     if (hash.empty() || part < 0 || suggestedWidth == 0 || suggestedHeight == 0)
     {
         sendTextFrameAndLogError("error: cmd=getslide kind=syntax");
+        sendRenderingFailed();
         return false;
     }
 
@@ -2990,7 +3004,7 @@ bool ChildSession::renderSlide(const StringVector& tokens)
                                                            &bufferWidth, &bufferHeight,
                                                            renderBackground, renderMasterPage);
     if (!success) {
-        sendTextFrame(R"(sliderenderingcomplete: {"status": "fail"})");
+        sendRenderingFailed();
         return false;
     }
 
