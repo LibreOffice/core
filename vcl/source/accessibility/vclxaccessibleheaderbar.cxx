@@ -40,18 +40,6 @@ VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar(HeaderBar* pHeaderBar)
 
 VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar() {}
 
-// XServiceInfo
-
-OUString VCLXAccessibleHeaderBar::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleHeaderBar"_ustr;
-}
-
-Sequence<OUString> VCLXAccessibleHeaderBar::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleHeaderBar"_ustr };
-}
-
 // =======XAccessibleContext=======
 
 sal_Int64 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount()

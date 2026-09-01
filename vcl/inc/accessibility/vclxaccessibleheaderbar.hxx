@@ -41,10 +41,6 @@ public:
         SAL_CALL getAccessibleChild(sal_Int64 i) override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
 public:
     virtual void SAL_CALL disposing() override;
     rtl::Reference<VCLXAccessibleHeaderBarItem> CreateChild(sal_Int32 i);
