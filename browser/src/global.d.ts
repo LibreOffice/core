@@ -308,7 +308,7 @@ interface ErrorMessages {
 	sessionexpired: string;
 	faileddocloading: string;
 	invalidLink: string;
-	leavind: string;
+	leaving: string;
 	docloadtimeout: string;
 	docunloadingretry: string;
 	docunloadinggiveup: string;

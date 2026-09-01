@@ -417,7 +417,7 @@ COOL_JS_LST =\
 	src/app/TracingEvents.ts \
 	src/app/ServerCommand.ts \
 	src/Leaflet.js \
-	src/errormessages.js \
+	src/errormessages.ts \
 	src/unocommands.js \
 	src/unoshortcuts.ts \
 	src/UNO/Key.js \
@@ -1675,7 +1675,7 @@ pot:
 		src/docstate.ts \
 		src/docstatefunctions.js \
 		src/dom/NotebookbarAccessibility.js \
-		src/errormessages.js \
+		src/errormessages.ts \
 		src/layer/marker/A11yTextInput.js \
 		src/layer/marker/TextInput.js \
 		src/layer/tile/CanvasTileLayer.js \
