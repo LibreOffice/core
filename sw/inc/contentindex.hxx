@@ -24,6 +24,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <iostream>
+#include <compare>
 
 class SwContentNode;
 
@@ -81,12 +82,8 @@ public:
     bool operator> ( const SwContentIndex& ) const;
     bool operator>=( const SwContentIndex& ) const;
 
-    bool operator< ( sal_Int32 const nVal ) const { return m_nIndex <  nVal; }
-    bool operator<=( sal_Int32 const nVal ) const { return m_nIndex <= nVal; }
-    bool operator> ( sal_Int32 const nVal ) const { return m_nIndex >  nVal; }
-    bool operator>=( sal_Int32 const nVal ) const { return m_nIndex >= nVal; }
-    bool operator==( sal_Int32 const nVal ) const { return m_nIndex == nVal; }
-    bool operator!=( sal_Int32 const nVal ) const { return m_nIndex != nVal; }
+    bool operator==( sal_Int32 nVal ) const { return m_nIndex == nVal; }
+    auto operator<=>(sal_Int32 nVal) const { return m_nIndex <=> nVal; }
 
     bool operator==( const SwContentIndex& rSwContentIndex ) const
     {
