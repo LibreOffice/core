@@ -260,7 +260,7 @@ void AccessibleControlShape::Init()
     }
 }
 
-void SAL_CALL AccessibleControlShape::grabFocus()
+void AccessibleControlShape::grabFocus()
 {
     if (!m_xUnoControl.is() || !isControlInAliveMode())
     {
@@ -276,7 +276,7 @@ void SAL_CALL AccessibleControlShape::grabFocus()
     }
 }
 
-OUString SAL_CALL AccessibleControlShape::getImplementationName()
+OUString AccessibleControlShape::getImplementationName()
 {
     return u"com.sun.star.comp.accessibility.AccessibleControlShape"_ustr;
 }
@@ -337,7 +337,7 @@ OUString
 IMPLEMENT_FORWARD_REFCOUNT( AccessibleControlShape, AccessibleShape )
 IMPLEMENT_GET_IMPLEMENTATION_ID( AccessibleControlShape )
 
-void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent& _rEvent )
+void AccessibleControlShape::propertyChange( const PropertyChangeEvent& _rEvent )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -363,7 +363,7 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
 #endif
 }
 
-Any SAL_CALL AccessibleControlShape::queryInterface( const Type& _rType )
+Any AccessibleControlShape::queryInterface( const Type& _rType )
 {
     Any aReturn = AccessibleShape::queryInterface( _rType );
     if ( !aReturn.hasValue() )
@@ -375,7 +375,7 @@ Any SAL_CALL AccessibleControlShape::queryInterface( const Type& _rType )
     return aReturn;
 }
 
-Sequence< Type > SAL_CALL AccessibleControlShape::getTypes()
+Sequence< Type > AccessibleControlShape::getTypes()
 {
     Sequence< Type > aShapeTypes = AccessibleShape::getTypes();
     Sequence< Type > aOwnTypes = AccessibleControlShape_Base::getTypes();
@@ -388,7 +388,7 @@ Sequence< Type > SAL_CALL AccessibleControlShape::getTypes()
     return comphelper::combineSequences(comphelper::concatSequences( aShapeTypes, aOwnTypes), aAggregateTypes );
 }
 
-void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& _rEvent )
+void AccessibleControlShape::notifyEvent( const AccessibleEventObject& _rEvent )
 {
     if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
     {
@@ -424,7 +424,7 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
     }
 }
 
-void SAL_CALL AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource)
+void AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource)
 {
     // did it come from our inner context (the real one, not it's proxy!)?
     SAL_INFO("sw.uno", "AccessibleControlShape::modeChanged");
@@ -444,7 +444,7 @@ void SAL_CALL AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource
     SAL_WARN_IF(!bReplaced, "sw.uno", "AccessibleControlShape::modeChanged: replacing ourselves away did fail");
 }
 
-void SAL_CALL AccessibleControlShape::disposing (const EventObject& _rSource)
+void AccessibleControlShape::disposing (const EventObject& _rSource)
 {
     AccessibleShape::disposing( _rSource );
 }
@@ -478,7 +478,7 @@ bool AccessibleControlShape::ensureListeningState(
     return _bNeedNewListening;
 }
 
-sal_Int64 SAL_CALL AccessibleControlShape::getAccessibleChildCount( )
+sal_Int64 AccessibleControlShape::getAccessibleChildCount( )
 {
     if ( !m_xUnoControl.is() )
         return 0;
@@ -495,7 +495,7 @@ sal_Int64 SAL_CALL AccessibleControlShape::getAccessibleChildCount( )
     }
 }
 
-Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleControlShape::getAccessibleChild( sal_Int64 i )
 {
     Reference< XAccessible > xChild;
     if ( !m_xUnoControl.is() )
@@ -539,7 +539,7 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
     return xChild;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessibleRelationSet(  )
+Reference< XAccessibleRelationSet > AccessibleControlShape::getAccessibleRelationSet(  )
 {
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     ensureControlModelAccess();
@@ -592,7 +592,7 @@ OUString AccessibleControlShape::CreateAccessibleName()
     return sName;
 }
 
-void SAL_CALL AccessibleControlShape::disposing()
+void AccessibleControlShape::disposing()
 {
     // ensure we're not listening
     m_bListeningForName = ensureListeningState( m_bListeningForName, false, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
@@ -786,7 +786,7 @@ bool AccessibleControlShape::isControlInAliveMode()
     return m_xUnoControl.is() && !m_xUnoControl->isDesignMode();
 }
 
-void SAL_CALL AccessibleControlShape::elementInserted( const css::container::ContainerEvent& _rEvent )
+void AccessibleControlShape::elementInserted( const css::container::ContainerEvent& _rEvent )
 {
     Reference< XContainer > xContainer( _rEvent.Source, UNO_QUERY );
     Reference< XControl > xControl( _rEvent.Element, UNO_QUERY );
@@ -819,12 +819,12 @@ void SAL_CALL AccessibleControlShape::elementInserted( const css::container::Con
     OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, 0, maShapeTreeInfo ) );
 }
 
-void SAL_CALL AccessibleControlShape::elementRemoved( const css::container::ContainerEvent& )
+void AccessibleControlShape::elementRemoved( const css::container::ContainerEvent& )
 {
     // not interested in
 }
 
-void SAL_CALL AccessibleControlShape::elementReplaced( const css::container::ContainerEvent& )
+void AccessibleControlShape::elementReplaced( const css::container::ContainerEvent& )
 {
     // not interested in
 }

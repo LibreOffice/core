@@ -215,15 +215,15 @@ public:
     void RemoveFocus();
 
     // lang::XEventListener
-    virtual void SAL_CALL
+    virtual void
         disposing (const css::lang::EventObject& rEventObject) override;
 
     // document::XEventListener
-    virtual void SAL_CALL
+    virtual void
         notifyEvent (const css::document::EventObject& rEventObject) override;
 
     // view::XSelectionChangeListener
-    virtual void  SAL_CALL
+    virtual void
         selectionChanged (const css::lang::EventObject& rEvent) override;
 
     // IAccessibleViewForwarderListener

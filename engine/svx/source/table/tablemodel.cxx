@@ -269,14 +269,14 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
 // XTable
 
 
-uno::Reference<css::table::XCellCursor> SAL_CALL TableModel::createCursor()
+uno::Reference<css::table::XCellCursor> TableModel::createCursor()
 {
     ::SolarMutexGuard aGuard;
     return createCursorByRange( uno::Reference< XCellRange >( this ) );
 }
 
 
-uno::Reference<css::table::XCellCursor> SAL_CALL TableModel::createCursorByRange( const uno::Reference< XCellRange >& rRange )
+uno::Reference<css::table::XCellCursor> TableModel::createCursorByRange( const uno::Reference< XCellRange >& rRange )
 {
     ::SolarMutexGuard aGuard;
 
@@ -289,13 +289,13 @@ uno::Reference<css::table::XCellCursor> SAL_CALL TableModel::createCursorByRange
 }
 
 
-sal_Int32 SAL_CALL TableModel::getRowCount()
+sal_Int32 TableModel::getRowCount()
 {
     ::SolarMutexGuard aGuard;
     return getRowCountImpl();
 }
 
-sal_Int32 SAL_CALL TableModel::getColumnCount()
+sal_Int32 TableModel::getColumnCount()
 {
     ::SolarMutexGuard aGuard;
     return getColumnCountImpl();
@@ -313,14 +313,14 @@ std::vector<sal_Int32> TableModel::getColumnWidths()
 // XModifiable
 
 
-bool SAL_CALL TableModel::isModified(  )
+bool TableModel::isModified(  )
 {
     ::SolarMutexGuard aGuard;
     return mbModified;
 }
 
 
-void SAL_CALL TableModel::setModified( bool bModified )
+void TableModel::setModified( bool bModified )
 {
     {
         ::SolarMutexGuard aGuard;
@@ -334,14 +334,14 @@ void SAL_CALL TableModel::setModified( bool bModified )
 // XModifyBroadcaster
 
 
-void SAL_CALL TableModel::addModifyListener( const uno::Reference<util::XModifyListener>& xListener )
+void TableModel::addModifyListener( const uno::Reference<util::XModifyListener>& xListener )
 {
     std::unique_lock aGuard(m_aMutex);
     maModifyListeners.addInterface( aGuard, xListener );
 }
 
 
-void SAL_CALL TableModel::removeModifyListener( const uno::Reference<util::XModifyListener>& xListener )
+void TableModel::removeModifyListener( const uno::Reference<util::XModifyListener>& xListener )
 {
     std::unique_lock aGuard(m_aMutex);
     maModifyListeners.removeInterface( aGuard, xListener );
@@ -351,7 +351,7 @@ void SAL_CALL TableModel::removeModifyListener( const uno::Reference<util::XModi
 // XColumnRowRange
 
 
-uno::Reference<css::table::XTableColumns> SAL_CALL TableModel::getColumns()
+uno::Reference<css::table::XTableColumns> TableModel::getColumns()
 {
     ::SolarMutexGuard aGuard;
 
@@ -361,7 +361,7 @@ uno::Reference<css::table::XTableColumns> SAL_CALL TableModel::getColumns()
 }
 
 
-uno::Reference<css::table::XTableRows> SAL_CALL TableModel::getRows()
+uno::Reference<css::table::XTableRows> TableModel::getRows()
 {
     ::SolarMutexGuard aGuard;
 
@@ -374,7 +374,7 @@ uno::Reference<css::table::XTableRows> SAL_CALL TableModel::getRows()
 // XCellRange
 
 
-uno::Reference<css::table::XCell> SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
+uno::Reference<css::table::XCell> TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
 {
     ::SolarMutexGuard aGuard;
 
@@ -392,7 +392,7 @@ uno::Reference<css::table::XCell> SAL_CALL TableModel::getCellByPosition( sal_In
 }
 
 
-uno::Reference<css::table::XCellRange> SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
+uno::Reference<css::table::XCellRange> TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 {
     ::SolarMutexGuard aGuard;
 
@@ -406,7 +406,7 @@ uno::Reference<css::table::XCellRange> SAL_CALL TableModel::getCellRangeByPositi
 }
 
 
-uno::Reference<css::table::XCellRange> SAL_CALL TableModel::getCellRangeByName( const OUString& /*aRange*/ )
+uno::Reference<css::table::XCellRange> TableModel::getCellRangeByName( const OUString& /*aRange*/ )
 {
     return uno::Reference< XCellRange >();
 }
@@ -415,40 +415,40 @@ uno::Reference<css::table::XCellRange> SAL_CALL TableModel::getCellRangeByName( 
 // XPropertySet
 
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL TableModel::getPropertySetInfo(  )
+uno::Reference<beans::XPropertySetInfo> TableModel::getPropertySetInfo(  )
 {
     uno::Reference<beans::XPropertySetInfo> xInfo;
     return xInfo;
 }
 
 
-void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const cpo::uno::Any& /*aValue*/ )
+void TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const cpo::uno::Any& /*aValue*/ )
 {
 }
 
 
-cpo::uno::Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ )
+cpo::uno::Any TableModel::getPropertyValue( const OUString& /*PropertyName*/ )
 {
     return cpo::uno::Any();
 }
 
 
-void SAL_CALL TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/ )
+void TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/ )
 {
 }
 
 
-void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/ )
+void TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/ )
 {
 }
 
 
-void SAL_CALL TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/ )
+void TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/ )
 {
 }
 
 
-void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/ )
+void TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/ )
 {
 }
 
@@ -456,12 +456,12 @@ void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPrope
 // XFastPropertySet
 
 
-void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const cpo::uno::Any& /*aValue*/ )
+void TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const cpo::uno::Any& /*aValue*/ )
 {
 }
 
 
-cpo::uno::Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ )
+cpo::uno::Any TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ )
 {
     cpo::uno::Any aAny;
     return aAny;

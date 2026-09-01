@@ -91,10 +91,10 @@ public:
     //  virtual bool queryInterface(css::uno::Uik aUik, css::uno::Reference< css::uno::XInterface >& rOut);
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // css::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
+    virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
     void DisConnect();
 

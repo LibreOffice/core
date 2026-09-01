@@ -69,35 +69,35 @@ public:
     SdrModel* GetDoc() const { return mpDoc; }
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     {  SfxBaseModel::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     {  SfxBaseModel::release(); }
 
     // XModel
-    virtual void SAL_CALL lockControllers(  ) override;
-    virtual void SAL_CALL unlockControllers(  ) override;
-    virtual bool SAL_CALL hasControllersLocked(  ) override;
+    virtual void lockControllers(  ) override;
+    virtual void unlockControllers(  ) override;
+    virtual bool hasControllersLocked(  ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XDrawPagesSupplier
-    virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages(  ) override;
+    virtual css::uno::Reference< css::drawing::XDrawPages > getDrawPages(  ) override;
 
     // XMultiServiceFactory ( SvxFmMSFactory )
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XAnyCompareFactory
-    virtual css::uno::Reference< css::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) override;
+    virtual css::uno::Reference< css::ucb::XAnyCompare > createAnyCompareByName( const OUString& PropertyName ) override;
 };
 
 SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut );

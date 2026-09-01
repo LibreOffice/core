@@ -77,15 +77,15 @@ public:
 private:
     //---  XAccessibleComponent  -------------------------------
     /// forward the focus to the contained control(in alive mode)
-    virtual void SAL_CALL grabFocus( ) override;
+    virtual void grabFocus( ) override;
 
     //---  XAccessibleContext  ---------------------------------
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount( ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual sal_Int64 getAccessibleChildCount( ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
 
     //---  XServiceInfo  ---------------------------------------
-    virtual OUString SAL_CALL getImplementationName( ) override;
+    virtual OUString getImplementationName( ) override;
 
     //---  XInterface  -----------------------------------------
     DECLARE_XINTERFACE( )
@@ -94,24 +94,24 @@ private:
     DECLARE_XTYPEPROVIDER( )
 
     //---  XPropertyChangeListener  ----------------------------
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
+    virtual void propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
 
     //---  XComponent  -----------------------------------------
-    virtual void SAL_CALL disposing( ) override;
+    virtual void disposing( ) override;
 
     //---  XEventListener  -------------------------------------
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     //---  XModeChangeListener  --------------------------------
-    virtual void SAL_CALL modeChanged( const css::util::ModeChangeEvent& _rSource ) override;
+    virtual void modeChanged( const css::util::ModeChangeEvent& _rSource ) override;
 
     //---  XAccessibleEventListener ----------------------------
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
+    virtual void notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
     // XVclContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+    virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     /** Initialize a new shape.  See the documentation of the base' constructor
         for the reason of this method's existence.

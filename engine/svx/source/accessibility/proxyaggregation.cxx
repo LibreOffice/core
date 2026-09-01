@@ -67,13 +67,13 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OProxyAggregation::queryAggregation( const Type& _rType )
+    Any OProxyAggregation::queryAggregation( const Type& _rType )
     {
         return m_xProxyAggregate.is() ? m_xProxyAggregate->queryAggregation( _rType ) : Any();
     }
 
 
-    Sequence< Type > SAL_CALL OProxyAggregation::getTypes(  )
+    Sequence< Type > OProxyAggregation::getTypes(  )
     {
         Sequence< Type > aTypes;
         if ( m_xProxyAggregate.is() )
@@ -124,7 +124,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OComponentProxyAggregationHelper::queryInterface( const Type& _rType )
+    Any OComponentProxyAggregationHelper::queryInterface( const Type& _rType )
     {
         Any aReturn( BASE::queryInterface( _rType ) );
         if ( !aReturn.hasValue() )
@@ -151,7 +151,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OComponentProxyAggregationHelper::disposing( const EventObject& _rSource )
+    void OComponentProxyAggregationHelper::disposing( const EventObject& _rSource )
     {
         if ( _rSource.Source == m_xInner )
         {   // it's our inner context which is dying -> dispose ourself
@@ -163,7 +163,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OComponentProxyAggregationHelper::dispose()
+    void OComponentProxyAggregationHelper::dispose()
     {
         ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
 
@@ -205,7 +205,7 @@ using namespace cpo::uno;
     IMPLEMENT_GET_IMPLEMENTATION_ID( OComponentProxyAggregation )
 
 
-    Sequence< Type > SAL_CALL OComponentProxyAggregation::getTypes(  )
+    Sequence< Type > OComponentProxyAggregation::getTypes(  )
     {
         return comphelper::concatSequences(
                 OComponentProxyAggregationHelper::getTypes(),
@@ -214,7 +214,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OComponentProxyAggregation::disposing( const EventObject& _rSource )
+    void OComponentProxyAggregation::disposing( const EventObject& _rSource )
     {
         // Simply disambiguate---this is necessary for MSVC to distinguish
         // "disposing(EventObject)" from "disposing()"; but it is also a good
@@ -225,14 +225,14 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OComponentProxyAggregation::disposing()
+    void OComponentProxyAggregation::disposing()
     {
         // call the dispose-functionality of the base, which will dispose our aggregated component
         OComponentProxyAggregationHelper::dispose();
     }
 
 
-    void SAL_CALL OComponentProxyAggregation::dispose()
+    void OComponentProxyAggregation::dispose()
     {
         // simply disambiguate
         WeakComponentImplHelperBase::dispose();

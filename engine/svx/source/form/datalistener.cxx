@@ -47,23 +47,23 @@ namespace svxform
     }
 
     // XContainerListener
-    void SAL_CALL DataListener::elementInserted( const ContainerEvent& /*Event*/ )
+    void DataListener::elementInserted( const ContainerEvent& /*Event*/ )
     {
         m_pNaviWin->NotifyChanges();
     }
 
-    void SAL_CALL DataListener::elementRemoved( const ContainerEvent& /*Event*/ )
+    void DataListener::elementRemoved( const ContainerEvent& /*Event*/ )
     {
         m_pNaviWin->NotifyChanges();
     }
 
-    void SAL_CALL DataListener::elementReplaced( const ContainerEvent& /*Event*/ )
+    void DataListener::elementReplaced( const ContainerEvent& /*Event*/ )
     {
         m_pNaviWin->NotifyChanges();
     }
 
     // XFrameActionListener
-    void SAL_CALL DataListener::frameAction( const FrameActionEvent& rActionEvt )
+    void DataListener::frameAction( const FrameActionEvent& rActionEvt )
     {
         if ( FrameAction_COMPONENT_ATTACHED == rActionEvt.Action ||
              FrameAction_COMPONENT_REATTACHED == rActionEvt.Action )
@@ -73,13 +73,13 @@ namespace svxform
     }
 
     // xml::dom::events::XEventListener
-    void SAL_CALL DataListener::handleEvent( const Reference< XEvent >& /*evt*/ )
+    void DataListener::handleEvent( const Reference< XEvent >& /*evt*/ )
     {
         m_pNaviWin->NotifyChanges();
     }
 
     // lang::XEventListener
-    void SAL_CALL DataListener::disposing( const EventObject& /*Source*/ )
+    void DataListener::disposing( const EventObject& /*Source*/ )
     {
         SAL_WARN( "svx.form", "disposing" );
     }

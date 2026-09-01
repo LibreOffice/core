@@ -99,10 +99,10 @@ public:
 
 private:
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& /*i_aEvt*/) override
+    virtual void disposing(const css::lang::EventObject& /*i_aEvt*/) override
     {
     }
-    virtual void SAL_CALL rowsChanged(const css::sdb::RowsChangeEvent& i_aEvt) override
+    virtual void rowsChanged(const css::sdb::RowsChangeEvent& i_aEvt) override
     {
         if ( i_aEvt.Action != RowChangeAction::UPDATE )
             return;

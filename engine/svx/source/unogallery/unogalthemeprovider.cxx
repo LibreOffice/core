@@ -47,29 +47,29 @@ public:
 protected:
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XGalleryThemeProvider
-    virtual css::uno::Reference< css::gallery::XGalleryTheme > SAL_CALL insertNewByName( const OUString& ThemeName ) override;
-    virtual void SAL_CALL removeByName( const OUString& ThemeName ) override;
+    virtual css::uno::Reference< css::gallery::XGalleryTheme > insertNewByName( const OUString& ThemeName ) override;
+    virtual void removeByName( const OUString& ThemeName ) override;
 
 private:
 
@@ -83,23 +83,23 @@ GalleryThemeProvider::GalleryThemeProvider() :
     mpGallery = ::Gallery::GetGalleryInstance();
 }
 
-OUString SAL_CALL GalleryThemeProvider::getImplementationName()
+OUString GalleryThemeProvider::getImplementationName()
 {
     return u"com.sun.star.comp.gallery.GalleryThemeProvider"_ustr;
 }
 
-bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName )
+bool GalleryThemeProvider::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GalleryThemeProvider::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSeq { u"com.sun.star.gallery.GalleryThemeProvider"_ustr };
     return aSeq;
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > GalleryThemeProvider::getTypes()
 {
     static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
@@ -112,12 +112,12 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > GalleryThemeProvider::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL GalleryThemeProvider::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
+void GalleryThemeProvider::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     cpo::uno::Sequence< beans::PropertyValue >   aParams;
 
@@ -135,13 +135,13 @@ void SAL_CALL GalleryThemeProvider::initialize( const cpo::uno::Sequence< cpo::u
 }
 
 
-cpo::uno::Type SAL_CALL GalleryThemeProvider::getElementType()
+cpo::uno::Type GalleryThemeProvider::getElementType()
 {
     return cppu::UnoType<gallery::XGalleryTheme>::get();
 }
 
 
-bool SAL_CALL GalleryThemeProvider::hasElements()
+bool GalleryThemeProvider::hasElements()
 {
     const SolarMutexGuard aGuard;
 
@@ -149,7 +149,7 @@ bool SAL_CALL GalleryThemeProvider::hasElements()
 }
 
 
-cpo::uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
+cpo::uno::Any GalleryThemeProvider::getByName( const OUString& rName )
 {
     const SolarMutexGuard aGuard;
     cpo::uno::Any            aRet;
@@ -165,7 +165,7 @@ cpo::uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
+cpo::uno::Sequence< OUString > GalleryThemeProvider::getElementNames()
 {
     const SolarMutexGuard aGuard;
     sal_uInt32                          i = 0, nCount = ( mpGallery ? mpGallery->GetThemeCount() : 0 ), nRealCount = 0;
@@ -186,7 +186,7 @@ cpo::uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
 }
 
 
-bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
+bool GalleryThemeProvider::hasByName( const OUString& rName )
 {
     const SolarMutexGuard aGuard;
 
@@ -199,7 +199,7 @@ bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
 }
 
 
-uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNewByName( const OUString& rThemeName )
+uno::Reference< gallery::XGalleryTheme > GalleryThemeProvider::insertNewByName( const OUString& rThemeName )
 {
     const SolarMutexGuard aGuard;
 
@@ -213,7 +213,7 @@ uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNe
 }
 
 
-void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
+void GalleryThemeProvider::removeByName( const OUString& rName )
 {
     const SolarMutexGuard aGuard;
 

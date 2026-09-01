@@ -68,7 +68,7 @@ namespace svxform
 
     protected:
         // XClipboardOwner
-        virtual void SAL_CALL lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& _rxClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& _rxTrans ) override;
+        virtual void lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& _rxClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& _rxTrans ) override;
 
         // TransferableHelper
         virtual void        DragFinished( sal_Int8 nDropAction ) override;

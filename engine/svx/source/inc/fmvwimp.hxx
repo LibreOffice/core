@@ -102,15 +102,15 @@ public:
         //const SdrPageViewWinRec*, FmXFormView* pView);
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex(sal_Int32 Index) override;
 
     // XFormControllerContext
-    virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) override;
+    virtual void makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) override;
 
     const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() const {return m_aControllerList;}
 
@@ -187,20 +187,20 @@ public:
     // UNO binding
 
 // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 // css::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const  css::container::ContainerEvent& rEvent) override;
-    virtual void SAL_CALL elementReplaced(const  css::container::ContainerEvent& rEvent) override;
-    virtual void SAL_CALL elementRemoved(const  css::container::ContainerEvent& rEvent) override;
+    virtual void elementInserted(const  css::container::ContainerEvent& rEvent) override;
+    virtual void elementReplaced(const  css::container::ContainerEvent& rEvent) override;
+    virtual void elementRemoved(const  css::container::ContainerEvent& rEvent) override;
 
 // css::form::XFormControllerListener
-    virtual void SAL_CALL formActivated(const css::lang::EventObject& rEvent) override;
-    virtual void SAL_CALL formDeactivated(const css::lang::EventObject& rEvent) override;
+    virtual void formActivated(const css::lang::EventObject& rEvent) override;
+    virtual void formDeactivated(const css::lang::EventObject& rEvent) override;
 
     // XFocusListener
-    virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) override;
-    virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) override;
+    virtual void focusGained( const css::awt::FocusEvent& e ) override;
+    virtual void focusLost( const css::awt::FocusEvent& e ) override;
 
     FmFormView* getView() const {return m_pView;}
     rtl::Reference< FormViewPageWindowAdapter >  findWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC ) const;

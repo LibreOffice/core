@@ -98,43 +98,43 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
 
     // XShapes
-    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes2
-    virtual void SAL_CALL addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes3
-    virtual void SAL_CALL sort( const cpo::uno::Sequence< sal_Int32 >& sortOrder ) override;
+    virtual void sort( const cpo::uno::Sequence< sal_Int32 >& sortOrder ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override ;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     // XShapeGrouper
-    virtual css::uno::Reference< css::drawing::XShapeGroup > SAL_CALL group( const css::uno::Reference< css::drawing::XShapes >& xShapes ) override;
-    virtual void SAL_CALL ungroup( const css::uno::Reference< css::drawing::XShapeGroup >& aGroup ) override;
+    virtual css::uno::Reference< css::drawing::XShapeGroup > group( const css::uno::Reference< css::drawing::XShapes >& xShapes ) override;
+    virtual void ungroup( const css::uno::Reference< css::drawing::XShapeGroup >& aGroup ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XFormsSupplier
-    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getForms() override;
+    virtual css::uno::Reference< css::container::XNameContainer > getForms() override;
 
     // XFormsSupplier2
-    virtual bool SAL_CALL hasForms() override;
+    virtual bool hasForms() override;
 };
 
 #endif

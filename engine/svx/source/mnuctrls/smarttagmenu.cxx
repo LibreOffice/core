@@ -34,14 +34,14 @@ public:
     explicit SmartTagMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XMenuListener
-    virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) override;
+    virtual void itemSelected( const css::awt::MenuEvent& rEvent ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     void FillMenu();

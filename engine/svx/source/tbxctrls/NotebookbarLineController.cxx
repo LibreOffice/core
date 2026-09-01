@@ -51,19 +51,19 @@ public:
     NotebookbarLineController(const NotebookbarLineController&) = delete;
     NotebookbarLineController& operator=(const NotebookbarLineController&) = delete;
 
-    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     {
         return u"com.sun.star.comp.svx.NotebookbarLineController"_ustr;
     }
 
-    bool SAL_CALL supportsService(const OUString& rServiceName) override
+    bool supportsService(const OUString& rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { u"com.sun.star.svx.NotebookbarLineController"_ustr };
     }
@@ -85,7 +85,7 @@ private:
     SfxBindings* mpBindings = nullptr;
 };
 
-void SAL_CALL
+void
 NotebookbarLineController::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     const comphelper::NamedValueCollection aArguments(rArguments);

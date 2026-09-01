@@ -67,7 +67,7 @@ SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 {
 }
 
-void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
+void SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
@@ -135,7 +135,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
         m_aLineStyleIsNoneFunction(bNoneLineStyle);
 }
 
-void SAL_CALL SvxLineStyleToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
+void SvxLineStyleToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
 {
     if (m_pToolbar)
     {
@@ -228,13 +228,13 @@ public:
     explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
+    virtual void execute(sal_Int16 nKeyModifier) override;
 
 private:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
@@ -482,7 +482,7 @@ SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<cs
 {
 }
 
-void SAL_CALL SvxLineEndToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
+void SvxLineEndToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
 {
     if (m_pToolbar)
     {

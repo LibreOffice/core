@@ -149,12 +149,12 @@ public:
     Annotation& operator=(const Annotation&) = delete;
 
     // XInterface:
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const& type) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const& type) override;
+    virtual void acquire() noexcept override
     {
         comphelper::WeakComponentImplHelper<css::office::XAnnotation>::acquire();
     }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     {
         comphelper::WeakComponentImplHelper<css::office::XAnnotation>::release();
     }
@@ -163,7 +163,7 @@ public:
     void SetPosition(const css::geometry::RealPoint2D& rValue);
     void SetSize(const css::geometry::RealSize2D& rValue);
 
-    virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
+    virtual css::uno::Reference<css::text::XText> getTextRange() override;
 
     // override WeakComponentImplHelperBase::disposing()
     // This function is called upon disposing the component,

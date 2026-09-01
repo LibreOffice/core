@@ -62,20 +62,20 @@ namespace svxform
         );
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
+        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
         // css::frame::XDispatchProviderInterceptor
-        virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) override;
-        virtual void SAL_CALL setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewDispatchProvider ) override;
-        virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) override;
-        virtual void SAL_CALL setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSupplier ) override;
+        virtual css::uno::Reference< css::frame::XDispatchProvider > getSlaveDispatchProvider(  ) override;
+        virtual void setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewDispatchProvider ) override;
+        virtual css::uno::Reference< css::frame::XDispatchProvider > getMasterDispatchProvider(  ) override;
+        virtual void setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSupplier ) override;
 
         // css::lang::XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     private:
         virtual ~DispatchInterceptionMultiplexer() override;

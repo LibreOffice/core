@@ -31,7 +31,7 @@
 using namespace ::svxform;
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier)
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
 
@@ -56,7 +56,7 @@ using namespace ::svxform;
 }
 
 
-::cpo::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames()
+::cpo::uno::Sequence< OUString > SvxFmMSFactory::getAvailableServiceNames()
 {
     static constexpr OUString aSvxComponentServiceNameList[] =
     {

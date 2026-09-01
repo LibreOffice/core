@@ -30,7 +30,7 @@ StylesPreviewToolBoxControl::StylesPreviewToolBoxControl() {}
 
 StylesPreviewToolBoxControl::~StylesPreviewToolBoxControl() {}
 
-void SAL_CALL
+void
 StylesPreviewToolBoxControl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     svt::ToolboxController::initialize(rArguments);
@@ -128,7 +128,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
     }
 }
 
-void SAL_CALL StylesPreviewToolBoxControl::update() {}
+void StylesPreviewToolBoxControl::update() {}
 
 void StylesPreviewToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/) {}
 

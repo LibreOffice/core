@@ -41,31 +41,31 @@ public:
     SvxShapeCollection() noexcept;
 
     // XInterface
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL
+    virtual void dispose() override;
+    virtual void
     addEventListener(const css::uno::Reference<css::lang::XEventListener>& aListener) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener(const css::uno::Reference<css::lang::XEventListener>& aListener) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex(sal_Int32 Index) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XShapes
-    virtual void SAL_CALL add(const css::uno::Reference<css::drawing::XShape>& xShape) override;
-    virtual void SAL_CALL remove(const css::uno::Reference<css::drawing::XShape>& xShape) override;
+    virtual void add(const css::uno::Reference<css::drawing::XShape>& xShape) override;
+    virtual void remove(const css::uno::Reference<css::drawing::XShape>& xShape) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     std::vector<css::uno::Reference<css::drawing::XShape>> getAllShapes() const;
 };

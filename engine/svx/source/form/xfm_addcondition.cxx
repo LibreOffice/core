@@ -98,7 +98,7 @@ namespace svxform
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OAddConditionDialog::getImplementationId(  )
+    Sequence<sal_Int8> OAddConditionDialog::getImplementationId(  )
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
@@ -110,19 +110,19 @@ namespace svxform
     }
 
 
-    OUString SAL_CALL OAddConditionDialog::getImplementationName()
+    OUString OAddConditionDialog::getImplementationName()
     {
         return OAddConditionDialog_GetImplementationName();
     }
 
 
-    Sequence< OUString > SAL_CALL OAddConditionDialog::getSupportedServiceNames()
+    Sequence< OUString > OAddConditionDialog::getSupportedServiceNames()
     {
         return OAddConditionDialog_GetSupportedServiceNames();
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OAddConditionDialog::getPropertySetInfo()
+    Reference<XPropertySetInfo>  OAddConditionDialog::getPropertySetInfo()
     {
         return createPropertySetInfo( getInfoHelper() );
     }

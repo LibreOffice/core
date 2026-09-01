@@ -262,7 +262,7 @@ void SvxUndoRedoControl::SetText(const OUString& rText)
 }
 
 // XStatusListener
-void SAL_CALL SvxUndoRedoControl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+void SvxUndoRedoControl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
     if (rEvent.FeatureURL.Main == ".uno:GetUndoStrings" || rEvent.FeatureURL.Main == ".uno:GetRedoStrings")
     {

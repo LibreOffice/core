@@ -124,8 +124,8 @@ public:
     Sequence<PropertyValues>& GetRubyValues() { return aRubyValues; }
     void AssertOneEntry();
 
-    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& aEvent) override;
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void selectionChanged(const css::lang::EventObject& aEvent) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     bool IsSelectionGrouped()
     {

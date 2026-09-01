@@ -50,29 +50,29 @@ public:
 protected:
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 getCount(  ) override;
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override;
 
     // XGalleryThemes
-    virtual OUString SAL_CALL getName(  ) override;
-    virtual void SAL_CALL update(  ) override;
-    virtual ::sal_Int32 SAL_CALL insertURLByIndex( const OUString& URL, ::sal_Int32 Index ) override;
-    virtual ::sal_Int32 SAL_CALL insertGraphicByIndex( const css::uno::Reference< css::graphic::XGraphic >& Graphic, ::sal_Int32 Index ) override;
-    virtual ::sal_Int32 SAL_CALL insertDrawingByIndex( const css::uno::Reference< css::lang::XComponent >& Drawing, ::sal_Int32 Index ) override;
-    virtual void SAL_CALL removeByIndex( ::sal_Int32 Index ) override;
+    virtual OUString getName(  ) override;
+    virtual void update(  ) override;
+    virtual ::sal_Int32 insertURLByIndex( const OUString& URL, ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 insertGraphicByIndex( const css::uno::Reference< css::graphic::XGraphic >& Graphic, ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 insertDrawingByIndex( const css::uno::Reference< css::lang::XComponent >& Drawing, ::sal_Int32 Index ) override;
+    virtual void removeByIndex( ::sal_Int32 Index ) override;
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

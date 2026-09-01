@@ -125,10 +125,10 @@ public:
         : mpController( pController ) {}
 
     // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
+    virtual void modified( const css::lang::EventObject& aEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     SvxTableController* mpController;
 };
@@ -136,7 +136,7 @@ public:
 // XModifyListener
 
 
-void SAL_CALL SvxTableControllerModifyListener::modified( const css::lang::EventObject&  )
+void SvxTableControllerModifyListener::modified( const css::lang::EventObject&  )
 {
     if( mpController )
         mpController->onTableModified();
@@ -146,7 +146,7 @@ void SAL_CALL SvxTableControllerModifyListener::modified( const css::lang::Event
 // XEventListener
 
 
-void SAL_CALL SvxTableControllerModifyListener::disposing( const css::lang::EventObject&  )
+void SvxTableControllerModifyListener::disposing( const css::lang::EventObject&  )
 {
     mpController = nullptr;
 }

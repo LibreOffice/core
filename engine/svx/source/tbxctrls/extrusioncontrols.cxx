@@ -271,7 +271,7 @@ VclPtr<vcl::Window> ExtrusionDirectionControl::createVclPopupWindow( vcl::Window
 }
 
 // XInitialization
-void SAL_CALL ExtrusionDirectionControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void ExtrusionDirectionControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -551,7 +551,7 @@ VclPtr<vcl::Window> ExtrusionDepthController::createVclPopupWindow( vcl::Window*
 }
 
 // XInitialization
-void SAL_CALL ExtrusionDepthController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void ExtrusionDepthController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -784,7 +784,7 @@ VclPtr<vcl::Window> ExtrusionLightingControl::createVclPopupWindow( vcl::Window*
 }
 
 // XInitialization
-void SAL_CALL ExtrusionLightingControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void ExtrusionLightingControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -930,7 +930,7 @@ VclPtr<vcl::Window> ExtrusionSurfaceControl::createVclPopupWindow( vcl::Window* 
 }
 
 // XInitialization
-void SAL_CALL ExtrusionSurfaceControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void ExtrusionSurfaceControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 

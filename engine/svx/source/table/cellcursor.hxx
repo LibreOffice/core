@@ -39,21 +39,21 @@ public:
     virtual ~CellCursor() override;
 
     // XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) override;
+    virtual css::uno::Reference< css::table::XCell > getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
+    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
+    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByName( const OUString& aRange ) override;
 
     // XCellCursor
-    virtual void SAL_CALL gotoStart(  ) override;
-    virtual void SAL_CALL gotoEnd(  ) override;
-    virtual void SAL_CALL gotoNext(  ) override;
-    virtual void SAL_CALL gotoPrevious(  ) override;
-    virtual void SAL_CALL gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRowOffset ) override;
+    virtual void gotoStart(  ) override;
+    virtual void gotoEnd(  ) override;
+    virtual void gotoNext(  ) override;
+    virtual void gotoPrevious(  ) override;
+    virtual void gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRowOffset ) override;
 
     // XMergeableCellRange
-    virtual void SAL_CALL merge(  ) override;
-    virtual void SAL_CALL split( ::sal_Int32 Columns, ::sal_Int32 Rows ) override;
-    virtual bool SAL_CALL isMergeable(  ) override;
+    virtual void merge(  ) override;
+    virtual void split( ::sal_Int32 Columns, ::sal_Int32 Rows ) override;
+    virtual bool isMergeable(  ) override;
 
 private:
     bool GetMergedSelection( CellPos& rStart, CellPos& rEnd );

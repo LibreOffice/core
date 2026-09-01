@@ -44,15 +44,15 @@ public:
     virtual ~EnhancedCustomShapeHandle() override;
 
     // XInterface
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XCustomShapeHandle
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setControllerPosition( const css::awt::Point& ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setControllerPosition( const css::awt::Point& ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 };
 
 #endif

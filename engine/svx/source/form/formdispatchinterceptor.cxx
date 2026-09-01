@@ -68,7 +68,7 @@ namespace svxform
     }
 
 
-    Reference< XDispatch > SAL_CALL DispatchInterceptionMultiplexer::queryDispatch( const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
+    Reference< XDispatch > DispatchInterceptionMultiplexer::queryDispatch( const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         Reference< XDispatch> xResult;
@@ -84,7 +84,7 @@ namespace svxform
     }
 
 
-    Sequence< Reference< XDispatch > > SAL_CALL
+    Sequence< Reference< XDispatch > >
     DispatchInterceptionMultiplexer::queryDispatches( const Sequence< DispatchDescriptor >& aDescripts )
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
@@ -96,35 +96,35 @@ namespace svxform
     }
 
 
-    Reference< XDispatchProvider > SAL_CALL DispatchInterceptionMultiplexer::getSlaveDispatchProvider(  )
+    Reference< XDispatchProvider > DispatchInterceptionMultiplexer::getSlaveDispatchProvider(  )
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         return m_xSlaveDispatcher;
     }
 
 
-    void SAL_CALL DispatchInterceptionMultiplexer::setSlaveDispatchProvider(const Reference< XDispatchProvider>& xNewDispatchProvider)
+    void DispatchInterceptionMultiplexer::setSlaveDispatchProvider(const Reference< XDispatchProvider>& xNewDispatchProvider)
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         m_xSlaveDispatcher = xNewDispatchProvider;
     }
 
 
-    Reference< XDispatchProvider> SAL_CALL DispatchInterceptionMultiplexer::getMasterDispatchProvider()
+    Reference< XDispatchProvider> DispatchInterceptionMultiplexer::getMasterDispatchProvider()
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         return m_xMasterDispatcher;
     }
 
 
-    void SAL_CALL DispatchInterceptionMultiplexer::setMasterDispatchProvider(const Reference< XDispatchProvider>& xNewSupplier)
+    void DispatchInterceptionMultiplexer::setMasterDispatchProvider(const Reference< XDispatchProvider>& xNewSupplier)
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         m_xMasterDispatcher = xNewSupplier;
     }
 
 
-    void SAL_CALL DispatchInterceptionMultiplexer::disposing(const EventObject& Source)
+    void DispatchInterceptionMultiplexer::disposing(const EventObject& Source)
     {
         if (m_bListening)
         {

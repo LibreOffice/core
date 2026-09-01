@@ -55,14 +55,14 @@ public:
     {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     void StopListening(const uno::Reference< lang::XComponent >& xComp);
     void StartListening(const uno::Reference< lang::XComponent >& xComp);
 };
 
 // XEventListener
-void SAL_CALL SdrControlEventListenerImpl::disposing( const css::lang::EventObject& /*Source*/)
+void SdrControlEventListenerImpl::disposing( const css::lang::EventObject& /*Source*/)
 {
     if (pObj)
     {

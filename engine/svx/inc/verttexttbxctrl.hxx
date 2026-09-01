@@ -44,15 +44,15 @@ public:
     virtual ~SvxVertCTLTextTbxCtrl() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override = 0;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override = 0;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 };
 
 class SvxCTLTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
@@ -60,7 +60,7 @@ class SvxCTLTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 public:
     SvxCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 };
 
 class SvxVertTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
@@ -68,7 +68,7 @@ class SvxVertTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 public:
     SvxVertTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

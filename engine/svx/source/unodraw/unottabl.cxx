@@ -38,11 +38,11 @@ public:
     virtual NameOrIndex* createItem() const override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 };
 }
 
@@ -51,12 +51,12 @@ SvxUnoTransGradientTable::SvxUnoTransGradientTable(SdrModel* pModel) noexcept
 {
 }
 
-OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName()
+OUString SvxUnoTransGradientTable::getImplementationName()
 {
     return u"SvxUnoTransGradientTable"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SvxUnoTransGradientTable::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.TransparencyGradientTable"_ustr };
 }
@@ -69,7 +69,7 @@ NameOrIndex* SvxUnoTransGradientTable::createItem() const
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoTransGradientTable::getElementType()
+cpo::uno::Type SvxUnoTransGradientTable::getElementType()
 {
     // tdf#158421 use newer extended type for the list
     return cppu::UnoType<awt::Gradient2>::get();

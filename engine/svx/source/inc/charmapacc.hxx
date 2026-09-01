@@ -64,59 +64,59 @@ class SvxShowCharSetAcc final
 {
     ::std::vector<rtl::Reference<SvxShowCharSetItemAcc>> m_aChildren;
     SvxShowCharSet* m_pParent; // the vcl control
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 public:
     SvxShowCharSetAcc(SvxShowCharSet* pParent);
 
     // XAccessibleComponent
-    virtual void SAL_CALL grabFocus() override;
+    virtual void grabFocus() override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
+        getAccessibleAtPoint(const css::awt::Point& aPoint) override;
 
     // OAccessible
     // XAccessibleContext - still waiting to be overwritten
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleChild(sal_Int64 i) override;
+        getAccessibleChild(sal_Int64 i) override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleParent() override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
+        getAccessibleParent() override;
+    virtual sal_Int16 getAccessibleRole() override;
+    virtual OUString getAccessibleDescription() override;
+    virtual OUString getAccessibleName() override;
     virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet>
-        SAL_CALL getAccessibleRelationSet() override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+        getAccessibleRelationSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
-    virtual sal_Int32 SAL_CALL getForeground() override;
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual sal_Int32 getForeground() override;
+    virtual sal_Int32 getBackground() override;
 
     // XAccessibleTable
-    virtual sal_Int32 SAL_CALL getAccessibleRowCount() override;
-    virtual sal_Int32 SAL_CALL getAccessibleColumnCount() override;
-    virtual OUString SAL_CALL getAccessibleRowDescription(sal_Int32 nRow) override;
-    virtual OUString SAL_CALL getAccessibleColumnDescription(sal_Int32 nColumn) override;
-    virtual sal_Int32 SAL_CALL getAccessibleRowExtentAt(sal_Int32 nRow, sal_Int32 nColumn) override;
-    virtual sal_Int32 SAL_CALL getAccessibleColumnExtentAt(sal_Int32 nRow,
+    virtual sal_Int32 getAccessibleRowCount() override;
+    virtual sal_Int32 getAccessibleColumnCount() override;
+    virtual OUString getAccessibleRowDescription(sal_Int32 nRow) override;
+    virtual OUString getAccessibleColumnDescription(sal_Int32 nColumn) override;
+    virtual sal_Int32 getAccessibleRowExtentAt(sal_Int32 nRow, sal_Int32 nColumn) override;
+    virtual sal_Int32 getAccessibleColumnExtentAt(sal_Int32 nRow,
                                                            sal_Int32 nColumn) override;
     virtual css::uno::Reference<css::accessibility::XAccessibleTable>
-        SAL_CALL getAccessibleRowHeaders() override;
+        getAccessibleRowHeaders() override;
     virtual css::uno::Reference<css::accessibility::XAccessibleTable>
-        SAL_CALL getAccessibleColumnHeaders() override;
-    virtual cpo::uno::Sequence<sal_Int32> SAL_CALL getSelectedAccessibleRows() override;
-    virtual cpo::uno::Sequence<sal_Int32> SAL_CALL getSelectedAccessibleColumns() override;
-    virtual bool SAL_CALL isAccessibleRowSelected(sal_Int32 nRow) override;
-    virtual bool SAL_CALL isAccessibleColumnSelected(sal_Int32 nColumn) override;
+        getAccessibleColumnHeaders() override;
+    virtual cpo::uno::Sequence<sal_Int32> getSelectedAccessibleRows() override;
+    virtual cpo::uno::Sequence<sal_Int32> getSelectedAccessibleColumns() override;
+    virtual bool isAccessibleRowSelected(sal_Int32 nRow) override;
+    virtual bool isAccessibleColumnSelected(sal_Int32 nColumn) override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn) override;
+        getAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn) override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleCaption() override;
+        getAccessibleCaption() override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleSummary() override;
-    virtual bool SAL_CALL isAccessibleSelected(sal_Int32 nRow, sal_Int32 nColumn) override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndex(sal_Int32 nRow, sal_Int32 nColumn) override;
-    virtual sal_Int32 SAL_CALL getAccessibleRow(sal_Int64 nChildIndex) override;
-    virtual sal_Int32 SAL_CALL getAccessibleColumn(sal_Int64 nChildIndex) override;
+        getAccessibleSummary() override;
+    virtual bool isAccessibleSelected(sal_Int32 nRow, sal_Int32 nColumn) override;
+    virtual sal_Int64 getAccessibleIndex(sal_Int32 nRow, sal_Int32 nColumn) override;
+    virtual sal_Int32 getAccessibleRow(sal_Int64 nChildIndex) override;
+    virtual sal_Int32 getAccessibleColumn(sal_Int64 nChildIndex) override;
 
     void fireEvent(const sal_Int16 _nEventId, const cpo::uno::Any& _rOldValue,
                    const cpo::uno::Any& _rNewValue)
@@ -163,39 +163,39 @@ public:
     void ParentDestroyed();
 
     // XAccessibleComponent
-    virtual void SAL_CALL grabFocus() override;
+    virtual void grabFocus() override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
+        getAccessibleAtPoint(const css::awt::Point& aPoint) override;
 
     // OAccessible
     // XAccessibleContext - still waiting to be overwritten
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleChild(sal_Int64 i) override;
+        getAccessibleChild(sal_Int64 i) override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleParent() override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
+        getAccessibleParent() override;
+    virtual sal_Int16 getAccessibleRole() override;
+    virtual OUString getAccessibleDescription() override;
+    virtual OUString getAccessibleName() override;
     virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet>
-        SAL_CALL getAccessibleRelationSet() override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+        getAccessibleRelationSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
-    virtual sal_Int32 SAL_CALL getForeground() override
+    virtual sal_Int32 getForeground() override
     {
         return mpParent->m_pParent->getForeground();
     }
-    virtual sal_Int32 SAL_CALL getBackground() override
+    virtual sal_Int32 getBackground() override
     {
         return mpParent->m_pParent->getBackground();
     }
 
     // XAccessibleAction
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount() override;
-    virtual bool SAL_CALL doAccessibleAction(sal_Int32 nIndex) override;
-    virtual OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex) override;
+    virtual sal_Int32 getAccessibleActionCount() override;
+    virtual bool doAccessibleAction(sal_Int32 nIndex) override;
+    virtual OUString getAccessibleActionDescription(sal_Int32 nIndex) override;
     virtual css::uno::Reference<css::accessibility::XAccessibleKeyBinding>
-        SAL_CALL getAccessibleActionKeyBinding(sal_Int32 nIndex) override;
+        getAccessibleActionKeyBinding(sal_Int32 nIndex) override;
 
     void fireEvent(const sal_Int16 _nEventId, const cpo::uno::Any& _rOldValue,
                    const cpo::uno::Any& _rNewValue)

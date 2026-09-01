@@ -129,7 +129,7 @@ bool AccessibleCell::ResetState (sal_Int64 aState)
 
 /** The children of this cell come from the paragraphs of text.
 */
-sal_Int64 SAL_CALL AccessibleCell::getAccessibleChildCount()
+sal_Int64 AccessibleCell::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
@@ -140,7 +140,7 @@ sal_Int64 SAL_CALL AccessibleCell::getAccessibleChildCount()
 /** Forward the request to the shape.  Return the requested shape or throw
     an exception for a wrong index.
 */
-Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int64 nIndex)
+Reference<XAccessible> AccessibleCell::getAccessibleChild (sal_Int64 nIndex)
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
@@ -155,7 +155,7 @@ Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int64 nI
         SHOWING
         VISIBLE
 */
-sal_Int64 SAL_CALL AccessibleCell::getAccessibleStateSet()
+sal_Int64 AccessibleCell::getAccessibleStateSet()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -216,7 +216,7 @@ sal_Int64 SAL_CALL AccessibleCell::getAccessibleStateSet()
     the already instantiated children and only if no match is found
     instantiate the remaining ones.
 */
-Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const css::awt::Point& aPoint)
+Reference<XAccessible >  AccessibleCell::getAccessibleAtPoint ( const css::awt::Point& aPoint)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -287,7 +287,7 @@ css::awt::Rectangle AccessibleCell::implGetBounds()
     return aBoundingBox;
 }
 
-sal_Int32 SAL_CALL AccessibleCell::getForeground()
+sal_Int32 AccessibleCell::getForeground()
 {
     ensureAlive();
 
@@ -296,7 +296,7 @@ sal_Int32 SAL_CALL AccessibleCell::getForeground()
 }
 
 
-sal_Int32 SAL_CALL AccessibleCell::getBackground()
+sal_Int32 AccessibleCell::getBackground()
 {
     ensureAlive();
 
@@ -307,7 +307,7 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground()
 // XAccessibleEventBroadcaster
 
 
-void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener)
+void AccessibleCell::addAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener)
 {
     AccessibleContextBase::addAccessibleEventListener(rxListener);
 
@@ -316,7 +316,7 @@ void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAcces
 }
 
 
-void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener)
+void AccessibleCell::removeAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener)
 {
     SolarMutexGuard aSolarGuard;
     AccessibleContextBase::removeAccessibleEventListener(rxListener);
@@ -328,13 +328,13 @@ void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAc
 // XServiceInfo
 
 
-OUString SAL_CALL AccessibleCell::getImplementationName()
+OUString AccessibleCell::getImplementationName()
 {
     return u"AccessibleCell"_ustr;
 }
 
 
-Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames()
+Sequence<OUString> AccessibleCell::getSupportedServiceNames()
 {
     ensureAlive();
     const cpo::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleCell"_ustr };
@@ -384,7 +384,7 @@ void AccessibleCell::disposing()
     AccessibleContextBase::dispose ();
 }
 
-sal_Int64 SAL_CALL AccessibleCell::getAccessibleIndexInParent()
+sal_Int64 AccessibleCell::getAccessibleIndexInParent()
 {
     ensureAlive();
     return mnIndexInParent;
@@ -428,7 +428,7 @@ OUString AccessibleCell::getCellName( sal_Int32 nCol, sal_Int32 nRow )
     return aBuf.makeStringAndClear();
 }
 
-OUString SAL_CALL AccessibleCell::getAccessibleName()
+OUString AccessibleCell::getAccessibleName()
 {
     ensureAlive();
     SolarMutexGuard aSolarGuard;
@@ -459,7 +459,7 @@ void AccessibleCell::UpdateChildren()
 +If this is correct, we also don't need  sdr::table::CellRef getCellRef(), UpdateChildren(), getCellName( sal_Int32 nCol, sal_Int32 nRow ) above
 +
 
-OUString SAL_CALL AccessibleCell::getAccessibleName() throw (cpo::uno::RuntimeException)
+OUString AccessibleCell::getAccessibleName() throw (cpo::uno::RuntimeException)
 {
     ThrowIfDisposed ();
     SolarMutexGuard aSolarGuard;

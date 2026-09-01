@@ -52,11 +52,11 @@ public:
     virtual bool ResetState (sal_Int64 aState) override;
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleChild(sal_Int64 nIndex) override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleChild(sal_Int64 nIndex) override;
+    virtual sal_Int64 getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleIndexInParent() override;
+    virtual OUString getAccessibleName() override;
     const sdr::table::CellRef& getCellRef() const { return mxCell;}
     void UpdateChildren();
     static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow );
@@ -65,17 +65,17 @@ public:
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
-    virtual sal_Int32 SAL_CALL getForeground() override;
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint(const css::awt::Point& aPoint) override;
+    virtual sal_Int32 getForeground() override;
+    virtual sal_Int32 getBackground() override;
 
     // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
+    virtual void addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
+    virtual void removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString> getSupportedServiceNames() override;
 
     // IAccessibleViewForwarderListener
     virtual void ViewForwarderChanged() override;
@@ -102,7 +102,7 @@ private:
     sdr::table::CellRef mxCell;
 
     /// This method is called from the component helper base class while disposing.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     AccessibleTableShape *pAccTable;
 };

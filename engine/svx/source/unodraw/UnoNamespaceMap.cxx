@@ -55,18 +55,18 @@ namespace svx
         NamespaceMap( const sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
         // XNameAccess
-        virtual Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual Any getByName( const OUString& aName ) override;
+        virtual Sequence< OUString > getElementNames(  ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual Type SAL_CALL getElementType(  ) override;
-        virtual bool SAL_CALL hasElements(  ) override;
+        virtual Type getElementType(  ) override;
+        virtual bool hasElements(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames(  ) override;
     };
 
     }
@@ -189,7 +189,7 @@ NamespaceMap::NamespaceMap( const sal_uInt16* pWhichIds, SfxItemPool* pPool )
 }
 
 // XNameAccess
-Any SAL_CALL NamespaceMap::getByName( const OUString& aName )
+Any NamespaceMap::getByName( const OUString& aName )
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -210,7 +210,7 @@ Any SAL_CALL NamespaceMap::getByName( const OUString& aName )
     return Any( aURL );
 }
 
-Sequence< OUString > SAL_CALL NamespaceMap::getElementNames()
+Sequence< OUString > NamespaceMap::getElementNames()
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -225,7 +225,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames()
     return comphelper::containerToSequence(aPrefixSet);
 }
 
-bool SAL_CALL NamespaceMap::hasByName( const OUString& aName )
+bool NamespaceMap::hasByName( const OUString& aName )
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -244,12 +244,12 @@ bool SAL_CALL NamespaceMap::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-Type SAL_CALL NamespaceMap::getElementType()
+Type NamespaceMap::getElementType()
 {
     return ::cppu::UnoType<OUString>::get();
 }
 
-bool SAL_CALL NamespaceMap::hasElements()
+bool NamespaceMap::hasElements()
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -260,17 +260,17 @@ bool SAL_CALL NamespaceMap::hasElements()
 }
 
 // XServiceInfo
-OUString SAL_CALL NamespaceMap::getImplementationName(  )
+OUString NamespaceMap::getImplementationName(  )
 {
     return NamespaceMap_getImplementationName();
 }
 
-bool SAL_CALL NamespaceMap::supportsService( const OUString& serviceName )
+bool NamespaceMap::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService( this, serviceName );
 }
 
-Sequence< OUString > SAL_CALL NamespaceMap::getSupportedServiceNames(  )
+Sequence< OUString > NamespaceMap::getSupportedServiceNames(  )
 {
     return NamespaceMap_getSupportedServiceNames();
 }

@@ -73,16 +73,16 @@ public:
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override = 0;
 
     // XContextChangeEventListener
-    virtual void SAL_CALL
+    virtual void
     notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
 
-    virtual ::cpo::uno::Any SAL_CALL queryInterface(const ::cpo::uno::Type& aType) override;
+    virtual ::cpo::uno::Any queryInterface(const ::cpo::uno::Type& aType) override;
 
-    virtual void SAL_CALL acquire() noexcept override;
+    virtual void acquire() noexcept override;
 
-    virtual void SAL_CALL disposing(const ::css::lang::EventObject& rEvent) override;
+    virtual void disposing(const ::css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
 private:
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> m_xMultiplexer;

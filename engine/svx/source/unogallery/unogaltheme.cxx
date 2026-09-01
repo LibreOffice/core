@@ -64,22 +64,22 @@ GalleryTheme::~GalleryTheme()
 }
 
 
-OUString SAL_CALL GalleryTheme::getImplementationName()
+OUString GalleryTheme::getImplementationName()
 {
     return u"com.sun.star.comp.gallery.GalleryTheme"_ustr;
 }
 
-bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
+bool GalleryTheme::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL GalleryTheme::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames()
 {
     return { u"com.sun.star.gallery.GalleryTheme"_ustr };
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryTheme::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > GalleryTheme::getTypes()
 {
     static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
@@ -91,19 +91,19 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryTheme::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > GalleryTheme::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 
-cpo::uno::Type SAL_CALL GalleryTheme::getElementType()
+cpo::uno::Type GalleryTheme::getElementType()
 {
     return cppu::UnoType<gallery::XGalleryItem>::get();
 }
 
 
-bool SAL_CALL GalleryTheme::hasElements()
+bool GalleryTheme::hasElements()
 {
     const SolarMutexGuard aGuard;
 
@@ -111,7 +111,7 @@ bool SAL_CALL GalleryTheme::hasElements()
 }
 
 
-sal_Int32 SAL_CALL GalleryTheme::getCount()
+sal_Int32 GalleryTheme::getCount()
 {
     const SolarMutexGuard aGuard;
 
@@ -119,7 +119,7 @@ sal_Int32 SAL_CALL GalleryTheme::getCount()
 }
 
 
-cpo::uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
+cpo::uno::Any GalleryTheme::getByIndex( ::sal_Int32 nIndex )
 {
     const SolarMutexGuard aGuard;
     cpo::uno::Any            aRet;
@@ -140,7 +140,7 @@ cpo::uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
 }
 
 
-OUString SAL_CALL GalleryTheme::getName(  )
+OUString GalleryTheme::getName(  )
 {
     const SolarMutexGuard aGuard;
     OUString     aRet;
@@ -152,7 +152,7 @@ OUString SAL_CALL GalleryTheme::getName(  )
 }
 
 
-void SAL_CALL GalleryTheme::update(  )
+void GalleryTheme::update(  )
 {
     const SolarMutexGuard aGuard;
 
@@ -164,7 +164,7 @@ void SAL_CALL GalleryTheme::update(  )
 }
 
 
-::sal_Int32 SAL_CALL GalleryTheme::insertURLByIndex(
+::sal_Int32 GalleryTheme::insertURLByIndex(
     const OUString& rURL, ::sal_Int32 nIndex )
 {
     const SolarMutexGuard aGuard;
@@ -195,7 +195,7 @@ void SAL_CALL GalleryTheme::update(  )
 }
 
 
-::sal_Int32 SAL_CALL GalleryTheme::insertGraphicByIndex(
+::sal_Int32 GalleryTheme::insertGraphicByIndex(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nIndex )
 {
     const SolarMutexGuard aGuard;
@@ -221,7 +221,7 @@ void SAL_CALL GalleryTheme::update(  )
 }
 
 
-::sal_Int32 SAL_CALL GalleryTheme::insertDrawingByIndex(
+::sal_Int32 GalleryTheme::insertDrawingByIndex(
     const uno::Reference< lang::XComponent >& Drawing, sal_Int32 nIndex )
 {
     const SolarMutexGuard aGuard;
@@ -278,7 +278,7 @@ void SAL_CALL GalleryTheme::update(  )
 }
 
 
-void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
+void GalleryTheme::removeByIndex( sal_Int32 nIndex )
 {
     const SolarMutexGuard aGuard;
 

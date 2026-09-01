@@ -47,7 +47,7 @@ SelectionChangeHandler::~SelectionChangeHandler()
 }
 
 
-void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&)
+void SelectionChangeHandler::selectionChanged (const lang::EventObject&)
 {
     if (maSelectionChangeCallback)
     {
@@ -62,7 +62,7 @@ void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&
 }
 
 
-void SAL_CALL SelectionChangeHandler::disposing (const lang::EventObject&)
+void SelectionChangeHandler::disposing (const lang::EventObject&)
 {
 }
 

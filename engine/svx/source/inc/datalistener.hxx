@@ -49,18 +49,18 @@ namespace svxform
 
     public:
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+        virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+        virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+        virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) override;
+        virtual void frameAction( const css::frame::FrameActionEvent& Action ) override;
 
         // xml::dom::events::XEventListener
-        virtual void SAL_CALL handleEvent( const css::uno::Reference< css::xml::dom::events::XEvent >& evt ) override;
+        virtual void handleEvent( const css::uno::Reference< css::xml::dom::events::XEvent >& evt ) override;
 
         // lang::XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
     };
 
 

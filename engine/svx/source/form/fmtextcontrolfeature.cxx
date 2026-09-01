@@ -84,7 +84,7 @@ namespace svx
     }
 
 
-    void SAL_CALL FmTextControlFeature::statusChanged( const FeatureStateEvent& _rState )
+    void FmTextControlFeature::statusChanged( const FeatureStateEvent& _rState )
     {
         m_aFeatureState   = _rState.State;
         m_bFeatureEnabled = _rState.IsEnabled;
@@ -94,7 +94,7 @@ namespace svx
     }
 
 
-    void SAL_CALL FmTextControlFeature::disposing( const EventObject& /*Source*/ )
+    void FmTextControlFeature::disposing( const EventObject& /*Source*/ )
     {
         // nothing to do
     }

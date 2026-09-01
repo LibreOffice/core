@@ -134,36 +134,36 @@ private:
 
     tools::Rectangle impl_getScaledRect_nothrow() const;
     // XStateChangeListener
-    virtual void SAL_CALL changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
-    virtual void SAL_CALL stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+    virtual void changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+    virtual void stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+    virtual void disposing( const css::lang::EventObject& aEvent ) override;
 
     // document::XEventListener
-    virtual void SAL_CALL       notifyEvent( const document::EventObject& aEvent ) override;
+    virtual void       notifyEvent( const document::EventObject& aEvent ) override;
 
     // XEmbeddedClient
-    virtual void SAL_CALL saveObject() override;
-    virtual void SAL_CALL visibilityChanged( bool bVisible ) override;
+    virtual void saveObject() override;
+    virtual void visibilityChanged( bool bVisible ) override;
 
     // XComponentSupplier
-    virtual uno::Reference< util::XCloseable > SAL_CALL getComponent() override;
+    virtual uno::Reference< util::XCloseable > getComponent() override;
 
     // XInplaceClient
-    virtual bool SAL_CALL canInplaceActivate() override;
-    virtual void SAL_CALL activatingInplace() override;
-    virtual void SAL_CALL activatingUI() override;
-    virtual void SAL_CALL deactivatedInplace() override;
-    virtual void SAL_CALL deactivatedUI() override;
-    virtual uno::Reference< css::frame::XLayoutManager > SAL_CALL getLayoutManager() override;
-    virtual uno::Reference< frame::XDispatchProvider > SAL_CALL getInplaceDispatchProvider() override;
-    virtual awt::Rectangle SAL_CALL getPlacement() override;
-    virtual awt::Rectangle SAL_CALL getClipRectangle() override;
-    virtual void SAL_CALL translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& aKeys ) override;
-    virtual void SAL_CALL scrollObject( const awt::Size& aOffset ) override;
-    virtual void SAL_CALL changedPlacement( const awt::Rectangle& aPosRect ) override;
+    virtual bool canInplaceActivate() override;
+    virtual void activatingInplace() override;
+    virtual void activatingUI() override;
+    virtual void deactivatedInplace() override;
+    virtual void deactivatedUI() override;
+    virtual uno::Reference< css::frame::XLayoutManager > getLayoutManager() override;
+    virtual uno::Reference< frame::XDispatchProvider > getInplaceDispatchProvider() override;
+    virtual awt::Rectangle getPlacement() override;
+    virtual awt::Rectangle getClipRectangle() override;
+    virtual void translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& aKeys ) override;
+    virtual void scrollObject( const awt::Size& aOffset ) override;
+    virtual void changedPlacement( const awt::Rectangle& aPosRect ) override;
 
     // XWindowSupplier
-    virtual uno::Reference< awt::XWindow > SAL_CALL getWindow() override;
+    virtual uno::Reference< awt::XWindow > getWindow() override;
 };
 
 }
@@ -185,11 +185,11 @@ tools::Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
     return aLogicRect;
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ )
+void SdrLightEmbeddedClient_Impl::changingState( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ )
 {
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
+void SdrLightEmbeddedClient_Impl::stateChanged( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
 {
     SolarMutexGuard aGuard;
 
@@ -213,12 +213,12 @@ void SdrLightEmbeddedClient_Impl::disconnect()
     mpObj = nullptr;
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
+void SdrLightEmbeddedClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
 {
     disconnect();
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObject& aEvent )
+void SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObject& aEvent )
 {
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
 
@@ -283,7 +283,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
     }
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
+void SdrLightEmbeddedClient_Impl::saveObject()
 {
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
     uno::Reference< embed::XCommonEmbedPersist > xPersist;
@@ -306,7 +306,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
         xModifiable->setModified( true );
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( bool /*bVisible*/ )
+void SdrLightEmbeddedClient_Impl::visibilityChanged( bool /*bVisible*/ )
 {
     // nothing to do currently
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
@@ -324,7 +324,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( bool /*bVisible*/ 
     }
 }
 
-uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComponent()
+uno::Reference< util::XCloseable > SdrLightEmbeddedClient_Impl::getComponent()
 {
     uno::Reference< util::XCloseable > xResult;
 
@@ -336,7 +336,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
 }
 // XInplaceClient
 
-bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
+bool SdrLightEmbeddedClient_Impl::canInplaceActivate()
 {
     bool bRet = false;
     SolarMutexGuard aGuard;
@@ -351,11 +351,11 @@ bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     return bRet;
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::activatingInplace()
+void SdrLightEmbeddedClient_Impl::activatingInplace()
 {
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
+void SdrLightEmbeddedClient_Impl::activatingUI()
 {
     SolarMutexGuard aGuard;
 
@@ -397,11 +397,11 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
     } // for(sal_Int32 i = nCount-1 ; i >= 0;--i)
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedInplace()
+void SdrLightEmbeddedClient_Impl::deactivatedInplace()
 {
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
+void SdrLightEmbeddedClient_Impl::deactivatedUI()
 {
     SolarMutexGuard aGuard;
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager(getLayoutManager());
@@ -413,7 +413,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     }
 }
 
-uno::Reference< css::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Impl::getLayoutManager()
+uno::Reference< css::frame::XLayoutManager > SdrLightEmbeddedClient_Impl::getLayoutManager()
 {
     uno::Reference< css::frame::XLayoutManager > xMan;
     SolarMutexGuard aGuard;
@@ -432,13 +432,13 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Imp
     return xMan;
 }
 
-uno::Reference< frame::XDispatchProvider > SAL_CALL SdrLightEmbeddedClient_Impl::getInplaceDispatchProvider()
+uno::Reference< frame::XDispatchProvider > SdrLightEmbeddedClient_Impl::getInplaceDispatchProvider()
 {
     SolarMutexGuard aGuard;
     return uno::Reference < frame::XDispatchProvider >( lcl_getFrame_throw(mpObj), uno::UNO_QUERY_THROW );
 }
 
-awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
+awt::Rectangle SdrLightEmbeddedClient_Impl::getPlacement()
 {
     SolarMutexGuard aGuard;
     if ( !mpObj )
@@ -454,20 +454,20 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     return vcl::unohelper::ConvertToAWTRect(aLogicRect);
 }
 
-awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getClipRectangle()
+awt::Rectangle SdrLightEmbeddedClient_Impl::getClipRectangle()
 {
     return getPlacement();
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
+void SdrLightEmbeddedClient_Impl::translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
 {
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
+void SdrLightEmbeddedClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
 {
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
+void SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
 {
     SolarMutexGuard aGuard;
     if ( !mpObj )
@@ -521,7 +521,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
 }
 // XWindowSupplier
 
-uno::Reference< awt::XWindow > SAL_CALL SdrLightEmbeddedClient_Impl::getWindow()
+uno::Reference< awt::XWindow > SdrLightEmbeddedClient_Impl::getWindow()
 {
     SolarMutexGuard aGuard;
     if ( !mpObj )

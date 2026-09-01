@@ -302,8 +302,8 @@ public:
     // Copy constructor
     SdrObject(SdrModel& rSdrModel, SdrObject const & rSource);
 
-    virtual void SAL_CALL acquire() noexcept override final;
-    virtual void SAL_CALL release() noexcept override final;
+    virtual void acquire() noexcept override final;
+    virtual void release() noexcept override final;
 
     sal_uInt64 GetUniqueID() const { return maUniqueID.getID(); }
 

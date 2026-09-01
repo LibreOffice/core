@@ -92,7 +92,7 @@ OUString SvxPixelCtlAccessible::getAccessibleName(  )
     return mpPixelCtl ? mpPixelCtl->GetAccessibleName() : u""_ustr;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL SvxPixelCtlAccessible::getAccessibleRelationSet()
+Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRelationSet()
 {
     if (mpPixelCtl)
         return mpPixelCtl->get_accessible_relation_set();
@@ -122,7 +122,7 @@ sal_Int64 SvxPixelCtlAccessible::getAccessibleStateSet(  )
     return nStateSet;
 }
 
-uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoint (
+uno::Reference<XAccessible > SvxPixelCtlAccessible::getAccessibleAtPoint (
         const awt::Point& rPoint)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -204,7 +204,7 @@ bool SvxPixelCtlAccessible::implIsSelected(sal_Int64 nChildIndex)
     return mpPixelCtl->GetFocusPosIndex() == nChildIndex;
 }
 
-void SAL_CALL SvxPixelCtlAccessible::disposing()
+void SvxPixelCtlAccessible::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     OAccessibleSelectionHelper::disposing();
@@ -311,12 +311,12 @@ SvxPixelCtlAccessibleChild::~SvxPixelCtlAccessibleChild()
     ensureDisposed();
 }
 
-uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleAtPoint( const awt::Point& )
+uno::Reference< XAccessible > SvxPixelCtlAccessibleChild::getAccessibleAtPoint( const awt::Point& )
 {
     return uno::Reference< XAccessible >();
 }
 
-void SAL_CALL SvxPixelCtlAccessibleChild::grabFocus()
+void SvxPixelCtlAccessibleChild::grabFocus()
 {
 }
 
@@ -333,34 +333,34 @@ sal_Int32 SvxPixelCtlAccessibleChild::getBackground()
 }
 
 // XAccessibleContext
-sal_Int64 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChildCount()
+sal_Int64 SvxPixelCtlAccessibleChild::getAccessibleChildCount()
 {
     return 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChild( sal_Int64 )
+uno::Reference< XAccessible > SvxPixelCtlAccessibleChild::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException();
 }
 
-uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleParent()
+uno::Reference< XAccessible > SvxPixelCtlAccessibleChild::getAccessibleParent()
 {
     return mxParent;
 }
 
-sal_Int16 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleRole()
+sal_Int16 SvxPixelCtlAccessibleChild::getAccessibleRole()
 {
     return AccessibleRole::CHECK_BOX;
 }
 
-OUString SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleDescription()
+OUString SvxPixelCtlAccessibleChild::getAccessibleDescription()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     return  GetName();
 }
 
-OUString SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleName()
+OUString SvxPixelCtlAccessibleChild::getAccessibleName()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return  GetName();
@@ -369,12 +369,12 @@ OUString SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleName()
 /** Return empty uno::Reference to indicate that the relation set is not
     supported.
 */
-uno::Reference<XAccessibleRelationSet> SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleRelationSet()
+uno::Reference<XAccessibleRelationSet> SvxPixelCtlAccessibleChild::getAccessibleRelationSet()
 {
     return uno::Reference< XAccessibleRelationSet >();
 }
 
-sal_Int64 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleStateSet()
+sal_Int64 SvxPixelCtlAccessibleChild::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
     sal_Int64 nStateSet = 0;
@@ -404,7 +404,7 @@ sal_Int64 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleStateSet()
     return nStateSet;
 }
 
-void SAL_CALL SvxPixelCtlAccessibleChild::disposing()
+void SvxPixelCtlAccessibleChild::disposing()
 {
     OAccessible::disposing();
     mxParent.clear();

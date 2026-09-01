@@ -76,9 +76,9 @@ public:
     OutputStorageWrapper_Impl();
 
 // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL closeOutput() override;
+    virtual void writeBytes(const Sequence< sal_Int8 >& aData) override;
+    virtual void flush() override;
+    virtual void closeOutput() override;
 
     SvStream*   GetStream();
 };
@@ -98,20 +98,20 @@ SvStream *OutputStorageWrapper_Impl::GetStream()
     return nullptr;
 }
 
-void SAL_CALL OutputStorageWrapper_Impl::writeBytes(
+void OutputStorageWrapper_Impl::writeBytes(
         const Sequence< sal_Int8 >& aData)
 {
     std::scoped_lock          aGuard( maMutex );
     xOut->writeBytes( aData );
 }
 
-void SAL_CALL OutputStorageWrapper_Impl::flush()
+void OutputStorageWrapper_Impl::flush()
 {
     std::scoped_lock          aGuard( maMutex );
     xOut->flush();
 }
 
-void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
+void OutputStorageWrapper_Impl::closeOutput()
 {
     std::scoped_lock          aGuard( maMutex );
     xOut->closeOutput();
@@ -504,7 +504,7 @@ rtl::Reference<SvXMLEmbeddedObjectHelper> SvXMLEmbeddedObjectHelper::Create(
     return pThis;
 }
 
-OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUString& rURL)
+OUString SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUString& rURL)
 {
     std::unique_lock          aGuard( m_aMutex );
 
@@ -528,7 +528,7 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUSt
 }
 
 // XNameAccess: alien objects!
-Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
+Any SvXMLEmbeddedObjectHelper::getByName(
         const OUString& rURLStr )
 {
     std::unique_lock          aGuard( m_aMutex );
@@ -625,12 +625,12 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
     return aRet;
 }
 
-Sequence< OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
+Sequence< OUString > SvXMLEmbeddedObjectHelper::getElementNames()
 {
    return {};
 }
 
-bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
+bool SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
 {
     std::unique_lock          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
@@ -652,7 +652,7 @@ bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
 }
 
 // XNameAccess
-Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
+Type SvXMLEmbeddedObjectHelper::getElementType()
 {
     std::unique_lock          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
@@ -661,7 +661,7 @@ Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
         return cppu::UnoType<XInputStream>::get();
 }
 
-bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
+bool SvXMLEmbeddedObjectHelper::hasElements()
 {
     std::unique_lock          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )

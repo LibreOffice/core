@@ -97,73 +97,73 @@ public:
     SVX_DLLPRIVATE void copyFormatFrom( const CellRef& xSourceCell );
 
     // XInterface
-    SVX_DLLPRIVATE virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& Type ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    SVX_DLLPRIVATE virtual cpo::uno::Any queryInterface( const cpo::uno::Type& Type ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XTypeProvider
-    SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    SVX_DLLPRIVATE virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Sequence< ::sal_Int8 > getImplementationId(  ) override;
 
     // XLayoutConstrains
-    SVX_DLLPRIVATE virtual css::awt::Size SAL_CALL getMinimumSize() override;
-    SVX_DLLPRIVATE virtual css::awt::Size SAL_CALL getPreferredSize() override;
-    SVX_DLLPRIVATE virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
+    SVX_DLLPRIVATE virtual css::awt::Size getMinimumSize() override;
+    SVX_DLLPRIVATE virtual css::awt::Size getPreferredSize() override;
+    SVX_DLLPRIVATE virtual css::awt::Size calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // XMergeableCell
-    virtual ::sal_Int32 SAL_CALL getRowSpan() override;
-    virtual ::sal_Int32 SAL_CALL getColumnSpan() override;
-    virtual bool SAL_CALL isMerged() override;
+    virtual ::sal_Int32 getRowSpan() override;
+    virtual ::sal_Int32 getColumnSpan() override;
+    virtual bool isMerged() override;
 
     // XCell
-    SVX_DLLPRIVATE virtual OUString SAL_CALL getFormula() override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setFormula( const OUString& aFormula ) override;
-    SVX_DLLPRIVATE virtual double SAL_CALL getValue() override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setValue( double nValue ) override;
-    SVX_DLLPRIVATE virtual css::table::CellContentType SAL_CALL getType() override;
-    SVX_DLLPRIVATE virtual sal_Int32 SAL_CALL getError() override;
+    SVX_DLLPRIVATE virtual OUString getFormula() override;
+    SVX_DLLPRIVATE virtual void setFormula( const OUString& aFormula ) override;
+    SVX_DLLPRIVATE virtual double getValue() override;
+    SVX_DLLPRIVATE virtual void setValue( double nValue ) override;
+    SVX_DLLPRIVATE virtual css::table::CellContentType getType() override;
+    SVX_DLLPRIVATE virtual sal_Int32 getError() override;
 
     // css::beans::XPropertySet
-    SVX_DLLPRIVATE virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    SVX_DLLPRIVATE virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    SVX_DLLPRIVATE virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    SVX_DLLPRIVATE virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    SVX_DLLPRIVATE virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    SVX_DLLPRIVATE virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    SVX_DLLPRIVATE virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
-    SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    SVX_DLLPRIVATE virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     // css::beans::XPropertyState
-    SVX_DLLPRIVATE virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    SVX_DLLPRIVATE virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    SVX_DLLPRIVATE virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    SVX_DLLPRIVATE virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Sequence< css::beans::PropertyState > getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
+    SVX_DLLPRIVATE virtual void setPropertyToDefault( const OUString& PropertyName ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XMultiPropertyStates
-    SVX_DLLPRIVATE virtual void SAL_CALL setAllPropertiesToDefault() override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertiesToDefault( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
-    SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyDefaults( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    SVX_DLLPRIVATE virtual void setAllPropertiesToDefault() override;
+    SVX_DLLPRIVATE virtual void setPropertiesToDefault( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyDefaults( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     // XText
-    SVX_DLLPRIVATE virtual void SAL_CALL insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, bool bAbsorb ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) override;
+    SVX_DLLPRIVATE virtual void insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) override;
 
     // XSimpleText
-    SVX_DLLPRIVATE virtual void SAL_CALL insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, bool bAbsorb ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
     // XTextRange
-    SVX_DLLPRIVATE virtual OUString SAL_CALL getString(  ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setString( const OUString& aString ) override;
+    SVX_DLLPRIVATE virtual OUString getString(  ) override;
+    SVX_DLLPRIVATE virtual void setString( const OUString& aString ) override;
 
     // XEventListener
-    SVX_DLLPRIVATE virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    SVX_DLLPRIVATE virtual void disposing( const css::lang::EventObject& Source ) override;
 
     SVX_DLLPRIVATE virtual void SetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject ) override;
 

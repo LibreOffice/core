@@ -82,7 +82,7 @@ void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 }
 
 
-cpo::uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const cpo::uno::Type & rType )
+cpo::uno::Any Svx3DSceneObject::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -95,20 +95,20 @@ cpo::uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const cpo::uno::Type 
     return aAny;
 }
 
-cpo::uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any Svx3DSceneObject::queryInterface( const cpo::uno::Type & rType )
 {
     return SvxShape::queryInterface( rType );
 }
 
 // XTypeProvider
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > Svx3DSceneObject::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 
-void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape )
+void Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape )
 {
     SolarMutexGuard aGuard;
 
@@ -154,7 +154,7 @@ void Svx3DSceneObject::addShape( SvxShape& rShape )
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
 
-void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xShape )
+void Svx3DSceneObject::remove( const Reference< drawing::XShape >& xShape )
 {
     SolarMutexGuard aGuard;
 
@@ -186,7 +186,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 }
 
 
-sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
+sal_Int32 Svx3DSceneObject::getCount()
 {
     SolarMutexGuard aGuard;
 
@@ -198,7 +198,7 @@ sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
 }
 
 
-cpo::uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
+cpo::uno::Any Svx3DSceneObject::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
 
@@ -219,13 +219,13 @@ cpo::uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
 
 // css::container::XElementAccess
 
-cpo::uno::Type SAL_CALL Svx3DSceneObject::getElementType()
+cpo::uno::Type Svx3DSceneObject::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
 
-bool SAL_CALL Svx3DSceneObject::hasElements()
+bool Svx3DSceneObject::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -417,7 +417,7 @@ bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItem
 }
 
 // css::lang::XServiceInfo
-cpo::uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Svx3DSceneObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -537,7 +537,7 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
 }
 
 // css::lang::XServiceInfo
-cpo::uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Svx3DCubeObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -642,7 +642,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
 }
 
 // css::lang::XServiceInfo
-cpo::uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Svx3DSphereObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -822,7 +822,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 }
 
 // css::lang::XServiceInfo
-cpo::uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Svx3DLatheObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -905,7 +905,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
 }
 
 // css::lang::XServiceInfo
-cpo::uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Svx3DExtrudeObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -1041,7 +1041,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
 }
 
 // css::lang::XServiceInfo
-cpo::uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Svx3DPolygonObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),

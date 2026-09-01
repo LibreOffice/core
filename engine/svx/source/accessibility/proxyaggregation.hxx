@@ -104,9 +104,9 @@ namespace accessibility
 
         // XInterface and XTypeProvider
         /// @throws cpo::uno::RuntimeException
-        cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType );
+        cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType );
         /// @throws cpo::uno::RuntimeException
-        cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  );
+        cpo::uno::Sequence< cpo::uno::Type > getTypes(  );
 
     private:
         OProxyAggregation( const OProxyAggregation& ) = delete;
@@ -142,7 +142,7 @@ namespace accessibility
         using OProxyAggregation::getComponentContext;
 
         // XInterface
-        cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& _rType ) override;
+        cpo::uno::Any queryInterface( const cpo::uno::Type& _rType ) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
@@ -162,11 +162,11 @@ namespace accessibility
         );
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XComponent
         /// @throws cpo::uno::RuntimeException
-        virtual void SAL_CALL dispose() = 0;
+        virtual void dispose() = 0;
 
     private:
         OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& ) = delete;
@@ -194,13 +194,13 @@ namespace accessibility
         DECLARE_XTYPEPROVIDER()
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) override;
+        virtual void disposing( const css::lang::EventObject& _rSource ) override;
 
         // XComponent/OComponentProxyAggregationHelper
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
     private:
         OComponentProxyAggregation( const OComponentProxyAggregation& ) = delete;

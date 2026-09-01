@@ -77,7 +77,7 @@ SvxShowCharSetAcc::~SvxShowCharSetAcc()
     ensureDisposed();
 }
 
-void SAL_CALL SvxShowCharSetAcc::disposing()
+void SvxShowCharSetAcc::disposing()
 {
     OAccessibleSelectionHelper::disposing();
     for (auto& rxChild : m_aChildren)
@@ -131,14 +131,14 @@ css::awt::Rectangle SvxShowCharSetAcc::implGetBounds()
     return aRet;
 }
 
-sal_Int64 SAL_CALL SvxShowCharSetAcc::getAccessibleChildCount()
+sal_Int64 SvxShowCharSetAcc::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
     return m_pParent->getMaxCharCount();
 }
 
-uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleChild( sal_Int64 i )
+uno::Reference< css::accessibility::XAccessible > SvxShowCharSetAcc::getAccessibleChild( sal_Int64 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -155,7 +155,7 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
     return xRet;
 }
 
-uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleParent()
+uno::Reference< css::accessibility::XAccessible > SvxShowCharSetAcc::getAccessibleParent()
 {
     OExternalLockGuard aGuard( this );
 
@@ -164,19 +164,19 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
     return uno::Reference<css::accessibility::XAccessible>();
 }
 
-sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
+sal_Int16 SvxShowCharSetAcc::getAccessibleRole()
 {
     return css::accessibility::AccessibleRole::TABLE;
 }
 
-OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
+OUString SvxShowCharSetAcc::getAccessibleDescription()
 {
     OExternalLockGuard aGuard( this );
     return SvxResId( RID_SVXSTR_CHARACTER_SELECTION );
 }
 
 
-OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
+OUString SvxShowCharSetAcc::getAccessibleName()
 {
     OExternalLockGuard aGuard( this );
 
@@ -184,13 +184,13 @@ OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
 }
 
 
-uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL SvxShowCharSetAcc::getAccessibleRelationSet()
+uno::Reference< css::accessibility::XAccessibleRelationSet > SvxShowCharSetAcc::getAccessibleRelationSet()
 {
     return uno::Reference< css::accessibility::XAccessibleRelationSet >();
 }
 
 
-sal_Int64 SAL_CALL SvxShowCharSetAcc::getAccessibleStateSet()
+sal_Int64 SvxShowCharSetAcc::getAccessibleStateSet()
 {
     OExternalLockGuard aGuard( this );
 
@@ -220,7 +220,7 @@ sal_Int64 SAL_CALL SvxShowCharSetAcc::getAccessibleStateSet()
 }
 
 
-uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleAtPoint( const awt::Point& aPoint )
+uno::Reference< css::accessibility::XAccessible > SvxShowCharSetAcc::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     OExternalLockGuard aGuard( this );
 
@@ -233,82 +233,82 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
     return pItem->GetAccessible();
 }
 
-void SAL_CALL SvxShowCharSetAcc::grabFocus()
+void SvxShowCharSetAcc::grabFocus()
 {
     OExternalLockGuard aGuard( this );
 
     m_pParent->GrabFocus();
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRowCount(  )
+sal_Int32 SvxShowCharSetAcc::getAccessibleRowCount(  )
 {
     return ((getAccessibleChildCount()-1) / COLUMN_COUNT) + 1;
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumnCount(  )
+sal_Int32 SvxShowCharSetAcc::getAccessibleColumnCount(  )
 {
     return COLUMN_COUNT;
 }
 
-OUString SAL_CALL SvxShowCharSetAcc::getAccessibleRowDescription( sal_Int32 /*nRow*/ )
+OUString SvxShowCharSetAcc::getAccessibleRowDescription( sal_Int32 /*nRow*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL SvxShowCharSetAcc::getAccessibleColumnDescription( sal_Int32 /*nColumn*/ )
+OUString SvxShowCharSetAcc::getAccessibleColumnDescription( sal_Int32 /*nColumn*/ )
 {
     return OUString();
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRowExtentAt( sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
+sal_Int32 SvxShowCharSetAcc::getAccessibleRowExtentAt( sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumnExtentAt( sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
+sal_Int32 SvxShowCharSetAcc::getAccessibleColumnExtentAt( sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
 {
     return 1;
 }
 
-Reference< XAccessibleTable > SAL_CALL SvxShowCharSetAcc::getAccessibleRowHeaders(  )
+Reference< XAccessibleTable > SvxShowCharSetAcc::getAccessibleRowHeaders(  )
 {
     return Reference< XAccessibleTable >();
 }
 
-Reference< XAccessibleTable > SAL_CALL SvxShowCharSetAcc::getAccessibleColumnHeaders(  )
+Reference< XAccessibleTable > SvxShowCharSetAcc::getAccessibleColumnHeaders(  )
 {
     return Reference< XAccessibleTable >();
 }
 
-Sequence< sal_Int32 > SAL_CALL SvxShowCharSetAcc::getSelectedAccessibleRows(  )
+Sequence< sal_Int32 > SvxShowCharSetAcc::getSelectedAccessibleRows(  )
 {
     OExternalLockGuard aGuard( this );
 
     return { SvxShowCharSet::GetRowPos(m_pParent->GetSelectIndexId()) };
 }
 
-Sequence< sal_Int32 > SAL_CALL SvxShowCharSetAcc::getSelectedAccessibleColumns(  )
+Sequence< sal_Int32 > SvxShowCharSetAcc::getSelectedAccessibleColumns(  )
 {
     OExternalLockGuard aGuard( this );
 
     return { SvxShowCharSet::GetColumnPos(m_pParent->GetSelectIndexId()) };
 }
 
-bool SAL_CALL SvxShowCharSetAcc::isAccessibleRowSelected( sal_Int32 nRow )
+bool SvxShowCharSetAcc::isAccessibleRowSelected( sal_Int32 nRow )
 {
     OExternalLockGuard aGuard( this );
 
     return SvxShowCharSet::GetRowPos(m_pParent->GetSelectIndexId()) == nRow;
 }
 
-bool SAL_CALL SvxShowCharSetAcc::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool SvxShowCharSetAcc::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
     return SvxShowCharSet::GetColumnPos(m_pParent->GetSelectIndexId()) == nColumn;
 }
 
-Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+Reference< XAccessible > SvxShowCharSetAcc::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     OExternalLockGuard aGuard( this );
 
@@ -319,36 +319,36 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCellAt( sal_In
     return pItem->GetAccessible();
 }
 
-Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCaption(  )
+Reference< XAccessible > SvxShowCharSetAcc::getAccessibleCaption(  )
 {
     return Reference< XAccessible >();
 }
 
-Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleSummary(  )
+Reference< XAccessible > SvxShowCharSetAcc::getAccessibleSummary(  )
 {
     return Reference< XAccessible >();
 }
 
-bool SAL_CALL SvxShowCharSetAcc::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+bool SvxShowCharSetAcc::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     OExternalLockGuard aGuard( this );
 
     return m_pParent->GetSelectIndexId() == getAccessibleIndex(nRow,nColumn);
 }
 
-sal_Int64 SAL_CALL SvxShowCharSetAcc::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 SvxShowCharSetAcc::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     return (static_cast<sal_Int64>(nRow) * COLUMN_COUNT) + nColumn;
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRow( sal_Int64 nChildIndex )
+sal_Int32 SvxShowCharSetAcc::getAccessibleRow( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
     return SvxShowCharSet::GetRowPos(sal::static_int_cast<sal_uInt16>(nChildIndex));
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int64 nChildIndex )
+sal_Int32 SvxShowCharSetAcc::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -373,19 +373,19 @@ void SvxShowCharSetItemAcc::ParentDestroyed()
     mpParent = nullptr;
 }
 
-sal_Int64 SAL_CALL SvxShowCharSetItemAcc::getAccessibleChildCount()
+sal_Int64 SvxShowCharSetItemAcc::getAccessibleChildCount()
 {
     return 0;
 }
 
 
-uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleChild( sal_Int64 /*i*/ )
+uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItemAcc::getAccessibleChild( sal_Int64 /*i*/ )
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 
-uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleParent()
+uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItemAcc::getAccessibleParent()
 {
     OExternalLockGuard aGuard( this );
 
@@ -393,13 +393,13 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc
 }
 
 
-sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
+sal_Int16 SvxShowCharSetItemAcc::getAccessibleRole()
 {
     return css::accessibility::AccessibleRole::TABLE_CELL;
 }
 
 
-OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
+OUString SvxShowCharSetItemAcc::getAccessibleDescription()
 {
     OExternalLockGuard aGuard( this );
 
@@ -427,7 +427,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
 }
 
 
-OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleName()
+OUString SvxShowCharSetItemAcc::getAccessibleName()
 {
     OExternalLockGuard aGuard( this );
 
@@ -445,13 +445,13 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleName()
 }
 
 
-uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL SvxShowCharSetItemAcc::getAccessibleRelationSet()
+uno::Reference< css::accessibility::XAccessibleRelationSet > SvxShowCharSetItemAcc::getAccessibleRelationSet()
 {
     return uno::Reference< css::accessibility::XAccessibleRelationSet >();
 }
 
 
-sal_Int64 SAL_CALL SvxShowCharSetItemAcc::getAccessibleStateSet()
+sal_Int64 SvxShowCharSetItemAcc::getAccessibleStateSet()
 {
     OExternalLockGuard aGuard( this );
 
@@ -521,7 +521,7 @@ Reference< css::accessibility::XAccessibleKeyBinding > SvxShowCharSetItemAcc::ge
 }
 
 
-void SAL_CALL SvxShowCharSetItemAcc::grabFocus()
+void SvxShowCharSetItemAcc::grabFocus()
 {
     // nothing to do
 }
@@ -546,12 +546,12 @@ awt::Rectangle SvxShowCharSetItemAcc::implGetBounds(  )
     return aRet;
 }
 
-uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )
+uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItemAcc::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )
 {
     return uno::Reference< css::accessibility::XAccessible >();
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getForeground(  )
+sal_Int32 SvxShowCharSetAcc::getForeground(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -560,7 +560,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getForeground(  )
     return static_cast<sal_Int32>(rStyleSettings.GetDialogTextColor());
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  )
+sal_Int32 SvxShowCharSetAcc::getBackground(  )
 {
     OExternalLockGuard aGuard( this  );
 

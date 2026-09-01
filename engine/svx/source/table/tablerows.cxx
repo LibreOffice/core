@@ -62,14 +62,14 @@ void TableRows::throwIfDisposed() const
 // XTableRows
 
 
-void SAL_CALL TableRows::insertByIndex( sal_Int32 nIndex, sal_Int32 nCount )
+void TableRows::insertByIndex( sal_Int32 nIndex, sal_Int32 nCount )
 {
     throwIfDisposed();
     mxTableModel->insertRows( nIndex, nCount );
 }
 
 
-void SAL_CALL TableRows::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
+void TableRows::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
 {
     throwIfDisposed();
     mxTableModel->removeRows( nIndex, nCount );
@@ -79,14 +79,14 @@ void SAL_CALL TableRows::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
 // XIndexAccess
 
 
-sal_Int32 SAL_CALL TableRows::getCount()
+sal_Int32 TableRows::getCount()
 {
     throwIfDisposed();
     return mxTableModel->getRowCount();
 }
 
 
-Any SAL_CALL TableRows::getByIndex( sal_Int32 Index )
+Any TableRows::getByIndex( sal_Int32 Index )
 {
     throwIfDisposed();
     return Any( Reference< XCellRange >( static_cast< XCellRange* >( mxTableModel->getRow( Index ).get() ) ) );
@@ -96,14 +96,14 @@ Any SAL_CALL TableRows::getByIndex( sal_Int32 Index )
 // XElementAccess
 
 
-Type SAL_CALL TableRows::getElementType()
+Type TableRows::getElementType()
 {
     throwIfDisposed();
     return cppu::UnoType<XCellRange>::get();
 }
 
 
-bool SAL_CALL TableRows::hasElements()
+bool TableRows::hasElements()
 {
     throwIfDisposed();
     return mxTableModel->getRowCount() != 0;

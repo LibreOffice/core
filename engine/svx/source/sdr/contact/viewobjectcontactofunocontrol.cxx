@@ -632,24 +632,24 @@ namespace sdr::contact {
         virtual ~ViewObjectContactOfUnoControl_Impl() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) override;
+        virtual void disposing( const EventObject& Source ) override;
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const WindowEvent& e ) override;
-        virtual void SAL_CALL windowMoved( const WindowEvent& e ) override;
-        virtual void SAL_CALL windowShown( const EventObject& e ) override;
-        virtual void SAL_CALL windowHidden( const EventObject& e ) override;
+        virtual void windowResized( const WindowEvent& e ) override;
+        virtual void windowMoved( const WindowEvent& e ) override;
+        virtual void windowShown( const EventObject& e ) override;
+        virtual void windowHidden( const EventObject& e ) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& evt ) override;
+        virtual void propertyChange( const PropertyChangeEvent& evt ) override;
 
         // XModeChangeListener
-        virtual void SAL_CALL modeChanged( const ModeChangeEvent& _rSource ) override;
+        virtual void modeChanged( const ModeChangeEvent& _rSource ) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+        virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+        virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+        virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     private:
         /** retrieves the SdrPageView which our associated SdrPageViewWindow belongs to
@@ -1293,7 +1293,7 @@ namespace sdr::contact {
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::disposing( const EventObject& Source )
+    void ViewObjectContactOfUnoControl_Impl::disposing( const EventObject& Source )
     {
         SolarMutexGuard aSolarGuard;
             // some code below - in particular our disposal - might trigger actions which require the
@@ -1318,33 +1318,33 @@ namespace sdr::contact {
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowResized( const WindowEvent& /*e*/ )
+    void ViewObjectContactOfUnoControl_Impl::windowResized( const WindowEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowMoved( const WindowEvent& /*e*/ )
+    void ViewObjectContactOfUnoControl_Impl::windowMoved( const WindowEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowShown( const EventObject& /*e*/ )
+    void ViewObjectContactOfUnoControl_Impl::windowShown( const EventObject& /*e*/ )
     {
         SolarMutexGuard aSolarGuard;
         m_bControlIsVisible = true;
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowHidden( const EventObject& /*e*/ )
+    void ViewObjectContactOfUnoControl_Impl::windowHidden( const EventObject& /*e*/ )
     {
         SolarMutexGuard aSolarGuard;
         m_bControlIsVisible = false;
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::propertyChange( const PropertyChangeEvent& /*_rEvent*/ )
+    void ViewObjectContactOfUnoControl_Impl::propertyChange( const PropertyChangeEvent& /*_rEvent*/ )
     {
         SolarMutexGuard aSolarGuard;
             // (re)painting might require VCL operations, which need the SolarMutex
@@ -1365,7 +1365,7 @@ namespace sdr::contact {
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::modeChanged( const ModeChangeEvent& _rSource )
+    void ViewObjectContactOfUnoControl_Impl::modeChanged( const ModeChangeEvent& _rSource )
     {
         SolarMutexGuard aSolarGuard;
 
@@ -1387,13 +1387,13 @@ namespace sdr::contact {
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementInserted( const ContainerEvent& /*_Event*/ )
+    void ViewObjectContactOfUnoControl_Impl::elementInserted( const ContainerEvent& /*_Event*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event )
+    void ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event )
     {
         SolarMutexGuard aSolarGuard;
             // some code below - in particular our disposal - might trigger actions which require the
@@ -1407,7 +1407,7 @@ namespace sdr::contact {
     }
 
 
-    void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementReplaced( const ContainerEvent& Event )
+    void ViewObjectContactOfUnoControl_Impl::elementReplaced( const ContainerEvent& Event )
     {
         SolarMutexGuard aSolarGuard;
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementReplaced: where did this come from?" );

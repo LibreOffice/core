@@ -95,7 +95,7 @@ void SvxUnoNameItemTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexce
         dispose();
 }
 
-bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& ServiceName )
+bool SvxUnoNameItemTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -112,7 +112,7 @@ void SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const cpo::un
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const cpo::uno::Any& aElement )
+void SvxUnoNameItemTable::insertByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SvxUnoNameItemTable::insertByName");
@@ -125,7 +125,7 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const
     ImplInsertByName( aName, aElement );
 }
 
-void SAL_CALL SvxUnoNameItemTable::cancel()
+void SvxUnoNameItemTable::cancel()
 {
     SolarMutexGuard aGuard;
     // drop all items that are owned by this service and not the document
@@ -133,7 +133,7 @@ void SAL_CALL SvxUnoNameItemTable::cancel()
     dispose();
 }
 
-void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
+void SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SvxUnoNameItemTable::removeByName");
@@ -156,7 +156,7 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, const cpo::uno::Any& aElement )
+void SvxUnoNameItemTable::replaceByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -203,7 +203,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 }
 
 // XNameAccess
-cpo::uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
+cpo::uno::Any SvxUnoNameItemTable::getByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SvxUnoNameItemTable::getByName");
@@ -227,7 +227,7 @@ cpo::uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName 
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
+cpo::uno::Sequence< OUString > SvxUnoNameItemTable::getElementNames(  )
 {
     SolarMutexGuard aGuard;
 
@@ -251,7 +251,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     return comphelper::containerToSequence(aNameSet);
 }
 
-bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
+bool SvxUnoNameItemTable::hasByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
@@ -272,7 +272,7 @@ bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     return false;
 }
 
-bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
+bool SvxUnoNameItemTable::hasElements(  )
 {
     SolarMutexGuard aGuard;
 

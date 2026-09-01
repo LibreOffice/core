@@ -62,22 +62,22 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const = 0;
 
     // XServiceInfo
-    virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
+    virtual bool supportsService( const  OUString& ServiceName ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const  OUString& Name ) override;
+    virtual void insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const  OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const  OUString& aName ) override;
+    virtual cpo::uno::Sequence<  OUString > getElementNames(  ) override;
+    virtual bool hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual bool hasElements(  ) override;
 };
 
 }
@@ -93,13 +93,13 @@ const XPropertyEntry* SvxUnoXPropertyTable::get(tools::Long index) const
 }
 
 // XServiceInfo
-bool SAL_CALL SvxUnoXPropertyTable::supportsService( const  OUString& ServiceName )
+bool SvxUnoXPropertyTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const  cpo::uno::Any& aElement )
+void SvxUnoXPropertyTable::insertByName( const  OUString& aName, const  cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -115,7 +115,7 @@ void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const 
     mrList.Insert(std::move(pNewEntry));
 }
 
-void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
+void SvxUnoXPropertyTable::removeByName( const  OUString& Name )
 {
     SolarMutexGuard aGuard;
 
@@ -137,7 +137,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement )
+void SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -163,7 +163,7 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
 }
 
 // XNameAccess
-cpo::uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
+cpo::uno::Any SvxUnoXPropertyTable::getByName( const  OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -182,7 +182,7 @@ cpo::uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
+cpo::uno::Sequence<  OUString > SvxUnoXPropertyTable::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -201,7 +201,7 @@ cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
     return aNames;
 }
 
-bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
+bool SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -220,7 +220,7 @@ bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 }
 
 // XElementAccess
-bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
+bool SvxUnoXPropertyTable::hasElements(  )
 {
     SolarMutexGuard aGuard;
 
@@ -239,11 +239,11 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 };
 
 }
@@ -269,18 +269,18 @@ std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& r
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
+cpo::uno::Type SvxUnoXColorTable::getElementType()
 {
     return ::cppu::UnoType<sal_Int32>::get();
 }
 
 // XServiceInfo
-OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  )
+OUString SvxUnoXColorTable::getImplementationName(  )
 {
     return u"SvxUnoXColorTable"_ustr;
 }
 
-cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SvxUnoXColorTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.ColorTable"_ustr };
 }
@@ -297,11 +297,11 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 };
 
 }
@@ -337,18 +337,18 @@ std::unique_ptr<XPropertyEntry> SvxUnoXLineEndTable::createEntry(const OUString&
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
+cpo::uno::Type SvxUnoXLineEndTable::getElementType()
 {
     return cppu::UnoType<drawing::PolyPolygonBezierCoords>::get();
 }
 
 // XServiceInfo
-OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  )
+OUString SvxUnoXLineEndTable::getImplementationName(  )
 {
     return u"SvxUnoXLineEndTable"_ustr;
 }
 
-cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SvxUnoXLineEndTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.LineEndTable"_ustr };
 }
@@ -365,11 +365,11 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 };
 
 }
@@ -415,18 +415,18 @@ std::unique_ptr<XPropertyEntry> SvxUnoXDashTable::createEntry(const OUString& rN
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
+cpo::uno::Type SvxUnoXDashTable::getElementType()
 {
     return cppu::UnoType<drawing::LineDash>::get();
 }
 
 // XServiceInfo
-OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  )
+OUString SvxUnoXDashTable::getImplementationName(  )
 {
     return u"SvxUnoXDashTable"_ustr;
 }
 
-cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SvxUnoXDashTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.DashTable"_ustr };
 }
@@ -443,11 +443,11 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 };
 
 }
@@ -488,18 +488,18 @@ std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& r
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
+cpo::uno::Type SvxUnoXHatchTable::getElementType()
 {
     return cppu::UnoType<drawing::Hatch>::get();
 }
 
 // XServiceInfo
-OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  )
+OUString SvxUnoXHatchTable::getImplementationName(  )
 {
     return u"SvxUnoXHatchTable"_ustr;
 }
 
-cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SvxUnoXHatchTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.HatchTable"_ustr };
 }
@@ -516,11 +516,11 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 };
 
 }
@@ -551,18 +551,18 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
+cpo::uno::Type SvxUnoXGradientTable::getElementType()
 {
     return cppu::UnoType<awt::Gradient>::get();
 }
 
 // XServiceInfo
-OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  )
+OUString SvxUnoXGradientTable::getImplementationName(  )
 {
     return u"SvxUnoXGradientTable"_ustr;
 }
 
-cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SvxUnoXGradientTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.GradientTable"_ustr };
 }
@@ -579,11 +579,11 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 };
 
 }
@@ -623,18 +623,18 @@ std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& 
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
+cpo::uno::Type SvxUnoXBitmapTable::getElementType()
 {
     return ::cppu::UnoType<awt::XBitmap>::get();
 }
 
 // XServiceInfo
-OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  )
+OUString SvxUnoXBitmapTable::getImplementationName(  )
 {
     return u"SvxUnoXBitmapTable"_ustr;
 }
 
-cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SvxUnoXBitmapTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.BitmapTable"_ustr };
 }

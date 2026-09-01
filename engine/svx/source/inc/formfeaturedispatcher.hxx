@@ -64,9 +64,9 @@ namespace svx
 
     private:
         // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& _rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
-        virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
-        virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
+        virtual void dispatch( const css::util::URL& _rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
+        virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
+        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
 
         /** notifies our current state to one or all listeners
 

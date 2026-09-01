@@ -573,13 +573,13 @@ void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SetShapeType( u"com.sun.star.drawing.FrameShape"_ustr );
 }
 
-void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& rValue )
+void SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& rValue )
 {
     SvxShape::setPropertyValue( aPropertyName, rValue );
     resetModifiedState();
 }
 
-void SAL_CALL SvxFrameShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& rValues )
+void SvxFrameShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& rValues )
 {
     SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();

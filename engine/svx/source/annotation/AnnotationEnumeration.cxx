@@ -40,8 +40,8 @@ public:
     AnnotationEnumeration& operator=(const AnnotationEnumeration&) = delete;
 
     // css::office::XAnnotationEnumeration:
-    virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Reference<css::office::XAnnotation> SAL_CALL nextElement() override;
+    virtual bool hasMoreElements() override;
+    virtual css::uno::Reference<css::office::XAnnotation> nextElement() override;
 
 private:
     // destructor is private and will be called indirectly by the release call    virtual ~AnnotationEnumeration() {}
@@ -65,9 +65,9 @@ AnnotationEnumeration::AnnotationEnumeration(AnnotationVector&& rAnnotations)
 }
 
 // css::office::XAnnotationEnumeration:
-bool SAL_CALL AnnotationEnumeration::hasMoreElements() { return maIter != maAnnotations.end(); }
+bool AnnotationEnumeration::hasMoreElements() { return maIter != maAnnotations.end(); }
 
-css::uno::Reference<css::office::XAnnotation> SAL_CALL AnnotationEnumeration::nextElement()
+css::uno::Reference<css::office::XAnnotation> AnnotationEnumeration::nextElement()
 {
     if (maIter == maAnnotations.end())
         throw css::container::NoSuchElementException();

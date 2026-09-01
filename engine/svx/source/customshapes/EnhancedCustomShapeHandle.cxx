@@ -35,19 +35,19 @@ EnhancedCustomShapeHandle::~EnhancedCustomShapeHandle()
 }
 
 
-void SAL_CALL EnhancedCustomShapeHandle::acquire() noexcept
+void EnhancedCustomShapeHandle::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL EnhancedCustomShapeHandle::release() noexcept
+void EnhancedCustomShapeHandle::release() noexcept
 {
     OWeakObject::release();
 }
 
 // XCustomShapeHandle
-css::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
+css::awt::Point EnhancedCustomShapeHandle::getPosition()
 {
     if(!mxCustomShape)
     {
@@ -65,7 +65,7 @@ css::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
     return css::awt::Point( aPosition.X(), aPosition.Y() );
 }
 
-void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const css::awt::Point& aPnt )
+void EnhancedCustomShapeHandle::setControllerPosition( const css::awt::Point& aPnt )
 {
     if(!mxCustomShape)
     {
@@ -81,7 +81,7 @@ void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const css::awt::
 }
 
 // XInitialization
-void SAL_CALL EnhancedCustomShapeHandle::initialize( const cpo::uno::Sequence< cpo::uno::Any >& /* aArguments */ )
+void EnhancedCustomShapeHandle::initialize( const cpo::uno::Sequence< cpo::uno::Any >& /* aArguments */ )
 {
 }
 

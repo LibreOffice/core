@@ -26,7 +26,7 @@
 
 using namespace com::sun::star;
 
-cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
+cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
     const cpo::uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {
@@ -65,7 +65,7 @@ void PrimitiveFactory2D::createPrimitivesFromXShape(
     }
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
+cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
     const cpo::uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {

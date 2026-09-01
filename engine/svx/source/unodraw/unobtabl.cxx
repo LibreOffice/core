@@ -40,11 +40,11 @@ public:
     virtual bool isValid( const NameOrIndex* pItem ) const override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
 };
 
 }
@@ -70,12 +70,12 @@ bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
     return false;
 }
 
-OUString SAL_CALL SvxUnoBitmapTable::getImplementationName()
+OUString SvxUnoBitmapTable::getImplementationName()
 {
     return u"SvxUnoBitmapTable"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SvxUnoBitmapTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.BitmapTable"_ustr };
 }
@@ -86,7 +86,7 @@ NameOrIndex* SvxUnoBitmapTable::createItem() const
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
+cpo::uno::Type SvxUnoBitmapTable::getElementType(  )
 {
     return ::cppu::UnoType<awt::XBitmap>::get();
 }

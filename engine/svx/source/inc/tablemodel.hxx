@@ -97,47 +97,47 @@ public:
     virtual css::uno::Reference< css::table::XTable > getTable() override;
 
     // XTable
-    virtual css::uno::Reference< css::table::XCellCursor > SAL_CALL createCursor(  ) override;
-    virtual css::uno::Reference< css::table::XCellCursor > SAL_CALL createCursorByRange( const css::uno::Reference< css::table::XCellRange >& rRange ) override;
-    virtual ::sal_Int32 SAL_CALL getRowCount() override;
-    virtual ::sal_Int32 SAL_CALL getColumnCount() override;
+    virtual css::uno::Reference< css::table::XCellCursor > createCursor(  ) override;
+    virtual css::uno::Reference< css::table::XCellCursor > createCursorByRange( const css::uno::Reference< css::table::XCellRange >& rRange ) override;
+    virtual ::sal_Int32 getRowCount() override;
+    virtual ::sal_Int32 getColumnCount() override;
 
     // XComponent
 //    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XModifiable
-    virtual bool SAL_CALL isModified(  ) override;
-    virtual void SAL_CALL setModified( bool bModified ) override;
+    virtual bool isModified(  ) override;
+    virtual void setModified( bool bModified ) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // XColumnRowRange
-    virtual css::uno::Reference< css::table::XTableColumns > SAL_CALL getColumns() override;
-    virtual css::uno::Reference< css::table::XTableRows > SAL_CALL getRows() override;
+    virtual css::uno::Reference< css::table::XTableColumns > getColumns() override;
+    virtual css::uno::Reference< css::table::XTableRows > getRows() override;
 
     // XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( ::sal_Int32 nColumn, ::sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( ::sal_Int32 nLeft, ::sal_Int32 nTop, ::sal_Int32 nRight, ::sal_Int32 nBottom ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) override;
+    virtual css::uno::Reference< css::table::XCell > getCellByPosition( ::sal_Int32 nColumn, ::sal_Int32 nRow ) override;
+    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByPosition( ::sal_Int32 nLeft, ::sal_Int32 nTop, ::sal_Int32 nRight, ::sal_Int32 nBottom ) override;
+    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByName( const OUString& aRange ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
+    virtual void setFastPropertyValue( ::sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getFastPropertyValue( ::sal_Int32 nHandle ) override;
 
     // XBroadcaster
-    virtual void SAL_CALL lockBroadcasts() override;
-    virtual void SAL_CALL unlockBroadcasts() override;
+    virtual void lockBroadcasts() override;
+    virtual void unlockBroadcasts() override;
 
     CellRef getCell( sal_Int32 nCol, sal_Int32 nRow ) const;
 

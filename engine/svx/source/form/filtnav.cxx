@@ -218,12 +218,12 @@ public:
     FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers);
 
 // XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) override;
+    virtual void disposing(const EventObject& Source) override;
 
 // XFilterControllerListener
-    virtual void SAL_CALL predicateExpressionChanged( const FilterEvent& Event ) override;
-    virtual void SAL_CALL disjunctiveTermRemoved( const FilterEvent& Event ) override;
-    virtual void SAL_CALL disjunctiveTermAdded( const FilterEvent& Event ) override;
+    virtual void predicateExpressionChanged( const FilterEvent& Event ) override;
+    virtual void disjunctiveTermRemoved( const FilterEvent& Event ) override;
+    virtual void disjunctiveTermAdded( const FilterEvent& Event ) override;
 
 // helpers
     /// @throws RuntimeException
@@ -294,7 +294,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 
 // XEventListener
 
-void SAL_CALL FmFilterAdapter::disposing(const EventObject& /*e*/)
+void FmFilterAdapter::disposing(const EventObject& /*e*/)
 {
 }
 
@@ -384,7 +384,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& Event )
 }
 
 
-void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event )
+void FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event )
 {
     SolarMutexGuard aGuard;
 
@@ -419,7 +419,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event 
 }
 
 
-void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event )
+void FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event )
 {
     SolarMutexGuard aGuard;
 

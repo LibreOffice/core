@@ -71,59 +71,59 @@ public:
     TableDesignStyle();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     // XStyle
-    virtual bool SAL_CALL isUserDefined() override;
-    virtual bool SAL_CALL isInUse() override;
-    virtual OUString SAL_CALL getParentStyle() override;
-    virtual void SAL_CALL setParentStyle( const OUString& aParentStyle ) override;
+    virtual bool isUserDefined() override;
+    virtual bool isInUse() override;
+    virtual OUString getParentStyle() override;
+    virtual void setParentStyle( const OUString& aParentStyle ) override;
 
     // XNamed
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& aName ) override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString& aName ) override;
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual Any getByName( const OUString& aName ) override;
+    virtual Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override ;
+    virtual Any getByIndex( sal_Int32 Index ) override;
 
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) override;
+    virtual void replaceByIndex( sal_Int32 Index, const Any& Element ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const Any& aElement ) override;
 
     // XPropertySet
-    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
+    virtual Reference<XPropertySetInfo> getPropertySetInfo() override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener ) override;
+    virtual void addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) override;
+    virtual void removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
 
     // XModifiable
-    virtual bool SAL_CALL isModified() override;
-    virtual void SAL_CALL setModified( bool bModified ) override;
+    virtual bool isModified() override;
+    virtual void setModified( bool bModified ) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const Reference< XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const Reference< XModifyListener >& aListener ) override;
+    virtual void addModifyListener( const Reference< XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const Reference< XModifyListener >& aListener ) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void modified( const css::lang::EventObject& aEvent ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     void notifyModifyListener();
     void resetUserDefined();
@@ -149,56 +149,56 @@ class TableDesignFamily : public ::cppu::WeakImplHelper< XNameContainer, XNamed,
 {
 public:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     // XNamed
-    virtual OUString SAL_CALL getName(  ) override;
-    virtual void SAL_CALL setName( const OUString& aName ) override;
+    virtual OUString getName(  ) override;
+    virtual void setName( const OUString& aName ) override;
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual Any getByName( const OUString& aName ) override;
+    virtual Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override ;
+    virtual Any getByIndex( sal_Int32 Index ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const Any& aElement ) override;
 
     // XSingleServiceFactory
-    virtual Reference< XInterface > SAL_CALL createInstance(  ) override;
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& aArguments ) override;
+    virtual Reference< XInterface > createInstance(  ) override;
+    virtual Reference< XInterface > createInstanceWithArguments( const Sequence< Any >& aArguments ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) override;
+    virtual void dispose(  ) override;
+    virtual void addEventListener( const Reference< XEventListener >& xListener ) override;
+    virtual void removeEventListener( const Reference< XEventListener >& aListener ) override;
 
     // XPropertySet
-    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
+    virtual Reference<XPropertySetInfo> getPropertySetInfo() override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener ) override;
+    virtual void addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) override;
+    virtual void removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
 
     // XReset
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL addResetListener( const Reference<form::XResetListener>& aListener ) override;
-    virtual void SAL_CALL removeResetListener( const Reference<form::XResetListener>& aListener ) override;
+    virtual void reset() override;
+    virtual void addResetListener( const Reference<form::XResetListener>& aListener ) override;
+    virtual void removeResetListener( const Reference<form::XResetListener>& aListener ) override;
 
     TableDesignStyleVector  maDesigns;
 };
@@ -231,23 +231,23 @@ const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
 }
 
 // XServiceInfo
-OUString SAL_CALL TableDesignStyle::getImplementationName()
+OUString TableDesignStyle::getImplementationName()
 {
     return u"TableDesignStyle"_ustr;
 }
 
-bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName )
+bool TableDesignStyle::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames()
+Sequence< OUString > TableDesignStyle::getSupportedServiceNames()
 {
     return { u"com.sun.star.style.Style"_ustr };
 }
 
 // XStyle
-bool SAL_CALL TableDesignStyle::isUserDefined()
+bool TableDesignStyle::isUserDefined()
 {
     return mbUserDefined;
 }
@@ -257,7 +257,7 @@ void TableDesignStyle::resetUserDefined()
     mbUserDefined = false;
 }
 
-bool SAL_CALL TableDesignStyle::isInUse()
+bool TableDesignStyle::isInUse()
 {
     std::unique_lock aGuard( m_aMutex );
     if (maModifyListeners.getLength(aGuard))
@@ -274,13 +274,13 @@ bool SAL_CALL TableDesignStyle::isInUse()
 }
 
 
-OUString SAL_CALL TableDesignStyle::getParentStyle()
+OUString TableDesignStyle::getParentStyle()
 {
     return OUString();
 }
 
 
-void SAL_CALL TableDesignStyle::setParentStyle( const OUString& )
+void TableDesignStyle::setParentStyle( const OUString& )
 {
 }
 
@@ -288,13 +288,13 @@ void SAL_CALL TableDesignStyle::setParentStyle( const OUString& )
 // XNamed
 
 
-OUString SAL_CALL TableDesignStyle::getName()
+OUString TableDesignStyle::getName()
 {
     return msName;
 }
 
 
-void SAL_CALL TableDesignStyle::setName( const OUString& rName )
+void TableDesignStyle::setName( const OUString& rName )
 {
     msName = rName;
 }
@@ -303,7 +303,7 @@ void SAL_CALL TableDesignStyle::setName( const OUString& rName )
 // XNameAccess
 
 
-Any SAL_CALL TableDesignStyle::getByName( const OUString& rName )
+Any TableDesignStyle::getByName( const OUString& rName )
 {
     const CellStyleNameMap& rMap = getCellStyleNameMap();
 
@@ -315,13 +315,13 @@ Any SAL_CALL TableDesignStyle::getByName( const OUString& rName )
 }
 
 
-Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames()
+Sequence< OUString > TableDesignStyle::getElementNames()
 {
     return comphelper::mapKeysToSequence( getCellStyleNameMap() );
 }
 
 
-bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )
+bool TableDesignStyle::hasByName( const OUString& rName )
 {
     const CellStyleNameMap& rMap = getCellStyleNameMap();
 
@@ -333,13 +333,13 @@ bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )
 // XElementAccess
 
 
-Type SAL_CALL TableDesignStyle::getElementType()
+Type TableDesignStyle::getElementType()
 {
     return cppu::UnoType<XStyle>::get();
 }
 
 
-bool SAL_CALL TableDesignStyle::hasElements()
+bool TableDesignStyle::hasElements()
 {
     return true;
 }
@@ -348,13 +348,13 @@ bool SAL_CALL TableDesignStyle::hasElements()
 // XIndexAccess
 
 
-sal_Int32 SAL_CALL TableDesignStyle::getCount()
+sal_Int32 TableDesignStyle::getCount()
 {
     return style_count;
 }
 
 
-Any SAL_CALL TableDesignStyle::getByIndex( sal_Int32 Index )
+Any TableDesignStyle::getByIndex( sal_Int32 Index )
 {
     if( (Index < 0) || (Index >= style_count) )
         throw IndexOutOfBoundsException();
@@ -366,7 +366,7 @@ Any SAL_CALL TableDesignStyle::getByIndex( sal_Int32 Index )
 
 // XIndexReplace
 
-void SAL_CALL TableDesignStyle::replaceByIndex( sal_Int32 Index, const Any& aElement )
+void TableDesignStyle::replaceByIndex( sal_Int32 Index, const Any& aElement )
 {
     if( (Index < 0) || (Index >= style_count) )
         throw IndexOutOfBoundsException();
@@ -382,7 +382,7 @@ void SAL_CALL TableDesignStyle::replaceByIndex( sal_Int32 Index, const Any& aEle
 // XNameReplace
 
 
-void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any& aElement )
+void TableDesignStyle::replaceByName( const OUString& rName, const Any& aElement )
 {
     const CellStyleNameMap& rMap = getCellStyleNameMap();
     CellStyleNameMap::const_iterator iter = rMap.find( rName );
@@ -490,7 +490,7 @@ void TableDesignStyle::setModified( bool bModified )
 // XModifyBroadcaster
 
 
-void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListener >& xListener )
+void TableDesignStyle::addModifyListener( const Reference< XModifyListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     if (m_bDisposed)
@@ -506,7 +506,7 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
 }
 
 
-void SAL_CALL TableDesignStyle::removeModifyListener( const Reference< XModifyListener >& xListener )
+void TableDesignStyle::removeModifyListener( const Reference< XModifyListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     maModifyListeners.removeInterface( aGuard, xListener );
@@ -531,13 +531,13 @@ void TableDesignStyle::notifyModifyListener()
 
 
 // if we get a modify hint from a style, notify all registered XModifyListener
-void SAL_CALL TableDesignStyle::modified( const css::lang::EventObject& )
+void TableDesignStyle::modified( const css::lang::EventObject& )
 {
     notifyModifyListener();
 }
 
 
-void SAL_CALL TableDesignStyle::disposing( const css::lang::EventObject& )
+void TableDesignStyle::disposing( const css::lang::EventObject& )
 {
 }
 
@@ -546,33 +546,33 @@ void SAL_CALL TableDesignStyle::disposing( const css::lang::EventObject& )
 
 
 // XServiceInfo
-OUString SAL_CALL TableDesignFamily::getImplementationName()
+OUString TableDesignFamily::getImplementationName()
 {
     return u"TableDesignFamily"_ustr;
 }
 
-bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceName )
+bool TableDesignFamily::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames()
+Sequence< OUString > TableDesignFamily::getSupportedServiceNames()
 {
     return { u"com.sun.star.style.StyleFamily"_ustr };
 }
 
 // XNamed
-OUString SAL_CALL TableDesignFamily::getName()
+OUString TableDesignFamily::getName()
 {
     return u"table"_ustr;
 }
 
-void SAL_CALL TableDesignFamily::setName( const OUString& )
+void TableDesignFamily::setName( const OUString& )
 {
 }
 
 // XNameAccess
-Any SAL_CALL TableDesignFamily::getByName( const OUString& rName )
+Any TableDesignFamily::getByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
 
@@ -585,7 +585,7 @@ Any SAL_CALL TableDesignFamily::getByName( const OUString& rName )
 }
 
 
-Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames()
+Sequence< OUString > TableDesignFamily::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -599,7 +599,7 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames()
 }
 
 
-bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName )
+bool TableDesignFamily::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -611,13 +611,13 @@ bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName )
 // XElementAccess
 
 
-Type SAL_CALL TableDesignFamily::getElementType()
+Type TableDesignFamily::getElementType()
 {
     return cppu::UnoType<XStyle>::get();
 }
 
 
-bool SAL_CALL TableDesignFamily::hasElements()
+bool TableDesignFamily::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -628,7 +628,7 @@ bool SAL_CALL TableDesignFamily::hasElements()
 // XIndexAccess
 
 
-sal_Int32 SAL_CALL TableDesignFamily::getCount()
+sal_Int32 TableDesignFamily::getCount()
 {
     SolarMutexGuard aGuard;
 
@@ -636,7 +636,7 @@ sal_Int32 SAL_CALL TableDesignFamily::getCount()
 }
 
 
-Any SAL_CALL TableDesignFamily::getByIndex( sal_Int32 Index )
+Any TableDesignFamily::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
 
@@ -650,7 +650,7 @@ Any SAL_CALL TableDesignFamily::getByIndex( sal_Int32 Index )
 // XNameContainer
 
 
-void SAL_CALL TableDesignFamily::insertByName( const OUString& rName, const Any& rElement )
+void TableDesignFamily::insertByName( const OUString& rName, const Any& rElement )
 {
     SolarMutexGuard aGuard;
 
@@ -667,7 +667,7 @@ void SAL_CALL TableDesignFamily::insertByName( const OUString& rName, const Any&
 }
 
 
-void SAL_CALL TableDesignFamily::removeByName( const OUString& rName )
+void TableDesignFamily::removeByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
 
@@ -689,7 +689,7 @@ void SAL_CALL TableDesignFamily::removeByName( const OUString& rName )
 // XNameReplace
 
 
-void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any& aElement )
+void TableDesignFamily::replaceByName( const OUString& rName, const Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -719,13 +719,13 @@ void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any
 // XSingleServiceFactory
 
 
-Reference< XInterface > SAL_CALL TableDesignFamily::createInstance()
+Reference< XInterface > TableDesignFamily::createInstance()
 {
     return Reference< XInterface >( static_cast< XStyle* >( new TableDesignStyle ) );
 }
 
 
-Reference< XInterface > SAL_CALL TableDesignFamily::createInstanceWithArguments( const Sequence< Any >&  )
+Reference< XInterface > TableDesignFamily::createInstanceWithArguments( const Sequence< Any >&  )
 {
     return createInstance();
 }
@@ -734,7 +734,7 @@ Reference< XInterface > SAL_CALL TableDesignFamily::createInstanceWithArguments(
 // XComponent
 
 
-void SAL_CALL TableDesignFamily::dispose(  )
+void TableDesignFamily::dispose(  )
 {
     TableDesignStyleVector aDesigns;
     aDesigns.swap( maDesigns );
@@ -748,12 +748,12 @@ void SAL_CALL TableDesignFamily::dispose(  )
 }
 
 
-void SAL_CALL TableDesignFamily::addEventListener( const Reference< XEventListener >&  )
+void TableDesignFamily::addEventListener( const Reference< XEventListener >&  )
 {
 }
 
 
-void SAL_CALL TableDesignFamily::removeEventListener( const Reference< XEventListener >&  )
+void TableDesignFamily::removeEventListener( const Reference< XEventListener >&  )
 {
 }
 

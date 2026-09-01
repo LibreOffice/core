@@ -724,7 +724,7 @@ bool FmXFormShell::IsReadonlyDoc_Lock() const
 
 //  EventListener
 
-void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e)
+void FmXFormShell::disposing(const lang::EventObject& e)
 {
     SolarMutexGuard g;
 
@@ -762,7 +762,7 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e)
 }
 
 
-void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt)
+void FmXFormShell::propertyChange(const PropertyChangeEvent& evt)
 {
     SolarMutexGuard g;
 
@@ -828,7 +828,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 }
 
 
-void SAL_CALL FmXFormShell::formActivated(const lang::EventObject& rEvent)
+void FmXFormShell::formActivated(const lang::EventObject& rEvent)
 {
     SolarMutexGuard g;
 
@@ -841,7 +841,7 @@ void SAL_CALL FmXFormShell::formActivated(const lang::EventObject& rEvent)
 }
 
 
-void SAL_CALL FmXFormShell::formDeactivated(const lang::EventObject& rEvent)
+void FmXFormShell::formDeactivated(const lang::EventObject& rEvent)
 {
     SolarMutexGuard g;
 
@@ -2463,7 +2463,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
 
   // XContainerListener
 
-void SAL_CALL FmXFormShell::elementInserted(const ContainerEvent& evt)
+void FmXFormShell::elementInserted(const ContainerEvent& evt)
 {
     SolarMutexGuard g;
 
@@ -2479,7 +2479,7 @@ void SAL_CALL FmXFormShell::elementInserted(const ContainerEvent& evt)
 }
 
 
-void SAL_CALL FmXFormShell::elementReplaced(const ContainerEvent& evt)
+void FmXFormShell::elementReplaced(const ContainerEvent& evt)
 {
     SolarMutexGuard g;
 
@@ -2494,7 +2494,7 @@ void SAL_CALL FmXFormShell::elementReplaced(const ContainerEvent& evt)
 }
 
 
-void SAL_CALL FmXFormShell::elementRemoved(const ContainerEvent& evt)
+void FmXFormShell::elementRemoved(const ContainerEvent& evt)
 {
     SolarMutexGuard g;
 
@@ -2600,7 +2600,7 @@ void FmXFormShell::impl_RemoveElement_nothrow_Lock(const Reference<XInterface>& 
 }
 
 
-void SAL_CALL FmXFormShell::selectionChanged(const lang::EventObject& rEvent)
+void FmXFormShell::selectionChanged(const lang::EventObject& rEvent)
 {
     SolarMutexGuard g;
 

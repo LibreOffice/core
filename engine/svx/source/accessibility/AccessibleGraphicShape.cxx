@@ -46,7 +46,7 @@ AccessibleGraphicShape::~AccessibleGraphicShape()
 }
 
 // XAccessibleImage
-OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription()
+OUString AccessibleGraphicShape::getAccessibleImageDescription()
 {
     if (m_pShape)
         return m_pShape->GetTitle();
@@ -54,19 +54,19 @@ OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription()
 }
 
 
-sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight()
+sal_Int32 AccessibleGraphicShape::getAccessibleImageHeight()
 {
     return AccessibleShape::getSize().Height;
 }
 
 
-sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth()
+sal_Int32 AccessibleGraphicShape::getAccessibleImageWidth()
 {
     return AccessibleShape::getSize().Width;
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     AccessibleGraphicShape::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleShape::queryInterface (rType);
@@ -77,7 +77,7 @@ cpo::uno::Any SAL_CALL
 }
 
 
-void SAL_CALL
+void
     AccessibleGraphicShape::acquire()
     noexcept
 {
@@ -85,7 +85,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     AccessibleGraphicShape::release()
     noexcept
 {
@@ -93,14 +93,14 @@ void SAL_CALL
 }
 
 // XServiceInfo
-OUString SAL_CALL
+OUString
     AccessibleGraphicShape::getImplementationName()
 {
     return u"AccessibleGraphicShape"_ustr;
 }
 
 
-cpo::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString>
     AccessibleGraphicShape::getSupportedServiceNames()
 {
     ensureAlive();
@@ -109,7 +109,7 @@ cpo::uno::Sequence< OUString> SAL_CALL
 }
 
 // XTypeProvider
-cpo::uno::Sequence<cpo::uno::Type> SAL_CALL
+cpo::uno::Sequence<cpo::uno::Type>
     AccessibleGraphicShape::getTypes()
 {
     // Get list of types from the context base implementation...

@@ -52,22 +52,22 @@ public:
 
     //=====  XAccessibleImage  ================================================
 
-    OUString SAL_CALL getAccessibleImageDescription() override;
+    OUString getAccessibleImageDescription() override;
 
-    sal_Int32 SAL_CALL getAccessibleImageHeight() override;
+    sal_Int32 getAccessibleImageHeight() override;
 
-    sal_Int32 SAL_CALL getAccessibleImageWidth() override;
+    sal_Int32 getAccessibleImageWidth() override;
 
     //=====  XInterface  ======================================================
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         queryInterface (const cpo::uno::Type & rType) override;
 
-    virtual void SAL_CALL
+    virtual void
         acquire()
         noexcept override;
 
-    virtual void SAL_CALL
+    virtual void
         release()
         noexcept override;
 
@@ -75,15 +75,15 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
 
-    virtual cpo::uno::Sequence< cpo::uno::Type> SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type>
         getTypes() override;
 
 protected:

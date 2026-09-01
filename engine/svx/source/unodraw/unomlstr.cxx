@@ -34,7 +34,7 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() noexcept
 }
 
 // css::util::XModifyListener
-void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& )
+void SvxUnoShapeModifyListener::modified(const lang::EventObject& )
 {
     SolarMutexGuard aGuard;
     if( mpObj )

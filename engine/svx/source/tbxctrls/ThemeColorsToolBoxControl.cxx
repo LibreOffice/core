@@ -35,7 +35,7 @@ void ThemeColorsToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
     svt::ToolboxController::disposing(rGuard);
 }
 
-void SAL_CALL
+void
 ThemeColorsToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/)
 {
 }
@@ -56,19 +56,19 @@ ThemeColorsToolBoxControl::createItemWindow(const css::uno::Reference<css::awt::
     return xItemWindow;
 }
 
-void SAL_CALL ThemeColorsToolBoxControl::update() {}
+void ThemeColorsToolBoxControl::update() {}
 
-OUString SAL_CALL ThemeColorsToolBoxControl::getImplementationName()
+OUString ThemeColorsToolBoxControl::getImplementationName()
 {
     return u"com.sun.star.comp.svx.ThemeColorsToolBoxControl"_ustr;
 }
 
-bool SAL_CALL ThemeColorsToolBoxControl::supportsService(const OUString& rServiceName)
+bool ThemeColorsToolBoxControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ThemeColorsToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ThemeColorsToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }

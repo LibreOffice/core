@@ -110,7 +110,7 @@ void FmRecordCountListener::DisConnect()
 }
 
 
-void SAL_CALL FmRecordCountListener::disposing(const css::lang::EventObject& /*Source*/)
+void FmRecordCountListener::disposing(const css::lang::EventObject& /*Source*/)
 {
     DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::disposing should never have been called without a propset !");
     DisConnect();

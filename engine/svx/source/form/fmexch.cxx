@@ -64,7 +64,7 @@ using namespace cpo::uno;
         m_bClipboardOwner = false;
     }
 
-    void SAL_CALL OLocalExchange::lostOwnership( const Reference< clipboard::XClipboard >& _rxClipboard, const Reference< XTransferable >& _rxTrans )
+    void OLocalExchange::lostOwnership( const Reference< clipboard::XClipboard >& _rxClipboard, const Reference< XTransferable >& _rxTrans )
     {
         TransferDataContainer::implCallOwnLostOwnership( _rxClipboard, _rxTrans );
         m_bClipboardOwner = false;

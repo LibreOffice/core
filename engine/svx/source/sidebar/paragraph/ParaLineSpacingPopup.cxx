@@ -48,7 +48,7 @@ void SvxLineSpacingToolBoxControl::initialize(const cpo::uno::Sequence<cpo::uno:
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
-void SAL_CALL SvxLineSpacingToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
+void SvxLineSpacingToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
 {
     if (m_pToolbar)
     {

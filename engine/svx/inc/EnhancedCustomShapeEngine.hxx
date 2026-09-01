@@ -40,16 +40,16 @@ public:
     EnhancedCustomShapeEngine(SdrObjCustomShape& rShape);
 
     // XInterface
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& rServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XCustomShapeEngine
-    virtual css::uno::Reference<css::drawing::XShape> SAL_CALL render() override;
+    virtual css::uno::Reference<css::drawing::XShape> render() override;
 
     std::vector<css::uno::Reference<css::drawing::XCustomShapeHandle>> getInteraction();
     tools::Rectangle getTextBounds() const;

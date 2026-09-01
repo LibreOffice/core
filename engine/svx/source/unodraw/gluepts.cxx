@@ -48,33 +48,33 @@ public:
     explicit SvxUnoGluePointAccess( SdrObject* pObject ) noexcept;
 
     // XIdentifierContainer
-    virtual sal_Int32 SAL_CALL insert( const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByIdentifier( sal_Int32 Identifier ) override;
+    virtual sal_Int32 insert( const cpo::uno::Any& aElement ) override;
+    virtual void removeByIdentifier( sal_Int32 Identifier ) override;
 
     // XIdentifierReplace
-    virtual void SAL_CALL replaceByIdentifer( sal_Int32 Identifier, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByIdentifer( sal_Int32 Identifier, const cpo::uno::Any& aElement ) override;
 
     // XIdentifierReplace
-    virtual cpo::uno::Any SAL_CALL getByIdentifier( sal_Int32 Identifier ) override;
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getIdentifiers(  ) override;
+    virtual cpo::uno::Any getByIdentifier( sal_Int32 Identifier ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > getIdentifiers(  ) override;
 
     /* deprecated */
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
+    virtual void insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+    virtual void removeByIndex( sal_Int32 Index ) override;
 
     /* deprecated */
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+    virtual void replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
     /* deprecated */
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount(  ) override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 };
 
 }
@@ -202,7 +202,7 @@ SvxUnoGluePointAccess::SvxUnoGluePointAccess( SdrObject* pObject ) noexcept
 }
 
 // XIdentifierContainer
-sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const cpo::uno::Any& aElement )
+sal_Int32 SvxUnoGluePointAccess::insert( const cpo::uno::Any& aElement )
 {
     if( auto pObject = mpObject.get() )
     {
@@ -232,7 +232,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const cpo::uno::Any& aElement 
     return -1;
 }
 
-void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
+void SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 {
     auto pObject = mpObject.get();
     if( pObject && ( Identifier >= NON_USER_DEFINED_GLUE_POINTS ))
@@ -262,7 +262,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 }
 
 // XIdentifierReplace
-void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const cpo::uno::Any& aElement )
+void SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const cpo::uno::Any& aElement )
 {
     auto pObject = mpObject.get();
     if( !pObject )
@@ -297,7 +297,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
 }
 
 // XIdentifierAccess
-cpo::uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
+cpo::uno::Any SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
 {
     auto pObject = mpObject.get();
     if( pObject )
@@ -338,7 +338,7 @@ cpo::uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identif
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
+cpo::uno::Sequence< sal_Int32 > SvxUnoGluePointAccess::getIdentifiers()
 {
     auto pObject = mpObject.get();
     if( pObject )
@@ -369,7 +369,7 @@ cpo::uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
 /* deprecated */
 
 // XIndexContainer
-void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const cpo::uno::Any& Element )
+void SvxUnoGluePointAccess::insertByIndex( sal_Int32, const cpo::uno::Any& Element )
 {
     auto pObject = mpObject.get();
     if( pObject )
@@ -399,7 +399,7 @@ void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const cpo::uno::A
     throw lang::IndexOutOfBoundsException();
 }
 
-void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
+void SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
 {
     auto pObject = mpObject.get();
     if( pObject )
@@ -425,7 +425,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
 }
 
 // XIndexReplace
-void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
+void SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     drawing::GluePoint2 aUnoGlue;
     if(!(Element >>= aUnoGlue))
@@ -451,7 +451,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const cpo:
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
+sal_Int32 SvxUnoGluePointAccess::getCount()
 {
     auto pObject = mpObject.get();
     sal_Int32 nCount = 0;
@@ -469,7 +469,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
     return nCount;
 }
 
-cpo::uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
+cpo::uno::Any SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
 {
     auto pObject = mpObject.get();
     if( Index >= 0 && pObject )
@@ -501,12 +501,12 @@ cpo::uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoGluePointAccess::getElementType()
+cpo::uno::Type SvxUnoGluePointAccess::getElementType()
 {
     return cppu::UnoType<drawing::GluePoint2>::get();
 }
 
-bool SAL_CALL SvxUnoGluePointAccess::hasElements()
+bool SvxUnoGluePointAccess::hasElements()
 {
     return bool(mpObject.get());
 }

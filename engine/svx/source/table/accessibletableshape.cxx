@@ -71,10 +71,10 @@ public:
     void getColumnAndRow( sal_Int64 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow );
 
     // XModifyListener
-    virtual void SAL_CALL modified( const EventObject& aEvent ) override;
+    virtual void modified( const EventObject& aEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& Source ) override;
+    virtual void disposing( const EventObject& Source ) override;
 
     AccessibleShapeTreeInfo& mrShapeTreeInfo;
     rtl::Reference< TableModel > mxTable;
@@ -206,7 +206,7 @@ void AccessibleTableShapeImpl::getColumnAndRow( sal_Int64 nChildIndex, sal_Int32
 }
 
 // XModifyListener
-void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ )
+void AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ )
 {
     if( !mxTable.is() )
         return;
@@ -301,7 +301,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
 }
 
 // XEventListener
-void SAL_CALL AccessibleTableShapeImpl::disposing( const EventObject& /*Source*/ )
+void AccessibleTableShapeImpl::disposing( const EventObject& /*Source*/ )
 {
 }
 
@@ -351,7 +351,7 @@ SvxTableController* AccessibleTableShape::getTableController()
 // XInterface
 
 
-Any SAL_CALL AccessibleTableShape::queryInterface( const Type& aType )
+Any AccessibleTableShape::queryInterface( const Type& aType )
 {
     if ( aType == cppu::UnoType<XAccessibleTableSelection>::get())
     {
@@ -365,13 +365,13 @@ Any SAL_CALL AccessibleTableShape::queryInterface( const Type& aType )
 }
 
 
-void SAL_CALL AccessibleTableShape::acquire(  ) noexcept
+void AccessibleTableShape::acquire(  ) noexcept
 {
     AccessibleTableShape_Base::acquire();
 }
 
 
-void SAL_CALL AccessibleTableShape::release(  ) noexcept
+void AccessibleTableShape::release(  ) noexcept
 {
     AccessibleTableShape_Base::release();
 }
@@ -380,7 +380,7 @@ void SAL_CALL AccessibleTableShape::release(  ) noexcept
 // XAccessible
 
 
-OUString SAL_CALL AccessibleTableShape::getImplementationName()
+OUString AccessibleTableShape::getImplementationName()
 {
     return u"com.sun.star.comp.accessibility.AccessibleTableShape"_ustr;
 }
@@ -392,14 +392,14 @@ OUString AccessibleTableShape::CreateAccessibleBaseName()
 }
 
 
-sal_Int64 SAL_CALL AccessibleTableShape::getAccessibleChildCount( )
+sal_Int64 AccessibleTableShape::getAccessibleChildCount( )
 {
     SolarMutexGuard aSolarGuard;
     return mxImpl->mxTable.is() ? static_cast<sal_Int64>(mxImpl->mxTable->getRowCount()) * static_cast<sal_Int64>(mxImpl->mxTable->getColumnCount()) : 0;
 }
 
 
-Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleTableShape::getAccessibleChild( sal_Int64 i )
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
@@ -408,13 +408,13 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleChild( sal_
 }
 
 
-sal_Int16 SAL_CALL AccessibleTableShape::getAccessibleRole()
+sal_Int16 AccessibleTableShape::getAccessibleRole()
 {
     return AccessibleRole::TABLE;
 }
 
 
-void SAL_CALL AccessibleTableShape::disposing()
+void AccessibleTableShape::disposing()
 {
     mxImpl->dispose();
 
@@ -426,28 +426,28 @@ void SAL_CALL AccessibleTableShape::disposing()
 // XAccessibleTable
 
 
-sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowCount()
+sal_Int32 AccessibleTableShape::getAccessibleRowCount()
 {
     SolarMutexGuard aSolarGuard;
     return mxImpl->mxTable.is() ? mxImpl->mxTable->getRowCount() : 0;
 }
 
 
-sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnCount(  )
+sal_Int32 AccessibleTableShape::getAccessibleColumnCount(  )
 {
     SolarMutexGuard aSolarGuard;
     return mxImpl->mxTable.is() ? mxImpl->mxTable->getColumnCount() : 0;
 }
 
 
-OUString SAL_CALL AccessibleTableShape::getAccessibleRowDescription( sal_Int32 nRow )
+OUString AccessibleTableShape::getAccessibleRowDescription( sal_Int32 nRow )
 {
     checkCellPosition( 0, nRow );
     return OUString();
 }
 
 
-OUString SAL_CALL AccessibleTableShape::getAccessibleColumnDescription( sal_Int32 nColumn )
+OUString AccessibleTableShape::getAccessibleColumnDescription( sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, 0 );
@@ -455,7 +455,7 @@ OUString SAL_CALL AccessibleTableShape::getAccessibleColumnDescription( sal_Int3
 }
 
 
-sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int32 AccessibleTableShape::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
@@ -469,7 +469,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowExtentAt( sal_Int32 nRo
 }
 
 
-sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int32 AccessibleTableShape::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
@@ -483,7 +483,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnExtentAt( sal_Int32 
 }
 
 
-Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleRowHeaders(  )
+Reference< XAccessibleTable > AccessibleTableShape::getAccessibleRowHeaders(  )
 {
     SvxTableController* pController = getTableController();
     if( !pController )
@@ -494,7 +494,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleRowHea
 }
 
 
-Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumnHeaders(  )
+Reference< XAccessibleTable > AccessibleTableShape::getAccessibleColumnHeaders(  )
 {
     SvxTableController* pController = getTableController();
     if( !pController )
@@ -505,7 +505,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumn
 }
 
 
-Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleRows(  )
+Sequence< sal_Int32 > AccessibleTableShape::getSelectedAccessibleRows(  )
 {
     sal_Int32 nRow = getAccessibleRowCount();
     ::std::vector<bool> aSelected( nRow, true );
@@ -541,7 +541,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleRows( 
 }
 
 
-Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleColumns(  )
+Sequence< sal_Int32 > AccessibleTableShape::getSelectedAccessibleColumns(  )
 {
     sal_Int32 nColumn = getAccessibleColumnCount();
     ::std::vector<bool> aSelected( nColumn, true );
@@ -577,7 +577,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleColumn
 }
 
 
-bool SAL_CALL AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow )
+bool AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( 0, nRow );
@@ -590,7 +590,7 @@ bool SAL_CALL AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow )
 }
 
 
-bool SAL_CALL AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, 0 );
@@ -603,7 +603,7 @@ bool SAL_CALL AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nColum
 }
 
 
-Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+Reference< XAccessible > AccessibleTableShape::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
@@ -616,21 +616,21 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCellAt( sal
 }
 
 
-Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCaption(  )
+Reference< XAccessible > AccessibleTableShape::getAccessibleCaption(  )
 {
     Reference< XAccessible > xRet;
     return xRet;
 }
 
 
-Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleSummary(  )
+Reference< XAccessible > AccessibleTableShape::getAccessibleSummary(  )
 {
     Reference< XAccessible > xRet;
     return xRet;
 }
 
 
-bool SAL_CALL AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+bool AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
@@ -648,7 +648,7 @@ bool SAL_CALL AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sal_In
 }
 
 
-sal_Int64 SAL_CALL AccessibleTableShape::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 AccessibleTableShape::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
@@ -656,7 +656,7 @@ sal_Int64 SAL_CALL AccessibleTableShape::getAccessibleIndex( sal_Int32 nRow, sal
 }
 
 
-sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRow( sal_Int64 nChildIndex )
+sal_Int32 AccessibleTableShape::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     sal_Int32 nColumn = 0, nRow = 0;
@@ -665,7 +665,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRow( sal_Int64 nChildIndex
 }
 
 
-sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumn( sal_Int64 nChildIndex )
+sal_Int32 AccessibleTableShape::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     sal_Int32 nColumn = 0, nRow = 0;
@@ -677,7 +677,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumn( sal_Int64 nChildIn
 // XAccessibleSelection
 
 
-void SAL_CALL AccessibleTableShape::selectAccessibleChild( sal_Int64 nChildIndex )
+void AccessibleTableShape::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     CellPos aPos;
@@ -702,7 +702,7 @@ void SAL_CALL AccessibleTableShape::selectAccessibleChild( sal_Int64 nChildIndex
 }
 
 
-bool SAL_CALL AccessibleTableShape::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool AccessibleTableShape::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -716,7 +716,7 @@ bool SAL_CALL AccessibleTableShape::isAccessibleChildSelected( sal_Int64 nChildI
 }
 
 
-void SAL_CALL AccessibleTableShape::clearAccessibleSelection()
+void AccessibleTableShape::clearAccessibleSelection()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -726,7 +726,7 @@ void SAL_CALL AccessibleTableShape::clearAccessibleSelection()
 }
 
 
-void SAL_CALL AccessibleTableShape::selectAllAccessibleChildren()
+void AccessibleTableShape::selectAllAccessibleChildren()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -737,7 +737,7 @@ void SAL_CALL AccessibleTableShape::selectAllAccessibleChildren()
 }
 
 
-sal_Int64 SAL_CALL AccessibleTableShape::getSelectedAccessibleChildCount()
+sal_Int64 AccessibleTableShape::getSelectedAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -756,7 +756,7 @@ sal_Int64 SAL_CALL AccessibleTableShape::getSelectedAccessibleChildCount()
 }
 
 
-Reference< XAccessible > SAL_CALL AccessibleTableShape::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+Reference< XAccessible > AccessibleTableShape::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -777,7 +777,7 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getSelectedAccessibleChi
 }
 
 
-void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int64 nChildIndex )
+void AccessibleTableShape::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     CellPos aPos;
@@ -805,7 +805,7 @@ void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int64 nChildInd
 }
 
 // XAccessibleTableSelection
-bool SAL_CALL AccessibleTableShape::selectRow( sal_Int32 row )
+bool AccessibleTableShape::selectRow( sal_Int32 row )
 {
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
@@ -814,7 +814,7 @@ bool SAL_CALL AccessibleTableShape::selectRow( sal_Int32 row )
     return pController->selectRow( row );
 }
 
-bool SAL_CALL AccessibleTableShape::selectColumn( sal_Int32 column )
+bool AccessibleTableShape::selectColumn( sal_Int32 column )
 {
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
@@ -823,7 +823,7 @@ bool SAL_CALL AccessibleTableShape::selectColumn( sal_Int32 column )
     return pController->selectColumn( column );
 }
 
-bool SAL_CALL AccessibleTableShape::unselectRow( sal_Int32 row )
+bool AccessibleTableShape::unselectRow( sal_Int32 row )
 {
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
@@ -832,7 +832,7 @@ bool SAL_CALL AccessibleTableShape::unselectRow( sal_Int32 row )
     return pController->deselectRow( row );
 }
 
-bool SAL_CALL AccessibleTableShape::unselectColumn( sal_Int32 column )
+bool AccessibleTableShape::unselectColumn( sal_Int32 column )
 {
     SolarMutexGuard aSolarGuard;
     SvxTableController* pController = getTableController();
@@ -870,12 +870,12 @@ void AccessibleTableShape::getColumnAndRow( sal_Int64 nChildIndex, sal_Int32& rn
 }
 
 // XSelectionChangeListener
-void SAL_CALL
+void
     AccessibleTableShape::disposing (const EventObject& aEvent)
 {
     AccessibleShape::disposing(aEvent);
 }
-void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent)
+void  AccessibleTableShape::selectionChanged (const EventObject& rEvent)
 {
     //sdr::table::CellRef xCellRef = static_cast< sdr::table::CellRef > (rEvent.Source);
     rtl::Reference< Cell > xCell = dynamic_cast<Cell*>(rEvent.Source.get());
@@ -991,152 +991,152 @@ AccessibleTableHeaderShape::~AccessibleTableHeaderShape()
 }
 
 // XAccessible
-Reference< XAccessibleContext > SAL_CALL AccessibleTableHeaderShape::getAccessibleContext()
+Reference< XAccessibleContext > AccessibleTableHeaderShape::getAccessibleContext()
 {
     return this;
 }
 
 // XAccessibleContext
-sal_Int64 SAL_CALL AccessibleTableHeaderShape::getAccessibleChildCount( )
+sal_Int64 AccessibleTableHeaderShape::getAccessibleChildCount( )
 {
     return static_cast<sal_Int64>(getAccessibleRowCount()) * static_cast<sal_Int64>(getAccessibleColumnCount());
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleTableHeaderShape::getAccessibleChild( sal_Int64 i )
 {
     return mpTable->getAccessibleChild( i );
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleParent()
+Reference< XAccessible > AccessibleTableHeaderShape::getAccessibleParent()
 {
     Reference< XAccessible > XParent;
     return XParent;
 }
 
-sal_Int64 SAL_CALL AccessibleTableHeaderShape::getAccessibleIndexInParent()
+sal_Int64 AccessibleTableHeaderShape::getAccessibleIndexInParent()
 {
     return -1;
 }
 
-sal_Int16 SAL_CALL AccessibleTableHeaderShape::getAccessibleRole()
+sal_Int16 AccessibleTableHeaderShape::getAccessibleRole()
 {
     return mpTable->getAccessibleRole();
 }
 
-OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleDescription()
+OUString AccessibleTableHeaderShape::getAccessibleDescription()
 {
     return mpTable->getAccessibleDescription();
 }
 
-OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleName()
+OUString AccessibleTableHeaderShape::getAccessibleName()
 {
     return mpTable->getAccessibleName();
 }
 
-sal_Int64 SAL_CALL AccessibleTableHeaderShape::getAccessibleStateSet()
+sal_Int64 AccessibleTableHeaderShape::getAccessibleStateSet()
 {
     return mpTable->getAccessibleStateSet();
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleTableHeaderShape::getAccessibleRelationSet()
+Reference< XAccessibleRelationSet > AccessibleTableHeaderShape::getAccessibleRelationSet()
 {
     return mpTable->getAccessibleRelationSet();
 }
 
-Locale SAL_CALL AccessibleTableHeaderShape::getLocale()
+Locale AccessibleTableHeaderShape::getLocale()
 {
     return mpTable->getLocale();
 }
 
 //XAccessibleComponent
-bool SAL_CALL AccessibleTableHeaderShape::containsPoint ( const css::awt::Point& aPoint )
+bool AccessibleTableHeaderShape::containsPoint ( const css::awt::Point& aPoint )
 {
     return mpTable->containsPoint( aPoint );
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleAtPoint ( const css::awt::Point& aPoint)
+Reference< XAccessible > AccessibleTableHeaderShape::getAccessibleAtPoint ( const css::awt::Point& aPoint)
 {
     return mpTable->getAccessibleAtPoint( aPoint );
 }
 
-css::awt::Rectangle SAL_CALL AccessibleTableHeaderShape::getBounds()
+css::awt::Rectangle AccessibleTableHeaderShape::getBounds()
 {
     return mpTable->getBounds();
 }
 
-css::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocation()
+css::awt::Point AccessibleTableHeaderShape::getLocation()
 {
     return mpTable->getLocation();
 }
 
-css::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocationOnScreen()
+css::awt::Point AccessibleTableHeaderShape::getLocationOnScreen()
 {
     return mpTable->getLocationOnScreen();
 }
 
-css::awt::Size SAL_CALL AccessibleTableHeaderShape::getSize()
+css::awt::Size AccessibleTableHeaderShape::getSize()
 {
     return mpTable->getSize();
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getForeground()
+sal_Int32 AccessibleTableHeaderShape::getForeground()
 {
     return mpTable->getForeground();
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getBackground()
+sal_Int32 AccessibleTableHeaderShape::getBackground()
 {
     return mpTable->getBackground();
 }
 
-void SAL_CALL AccessibleTableHeaderShape::grabFocus()
+void AccessibleTableHeaderShape::grabFocus()
 {
     mpTable->grabFocus();
 }
 // XAccessibleTable
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleRowCount()
+sal_Int32 AccessibleTableHeaderShape::getAccessibleRowCount()
 {
     return mbRow ? 1 : mpTable->getAccessibleRowCount();
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleColumnCount()
+sal_Int32 AccessibleTableHeaderShape::getAccessibleColumnCount()
 {
     return !mbRow ? 1 : mpTable->getAccessibleColumnCount();
 }
 
-OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleRowDescription( sal_Int32 nRow )
+OUString AccessibleTableHeaderShape::getAccessibleRowDescription( sal_Int32 nRow )
 {
     return mpTable->getAccessibleRowDescription( nRow );
 }
 
-OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleColumnDescription( sal_Int32 nColumn )
+OUString AccessibleTableHeaderShape::getAccessibleColumnDescription( sal_Int32 nColumn )
 {
     return mpTable->getAccessibleColumnDescription( nColumn );
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int32 AccessibleTableHeaderShape::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     return mpTable->getAccessibleRowExtentAt( nRow, nColumn );
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int32 AccessibleTableHeaderShape::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     return mpTable->getAccessibleColumnExtentAt( nRow, nColumn );
 }
 
-Reference< XAccessibleTable > SAL_CALL AccessibleTableHeaderShape::getAccessibleRowHeaders(  )
+Reference< XAccessibleTable > AccessibleTableHeaderShape::getAccessibleRowHeaders(  )
 {
     Reference< XAccessibleTable > xRet;
     return xRet;
 }
 
-Reference< XAccessibleTable > SAL_CALL AccessibleTableHeaderShape::getAccessibleColumnHeaders(  )
+Reference< XAccessibleTable > AccessibleTableHeaderShape::getAccessibleColumnHeaders(  )
 {
     Reference< XAccessibleTable > xRet;
     return xRet;
 }
 
-Sequence< sal_Int32 > SAL_CALL AccessibleTableHeaderShape::getSelectedAccessibleRows(  )
+Sequence< sal_Int32 > AccessibleTableHeaderShape::getSelectedAccessibleRows(  )
 {
     sal_Int32 nRow = getAccessibleRowCount();
     ::std::vector<bool> aSelected( nRow, true );
@@ -1171,7 +1171,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableHeaderShape::getSelectedAccessible
     return aRet;
 }
 
-Sequence< sal_Int32 > SAL_CALL AccessibleTableHeaderShape::getSelectedAccessibleColumns(  )
+Sequence< sal_Int32 > AccessibleTableHeaderShape::getSelectedAccessibleColumns(  )
 {
     sal_Int32 nColumn = getAccessibleColumnCount();
     ::std::vector<bool> aSelected( nColumn, true );
@@ -1206,53 +1206,53 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableHeaderShape::getSelectedAccessible
     return aRet;
 }
 
-bool SAL_CALL AccessibleTableHeaderShape::isAccessibleRowSelected( sal_Int32 nRow )
+bool AccessibleTableHeaderShape::isAccessibleRowSelected( sal_Int32 nRow )
 {
     return mpTable->isAccessibleRowSelected( nRow );
 }
 
-bool SAL_CALL AccessibleTableHeaderShape::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool AccessibleTableHeaderShape::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     return mpTable->isAccessibleColumnSelected( nColumn );
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+Reference< XAccessible > AccessibleTableHeaderShape::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     return mpTable->getAccessibleCellAt( nRow, nColumn );
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleCaption(  )
+Reference< XAccessible > AccessibleTableHeaderShape::getAccessibleCaption(  )
 {
     return mpTable->getAccessibleCaption();
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleSummary(  )
+Reference< XAccessible > AccessibleTableHeaderShape::getAccessibleSummary(  )
 {
     return mpTable->getAccessibleSummary();
 }
 
-bool SAL_CALL AccessibleTableHeaderShape::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+bool AccessibleTableHeaderShape::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     return mpTable->isAccessibleSelected( nRow, nColumn );
 }
 
-sal_Int64 SAL_CALL AccessibleTableHeaderShape::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 AccessibleTableHeaderShape::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     return mpTable->getAccessibleIndex( nRow, nColumn );
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleRow( sal_Int64 nChildIndex )
+sal_Int32 AccessibleTableHeaderShape::getAccessibleRow( sal_Int64 nChildIndex )
 {
     return mpTable->getAccessibleRow( nChildIndex );
 }
 
-sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleColumn( sal_Int64 nChildIndex )
+sal_Int32 AccessibleTableHeaderShape::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     return mpTable->getAccessibleColumn( nChildIndex );
 }
 
 // XAccessibleTableSelection
-bool SAL_CALL AccessibleTableHeaderShape::selectRow( sal_Int32 row )
+bool AccessibleTableHeaderShape::selectRow( sal_Int32 row )
 {
     if( mbRow )
         return mpTable->selectRow( row );
@@ -1265,7 +1265,7 @@ bool SAL_CALL AccessibleTableHeaderShape::selectRow( sal_Int32 row )
     }
 }
 
-bool SAL_CALL AccessibleTableHeaderShape::selectColumn( sal_Int32 column )
+bool AccessibleTableHeaderShape::selectColumn( sal_Int32 column )
 {
     if( !mbRow )
         return mpTable->selectColumn( column );
@@ -1278,7 +1278,7 @@ bool SAL_CALL AccessibleTableHeaderShape::selectColumn( sal_Int32 column )
     }
 }
 
-bool SAL_CALL AccessibleTableHeaderShape::unselectRow( sal_Int32 row )
+bool AccessibleTableHeaderShape::unselectRow( sal_Int32 row )
 {
     if( mbRow )
         return mpTable->unselectRow( row );
@@ -1290,7 +1290,7 @@ bool SAL_CALL AccessibleTableHeaderShape::unselectRow( sal_Int32 row )
     }
 }
 
-bool SAL_CALL AccessibleTableHeaderShape::unselectColumn( sal_Int32 column )
+bool AccessibleTableHeaderShape::unselectColumn( sal_Int32 column )
 {
     if( !mbRow )
         return mpTable->unselectColumn( column );

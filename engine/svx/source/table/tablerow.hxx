@@ -52,17 +52,17 @@ public:
     const TableModelRef& getModel() const;
 
     // XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) override;
+    virtual css::uno::Reference< css::table::XCell > getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
+    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
+    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByName( const OUString& aRange ) override;
 
     // XNamed
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& aName ) override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString& aName ) override;
 
     // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
+    virtual void setFastPropertyValue( ::sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getFastPropertyValue( ::sal_Int32 nHandle ) override;
 
 private:
     static rtl::Reference< FastPropertySetInfo > getStaticPropertySetInfo();

@@ -113,37 +113,37 @@ public:
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
      //Solution: Overwrite the object's current name.
-    virtual OUString SAL_CALL    getAccessibleName() override;
-    virtual OUString SAL_CALL    getAccessibleDescription() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() override;
+    virtual OUString    getAccessibleName() override;
+    virtual OUString    getAccessibleDescription() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> getAccessibleRelationSet() override;
 //=====  XAccessibleSelection  ============================================
 
-    virtual void SAL_CALL selectAccessibleChild(
+    virtual void selectAccessibleChild(
         sal_Int64 nChildIndex ) override;
 
-    virtual bool SAL_CALL isAccessibleChildSelected(
+    virtual bool isAccessibleChildSelected(
         sal_Int64 nChildIndex ) override;
 
-    virtual void SAL_CALL clearAccessibleSelection(  ) override;
+    virtual void clearAccessibleSelection(  ) override;
 
-    virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
+    virtual void selectAllAccessibleChildren(  ) override;
 
-    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
+    virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
 
-    virtual void SAL_CALL deselectAccessibleChild(
+    virtual void deselectAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
 
     // ====== XAccessibleExtendedAttributes =====================================
-    virtual OUString SAL_CALL getExtendedAttributes() override;
+    virtual OUString getExtendedAttributes() override;
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual sal_Int16 getAccessibleRole() override;
     //=====  XAccessibleGroupPosition  =========================================
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 >
         getGroupPosition( const cpo::uno::Any& rAny ) override;
-    virtual OUString SAL_CALL getObjectLink( const cpo::uno::Any& accoject ) override;
+    virtual OUString getObjectLink( const cpo::uno::Any& accoject ) override;
     /** The destructor releases its children manager and text engine if
         still existent.  These are responsible to send appropriate events.
     */
@@ -199,7 +199,7 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
     /** Return the specified child.
@@ -212,16 +212,16 @@ public:
             Throws an exception if the index is not valid.
     */
     virtual css::uno::Reference<
-            css::accessibility::XAccessible> SAL_CALL
+            css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 nIndex) override;
 
 
     /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleStateSet() override;
 
     /// Return this objects index among the parents children.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleIndexInParent() override;
 
     // OAccessible
@@ -230,12 +230,12 @@ public:
     //=====  XAccessibleComponent  ============================================
 
     virtual css::uno::Reference<
-        css::accessibility::XAccessible > SAL_CALL
+        css::accessibility::XAccessible >
         getAccessibleAtPoint (const css::awt::Point& aPoint) override;
 
-    virtual sal_Int32 SAL_CALL getForeground() override;
+    virtual sal_Int32 getForeground() override;
 
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual sal_Int32 getBackground() override;
 
     //=====  XAccessibleEventBroadcaster  =====================================
 
@@ -245,7 +245,7 @@ public:
         @param rxListener
             This listener is informed about accessibility events.
     */
-    virtual void SAL_CALL
+    virtual void
         addAccessibleEventListener (
             const css::uno::Reference<
             css::accessibility::XAccessibleEventListener >& rxListener) override;
@@ -257,7 +257,7 @@ public:
             This listener will not be informed about accessibility events
             anymore.
     */
-    virtual void SAL_CALL
+    virtual void
         removeAccessibleEventListener (
             const css::uno::Reference<
             css::accessibility::XAccessibleEventListener >& rxListener) override;
@@ -265,14 +265,14 @@ public:
 
     //=====  XInterface  ======================================================
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         queryInterface (const cpo::uno::Type & rType) override;
 
-    virtual void SAL_CALL
+    virtual void
         acquire()
         noexcept override;
 
-    virtual void SAL_CALL
+    virtual void
         release()
         noexcept override;
 
@@ -281,15 +281,15 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
 
-    virtual cpo::uno::Sequence< cpo::uno::Type> SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type>
         getTypes() override;
 
     //=====  IAccessibleViewForwarderListener  ================================
@@ -302,7 +302,7 @@ public:
 
     //=====  document::XShapeEventListener  ========================================
 
-    virtual void SAL_CALL
+    virtual void
         notifyShapeEvent (const css::document::EventObject& rEventObject) override;
 
 
@@ -311,29 +311,29 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(AccessibleShape)
 
     //===== XAccessibleHypertext ========================================================
-    virtual sal_Int32 SAL_CALL getHyperLinkCount() override;
+    virtual sal_Int32 getHyperLinkCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleHyperlink >
-        SAL_CALL getHyperLink( sal_Int32 nLinkIndex ) override;
-    virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex ) override;
+        getHyperLink( sal_Int32 nLinkIndex ) override;
+    virtual sal_Int32 getHyperLinkIndex( sal_Int32 nCharIndex ) override;
     //=====  XAccessibleText  ==================================================
-        virtual sal_Int32 SAL_CALL getCaretPosition(  ) override;
-        virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
-        virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;//Shen Zhen Jie changed sal_Unicode to sal_uInt32; change back to sal_Unicode
-        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
-        virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
-        virtual sal_Int32 SAL_CALL getCharacterCount(  ) override;
-        virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
-        virtual OUString SAL_CALL getSelectedText(  ) override;
-        virtual sal_Int32 SAL_CALL getSelectionStart(  ) override;
-        virtual sal_Int32 SAL_CALL getSelectionEnd(  ) override;
-        virtual bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual OUString SAL_CALL getText(  ) override;
-        virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-        virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-        virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-        virtual bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
+        virtual sal_Int32 getCaretPosition(  ) override;
+        virtual bool setCaretPosition( sal_Int32 nIndex ) override;
+        virtual sal_Unicode getCharacter( sal_Int32 nIndex ) override;//Shen Zhen Jie changed sal_Unicode to sal_uInt32; change back to sal_Unicode
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
+        virtual css::awt::Rectangle getCharacterBounds( sal_Int32 nIndex ) override;
+        virtual sal_Int32 getCharacterCount(  ) override;
+        virtual sal_Int32 getIndexAtPoint( const css::awt::Point& aPoint ) override;
+        virtual OUString getSelectedText(  ) override;
+        virtual sal_Int32 getSelectionStart(  ) override;
+        virtual sal_Int32 getSelectionEnd(  ) override;
+        virtual bool setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual OUString getText(  ) override;
+        virtual OUString getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual css::accessibility::TextSegment getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+        virtual css::accessibility::TextSegment getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+        virtual css::accessibility::TextSegment getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+        virtual bool copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual bool scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
 
     //===== Misc ========================================================
 
@@ -377,7 +377,7 @@ protected:
     /** This method is called from the component helper base class while
         disposing.
     */
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     /** Create a base name string that contains the accessible name.
 

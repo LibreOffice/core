@@ -50,31 +50,31 @@ AccessibleOLEShape::~AccessibleOLEShape()
 }
 
 // XAccessibleAction
-sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount()
+sal_Int32 AccessibleOLEShape::getAccessibleActionCount()
 {
     return 0;
 }
 
 
-bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
+bool AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 
-OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
+OUString AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 
-Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 /*nIndex*/)
+Reference<XAccessibleKeyBinding> AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 /*nIndex*/)
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     AccessibleOLEShape::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleShape::queryInterface (rType);
@@ -85,7 +85,7 @@ cpo::uno::Any SAL_CALL
 }
 
 
-void SAL_CALL
+void
     AccessibleOLEShape::acquire()
     noexcept
 {
@@ -93,7 +93,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
+void
     AccessibleOLEShape::release()
     noexcept
 {
@@ -101,14 +101,14 @@ void SAL_CALL
 }
 
 // XServiceInfo
-OUString SAL_CALL
+OUString
     AccessibleOLEShape::getImplementationName()
 {
     return u"AccessibleOLEShape"_ustr;
 }
 
 
-cpo::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString>
     AccessibleOLEShape::getSupportedServiceNames()
 {
     ensureAlive();
@@ -117,7 +117,7 @@ cpo::uno::Sequence< OUString> SAL_CALL
 }
 
 // XTypeProvider
-cpo::uno::Sequence<cpo::uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> AccessibleOLEShape::getTypes()
 {
     // Get list of types from the context base implementation...
     return comphelper::concatSequences(AccessibleShape::getTypes(),
@@ -125,7 +125,7 @@ cpo::uno::Sequence<cpo::uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
 }
 
 // XAccessibleExtendedAttributes
-OUString SAL_CALL AccessibleOLEShape::getExtendedAttributes()
+OUString AccessibleOLEShape::getExtendedAttributes()
 {
     if (m_pShape)
         return "style:" + static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString() + ";";

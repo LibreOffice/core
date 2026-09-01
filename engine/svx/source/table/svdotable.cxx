@@ -615,7 +615,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
 // XModifyListener
 
 
-void SAL_CALL SdrTableObjImpl::modified( const css::lang::EventObject& aEvent )
+void SdrTableObjImpl::modified( const css::lang::EventObject& aEvent )
 {
     if (aEvent.Source == mxTableStyle && mpTableObj)
         static_cast<TextProperties&>(mpTableObj->GetProperties()).increaseVersion();
@@ -700,7 +700,7 @@ void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
 // XEventListener
 
 
-void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& Source )
+void SdrTableObjImpl::disposing( const css::lang::EventObject& Source )
 {
     assert(Source.Source == mxTableStyle);
     (void)Source;

@@ -77,28 +77,28 @@ public:
     void ImplInsertByName( const OUString& aName, const cpo::uno::Any& aElement );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const  OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames(  ) override;
 
     // XCancellable
-    virtual void SAL_CALL cancel() override;
+    virtual void cancel() override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const  OUString& Name ) override;
+    virtual void insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const  OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const  OUString& aName ) override;
+    virtual cpo::uno::Sequence<  OUString > getElementNames(  ) override;
+    virtual bool hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 };
 
 }
@@ -136,17 +136,17 @@ void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     }
 }
 
-bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceName )
+bool SvxUnoMarkerTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-OUString SAL_CALL SvxUnoMarkerTable::getImplementationName()
+OUString SvxUnoMarkerTable::getImplementationName()
 {
     return u"SvxUnoMarkerTable"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SvxUnoMarkerTable::getSupportedServiceNames(  )
 {
     cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.MarkerTable"_ustr };
     return aSNS;
@@ -172,7 +172,7 @@ void SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const cpo::uno:
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const cpo::uno::Any& aElement )
+void SvxUnoMarkerTable::insertByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -184,7 +184,7 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const c
     ImplInsertByName( aName, aElement );
 }
 
-void SAL_CALL SvxUnoMarkerTable::cancel()
+void SvxUnoMarkerTable::cancel()
 {
     SolarMutexGuard aGuard;
     // drop all items that are owned by this service and not the document
@@ -192,7 +192,7 @@ void SAL_CALL SvxUnoMarkerTable::cancel()
     dispose();
 }
 
-void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
+void SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
@@ -214,7 +214,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const cpo::uno::Any& aElement )
+void SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -305,7 +305,7 @@ static bool getByNameFromPool( std::u16string_view rSearchName, SfxItemPool cons
 }
 
 // XNameAccess
-cpo::uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
+cpo::uno::Any SvxUnoMarkerTable::getByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
@@ -345,7 +345,7 @@ static void createNamesForPool( SfxItemPool const * pPool, SfxItemType eItemType
     }
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
+cpo::uno::Sequence< OUString > SvxUnoMarkerTable::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -360,7 +360,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
     return comphelper::containerToSequence(aNameSet);
 }
 
-bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
+bool SvxUnoMarkerTable::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -401,12 +401,12 @@ bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
+cpo::uno::Type SvxUnoMarkerTable::getElementType(  )
 {
     return cppu::UnoType<drawing::PointSequence>::get();
 }
 
-bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
+bool SvxUnoMarkerTable::hasElements(  )
 {
     SolarMutexGuard aGuard;
 

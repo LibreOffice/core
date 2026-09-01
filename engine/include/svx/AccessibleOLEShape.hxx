@@ -52,43 +52,43 @@ public:
 
     //=====  XAccessibleAction  ===============================================
 
-    sal_Int32 SAL_CALL getAccessibleActionCount() override;
+    sal_Int32 getAccessibleActionCount() override;
 
-    bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
+    bool doAccessibleAction (sal_Int32 nIndex) override;
 
-    OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex) override;
+    OUString getAccessibleActionDescription (sal_Int32 nIndex) override;
 
     css::uno::Reference<
-        css::accessibility::XAccessibleKeyBinding> SAL_CALL getAccessibleActionKeyBinding (
+        css::accessibility::XAccessibleKeyBinding> getAccessibleActionKeyBinding (
             sal_Int32 nIndex) override;
 
     //=====  XInterface  ======================================================
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         queryInterface (const cpo::uno::Type & rType) override;
 
-    virtual void SAL_CALL
+    virtual void
         acquire()
         noexcept override;
 
-    virtual void SAL_CALL
+    virtual void
         release()
         noexcept override;
 
     //=====  XServiceInfo  ====================================================
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
 
-    virtual cpo::uno::Sequence< cpo::uno::Type> SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type>
         getTypes() override;
 // ====== XAccessibleExtendedAttributes =====================================
-    virtual OUString SAL_CALL getExtendedAttributes() override;
+    virtual OUString getExtendedAttributes() override;
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString

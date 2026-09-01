@@ -70,7 +70,7 @@ bool GalleryItem::isValid() const
 }
 
 
-cpo::uno::Any SAL_CALL GalleryItem::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any GalleryItem::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -93,36 +93,36 @@ cpo::uno::Any SAL_CALL GalleryItem::queryInterface( const cpo::uno::Type & rType
 }
 
 
-void SAL_CALL GalleryItem::acquire()
+void GalleryItem::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL GalleryItem::release()
+void GalleryItem::release()
     noexcept
 {
     OWeakObject::release();
 }
 
 
-OUString SAL_CALL GalleryItem::getImplementationName()
+OUString GalleryItem::getImplementationName()
 {
     return u"com.sun.star.comp.gallery.GalleryItem"_ustr;
 }
 
-bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
+bool GalleryItem::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GalleryItem::getSupportedServiceNames()
 {
     return { u"com.sun.star.gallery.GalleryItem"_ustr };
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryItem::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > GalleryItem::getTypes()
 {
     static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
@@ -134,13 +134,13 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryItem::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > GalleryItem::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 
-sal_Int8 SAL_CALL GalleryItem::getType()
+sal_Int8 GalleryItem::getType()
 {
     const SolarMutexGuard aGuard;
     sal_Int8            nRet = gallery::GalleryItemType::EMPTY;

@@ -3254,7 +3254,7 @@ void FmXGridCell::SetTextLineColor(const Color& _rColor)
 
 // XTypeProvider
 
-Sequence< Type > SAL_CALL FmXGridCell::getTypes( )
+Sequence< Type > FmXGridCell::getTypes( )
 {
     Sequence< cpo::uno::Type > aTypes = ::comphelper::concatSequences(
         ::cppu::OComponentHelper::getTypes(),
@@ -3288,7 +3288,7 @@ void FmXGridCell::disposing()
 }
 
 
-Any SAL_CALL FmXGridCell::queryAggregation( const cpo::uno::Type& _rType )
+Any FmXGridCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = OComponentHelper::queryAggregation( _rType );
 
@@ -3337,116 +3337,116 @@ void FmXGridCell::setLock(bool _bLock)
 }
 
 
-void SAL_CALL FmXGridCell::setPosSize( ::sal_Int32, ::sal_Int32, ::sal_Int32, ::sal_Int32, ::sal_Int16 )
+void FmXGridCell::setPosSize( ::sal_Int32, ::sal_Int32, ::sal_Int32, ::sal_Int32, ::sal_Int16 )
 {
     OSL_FAIL( "FmXGridCell::setPosSize: not implemented" );
     // not allowed to tamper with this for a grid cell
 }
 
 
-awt::Rectangle SAL_CALL FmXGridCell::getPosSize(  )
+awt::Rectangle FmXGridCell::getPosSize(  )
 {
     OSL_FAIL( "FmXGridCell::getPosSize: not implemented" );
     return awt::Rectangle();
 }
 
 
-void SAL_CALL FmXGridCell::setVisible( bool )
+void FmXGridCell::setVisible( bool )
 {
     OSL_FAIL( "FmXGridCell::setVisible: not implemented" );
     // not allowed to tamper with this for a grid cell
 }
 
 
-void SAL_CALL FmXGridCell::setEnable( bool )
+void FmXGridCell::setEnable( bool )
 {
     OSL_FAIL( "FmXGridCell::setEnable: not implemented" );
     // not allowed to tamper with this for a grid cell
 }
 
 
-void SAL_CALL FmXGridCell::setFocus(  )
+void FmXGridCell::setFocus(  )
 {
     OSL_FAIL( "FmXGridCell::setFocus: not implemented" );
     // not allowed to tamper with this for a grid cell
 }
 
 
-void SAL_CALL FmXGridCell::addWindowListener( const Reference< awt::XWindowListener >& _rxListener )
+void FmXGridCell::addWindowListener( const Reference< awt::XWindowListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aWindowListeners.addInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::removeWindowListener( const Reference< awt::XWindowListener >& _rxListener )
+void FmXGridCell::removeWindowListener( const Reference< awt::XWindowListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aWindowListeners.removeInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::addFocusListener( const Reference< awt::XFocusListener >& _rxListener )
+void FmXGridCell::addFocusListener( const Reference< awt::XFocusListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aFocusListeners.addInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::removeFocusListener( const Reference< awt::XFocusListener >& _rxListener )
+void FmXGridCell::removeFocusListener( const Reference< awt::XFocusListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aFocusListeners.removeInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::addKeyListener( const Reference< awt::XKeyListener >& _rxListener )
+void FmXGridCell::addKeyListener( const Reference< awt::XKeyListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aKeyListeners.addInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::removeKeyListener( const Reference< awt::XKeyListener >& _rxListener )
+void FmXGridCell::removeKeyListener( const Reference< awt::XKeyListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aKeyListeners.removeInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::addMouseListener( const Reference< awt::XMouseListener >& _rxListener )
+void FmXGridCell::addMouseListener( const Reference< awt::XMouseListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseListeners.addInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::removeMouseListener( const Reference< awt::XMouseListener >& _rxListener )
+void FmXGridCell::removeMouseListener( const Reference< awt::XMouseListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseListeners.removeInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener )
+void FmXGridCell::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseMotionListeners.addInterface( _rxListener );
 }
 
 
-void SAL_CALL FmXGridCell::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener )
+void FmXGridCell::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener )
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseMotionListeners.removeInterface( _rxListener );
 }
 
-void SAL_CALL FmXGridCell::addPaintListener( const Reference< awt::XPaintListener >& )
+void FmXGridCell::addPaintListener( const Reference< awt::XPaintListener >& )
 {
     OSL_FAIL( "FmXGridCell::addPaintListener: not implemented" );
 }
 
-void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintListener >& )
+void FmXGridCell::removePaintListener( const Reference< awt::XPaintListener >& )
 {
     OSL_FAIL( "FmXGridCell::removePaintListener: not implemented" );
 }
@@ -3657,7 +3657,7 @@ void FmXEditCell::disposing()
     FmXDataCell::disposing();
 }
 
-Any SAL_CALL FmXEditCell::queryAggregation( const cpo::uno::Type& _rType )
+Any FmXEditCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXTextCell::queryAggregation( _rType );
 
@@ -3667,7 +3667,7 @@ Any SAL_CALL FmXEditCell::queryAggregation( const cpo::uno::Type& _rType )
     return aReturn;
 }
 
-Sequence< cpo::uno::Type > SAL_CALL FmXEditCell::getTypes(  )
+Sequence< cpo::uno::Type > FmXEditCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXTextCell::getTypes(),
@@ -3678,18 +3678,18 @@ Sequence< cpo::uno::Type > SAL_CALL FmXEditCell::getTypes(  )
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXEditCell )
 
 // css::awt::XTextComponent
-void SAL_CALL FmXEditCell::addTextListener(const Reference< css::awt::XTextListener >& l)
+void FmXEditCell::addTextListener(const Reference< css::awt::XTextListener >& l)
 {
     m_aTextListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXEditCell::removeTextListener(const Reference< css::awt::XTextListener >& l)
+void FmXEditCell::removeTextListener(const Reference< css::awt::XTextListener >& l)
 {
     m_aTextListeners.removeInterface( l );
 }
 
-void SAL_CALL FmXEditCell::setText( const OUString& aText )
+void FmXEditCell::setText( const OUString& aText )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3703,7 +3703,7 @@ void SAL_CALL FmXEditCell::setText( const OUString& aText )
     }
 }
 
-void SAL_CALL FmXEditCell::insertText(const css::awt::Selection& rSel, const OUString& aText)
+void FmXEditCell::insertText(const css::awt::Selection& rSel, const OUString& aText)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3714,7 +3714,7 @@ void SAL_CALL FmXEditCell::insertText(const css::awt::Selection& rSel, const OUS
     }
 }
 
-OUString SAL_CALL FmXEditCell::getText()
+OUString FmXEditCell::getText()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3737,7 +3737,7 @@ OUString SAL_CALL FmXEditCell::getText()
     return aText;
 }
 
-OUString SAL_CALL FmXEditCell::getSelectedText()
+OUString FmXEditCell::getSelectedText()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3750,7 +3750,7 @@ OUString SAL_CALL FmXEditCell::getSelectedText()
     return aText;
 }
 
-void SAL_CALL FmXEditCell::setSelection( const css::awt::Selection& aSelection )
+void FmXEditCell::setSelection( const css::awt::Selection& aSelection )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3758,7 +3758,7 @@ void SAL_CALL FmXEditCell::setSelection( const css::awt::Selection& aSelection )
         m_pEditImplementation->SetSelection( Selection( aSelection.Min, aSelection.Max ) );
 }
 
-css::awt::Selection SAL_CALL FmXEditCell::getSelection()
+css::awt::Selection FmXEditCell::getSelection()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3769,14 +3769,14 @@ css::awt::Selection SAL_CALL FmXEditCell::getSelection()
     return css::awt::Selection(aSel.Min(), aSel.Max());
 }
 
-bool SAL_CALL FmXEditCell::isEditable()
+bool FmXEditCell::isEditable()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_pEditImplementation && !m_pEditImplementation->IsReadOnly() && m_pEditImplementation->GetControl().IsEnabled();
 }
 
-void SAL_CALL FmXEditCell::setEditable( bool bEditable )
+void FmXEditCell::setEditable( bool bEditable )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3784,14 +3784,14 @@ void SAL_CALL FmXEditCell::setEditable( bool bEditable )
         m_pEditImplementation->SetReadOnly( !bEditable );
 }
 
-sal_Int16 SAL_CALL FmXEditCell::getMaxTextLen()
+sal_Int16 FmXEditCell::getMaxTextLen()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_pEditImplementation ? m_pEditImplementation->GetMaxTextLen() : 0;
 }
 
-void SAL_CALL FmXEditCell::setMaxTextLen( sal_Int16 nLen )
+void FmXEditCell::setMaxTextLen( sal_Int16 nLen )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3799,12 +3799,12 @@ void SAL_CALL FmXEditCell::setMaxTextLen( sal_Int16 nLen )
         m_pEditImplementation->SetMaxTextLen( nLen );
 }
 
-void SAL_CALL FmXEditCell::addChangeListener( const Reference< form::XChangeListener >& Listener )
+void FmXEditCell::addChangeListener( const Reference< form::XChangeListener >& Listener )
 {
     m_aChangeListeners.addInterface( Listener );
 }
 
-void SAL_CALL FmXEditCell::removeChangeListener( const Reference< form::XChangeListener >& Listener )
+void FmXEditCell::removeChangeListener( const Reference< form::XChangeListener >& Listener )
 {
     m_aChangeListeners.removeInterface( Listener );
 }
@@ -3871,7 +3871,7 @@ void FmXCheckBoxCell::disposing()
 }
 
 
-Any SAL_CALL FmXCheckBoxCell::queryAggregation( const cpo::uno::Type& _rType )
+Any FmXCheckBoxCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXDataCell::queryAggregation( _rType );
 
@@ -3882,7 +3882,7 @@ Any SAL_CALL FmXCheckBoxCell::queryAggregation( const cpo::uno::Type& _rType )
 }
 
 
-Sequence< cpo::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  )
+Sequence< cpo::uno::Type > FmXCheckBoxCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXDataCell::getTypes(),
@@ -3893,17 +3893,17 @@ Sequence< cpo::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  )
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXCheckBoxCell )
 
-void SAL_CALL FmXCheckBoxCell::addItemListener( const Reference< css::awt::XItemListener >& l )
+void FmXCheckBoxCell::addItemListener( const Reference< css::awt::XItemListener >& l )
 {
     m_aItemListeners.addInterface( l );
 }
 
-void SAL_CALL FmXCheckBoxCell::removeItemListener( const Reference< css::awt::XItemListener >& l )
+void FmXCheckBoxCell::removeItemListener( const Reference< css::awt::XItemListener >& l )
 {
     m_aItemListeners.removeInterface( l );
 }
 
-void SAL_CALL FmXCheckBoxCell::setState( sal_Int16 n )
+void FmXCheckBoxCell::setState( sal_Int16 n )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3914,7 +3914,7 @@ void SAL_CALL FmXCheckBoxCell::setState( sal_Int16 n )
     }
 }
 
-sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
+sal_Int16 FmXCheckBoxCell::getState()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3926,7 +3926,7 @@ sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
     return TRISTATE_INDET;
 }
 
-void SAL_CALL FmXCheckBoxCell::enableTriState(bool b)
+void FmXCheckBoxCell::enableTriState(bool b)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3934,18 +3934,18 @@ void SAL_CALL FmXCheckBoxCell::enableTriState(bool b)
         m_pBox->EnableTriState( b );
 }
 
-void SAL_CALL FmXCheckBoxCell::addActionListener( const Reference< awt::XActionListener >& Listener )
+void FmXCheckBoxCell::addActionListener( const Reference< awt::XActionListener >& Listener )
 {
     m_aActionListeners.addInterface( Listener );
 }
 
 
-void SAL_CALL FmXCheckBoxCell::removeActionListener( const Reference< awt::XActionListener >& Listener )
+void FmXCheckBoxCell::removeActionListener( const Reference< awt::XActionListener >& Listener )
 {
     m_aActionListeners.removeInterface( Listener );
 }
 
-void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& Label )
+void FmXCheckBoxCell::setLabel( const OUString& Label )
 {
     SolarMutexGuard aGuard;
     if ( m_pColumn )
@@ -3955,7 +3955,7 @@ void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& Label )
     }
 }
 
-void SAL_CALL FmXCheckBoxCell::setActionCommand( const OUString& Command )
+void FmXCheckBoxCell::setActionCommand( const OUString& Command )
 {
     m_aActionCommand = Command;
 }
@@ -4018,7 +4018,7 @@ void FmXListBoxCell::disposing()
     FmXTextCell::disposing();
 }
 
-Any SAL_CALL FmXListBoxCell::queryAggregation( const cpo::uno::Type& _rType )
+Any FmXListBoxCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXTextCell::queryAggregation(_rType);
 
@@ -4028,7 +4028,7 @@ Any SAL_CALL FmXListBoxCell::queryAggregation( const cpo::uno::Type& _rType )
     return aReturn;
 }
 
-Sequence< cpo::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  )
+Sequence< cpo::uno::Type > FmXListBoxCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXTextCell::getTypes(),
@@ -4038,27 +4038,27 @@ Sequence< cpo::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  )
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXListBoxCell )
 
-void SAL_CALL FmXListBoxCell::addItemListener(const Reference< css::awt::XItemListener >& l)
+void FmXListBoxCell::addItemListener(const Reference< css::awt::XItemListener >& l)
 {
     m_aItemListeners.addInterface( l );
 }
 
-void SAL_CALL FmXListBoxCell::removeItemListener(const Reference< css::awt::XItemListener >& l)
+void FmXListBoxCell::removeItemListener(const Reference< css::awt::XItemListener >& l)
 {
     m_aItemListeners.removeInterface( l );
 }
 
-void SAL_CALL FmXListBoxCell::addActionListener(const Reference< css::awt::XActionListener >& l)
+void FmXListBoxCell::addActionListener(const Reference< css::awt::XActionListener >& l)
 {
     m_aActionListeners.addInterface( l );
 }
 
-void SAL_CALL FmXListBoxCell::removeActionListener(const Reference< css::awt::XActionListener >& l)
+void FmXListBoxCell::removeActionListener(const Reference< css::awt::XActionListener >& l)
 {
     m_aActionListeners.removeInterface( l );
 }
 
-void SAL_CALL FmXListBoxCell::addItem(const OUString& aItem, sal_Int16 nPos)
+void FmXListBoxCell::addItem(const OUString& aItem, sal_Int16 nPos)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (m_pBox)
@@ -4068,7 +4068,7 @@ void SAL_CALL FmXListBoxCell::addItem(const OUString& aItem, sal_Int16 nPos)
     }
 }
 
-void SAL_CALL FmXListBoxCell::addItems(const cpo::uno::Sequence<OUString>& aItems, sal_Int16 nPos)
+void FmXListBoxCell::addItems(const cpo::uno::Sequence<OUString>& aItems, sal_Int16 nPos)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (m_pBox)
@@ -4084,7 +4084,7 @@ void SAL_CALL FmXListBoxCell::addItems(const cpo::uno::Sequence<OUString>& aItem
     }
 }
 
-void SAL_CALL FmXListBoxCell::removeItems(sal_Int16 nPos, sal_Int16 nCount)
+void FmXListBoxCell::removeItems(sal_Int16 nPos, sal_Int16 nCount)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pBox )
@@ -4095,7 +4095,7 @@ void SAL_CALL FmXListBoxCell::removeItems(sal_Int16 nPos, sal_Int16 nCount)
     }
 }
 
-sal_Int16 SAL_CALL FmXListBoxCell::getItemCount()
+sal_Int16 FmXListBoxCell::getItemCount()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pBox)
@@ -4104,7 +4104,7 @@ sal_Int16 SAL_CALL FmXListBoxCell::getItemCount()
     return rBox.get_count();
 }
 
-OUString SAL_CALL FmXListBoxCell::getItem(sal_Int16 nPos)
+OUString FmXListBoxCell::getItem(sal_Int16 nPos)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pBox)
@@ -4113,7 +4113,7 @@ OUString SAL_CALL FmXListBoxCell::getItem(sal_Int16 nPos)
     return rBox.get_text(nPos);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems()
+cpo::uno::Sequence<OUString> FmXListBoxCell::getItems()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4132,7 +4132,7 @@ cpo::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems()
     return aSeq;
 }
 
-sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos()
+sal_Int16 FmXListBoxCell::getSelectedItemPos()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (m_pBox)
@@ -4149,7 +4149,7 @@ sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos()
     return -1; // nothing selected
 }
 
-Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
+Sequence< sal_Int16 > FmXListBoxCell::getSelectedItemsPos()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4166,7 +4166,7 @@ Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
     return {};
 }
 
-OUString SAL_CALL FmXListBoxCell::getSelectedItem()
+OUString FmXListBoxCell::getSelectedItem()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4182,7 +4182,7 @@ OUString SAL_CALL FmXListBoxCell::getSelectedItem()
     return aItem;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
+cpo::uno::Sequence<OUString> FmXListBoxCell::getSelectedItems()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4199,7 +4199,7 @@ cpo::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
     return {};
 }
 
-void SAL_CALL FmXListBoxCell::selectItemPos(sal_Int16 nPos, bool bSelect)
+void FmXListBoxCell::selectItemPos(sal_Int16 nPos, bool bSelect)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4213,7 +4213,7 @@ void SAL_CALL FmXListBoxCell::selectItemPos(sal_Int16 nPos, bool bSelect)
     }
 }
 
-void SAL_CALL FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPositions, bool bSelect)
+void FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPositions, bool bSelect)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4231,7 +4231,7 @@ void SAL_CALL FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPosit
     }
 }
 
-void SAL_CALL FmXListBoxCell::selectItem(const OUString& aItem, bool bSelect)
+void FmXListBoxCell::selectItem(const OUString& aItem, bool bSelect)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4246,34 +4246,34 @@ void SAL_CALL FmXListBoxCell::selectItem(const OUString& aItem, bool bSelect)
     }
 }
 
-bool SAL_CALL FmXListBoxCell::isMutipleMode()
+bool FmXListBoxCell::isMutipleMode()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_bMulti;
 }
 
-void SAL_CALL FmXListBoxCell::setMultipleMode(bool bMulti)
+void FmXListBoxCell::setMultipleMode(bool bMulti)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     m_bMulti = bMulti;
 }
 
-sal_Int16 SAL_CALL FmXListBoxCell::getDropDownLineCount()
+sal_Int16 FmXListBoxCell::getDropDownLineCount()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_nLines;
 }
 
-void SAL_CALL FmXListBoxCell::setDropDownLineCount(sal_Int16 nLines)
+void FmXListBoxCell::setDropDownLineCount(sal_Int16 nLines)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     m_nLines = nLines; // just store it to return it
 }
 
-void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 /*nEntry*/)
+void FmXListBoxCell::makeVisible(sal_Int16 /*nEntry*/)
 {
 }
 
@@ -4342,7 +4342,7 @@ void FmXComboBoxCell::disposing()
     FmXTextCell::disposing();
 }
 
-Any SAL_CALL FmXComboBoxCell::queryAggregation( const cpo::uno::Type& _rType )
+Any FmXComboBoxCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXTextCell::queryAggregation(_rType);
 
@@ -4352,7 +4352,7 @@ Any SAL_CALL FmXComboBoxCell::queryAggregation( const cpo::uno::Type& _rType )
     return aReturn;
 }
 
-Sequence< Type > SAL_CALL FmXComboBoxCell::getTypes(  )
+Sequence< Type > FmXComboBoxCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXTextCell::getTypes(),
@@ -4362,28 +4362,28 @@ Sequence< Type > SAL_CALL FmXComboBoxCell::getTypes(  )
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXComboBoxCell )
 
-void SAL_CALL FmXComboBoxCell::addItemListener(const Reference< awt::XItemListener >& l)
+void FmXComboBoxCell::addItemListener(const Reference< awt::XItemListener >& l)
 {
     m_aItemListeners.addInterface( l );
 }
 
-void SAL_CALL FmXComboBoxCell::removeItemListener(const Reference< awt::XItemListener >& l)
+void FmXComboBoxCell::removeItemListener(const Reference< awt::XItemListener >& l)
 {
     m_aItemListeners.removeInterface( l );
 }
 
-void SAL_CALL FmXComboBoxCell::addActionListener(const Reference< awt::XActionListener >& l)
+void FmXComboBoxCell::addActionListener(const Reference< awt::XActionListener >& l)
 {
     m_aActionListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXComboBoxCell::removeActionListener(const Reference< awt::XActionListener >& l)
+void FmXComboBoxCell::removeActionListener(const Reference< awt::XActionListener >& l)
 {
     m_aActionListeners.removeInterface( l );
 }
 
-void SAL_CALL FmXComboBoxCell::addItem( const OUString& Item, sal_Int16 Pos )
+void FmXComboBoxCell::addItem( const OUString& Item, sal_Int16 Pos )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
@@ -4392,7 +4392,7 @@ void SAL_CALL FmXComboBoxCell::addItem( const OUString& Item, sal_Int16 Pos )
     rBox.insert_text(Pos, Item);
 }
 
-void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& Items, sal_Int16 Pos )
+void FmXComboBoxCell::addItems( const Sequence< OUString >& Items, sal_Int16 Pos )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
@@ -4407,7 +4407,7 @@ void SAL_CALL FmXComboBoxCell::addItems( const Sequence< OUString >& Items, sal_
     }
 }
 
-void SAL_CALL FmXComboBoxCell::removeItems( sal_Int16 Pos, sal_Int16 Count )
+void FmXComboBoxCell::removeItems( sal_Int16 Pos, sal_Int16 Count )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
@@ -4417,7 +4417,7 @@ void SAL_CALL FmXComboBoxCell::removeItems( sal_Int16 Pos, sal_Int16 Count )
         rBox.remove( Pos + (--n) );
 }
 
-sal_Int16 SAL_CALL FmXComboBoxCell::getItemCount()
+sal_Int16 FmXComboBoxCell::getItemCount()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
@@ -4426,7 +4426,7 @@ sal_Int16 SAL_CALL FmXComboBoxCell::getItemCount()
     return rBox.get_count();
 }
 
-OUString SAL_CALL FmXComboBoxCell::getItem( sal_Int16 Pos )
+OUString FmXComboBoxCell::getItem( sal_Int16 Pos )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pComboBox)
@@ -4435,7 +4435,7 @@ OUString SAL_CALL FmXComboBoxCell::getItem( sal_Int16 Pos )
     return rBox.get_text(Pos);
 }
 
-Sequence< OUString > SAL_CALL FmXComboBoxCell::getItems()
+Sequence< OUString > FmXComboBoxCell::getItems()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4452,13 +4452,13 @@ Sequence< OUString > SAL_CALL FmXComboBoxCell::getItems()
     return aItems;
 }
 
-sal_Int16 SAL_CALL FmXComboBoxCell::getDropDownLineCount()
+sal_Int16 FmXComboBoxCell::getDropDownLineCount()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_nLines;
 }
 
-void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines)
+void FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_nLines = nLines; // just store it to return it
@@ -4520,7 +4520,7 @@ void FmXFilterCell::disposing()
 }
 
 
-Any SAL_CALL FmXFilterCell::queryAggregation( const cpo::uno::Type& _rType )
+Any FmXFilterCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXGridCell::queryAggregation(_rType);
 
@@ -4531,7 +4531,7 @@ Any SAL_CALL FmXFilterCell::queryAggregation( const cpo::uno::Type& _rType )
 }
 
 
-Sequence< cpo::uno::Type > SAL_CALL FmXFilterCell::getTypes(  )
+Sequence< cpo::uno::Type > FmXFilterCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXGridCell::getTypes(),
@@ -4544,62 +4544,62 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( FmXFilterCell )
 
 // css::awt::XTextComponent
 
-void SAL_CALL FmXFilterCell::addTextListener(const Reference< css::awt::XTextListener >& l)
+void FmXFilterCell::addTextListener(const Reference< css::awt::XTextListener >& l)
 {
     m_aTextListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXFilterCell::removeTextListener(const Reference< css::awt::XTextListener >& l)
+void FmXFilterCell::removeTextListener(const Reference< css::awt::XTextListener >& l)
 {
     m_aTextListeners.removeInterface( l );
 }
 
-void SAL_CALL FmXFilterCell::setText( const OUString& aText )
+void FmXFilterCell::setText( const OUString& aText )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     static_cast<DbFilterField*>(m_pCellControl.get())->SetText(aText);
 }
 
-void SAL_CALL FmXFilterCell::insertText( const css::awt::Selection& /*rSel*/, const OUString& /*aText*/ )
+void FmXFilterCell::insertText( const css::awt::Selection& /*rSel*/, const OUString& /*aText*/ )
 {
 }
 
-OUString SAL_CALL FmXFilterCell::getText()
+OUString FmXFilterCell::getText()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return static_cast<DbFilterField*>(m_pCellControl.get())->GetText();
 }
 
-OUString SAL_CALL FmXFilterCell::getSelectedText()
+OUString FmXFilterCell::getSelectedText()
 {
     return getText();
 }
 
-void SAL_CALL FmXFilterCell::setSelection( const css::awt::Selection& /*aSelection*/ )
+void FmXFilterCell::setSelection( const css::awt::Selection& /*aSelection*/ )
 {
 }
 
-css::awt::Selection SAL_CALL FmXFilterCell::getSelection()
+css::awt::Selection FmXFilterCell::getSelection()
 {
     return css::awt::Selection();
 }
 
-bool SAL_CALL FmXFilterCell::isEditable()
+bool FmXFilterCell::isEditable()
 {
     return true;
 }
 
-void SAL_CALL FmXFilterCell::setEditable( bool /*bEditable*/ )
+void FmXFilterCell::setEditable( bool /*bEditable*/ )
 {
 }
 
-sal_Int16 SAL_CALL FmXFilterCell::getMaxTextLen()
+sal_Int16 FmXFilterCell::getMaxTextLen()
 {
     return 0;
 }
 
-void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ )
+void FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ )
 {
 }
 

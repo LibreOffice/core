@@ -272,16 +272,16 @@ namespace svxform
         OFormComponentObserver( ::svxform::NavigatorTreeModel* pModel );
 
     // XEventListenerListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void disposing(const css::lang::EventObject& Source) override;
 
     // css::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
+        virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
     // css::container::XContainerListener
 
-        virtual void SAL_CALL elementInserted(const  css::container::ContainerEvent& rEvent) override;
-        virtual void SAL_CALL elementReplaced(const  css::container::ContainerEvent& rEvent) override;
-        virtual void SAL_CALL elementRemoved(const  css::container::ContainerEvent& rEvent) override;
+        virtual void elementInserted(const  css::container::ContainerEvent& rEvent) override;
+        virtual void elementReplaced(const  css::container::ContainerEvent& rEvent) override;
+        virtual void elementRemoved(const  css::container::ContainerEvent& rEvent) override;
 
         void Lock() { m_nLocks++; }
         void UnLock() { m_nLocks--; }

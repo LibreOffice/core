@@ -36,34 +36,34 @@ public:
     virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) = 0;
 
     /// @throws cpo::uno::RuntimeException
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) = 0;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) = 0;
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) = 0;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) = 0;
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) = 0;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) = 0;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws cpo::uno::RuntimeException
-    virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) = 0;
+    virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) = 0;
     /// @throws css::beans::UnknownPropertyException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) = 0;
+    virtual void setPropertyToDefault( const OUString& PropertyName ) = 0;
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) = 0;
+    virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) = 0;
 
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) = 0;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) = 0;
 
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() = 0;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() = 0;
 
     virtual void dispose() = 0;
 

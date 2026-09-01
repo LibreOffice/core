@@ -39,27 +39,27 @@ public:
     SvxUnoColorTable();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const  OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence<  OUString > getSupportedServiceNames() override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const  OUString& Name ) override;
+    virtual void insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const  OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const  OUString& aName ) override;
 
-    virtual cpo::uno::Sequence<  OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence<  OUString > getElementNames() override;
 
-    virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
+    virtual bool hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 };
 
 SvxUnoColorTable::SvxUnoColorTable()
@@ -69,24 +69,24 @@ SvxUnoColorTable::SvxUnoColorTable()
 {
 }
 
-bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceName )
+bool SvxUnoColorTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-OUString SAL_CALL SvxUnoColorTable::getImplementationName()
+OUString SvxUnoColorTable::getImplementationName()
 {
     return u"com.sun.star.drawing.SvxUnoColorTable"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvxUnoColorTable::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.ColorTable"_ustr };
     return aSNS;
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
+void SvxUnoColorTable::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     if( hasByName( aName ) )
         throw container::ElementExistException();
@@ -101,7 +101,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const cpo::
     }
 }
 
-void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
+void SvxUnoColorTable::removeByName( const OUString& Name )
 {
     tools::Long nIndex = pList.is() ? pList->GetIndex( Name ) : -1;
     if( nIndex == -1 )
@@ -111,7 +111,7 @@ void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
+void SvxUnoColorTable::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     Color nColor;
     if( !(aElement >>= nColor) )
@@ -125,7 +125,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const cpo:
 }
 
 // XNameAccess
-cpo::uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
+cpo::uno::Any SvxUnoColorTable::getByName( const OUString& aName )
 {
     tools::Long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
     if( nIndex == -1 )
@@ -135,7 +135,7 @@ cpo::uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
     return cpo::uno::Any( static_cast<sal_Int32>(pEntry->GetColor().GetRGBColor()) );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
+cpo::uno::Sequence< OUString > SvxUnoColorTable::getElementNames()
 {
     const tools::Long nCount = pList.is() ? pList->Count() : 0;
 
@@ -151,19 +151,19 @@ cpo::uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
     return aSeq;
 }
 
-bool SAL_CALL SvxUnoColorTable::hasByName( const OUString& aName )
+bool SvxUnoColorTable::hasByName( const OUString& aName )
 {
     tools::Long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
     return nIndex != -1;
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SvxUnoColorTable::getElementType()
+cpo::uno::Type SvxUnoColorTable::getElementType()
 {
     return ::cppu::UnoType<sal_Int32>::get();
 }
 
-bool SAL_CALL SvxUnoColorTable::hasElements()
+bool SvxUnoColorTable::hasElements()
 {
     return pList.is() && pList->Count() != 0;
 }

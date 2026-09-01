@@ -39,16 +39,16 @@ public:
     void throwIfDisposed() const;
 
     // XTableColumns
-    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
+    virtual void insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
+    virtual void removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     // Methods
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
 private:
     TableModelRef   mxTableModel;

@@ -292,19 +292,19 @@ public:
     SvxFontNameToolBoxControl();
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual css::uno::Reference<css::awt::XWindow> createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // WeakComponentImplHelperBase
     using SvxFontNameToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& rServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     VclPtr<SvxFontNameBox_Impl> m_xVclBox;
@@ -506,13 +506,13 @@ public:
     explicit SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
-    virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
+    virtual void execute(sal_Int16 nKeyModifier) override;
 private:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -3287,7 +3287,7 @@ SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
 {
 }
 
-void SAL_CALL SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments)
+void SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments)
 {
     svt::ToolboxController::initialize(rArguments);
 
@@ -3369,7 +3369,7 @@ com_sun_star_comp_svx_StyleToolBoxControl_get_implementation(
     return cppu::acquire( new SvxStyleToolBoxControl() );
 }
 
-void SAL_CALL SvxStyleToolBoxControl::update()
+void SvxStyleToolBoxControl::update()
 {
     for (rtl::Reference<SfxStyleControllerItem_Impl>& pBoundItem : m_xBoundItems)
         pBoundItem->ReBind();
@@ -4005,7 +4005,7 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< css::
 {
 }
 
-void SAL_CALL SvxFrameToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
+void SvxFrameToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
 {
     if (m_pToolbar)
     {

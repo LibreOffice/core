@@ -219,7 +219,7 @@ void OWrappedAccessibleChildrenManager::handleChildNotification( const Accessibl
 }
 
 
-void SAL_CALL OWrappedAccessibleChildrenManager::disposing( const EventObject& _rSource )
+void OWrappedAccessibleChildrenManager::disposing( const EventObject& _rSource )
 {
     // this should come from one of the inner XAccessible's of our children
     Reference< XAccessible > xSource( _rSource.Source, UNO_QUERY );
@@ -295,7 +295,7 @@ Reference< XAccessibleContext > OAccessibleWrapper::getContextNoCreate( ) const
     return m_aContext.get();
 }
 
-Reference< XAccessibleContext > SAL_CALL OAccessibleWrapper::getAccessibleContext(  )
+Reference< XAccessibleContext > OAccessibleWrapper::getAccessibleContext(  )
 {
     // see if the context is still alive (we cache it)
     rtl::Reference<OAccessibleContextWrapper> xContext = m_aContext.get();
@@ -359,7 +359,7 @@ OAccessibleContextWrapperHelper::~OAccessibleContextWrapperHelper( )
 }
 
 
-Any SAL_CALL OAccessibleContextWrapperHelper::queryInterface( const Type& _rType )
+Any OAccessibleContextWrapperHelper::queryInterface( const Type& _rType )
 {
     Any aReturn = OComponentProxyAggregationHelper::queryInterface( _rType );
     if ( !aReturn.hasValue() )
@@ -370,7 +370,7 @@ Any SAL_CALL OAccessibleContextWrapperHelper::queryInterface( const Type& _rType
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapperHelper, OComponentProxyAggregationHelper, OAccessibleContextWrapperHelper_Base )
 
-void SAL_CALL OAccessibleContextWrapperHelper::notifyEvent( const AccessibleEventObject& _rEvent )
+void OAccessibleContextWrapperHelper::notifyEvent( const AccessibleEventObject& _rEvent )
 {
 #if OSL_DEBUG_LEVEL > 0
     if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
@@ -408,7 +408,7 @@ void SAL_CALL OAccessibleContextWrapperHelper::notifyEvent( const AccessibleEven
 }
 
 
-void SAL_CALL OAccessibleContextWrapperHelper::dispose()
+void OAccessibleContextWrapperHelper::dispose()
 {
     ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
 
@@ -426,7 +426,7 @@ void SAL_CALL OAccessibleContextWrapperHelper::dispose()
 }
 
 
-void SAL_CALL OAccessibleContextWrapperHelper::disposing( const EventObject& _rEvent )
+void OAccessibleContextWrapperHelper::disposing( const EventObject& _rEvent )
 {
     // simply disambiguate this
     OComponentProxyAggregationHelper::disposing( _rEvent );
@@ -454,13 +454,13 @@ OAccessibleContextWrapper::~OAccessibleContextWrapper()
 }
 
 
-sal_Int64 SAL_CALL OAccessibleContextWrapper::getAccessibleChildCount(  )
+sal_Int64 OAccessibleContextWrapper::getAccessibleChildCount(  )
 {
     return m_xInnerContext->getAccessibleChildCount();
 }
 
 
-Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > OAccessibleContextWrapper::getAccessibleChild( sal_Int64 i )
 {
     // get the child of the wrapped component
     Reference<XAccessible> xInnerChild = m_xInnerContext->getAccessibleChild(i);
@@ -468,37 +468,37 @@ Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleChild(
 }
 
 
-Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleParent(  )
+Reference< XAccessible > OAccessibleContextWrapper::getAccessibleParent(  )
 {
     return m_xParentAccessible;
 }
 
 
-sal_Int64 SAL_CALL OAccessibleContextWrapper::getAccessibleIndexInParent(  )
+sal_Int64 OAccessibleContextWrapper::getAccessibleIndexInParent(  )
 {
     return m_xInnerContext->getAccessibleIndexInParent();
 }
 
 
-sal_Int16 SAL_CALL OAccessibleContextWrapper::getAccessibleRole(  )
+sal_Int16 OAccessibleContextWrapper::getAccessibleRole(  )
 {
     return m_xInnerContext->getAccessibleRole();
 }
 
 
-OUString SAL_CALL OAccessibleContextWrapper::getAccessibleDescription(  )
+OUString OAccessibleContextWrapper::getAccessibleDescription(  )
 {
     return m_xInnerContext->getAccessibleDescription();
 }
 
 
-OUString SAL_CALL OAccessibleContextWrapper::getAccessibleName(  )
+OUString OAccessibleContextWrapper::getAccessibleName(  )
 {
     return m_xInnerContext->getAccessibleName();
 }
 
 
-Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapper::getAccessibleRelationSet(  )
+Reference< XAccessibleRelationSet > OAccessibleContextWrapper::getAccessibleRelationSet(  )
 {
     return m_xInnerContext->getAccessibleRelationSet();
         // TODO: if this relation set would contain relations to siblings, we would normally need
@@ -506,13 +506,13 @@ Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapper::getAcces
 }
 
 
-sal_Int64 SAL_CALL OAccessibleContextWrapper::getAccessibleStateSet(  )
+sal_Int64 OAccessibleContextWrapper::getAccessibleStateSet(  )
 {
     return m_xInnerContext->getAccessibleStateSet();
 }
 
 
-Locale SAL_CALL OAccessibleContextWrapper::getLocale(  )
+Locale OAccessibleContextWrapper::getLocale(  )
 {
     return m_xInnerContext->getLocale();
 }
@@ -525,7 +525,7 @@ void OAccessibleContextWrapper::notifyTranslatedEvent( const AccessibleEventObje
 }
 
 
-void SAL_CALL OAccessibleContextWrapper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
+void OAccessibleContextWrapper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_nNotifierClient )
@@ -534,7 +534,7 @@ void SAL_CALL OAccessibleContextWrapper::addAccessibleEventListener( const Refer
 }
 
 
-void SAL_CALL OAccessibleContextWrapper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
+void OAccessibleContextWrapper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_nNotifierClient )
@@ -577,12 +577,12 @@ void OAccessibleContextWrapper::implDisposing(const css::lang::EventObject* pEve
         AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
 }
 
-void SAL_CALL OAccessibleContextWrapper::disposing()
+void OAccessibleContextWrapper::disposing()
 {
     implDisposing(nullptr);
 }
 
-void SAL_CALL OAccessibleContextWrapper::disposing(const css::lang::EventObject& rEvent)
+void OAccessibleContextWrapper::disposing(const css::lang::EventObject& rEvent)
 {
     assert(rEvent.Source == Reference<XInterface>(m_xInnerContext, UNO_QUERY)
            && "OAccessibleContextWrapper::disposing called with event source that's not the "

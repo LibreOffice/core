@@ -160,7 +160,7 @@ void Annotation::SetTextImpl(OUString const& rText, const std::unique_lock<std::
     return xText->setString(rText);
 }
 
-uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
+uno::Reference<text::XText> Annotation::getTextRange()
 {
     std::unique_lock g(m_aMutex);
     return getTextRangeImpl(g);

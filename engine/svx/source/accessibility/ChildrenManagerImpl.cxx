@@ -640,7 +640,7 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
 }
 
 // lang::XEventListener
-void SAL_CALL
+void
     ChildrenManagerImpl::disposing (const lang::EventObject& rEventObject)
 {
     if (rEventObject.Source == maShapeTreeInfo.GetModelBroadcaster()
@@ -670,7 +670,7 @@ void SAL_CALL
 // document::XEventListener
 /** Listen for new and removed shapes.
 */
-void SAL_CALL
+void
     ChildrenManagerImpl::notifyEvent (
         const document::EventObject& rEventObject)
 {
@@ -687,7 +687,7 @@ void SAL_CALL
 }
 
 // view::XSelectionChangeListener
-void  SAL_CALL
+void
     ChildrenManagerImpl::selectionChanged (const lang::EventObject& /*rEvent*/)
 {
     UpdateSelection ();

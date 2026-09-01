@@ -33,10 +33,10 @@ public:
     virtual ~SvxUnoShapeModifyListener() noexcept override;
 
     // css::util::XModifyListener
-    virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
+    virtual void modified(const css::lang::EventObject& aEvent) override;
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // internal
     void invalidate() noexcept;

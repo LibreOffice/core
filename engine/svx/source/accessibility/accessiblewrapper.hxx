@@ -89,7 +89,7 @@ public:
                 getContextNoCreate( ) const;
 
 protected:
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                 getAccessibleContext(  ) override final;
 
 protected:
@@ -172,19 +172,19 @@ protected:
 
 protected:
     // XInterface
-    cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& _rType ) override;
+    cpo::uno::Any queryInterface( const cpo::uno::Type& _rType ) override;
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override final;
+    virtual void notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override final;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // XComponent/OComponentProxyAggregationHelper
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
     // own overridables
     /** notify an accessible event which has been translated (if necessary)
@@ -251,20 +251,20 @@ public:
     DECLARE_XTYPEPROVIDER( )
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override final;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override final;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override final;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override final;
-    virtual OUString SAL_CALL getAccessibleDescription(  ) override final;
-    virtual OUString SAL_CALL getAccessibleName(  ) override final;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override final;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override final;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override final;
+    virtual sal_Int64 getAccessibleChildCount(  ) override final;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override final;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override final;
+    virtual sal_Int64 getAccessibleIndexInParent(  ) override;
+    virtual sal_Int16 getAccessibleRole(  ) override final;
+    virtual OUString getAccessibleDescription(  ) override final;
+    virtual OUString getAccessibleName(  ) override final;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override final;
+    virtual sal_Int64 getAccessibleStateSet(  ) override final;
+    virtual css::lang::Locale getLocale(  ) override final;
 
     // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override final;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override final;
+    virtual void addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override final;
+    virtual void removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override final;
 
     // OAccessibleContextWrapper
     virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) override final;
@@ -273,10 +273,10 @@ public:
     void implDisposing(const css::lang::EventObject* pEvent);
 
     // OComponentHelper
-    void SAL_CALL disposing() override final;
+    void disposing() override final;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override final;
+    virtual void disposing(const css::lang::EventObject& rEvent) override final;
 
 protected:
     virtual ~OAccessibleContextWrapper() override;
@@ -357,7 +357,7 @@ public:
 
 private:
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     void    implTranslateChildEventValue( const cpo::uno::Any& _rInValue, cpo::uno::Any& _rOutValue );
 

@@ -305,7 +305,7 @@ cpo::uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMap
 
 // XInterface
 
-cpo::uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any SvxUnoDrawPool::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -325,7 +325,7 @@ cpo::uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const cpo::uno::Type & rT
     return aAny;
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SvxUnoDrawPool::getTypes()
 {
     static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
@@ -336,23 +336,23 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawPool::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SvxUnoDrawPool::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
-bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName )
+bool SvxUnoDrawPool::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-OUString SAL_CALL SvxUnoDrawPool::getImplementationName()
+OUString SvxUnoDrawPool::getImplementationName()
 {
     return u"SvxUnoDrawPool"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoDrawPool::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SvxUnoDrawPool::getSupportedServiceNames(  )
 {
     cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.Defaults"_ustr };
     return aSNS;

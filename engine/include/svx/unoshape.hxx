@@ -225,80 +225,80 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override final;
 
     // XAggregation
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& aType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& aType ) override;
 
     // XNamed
-    virtual OUString SAL_CALL getName(  ) override;
-    virtual void SAL_CALL setName( const OUString& aName ) override;
+    virtual OUString getName(  ) override;
+    virtual void setName( const OUString& aName ) override;
 
     // XShapeDescriptor
-    virtual OUString SAL_CALL getShapeType() override;
+    virtual OUString getShapeType() override;
 
     // XShape
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size getSize() override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     // XPropertyState
-    virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyState > getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
+    virtual void setPropertyToDefault( const OUString& PropertyName ) override;
+    virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XMultiPropertyStates
-    virtual void SAL_CALL setAllPropertiesToDefault() override;
-    virtual void SAL_CALL setPropertiesToDefault(
+    virtual void setAllPropertiesToDefault() override;
+    virtual void setPropertiesToDefault(
         const cpo::uno::Sequence<
         OUString >& aPropertyNames ) override;
     virtual cpo::uno::Sequence< cpo::uno::Any >
-    SAL_CALL getPropertyDefaults(
+    getPropertyDefaults(
         const cpo::uno::Sequence<
         OUString >& aPropertyNames ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
     // XGluePointsSupplier
-    virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL getGluePoints(  ) override;
+    virtual css::uno::Reference< css::container::XIndexContainer > getGluePoints(  ) override;
 
     // XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XActionLockable
-    virtual bool SAL_CALL isActionLocked(  ) override;
-    virtual void SAL_CALL addActionLock(  ) override;
-    virtual void SAL_CALL removeActionLock(  ) override;
-    virtual void SAL_CALL setActionLocks( sal_Int16 nLock ) override;
-    virtual sal_Int16 SAL_CALL resetActionLocks(  ) override;
+    virtual bool isActionLocked(  ) override;
+    virtual void addActionLock(  ) override;
+    virtual void removeActionLock(  ) override;
+    virtual void setActionLocks( sal_Int16 nLock ) override;
+    virtual sal_Int16 resetActionLocks(  ) override;
 
 private:
     /** initializes SdrObj-dependent members. Only to be called when GetSdrObject() != NULL
@@ -349,30 +349,30 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     { SvxShape::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     { SvxShape::release(); }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
     // css::text::XTextRange
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd() override;
-    virtual OUString SAL_CALL getString() override;
-    virtual void SAL_CALL setString( const OUString& aString ) override;
+    virtual css::uno::Reference< css::text::XTextRange > getStart() override;
+    virtual css::uno::Reference< css::text::XTextRange > getEnd() override;
+    virtual OUString getString() override;
+    virtual void setString( const OUString& aString ) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 };
 
 class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SvxShapeRect final : public SvxShapeText
@@ -382,15 +382,15 @@ public:
     virtual ~SvxShapeRect() noexcept override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     { OWeakAggObject::release(); }
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /// This only exists so I have a common base class for SvxShapeGroup and Svx3DSceneObject
@@ -401,9 +401,9 @@ public:
     SvxShapeGroupAnyD( SdrObject* pObject, std::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet );
     virtual ~SvxShapeGroupAnyD() noexcept override;
 
-    virtual void SAL_CALL acquire() noexcept override
+    virtual void acquire() noexcept override
     { SvxShape::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     { SvxShape::release(); }
 
     virtual void addShape(SvxShape& rShape) = 0;
@@ -430,44 +430,44 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     { SvxShape::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     { SvxShape::release(); }
 
     // XShapes
-    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes2
-    virtual void SAL_CALL addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override ;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     // XShapeDescriptor
-    virtual OUString SAL_CALL getShapeType() override;
+    virtual OUString getShapeType() override;
 
     // XShape
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size getSize() override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // XShapeGroup
-    virtual void SAL_CALL enterGroup(  ) override;
-    virtual void SAL_CALL leaveGroup(  ) override;
+    virtual void enterGroup(  ) override;
+    virtual void leaveGroup(  ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     virtual void addShape(SvxShape& rShape) final override;
 
@@ -487,8 +487,8 @@ public:
     virtual ~SvxShapeConnector() noexcept override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 };
 
 /***********************************************************************
@@ -505,38 +505,38 @@ public:
     virtual ~SvxShapeControl() noexcept override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     { SvxShapeText::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     { SvxShapeText::release(); }
 
     // XPropertySet
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
 
     // XPropertyState
-    virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
+    virtual void setPropertyToDefault( const OUString& PropertyName ) override;
+    virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XShapeDescriptor
-    virtual OUString SAL_CALL getShapeType() override;
+    virtual OUString getShapeType() override;
 
     // XShape
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size getSize() override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // XControlShape
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getControl() override;
-    virtual void SAL_CALL setControl( const css::uno::Reference< css::awt::XControlModel >& xControl ) override;
+    virtual css::uno::Reference< css::awt::XControlModel > getControl() override;
+    virtual void setControl( const css::uno::Reference< css::awt::XControlModel >& xControl ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 };
 
 /***********************************************************************
@@ -656,30 +656,30 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     { SvxShape::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     { SvxShape::release(); }
 
     // XShapes
-    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override ;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount(  ) override ;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     virtual void addShape(SvxShape& rShape) override final;
 };
@@ -698,7 +698,7 @@ public:
     virtual ~Svx3DCubeObject() noexcept override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /***********************************************************************
@@ -716,7 +716,7 @@ private:
     virtual ~Svx3DSphereObject() noexcept override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /***********************************************************************
@@ -733,7 +733,7 @@ public:
     virtual ~Svx3DLatheObject() noexcept override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /***********************************************************************
@@ -751,7 +751,7 @@ private:
     virtual ~Svx3DExtrudeObject() noexcept override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /***********************************************************************
@@ -768,7 +768,7 @@ public:
     virtual ~Svx3DPolygonObject() noexcept override;
 
     // XServiceInfo
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /***********************************************************************
@@ -790,24 +790,24 @@ public:
     virtual ~SvxCustomShape() noexcept override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     { SvxShapeText::acquire(); }
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     { SvxShapeText::release(); }
 
     // XShape
-    virtual css::awt::Point SAL_CALL getPosition() override;
+    virtual css::awt::Point getPosition() override;
 
     // XPropertySet
-    void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     //XEnhancedCustomShapeDefaulter
-    virtual void SAL_CALL createCustomShapeDefaults( const OUString& rShapeType ) override;
+    virtual void createCustomShapeDefaults( const OUString& rShapeType ) override;
 };
 
 /***********************************************************************

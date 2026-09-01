@@ -527,7 +527,7 @@ public:
     EditEngine* GetEditEngine() { return m_pEditEngine; }
     EditView* GetEditView() { return m_pEditView; }
 
-    void SAL_CALL dispose() override
+    void dispose() override
     {
         if (!isAlive())
             return;
@@ -554,7 +554,7 @@ public:
     // XAccessibleComponent
 
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleAtPoint(const css::awt::Point& rPoint) override
+        getAccessibleAtPoint(const css::awt::Point& rPoint) override
     {
         SolarMutexGuard aGuard;
         if (!m_xTextHelper)
@@ -580,7 +580,7 @@ public:
         return aRet;
     }
 
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override
+    virtual css::awt::Point getLocationOnScreen() override
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
@@ -598,9 +598,9 @@ public:
         return aScreenLoc;
     }
 
-    virtual void SAL_CALL grabFocus() override { m_pController->GrabFocus(); }
+    virtual void grabFocus() override { m_pController->GrabFocus(); }
 
-    virtual sal_Int32 SAL_CALL getForeground() override
+    virtual sal_Int32 getForeground() override
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
@@ -610,7 +610,7 @@ public:
         return static_cast<sal_Int32>(nCol);
     }
 
-    virtual sal_Int32 SAL_CALL getBackground() override
+    virtual sal_Int32 getBackground() override
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
@@ -621,7 +621,7 @@ public:
     }
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override
+    virtual sal_Int64 getAccessibleChildCount() override
     {
         if (m_xTextHelper)
             return m_xTextHelper->GetChildCount();
@@ -629,7 +629,7 @@ public:
     }
 
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleChild(sal_Int64 i) override
+        getAccessibleChild(sal_Int64 i) override
     {
         if (m_xTextHelper)
             return m_xTextHelper->GetChild(i);
@@ -637,7 +637,7 @@ public:
     }
 
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleParent() override
+        getAccessibleParent() override
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
@@ -646,7 +646,7 @@ public:
         return m_pController->GetDrawingArea()->get_accessible_parent();
     }
 
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override
+    virtual sal_Int64 getAccessibleIndexInParent() override
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
@@ -685,12 +685,12 @@ public:
         return nRet;
     }
 
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override
+    virtual sal_Int16 getAccessibleRole() override
     {
         return css::accessibility::AccessibleRole::TEXT_FRAME;
     }
 
-    virtual OUString SAL_CALL getAccessibleDescription() override
+    virtual OUString getAccessibleDescription() override
     {
         SolarMutexGuard aGuard;
 
@@ -704,7 +704,7 @@ public:
         return aRet;
     }
 
-    virtual OUString SAL_CALL getAccessibleId() override
+    virtual OUString getAccessibleId() override
     {
         SolarMutexGuard aGuard;
 
@@ -714,7 +714,7 @@ public:
         return OUString();
     }
 
-    virtual OUString SAL_CALL getAccessibleName() override
+    virtual OUString getAccessibleName() override
     {
         SolarMutexGuard aGuard;
 
@@ -729,7 +729,7 @@ public:
     }
 
     virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet>
-        SAL_CALL getAccessibleRelationSet() override
+        getAccessibleRelationSet() override
     {
         SolarMutexGuard aGuard;
         if (!m_pController)
@@ -738,7 +738,7 @@ public:
         return m_pController->GetDrawingArea()->get_accessible_relation_set();
     }
 
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override
+    virtual sal_Int64 getAccessibleStateSet() override
     {
         SolarMutexGuard aGuard;
         sal_Int64 nStateSet = 0;
@@ -765,14 +765,14 @@ public:
         return nStateSet;
     }
 
-    virtual css::lang::Locale SAL_CALL getLocale() override
+    virtual css::lang::Locale getLocale() override
     {
         SolarMutexGuard aGuard;
         return LanguageTag(m_pEditEngine->GetDefaultLanguage()).getLocale();
     }
 
     // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener(
+    virtual void addAccessibleEventListener(
         const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rListener) override
     {
         if (!m_xTextHelper) // not disposing (about to destroy view shell)
@@ -780,7 +780,7 @@ public:
         m_xTextHelper->AddEventListener(rListener);
     }
 
-    virtual void SAL_CALL removeAccessibleEventListener(
+    virtual void removeAccessibleEventListener(
         const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rListener) override
     {
         if (!m_xTextHelper) // not disposing (about to destroy view shell)

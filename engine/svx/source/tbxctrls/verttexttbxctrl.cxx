@@ -72,7 +72,7 @@ SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(
 
 SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl() {}
 
-void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
+void SvxVertCTLTextTbxCtrl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     SvxVertCTLTextTbxCtrl_Base::initialize(rArguments);
     // fdo#83320 Hide vertical text commands early
@@ -93,7 +93,7 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const cpo::uno::Sequence<cpo::un
         m_bVisible = pToolBox->IsItemVisible(nItemId);
 }
 
-void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+void SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nItemId;
@@ -150,7 +150,7 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStat
 }
 
 // XServiceInfo
-bool SAL_CALL SvxVertCTLTextTbxCtrl::supportsService(const OUString& ServiceName)
+bool SvxVertCTLTextTbxCtrl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

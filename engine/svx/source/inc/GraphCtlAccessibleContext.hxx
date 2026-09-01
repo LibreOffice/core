@@ -66,40 +66,40 @@ public:
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
-    virtual void SAL_CALL grabFocus() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
+    virtual void grabFocus() override;
 
-    virtual sal_Int32 SAL_CALL getForeground() override;
+    virtual sal_Int32 getForeground() override;
 
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual sal_Int32 getBackground() override;
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleChild (sal_Int64 nIndex) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleParent() override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
-    virtual css::lang::Locale SAL_CALL getLocale() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleChild (sal_Int64 nIndex) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleParent() override;
+    virtual sal_Int16 getAccessibleRole() override;
+    virtual OUString getAccessibleDescription() override;
+    virtual OUString getAccessibleName() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> getAccessibleRelationSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
+    virtual css::lang::Locale getLocale() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService (const OUString& sServiceName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService (const OUString& sServiceName) override;
+    virtual cpo::uno::Sequence< OUString> getSupportedServiceNames() override;
 
     // XServiceName
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
     // XAccessibleSelection
-    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
-    virtual bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
-    virtual void SAL_CALL clearAccessibleSelection() override;
-    virtual void SAL_CALL selectAllAccessibleChildren() override;
-    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual void selectAccessibleChild( sal_Int64 nChildIndex ) override;
+    virtual bool isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    virtual void clearAccessibleSelection() override;
+    virtual void selectAllAccessibleChildren() override;
+    virtual sal_Int64 getSelectedAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // IAccessibleViewforwarder
     virtual tools::Rectangle GetVisibleArea() const override;
@@ -118,7 +118,7 @@ private:
     /// @throws css::lang::IndexOutOfBoundsException
     void checkChildIndexOnSelection(sal_Int64 nIndexOfChild );
 
-    virtual void SAL_CALL disposing() final override;
+    virtual void disposing() final override;
 
     /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException

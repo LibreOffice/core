@@ -81,10 +81,10 @@ namespace svxform
         explicit FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
 
         // XScriptListener
-        virtual void SAL_CALL firing( const ScriptEvent& aEvent ) override;
-        virtual Any SAL_CALL approveFiring( const ScriptEvent& aEvent ) override;
+        virtual void firing( const ScriptEvent& aEvent ) override;
+        virtual Any approveFiring( const ScriptEvent& aEvent ) override;
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) override;
+        virtual void disposing( const EventObject& Source ) override;
 
         // lifetime control
         void dispose();
@@ -681,7 +681,7 @@ namespace svxform
     }
 
 
-    void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent )
+    void FormScriptListener::firing( const ScriptEvent& _rEvent )
     {
         if ( _rEvent.ScriptType == "VBAInterop" )
            return; // not handled here
@@ -702,7 +702,7 @@ namespace svxform
     }
 
 
-    Any SAL_CALL FormScriptListener::approveFiring( const ScriptEvent& _rEvent )
+    Any FormScriptListener::approveFiring( const ScriptEvent& _rEvent )
     {
         Any aResult;
 
@@ -714,7 +714,7 @@ namespace svxform
     }
 
 
-    void SAL_CALL FormScriptListener::disposing( const EventObject& /*Source*/ )
+    void FormScriptListener::disposing( const EventObject& /*Source*/ )
     {
         // not interested in
     }

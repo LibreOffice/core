@@ -113,7 +113,7 @@ SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
     ensureDisposed();
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint )
+Reference< XAccessible > SvxRectCtlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
 
@@ -128,12 +128,12 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPo
 }
 
 // XAccessibleContext
-sal_Int64 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount()
+sal_Int64 SvxRectCtlAccessibleContext::getAccessibleChildCount()
 {
     return SvxRectCtl::NO_CHILDREN;
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChild( sal_Int64 nIndex )
+Reference< XAccessible > SvxRectCtlAccessibleContext::getAccessibleChild( sal_Int64 nIndex )
 {
     checkChildIndex( nIndex );
 
@@ -166,7 +166,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
     return xChild;
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleParent()
+Reference< XAccessible > SvxRectCtlAccessibleContext::getAccessibleParent()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (mpRepr)
@@ -174,24 +174,24 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessiblePare
     return uno::Reference<css::accessibility::XAccessible>();
 }
 
-sal_Int16 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRole()
+sal_Int16 SvxRectCtlAccessibleContext::getAccessibleRole()
 {
     return AccessibleRole::PANEL;
 }
 
-OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleDescription()
+OUString SvxRectCtlAccessibleContext::getAccessibleDescription()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return msDescription + " Please use arrow key to selection.";
 }
 
-OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName()
+OUString SvxRectCtlAccessibleContext::getAccessibleName()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return msName;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRelationSet()
+Reference< XAccessibleRelationSet > SvxRectCtlAccessibleContext::getAccessibleRelationSet()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     if (mpRepr)
@@ -199,7 +199,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAcc
     return uno::Reference<css::accessibility::XAccessibleRelationSet>();
 }
 
-sal_Int64 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleStateSet()
+sal_Int64 SvxRectCtlAccessibleContext::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
     sal_Int64 nStateSet = 0;
@@ -223,7 +223,7 @@ sal_Int64 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleStateSet()
     return nStateSet;
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::grabFocus()
+void SvxRectCtlAccessibleContext::grabFocus()
 {
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -356,7 +356,7 @@ void SvxRectCtlAccessibleContext::selectChild(RectPoint eButton )
     selectChild(PointToIndex( eButton ));
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::disposing()
+void SvxRectCtlAccessibleContext::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     OAccessibleSelectionHelper::disposing();
@@ -410,12 +410,12 @@ SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
     ensureDisposed();
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleAtPoint( const awt::Point& /*rPoint*/ )
+Reference< XAccessible > SvxRectCtlChildAccessibleContext::getAccessibleAtPoint( const awt::Point& /*rPoint*/ )
 {
     return Reference< XAccessible >();
 }
 
-void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus()
+void SvxRectCtlChildAccessibleContext::grabFocus()
 {
 }
 
@@ -440,37 +440,37 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
 }
 
 // XAccessibleContext
-sal_Int64 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChildCount()
+sal_Int64 SvxRectCtlChildAccessibleContext::getAccessibleChildCount()
 {
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int64 /*nIndex*/ )
+Reference< XAccessible > SvxRectCtlChildAccessibleContext::getAccessibleChild( sal_Int64 /*nIndex*/ )
 {
     throw lang::IndexOutOfBoundsException();
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleParent()
+Reference< XAccessible > SvxRectCtlChildAccessibleContext::getAccessibleParent()
 {
     return mxParent;
 }
 
-sal_Int16 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRole()
+sal_Int16 SvxRectCtlChildAccessibleContext::getAccessibleRole()
 {
     return AccessibleRole::RADIO_BUTTON;
 }
 
-OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleDescription()
+OUString SvxRectCtlChildAccessibleContext::getAccessibleDescription()
 {
     return msDescription;
 }
 
-OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName()
+OUString SvxRectCtlChildAccessibleContext::getAccessibleName()
 {
     return msName;
 }
 
-Reference<XAccessibleRelationSet> SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRelationSet()
+Reference<XAccessibleRelationSet> SvxRectCtlChildAccessibleContext::getAccessibleRelationSet()
 {
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     if( mxParent.is() )
@@ -482,7 +482,7 @@ Reference<XAccessibleRelationSet> SAL_CALL SvxRectCtlChildAccessibleContext::get
     return pRelationSetHelper;
 }
 
-sal_Int64 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleStateSet()
+sal_Int64 SvxRectCtlChildAccessibleContext::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
     sal_Int64 nStateSet = 0;
@@ -508,33 +508,33 @@ sal_Int64 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleStateSet()
 }
 
 // XAccessibleValue
-Any SAL_CALL SvxRectCtlChildAccessibleContext::getCurrentValue()
+Any SvxRectCtlChildAccessibleContext::getCurrentValue()
 {
     Any aRet;
     aRet <<= ( mbIsChecked? 1.0 : 0.0 );
     return aRet;
 }
 
-bool SAL_CALL SvxRectCtlChildAccessibleContext::setCurrentValue( const Any& /*aNumber*/ )
+bool SvxRectCtlChildAccessibleContext::setCurrentValue( const Any& /*aNumber*/ )
 {
     return false;
 }
 
-Any SAL_CALL SvxRectCtlChildAccessibleContext::getMaximumValue()
+Any SvxRectCtlChildAccessibleContext::getMaximumValue()
 {
     Any aRet;
     aRet <<= 1.0;
     return aRet;
 }
 
-Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue()
+Any SvxRectCtlChildAccessibleContext::getMinimumValue()
 {
     Any aRet;
     aRet <<= 0.0;
     return aRet;
 }
 
-Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumIncrement()
+Any SvxRectCtlChildAccessibleContext::getMinimumIncrement()
 {
     Any aRet;
     aRet <<= 1.0;
@@ -587,7 +587,7 @@ Reference< XAccessibleKeyBinding > SvxRectCtlChildAccessibleContext::getAccessib
     return Reference< XAccessibleKeyBinding >();
 }
 
-void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
+void SvxRectCtlChildAccessibleContext::disposing()
 {
     OAccessible::disposing();
     mxParent.clear();

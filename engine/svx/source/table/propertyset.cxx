@@ -75,19 +75,19 @@ const Property* FastPropertySetInfo::hasProperty( const OUString& aName )
 // XPropertySetInfo
 
 
-Sequence< Property > SAL_CALL FastPropertySetInfo::getProperties()
+Sequence< Property > FastPropertySetInfo::getProperties()
 {
     return Sequence< Property >( maProperties.data(), maProperties.size() );
 }
 
 
-Property SAL_CALL FastPropertySetInfo::getPropertyByName( const OUString& aName )
+Property FastPropertySetInfo::getPropertyByName( const OUString& aName )
 {
     return getProperty( aName );
 }
 
 
-bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName )
+bool FastPropertySetInfo::hasPropertyByName( const OUString& aName )
 {
     return hasProperty( aName ) != nullptr;
 }
@@ -106,40 +106,40 @@ FastPropertySet::~FastPropertySet()
 // XPropertySet
 
 
-Reference< XPropertySetInfo > SAL_CALL FastPropertySet::getPropertySetInfo(  )
+Reference< XPropertySetInfo > FastPropertySet::getPropertySetInfo(  )
 {
     return mxInfo;
 }
 
 
-void SAL_CALL FastPropertySet::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+void FastPropertySet::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     setFastPropertyValue( mxInfo->getProperty( aPropertyName ).Handle, aValue );
 }
 
 
-Any SAL_CALL FastPropertySet::getPropertyValue( const OUString& aPropertyName )
+Any FastPropertySet::getPropertyValue( const OUString& aPropertyName )
 {
     return getFastPropertyValue( mxInfo->getProperty( aPropertyName ).Handle );
 }
 
 
-void SAL_CALL FastPropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void FastPropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
 }
 
 
-void SAL_CALL FastPropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void FastPropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
 }
 
 
-void SAL_CALL FastPropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void FastPropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
 }
 
 
-void SAL_CALL FastPropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void FastPropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
 }
 
@@ -147,7 +147,7 @@ void SAL_CALL FastPropertySet::removeVetoableChangeListener( const OUString&, co
 // XMultiPropertySet
 
 
-void SAL_CALL FastPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
+void FastPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
 {
     if( aPropertyNames.getLength() != aValues.getLength() )
         throw IllegalArgumentException();
@@ -168,7 +168,7 @@ void SAL_CALL FastPropertySet::setPropertyValues( const Sequence< OUString >& aP
 }
 
 
-Sequence< Any > SAL_CALL FastPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
+Sequence< Any > FastPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
 {
     sal_Int32 nCount = aPropertyNames.getLength();
     Sequence< Any > aValues( nCount );
@@ -190,17 +190,17 @@ Sequence< Any > SAL_CALL FastPropertySet::getPropertyValues( const Sequence< OUS
 }
 
 
-void SAL_CALL FastPropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void FastPropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
 }
 
 
-void SAL_CALL FastPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
+void FastPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
 {
 }
 
 
-void SAL_CALL FastPropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void FastPropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
 }
 

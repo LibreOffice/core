@@ -128,7 +128,7 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
     return xAccessibleShape;
 }
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint )
+Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -170,7 +170,7 @@ awt::Rectangle SvxGraphCtrlAccessibleContext::implGetBounds()
 }
 
 // XAccessibleContext
-sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount()
+sal_Int64 SvxGraphCtrlAccessibleContext::getAccessibleChildCount()
 {
     ::SolarMutexGuard aGuard;
 
@@ -195,14 +195,14 @@ SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int64 nIndex )
     return mpPage->GetObj( nIndex );
 }
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int64 nIndex )
+Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
     return getAccessible( getSdrObject( nIndex ) );
 }
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleParent()
+Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessibleParent()
 {
     ::SolarMutexGuard aGuard;
 
@@ -212,20 +212,20 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessiblePa
     return mpControl->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int16 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRole()
+sal_Int16 SvxGraphCtrlAccessibleContext::getAccessibleRole()
 {
     return AccessibleRole::PANEL;
 }
 
 
-OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleDescription()
+OUString SvxGraphCtrlAccessibleContext::getAccessibleDescription()
 {
     ::SolarMutexGuard aGuard;
     return msDescription;
 }
 
 
-OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName()
+OUString SvxGraphCtrlAccessibleContext::getAccessibleName()
 {
     ::SolarMutexGuard aGuard;
     return msName;
@@ -235,13 +235,13 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName()
 /** Return empty reference to indicate that the relation set is not
     supported.
 */
-Reference< XAccessibleRelationSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRelationSet()
+Reference< XAccessibleRelationSet > SvxGraphCtrlAccessibleContext::getAccessibleRelationSet()
 {
     return Reference< XAccessibleRelationSet >();
 }
 
 
-sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleStateSet()
+sal_Int64 SvxGraphCtrlAccessibleContext::getAccessibleStateSet()
 {
     ::SolarMutexGuard aGuard;
 
@@ -265,7 +265,7 @@ sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleStateSet()
 }
 
 
-lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale()
+lang::Locale SvxGraphCtrlAccessibleContext::getLocale()
 {
     ::SolarMutexGuard aGuard;
 
@@ -281,7 +281,7 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus()
+void SvxGraphCtrlAccessibleContext::grabFocus()
 {
     ::SolarMutexGuard aGuard;
 
@@ -291,31 +291,31 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus()
     mpControl->GrabFocus();
 }
 
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground()
+sal_Int32 SvxGraphCtrlAccessibleContext::getForeground()
 {
     svtools::ColorConfig aColorConfig;
     Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground()
+sal_Int32 SvxGraphCtrlAccessibleContext::getBackground()
 {
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 
 // XServiceInfo
-OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName()
+OUString SvxGraphCtrlAccessibleContext::getImplementationName()
 {
     return u"com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext"_ustr;
 }
 
-bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName )
+bool SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames()
+Sequence< OUString > SvxGraphCtrlAccessibleContext::getSupportedServiceNames()
 {
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr,
              u"com.sun.star.drawing.AccessibleGraphControl"_ustr };
@@ -328,7 +328,7 @@ OUString SvxGraphCtrlAccessibleContext::getServiceName()
 }
 
 // XAccessibleSelection
-void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int64 nIndex )
+void SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -345,7 +345,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int64 nI
 }
 
 
-bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int64 nIndex )
+bool SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -359,7 +359,7 @@ bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int6
 }
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection()
+void SvxGraphCtrlAccessibleContext::clearAccessibleSelection()
 {
     ::SolarMutexGuard aGuard;
 
@@ -370,7 +370,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection()
 }
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren()
+void SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren()
 {
     ::SolarMutexGuard aGuard;
 
@@ -381,7 +381,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren()
 }
 
 
-sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCount()
+sal_Int64 SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCount()
 {
     ::SolarMutexGuard aGuard;
 
@@ -393,7 +393,7 @@ sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCoun
 }
 
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChild( sal_Int64 nIndex )
+Reference< XAccessible > SvxGraphCtrlAccessibleContext::getSelectedAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -410,7 +410,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
 }
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int64 nIndex )
+void SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 
@@ -467,7 +467,7 @@ void SvxGraphCtrlAccessibleContext::setModelAndView (
 }
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
+void SvxGraphCtrlAccessibleContext::disposing()
 {
     ::SolarMutexGuard aGuard;
 

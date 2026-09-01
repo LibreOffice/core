@@ -88,25 +88,25 @@ EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(SdrObjCustomShape& rShape)
 }
 
 // XInterface
-void SAL_CALL EnhancedCustomShapeEngine::acquire() noexcept
+void EnhancedCustomShapeEngine::acquire() noexcept
 {
     OWeakObject::acquire();
 }
-void SAL_CALL EnhancedCustomShapeEngine::release() noexcept
+void EnhancedCustomShapeEngine::release() noexcept
 {
     OWeakObject::release();
 }
 
 // XServiceInfo
-OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
+OUString EnhancedCustomShapeEngine::getImplementationName()
 {
     return u"com.sun.star.drawing.EnhancedCustomShapeEngine"_ustr;
 }
-bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
+bool EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
+Sequence< OUString > EnhancedCustomShapeEngine::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.CustomShapeEngine"_ustr };
 }
@@ -217,7 +217,7 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::ImplForceGroupWithText(
     return pRenderedShape;
 }
 
-Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
+Reference< drawing::XShape > EnhancedCustomShapeEngine::render()
 {
     rtl::Reference<SdrObject> pSdrObj = render2();
     if (!pSdrObj)

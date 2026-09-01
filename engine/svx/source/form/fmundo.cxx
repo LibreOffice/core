@@ -83,10 +83,10 @@ public:
 
     }
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject& ) override {}
+    virtual void disposing(const EventObject& ) override {}
 
     // XScriptListener
-    virtual void SAL_CALL firing(const  ScriptEvent& evt) override
+    virtual void firing(const  ScriptEvent& evt) override
     {
         attemptListenerCreation();
         if ( m_vbaListener.is() )
@@ -95,7 +95,7 @@ public:
         }
     }
 
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) override
+    virtual Any approveFiring(const ScriptEvent& evt) override
     {
         attemptListenerCreation();
         if ( m_vbaListener.is() )
@@ -502,7 +502,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 
 //  XEventListener
 
-void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e)
+void FmXUndoEnvironment::disposing(const EventObject& e)
 {
     // check if it's an object we have cached information about
     if (m_pPropertySetCache)
@@ -519,7 +519,7 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e)
 
 // XPropertyChangeListener
 
-void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
+void FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -712,7 +712,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 
 // XContainerListener
 
-void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt)
+void FmXUndoEnvironment::elementInserted(const ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -736,7 +736,7 @@ void FmXUndoEnvironment::implSetModified()
 }
 
 
-void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt)
+void FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -753,7 +753,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt)
 }
 
 
-void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
+void FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -766,7 +766,7 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
 }
 
 
-void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ )
+void FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ )
 {
     implSetModified();
 }

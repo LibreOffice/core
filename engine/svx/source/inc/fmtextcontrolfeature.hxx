@@ -79,8 +79,8 @@ namespace svx
         virtual ~FmTextControlFeature() override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& State ) override;
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void statusChanged( const css::frame::FeatureStateEvent& State ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
     };
 
 

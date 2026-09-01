@@ -176,9 +176,9 @@ using namespace cpo::uno;
         virtual ~FmFocusListenerAdapter() override;
 
     protected:
-        virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) override;
-        virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) override;
-        virtual void SAL_CALL disposing( const EventObject& Source ) override;
+        virtual void focusGained( const css::awt::FocusEvent& e ) override;
+        virtual void focusLost( const css::awt::FocusEvent& e ) override;
+        virtual void disposing( const EventObject& Source ) override;
     };
 
 
@@ -222,21 +222,21 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL FmFocusListenerAdapter::focusGained( const css::awt::FocusEvent& e )
+    void FmFocusListenerAdapter::focusGained( const css::awt::FocusEvent& e )
     {
         if ( m_pObserver )
             m_pObserver->focusGained( e );
     }
 
 
-    void SAL_CALL FmFocusListenerAdapter::focusLost( const css::awt::FocusEvent& e )
+    void FmFocusListenerAdapter::focusLost( const css::awt::FocusEvent& e )
     {
         if ( m_pObserver )
             m_pObserver->focusLost( e );
     }
 
 
-    void SAL_CALL FmFocusListenerAdapter::disposing( const EventObject& Source )
+    void FmFocusListenerAdapter::disposing( const EventObject& Source )
     {
         DBG_ASSERT( Source.Source == m_xWindow, "FmFocusListenerAdapter::disposing: where did this come from?" );
         m_xWindow.clear();
@@ -260,11 +260,11 @@ using namespace cpo::uno;
         virtual ~FmMouseListenerAdapter() override;
 
     protected:
-        virtual void SAL_CALL mousePressed( const css::awt::MouseEvent& e ) override;
-        virtual void SAL_CALL mouseReleased( const css::awt::MouseEvent& e ) override;
-        virtual void SAL_CALL mouseEntered( const css::awt::MouseEvent& e ) override;
-        virtual void SAL_CALL mouseExited( const css::awt::MouseEvent& e ) override;
-        virtual void SAL_CALL disposing( const EventObject& Source ) override;
+        virtual void mousePressed( const css::awt::MouseEvent& e ) override;
+        virtual void mouseReleased( const css::awt::MouseEvent& e ) override;
+        virtual void mouseEntered( const css::awt::MouseEvent& e ) override;
+        virtual void mouseExited( const css::awt::MouseEvent& e ) override;
+        virtual void disposing( const EventObject& Source ) override;
     };
 
     FmMouseListenerAdapter::FmMouseListenerAdapter( const Reference< css::awt::XControl >& _rxControl, IContextRequestObserver* _pObserver )
@@ -307,7 +307,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mousePressed( const css::awt::MouseEvent& _rEvent )
+    void FmMouseListenerAdapter::mousePressed( const css::awt::MouseEvent& _rEvent )
     {
         SolarMutexGuard aGuard;
         // is this a request for a context menu?
@@ -319,25 +319,25 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseReleased( const css::awt::MouseEvent& /*e*/ )
+    void FmMouseListenerAdapter::mouseReleased( const css::awt::MouseEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseEntered( const css::awt::MouseEvent& /*e*/ )
+    void FmMouseListenerAdapter::mouseEntered( const css::awt::MouseEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseExited( const css::awt::MouseEvent& /*e*/ )
+    void FmMouseListenerAdapter::mouseExited( const css::awt::MouseEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::disposing( const EventObject& Source )
+    void FmMouseListenerAdapter::disposing( const EventObject& Source )
     {
         DBG_ASSERT( Source.Source == m_xWindow, "FmMouseListenerAdapter::disposing: where did this come from?" );
         m_xWindow.clear();

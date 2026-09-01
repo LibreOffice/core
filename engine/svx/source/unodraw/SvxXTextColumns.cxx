@@ -76,36 +76,36 @@ public:
     SvxXTextColumns() = default;
 
     // XTextColumns
-    virtual sal_Int32 SAL_CALL getReferenceValue() override;
-    virtual sal_Int16 SAL_CALL getColumnCount() override;
-    virtual void SAL_CALL setColumnCount(sal_Int16 nColumns) override;
-    virtual cpo::uno::Sequence<css::text::TextColumn> SAL_CALL getColumns() override;
-    virtual void SAL_CALL
+    virtual sal_Int32 getReferenceValue() override;
+    virtual sal_Int16 getColumnCount() override;
+    virtual void setColumnCount(sal_Int16 nColumns) override;
+    virtual cpo::uno::Sequence<css::text::TextColumn> getColumns() override;
+    virtual void
     setColumns(const cpo::uno::Sequence<css::text::TextColumn>& Columns) override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo>
-        SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
+        getPropertySetInfo() override;
+    virtual void setPropertyValue(const OUString& aPropertyName,
                                            const cpo::uno::Any& aValue) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual cpo::uno::Any getPropertyValue(const OUString& PropertyName) override;
+    virtual void addPropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
         const OUString& PropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
         const OUString& PropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 private:
     sal_Int32 m_nReference = USHRT_MAX;

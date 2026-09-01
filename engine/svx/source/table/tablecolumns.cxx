@@ -63,14 +63,14 @@ void TableColumns::throwIfDisposed() const
 // XTableRows
 
 
-void SAL_CALL TableColumns::insertByIndex( sal_Int32 nIndex, sal_Int32 nCount )
+void TableColumns::insertByIndex( sal_Int32 nIndex, sal_Int32 nCount )
 {
     throwIfDisposed();
     mxTableModel->insertColumns( nIndex, nCount );
 }
 
 
-void SAL_CALL TableColumns::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
+void TableColumns::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
 {
     throwIfDisposed();
     mxTableModel->removeColumns( nIndex, nCount );
@@ -80,14 +80,14 @@ void SAL_CALL TableColumns::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount )
 // XIndexAccess
 
 
-sal_Int32 SAL_CALL TableColumns::getCount()
+sal_Int32 TableColumns::getCount()
 {
     throwIfDisposed();
     return mxTableModel->getColumnCount();
 }
 
 
-Any SAL_CALL TableColumns::getByIndex( sal_Int32 Index )
+Any TableColumns::getByIndex( sal_Int32 Index )
 {
     throwIfDisposed();
 
@@ -101,7 +101,7 @@ Any SAL_CALL TableColumns::getByIndex( sal_Int32 Index )
 // XElementAccess
 
 
-Type SAL_CALL TableColumns::getElementType()
+Type TableColumns::getElementType()
 {
     throwIfDisposed();
 
@@ -109,7 +109,7 @@ Type SAL_CALL TableColumns::getElementType()
 }
 
 
-bool SAL_CALL TableColumns::hasElements()
+bool TableColumns::hasElements()
 {
     throwIfDisposed();
 

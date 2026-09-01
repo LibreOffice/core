@@ -158,7 +158,7 @@ const TableModelRef& TableRow::getModel() const
 // XCellRange
 
 
-Reference< XCell > SAL_CALL TableRow::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
+Reference< XCell > TableRow::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
 {
     throwIfDisposed();
     if( nRow != 0 )
@@ -168,7 +168,7 @@ Reference< XCell > SAL_CALL TableRow::getCellByPosition( sal_Int32 nColumn, sal_
 }
 
 
-Reference< XCellRange > SAL_CALL TableRow::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
+Reference< XCellRange > TableRow::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 {
     throwIfDisposed();
     if( (nLeft >= 0 ) && (nTop == 0) && (nRight >= nLeft) && (nBottom == 0)  )
@@ -179,7 +179,7 @@ Reference< XCellRange > SAL_CALL TableRow::getCellRangeByPosition( sal_Int32 nLe
 }
 
 
-Reference< XCellRange > SAL_CALL TableRow::getCellRangeByName( const OUString& /*aRange*/ )
+Reference< XCellRange > TableRow::getCellRangeByName( const OUString& /*aRange*/ )
 {
     throwIfDisposed();
     return Reference< XCellRange >();
@@ -189,13 +189,13 @@ Reference< XCellRange > SAL_CALL TableRow::getCellRangeByName( const OUString& /
 // XNamed
 
 
-OUString SAL_CALL TableRow::getName()
+OUString TableRow::getName()
 {
     return maName;
 }
 
 
-void SAL_CALL TableRow::setName( const OUString& aName )
+void TableRow::setName( const OUString& aName )
 {
     maName = aName;
 }
@@ -204,7 +204,7 @@ void SAL_CALL TableRow::setName( const OUString& aName )
 // XFastPropertySet
 
 
-void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue )
+void TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue )
 {
     if(!mxTableModel.is() || nullptr == mxTableModel->getSdrTableObj())
         return;
@@ -293,7 +293,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
 }
 
 
-Any SAL_CALL TableRow::getFastPropertyValue( sal_Int32 nHandle )
+Any TableRow::getFastPropertyValue( sal_Int32 nHandle )
 {
     switch( nHandle )
     {

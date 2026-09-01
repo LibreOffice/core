@@ -102,16 +102,16 @@ public:
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
 
     // XEmbeddedObjectResolver
-    virtual OUString SAL_CALL resolveEmbeddedObjectURL( const OUString& aURL ) override;
+    virtual OUString resolveEmbeddedObjectURL( const OUString& aURL ) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XNameAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 };
 
 namespace svx {

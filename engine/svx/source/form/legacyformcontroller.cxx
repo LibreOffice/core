@@ -77,25 +77,25 @@ namespace svxform
         }
 
         // form::XFormController
-        virtual Reference< XControl > SAL_CALL getCurrentControl(  ) override;
-        virtual void SAL_CALL addActivateListener( const Reference< form::XFormControllerListener >& l ) override;
-        virtual void SAL_CALL removeActivateListener( const Reference< form::XFormControllerListener >& l ) override;
+        virtual Reference< XControl > getCurrentControl(  ) override;
+        virtual void addActivateListener( const Reference< form::XFormControllerListener >& l ) override;
+        virtual void removeActivateListener( const Reference< form::XFormControllerListener >& l ) override;
 
         // awt::XTabController
-        virtual void SAL_CALL setModel( const Reference< XTabControllerModel >& Model ) override;
-        virtual Reference< XTabControllerModel > SAL_CALL getModel(  ) override;
-        virtual void SAL_CALL setContainer( const Reference< XControlContainer >& Container ) override;
-        virtual Reference< XControlContainer > SAL_CALL getContainer(  ) override;
-        virtual Sequence< Reference< XControl > > SAL_CALL getControls(  ) override;
-        virtual void SAL_CALL autoTabOrder(  ) override;
-        virtual void SAL_CALL activateTabOrder(  ) override;
-        virtual void SAL_CALL activateFirst(  ) override;
-        virtual void SAL_CALL activateLast(  ) override;
+        virtual void setModel( const Reference< XTabControllerModel >& Model ) override;
+        virtual Reference< XTabControllerModel > getModel(  ) override;
+        virtual void setContainer( const Reference< XControlContainer >& Container ) override;
+        virtual Reference< XControlContainer > getContainer(  ) override;
+        virtual Sequence< Reference< XControl > > getControls(  ) override;
+        virtual void autoTabOrder(  ) override;
+        virtual void activateTabOrder(  ) override;
+        virtual void activateFirst(  ) override;
+        virtual void activateLast(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     private:
         const Reference< form::runtime::XFormController >   m_xDelegator;
@@ -103,89 +103,89 @@ namespace svxform
 
     }
 
-    Reference< XControl > SAL_CALL LegacyFormController::getCurrentControl(  )
+    Reference< XControl > LegacyFormController::getCurrentControl(  )
     {
         return m_xDelegator->getCurrentControl();
     }
 
 
-    void SAL_CALL LegacyFormController::addActivateListener( const Reference< form::XFormControllerListener >& _listener )
+    void LegacyFormController::addActivateListener( const Reference< form::XFormControllerListener >& _listener )
     {
         m_xDelegator->addActivateListener( _listener );
     }
 
 
-    void SAL_CALL LegacyFormController::removeActivateListener( const Reference< form::XFormControllerListener >& _listener )
+    void LegacyFormController::removeActivateListener( const Reference< form::XFormControllerListener >& _listener )
     {
         m_xDelegator->removeActivateListener( _listener );
     }
 
 
-    void SAL_CALL LegacyFormController::setModel( const Reference< XTabControllerModel >& _model )
+    void LegacyFormController::setModel( const Reference< XTabControllerModel >& _model )
     {
         m_xDelegator->setModel( _model );
     }
 
 
-    Reference< XTabControllerModel > SAL_CALL LegacyFormController::getModel(  )
+    Reference< XTabControllerModel > LegacyFormController::getModel(  )
     {
         return m_xDelegator->getModel();
     }
 
 
-    void SAL_CALL LegacyFormController::setContainer( const Reference< XControlContainer >& _container )
+    void LegacyFormController::setContainer( const Reference< XControlContainer >& _container )
     {
         m_xDelegator->setContainer( _container );
     }
 
 
-    Reference< XControlContainer > SAL_CALL LegacyFormController::getContainer(  )
+    Reference< XControlContainer > LegacyFormController::getContainer(  )
     {
         return m_xDelegator->getContainer();
     }
 
 
-    Sequence< Reference< XControl > > SAL_CALL LegacyFormController::getControls(  )
+    Sequence< Reference< XControl > > LegacyFormController::getControls(  )
     {
         return m_xDelegator->getControls();
     }
 
 
-    void SAL_CALL LegacyFormController::autoTabOrder(  )
+    void LegacyFormController::autoTabOrder(  )
     {
         m_xDelegator->autoTabOrder();
     }
 
 
-    void SAL_CALL LegacyFormController::activateTabOrder(  )
+    void LegacyFormController::activateTabOrder(  )
     {
         m_xDelegator->activateTabOrder();
     }
 
 
-    void SAL_CALL LegacyFormController::activateFirst(  )
+    void LegacyFormController::activateFirst(  )
     {
         m_xDelegator->activateFirst();
     }
 
 
-    void SAL_CALL LegacyFormController::activateLast(  )
+    void LegacyFormController::activateLast(  )
     {
         m_xDelegator->activateLast();
     }
 
 
-    OUString SAL_CALL LegacyFormController::getImplementationName(  )
+    OUString LegacyFormController::getImplementationName(  )
     {
         return u"org.openoffice.comp.svx.LegacyFormController"_ustr;
     }
 
-    bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName )
+    bool LegacyFormController::supportsService( const OUString& _serviceName )
     {
         return cppu::supportsService(this, _serviceName);
     }
 
-    Sequence< OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  )
+    Sequence< OUString > LegacyFormController::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.form.FormController"_ustr, u"com.sun.star.awt.control.TabController"_ustr };
     }

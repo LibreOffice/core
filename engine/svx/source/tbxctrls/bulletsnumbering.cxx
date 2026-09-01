@@ -75,11 +75,11 @@ public:
     std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 };
 
 }
@@ -308,7 +308,7 @@ VclPtr<vcl::Window> NumberingToolBoxControl::createVclPopupWindow( vcl::Window* 
     return mxInterimPopover;
 }
 
-void SAL_CALL NumberingToolBoxControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
+void NumberingToolBoxControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
 
@@ -335,12 +335,12 @@ void SAL_CALL NumberingToolBoxControl::initialize( const cpo::uno::Sequence< cpo
     }
 }
 
-OUString SAL_CALL NumberingToolBoxControl::getImplementationName()
+OUString NumberingToolBoxControl::getImplementationName()
 {
     return u"com.sun.star.comp.svx.NumberingToolBoxControl"_ustr;
 }
 
-Sequence< OUString > SAL_CALL NumberingToolBoxControl::getSupportedServiceNames()
+Sequence< OUString > NumberingToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }

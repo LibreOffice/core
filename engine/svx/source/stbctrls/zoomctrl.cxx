@@ -205,7 +205,7 @@ SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_SLIDE));
 }
 
-void SAL_CALL SvxZoomPageStatusBarControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void SvxZoomPageStatusBarControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // Call inherited initialize
     StatusbarController::initialize(aArguments);

@@ -178,14 +178,14 @@ namespace svx
         virtual ~FormControllerHelper() override;
 
         // XFeatureInvalidation
-        virtual void SAL_CALL invalidateFeatures( const cpo::uno::Sequence< ::sal_Int16 >& Features ) override;
-        virtual void SAL_CALL invalidateAllFeatures() override;
+        virtual void invalidateFeatures( const cpo::uno::Sequence< ::sal_Int16 >& Features ) override;
+        virtual void invalidateAllFeatures() override;
 
         // XSQLErrorListener
-        virtual void SAL_CALL errorOccured( const css::sdb::SQLErrorEvent& Event ) override;
+        virtual void errorOccured( const css::sdb::SQLErrorEvent& Event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         enum FormOperation { EXECUTE, EXECUTE_ARGS, COMMIT_CONTROL, COMMIT_RECORD };
 

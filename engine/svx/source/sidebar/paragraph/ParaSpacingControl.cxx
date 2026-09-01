@@ -173,7 +173,7 @@ void ParaLRSpacingControl::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItem
     }
 }
 
-void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
+void ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
 {
     ToolBoxItemId nId = GetId();
     ToolBox& rTbx = GetToolBox();
@@ -188,7 +188,7 @@ void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::Cont
     }
 }
 
-::cpo::uno::Any SAL_CALL ParaLRSpacingControl::queryInterface(const ::cpo::uno::Type& aType)
+::cpo::uno::Any ParaLRSpacingControl::queryInterface(const ::cpo::uno::Type& aType)
 {
     ::cpo::uno::Any a(SfxToolBoxControl::queryInterface(aType));
     if (a.hasValue())
@@ -197,18 +197,18 @@ void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::Cont
     return ::cppu::queryInterface(aType, static_cast<css::ui::XContextChangeEventListener*>(this));
 }
 
-void SAL_CALL ParaLRSpacingControl::acquire() noexcept
+void ParaLRSpacingControl::acquire() noexcept
 {
     SfxToolBoxControl::acquire();
 }
 
-void SAL_CALL ParaLRSpacingControl::disposing(const ::css::lang::EventObject& rEvent)
+void ParaLRSpacingControl::disposing(const ::css::lang::EventObject& rEvent)
 {
     // disambiguate XEventListener inherited via both SfxToolBoxControl and XContextChangeEventListener
     svt::ToolboxController::disposing(rEvent);
 }
 
-void SAL_CALL ParaLRSpacingControl::release() noexcept
+void ParaLRSpacingControl::release() noexcept
 {
     SfxToolBoxControl::release();
 }

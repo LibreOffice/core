@@ -111,8 +111,8 @@ public:
 
     void ExecutePopup(weld::Widget* pParent, const ::Point &rPos);
 
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent &rEvent) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject &rSource) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent &rEvent) override;
+    virtual void disposing( const css::lang::EventObject &rSource) override;
 };
 
 }
@@ -1616,7 +1616,7 @@ GalleryThemePopup::GalleryThemePopup(
 
 }
 
-void SAL_CALL GalleryThemePopup::statusChanged(
+void GalleryThemePopup::statusChanged(
     const css::frame::FeatureStateEvent &rEvent )
 {
     const OUString &rURL = rEvent.FeatureURL.Complete;
@@ -1651,7 +1651,7 @@ void SAL_CALL GalleryThemePopup::statusChanged(
     }
 }
 
-void SAL_CALL GalleryThemePopup::disposing(
+void GalleryThemePopup::disposing(
     const css::lang::EventObject &/*rSource*/)
 {
 }
