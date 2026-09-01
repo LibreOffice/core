@@ -84,6 +84,10 @@
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <unicode/errorcode.h>
+#include <unicode/regex.h>
+#include <unicode/unistr.h>
+
 #include <sfx2/brokenpackageint.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -1469,6 +1473,31 @@ ErrCode SfxObjectShell::CallBasic( std::u16string_view rMacro,
         pMgr = SfxApplication::GetBasicManager();
     ErrCode nRet = SfxApplication::CallBasic( OUString(rMacro), pMgr, pArgs, pRet );
     return nRet;
+}
+
+bool SfxObjectShell::isScriptURLAllowed(const OUString& rScriptURL)
+{
+    std::optional<cpo::uno::Sequence<OUString>> allowedEvents(
+        officecfg::Office::Common::Security::Scripting::AllowedDocumentEventURLs::get());
+    // When AllowedDocumentEventURLs is empty, all event URLs are allowed
+    if (!allowedEvents)
+        return true;
+
+    icu::ErrorCode status;
+    const uint32_t rMatcherFlags = UREGEX_CASE_INSENSITIVE;
+    icu::UnicodeString usInput(rScriptURL.getStr());
+    const cpo::uno::Sequence<OUString>& rAllowedEvents = *allowedEvents;
+    for (auto const& allowedEvent : rAllowedEvents)
+    {
+        icu::UnicodeString usRegex(allowedEvent.getStr());
+        icu::RegexMatcher rmatch1(usRegex, usInput, rMatcherFlags, status);
+        if (rScriptURL.startsWith(allowedEvent) || rmatch1.matches(status))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool SfxObjectShell::isScriptAccessAllowed( const Reference< XInterface >& _rxScriptContext )

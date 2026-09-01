@@ -437,6 +437,9 @@ public:
 
     static bool                 UnTrustedScript(const OUString& rScriptURL);
 
+    /// Check if script URL whitelist exists, and if so, if current script url is part of it
+    static bool                 isScriptURLAllowed(const OUString& rScriptURL);
+
     static bool                 isScriptAccessAllowed(const css::uno::Reference<css::uno::XInterface>& rScriptContext);
 
     SvKeyValueIterator*         GetHeaderAttributes();
