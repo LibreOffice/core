@@ -19,10 +19,34 @@
 
 #include "pnghelper.hxx"
 #include <iterator>
+#include <o3tl/safeint.hxx>
 
 #include <zlib.h>
 
 using namespace pdfi;
+
+namespace
+{
+    const sal_Int32 nMaxPixelsAllowed = SAL_MAX_INT32/2/4;
+
+    bool isReasonableSize( int width, int height )
+    {
+        sal_Int32 nPixels;
+        if( width < 1 || height < 1 )
+            return false;
+        return !o3tl::checked_multiply( sal_Int32( width ), sal_Int32( height ), nPixels )
+               && nPixels <= nMaxPixelsAllowed;
+    }
+
+    sal_Int64 alphaOffsetForMaskPixel( int y, int x,
+                                       int width, int height,
+                                       int maskWidth, int maskHeight )
+    {
+        const sal_Int64 nLine = sal_Int64( y ) * height / maskHeight;
+        const sal_Int64 nColumn = sal_Int64( x ) * width / maskWidth;
+        return nLine * ( sal_Int64( width ) * 4 + 1 ) + nColumn * 4 + 4;
+    }
+}
 
 // checksum helpers, courtesy of libpng.org
 
@@ -184,6 +208,9 @@ void PngHelper::createPng( OutputBuffer&     o_rOutputBuf,
                            bool              bIsMask
                            )
 {
+    if( !isReasonableSize( width, height ) )
+        return;
+
     appendFileHeader( o_rOutputBuf );
     appendIHDR( o_rOutputBuf, width, height, 1, 3 );
 
@@ -248,6 +275,9 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                            Stream* maskStr,
                            int maskWidth, int maskHeight, GfxImageColorMap* maskColorMap )
 {
+    if( !isReasonableSize( width, height ) )
+        return;
+
     appendFileHeader( o_rOutputBuf );
     appendIHDR( o_rOutputBuf, width, height, 8, 6 ); // RGBA image
 
@@ -278,6 +308,8 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     {
         aScanlines.push_back( 0 );
         p = imgStr->getLine();
+        if( !p )
+            return;
         for( int x=0; x<width; ++x)
         {
             colorMap->getRGB(p, &rgb);
@@ -318,13 +350,16 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     for( int y = 0; y < maskHeight; ++y )
     {
         pm = imgStrMask->getLine();
+        if( !pm )
+            break;
         for( int x = 0; x < maskWidth; ++x )
         {
             maskColorMap->getGray(pm,&alpha);
             pm += maskColorMap->getNumPixelComps();
-            int nIndex = (y*height/maskHeight) * (width*4+1) + // mapped line
-                         (x*width/maskWidth)*4 + 1  + 3        // mapped column
-                         ;
+            const sal_Int64 nIndex = alphaOffsetForMaskPixel( y, x, width, height,
+                                                              maskWidth, maskHeight );
+            if( nIndex < 0 || o3tl::make_unsigned( nIndex ) >= aScanlines.size() )
+                continue;
             aScanlines[ nIndex ] = colToByte(alpha);
         }
     }
@@ -351,6 +386,9 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                            bool maskInvert
                           )
 {
+    if( !isReasonableSize( width, height ) )
+        return;
+
     appendFileHeader( o_rOutputBuf );
     appendIHDR( o_rOutputBuf, width, height, 8, 6 ); // RGBA image
 
@@ -380,6 +418,8 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     {
         aScanlines.push_back( 0 );
         p = imgStr->getLine();
+        if( !p )
+            return;
         for( int x=0; x<width; ++x)
         {
             colorMap->getRGB(p, &rgb);
@@ -420,9 +460,10 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
         {
             unsigned char aPixel = 0;
             imgStrMask->getPixel( &aPixel );
-            int nIndex = (y*height/maskHeight) * (width*4+1) + // mapped line
-                         (x*width/maskWidth)*4 + 1  + 3        // mapped column
-                         ;
+            const sal_Int64 nIndex = alphaOffsetForMaskPixel( y, x, width, height,
+                                                              maskWidth, maskHeight );
+            if( nIndex < 0 || o3tl::make_unsigned( nIndex ) >= aScanlines.size() )
+                continue;
             if( maskInvert )
                 aScanlines[ nIndex ] = aPixel ? 0xff : 0x00;
             else
