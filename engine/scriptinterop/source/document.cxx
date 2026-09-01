@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -29,6 +30,8 @@
 #include <com/sun/star/io/XTempFile.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
@@ -49,6 +52,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cpo/uno/Any.hxx>
+#include <cpo/uno/Exception.hdl>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -703,7 +707,18 @@ private:
 
 class BodyImpl: public cppu::WeakImplHelper<scriptinterop::XBody> {
 public:
-    explicit BodyImpl(css::uno::Reference<css::text::XText> const & text): text_(text) {}
+    explicit BodyImpl(
+        css::uno::Reference<css::frame::XModel> const & model,
+        css::uno::Reference<css::text::XText> const & text):
+        model_(model), text_(text) {}
+
+    css::uno::Reference<scriptinterop::XParagraph> appendListItem(OUString const & text) override {
+        return appendImpl(text, u"List Bullet"_ustr);
+    }
+
+    css::uno::Reference<scriptinterop::XParagraph> appendParagraph(OUString const & text) override {
+        return appendImpl(text, u""_ustr);
+    }
 
     css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
@@ -714,6 +729,81 @@ public:
     OUString getText() override { return text_.is() ? text_->getString() : u""_ustr; }
 
 private:
+    css::uno::Reference<scriptinterop::XParagraph> appendImpl(
+        OUString const & text, OUString const & paraStyle)
+    {
+        if (!text_.is()) {
+            throw cpo::uno::RuntimeException(u"XBody has no underlying text"_ustr);
+        }
+        auto const cursor = text_->createTextCursorByRange(text_->getEnd());
+        text_->insertControlCharacter(
+            cursor, css::text::ControlCharacter::PARAGRAPH_BREAK, false);
+        text_->insertString(cursor, text, false);
+        css::uno::Reference<css::text::XTextContent> lastParagraph;
+        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
+                text_, css::uno::UNO_QUERY})
+        {
+            auto const en = ea->createEnumeration();
+            while (en.is() && en->hasMoreElements()) {
+                css::uno::Reference<css::text::XTextContent> xtc;
+                en->nextElement() >>= xtc;
+                if (!xtc.is()) {
+                    continue;
+                }
+                css::uno::Reference<css::lang::XServiceInfo> const info(
+                    xtc, css::uno::UNO_QUERY);
+                if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+                    continue;
+                }
+                lastParagraph = xtc;
+            }
+        }
+        if (!lastParagraph.is()) {
+            return {};
+        }
+        if (!paraStyle.isEmpty()) {
+            css::uno::Reference<css::beans::XPropertySet> const props(
+                lastParagraph, css::uno::UNO_QUERY);
+            if (props.is()) {
+                try {
+                    props->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(paraStyle));
+                } catch (css::lang::IllegalArgumentException const &) {
+                    // Document lacks the requested style; build a bullet NumberingRules from
+                    // scratch and apply it, so the paragraph is a real list item regardless of
+                    // which paragraph styles the document has registered:
+                    applyBulletNumbering(props);
+                }
+            }
+        }
+        return new ParagraphImpl(lastParagraph);
+    }
+
+    void applyBulletNumbering(css::uno::Reference<css::beans::XPropertySet> const & props) {
+        css::uno::Reference<css::lang::XMultiServiceFactory> const factory(
+            model_, css::uno::UNO_QUERY);
+        if (!factory.is()) {
+            return;
+        }
+        css::uno::Reference<css::container::XIndexReplace> const rules(
+            factory->createInstance(u"com.sun.star.text.NumberingRules"_ustr),
+            css::uno::UNO_QUERY);
+        if (!rules.is() || rules->getCount() == 0) {
+            return;
+        }
+        rules->replaceByIndex(
+            0,
+            cpo::uno::Any(
+                cpo::uno::Sequence<css::beans::PropertyValue>{
+                    {u"NumberingType"_ustr, 0,
+                     cpo::uno::Any(sal_Int16(css::style::NumberingType::CHAR_SPECIAL)),
+                     css::beans::PropertyState_DIRECT_VALUE},
+                    {u"BulletChar"_ustr, 0, cpo::uno::Any(OUString(OUStringChar(u'\u2022'))),
+                     css::beans::PropertyState_DIRECT_VALUE}}));
+        props->setPropertyValue(u"NumberingRules"_ustr, cpo::uno::Any(rules));
+        props->setPropertyValue(u"NumberingIsNumber"_ustr, cpo::uno::Any(true));
+    }
+
+    css::uno::Reference<css::frame::XModel> model_;
     css::uno::Reference<css::text::XText> text_;
 };
 
@@ -743,7 +833,7 @@ public:
     css::uno::Reference<scriptinterop::XBody> getBody() override
     {
         css::uno::Reference<css::text::XTextDocument> const doc(model_, css::uno::UNO_QUERY_THROW);
-        return new BodyImpl(doc->getText());
+        return new BodyImpl(model_, doc->getText());
     }
 
     css::uno::Reference<scriptinterop::XCursor> getCursor() override

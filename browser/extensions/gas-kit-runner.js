@@ -130,26 +130,6 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             }
         };
 
-        // Placeholders used by appendParagraph/appendListItem when there is no real UNO paragraph
-        // yet:
-        const emptyText = {
-            getEscapement: function() { return 0; },
-            getFontFamily: function() { return ''; },
-            getLinkUrl: function() { return ''; },
-            getText: function() { return ''; },
-            getTextAttributeIndices: function() { return [0]; },
-            isBold: function() { return false; },
-            isItalic: function() { return false; },
-            isStrikethrough: function() { return false; },
-            isUnderline: function() { return false; }
-        };
-        const emptyPara = {
-            asText: function() { return emptyText; },
-            getElementType: function() { return 'PARAGRAPH'; },
-            getText: function() { return ''; },
-            isLeftToRight: function() { return true; }
-        };
-
         function paragraphElement(paragraph, index) {
             const xtext = paragraph.asText();
             const text = xtext.getText();
@@ -275,8 +255,16 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 editAsText: function() { return textFacade(null, xbody.getText()); },
                 asText: function() { return textFacade(null, xbody.getText()); },
                 copy: function() { return body; },
-                appendParagraph: function() { return paragraphElement(emptyPara, paras().length); },
-                appendListItem: function() { return paragraphElement(emptyPara, paras().length); },
+                appendParagraph: function(text) {
+                    const p = xbody.appendParagraph(text || '');
+                    cached = null;
+                    return paragraphElement(p, paras().length - 1);
+                },
+                appendListItem: function(text) {
+                    const p = xbody.appendListItem(text || '');
+                    cached = null;
+                    return paragraphElement(p, paras().length - 1);
+                },
                 getParent: function() { return null; },
                 getAttributes: function() { return {}; },
                 findText: function() { return null; }

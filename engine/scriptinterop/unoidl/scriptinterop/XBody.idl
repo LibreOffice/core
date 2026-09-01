@@ -12,6 +12,10 @@
 module scriptinterop {
 
 interface XBody: XBase {
+    XParagraph appendListItem([in] string text);
+
+    XParagraph appendParagraph([in] string text);
+
     sequence<XParagraph> getChildren();
 
     string getText();
