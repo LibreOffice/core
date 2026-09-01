@@ -968,12 +968,117 @@ public:
     }
 };
 
+/// A document subscribes to a related document whose file is gone from storage.
+/// The storage answers the remote load with 404, so the subscriber is told the
+/// source is missing rather than merely disconnected.
+class UnitRemoteDocumentMissing : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitMissing, Done) _phase;
+
+    std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
+
+    std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+
+public:
+    UnitRemoteDocumentMissing()
+        : WopiTestServer("UnitRemoteDocumentMissing")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // The subscribing document lists the missing file as a related document.
+        if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
+        {
+            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
+            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+            entry->set("WOPISrc", remoteWopiSrc());
+            entry->set("AccessToken", "remotetoken");
+            relatedDocuments->add(entry);
+            fileInfo->set("RelatedDocuments", relatedDocuments);
+        }
+    }
+
+    std::unique_ptr<http::Response>
+    assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        // The related document's file is gone, so the storage cannot find it.
+        // The subscribing document itself still loads normally.
+        if (Poco::URI(request.getURI()).getPath().ends_with("/2"))
+            return std::make_unique<http::Response>(http::StatusCode::NotFound);
+
+        return nullptr;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitLoadStatus)
+        {
+            // The subscriber document is up; ask for the missing related document.
+            TRANSITION_STATE(_phase, Phase::WaitMissing);
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("relateddocuments:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        // The subscribe fails to read the source, so the entry ends up missing.
+        if (_phase == Phase::WaitMissing &&
+            message.find("\"state\":\"missing\"") != std::string_view::npos)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The subscriber was told the source is missing when its file is gone");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/1?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitMissing:
+            case Phase::Done:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
                               new UnitRemoteDocumentTags(), new UnitRelatedDocumentPost(),
                               new UnitRemoteDocumentMutual(), new UnitRemoteDocumentCommand(),
-                              nullptr };
+                              new UnitRemoteDocumentMissing(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -333,7 +333,8 @@ void RelatedDocuments::onEvent(DocumentBroker& docBroker, const std::string& enc
         const auto it = _entries.find(docKey);
         if (it != _entries.end())
         {
-            if (event == "connected" || event == "disconnected" || event == "failed")
+            if (event == "connected" || event == "disconnected" || event == "failed" ||
+                event == "missing")
                 it->second.lastState = event;
             refresh(docBroker);
         }

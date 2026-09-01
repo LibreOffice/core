@@ -426,7 +426,7 @@ void RemoteDocument::onInvalidated(const int part)
 void RemoteDocument::onLoadFailed(const std::string& kind)
 {
     LOG_ERR("RemoteDoc: loading the remote document [" << _docKey << "] failed: " << kind);
-    broadcastEvent("event=failed kind=" + kind);
+    broadcastEvent("event=missing kind=" + kind);
     shutdown();
 }
 
