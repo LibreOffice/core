@@ -89,7 +89,7 @@
     <string name="storage_permission_required">Jogosultság szükséges a tárolóhelyre íráshoz</string>
     <string name="file_creation_failed">A fájl létrehozása sikertelen</string>
     <string name="file_exists_warning">Már létezik ilyen nevű fájl, felül lesz írva.</string>
-    <string name="temp_file_saving_disabled">Ez a fájl írásvédett, a mentés le van tiltva.</string>
+    <string name="temp_file_saving_disabled">A forrásalkalmazás írásvédettként osztotta meg. A módosításhoz használja a „Másolat szerkesztése” lehetőséget.</string>
     <string name="no_items">Nincsenek elemek</string>
     <string name="no_recent_items">A fájlok megnyitásához használja az eszköztáron levő mappa ikont.</string>
     <string name="app_vendor">Ezt a kiadást a $VENDOR adta ki.</string>
