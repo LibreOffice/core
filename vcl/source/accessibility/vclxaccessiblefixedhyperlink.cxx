@@ -28,16 +28,4 @@ VCLXAccessibleFixedHyperlink::VCLXAccessibleFixedHyperlink(vcl::Window* pWindow)
 {
 }
 
-// XServiceInfo
-
-OUString VCLXAccessibleFixedHyperlink::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleFixedHyperlink"_ustr;
-}
-
-uno::Sequence<OUString> VCLXAccessibleFixedHyperlink::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleFixedHyperlink"_ustr };
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
