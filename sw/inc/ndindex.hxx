@@ -64,7 +64,7 @@ public:
 
     SwNodeIndex( const SwNodeIndex& rIdx, sal_Int32 nDiff ) : SwNodeIndex(rIdx, SwNodeOffset(nDiff)) {}
     SwNodeIndex( const SwNodeIndex& rIdx, SwNodeOffset nDiff = SwNodeOffset(0) )
-        : SwNodeIndex( nDiff ? rIdx.GetNodes()[ rIdx.GetIndex() + nDiff ] : rIdx.m_pNode ) {}
+        : SwNodeIndex( *rIdx.m_pNode, nDiff ) {}
 
     SwNodeIndex( const SwNode& rNd, sal_Int32 nDiff ) : SwNodeIndex(rNd, SwNodeOffset(nDiff)) {}
     explicit SwNodeIndex( const SwNode& rNd )
@@ -85,23 +85,20 @@ public:
     bool operator>( const SwNodeIndex& rIndex ) const { return operator>(rIndex.GetNode()); }
     bool operator>=( const SwNodeIndex& rIndex ) const { return operator>=(rIndex.GetNode()); }
     bool operator==( const SwNodeIndex& rIndex ) const { return operator==(rIndex.GetNode()); }
-    bool operator!=( const SwNodeIndex& rIndex ) const { return operator!=(rIndex.GetNode()); }
 
     bool operator<( SwNodeOffset nOther ) const { return GetIndex() < nOther; }
     bool operator<=( SwNodeOffset nOther ) const { return GetIndex() <= nOther; }
     bool operator>( SwNodeOffset nOther ) const { return GetIndex() > nOther; }
     bool operator>=( SwNodeOffset nOther ) const { return GetIndex() >= nOther; }
     bool operator==( SwNodeOffset nOther ) const { return GetIndex() == nOther; }
-    bool operator!=( SwNodeOffset nOther ) const { return GetIndex() != nOther; }
 
     bool operator<( const SwNode& rNd ) const { assert(&GetNodes() == &rNd.GetNodes()); return operator<(rNd.GetIndex()); }
     bool operator<=( const SwNode& rNd ) const { return operator==(rNd) || operator<(rNd); }
     bool operator>( const SwNode& rNd ) const { assert(&GetNodes() == &rNd.GetNodes()); return operator>(rNd.GetIndex()); }
     bool operator>=( const SwNode& rNd ) const { return operator==(rNd) || operator>(rNd); }
     bool operator==( const SwNode& rNd ) const { return m_pNode == &rNd; }
-    bool operator!=( const SwNode& rNd ) const { return m_pNode != &rNd; }
 
-    inline SwNodeIndex& operator=( SwNodeOffset );
+    SwNodeIndex& operator=( SwNodeOffset nNew ) { return operator=(*GetNodes()[nNew]); }
     SwNodeIndex& operator=( const SwNodeIndex& rIdx ) { return operator=(*rIdx.m_pNode); }
     inline SwNodeIndex& operator=( const SwNode& );
 
@@ -151,18 +148,6 @@ public:
 // For inlines node.hxx is needed which in turn needs this one.
 // Therefore all inlines accessing m_pNode are implemented here.
 
-inline SwNodeIndex& SwNodeIndex::operator=( SwNodeOffset const nNew )
-{
-    auto pNewNode = GetNodes()[ nNew ];
-    if (pNewNode != m_pNode)
-    {
-        DeRegisterIndex();
-        m_pNode = GetNodes()[ nNew ];
-        RegisterIndex();
-    }
-    return *this;
-}
-
 SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
 {
     if (&rNd != m_pNode)
@@ -176,12 +161,7 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
 
 SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, SwNodeOffset nOffset )
 {
-    const SwNode* pNewNode;
-    if (nOffset)
-        pNewNode = rNd.GetNodes()[ rNd.GetIndex() + nOffset ];
-    else
-        pNewNode = &rNd;
-    return operator=(*pNewNode);
+    return operator=(nOffset ? *rNd.GetNodes()[rNd.GetIndex() + nOffset] : rNd);
 }
 
 #endif
