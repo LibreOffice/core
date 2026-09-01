@@ -761,9 +761,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         }
         else if (tokens.equals(0, "uno"))
         {
-            // SpellCheckApplySuggestion might contain non separator spaces
+            // SpellCheckApplySuggestion and AddToWordbook might contain non separator spaces
             if (tokens[1].find(".uno:SpellCheckApplySuggestion") != std::string::npos ||
-                tokens[1].find(".uno:LanguageStatus") != std::string::npos)
+                tokens[1].find(".uno:LanguageStatus") != std::string::npos ||
+                tokens[1].find(".uno:AddToWordbook") != std::string::npos)
             {
                 StringVector newTokens;
                 newTokens.push_back(tokens[0]);
