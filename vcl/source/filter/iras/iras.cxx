@@ -100,7 +100,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if (!m_rRAS.good() || nMagicNumber != SUNRASTER_MAGICNUMBER)
         return false;
 
-    // Kopf einlesen:
+    // Read header:
 
     mbStatus = ImplReadHeader();
     if ( !mbStatus )
@@ -109,7 +109,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     std::vector<Color> aPalette;
     bool bOk = true;
 
-    if ( mnDstBitsPerPix <= 8 )     // pallets pictures
+    if ( mnDstBitsPerPix <= 8 )     // palette pictures
     {
         bool bPalette(false);
 

@@ -149,7 +149,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, Bitmap& rBitmap, doub
     @param pData
     The block of data to copy
     @param nStride
-    The number of bytes in a scanline, must >= (width * nBitCount / 8)
+    The number of bytes in a scanline, must be >= (width * nBitCount / 8)
     @param bReversColors
     In case the endianness of pData is wrong, you could reverse colors
 */

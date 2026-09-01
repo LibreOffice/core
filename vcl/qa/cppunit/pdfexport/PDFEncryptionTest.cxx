@@ -279,12 +279,12 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPermsEncryption)
 {
     // Encrypts file permissions for /Perms entry
 
-    // We use a existing encrypted /Perm to validate the decryption and re-encryption
+    // We use an existing encrypted /Perm to validate the decryption and re-encryption
     // algorithm works correctly.
 
     const sal_uInt8 pUserPass[] = { 'T', 'e', 's', 't' };
 
-    // U and UE taken from an PDF that was encrypted with "Test" as password
+    // U and UE taken from a PDF that was encrypted with "Test" as password
     std::vector<sal_uInt8> U = parseHex("7BD210807A0277FECC52C261C442F02E1AD62C1A23553348B8F8AF7320"
                                         "DC9978FAB7E65E1BF4CA76F4BE5E6D2AA8C7D5");
     std::vector<sal_uInt8> UE
@@ -327,7 +327,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPermsEncryption)
     CPPUNIT_ASSERT_EQUAL(std::string("fcffffffffffffff54616462bb609a8a"),
                          comphelper::hashToString(aPermsDecrpyted));
 
-    // Check the creating /Perm content from access permissions works correctly
+    // Check that creating /Perm content from access permissions works correctly
     std::vector<sal_uInt8> aPermsCreated = vcl::pdf::createPerms(nExpectedAccessPermisssions, true);
 
     // Last 12 bytes are random, so we shouldn't check those
@@ -500,7 +500,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileEncryption_checkDifferentIV)
     }
 }
 
-} // end anonymous namespace
+} // namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

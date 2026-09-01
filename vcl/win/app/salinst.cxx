@@ -98,7 +98,7 @@ void WinSalYieldMutex::BeforeReleaseHandler()
 
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
     {
-        // If we don't call these message, the Output from the
+        // If we don't call these messages, the Output from the
         // Java clients doesn't come in the right order
         GdiFlush();
     }

@@ -834,7 +834,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
             // either on first page
             // or on paper format change - cups does not support multiple paper formats per job (yet?)
             // so we need to start a new job to get a new paper format from the printer
-            // orientation switches (that is switch of height and width) is handled transparently by CUPS
+            // orientation switches (that is switch of height and width) are handled transparently by CUPS
             if( ! xWriter ||
                 (aNewParm != aLastParm && ! i_pFileName ) )
             {

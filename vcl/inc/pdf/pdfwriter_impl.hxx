@@ -153,7 +153,7 @@ struct PDFPage
     // the same for double values
     void appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32 nPrecision = 5 ) const;
     // appends LineInfo
-    // returns false if too many dash array entry were created for
+    // returns false if too many dash array entries were created for
     // the implementation limits of some PDF readers
     bool appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const;
     // appends a horizontal waveline with vertical offset (helper for drawWaveLine)

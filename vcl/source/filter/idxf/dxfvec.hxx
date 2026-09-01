@@ -76,14 +76,14 @@ public:
     // vector with same direction and a length of 1:
     DXFVector Unit() const;
 
-    // equivalence or net:
+    // equivalence or not:
     bool operator == (const DXFVector & rV) const;
 };
 
 
 //---------------------------- DXFTransform ------------------------------------
 
-// a transformation matrice specialized for our problem
+// a transformation matrix specialized for our problem
 
 class DXFTransform {
 
@@ -104,7 +104,7 @@ public:
 
     DXFTransform(const DXFVector & rExtrusion);
         // Transformation "ECS->WCS" via "Entity Extrusion Direction"
-        // ant the "Arbitrary Axis Algorithm"
+        // and the "Arbitrary Axis Algorithm"
         // (See DXF-Docu from AutoDesk)
 
     DXFTransform(const DXFVector & rViewDir, const DXFVector & rViewTarget);
@@ -127,7 +127,7 @@ public:
 
     bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
         // Attempt to transform a circle (in xy plane) so that it results
-        // in an aligned ellipse. If the does not work because an ellipse of
+        // in an aligned ellipse. If this does not work because an ellipse of
         // arbitrary position would be created, sal_False is returned.
         // (The center point will not be transformed, use Transform(..))
 
@@ -135,7 +135,7 @@ public:
         // Calculates the rotation angle around z-axis (in degrees)
 
     bool Mirror() const;
-        // Returns sal_True, if the matrice represents a left-handed coordinate system
+        // Returns sal_True, if the matrix represents a left-handed coordinate system
 
     LineInfo Transform(const DXFLineInfo& aDXFLineInfo) const;
         // Transform to LineInfo
