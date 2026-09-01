@@ -6240,6 +6240,15 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         {
             clearCaches();
         }
+        else if (message->firstTokenMatches("wordbookchanged:"))
+        {
+#if !MOBILEAPP
+            // Push the wordbook to the WOPI host now rather than at session teardown, so a
+            // word added to a dictionary shows up in the Custom Dictionaries settings panel
+            // (which reads the WOPI host's copy, not the jail's live one) without a reopen.
+            uploadPresetsToWopiHost();
+#endif
+        }
         else if (Util::isDebugEnabled() && message->firstTokenMatches("unitresult:"))
         {
             UNITWSD_CALL(processUnitResult(message->tokens()));

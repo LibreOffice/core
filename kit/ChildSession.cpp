@@ -3926,6 +3926,8 @@ bool ChildSession::unoCommand(const StringVector& tokens)
                           tokens.startsWith(1, "vnd.sun.star.script:") ||
                           tokens.equals(1, ".uno:Paste") ||
                           tokens.equals(1, ".uno:PasteSpecial") ||
+                          // Carries the dictionary name as a query after the command.
+                          tokens.startsWith(1, ".uno:AddToWordbook") ||
                           // Both answer with how long the calculation took.
                           tokens.equals(1, ".uno:CalculateSheet") ||
                           tokens.equals(1, ".uno:CalculateHard"));
@@ -5577,6 +5579,12 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
 #endif
                 }
             }
+        }
+
+        // The command name keeps the query that names the dictionary.
+        if (!commandName.isEmpty() && commandName.toString().starts_with(".uno:AddToWordbook"))
+        {
+            _docManager->sendTextFrame("wordbookchanged:");
         }
 
         if (!commandName.isEmpty() &&

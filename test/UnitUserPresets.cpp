@@ -23,11 +23,13 @@
 #include <common/JailUtil.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/Process.hpp>
+#include <wsd/ClientSession.hpp>
 
 #include <Poco/Net/HTTPRequest.h>
 #include <atomic>
 #include <csignal>
 #include <ctime>
+#include <filesystem>
 #include <fstream>
 #include <set>
 #include <string>
@@ -655,11 +657,164 @@ public:
     }
 };
 
+namespace
+{
+/// The fileId under which the host receives the user dictionary.
+constexpr std::string_view WordbookFileId = "/settings/userconfig/wordbook/standard.dic";
+
+/// The command the spelling context menu sends, with the dictionary named in the query.
+constexpr auto AddToWordbookCommand = "uno .uno:AddToWordbook?Wordbook:string=standard.dic";
+
+/// The fileId of a preset upload, or an empty string for any other request.
+std::string presetUploadFileId(const Poco::Net::HTTPRequest& request)
+{
+    const Poco::URI uri(request.getURI());
+    if (uri.getPath() != "/wopi/settings/upload")
+        return std::string();
+
+    for (const auto& parameter : uri.getQueryParameters())
+    {
+        if (parameter.first == "fileId")
+            return parameter.second;
+    }
+    return std::string();
+}
+
+/// The directory of the user configuration inside the jail of the document of the session, or
+/// an empty string when the session has no document.
+std::string jailConfigPath(const std::shared_ptr<ClientSession>& session)
+{
+    const std::shared_ptr<DocumentBroker> docBroker = session->getDocumentBroker();
+    if (!docBroker)
+        return std::string();
+    return FileUtil::buildLocalPathToJail(JailUtil::isMountNamespacesEnabled(),
+                                          docBroker->getJailRoot(), JAILED_CONFIG_ROOT);
+}
+
+/// Writes the user dictionary in the jail with the given words, in the format the engine
+/// stores it in. The engine adds a word only once its background spell check has marked it,
+/// so the tests write the dictionary themselves and send the command to report the change.
+void writeJailWordbook(const std::string& configPath, const std::vector<std::string>& words)
+{
+    const std::string directory = configPath + "wordbook";
+    std::filesystem::create_directories(directory);
+    std::ofstream file(directory + "/standard.dic", std::ios::trunc);
+    file << "OOoUserDict1\nlang: <none>\ntype: positive\n---\n";
+    for (const std::string& word : words)
+        file << word << '\n';
+}
+} // namespace
+
+/// A word added to the user dictionary reaches the host while the document is still open. The
+/// settings dialog reads the dictionary from the host, so it shows the word without a reopen.
+class UnitWordbookLiveUpload : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitLoad, AddWord, WaitUpload, Done) _phase;
+
+    std::string _jailConfigPath;
+
+public:
+    UnitWordbookLiveUpload()
+        : Base("UnitWordbookLiveUpload")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // Presets go only to a host that has settings for the user.
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI()
+                          + "/wopi/settings/userconfig.json?testname=UnitWordbookLiveUpload";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", "wordbookstamp");
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const Poco::URI uriReq(request.getURI());
+        if (uriReq.getPath() == "/wopi/settings/userconfig.json")
+        {
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody("{\"kind\":\"user\"}", "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    bool handleHttpPostRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                               const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const std::string fileId = presetUploadFileId(request);
+        if (fileId.empty())
+            return Base::handleHttpPostRequest(request, message, socket);
+
+        const std::string body(std::istreambuf_iterator<char>(message), {});
+        TST_LOG("Preset upload of [" << fileId << "]: " << body);
+        http::Response httpResponse(http::StatusCode::OK);
+        socket->sendAndShutdown(httpResponse);
+
+        if (fileId == WordbookFileId)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+            LOK_ASSERT_MESSAGE("the uploaded dictionary should hold the new word",
+                               body.find("Plorkvane") != std::string::npos);
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("the dictionary reached the host while the document is open");
+        }
+        return true;
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+        _jailConfigPath = jailConfigPath(session);
+        LOK_ASSERT_MESSAGE("the session should have a document", !_jailConfigPath.empty());
+        TRANSITION_STATE(_phase, Phase::AddWord);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::AddWord:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitUpload);
+                writeJailWordbook(_jailConfigPath, { "Plorkvane" });
+                WSD_CMD_BY_CONNECTION_INDEX(0, AddToWordbookCommand);
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[6]{ new UnitEarlyDocDeath(), new UnitSpifPreset(),
-                             new UnitSecondUserPresets(), new UnitLoneUserReloadsPresets(),
-                             new UnitNoUserSettingsNoUpload(), nullptr };
+    return new UnitBase*[7]{ new UnitEarlyDocDeath(),
+                             new UnitSpifPreset(),
+                             new UnitSecondUserPresets(),
+                             new UnitLoneUserReloadsPresets(),
+                             new UnitNoUserSettingsNoUpload(),
+                             new UnitWordbookLiveUpload(),
+                             nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
