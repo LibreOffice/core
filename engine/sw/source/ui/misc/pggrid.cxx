@@ -51,7 +51,7 @@ SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* p
     , m_xCharsGridRB(m_xBuilder->weld_radio_button(u"radioRB_CHARSGRID"_ustr))
     , m_xSnapToCharsCB(m_xBuilder->weld_check_button(u"checkCB_SNAPTOCHARS"_ustr))
     , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, u"drawingareaWN_EXAMPLE"_ustr, m_aExampleWN))
-    , m_xLayoutFL(m_xBuilder->weld_widget(u"frameFL_LAYOUT"_ustr))
+    , m_xLayoutFL(m_xBuilder->weld_frame(u"frameFL_LAYOUT"_ustr))
     , m_xLinesPerPageNF(m_xBuilder->weld_spin_button(u"spinNF_LINESPERPAGE"_ustr))
     , m_xLinesRangeFT(m_xBuilder->weld_label(u"labelFT_LINERANGE"_ustr))
     , m_xTextSizeMF(m_xBuilder->weld_metric_spin_button(u"spinMF_TEXTSIZE"_ustr, FieldUnit::POINT))
@@ -63,7 +63,7 @@ SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* p
     , m_xRubySizeFT(m_xBuilder->weld_label(u"labelFT_RUBYSIZE"_ustr))
     , m_xRubySizeMF(m_xBuilder->weld_metric_spin_button(u"spinMF_RUBYSIZE"_ustr, FieldUnit::POINT))
     , m_xRubyBelowCB(m_xBuilder->weld_check_button(u"checkCB_RUBYBELOW"_ustr))
-    , m_xDisplayFL(m_xBuilder->weld_widget(u"frameFL_DISPLAY"_ustr))
+    , m_xDisplayFL(m_xBuilder->weld_frame(u"frameFL_DISPLAY"_ustr))
     , m_xDisplayCB(m_xBuilder->weld_check_button(u"checkCB_DISPLAY"_ustr))
     , m_xPrintCB(m_xBuilder->weld_check_button(u"checkCB_PRINT"_ustr))
     , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"listLB_COLOR"_ustr),

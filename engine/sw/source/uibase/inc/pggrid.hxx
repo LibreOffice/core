@@ -42,7 +42,7 @@ class SwTextGridPage final : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xCharsGridRB;
     std::unique_ptr<weld::CheckButton> m_xSnapToCharsCB;
     std::unique_ptr<weld::CustomWeld> m_xExampleWN;
-    std::unique_ptr<weld::Widget> m_xLayoutFL;
+    std::unique_ptr<weld::Frame> m_xLayoutFL;
     std::unique_ptr<weld::SpinButton> m_xLinesPerPageNF;
     std::unique_ptr<weld::Label> m_xLinesRangeFT;
     std::unique_ptr<weld::MetricSpinButton> m_xTextSizeMF;
@@ -54,7 +54,7 @@ class SwTextGridPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xRubySizeFT;
     std::unique_ptr<weld::MetricSpinButton> m_xRubySizeMF;
     std::unique_ptr<weld::CheckButton> m_xRubyBelowCB;
-    std::unique_ptr<weld::Widget> m_xDisplayFL;
+    std::unique_ptr<weld::Frame> m_xDisplayFL;
     std::unique_ptr<weld::CheckButton> m_xDisplayCB;
     std::unique_ptr<weld::CheckButton> m_xPrintCB;
     std::unique_ptr<ColorListBox> m_xColorLB;
