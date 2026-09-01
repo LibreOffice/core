@@ -58,19 +58,16 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-AccessibleDocumentViewBase::AccessibleDocumentViewBase (
-    ::sd::Window* pSdWindow,
-    ::sd::ViewShell* pViewShell,
+AccessibleDocumentViewBase::AccessibleDocumentViewBase(
+    ::sd::Window* pSdWindow, ::sd::ViewShell* pViewShell,
     uno::Reference<frame::XController> xController,
-    const uno::Reference<XAccessible>& rxParent)
-    : AccessibleContextBase (rxParent,
-                             pViewShell->GetDoc()->GetDocumentType() == DocumentType::Impress ?
-                                     AccessibleRole::DOCUMENT_PRESENTATION :
-                                     AccessibleRole::DOCUMENT),
-      mxController (std::move(xController)),
-      maViewForwarder (
-        static_cast<SdrPaintView*>(pViewShell->GetView()),
-        *pSdWindow->GetOutDev())
+    const rtl::Reference<comphelper::OAccessible>& rpParent)
+    : AccessibleContextBase(rpParent,
+                            pViewShell->GetDoc()->GetDocumentType() == DocumentType::Impress
+                                ? AccessibleRole::DOCUMENT_PRESENTATION
+                                : AccessibleRole::DOCUMENT)
+    , mxController(std::move(xController))
+    , maViewForwarder(static_cast<SdrPaintView*>(pViewShell->GetView()), *pSdWindow->GetOutDev())
 {
     if (mxController.is())
         mxModel = mxController->getModel();
