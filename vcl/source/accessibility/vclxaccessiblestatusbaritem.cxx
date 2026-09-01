@@ -186,27 +186,6 @@ void VCLXAccessibleStatusBarItem::disposing()
     m_sItemText.clear();
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleStatusBarItem::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleStatusBarItem"_ustr;
-}
-
-
-sal_Bool VCLXAccessibleStatusBarItem::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-
-Sequence< OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleStatusBarItem"_ustr };
-}
-
 // XAccessibleContext
 
 

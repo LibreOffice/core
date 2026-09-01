@@ -20,14 +20,12 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/status.hxx>
 #include <vcl/vclptr.hxx>
 
-class VCLXAccessibleStatusBarItem final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleTextHelper, css::lang::XServiceInfo>
+class VCLXAccessibleStatusBarItem final : public comphelper::OAccessibleTextHelper
 {
     friend class VCLXAccessibleStatusBar;
 
@@ -60,11 +58,6 @@ private:
 
 public:
     VCLXAccessibleStatusBarItem( StatusBar* pStatusBar, sal_uInt16 nItemId );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
