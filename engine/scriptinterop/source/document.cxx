@@ -65,6 +65,7 @@
 #include <sal/types.h>
 #include <scriptinterop/ElementType.hpp>
 #include <scriptinterop/ImageOptions.hpp>
+#include <scriptinterop/TextAlignment.hpp>
 #include <scriptinterop/XBody.hpp>
 #include <scriptinterop/XContainerElement.hpp>
 #include <scriptinterop/XCursor.hpp>
@@ -165,12 +166,6 @@ public:
 
     css::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
 
-    sal_Int16 getEscapement(sal_Int32 offset) override {
-        sal_Int16 esc = 0;
-        getProp(runAt(offset), u"CharEscapement"_ustr) >>= esc;
-        return esc > 0 ? 1 : esc < 0 ? -1 : 0;
-    }
-
     OUString getFontFamily(sal_Int32 offset) override {
         OUString name;
         getProp(runAt(offset), u"CharFontName"_ustr) >>= name;
@@ -188,15 +183,42 @@ public:
         return range.is() ? range->getString() : u""_ustr;
     }
 
+    scriptinterop::TextAlignment getTextAlignment(sal_Int32 offset) override {
+        sal_Int16 esc = 0;
+        getProp(runAt(offset), u"CharEscapement"_ustr) >>= esc;
+        return esc > 0 ? scriptinterop::TextAlignment_SUPERSCRIPT
+            : esc < 0 ? scriptinterop::TextAlignment_SUBSCRIPT
+            : scriptinterop::TextAlignment_NORMAL;
+    }
+
+    // GAS guarantees at least one attribute index for any text (uniform text has one index at 0):
     cpo::uno::Sequence<sal_Int32> getTextAttributeIndices() override {
         std::vector<sal_Int32> v;
-        v.reserve(runs_.size());
+        v.reserve(runs_.empty() ? 1 : runs_.size());
         sal_Int32 off = 0;
         for (auto const & r: runs_) {
             v.push_back(off);
             off += r->getString().getLength();
         }
+        if (v.empty()) {
+            v.push_back(0);
+        }
         return cpo::uno::Sequence(v.data(), v.size());
+    }
+
+    scriptinterop::ElementType getType() override {
+        css::uno::Reference<css::beans::XPropertySet> const props(content_, css::uno::UNO_QUERY);
+        if (props.is()) {
+            auto const info(props->getPropertySetInfo());
+            if (info.is() && info->hasPropertyByName(u"NumberingIsNumber"_ustr)) {
+                bool numbered = false;
+                props->getPropertyValue(u"NumberingIsNumber"_ustr) >>= numbered;
+                if (numbered) {
+                    return scriptinterop::ElementType_LIST_ITEM;
+                }
+            }
+        }
+        return scriptinterop::ElementType_PARAGRAPH;
     }
 
     bool isBold(sal_Int32 offset) override {
@@ -437,6 +459,10 @@ public:
 
     css::uno::Reference<scriptinterop::XText> asText() override {
         return new TextImpl(content_);
+    }
+
+    css::uno::Reference<scriptinterop::XText> editAsText() override {
+        return asText();
     }
 
     OUString SAL_CALL getText() override

@@ -46,7 +46,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 },
                 getPreviousSibling: function() { return null; },
                 getNextSibling: function() { return null; },
-                getType: function() { return 'TEXT'; }
+                getType: function() { return uno.idl.scriptinterop.ElementType.TEXT; }
             };
             return t;
         }
@@ -60,9 +60,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             for (let i = 0; i < ranges.length; ++i) {
                 const r = ranges[i];
                 const para = r.getElement();
-                const el = para
-                    ? paragraphElement(para, i)
-                    : textFacade(sel, sel.getText());
+                const el = para ? para : textFacade(sel, sel.getText());
                 wrapped.push({
                     isPartial: function() { return r.isPartial(); },
                     getElement: function() { return el; },
@@ -81,7 +79,9 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             return {
                 getElement: function() {
                     const p = xc.getElement();
-                    return p ? paragraphElement(p, 0) : { getType: function() { return 'TEXT'; } };
+                    return p ? p : { getType: function() {
+                        return uno.idl.scriptinterop.ElementType.TEXT;
+                    } };
                 },
                 getOffset: function() { return xc.getOffset(); },
                 getSurroundingText: function() {
@@ -130,91 +130,12 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             }
         };
 
-        function paragraphElement(paragraph, index) {
-            const xtext = paragraph.asText();
-            const text = xtext.getText();
-            const textEl = {
-                getType: function() { return 'TEXT'; },
-                getText: function() { return text; },
-                asText: function() { return textEl; },
-                editAsText: function() { return textEl; },
-                copy: function() { return textEl; },
-                getNumChildren: function() { return 0; },
-                getAttributes: function() { return {}; },
-                // Apps Script guarantees at least one attribute index even for uniform text:
-                getTextAttributeIndices: function() {
-                    const arr = xtext.getTextAttributeIndices();
-                    return arr.length > 0 ? Array.from(arr) : [0];
-                },
-                setAttributes: function() { return textEl; },
-                findText: function() { return null; },
-                getParent: function() { return null; },
-                getFontFamily: function(offset) { return xtext.getFontFamily(offset); },
-                isBold: function(offset) { return xtext.isBold(offset); },
-                isItalic: function(offset) { return xtext.isItalic(offset); },
-                isUnderline: function(offset) { return xtext.isUnderline(offset); },
-                isStrikethrough: function(offset) { return xtext.isStrikethrough(offset); },
-                getTextAlignment: function(offset) {
-                    const esc = xtext.getEscapement(offset);
-                    if (esc > 0) return 'SUPERSCRIPT';
-                    if (esc < 0) return 'SUBSCRIPT';
-                    return 'NORMAL';
-                },
-                getLinkUrl: function(offset) {
-                    const url = xtext.getLinkUrl(offset);
-                    return url === '' ? null : url;
-                }
-            };
-            // Only pass through names GAS's ElementType actually defines; anything scriptinterop
-            // grows later that GAS does not know (including the UNSUPPORTED fallback) collapses to
-            // PARAGRAPH so a .gs script comparing with ElementType.PARAGRAPH keeps working:
-            const gasKnown = {
-                PARAGRAPH: true, LIST_ITEM: true, TABLE: true, INLINE_IMAGE: true,
-                PAGE_BREAK: true, HORIZONTAL_RULE: true
-            };
-            const rawType = String(paragraph.getType());
-            const gasType = gasKnown[rawType] ? rawType : 'PARAGRAPH';
-            const paraEl = {
-                getType: function() { return gasType; },
-                getText: function() { return text; },
-                asText: function() { return textEl; },
-                editAsText: function() { return textEl; },
-                copy: function() { return paraEl; },
-                getNumChildren: function() { return 1; },
-                getChild: function() { return textEl; },
-                getChildIndex: function() { return index; },
-                getHeading: function() { return 'NORMAL'; },
-                getAlignment: function() { return 'NORMAL'; },
-                getAttributes: function() { return {}; },
-                getTextAttributeIndices: function() { return []; },
-                getIndentStart: function() { return 0; },
-                getSpacingBefore: function() { return 0; },
-                getSpacingAfter: function() { return 0; },
-                getParent: function() { return null; },
-                getPreviousSibling: function() { return null; },
-                getNextSibling: function() { return null; },
-                findElement: function() { return null; },
-                findText: function() { return null; },
-                isLeftToRight: function() { return paragraph.isLeftToRight(); }
-            };
-            return paraEl;
-        }
         function footnoteContentsFacade(footnote) {
-            let cached = null;
-            function paras() {
-                if (!cached) {
-                    const list = footnote.getParagraphs();
-                    cached = [];
-                    for (let i = 0; i < list.length; ++i) {
-                        cached.push(paragraphElement(list[i], i));
-                    }
-                }
-                return cached;
-            }
+            const paras = footnote.getParagraphs();
             const section = {
                 getType: function() { return 'FOOTNOTE_SECTION'; },
-                getNumChildren: function() { return paras().length; },
-                getChild: function(n) { return paras()[n]; },
+                getNumChildren: function() { return paras.length; },
+                getChild: function(n) { return paras[n]; },
                 getParent: function() { return null; },
                 getAttributes: function() { return {}; },
                 findText: function() { return null; }
@@ -237,28 +158,15 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
         function bodyFacade() {
             const xbody = activeDoc().getBody();
             const body = {
-                getType: function() { return 'BODY_SECTION'; },
+                getType: function() { return uno.idl.scriptinterop.ElementType.BODY_SECTION; },
                 getText: function() { return xbody.getText(); },
                 getNumChildren: function() { return xbody.getNumChildren(); },
-                getChild: function(n) {
-                    const xchild = xbody.getChild(n);
-                    const type = String(xchild.getType());
-                    if (type === 'PARAGRAPH' || type === 'LIST_ITEM') {
-                        return paragraphElement(xchild, n);
-                    }
-                    return xchild;
-                },
+                getChild: function(n) { return xbody.getChild(n); },
                 editAsText: function() { return textFacade(null, xbody.getText()); },
                 asText: function() { return textFacade(null, xbody.getText()); },
                 copy: function() { return body; },
-                appendParagraph: function(text) {
-                    const p = xbody.appendParagraph(text || '');
-                    return paragraphElement(p, xbody.getNumChildren() - 1);
-                },
-                appendListItem: function(text) {
-                    const p = xbody.appendListItem(text || '');
-                    return paragraphElement(p, xbody.getNumChildren() - 1);
-                },
+                appendParagraph: function(text) { return xbody.appendParagraph(text || ''); },
+                appendListItem: function(text) { return xbody.appendListItem(text || ''); },
                 getParent: function() { return null; },
                 getAttributes: function() { return {}; },
                 findText: function() { return null; }
@@ -290,8 +198,11 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 };
             },
             getUi: function() { return uiStub; },
+            // Members scriptinterop's ElementType has round-trip as the same enum object, so a
+            // strict === comparison with what getType() returns matches; members GAS defines that
+            // scriptinterop does not know stay as strings that never match anything on our side:
             ElementType: {
-                BODY_SECTION: 'BODY_SECTION',
+                BODY_SECTION: uno.idl.scriptinterop.ElementType.BODY_SECTION,
                 COMMENT_SECTION: 'COMMENT_SECTION',
                 DATE: 'DATE',
                 DOCUMENT: 'DOCUMENT',
@@ -303,22 +214,22 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 FOOTNOTE: 'FOOTNOTE',
                 FOOTNOTE_SECTION: 'FOOTNOTE_SECTION',
                 HEADER_SECTION: 'HEADER_SECTION',
-                HORIZONTAL_RULE: 'HORIZONTAL_RULE',
+                HORIZONTAL_RULE: uno.idl.scriptinterop.ElementType.HORIZONTAL_RULE,
                 INLINE_DRAWING: 'INLINE_DRAWING',
-                INLINE_IMAGE: 'INLINE_IMAGE',
-                LIST_ITEM: 'LIST_ITEM',
-                PAGE_BREAK: 'PAGE_BREAK',
-                PARAGRAPH: 'PARAGRAPH',
+                INLINE_IMAGE: uno.idl.scriptinterop.ElementType.INLINE_IMAGE,
+                LIST_ITEM: uno.idl.scriptinterop.ElementType.LIST_ITEM,
+                PAGE_BREAK: uno.idl.scriptinterop.ElementType.PAGE_BREAK,
+                PARAGRAPH: uno.idl.scriptinterop.ElementType.PARAGRAPH,
                 PERSON: 'PERSON',
                 RICH_LINK: 'RICH_LINK',
-                TABLE: 'TABLE',
-                TABLE_CELL: 'TABLE_CELL',
+                TABLE: uno.idl.scriptinterop.ElementType.TABLE,
+                TABLE_CELL: uno.idl.scriptinterop.ElementType.TABLE_CELL,
                 TABLE_OF_CONTENTS: 'TABLE_OF_CONTENTS',
-                TABLE_ROW: 'TABLE_ROW',
-                TEXT: 'TEXT',
-                UNSUPPORTED: 'UNSUPPORTED'
+                TABLE_ROW: uno.idl.scriptinterop.ElementType.TABLE_ROW,
+                TEXT: uno.idl.scriptinterop.ElementType.TEXT,
+                UNSUPPORTED: uno.idl.scriptinterop.ElementType.UNSUPPORTED
             },
-            TextAlignment: { NORMAL: 'NORMAL', SUBSCRIPT: 'SUBSCRIPT', SUPERSCRIPT: 'SUPERSCRIPT' },
+            TextAlignment: uno.idl.scriptinterop.TextAlignment,
             HorizontalAlignment: {
                 LEFT: 'LEFT', CENTER: 'CENTER', RIGHT: 'RIGHT', JUSTIFY: 'JUSTIFY'
             },

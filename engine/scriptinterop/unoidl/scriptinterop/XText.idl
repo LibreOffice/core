@@ -11,14 +11,12 @@
 
 module scriptinterop {
 
-interface XText: XBase {
-    short getEscapement([in] long offset); // -1 subscript, 0 normal, 1 superscript
-
+interface XText: XElement {
     string getFontFamily([in] long offset);
 
     string getLinkUrl([in] long offset);
 
-    string getText();
+    TextAlignment getTextAlignment([in] long offset);
 
     sequence<long> getTextAttributeIndices();
 
