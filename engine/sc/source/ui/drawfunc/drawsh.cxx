@@ -245,7 +245,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         pView->BegUndo();
 
                     pView->SetAttrToMarked(*pNewArgs, false);
-                    svx::applyBareLineColorToMarked(*pView, *pReqArgs);
+                    svx::applyBareLineAttributesToMarked(*pView, *pReqArgs);
 
                     if (bUndo)
                         pView->EndUndo();

@@ -2364,7 +2364,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->BegUndo();
 
                 mpDrawView->SetAttributes(*pNewArgs);
-                svx::applyBareLineColorToMarked(*mpDrawView, *pReqArgs);
+                svx::applyBareLineAttributesToMarked(*mpDrawView, *pReqArgs);
 
                 if (bUndo)
                     mpDrawView->EndUndo();

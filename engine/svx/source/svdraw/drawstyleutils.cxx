@@ -55,7 +55,7 @@ void convertDrawStyleArguments(SfxItemSet& rArgs)
 
     // A fully transparent line color means "no line". A non-transparent line
     // color is left as-is here: it is visible alongside any style, and forcing
-    // solid is done per object by applyBareLineColorToMarked().
+    // solid is done per object by applyBareLineAttributesToMarked().
     if (const SfxPoolItem* pColorItem = rArgs.GetItem(SID_ATTR_LINE_COLOR, false))
     {
         const Color aColor = static_cast<const XLineColorItem*>(pColorItem)->GetColorValue();
@@ -82,19 +82,24 @@ void convertDrawStyleArguments(SfxItemSet& rArgs)
     }
 }
 
-void applyBareLineColorToMarked(SdrView& rView, const SfxItemSet& rArgs)
+void applyBareLineAttributesToMarked(SdrView& rView, const SfxItemSet& rArgs)
 {
-    // A bare line color is a non-transparent line color with no explicit,
-    // non-None line style in the request.
-    const SfxPoolItem* pLineColor = rArgs.GetItem(SID_ATTR_LINE_COLOR, false);
     const SfxPoolItem* pLineStyle = rArgs.GetItem(SID_ATTR_LINE_STYLE, false);
-    const bool bBareLineColor
+    if (pLineStyle
+        && static_cast<const XLineStyleItem*>(pLineStyle)->GetValue()
+               != css::drawing::LineStyle_NONE)
+        return;
+
+    const SfxPoolItem* pLineColor = rArgs.GetItem(SID_ATTR_LINE_COLOR, false);
+    const bool bVisibleLineColor
         = pLineColor
-          && !static_cast<const XLineColorItem*>(pLineColor)->GetColorValue().IsFullyTransparent()
-          && (!pLineStyle
-              || static_cast<const XLineStyleItem*>(pLineStyle)->GetValue()
-                     == css::drawing::LineStyle_NONE);
-    if (!bBareLineColor)
+          && !static_cast<const XLineColorItem*>(pLineColor)->GetColorValue().IsFullyTransparent();
+    if (pLineColor && !bVisibleLineColor)
+        return;
+
+    const bool bLineWidth = rArgs.GetItem(SID_ATTR_LINE_WIDTH, false)
+                            || rArgs.GetItemIfSet(SID_ATTR_LINE_WIDTH_ARG, false);
+    if (!bVisibleLineColor && !bLineWidth)
         return;
 
     const bool bUndo = rView.IsUndoEnabled();
