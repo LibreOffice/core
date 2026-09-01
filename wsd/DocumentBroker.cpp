@@ -4690,7 +4690,10 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         // If last editable, save (if not saving already) and
         // don't remove until after uploading to storage.
         // If always_save_on_exit=true, issue a save to guarantee uploading if necessary.
-        if (!lastEditableSession ||
+        // A detached document keeps its edits in memory for the view that is coming back,
+        // so it writes nothing here. The app writes the user's own file only while the
+        // document is marked as edited, and a save would clear that mark.
+        if (isDetached() || !lastEditableSession ||
             (!_saveManager.isSaving() &&
              !autoSave(/*force=*/_alwaysSaveOnExit || isPossiblyModified(),
                        dontSaveIfUnmodified, /*finalWrite=*/true)))
