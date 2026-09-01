@@ -140,79 +140,10 @@ bool SwPosition::operator<(const SwPosition &rPos) const
     return nNode < rPos.nNode;
 }
 
-bool SwPosition::operator>(const SwPosition &rPos) const
-{
-    // cheaper to check for == first
-    if( nNode == rPos.nNode )
-    {
-        // note that positions with text node but no SwContentIndex registered are
-        // created for text frames anchored at para (see SwXFrame::getAnchor())
-        SwContentNode const*const pThisReg(GetContentNode());
-        SwContentNode const*const pOtherReg(rPos.GetContentNode());
-        if (pThisReg && pOtherReg)
-        {
-            return (nContent > rPos.nContent);
-        }
-        else // by convention position with no index is smaller
-        {
-            return pThisReg != nullptr;
-        }
-    }
-    return nNode > rPos.nNode;
-}
-
-bool SwPosition::operator<=(const SwPosition &rPos) const
-{
-    // cheaper to check for == first
-    if( nNode == rPos.nNode )
-    {
-        // note that positions with text node but no SwContentIndex registered are
-        // created for text frames anchored at para (see SwXFrame::getAnchor())
-        SwContentNode const*const pThisReg(GetContentNode());
-        SwContentNode const*const pOtherReg(rPos.GetContentNode());
-        if (pThisReg && pOtherReg)
-        {
-            return (nContent <= rPos.nContent);
-        }
-        else // by convention position with no index is smaller
-        {
-            return pThisReg == nullptr;
-        }
-    }
-    return nNode < rPos.nNode;
-}
-
-bool SwPosition::operator>=(const SwPosition &rPos) const
-{
-    // cheaper to check for == first
-    if( nNode == rPos.nNode )
-    {
-        // note that positions with text node but no SwContentIndex registered are
-        // created for text frames anchored at para (see SwXFrame::getAnchor())
-        SwContentNode const*const pThisReg(GetContentNode());
-        SwContentNode const*const pOtherReg(rPos.GetContentNode());
-        if (pThisReg && pOtherReg)
-        {
-            return (nContent >= rPos.nContent);
-        }
-        else // by convention position with no index is smaller
-        {
-            return pOtherReg == nullptr;
-        }
-    }
-    return nNode > rPos.nNode;
-}
-
 bool SwPosition::operator==(const SwPosition &rPos) const
 {
     return (nNode == rPos.nNode)
         && (nContent == rPos.nContent);
-}
-
-bool SwPosition::operator!=(const SwPosition &rPos) const
-{
-    return (nNode != rPos.nNode)
-        || (nContent != rPos.nContent);
 }
 
 SwDoc& SwPosition::GetDoc() const
