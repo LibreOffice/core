@@ -528,8 +528,8 @@ css::uno::Reference<css::text::XTextContent> findContainingParagraph(
             continue;
         }
         try {
-            if (cmp->compareRegionStarts(marker->getStart(), paraRange->getStart()) >= 0
-                && cmp->compareRegionStarts(marker->getStart(), paraRange->getEnd()) <= 0)
+            if (cmp->compareRegionStarts(marker->getStart(), paraRange->getStart()) <= 0
+                && cmp->compareRegionStarts(marker->getStart(), paraRange->getEnd()) >= 0)
             {
                 return xtc;
             }
@@ -604,6 +604,66 @@ private:
     sal_Int32 paragraphLen_ = 0;
 };
 
+// Walk the host XText and push one RangeElementImpl per paragraph that the raw range overlaps.
+// The sub-range for each paragraph is the intersection of the raw range with the paragraph's
+// extent, so a paragraph that lies fully inside the raw range becomes a non-partial element and
+// the first and last paragraphs become partial ones:
+void splitAtParagraphBoundaries(
+    css::uno::Reference<css::text::XTextRange> const & range,
+    std::vector<css::uno::Reference<scriptinterop::XRangeElement>> & out)
+{
+    if (!range.is()) {
+        return;
+    }
+    auto const host = range->getText();
+    css::uno::Reference<css::text::XTextRangeCompare> const cmp(host, css::uno::UNO_QUERY);
+    css::uno::Reference<css::container::XEnumerationAccess> const ea(host, css::uno::UNO_QUERY);
+    if (!host.is() || !cmp.is() || !ea.is()) {
+        out.emplace_back(new RangeElementImpl(range));
+        return;
+    }
+    auto const rStart = range->getStart();
+    auto const rEnd = range->getEnd();
+    auto const en = ea->createEnumeration();
+    while (en.is() && en->hasMoreElements()) {
+        css::uno::Reference<css::text::XTextContent> xtc;
+        en->nextElement() >>= xtc;
+        if (!xtc.is()) {
+            continue;
+        }
+        css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
+        if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+            continue;
+        }
+        css::uno::Reference<css::text::XTextRange> const pRange(xtc, css::uno::UNO_QUERY);
+        if (!pRange.is()) {
+            continue;
+        }
+        try {
+            if (cmp->compareRegionStarts(pRange->getEnd(), rStart) > 0) {
+                continue;
+            }
+            if (cmp->compareRegionStarts(pRange->getStart(), rEnd) < 0) {
+                break;
+            }
+            auto const subStart = cmp->compareRegionStarts(rStart, pRange->getStart()) <= 0
+                ? rStart : pRange->getStart();
+            auto const subEnd = cmp->compareRegionStarts(rEnd, pRange->getEnd()) >= 0
+                ? rEnd : pRange->getEnd();
+            auto const cursor = host->createTextCursorByRange(subStart);
+            if (!cursor.is()) {
+                continue;
+            }
+            cursor->gotoRange(subEnd, true);
+            out.emplace_back(new RangeElementImpl(cursor));
+        } catch (css::lang::IllegalArgumentException const & e) {
+            SAL_WARN(
+                "scriptinterop",
+                "splitAtParagraphBoundaries: compareRegionStarts failed: " << e.Message);
+        }
+    }
+}
+
 cpo::uno::Sequence<css::uno::Reference<scriptinterop::XRangeElement>>
 SelectionImpl::getRangeElements() {
     std::vector<css::uno::Reference<scriptinterop::XRangeElement>> v;
@@ -612,9 +672,7 @@ SelectionImpl::getRangeElements() {
         for (sal_Int32 i = 0; i != n; ++i) {
             css::uno::Reference<css::text::XTextRange> range;
             ranges_->getByIndex(i) >>= range;
-            if (range.is()) {
-                v.emplace_back(new RangeElementImpl(range));
-            }
+            splitAtParagraphBoundaries(range, v);
         }
     }
     return cpo::uno::Sequence(v.data(), v.size());
