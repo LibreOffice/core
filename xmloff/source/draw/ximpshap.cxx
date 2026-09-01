@@ -135,7 +135,7 @@ static bool ImpIsEmptyURL( std::u16string_view rURL )
     if( rURL.empty() )
         return true;
 
-    // #i13140# Also compare against 'toplevel' URLs. which also
+    // #i13140# Also compare against 'toplevel' URLs, which also
     // result in empty filename strings.
     if( rURL == u"#./" )
         return true;
@@ -338,7 +338,7 @@ void SdXMLShapeContext::endFastElement(sal_Int32 )
             mxLockable->addActionLock();
         }
 
-        // delete addition newline
+        // delete additional newline
         mxCursor->gotoEnd( false );
         mxCursor->goLeft( 1, true );
         mxCursor->setString( u""_ustr );
@@ -581,7 +581,7 @@ void SdXMLShapeContext::SetTransformation()
 
     // now set transformation for this object
 
-    // maUsedTransformtion contains the mathematical correct matrix, which if
+    // maUsedTransformation contains the mathematically correct matrix, which if
     // applied to a unit square would generate the transformed shape. But the property
     // "Transformation" contains a matrix, which can be used in TRSetBaseGeometry
     // and would be created by TRGetBaseGeometry. And those use a mathematically wrong

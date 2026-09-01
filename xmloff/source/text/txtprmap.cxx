@@ -873,7 +873,7 @@ XMLPropertyMapEntry constexpr aXMLFramePropMap[] =
     // RES_LAYOUT_SPLIT
     // not required
     // RES_CHAIN
-    // not required (exported at text:text-box element)
+    // not required (exported as text:text-box element)
     // RES_LINENUMBER
     // not required
     // RES_FTN_AT_TXTEND

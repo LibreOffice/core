@@ -1621,7 +1621,7 @@ void SAL_CALL OOo2OasisTransformer::setTargetDocument(
     if( !GetDocHandler().is() )
     {
         // if initialize hasn't been called, then we have to call it now
-        // to get the sub component initialized.
+        // to get the sub-component initialized.
         Sequence<Any> aArgs( 0 );
         Initialize( aArgs );
     }
@@ -1666,7 +1666,7 @@ void SAL_CALL OOo2OasisTransformer::startDocument()
     if( !GetDocHandler().is() )
     {
         // if initialize hasn't been called, then we have to call it now
-        // to get the sub component initialized.
+        // to get the sub-component initialized.
         Sequence<Any> aArgs( 0 );
         Initialize( aArgs );
     }

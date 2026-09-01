@@ -131,7 +131,7 @@ namespace xmloff
 
     void OElementExport::exportSubTags()
     {
-        // the properties which where not exported 'til now
+        // the properties which were not exported 'til now
         exportRemainingProperties();
 
         // the script:events sub tags

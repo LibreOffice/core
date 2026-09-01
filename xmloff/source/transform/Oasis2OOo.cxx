@@ -226,9 +226,9 @@ XMLTransformerActionInit const aActionTable[] =
     ENTRY1( XML_NAMESPACE_TEXT, XML_H, XML_ETACTION_PROC_ATTRS, OASIS_PARA_ACTIONS ),
     ENTRY1( XML_NAMESPACE_TEXT, XML_P, XML_ETACTION_PROC_ATTRS, OASIS_PARA_ACTIONS ),
 
-    // process <test:list>'s text:style-name attributes
+    // process <text:list>'s text:style-name attributes
     // rename <text:list> to <text:ordered-list> or <text:unordered-list>
-    // TODO: All list currently are renamed to <text:ordered-list>
+    // TODO: All lists are currently renamed to <text:ordered-list>
     ENTRY2QN( XML_NAMESPACE_TEXT, XML_LIST, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
             XML_NAMESPACE_TEXT, XML_ORDERED_LIST,
             OASIS_LIST_STYLE_REF_ACTIONS ),

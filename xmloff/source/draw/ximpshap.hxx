@@ -561,7 +561,7 @@ public:
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
-// draw:-frame
+// draw:frame
 
 class SdXMLFrameShapeContext : public SdXMLShapeContext, public MultiImageImportHelper
 {
