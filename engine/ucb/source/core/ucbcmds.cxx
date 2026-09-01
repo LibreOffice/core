@@ -486,7 +486,7 @@ uno::Reference< ucb::XContent > createNew(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Folder", cpo::uno::Any(rContext.aArg.TargetURL)}
+            {u"Folder"_ustr, cpo::uno::Any(rContext.aArg.TargetURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_CREATE,
@@ -533,7 +533,7 @@ uno::Reference< ucb::XContent > createNew(
         {
             cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"Folder", cpo::uno::Any(rContext.aArg.TargetURL)}
+                {u"Folder"_ustr, cpo::uno::Any(rContext.aArg.TargetURL)}
             }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_CREATE,
@@ -551,7 +551,7 @@ uno::Reference< ucb::XContent > createNew(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Folder", cpo::uno::Any(rContext.aArg.TargetURL)}
+            {u"Folder"_ustr, cpo::uno::Any(rContext.aArg.TargetURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_CREATE,
@@ -632,7 +632,7 @@ uno::Reference< ucb::XContent > createNew(
         {
             cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"Folder", cpo::uno::Any(rContext.aArg.TargetURL)}
+                {u"Folder"_ustr, cpo::uno::Any(rContext.aArg.TargetURL)}
             }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_CREATE,
@@ -666,7 +666,7 @@ void transferProperties(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rContext.aArg.SourceURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rContext.aArg.SourceURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -692,7 +692,7 @@ void transferProperties(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rContext.aArg.SourceURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rContext.aArg.SourceURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -943,7 +943,7 @@ void handleNameClashRename(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(xNew->getIdentifier()->getContentIdentifier())}
+            {u"Uri"_ustr, cpo::uno::Any(xNew->getIdentifier()->getContentIdentifier())}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1026,7 +1026,7 @@ void handleNameClashRename(
                     {
                         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
                         {
-                            {"Uri", cpo::uno::Any(xNew->getIdentifier()->getContentIdentifier())}
+                            {u"Uri"_ustr, cpo::uno::Any(xNew->getIdentifier()->getContentIdentifier())}
                         }));
                         ucbhelper::cancelCommandExecution(
                             ucb::IOErrorCode_CANT_READ,
@@ -1124,7 +1124,7 @@ void globalTransfer_(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Folder", cpo::uno::Any(rContext.aArg.TargetURL)}
+            {u"Folder"_ustr, cpo::uno::Any(rContext.aArg.TargetURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_CREATE,
@@ -1167,7 +1167,7 @@ void globalTransfer_(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rContext.aArg.SourceURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rContext.aArg.SourceURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1428,7 +1428,7 @@ void globalTransfer_(
             {
                 cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
                 {
-                    {"Uri", cpo::uno::Any(rContext.aArg.SourceURL)}
+                    {u"Uri"_ustr, cpo::uno::Any(rContext.aArg.SourceURL)}
                 }));
                 ucbhelper::cancelCommandExecution(
                     ucb::IOErrorCode_CANT_READ,
@@ -1564,7 +1564,7 @@ void UniversalContentBroker::globalTransfer(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rArg.TargetURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rArg.TargetURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1584,7 +1584,7 @@ void UniversalContentBroker::globalTransfer(
         {
             cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"Uri", cpo::uno::Any(rArg.TargetURL)}
+                {u"Uri"_ustr, cpo::uno::Any(rArg.TargetURL)}
             }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_READ,
@@ -1742,7 +1742,7 @@ void UniversalContentBroker::globalTransfer(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rArg.SourceURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rArg.SourceURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1759,7 +1759,7 @@ void UniversalContentBroker::globalTransfer(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rArg.SourceURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rArg.SourceURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1789,7 +1789,7 @@ void UniversalContentBroker::globalTransfer(
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rArg.SourceURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rArg.SourceURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1874,7 +1874,7 @@ cpo::uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rArg.TargetURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rArg.TargetURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1891,7 +1891,7 @@ cpo::uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
     {
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", cpo::uno::Any(rArg.TargetURL)}
+            {u"Uri"_ustr, cpo::uno::Any(rArg.TargetURL)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,

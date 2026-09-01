@@ -790,7 +790,7 @@ bool UniversalContentBroker::getContentProviderData(
 
         cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", cpo::uno::Any(aFullPath.makeStringAndClear())}
+            {u"nodepath"_ustr, cpo::uno::Any(aFullPath.makeStringAndClear())}
         }));
 
         uno::Reference< uno::XInterface > xInterface(

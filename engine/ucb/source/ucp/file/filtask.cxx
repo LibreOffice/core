@@ -918,7 +918,7 @@ TaskManager::setv( const OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         cpo::uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
                         {
-                            {"Uri", cpo::uno::Any(aUnqPath)}
+                            {u"Uri"_ustr, cpo::uno::Any(aUnqPath)}
                         }));
                         retRange[i] <<= InteractiveAugmentedIOException(
                             OUString(),
@@ -980,7 +980,7 @@ TaskManager::setv( const OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         cpo::uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
                         {
-                            {"Uri", cpo::uno::Any(aUnqPath)}
+                            {u"Uri"_ustr, cpo::uno::Any(aUnqPath)}
                         }));
                         IOErrorCode ioError;
                         switch( err )
