@@ -16,15 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-### i85237 ###
-svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
-
-### i85238 ###
-svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleContext
-
-### i85239 ###
-svtools.AccessibleBrowseBoxHeaderBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
-
 ### i85240 ###
 svtools.AccessibleTabBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
 

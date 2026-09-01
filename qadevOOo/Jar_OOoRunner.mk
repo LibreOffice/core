@@ -1019,10 +1019,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_streams/uno/ObjectOutputStream \
     qadevOOo/tests/java/mod/_streams/uno/Pipe \
     qadevOOo/tests/java/mod/_streams/uno/Pump \
-    qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBox \
-    qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBoxHeaderBar \
-    qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBoxHeaderCell \
-    qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBoxTable \
     qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBoxTableCell \
     qadevOOo/tests/java/mod/_svtools/AccessibleIconChoiceCtrl \
     qadevOOo/tests/java/mod/_svtools/AccessibleIconChoiceCtrlEntry \
