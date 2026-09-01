@@ -616,17 +616,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_SEND_FEEDBACK:
-        {
-            OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL(officecfg::Office::Common::Menus::SendFeedbackURL::get() + //officecfg/registry/data/org/openoffice/Office/Common.xcu => https://hub.libreoffice.org/send-feedback/
-                "?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-                "&LOlocale=" + utl::ConfigManager::getUILocale() +
-                "&LOmodule=" + module.subView(module.lastIndexOf('.') + 1 )  );
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
-
         case SID_Q_AND_A:
         {
             // Askbot has URL's normalized to languages, not locales

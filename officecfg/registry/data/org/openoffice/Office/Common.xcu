@@ -336,9 +336,6 @@
         </prop>
       </node>
     </node>
-    <prop oor:name="SendFeedbackURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/send-feedback/</value>
-    </prop>
     <prop oor:name="QA_URL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/forum/</value>
     </prop>

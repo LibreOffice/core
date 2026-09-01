@@ -1803,13 +1803,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHelp-SendFeedback">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:SendFeedback</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuHelp-Donation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

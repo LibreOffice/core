@@ -1794,18 +1794,15 @@ cmd/sc_toolsmacroedit.png cmd/sc_basicideappear.png
 cmd/32/donation.png cmd/32/currencyfield.png
 cmd/32/helperdialog.png cmd/32/helpindex.png
 cmd/32/questionanswers.png cmd/32/browseview.png
-cmd/32/sendfeedback.png cmd/32/insertenvelope.png
 
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/lc_helperdialog.png cmd/lc_helpindex.png
 cmd/lc_questionanswers.png cmd/lc_browseview.png
-cmd/lc_sendfeedback.png cmd/lc_insertenvelope.png
 
 cmd/sc_about.png res/mainapp_16_8.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
 cmd/sc_helperdialog.png cmd/sc_helpindex.png
 cmd/sc_questionanswers.png cmd/sc_browseview.png
-cmd/sc_sendfeedback.png cmd/sc_insertenvelope.png
 
 # Math
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png

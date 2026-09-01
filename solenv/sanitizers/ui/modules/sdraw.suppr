@@ -99,7 +99,6 @@ sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-HelpIndex'] butt
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-ExtendedHelp'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-Documentation'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-QuestionAnswers'] button-no-label
-sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-SendFeedback'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-SafeMode'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-GetInvolved'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-Donation'] button-no-label

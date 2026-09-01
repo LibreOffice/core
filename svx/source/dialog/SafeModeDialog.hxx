@@ -50,7 +50,6 @@ private:
     std::unique_ptr<weld::CheckButton> mxCBResetCustomizations;
     std::unique_ptr<weld::CheckButton> mxCBResetWholeUserProfile;
 
-    std::unique_ptr<weld::LinkButton> mxBugLink;
     std::unique_ptr<weld::LinkButton> mxUserProfileLink;
     std::unique_ptr<weld::Button> mxBtnCreateZip;
 

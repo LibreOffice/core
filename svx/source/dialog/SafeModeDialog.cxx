@@ -51,7 +51,6 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     , mxCBDisableHWAcceleration(m_xBuilder->weld_check_button(u"check_disable_hw_acceleration"_ustr))
     , mxCBResetCustomizations(m_xBuilder->weld_check_button(u"check_reset_customizations"_ustr))
     , mxCBResetWholeUserProfile(m_xBuilder->weld_check_button(u"check_reset_whole_userprofile"_ustr))
-    , mxBugLink(m_xBuilder->weld_link_button(u"linkbutton_bugs"_ustr))
     , mxUserProfileLink(m_xBuilder->weld_link_button(u"linkbutton_profile"_ustr))
     , mxBtnCreateZip(m_xBuilder->weld_button(u"btn_create_zip"_ustr))
 {
@@ -84,12 +83,6 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     // it'll disable the relevant parts
     mxRadioRestore->set_active(true);
     RadioBtnHdl(*mxRadioRestore);
-
-    // Set URL for help button (module=safemode)
-    OUString sURL(officecfg::Office::Common::Menus::SendFeedbackURL::get()  //officecfg/registry/data/org/openoffice/Office/Common.xcu => https://hub.libreoffice.org/send-feedback/
-     + "?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-        "&LOlocale=" + utl::ConfigManager::getUILocale() + "&LOmodule=safemode");
-    mxBugLink->set_uri(sURL);
 
     mxUserProfileLink->set_uri(comphelper::BackupFileHelper::getUserProfileURL());
 }

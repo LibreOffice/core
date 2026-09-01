@@ -170,7 +170,6 @@
             <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:QuestionAnswers"/>
-            <menu:menuitem menu:id=".uno:SendFeedback"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
             <menu:menuseparator/>
