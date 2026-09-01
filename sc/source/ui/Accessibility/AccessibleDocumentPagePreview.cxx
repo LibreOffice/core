@@ -658,8 +658,10 @@ public:
     rtl::Reference<::accessibility::AccessibleShape> GetForeShape(sal_Int32 nIndex) const;
     sal_Int32 GetControlCount() const;
     rtl::Reference<::accessibility::AccessibleShape> GetControl(sal_Int32 nIndex) const;
-    uno::Reference<XAccessible> GetForegroundShapeAt(const awt::Point& rPoint) const; // inclusive controls
-    uno::Reference<XAccessible> GetBackgroundShapeAt(const awt::Point& rPoint) const;
+    rtl::Reference<::accessibility::AccessibleShape>
+    GetForegroundShapeAt(const awt::Point& rPoint) const; // inclusive controls
+    rtl::Reference<::accessibility::AccessibleShape>
+    GetBackgroundShapeAt(const awt::Point& rPoint) const;
 
     void DataChanged();
     void VisAreaChanged() const;
@@ -905,43 +907,45 @@ struct ScShapePointFound
 
 }
 
-uno::Reference<XAccessible> ScShapeChildren::GetForegroundShapeAt(const awt::Point& rPoint) const //inclusive Controls
+rtl::Reference<::accessibility::AccessibleShape>
+ScShapeChildren::GetForegroundShapeAt(const awt::Point& rPoint) const //inclusive Controls
 {
-    uno::Reference<XAccessible> xAcc;
+    rtl::Reference<::accessibility::AccessibleShape> pAcc;
 
     for(const auto& rShapeRange : maShapeRanges)
     {
         ScShapeChildVec::const_iterator aFindItr = std::find_if(rShapeRange.maForeShapes.begin(), rShapeRange.maForeShapes.end(), ScShapePointFound(rPoint));
         if (aFindItr != rShapeRange.maForeShapes.end())
-            xAcc = GetAccShape(*aFindItr);
+            pAcc = GetAccShape(*aFindItr);
         else
         {
             ScShapeChildVec::const_iterator aCtrlItr = std::find_if(rShapeRange.maControls.begin(), rShapeRange.maControls.end(), ScShapePointFound(rPoint));
             if (aCtrlItr != rShapeRange.maControls.end())
-                xAcc = GetAccShape(*aCtrlItr);
+                pAcc = GetAccShape(*aCtrlItr);
         }
 
-        if (xAcc.is())
+        if (pAcc.is())
             break;
     }
 
-    return xAcc;
+    return pAcc;
 }
 
-uno::Reference<XAccessible> ScShapeChildren::GetBackgroundShapeAt(const awt::Point& rPoint) const
+rtl::Reference<::accessibility::AccessibleShape>
+ScShapeChildren::GetBackgroundShapeAt(const awt::Point& rPoint) const
 {
-    uno::Reference<XAccessible> xAcc;
+    rtl::Reference<::accessibility::AccessibleShape> pAcc;
 
     for(const auto& rShapeRange : maShapeRanges)
     {
         ScShapeChildVec::const_iterator aFindItr = std::find_if(rShapeRange.maBackShapes.begin(), rShapeRange.maBackShapes.end(), ScShapePointFound(rPoint));
         if (aFindItr != rShapeRange.maBackShapes.end())
-            xAcc = GetAccShape(*aFindItr);
-        if (xAcc.is())
+            pAcc = GetAccShape(*aFindItr);
+        if (pAcc.is())
             break;
     }
 
-    return xAcc;
+    return pAcc;
 }
 
 ::accessibility::AccessibleShape* ScShapeChildren::GetAccShape(const ScShapeChild& rShape) const
