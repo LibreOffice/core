@@ -234,6 +234,22 @@ describe('SlideLinks', function () {
 		nodeassert.equal(links.isPageBroken(numbersPart), false);
 	});
 
+	it('marks a page as connected when its source is held open', function () {
+		(app as any).relatedDocuments = [
+			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'connected' },
+			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'available' },
+		];
+		deliver('slidelinks', { message: list });
+
+		// The pages read from the connected source are connected.
+		nodeassert.equal(links.isPageConnected(numbersPart), true);
+		nodeassert.equal(links.isPageConnected(outlookPart), true);
+		// A page whose source is only available, not held open, is not.
+		nodeassert.equal(links.isPageConnected(ticketsPart), false);
+		// A page that is linked to nothing is not.
+		nodeassert.equal(links.isPageConnected(unknownPart), false);
+	});
+
 	it('offers the update command for a document that holds links alone', function () {
 		deliver('slidelinks', { message: list });
 		nodeassert.equal(commandShown.get('updateslidelinks'), true);

@@ -751,6 +751,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		const outdated =
 			!broken && linked && links && img._part && links.isPageOutdated(img._part);
 		img._linkBadge.classList.toggle('outdated', !!outdated);
+		const connected =
+			!broken &&
+			!outdated &&
+			linked &&
+			links &&
+			img._part &&
+			links.isPageConnected(img._part);
+		img._linkBadge.classList.toggle('connected', !!connected);
 		this._setPreviewPositionLabels(img, i);
 	},
 

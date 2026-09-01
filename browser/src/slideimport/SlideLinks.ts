@@ -106,6 +106,13 @@ class SlideLinks {
 		return related !== null && related.state === 'missing';
 	}
 
+	public isPageConnected(part: string): boolean {
+		const link = this.pages.get(part);
+		if (!link) return false;
+		const related = this.relatedDocument(link.source);
+		return related !== null && related.state === 'connected';
+	}
+
 	private currentSourceTime(source: string): string | null {
 		const related = this.relatedDocument(source);
 		return related && related.lastModifiedTime
