@@ -2677,7 +2677,9 @@ bool ChildSession::unoCommand(const StringVector& tokens)
                           tokens.equals(1, ".uno:OpenHyperlink") ||
                           tokens.startsWith(1, "vnd.sun.star.script:") ||
                           tokens.equals(1, ".uno:Paste") ||
-                          tokens.equals(1, ".uno:PasteSpecial"));
+                          tokens.equals(1, ".uno:PasteSpecial") ||
+                          // Answers with how long the calculation took.
+                          tokens.equals(1, ".uno:CalculateSheet"));
 
     const std::string saveArgs = tokens.substrFromToken(2);
     LOG_TRC("uno command " << tokens[1] << " " << saveArgs << " notify: " << notify);

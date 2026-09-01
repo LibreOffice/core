@@ -465,6 +465,24 @@ SfxVoidItem CalculateHard FID_HARD_RECALC
 ]
 
 
+SfxVoidItem CalculateSheet FID_CALCULATE_SHEET
+(SfxInt32Item Tab FID_CALCULATE_SHEET)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Options;
+]
+
+
 SfxVoidItem Cancel SID_CANCEL
 ()
 [

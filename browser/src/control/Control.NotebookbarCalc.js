@@ -2351,10 +2351,16 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 						'children': [
 							{
 								'id': 'formula-calculate',
-								'type': 'toolitem',
+								'type': 'menubutton',
 								'text': _UNO('.uno:Calculate', 'spreadsheet'),
+								'noLabel': true,
 								'command': '.uno:Calculate',
-								'accessibility': { focusBack: true,	combination: 'RC', de: null }
+								'applyCallback': '.uno:Calculate',
+								'accessibility': { focusBack: true,	combination: 'RC', de: null },
+								'menu': [
+									{ type: 'comboboxentry', id: 'formula-calculate-all', text: _UNO('.uno:Calculate', 'spreadsheet'), uno: '.uno:Calculate' },
+									{ type: 'comboboxentry', id: 'formula-calculate-sheet', text: _UNO('.uno:CalculateSheet', 'spreadsheet'), uno: '.uno:CalculateSheet' },
+								]
 							}
 						]
 					}

@@ -1051,6 +1051,28 @@ function onCommandResult(e) {
 		setTimeout(function () {
 			map._docLayer.scrollToPos(new cool.SimplePoint(app.file.textCursor.rectangle.x1, app.file.textCursor.rectangle.y1));
 		}, 0);
+	} else if (
+		commandName === '.uno:CalculateSheet' &&
+		e.success === true &&
+		e.result &&
+		e.result.value &&
+		!isNaN(e.result.value)
+	) {
+		// The command answers with the microseconds its calculation took.
+		// Under ten milliseconds one decimal still shows a number.
+		const milliseconds = parseInt(e.result.value, 10) / 1000;
+		const elapsed =
+			milliseconds < 10
+				? milliseconds.toFixed(1)
+				: Math.round(milliseconds).toString();
+		// A timing is worth a glance, so it goes away on its own well before
+		// the ten seconds a snackbar lasts by default.
+		map.uiManager.showSnackbar(
+			_('Sheet recalculated in %1 ms').replace('%1', elapsed),
+			null,
+			null,
+			2000,
+		);
 	}
 }
 

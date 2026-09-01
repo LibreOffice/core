@@ -354,8 +354,9 @@ class SvxZoomSliderItem;
 
 #define FID_HARD_RECALC         (EXTRA_MENU_START + 18)
 #define FID_AUTOCOMPLETE        (EXTRA_MENU_START + 19)
+#define FID_CALCULATE_SHEET     (EXTRA_MENU_START + 20)
 
-#define EXTRA_MENU_END          (EXTRA_MENU_START + 20)
+#define EXTRA_MENU_END          (EXTRA_MENU_START + 21)
 
 #define DATA_MENU_START         (EXTRA_MENU_END)
 #define SID_DEFINE_DBNAME       (DATA_MENU_START)

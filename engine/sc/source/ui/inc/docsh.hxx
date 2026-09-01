@@ -33,7 +33,9 @@
 #include <optutil.hxx>
 #include <docuno.hxx>
 
+#include <chrono>
 #include <memory>
+#include <optional>
 #include <string_view>
 #include <unordered_map>
 #include <map>
@@ -154,6 +156,9 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
     css::uno::Reference< css::frame::XModel > LoadSharedDocument();
 
     void          UseSheetSaveEntries();
+
+    /// Refreshes the charts, broadcasts the change and repaints.
+    void UpdateAfterRecalc(ScTabViewShell* pViewShell);
 
     std::unique_ptr<ScDocFunc> CreateDocFunc();
 
@@ -293,6 +298,10 @@ public:
 
     SC_DLLPUBLIC void DoRecalc( bool bApi );
     SC_DLLPUBLIC void DoHardRecalc();
+    /// Marks every formula on one sheet dirty and calculates it. Returns the
+    /// time the calculation alone took, or nothing when there is no such sheet
+    /// or a calculation is already running.
+    std::optional<std::chrono::nanoseconds> DoHardRecalcSheet(SCTAB nTab);
 
     void            UpdateOle(const ScViewData& rViewData, bool bSnapSize = false);
     bool            IsOle() const;

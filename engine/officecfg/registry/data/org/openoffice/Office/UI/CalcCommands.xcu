@@ -2182,6 +2182,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:CalculateSheet" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Recalculate ~Sheet</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:AutoComplete" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~AutoInput</value>

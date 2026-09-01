@@ -62,6 +62,7 @@ interface TableDocument
     FID_RECALC      [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_OPEN_HYPERLINK    [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_HARD_RECALC [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_CALCULATE_SHEET [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_UPDATETABLINKS      [ ExecMethod = Execute; ]
     SID_REIMPORT_AFTER_LOAD [ ExecMethod = Execute; ]
     SID_AUTO_STYLE          [ ExecMethod = Execute; ]

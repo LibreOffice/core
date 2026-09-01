@@ -108,6 +108,8 @@
 #include <formulacell.hxx>
 #include <documentlinkmgr.hxx>
 #include <tablestyle.hxx>
+#include <chrono>
+#include <optional>
 #include <memory>
 #include <helpids.h>
 #include <editeng/eeitem.hxx>
@@ -494,6 +496,28 @@ void ScDocShell::Execute( SfxRequest& rReq )
             DoHardRecalc();
             rReq.Done();
             break;
+        case FID_CALCULATE_SHEET:
+        {
+            const SfxInt32Item* pTabItem = rReq.GetArg<SfxInt32Item>(FID_CALCULATE_SHEET);
+            // Without an argument the command works on the sheet on screen.
+            SCTAB nTab = 0;
+            if (pTabItem)
+                nTab = static_cast<SCTAB>(pTabItem->GetValue());
+            else if (ScTabViewShell* pViewShell = GetBestViewShell())
+                nTab = pViewShell->GetViewData().GetTabNumber();
+            // The return value holds how long the calculation took, in whole
+            // microseconds. A sheet that was not calculated answers without one.
+            std::optional<std::chrono::nanoseconds> oCalcDuration = DoHardRecalcSheet(nTab);
+            if (oCalcDuration)
+            {
+                const sal_Int64 nMicroseconds
+                    = std::chrono::duration_cast<std::chrono::microseconds>(*oCalcDuration).count();
+                rReq.SetReturnValue(
+                    SfxStringItem(FID_CALCULATE_SHEET, OUString::number(nMicroseconds)));
+            }
+            rReq.Done();
+            break;
+        }
         case SID_UPDATETABLINKS:
             {
                 // Draw-layer fill bitmap links are registered as the shapes are
@@ -1846,8 +1870,13 @@ void ScDocShell::DoRecalc( bool bApi )
             pFC->SetDirty();
     }
     m_pDocument->CalcFormulaTree();
-    if ( pSh )
-        pSh->UpdateCharts(true);
+    UpdateAfterRecalc(pSh);
+}
+
+void ScDocShell::UpdateAfterRecalc(ScTabViewShell* pViewShell)
+{
+    if (pViewShell)
+        pViewShell->UpdateCharts(true);
 
     m_pDocument->BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
 
@@ -1902,6 +1931,40 @@ void ScDocShell::DoHardRecalc()
     PostPaintGridAll();
     auto end = std::chrono::steady_clock::now();
     SAL_INFO("sc.timing", "ScDocShell::DoHardRecalc(): took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms");
+}
+
+std::optional<std::chrono::nanoseconds> ScDocShell::DoHardRecalcSheet(SCTAB nTab)
+{
+    ScDocument& rDocument = GetDocument();
+    if (nTab < 0 || nTab >= rDocument.GetTableCount())
+        return std::nullopt;
+
+    if (rDocument.IsInDocShellRecalc())
+    {
+        SAL_WARN("sc", "ScDocShell::DoHardRecalcSheet tries re-entering while in Recalc.");
+        return std::nullopt;
+    }
+
+    ScTabViewShell* pViewShell = GetBestViewShell();
+    // Only under this guard is a formula group with an IF, IFS or SWITCH
+    // parallelised, so the sheet calculates as it would in a full recalculation.
+    ScDocShellRecalcGuard aRecalcGuard(rDocument);
+    rDocument.SetDirty(ScRange(0, 0, nTab, rDocument.MaxCol(), rDocument.MaxRow(), nTab),
+                       /*bIncludeEmptyCells*/ false);
+
+    auto aStart = std::chrono::steady_clock::now();
+    rDocument.CalcFormulaTree(/*bOnlyForced*/ false,
+                              /*bProgressBar*/ false,
+                              /*bSetAllDirty*/ false);
+    const std::chrono::nanoseconds aCalcDuration = std::chrono::steady_clock::now() - aStart;
+
+    UpdateAfterRecalc(pViewShell);
+
+    SAL_INFO("sc.timing",
+             "ScDocShell::DoHardRecalcSheet(): calculation took "
+                 << std::chrono::duration_cast<std::chrono::milliseconds>(aCalcDuration).count()
+                 << "ms");
+    return aCalcDuration;
 }
 
 void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
