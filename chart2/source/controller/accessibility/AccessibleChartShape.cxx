@@ -40,12 +40,12 @@ AccessibleChartShape::AccessibleChartShape(
         return;
 
     Reference< drawing::XShape > xShape( rAccInfo.m_aOID.getAdditionalShape() );
-    Reference< XAccessible > xParent;
+    rtl::Reference<comphelper::OAccessible> pParent;
     if ( rAccInfo.m_pParent )
     {
-        xParent.set( rAccInfo.m_pParent );
+        pParent.set(rAccInfo.m_pParent);
     }
-    ::accessibility::AccessibleShapeInfo aShapeInfo( xShape, xParent );
+    ::accessibility::AccessibleShapeInfo aShapeInfo(xShape, pParent);
 
     m_aShapeTreeInfo.SetSdrView( rAccInfo.m_pSdrView );
     m_aShapeTreeInfo.SetController( nullptr );
