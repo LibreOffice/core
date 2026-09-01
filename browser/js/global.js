@@ -16,12 +16,17 @@ window.app = {
 // since body has overflow:hidden, that still shifts the visible UI up by the chrome-height delta
 // when focus arrives during a chrome rebuild like the readonly-to-edit transition), and
 // {preventScroll: true} on .focus() is not enough because Chromium's selection-into-view path runs
-// independently of focus():
+// independently of focus(). WebKit scrolls the page the same way to reveal a focused element or
+// frame, in both directions, so both axes are pinned:
 window.addEventListener('scroll', function() {
 	if (document.documentElement.scrollTop !== 0)
 		document.documentElement.scrollTop = 0;
 	if (document.body && document.body.scrollTop !== 0)
 		document.body.scrollTop = 0;
+	if (document.documentElement.scrollLeft !== 0)
+		document.documentElement.scrollLeft = 0;
+	if (document.body && document.body.scrollLeft !== 0)
+		document.body.scrollLeft = 0;
 }, true);
 
 // For typings (including the global object), please see browser/src/global.d.ts
