@@ -3468,7 +3468,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         if (nSprmId == NS_ooxml::LN_CT_SdtPr_dataBinding)
         {
-            // Although the absense of a <w:text/> element should mean that the control is richText,
+            // Although the absence of a <w:text/> element should mean that the control is richText,
             // in practice, the presence of a dataBinding element makes it plainText
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::richText)
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
