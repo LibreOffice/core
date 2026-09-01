@@ -25,7 +25,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <sal/log.hxx>
 #include <vcl/formatter.hxx>
-#include <vcl/svapp.hxx>
 
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
