@@ -2177,7 +2177,9 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs )
         {
             if (!aDashArrayStr.isEmpty())
                 aDashArrayStr.append(",");
-            aDashArrayStr.append(x);
+            // tdf#86206 - map dash lengths to ensure correct dash pattern in scaled documents
+            const sal_Int32 nDash = ImplMap(basegfx::fround(x));
+            aDashArrayStr.append(nDash);
         }
         if (!aDashArrayStr.isEmpty())
             mrExport.AddAttribute(u"stroke-dasharray"_ustr, aDashArrayStr.makeStringAndClear());
