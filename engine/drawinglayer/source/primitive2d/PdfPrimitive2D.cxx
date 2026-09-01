@@ -13,6 +13,7 @@
 #include <drawinglayer/primitive2d/ViewDependentTools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/tools.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/bitmap.hxx>
 
@@ -26,6 +27,7 @@ PdfPrimitive2D::PdfPrimitive2D(BinaryDataContainer const& rDataContainer, sal_In
     , mfPreviousDiscreteSizeX(0.0)
     , mfPreviousDiscreteSizeY(0.0)
 {
+    mpPdfDocument = vcl::pdf::PDFiumLibrary::openDocumentShared(maDataContainer);
     activateFlushOnTimer();
 }
 
@@ -43,8 +45,7 @@ bool PdfPrimitive2D::ensurePdfium() const
 
     if (!mpPdfDocument)
     {
-        mpPdfDocument = mpPdfium->openDocument(maDataContainer.getData(), maDataContainer.getSize(),
-                                               OString());
+        mpPdfDocument = vcl::pdf::PDFiumLibrary::openDocumentShared(maDataContainer);
         if (!mpPdfDocument)
             return false;
     }
@@ -99,6 +100,10 @@ PdfPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewIn
 {
     if (!ensurePdfium())
         return nullptr;
+
+    // an open page keeps its parsed content in memory, and only the rendered bitmap is
+    // needed once this function returns, so close the page again on every way out
+    comphelper::ScopeGuard aPageGuard([this] { mpPdfPage.reset(); });
 
     // calculate discrete sizes
     basegfx::B2DRange aDiscreteRange;

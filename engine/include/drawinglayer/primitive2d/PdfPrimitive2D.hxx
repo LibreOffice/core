@@ -47,10 +47,10 @@ private:
     /// cached PDFium library instance
     mutable std::shared_ptr<vcl::pdf::PDFium> mpPdfium;
 
-    /// cache the document, so we don't need to reopen on every use
-    mutable std::unique_ptr<vcl::pdf::PDFiumDocument> mpPdfDocument;
+    /// one instance shared between all users of the same PDF data
+    mutable std::shared_ptr<vcl::pdf::PDFiumDocument> mpPdfDocument;
 
-    /// cache the current page, so we don't need to reopen on every use
+    /// the currently open page, empty between decompositions
     mutable std::unique_ptr<vcl::pdf::PDFiumPage> mpPdfPage;
 
     /// ensures PDFium document and page are opened, returns false on failure

@@ -18,6 +18,11 @@ std::shared_ptr<PDFium>& PDFiumLibrary::get()
     return pInstance;
 }
 
+std::shared_ptr<PDFiumDocument> PDFiumLibrary::openDocumentShared(const BinaryDataContainer&)
+{
+    return nullptr;
+}
+
 } // end vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

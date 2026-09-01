@@ -11,6 +11,8 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <cassert>
+#include <map>
+#include <mutex>
 
 #include <sal/log.hxx>
 #include <fpdf_doc.h>
@@ -25,6 +27,7 @@
 #include <fpdf_structtree.h>
 
 #include <osl/endian.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/font.hxx>
@@ -2164,6 +2167,44 @@ std::shared_ptr<PDFium>& PDFiumLibrary::get()
 {
     static std::shared_ptr<PDFium> pInstance = std::make_shared<PDFiumImpl>();
     return pInstance;
+}
+
+namespace
+{
+std::mutex g_aSharedDocumentsMutex;
+// Documents handed out by openDocumentShared, keyed by the address of the bytes each one was opened on.
+std::map<const void*, std::weak_ptr<PDFiumDocument>> g_aSharedDocuments;
+}
+
+std::shared_ptr<PDFiumDocument>
+PDFiumLibrary::openDocumentShared(const BinaryDataContainer& rDataContainer)
+{
+    std::shared_ptr<PDFium> pPdfium = get();
+    if (!pPdfium)
+        return nullptr;
+
+    std::shared_ptr<const std::vector<sal_uInt8>> pBytes = rDataContainer.getSharedData();
+    if (!pBytes || pBytes->empty())
+        return nullptr;
+
+    std::scoped_lock aGuard(g_aSharedDocumentsMutex);
+
+    std::erase_if(g_aSharedDocuments, [](const auto& rEntry) { return rEntry.second.expired(); });
+
+    auto it = g_aSharedDocuments.find(pBytes->data());
+    if (it != g_aSharedDocuments.end())
+        if (std::shared_ptr<PDFiumDocument> pExisting = it->second.lock())
+            return pExisting;
+
+    std::unique_ptr<PDFiumDocument> pDocument
+        = pPdfium->openDocument(pBytes->data(), pBytes->size(), OString());
+    if (!pDocument)
+        return nullptr;
+
+    std::shared_ptr<PDFiumDocument> pShared(
+        pDocument.release(), [pBytes, pPdfium](PDFiumDocument* pDoc) { delete pDoc; });
+    g_aSharedDocuments[pBytes->data()] = pShared;
+    return pShared;
 }
 
 } // end vcl::pdf

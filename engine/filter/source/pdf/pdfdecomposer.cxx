@@ -53,12 +53,8 @@ XPdfDecomposer::XPdfDecomposer(uno::Reference<cpo::uno::XComponentContext> const
 bool getPdfPageSizeMM100(const BinaryDataContainer& rDataContainer, sal_Int32 nPageIndex,
                          double& rfWidthMM100, double& rfHeightMM100)
 {
-    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPdfium)
-        return false;
-
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize(), OString());
+    std::shared_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = vcl::pdf::PDFiumLibrary::openDocumentShared(rDataContainer);
     if (!pPdfDocument)
         return false;
 

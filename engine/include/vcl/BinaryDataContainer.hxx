@@ -46,6 +46,11 @@ public:
     size_t getSize() const;
     bool isEmpty() const;
     const sal_uInt8* getData() const;
+
+    /// The bytes as a shared reference. The referenced bytes stay valid and in
+    /// memory for the life of the reference, even if this container swaps its
+    /// copy out to disk in the meantime.
+    std::shared_ptr<const std::vector<sal_uInt8>> getSharedData() const;
     SAL_DLLPRIVATE cpo::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
 
     // Returns the data as a readonly stream open for reading

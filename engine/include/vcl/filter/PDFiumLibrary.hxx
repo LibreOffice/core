@@ -40,6 +40,7 @@
 
 class SvMemoryStream;
 class Bitmap;
+class BinaryDataContainer;
 
 namespace vcl::pdf
 {
@@ -378,6 +379,10 @@ public:
 struct VCL_DLLPUBLIC PDFiumLibrary final
 {
     static std::shared_ptr<PDFium>& get();
+
+    // Returns one document instance shared between all callers that pass the same bytes.
+    static std::shared_ptr<PDFiumDocument>
+    openDocumentShared(const BinaryDataContainer& rDataContainer);
 };
 
 // Tools

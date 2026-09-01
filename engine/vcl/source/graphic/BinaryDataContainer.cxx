@@ -201,6 +201,12 @@ const sal_uInt8* BinaryDataContainer::getData() const
     return mpImpl && mpImpl->mpData ? mpImpl->mpData->data() : nullptr;
 }
 
+std::shared_ptr<const std::vector<sal_uInt8>> BinaryDataContainer::getSharedData() const
+{
+    ensureSwappedIn();
+    return mpImpl ? mpImpl->mpData : nullptr;
+}
+
 void BinaryDataContainer::ensureSwappedIn() const
 {
     if (mpImpl)
