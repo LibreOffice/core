@@ -64,21 +64,6 @@ void VCLXAccessibleScrollBar::FillAccessibleStateSet( sal_Int64& rStateSet )
     rStateSet |= GetOrientationState();
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleScrollBar::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleScrollBar"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleScrollBar"_ustr };
-}
-
 // XAccessibleAction
 
 constexpr sal_Int32 ACCESSIBLE_ACTION_COUNT=4;

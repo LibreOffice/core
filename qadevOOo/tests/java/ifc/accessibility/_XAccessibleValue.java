@@ -124,8 +124,6 @@ public class _XAccessibleValue extends MultiMethodTest {
 
         boolean result = true ;
         boolean partResult=true;
-        String noMax = "com.sun.star.comp.toolkit.AccessibleScrollBar";
-        String implName = util.utils.getImplName(oObj);
 
         if (anotherFromGroup == null) {
             double newVal = curVal + 1;
@@ -162,14 +160,6 @@ public class _XAccessibleValue extends MultiMethodTest {
             log.println("Result max value is " + resVal);
             partResult = Math.abs(maxVal - resVal) < 0.00001;
 
-            if (implName.equals(noMax)) {
-                log.println("If one sets the maximum value of a scroll bar with XScrollBar::setMaximum(),"+
-                "then XScrollBar::getValue() returns the maximum value minus the visible size of"+
-                "the thumb");
-                //using arbitrary Value, since we can't determine the resulting value
-                partResult = resVal > 10;
-            }
-
             result &=partResult;
             log.println("\t works: "+partResult);
 
@@ -186,13 +176,6 @@ public class _XAccessibleValue extends MultiMethodTest {
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result max value is " + resVal);
             partResult = Math.abs(maxVal - resVal) < 0.00001;
-            if (implName.equals(noMax)) {
-                log.println("If one sets the maximum value of a scroll bar with XScrollBar::setMaximum(),"+
-                "then XScrollBar::getValue() returns the maximum value minus the visible size of"+
-                "the thumb");
-                //using arbitrary Value, since we can't determine the resulting value
-                partResult = resVal > 10;
-            }
 
             result &=partResult;
             log.println("\t works: "+partResult);
