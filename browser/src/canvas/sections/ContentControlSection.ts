@@ -80,7 +80,7 @@ export class ContentControlSection extends CanvasSectionObject {
 		else if (json.action === 'change-picture') {
 			this.sectionProperties.picturePicker = true;
 			if (!this.map.wopi.EnableInsertRemoteImage)
-				window.L.DomUtil.get('insertgraphic').click();
+				app.LOUtil.openFilePicker('insertgraphic');
 			else
 				this.map.fire('postMessage', {msgId: 'UI_InsertGraphic'});
 		}

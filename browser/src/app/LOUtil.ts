@@ -143,6 +143,31 @@ class LOUtil {
 		'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
 	];
 
+	// The command behind each hidden file-input element.
+	private static filePickerCommands: { [inputId: string]: string } = {
+		insertgraphic: '.uno:InsertGraphic',
+		insertmultimedia: '.uno:InsertAVMedia',
+		selectbackground: '.uno:SelectBackground',
+		comparedocuments: '.uno:CompareDocuments',
+	};
+
+	// Open the file picker for one of the hidden file-input elements. In the
+	// desktop apps the bare command goes to the engine, which asks the app for
+	// a file through the requestfilepicker callback and then runs the command
+	// on the picked file directly. Everywhere else a click on the input element
+	// opens the browser's picker, and the picked file is uploaded through an
+	// insertfile message.
+	public static openFilePicker(inputId: string): void {
+		if (window.mode.isCODesktop()) {
+			app.map.sendUnoCommand(LOUtil.filePickerCommands[inputId]);
+			return;
+		}
+
+		const input = document.getElementById(inputId) as HTMLInputElement;
+		if (input) input.click();
+		else console.error('openFilePicker: no input element "' + inputId + '"');
+	}
+
 	// Time in milliseconds a touch has to stay down to count as a long press.
 	public static readonly longPressTime = 550;
 

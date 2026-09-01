@@ -2621,11 +2621,11 @@ class Menubar extends window.L.Control {
 			// request new tiles for now.
 			app.map._docLayer.requestNewFiledBasedViewTiles();
 		} else if (id === 'insertgraphic') {
-			window.L.DomUtil.get('insertgraphic').click();
+			app.LOUtil.openFilePicker('insertgraphic');
 		} else if (id === 'insertgraphicremote') {
 			this._map.fire('postMessage', {msgId: 'UI_InsertGraphic'});
 		} else if (id === 'insertmultimedia') {
-			window.L.DomUtil.get('insertmultimedia').click();
+			app.LOUtil.openFilePicker('insertmultimedia');
 		} else if (id === 'remotemultimedia') {
 			this._map.fire('postMessage', {
 				msgId: 'UI_InsertFile', args: {

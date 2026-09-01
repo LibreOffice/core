@@ -133,7 +133,7 @@ class Dispatcher {
 		};
 
 		this.actionsMap['insertmultimedia'] = function () {
-			window.L.DomUtil.get('insertmultimedia').click();
+			app.LOUtil.openFilePicker('insertmultimedia');
 		};
 		this.actionsMap['remotemultimedia'] = function () {
 			app.map.fire('postMessage', {
@@ -146,7 +146,7 @@ class Dispatcher {
 		};
 
 		this.actionsMap['localcomparedocuments'] = function () {
-			window.L.DomUtil.get('comparedocuments').click();
+			app.LOUtil.openFilePicker('comparedocuments');
 		};
 		this.actionsMap['remotecomparedocuments'] = function () {
 			app.map.fire('postMessage', {
@@ -201,7 +201,7 @@ class Dispatcher {
 			app.map.fire('morelanguages', { applyto: 'all' });
 		};
 		this.actionsMap['localgraphic'] = function () {
-			window.L.DomUtil.get('insertgraphic').click();
+			app.LOUtil.openFilePicker('insertgraphic');
 		};
 		this.actionsMap['remotegraphic'] = this.actionsMap['insertremotegraphic'] =
 			function () {
@@ -1014,7 +1014,7 @@ class Dispatcher {
 		};
 
 		this.actionsMap['selectbackground'] = function () {
-			window.L.DomUtil.get('selectbackground').click();
+			app.LOUtil.openFilePicker('selectbackground');
 		};
 
 		this.actionsMap['notesmode'] = function () {

@@ -550,7 +550,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		$(control.button).unbind('click');
 		$(control.label).unbind('click');
 		$(control.container).click(function () {
-			window.L.DomUtil.get('selectbackground').click();
+			app.LOUtil.openFilePicker('selectbackground');
 		});
 		builder._preventDocumentLosingFocusOnClick(control.container);
 	},
@@ -562,7 +562,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		$(control.button).unbind('click');
 		$(control.label).unbind('click');
 		$(control.container).click(function () {
-			window.L.DomUtil.get('comparedocuments').click();
+			app.LOUtil.openFilePicker('comparedocuments');
 		});
 		builder._preventDocumentLosingFocusOnClick(control.container);
 	},
