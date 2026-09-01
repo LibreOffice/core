@@ -144,8 +144,22 @@ function closeActiveDialog(level) {
 		.parents('.jsdialog-window')
 		.invoke('attr', 'id')
 		.then(dialogId => {
-			cy.cGet(`#${CSS.escape(dialogId)} .ui-dialog-titlebar-close`)
-				.click();
+			const windowSelector = `#${CSS.escape(dialogId)}`;
+			// A jsdialog update can rebuild the dialog contents at any moment,
+			// which detaches a close button found earlier. Find the button and
+			// click it in one step, and repeat until the dialog is gone.
+			helper.retryUntil(
+				function () {
+					cy.cGet('body').then($body => {
+						const $button = $body.find(windowSelector + ' .ui-dialog-titlebar-close');
+						if ($button.length) $button[0].click();
+					});
+				},
+				function () {
+					return cy.cGet('body').then($body =>
+						$body.find(windowSelector).length === 0);
+				},
+				{ errorMsg: 'dialog ' + dialogId + ' never closed' });
 		});
 
 	cy.cGet('.ui-dialog[role="dialog"]:not(.snackbar)').should('have.length', level - 1);
