@@ -1039,20 +1039,20 @@ void AIChatSession::postViaTransport(
 
     std::weak_ptr<DocumentBroker> docBrokerWeak = docBroker;
     post(url, authHeader, std::move(body), _session.getAIRequestTimeoutSeconds(),
-         [docBrokerWeak, onResponse = std::move(onResponse)](int statusCode, std::string body)
+         [docBrokerWeak, onResponse = std::move(onResponse)](int statusCode, std::string responseBody)
     {
         // The transport may complete on another thread (e.g. the Qt GUI thread);
         // hop back onto the polling thread the rest of AIChatSession runs on.
-        auto docBroker = docBrokerWeak.lock();
-        if (!docBroker)
+        auto responseBroker = docBrokerWeak.lock();
+        if (!responseBroker)
             return;
-        auto poll = docBroker->getPoll().lock();
+        auto poll = responseBroker->getPoll().lock();
         if (!poll)
             return;
         poll->addCallback(
-            [onResponse, statusCode, body = std::move(body)]() mutable
+            [onResponse, statusCode, responseBody = std::move(responseBody)]() mutable
         {
-            onResponse(statusCode, std::move(body));
+            onResponse(statusCode, std::move(responseBody));
         });
     });
 }

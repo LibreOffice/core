@@ -63,10 +63,10 @@ protected:
         const QPointer<QWidget> pGuard(pWidget);
         const Mode eMode = m_eMode;
         QTimer::singleShot(0, this, [pGuard, eMode]() {
-            QWidget* pWidget = pGuard.data();
-            if (!pWidget || !pWidget->testAttribute(Qt::WA_SetCursor))
+            QWidget* pGuardedWidget = pGuard.data();
+            if (!pGuardedWidget || !pGuardedWidget->testAttribute(Qt::WA_SetCursor))
                 return;
-            const QCursor aCursor = pWidget->cursor();
+            const QCursor aCursor = pGuardedWidget->cursor();
             if (aCursor.shape() != Qt::BitmapCursor)
                 return;
             QPixmap aPixmap = aCursor.pixmap();
@@ -77,11 +77,11 @@ protected:
             {
                 if (aPixmap.devicePixelRatio() != 1.0)
                     return;
-                const qreal fRatio = pWidget->devicePixelRatio();
+                const qreal fRatio = pGuardedWidget->devicePixelRatio();
                 if (fRatio <= 1.0)
                     return;
                 aPixmap.setDevicePixelRatio(fRatio);
-                pWidget->setCursor(QCursor(aPixmap, qRound(aHotspot.x() / fRatio),
+                pGuardedWidget->setCursor(QCursor(aPixmap, qRound(aHotspot.x() / fRatio),
                                            qRound(aHotspot.y() / fRatio)));
             }
             else
@@ -90,7 +90,7 @@ protected:
                 if (fRatio <= 1.0)
                     return;
                 aPixmap.setDevicePixelRatio(1.0);
-                pWidget->setCursor(QCursor(aPixmap, qRound(aHotspot.x() * fRatio),
+                pGuardedWidget->setCursor(QCursor(aPixmap, qRound(aHotspot.x() * fRatio),
                                            qRound(aHotspot.y() * fRatio)));
             }
         });

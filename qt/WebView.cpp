@@ -971,6 +971,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
             ._fileURL = {},
             ._fakeClientFd = -1,
             ._appDocId = 0,
+            ._remoteInfo = {},
         };
         _docType = QStringLiteral("starter");
     }
@@ -981,6 +982,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
             ._fileURL = fileURL,
             ._fakeClientFd = fakeSocketSocket(),
             ._appDocId = coda::generateNewAppDocId(),
+            ._remoteInfo = {},
         };
         _docType = _isWelcome ? QStringLiteral("welcome")
                               : docTypeFromExtension(QString::fromStdString(fileURL.getPath()));
@@ -1299,10 +1301,10 @@ void WebView::queryGnomeFontScalingUpdateZoom()
 
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(pendingCall, _webView.get());
     QObject::connect(watcher, &QDBusPendingCallWatcher::finished,
-                     [this](QDBusPendingCallWatcher* watcher)
+                     [this](QDBusPendingCallWatcher* finishedCall)
                      {
-                         QDBusPendingReply<QVariant> reply = *watcher;
-                         watcher->deleteLater();
+                         QDBusPendingReply<QVariant> reply = *finishedCall;
+                         finishedCall->deleteLater();
 
                          if (reply.isError())
                              return;

@@ -3866,7 +3866,7 @@ void lokit_main(
                 bool sysTemplateIncomplete,
 #else
                 int docBrokerSocket,
-                const std::string& userInterface,
+                [[maybe_unused]] const std::string& userInterface,
 #endif
                 std::size_t numericIdentifier
                 )
