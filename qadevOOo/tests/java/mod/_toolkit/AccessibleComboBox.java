@@ -141,8 +141,6 @@ public class AccessibleComboBox extends TestCase {
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                 AccessibleRole.PANEL, "", "AccessibleComboBox");
 
-        log.println("ImplementationName " + utils.getImplName(oObj));
-
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleComponent acomp = UnoRuntime.queryInterface(

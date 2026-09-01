@@ -34,11 +34,6 @@ class VCLXAccessibleComboBox final : public VCLXAccessibleBox
 public:
     VCLXAccessibleComboBox(ComboBox* pComboBox);
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    // Return combo box specific services.
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
 private:
     virtual ~VCLXAccessibleComboBox() override = default;
 };

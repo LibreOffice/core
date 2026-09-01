@@ -29,18 +29,4 @@ VCLXAccessibleComboBox::VCLXAccessibleComboBox(ComboBox* pComboBox)
 {
 }
 
-// XServiceInfo
-
-OUString VCLXAccessibleComboBox::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleComboBox"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleComboBox::getSupportedServiceNames()
-{
-    return comphelper::concatSequences(VCLXAccessibleBox::getSupportedServiceNames(),
-                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleComboBox"_ustr});
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
