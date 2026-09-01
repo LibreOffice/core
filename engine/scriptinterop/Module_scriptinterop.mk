@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,scriptinterop,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,scriptinterop,\
+    $(call gb_Helper_optional,QUICKJS,CppunitTest_scriptinterop_document) \
     CppunitTest_scriptinterop_presentation \
 ))
 
