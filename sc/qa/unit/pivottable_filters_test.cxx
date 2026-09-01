@@ -499,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableNoColumnsLayout)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf112501)
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf112501PivotCompactModePopupButtonPlacement)
 {
     createScDoc("xls/tdf112501.xls");
     ScDocument* pDoc = getScDoc();
