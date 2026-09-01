@@ -127,12 +127,6 @@ public class _XAccessibleValue extends MultiMethodTest {
         String noMax = "com.sun.star.comp.toolkit.AccessibleScrollBar";
         String implName = util.utils.getImplName(oObj);
 
-        if (tEnv.getObjRelation("ValueNotPersistent")!=null) {
-            log.println("Excluded since it works like AccessibleAction");
-            tRes.tested("setCurrentValue()",Status.skipped(true));
-            return;
-        }
-
         if (anotherFromGroup == null) {
             double newVal = curVal + 1;
             if (newVal > maxVal) newVal -= 2;
