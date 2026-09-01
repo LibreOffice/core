@@ -67,9 +67,9 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     SwDoc& GetDoc() const;
 
     bool operator < (const SwPosition &) const;
-    bool operator > (const SwPosition &) const;
-    bool operator <=(const SwPosition &) const;
-    bool operator >=(const SwPosition &) const;
+    bool operator > (const SwPosition & rOther) const { return rOther < *this; }
+    bool operator <=(const SwPosition & rOther) const { return !(*this > rOther); }
+    bool operator >=(const SwPosition & rOther) const { return !(*this < rOther); }
     bool operator ==(const SwPosition &) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
