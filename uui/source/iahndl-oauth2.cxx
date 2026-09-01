@@ -288,7 +288,7 @@ void OAuth2Request::Impl::sendResponse(tcp::socket& socket, std::string_view bod
     // Wait for peer's FIN to avoid RST on close; timeout guards against a hung peer
     socket.set_option(net::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO>(5000), ec);
     char buf[1];
-    socket.read_some(net::buffer(buf), ec);
+    (void)socket.read_some(net::buffer(buf), ec);
 }
 
 void OAuth2Request::Impl::sendCloseResponse(tcp::socket& socket, std::u16string_view error) const
