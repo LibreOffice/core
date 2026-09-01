@@ -89,7 +89,7 @@ class SlideLinks {
 	// for a page that is linked to nothing.
 	public getPageLink(part: string): { source: string; name: string } | null {
 		const link = this.pages.get(part);
-		return link ? link : null;
+		return link ? { source: link.source, name: link.name } : null;
 	}
 
 	public isPageOutdated(part: string): boolean {
@@ -97,6 +97,13 @@ class SlideLinks {
 		if (!link || !link.lastModifiedTime) return false;
 		const current = this.currentSourceTime(link.source);
 		return current !== null && current !== link.lastModifiedTime;
+	}
+
+	public isPageBroken(part: string): boolean {
+		const link = this.pages.get(part);
+		if (!link) return false;
+		const related = this.relatedDocument(link.source);
+		return related !== null && related.state === 'missing';
 	}
 
 	private currentSourceTime(source: string): string | null {

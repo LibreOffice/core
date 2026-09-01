@@ -112,7 +112,8 @@
 	color: var(--color-primary);
 }
 
-.slide-import-related-item[data-state='failed'] .slide-import-related-state {
+.slide-import-related-item[data-state='failed'] .slide-import-related-state,
+.slide-import-related-item[data-state='missing'] .slide-import-related-state {
 	color: var(--color-error);
 }
 

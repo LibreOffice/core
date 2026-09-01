@@ -740,13 +740,16 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	// Shows the link mark on the preview of a slide that is linked to another
 	// file, and describes the link in the preview's labels. A link whose source
-	// moved on since the slide was read from it is marked as out of date.
+	// is missing is marked as broken by specific class.
 	_setPreviewLinkMark: function (img, i) {
 		const links = this._map.slideLinks;
 		const linked = this._pageLink(img) !== null;
 		img._linkBadge.classList.toggle('linked', linked);
+		const broken =
+			linked && links && img._part && links.isPageBroken(img._part);
+		img._linkBadge.classList.toggle('broken', !!broken);
 		const outdated =
-			linked && links && img._part && links.isPageOutdated(img._part);
+			!broken && linked && links && img._part && links.isPageOutdated(img._part);
 		img._linkBadge.classList.toggle('outdated', !!outdated);
 		this._setPreviewPositionLabels(img, i);
 	},

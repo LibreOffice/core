@@ -204,6 +204,36 @@ describe('SlideLinks', function () {
 		nodeassert.equal(links.getPageLink(unknownPart), null);
 	});
 
+	it('marks a page as broken when its source is missing from storage', function () {
+		(app as any).relatedDocuments = [
+			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
+			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+		];
+		deliver('slidelinks', { message: list });
+
+		// Both pages read from the missing source are broken.
+		nodeassert.equal(links.isPageBroken(numbersPart), true);
+		nodeassert.equal(links.isPageBroken(outlookPart), true);
+		// A page whose source is present is not.
+		nodeassert.equal(links.isPageBroken(ticketsPart), false);
+		// A page that is linked to nothing is not.
+		nodeassert.equal(links.isPageBroken(unknownPart), false);
+	});
+
+	it('stops marking pages broken once the source is read again', function () {
+		(app as any).relatedDocuments = [
+			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
+			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+		];
+		deliver('slidelinks', { message: list });
+		nodeassert.equal(links.isPageBroken(numbersPart), true);
+
+		// The source is subscribed again and connects, so its links are whole.
+		(app as any).relatedDocuments = relatedDocuments();
+		deliver('relateddocuments', { documents: (app as any).relatedDocuments });
+		nodeassert.equal(links.isPageBroken(numbersPart), false);
+	});
+
 	it('offers the update command for a document that holds links alone', function () {
 		deliver('slidelinks', { message: list });
 		nodeassert.equal(commandShown.get('updateslidelinks'), true);

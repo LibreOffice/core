@@ -447,6 +447,8 @@ class SlideImportPane {
         return _('Disconnected');
       case 'failed':
         return _('Failed');
+      case 'missing':
+        return _('Missing');
       default:
         return _('Available');
     }

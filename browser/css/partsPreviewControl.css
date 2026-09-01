@@ -172,6 +172,10 @@
 	box-shadow: 0 0 0 2px var(--color-warning);
 }
 
+.preview-link-badge.broken::before {
+	box-shadow: 0 0 0 2px var(--color-error);
+}
+
 [data-theme='dark'] .preview-link-badge::before {
 	background-image: url('images/dark/lc_inserthyperlink.svg');
 }
