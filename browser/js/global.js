@@ -1089,7 +1089,9 @@ function showWelcomeSVG() {
 
 		sendPendingBrowserSettingsUpdate: function() {
 			const isEmpty = (obj) => Object.keys(obj).length === 0;
-			if (!isEmpty(global.prefs._settingUpdateJSON)) {
+			// Ensure the socket is open before sending. Because it resets the _settingsUpdatedJSON.
+			const canSend = global.socket && global.socket.readyState === 1;
+			if (canSend && !isEmpty(global.prefs._settingUpdateJSON)) {
 				global.socket.send('browsersetting action=update json=' + JSON.stringify(global.prefs._settingUpdateJSON));
 				global.prefs._settingUpdateJSON = {};
 			}

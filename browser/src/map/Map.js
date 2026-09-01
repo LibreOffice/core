@@ -886,6 +886,9 @@ window.L.Map = window.L.Evented.extend({
 
 		window.L.DomEvent[onOff](window, 'blur', this._onLostFocus, this);
 		window.L.DomEvent[onOff](window, 'focus', this._onGotFocus, this);
+		// A reload, a link followed or a tab closed takes the page away without a
+		// blur. pagehide is the signal all of those fire.
+		window.L.DomEvent[onOff](window, 'pagehide', this._onPageHide, this);
 	},
 
 
@@ -915,6 +918,13 @@ window.L.Map = window.L.Evented.extend({
 			this.focus(acceptInput);
 			this._textInput.hideCursor(); // The cursor is in the dialog.
 		}
+	},
+
+	// The page is going away. A preference changed moments ago is still sitting in
+	// the batch that would have been sent a few seconds from now, so send it while
+	// the connection is up.
+	_onPageHide: function () {
+		window.prefs.sendPendingBrowserSettingsUpdate();
 	},
 
 	// Our browser tab lost focus.

@@ -59,6 +59,12 @@ window.L.Map.Settings = window.L.Handler.extend({
 		if (this._iframeDialog && this._iframeDialog.hasLoaded())
 			this.removeIframe();
 
+		// The dialog fills the Interface Settings in from the stored
+		// browsersetting.json. Preference changes are batched before they are sent
+		// there, so send what is still waiting and the dialog opens on the same
+		// values the toolbar toggles show.
+		window.prefs.sendPendingBrowserSettingsUpdate();
+
 		const theme = window.prefs.getBoolean('darkTheme') ? 'dark' : 'light';
 
 		const params: Array<Record<string, any>> = [
@@ -124,6 +130,37 @@ window.L.Map.Settings = window.L.Handler.extend({
 		);
 	},
 
+	// The document types browsersetting.json groups the per-document view toggles
+	// under.
+	_docTypeSettingGroups: ['text', 'spreadsheet', 'presentation', 'drawing'],
+
+	/**
+	 * Takes on the Interface Settings the dialog has just saved. The view toggles
+	 * of a document type are read when a document opens, so recording them here
+	 * keeps this session, localStorage and the stored browsersetting.json on the
+	 * same values. The settings shared by every document type (theme, layout,
+	 * zoom) have live UI of their own and go on applying at the next open only.
+	 * The comments are switched over through the same call the Show Comments
+	 * button makes, so that choice takes effect without a reload.
+	 */
+	applyBrowserSettings: function (settings: Record<string, string>): void {
+		const viewToggles: Record<string, string> = {};
+		for (const [key, value] of Object.entries(settings)) {
+			const group = key.substring(0, key.indexOf('.'));
+			if (this._docTypeSettingGroups.includes(group)) viewToggles[key] = value;
+		}
+		window.prefs.setMultiple(viewToggles);
+
+		const saved = viewToggles[this._map.getDocType() + '.ShowAnnotations'];
+		if (saved === undefined) return;
+
+		const handler = this._map['stateChangeHandler'];
+		const state = handler.getItemValue('showannotations');
+		const shown = state === 'true' || state === true;
+		const show = saved === 'true';
+		if (show !== shown) this._map.showComments(show);
+	},
+
 	onMessage: function (e: MessageEvent): void {
 		if (typeof e.data !== 'string') return; // Some extensions may inject scripts resulting in load events that are not strings
 		const data = JSON.parse(e.data);
@@ -136,6 +173,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 			this._iframeDialog.postMessage(data);
 		} else if (data.MessageId === 'settings-save-complete') {
 			this.removeIframe();
+			if (data.browserSettings) this.applyBrowserSettings(data.browserSettings);
 			// updateviewsettings applies these to the session (e.g. AI credentials
 			// so the AI assistant can authenticate). The apps persist settings
 			// separately, through the native bridge.

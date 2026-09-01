@@ -101,6 +101,10 @@ interface SaveAllResult {
 	// re-fetch redacts the in-memory copy. Applied to the live session so a
 	// freshly entered secret is not lost.
 	viewSettings: ViewSettings;
+	// The Interface Settings as they were written to browsersetting.json, with
+	// flat dotted keys and string values ("text.ShowAnnotations": "false"). Null
+	// when the dialog shows no Interface Settings section.
+	browserSettings: Record<string, string> | null;
 }
 
 // Visual state of an AI model-fetch status line. 'hidden' (or an empty message)
@@ -197,6 +201,7 @@ const onMessage = (e) => {
 								// re-fetched copy, so a freshly typed key still reaches
 								// the live session.
 								viewSettings: result.viewSettings,
+								browserSettings: result.browserSettings,
 								aiJustConfigured: result.aiJustConfigured,
 								aiKeyMissing: result.aiKeyMissing,
 							}),
@@ -272,6 +277,16 @@ const defaultBrowserSetting: Record<string, any> = {
 		ShowAnnotations: true,
 	},
 };
+
+// The form is filled in from a copy of the defaults. Its controls write the
+// user's choice straight back into the object they were handed, and a custom
+// control such as the zoom dropdown is handed the whole {value, label,
+// customType} object, so working on the defaults themselves would leave them
+// holding the user's choice - or, where the collected value replaces the object,
+// no value at all.
+function defaultBrowserSettingCopy(): Record<string, any> {
+	return JSON.parse(JSON.stringify(defaultBrowserSetting));
+}
 
 abstract class SettingsStorage {
 	abstract fetchSettingsConfig(): Promise<ConfigData>;
@@ -777,14 +792,16 @@ class SettingIframe {
 		const saves: Promise<void>[] = [];
 
 		// Browser settings
+		let browserSettings: Record<string, string> | null = null;
 		if (this._browserSettingSection) {
+			const payload = this.browserSettingsPayload();
+			browserSettings = this.flattenBrowserSettings(JSON.parse(payload));
 			saves.push(
 				(async () => {
-					const file = new File(
-						[this.browserSettingsPayload()],
-						'browsersetting.json',
-						{ type: 'application/json', lastModified: Date.now() },
-					);
+					const file = new File([payload], 'browsersetting.json', {
+						type: 'application/json',
+						lastModified: Date.now(),
+					});
 					await this.uploadFile(this.PATH.browserSettingsUpload(), file);
 					if ((window as any).parent?.mode?.isCODesktop()) {
 						(window.parent as any).postMobileMessage('SYNCSETTINGS');
@@ -808,7 +825,7 @@ class SettingIframe {
 
 		await Promise.all(saves);
 
-		return { aiJustConfigured, aiKeyMissing, viewSettings };
+		return { aiJustConfigured, aiKeyMissing, viewSettings, browserSettings };
 	}
 
 	init(): void {
@@ -1618,9 +1635,7 @@ class SettingIframe {
 				if (!confirmed) {
 					return;
 				}
-				this.browserSettingOptions = JSON.parse(
-					JSON.stringify(defaultBrowserSetting),
-				);
+				this.browserSettingOptions = defaultBrowserSettingCopy();
 				// A reset drops every choice the user had saved.
 				this.storedBrowserSetting = {};
 				this.createBrowserSettingForm(sharedConfigsContainer);
@@ -1955,12 +1970,66 @@ class SettingIframe {
 		);
 	}
 
+	private static isSettingGroup(value: any): boolean {
+		return (
+			typeof value === 'object' &&
+			value !== null &&
+			!Array.isArray(value) &&
+			!('customType' in value)
+		);
+	}
+
+	// browsersetting.json also holds preferences this dialog does not know about:
+	// the resolved-comments choice, the open sidebar deck, the hidden status bar
+	// entries. Carry those over from the stored file so a save here keeps them.
+	private withStoredExtras(
+		settings: Record<string, any>,
+		stored: Record<string, any> = this.storedBrowserSetting,
+	): Record<string, any> {
+		const merged: Record<string, any> = { ...settings };
+
+		for (const [key, storedValue] of Object.entries(stored ?? {})) {
+			const value = merged[key];
+			if (value === undefined) merged[key] = storedValue;
+			else if (
+				SettingIframe.isSettingGroup(value) &&
+				SettingIframe.isSettingGroup(storedValue)
+			)
+				merged[key] = this.withStoredExtras(value, storedValue);
+		}
+
+		return merged;
+	}
+
+	// The Interface Settings as flat, dotted keys with string values, the shape a
+	// browser preference has: {"text.ShowAnnotations": "false"}.
+	private flattenBrowserSettings(
+		settings: Record<string, any>,
+		parentKey: string = '',
+		flattened: Record<string, string> = {},
+	): Record<string, string> {
+		for (const [key, value] of Object.entries(settings)) {
+			const fullKey = parentKey ? `${parentKey}.${key}` : key;
+			if (SettingIframe.isSettingGroup(value))
+				this.flattenBrowserSettings(value, fullKey, flattened);
+			else if (Array.isArray(value)) flattened[fullKey] = JSON.stringify(value);
+			else if (typeof value === 'boolean')
+				flattened[fullKey] = value ? 'true' : 'false';
+			else if (value !== null && typeof value === 'object')
+				// A custom-widget setting carries its value beside the widget type.
+				flattened[fullKey] = String(value.value);
+			else flattened[fullKey] = String(value);
+		}
+
+		return flattened;
+	}
+
 	// The Interface Settings as they should be written to browsersetting.json,
 	// collected from what the page shows.
 	private browserSettingsPayload(): string {
 		this.collectBrowserSettingsFromUI();
 
-		const settings = { ...this.browserSettingOptions };
+		const settings = this.withStoredExtras(this.browserSettingOptions);
 
 		const followServerZoomCheckbox =
 			this._zoomSection?.querySelector<HTMLInputElement>(
@@ -3454,13 +3523,13 @@ class SettingIframe {
 						: {};
 					this.browserSettingOptions = browserSettingContent
 						? this.mergeWithDefault(
-								defaultBrowserSetting,
+								defaultBrowserSettingCopy(),
 								this.storedBrowserSetting,
 							)
-						: defaultBrowserSetting;
+						: defaultBrowserSettingCopy();
 				} else {
 					this.storedBrowserSetting = {};
-					this.browserSettingOptions = defaultBrowserSetting;
+					this.browserSettingOptions = defaultBrowserSettingCopy();
 				}
 				this.createBrowserSettingForm(settingsContainer);
 			}
