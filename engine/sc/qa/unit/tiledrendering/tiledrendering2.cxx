@@ -948,6 +948,51 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkCellEditedInsideAddressB
     CPPUNIT_ASSERT_EQUAL(u"https://www.exmple.com/"_ustr, lcl_getCellTextWithLinks(*pDoc, aA1));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellKeepsItsOwnLinkText)
+{
+    // A link whose text is not the address itself is one the user gave that text, and
+    // committing the text would not bring the link back, so editing has to leave it alone.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("LibreOffice", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    lcl_selectInCell(pView, 0, 11);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"LibreOffice"_ustr, u"http://www.libreoffice.org/"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    CPPUNIT_ASSERT_EQUAL(u"[LibreOffice](http://www.libreoffice.org/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+
+    // When editing that cell again, the link stays a link: its text is still marked with the
+    // address the user gave it.
+    lcl_selectInCell(pView, 0, 0);
+
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetEditActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pEditView->getEditEngine().GetTextLen(0));
+
+    const std::vector<EFieldInfo> aFieldInfos = pEditView->getEditEngine().GetFieldInfo(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFieldInfos.size());
+    CPPUNIT_ASSERT(aFieldInfos[0].bTextIsSpanned);
+    CPPUNIT_ASSERT_EQUAL(u"LibreOffice"_ustr, aFieldInfos[0].aCurrentText);
+    auto pURLField = dynamic_cast<const SvxURLField*>(aFieldInfos[0].pFieldItem->GetField());
+    CPPUNIT_ASSERT(pURLField);
+    CPPUNIT_ASSERT_EQUAL(u"http://www.libreoffice.org/"_ustr, pURLField->GetURL());
+
+    // Committing the edit keeps the link, with the text the user gave it.
+    ScModule::get()->InputEnterHandler();
+    CPPUNIT_ASSERT_EQUAL(u"[LibreOffice](http://www.libreoffice.org/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
 // The automatic font color of a shape being edited has to be resolved against the fill of
 // that shape, not against the page background
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeTextEditAutoColorOnDarkPage)
