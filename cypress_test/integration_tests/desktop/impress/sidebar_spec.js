@@ -24,6 +24,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sidebar Tests', function()
 		cy.cGet('#colorwindow_iv_colors.ui-iconview').should('be.visible');
 	});
 
+	it('Hidden gradient color buttons take no room in the panel', function() {
+		cy.cGet('#fillstyle select').select('Color');
+		cy.cGet('#fillattr').should('be.visible');
+		helper.processToIdle(this.win);
+
+		// Only the border of a hidden grid cell is left.
+		cy.cGet('#fillattr2').should('have.class', 'hidden').invoke('outerWidth').should('be.lessThan', 5);
+		cy.cGet('#fillattr3').should('have.class', 'hidden').invoke('outerWidth').should('be.lessThan', 5);
+	});
+
 	it.skip('Set underline using popup', function() {
 		cy.cGet('#layoutvalueset').should('be.visible');
 		impressHelper.selectTextShapeInTheCenter();

@@ -244,6 +244,9 @@ function _menubuttonControl(
 		if (data.enabled === false) button.disabled = true;
 
 		if (data.visible === false) button.classList.add('hidden');
+
+		if (data.xalign === 'left') button.classList.add('content-start');
+		else if (data.xalign === 'right') button.classList.add('content-end');
 	} else {
 		window.app.console.warn('Not found menu "' + menuId + '"');
 	}

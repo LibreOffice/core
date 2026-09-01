@@ -470,6 +470,8 @@ interface MenuButtonWidgetJSON extends WidgetJSON {
 	icon?: string; // theme-aware icon file name, e.g. 'lc_recsearch.svg'
 	accessKey?: string;
 	noLabel?: boolean; // suppress text label, show icon only
+	// which end of the button the content sits at: 'left' or 'right', absent for the middle
+	xalign?: string;
 }
 
 // type: 'image'

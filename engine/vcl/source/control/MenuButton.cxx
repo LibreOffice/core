@@ -324,6 +324,15 @@ void MenuButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     PushButton::DumpAsPropertyTree(rJsonWriter);
 
+    // The end of the button that its content sits at, as the .ui file asked for it. Only an
+    // explicit left or right is written out. Content that sits in the middle is the absence
+    // of the property.
+    const WinBits nStyle = GetStyle();
+    if (nStyle & WB_LEFT)
+        rJsonWriter.put("xalign", "left");
+    else if (nStyle & WB_RIGHT)
+        rJsonWriter.put("xalign", "right");
+
     if (mpMenu)
     {
         auto aMenuNode = rJsonWriter.startArray("menu");

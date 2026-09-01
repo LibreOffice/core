@@ -2841,6 +2841,32 @@ img.ui-combobox-value-preview {
 	justify-content: center;
 }
 
+/* A menu button that asks for its content at one end shows it there, the way a
+ * list box shows its text. The arrow stays at the far end of the button. */
+.jsdialog.menubutton.content-start {
+	justify-content: flex-start;
+}
+
+.jsdialog.menubutton.content-start .arrow {
+	margin-inline-start: auto;
+}
+
+.jsdialog.menubutton.content-end {
+	justify-content: flex-end;
+}
+
+/* The generic secondary button rule in btns.css hands every button a 5px side
+ * margin and a width that follows its content. In a grid that pushes a menu
+ * button out of its column, so it no longer lines up with the list boxes and
+ * spin fields in the rows around it. A cell takes its width from the column,
+ * so both are undone here. The rule in btns.css names a long list of classes
+ * at once, so these need !important to win against it. A hidden menu button
+ * keeps the zero width that every hidden grid child has. */
+.ui-grid > button.jsdialog.menubutton:not(.hidden) {
+	margin-inline: 0 !important;
+	width: auto !important;
+}
+
 .jsdialog.menubutton img {
 	margin-inline-end: 4px;
 }

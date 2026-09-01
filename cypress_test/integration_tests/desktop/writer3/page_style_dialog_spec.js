@@ -95,4 +95,25 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 			});
 		});
 	});
+
+	/*
+	 * cool#16155: the Style and Color rows of the Border tab hold menu buttons, the Thickness
+	 * row a list box. All three sit in the same grid column, so their left edges line up.
+	 */
+	it('Border tab lines up the controls of the Line section', function() {
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+
+		helper.processToIdle(this.win);
+
+		cy.cGet('[id^="TemplateDialog"]').should('be.visible');
+		cy.cGet('button#borders.ui-tab').click();
+
+		helper.processToIdle(this.win);
+
+		cy.cGet('#linewidthlb').should('be.visible').invoke('offset').then((thickness) => {
+			cy.cGet('#linestylelb').should('be.visible').invoke('offset').its('left').should('eq', thickness.left);
+			cy.cGet('#linecolorlb').should('be.visible').invoke('offset').its('left').should('eq', thickness.left);
+		});
+	});
 });
