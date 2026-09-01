@@ -154,12 +154,12 @@ public:
         sal_uInt32 nIndex(0);
 
         // test as long as there are at least two points and as long as the index
-        // is smaller or equal second last point
+        // is smaller than or equal second last point
         while((maVector.size() > 1) && (nIndex <= maVector.size() - 2))
         {
             if(maVector[nIndex] == maVector[nIndex + 1])
             {
-                // if next is same as index, delete next
+                // if next is the same as index, delete next
                 maVector.erase(maVector.begin() + (nIndex + 1));
             }
             else
@@ -462,7 +462,7 @@ public:
 
         if(aStart == aEnd)
         {
-            // swap Prev and Next at middle element (if exists)
+            // swap Prev and Next at middle element (if it exists)
             aStart->flip();
         }
 
@@ -572,7 +572,7 @@ public:
 class ImplB2DPolygon
 {
 private:
-    // The point vector. This vector exists always and defines the
+    // The point vector. This vector always exists and defines the
     // count of members.
     CoordinateDataArray2D                         maPoints;
 
@@ -585,7 +585,7 @@ private:
     // but add buffered data that is valid for all referencing instances
     mutable std::unique_ptr<ImplBufferedData> mpBufferedData;
 
-    // flag which decides if this polygon is opened or closed
+    // flag which decides if this polygon is open or closed
     bool                                          mbIsClosed;
 
 public:
@@ -636,7 +636,7 @@ public:
     :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
-        // complete initialization using partly copy
+        // complete initialization using partial copy
         if(rToBeCopied.moControlVector && rToBeCopied.moControlVector->isUsed())
         {
             moControlVector.emplace( *rToBeCopied.moControlVector, nIndex, nCount );
@@ -928,7 +928,7 @@ public:
     {
         if(mbIsClosed)
         {
-            // check for same start and end point
+            // check for identical start and end points
             const sal_uInt32 nIndex(maPoints.count() - 1);
 
             if(maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex))
