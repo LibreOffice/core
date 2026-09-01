@@ -52,10 +52,6 @@ private:
 public:
     VCLXAccessibleCheckBox(CheckBox* pCheckBox);
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) override;
     virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) override;

@@ -130,21 +130,6 @@ void VCLXAccessibleCheckBox::FillAccessibleStateSet( sal_Int64& rStateSet )
         rStateSet |= AccessibleStateType::INDETERMINATE;
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleCheckBox::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleCheckBox"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleCheckBox::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleCheckBox"_ustr };
-}
-
 // XAccessibleAction
 
 
