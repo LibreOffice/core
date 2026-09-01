@@ -5401,6 +5401,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitivesMasterPagePl
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 }
 
+#ifndef _WIN32 // osl_setTimezone has no effect on Windows
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnnotationDateTimeUsesViewTimezone)
 {
     // A new annotation and a reply to it are both stamped with the clock of the timezone their
@@ -5461,6 +5462,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnnotationDateTimeUsesViewTimezon
     CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTime, aParsed));
     CPPUNIT_ASSERT(DateTime(aParsed).IsBetween(aExpectedFrom, aAfterReply + aAuthorOffset));
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOpenEditRaisesTheVectorVersion)
 {

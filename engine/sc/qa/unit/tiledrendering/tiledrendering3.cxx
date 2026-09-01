@@ -2849,6 +2849,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForOverflowingText)
     CPPUNIT_ASSERT_LESS(tools::Long(32212230), aInvalidation.Right());
 }
 
+#ifndef _WIN32 // osl_setTimezone has no effect on Windows
 namespace
 {
 /// The comment timezone tests put the server on UTC and the author in Kolkata, which is five and a
@@ -2945,6 +2946,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDateTimeUsesViewTi
     CPPUNIT_ASSERT(pThreaded);
     CPPUNIT_ASSERT(isAuthorLocalTime(pThreaded->maRoot.maDateTime, aBefore, aAfter));
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -1430,6 +1430,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testNavigatorContentTreeKeyedToOwning
     Scheduler::ProcessEventsToIdle();
 }
 
+#ifndef _WIN32 // osl_setTimezone has no effect on Windows
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeUsesViewTimezone)
 {
     // A new comment is stamped with the clock of the timezone its author reads, so the client
@@ -1518,6 +1519,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeWithoutViewTimezon
     // Both readings are in the server's zone, and so is the comment.
     CPPUNIT_ASSERT(getOnlyPostItField(*pPostItMgr)->GetDateTime().IsBetween(aBefore, aAfter));
 }
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
