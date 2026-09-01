@@ -40,7 +40,7 @@ namespace
         CPPUNIT_TEST( DAVTypesTest );
         CPPUNIT_TEST( DAVOptsCacheTests );
         CPPUNIT_TEST_SUITE_END();
-    };                          // class webdav_local_test
+    };                          // class webdav_opts_test
 
     // initialise your test code values here.
     void webdav_opts_test::setUp()

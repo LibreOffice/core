@@ -37,7 +37,7 @@ namespace
         CPPUNIT_TEST_SUITE( webdav_resource_access_test );
         CPPUNIT_TEST( DAVCheckRetries );
         CPPUNIT_TEST_SUITE_END();
-    };                          // class webdav_local_test
+    };                          // class webdav_resource_access_test
 
     // initialise your test code values here.
     void webdav_resource_access_test::setUp()

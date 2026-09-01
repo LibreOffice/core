@@ -38,7 +38,7 @@ namespace
         CPPUNIT_TEST( PropfindCacheElemTests );
         CPPUNIT_TEST( PropfindCacheTests );
         CPPUNIT_TEST_SUITE_END();
-    };                          // class webdav_local_test
+    };                          // class webdav_propcache_test
 
     // initialise your test code values here.
     void webdav_propcache_test::setUp()

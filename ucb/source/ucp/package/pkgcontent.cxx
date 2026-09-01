@@ -1278,7 +1278,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Do not set new title!
             aNewTitle.clear();
 
-            // Set error .
+            // Set error.
             aRetRange[ nTitlePos ] <<= uno::Exception(
                     u"Exchange failed!"_ustr,
                     getXWeak() );
@@ -1718,7 +1718,7 @@ void Content::transfer(
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( rInfo.SourceURL );
 
-    // Note: The static cast is okay here, because its sure that
+    // Note: The static cast is okay here, because it is sure that
     //       m_xProvider is always the PackageContentProvider.
     rtl::Reference< Content > xSource;
 
@@ -1757,7 +1757,7 @@ void Content::transfer(
             : getContentType( m_aUri.getScheme(), false );
     aContentInfo.Attributes = 0;
 
-    // Note: The static cast is okay here, because its sure that
+    // Note: The static cast is okay here, because it is sure that
     //       createNewContent always creates a Content.
     rtl::Reference< Content > xTarget
         = static_cast< Content * >( createNewContent( aContentInfo ).get() );
@@ -1907,7 +1907,7 @@ void Content::transfer(
     }
 
 
-    // 5) Destroy source ( when moving only ) .
+    // 5) Destroy source (when moving only).
 
 
     if ( !rInfo.MoveData )
