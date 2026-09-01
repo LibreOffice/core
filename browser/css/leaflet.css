@@ -754,10 +754,27 @@ input.clipboard {
 .cool-ruler {
 	background-color: var(--color-main-background);
 	height: var(--ruler-height);
-	width: 100vw;
+	width: 100%;
 	margin: 0px !important;
 	position: absolute;
 	overflow-x: clip;
+}
+
+/* The control corners are zero-sized anchors. While a corner holds a ruler it is
+   stretched over the whole map, which gives the horizontal ruler's percentage
+   width the document area to resolve against, and its content is clipped at the
+   map bounds: the vertical ruler is the same bar rotated by 90 degrees, one
+   viewport-width long, and the clip ends its box at the bottom of the document
+   area, so the page stays exactly window-sized in both directions. */
+.leaflet-top:has(> .cool-ruler) {
+	inset: 0;
+	overflow: clip;
+}
+
+/* The vertical ruler is the same bar rotated by 90 degrees, so its width is its
+   on-screen length. The viewport width always covers the document height. */
+.cool-ruler.vruler {
+	width: 100vw;
 }
 
 .cool-ruler-breakcontainer {
