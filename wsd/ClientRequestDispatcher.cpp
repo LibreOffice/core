@@ -311,7 +311,7 @@ public:
         if (filenameParam.getFileName() == "callback:")
             tempPath.setFileName("incoming_file"); // A sensible name.
         else
-            tempPath.setFileName(filenameParam.getFileName()); //TODO: Sanitize.
+            tempPath.setFileName(Util::cleanupFilename(filenameParam.getFileName()));
         std::string paramName = "data";
         if (params.has("name"))
         {
@@ -389,7 +389,7 @@ public:
             if (filenameParam.getFileName() == "callback:")
                 tempPath.setFileName("incoming_file"); // A sensible name.
             else
-                tempPath.setFileName(filenameParam.getFileName()); //TODO: Sanitize.
+                tempPath.setFileName(Util::cleanupFilename(filenameParam.getFileName()));
             _filename = tempPath.toString();
 
             // Copy the stream to _filename.
