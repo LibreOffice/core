@@ -1081,6 +1081,30 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPicturePlaceholderCustomPromptText)
     assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:bodyPr", 1);
     assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p", 1);
     assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p/a:r", 0);
+    // The paragraph still states what text put there would look like
+    assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p/a:endParaRPr", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyTitlePlaceholderFormatting)
+{
+    // Given a slide holding a title placeholder nothing was typed into, which its layout formats
+    // 22pt in the light scheme colour, not bold, indented:
+    createSdImpressDoc("pptx/empty-title-placeholder.pptx");
+    save(TestFilter::PPTX);
+
+    static constexpr OString aTitle(
+        "/p:sld/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='title']/p:txBody/a:p"_ostr);
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // Without the fix the paragraph was written bare, and PowerPoint showed the title
+    // bold black at 17pt, not white at 22pt
+    assertXPath(pSlide, aTitle + "/a:pPr", "marL", u"717480");
+    assertXPath(pSlide, aTitle + "/a:endParaRPr", "sz", u"2200");
+    assertXPath(pSlide, aTitle + "/a:endParaRPr", "b", u"0");
+    assertXPath(pSlide, aTitle + "/a:endParaRPr/a:solidFill/a:schemeClr", "val", u"lt1");
+
+    // The prompt shown in it is Impress's own, and stays out of the file
+    assertXPath(pSlide, aTitle + "/a:r", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)

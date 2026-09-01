@@ -2358,7 +2358,7 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
                   /*nXmlNamespace=*/0, /*bWritePropertiesAsLstStyles=*/bWritePropertiesAsLstStyles);
         if (!bText)
             // A text body holds at least one paragraph, and an empty one says the shape has no text
-            pFS->singleElementNS(XML_a, XML_p);
+            WriteTextlessParagraph(xIface);
         pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_txBody : XML_txbx) );
         if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes)
             WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );

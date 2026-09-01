@@ -500,6 +500,9 @@ public:
 
     void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
 
+    /** Writes a paragraph with no text, carrying the properties text put in it would get. */
+    void WriteTextlessParagraph(const css::uno::Reference<css::uno::XInterface>& rXIface);
+
     void WriteBodyProps(
             const css::uno::Reference< css::uno::XInterface >& rXIface,
             sal_Int32 nXmlNamespace, bool bIsFontworkShape,
