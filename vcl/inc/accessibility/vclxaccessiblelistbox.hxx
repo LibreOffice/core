@@ -33,11 +33,6 @@ class VCLXAccessibleListBox final : public VCLXAccessibleBox
 public:
     VCLXAccessibleListBox(ListBox* pListBox);
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    // Return list box specific services.
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
 private:
     virtual ~VCLXAccessibleListBox() override = default;
 };

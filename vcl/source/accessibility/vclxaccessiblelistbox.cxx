@@ -28,18 +28,4 @@ VCLXAccessibleListBox::VCLXAccessibleListBox(ListBox* pListBox)
 {
 }
 
-// XServiceInfo
-
-OUString VCLXAccessibleListBox::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleListBox"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames()
-{
-    return comphelper::concatSequences(VCLXAccessibleBox::getSupportedServiceNames(),
-                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleListBox"_ustr});
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
