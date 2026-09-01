@@ -436,7 +436,8 @@ public:
     SD_DLLPUBLIC bool getSlideLinks(tools::JsonWriter& rJsonWriter) override;
     /// @see vcl::ITiledRenderable::refreshSlideLinks().
     SD_DLLPUBLIC sal_Int32 refreshSlideLinks(const OUString& rSourceName,
-                                             const OUString& rFileUrl) override;
+                                             const OUString& rFileUrl,
+                                             const OUString& rLastModifiedTime) override;
     /// @see vcl::ITiledRenderable::breakSlideLink().
     SD_DLLPUBLIC bool breakSlideLink(sal_Int32 nIndex) override;
 

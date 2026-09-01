@@ -1531,7 +1531,9 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         // the server staged in the jail.
         const bool readsLinks = tokens.size() == 2 && tokens.equals(1, "list");
         const bool breaksLink = tokens.size() == 3 && tokens.equals(1, "break");
-        const bool updatesLinks = tokens.size() == 4 && tokens.equals(1, "update");
+        // An update may carry an optional time= token besides source= and file=.
+        const bool updatesLinks =
+            (tokens.size() == 4 || tokens.size() == 5) && tokens.equals(1, "update");
         if (!readsLinks && !breaksLink && !updatesLinks)
         {
             LOG_ERR("Bad syntax for: " << firstLine);

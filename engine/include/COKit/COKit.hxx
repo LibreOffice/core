@@ -2598,10 +2598,13 @@ struct COKitDocument
      *        whose source page the file does not hold keeps the content it holds. Each refreshed
      *        page is the page read for it, so its part changes and a caller holding the parts of
      *        that source asks for the list again.
+     * @param pLastModifiedTime the time the source document was last modified now, recorded on
+     *        each refreshed page so a later comparison can tell whether the page is up to date.
      * @return the number of pages refreshed, or -1 when no page is linked to that source document,
      *         when the URL is not a file on this machine, or when the file could not be read.
      */
-    virtual int refreshSlideLinks(const char* pSourceName, const char* pUrl) = 0;
+    virtual int refreshSlideLinks(const char* pSourceName, const char* pUrl,
+                                  const char* pLastModifiedTime) = 0;
 
     /**
      * Take the source document off one linked page.

@@ -93,6 +93,9 @@ class SlideImportSession {
 	public insertStaged(stagedName: string, at: number): void {
 		const link = this.linkToSource && this.canLink;
 		const source = this.sourceName();
+		// A linked page records the time its source was last modified now, so a
+		// later comparison tells whether it is up to date.
+		const time = link ? SlideImportSession.sourceModifiedTime(source) : '';
 		app.socket.sendMessage(
 			'slideimport insert file=' +
 				encodeURIComponent(stagedName) +
@@ -102,7 +105,8 @@ class SlideImportSession {
 				' keepdesign=' +
 				(this.keepDesign ? '1' : '0') +
 				' link=' +
-				(link ? '1' : '0'),
+				(link ? '1' : '0') +
+				(time ? ' time=' + encodeURIComponent(time) : ''),
 		);
 	}
 
@@ -312,6 +316,21 @@ class SlideImportSession {
 		} catch {
 			return name || wopiSrc;
 		}
+	}
+
+	// The time the related document of the given name was last modified now, as
+	// the storage announced it, or empty when the storage named no such
+	// document or gave it no time.
+	public static sourceModifiedTime(source: string): string {
+		if (!source) return '';
+		for (const doc of app.relatedDocuments || []) {
+			if (
+				SlideImportSession.relatedDocumentName(doc.wopiSrc) === source &&
+				doc.lastModifiedTime
+			)
+				return doc.lastModifiedTime;
+		}
+		return '';
 	}
 
 	// The related document with the given address, or null when the storage

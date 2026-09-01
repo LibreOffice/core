@@ -184,9 +184,10 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), getLinks(socket)->size());
 
         // An insert names the source document, and the slides it takes from the staged file
-        // are linked to it.
-        helpers::sendTextFrame(socket, insertCommand("slides=0,1 at=0 keepdesign=0 link=1"),
-                               testname);
+        // are linked to it. It also names the time the source was last modified.
+        helpers::sendTextFrame(
+            socket, insertCommand("slides=0,1 at=0 keepdesign=0 link=1 time=2021-05-05T10:00:00Z"),
+            testname);
         const std::string insertReply =
             helpers::getResponseString(socket, "slideimport:", testname);
         Poco::JSON::Object::Ptr insertObject = helpers::parseJsonReply(insertReply, "slideimport:");
@@ -196,6 +197,12 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), links->size());
         const std::vector<std::string> parts = getParts(links->getObject(0), 2);
         LOK_ASSERT_MESSAGE("two linked pages must hold two parts", parts[0] != parts[1]);
+
+        // Each linked page reports the source time the insert named.
+        Poco::JSON::Array::Ptr slides = links->getObject(0)->getArray("slides");
+        for (std::size_t i = 0; i < slides->size(); ++i)
+            LOK_ASSERT_EQUAL(std::string("2021-05-05T10:00:00Z"),
+                             slides->getObject(i)->getValue<std::string>("lastModifiedTime"));
 
         // A plain copy of the same slides is no link, so the list still holds
         // the two linked pages alone.

@@ -190,7 +190,7 @@ selectbackground name=<name>
     Inserts a graphic file with the name <name> into the document as background.
 
 slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
-                   [at=<S>] [keepdesign=<0|1>] [link=<0|1>]
+                   [at=<S>] [keepdesign=<0|1>] [link=<0|1>] [time=<source time>]
 
     Inserts pages of a presentation staged in the jail into the open document.
     Only Impress documents are served. The staged name is the file a related
@@ -207,7 +207,9 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     <source> names the source document as the user knows it, percent-encoded
     like the staged name: a document name holding no path. link=1 keeps the
     inserted pages bound to it, so that they can be refreshed from it later;
-    link=0, or no link at all, inserts plain copies. The reply is
+    link=0, or no link at all, inserts plain copies. <source time> is the time
+    the source was last modified now, percent-encoded, recorded on the linked
+    pages so a later comparison tells whether they are up to date. The reply is
         slideimport: {"status":"inserted","count":<K>}
 
     Errors are reported as
@@ -242,7 +244,7 @@ exportslides [slides=<p0,p1,...>]
 
 slidelink list
 slidelink break part=<part>
-slidelink update source=<source name> file=<staged name>
+slidelink update source=<source name> file=<staged name> [time=<source time>]
 
     Reads the pages of the document that are linked to a source document,
     refreshes the pages of one source, and takes the source off one page. Only
@@ -254,17 +256,22 @@ slidelink update source=<source name> file=<staged name>
 
     A client sends all three. An update names a file the server staged in the
     jail, which is what an exportslides of a related document comes to, so the
-    kit reads only a file of its own jail and never a location.
+    kit reads only a file of its own jail and never a location. An update may add
+    a time, the time the source was last modified now, which the refreshed pages
+    record so a later comparison tells whether they are up to date.
 
     list: the reply is
         slidelinks: {"links":[{"source":"<source document>",
-                     "slides":[{"part":"<part>","name":"<source slide>"},...]},...]}
+                     "slides":[{"part":"<part>","name":"<source slide>",
+                                "lastModifiedTime":"<source time at the last read>"},...]},...]}
     with the sources in the order their first page appears and the pages of one
     source in slide order. <part> is the linked page and <source slide> the
-    slide of the source it was made from, named as the user sees it there. A
-    page linked to a file by its path names no source document and is left out,
-    since a refresh has no way to reach it. A document that links to nothing
-    reports an empty array.
+    slide of the source it was made from, named as the user sees it there.
+    <source time at the last read> is the time the source was last modified when
+    the page was read from it, empty when none was recorded. A page linked to a
+    file by its path names no source document and is left out, since a refresh
+    has no way to reach it. A document that links to nothing reports an empty
+    array.
 
     The kit sends that same list on its own, to every view of the document, when a
     page loses the source it records, which is what an edit of a linked page does,

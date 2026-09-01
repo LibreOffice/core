@@ -6478,12 +6478,13 @@ bool SdXImpressDocument::getSlideLinks(tools::JsonWriter& rJsonWriter)
 }
 
 sal_Int32 SdXImpressDocument::refreshSlideLinks(const OUString& rSourceName,
-                                                const OUString& rFileUrl)
+                                                const OUString& rFileUrl,
+                                                const OUString& rLastModifiedTime)
 {
     if (!mpDoc)
         return -1;
 
-    return sd::SlideLink::Refresh(*mpDoc, rSourceName, rFileUrl);
+    return sd::SlideLink::Refresh(*mpDoc, rSourceName, rFileUrl, rLastModifiedTime);
 }
 
 bool SdXImpressDocument::breakSlideLink(sal_Int32 nIndex)
@@ -6575,8 +6576,8 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         bLink = aTree.get<bool>("link", false);
         aSourceName = OStringToOUString(aTree.get<std::string>("source", ""),
                                         RTL_TEXTENCODING_UTF8);
-        aLastModifiedTime = OStringToOUString(
-            OString(aTree.get<std::string>("lastModifiedTime", "")), RTL_TEXTENCODING_UTF8);
+        aLastModifiedTime = OStringToOUString(aTree.get<std::string>("lastModifiedTime", ""),
+                                              RTL_TEXTENCODING_UTF8);
         if (auto oPages = aTree.get_child_optional("slides"))
         {
             for (const auto& rPage : *oPages)

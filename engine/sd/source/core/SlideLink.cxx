@@ -219,12 +219,13 @@ void SlideLink::WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonW
             auto aSlideNode = rJsonWriter.startStruct();
             rJsonWriter.put("part", pPage->GetGuid().getString());
             rJsonWriter.put("name", pPage->GetBookmarkName());
+            rJsonWriter.put("lastModifiedTime", pPage->GetSourceModifiedTime());
         }
     }
 }
 
 sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
-                             const OUString& rFileUrl)
+                             const OUString& rFileUrl, const OUString& rLastModifiedTime)
 {
     const OUString aReference = MakeSourceReference(rSourceName);
     const std::vector<sal_uInt16> aLinkedPages = getLinkedPages(rDoc, aReference);
@@ -311,12 +312,16 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
 
         // A resolution puts the slide it read in place of the page at its position, and a page read
         // from a file holds an identifier of its own, so the identifier a position holds now says
-        // whether that page was refreshed.
+        // whether that page was refreshed. A refreshed page records the time its source was last
+        // modified now, so that its content and that time agree again.
         for (size_t nPos = 0; nPos < aPageIds.size(); ++nPos)
         {
-            const SdPage* pPage = rDoc.GetSdPage(aPages[nFirst + nPos], PageKind::Standard);
+            SdPage* pPage = rDoc.GetSdPage(aPages[nFirst + nPos], PageKind::Standard);
             if (pPage && pPage->GetGuid().getString() != aPageIds[nPos])
+            {
+                pPage->SetSourceModifiedTime(rLastModifiedTime);
                 ++nRefreshed;
+            }
         }
 
         nFirst = nPast;

@@ -520,7 +520,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
     const OUString aChangedUrl
         = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
-                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl));
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
+                                                              u"2021-01-01T00:00:00Z"_ustr));
 
     // The linked slide shows the new content, and it kept its position, its name and its link.
     CPPUNIT_ASSERT_EQUAL(u"Source title, revised"_ustr, getSlideText(*pDoc, 1));
@@ -530,6 +531,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
     CPPUNIT_ASSERT_EQUAL(u"Q3 numbers"_ustr, pLinked->GetName());
     CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
     CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+    // The refreshed page records the source time the refresh was given.
+    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, pLinked->GetSourceModifiedTime());
 
     // The plain copy of the same slide belongs to no source and keeps what it holds.
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 2));
@@ -547,13 +550,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
 
     // A source no page of this document is linked to refreshes nothing at all.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         pXImpressDocument->refreshSlideLinks(u"Other deck.odp"_ustr, aChangedUrl));
+                         pXImpressDocument->refreshSlideLinks(u"Other deck.odp"_ustr, aChangedUrl,
+                                                              OUString()));
 
     // The slides are read from a local file, so a location that would have to be fetched is
     // refused.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
                          pXImpressDocument->refreshSlideLinks(
-                             u"Q3 deck.odp"_ustr, u"https://example.com/deck.odp"_ustr));
+                             u"Q3 deck.odp"_ustr, u"https://example.com/deck.odp"_ustr, OUString()));
 
     // A file that holds no slide of the recorded name leaves the linked slide as it is, and a
     // refresh that changes nothing is no undo step of its own.
@@ -561,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
         static_cast<sal_Int32>(0),
         pXImpressDocument->refreshSlideLinks(
             u"Q3 deck.odp"_ustr,
-            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp")));
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"), OUString()));
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
 }
@@ -592,7 +596,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSections)
         static_cast<sal_Int32>(2),
         pXImpressDocument->refreshSlideLinks(
             u"Q3 deck.odp"_ustr,
-            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp")));
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp"),
+            OUString()));
     CPPUNIT_ASSERT_EQUAL(u"Source title, revised"_ustr, getSlideText(*pDoc, 0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
     CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, rSections.GetSection(0).maName);
@@ -678,7 +683,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreak)
     const OUString aChangedUrl
         = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
-                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl));
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
+                                                              u"2021-01-01T00:00:00Z"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
 
     // Undoing the refresh and then the break gives the page the source and the slide it recorded
@@ -740,7 +746,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
         static_cast<sal_Int32>(-1),
         pXImpressDocument->refreshSlideLinks(
             u"Q3 deck.odp"_ustr,
-            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp")));
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp"),
+            OUString()));
 
     // The edit and the source it took off are one undo step, so one undo puts the shape back where
     // it was and the slide back with its source.

@@ -1356,7 +1356,8 @@ static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
 
 static std::string doc_getSlideLinks(COKitDocument* pThis);
 
-static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl);
+static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl,
+                                 const char* pLastModifiedTime);
 
 static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart);
 static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char* pUrl);
@@ -1907,9 +1908,10 @@ std::string COKitDocumentImpl::getSlideLinks()
     return doc_getSlideLinks(this);
 }
 
-int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl)
+int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl,
+                                         const char* pLastModifiedTime)
 {
-    return doc_refreshSlideLinks(this, pSourceName, pUrl);
+    return doc_refreshSlideLinks(this, pSourceName, pUrl, pLastModifiedTime);
 }
 
 bool COKitDocumentImpl::breakSlideLink(const char* pPart)
@@ -7121,7 +7123,8 @@ static std::string doc_getSlideLinks(COKitDocument* pThis)
     return convertOStringToStdString(aLinks);
 }
 
-static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl)
+static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl,
+                                 const char* pLastModifiedTime)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -7136,7 +7139,8 @@ static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, 
         return -1;
     }
 
-    return pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl));
+    return pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl),
+                                   getUString(pLastModifiedTime));
 }
 
 static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart)

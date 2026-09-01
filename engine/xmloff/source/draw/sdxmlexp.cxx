@@ -1700,12 +1700,18 @@ void SdXMLExport::ExportContent_()
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
 
                         // The time the source document was last modified, kept
-                        // so a later refresh can tell whether it moved on.
-                        OUString aSourceModifiedTime;
-                        xProps->getPropertyValue(u"SourceModifiedTime"_ustr) >>= aSourceModifiedTime;
-                        if( !aSourceModifiedTime.isEmpty() )
-                            AddAttribute( XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME,
-                                          aSourceModifiedTime );
+                        // so a later refresh can tell whether it moved on. The
+                        // coext namespace is declared only in extended ODF, so
+                        // the attribute goes only there, as coext:guid does.
+                        if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                        {
+                            OUString aSourceModifiedTime;
+                            xProps->getPropertyValue(u"SourceModifiedTime"_ustr)
+                                >>= aSourceModifiedTime;
+                            if( !aSourceModifiedTime.isEmpty() )
+                                AddAttribute( XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME,
+                                              aSourceModifiedTime );
+                        }
                     }
                 }
                 catch(const Exception&)

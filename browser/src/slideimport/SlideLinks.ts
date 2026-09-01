@@ -36,6 +36,9 @@ interface SlideLinkPage {
 	// The slide of the source the page was made from, as the user sees it
 	// in that source.
 	name: string;
+	// The time the source was last modified when the page was read from it,
+	// empty when none was recorded.
+	lastModifiedTime: string;
 }
 
 interface SlideLinkSource {
@@ -54,8 +57,10 @@ interface SlideLinkRefresh {
 
 class SlideLinks {
 	private map: any;
-	// The source document and source slide of every linked page, by part.
-	private pages: Map<string, { source: string; name: string }> = new Map();
+	private pages: Map<
+		string,
+		{ source: string; name: string; lastModifiedTime: string }
+	> = new Map();
 	// The sources the document links to, in the order the list reports them.
 	private sources: string[] = [];
 	// Whether the link list of this load has been asked for.
@@ -85,6 +90,20 @@ class SlideLinks {
 	public getPageLink(part: string): { source: string; name: string } | null {
 		const link = this.pages.get(part);
 		return link ? link : null;
+	}
+
+	public isPageOutdated(part: string): boolean {
+		const link = this.pages.get(part);
+		if (!link || !link.lastModifiedTime) return false;
+		const current = this.currentSourceTime(link.source);
+		return current !== null && current !== link.lastModifiedTime;
+	}
+
+	private currentSourceTime(source: string): string | null {
+		const related = this.relatedDocument(source);
+		return related && related.lastModifiedTime
+			? related.lastModifiedTime
+			: null;
 	}
 
 	// Refreshes the pages of every source of this document. The server reads
@@ -153,6 +172,7 @@ class SlideLinks {
 				this.pages.set(slide.part, {
 					source: entry.source,
 					name: slide.name,
+					lastModifiedTime: slide.lastModifiedTime || '',
 				});
 		}
 		app.events.fire('slidelink:changed', {});
@@ -182,7 +202,7 @@ class SlideLinks {
 	// document is related to no document of that name.
 	private relatedDocument(
 		source: string,
-	): { wopiSrc: string; state: string } | null {
+	): { wopiSrc: string; state: string; lastModifiedTime?: string } | null {
 		for (const doc of app.relatedDocuments || []) {
 			if (SlideImportSession.relatedDocumentName(doc.wopiSrc) === source)
 				return doc;
@@ -221,6 +241,10 @@ class SlideLinks {
 
 	// A source this run is waiting on has come up, so it is asked for its pages.
 	private onRelatedDocuments(): void {
+		// A source's time may have moved on, so the pages linked to it are
+		// looked at again to see whether they are still up to date.
+		app.events.fire('slidelink:changed', {});
+
 		if (this.running === null || this.running.accepted) return;
 		const related = this.relatedDocument(this.running.source);
 		if (related && related.state === 'connected')
@@ -249,11 +273,15 @@ class SlideLinks {
 			return;
 		}
 
+		// The pages read now match the source as it is, so they record the
+		// source time the related documents list reports for it.
+		const current = this.currentSourceTime(this.running.source);
 		app.socket.sendMessage(
 			'slidelink update source=' +
 				encodeURIComponent(this.running.source) +
 				' file=' +
-				encodeURIComponent(stagedName),
+				encodeURIComponent(stagedName) +
+				(current ? ' time=' + encodeURIComponent(current) : ''),
 		);
 	}
 

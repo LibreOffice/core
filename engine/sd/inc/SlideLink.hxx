@@ -63,12 +63,15 @@ public:
     /** Writes the pages of rDoc that are linked to a source document, grouped by source:
 
         {"links":[{"source":"<source document>",
-                   "slides":[{"part":<page id>,"name":"<source page>"},...]},...]}
+                   "slides":[{"part":"<page id>","name":"<source page>",
+                              "lastModifiedTime":"<source time at the last read>"},...]},...]}
 
         The sources come in the order their first page appears and the pages of one source in
         document order. A page id is the unique identifier the linked page holds now, and a source
-        page is named as the user sees it in the source document. A page linked to a file by its path
-        is left out, since it names no source document.
+        page is named as the user sees it in the source document. The last modified time is the time
+        the source document was last modified when the page was read from it, empty when none was
+        recorded; comparing it with the source's current time tells whether the page is out of date.
+        A page linked to a file by its path is left out, since it names no source document.
     */
     static void WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonWriter);
 
@@ -81,11 +84,14 @@ public:
         the content it holds. Each refreshed page is the page read for it, so it holds a new unique
         identifier afterwards. The whole refresh is one undo step.
 
+        rLastModifiedTime is the time the source document was last modified now, recorded on each
+        refreshed page so that its content and the time it was read from agree again.
+
         @return the number of pages refreshed, or -1 when no page of rDoc is linked to rSourceName,
                 when rFileUrl is not a file on this machine, or when the file could not be read.
     */
     static sal_Int32 Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
-                             const OUString& rFileUrl);
+                             const OUString& rFileUrl, const OUString& rLastModifiedTime);
 
     /** Takes the source document off the page at nIndex in the standard page list of rDoc.
 

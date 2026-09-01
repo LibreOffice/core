@@ -517,9 +517,11 @@ public:
 
     /** Refreshes the pages linked to one source document from a local file holding the source
         pages, and returns how many pages were refreshed; -1 when no page is linked to that source
-        or the file could not be read (Impress only function) */
+        or the file could not be read. rLastModifiedTime is the time the source was last modified
+        now, recorded on each refreshed page (Impress only function) */
     virtual sal_Int32 refreshSlideLinks(const OUString& /*rSourceName*/,
-                                        const OUString& /*rFileUrl*/)
+                                        const OUString& /*rFileUrl*/,
+                                        const OUString& /*rLastModifiedTime*/)
     {
         return -1;
     }

@@ -168,6 +168,10 @@
 	box-shadow: 0 0 2px var(--color-border);
 }
 
+.preview-link-badge.outdated::before {
+	box-shadow: 0 0 0 2px var(--color-warning);
+}
+
 [data-theme='dark'] .preview-link-badge::before {
 	background-image: url('images/dark/lc_inserthyperlink.svg');
 }

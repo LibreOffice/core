@@ -2345,12 +2345,16 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     std::string encodedName;
     std::string encodedSource;
+    // The time the source was last modified now, recorded on linked pages so a
+    // later comparison tells whether they are up to date. Optional.
+    std::string encodedTime;
     std::string slideList;
     int at = -1;
     bool keepDesign = false;
     bool link = false;
     bool haveName = false;
     bool haveSource = false;
+    bool haveTime = false;
     bool malformed = false;
     for (std::size_t i = 2; i < tokens.size() && !malformed; ++i)
     {
@@ -2366,6 +2370,11 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         {
             malformed = std::exchange(haveSource, true);
             encodedSource = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "time", value))
+        {
+            malformed = std::exchange(haveTime, true);
+            encodedTime = std::move(value);
         }
         else if (getTokenString(tokens[i], "slides", value))
         {
@@ -2395,12 +2404,14 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     std::string name;
     std::string source;
+    std::string lastModifiedTime;
     if (!malformed && haveName)
     {
         try
         {
             URI::decode(encodedName, name);
             URI::decode(encodedSource, source);
+            URI::decode(encodedTime, lastModifiedTime);
         }
         catch (const Poco::Exception& exc)
         {
@@ -2460,7 +2471,8 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     options << "{\"slides\":[" << joinSlideIndexList(slides)
             << "],\"at\":" << at << ",\"keepDesign\":" << (keepDesign ? "true" : "false")
             << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
-            << JsonUtil::escapeJSONValue(source) << "\"}";
+            << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
+            << JsonUtil::escapeJSONValue(lastModifiedTime) << "\"}";
 
     // The document reads the staged file within this call, so the file goes as soon as it
     // returns: the pages of it belong to the document from then on.
@@ -2537,8 +2549,13 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 {
     std::string encodedSource;
     std::string encodedFile;
-    if (tokens.size() != 4 || !getTokenString(tokens[2], "source", encodedSource) ||
-        !getTokenString(tokens[3], "file", encodedFile))
+    // A time= token is optional: it names the time the source was last modified now, recorded on
+    // the refreshed pages.
+    std::string encodedTime;
+    if ((tokens.size() != 4 && tokens.size() != 5) ||
+        !getTokenString(tokens[2], "source", encodedSource) ||
+        !getTokenString(tokens[3], "file", encodedFile) ||
+        (tokens.size() == 5 && !getTokenString(tokens[4], "time", encodedTime)))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
         return false;
@@ -2546,10 +2563,12 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 
     std::string source;
     std::string file;
+    std::string lastModifiedTime;
     try
     {
         URI::decode(encodedSource, source);
         URI::decode(encodedFile, file);
+        URI::decode(encodedTime, lastModifiedTime);
     }
     catch (const Poco::Exception& exc)
     {
@@ -2608,7 +2627,8 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     // returns. Each page records the source document it belongs to, and a later refresh of
     // that source reads the file it is given then.
     const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
-    const int count = getLOKitDocument()->refreshSlideLinks(source.c_str(), url.c_str());
+    const int count =
+        getLOKitDocument()->refreshSlideLinks(source.c_str(), url.c_str(), lastModifiedTime.c_str());
 
     FileUtil::removeFile(sharedStagedPath, true);
 
