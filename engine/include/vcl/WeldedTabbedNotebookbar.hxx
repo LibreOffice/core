@@ -15,7 +15,6 @@
 #include <rtl/ustring.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <string_view>
 #include <vector>
 
 /**
@@ -31,16 +30,16 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) WeldedTabbedNotebookbar
 public:
     struct ExtraToolbar
     {
-        std::u16string_view m_aControllerService;
+        OUString m_aControllerService;
         std::unique_ptr<weld::Builder> m_xBuilder;
         std::unique_ptr<weld::Toolbar> m_xToolbar;
     };
 
     struct ExtraPanel
     {
-        std::u16string_view m_aUIFilePath;
-        std::u16string_view m_aToolbarId;
-        std::u16string_view m_aControllerService;
+        OUString m_aUIFilePath;
+        OUString m_aToolbarId;
+        OUString m_aControllerService;
     };
 
     WeldedTabbedNotebookbar(const VclPtr<vcl::Window>& pContainerWindow,

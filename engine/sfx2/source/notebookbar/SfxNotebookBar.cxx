@@ -436,9 +436,10 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
 
     const std::vector<WeldedTabbedNotebookbar::ExtraPanel> aExtraPanels{
-        { u"svx/ui/notebookbarshapeline.ui", u"LineWeldedToolbar",
-          u"com.sun.star.svx.NotebookbarLineController" },
-        { u"svx/ui/notebookbarpictureline.ui", u"PictureLineWeldedToolbar", u"" },
+        { u"svx/ui/notebookbarshapeline.ui"_ustr, u"LineWeldedToolbar"_ustr,
+          u"com.sun.star.svx.NotebookbarLineController"_ustr },
+        { u"svx/ui/notebookbarpictureline.ui"_ustr, u"PictureLineWeldedToolbar"_ustr,
+          OUString() },
     };
 
     rViewData.m_pWeldedWrapper.reset(
@@ -461,11 +462,11 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             std::make_unique<ToolbarUnoDispatcher>(*rExtra.m_xToolbar,
                                                    *rExtra.m_xBuilder, xFrame));
 
-        if (rExtra.m_aControllerService.empty())
+        if (rExtra.m_aControllerService.isEmpty())
             continue;
 
         if (css::uno::Reference<css::lang::XComponent> xController
-            = CreateExtraPanelController(OUString(rExtra.m_aControllerService), xFrame,
+            = CreateExtraPanelController(rExtra.m_aControllerService, xFrame,
                                          pViewShell->GetViewFrame().GetBindings(),
                                          *rExtra.m_xToolbar, *rExtra.m_xBuilder))
             rViewData.m_aExtraPanelControllers.push_back(std::move(xController));

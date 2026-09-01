@@ -26,9 +26,8 @@ WeldedTabbedNotebookbar::WeldedTabbedNotebookbar(
         ExtraToolbar aExtra;
         aExtra.m_aControllerService = rPanel.m_aControllerService;
         aExtra.m_xBuilder = JSInstanceBuilder::CreateNotebookbarBuilder(
-            pContainerWindow, AllSettings::GetUIRootDir(), OUString(rPanel.m_aUIFilePath), rFrame,
-            nWindowId);
-        aExtra.m_xToolbar = aExtra.m_xBuilder->weld_toolbar(OUString(rPanel.m_aToolbarId));
+            pContainerWindow, AllSettings::GetUIRootDir(), rPanel.m_aUIFilePath, rFrame, nWindowId);
+        aExtra.m_xToolbar = aExtra.m_xBuilder->weld_toolbar(rPanel.m_aToolbarId);
         m_aExtraToolbars.push_back(std::move(aExtra));
     }
 }
