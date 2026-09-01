@@ -37,11 +37,9 @@ class AccessibleOutlineView final
     : public AccessibleDocumentViewBase
 {
 public:
-    AccessibleOutlineView (
-        ::sd::Window* pSdWindow,
-        ::sd::OutlineViewShell* pViewShell,
-        const css::uno::Reference<css::frame::XController>& rxController,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+    AccessibleOutlineView(::sd::Window* pSdWindow, ::sd::OutlineViewShell* pViewShell,
+                          const css::uno::Reference<css::frame::XController>& rxController,
+                          const rtl::Reference<comphelper::OAccessible>& rpParent);
 
     virtual ~AccessibleOutlineView() override;
 

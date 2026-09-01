@@ -39,13 +39,12 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
-AccessibleOutlineView::AccessibleOutlineView (
-    ::sd::Window* pSdWindow,
-    ::sd::OutlineViewShell* pViewShell,
+AccessibleOutlineView::AccessibleOutlineView(
+    ::sd::Window* pSdWindow, ::sd::OutlineViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
-    const uno::Reference<XAccessible>& rxParent)
-    : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
-      maTextHelper( ::std::unique_ptr< SvxEditSource >() )
+    const rtl::Reference<comphelper::OAccessible>& rpParent)
+    : AccessibleDocumentViewBase(pSdWindow, pViewShell, rxController, rpParent)
+    , maTextHelper(::std::unique_ptr<SvxEditSource>())
 {
     SolarMutexGuard aGuard;
 
