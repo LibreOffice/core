@@ -288,3 +288,4 @@ browser/util/__pycache__
 # This needs to stay at the end, to honor engine/.gitignore:
 !engine/**
 /engine/translations
+/engine/tmp/
