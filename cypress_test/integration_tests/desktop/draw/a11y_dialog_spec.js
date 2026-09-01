@@ -159,7 +159,18 @@ describe(['tagdesktop'], 'Accessibility Draw Dialog Tests', { testIsolation: fal
 	});
 
 	it('Graphic dialog', function () {
+		// Leave the shape text editing and drop the shape selection, and wait
+		// for its selection overlay to go away. insertImage waits for the
+		// selection overlay of the inserted image, so an overlay left over
+		// from the shape would satisfy that wait before the image exists.
+		helper.typeIntoDocument('{esc}{esc}');
+		cy.cGet('#document-container svg g').should('not.exist');
+
 		desktopHelper.insertImage();
+
+		cy.then(() => {
+			return helper.processToIdle(win);
+		});
 
 		cy.then(() => {
 			win.app.map.sendUnoCommand('.uno:CompressGraphic');
