@@ -758,7 +758,7 @@ QVariant Bridge::cool(const QString& messageStr)
         // A release build carries a slideshow only when the app branding provides one.
         const bool welcomeEnabled = true;
 #endif
-        const std::string welcomePath = getDataDir() + "/browser/dist/welcome/welcome-slideshow.odp";
+        const std::string welcomePath = getBrowserDistDir() + "/welcome/welcome-slideshow.odp";
         struct stat st;
         if (!welcomeEnabled)
         {

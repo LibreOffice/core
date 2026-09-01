@@ -172,9 +172,8 @@ Poco::Path getTemplatePath(const std::string& templateType, const std::string& t
         }
         else
         {
-            // Relative path - resolve against browser/dist
-            resolvedPath = Poco::Path(getDataDir());
-            resolvedPath.append("browser/dist");
+            // Relative path - resolve against the browser web assets
+            resolvedPath = Poco::Path(getBrowserDistDir());
             resolvedPath.append(templatePath);
         }
     }
@@ -193,8 +192,8 @@ Poco::Path getTemplatePath(const std::string& templateType, const std::string& t
         else if (templateType == "draw")
             templateFileName = "Drawing.odg";
 
-        Poco::Path defaultPath(getDataDir());
-        defaultPath.append("browser/dist/templates");
+        Poco::Path defaultPath(getBrowserDistDir());
+        defaultPath.append("templates");
         defaultPath.append(templateFileName);
         return defaultPath;
     }
@@ -970,8 +969,8 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     channel->registerObject("bridge", _bridge);
     _webView->page()->setWebChannel(channel);
 
-    Poco::Path coolHtmlPath(getDataDir());
-    coolHtmlPath.append("/browser/dist/cool.html");
+    Poco::Path coolHtmlPath(getBrowserDistDir());
+    coolHtmlPath.append("cool.html");
     Poco::URI urlAndQuery(coolHtmlPath);
     urlAndQuery.setScheme("file");
     std::string uiLanguage = getUILanguage();
@@ -1074,8 +1073,8 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
     _bridge = coda::attachRemoteBridge(
         _webView->page(), _document, this, nullptr, _webView.get());
 
-    Poco::Path coolHtmlPath(getDataDir());
-    coolHtmlPath.append("/browser/dist/cool.html");
+    Poco::Path coolHtmlPath(getBrowserDistDir());
+    coolHtmlPath.append("cool.html");
     QUrl urlAndQuery = QUrl::fromLocalFile(
         QString::fromStdString(coolHtmlPath.toString()));
     coda::addRemoteCoolParams(urlAndQuery, _document);

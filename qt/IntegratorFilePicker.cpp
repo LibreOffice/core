@@ -417,8 +417,7 @@ IntegratorFilePicker::IntegratorFilePicker(const QString& serverUrl,
     // if the integrator's CSP response echoes that origin back,
     // signalling it implements the X-Collab-Frame-Origin protocol.
     // Falls back to the open-in-new-window flow otherwise.
-    QString distRoot = QString::fromStdString(getDataDir())
-                     + "/browser/dist";
+    QString distRoot = QString::fromStdString(getBrowserDistDir());
     auto* httpServer = new EmbedHttpServer(distRoot, this);
     if (httpServer->listen()
         && probeFrameOriginProtocol(serverUrl, httpServer->port()))

@@ -66,6 +66,8 @@ inline std::string getDataDir()
     }
     return COOLWSD_DATADIR;
 }
+
+inline std::string getBrowserDistDir() { return getDataDir() + "/browser/dist"; }
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
