@@ -166,9 +166,9 @@ namespace sdr::properties
                     // Note: The test for SdrModelChange above was wrong (compared the already set
                     // new SdrObject), so this never triggered and pTargetStyleSheet was never set to
                     // nullptr before. This means that a StyleSheet from another SdrModel was used
-                    // what of course is very dangerous. Interestingly did not crash since when that
+                    // which of course is very dangerous. Interestingly did not crash since when that
                     // other SdrModel was destroyed the ::Notify mechanism still worked reliably
-                    // and de-connected this Properties successfully from the alien-StyleSheet.
+                    // and disconnected these Properties successfully from the alien-StyleSheet.
                     pTargetStyleSheet = nullptr;
 
                     // Check if we have a TargetStyleSheetPool at the target-SdrModel. This *should*

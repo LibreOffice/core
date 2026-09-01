@@ -88,7 +88,7 @@ void PaletteManager::LoadPalettes()
     while (nIndex >= 0);
 
     std::set<OUString> aNames;
-    //try all entries palette path list user first, then
+    //try all entries in palette path list, user first, then
     //system, ignoring duplicate file names
     while (!aDirs.empty())
     {

@@ -410,7 +410,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
         GetPageView().GetView().SetPageDecorationAllowed(false);
         GetPageView().GetView().SetMasterPageVisualizationAllowed(false);
 
-        if (pPageFrame) // Writer page frame for anchor based clipping
+        if (pPageFrame) // Writer page frame for anchor-based clipping
         {
             aDisplayInfo.SetWriterPageFrame(*pPageFrame);
         }

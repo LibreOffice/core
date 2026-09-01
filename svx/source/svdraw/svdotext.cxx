@@ -278,9 +278,9 @@ bool SdrTextObj::IsAutoGrowWidth() const
     const SfxItemSet& rSet = GetObjectItemSet();
     bool bRet = rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
 
-    bool bInEditMOde = IsInEditMode();
+    bool bInEditMode = IsInEditMode();
 
-    if(!bInEditMOde && bRet)
+    if(!bInEditMode && bRet)
     {
         SdrTextAniKind eAniKind = rSet.Get(SDRATTR_TEXT_ANIKIND).GetValue();
 
@@ -1640,7 +1640,7 @@ bool SdrTextObj::IsReallyEdited() const
     return mpEditingOutliner && mpEditingOutliner->IsModified();
 }
 
-// moved inlines here form hxx
+// moved inlines here from hxx
 
 tools::Long SdrTextObj::GetEckenradius() const
 {

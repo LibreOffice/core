@@ -487,7 +487,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
     updateFromModel();
 
     // consider the following ugly scenario: updateFromModel leads to a propertiesChanges on the Control,
-    // which determines, dat a "critical" property has changed (e.g. "Border") and therefore starts a new
+    // which determines, that a "critical" property has changed (e.g. "Border") and therefore starts a new
     // Peer, which lands again here in createPeer we also start a second FmXGridPeer and initialise it.
     // Then we exit from the first incarnation's updateFromModel and continue working with the pPeer,
     // that is in fact now already obsolete (as another peer is being started in the second incarnation).
@@ -2464,7 +2464,7 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< css::frame
     {   // our chain will have a new first element
         m_xFirstDispatchInterceptor.set(m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY);
     }
-    // do this before removing the interceptor from the chain as we won't know it's slave afterwards)
+    // do this before removing the interceptor from the chain as we won't know its slave afterwards)
 
     while (xChainWalk.is())
     {

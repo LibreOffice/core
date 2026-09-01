@@ -1342,7 +1342,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
             }
 
             OString sContents = sChars.copy(1, sChars.getLength() - 2);
-            //The assumption that is that cases of ligatures are with a range
+            //The assumption is that cases of ligatures are with a range
             //of a single glyph(?). In which case we have pushed such entries
             //into bfcharlines above.
             assert(sContents.getLength() == 4);

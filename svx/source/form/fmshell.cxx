@@ -730,7 +730,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( !bCancelled )
             {
                 // if the filter navigator is still open, we need to close it, so it can possibly
-                // commit it's most recent changes
+                // commit its most recent changes
                 if (GetViewShell())
                     if ( GetViewShell()->GetViewFrame().HasChildWindow( SID_FM_FILTER_NAVIGATOR ) )
                     {
@@ -1344,7 +1344,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
     if ( !_rxModel.is() )
         return nullptr;
 
-    // we can only retrieve controls for SdrObjects which belong to page which is actually displayed in the given view
+    // we can only retrieve controls for SdrObjects which belong to a page which is actually displayed in the given view
     SdrPageView* pPageView = _rView.GetSdrPageView();
     SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
     OSL_ENSURE( pPage, "FmFormShell::GetFormControl: no page displayed in the given view!" );

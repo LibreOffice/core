@@ -115,7 +115,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
         case PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D :
         case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D :
 
-        // decompose SdrObjects with evtl. animated text
+        // decompose SdrObjects with eventual animated text
         case PRIMITIVE2D_ID_SDRCAPTIONPRIMITIVE2D :
         case PRIMITIVE2D_ID_SDRCONNECTORPRIMITIVE2D :
         case PRIMITIVE2D_ID_SDRCUSTOMSHAPEPRIMITIVE2D :
@@ -130,7 +130,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
         case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
         case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
 
-        // decompose evtl. animated text contained in MaskPrimitive2D
+        // decompose eventual animated text contained in MaskPrimitive2D
         // or group primitives
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
         case PRIMITIVE2D_ID_GROUPPRIMITIVE2D :
@@ -278,7 +278,7 @@ void ViewObjectContact::triggerLazyInvalidate()
 // Take some action when new objects are inserted
 void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
 {
-    // force creation of the new VOC and trigger it's refresh, so it
+    // force creation of the new VOC and trigger its refresh, so it
     // will take part in LazyInvalidate immediately
     rChild.GetViewObjectContact(GetObjectContact()).ActionChanged();
 
@@ -624,7 +624,7 @@ const basegfx::B2DVector& ViewObjectContact::getGridOffset() const
         // the calc-view gets solved one day - all this can be removed
         // again. For now, let's just reset here and force re-calculation.
         // Add a SAL_WARN to inform about this.
-        SAL_WARN("svx", "Suspicious GridOffset value resetted (!)");
+        SAL_WARN("svx", "Suspicious GridOffset value reset (!)");
         moGridOffset.reset();
     }
 

@@ -634,7 +634,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 {
                     // Here an interactively created SdrObject gets added, so
                     // take into account that interaction created an object in
-                    // model coordinates. If we have e.g. a GirdOffset, this is a
+                    // model coordinates. If we have e.g. a GridOffset, this is a
                     // little bit tricky - we have an object in model coordinates,
                     // so the fetched offset is at the wrong point in principle
                     // since we need to 'subtract' the offset here to get to
@@ -642,7 +642,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     // so go for it.
                     // The 2nd a little tricky thing is that this will early-create
                     // a ViewObjectContact for the new SdrObject, but these VOCs
-                    // are anyways layouted for being create-on-demand. This will
+                    // are anyways laid out to be created on demand. This will
                     // be adapted/replaced correctly later on.
                     // This *should* be the right place for getting all interactively
                     // created objects, see InsertObjectAtView below that calls
@@ -788,7 +788,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             if (dynamic_cast<const SdrRectObj*>(mpCurrentCreate.get()) != nullptr)
             {
                 // ensure object has some size, necessary for SdrTextObj because
-                // there are still untested divisions by that sizes
+                // there are still untested divisions by those sizes
                 tools::Rectangle aCurrentSnapRect(mpCurrentCreate->GetSnapRect());
 
                 if(aCurrentSnapRect.GetWidth() <= 1 || aCurrentSnapRect.GetHeight() <= 1)

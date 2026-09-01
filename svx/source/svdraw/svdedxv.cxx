@@ -158,7 +158,7 @@ IMPL_LINK_NOARG(SdrObjEditView, TextEditUpdate, Timer*, void)
         rVC.ActionChanged();
     else
         // invalidate only visualizations in different views:
-        // this is important to not cause evtl. high repaint costs
+        // this is important to not cause eventual high repaint costs
         // in the EditView -> we avoid this by running the TextEdit
         // on the overlay. NOTE: This is only for better performance,
         // any repaint will just work fine and do the right thing
@@ -844,7 +844,7 @@ void TextEditOverlayObject::checkSelectionChange()
 
 // TextEdit
 
-// callback from the active EditView, forward to evtl. existing instances of the
+// callback from the active EditView, forward to eventual existing instances of the
 // TextEditOverlayObject(s). This will additionally update the selection which
 // is an integral part of the text visualization
 void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&)
@@ -868,7 +868,7 @@ void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&)
     }
 }
 
-// callback from the active EditView, forward to evtl. existing instances of the
+// callback from the active EditView, forward to eventual existing instances of the
 // TextEditOverlayObject(s). This call *only* updates the selection visualization
 // which is e.g. used when only the selection is changed, but not the text
 void SdrObjEditView::EditViewSelectionChange()
@@ -1641,7 +1641,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
 SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 {
-    // IASS: stop evtl. running timer immediately
+    // IASS: stop eventual running timer immediately
     maTextEditUpdateTimer.Stop();
 
     SdrEndTextEditKind eRet = SdrEndTextEditKind::Unchanged;

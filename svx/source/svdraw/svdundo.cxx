@@ -857,7 +857,7 @@ void SdrUndoInsertObj::Redo()
     if (!mxObj->IsInserted() && pObjList)
     {
         // Restore anchor position of an object,
-        // which becomes a member of a group, because its cleared in method
+        // which becomes a member of a group, because it is cleared in method
         // <InsertObject(..)>. Needed for correct Redo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
 

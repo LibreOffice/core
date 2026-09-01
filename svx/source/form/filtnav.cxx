@@ -1424,7 +1424,7 @@ IMPL_LINK(FmFilterNavigator, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
     rUnsetDragIcon = false;
 
-    // be sure that the data is only used within an only one form!
+    // be sure that the data is only used within only one form!
     m_aControlExchange.prepareDrag();
 
     ::std::vector<FmFilterItem*> aItemList;

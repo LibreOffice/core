@@ -157,7 +157,7 @@ void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rCo
     basegfx::B3DHomMatrix aDeviceToView;
 
     // create transformation (scene as group's transformation)
-    // For historical reasons, the outmost scene's transformation is handles as part of the
+    // For historical reasons, the outmost scene's transformation is handled as part of the
     // view transformation. This means that the BoundRect of the contained 3D Objects is
     // without that transformation and makes it necessary to NOT add the first scene to the
     // Primitive3DContainer of contained objects.
@@ -295,7 +295,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
         if((bTestVisibility && nVisibleSize) || nAllSize)
         {
             // for getting the 3D range using getB3DRangeFromPrimitive3DContainer a ViewInformation3D
-            // needs to be given for evtl. decompositions. At the same time createViewInformation3D
+            // needs to be given for eventual decompositions. At the same time createViewInformation3D
             // currently is based on creating the target-ViewInformation3D using a given range. To
             // get the true range, use a neutral ViewInformation3D here. This leaves all matrices
             // on identity and the time on 0.0.
@@ -434,7 +434,7 @@ basegfx::B3DRange ViewContactOfE3dScene::getAllContentRange3D() const
     if(!xAllSequence.empty())
     {
         // for getting the 3D range using getB3DRangeFromPrimitive3DContainer a ViewInformation3D
-        // needs to be given for evtl. decompositions. Use a neutral ViewInformation3D here. This
+        // needs to be given for eventual decompositions. Use a neutral ViewInformation3D here. This
         // leaves all matrices on identity and the time on 0.0.
         const uno::Sequence< beans::PropertyValue > aEmptyProperties;
         const drawinglayer::geometry::ViewInformation3D aNeutralViewInformation3D(aEmptyProperties);

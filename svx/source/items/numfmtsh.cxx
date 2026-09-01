@@ -153,7 +153,7 @@ SvxNumberFormatShell::SvxNumberFormatShell(SvNumberFormatter* pNumFormatter, sal
 SvxNumberFormatShell::~SvxNumberFormatShell()
 {
     /*
-     * At this point, depending on whether the added user-defined were
+     * At this point, depending on whether the added user-defined formats were
      * validated (ValidateNewEntries()), the add list is removed from
      * the number formatter again.
      *

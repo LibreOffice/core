@@ -1613,11 +1613,11 @@ void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderCont
     }
 }
 
-// test is the color between Font- and background-color to be identify
+// test if the contrast between Font- and background-color allows them to be identified
 // return is always the Font-Color
-//        when both light or dark, change the Contrast
-//        in other case do not change the origin color
-//        when the color is R=G=B=128 the DecreaseContrast make 128 the need an exception
+//        when both are light or dark, change the contrast
+//        in other cases do not change the original color
+//        when the color is R=G=B=128 DecreaseContrast keeps 128, hence the need for an exception
 Color SvxStyleBox_Base::TestColorsVisible(const Color &FontCol, const Color &BackCol)
 {
     constexpr sal_uInt8  ChgVal = 60;       // increase/decrease the Contrast

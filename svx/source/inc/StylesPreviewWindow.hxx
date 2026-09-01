@@ -27,7 +27,7 @@
 #include <sfx2/sfxstatuslistener.hxx>
 #include <vcl/weld/IconView.hxx>
 
-// pair of id and name, name can be translated to other language
+// pair of id and name, name can be translated to another language
 struct StylePreviewDescriptor
 {
     OUString commonName; // English: Heading 1

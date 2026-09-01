@@ -809,7 +809,7 @@ void SvxTextEditSourceImpl::UpdateData()
 void SvxTextEditSourceImpl::lock()
 {
     // if this assert ever fires, we will need to make this a counter instead of a boolean
-    assert(!mbIsLocked && "cannot nest these loc() calls");
+    assert(!mbIsLocked && "cannot nest these lock() calls");
     mbIsLocked = true;
     if( mpOutliner )
     {
