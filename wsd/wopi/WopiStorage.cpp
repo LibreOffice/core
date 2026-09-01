@@ -181,10 +181,13 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
 
             std::string wopiSrc;
             std::string accessToken;
+            std::string lastModifiedTime;
             JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
             JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
+            JsonUtil::findJSONValue(entry, "LastModifiedTime", lastModifiedTime);
             if (!wopiSrc.empty() && !accessToken.empty())
-                _relatedDocuments.emplace_back(std::move(wopiSrc), std::move(accessToken));
+                _relatedDocuments.push_back({ std::move(wopiSrc), std::move(accessToken),
+                                              std::move(lastModifiedTime) });
 
             if (entry->has("AccessToken"))
                 entry->set("AccessToken", "<redacted>");

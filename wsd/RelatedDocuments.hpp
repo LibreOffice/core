@@ -33,9 +33,10 @@ class RelatedDocuments
 {
 public:
     /// Stores the access token to use for a subscription to the given remote
-    /// document. The latest token per WOPISrc wins.
+    /// document, together with the time the remote document was last modified.
+    /// The latest token per WOPISrc wins.
     void setToken(DocumentBroker& docBroker, const std::string& wopiSrc,
-                  const std::string& accessToken);
+                  const std::string& accessToken, const std::string& lastModifiedTime);
 
     /// Handles a remotedocsubscribe: or remotedocunsubscribe: message from the kit.
     void handleMessage(DocumentBroker& docBroker, const std::shared_ptr<Message>& message,
@@ -78,6 +79,9 @@ private:
         /// The last connection event of a subscription: subscribed,
         /// connected, disconnected or failed.
         std::string lastState;
+        /// The time the remote document was last modified, as the integrator
+        /// reported it. Empty when the integrator did not provide one.
+        std::string lastModifiedTime;
     };
 
     /// Mirrors a remotedocevent into the entry states.

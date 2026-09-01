@@ -456,15 +456,17 @@ public:
 
     /// Sends a raw text frame to the kit child process, without a view prefix.
     bool sendTextFrameToKit(const std::string& message);
-
+    
     /// Returns true when the given access token belongs to a live session of
     /// this document.
     bool isKnownAccessToken(const std::string& accessToken) const;
 
 #if !MOBILEAPP
     /// Stores the access token to use for a subscription to the given remote
-    /// document. The latest token per WOPISrc wins.
-    void setRemoteDocumentToken(const std::string& wopiSrc, const std::string& accessToken);
+    /// document, together with the time the remote document was last modified.
+    /// The latest token per WOPISrc wins.
+    void setRemoteDocumentToken(const std::string& wopiSrc, const std::string& accessToken,
+                                const std::string& lastModifiedTime);
 
     /// Removes the record of a remote document subscription that was not
     /// accepted.

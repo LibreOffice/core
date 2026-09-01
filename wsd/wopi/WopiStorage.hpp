@@ -63,9 +63,20 @@ public:
         const std::string& getHideUserList() const { return _hideUserList; }
         const std::string& getPresentationLeader() const { return _presentationLeader; }
 
-        /// Remote documents this document may subscribe to, as
-        /// (WOPISrc, access token) pairs.
-        const std::vector<std::pair<std::string, std::string>>& getRelatedDocuments() const
+        /// One remote document this document may subscribe to.
+        struct RelatedDocument
+        {
+            /// The remote document's WOPISrc.
+            std::string wopiSrc;
+            /// The access token to reach the remote document with.
+            std::string accessToken;
+            /// The time the remote document was last modified, as the
+            /// integrator reported it. Empty when none was provided.
+            std::string lastModifiedTime;
+        };
+
+        /// Remote documents this document may subscribe to.
+        const std::vector<RelatedDocument>& getRelatedDocuments() const
         {
             return _relatedDocuments;
         }
@@ -210,8 +221,8 @@ public:
         /// Used for directly starting follow me presentation
         std::string _presentationLeader;
 
-        /// (WOPISrc, access token) pairs from the RelatedDocuments entries.
-        std::vector<std::pair<std::string, std::string>> _relatedDocuments;
+        /// The RelatedDocuments entries this document may subscribe to.
+        std::vector<RelatedDocument> _relatedDocuments;
     };
 
     WopiStorage(const Poco::URI& uri, const std::string& localStorePath,

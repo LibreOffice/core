@@ -2271,11 +2271,13 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
     // related document the same way a CheckFileInfo RelatedDocuments entry
     // does:
     //   { "AccessToken": "<token of the target document>",
-    //     "RelatedDocument": { "WOPISrc": "...", "AccessToken": "..." } }
+    //     "RelatedDocument": { "WOPISrc": "...", "AccessToken": "...",
+    //                          "LastModifiedTime": "..." } }
     const std::string body(std::istreambuf_iterator<char>(message), {});
     std::string accessToken;
     std::string remoteWopiSrc;
     std::string remoteAccessToken;
+    std::string remoteLastModifiedTime;
     Poco::JSON::Object::Ptr object;
     if (JsonUtil::parseJSON(body, object))
     {
@@ -2284,6 +2286,7 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
         {
             JsonUtil::findJSONValue(relatedDocument, "WOPISrc", remoteWopiSrc);
             JsonUtil::findJSONValue(relatedDocument, "AccessToken", remoteAccessToken);
+            JsonUtil::findJSONValue(relatedDocument, "LastModifiedTime", remoteLastModifiedTime);
         }
     }
 
@@ -2319,7 +2322,9 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
         disposition,
         [docBroker, accessToken = std::move(accessToken),
          remoteWopiSrc = std::move(remoteWopiSrc),
-         remoteAccessToken = std::move(remoteAccessToken)](const std::shared_ptr<Socket>& moveSocket)
+         remoteAccessToken = std::move(remoteAccessToken),
+         remoteLastModifiedTime = std::move(remoteLastModifiedTime)](
+            const std::shared_ptr<Socket>& moveSocket)
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
@@ -2334,7 +2339,8 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
                 return;
             }
 
-            docBroker->setRemoteDocumentToken(remoteWopiSrc, remoteAccessToken);
+            docBroker->setRemoteDocumentToken(remoteWopiSrc, remoteAccessToken,
+                                              remoteLastModifiedTime);
 
             http::Response httpResponse(http::StatusCode::OK);
             httpResponse.setContentLength(0);

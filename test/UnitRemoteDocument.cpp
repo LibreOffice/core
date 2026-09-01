@@ -79,6 +79,7 @@ public:
             Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
             entry->set("WOPISrc", remoteWopiSrc());
             entry->set("AccessToken", "remotetoken");
+            entry->set("LastModifiedTime", "2026-09-01T12:00:00.000000Z");
             relatedDocuments->add(entry);
             fileInfo->set("RelatedDocuments", relatedDocuments);
         }
@@ -108,6 +109,9 @@ public:
             TST_LOG("Got: [" << message << ']');
             LOK_ASSERT_MESSAGE("The related documents JSON must not carry access tokens",
                                message.find("remotetoken") == std::string_view::npos);
+            LOK_ASSERT_MESSAGE("The related documents JSON must carry the last modified time",
+                               message.find("\"lastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"") !=
+                                   std::string_view::npos);
             if (message.find("\"state\":\"available\"") != std::string_view::npos)
                 _sawAvailableState = true;
             if (message.find("\"state\":\"connected\"") != std::string_view::npos)
@@ -571,7 +575,8 @@ class UnitRelatedDocumentPost : public WopiTestServer
                               http::Request::VERB_POST);
         request.setBody("{\"AccessToken\":\"" + accessToken +
                             "\",\"RelatedDocument\":{\"WOPISrc\":\"" + remoteWopiSrc() +
-                            "\",\"AccessToken\":\"remotetoken\"}}",
+                            "\",\"AccessToken\":\"remotetoken\""
+                            ",\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"}}",
                         "application/json");
 
         auto session = http::Session::create(helpers::getTestServerURI());
@@ -639,6 +644,16 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
+        if (message.starts_with("relateddocuments:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            LOK_ASSERT_MESSAGE(
+                "The POST-registered last modified time must reach the related documents JSON",
+                message.find("\"lastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"") !=
+                    std::string_view::npos);
+            return false;
+        }
+
         if (!message.starts_with("remotedocevent:"))
             return false;
 

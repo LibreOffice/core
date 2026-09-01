@@ -4474,7 +4474,8 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         if (wopiFileInfo)
         {
             for (const auto& related : wopiFileInfo->getRelatedDocuments())
-                setRemoteDocumentToken(related.first, related.second);
+                setRemoteDocumentToken(related.wopiSrc, related.accessToken,
+                                       related.lastModifiedTime);
         }
 #endif
 
@@ -5016,9 +5017,10 @@ bool DocumentBroker::sendTextFrameToKit(const std::string& message)
 
 #if !MOBILEAPP
 void DocumentBroker::setRemoteDocumentToken(const std::string& wopiSrc,
-                                            const std::string& accessToken)
+                                            const std::string& accessToken,
+                                            const std::string& lastModifiedTime)
 {
-    _relatedDocuments.setToken(*this, wopiSrc, accessToken);
+    _relatedDocuments.setToken(*this, wopiSrc, accessToken, lastModifiedTime);
 }
 
 

@@ -33,7 +33,8 @@
 #include <sstream>
 
 void RelatedDocuments::setToken(DocumentBroker& docBroker, const std::string& wopiSrc,
-                                const std::string& accessToken)
+                                const std::string& accessToken,
+                                const std::string& lastModifiedTime)
 {
     docBroker.assertCorrectThread();
 
@@ -44,6 +45,7 @@ void RelatedDocuments::setToken(DocumentBroker& docBroker, const std::string& wo
         const std::string docKey = RequestDetails::getDocKey(wopiSrc);
         _tokens[docKey] = accessToken;
         _entries[docKey].wopiSrc = wopiSrc.substr(0, wopiSrc.find('?'));
+        _entries[docKey].lastModifiedTime = lastModifiedTime;
         refresh(docBroker);
     }
     catch (const std::exception& exc)
@@ -387,6 +389,7 @@ std::string RelatedDocuments::buildJson() const
         entry->set("wopiSrc", it.second.wopiSrc);
         entry->set("state", hasSubscription(it.first) ? it.second.lastState
                                                       : std::string("available"));
+        entry->set("lastModifiedTime", it.second.lastModifiedTime);
         documents->add(entry);
     }
 
@@ -407,7 +410,8 @@ void RelatedDocuments::dumpState(std::ostream& os) const
     os << "\n  related documents: " << _entries.size();
     for (const auto& it : _entries)
         os << "\n    " << it.first << " state: "
-           << (hasSubscription(it.first) ? it.second.lastState : std::string("available"));
+           << (hasSubscription(it.first) ? it.second.lastState : std::string("available"))
+           << " last modified: " << it.second.lastModifiedTime;
     os << "\n  incoming docKey chain: " << _incomingDocKeyChain.size();
     for (const std::string& docKey : _incomingDocKeyChain)
         os << "\n    " << docKey;
