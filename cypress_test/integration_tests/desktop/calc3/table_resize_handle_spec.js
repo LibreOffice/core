@@ -63,3 +63,25 @@ describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 		});
 	});
 });
+
+describe(['tagdesktop'], 'Calc styled table resize handle below the fold.', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/table_resize_handles_below_fold.xlsx');
+	});
+
+	// 12 styled tables down to row 55, most of them outside the initial viewport. Nothing is
+	// clicked here: a handle that only arrives with the cursor change is the bug this guards.
+	// An off screen section has no test div, so ask the section container rather than the DOM.
+	it('shows a handle for every table of the sheet, not only the ones on screen', function() {
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.sectionContainer.getSectionWithName('table range handle 11'),
+				'handle of the 12th table').to.exist;
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			expect(win.app.sectionContainer.getSectionWithName('table range handle 12'),
+				'no handle past the 12 tables').to.not.exist;
+		});
+	});
+});

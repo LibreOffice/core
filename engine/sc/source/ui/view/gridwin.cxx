@@ -7105,9 +7105,12 @@ void ScGridWindow::UpdateDatabaseOverlay()
             if (aRange.aStart.Tab() != nTab)
                 continue;
 
-            // skip tables entirely outside the visible range
-            if (aRange.aEnd.Col() < maVisibleRange.mnCol1 || aRange.aStart.Col() > maVisibleRange.mnCol2 ||
-                aRange.aEnd.Row() < maVisibleRange.mnRow1 || aRange.aStart.Row() > maVisibleRange.mnRow2)
+            // skip tables entirely outside the visible range. COOL places the marks
+            // from absolute positions and scrolling never reaches this overlay, so there
+            // every table of the sheet is sent and the client picks the ones on screen.
+            if (!comphelper::COKit::isActive()
+                && (aRange.aEnd.Col() < maVisibleRange.mnCol1 || aRange.aStart.Col() > maVisibleRange.mnCol2 ||
+                    aRange.aEnd.Row() < maVisibleRange.mnRow1 || aRange.aStart.Row() > maVisibleRange.mnRow2))
                 continue;
 
             // no handle on a protected/non-editable table
