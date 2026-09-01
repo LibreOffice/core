@@ -1629,6 +1629,7 @@ void ScDPResultMember::FillMemberResults(uno::Sequence<sheet::MemberResult>* pSe
                 {
                     // single data field layout.
                     const std::optional<OUString> & pSubtotalName = pParentDim->GetSubtotalName();
+                    // coverity[var_deref_model : FALSE] - null_ref will not be derefed in this case
                     if (pSubtotalName)
                         aSubStr = lcl_parseSubtotalName(*pSubtotalName, aCaption);
                     pArray[rPos].Flags &= ~sheet::MemberResultFlags::GRANDTOTAL;
