@@ -1322,6 +1322,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"DuplicatePage", { PayloadType::EnabledPayload, true } },
         { u"DeleteRows", { PayloadType::EnabledPayload, true } },
         { u"DeleteColumns", { PayloadType::EnabledPayload, true } },
+        { u"DeleteCell", { PayloadType::EnabledPayload, true } },
         { u"DistributeRows", { PayloadType::EnabledPayload, true } },
         { u"DistributeColumns", { PayloadType::EnabledPayload, true } },
         { u"SetMinimalRowHeight", { PayloadType::EnabledPayload, true } },

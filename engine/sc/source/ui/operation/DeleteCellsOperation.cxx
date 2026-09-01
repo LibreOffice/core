@@ -9,6 +9,8 @@
 
 #include <operation/DeleteCellsOperation.hxx>
 
+#include <dbdata.hxx>
+#include <dbdocfun.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <markdata.hxx>
@@ -110,6 +112,112 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         default:;
     }
     return true;
+}
+
+/**
+ * Upper names of the Tables the deletion would leave without a data row.  Collected before
+ * the cells move, because afterwards the Table no longer says which rows it lost.
+ */
+std::vector<OUString> collectTablesLosingData(const ScDocument& rDoc, const ScMarkData& rMark,
+                                              const ScRange& rRange, DelCellCmd eCmd)
+{
+    std::vector<OUString> aNames;
+
+    if (eCmd != DelCellCmd::Rows && eCmd != DelCellCmd::CellsUp)
+        return aNames;
+
+    ScRange aBand(rRange);
+    if (eCmd == DelCellCmd::Rows)
+    {
+        aBand.aStart.SetCol(0);
+        aBand.aEnd.SetCol(rDoc.MaxCol());
+    }
+
+    for (const SCTAB nTab : rMark)
+    {
+        aBand.aStart.SetTab(nTab);
+        aBand.aEnd.SetTab(nTab);
+
+        for (const ScDBData* pData : rDoc.GetAllNamedDBsInArea(aBand))
+        {
+            if (!pData->HasHeader())
+                continue;
+
+            ScRange aArea;
+            pData->GetArea(aArea);
+
+            // A cell shift moves the Table's area only when it spans the whole width of it.
+            if (eCmd == DelCellCmd::CellsUp
+                && (aBand.aStart.Col() > aArea.aStart.Col()
+                    || aBand.aEnd.Col() < aArea.aEnd.Col()))
+                continue;
+
+            // The Total Row is part of the area, so it is not a row that may be given back.
+            const SCROW nFirstData = aArea.aStart.Row() + 1;
+            const SCROW nLastData = aArea.aEnd.Row() - (pData->HasTotals() ? 1 : 0);
+            if (nFirstData > nLastData)
+                continue;
+
+            // Taking the header row promotes the row below it instead, and taking the Total Row
+            // is not a resize any more. Both are left alone here.
+            if (aBand.aStart.Row() != nFirstData)
+                continue;
+            if (aBand.aEnd.Row() < nLastData
+                || (pData->HasTotals() && aBand.aEnd.Row() > nLastData))
+                continue;
+
+            aNames.push_back(pData->GetUpperName());
+        }
+    }
+
+    return aNames;
+}
+
+/**
+ * Give back one empty data row, as a Table cannot be left with only its header row.  The rows
+ * asked for are really gone by now, so the row is a fresh empty one, as MSO leaves behind too.
+ */
+void restoreTableDataRow(ScDocShell& rDocShell, const OUString& rUpperName, DelCellCmd eCmd,
+                         bool bRecord, bool bApi)
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDBs = rDoc.GetDBCollection();
+    if (!pDBs)
+        return;
+
+    // Re-resolve by name: the deletion may have dropped the Table, and an earlier repair on the
+    // same sheet may have shifted it.
+    ScDBData* pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
+    if (!pData)
+        return;
+
+    ScRange aArea;
+    pData->GetArea(aArea);
+    if (aArea.aEnd.Row() - aArea.aStart.Row() >= pData->GetMinRowSpan())
+        return;
+
+    const SCROW nNewRow = aArea.aStart.Row() + 1;
+    const ScRange aInsert(aArea.aStart.Col(), nNewRow, aArea.aStart.Tab(), aArea.aEnd.Col(),
+                          nNewRow, aArea.aStart.Tab());
+    rDocShell.GetDocFunc().InsertCells(
+        aInsert, nullptr, eCmd == DelCellCmd::Rows ? INS_INSROWS_BEFORE : INS_CELLSDOWN, bRecord,
+        bApi);
+
+    // The insert widens the area on its own only when it lands inside it, which is the case for a
+    // Table with a Total Row but not for one that is down to its header row.
+    pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
+    if (!pData)
+        return;
+
+    pData->GetArea(aArea);
+    const SCROW nMissing = pData->GetMinRowSpan() - (aArea.aEnd.Row() - aArea.aStart.Row());
+    if (nMissing <= 0)
+        return;
+
+    ScDBData aNewData(*pData);
+    aArea.aEnd.IncRow(nMissing);
+    aNewData.SetArea(aArea);
+    ScDBDocFunc(rDocShell).ModifyDBData(aNewData);
 }
 
 } // anonymous namespace
@@ -306,6 +414,11 @@ bool DeleteCellsOperation::runImplementation()
     //the patch comes from maoyg
     ::std::vector<ScRange> qDecreaseRange;
     bool bDeletingMerge = false;
+
+    // The list action below stays open past the deletion, for the row given back to these.
+    const std::vector<OUString> aStarvedTables
+        = collectTablesLosingData(rDoc, aMark, aInputRange, meCmd);
+
     OUString aUndo = ScResId(STR_UNDO_DELETECELLS);
     if (mbRecord)
     {
@@ -604,7 +717,7 @@ bool DeleteCellsOperation::runImplementation()
             nUndoPos++;
         }
 
-        if (!bDeletingMerge)
+        if (!bDeletingMerge && aStarvedTables.empty())
         {
             mrDocShell.GetUndoManager()->LeaveListAction();
         }
@@ -673,7 +786,10 @@ bool DeleteCellsOperation::runImplementation()
         qDecreaseRange.pop_back();
     }
 
-    if (bDeletingMerge)
+    for (const OUString& rUpperName : aStarvedTables)
+        restoreTableDataRow(mrDocShell, rUpperName, meCmd, mbRecord, mbApi);
+
+    if (bDeletingMerge || (mbRecord && !aStarvedTables.empty()))
         mrDocShell.GetUndoManager()->LeaveListAction();
 
     if (meCmd == DelCellCmd::Cols || meCmd == DelCellCmd::CellsLeft)

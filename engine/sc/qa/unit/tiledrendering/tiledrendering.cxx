@@ -849,6 +849,131 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableRemoveDuplicates)
     CPPUNIT_ASSERT_MESSAGE("second duplicate row removed", rDoc.GetString(0, 4, 0).isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteTableDataRowsUndoRedo)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Styled table A1:C11 with header (row 1), data rows 2-10 and a Total Row (row 11).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 10,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    rDoc.SetString(0, 0, 0, u"Name"_ustr);
+    rDoc.SetString(1, 0, 0, u"Number"_ustr);
+    rDoc.SetString(2, 0, 0, u"Column3"_ustr);
+    for (SCROW nRow = 1; nRow <= 9; ++nRow)
+        rDoc.SetValue(1, nRow, 0, static_cast<double>(nRow)); // Number: 1..9 (sum 45)
+    pData->RefreshTableColumnNames(&rDoc);
+
+    rDoc.SetString(0, 10, 0, u"Total"_ustr);
+    rDoc.SetString(1, 10, 0, u"=SUBTOTAL(9;Table1[Number])"_ustr);
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(45.0, rDoc.GetValue(1, 10, 0));
+
+    auto getTableArea = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        ScRange aArea;
+        p->GetArea(aArea);
+        return aArea;
+    };
+    // Every data row, header and Total Row untouched: the Table keeps a data row.
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 1, 0, 2, 9, 0));
+
+    rDoc.SetString(0, 12, 0, u"below"_ustr);
+
+    dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Header + one empty data row + the Total Row, and 9 rows went for 8 rows of shift.
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 2, 0), getTableArea());
+    CPPUNIT_ASSERT_MESSAGE("the data row we give back must be empty",
+                           rDoc.GetString(1, 1, 0).isEmpty());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the Total Row rode the shrink up", u"Total"_ustr,
+                                 rDoc.GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"below"_ustr, rDoc.GetString(0, 4, 0));
+
+    // The whole point of the exercise: the total is over that one row, not over nothing.
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the struct ref must resolve, not break to an error", u"0"_ustr,
+                                 rDoc.GetString(1, 2, 0));
+
+    // Deletion and repair are one undo step.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 10, 0), getTableArea());
+    CPPUNIT_ASSERT_EQUAL(u"below"_ustr, rDoc.GetString(0, 12, 0));
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(45.0, rDoc.GetValue(1, 10, 0));
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 2, 0), getTableArea());
+    CPPUNIT_ASSERT_EQUAL(u"below"_ustr, rDoc.GetString(0, 4, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteTableDataCellsUpUndo)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Styled table A1:C8 without a Total Row: header (row 1), data rows 2-8.
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 7,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ false);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    auto getTableArea = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        ScRange aArea;
+        p->GetArea(aArea);
+        return aArea;
+    };
+
+    rDoc.SetString(0, 9, 0, u"below"_ustr); // in the Table's columns, under it
+    rDoc.SetString(3, 9, 0, u"beside"_ustr); // column D, outside the shifted band
+
+    // Delete every data row as a cell shift over the Table's own columns only.
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 1, 0, 2, 7, 0));
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"Flags"_ustr, u"U"_ustr), // shift cells up
+    };
+    dispatchCommand(mxComponent, u".uno:DeleteCell"_ustr, aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // Here the insert lands below the shrunken area, so the area has to be widened explicitly.
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 1, 0), getTableArea());
+    CPPUNIT_ASSERT_MESSAGE("the data row we give back must be empty",
+                           rDoc.GetString(0, 1, 0).isEmpty());
+
+    // 7 rows went from the band, one came back: below moved up by 6, beside it did not move.
+    CPPUNIT_ASSERT_EQUAL(u"below"_ustr, rDoc.GetString(0, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"beside"_ustr, rDoc.GetString(3, 9, 0));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 7, 0), getTableArea());
+    CPPUNIT_ASSERT_EQUAL(u"below"_ustr, rDoc.GetString(0, 9, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsRowsOnlyUndoRedo)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");

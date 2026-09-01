@@ -2762,6 +2762,27 @@ ScDBData* ScDBCollection::GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
     return nullptr;
 }
 
+bool ScDBCollection::WouldTakeHeaderRow(const ScRange& rRange) const
+{
+    for (const ScDBData* pData : GetAllNamedDBsInArea(rRange))
+    {
+        if (!pData->HasHeader())
+            continue;
+
+        ScRange aArea;
+        pData->GetArea(aArea);
+
+        // Taking the whole range is allowed, that just removes the range.
+        if (rRange.Contains(aArea))
+            continue;
+
+        if (rRange.aStart.Row() <= aArea.aStart.Row() && rRange.aEnd.Row() >= aArea.aStart.Row())
+            return true;
+    }
+
+    return false;
+}
+
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
 {
     // First, search the global named db ranges.

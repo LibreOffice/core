@@ -38,6 +38,7 @@
 
 #include <cellsh.hxx>
 #include <sc.hrc>
+#include <dbdata.hxx>
 #include <docsh.hxx>
 #include <attrib.hxx>
 #include <tabvwsh.hxx>
@@ -292,6 +293,19 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_CELLSRIGHT:
                 bDisable = (!bSimpleArea) || GetViewData().SimpleRowMarked();
                 break;
+
+            case SID_DEL_ROWS:
+            case FID_DELETE_CELL:
+            {
+                const ScDBCollection* pDBs = rDoc.GetDBCollection();
+                // SID_DEL_ROWS takes whole rows, so ask about every column.
+                const bool bWholeRows = (nWhich == SID_DEL_ROWS);
+                if (pDBs)
+                    bDisable = pDBs->WouldTakeHeaderRow(
+                        ScRange(bWholeRows ? 0 : nCol1, nRow1, nTab,
+                                bWholeRows ? rDoc.MaxCol() : nCol2, nRow2, nTab));
+                break;
+            }
 
             case SID_COPY:              // copy
             case SID_COPY_HYPERLINK_LOCATION:
