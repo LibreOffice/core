@@ -600,11 +600,21 @@ export class Header extends CanvasSectionObject {
 		return this._menuPosEl;
 	}
 
+	private _isCommandDisabledForSelection(command: string): boolean {
+		if (!this._isRowColumnInSelectedRange(this._lastMouseOverIndex))
+			return false;
+
+		return this._map.stateChangeHandler.getItemValue(command) === 'disabled';
+	}
+
 	// Sheet protection blocks some header commands but leaves others
 	// working, and which structural edits stay allowed is chosen when the
 	// sheet is protected. Keep in the menu only the commands that still work
 	// on the current sheet.
 	_isHeaderCommandUsable(command: string): boolean {
+		if (this._isCommandDisabledForSelection(command))
+			return false;
+
 		const part = this._map._docLayer._selectedPart;
 		if (!(app.calc as any).isPartProtected(part))
 			return true;
