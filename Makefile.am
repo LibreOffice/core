@@ -57,6 +57,10 @@ else !ENABLE_FUZZERS
 
 SUBDIRS = browser .
 
+if ENABLE_QTAPP
+SUBDIRS += qt
+endif
+
 if ENABLE_TESTS
 SUBDIRS += test
 endif

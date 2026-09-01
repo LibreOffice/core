@@ -1002,7 +1002,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     _webView->page()->setWebChannel(channel);
 
     Poco::Path coolHtmlPath(getBrowserDistDir());
-    coolHtmlPath.append("cool.html");
+    coolHtmlPath.append("cool-qt.html");
     Poco::URI urlAndQuery(coolHtmlPath);
     urlAndQuery.setScheme("file");
     std::string uiLanguage = getUILanguage();
@@ -1109,7 +1109,7 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
         _webView->page(), _document, this, nullptr, _webView.get());
 
     Poco::Path coolHtmlPath(getBrowserDistDir());
-    coolHtmlPath.append("cool.html");
+    coolHtmlPath.append("cool-qt.html");
     QUrl urlAndQuery = QUrl::fromLocalFile(
         QString::fromStdString(coolHtmlPath.toString()));
     coda::addRemoteCoolParams(urlAndQuery, _document);

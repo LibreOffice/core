@@ -164,6 +164,15 @@
 #define EXTERNC /**/
 #define EXPORT /**/
 
+/* The combined server-plus-qt build leaves these undefined above so the coda-qt
+   target can set them on its own command line. Everything else gets the server values. */
+#ifndef MOBILEAPP
+#define MOBILEAPP 0
+#endif
+#ifndef ENABLE_CHILDROOTS
+#define ENABLE_CHILDROOTS 1
+#endif
+
 /* Controls whether or not we allow loading documents from the local filesystem. */
 #ifndef ENABLE_LOCAL_FILESYSTEM
 #if MOBILEAPP || ENABLE_DEBUG

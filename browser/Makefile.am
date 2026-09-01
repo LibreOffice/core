@@ -1095,6 +1095,7 @@ build-cool: \
 	$(DIST_FOLDER)/bundle.js \
 	$(DIST_FOLDER)/cool.html \
 	$(QTAPP_TABSTRIP_FILES) \
+	$(COOL_QT_HTML) \
 	$(WASM_FILES) \
 	$(WASM_FALLBACK_FILES) \
 	$(TEMPLATE_MANIFEST) \
@@ -1252,30 +1253,41 @@ $(INTERMEDIATE_DIR)/COOL_JS.m4: $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist Makefile
 	@truncate $(if $(filter Darwin FreeBSD,$(shell uname -s)),-s -1,--size=-1) $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp
 	@mv $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp $(INTERMEDIATE_DIR)/COOL_JS.m4
 
-$(DIST_FOLDER)/cool.html: $(srcdir)/html/cool.html.m4 \
+if ENABLE_QTAPP
+COOL_QT_HTML = $(DIST_FOLDER)/cool-qt.html
+endif
+
+cool_html_prereqs = $(srcdir)/html/cool.html.m4 \
 	$(COOL_HTML_DST) \
 	$(COOL_WELCOME_DST) \
 	$(COOL_EXTENSIONS_DST) \
 	$(DIST_FOLDER)/bundle.css \
 	$(DIST_FOLDER)/global.js \
-	$(INTERMEDIATE_DIR)/COOL_JS.m4 \
-	| $(DIST_FOLDER)/bundle.js
+	$(INTERMEDIATE_DIR)/COOL_JS.m4
 
-	$(QUIET_M4) m4 -PE -I $(INTERMEDIATE_DIR) \
-	    -DBUNDLE=$(IS_BUNDLE) \
-		-DIOSAPP=$(ENABLE_IOSAPP) \
-		-DMACOSAPP=$(ENABLE_MACOSAPP) \
-		-DQTAPP=$(ENABLE_QTAPP) \
-		-DDEBUG=$(ENABLE_DEBUG) \
-		-DENABLE_EXPERIMENTAL=$(ENABLE_EXPERIMENTAL) \
-		-DWINDOWSAPP=$(ENABLE_WINDOWSAPP) \
-		-DANDROIDAPP=$(ENABLE_ANDROIDAPP) \
-		-DEMSCRIPTENAPP=$(ENABLE_EMSCRIPTENAPP) \
-		-DMOBILEAPPNAME="$(APP_NAME)" \
-		-DCOOL_CSS="$(subst $(SPACE),$(COMMA),$(COOL_CSS_M4))" \
-		-DGLOBAL_JS="$(DIST_FOLDER)/global.js" \
-		-DVENDOR="$(VENDOR)" \
-		-DINFO_URL="$(INFO_URL)" \
+cool_html_defines = -PE -I $(INTERMEDIATE_DIR) \
+	-DBUNDLE=$(IS_BUNDLE) \
+	-DIOSAPP=$(ENABLE_IOSAPP) \
+	-DMACOSAPP=$(ENABLE_MACOSAPP) \
+	-DDEBUG=$(ENABLE_DEBUG) \
+	-DENABLE_EXPERIMENTAL=$(ENABLE_EXPERIMENTAL) \
+	-DWINDOWSAPP=$(ENABLE_WINDOWSAPP) \
+	-DANDROIDAPP=$(ENABLE_ANDROIDAPP) \
+	-DEMSCRIPTENAPP=$(ENABLE_EMSCRIPTENAPP) \
+	-DMOBILEAPPNAME="$(APP_NAME)" \
+	-DCOOL_CSS="$(subst $(SPACE),$(COMMA),$(COOL_CSS_M4))" \
+	-DGLOBAL_JS="$(DIST_FOLDER)/global.js" \
+	-DVENDOR="$(VENDOR)" \
+	-DINFO_URL="$(INFO_URL)"
+
+# cool.html is the server page and cool-qt.html the app page; QTAPP is the only
+# define that differs.
+$(DIST_FOLDER)/cool.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
+	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=false \
+		$(srcdir)/html/cool.html.m4 > $@
+
+$(DIST_FOLDER)/cool-qt.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
+	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=true \
 		$(srcdir)/html/cool.html.m4 > $@
 
 if ENABLE_QTAPP

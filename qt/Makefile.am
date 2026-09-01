@@ -5,7 +5,8 @@ bin_PROGRAMS = coda-qt
 include_paths = -I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/kit -I${top_srcdir}/wsd -I${top_srcdir} ${ZSTD_CFLAGS} ${QT6_CFLAGS}
 
 warning_flags = -Wall -Werror -Wno-parentheses -Wno-sign-compare -Wno-unused-variable
-define_flags = -DMOBILEAPP=1
+
+define_flags = -DMOBILEAPP=1 -DENABLE_CHILDROOTS=0
 
 AM_CPPFLAGS = -pthread \
               -DCOOLWSD_DATADIR='"'@COOLWSD_DATADIR@'"' \
@@ -104,8 +105,19 @@ coda_qt_CXXFLAGS += -mno-direct-extern-access
 endif
 endif
 
+# SIMD is on tree-wide in the combined build, so kit/DeltaSimd.c takes the AVX2
+# path and needs the flags libsimd gets. Empty in a pure qtapp build.
+coda_qt_CFLAGS = $(AM_CFLAGS) $(SIMD_CFLAGS)
+
 coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CODocumentBroker.cpp CoolUrlSchemeHandler.cpp CursorFix.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp IntegratorFilePicker.cpp RemoteOpen.cpp StandaloneWindow.cpp TabbedWindow.cpp TabManager.cpp TabShellBridge.cpp WindowUtils.cpp $(cmake_list)
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
+
+# SSL is on tree-wide in the combined build, so the shared net sources here
+# reference ssl::Manager and SslContext.
+if ENABLE_SSL
+coda_qt_SOURCES += ../net/Ssl.cpp
+coda_qt_LDADD = $(OPENSSL_LIBS)
+endif
 
 metainfodir = $(datadir)/metainfo
 metainfo_DATA = com.collaboraoffice.Office.metainfo.xml

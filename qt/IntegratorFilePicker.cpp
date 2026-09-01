@@ -471,7 +471,7 @@ void IntegratorFilePicker::attachEmbeddedDocument(
         _webView->page(), _document, /*owner=*/nullptr, this, _webView);
 
     // Build the URL we rewrite the iframe to: our local HTTPS server's
-    // /cool.html with CODA-local params added.  Preserve the UI
+    // /cool-qt.html with CODA-local params added.  Preserve the UI
     // hints (lang, closebutton, revisionhistory) from the original
     // NC iframe URL, but drop WOPISrc and access_token: their
     // presence on the URL is what makes main.js set isWopi=true and
@@ -488,7 +488,7 @@ void IntegratorFilePicker::attachEmbeddedDocument(
     target.setScheme("https");
     target.setHost("localhost");
     target.setPort(_embedPort);
-    target.setPath("/cool.html");
+    target.setPath("/cool-qt.html");
     target.setQuery(embedQuery);
     coda::addRemoteCoolParams(target, _document);
 
