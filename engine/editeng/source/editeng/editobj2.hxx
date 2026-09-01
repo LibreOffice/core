@@ -41,6 +41,33 @@ class SharedStringPool;
 
 }
 
+class XEditAttribute
+{
+private:
+    SfxPoolItemHolder   maItemHolder;
+    sal_Int32           nStart;
+    sal_Int32           nEnd;
+
+public:
+    XEditAttribute(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd );
+
+    const SfxPoolItem*      GetItem() const             { return maItemHolder.getItem(); }
+    SfxPoolItemHolder&      GetItemHolder()             { return maItemHolder; }
+
+    sal_Int32&              GetStart()                  { return nStart; }
+    sal_Int32&              GetEnd()                    { return nEnd; }
+
+    sal_Int32               GetStart() const            { return nStart; }
+    sal_Int32               GetEnd() const              { return nEnd; }
+
+    sal_Int32               GetLen() const              { return nEnd-nStart; }
+
+    bool IsFeature() const;
+    void SetItem(SfxItemPool&, const SfxPoolItem&);
+
+    inline bool operator==( const XEditAttribute& rCompare ) const;
+};
+
 inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
 {
     return  (nStart == rCompare.nStart) &&

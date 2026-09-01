@@ -1295,7 +1295,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             if ( bEmptyPara ||
                  ( ( pAttr->GetEnd() > nStartPos ) && ( pAttr->GetStart() < nEndPos ) ) )
             {
-                XEditAttribute aX = pTxtObj->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
+                XEditAttribute aX(*pTxtObj->GetPool(), *pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
                 // Possibly Correct ...
                 if ( ( nNode == nStartNode ) && ( nStartPos != 0 ) )
                 {

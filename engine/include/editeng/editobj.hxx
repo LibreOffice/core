@@ -23,7 +23,6 @@
 #include <svl/style.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/macros.hxx>
-#include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/lineend.hxx>
 
@@ -53,35 +52,6 @@ class SharedStringPool;
 }
 
 enum class TextRotation { NONE, TOPTOBOTTOM, BOTTOMTOTOP };
-
-class XEditAttribute
-{
-private:
-    SfxPoolItemHolder   maItemHolder;
-    sal_Int32           nStart;
-    sal_Int32           nEnd;
-
-public:
-    XEditAttribute(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd );
-
-    const SfxPoolItem*      GetItem() const             { return maItemHolder.getItem(); }
-    SfxPoolItemHolder&      GetItemHolder()             { return maItemHolder; }
-
-    sal_Int32&              GetStart()                  { return nStart; }
-    sal_Int32&              GetEnd()                    { return nEnd; }
-
-    sal_Int32               GetStart() const            { return nStart; }
-    sal_Int32               GetEnd() const              { return nEnd; }
-
-    sal_Int32               GetLen() const              { return nEnd-nStart; }
-
-    bool IsFeature() const;
-    void SetItem(SfxItemPool&, const SfxPoolItem&);
-
-    inline bool operator==( const XEditAttribute& rCompare ) const;
-};
-
-
 
 class EDITENG_DLLPUBLIC EditTextObject final
 {
@@ -172,7 +142,6 @@ public:
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 
     ContentInfo*            CreateAndInsertContent();
-    XEditAttribute          CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
     ContentInfosType&       GetContents() { return maContents;}
     const ContentInfosType& GetContents() const { return maContents;}
 

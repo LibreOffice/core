@@ -364,11 +364,6 @@ TextRotation EditTextObject::GetRotation() const
     return meRotation;
 }
 
-XEditAttribute EditTextObject::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
-{
-    return XEditAttribute(*mpPool, rItem, nStart, nEnd);
-}
-
 ContentInfo* EditTextObject::CreateAndInsertContent()
 {
     maContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*mpPool)));
