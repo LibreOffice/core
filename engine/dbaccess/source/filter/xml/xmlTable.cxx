@@ -83,8 +83,8 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     }
     cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
     {
-        {"Name", cpo::uno::Any(m_sName)}, // set as folder
-        {"Parent", cpo::uno::Any(m_xParentContainer)}
+        {u"Name"_ustr, cpo::uno::Any(m_sName)}, // set as folder
+        {u"Parent"_ustr, cpo::uno::Any(m_xParentContainer)}
     }));
     m_xTable.set(
         GetOwnImport().GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceName,aArguments, GetOwnImport().GetComponentContext()),

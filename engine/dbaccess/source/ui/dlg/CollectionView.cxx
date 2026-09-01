@@ -133,8 +133,8 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, weld::Button&, void)
                 {
                     Sequence<Any> aValues(comphelper::InitAnyPropertySequence(
                     {
-                        {"ResourceName", Any(sSubFolder)},
-                        {"ResourceType", Any(u"folder"_ustr)}
+                        {u"ResourceName"_ustr, Any(sSubFolder)},
+                        {u"ResourceType"_ustr, Any(u"folder"_ustr)}
                     }));
                     InteractiveAugmentedIOException aException(OUString(),Reference<XInterface>(),
                                                                InteractionClassification_ERROR,

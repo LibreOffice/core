@@ -368,8 +368,8 @@ Reference< XInterface > ODocumentContainer::createInstanceWithArguments( const O
                     xCopyFrom->getByName(element) >>= xObjectToCopy;
                     Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                     {
-                        {"Name", Any(element)}, // set as folder
-                        {"Parent", Any(xContent)},
+                        {u"Name"_ustr, Any(element)}, // set as folder
+                        {u"Parent"_ustr, Any(xContent)},
                         {PROPERTY_EMBEDDEDOBJECT, Any(xObjectToCopy)},
                     }));
 

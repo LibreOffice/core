@@ -81,9 +81,9 @@ void OSQLMessageDialog::initialize(Sequence<Any> const & args)
     if ((args.getLength() == 3) && (args[0] >>= title) && (args[1] >>= parentWindow)) {
         Sequence<Any> s(comphelper::InitAnyPropertySequence(
         {
-            {"Title", Any(title)},
-            {"ParentWindow", Any(parentWindow)},
-            {"SQLException", args[2]}
+            {u"Title"_ustr, Any(title)},
+            {u"ParentWindow"_ustr, Any(parentWindow)},
+            {u"SQLException"_ustr, args[2]}
         }));
         OGenericUnoDialog::initialize(s);
     } else {

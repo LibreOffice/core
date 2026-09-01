@@ -71,8 +71,8 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
         {
             Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {"Name", Any(sName)}, // set as folder
-                {"Parent", Any(_xParentContainer)},
+                {u"Name"_ustr, Any(sName)}, // set as folder
+                {u"Parent"_ustr, Any(_xParentContainer)},
             }));
             m_xContainer.set(xORB->createInstanceWithArguments(_sCollectionServiceName,aArguments),UNO_QUERY);
             Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);

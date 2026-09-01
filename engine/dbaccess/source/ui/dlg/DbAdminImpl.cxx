@@ -210,7 +210,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
     // user: DSID_USER -> "user"
     const SfxStringItem* pUser = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_USER);
     if (pUser && pUser->GetValue().getLength())
-        aReturn.emplace_back(  "user", 0,
+        aReturn.emplace_back(  u"user"_ustr, 0,
                             Any(pUser->GetValue()), PropertyState_DIRECT_VALUE);
 
     // check if the connection type requires a password
@@ -294,7 +294,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
         }
 
         if (!sPassword.isEmpty())
-            aReturn.emplace_back( "password", 0,
+            aReturn.emplace_back( u"password"_ustr, 0,
                                Any(sPassword), PropertyState_DIRECT_VALUE);
     }
 

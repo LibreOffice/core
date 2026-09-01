@@ -641,13 +641,13 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::BOOLEAN:
                     {
                         aCurrentModelType = u"CheckBox"_ustr;
-                        aInitialValues.emplace_back( "VisualEffect", Any( VisualEffect::FLAT ) );
+                        aInitialValues.emplace_back( u"VisualEffect"_ustr, Any( VisualEffect::FLAT ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
                         sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
                         OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullable );
                         aInitialValues.emplace_back(
-                            "TriState",
+                            u"TriState"_ustr,
                             Any( ColumnValue::NO_NULLS != nNullable )
                         );
                         if ( ColumnValue::NO_NULLS == nNullable )
@@ -657,7 +657,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
 
                     case DataType::LONGVARCHAR:
                     case DataType::CLOB:
-                        aInitialValues.emplace_back( "MultiLine", Any( true ) );
+                        aInitialValues.emplace_back( u"MultiLine"_ustr, Any( true ) );
                         [[fallthrough]];
                     case DataType::BINARY:
                     case DataType::VARBINARY:
@@ -675,8 +675,8 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )
-                            aInitialValues.emplace_back( "FormatsSupplier", Any( xSupplier ) );
-                        aInitialValues.emplace_back( "TreatAsNumber", Any( bFormattedIsNumeric ) );
+                            aInitialValues.emplace_back( u"FormatsSupplier"_ustr, Any( xSupplier ) );
+                        aInitialValues.emplace_back( u"TreatAsNumber"_ustr, Any( bFormattedIsNumeric ) );
                         aCopyProperties.emplace_back(PROPERTY_FORMATKEY );
                         break;
                 }
