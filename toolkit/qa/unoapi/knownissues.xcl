@@ -91,7 +91,6 @@ toolkit.AccessibleComboBox
 ### i86110 ###
 toolkit.AccessibleEdit
 toolkit.AccessibleList
-toolkit.AccessibleListBox
 toolkit.AccessibleListItem
 toolkit.AccessibleRadioButton
 # -> disabled in toolkit.sce

@@ -175,7 +175,6 @@ job255=syssh.SystemShellExecute
 job256=text.DefaultNumberingProvider
 job257=toolkit.AccessibleComboBox
 job258=toolkit.AccessibleList
-job259=toolkit.AccessibleListBox
 job260=toolkit.AccessibleMenuSeparator
 job261=toolkit.AccessibleStatusBar
 job262=toolkit.AccessibleTabControl
