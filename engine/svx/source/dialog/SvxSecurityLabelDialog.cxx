@@ -157,6 +157,13 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
 
     m_xWarning->set_label_type(weld::LabelType::Warning);
 
+    // The marking preview reads as a banner, like the one the document gets, so it
+    // stands out from the form below it. Online styles it from jsdialogs.css instead
+    // (#SecurityLabelDialog #preview); neither the background nor the label type
+    // reaches the browser.
+    m_xPreview->set_title_background();
+    m_xPreview->set_label_type(weld::LabelType::Title);
+
     UpdatePreview();
 }
 
@@ -367,7 +374,7 @@ void SvxSecurityLabelDialog::enterForeignMode(const svx::seclabel::StanagLabel& 
 
     // The 4774 label is self-describing; use its summary, since the policy that
     // defines its exact marking is not available here.
-    m_xPreview->set_label(rLabel.summary());
+    setPreview(rLabel.summary());
 
     const OUString sPolicy = rLabel.aPolicyName.isEmpty() ? rLabel.aPolicyId : rLabel.aPolicyName;
     m_xWarning->set_label(SvxResId(RID_SVXSTR_SECLABEL_FOREIGN).replaceFirst(u"%1", sPolicy));
@@ -413,7 +420,7 @@ void SvxSecurityLabelDialog::UpdatePreview()
 
     // The marking is derived from a label (the authoritative form); timestamps are
     // irrelevant to the visual marking, so a preview label with empty ones is fine.
-    m_xPreview->set_label(m_pPolicy->deriveMarking(
+    setPreview(m_pPolicy->deriveMarking(
         m_pPolicy->buildLabel(sClassification, aSelected, OUString(), OUString())));
 
     OUString sWarning;
@@ -425,6 +432,12 @@ void SvxSecurityLabelDialog::UpdatePreview()
     }
     m_xWarning->set_label(sWarning);
     m_xWarning->set_visible(!sWarning.isEmpty());
+}
+
+void SvxSecurityLabelDialog::setPreview(const OUString& rMarking)
+{
+    m_xPreview->set_label(rMarking);
+    m_xPreview->set_visible(!rMarking.isEmpty());
 }
 
 IMPL_LINK_NOARG(SvxSecurityLabelDialog, ClassificationHdl, weld::ComboBox&, void)

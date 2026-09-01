@@ -89,6 +89,8 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // Italic selection-count note beside each group header (e.g. "select at least 1").
     std::vector<std::unique_ptr<weld::Label>> m_xGroupHints;
     std::vector<std::vector<std::unique_ptr<weld::CheckButton>>> m_xChecks;
+    // The marking banner atop the dialog: a title-background strip, hidden while
+    // there is no marking to show.
     std::unique_ptr<weld::Label> m_xPreview;
     std::unique_ptr<weld::Label> m_xWarning;
     std::unique_ptr<weld::Button> m_xOkBtn;
@@ -108,6 +110,8 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     void PopulateClassifications();
     void PopulateCategories();
     void UpdatePreview();
+    // Put rMarking in the banner atop the dialog; an empty marking leaves no banner.
+    void setPreview(const OUString& rMarking);
     // Make m_aPolicySet.aPolicies[nIndex] the active policy and rebuild the editor.
     void setActivePolicy(int nIndex);
 

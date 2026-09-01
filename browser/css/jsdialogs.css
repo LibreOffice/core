@@ -384,11 +384,27 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
    the whole dialog. Its container is sized with max-height (not a definite height), so
    the vexpand grid row cannot resolve and the list would otherwise grow to its full
    content and push the dialog past its own max-height, producing a second, outer
-   scrollbar. The reserve leaves room for the policy/classification rows, the marking
-   preview and the (wrapping) warning below; tune it if those grow. */
+   scrollbar. The reserve leaves room for the marking banner above, the
+   policy/classification rows and the (wrapping) warning below; tune it if those
+   grow. */
 #SecurityLabelDialog #categorieswin {
-	max-height: calc(90vh - 27rem);
+	max-height: calc(90vh - 28rem);
 	overflow-y: auto;
+}
+
+/* The marking preview is a banner atop the dialog, styled like the one the document
+   gets (#security-label-banner), so it stands out from the form below it. The label
+   renders as a span, hence the display/width; the dialog hides it when there is no
+   marking to show. */
+#SecurityLabelDialog #preview {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 4px 8px;
+	text-align: center;
+	font-weight: bold;
+	background-color: var(--security-banner-background, rgb(var(--doc-type, 3, 105, 163)));
+	color: var(--security-banner-color, var(--color-background-lighter));
 }
 
 @media (max-width: 480px) {
