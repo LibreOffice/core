@@ -47,10 +47,6 @@ dbaccess.SbaXGridControl::com::sun::star::awt::XWindow
 dbaccess.ODatabaseSource::com::sun::star::beans::XPropertySet
 dbaccess.OCommandDefinition::com::sun::star::beans::XPropertySet
 
-### i84128 ###
-dbaccess.TableWindowAccessibility 
-# -> disabled in dbaccess.sce
-
 ### i87247 ###
 dbaccess.DBContentLoader::com::sun::star::frame::XFrameLoader
 

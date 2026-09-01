@@ -29,4 +29,3 @@
 -o dbaccess.OSQLMessageDialog
 -o dbaccess.OSingleSelectQueryComposer
 #i95611 -o dbaccess.SbaXGridControl
-#i84128 -o dbaccess.TableWindowAccessibility

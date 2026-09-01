@@ -762,7 +762,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_dbaccess/OSingleSelectQueryComposer \
     qadevOOo/tests/java/mod/_dbaccess/OSQLMessageDialog \
     qadevOOo/tests/java/mod/_dbaccess/SbaXGridControl \
-    qadevOOo/tests/java/mod/_dbaccess/TableWindowAccessibility \
     qadevOOo/tests/java/mod/_dbpool/OConnectionPool \
     qadevOOo/tests/java/mod/_defreg/NestedRegistry \
     qadevOOo/tests/java/mod/_dtrans/generic \
