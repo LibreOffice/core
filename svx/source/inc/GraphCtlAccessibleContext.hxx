@@ -121,7 +121,7 @@ private:
     /// @throws css::lang::IndexOutOfBoundsException
     SdrObject* getSdrObject( sal_Int64 nIndex );
 
-    css::uno::Reference< css::accessibility::XAccessible > getAccessible( const SdrObject* pObj );
+    rtl::Reference<::accessibility::AccessibleShape> getAccessible(const SdrObject* pObj);
 
     /** Description of this object.  This is not a constant because it can
         be set from the outside.
