@@ -43,6 +43,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -351,6 +352,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
         SvtDynamicMenuOptions::GetMenu( m_bNewMenu ? EDynamicMenuType::NewMenu : EDynamicMenuType::WizardMenu );
 
     sal_uInt16 nItemId = 1;
+    const bool bMacrosDisabled = SvtSecurityOptions::IsMacroDisabled();
 
     for ( const auto& aDynamicMenuEntry : aDynamicMenuEntries )
     {
@@ -363,6 +365,10 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
         {
             rPopupMenu->insertItem(nItemId, aDynamicMenuEntry.sTitle, 0, -1);
             rPopupMenu->setCommand(nItemId, aDynamicMenuEntry.sURL);
+
+            // a macro: url is refused while macros are disabled
+            if ( bMacrosDisabled && aDynamicMenuEntry.sURL.startsWith("macro:") )
+                rPopupMenu->enableItem(nItemId, false);
 
             void* nAttributePtr = MenuAttributes::CreateAttribute( aDynamicMenuEntry.sTargetName, aDynamicMenuEntry.sImageIdentifier );
             pPopupMenu->setUserValue(nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute);
