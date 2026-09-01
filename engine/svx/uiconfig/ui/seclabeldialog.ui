@@ -166,6 +166,9 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="seclabeldialog|catft">Categories</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="categorieswin"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -180,6 +183,9 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="shadow_type">in</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="catft"/>
+                    </accessibility>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
@@ -214,6 +220,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group0catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -230,6 +239,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group0hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -251,6 +265,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group0label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g0c0">
                               <property name="label">category</property>
@@ -987,6 +1004,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group1catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1003,6 +1023,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group1hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1024,6 +1049,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group1label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g1c0">
                               <property name="label">category</property>
@@ -1760,6 +1788,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group2catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1776,6 +1807,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group2hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1797,6 +1833,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group2label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g2c0">
                               <property name="label">category</property>
@@ -2533,6 +2572,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group3catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2549,6 +2591,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group3hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2570,6 +2617,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group3label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g3c0">
                               <property name="label">category</property>
@@ -3306,6 +3356,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group4catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -3322,6 +3375,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group4hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -3343,6 +3401,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group4label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g4c0">
                               <property name="label">category</property>
@@ -4079,6 +4140,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group5catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -4095,6 +4159,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group5hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -4116,6 +4185,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group5label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g5c0">
                               <property name="label">category</property>
@@ -4852,6 +4924,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group6catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -4868,6 +4943,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group6hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -4889,6 +4969,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group6label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g6c0">
                               <property name="label">category</property>
@@ -5625,6 +5708,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group7catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -5641,6 +5727,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group7hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -5662,6 +5753,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group7label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g7c0">
                               <property name="label">category</property>
@@ -6398,6 +6492,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group8catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -6414,6 +6511,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group8hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -6435,6 +6537,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group8label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g8c0">
                               <property name="label">category</property>
@@ -7171,6 +7276,9 @@
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
+                            <accessibility>
+                              <relation type="label-for" target="group9catbox"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -7187,6 +7295,11 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="group9hint-atkobject">
+                                <property name="AtkObject::accessible-role">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -7208,6 +7321,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">2</property>
                         <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="group9label"/>
+                        </accessibility>
                           <child>
                             <object class="GtkCheckButton" id="g9c0">
                               <property name="label">category</property>
@@ -7948,6 +8064,11 @@
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="preview-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -7962,6 +8083,11 @@
                 <property name="xalign">0</property>
                 <property name="wrap">True</property>
                 <property name="margin-top">6</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="seclabelwarning-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
