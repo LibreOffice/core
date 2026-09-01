@@ -61,6 +61,11 @@ describe(['tagdesktop'], 'Accessibility Draw Dialog Tests', { testIsolation: fal
 	// Tab walks objects in document order; a click point moves with the viewport.
 	function enterShapeTextEditing() {
 		helper.typeIntoDocument('{esc}');
+		// Closing a dialog gives the keyboard focus back to the document
+		// asynchronously. Wait for the focus to arrive, so the Tab below is
+		// delivered to the document rather than to whatever held the focus
+		// meanwhile.
+		helper.assertFocus('className', 'clipboard');
 		cy.realPress('Tab');
 		cy.cGet('#test-div-shapeHandlesSection').should('exist');
 		helper.typeIntoDocument('{enter}');
