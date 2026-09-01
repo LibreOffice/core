@@ -800,6 +800,10 @@ bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentU
 
         _rDocGuard.clear();
         // <- SYNCHRONIZED
+
+        // decide the macro mode while the load arguments still hold the interaction handler
+        m_pImpl->checkMacrosOnLoading();
+
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }
 
