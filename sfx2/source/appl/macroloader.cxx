@@ -33,6 +33,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/securityoptions.hxx>
 #include <vcl/svapp.hxx>
 
 #include <memory>
@@ -200,6 +201,9 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
     (void) pSh;
     return ERRCODE_BASIC_PROC_UNDEFINED;
 #else
+    if ( SvtSecurityOptions::IsMacroDisabled() )
+        return ERRCODE_IO_ACCESSDENIED;
+
     SfxObjectShell* pCurrent = pSh;
     if ( !pCurrent )
         // all not full qualified names use the BASIC of the given or current document
