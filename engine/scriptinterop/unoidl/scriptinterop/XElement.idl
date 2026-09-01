@@ -11,14 +11,11 @@
 
 module scriptinterop {
 
-interface XBody: XBase {
-    XParagraph appendListItem([in] string text);
-
-    XParagraph appendParagraph([in] string text);
-
-    sequence<XElement> getChildren();
-
+// Common base for the heterogeneous children of a body (paragraphs, tables, etc.):
+interface XElement: XBase {
     string getText();
+
+    ElementType getType();
 };
 
 };

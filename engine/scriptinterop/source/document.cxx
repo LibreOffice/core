@@ -65,6 +65,7 @@
 #include <scriptinterop/XBody.hpp>
 #include <scriptinterop/XCursor.hpp>
 #include <scriptinterop/XDocument.hpp>
+#include <scriptinterop/XElement.hpp>
 #include <scriptinterop/XFootnote.hpp>
 #include <scriptinterop/XParagraph.hpp>
 #include <scriptinterop/XRangeElement.hpp>
@@ -428,7 +429,13 @@ public:
         return new TextImpl(content_);
     }
 
-    scriptinterop::ElementType getElementType() override {
+    OUString SAL_CALL getText() override
+    {
+        css::uno::Reference<css::text::XTextRange> const range(content_, css::uno::UNO_QUERY);
+        return range.is() ? range->getString() : OUString();
+    }
+
+    scriptinterop::ElementType getType() override {
         css::uno::Reference<css::beans::XPropertySet> const props(content_, css::uno::UNO_QUERY);
         if (props.is()) {
             auto const info(props->getPropertySetInfo());
@@ -441,12 +448,6 @@ public:
             }
         }
         return scriptinterop::ElementType_PARAGRAPH;
-    }
-
-    OUString SAL_CALL getText() override
-    {
-        css::uno::Reference<css::text::XTextRange> const range(content_, css::uno::UNO_QUERY);
-        return range.is() ? range->getString() : OUString();
     }
 
     bool isLeftToRight() override {
@@ -467,10 +468,10 @@ private:
     css::uno::Reference<css::text::XTextContent> content_;
 };
 
-cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> enumerateParagraphs(
+cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> enumerateElements(
     css::uno::Reference<css::text::XText> const & text)
 {
-    std::vector<css::uno::Reference<scriptinterop::XParagraph>> v;
+    std::vector<css::uno::Reference<scriptinterop::XElement>> v;
     if (css::uno::Reference<css::container::XEnumerationAccess> const ea{text, css::uno::UNO_QUERY})
     {
         auto const en = ea->createEnumeration();
@@ -755,8 +756,26 @@ public:
     css::uno::Reference<cpo::uno::XInterface> getuno() override { return footnote_; }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> getParagraphs() override {
-        return enumerateParagraphs(
-            css::uno::Reference<css::text::XText>(footnote_, css::uno::UNO_QUERY));
+        std::vector<css::uno::Reference<scriptinterop::XParagraph>> v;
+        css::uno::Reference<css::text::XText> const text(footnote_, css::uno::UNO_QUERY);
+        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
+                text, css::uno::UNO_QUERY})
+        {
+            auto const en = ea->createEnumeration();
+            while (en.is() && en->hasMoreElements()) {
+                css::uno::Reference<css::text::XTextContent> xtc;
+                en->nextElement() >>= xtc;
+                if (!xtc.is()) {
+                    continue;
+                }
+                css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
+                if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+                    continue;
+                }
+                v.emplace_back(new ParagraphImpl(xtc));
+            }
+        }
+        return cpo::uno::Sequence(v.data(), v.size());
     }
 
 private:
@@ -780,8 +799,8 @@ public:
 
     css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> getChildren() override {
-        return enumerateParagraphs(text_);
+    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> getChildren() override {
+        return enumerateElements(text_);
     }
 
     OUString getText() override { return text_.is() ? text_->getString() : u""_ustr; }

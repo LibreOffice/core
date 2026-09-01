@@ -11,13 +11,9 @@
 
 module scriptinterop {
 
-interface XParagraph : XBase
+interface XParagraph: XElement
 {
     XText asText();
-
-    ElementType getElementType();
-
-    string getText();
 
     boolean isLeftToRight();
 };

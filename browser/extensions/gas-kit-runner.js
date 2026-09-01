@@ -172,7 +172,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 PARAGRAPH: true, LIST_ITEM: true, TABLE: true, INLINE_IMAGE: true,
                 PAGE_BREAK: true, HORIZONTAL_RULE: true
             };
-            const rawType = String(paragraph.getElementType());
+            const rawType = String(paragraph.getType());
             const gasType = gasKnown[rawType] ? rawType : 'PARAGRAPH';
             const paraEl = {
                 getType: function() { return gasType; },
