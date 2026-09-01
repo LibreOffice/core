@@ -321,8 +321,6 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
 
     // Return the role <const>COMBO_BOX</const> for both VCL combo boxes and
     // VCL list boxes in DropDown-Mode else <const>PANEL</const>.
-    // This way the Java bridge has not to handle both independently.
-    //return m_bIsDropDownBox ? AccessibleRole::COMBO_BOX : AccessibleRole::PANEL;
     if (m_bIsDropDownBox || (m_aBoxType == COMBOBOX))
         return AccessibleRole::COMBO_BOX;
     else
