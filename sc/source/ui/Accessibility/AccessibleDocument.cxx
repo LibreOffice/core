@@ -227,7 +227,7 @@ public:
     sal_Int32 GetCount() const;
     rtl::Reference<::accessibility::AccessibleShape> Get(const ScAccessibleShapeData* pData) const;
     rtl::Reference<::accessibility::AccessibleShape> Get(sal_Int32 nIndex) const;
-    uno::Reference< XAccessible > GetAt(const awt::Point& rPoint) const;
+    rtl::Reference<::accessibility::AccessibleShape> GetAt(const awt::Point& rPoint) const;
 
     // gets the index of the shape starting on 0 (without the index of the table)
     // returns the selected shape
@@ -541,9 +541,10 @@ rtl::Reference<::accessibility::AccessibleShape> ScChildrenShapes::Get(sal_Int32
     return Get(maZOrderedShapes[nIndex]);
 }
 
-uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) const
+rtl::Reference<::accessibility::AccessibleShape>
+ScChildrenShapes::GetAt(const awt::Point& rPoint) const
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<::accessibility::AccessibleShape> pAccessible;
     if(mpViewShell)
     {
         if (mbShapesNeedSorting)
@@ -569,7 +570,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                         -= vcl::unohelper::ConvertToVCLRect(pShape->pAccShape->getBounds()).TopLeft();
                     if (pShape->pAccShape->containsPoint(vcl::unohelper::ConvertToAWTPoint(aPoint)))
                     {
-                        xAccessible = pShape->pAccShape.get();
+                        pAccessible = pShape->pAccShape.get();
                         bFound = true;
                     }
                 }
@@ -584,7 +585,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
             --i;
         }
     }
-    return xAccessible;
+    return pAccessible;
 }
 
 bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
