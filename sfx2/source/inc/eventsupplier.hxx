@@ -86,9 +86,6 @@ public:
                                     ::comphelper::NamedValueCollection& o_normalizedDescriptor,
                                     SfxObjectShell* i_document );
     static void Execute( css::uno::Any const & aEventData, const css::document::DocumentEvent& aTrigger, SfxObjectShell* pDoc );
-
-    /// Check if script URL whitelist exists, and if so, if current script url is part of it
-    static bool isScriptURLAllowed(const OUString& aScriptURL);
 };
 
 #endif

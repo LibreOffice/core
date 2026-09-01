@@ -51,9 +51,6 @@
 #include <sfx2/frame.hxx>
 #include <macroloader.hxx>
 
-#include <unicode/errorcode.h>
-#include <unicode/regex.h>
-#include <unicode/unistr.h>
 
 using namespace css;
 using namespace ::com::sun::star;
@@ -161,31 +158,6 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
     return maEventNames.hasElements();
 }
 
-bool SfxEvents_Impl::isScriptURLAllowed(const OUString& aScriptURL)
-{
-    boost::optional<css::uno::Sequence<OUString>> allowedEvents(
-        officecfg::Office::Common::Security::Scripting::AllowedDocumentEventURLs::get());
-    // When AllowedDocumentEventURLs is empty, all event URLs are allowed
-    if (!allowedEvents)
-        return true;
-
-    icu::ErrorCode status;
-    const uint32_t rMatcherFlags = UREGEX_CASE_INSENSITIVE;
-    icu::UnicodeString usInput(aScriptURL.getStr());
-    const css::uno::Sequence<OUString>& rAllowedEvents = *allowedEvents;
-    for (auto const& allowedEvent : rAllowedEvents)
-    {
-        icu::UnicodeString usRegex(allowedEvent.getStr());
-        icu::RegexMatcher rmatch1(usRegex, usInput, rMatcherFlags, status);
-        if (aScriptURL.startsWith(allowedEvent) || rmatch1.matches(status))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     uno::Sequence < beans::PropertyValue > aProperties;
@@ -224,7 +196,7 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
     if (aScript.isEmpty())
         return;
 
-    if (!isScriptURLAllowed(aScript))
+    if (!SfxObjectShell::isScriptURLAllowed(aScript))
         return;
 
     if (!pDoc)
