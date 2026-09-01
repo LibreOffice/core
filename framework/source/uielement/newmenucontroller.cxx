@@ -45,6 +45,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
 
@@ -331,6 +332,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
         OUString aTargetFrame;
         OUString aImageId;
         sal_uInt16 nItemId = 1;
+        const bool bMacrosDisabled = SvtSecurityOptions().IsMacroDisabled();
 
         for ( const auto& aDynamicMenuEntry : aDynamicMenuEntries )
         {
@@ -355,6 +357,10 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
             {
                 pVCLPopupMenu->InsertItem( nItemId, aTitle );
                 pVCLPopupMenu->SetItemCommand( nItemId, aURL );
+
+                // a macro: url is refused while macros are disabled
+                if ( bMacrosDisabled && aURL.startsWith("macro:") )
+                    pVCLPopupMenu->EnableItem( nItemId, false );
 
                 void* nAttributePtr = MenuAttributes::CreateAttribute( aTargetFrame, aImageId );
                 pVCLPopupMenu->SetUserValue( nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute );
