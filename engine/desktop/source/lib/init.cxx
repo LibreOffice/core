@@ -6167,15 +6167,15 @@ static void addOrganizationPath(const OUString& rPathName, const OUString& rDire
     }
 
     const OUString aContent
-        = OUString::Concat("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                           "<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\""
-                           " oor:name=\"Paths\" oor:package=\"org.openoffice.Office\">"
-                           "<node oor:name=\"Paths\"><node oor:name=\"")
+        = OUString::Concat(R"(<?xml version="1.0" encoding="UTF-8"?>)"
+                           R"(<oor:component-data xmlns:oor="http://openoffice.org/2001/registry")"
+                           R"( oor:name="Paths" oor:package="org.openoffice.Office">)"
+                           R"(<node oor:name="Paths"><node oor:name=")")
           + comphelper::string::encodeForXml(rPathName)
-          + "\" oor:op=\"fuse\"><prop oor:name=\"OrganizationPaths\""
-            " oor:type=\"oor:string-list\"><value>"
+          + R"(" oor:op="fuse"><prop oor:name="OrganizationPaths")"
+            R"( oor:type="oor:string-list"><value>)"
           + comphelper::string::encodeForXml(rDirectoryUrl)
-          + "</value></prop></node></node></oor:component-data>";
+          + R"(</value></prop></node></node></oor:component-data>)";
 
     const OString aXcu = OUStringToOString(aContent, RTL_TEXTENCODING_UTF8);
 
