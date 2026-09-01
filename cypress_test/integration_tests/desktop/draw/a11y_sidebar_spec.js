@@ -111,28 +111,46 @@ describe(['tagdesktop'], 'Accessibility Draw Sidebar Tests', { testIsolation: fa
 	it('ShapesDeck', function () {
 		cy.then(() => {
 			win.app.map.sendUnoCommand('.uno:SidebarDeck.ShapesDeck');
-			helper.processToIdle(win);
+		});
+
+		// The deck switch reaches the browser asynchronously. Validate only once
+		// the deck content is up, otherwise the check runs against the old deck.
+		cy.cGet('#DefaultShapesPanel').should('be.visible');
+		cy.then(() => {
+			return helper.processToIdle(win);
 		});
 
 		runA11yValidation();
 
 		cy.then(() => {
 			win.app.map.sendUnoCommand('.uno:SidebarDeck.PropertyDeck');
-			helper.processToIdle(win);
+		});
+		cy.cGet('#PropertyDeck').should('be.visible');
+		cy.then(() => {
+			return helper.processToIdle(win);
 		});
 	});
 
 	it('StyleListDeck', function () {
 		cy.then(() => {
 			win.app.map.sendUnoCommand('.uno:SidebarDeck.StyleListDeck');
-			helper.processToIdle(win);
+		});
+
+		// The deck switch reaches the browser asynchronously. Validate only once
+		// the deck content is up, otherwise the check runs against the old deck.
+		cy.cGet('#StyleListDeck').should('be.visible');
+		cy.then(() => {
+			return helper.processToIdle(win);
 		});
 
 		runA11yValidation();
 
 		cy.then(() => {
 			win.app.map.sendUnoCommand('.uno:SidebarDeck.PropertyDeck');
-			helper.processToIdle(win);
+		});
+		cy.cGet('#PropertyDeck').should('be.visible');
+		cy.then(() => {
+			return helper.processToIdle(win);
 		});
 	});
 
