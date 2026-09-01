@@ -22,10 +22,10 @@
             <menu:menuitem menu:id=".uno:AddDirect"/>
             <menu:menuitem menu:id=".uno:Open"/>
             <menu:menuitem menu:id=".uno:OpenRemote" menu:style="text"/>
-            <menu:menuitem menu:id=".uno:RecentFileList"/>
+            <menu:menuitem menu:id=".uno:RecentFileList" menu:style="text"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
-            <menu:menu menu:id=".uno:TemplateMenu">
+            <menu:menu menu:id=".uno:TemplateMenu" menu:style="text">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:OpenTemplate" menu:style="text"/>
                     <menu:menuitem menu:id=".uno:NewDoc" menu:style="text"/>
@@ -38,20 +38,20 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Quit"/>
+            <menu:menuitem menu:id=".uno:Quit" menu:style="text"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
-            <menu:menu menu:id=".uno:MacrosMenu">
+            <menu:menu menu:id=".uno:MacrosMenu" menu:style="text">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MacroManager"/>
+                    <menu:menuitem menu:id=".uno:MacroManager" menu:style="text"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:RunMacro"/>
-                    <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
-                    <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
+                    <menu:menuitem menu:id=".uno:RunMacro" menu:style="text"/>
+                    <menu:menuitem menu:id=".uno:BasicIDEAppear" menu:style="text"/>
+                    <menu:menuitem menu:id=".uno:ScriptOrganizer" menu:style="text"/>
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
+                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:style="text"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ExtensionManager" menu:style="text"/>
@@ -62,18 +62,18 @@
     <menu:menu menu:id=".uno:HelpMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex"/>
-            <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+            <menu:menuitem menu:id=".uno:ExtendedHelp" menu:style="text"/>
             <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:QuestionAnswers"/>
+            <menu:menuitem menu:id=".uno:QuestionAnswers" menu:style="text"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:GetInvolved" menu:style="text"/>
-            <menu:menuitem menu:id=".uno:Donation"/>
+            <menu:menuitem menu:id=".uno:Donation" menu:style="text"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
-            <menu:menuitem menu:id=".uno:About"/>
+            <menu:menuitem menu:id=".uno:About" menu:style="text"/>
         </menu:menupopup>
     </menu:menu>
 </menu:menubar>

@@ -21,20 +21,20 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
-      <menu:menuitem menu:id=".uno:RecentFileList"/>
-      <menu:menuitem menu:id=".uno:CloseDoc"/>
+      <menu:menuitem menu:id=".uno:RecentFileList" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CloseDoc" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
-      <menu:menuitem menu:id=".uno:SaveAs"/>
+      <menu:menuitem menu:id=".uno:SaveAs" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CheckOut" menu:style="text"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut" menu:style="text"/>
       <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Quit"/>
+      <menu:menuitem menu:id=".uno:Quit" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:EditMenu">
@@ -46,12 +46,12 @@
       <menu:menuitem menu:id=".uno:Copy"/>
       <menu:menuitem menu:id=".uno:Paste"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:RecSearch"/>
+      <menu:menuitem menu:id=".uno:RecSearch" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:FormSlots/saveRecord"/>
-      <menu:menuitem menu:id=".uno:FormSlots/deleteRecord"/>
+      <menu:menuitem menu:id=".uno:FormSlots/saveRecord" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FormSlots/deleteRecord" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DSBEditDoc"/>
+      <menu:menuitem menu:id=".uno:DSBEditDoc" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
@@ -69,33 +69,33 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:Refresh"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:OrderCrit"/>
-      <menu:menuitem menu:id=".uno:Sortup"/>
-      <menu:menuitem menu:id=".uno:SortDown"/>
+      <menu:menuitem menu:id=".uno:OrderCrit" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Sortup" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SortDown" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AutoFilter"/>
-      <menu:menuitem menu:id=".uno:FormFiltered"/>
-      <menu:menuitem menu:id=".uno:FilterCrit"/>
+      <menu:menuitem menu:id=".uno:AutoFilter" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FormFiltered" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:FilterCrit" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:RemoveFilterSort"/>
+      <menu:menuitem menu:id=".uno:RemoveFilterSort" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
-      <menu:menu menu:id=".uno:MacrosMenu">
+      <menu:menu menu:id=".uno:MacrosMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:MacroManager"/>
+          <menu:menuitem menu:id=".uno:MacroManager" menu:style="text"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:MacroRecorder"/>
-          <menu:menuitem menu:id=".uno:RunMacro"/>
-          <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
-          <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
+          <menu:menuitem menu:id=".uno:MacroRecorder" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:RunMacro" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:BasicIDEAppear" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ScriptOrganizer" menu:style="text"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:MacroSignature" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
+          <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ExtensionManager" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
@@ -103,26 +103,26 @@
   </menu:menu>
   <menu:menu menu:id=".uno:WindowList">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:CloseWin"/>
+      <menu:menuitem menu:id=".uno:CloseWin" menu:style="text"/>
       <menu:menuseparator/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:HelpMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:HelpIndex"/>
-      <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+      <menu:menuitem menu:id=".uno:ExtendedHelp" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
       <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:QuestionAnswers"/>
+      <menu:menuitem menu:id=".uno:QuestionAnswers" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:GetInvolved" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:Donation"/>
+      <menu:menuitem menu:id=".uno:Donation" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:About"/>
+      <menu:menuitem menu:id=".uno:About" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
 </menu:menubar>

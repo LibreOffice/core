@@ -21,20 +21,20 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
-      <menu:menuitem menu:id=".uno:RecentFileList"/>
-      <menu:menuitem menu:id=".uno:CloseDoc"/>
+      <menu:menuitem menu:id=".uno:RecentFileList" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CloseDoc" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
-      <menu:menuitem menu:id=".uno:SaveAs"/>
+      <menu:menuitem menu:id=".uno:SaveAs" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CheckOut" menu:style="text"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut" menu:style="text"/>
       <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Quit"/>
+      <menu:menuitem menu:id=".uno:Quit" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:EditMenu">
@@ -46,48 +46,48 @@
       <menu:menuitem menu:id=".uno:Copy"/>
       <menu:menuitem menu:id=".uno:Paste"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SbaExecuteSql"/>
-      <menu:menuitem menu:id=".uno:SbaNativeSql"/>
-      <menu:menuitem menu:id=".uno:DBClearQuery"/>
+      <menu:menuitem menu:id=".uno:SbaExecuteSql" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SbaNativeSql" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DBClearQuery" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DBQueryPropertiesDialog"/>
+      <menu:menuitem menu:id=".uno:DBQueryPropertiesDialog" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:DBChangeDesignMode"/>
-      <menu:menuitem menu:id=".uno:DBQueryPreview"/>
+      <menu:menuitem menu:id=".uno:DBChangeDesignMode" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DBQueryPreview" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-      <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+      <menu:menuitem menu:id=".uno:AvailableToolbars" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DBViewFunctions"/>
-      <menu:menuitem menu:id=".uno:DBViewTableNames"/>
-      <menu:menuitem menu:id=".uno:DBViewAliases"/>
+      <menu:menuitem menu:id=".uno:DBViewFunctions" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DBViewTableNames" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:DBViewAliases" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:InsertMenu" menu:style="text">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:DBAddRelation"/>
-      <menu:menuitem menu:id=".uno:AddTable"/>
+      <menu:menuitem menu:id=".uno:DBAddRelation" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AddTable" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
-      <menu:menu menu:id=".uno:MacrosMenu">
+      <menu:menu menu:id=".uno:MacrosMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:MacroManager"/>
+          <menu:menuitem menu:id=".uno:MacroManager" menu:style="text"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:MacroRecorder"/>
-          <menu:menuitem menu:id=".uno:RunMacro"/>
-          <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
-          <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
+          <menu:menuitem menu:id=".uno:MacroRecorder" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:RunMacro" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:BasicIDEAppear" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ScriptOrganizer" menu:style="text"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:MacroSignature" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
+          <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ExtensionManager" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
@@ -95,26 +95,26 @@
   </menu:menu>
   <menu:menu menu:id=".uno:WindowList">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:CloseWin"/>
+      <menu:menuitem menu:id=".uno:CloseWin" menu:style="text"/>
       <menu:menuseparator/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:HelpMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:HelpIndex"/>
-      <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+      <menu:menuitem menu:id=".uno:ExtendedHelp" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
       <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:QuestionAnswers"/>
+      <menu:menuitem menu:id=".uno:QuestionAnswers" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:GetInvolved" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:Donation"/>
+      <menu:menuitem menu:id=".uno:Donation" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:About"/>
+      <menu:menuitem menu:id=".uno:About" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
 </menu:menubar>

@@ -22,8 +22,8 @@
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
       <menu:menuitem menu:id=".uno:OpenRemote" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:RecentFileList"/>
-      <menu:menuitem menu:id=".uno:CloseDoc"/>
+      <menu:menuitem menu:id=".uno:RecentFileList" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CloseDoc" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
       <menu:menuseparator/>
@@ -32,33 +32,33 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
       <menu:menuitem menu:id=".uno:SaveAsRemote" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:SaveAs"/>
+      <menu:menuitem menu:id=".uno:SaveAs" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CheckOut"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-      <menu:menuitem menu:id=".uno:CheckIn"/>
+      <menu:menuitem menu:id=".uno:CheckOut" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CancelCheckOut" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ExportToPDF"/>
+      <menu:menuitem menu:id=".uno:ExportToPDF" menu:style="text"/>
       <menu:menu menu:id=".uno:SendToMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:SendMail"/>
-          <menu:menuitem menu:id=".uno:SendMailDocAsPDF"/>
+          <menu:menuitem menu:id=".uno:SendMail" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:SendMailDocAsPDF" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Print"/>
-      <menu:menuitem menu:id=".uno:PrinterSetup"/>
+      <menu:menuitem menu:id=".uno:PrinterSetup" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:SignaturesMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Signature"/>
-          <menu:menuitem menu:id=".uno:SignPDF"/>
+          <menu:menuitem menu:id=".uno:Signature" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:SignPDF" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
+      <menu:menuitem menu:id=".uno:SetDocumentProperties" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Quit"/>
+      <menu:menuitem menu:id=".uno:Quit" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:EditMenu">
@@ -69,41 +69,41 @@
       <menu:menuitem menu:id=".uno:Cut"/>
       <menu:menuitem menu:id=".uno:Copy"/>
       <menu:menuitem menu:id=".uno:Paste"/>
-      <menu:menuitem menu:id=".uno:Select"/>
+      <menu:menuitem menu:id=".uno:Select" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:NextMark"/>
-      <menu:menuitem menu:id=".uno:PrevMark"/>
+      <menu:menuitem menu:id=".uno:NextMark" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:PrevMark" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:NextError"/>
-      <menu:menuitem menu:id=".uno:PrevError"/>
+      <menu:menuitem menu:id=".uno:NextError" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:PrevError" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:Draw"/>
-      <menu:menuitem menu:id=".uno:RedrawAutomatic"/>
+      <menu:menuitem menu:id=".uno:Draw" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:RedrawAutomatic" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ToolbarMode"/>
-      <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-      <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+      <menu:menuitem menu:id=".uno:ToolbarMode" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:AvailableToolbars" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CommandWindow"/>
-      <menu:menuitem menu:id=".uno:Sidebar"/>
-      <menu:menuitem menu:id=".uno:ElementsDockingWindow"/>
+      <menu:menuitem menu:id=".uno:CommandWindow" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Sidebar" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ElementsDockingWindow" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:FullScreen"/>
-      <menu:menuitem menu:id=".uno:ZoomIn"/>
-      <menu:menuitem menu:id=".uno:ZoomOut"/>
-      <menu:menuitem menu:id=".uno:ZoomOptimal"/>
+      <menu:menuitem menu:id=".uno:FullScreen" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ZoomIn" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ZoomOut" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ZoomOptimal" menu:style="text"/>
       <menu:menu menu:id=".uno:ZoomMenu" menu:style="text">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Zoom50Percent" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:Zoom75Percent"/>
-          <menu:menuitem menu:id=".uno:Zoom100Percent"/>
-          <menu:menuitem menu:id=".uno:Zoom150Percent"/>
+          <menu:menuitem menu:id=".uno:Zoom75Percent" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:Zoom100Percent" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:Zoom150Percent" menu:style="text"/>
           <menu:menuitem menu:id=".uno:Zoom200Percent" menu:style="text"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:Zoom"/>
+          <menu:menuitem menu:id=".uno:Zoom" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
     </menu:menupopup>
@@ -111,36 +111,36 @@
   <menu:menu menu:id=".uno:FormatMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ChangeFont"/>
-      <menu:menuitem menu:id=".uno:ChangeFontSize"/>
+      <menu:menuitem menu:id=".uno:ChangeFontSize" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ChangeDistance"/>
-      <menu:menuitem menu:id=".uno:ChangeAlignment"/>
+      <menu:menuitem menu:id=".uno:ChangeDistance" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ChangeAlignment" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Textmode"/>
+      <menu:menuitem menu:id=".uno:Textmode" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:SymbolCatalogue"/>
+      <menu:menuitem menu:id=".uno:SymbolCatalogue" menu:style="text"/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
-      <menu:menuitem menu:id=".uno:ImportFormula"/>
-      <menu:menuitem menu:id=".uno:ImportMathMLClipboard"/>
-      <menu:menuitem menu:id=".uno:SaveFormula"/>
+      <menu:menuitem menu:id=".uno:ImportFormula" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ImportMathMLClipboard" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SaveFormula" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menu menu:id=".uno:MacrosMenu">
+      <menu:menu menu:id=".uno:MacrosMenu" menu:style="text">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:MacroManager"/>
+          <menu:menuitem menu:id=".uno:MacroManager" menu:style="text"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:MacroRecorder"/>
-          <menu:menuitem menu:id=".uno:RunMacro"/>
-          <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
-          <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
+          <menu:menuitem menu:id=".uno:MacroRecorder" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:RunMacro" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:BasicIDEAppear" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ScriptOrganizer" menu:style="text"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:MacroSignature" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
+          <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ExtensionManager" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
@@ -148,7 +148,7 @@
   </menu:menu>
   <menu:menu menu:id=".uno:WindowList">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:NewWindow"/>
+      <menu:menuitem menu:id=".uno:NewWindow" menu:style="text"/>
       <menu:menuitem menu:id=".uno:CloseWin"/>
       <menu:menuseparator/>
     </menu:menupopup>
@@ -156,19 +156,19 @@
   <menu:menu menu:id=".uno:HelpMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:HelpIndex"/>
-      <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+      <menu:menuitem menu:id=".uno:ExtendedHelp" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
       <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:QuestionAnswers"/>
+      <menu:menuitem menu:id=".uno:QuestionAnswers" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SafeMode" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:GetInvolved" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:Donation"/>
+      <menu:menuitem menu:id=".uno:Donation" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:About"/>
+      <menu:menuitem menu:id=".uno:About" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
 </menu:menubar>
