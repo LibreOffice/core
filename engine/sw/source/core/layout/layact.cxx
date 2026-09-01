@@ -20,6 +20,7 @@
 #include <config_feature_desktop.h>
 #include <config_wasm_strip.h>
 
+#include <chrono>
 #include <ctime>
 #include <rootfrm.hxx>
 #include <rowfrm.hxx>
@@ -2176,6 +2177,14 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob, IdleJo
                 {
                     // Idle spellcheck for the non-visible area: interrupt on user input.
                     bInterrupt = comphelper::COKit::anyInput();
+                    if (!bInterrupt)
+                        // comphelper::COKit::anyInput() never reports pending input in a
+                        // forked kit child, so a spell checker whose per-word cost
+                        // occasionally spikes (a compounding dictionary backtracking
+                        // through a near-valid word split, for example) would otherwise
+                        // run this sweep to completion in one call instead of yielding
+                        // and picking up where it left off later.
+                        bInterrupt = std::chrono::steady_clock::now() >= m_aJobDeadline;
                 }
                 if (bInterrupt)
                 {
@@ -2300,6 +2309,7 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
 
     m_pContentNode = nullptr;
     m_nTextPos = COMPLETE_STRING;
+    m_aJobDeadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(200);
 
     while ( pPage )
     {

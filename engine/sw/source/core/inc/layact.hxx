@@ -24,6 +24,7 @@
 #include <vcl/inputtypes.hxx>
 #include <tools/color.hxx>
 
+#include <chrono>
 #include <ctime>
 #include <memory>
 #include <vector>
@@ -209,6 +210,7 @@ class SwLayIdle
     SwContentNode *m_pContentNode;    // The current cursor position is saved here
     sal_Int32  m_nTextPos;
     bool        m_bPageValid;     // Were we able to evaluate everything on the whole page?
+    std::chrono::steady_clock::time_point m_aJobDeadline; // When the current DoIdleJob() call must yield by
 #ifdef DBG_UTIL
     bool m_bIndicator;
 
