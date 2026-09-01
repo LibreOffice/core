@@ -536,14 +536,19 @@ const ZOOM_LEVELS: Array<number> = [
 	400,
 ];
 
-const AI_ERROR_MESSAGES: Record<number, string> = {
-	400: 'Invalid request',
-	401: 'Invalid API key',
-	403: 'API key lacks permissions',
-	421: "This AI host is not in the server's allowed host list (lok_allow.host). Ask your administrator to permit it.",
-	429: 'Rate limited - please wait a moment and retry',
-	500: 'API server error - try again later',
-	503: 'Service temporarily unavailable',
+// Thunks rather than strings: the module loads before the translations do,
+// so _() must run when the message is shown, not here.
+const AI_ERROR_MESSAGES: Record<number, () => string> = {
+	400: () => _('Invalid request'),
+	401: () => _('Invalid API key'),
+	403: () => _('API key lacks permissions'),
+	421: () =>
+		_(
+			"This AI host is not in the server's allowed host list (lok_allow.host). Ask your administrator to permit it.",
+		),
+	429: () => _('Rate limited - please wait a moment and retry'),
+	500: () => _('API server error - try again later'),
+	503: () => _('Service temporarily unavailable'),
 };
 
 // Some providers add capability metadata to /v1/models entries: Together uses
@@ -3333,7 +3338,7 @@ class SettingIframe {
 			return _('API quota exceeded - check your plan and billing details');
 		}
 		return (
-			AI_ERROR_MESSAGES[status] ||
+			AI_ERROR_MESSAGES[status]?.() ||
 			_(
 				'Could not fetch models (HTTP {0}). Check the provider URL and API key.',
 			).replace('{0}', String(status))

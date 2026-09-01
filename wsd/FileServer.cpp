@@ -2668,7 +2668,26 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     baseUrl = AIUtil::normalizeAIBaseUrl(baseUrl);
     baseUrl += "/v1/models";
 
-    Poco::URI uri(baseUrl);
+    Poco::URI uri;
+    try
+    {
+        uri = Poco::URI(baseUrl);
+    }
+    catch (const std::exception&)
+    {
+    }
+
+    // A provider URL without a host, for example one missing its scheme, can
+    // never be reached; report it as a bad request instead of letting the
+    // empty host fail the allowlist check with a misleading 421.
+    if (uri.getHost().empty())
+    {
+        LOG_WRN("Rejected fetch-models request: provider URL has no host ["
+                << Anonymizer::anonymizeUrl(baseUrl) << ']');
+        sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
+                  "The provider URL is invalid");
+        return;
+    }
 
     // A built-in provider's host is a fixed public endpoint and is always
     // allowed; only a custom host goes through the net.lok_allow allowlist.
@@ -2680,7 +2699,8 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         // Use 421 rather than 403 so the browser can tell this local allowlist
         // refusal apart from a genuine 403 forwarded from the upstream provider.
         sendError(http::StatusCode::MisdirectedRequest, getRequestPath(request), socket,
-                  shortMessage, "Target host is not in the allowed host list");
+                  shortMessage,
+                  "Host \"" + uri.getHost() + "\" is not in the allowed host list");
         return;
     }
 

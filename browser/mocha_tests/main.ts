@@ -55,4 +55,5 @@
 /// <reference path="./DocDispatcherExtensions.test.ts" />
 /// <reference path="./ContributedNotebookbarTabs.test.ts" />
 /// <reference path="./CDarkOverlay.test.ts" />
+/// <reference path="./AIChatMessageCodes.test.ts" />
 // NOTE: reference new tests here ...

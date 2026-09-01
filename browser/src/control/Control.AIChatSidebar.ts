@@ -2134,6 +2134,168 @@ namespace cool {
 			);
 		}
 
+		// The server reports a failure as a stable errorCode plus an
+		// untranslated English fallback in data.error. The codes mirror the
+		// sendChatError() calls in wsd/AIChatSession.cpp; a message's variable
+		// part (for example the rejected host) arrives separately in
+		// data.errorArg and is interpolated into the translated string.
+		private translateChatError(data: any, defaultError: string): string {
+			const messages: { [code: string]: () => string } = {
+				requestTooLarge: () => _('Request too large'),
+				invalidRequestFormat: () => _('Invalid request format'),
+				requestSuperseded: () => _('Request superseded by a newer request'),
+				noMessages: () => _('No messages provided'),
+				messageTooLong: () => _('Message too long'),
+				aiDisabled: () => _('AI features are disabled by the administrator'),
+				aiNotAvailableForGuests: () => _('AI is not available for guests'),
+				aiDisabledForDocument: () =>
+					_('AI features are disabled for this document'),
+				aiNotConfigured: () => _('AI settings not configured'),
+				providerUrlInvalid: () =>
+					_('The AI provider URL is invalid, check the AI settings'),
+				imageProviderUrlInvalid: () =>
+					_('The AI image provider URL is invalid, check the AI settings'),
+				hostNotAllowed: () =>
+					_(
+						'Host "{0}" is not in the allowed host list, contact your administrator',
+					),
+				networkError: () => _('Network error - please check your connection'),
+				requestTimeout: () => this.timeoutErrorMessage,
+				connectionFailed: () => _('Could not connect to the AI provider'),
+				noResponse: () => _('No response from AI'),
+				tooManyToolSteps: () => _('AI used too many tool steps'),
+				outOfTokens: () =>
+					_(
+						'The model ran out of tokens before producing output. Try a shorter input or a model with a larger output budget.',
+					),
+				emptyResponse: () =>
+					_(
+						'The model returned an empty response (no tokens generated). This is usually a temporary provider issue - please retry, or try a different model.',
+					),
+				imageNoPrompt: () => _('Image generation failed: no prompt from model'),
+				documentNotAvailable: () => _('Document not available'),
+				outlineInvalid: () => _('The edited outline is not valid: {0}'),
+				outlineNoSlides: () =>
+					_('Could not build any slides from the outline. Please try again.'),
+				imageSettingsNotConfigured: () => _('AI image settings not configured'),
+				imageModelNotConfigured: () => _('Image model not configured'),
+				imageGenFailed: () => _('Image generation failed: {0}'),
+				noImageGenerated: () => _('No image generated'),
+				aiBadResponse: () => _('Failed to parse the AI response'),
+				apiInvalidRequest: () =>
+					_('The AI provider rejected the request as invalid'),
+				apiInvalidKey: () => _('Invalid API key'),
+				apiKeyPermissions: () => _('API key lacks permissions'),
+				apiQuotaExceeded: () =>
+					_('API quota exceeded - check your plan and billing details'),
+				apiRateLimited: () =>
+					_('Rate limited - please wait a moment and retry'),
+				apiServerError: () => _('API server error - try again later'),
+				apiServiceUnavailable: () => _('Service temporarily unavailable'),
+				apiError: () => _('API error ({0})'),
+			};
+
+			const build = data.errorCode && messages[data.errorCode];
+			if (build)
+				return AIChatSidebar.interpolate(build(), [data.errorArg || '']);
+
+			// No code: an old server, or a locally synthesized error (see
+			// startRequestTimeout). Keep the pre-code remap of the bare
+			// timeout report to actionable guidance.
+			if (data.error === 'Request timeout') return this.timeoutErrorMessage;
+			return data.error || defaultError;
+		}
+
+		// Replaces {0}, {1}, ... placeholders in a translated message with the
+		// variable parts the server sent alongside its message code.
+		private static interpolate(msg: string, args: string[]): string {
+			let result = msg;
+			for (let i = 0; i < args.length; i++)
+				result = result.replace('{' + i + '}', args[i]);
+			return result;
+		}
+
+		// The server reports tool progress as a stable statusKey plus an
+		// untranslated English fallback in data.status. The keys mirror the
+		// sendToolProgress() calls in wsd/AIChatSession.cpp; counters arrive
+		// separately in data.statusArgs.
+		private translateProgress(data: any): string {
+			const messages: { [key: string]: () => string } = {
+				extractingLinkTargets: () => _('Extracting link targets...'),
+				evaluatingFormula: () => _('Evaluating formula...'),
+				loadingFunctionCatalog: () => _('Loading function catalog...'),
+				thinking: () => _('Thinking...'),
+				working: () => _('Working...'),
+				settingFormulas: () => _('Setting formulas...'),
+				buildingSlide: () => _('Building slide {0} of {1}...'),
+				skippingSlide: () => _('Skipping slide {0}...'),
+				generatingImage: () => _('Generating image {0} of {1}...'),
+			};
+
+			const build = data.statusKey && messages[data.statusKey];
+			if (build)
+				return AIChatSidebar.interpolate(build(), data.statusArgs || []);
+			return data.status || '';
+		}
+
+		// A server-composed success message arrives as a stable displayCode
+		// plus an untranslated English fallback in data.displayContent (a
+		// model-written message has no code and is shown as sent). The codes
+		// mirror the sendChatResult() calls in wsd/AIChatSession.cpp;
+		// data.displayArgs carries the variable parts.
+		private translateDisplay(data: any): string | undefined {
+			const args: string[] = data.displayArgs || [];
+			switch (data.displayCode) {
+				case 'pickSection':
+					return (
+						_(
+							'This document is too large to read in full. Pick a section to focus on:',
+						) +
+						'\n\n' +
+						(args[0] || '')
+					);
+				case 'narrowSheet':
+					return (
+						_(
+							'This sheet is too large to read in full. To narrow it down, you can:',
+						) +
+						'\n\n- ' +
+						_(
+							'Select a range of cells in the sheet, then ask your question again',
+						) +
+						'\n- ' +
+						_('Reply with a range to focus on, like `A1:D100`')
+					);
+				case 'deckReady': {
+					let msg = AIChatSidebar.interpolate(
+						_(
+							'Your deck is ready: {0} slides built from the approved outline.',
+						),
+						args,
+					);
+					if (Number(args[1]) > 0)
+						msg +=
+							' ' +
+							AIChatSidebar.interpolate(
+								_('{0} slide(s) could not be built and were skipped.'),
+								[args[1]],
+							);
+					if (Number(args[2]) > 0)
+						msg +=
+							' ' +
+							AIChatSidebar.interpolate(
+								_(
+									'{0} image(s) could not be generated and show a placeholder.',
+								),
+								[args[2]],
+							);
+					return msg;
+				}
+				default:
+					return data.displayContent || undefined;
+			}
+		}
+
 		private startRequestTimeout(
 			requestId: string,
 			ms: number,
@@ -2306,11 +2468,7 @@ namespace cool {
 			if (data.success) {
 				this.messages.push(buildSuccessMsg(data));
 			} else {
-				let errorText = data.error || defaultError;
-				// Replace the bare timeout report with guidance the user can
-				// act on.
-				if (errorText === 'Request timeout')
-					errorText = this.timeoutErrorMessage;
+				const errorText = this.translateChatError(data, defaultError);
 				this.messages.push({
 					role: 'assistant',
 					content: _('Error: ') + errorText,
@@ -2351,7 +2509,7 @@ namespace cool {
 					return {
 						role: 'assistant',
 						content: d.content,
-						displayContent: d.displayContent || undefined,
+						displayContent: this.translateDisplay(d),
 						timestamp: Date.now(),
 					};
 				},
@@ -2361,7 +2519,7 @@ namespace cool {
 
 		private onAIChatProgress(data: any): void {
 			if (data.requestId !== this.currentRequestId) return;
-			this.progressText = data.status || '';
+			this.progressText = this.translateProgress(data);
 			this.updateLoadingDots();
 			// Reset the request timeout so multi-round loops do not time out
 			this.startRequestTimeout(

@@ -42,6 +42,17 @@ class Message;
 // the type is only completed (and used) in the server's #if !MOBILEAPP code paths.
 namespace http { class Session; }
 
+/// A chat failure as sent to the client: a stable code the browser maps to a
+/// translated message (see translateChatError in Control.AIChatSidebar.ts),
+/// the English text older clients show verbatim, and the message's variable
+/// part (for example a rejected host name) interpolated client-side.
+struct ChatError
+{
+    std::string code;
+    std::string message;
+    std::string arg;
+};
+
 /// Result of preparing an AI image generation HTTP request.
 struct ImageGenRequest
 {
@@ -50,6 +61,19 @@ struct ImageGenRequest
     std::string apiKey;
     std::string payloadStr;
     std::string error; // non-empty if setup failed
+    std::string errorCode; // stable identifier for the client's translation
+    std::string errorArg; // variable part of the message (for example the host)
+};
+
+/// Result of parsing an image-generation response: the image payload on
+/// success, or the failure mapped for the client (error/errorCode/errorArg
+/// as in ImageGenRequest).
+struct ImageGenResult
+{
+    std::string b64Json;
+    std::string error;
+    std::string errorCode;
+    std::string errorArg;
 };
 
 /// A single tool call from the LLM that is queued for execution.
@@ -233,16 +257,27 @@ private:
     /// Send an aichatresult: frame. When success is true and displayText
     /// is non-empty, the message carries a separate user-facing
     /// rendering (displayContent) distinct from the model-facing text;
-    /// otherwise the single text is used for both.
+    /// otherwise the single text is used for both. When the display text is
+    /// server-composed (not model output), displayCode names it for the
+    /// client's translation map in Control.AIChatSidebar.ts and displayArgs
+    /// carries its variable parts; displayText stays the English fallback.
     void sendChatResult(bool success, const std::string& text, const std::string& requestId,
-                        const std::string& displayText = std::string());
-    /// Maps an HTTP status (or an ai::Http* sentinel) to a user-facing message.
+                        const std::string& displayText = std::string(),
+                        const std::string& displayCode = std::string(),
+                        const std::vector<std::string>& displayArgs = {});
+    /// Send a failed aichatresult: frame. The code is the stable identifier
+    /// the client maps to a translated message and must match the map in
+    /// Control.AIChatSidebar.ts; text is the English fallback older clients
+    /// show verbatim; arg carries the message's variable part (for example
+    /// the rejected host) for client-side interpolation.
+    void sendChatError(const std::string& code, const std::string& text,
+                       const std::string& requestId, const std::string& arg = std::string());
+    /// Maps an HTTP status (or an ai::Http* sentinel) to a user-facing error.
     /// The response body lets a 429 tell an exhausted quota apart from a
     /// throttle, which need opposite advice.
-    static std::string mapHttpStatusToError(int statusCode,
-                                            const std::string& reasonPhrase,
-                                            const std::string& body = "",
-                                            const std::string& context = "");
+    static ChatError mapHttpStatusToError(int statusCode,
+                                          const std::string& reasonPhrase,
+                                          const std::string& body = "");
     Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType) const;
 #if MOBILEAPP
     /// Desktop transport: POST via the registered ai::HttpPostFn and deliver the
@@ -290,8 +325,14 @@ private:
     void processNextPendingToolCall();
     void continueToolLoop(const std::string& toolCallId,
                           const std::string& result);
-    void sendToolProgress(const std::string& toolName,
-                          const std::string& status);
+    /// Send an aichatprogress: frame. The status is the English fallback older
+    /// clients show verbatim; statusKey is the stable identifier the client
+    /// maps to a translated message and must match the map in
+    /// Control.AIChatSidebar.ts; args carries the message's variable parts
+    /// (slide or image counters) for client-side interpolation.
+    void sendToolProgress(const std::string& toolName, const std::string& status,
+                          const std::string& statusKey = std::string(),
+                          const std::vector<std::string>& args = {});
     void sendToolApproval(const std::string& toolName,
                           const std::string& description);
     /// Rewrite a slide-command transform in place for forwarding to the kit:
@@ -319,10 +360,10 @@ private:
     bool handleImageGeneration(const std::string& prompt,
                                const std::string& requestId);
     ImageGenRequest createImageGenRequest(const std::string& prompt);
-    /// Parses an image-generation response into {base64Image, errorMessage};
-    /// exactly one is non-empty. statusCode may be an ai::Http* sentinel.
-    static std::pair<std::string, std::string> parseImageGenResponse(
-        int statusCode, const std::string& body);
+    /// Parses an image-generation response: on success b64Json is non-empty,
+    /// otherwise error (with errorCode/errorArg) describes the failure.
+    /// statusCode may be an ai::Http* sentinel.
+    static ImageGenResult parseImageGenResponse(int statusCode, const std::string& body);
     /// Rewrite the pending transform's GenerateImage commands into loading
     /// placeholders, apply it, then fetch and fill in the real images. Each
     /// image's target slide is worked out from nExistingSlides, the number of

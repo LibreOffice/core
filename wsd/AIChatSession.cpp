@@ -345,7 +345,9 @@ AIChatSession::AIChatSession(ClientSession& session)
 AIChatSession::~AIChatSession() = default;
 
 void AIChatSession::sendChatResult(bool success, const std::string& text,
-                                   const std::string& requestId, const std::string& displayText)
+                                   const std::string& requestId, const std::string& displayText,
+                                   const std::string& displayCode,
+                                   const std::vector<std::string>& displayArgs)
 {
     Poco::JSON::Object::Ptr result = new Poco::JSON::Object();
     result->set("success", success);
@@ -354,6 +356,17 @@ void AIChatSession::sendChatResult(bool success, const std::string& text,
         result->set("content", text);
         if (!displayText.empty())
             result->set("displayContent", displayText);
+        if (!displayCode.empty())
+        {
+            result->set("displayCode", displayCode);
+            if (!displayArgs.empty())
+            {
+                Poco::JSON::Array::Ptr args = new Poco::JSON::Array();
+                for (const std::string& arg : displayArgs)
+                    args->add(arg);
+                result->set("displayArgs", args);
+            }
+        }
     }
     else
         result->set("error", text);
@@ -364,30 +377,54 @@ void AIChatSession::sendChatResult(bool success, const std::string& text,
     _session.sendTextFrame("aichatresult: " + oss.str());
 }
 
-std::string AIChatSession::mapHttpStatusToError(
-    int statusCode, const std::string& reasonPhrase,
-    const std::string& body, const std::string& context)
+void AIChatSession::sendChatError(const std::string& code, const std::string& text,
+                                  const std::string& requestId, const std::string& arg)
+{
+    Poco::JSON::Object::Ptr result = new Poco::JSON::Object();
+    result->set("success", false);
+    result->set("error", text);
+    if (!code.empty())
+        result->set("errorCode", code);
+    if (!arg.empty())
+        result->set("errorArg", arg);
+    result->set("requestId", requestId);
+
+    std::ostringstream oss;
+    result->stringify(oss);
+    _session.sendTextFrame("aichatresult: " + oss.str());
+}
+
+ChatError AIChatSession::mapHttpStatusToError(
+    int statusCode, const std::string& reasonPhrase, const std::string& body)
 {
     switch (statusCode)
     {
         case 400 /* Bad Request */:
-            return context.empty() ? "Invalid request"
-                                   : "Invalid " + context + " request";
-        case 401 /* Unauthorized */:        return "Invalid API key";
-        case 403 /* Forbidden */:           return "API key lacks permissions";
+            return { "apiInvalidRequest", "Invalid request", "" };
+        case 401 /* Unauthorized */:
+            return { "apiInvalidKey", "Invalid API key", "" };
+        case 403 /* Forbidden */:
+            return { "apiKeyPermissions", "API key lacks permissions", "" };
         case 429 /* Too Many Requests */:
             return isInsufficientQuotaError(body)
-                       ? "API quota exceeded - check your plan and billing details"
-                       : "Rate limited - please wait a moment and retry";
-        case 500 /* Internal Server Error */: return "API server error - try again later";
-        case 503 /* Service Unavailable */:   return "Service temporarily unavailable";
+                       ? ChatError{ "apiQuotaExceeded",
+                                    "API quota exceeded - check your plan and billing details",
+                                    "" }
+                       : ChatError{ "apiRateLimited",
+                                    "Rate limited - please wait a moment and retry", "" };
+        case 500 /* Internal Server Error */:
+            return { "apiServerError", "API server error - try again later", "" };
+        case 503 /* Service Unavailable */:
+            return { "apiServiceUnavailable", "Service temporarily unavailable", "" };
         default:
         {
-            std::string err = "API error (";
-            err.append(std::to_string(statusCode));
-            err.append("): ");
-            err.append(reasonPhrase);
-            return err;
+            std::string detail = std::to_string(statusCode);
+            if (!reasonPhrase.empty())
+            {
+                detail.append(": ");
+                detail.append(reasonPhrase);
+            }
+            return { "apiError", "API error (" + detail + ")", detail };
         }
     }
 }
@@ -607,14 +644,14 @@ bool AIChatSession::handleAction(const std::string& firstLine)
 
     if (jsonPayload.size() > MAX_AI_PAYLOAD_SIZE)
     {
-        sendChatResult(false, "Request too large", "");
+        sendChatError("requestTooLarge", "Request too large", "");
         return true;
     }
 
     Poco::JSON::Object::Ptr requestObj = new Poco::JSON::Object();
     if (!JsonUtil::parseJSON(jsonPayload, requestObj))
     {
-        sendChatResult(false, "Invalid request format", "");
+        sendChatError("invalidRequestFormat", "Invalid request format", "");
         return true;
     }
 
@@ -626,8 +663,8 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     // before this new request takes over the single pending-fetch slot.
     if (_pendingDesignFetch)
     {
-        sendChatResult(false, "Request superseded by a newer request",
-                       _pendingDesignFetch->requestId);
+        sendChatError("requestSuperseded", "Request superseded by a newer request",
+                      _pendingDesignFetch->requestId);
         _pendingDesignFetch.reset();
     }
 
@@ -671,7 +708,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     Poco::JSON::Array::Ptr messages = requestObj->getArray("messages");
     if (!messages || messages->size() == 0)
     {
-        sendChatResult(false, "No messages provided", req.requestId);
+        sendChatError("noMessages", "No messages provided", req.requestId);
         return true;
     }
 
@@ -693,7 +730,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         JsonUtil::findJSONValue(msg, "content", content);
         if (content.size() > MAX_AI_MESSAGE_LENGTH)
         {
-            sendChatResult(false, "Message too long", req.requestId);
+            sendChatError("messageTooLong", "Message too long", req.requestId);
             return true;
         }
 
@@ -729,7 +766,8 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     // through the Options dialog, so this gate only applies to the WSD server.
     if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
     {
-        sendChatResult(false, "AI features are disabled by the administrator", req.requestId);
+        sendChatError("aiDisabled", "AI features are disabled by the administrator",
+                      req.requestId);
         return true;
     }
 
@@ -737,14 +775,15 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     // visitor), so a server-wide provider is not spent on them.
     if (_session.isAnonymousUser())
     {
-        sendChatResult(false, "AI is not available for guests", req.requestId);
+        sendChatError("aiNotAvailableForGuests", "AI is not available for guests", req.requestId);
         return true;
     }
 #endif
 
     if (_session.isDisableAISettings())
     {
-        sendChatResult(false, "AI features are disabled for this document", req.requestId);
+        sendChatError("aiDisabledForDocument", "AI features are disabled for this document",
+                      req.requestId);
         return true;
     }
 
@@ -752,7 +791,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     // and a base URL are the minimum needed to reach the provider.
     if (model.empty() || baseUrl.empty())
     {
-        sendChatResult(false, "AI settings not configured", req.requestId);
+        sendChatError("aiNotConfigured", "AI settings not configured", req.requestId);
         return true;
     }
 
@@ -1042,16 +1081,38 @@ void AIChatSession::callLLMAPI()
         return;
 
 #if !MOBILEAPP
+    std::string host;
+    try
+    {
+        host = Poco::URI(_toolLoop->requestUrl).getHost();
+    }
+    catch (const std::exception&)
+    {
+    }
+
+    // A provider URL without a host, for example one missing its scheme,
+    // can never be reached; report it as a configuration problem instead of
+    // letting the empty host fail the allowlist check with a misleading error.
+    if (host.empty())
+    {
+        LOG_WRN("Rejected AI chat request: provider URL has no host ["
+                << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
+        sendChatError("providerUrlInvalid", "The AI provider URL is invalid, check the AI settings",
+                      _toolLoop->requestId);
+        _toolLoop.reset();
+        return;
+    }
+
     // A built-in provider's host is a fixed public endpoint and is always
     // allowed; only a custom host goes through the net.lok_allow allowlist.
-    Poco::URI uri(_toolLoop->requestUrl);
-    if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
-        HostUtil::isForbiddenKitHost(uri.getHost()))
+    if (!AIUtil::isPreCannedAIProviderHost(host) && HostUtil::isForbiddenKitHost(host))
     {
         LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
-        sendChatResult(false, "Target host is not in the allowed host list, contact your administrator",
-                       _toolLoop->requestId);
+        sendChatError("hostNotAllowed",
+                      "Host \"" + host +
+                          "\" is not in the allowed host list, contact your administrator",
+                      _toolLoop->requestId, host);
         _toolLoop.reset();
         return;
     }
@@ -1091,15 +1152,15 @@ void AIChatSession::callLLMAPI()
 
         if (statusCode == ai::HttpConnectFailed)
         {
-            self->sendChatResult(
-                false, "Network error - please check your connection", requestId);
+            self->sendChatError("networkError", "Network error - please check your connection",
+                                requestId);
             self->_toolLoop.reset();
             return;
         }
 
         if (statusCode == ai::HttpNoResponse)
         {
-            self->sendChatResult(false, "Request timeout", requestId);
+            self->sendChatError("requestTimeout", "Request timeout", requestId);
             self->_toolLoop.reset();
             return;
         }
@@ -1118,7 +1179,8 @@ void AIChatSession::callLLMAPI()
         {
             LOG_WRN("AIChat: provider returned HTTP " << statusCode
                     << " for request [" << requestId << "]; body: " << body);
-            self->sendChatResult(false, mapHttpStatusToError(statusCode, reason, body), requestId);
+            const ChatError err = mapHttpStatusToError(statusCode, reason, body);
+            self->sendChatError(err.code, err.message, requestId, err.arg);
             self->_toolLoop.reset();
             return;
         }
@@ -1157,7 +1219,7 @@ void AIChatSession::postChatCompletion(
     if (!httpSession)
     {
         LOG_WRN("AIToolLoop: failed to create HTTP session");
-        sendChatResult(false, "Failed to create HTTP session", _toolLoop->requestId);
+        sendChatError("connectionFailed", "Failed to create HTTP session", _toolLoop->requestId);
         _toolLoop.reset();
         return;
     }
@@ -1205,7 +1267,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
         LOG_WRN("AIToolLoop: LLM response is not valid JSON [" << requestId
                 << "], bodySize=" << responseBody.size()
                 << " bodyHead=" << responseBody.substr(0, 300));
-        sendChatResult(false, "No response from AI", requestId);
+        sendChatError("noResponse", "No response from AI", requestId);
         _toolLoop.reset();
         return;
     }
@@ -1215,7 +1277,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
     {
         LOG_WRN("AIToolLoop: LLM response missing or empty 'choices' [" << requestId
                 << "], bodyHead=" << responseBody.substr(0, 300));
-        sendChatResult(false, "No response from AI", requestId);
+        sendChatError("noResponse", "No response from AI", requestId);
         _toolLoop.reset();
         return;
     }
@@ -1224,7 +1286,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
     if (!choice)
     {
         LOG_WRN("AIToolLoop: LLM response choices[0] is null [" << requestId << ']');
-        sendChatResult(false, "No response from AI", requestId);
+        sendChatError("noResponse", "No response from AI", requestId);
         _toolLoop.reset();
         return;
     }
@@ -1238,7 +1300,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
     {
         LOG_WRN("AIToolLoop: LLM response choices[0].message is null ["
                 << requestId << "], finishReason='" << finishReason << "'");
-        sendChatResult(false, "No response from AI", requestId);
+        sendChatError("noResponse", "No response from AI", requestId);
         _toolLoop.reset();
         return;
     }
@@ -1249,7 +1311,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
     {
         if (_toolLoop->toolRoundsRemaining <= 0)
         {
-            sendChatResult(false, "AI used too many tool steps", requestId);
+            sendChatError("tooManyToolSteps", "AI used too many tool steps", requestId);
             _toolLoop.reset();
             return;
         }
@@ -1343,7 +1405,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
         }
         else if (finishReason == "length")
         {
-            sendChatResult(false,
+            sendChatError("outOfTokens",
                 "The model ran out of tokens before producing output. Try a "
                 "shorter input or a model with a larger output budget.", requestId);
         }
@@ -1353,14 +1415,14 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
             // with all fields null and no completion. Usually transient.
             LOG_WRN("AIToolLoop: provider returned zero-token blank ["
                     << requestId << "], bodySize=" << responseBody.size());
-            sendChatResult(false,
+            sendChatError("emptyResponse",
                 "The model returned an empty response (no tokens generated). "
                 "This is usually a temporary provider issue — please retry, "
                 "or try a different model.", requestId);
         }
         else
         {
-            sendChatResult(false, "No response from AI", requestId);
+            sendChatError("noResponse", "No response from AI", requestId);
         }
         _toolLoop.reset();
         return;
@@ -1462,7 +1524,8 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
 
         if (imagePrompt.empty())
         {
-            sendChatResult(false, "Image generation failed: no prompt from model", requestId);
+            sendChatError("imageNoPrompt", "Image generation failed: no prompt from model",
+                          requestId);
             _toolLoop.reset();
             return true;
         }
@@ -1475,7 +1538,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
     if (!docBroker)
     {
-        sendChatResult(false, "Document not available", requestId);
+        sendChatError("documentNotAvailable", "Document not available", requestId);
         _toolLoop.reset();
         return true;
     }
@@ -1544,7 +1607,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         _toolLoop->pendingToolCallId = toolCallId;
         _toolLoop->pendingToolName = fnName;
 
-        sendToolProgress(fnName, "Extracting link targets...");
+        sendToolProgress(fnName, "Extracting link targets...", "extractingLinkTargets");
         docBroker->forwardToChild(_session.client_from_this(),
             "extractlinktargets url=interactive");
         return true;
@@ -1575,7 +1638,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         std::string encodedFormula;
         Poco::URI::encode(formula, "", encodedFormula);
 
-        sendToolProgress(fnName, "Evaluating formula...");
+        sendToolProgress(fnName, "Evaluating formula...", "evaluatingFormula");
         docBroker->forwardToChild(_session.client_from_this(),
             "commandvalues command=.uno:EvaluateFormula?cell="
             + cell + "&formula=" + encodedFormula);
@@ -1589,7 +1652,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         _toolLoop->pendingToolCallId = toolCallId;
         _toolLoop->pendingToolName = fnName;
 
-        sendToolProgress(fnName, "Loading function catalog...");
+        sendToolProgress(fnName, "Loading function catalog...", "loadingFunctionCatalog");
         docBroker->forwardToChild(_session.client_from_this(),
             "commandvalues command=.uno:CalcFunctionList?english=true");
         return true;
@@ -1907,7 +1970,7 @@ void AIChatSession::processNextPendingToolCall()
     if (_toolLoop->pendingToolCalls.empty())
     {
         // All tool calls processed, call LLM with all results
-        sendToolProgress(_toolLoop->pendingToolName, "Thinking...");
+        sendToolProgress(_toolLoop->pendingToolName, "Thinking...", "thinking");
         callLLMAPI();
         return;
     }
@@ -1951,8 +2014,9 @@ void AIChatSession::continueToolLoop(const std::string& toolCallId,
     processNextPendingToolCall();
 }
 
-void AIChatSession::sendToolProgress(const std::string& toolName,
-                                     const std::string& status)
+void AIChatSession::sendToolProgress(const std::string& toolName, const std::string& status,
+                                     const std::string& statusKey,
+                                     const std::vector<std::string>& args)
 {
     if (!_toolLoop)
         return;
@@ -1961,6 +2025,17 @@ void AIChatSession::sendToolProgress(const std::string& toolName,
     progress->set("requestId", _toolLoop->requestId);
     progress->set("toolName", toolName);
     progress->set("status", status);
+    if (!statusKey.empty())
+    {
+        progress->set("statusKey", statusKey);
+        if (!args.empty())
+        {
+            Poco::JSON::Array::Ptr statusArgs = new Poco::JSON::Array();
+            for (const std::string& arg : args)
+                statusArgs->add(arg);
+            progress->set("statusArgs", statusArgs);
+        }
+    }
 
     std::ostringstream oss;
     progress->stringify(oss);
@@ -2042,9 +2117,10 @@ bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJso
         // decorator turns into clickable links), and a hidden instruction
         // for the model that lists the canonical target strings so it can
         // call extract_document_structure correctly when the user picks.
-        std::ostringstream displayMd;
-        displayMd << "This document is too large to read in full. Pick a section "
-                     "to focus on:\n\n";
+        // The intro sentence is server-composed and travels with a displayCode
+        // so the client can translate it; the section list is document content
+        // and goes along as the code's argument.
+        std::ostringstream sectionList;
         std::ostringstream modelTxt;
         modelTxt << "The document is too large to read in full. The user is "
                     "picking which section to scope the read by. Available "
@@ -2057,7 +2133,7 @@ bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJso
             std::string label, value;
             JsonUtil::findJSONValue(c, "label", label);
             JsonUtil::findJSONValue(c, "value", value);
-            displayMd << "- " << label << "\n";
+            sectionList << "- " << label << "\n";
             if (i > 0)
                 modelTxt << ", ";
             modelTxt << value;
@@ -2067,7 +2143,11 @@ bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJso
                     "answer the user's earlier request using only the content of "
                     "the chosen section.";
 
-        sendChatResult(true, modelTxt.str(), _toolLoop->requestId, displayMd.str());
+        const std::string displayMd = "This document is too large to read in full. Pick a "
+                                      "section to focus on:\n\n" +
+                                      sectionList.str();
+        sendChatResult(true, modelTxt.str(), _toolLoop->requestId, displayMd, "pickSection",
+                       { sectionList.str() });
         _toolLoop.reset();
         return true;
     }
@@ -2092,7 +2172,7 @@ bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJso
             "range='<their range>'). Do not call extract_document_structure with "
             "no range argument again on this document.";
 
-        sendChatResult(true, modelTxt, _toolLoop->requestId, displayMd);
+        sendChatResult(true, modelTxt, _toolLoop->requestId, displayMd, "narrowSheet");
         _toolLoop.reset();
         return true;
     }
@@ -2144,8 +2224,8 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
 
             if (auto outlineErr = DeckSpec::validateOutline(outline, _toolLoop->budgets))
             {
-                sendChatResult(false, "The edited outline is not valid: " + *outlineErr,
-                               _toolLoop->requestId);
+                sendChatError("outlineInvalid", "The edited outline is not valid: " + *outlineErr,
+                              _toolLoop->requestId, *outlineErr);
                 _toolLoop.reset();
                 return true;
             }
@@ -2175,7 +2255,7 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
         std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
         if (!docBroker)
         {
-            sendChatResult(false, "Document not available", _toolLoop->requestId);
+            sendChatError("documentNotAvailable", "Document not available", _toolLoop->requestId);
             _toolLoop.reset();
             return true;
         }
@@ -2190,7 +2270,7 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
             _toolLoop->awaitingApproval = false;
             _toolLoop->awaitingKitResponse = true;
 
-            sendToolProgress(_toolLoop->pendingToolName, "Working...");
+            sendToolProgress(_toolLoop->pendingToolName, "Working...", "working");
             docBroker->forwardToChild(_session.client_from_this(), command);
         }
         else if (_toolLoop->pendingToolName == AIToolNames::SetCellFormula)
@@ -2213,7 +2293,8 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
                 return true;
             }
 
-            sendToolProgress(std::string(AIToolNames::SetCellFormula), "Setting formulas...");
+            sendToolProgress(std::string(AIToolNames::SetCellFormula), "Setting formulas...",
+                         "settingFormulas");
 
             // Dispatch SetCellFormula for each pair
             Poco::JSON::Array resultArr;
@@ -2389,7 +2470,8 @@ void AIChatSession::expandNextSlide()
     const unsigned slideNumber = _deckExpansion->nextIndex + 1;
     sendToolProgress(std::string(AIToolNames::ProposeOutline),
                      "Building slide " + std::to_string(slideNumber) + " of " +
-                         std::to_string(total) + "...");
+                         std::to_string(total) + "...",
+                     "buildingSlide", { std::to_string(slideNumber), std::to_string(total) });
 
     Poco::JSON::Object::Ptr entry = _deckExpansion->slides->getObject(_deckExpansion->nextIndex);
 
@@ -2491,7 +2573,7 @@ void AIChatSession::handleExpansionResponse(int statusCode, const std::string& b
     }
     if (statusCode != 200)
     {
-        failCurrentExpansionSlide(mapHttpStatusToError(statusCode, reason));
+        failCurrentExpansionSlide(mapHttpStatusToError(statusCode, reason).message);
         return;
     }
 
@@ -2674,7 +2756,8 @@ void AIChatSession::failCurrentExpansionSlide(const std::string& reason)
                                             << reason);
     _deckExpansion->skippedSlides.push_back(static_cast<int>(slideNumber));
     sendToolProgress(std::string(AIToolNames::ProposeOutline),
-                     "Skipping slide " + std::to_string(slideNumber) + "...");
+                     "Skipping slide " + std::to_string(slideNumber) + "...", "skippingSlide",
+                     { std::to_string(slideNumber) });
     ++_deckExpansion->nextIndex;
     _deckExpansion->retriedCurrentSlide = false;
     _deckExpansion->lastSlideError.clear();
@@ -2690,8 +2773,8 @@ void AIChatSession::finishDeckExpansion()
 
     if (_deckExpansion->builtCount == 0)
     {
-        sendChatResult(false, "Could not build any slides from the outline. Please try again.",
-                       requestId);
+        sendChatError("outlineNoSlides",
+                      "Could not build any slides from the outline. Please try again.", requestId);
         _deckExpansion.reset();
         _toolLoop.reset();
         return;
@@ -2737,7 +2820,8 @@ void AIChatSession::finishDeckExpansion()
         appendImageFailureNote(content.str(), _deckExpansion->failedImagePrompts);
 
     // User-facing message: a short ready line, plus brief notes for anything that
-    // did not come out.
+    // did not come out. The counts travel as displayArgs so the client can
+    // compose the same message from translated strings.
     std::ostringstream display;
     display << "Your deck is ready: " << _deckExpansion->builtCount
             << " slides built from the approved outline.";
@@ -2748,7 +2832,10 @@ void AIChatSession::finishDeckExpansion()
         display << " " << _deckExpansion->failedImagePrompts.size()
                 << " image(s) could not be generated and show a placeholder.";
 
-    sendChatResult(true, modelContent, requestId, display.str());
+    sendChatResult(true, modelContent, requestId, display.str(), "deckReady",
+                   { std::to_string(_deckExpansion->builtCount),
+                     std::to_string(_deckExpansion->skippedSlides.size()),
+                     std::to_string(_deckExpansion->failedImagePrompts.size()) });
     _deckExpansion.reset();
     _toolLoop.reset();
 }
@@ -2767,19 +2854,40 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     if (req.apiKey.empty() || baseUrl.empty())
     {
         req.error = "AI image settings not configured";
+        req.errorCode = "imageSettingsNotConfigured";
         return req;
     }
 
     req.requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl) + "/v1/images/generations";
 
 #if !MOBILEAPP
+    std::string host;
+    try
+    {
+        host = Poco::URI(req.requestUrl).getHost();
+    }
+    catch (const std::exception&)
+    {
+    }
+
+    // A provider URL without a host, for example one missing its scheme,
+    // can never be reached; report it as a configuration problem instead of
+    // letting the empty host fail the allowlist check with a misleading error.
+    if (host.empty())
+    {
+        req.error = "The AI image provider URL is invalid, check the AI settings";
+        req.errorCode = "imageProviderUrlInvalid";
+        return req;
+    }
+
     // A built-in provider's host is a fixed public endpoint and is always
     // allowed; only a custom host goes through the net.lok_allow allowlist.
-    Poco::URI uri(req.requestUrl);
-    if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
-        HostUtil::isForbiddenKitHost(uri.getHost()))
+    if (!AIUtil::isPreCannedAIProviderHost(host) && HostUtil::isForbiddenKitHost(host))
     {
-        req.error = "Target host is not in the allowed host list, contact your administrator";
+        req.error =
+            "Host \"" + host + "\" is not in the allowed host list, contact your administrator";
+        req.errorCode = "hostNotAllowed";
+        req.errorArg = host;
         return req;
     }
 #endif
@@ -2788,6 +2896,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     if (imageModel.empty())
     {
         req.error = "Image model not configured";
+        req.errorCode = "imageModelNotConfigured";
         return req;
     }
 
@@ -2811,6 +2920,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     if (!req.httpSession)
     {
         req.error = "Failed to create HTTP session";
+        req.errorCode = "connectionFailed";
         return req;
     }
 
@@ -2819,14 +2929,23 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     return req;
 }
 
-std::pair<std::string, std::string> AIChatSession::parseImageGenResponse(
-    int statusCode, const std::string& body)
+ImageGenResult AIChatSession::parseImageGenResponse(int statusCode, const std::string& body)
 {
+    ImageGenResult res;
+
     if (statusCode == ai::HttpConnectFailed)
-        return {"", "Network error - please check your connection"};
+    {
+        res.error = "Network error - please check your connection";
+        res.errorCode = "networkError";
+        return res;
+    }
 
     if (statusCode == ai::HttpNoResponse)
-        return {"", "Request timeout"};
+    {
+        res.error = "Request timeout";
+        res.errorCode = "requestTimeout";
+        return res;
+    }
 
     if (statusCode != 200)
     {
@@ -2845,27 +2964,49 @@ std::pair<std::string, std::string> AIChatSession::parseImageGenResponse(
                     errorMsg = std::move(message);
             }
         }
-        return {"", errorMsg};
+        res.error = errorMsg;
+        res.errorCode = "imageGenFailed";
+        // The provider's own message (or the bare HTTP status) is the variable
+        // part; the client wraps it in a translated frame.
+        res.errorArg = std::move(errorMsg);
+        return res;
     }
 
     Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
     if (!JsonUtil::parseJSON(body, responseObject))
-        return {"", "Failed to parse response"};
+    {
+        res.error = "Failed to parse response";
+        res.errorCode = "aiBadResponse";
+        return res;
+    }
 
     Poco::JSON::Array::Ptr dataArray = responseObject->getArray("data");
     if (!dataArray || dataArray->size() == 0)
-        return {"", "No image generated"};
+    {
+        res.error = "No image generated";
+        res.errorCode = "noImageGenerated";
+        return res;
+    }
 
     Poco::JSON::Object::Ptr firstItem = dataArray->getObject(0);
     if (!firstItem)
-        return {"", "No image generated"};
+    {
+        res.error = "No image generated";
+        res.errorCode = "noImageGenerated";
+        return res;
+    }
 
     std::string b64Json;
     JsonUtil::findJSONValue(firstItem, "b64_json", b64Json);
     if (b64Json.empty())
-        return {"", "No image data in response"};
+    {
+        res.error = "No image data in response";
+        res.errorCode = "noImageGenerated";
+        return res;
+    }
 
-    return {std::move(b64Json), ""};
+    res.b64Json = std::move(b64Json);
+    return res;
 }
 
 bool AIChatSession::handleImageGeneration(const std::string& prompt,
@@ -2877,7 +3018,7 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     ImageGenRequest req = createImageGenRequest(prompt);
     if (!req.error.empty())
     {
-        sendChatResult(false, req.error, requestId);
+        sendChatError(req.errorCode, req.error, requestId, req.errorArg);
         return true;
     }
 
@@ -2885,14 +3026,21 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     auto clientSessionPtr = _session.client_from_this();
     auto sendImageResult = [clientSession = std::move(clientSessionPtr), requestId](
                                bool success, const std::string& imageData,
-                               const std::string& error)
+                               const std::string& error, const std::string& errorCode,
+                               const std::string& errorArg)
     {
         Poco::JSON::Object::Ptr result = new Poco::JSON::Object();
         result->set("success", success);
         if (success)
             result->set("imageData", imageData);
         else
+        {
             result->set("error", error);
+            if (!errorCode.empty())
+                result->set("errorCode", errorCode);
+            if (!errorArg.empty())
+                result->set("errorArg", errorArg);
+        }
         result->set("requestId", requestId);
 
         std::ostringstream oss;
@@ -2908,14 +3056,14 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     {
         self->_activeChatSession.reset();
 
-        auto [b64Json, error] = parseImageGenResponse(statusCode, body);
-        if (!error.empty())
+        const ImageGenResult res = parseImageGenResponse(statusCode, body);
+        if (!res.error.empty())
         {
-            sendImageResult(false, "", error);
+            sendImageResult(false, "", res.error, res.errorCode, res.errorArg);
             return;
         }
 
-        sendImageResult(true, b64Json, "");
+        sendImageResult(true, res.b64Json, "", "", "");
     };
 
     LOG_DBG("AIImageGeneration: sending request [" << requestId << "] to "
@@ -2967,7 +3115,7 @@ void AIChatSession::processTransformImageGenerations(
         _toolLoop->awaitingKitResponse = true;
         std::string encodedTransform;
         Poco::URI::encode(transform, "", encodedTransform);
-        sendToolProgress(_toolLoop->pendingToolName, "Working...");
+        sendToolProgress(_toolLoop->pendingToolName, "Working...", "working");
         docBroker->forwardToChild(_session.client_from_this(),
             "transformdocumentstructure url=interactive transform=" + encodedTransform);
         return;
@@ -3036,7 +3184,7 @@ void AIChatSession::processTransformImageGenerations(
     _toolLoop->awaitingKitResponse = true;
     std::string encodedTransform;
     Poco::URI::encode(modifiedTransform, "", encodedTransform);
-    sendToolProgress(_toolLoop->pendingToolName, "Working...");
+    sendToolProgress(_toolLoop->pendingToolName, "Working...", "working");
     docBroker->forwardToChild(_session.client_from_this(),
         "transformdocumentstructure url=interactive transform=" + encodedTransform);
 
@@ -3063,9 +3211,10 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
         const PendingImageGen& gen = _toolLoop->pendingImageGens[idx];
         const std::size_t total = _toolLoop->pendingImageGens.size();
 
-        sendToolProgress(_toolLoop->pendingToolName, "Generating image " +
-                                                         std::to_string(idx + 1) + " of " +
-                                                         std::to_string(total) + "...");
+        sendToolProgress(_toolLoop->pendingToolName,
+                         "Generating image " + std::to_string(idx + 1) + " of " +
+                             std::to_string(total) + "...",
+                         "generatingImage", { std::to_string(idx + 1), std::to_string(total) });
 
         ImageGenRequest req = createImageGenRequest(gen.prompt);
         if (!req.error.empty())
@@ -3096,17 +3245,17 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
             if (!self->_toolLoop)
                 return;
 
-            auto [b64Json, error] = parseImageGenResponse(statusCode, body);
-            if (!error.empty())
+            const ImageGenResult res = parseImageGenResponse(statusCode, body);
+            if (!res.error.empty())
             {
-                LOG_WRN_S("TransformImageGen: " << error);
+                LOG_WRN_S("TransformImageGen: " << res.error);
                 onImageFail();
                 return;
             }
 
             // Decode base64 and write to jail insertfile directory
             std::string binaryData;
-            macaron::Base64::Decode(b64Json, binaryData);
+            macaron::Base64::Decode(res.b64Json, binaryData);
 
             const std::string jailId = docBroker->getJailId();
             const std::string dirPath = FileUtil::buildLocalPathToJail(
