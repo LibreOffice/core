@@ -124,7 +124,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.registry.XImplementationRegistration",
         "com.sun.star.registry.XRegistryKey",
         "com.sun.star.registry.XSimpleRegistry",
-        "com.sun.star.uno.DeploymentException",
+        "cpo.uno.DeploymentException",
         "cpo.uno.RuntimeException",
         "cpo.uno.TypeClass",
         "com.sun.star.uno.Uik",
@@ -3446,7 +3446,7 @@ void ServiceType::dumpHppFile(
         includes.addReference();
         includes.addRtlUstringH();
         includes.addRtlUstringHxx();
-        includes.add("com.sun.star.uno.DeploymentException"_ostr);
+        includes.add("cpo.uno.DeploymentException"_ostr);
         includes.add("com.sun.star.uno.XComponentContext"_ostr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons : entity_->getConstructors()) {
             if (cons.defaultConstructor) {
@@ -3555,14 +3555,14 @@ void ServiceType::dumpHppFile(
                 o << indent()
                   << "} catch (const ::cpo::uno::Exception & the_exception) {\n";
                 inc();
-                o << indent() << "throw ::css::uno::DeploymentException(";
+                o << indent() << "throw ::cpo::uno::DeploymentException(";
                 failsToSupply(o, name_, baseName);
                 o << " + \": \" + the_exception.Message, the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent()
                   << "if (!the_instance.is()) {\n";
                 inc();
-                o << indent() << "throw ::css::uno::DeploymentException(";
+                o << indent() << "throw ::cpo::uno::DeploymentException(";
                 failsToSupply(o, name_, baseName);
                 o << ", the_context);\n";
                 dec();
@@ -3708,7 +3708,7 @@ void ServiceType::dumpHppFile(
                       << ("} catch (const ::cpo::uno::Exception &"
                           " the_exception) {\n");
                     inc();
-                    o << indent() << "throw ::css::uno::DeploymentException(";
+                    o << indent() << "throw ::cpo::uno::DeploymentException(";
                     failsToSupply(o, name_, baseName);
                     o << " + \": \" + the_exception.Message, the_context);\n";
                     dec();
@@ -3716,7 +3716,7 @@ void ServiceType::dumpHppFile(
                 }
                 o << indent() << "if (!the_instance.is()) {\n";
                 inc();
-                o << indent() << "throw ::css::uno::DeploymentException(";
+                o << indent() << "throw ::cpo::uno::DeploymentException(";
                 failsToSupply(o, name_, baseName);
                 o << ", the_context);\n";
                 dec();
@@ -3784,7 +3784,7 @@ void SingletonType::dumpHppFile(
     o << "\n";
     //TODO: Decide whether the types added to includes should rather be added to
     // m_dependencies (and thus be generated during dumpDependedTypes):
-    includes.add("com.sun.star.uno.DeploymentException"_ostr);
+    includes.add("cpo.uno.DeploymentException"_ostr);
     includes.add("com.sun.star.uno.XComponentContext"_ostr);
     includes.addCassert();
     includes.addAny();
@@ -3841,7 +3841,7 @@ void SingletonType::dumpHppFile(
       << indent() << "if (!instance.is()) {\n";
     inc();
     o << indent()
-      << ("throw ::css::uno::DeploymentException("
+      << ("throw ::cpo::uno::DeploymentException("
           "::rtl::OUString( \"component context"
           " fails to supply singleton ")
       << name_ << " of type " << baseName << "\" ), the_context);\n";

@@ -238,7 +238,7 @@ void DocumentHolder::FreeOffice()
     try {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         xDesktop->removeTerminateListener( this );
-    } catch (const css::uno::DeploymentException&) {
+    } catch (const cpo::uno::DeploymentException&) {
         // if this happens, the desktop is already gone
     }
 

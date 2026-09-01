@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
@@ -119,7 +119,7 @@ css::uno::Reference<css::frame::XDispatch> Provider::queryDispatch(css::util::UR
           >>= dispatch)
         || !dispatch.is())
     {
-        throw css::uno::DeploymentException(u"component context fails to supply singleton "
+        throw cpo::uno::DeploymentException(u"component context fails to supply singleton "
                                             "org.libreoffice.rust_uno.example_singleton of type "
                                             "com.sun.star.frame.XDispatch"_ustr,
                                             context_);

@@ -20,7 +20,7 @@ package com.sun.star.comp.helper;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Any;
 
-import com.sun.star.uno.DeploymentException;
+import cpo.uno.DeploymentException;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;

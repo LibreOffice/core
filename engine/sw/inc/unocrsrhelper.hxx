@@ -222,7 +222,7 @@ namespace SwUnoCursorHelper
     void SetTextFormatColl(const cpo::uno::Any & rAny, SwPaM & rPaM);
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    /// @throws css::uno::DeploymentException
+    /// @throws cpo::uno::DeploymentException
     bool SetCursorPropertyValue(
             SfxItemPropertyMapEntry const& rEntry,
             cpo::uno::Any const& rValue,

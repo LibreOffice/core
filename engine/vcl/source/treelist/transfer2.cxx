@@ -31,7 +31,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <svl/urlbmk.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/transfer.hxx>

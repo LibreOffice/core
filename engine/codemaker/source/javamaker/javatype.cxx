@@ -2193,7 +2193,7 @@ void addConstructor(
         localIndex = std::max< sal_uInt16 >(localIndex, 2);
         code->storeLocalReference(1);
         // stack: -
-        code->instrNew("com/sun/star/uno/DeploymentException"_ostr);
+        code->instrNew("cpo/uno/DeploymentException"_ostr);
         // stack: ex
         code->instrDup();
         // stack: ex ex
@@ -2210,7 +2210,7 @@ void addConstructor(
         code->loadLocalReference(0);
         // stack: ex ex "..." context
         code->instrInvokespecial(
-            "com/sun/star/uno/DeploymentException"_ostr, "<init>"_ostr,
+            "cpo/uno/DeploymentException"_ostr, "<init>"_ostr,
             "(Ljava/lang/String;Ljava/lang/Object;)V"_ostr);
         // stack: ex
         ClassFile::Code::Position pos2 = code->getPosition();
@@ -2254,7 +2254,7 @@ void handleService(
             codemaker::convertString(entity->getBase()));
         dependencies->insert(entity->getBase());
         dependencies->insert(u"com.sun.star.lang.XMultiComponentFactory"_ustr);
-        dependencies->insert(u"com.sun.star.uno.DeploymentException"_ustr);
+        dependencies->insert(u"cpo.uno.DeploymentException"_ustr);
         dependencies->insert(u"cpo.uno.TypeClass"_ustr);
         dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons :
@@ -2296,7 +2296,7 @@ void handleService(
             code->branchHere(branch);
             code->instrPop();
             // stack: -
-            code->instrNew("com/sun/star/uno/DeploymentException"_ostr);
+            code->instrNew("cpo/uno/DeploymentException"_ostr);
             // stack: ex
             code->instrDup();
             // stack: ex ex
@@ -2307,7 +2307,7 @@ void handleService(
             code->loadLocalReference(1);
             // stack: ex ex "..." context
             code->instrInvokespecial(
-                "com/sun/star/uno/DeploymentException"_ostr, "<init>"_ostr,
+                "cpo/uno/DeploymentException"_ostr, "<init>"_ostr,
                 "(Ljava/lang/String;Ljava/lang/Object;)V"_ostr);
             // stack: ex
             code->instrAthrow();
@@ -2339,7 +2339,7 @@ void handleSingleton(
     OString unoName(codemaker::convertString(name));
     OString className(
         translateUnoidlEntityNameToJavaFullyQualifiedName(name, "singleton"));
-    dependencies->insert(u"com.sun.star.uno.DeploymentException"_ustr);
+    dependencies->insert(u"cpo.uno.DeploymentException"_ustr);
     dependencies->insert(u"cpo.uno.TypeClass"_ustr);
     dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
     std::unique_ptr< ClassFile > cf(
@@ -2417,7 +2417,7 @@ void handleSingleton(
     code->branchHere(branch3);
     code->instrPop();
     // stack: -
-    code->instrNew("com/sun/star/uno/DeploymentException"_ostr);
+    code->instrNew("cpo/uno/DeploymentException"_ostr);
     // stack: ex
     code->instrDup();
     // stack: ex ex
@@ -2428,7 +2428,7 @@ void handleSingleton(
     code->loadLocalReference(0);
     // stack: ex ex "..." context
     code->instrInvokespecial(
-        "com/sun/star/uno/DeploymentException"_ostr, "<init>"_ostr,
+        "cpo/uno/DeploymentException"_ostr, "<init>"_ostr,
         "(Ljava/lang/String;Ljava/lang/Object;)V"_ostr);
     // stack: ex
     code->instrAthrow();

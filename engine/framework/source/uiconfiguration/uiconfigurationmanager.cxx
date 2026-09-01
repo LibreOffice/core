@@ -1153,7 +1153,7 @@ Reference< XAcceleratorConfiguration > UIConfigurationManager::getShortCutManage
         m_xAccConfig = DocumentAcceleratorConfiguration::
             createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
     }
-    catch ( const css::uno::DeploymentException& )
+    catch ( const cpo::uno::DeploymentException& )
     {
         SAL_WARN("fwk.uiconfiguration", "DocumentAcceleratorConfiguration"
                 " not available. This should happen only on mobile platforms.");

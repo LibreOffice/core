@@ -94,7 +94,7 @@ int pdfVerify(int nArgc, char** pArgv)
     {
         xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
     }
-    catch (const uno::DeploymentException&)
+    catch (const cpo::uno::DeploymentException&)
     {
         TOOLS_WARN_EXCEPTION("xmlsecurity.workben",
                              "DeploymentException while creating SEInitializer:");

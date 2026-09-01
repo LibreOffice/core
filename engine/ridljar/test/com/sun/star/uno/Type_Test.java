@@ -63,7 +63,7 @@ public final class Type_Test {
             new Type("cpo.uno.RuntimeException", TypeClass.EXCEPTION).getZClass());
         assertSame(
             "exception DeploymentException", DeploymentException.class,
-            new Type("com.sun.star.uno.DeploymentException", TypeClass.EXCEPTION).getZClass());
+            new Type("cpo.uno.DeploymentException", TypeClass.EXCEPTION).getZClass());
         assertSame(
             "interface XInterface", XInterface.class,
             new Type("com.sun.star.uno.XInterface", TypeClass.INTERFACE).getZClass());

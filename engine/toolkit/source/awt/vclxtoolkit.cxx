@@ -834,7 +834,7 @@ static void ToolkitWorkerFunction( void* pArgs )
     {
         xServiceManager = ::comphelper::getProcessServiceFactory();
     }
-    catch (const css::uno::DeploymentException&)
+    catch (const cpo::uno::DeploymentException&)
     {
     }
     if (!xServiceManager.is())

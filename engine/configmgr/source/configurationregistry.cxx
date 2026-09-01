@@ -35,7 +35,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
@@ -222,7 +222,7 @@ Service::Service(
     } catch (cpo::uno::RuntimeException &) {
         throw;
     } catch (cpo::uno::Exception & e) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             ("component context fails to supply service"
              " com.sun.star.configuration.DefaultProvider of type"
              " com.sun.star.lang.XMultiServiceFactory: " + e.Message),

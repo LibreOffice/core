@@ -34,7 +34,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <framework/AbstractView.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -253,7 +253,7 @@ bool ViewTabBar::ActivatePage(size_t nIndex)
                           new sd::framework::ResourceId(
                               FrameworkHelper::msCenterPaneURL)).get());
         }
-        catch (const DeploymentException&)
+        catch (const cpo::uno::DeploymentException&)
         {
         }
 

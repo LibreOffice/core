@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module uno {
+module cpo {  module uno {
 
 
 /** Exception signalling a deployment error.
@@ -29,6 +29,6 @@ published exception DeploymentException : cpo::uno::RuntimeException
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

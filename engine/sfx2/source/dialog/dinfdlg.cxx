@@ -971,7 +971,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
         xD = security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
         xD->setParentWindow(GetDialogController()->getDialog()->GetXWindow());
     }
-    catch ( const css::uno::DeploymentException& )
+    catch ( const cpo::uno::DeploymentException& )
     {
     }
     OUString s;

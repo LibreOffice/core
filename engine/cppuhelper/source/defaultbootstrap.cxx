@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -36,7 +36,7 @@ OUString getBootstrapVariable(
 {
     OUString v;
     if (!bootstrap.getFrom(name, v)) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             "Cannot obtain " + name + " from uno ini");
     }
     return v;
@@ -49,7 +49,7 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
 {
     rtl::Bootstrap bs(iniUri);
     if (bs.getHandle() == nullptr) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             "Cannot open uno ini " + iniUri);
     }
     rtl::Reference smgr(

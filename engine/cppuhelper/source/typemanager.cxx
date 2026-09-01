@@ -39,7 +39,7 @@
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -186,7 +186,7 @@ ModuleDescription::getMembers() {
         }
         return s;
     } catch (unoidl::FileFormatException & e) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             e.getUri() + ": " + e.getDetail(),
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1809,7 +1809,7 @@ void Enumeration::findNextMatch() {
             }
         }
     } catch (unoidl::FileFormatException & e) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             e.getUri() + ": " + e.getDetail(),
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1889,7 +1889,7 @@ cppuhelper::TypeManager::resolve(OUString const & name) {
     css::uno::Reference< css::reflection::XTypeDescription > desc(
         find(name), css::uno::UNO_QUERY);
     if (!desc.is()) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             "cannot resolve type \"" + name + "\"",
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1996,7 +1996,7 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
     try {
         cursor = manager_->createCursor(moduleName);
     } catch (unoidl::FileFormatException & e) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             ("unoidl::FileFormatException for <" + e.getUri() + ">: "
              + e.getDetail()),
             static_cast< cppu::OWeakObject * >(this));
@@ -2043,7 +2043,7 @@ void cppuhelper::TypeManager::readRdbDirectory(
         }
         [[fallthrough]];
     default:
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             OUString::Concat("Cannot open directory ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -2063,13 +2063,13 @@ void cppuhelper::TypeManager::readRdbFile(
         manager_->addProvider(OUString(uri));
     } catch (unoidl::NoSuchFileException &) {
         if (!optional) {
-            throw css::uno::DeploymentException(
+            throw cpo::uno::DeploymentException(
                 OUString::Concat(uri) + ": no such file",
                 static_cast< cppu::OWeakObject * >(this));
         }
         SAL_INFO("cppuhelper", "Ignored optional " << OUString(uri));
     } catch (unoidl::FileFormatException & e) {
-            throw css::uno::DeploymentException(
+            throw cpo::uno::DeploymentException(
                 ("unoidl::FileFormatException for <" + e.getUri() + ">: "
                  + e.getDetail()),
                 static_cast< cppu::OWeakObject * >(this));
@@ -2282,7 +2282,7 @@ rtl::Reference< unoidl::Entity > cppuhelper::TypeManager::findEntity(
     try {
         return manager_->findEntity(name);
     } catch (unoidl::FileFormatException & e) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             ("unoidl::FileFormatException for <" + e.getUri() + ">: "
              + e.getDetail()),
             static_cast< cppu::OWeakObject * >(this));

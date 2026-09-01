@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/sequence.hxx>
@@ -800,7 +800,7 @@ void cppuhelper::ServiceManager::loadImplementation(
     try {
         uri = cppu::bootstrap_expandUri(implementation->uri);
     } catch (css::lang::IllegalArgumentException & e) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             "Cannot expand URI" + implementation->uri + ": " + e.Message,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -857,7 +857,7 @@ void cppuhelper::ServiceManager::loadImplementation(
         if (!f1.is()) {
             f2.set(f0, css::uno::UNO_QUERY);
             if (!f2.is()) {
-                throw css::uno::DeploymentException(
+                throw cpo::uno::DeploymentException(
                     ("Implementation " + implementation->name
                      + " does not provide a constructor or factory"),
                     static_cast< cppu::OWeakObject * >(this));
@@ -1334,7 +1334,7 @@ void cppuhelper::ServiceManager::readRdbDirectory(
         }
         [[fallthrough]];
     default:
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             OUString::Concat("Cannot open directory ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1355,7 +1355,7 @@ void cppuhelper::ServiceManager::readRdbFile(
             uri, css::uno::Reference< css::uno::XComponentContext >(), &data_);
     } catch (css::container::NoSuchElementException &) {
         if (!optional) {
-            throw css::uno::DeploymentException(
+            throw cpo::uno::DeploymentException(
                 uri + ": no such file",
                 static_cast< cppu::OWeakObject * >(this));
         }
@@ -1364,7 +1364,7 @@ void cppuhelper::ServiceManager::readRdbFile(
 #if !ENABLE_FUZZERS
     catch (css::registry::InvalidRegistryException & e) {
         if (!readLegacyRdbFile(uri)) {
-            throw css::uno::DeploymentException(
+            throw cpo::uno::DeploymentException(
                 "InvalidRegistryException: " + e.Message,
                 static_cast< cppu::OWeakObject * >(this));
         }
@@ -1404,7 +1404,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
     }
     RegistryKey rootKey;
     if (reg.openRootKey(rootKey) != RegError::NO_ERROR) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1415,7 +1415,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
     case RegError::KEY_NOT_EXISTS:
         return true;
     default:
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1461,7 +1461,7 @@ OUString cppuhelper::ServiceManager::readLegacyRdbString(
         || t != RegValueType::STRING
         || s == 0 || s > o3tl::make_unsigned(SAL_MAX_INT32))
     {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1477,7 +1477,7 @@ OUString cppuhelper::ServiceManager::readLegacyRdbString(
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1496,14 +1496,14 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
     case RegError::KEY_NOT_EXISTS:
         return;
     default:
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     OUString prefix(subkey.getName() + "/");
     RegistryKeyNames names;
     if (subkey.getKeyNames(OUString(), names) != RegError::NO_ERROR) {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -1876,7 +1876,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         }
         catch (css::lang::IllegalArgumentException& aError)
         {
-            throw css::uno::DeploymentException(
+            throw cpo::uno::DeploymentException(
                 "Cannot expand URI" + rEntry.second->uri + ": " + aError.Message,
                 static_cast< cppu::OWeakObject * >(this));
         }
@@ -1946,7 +1946,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 {
                     xSSFactory.set(xFactory, css::uno::UNO_QUERY);
                     if (!xSSFactory.is())
-                        throw css::uno::DeploymentException(
+                        throw cpo::uno::DeploymentException(
                             ("Implementation " + rEntry.second->name
                              + " does not provide a constructor or factory"),
                             static_cast< cppu::OWeakObject * >(this));

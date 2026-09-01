@@ -46,7 +46,7 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
     css::uno::Reference<css::lang::XMultiServiceFactory> config;
     try {
         config = css::configuration::theDefaultProvider::get(context);
-    } catch (css::uno::DeploymentException &) {}
+    } catch (cpo::uno::DeploymentException &) {}
     if (config) {
         utl::ConfigManager::storeConfigItems();
         css::uno::Reference<css::util::XFlushable>(
@@ -57,11 +57,11 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
     css::uno::Reference<css::frame::XDesktop> xDesktop;
     try {
         xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-    } catch (css::uno::DeploymentException &) {}
+    } catch (cpo::uno::DeploymentException &) {}
     if (xDesktop)
         try {
             xDesktop->terminate();
-        } catch (css::uno::DeploymentException &) {}
+        } catch (cpo::uno::DeploymentException &) {}
 
     css::uno::Reference<css::lang::XComponent>(
         context, css::uno::UNO_QUERY_THROW)->dispose();

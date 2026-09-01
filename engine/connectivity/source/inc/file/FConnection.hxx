@@ -65,7 +65,7 @@ namespace connectivity::file
 
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        /// @throws css::uno::DeploymentException
+        /// @throws cpo::uno::DeploymentException
         virtual void construct(const OUString& _rUrl, const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
         // OComponentHelper

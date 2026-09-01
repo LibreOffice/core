@@ -55,7 +55,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/script/LibraryNotLoadedException.hpp>
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
@@ -3302,7 +3302,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
                                                                  Reference< task::XAbortChannel >(),
                                                                  Reference< ucb::XCommandEnvironment >() );
         }
-        catch(const css::uno::DeploymentException& )
+        catch(const cpo::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             m_eState = END_REACHED;
@@ -3353,7 +3353,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
                                                                          Reference< task::XAbortChannel >(),
                                                                          Reference< ucb::XCommandEnvironment >() );
         }
-        catch(const css::uno::DeploymentException& )
+        catch(const cpo::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             return xScriptPackage;
@@ -3403,7 +3403,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
                                                                     Reference< task::XAbortChannel >(),
                                                                     Reference< ucb::XCommandEnvironment >() );
         }
-        catch(const css::uno::DeploymentException& )
+        catch(const cpo::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             return xScriptPackage;

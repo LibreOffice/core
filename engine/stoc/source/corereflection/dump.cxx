@@ -19,7 +19,7 @@
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 #include <com/sun/star/reflection/XDump.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -71,7 +71,7 @@ getIdentifier(css::uno::Reference<css::reflection::XConstantTypeDescription> con
     auto const i = n.lastIndexOf('.');
     if (i == -1 || i == n.getLength() - 1)
     {
-        throw css::uno::DeploymentException("bad constant name " + n);
+        throw cpo::uno::DeploymentException("bad constant name " + n);
     }
     return n.copy(i + 1);
 }

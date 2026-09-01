@@ -48,7 +48,7 @@ SwRDFHelper::getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
     {
         const uno::Reference<uno::XComponentContext>& xComponentContext(
             comphelper::getProcessComponentContext());
-        // rdf::URI::create may fail with type: com.sun.star.uno.DeploymentException
+        // rdf::URI::create may fail with type: cpo.uno.DeploymentException
         // message: component context fails to supply service com.sun.star.rdf.URI of type com.sun.star.rdf.XURI
         // context: cppu::ComponentContext
         uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);

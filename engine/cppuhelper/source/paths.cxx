@@ -25,7 +25,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <rtl/bootstrap.hxx>
@@ -45,7 +45,7 @@ OUString get_this_libpath() {
         if (osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(get_this_libpath), uri))
             i = uri.lastIndexOf('/');
         if (i == -1)
-            throw css::uno::DeploymentException("URI " + uri + " is expected to contain a slash");
+            throw cpo::uno::DeploymentException("URI " + uri + " is expected to contain a slash");
         return uri.copy(0, i);
     }();
 
@@ -107,14 +107,14 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
         case osl::FileBase::E_NOENT:
             return false;
         default:
-            throw css::uno::DeploymentException(
+            throw cpo::uno::DeploymentException(
                 u"Cannot iterate directory"_ustr);
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
             osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
-            throw css::uno::DeploymentException(
+            throw cpo::uno::DeploymentException(
                 u"Cannot stat in directory"_ustr);
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks

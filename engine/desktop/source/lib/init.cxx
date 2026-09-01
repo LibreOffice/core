@@ -10139,12 +10139,12 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
 
                 // pre-load all component libraries.
                 if (!xContext.is())
-                    throw css::uno::DeploymentException(u"preInit: XComponentContext is not created"_ustr);
+                    throw cpo::uno::DeploymentException(u"preInit: XComponentContext is not created"_ustr);
 
                 css::uno::Reference< css::uno::XInterface > xService;
                 xContext->getValueByName(u"/singletons/com.sun.star.lang.theServiceManager"_ustr) >>= xService;
                 if (!xService.is())
-                    throw css::uno::DeploymentException(u"preInit: XMultiComponentFactory is not created"_ustr);
+                    throw cpo::uno::DeploymentException(u"preInit: XMultiComponentFactory is not created"_ustr);
 
                 css::uno::Reference<css::lang::XInitialization> aService(
                     xService, css::uno::UNO_QUERY_THROW);

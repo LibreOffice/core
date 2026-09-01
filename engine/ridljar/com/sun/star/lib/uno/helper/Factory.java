@@ -122,7 +122,7 @@ public class Factory
 
     private Factory(
         Class impl_class, String impl_name, String supported_services [] )
-                throws com.sun.star.uno.DeploymentException
+                throws cpo.uno.DeploymentException
     {
         m_impl_name = impl_name;
         m_supported_services = supported_services;
@@ -132,7 +132,7 @@ public class Factory
 
         if (!java.lang.reflect.Modifier.isPublic( impl_class.getModifiers() ))
         {
-            throw new com.sun.star.uno.DeploymentException("class " + impl_class + " is not public");
+            throw new cpo.uno.DeploymentException("class " + impl_class + " is not public");
         }
 
         java.lang.reflect.Method tmpMethod = null;
@@ -169,7 +169,7 @@ public class Factory
             {
                 if (!java.lang.reflect.Modifier.isPublic( tmpCtor.getModifiers() ))
                 {
-                    throw new com.sun.star.uno.DeploymentException("constructor with XComponentContext param for class  " + impl_class + " is not public");
+                    throw new cpo.uno.DeploymentException("constructor with XComponentContext param for class  " + impl_class + " is not public");
                 }
             }
             else
@@ -182,11 +182,11 @@ public class Factory
                 }
                 catch (Exception exc2)
                 {
-                    throw new com.sun.star.uno.DeploymentException(exc2, "class " + impl_class + " has no means of creating it, cannot find a __create method or a useful constructor.");
+                    throw new cpo.uno.DeploymentException(exc2, "class " + impl_class + " has no means of creating it, cannot find a __create method or a useful constructor.");
                 }
                 if (!java.lang.reflect.Modifier.isPublic( defaultCtor.getModifiers() ))
                 {
-                    throw new com.sun.star.uno.DeploymentException("default constructor for class  " + impl_class + " is not public");
+                    throw new cpo.uno.DeploymentException("default constructor for class  " + impl_class + " is not public");
                 }
             }
         }

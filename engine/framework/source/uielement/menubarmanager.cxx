@@ -1185,7 +1185,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHan
             xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( m_xContext );
             m_xGlobalAcceleratorManager = xGlobalAccelCfg;
         }
-        catch ( const css::uno::DeploymentException& )
+        catch ( const cpo::uno::DeploymentException& )
         {
             SAL_WARN("fwk.uielement", "GlobalAcceleratorConfiguration"
                     " not available. This should happen only on mobile platforms.");

@@ -40,7 +40,7 @@ interface XTest {
         set raises (cpo::uno::RuntimeException);
     };
     [attribute, readonly] long A4 {
-        get raises (com::sun::star::uno::DeploymentException);
+        get raises (cpo::uno::DeploymentException);
     };
 };
 
@@ -88,13 +88,13 @@ service S1: XTest {
                 com::sun::star::lang::ClassNotFoundException,
                 cpo::uno::Exception,
                 com::sun::star::lang::IllegalAccessException,
-                com::sun::star::uno::DeploymentException);
+                cpo::uno::DeploymentException);
 
     create3([in] sequence<any> S1)
         raises (cpo::uno::RuntimeException,
                 com::sun::star::lang::ClassNotFoundException,
                 com::sun::star::lang::IllegalAccessException,
-                com::sun::star::uno::DeploymentException);
+                cpo::uno::DeploymentException);
 
     create4([in] long javamaker, [in] long S1, [in] long create4);
 

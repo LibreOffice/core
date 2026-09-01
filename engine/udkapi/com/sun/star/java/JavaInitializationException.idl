@@ -33,7 +33,7 @@ module com { module sun { module star { module java {
     com::sun::star::java::MissingJavaRuntimeException <br>
     com::sun::star::java::JavaVMCreationFailureException <br>
  */
-published exception JavaInitializationException: com::sun::star::uno::DeploymentException
+published exception JavaInitializationException: cpo::uno::DeploymentException
 {
 };
 

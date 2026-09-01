@@ -1200,7 +1200,7 @@ void PythonStubGenerator::generateSingleton(const unoidl::InterfaceBasedSingleto
     // A singleton's get() method can raise a DeploymentException if it fails.
     // We document this in the docstring.
     OString deploymentExcHint
-        = mapUnoTypeToPythonHint(u"com.sun.star.uno.DeploymentException", *m_typeManager,
+        = mapUnoTypeToPythonHint(u"cpo.uno.DeploymentException", *m_typeManager,
                                  m_moduleName, m_pyClassName, m_imports, m_dependentTypes);
 
     m_buffer.append(getIndent());

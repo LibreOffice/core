@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
@@ -73,7 +73,7 @@ Reference< XMultiServiceFactory > getProcessServiceFactory()
     Reference< XMultiServiceFactory> xReturn = localProcessFactory.get();
     if ( !xReturn.is() )
     {
-        throw DeploymentException( u"null process service factory"_ustr );
+        throw cpo::uno::DeploymentException( u"null process service factory"_ustr );
     }
     return xReturn;
 }
@@ -89,14 +89,14 @@ Reference< XComponentContext > getComponentContext(
                       uno::UNO_QUERY );
         }
         catch (beans::UnknownPropertyException & e) {
-            throw DeploymentException(
+            throw cpo::uno::DeploymentException(
                 "unknown service factory DefaultContext property: " + e.Message,
                 Reference<XInterface>(factory, UNO_QUERY) );
         }
     }
     if ( !xRet.is() )
     {
-        throw DeploymentException(
+        throw cpo::uno::DeploymentException(
             u"no service factory DefaultContext"_ustr,
             Reference<XInterface>(factory, UNO_QUERY) );
     }

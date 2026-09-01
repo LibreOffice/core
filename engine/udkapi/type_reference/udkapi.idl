@@ -15,6 +15,8 @@ module cpo {
     };
     published exception RuntimeException: ::cpo::uno::Exception {
     };
+    published exception DeploymentException: ::cpo::uno::RuntimeException {
+    };
     published exception SecurityException: ::cpo::uno::RuntimeException {
     };
     published enum TypeClass {
@@ -937,12 +939,8 @@ module com {
      ::com::sun::star::io::XInputStream extract([in] ::com::sun::star::io::XInputStream aStream);
     };
    };
-   module uno {
-    published exception DeploymentException: ::cpo::uno::RuntimeException {
-    };
-   };
    module java {
-    published exception JavaInitializationException: ::com::sun::star::uno::DeploymentException {
+    published exception JavaInitializationException: ::cpo::uno::DeploymentException {
     };
     published exception JavaDisabledException: ::com::sun::star::java::JavaInitializationException {
     };

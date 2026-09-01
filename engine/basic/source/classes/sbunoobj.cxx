@@ -44,7 +44,7 @@
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -2377,7 +2377,7 @@ void SbUnoObject::doIntrospection()
     {
         xIntrospection = theIntrospection::get(xContext);
     }
-    catch ( const css::uno::DeploymentException& )
+    catch ( const cpo::uno::DeploymentException& )
     {
     }
 

@@ -172,7 +172,7 @@ ScModule::~ScModule()
             css::datatransfer::clipboard::SystemClipboard::create(
                 comphelper::getProcessComponentContext());
         xClipboard->setContents( nullptr, nullptr );
-    } catch (css::uno::DeploymentException const&) {
+    } catch (cpo::uno::DeploymentException const&) {
         // ignore, sometimes happens that UNO is already shutdown by now
     }
 

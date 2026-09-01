@@ -35,7 +35,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
@@ -118,7 +118,7 @@ css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
           dispatch) ||
         !dispatch.is())
     {
-        throw css::uno::DeploymentException(
+        throw cpo::uno::DeploymentException(
             u"component context fails to supply singleton"
             " com.sun.star.test.deployment.passive_native_singleton of type"
             " com.sun.star.frame.XDispatch"_ustr,

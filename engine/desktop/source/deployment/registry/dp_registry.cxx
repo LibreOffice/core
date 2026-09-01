@@ -35,7 +35,7 @@
 #include <ucbhelper/content.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
+#include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

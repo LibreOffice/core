@@ -1432,7 +1432,7 @@ Reference< ui::XAcceleratorConfiguration > ModuleUIConfigurationManager::getShor
         m_xModuleAcceleratorManager = ui::ModuleAcceleratorConfiguration::
             createWithModuleIdentifier(m_xContext, m_aModuleIdentifier);
     }
-    catch ( const css::uno::DeploymentException& )
+    catch ( const cpo::uno::DeploymentException& )
     {
         SAL_WARN("fwk.uiconfiguration", "ModuleAcceleratorConfiguration"
                 " not available. This should happen only on mobile platforms.");
