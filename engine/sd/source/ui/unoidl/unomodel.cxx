@@ -6539,6 +6539,19 @@ void clearInsertedPageLinks(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uI
         pPage->SetBookmarkName(OUString());
     }
 }
+
+/// Records on the pages of a run the time the source document was last modified, so each linked
+/// page carries when its source was last seen.
+void stampInsertedPageSource(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uInt16 nSlideCount,
+                             const OUString& rModifiedTime)
+{
+    for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
+    {
+        SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
+        if (pPage)
+            pPage->SetSourceModifiedTime(rModifiedTime);
+    }
+}
 } // namespace
 
 bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OString& rJsonOptions)
@@ -6550,6 +6563,7 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     bool bKeepDesign = false;
     bool bLink = false;
     OUString aSourceName;
+    OUString aLastModifiedTime;
     std::vector<sal_Int32> aPages;
     try
     {
@@ -6561,6 +6575,8 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         bLink = aTree.get<bool>("link", false);
         aSourceName = OStringToOUString(aTree.get<std::string>("source", ""),
                                         RTL_TEXTENCODING_UTF8);
+        aLastModifiedTime = OStringToOUString(
+            OString(aTree.get<std::string>("lastModifiedTime", "")), RTL_TEXTENCODING_UTF8);
         if (auto oPages = aTree.get_child_optional("slides"))
         {
             for (const auto& rPage : *oPages)
@@ -6607,13 +6623,13 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
                                  pSource->GetDocSh(), /*oScaleObjects=*/true))
         return false;
 
+    const sal_uInt16 nFirstSlide
+        = nInsertPos == 0xFFFF ? nSlidesBefore : static_cast<sal_uInt16>(nAt);
+    const sal_uInt16 nInsertedCount = mpDoc->GetSdPageCount(PageKind::Standard) - nSlidesBefore;
     if (!bLink)
-    {
-        const sal_uInt16 nFirstSlide
-            = nInsertPos == 0xFFFF ? nSlidesBefore : static_cast<sal_uInt16>(nAt);
-        clearInsertedPageLinks(*mpDoc, nFirstSlide,
-                               mpDoc->GetSdPageCount(PageKind::Standard) - nSlidesBefore);
-    }
+        clearInsertedPageLinks(*mpDoc, nFirstSlide, nInsertedCount);
+    else if (!aLastModifiedTime.isEmpty())
+        stampInsertedPageSource(*mpDoc, nFirstSlide, nInsertedCount, aLastModifiedTime);
 
     return true;
 }

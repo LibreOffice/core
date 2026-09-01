@@ -2568,8 +2568,9 @@ struct COKitDocument
      * @param pUrl the presentation to take the pages from, as a URL.
      * @param pJsonOptions names the pages to take as "slides", an empty list taking every
      *        page, the slide to insert before as "at", whether the pages keep the design of
-     *        the file they came from as "keepDesign", and whether they stay linked to the
-     *        document named by "source" as "link".
+     *        the file they came from as "keepDesign", whether they stay linked to the
+     *        document named by "source" as "link", and the time that source was last
+     *        modified as "lastModifiedTime", recorded on each linked page.
      * @return whether the pages were inserted.
      */
     virtual bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) = 0;

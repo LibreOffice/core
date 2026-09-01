@@ -51,7 +51,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 ,   mbHadSMILNodes( false )
 {
     bool bHaveXmlId( false );
-    OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF;
+    OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF, sSourceModifiedTime;
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
@@ -115,6 +115,11 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             case XML_ELEMENT(XLINK, XML_HREF):
             {
                 sHREF = sValue;
+                break;
+            }
+            case XML_ELEMENT(CO_EXT, XML_SOURCE_MODIFIED_TIME):
+            {
+                sSourceModifiedTime = sValue;
                 break;
             }
         }
@@ -221,6 +226,10 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             }
 
             xProps->setPropertyValue(u"BookmarkURL"_ustr, cpo::uno::Any( sHREF ) );
+
+            if( !sSourceModifiedTime.isEmpty() )
+                xProps->setPropertyValue(u"SourceModifiedTime"_ustr,
+                                         cpo::uno::Any( sSourceModifiedTime ) );
         }
     }
 

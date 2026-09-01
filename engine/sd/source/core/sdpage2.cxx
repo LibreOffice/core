@@ -357,6 +357,7 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     maCreatedPageName.clear();
     maFileName = rSrcPage.maFileName;
     maBookmarkName = rSrcPage.maBookmarkName;
+    maSourceModifiedTime = rSrcPage.maSourceModifiedTime;
     mbScaleObjects = rSrcPage.mbScaleObjects;
     meCharSet = rSrcPage.meCharSet;
     mnPaperBin = rSrcPage.mnPaperBin;

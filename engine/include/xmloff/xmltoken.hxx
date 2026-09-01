@@ -3634,6 +3634,7 @@ namespace xmloff::token {
 
         XML_GUID,
         XML_DATE_UTC,
+        XML_SOURCE_MODIFIED_TIME,
 
         XML_SHEET_VIEWS,
         XML_SHEET_VIEW,

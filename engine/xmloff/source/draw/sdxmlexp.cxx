@@ -1698,6 +1698,14 @@ void SdXMLExport::ExportContent_()
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_REPLACE );
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
+
+                        // The time the source document was last modified, kept
+                        // so a later refresh can tell whether it moved on.
+                        OUString aSourceModifiedTime;
+                        xProps->getPropertyValue(u"SourceModifiedTime"_ustr) >>= aSourceModifiedTime;
+                        if( !aSourceModifiedTime.isEmpty() )
+                            AddAttribute( XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME,
+                                          aSourceModifiedTime );
                     }
                 }
                 catch(const Exception&)

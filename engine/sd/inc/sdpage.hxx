@@ -120,6 +120,7 @@ friend class sd::UndoAttrObject;
     OUString    maCreatedPageName;        ///< generated page name by GetPageName.
     OUString    maFileName;               ///< file name.
     OUString    maBookmarkName;           ///< Bookmark name.
+    OUString    maSourceModifiedTime;     ///< time the source document was last modified, ISO8601.
     bool    mbScaleObjects;           ///< Objects should be scaled
     rtl_TextEncoding meCharSet;           ///< Text encoding
     sal_uInt16  mnPaperBin;               ///< PaperBin
@@ -286,6 +287,8 @@ public:
     const OUString& GetFileName() const       { return maFileName; }
     void            SetBookmarkName(const OUString& aName) { maBookmarkName = aName; }
     const OUString& GetBookmarkName() const       { return maBookmarkName; }
+    void            SetSourceModifiedTime(const OUString& aTime) { maSourceModifiedTime = aTime; }
+    const OUString& GetSourceModifiedTime() const { return maSourceModifiedTime; }
 
     SD_DLLPUBLIC void ConnectLink();
     void            DisconnectLink();

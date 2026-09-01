@@ -4535,6 +4535,16 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:group>
     </rng:optional>
   </rng:define>
+  <!-- TODO no proposal -->
+  <!-- The time the source document the page came from was last modified, as
+       the integrator reported it. It goes with the reference above. -->
+  <rng:define name="draw-page-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:source-modified-time">
+        <rng:text/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <!-- TODO no proposal for page number on multipage formats -->
   <rng:define name="draw-image-attlist" combine="interleave">
     <rng:optional>

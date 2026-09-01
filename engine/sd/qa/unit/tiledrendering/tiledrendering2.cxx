@@ -430,19 +430,20 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     const OUString aSourceUrl
         = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
 
-    // A slide inserted as a link reports the source document and the slide of
-    // it that it came from.
+    // A slide inserted as a link reports the source document, the slide of it that it came
+    // from, and the time that source was last modified.
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"at\":1,\"keepDesign\":false,\"link\":true,"
-                    "\"source\":\"Q3 #1 100%.odp\"}"_ostr));
+                    "\"source\":\"Q3 #1 100%.odp\",\"lastModifiedTime\":\"2020-09-13T12:26:40Z\"}"_ostr));
     SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
     CPPUNIT_ASSERT(pLinked);
     CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20%231%20100%25.odp"_ustr,
                          pLinked->GetFileName());
     CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr, pLinked->GetSourceModifiedTime());
 
     // A slide inserted from the same file without asking for a link is a plain copy, and
-    // names no source.
+    // names no source and no modified time.
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl,
         "{\"slides\":[0],\"at\":2,\"keepDesign\":false,\"source\":\"Q3 #1 100%.odp\"}"_ostr));
@@ -450,6 +451,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT(pCopied);
     CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetFileName());
     CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetSourceModifiedTime());
 
     // An insert that names no source document has nothing for a link to record, so one that
     // asks for links inserts nothing at all.
@@ -463,6 +465,30 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"link\":true,\"source\":\"/tmp/staged/Q3.odp\"}"_ostr));
     CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkModifiedTimeRoundtrip)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\","
+                    "\"lastModifiedTime\":\"2020-09-13T12:26:40Z\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr,
+                         pDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
+
+    // The time the source was last modified survives a save to ODF and the load back.
+    saveAndReload(TestFilter::ODP);
+    SdXImpressDocument* pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pReloaded);
+    SdDrawDocument* pReloadedDoc = pReloaded->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr,
+                         pReloadedDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)

@@ -503,8 +503,9 @@ public:
     /** Inserts pages of the presentation at rFileUrl into this document. rJsonOptions names
         the pages to take as "slides", an empty list taking every page, the slide to insert
         before as "at", whether the pages keep the design of the file they came from as
-        "keepDesign", and whether they stay linked to the document named by "source" as "link"
-        (Impress only function) */
+        "keepDesign", whether they stay linked to the document named by "source" as "link",
+        and the time that source was last modified as "lastModifiedTime", recorded on each
+        linked page (Impress only function) */
     virtual bool insertPagesFromFile(const OUString& /*rFileUrl*/, const OString& /*rJsonOptions*/)
     {
         return false;

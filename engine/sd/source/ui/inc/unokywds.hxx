@@ -54,6 +54,7 @@ inline constexpr OUString sUNO_Prop_IsBackgroundVisible = u"IsBackgroundVisible"
 inline constexpr OUString sUNO_Prop_IsBackgroundObjectsVisible = u"IsBackgroundObjectsVisible"_ustr;
 inline constexpr OUString sUNO_Prop_UserDefinedAttributes = u"UserDefinedAttributes"_ustr;
 inline constexpr OUString sUNO_Prop_BookmarkURL = u"BookmarkURL"_ustr;
+inline constexpr OUString sUNO_Prop_SourceModifiedTime = u"SourceModifiedTime"_ustr;
 inline constexpr OUString sUNO_Prop_RuntimeUID = u"RuntimeUID"_ustr;
 inline constexpr OUString sUNO_Prop_HasValidSignatures = u"HasValidSignatures"_ustr;
 inline constexpr OUString sUNO_Prop_AllowLinkUpdate = u"AllowLinkUpdate"_ustr;

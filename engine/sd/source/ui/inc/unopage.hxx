@@ -75,6 +75,8 @@ protected:
 
     OUString getBookmarkURL() const;
     void setBookmarkURL( std::u16string_view rURL );
+    OUString getSourceModifiedTime() const;
+    void setSourceModifiedTime( const OUString& rTime );
 
     void SetLeftBorder( sal_Int32 nValue );
     void SetRightBorder( sal_Int32 nValue );

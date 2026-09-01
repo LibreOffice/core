@@ -3635,7 +3635,8 @@ namespace xmloff::token {
         TOKEN( "horizontal-rule",                 XML_HORIZONTAL_RULE ),
 
         TOKEN( "guid",                            XML_GUID ),
-        TOKEN("date-utc", XML_DATE_UTC),
+        TOKEN( "date-utc",                        XML_DATE_UTC ),
+        TOKEN( "source-modified-time",            XML_SOURCE_MODIFIED_TIME ),
 
         TOKEN( "sheet-views",                     XML_SHEET_VIEWS ),
         TOKEN( "sheet-view",                      XML_SHEET_VIEW ),
