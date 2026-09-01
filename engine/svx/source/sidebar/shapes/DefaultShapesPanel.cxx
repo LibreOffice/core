@@ -95,6 +95,24 @@ void DefaultShapesPanel::Initialize()
         aSetMap.first->SetColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
         aSetMap.first->SetSelectHdl(LINK(this, DefaultShapesPanel, ShapeSelectHdl));
     }
+
+    // Each set draws its shape gallery onto a plain drawing area, which carries no text of its
+    // own, so name it after the heading of the frame it sits in.
+    const std::pair<ValueSet*, OUString> aSetLabelIds[] = {
+        { mxLineArrowSet.get(),   u"label1"_ustr },
+        { mxCurveSet.get(),       u"label2"_ustr },
+        { mxConnectorSet.get(),   u"label3"_ustr },
+        { mxBasicShapeSet.get(),  u"label4"_ustr },
+        { mxSymbolShapeSet.get(), u"label5"_ustr },
+        { mxBlockArrowSet.get(),  u"label6"_ustr },
+        { mxFlowchartSet.get(),   u"label7"_ustr },
+        { mxCalloutSet.get(),     u"label8"_ustr },
+        { mxStarSet.get(),        u"label9"_ustr },
+        { mx3DObjectSet.get(),    u"label10"_ustr },
+    };
+    for (const auto& rSetLabelId : aSetLabelIds)
+        rSetLabelId.first->GetDrawingArea()->set_accessible_name(
+            m_xBuilder->weld_label(rSetLabelId.second)->get_label());
 }
 
 DefaultShapesPanel::~DefaultShapesPanel()
