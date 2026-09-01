@@ -1804,8 +1804,7 @@ SwAccessibleMap::GetContextImpl(const SdrObject* pObj, SwAccessibleContext* pPar
             ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
                         ::accessibility::ShapeTypeHandler::Instance();
 
-            ::accessibility::AccessibleShapeInfo aShapeInfo(
-                    xShape, uno::Reference<XAccessible>(pParentImpl), this );
+            ::accessibility::AccessibleShapeInfo aShapeInfo(xShape, pParentImpl, this);
 
             xAcc = rShapeTypeHandler.CreateAccessibleObject(
                         aShapeInfo, mpShapeMap->GetInfo() );
