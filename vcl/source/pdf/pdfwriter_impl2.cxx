@@ -264,7 +264,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     {
         m_rOuterFace.DrawJPGBitmap( *pStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aAlphaMask, i_Graphic );
         m_aPDFBmpCache.insert(
-            { *aBmpChecksum, PDFBmpCacheEntry{ bTrueColorJPG, pStrm, aAlphaMask } });
+            { *aBmpChecksum, PDFBmpCacheEntry{ bTrueColorJPG, std::move(pStrm), aAlphaMask } });
     }
     else
     {
