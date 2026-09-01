@@ -5,7 +5,7 @@
     <string name="failed_to_insert_image">Nem sikerült beilleszteni a képet</string>
     <string name="failed_to_load_file">Nem sikerült meghatározni a betöltendő fájlt</string>
     <string name="storage_permission_required">Jogosultság szükséges a tárolóhelyre íráshoz</string>
-    <string name="temp_file_saving_disabled">Ez a fájl írásvédett, a mentés le van tiltva.</string>
+    <string name="temp_file_saving_disabled">A forrásalkalmazás írásvédettként osztotta meg. A módosításhoz használja a „Másolat szerkesztése” lehetőséget.</string>
     <string name="preparing_for_the_first_start_after_an_update">Előkészülés a frissítés utáni első indításhoz.</string>
     <string name="saving">Mentés...</string>
     <string name="exiting">Kilépés...</string>
@@ -23,4 +23,9 @@
     <string name="convert_odf_message">Ez a dokumentum olyan formázást vagy tartalmat tartalmazhat, amely nem menthető az aktuálisan kiválasztott \"Szöveg\" fájlformátumban.</string>
     <string name="ask_for_convert_odf">Fájlformátum megerősítése</string>
     <string name="use_odf">ODF formátum használata</string>
+    <string name="all_files_access_title">Csak olvasható módban megnyitva</string>
+    <string name="all_files_access_message">Az alkalmazás, amely megosztotta ezt a fájlt, nem tette lehetővé a változtatások visszamentését.\n\nAdja meg a „Teljes fájlhozzáférés” jogot, hogy ez az alkalmazás az eredeti helyén írhassa a fájlt, azaz szerkeszthető legyen.</string>
+    <string name="all_files_access_grant">Hozzáférés engedélyezése</string>
+    <string name="do_not_ask_again">Ne kérdezze ismét</string>
+    <string name="failed_to_save_file">A fájlmódosítások mentése nem sikerült</string>
 </resources>
