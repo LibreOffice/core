@@ -27,9 +27,6 @@ class EditBrowseBoxTableCell final : public cppu::ImplInheritanceHelper<VCLXAcce
 public:
     EditBrowseBoxTableCell(svt::ControlBase* pControl);
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-
     // XAccessibleContext
     virtual css::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleParent() override;

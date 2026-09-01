@@ -36,8 +36,6 @@ namespace dbaui
         */
         OJoinDesignViewAccess(  OJoinTableView* _pTableView);
 
-        virtual OUString SAL_CALL getImplementationName() override;
-
         // XAccessibleContext
         virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;

@@ -43,10 +43,7 @@ namespace dbaui
         m_pLine = nullptr;
         VCLXAccessibleComponent::disposing();
     }
-    OUString SAL_CALL OConnectionLineAccess::getImplementationName()
-    {
-        return u"org.openoffice.comp.dbu.ConnectionLineAccessibility"_ustr;
-    }
+
     // XAccessibleContext
     sal_Int64 SAL_CALL OConnectionLineAccess::getAccessibleChildCount(  )
     {

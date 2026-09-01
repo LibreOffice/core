@@ -36,10 +36,7 @@ namespace dbaui
         , m_pTableView(_pTableView)
     {
     }
-    OUString SAL_CALL OJoinDesignViewAccess::getImplementationName()
-    {
-        return u"org.openoffice.comp.dbu.JoinViewAccessibility"_ustr;
-    }
+
     void OJoinDesignViewAccess::clearTableView()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
