@@ -124,9 +124,6 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent() override;
-
     /** This implementation returns either 1 or 0 depending on whether there
         is an active accessible OLE object or not.
     */

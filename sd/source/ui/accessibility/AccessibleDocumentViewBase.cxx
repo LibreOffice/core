@@ -214,14 +214,6 @@ void AccessibleDocumentViewBase::ViewForwarderChanged()
 
 //=====  XAccessibleContext  ==================================================
 
-Reference<XAccessible> SAL_CALL
-       AccessibleDocumentViewBase::getAccessibleParent()
-{
-    ensureAlive();
-
-    return AccessibleContextBase::getAccessibleParent();
-}
-
 sal_Int64 SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChildCount()
 {
