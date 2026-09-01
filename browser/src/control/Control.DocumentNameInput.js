@@ -69,6 +69,19 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 		}
 	},
 
+	_canEditDocumentName: function() {
+		return !this.map['wopi'].UserCanNotWriteRelative && !this.map.isReadOnlyMode();
+	},
+
+	// Put the name field back to the state the current permissions allow, after a
+	// progress bar or a loading animation took it over.
+	restoreDocumentNameInput : function() {
+		if (this._canEditDocumentName())
+			this.enableDocumentNameInput();
+		else
+			this.disableDocumentNameInput();
+	},
+
 	disableDocumentNameInput : function() {
 		$('#document-name-input').prop('disabled', true);
 		$('#document-name-input').removeClass('editable');
@@ -152,12 +165,7 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 		// properties along, so the loading bar has nothing left to report.
 		$('#document-name-input-loading-bar').css('display', 'none');
 
-		if (!e.UserCanNotWriteRelative && !this.map.isReadOnlyMode()) {
-			// Save As allowed
-			this.enableDocumentNameInput();
-		} else {
-			this.disableDocumentNameInput();
-		}
+		this.restoreDocumentNameInput();
 	},
 
 	showProgressBar: function() {
@@ -166,7 +174,7 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 	},
 
 	hideProgressBar: function() {
-		this.enableDocumentNameInput();
+		this.restoreDocumentNameInput();
 		this.progressBar.style.display = 'none';
 	},
 
@@ -180,7 +188,7 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 	},
 
 	hideLoadingAnimation : function() {
-		this.enableDocumentNameInput();
+		this.restoreDocumentNameInput();
 		$('#document-name-input-loading-bar').css('display', 'none');
 	},
 
