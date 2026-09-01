@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <cwchar>
 #include <deque>
 #include <filesystem>
 #include <fstream>
@@ -22,6 +23,7 @@
 
 #include <Windows.h>
 #include <appmodel.h>
+#include <dwmapi.h>
 #include <ole2.h>
 #include <shellapi.h>
 #include <shlobj.h>
@@ -184,6 +186,10 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
 static HANDLE copyEngineClipboardData(UINT format, const std::string& mimeType);
 
 static std::string MIME_type_for_clipboard_format(UINT format);
+
+static void applyTitleBarTheme(HWND hWnd);
+
+static void applyTitleBarThemeToAllWindows();
 
 static std::set<std::string> currentlyOpenDocumens()
 {
@@ -1616,6 +1622,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 // Accept files dragged from Explorer onto the window, which arrive as WM_DROPFILES.
                 DragAcceptFiles(hWnd, TRUE);
 
+                // Set the title bar before the window is shown, so it is never drawn in the wrong
+                // theme first.
+                applyTitleBarTheme(hWnd);
+
                 // Contrary to documentation, when you use CW_USEDEFAULT for the x and y parameters
                 // in the CreateWindowW() call, Windows will occasionally place the window so that
                 // it is partially obscured by the taskbar. Workaround for that.
@@ -1805,6 +1815,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         }
         break;
 
+        case WM_SETTINGCHANGE:
+            // Take into account the systme theme changes and use that for the titlebar in
+            // case the in-app theme preference is not set. `applyTitleBarThemeToAllWindows`
+            // need not be called since each window receives this message.
+            if (lParam && wcscmp((const wchar_t*)lParam, L"ImmersiveColorSet") == 0)
+                applyTitleBarTheme(hWnd);
+        break;
+
         case WM_CLOSE:
             if (windowData[hWnd].mode == DocumentMode::STARTER)
                 ; // Nothing
@@ -1956,6 +1974,41 @@ static bool isLightTheme()
         return true;
 
     return value == 1;
+}
+
+static bool darkModeEnabled() { return Desktop::getDarkMode().value_or(!isLightTheme()); }
+
+// This might not be defined for older Windows versions
+#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
+#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+#endif
+
+// Make the native (DWM-drawn) title bar of a window match the effective dark mode. The document UI
+// inside the web view follows the same state through the darkTheme parameter of the cool.html URL.
+static void applyTitleBarTheme(HWND hWnd)
+{
+    const BOOL darkMode = darkModeEnabled() ? TRUE : FALSE;
+    HRESULT hr =
+        DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &darkMode, sizeof(darkMode));
+    if (!SUCCEEDED(hr))
+    {
+        LOG_DBG("DwmSetWindowAttribute() for a dark title bar failed: " << hr);
+        return;
+    }
+
+    // A window that is already on screen does not necessarily repaint its frame by itself, so ask
+    // for that. Harmless for a window that is not visible yet (during WM_CREATE, say).
+    SetWindowPos(hWnd, NULL, 0, 0, 0, 0,
+                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+}
+
+// Used when the dark mode changes for the whole application (the web UI asked for it with
+// SETDARKMODE), as opposed to a platform theme change, which each window is told about separately
+// with its own WM_SETTINGCHANGE.
+static void applyTitleBarThemeToAllWindows()
+{
+    for (const auto& i : windowData)
+        applyTitleBarTheme(i.second.hWnd);
 }
 
 static HRESULT GetStreamForIFStream(std::ifstream& file, IStream** outStream)
@@ -2709,8 +2762,7 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                             coolURL += "&dir=" + std::string(LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
 
                             // Saved choice wins, otherwise follow the system theme.
-                            const bool darkMode = Desktop::getDarkMode().value_or(!isLightTheme());
-                            coolURL += darkMode ? "&darkTheme=true" : "&darkTheme=false";
+                            coolURL += darkModeEnabled() ? "&darkTheme=true" : "&darkTheme=false";
 
                             if (data.mode != DocumentMode::STARTER)
                                 coolURL +=
@@ -3312,6 +3364,7 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         else if (s.starts_with(L"SETDARKMODE "))
         {
             Desktop::setDarkMode(s.substr(strlen("SETDARKMODE ")) == L"true");
+            applyTitleBarThemeToAllWindows();
         }
         else if (s.starts_with(L"downloadas "))
         {
