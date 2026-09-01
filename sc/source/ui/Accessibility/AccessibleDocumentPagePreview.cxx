@@ -657,7 +657,7 @@ public:
     sal_Int32 GetForeShapeCount() const;
     rtl::Reference<::accessibility::AccessibleShape> GetForeShape(sal_Int32 nIndex) const;
     sal_Int32 GetControlCount() const;
-    uno::Reference<XAccessible> GetControl(sal_Int32 nIndex) const;
+    rtl::Reference<::accessibility::AccessibleShape> GetControl(sal_Int32 nIndex) const;
     uno::Reference<XAccessible> GetForegroundShapeAt(const awt::Point& rPoint) const; // inclusive controls
     uno::Reference<XAccessible> GetBackgroundShapeAt(const awt::Point& rPoint) const;
 
@@ -866,23 +866,23 @@ sal_Int32 ScShapeChildren::GetControlCount() const
     return nCount;
 }
 
-uno::Reference<XAccessible> ScShapeChildren::GetControl(sal_Int32 nIndex) const
+rtl::Reference<::accessibility::AccessibleShape> ScShapeChildren::GetControl(sal_Int32 nIndex) const
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<::accessibility::AccessibleShape> pAccessible;
     for (const auto& rShapeRange : maShapeRanges)
     {
         sal_Int32 nCount(rShapeRange.maControls.size());
         if(nIndex < nCount)
-            xAccessible = GetAccShape(rShapeRange.maControls, nIndex);
+            pAccessible = GetAccShape(rShapeRange.maControls, nIndex);
         nIndex -= nCount;
-        if (xAccessible.is())
+        if (pAccessible.is())
             break;
     }
 
     if (nIndex >= 0)
         throw lang::IndexOutOfBoundsException();
 
-    return xAccessible;
+    return pAccessible;
 }
 
 namespace {
