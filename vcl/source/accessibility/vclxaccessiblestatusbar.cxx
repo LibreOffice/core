@@ -243,22 +243,6 @@ void VCLXAccessibleStatusBar::disposing()
     m_aAccessibleChildren.clear();
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleStatusBar::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleStatusBar"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleStatusBar"_ustr };
-}
-
-
 // XAccessibleContext
 
 

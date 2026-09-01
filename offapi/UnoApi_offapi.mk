@@ -489,7 +489,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt,\
 	AccessibleComboBox \
 	AccessibleList \
 	AccessibleListBox \
-	AccessibleStatusBar \
 	AccessibleWindow \
 	AnimatedImagesControl \
 	AnimatedImagesControlModel \
