@@ -97,21 +97,6 @@ void VCLXAccessibleButton::FillAccessibleStateSet( sal_Int64& rStateSet )
     }
 }
 
-
-// XServiceInfo
-
-
-OUString VCLXAccessibleButton::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleButton"_ustr;
-}
-
-
-Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleButton"_ustr };
-}
-
 // XAccessibleContext
 
 

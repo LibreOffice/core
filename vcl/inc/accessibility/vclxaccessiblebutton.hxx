@@ -41,10 +41,6 @@ public:
     VCLXAccessibleButton(PushButton* pButton)
         : ImplInheritanceHelper(pButton) {}
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
     // XAccessibleContext
     virtual OUString SAL_CALL getAccessibleName(  ) override;
 
