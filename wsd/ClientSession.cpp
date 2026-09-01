@@ -2284,12 +2284,13 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         oss << std::boolalpha;
         oss << "load url=" << publicUri.toString();
 
-#if ENABLE_SSL
-        // if ssl client verification was disabled in online for the wopi server,
-        // then exempt that host from ssl host verification also in core
-        if (StorageConnectionManager::isStorageVerificationDisabled())
-            oss << " verifyHost=false";
-#endif
+        if constexpr (Util::isWopiSupported())
+        {
+            // if ssl client verification was disabled in online for the wopi server,
+            // then exempt that host from ssl host verification also in core
+            if (StorageConnectionManager::isStorageVerificationDisabled())
+                oss << " verifyHost=false";
+        }
 
         if (!getUserId().empty() && !getUserName().empty())
         {
