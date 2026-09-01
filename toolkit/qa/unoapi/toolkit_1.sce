@@ -21,7 +21,6 @@
 #i86008 -o toolkit.AccessibleComboBox
 -o toolkit.AccessibleDropDownComboBox
 #i86110 -o toolkit.AccessibleEdit
-#i86110 -o toolkit.AccessibleList
 #i86110 -o toolkit.AccessibleListItem
 -o toolkit.AccessibleMenu
 -o toolkit.AccessibleMenuBar
