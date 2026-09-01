@@ -653,9 +653,9 @@ public:
     void Init();
 
     sal_Int32 GetBackShapeCount() const;
-    uno::Reference<XAccessible> GetBackShape(sal_Int32 nIndex) const;
+    rtl::Reference<::accessibility::AccessibleShape> GetBackShape(sal_Int32 nIndex) const;
     sal_Int32 GetForeShapeCount() const;
-    uno::Reference<XAccessible> GetForeShape(sal_Int32 nIndex) const;
+    rtl::Reference<::accessibility::AccessibleShape> GetForeShape(sal_Int32 nIndex) const;
     sal_Int32 GetControlCount() const;
     uno::Reference<XAccessible> GetControl(sal_Int32 nIndex) const;
     uno::Reference<XAccessible> GetForegroundShapeAt(const awt::Point& rPoint) const; // inclusive controls
@@ -810,23 +810,24 @@ sal_Int32 ScShapeChildren::GetBackShapeCount() const
     return nCount;
 }
 
-uno::Reference<XAccessible> ScShapeChildren::GetBackShape(sal_Int32 nIndex) const
+rtl::Reference<::accessibility::AccessibleShape>
+ScShapeChildren::GetBackShape(sal_Int32 nIndex) const
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<::accessibility::AccessibleShape> pAccessible;
     for (const auto& rShapeRange : maShapeRanges)
     {
         sal_Int32 nCount(rShapeRange.maBackShapes.size());
         if(nIndex < nCount)
-            xAccessible = GetAccShape(rShapeRange.maBackShapes, nIndex);
+            pAccessible = GetAccShape(rShapeRange.maBackShapes, nIndex);
         nIndex -= nCount;
-        if (xAccessible.is())
+        if (pAccessible.is())
             break;
     }
 
     if (nIndex >= 0)
         throw lang::IndexOutOfBoundsException();
 
-    return xAccessible;
+    return pAccessible;
 }
 
 sal_Int32 ScShapeChildren::GetForeShapeCount() const
@@ -837,23 +838,24 @@ sal_Int32 ScShapeChildren::GetForeShapeCount() const
     return nCount;
 }
 
-uno::Reference<XAccessible> ScShapeChildren::GetForeShape(sal_Int32 nIndex) const
+rtl::Reference<::accessibility::AccessibleShape>
+ScShapeChildren::GetForeShape(sal_Int32 nIndex) const
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<::accessibility::AccessibleShape> pAccessible;
     for (const auto& rShapeRange : maShapeRanges)
     {
         sal_Int32 nCount(rShapeRange.maForeShapes.size());
         if(nIndex < nCount)
-            xAccessible = GetAccShape(rShapeRange.maForeShapes, nIndex);
+            pAccessible = GetAccShape(rShapeRange.maForeShapes, nIndex);
         nIndex -= nCount;
-        if (xAccessible.is())
+        if (pAccessible.is())
             break;
     }
 
     if (nIndex >= 0)
         throw lang::IndexOutOfBoundsException();
 
-    return xAccessible;
+    return pAccessible;
 }
 
 sal_Int32 ScShapeChildren::GetControlCount() const
