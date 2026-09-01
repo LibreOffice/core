@@ -22,15 +22,19 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/intitem.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/EnhancedCustomShapeGeometry.hxx>
+#include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -40,6 +44,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1420,6 +1425,59 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf160421_3D_FlipLight)
     xShape = getShape(2);
     nColorDistance = aNormalColor.GetColorError(getColor(xShape, 0.6, 0.6));
     CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testGalleryShapeTypeMapping)
+{
+    // These gallery shapes carry their own inline geometry and have no legacy binary
+    // equivalent. They must map to the same type as other shapes with inline geometry
+    // instead of staying unmapped, or converting them to a polygon splits each of them
+    // into an unneeded fill object and a stroke object.
+    CPPUNIT_ASSERT_EQUAL(mso_sptMin, EnhancedCustomShapeTypeNames::Get(u"frame"_ustr));
+    CPPUNIT_ASSERT_EQUAL(mso_sptMin, EnhancedCustomShapeTypeNames::Get(u"circle-pie"_ustr));
+    CPPUNIT_ASSERT_EQUAL(mso_sptMin, EnhancedCustomShapeTypeNames::Get(u"puzzle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(mso_sptMin,
+                          EnhancedCustomShapeTypeNames::Get(u"up-right-down-arrow"_ustr));
+    CPPUNIT_ASSERT_EQUAL(mso_sptMin,
+                          EnhancedCustomShapeTypeNames::Get(u"up-right-arrow-callout"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testConvertRingToPolygonIsSingleObject)
+{
+    // Given a ring (donut) shape:
+    mxComponent = loadFromDesktop(u"private:factory/sdraw"_ustr);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.CustomShape"_ustr), uno::UNO_QUERY);
+    xPage->add(xShape);
+    xShape->setSize(awt::Size(10000, 10000));
+    xShape->setPosition(awt::Point(1000, 1000));
+    cpo::uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence({
+        { u"Type"_ustr, cpo::uno::Any(u"ring"_ustr) },
+    }));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aShapeGeometry));
+
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
+    CPPUNIT_ASSERT(pObj);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->MarkObj(pObj, pSdrView->GetSdrPageView());
+
+    // When converting it to a polygon:
+    dispatchCommand(mxComponent, u".uno:ChangePolygon"_ustr, {});
+
+    // Then the result must be a single path object, not a group of a fill and a line shape.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(1), countShapes());
+    uno::Reference<drawing::XShape> xConverted(getShape(0));
+    SdrObject* pConverted = SdrObject::getSdrObjectFromXShape(xConverted);
+    CPPUNIT_ASSERT(pConverted);
+    CPPUNIT_ASSERT(!dynamic_cast<SdrObjGroup*>(pConverted));
 }
 }
 

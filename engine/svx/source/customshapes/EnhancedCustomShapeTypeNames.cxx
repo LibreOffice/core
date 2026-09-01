@@ -237,24 +237,27 @@ constexpr NameTypeTable pNameTypeTableArray[] =
     { u"mso-spt202"_ustr, mso_sptTextBox },
     { u"teardrop"_ustr,   mso_sptTearDrop },
     { u"ooxml-rect"_ustr, mso_sptRectangle },
-    { u"sinusoid"_ustr, mso_sptSinusoid }
+    { u"sinusoid"_ustr, mso_sptSinusoid },
+
+    // These gallery shapes carry their own inline geometry and have no legacy binary
+    // equivalent, so they map to the same type as "non-primitive" custom shapes.
+    { u"frame"_ustr, mso_sptMin },
+    { u"circle-pie"_ustr, mso_sptMin },
+    { u"puzzle"_ustr, mso_sptMin },
+    { u"up-right-down-arrow"_ustr, mso_sptMin },
+    { u"up-right-arrow-callout"_ustr, mso_sptMin }
 };
 
     // gallery: quadrat
     // gallery: round-quadrat
     // gallery: circle
-    // gallery: circle-pie
-    // gallery: frame
     // gallery: flower
     // gallery: cloud
-    // gallery: puzzle
     // gallery: octagon-bevel
     // gallery: diamond-bevel
     // gallery: up-right-arrow
-    // gallery: up-right-down-arrow
     // gallery: corner-right-arrow
     // gallery: split-arrow
-    // gallery: up-right-arrow-callout
     // gallery: split-round-arrow
     // gallery: s-sharped-arrow
     // Gallery: star6

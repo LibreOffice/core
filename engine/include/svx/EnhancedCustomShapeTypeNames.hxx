@@ -27,7 +27,8 @@
 
 namespace EnhancedCustomShapeTypeNames
 {
-UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) MSO_SPT Get(const OUString&);
+// Exported unconditionally: svx's own unit test links against this one.
+SVXCORE_DLLPUBLIC MSO_SPT Get(const OUString&);
 UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OUString Get(const MSO_SPT);
 UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) const OUString& GetAccName(const OUString&);
 }

@@ -2280,6 +2280,9 @@ void EnhancedCustomShape2d::CreateSubPath(
                             // has values '0 23592960'. But that is fixedfloat and means 360*2^16. Thus all these shapes
                             // have a full ellipse with start at 0deg.
                             aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipse(aCenter, fScaledWR, fScaledHR));
+                            // A full ellipse is a closed loop by construction, even though its
+                            // start and end points do not literally coincide once appended here.
+                            aNewB2DPolygon.setClosed(true);
                             continue;
                         }
 
@@ -2303,6 +2306,9 @@ void EnhancedCustomShape2d::CreateSubPath(
                             const double fE(lcl_getNormalizedCircleAngleRad(fWR, fHR, fEndAngle));
                             aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fScaledWR, fScaledHR, fS, fH));
                             aNewB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fScaledWR, fScaledHR, fH, fE));
+                            // A full ellipse is a closed loop by construction, even though its
+                            // start and end points do not literally coincide once appended here.
+                            aNewB2DPolygon.setClosed(true);
                             continue;
                         }
 
