@@ -80,12 +80,6 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    // Return list specific services.
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
-
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
     virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
