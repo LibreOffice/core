@@ -28,9 +28,11 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XTempFile.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -42,6 +44,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -63,6 +66,7 @@
 #include <scriptinterop/ElementType.hpp>
 #include <scriptinterop/ImageOptions.hpp>
 #include <scriptinterop/XBody.hpp>
+#include <scriptinterop/XContainerElement.hpp>
 #include <scriptinterop/XCursor.hpp>
 #include <scriptinterop/XDocument.hpp>
 #include <scriptinterop/XElement.hpp>
@@ -70,12 +74,18 @@
 #include <scriptinterop/XParagraph.hpp>
 #include <scriptinterop/XRangeElement.hpp>
 #include <scriptinterop/XSelection.hpp>
+#include <scriptinterop/XTable.hpp>
+#include <scriptinterop/XTableCell.hpp>
+#include <scriptinterop/XTableRow.hpp>
 #include <scriptinterop/XText.hpp>
 
 #include "document.hxx"
 
 namespace
 {
+cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> enumerateElements(
+    css::uno::Reference<css::text::XText> const & text);
+
 class SelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSelection>
 {
 public:
@@ -468,6 +478,146 @@ private:
     css::uno::Reference<css::text::XTextContent> content_;
 };
 
+class TableCellImpl: public cppu::WeakImplHelper<scriptinterop::XTableCell> {
+public:
+    explicit TableCellImpl(css::uno::Reference<css::text::XText> const & text): text_(text) {}
+
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
+
+    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+        auto const list = getChildren();
+        return index >= 0 && index < list.getLength() ? list[index] : nullptr;
+    }
+
+    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> getChildren() override {
+        return enumerateElements(text_);
+    }
+
+    sal_Int32 getNumChildren() override { return getChildren().getLength(); }
+
+    scriptinterop::ElementType getType() override { return scriptinterop::ElementType_TABLE_CELL; }
+
+    OUString getText() override { return text_.is() ? text_->getString() : u""_ustr; }
+
+private:
+    css::uno::Reference<css::text::XText> text_;
+};
+
+class TableRowImpl: public cppu::WeakImplHelper<scriptinterop::XTableRow> {
+public:
+    TableRowImpl(css::uno::Reference<css::text::XTextTable> const & table, sal_Int32 rowIndex):
+        table_(table), rowIndex_(rowIndex) {}
+
+    css::uno::Reference<cpo::uno::XInterface> getuno() override {
+        if (!table_.is()) {
+            return {};
+        }
+        auto const rows = table_->getRows();
+        css::uno::Reference<cpo::uno::XInterface> row;
+        if (rows.is() && rowIndex_ >= 0 && rowIndex_ < rows->getCount()) {
+            rows->getByIndex(rowIndex_) >>= row;
+        }
+        return row;
+    }
+
+    css::uno::Reference<scriptinterop::XTableCell> getCell(sal_Int32 index) override {
+        css::uno::Reference<css::table::XCellRange> const range(table_, css::uno::UNO_QUERY);
+        if (!range.is()) {
+            return {};
+        }
+        css::uno::Reference<css::text::XText> text;
+        try {
+            text.set(range->getCellByPosition(index, rowIndex_), css::uno::UNO_QUERY);
+        } catch (css::lang::IndexOutOfBoundsException const &) {
+            return {};
+        }
+        return text.is() ? new TableCellImpl(text) : nullptr;
+    }
+
+    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+        return getCell(index);
+    }
+
+    scriptinterop::ElementType getType() override { return scriptinterop::ElementType_TABLE_ROW; }
+
+    sal_Int32 getNumChildren() override { return getNumCells(); }
+
+    sal_Int32 getNumCells() override {
+        if (!table_.is()) {
+            return 0;
+        }
+        auto const cols = table_->getColumns();
+        return cols.is() ? cols->getCount() : sal_Int32(0);
+    }
+
+    OUString getText() override {
+        OUStringBuffer buf;
+        auto const n = getNumCells();
+        for (sal_Int32 i = 0; i != n; ++i) {
+            auto const cell = getCell(i);
+            if (cell.is()) {
+                if (!buf.isEmpty()) {
+                    buf.append('\t');
+                }
+                buf.append(cell->getText());
+            }
+        }
+        return buf.makeStringAndClear();
+    }
+
+private:
+    css::uno::Reference<css::text::XTextTable> table_;
+    sal_Int32 rowIndex_;
+};
+
+class TableImpl: public cppu::WeakImplHelper<scriptinterop::XTable> {
+public:
+    explicit TableImpl(css::uno::Reference<css::text::XTextTable> const & table): table_(table) {}
+
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return table_; }
+
+    scriptinterop::ElementType getType() override { return scriptinterop::ElementType_TABLE; }
+
+    sal_Int32 getNumRows() override {
+        if (!table_.is()) {
+            return 0;
+        }
+        auto const rows = table_->getRows();
+        return rows.is() ? rows->getCount() : sal_Int32(0);
+    }
+
+    css::uno::Reference<scriptinterop::XTableRow> getRow(sal_Int32 index) override {
+        if (!table_.is() || index < 0 || index >= getNumRows()) {
+            return {};
+        }
+        return new TableRowImpl(table_, index);
+    }
+
+    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+        return getRow(index);
+    }
+
+    sal_Int32 getNumChildren() override { return getNumRows(); }
+
+    OUString getText() override {
+        OUStringBuffer buf;
+        auto const n = getNumRows();
+        for (sal_Int32 i = 0; i != n; ++i) {
+            auto const row = getRow(i);
+            if (row.is()) {
+                if (!buf.isEmpty()) {
+                    buf.append('\n');
+                }
+                buf.append(row->getText());
+            }
+        }
+        return buf.makeStringAndClear();
+    }
+
+private:
+    css::uno::Reference<css::text::XTextTable> table_;
+};
+
 cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> enumerateElements(
     css::uno::Reference<css::text::XText> const & text)
 {
@@ -482,10 +632,17 @@ cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> enumerateElemen
                 continue;
             }
             css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
-            if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+            if (!info.is()) {
                 continue;
             }
-            v.emplace_back(new ParagraphImpl(xtc));
+            if (info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+                v.emplace_back(new ParagraphImpl(xtc));
+            } else if (info->supportsService(u"com.sun.star.text.TextTable"_ustr)) {
+                css::uno::Reference<css::text::XTextTable> const table(xtc, css::uno::UNO_QUERY);
+                if (table.is()) {
+                    v.emplace_back(new TableImpl(table));
+                }
+            }
         }
     }
     return cpo::uno::Sequence(v.data(), v.size());
@@ -799,11 +956,22 @@ public:
 
     css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
+    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+        auto const list = getChildren();
+        return index >= 0 && index < list.getLength() ? list[index] : nullptr;
+    }
+
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> getChildren() override {
         return enumerateElements(text_);
     }
 
+    sal_Int32 getNumChildren() override { return getChildren().getLength(); }
+
     OUString getText() override { return text_.is() ? text_->getString() : u""_ustr; }
+
+    scriptinterop::ElementType getType() override {
+        return scriptinterop::ElementType_BODY_SECTION;
+    }
 
 private:
     css::uno::Reference<scriptinterop::XParagraph> appendImpl(

@@ -236,34 +236,28 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
 
         function bodyFacade() {
             const xbody = activeDoc().getBody();
-            let cached = null;
-            function paras() {
-                if (!cached) {
-                    const list = xbody.getChildren();
-                    cached = [];
-                    for (let i = 0; i < list.length; ++i) {
-                        cached.push(paragraphElement(list[i], i));
-                    }
-                }
-                return cached;
-            }
             const body = {
                 getType: function() { return 'BODY_SECTION'; },
                 getText: function() { return xbody.getText(); },
-                getNumChildren: function() { return paras().length; },
-                getChild: function(n) { return paras()[n]; },
+                getNumChildren: function() { return xbody.getNumChildren(); },
+                getChild: function(n) {
+                    const xchild = xbody.getChild(n);
+                    const type = String(xchild.getType());
+                    if (type === 'PARAGRAPH' || type === 'LIST_ITEM') {
+                        return paragraphElement(xchild, n);
+                    }
+                    return xchild;
+                },
                 editAsText: function() { return textFacade(null, xbody.getText()); },
                 asText: function() { return textFacade(null, xbody.getText()); },
                 copy: function() { return body; },
                 appendParagraph: function(text) {
                     const p = xbody.appendParagraph(text || '');
-                    cached = null;
-                    return paragraphElement(p, paras().length - 1);
+                    return paragraphElement(p, xbody.getNumChildren() - 1);
                 },
                 appendListItem: function(text) {
                     const p = xbody.appendListItem(text || '');
-                    cached = null;
-                    return paragraphElement(p, paras().length - 1);
+                    return paragraphElement(p, xbody.getNumChildren() - 1);
                 },
                 getParent: function() { return null; },
                 getAttributes: function() { return {}; },

@@ -32,6 +32,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XBase \
     XBody \
     XClientRuntime \
+    XContainerElement \
     XCursor \
     XDocument \
     XDrawing \
@@ -47,6 +48,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XSlide \
     XSlideSelection \
     XSpreadsheet \
+    XTable \
+    XTableCell \
+    XTableRow \
     XText \
     XTextParagraph \
     XTextRange \

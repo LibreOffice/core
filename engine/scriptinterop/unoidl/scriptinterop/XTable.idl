@@ -11,19 +11,10 @@
 
 module scriptinterop {
 
-// Discriminator for a body-level element, matching the Google Apps Script Document ElementType
-// enum names.  Grow with additional values as the implementation learns to recognise them:
-enum ElementType {
-    PARAGRAPH,
-    LIST_ITEM,
-    TABLE,
-    TABLE_ROW,
-    TABLE_CELL,
-    INLINE_IMAGE,
-    PAGE_BREAK,
-    HORIZONTAL_RULE,
-    BODY_SECTION,
-    UNSUPPORTED
+interface XTable: XContainerElement {
+    long getNumRows();
+
+    XTableRow getRow([in] long index);
 };
 
 };
