@@ -33,7 +33,7 @@ using namespace css::uno;
 
 /**
    * Get description.
-   * @param description Variant to get description.
+   * @param description BSTR to get description.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)

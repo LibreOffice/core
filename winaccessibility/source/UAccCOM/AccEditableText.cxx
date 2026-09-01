@@ -46,7 +46,6 @@ using namespace com::sun::star::beans;
  *
  * @param    startOffset    the start offset of copying.
  * @param    endOffset      the end offset of copying.
- * @param    success        the boolean result to be returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
 {
@@ -75,7 +74,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::copyText(long startOffset, l
  *
  * @param    startOffset    the start offset of deleting.
  * @param    endOffset      the end offset of deleting.
- * @param    success        the boolean result to be returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
 {
@@ -102,7 +100,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::deleteText(long startOffset,
  *
  * @param    offset    the offset of inserting.
  * @param    text      the text to be inserted.
- * @param    success   the boolean result to be returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::insertText(long offset, BSTR* text)
 {
@@ -134,7 +131,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::insertText(long offset, BSTR
  *
  * @param    startOffset    the start offset of cutting.
  * @param    endOffset      the end offset of cutting.
- * @param    success        the boolean result to be returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
 {
@@ -160,7 +156,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::cutText(long startOffset, lo
  * Pastes text from clipboard at specified offset.
  *
  * @param    offset    the offset of pasting.
- * @param    success   the boolean result to be returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::pasteText(long offset)
 {
@@ -188,7 +183,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::pasteText(long offset)
  * @param    startOffset    the start offset of replacing.
  * @param    endOffset      the end offset of replacing.
  * @param    text           the replacing text.
- * @param    success        the boolean result to be returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset,
                                                                 BSTR* text)
@@ -220,7 +214,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset
  * @param    startOffset    the start offset.
  * @param    endOffset      the end offset.
  * @param    attributes     the attribute text.
- * @param    success        the boolean result to be returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset,
                                                                   BSTR* attributes)

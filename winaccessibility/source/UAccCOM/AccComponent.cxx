@@ -67,7 +67,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_locationInParent(long* x, l
 /**
  * Returns the foreground color of this object.
  *
- * @param    Color    the color of foreground.
+ * @param    foreground    the color of foreground.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_foreground(IA2Color* foreground)
 {
@@ -95,7 +95,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_foreground(IA2Color* foregr
 /**
  * Returns the background color of this object.
  *
- * @param    Color    the color of background.
+ * @param    background    the color of background.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_background(IA2Color* background)
 {

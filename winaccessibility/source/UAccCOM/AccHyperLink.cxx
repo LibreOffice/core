@@ -32,9 +32,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
 /**
- * Returns the number of action.
+ * Returns the number of actions.
  *
- * @param    nActions    the number of action.
+ * @param    nActions    the number of actions.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::nActions(/*[out,retval]*/ long* nActions)
 {
@@ -42,7 +42,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::nActions(/*[out,retval]*/ long*
 }
 
 /**
- * Performs specified action on the object.
+ * Performs the specified action on the object.
  *
  * @param    actionIndex    the index of action.
  */
@@ -52,7 +52,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::doAction(/* [in] */ long action
 }
 
 /**
- * Gets description of specified action.
+ * Gets the description of the specified action.
  *
  * @param    actionIndex    the index of action.
  * @param    description    the description string of the specified action.
@@ -75,14 +75,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_localizedName(long actionIn
 }
 
 /**
- * Returns key binding object (if any) associated with specified action
+ * Returns key binding object (if any) associated with the specified action
  * key binding is string.
  * e.g. "alt+d" (like IAccessible::get_accKeyboardShortcut).
  *
  * @param    actionIndex    the index of action.
- * @param    nMaxBinding    the max number of key binding.
+ * @param    nMaxBinding    the max number of key bindings.
  * @param    keyBinding     the key binding array.
- * @param    nBinding       the actual number of key binding returned.
+ * @param    nBinding       the actual number of key bindings returned.
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_keyBinding(
     /* [in] */ long actionIndex,
@@ -192,7 +192,7 @@ CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR* index)
 }
 
 /**
-   * Get start index.
+   * Get end index.
    * @param index Variant to get end index.
    * @return Result.
 */

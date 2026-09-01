@@ -614,7 +614,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_isSelected(long row, long colum
   * Selects a row and unselect all previously selected rows.
   *
   * @param    row        the row index.
-  * @param    success    the result.
   */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectRow(long row)
 {
@@ -658,7 +657,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectRow(long row)
   * Selects a column and unselect all previously selected columns.
   *
   * @param    column    the column index.
-  * @param    success   the result.
   */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectColumn(long column)
 {
@@ -703,7 +701,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectColumn(long column)
   * Unselects one row, leaving other selected rows selected (if any).
   *
   * @param    row        the row index.
-  * @param    success    the result.
   */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectRow(long row)
 {
@@ -750,7 +747,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectRow(long row)
   * Unselects one column, leaving other selected columns selected (if any).
   *
   * @param    column    the column index.
-  * @param    success   the result.
   */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectColumn(long column)
 {

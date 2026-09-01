@@ -62,8 +62,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT* currentVa
 
 /**
    * Set current value.
-   * @param  Value New value should be set.
-   * @param  success If the method is successfully called.
+   * @param  value New value to set.
    * @return Result.
    */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)

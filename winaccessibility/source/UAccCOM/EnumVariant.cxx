@@ -33,7 +33,7 @@ using namespace com::sun::star::accessibility;
 
 
 /**
-   * enumerate method,get next element
+   * Enumerate method, get next elements.
    * @param  cElements The number of elements to be returned.
    * @param  pvar      An array of at least size celt in which the elements are to be returned.
    * @param  pcElementFetched Pointer to the number of elements returned in rgVar, or Null
@@ -93,7 +93,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
 }
 
 /**
-   * skip the elements in the given range when enumerate elements
+   * Skip the elements in the given range when enumerating elements.
    * @param  cElements The number of elements to skip.
    * @return Result.
    */
@@ -120,7 +120,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
 
 
 /**
-   * reset the enumeration position to initial value
+   * Reset the enumeration position to initial value.
    * @param
    * @return Result.
    */
