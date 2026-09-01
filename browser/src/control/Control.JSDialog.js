@@ -684,6 +684,11 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				const focusables = this._getFocusablesForInitialFocus(instance.container);
 				if (focusables && focusables.length) firstFocusableElement = focusables[0];
 			}
+
+			// Nothing tabbable: a listbox option carries tabindex="-1" and takes
+			// the focus from its container instead.
+			if (!firstFocusableElement)
+				firstFocusableElement = JSDialog.FindFocusableWithin(instance.container, 'next');
 		}
 
 		if (firstFocusableElement && document.activeElement !== firstFocusableElement && !instance.isAutoCompletePopup) {
