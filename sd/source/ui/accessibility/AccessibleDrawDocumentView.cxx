@@ -78,12 +78,11 @@ struct XShapePosCompareHelper
 
 }
 
-AccessibleDrawDocumentView::AccessibleDrawDocumentView (
-    ::sd::Window* pSdWindow,
-    ::sd::ViewShell* pViewShell,
+AccessibleDrawDocumentView::AccessibleDrawDocumentView(
+    ::sd::Window* pSdWindow, ::sd::ViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
-    const uno::Reference<XAccessible>& rxParent)
-    : ImplInheritanceHelper(pSdWindow, pViewShell, rxController, rxParent)
+    const rtl::Reference<comphelper::OAccessible>& rpParent)
+    : ImplInheritanceHelper(pSdWindow, pViewShell, rxController, rpParent)
     , mpSdViewSh(pViewShell)
 {
     UpdateAccessibleName();

@@ -41,11 +41,9 @@ class AccessibleDrawDocumentView final
                                          css::accessibility::XAccessibleGroupPosition>
 {
 public:
-
-    AccessibleDrawDocumentView (::sd::Window* pSdWindow,
-        ::sd::ViewShell* pViewShell,
-        const css::uno::Reference<css::frame::XController>& rxController,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+    AccessibleDrawDocumentView(::sd::Window* pSdWindow, ::sd::ViewShell* pViewShell,
+                               const css::uno::Reference<css::frame::XController>& rxController,
+                               const rtl::Reference<comphelper::OAccessible>& rpParent);
 
     virtual ~AccessibleDrawDocumentView() override;
 
