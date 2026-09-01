@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection AnimatedGifManager */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection AnimatedGifManager ViewState */
 
 function clamp(num, min, max)
 {
@@ -704,6 +704,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 		else if (textMsg.startsWith('statechanged:')) {
 			this._onStateChangedMsg(textMsg);
+		}
+		else if (textMsg.startsWith('viewposition:')) {
+			if (this._viewState)
+				this._viewState.onViewPositionMsg(textMsg);
 		}
 		else if (textMsg.startsWith('status:') || textMsg.startsWith('statusupdate:')) {
 			this._onStatusMsg(textMsg);
@@ -3930,6 +3934,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Plays animated GIFs over the document.
 		if (!this._animatedGifManager)
 			this._animatedGifManager = new AnimatedGifManager(map);
+
+		if (!this._viewState)
+			this._viewState = new ViewState(map);
 
 		/*
 			Because of special handling of delete and backspace chars, we need to know which Writer form is focused.

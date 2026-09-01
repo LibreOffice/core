@@ -777,6 +777,7 @@ COOL_JS_LST =\
 	src/control/VRuler.ts \
 	src/control/HRuler.ts \
 	src/control/PermissionMode.ts \
+	src/control/ViewState.ts \
 	src/slideshow/SlideCache.ts \
 	src/slideshow/SlideCompositor.ts \
 	src/slideshow/LayerRenderer.ts \
