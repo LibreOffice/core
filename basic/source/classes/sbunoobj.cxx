@@ -884,10 +884,11 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
                 bool bNeedsInit
                     = eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY;
                 bool bInspectElements = bNeedsInit;
-                if (!bInspectElements)
+                // cid#1700598 - guard the element probe against empty arrays
+                if (!bInspectElements && nLower <= nUpper)
                 {
                     sal_Int32 nFirstIdx = nLower;
-                    SbxVariableRef xFirstVar = pArray->Get(nFirstIdx);
+                    SbxVariableRef xFirstVar = pArray->Get(&nFirstIdx);
                     if (xFirstVar && !xFirstVar->IsFixed())
                         bInspectElements = true;
                 }
@@ -930,7 +931,8 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
                 // tdf#146873 - inspect elements when they are non-fixed
                 bool bNeedsInit = eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY;
                 bool bInspectElements = bNeedsInit;
-                if (!bInspectElements)
+                // cid#1700598 - guard the element probe against empty arrays
+                if (!bInspectElements && pArray->Count() > 0)
                 {
                     SbxVariableRef xFirstVar = pArray->SbxArray::Get(0);
                     if (xFirstVar && !xFirstVar->IsFixed())

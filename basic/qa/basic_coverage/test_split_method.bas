@@ -66,6 +66,20 @@ Sub verify_testSplit
     ' - Actual  : Object variable not set
     TestUtil.AssertEqual(oObject.TypeClass, 20, "CoreReflection.getType() for oObject.TypeClass after Split() + Array()")
 
+    ' cid#1700598 - guard the element probe against empty arrays
+    Dim aEmpty() As Integer
+    ' Without the fix in place, this assignment would have failed with
+    ' "Inadmissible value or data type. Index out of defined range"
+    oObject = oReflection.GetType(aEmpty)
+    TestUtil.AssertEqual(oObject.Name, "[]short", "CoreReflection.getType() for an empty Integer array")
+
+    ' cid#1700598 - the element probe must use the dimension and not the flat storage index
+    Dim aNegative(-5 To -1) As Integer
+    ' Without the fix in place, this assignment would have failed with
+    ' "Inadmissible value or data type. Index out of defined range"
+    oObject = oReflection.GetType(aNegative)
+    TestUtil.AssertEqual(oObject.Name, "[]short", "CoreReflection.getType() for an array with a negative lower bound")
+
     ' tdf#141474 keyword names need to match that of VBA
     TestUtil.AssertEqual(Split(expression:="LibreOffice StarOffice")(1), "StarOffice", "Split with 1 keyword name" )
     Dim txt As String : txt = "Libre_Office_Star_Office"
