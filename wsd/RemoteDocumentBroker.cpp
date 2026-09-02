@@ -48,7 +48,23 @@ std::string joinDocKeyChain(const std::vector<std::string>& docKeyChain)
 
     return result;
 }
-} // namespace
+
+/// The two parts of the read-only trust boundary between the parent document
+/// and a remote document.
+///
+/// allowedRequests lists the commands a view may send to a remote document
+/// allowedResults lists the reply frames the remote document may send back
+const std::vector<std::string> allowedRequests = {
+    "status", "commandvalues ", "setclientpart ", "selectclientpart ",
+    "clientvisiblearea ", "clientzoom ", "ping",
+    "getslidesections", "getpresentationinfo", "getthumbnail ", "tile ", "tilecombine ",
+    "exportslides"
+};
+
+const std::vector<std::string> allowedResults = {
+    "presentationinfo:", "slidesections:", "tile:", "exportslides:"
+};
+}
 
 HeadlessClientSession::HeadlessClientSession(const std::weak_ptr<RemoteDocument>& remoteDocument,
                                              const std::string& loadUrl,
@@ -125,15 +141,8 @@ void HeadlessClientSession::sendHandshake()
 
 bool HeadlessClientSession::sendCommand(const std::string& command)
 {
-    // Only commands that cannot modify the remote document.
-    static const std::vector<std::string> allowedPrefixes = {
-        "status", "commandvalues ", "setclientpart ", "selectclientpart ",
-        "clientvisiblearea ", "clientzoom ", "ping",
-        "getslidesections", "getpresentationinfo", "getthumbnail ", "tile ", "tilecombine "
-    };
-
     bool allowed = false;
-    for (const std::string& prefix : allowedPrefixes)
+    for (const std::string& prefix : allowedRequests)
     {
         if (command.starts_with(prefix))
         {
@@ -231,16 +240,23 @@ void HeadlessClientSession::handleMessage(const std::vector<char>& data)
             LOG_WRN("RemoteDoc: error from the remote document: " << firstLine);
         }
     }
-    else
+
+    bool forwardable = false;
+    for (const std::string& prefix : allowedResults)
     {
-        LOG_TRC("RemoteDoc: passing through message ["
-                << COOLProtocol::getAbbreviatedMessage(firstLine) << ']');
+        if (tokens.equals(0, prefix))
+        {
+            forwardable = true;
+            break;
+        }
     }
 
-    // Every remote frame, including the ones translated into events above, is
-    // offered to the views driving commands so they can render the remote
-    // document (its structure, invalidations and rendered pixels).
-    remoteDocument->forwardCommandResult(data);
+    // We drop all unexpected (not requested) or not needed messages send to us
+    if (forwardable)
+        remoteDocument->forwardCommandResult(data);
+    else
+        LOG_TRC("RemoteDoc: ignoring the remote frame ["
+                << COOLProtocol::getAbbreviatedMessage(firstLine) << ']');
 }
 
 void HeadlessClientSession::onDisconnect()
