@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -79,13 +78,6 @@ uno::Reference<accessibility::XAccessibleContext> AccessibleStatusBarTest::getTe
     std::cout << "context name: " << AccessibilityTools::debugString(xContext) << std::endl;
 
     Scheduler::ProcessEventsToIdle(); // not sure why?
-
-    uno::Reference<lang::XServiceInfo> xSI(xContext, uno::UNO_QUERY_THROW);
-    std::cout << "implementation name: " << xSI->getImplementationName() << std::endl;
-    auto serviceNames = xSI->getSupportedServiceNames();
-    std::cout << "has " << serviceNames.size() << " services:" << std::endl;
-    for (auto& service : serviceNames)
-        std::cout << " * service: " << service << std::endl;
 
     return xContext;
 }
