@@ -47,10 +47,6 @@ namespace dbaui
     public:
         OTableWindowAccess( OTableWindow* _pTable);
 
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
         // XAccessibleContext
         virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;

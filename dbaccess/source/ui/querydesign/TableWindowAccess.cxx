@@ -53,14 +53,7 @@ namespace dbaui
 
         VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
     }
-    OUString SAL_CALL OTableWindowAccess::getImplementationName()
-    {
-        return u"org.openoffice.comp.dbu.TableWindowAccessibility"_ustr;
-    }
-    Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames()
-    {
-        return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
-    }
+
     // XAccessibleContext
     sal_Int64 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  )
     {
