@@ -198,8 +198,8 @@ private:
     SfxMedium *                 pMedium;  // Description of the file for example
                                           // storage that contains the object
     SfxObjectCreateMode         eCreateMode;      // Purpose of the object
-    bool                        bHasName :1;      // sal_True  := existing object,
-                                                  // sal_False := new object
+    bool                        bHasName :1;      // true  := existing object,
+                                                  // false := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
     bool                        bRememberSignature; // Do we want to remember the signature.
@@ -564,7 +564,7 @@ public:
        returns the Title just like MB now would
        display it in the History
 
-       10 bis USHRT_MAX
+       10 to USHRT_MAX
        provides the 'nMaxLength' of the logical
        file name including the path
        (remote => css::util::URL)

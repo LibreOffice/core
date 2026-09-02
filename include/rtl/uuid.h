@@ -71,7 +71,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createUuid(
     <p>
     Note:   lexical ordering is not temporal ordering!
     <p>
-    Note:   For equalnesschecking, a memcmp(pUUID1,pUUID2,16) is more efficient
+    Note:   For equality checking, a memcmp(pUUID1,pUUID2,16) is more efficient
 
     @return
     <ul>
@@ -129,12 +129,12 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
 
 /*
     Predefined Namespaces
-    (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;
+    (Use them the following way : sal_uInt8 aNsDNS[16] = RTL_UUID_NAMESPACE_DNS;)
  */
 /** namespace DNS
 
     <p>
-    (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;
+    (Use them the following way : sal_uInt8 aNsDNS[16] = RTL_UUID_NAMESPACE_DNS;)
     <p>
    6ba7b810-9dad-11d1-80b4-00c04fd430c8 */
 #define RTL_UUID_NAMESPACE_DNS {\

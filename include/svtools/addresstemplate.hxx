@@ -53,9 +53,9 @@ namespace svt
 
         /** if you use this ctor, the dialog
             <ul><li>will not store its data in the configuration (nor initially retrieve it from there)</li>
-                <li>will not allow to change the data source name</li>
-                <li>will not allow to change the table name</li>
-                <li>will not allow to call the data source administration dialog</li>
+                <li>will not allow changing the data source name</li>
+                <li>will not allow changing the table name</li>
+                <li>will not allow calling the data source administration dialog</li>
             </ul>
 
             @param _rxORB

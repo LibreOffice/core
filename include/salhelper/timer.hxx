@@ -152,7 +152,7 @@ public:
      */
     sal_Bool    SAL_CALL isExpired() const;
 
-    /** Does pTimer expires before us?
+    /** Does pTimer expire before us?
      */
     sal_Bool    SAL_CALL expiresBefore( const Timer* pTimer ) const;
 
@@ -177,7 +177,7 @@ public:
      */
     TTimeValue  SAL_CALL getRemainingTime() const;
 
-    /** Internal method to shutdown the timer thread
+    /** Internal method to shut down the timer thread
      */
     static void SAL_CALL joinThread();
 
