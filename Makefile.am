@@ -558,13 +558,24 @@ GBUILD_EXES = coolconfig coolconvert coolforkit-caps coolforkit-ns coolmount coo
 
 GBUILD_EXES_NOINST = clientnb coconvert connect coolbench coolmap coolsocketdump lokitclient
 
+GBUILD_MAKE = $(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' ONLINE.SIMD_CFLAGS='$(SIMD_CFLAGS)'
+
+# The gbuild objects and their dependency files live in the engine workdir and
+# record the absolute path of our sources.  A build from the distribution
+# tarball extracts into a differently named directory on every version bump
+# while the engine build tree is reused, so drop what a previous source
+# directory left behind before building from the current one.
+GBUILD_SRCDIR_STAMP = $(ENGINE_BUILDDIR)/workdir/online.srcdir
+
 build-gbuild: FORCE
-	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' ONLINE.SIMD_CFLAGS='$(SIMD_CFLAGS)' Module_gbuild
+	+if test "`cat $(GBUILD_SRCDIR_STAMP) 2>/dev/null`" != "$(abs_top_srcdir)"; then $(GBUILD_MAKE) Module_gbuild.clean; fi
+	+$(GBUILD_MAKE) Module_gbuild
+	echo "$(abs_top_srcdir)" > $(GBUILD_SRCDIR_STAMP)
 $(GBUILD_EXES) $(GBUILD_EXES_NOINST): build-gbuild
 
 # Similar to build-gbuild, but for the --enable-fuzzers case.
 build-fuzzer-gbuild-libs: FORCE
-	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' ONLINE.SIMD_CFLAGS='$(SIMD_CFLAGS)' ONLINE.FUZZER_CFLAGS='-fsanitize=fuzzer-no-link' StaticLibrary_shared
+	+$(GBUILD_MAKE) ONLINE.FUZZER_CFLAGS='-fsanitize=fuzzer-no-link' StaticLibrary_shared
 
 FORCE:
 
