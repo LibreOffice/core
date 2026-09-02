@@ -155,22 +155,6 @@ index bad07b723..b960f90b4 100644
    friend constexpr auto operator<=>(
        span lhs,
        span<OtherElementType, OtherExtent, OtherInternalPtrType> rhs) {
-diff --git a/core/fxcrt/cfx_bidi_resolver.cpp b/core/fxcrt/cfx_bidi_resolver.cpp
-index 50e302e35..ce912caa8 100644
---- a/core/fxcrt/cfx_bidi_resolver.cpp
-+++ b/core/fxcrt/cfx_bidi_resolver.cpp
-@@ -10,7 +10,11 @@
- #include "core/fxcrt/check_op.h"
- #include "core/fxcrt/fx_safe_types.h"
- #include "core/fxcrt/ptr_util.h"
-+#if defined(USE_SYSTEM_ICUUC)
-+#include <unicode/ubidi.h>
-+#else
- #include "third_party/icu/source/common/unicode/ubidi.h"
-+#endif
- 
- void CFX_BidiResolver::UBiDiDeleter::operator()(UBiDi* bidi) const {
-   ubidi_close(bidi);
 diff --git a/core/fxge/cfx_renderdevice.h b/core/fxge/cfx_renderdevice.h
 index 8f427ce01..1251e2bbb 100644
 --- a/core/fxge/cfx_renderdevice.h
