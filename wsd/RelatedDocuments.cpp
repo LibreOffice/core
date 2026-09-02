@@ -16,7 +16,6 @@
 #include <common/Anonymizer.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/Log.hpp>
-#include <common/Message.hpp>
 #include <common/Protocol.hpp>
 #include <common/StringVector.hpp>
 #include <common/Uri.hpp>
@@ -32,55 +31,60 @@
 #include <algorithm>
 #include <sstream>
 
-void RelatedDocuments::setToken(DocumentBroker& docBroker, const std::string& wopiSrc,
-                                const std::string& accessToken,
-                                const std::string& lastModifiedTime)
+void RelatedDocuments::setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
+                                 const std::string& lastModifiedTime)
 {
     docBroker.assertCorrectThread();
 
     // Key by the docKey, so encoded and decoded spellings of the same
-    // WOPISrc resolve to one entry.
+    // WOPISrc resolve to one source.
     try
     {
         const std::string docKey = RequestDetails::getDocKey(wopiSrc);
-        _tokens[docKey] = accessToken;
         _entries[docKey].wopiSrc = wopiSrc.substr(0, wopiSrc.find('?'));
         _entries[docKey].lastModifiedTime = lastModifiedTime;
-        refresh(docBroker);
+        refreshAllViews(docBroker);
     }
     catch (const std::exception& exc)
     {
-        LOG_ERR("Ignoring the access token for the invalid remote document WOPISrc ["
+        LOG_ERR("Ignoring the invalid related document WOPISrc ["
                 << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
     }
 }
 
-void RelatedDocuments::handleMessage(DocumentBroker& docBroker,
-                                     const std::shared_ptr<Message>& message,
-                                     const bool subscribe)
+void RelatedDocuments::setViewToken(DocumentBroker& docBroker, const std::string& tag,
+                                    const std::string& wopiSrc, const std::string& accessToken)
 {
     docBroker.assertCorrectThread();
 
-    std::string tag;
-    std::string encodedWopiSrc;
-    COOLProtocol::getTokenString((*message)[1], "tag", tag);
-    COOLProtocol::getTokenString((*message)[2], "wopisrc", encodedWopiSrc);
-    if (tag.empty() || encodedWopiSrc.empty())
+    try
     {
-        LOG_ERR("Missing tag or wopisrc in [" << message->abbr() << ']');
-        return;
+        const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+        _views[tag].tokens[docKey] = accessToken;
+        refreshView(docBroker, tag);
     }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Ignoring the access token for the invalid related document WOPISrc ["
+                << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
+    }
+}
+
+void RelatedDocuments::handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
+                                       const std::string& encodedWopiSrc, const bool subscribe)
+{
+    docBroker.assertCorrectThread();
 
     const std::string wopiSrc = Uri::decode(encodedWopiSrc);
 
-    LOG_INF("Remote document " << (subscribe ? "subscribe" : "unsubscribe") << " tag=" << tag
-                               << " to [" << Anonymizer::anonymizeUrl(wopiSrc) << ']');
+    LOG_INF("Remote document " << (subscribe ? "subscribe" : "unsubscribe") << " by view ["
+                               << tag << "] to [" << Anonymizer::anonymizeUrl(wopiSrc)
+                               << ']');
 
     if (!RemoteDocumentBroker::isEnabled() || !RemoteDocumentBroker::isInitialized())
     {
-        LOG_ERR("Remote document subscribe tag=" << tag
-                                                 << " rejected: remote_documents is disabled in "
-                                                    "the configuration");
+        LOG_ERR("Remote document subscribe by view [" << tag
+                                                      << "] rejected: remote_documents is disabled");
         sendError(docBroker, tag, encodedWopiSrc, "disabled");
         return;
     }
@@ -108,39 +112,28 @@ void RelatedDocuments::handleMessage(DocumentBroker& docBroker,
         return;
     }
 
+    View& view = _views[tag];
+
     if (!subscribe)
     {
-        // Tag 0 drops every link of this document to the given WOPISrc; an
-        // explicit tag drops only that link.
-        for (auto it = _subscriptions.begin(); it != _subscriptions.end();)
+        const auto it = view.subscriptions.find(remoteDocKey);
+        if (it != view.subscriptions.end())
         {
-            if (RequestDetails::getDocKey(std::get<0>(*it)) == remoteDocKey &&
-                (tag == "0" || std::get<2>(*it) == tag))
-            {
-                RemoteDocumentBroker::instance().unsubscribeAsync(
-                    std::get<0>(*it), std::get<1>(*it), docBroker.getDocKey(), std::get<2>(*it));
-                it = _subscriptions.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
+            RemoteDocumentBroker::instance().unsubscribeAsync(
+                it->second.wopiSrc, it->second.accessToken, docBroker.getDocKey(), tag);
+            view.subscriptions.erase(it);
+            refreshView(docBroker, tag);
         }
 
-        refresh(docBroker);
         return;
     }
 
-    const auto itToken = _tokens.find(remoteDocKey);
-    if (itToken == _tokens.end())
+    const auto itToken = view.tokens.find(remoteDocKey);
+    if (itToken == view.tokens.end())
     {
-        std::ostringstream registered;
-        for (const auto& it : _tokens)
-            registered << " [" << it.first << ']';
-        LOG_ERR("Remote document subscribe tag="
-                << tag << " rejected: no access token registered for [" << remoteDocKey
-                << "], have " << _tokens.size()
-                << " from RelatedDocuments or POST /cool/relateddocument:" << registered.str());
+        LOG_ERR("Remote document subscribe by view ["
+                << tag << "] rejected: the view holds no access token for [" << remoteDocKey
+                << ']');
         sendError(docBroker, tag, encodedWopiSrc, "notoken");
         return;
     }
@@ -148,21 +141,25 @@ void RelatedDocuments::handleMessage(DocumentBroker& docBroker,
     const std::string serverUrl = RemoteDocumentBroker::getServerUrl();
     if (serverUrl.empty())
     {
-        LOG_ERR("Remote document subscribe tag="
+        LOG_ERR("Remote document subscribe by view ["
                 << tag
-                << " rejected: no server URL to dial through; set remote_documents.server_url "
+                << "] rejected: no server URL to dial through; set remote_documents.server_url "
                    "or server_name in the configuration");
         sendError(docBroker, tag, encodedWopiSrc, "noserver");
         return;
     }
 
+    // A view already subscribed to the source has nothing to do.
+    if (view.subscriptions.find(remoteDocKey) != view.subscriptions.end())
+        return;
+
     static const size_t maxLinks =
         ConfigUtil::getConfigValue<int>("remote_documents.max_links_per_document", 4);
-    if (_subscriptions.size() >= maxLinks)
+    if (view.subscriptions.size() >= maxLinks)
     {
-        LOG_ERR("Remote document subscribe tag="
-                << tag << " rejected: [" << docBroker.getDocKey() << "] already holds "
-                << _subscriptions.size() << " subscriptions of the maximum " << maxLinks);
+        LOG_ERR("Remote document subscribe by view ["
+                << tag << "] rejected: the view already holds " << view.subscriptions.size()
+                << " subscriptions of the maximum " << maxLinks);
         sendError(docBroker, tag, encodedWopiSrc, "limitreached");
         return;
     }
@@ -176,62 +173,59 @@ void RelatedDocuments::handleMessage(DocumentBroker& docBroker,
     request.serverUrl = serverUrl;
     request.consumer = docBroker.shared_from_this();
 
-    _subscriptions.emplace(wopiSrc, itToken->second, tag);
-    setSubscribed(docBroker, remoteDocKey);
+    view.subscriptions[remoteDocKey] = { wopiSrc, itToken->second, "subscribed" };
 
     RemoteDocumentBroker::instance().subscribeAsync(std::move(request));
+    refreshView(docBroker, tag);
 }
 
-void RelatedDocuments::sendEvent(DocumentBroker& docBroker, const std::string& tag,
-                                 const std::string& encodedWopiSrc,
-                                 const std::string& eventArguments)
+void RelatedDocuments::onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
+                                     const std::string& encodedWopiSrc,
+                                     const std::string& eventArguments)
 {
     docBroker.assertCorrectThread();
 
+    const StringVector arguments = StringVector::tokenize(eventArguments);
+    std::string event;
+    if (arguments.size())
+        COOLProtocol::getTokenString(arguments[0], "event", event);
+
+    // Every event reaches the kit, which will drive the shared freshness of
+    // linked slides once the engine reads these events.
     docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
                                  ' ' + eventArguments);
 
-    onEvent(docBroker, encodedWopiSrc, eventArguments);
-}
-
-void RelatedDocuments::sendError(DocumentBroker& docBroker, const std::string& tag,
-                                 const std::string& encodedWopiSrc, const std::string& kind)
-{
-    sendEvent(docBroker, tag, encodedWopiSrc, "event=error kind=" + kind);
-}
-
-void RelatedDocuments::removeSubscription(DocumentBroker& docBroker, const std::string& wopiSrc,
-                                          const std::string& tag)
-{
-    docBroker.assertCorrectThread();
-
-    for (auto it = _subscriptions.begin(); it != _subscriptions.end();)
-    {
-        if (std::get<0>(*it) == wopiSrc && std::get<2>(*it) == tag)
-            it = _subscriptions.erase(it);
-        else
-            ++it;
-    }
-
-    refresh(docBroker);
-}
-
-void RelatedDocuments::unsubscribeAll(DocumentBroker& docBroker)
-{
-    if (_subscriptions.empty() || !RemoteDocumentBroker::isInitialized())
+    // Content events carry no per-view connection change.
+    if (event == "modified" || event == "invalidated" || event == "structure" || event.empty())
         return;
 
-    LOG_DBG("Dropping " << _subscriptions.size() << " remote document subscriptions of ["
-                        << docBroker.getDocKey() << ']');
+    // Connection events belong to the one view that opened the subscription.
+    try
+    {
+        const std::string docKey = RequestDetails::getDocKey(Uri::decode(encodedWopiSrc));
+        const auto itView = _views.find(tag);
+        if (itView == _views.end())
+            return;
 
-    for (const auto& it : _subscriptions)
-        RemoteDocumentBroker::instance().unsubscribeAsync(std::get<0>(it), std::get<1>(it),
-                                                          docBroker.getDocKey(), std::get<2>(it));
+        const auto itSub = itView->second.subscriptions.find(docKey);
+        if (itSub == itView->second.subscriptions.end())
+            return;
 
-    _subscriptions.clear();
+        if (event == "unsubscribed")
+            itView->second.subscriptions.erase(itSub);
+        else if (event == "connected" || event == "disconnected" || event == "failed" ||
+                 event == "missing")
+            itSub->second.state = event;
+
+        refreshView(docBroker, tag);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Cannot mirror the remote document event: " << exc.what());
+    }
 }
 
-void RelatedDocuments::sendCommand(DocumentBroker& docBroker, const std::string& sessionId,
+void RelatedDocuments::sendCommand(DocumentBroker& docBroker, const std::string& tag,
                                    const std::string& wopiSrc, const std::string& command)
 {
     docBroker.assertCorrectThread();
@@ -250,20 +244,79 @@ void RelatedDocuments::sendCommand(DocumentBroker& docBroker, const std::string&
         return;
     }
 
-    // A command is only routed to a remote the document is subscribed to.
-    for (const auto& it : _subscriptions)
+    // A command only reaches a remote the view itself is subscribed to.
+    const auto itView = _views.find(tag);
+    if (itView != _views.end())
     {
-        if (RequestDetails::getDocKey(std::get<0>(it)) == remoteDocKey)
+        const auto itSub = itView->second.subscriptions.find(remoteDocKey);
+        if (itSub != itView->second.subscriptions.end())
         {
-            RemoteDocumentBroker::instance().sendCommandAsync(std::get<0>(it), std::get<1>(it),
-                                                              docBroker.getDocKey(), sessionId,
+            RemoteDocumentBroker::instance().sendCommandAsync(itSub->second.wopiSrc,
+                                                              itSub->second.accessToken,
+                                                              docBroker.getDocKey(), tag,
                                                               command);
             return;
         }
     }
 
-    LOG_DBG("Ignoring a remote document command for [" << remoteDocKey
-                                                       << "]: no live subscription");
+    LOG_DBG("Ignoring a remote document command from view [" << tag << "] for ["
+                                                             << remoteDocKey
+                                                             << "]: no live subscription");
+}
+
+void RelatedDocuments::removeSubscription(DocumentBroker& docBroker, const std::string& tag,
+                                          const std::string& wopiSrc)
+{
+    docBroker.assertCorrectThread();
+
+    const auto itView = _views.find(tag);
+    if (itView == _views.end())
+        return;
+
+    try
+    {
+        const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+        if (itView->second.subscriptions.erase(docKey))
+            refreshView(docBroker, tag);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Cannot drop the remote document subscription: " << exc.what());
+    }
+}
+
+void RelatedDocuments::removeView(DocumentBroker& docBroker, const std::string& tag)
+{
+    docBroker.assertCorrectThread();
+
+    const auto itView = _views.find(tag);
+    if (itView == _views.end())
+        return;
+
+    if (RemoteDocumentBroker::isInitialized())
+    {
+        for (const auto& it : itView->second.subscriptions)
+            RemoteDocumentBroker::instance().unsubscribeAsync(
+                it.second.wopiSrc, it.second.accessToken, docBroker.getDocKey(), tag);
+    }
+
+    _views.erase(itView);
+}
+
+void RelatedDocuments::unsubscribeAll(DocumentBroker& docBroker)
+{
+    if (RemoteDocumentBroker::isInitialized())
+    {
+        for (const auto& itView : _views)
+        {
+            for (const auto& it : itView.second.subscriptions)
+                RemoteDocumentBroker::instance().unsubscribeAsync(
+                    it.second.wopiSrc, it.second.accessToken, docBroker.getDocKey(), itView.first);
+        }
+    }
+
+    for (auto& itView : _views)
+        itView.second.subscriptions.clear();
 }
 
 void RelatedDocuments::addToIncomingDocKeyChain(DocumentBroker& docBroker,
@@ -275,121 +328,76 @@ void RelatedDocuments::addToIncomingDocKeyChain(DocumentBroker& docBroker,
     for (std::size_t i = 0; i < docKeys.size(); ++i)
     {
         std::string docKey = docKeys[i];
-        if (!docKey.empty() &&
-            std::find(_incomingDocKeyChain.begin(), _incomingDocKeyChain.end(), docKey) ==
+        if (docKey.empty() ||
+            std::find(_incomingDocKeyChain.begin(), _incomingDocKeyChain.end(), docKey) !=
                 _incomingDocKeyChain.end())
-        {
-            LOG_DBG("The docKey [" << docKey << "] is on the connection chain of ["
-                                   << docBroker.getDocKey() << ']');
+            continue;
 
-            // The chain proves this docKey (transitively) subscribes to this
-            // document. A live subscription of ours back to it closes a loop
-            // that would keep both documents loaded forever. When documents
-            // subscribed to each other at the same moment, each end sees the
-            // other's chain; the greater docKey yields so one link survives.
-            if (docBroker.getDocKey() > docKey && RemoteDocumentBroker::isInitialized())
+        LOG_DBG("The docKey [" << docKey << "] is on the connection chain of ["
+                               << docBroker.getDocKey() << ']');
+
+        // The chain proves this docKey (transitively) subscribes to this
+        // document. A live subscription of ours back to it closes a loop that
+        // would keep both documents loaded forever. When documents subscribed
+        // to each other at the same moment, each end sees the other's chain;
+        // the greater docKey yields so one link survives.
+        if (docBroker.getDocKey() > docKey && RemoteDocumentBroker::isInitialized())
+        {
+            for (auto& itView : _views)
             {
-                for (auto it = _subscriptions.begin(); it != _subscriptions.end();)
-                {
-                    if (RequestDetails::getDocKey(std::get<0>(*it)) == docKey)
-                    {
-                        LOG_WRN("Dropping the remote document link tag="
-                                << std::get<2>(*it) << " of [" << docBroker.getDocKey() << "] to ["
-                                << docKey << "]: it subscribes back to this document");
-                        RemoteDocumentBroker::instance().unsubscribeAsync(
-                            std::get<0>(*it), std::get<1>(*it), docBroker.getDocKey(),
-                            std::get<2>(*it));
-                        sendError(docBroker, std::get<2>(*it), Uri::encode(std::get<0>(*it)),
-                                  "cycledetected");
-                        it = _subscriptions.erase(it);
-                    }
-                    else
-                    {
-                        ++it;
-                    }
-                }
+                const auto itSub = itView.second.subscriptions.find(docKey);
+                if (itSub == itView.second.subscriptions.end())
+                    continue;
+
+                LOG_WRN("Dropping the remote document link of view ["
+                        << itView.first << "] in [" << docBroker.getDocKey() << "] to [" << docKey
+                        << "]: it subscribes back to this document");
+                RemoteDocumentBroker::instance().unsubscribeAsync(itSub->second.wopiSrc,
+                                                                  itSub->second.accessToken,
+                                                                  docBroker.getDocKey(),
+                                                                  itView.first);
+                sendError(docBroker, itView.first, Uri::encode(itSub->second.wopiSrc),
+                          "cycledetected");
+                itView.second.subscriptions.erase(itSub);
+                refreshView(docBroker, itView.first);
             }
-
-            _incomingDocKeyChain.push_back(std::move(docKey));
         }
+
+        _incomingDocKeyChain.push_back(std::move(docKey));
     }
 }
 
-void RelatedDocuments::onEvent(DocumentBroker& docBroker, const std::string& encodedWopiSrc,
-                               const std::string& eventArguments)
+void RelatedDocuments::sendError(DocumentBroker& docBroker, const std::string& tag,
+                                 const std::string& encodedWopiSrc, const std::string& kind)
 {
-    const StringVector arguments = StringVector::tokenize(eventArguments);
-    std::string event;
-    if (arguments.size())
-        COOLProtocol::getTokenString(arguments[0], "event", event);
-
-    // Content events carry no subscription-state change.
-    if (event == "modified" || event == "invalidated" || event == "structure" || event.empty())
-        return;
-
-    try
-    {
-        const std::string docKey = RequestDetails::getDocKey(Uri::decode(encodedWopiSrc));
-        const auto it = _entries.find(docKey);
-        if (it != _entries.end())
-        {
-            if (event == "connected" || event == "disconnected" || event == "failed" ||
-                event == "missing")
-                it->second.lastState = event;
-            refresh(docBroker);
-        }
-    }
-    catch (const std::exception& exc)
-    {
-        LOG_ERR("Cannot mirror the remote document event: " << exc.what());
-    }
+    docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
+                                 " event=error kind=" + kind);
 }
 
-void RelatedDocuments::setSubscribed(DocumentBroker& docBroker, const std::string& docKey)
+std::string RelatedDocuments::buildJson(const std::string& tag) const
 {
-    const auto it = _entries.find(docKey);
-    if (it != _entries.end())
-    {
-        it->second.lastState = "subscribed";
-        refresh(docBroker);
-    }
-}
+    const auto itView = _views.find(tag);
+    const View* view = itView != _views.end() ? &itView->second : nullptr;
 
-void RelatedDocuments::refresh(DocumentBroker& docBroker)
-{
-    const std::string message = "relateddocuments: " + buildJson();
-    if (message == _lastClientMessage)
-        return;
-
-    _lastClientMessage = message;
-    docBroker.broadcastMessage(message);
-}
-
-void RelatedDocuments::sendTo(const std::shared_ptr<ClientSession>& session) const
-{
-    session->sendTextFrame("relateddocuments: " + buildJson());
-}
-
-bool RelatedDocuments::hasSubscription(const std::string& remoteDocKey) const
-{
-    for (const auto& it : _subscriptions)
-    {
-        if (RequestDetails::getDocKey(std::get<0>(it)) == remoteDocKey)
-            return true;
-    }
-
-    return false;
-}
-
-std::string RelatedDocuments::buildJson() const
-{
     Poco::JSON::Array::Ptr documents = new Poco::JSON::Array();
     for (const auto& it : _entries)
     {
+        // The source and its last-modified time are the same for every view;
+        // the state is this view's own: its live connection when subscribed,
+        // otherwise whether it holds a token to reach the source at all.
+        std::string state = "noaccess";
+        if (view)
+        {
+            const auto itSub = view->subscriptions.find(it.first);
+            if (itSub != view->subscriptions.end())
+                state = itSub->second.state;
+            else if (view->tokens.find(it.first) != view->tokens.end())
+                state = "available";
+        }
+
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
         entry->set("wopiSrc", it.second.wopiSrc);
-        entry->set("state", hasSubscription(it.first) ? it.second.lastState
-                                                      : std::string("available"));
+        entry->set("state", state);
         entry->set("lastModifiedTime", it.second.lastModifiedTime);
         documents->add(entry);
     }
@@ -402,20 +410,52 @@ std::string RelatedDocuments::buildJson() const
     return oss.str();
 }
 
+void RelatedDocuments::sendTo(const std::shared_ptr<ClientSession>& session)
+{
+    const std::string tag = session->getId();
+    const std::string message = "relateddocuments: " + buildJson(tag);
+    _views[tag].lastClientMessage = message;
+    session->sendTextFrame(message);
+}
+
+void RelatedDocuments::refreshView(DocumentBroker& docBroker, const std::string& tag)
+{
+    const std::shared_ptr<ClientSession> session = docBroker.findSession(tag);
+    if (!session)
+        return;
+
+    const std::string message = "relateddocuments: " + buildJson(tag);
+    View& view = _views[tag];
+    if (message == view.lastClientMessage)
+        return;
+
+    view.lastClientMessage = message;
+    session->sendTextFrame(message);
+}
+
+void RelatedDocuments::refreshAllViews(DocumentBroker& docBroker)
+{
+    for (const std::string& tag : docBroker.getSessionIds())
+        refreshView(docBroker, tag);
+}
+
 void RelatedDocuments::dumpState(std::ostream& os) const
 {
-    os << "\n  remote subscriptions: " << _subscriptions.size();
-    for (const auto& it : _subscriptions)
-        os << "\n    " << Anonymizer::anonymizeUrl(std::get<0>(it))
-           << " tag: " << std::get<2>(it);
-    os << "\n  related documents: " << _entries.size();
+    os << "\n  related document sources: " << _entries.size();
     for (const auto& it : _entries)
-        os << "\n    " << it.first << " state: "
-           << (hasSubscription(it.first) ? it.second.lastState : std::string("available"))
-           << " last modified: " << it.second.lastModifiedTime;
+        os << "\n    " << it.first << " last modified: " << it.second.lastModifiedTime;
     os << "\n  incoming docKey chain: " << _incomingDocKeyChain.size();
     for (const std::string& docKey : _incomingDocKeyChain)
         os << "\n    " << docKey;
+    os << "\n  views: " << _views.size();
+    for (const auto& itView : _views)
+    {
+        os << "\n    view " << itView.first << " tokens: " << itView.second.tokens.size()
+           << " subscriptions: " << itView.second.subscriptions.size();
+        for (const auto& it : itView.second.subscriptions)
+            os << "\n      " << Anonymizer::anonymizeUrl(it.second.wopiSrc) << " state: "
+               << it.second.state;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -14,113 +14,136 @@
 #include <iosfwd>
 #include <map>
 #include <memory>
-#include <set>
 #include <string>
-#include <tuple>
 #include <vector>
 
 class ClientSession;
 class DocumentBroker;
-class Message;
 
-/// The related documents of one document: the access tokens for the entries
-/// the document may subscribe to (from the RelatedDocuments field of
-/// CheckFileInfo and from POST /cool/relateddocument), the live
-/// subscriptions, the docKey chain of the incoming headless sessions, and
-/// the relateddocuments: view of it all for the clients. The view never
-/// carries the tokens.
+/// The related documents of one document, split into a shared part and a
+/// private part per browser view.
+///
+/// The shared part, the same for every view, is the list of related documents
+/// this document may open.
+///
+/// The private part belongs to one view, keyed by that view's tag.
+///
+/// A view's tag is its ClientSession id. It is the tag reported in
+/// remotedocevent messages, so a remote document's reply reaches the one view
+/// that opened the subscription.
 class RelatedDocuments
 {
 public:
-    /// Stores the access token to use for a subscription to the given remote
-    /// document, together with the time the remote document was last modified.
-    /// The latest token per WOPISrc wins.
-    void setToken(DocumentBroker& docBroker, const std::string& wopiSrc,
-                  const std::string& accessToken, const std::string& lastModifiedTime);
+    /// Records the public part of a related document: its source and the time
+    /// it was last modified. The same for every view. The latest report per
+    /// WOPISrc wins.
+    void setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
+                   const std::string& lastModifiedTime);
 
-    /// Handles a remotedocsubscribe: or remotedocunsubscribe: message from the kit.
-    void handleMessage(DocumentBroker& docBroker, const std::shared_ptr<Message>& message,
-                       bool subscribe);
+    /// Records the access token one view holds for a related document. Private
+    /// to that view.
+    void setViewToken(DocumentBroker& docBroker, const std::string& tag,
+                      const std::string& wopiSrc, const std::string& accessToken);
 
-    /// Sends a remote document event to the kit and mirrors the subscription
-    /// state to the clients.
-    void sendEvent(DocumentBroker& docBroker, const std::string& tag,
-                   const std::string& encodedWopiSrc, const std::string& eventArguments);
+    /// Opens or drops one view's subscription to a remote document. On
+    /// subscribe the view's own token is used; a view without a token for the
+    /// source is refused.
+    void handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
+                         const std::string& encodedWopiSrc, bool subscribe);
 
-    /// Removes the record of a remote document subscription that was not
-    /// accepted.
-    void removeSubscription(DocumentBroker& docBroker, const std::string& wopiSrc,
-                            const std::string& tag);
+    /// Handles a remote document event addressed to one view: updates that
+    /// view's connection state and re-sends its related documents list.
+    /// Content events, which are the same for every view, are passed to the
+    /// kit instead.
+    void onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
+                       const std::string& encodedWopiSrc, const std::string& eventArguments);
 
-    /// Drops every remote document subscription the document holds.
-    void unsubscribeAll(DocumentBroker& docBroker);
-
-    /// Routes a read-only client command from one browser view to the remote
-    /// document with the given WOPISrc, when a live subscription to it exists.
-    void sendCommand(DocumentBroker& docBroker, const std::string& sessionId,
+    /// Routes a read-only client command from one view to a remote document
+    /// that view is subscribed to.
+    void sendCommand(DocumentBroker& docBroker, const std::string& tag,
                      const std::string& wopiSrc, const std::string& command);
 
-    /// Records the docKeys from a comma-separated chain as linked to the
-    /// document through headless sessions.
+    /// Drops the record of one view's subscription that was not accepted.
+    void removeSubscription(DocumentBroker& docBroker, const std::string& tag,
+                            const std::string& wopiSrc);
+
+    /// Drops everything one view held, its tokens and its subscriptions, when
+    /// the view leaves.
+    void removeView(DocumentBroker& docBroker, const std::string& tag);
+
+    /// Drops every view's subscriptions when the document unloads.
+    void unsubscribeAll(DocumentBroker& docBroker);
+
+    /// Records the docKeys from a comma-separated chain as connected into this
+    /// document through headless sessions, and drops any view's subscription
+    /// back to one of them that would close a loop.
     void addToIncomingDocKeyChain(DocumentBroker& docBroker, const std::string& docKeyChain);
 
-    /// Sends the current related documents list to the given session.
-    void sendTo(const std::shared_ptr<ClientSession>& session) const;
+    /// Sends the given view its own related documents list.
+    void sendTo(const std::shared_ptr<ClientSession>& session);
 
+    /// True when no related document source is known.
     bool empty() const { return _entries.empty(); }
 
     void dumpState(std::ostream& os) const;
 
 private:
+    /// The public part of one related document, the same for every view.
     struct Entry
     {
         /// The remote document's WOPISrc, decoded, without query parameters.
         std::string wopiSrc;
-        /// The last connection event of a subscription: subscribed,
-        /// connected, disconnected or failed.
-        std::string lastState;
         /// The time the remote document was last modified, as the integrator
         /// reported it. Empty when the integrator did not provide one.
         std::string lastModifiedTime;
     };
 
-    /// Mirrors a remotedocevent into the entry states.
-    void onEvent(DocumentBroker& docBroker, const std::string& encodedWopiSrc,
-                 const std::string& eventArguments);
+    /// One view's subscription to a remote document.
+    struct Subscription
+    {
+        /// The remote document's WOPISrc, decoded.
+        std::string wopiSrc;
+        /// The token the subscription was opened with.
+        std::string accessToken;
+        /// The last connection event: subscribed, connected, disconnected,
+        /// failed or missing.
+        std::string state;
+    };
 
-    /// Marks the entry with the given docKey as subscribed.
-    void setSubscribed(DocumentBroker& docBroker, const std::string& docKey);
+    /// The private state of one view.
+    struct View
+    {
+        /// Access tokens the view holds, keyed by the remote document's docKey.
+        std::map<std::string, std::string> tokens;
+        /// The view's subscriptions, keyed by the remote document's docKey.
+        std::map<std::string, Subscription> subscriptions;
+        /// The last relateddocuments: message sent to the view.
+        std::string lastClientMessage;
+    };
 
-    /// Sends the list to every session when it changed.
-    void refresh(DocumentBroker& docBroker);
+    /// Answers one view's remote document subscription with an error event.
+    static void sendError(DocumentBroker& docBroker, const std::string& tag,
+                          const std::string& encodedWopiSrc, const std::string& kind);
 
-    /// Answers a remote document subscription with an error event.
-    void sendError(DocumentBroker& docBroker, const std::string& tag,
-                   const std::string& encodedWopiSrc, const std::string& kind);
+    /// Builds the relateddocuments: list for one view: every known source,
+    /// stamped with that view's access and connection state.
+    std::string buildJson(const std::string& tag) const;
 
-    /// Returns true when the document holds a subscription to the remote
-    /// document with the given docKey.
-    bool hasSubscription(const std::string& remoteDocKey) const;
+    /// Re-sends the list to one view when it changed.
+    void refreshView(DocumentBroker& docBroker, const std::string& tag);
 
-    /// The entries and their subscription states as JSON.
-    std::string buildJson() const;
+    /// Re-sends the list to every view when the shared part changed.
+    void refreshAllViews(DocumentBroker& docBroker);
 
-    /// The related documents the document knows, keyed by their docKey.
+    /// The related document sources the document knows, keyed by their docKey.
     std::map<std::string, Entry> _entries;
 
-    /// Access tokens for the remote documents, keyed by their docKey.
-    std::map<std::string, std::string> _tokens;
-
-    /// The remote documents the document is subscribed to, as
-    /// (WOPISrc, access token, link tag) tuples.
-    std::set<std::tuple<std::string, std::string, std::string>> _subscriptions;
-
-    /// docKeys of the documents connected to the document through headless
+    /// docKeys of the documents connected into this document through headless
     /// sessions, from the remotechain option of the sessions' load messages.
     std::vector<std::string> _incomingDocKeyChain;
 
-    /// The last relateddocuments: message sent to the clients.
-    std::string _lastClientMessage;
+    /// The private state of each view, keyed by the view's tag.
+    std::map<std::string, View> _views;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

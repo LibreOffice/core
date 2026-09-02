@@ -2339,8 +2339,8 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
                 return;
             }
 
-            docBroker->setRemoteDocumentToken(remoteWopiSrc, remoteAccessToken,
-                                              remoteLastModifiedTime);
+            docBroker->registerRemoteDocumentToken(accessToken, remoteWopiSrc, remoteAccessToken,
+                                                   remoteLastModifiedTime);
 
             http::Response httpResponse(http::StatusCode::OK);
             httpResponse.setContentLength(0);

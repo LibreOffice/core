@@ -4473,25 +4473,13 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
 #if !MOBILEAPP
         if (wopiFileInfo)
         {
-            const auto& tokens = wopiFileInfo->getRelatedDocumentTokens();
+            // The source list and last-modified times are public, the same for
+            // every view. This view's access tokens are private to it.
             for (const auto& related : wopiFileInfo->getRelatedDocuments())
-            {
-                // The last-modified time is public; this view's token, if it
-                // holds one for this source, is private to UserPrivateInfo.
-                std::string accessToken;
-                for (const auto& token : tokens)
-                {
-                    if (token.wopiSrc == related.wopiSrc)
-                    {
-                        accessToken = token.accessToken;
-                        break;
-                    }
-                }
+                setRemoteDocumentSource(related.wopiSrc, related.lastModifiedTime);
 
-                if (!accessToken.empty())
-                    setRemoteDocumentToken(related.wopiSrc, accessToken,
-                                           related.lastModifiedTime);
-            }
+            for (const auto& token : wopiFileInfo->getRelatedDocumentTokens())
+                setRemoteDocumentViewToken(session->getId(), token.wopiSrc, token.accessToken);
         }
 #endif
 
@@ -4809,6 +4797,8 @@ void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSessi
 #if !MOBILEAPP
         _admin.rmDoc(_docKey, id);
         COOLWSD::dumpEndSessionTrace(getJailId(), id, _uriOrig);
+        // Drop the tokens and subscriptions this view held for related documents.
+        removeRemoteDocumentView(id);
 #endif
         if (_docState.isUnloadRequested())
         {
@@ -5032,39 +5022,92 @@ bool DocumentBroker::sendTextFrameToKit(const std::string& message)
 }
 
 #if !MOBILEAPP
-void DocumentBroker::setRemoteDocumentToken(const std::string& wopiSrc,
-                                            const std::string& accessToken,
-                                            const std::string& lastModifiedTime)
+void DocumentBroker::setRemoteDocumentSource(const std::string& wopiSrc,
+                                             const std::string& lastModifiedTime)
 {
-    _relatedDocuments.setToken(*this, wopiSrc, accessToken, lastModifiedTime);
+    _relatedDocuments.setSource(*this, wopiSrc, lastModifiedTime);
 }
 
+void DocumentBroker::setRemoteDocumentViewToken(const std::string& tag,
+                                                const std::string& wopiSrc,
+                                                const std::string& accessToken)
+{
+    _relatedDocuments.setViewToken(*this, tag, wopiSrc, accessToken);
+}
+
+void DocumentBroker::registerRemoteDocumentToken(const std::string& callerAccessToken,
+                                                 const std::string& wopiSrc,
+                                                 const std::string& accessToken,
+                                                 const std::string& lastModifiedTime)
+{
+    ASSERT_CORRECT_THREAD();
+
+    setRemoteDocumentSource(wopiSrc, lastModifiedTime);
+
+    // The token is private to the view whose own access token the caller
+    // proved it holds, not to every view of the document.
+    for (const auto& it : _sessions)
+    {
+        if (it.second->getAuthorization().matchesToken(callerAccessToken))
+        {
+            setRemoteDocumentViewToken(it.first, wopiSrc, accessToken);
+            return;
+        }
+    }
+}
+
+void DocumentBroker::handleRemoteDocumentSubscribe(const std::string& tag,
+                                                   const std::string& encodedWopiSrc,
+                                                   const bool subscribe)
+{
+    _relatedDocuments.handleSubscribe(*this, tag, encodedWopiSrc, subscribe);
+}
 
 void DocumentBroker::sendRemoteDocumentEvent(const std::string& tag,
                                              const std::string& encodedWopiSrc,
                                              const std::string& eventArguments)
 {
-    _relatedDocuments.sendEvent(*this, tag, encodedWopiSrc, eventArguments);
+    _relatedDocuments.onRemoteEvent(*this, tag, encodedWopiSrc, eventArguments);
 }
 
-void DocumentBroker::sendRemoteDocumentCommand(const std::string& sessionId,
+std::shared_ptr<ClientSession> DocumentBroker::findSession(const std::string& id) const
+{
+    ASSERT_CORRECT_THREAD();
+
+    const auto it = _sessions.find(id);
+    return it != _sessions.end() ? it->second : nullptr;
+}
+
+std::vector<std::string> DocumentBroker::getSessionIds() const
+{
+    ASSERT_CORRECT_THREAD();
+
+    std::vector<std::string> ids;
+    ids.reserve(_sessions.size());
+    for (const auto& it : _sessions)
+        ids.push_back(it.first);
+
+    return ids;
+}
+
+void DocumentBroker::sendRemoteDocumentCommand(const std::string& tag,
                                                const std::string& wopiSrc,
                                                const std::string& command)
 {
-    _relatedDocuments.sendCommand(*this, sessionId, wopiSrc, command);
+    _relatedDocuments.sendCommand(*this, tag, wopiSrc, command);
 }
 
-void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& sessionId,
+void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
                                                      const std::string& encodedWopiSrc,
                                                      const std::vector<char>& payload)
 {
     ASSERT_CORRECT_THREAD();
 
-    const auto it = _sessions.find(sessionId);
+    // The tag is the requesting view's session id.
+    const auto it = _sessions.find(tag);
     if (it == _sessions.end())
     {
-        LOG_DBG("No session [" << sessionId << "] for a remote document reply on [" << _docKey
-                               << ']');
+        LOG_DBG("No view [" << tag << "] for a remote document reply on [" << _docKey << ']');
         return;
     }
 
@@ -5081,6 +5124,11 @@ void DocumentBroker::addToIncomingDocKeyChain(const std::string& docKeyChain)
 void DocumentBroker::removeRemoteSubscription(const std::string& wopiSrc, const std::string& tag)
 {
     _relatedDocuments.removeSubscription(*this, wopiSrc, tag);
+}
+
+void DocumentBroker::removeRemoteDocumentView(const std::string& tag)
+{
+    _relatedDocuments.removeView(*this, tag);
 }
 
 #endif // !MOBILEAPP
@@ -5432,18 +5480,6 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
 
             _registeredDownloadLinks[downloadid] = std::move(url);
         }
-#if !MOBILEAPP
-        else if (message->firstTokenMatches("remotedocsubscribe:"))
-        {
-            LOG_CHECK_RET(message->tokens().size() == 3, false);
-            _relatedDocuments.handleMessage(*this, message, /*subscribe=*/true);
-        }
-        else if (message->firstTokenMatches("remotedocunsubscribe:"))
-        {
-            LOG_CHECK_RET(message->tokens().size() == 3, false);
-            _relatedDocuments.handleMessage(*this, message, /*subscribe=*/false);
-        }
-#endif
         else if (message->firstTokenMatches("traceevent:"))
         {
             LOG_CHECK_RET(message->tokens().size() == 1, false);

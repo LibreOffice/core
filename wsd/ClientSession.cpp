@@ -1480,9 +1480,6 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "remotedoccommand"))
     {
-        // A read-only command for a subscribed remote document. It is routed
-        // to that remote's headless session inside wsd and never sent to the
-        // kit; the remote's reply comes back as remotedoccommandresult.
         std::string encodedWopiSrc;
         if (tokens.size() < 3 || !COOLProtocol::getTokenString(tokens[1], "wopisrc", encodedWopiSrc)
             || encodedWopiSrc.empty())
@@ -1494,6 +1491,21 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         // The inner command is everything after the wopisrc token.
         docBroker->sendRemoteDocumentCommand(getId(), Uri::decode(encodedWopiSrc),
                                              tokens.cat(' ', 2));
+        return true;
+    }
+    else if (tokens.equals(0, "remotedocsubscribe") || tokens.equals(0, "remotedocunsubscribe"))
+    {
+        std::string encodedWopiSrc;
+        if (tokens.size() < 2 ||
+            !COOLProtocol::getTokenString(tokens[1], "wopisrc", encodedWopiSrc) ||
+            encodedWopiSrc.empty())
+        {
+            sendTextFrameAndLogError("error: cmd=remotedocsubscribe kind=syntax");
+            return false;
+        }
+
+        docBroker->handleRemoteDocumentSubscribe(getId(), encodedWopiSrc,
+                                                 tokens.equals(0, "remotedocsubscribe"));
         return true;
     }
 #endif // !MOBILEAPP && !WASMAPP
@@ -1532,8 +1544,6 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "geta11ycaretposition") ||
              tokens.equals(0, "getpresentationinfo") ||
              tokens.equals(0, "getslidesections") ||
-             tokens.equals(0, "remotedocsubscribe") ||
-             tokens.equals(0, "remotedocunsubscribe") ||
              tokens.equals(0, "slideshowfollow"))
     {
 #if !MOBILEAPP

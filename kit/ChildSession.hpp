@@ -181,7 +181,6 @@ private:
     bool outlineState(const StringVector& tokens);
     bool downloadAs(const StringVector& tokens);
     bool getChildId();
-    bool remoteDocumentSubscribe(const StringVector& tokens);
     bool getTextSelection(const StringVector& tokens);
     bool setClipboard(const StringVector& tokens);
     std::string getTextSelectionInternal(const std::string& mimeType);

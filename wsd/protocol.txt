@@ -92,17 +92,16 @@ downloadas name=<fileName> id=<id> format=<document format> options=<SkipImages,
     * 'export': Just a simple download
 
 remotedocsubscribe wopisrc=<encoded-WOPISrc>
-remotedocunsubscribe wopisrc=<encoded-WOPISrc> [tag=<t>]
+remotedocunsubscribe wopisrc=<encoded-WOPISrc>
 
-    Subscribes this document to, or unsubscribes it from, live events about
-    the given remote document. The server holds the access token for the
-    remote document; it comes from the RelatedDocuments field of
-    CheckFileInfo or from a POST to /cool/relateddocument. Requires the
-    remote_documents feature to be enabled in the configuration. Events
-    arrive as remotedocevent: messages. Every subscription is a separate
-    link with its own tag; an unsubscription names the tag of one link, or
-    drops every link of this document to the given WOPISrc when the tag is
-    left out or 0.
+    Subscribes the sending view to, or unsubscribes it from, live events
+    about the given remote document. The subscription belongs to that one
+    view and is opened with that view's own access token for the remote
+    document; the token comes from that view's UserPrivateInfo in
+    CheckFileInfo, or from a POST to /cool/relateddocument. A view without a
+    token for the source is refused. A view holds at most one subscription
+    per source. The command is handled inside wsd and never given to this
+    document's kit. Requires the remote_documents feature to be enabled.
 
 remotedoccommand wopisrc=<encoded-WOPISrc> <inner client command>
 
@@ -701,21 +700,27 @@ relateddocuments: <json>
 
     The related documents the server tracks for this document, from the
     RelatedDocuments field of CheckFileInfo and from POST
-    /cool/relateddocument. Sent to a client when it joins and to every
-    client when the list or a subscription state changes. Access tokens are
-    never included. The JSON carries a documents array of entries:
+    /cool/relateddocument. Built for the receiving view: the source list and
+    last-modified times are the same for every view, but the state is that
+    view's own. Sent to a view when it joins and again when the shared list
+    or that view's own access or subscription state changes. Access tokens
+    are never included. The JSON carries a documents array of entries:
 
         { "wopiSrc": "<decoded WOPISrc, no query>",
-          "state": "available|subscribed|connected|disconnected|failed|missing" }
+          "lastModifiedTime": "<time or empty>",
+          "state": "noaccess|available|subscribed|connected|disconnected|failed|missing" }
 
-    'available' means no live subscription; the other values follow the
-    remotedocevent states of the current subscription. 'missing' means the
-    source could not be read from storage, so the links to it are broken.
+    'noaccess' means the view holds no token for the source. 'available'
+    means the view holds a token but has no live subscription. The other
+    values follow the remotedocevent states of the view's subscription.
+    'missing' means the source could not be read from storage, so the links
+    to it are broken.
 
 remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>]
 
-    An event about a remote document this document subscribed to with
-    remotedocsubscribe. The tag identifies one subscription. <event> is one of:
+    An event about a remote document a view subscribed to with
+    remotedocsubscribe. The tag is the session id of the view that opened the
+    subscription. <event> is one of:
     * 'connected': the remote document is loaded and events are flowing
     * 'modified': the remote document's modified state changed to <value>
     * 'invalidated': the content of part <part> changed (-1 covers documents

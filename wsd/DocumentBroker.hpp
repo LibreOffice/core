@@ -456,35 +456,54 @@ public:
 
     /// Sends a raw text frame to the kit child process, without a view prefix.
     bool sendTextFrameToKit(const std::string& message);
-    
+
     /// Returns true when the given access token belongs to a live session of
     /// this document.
     bool isKnownAccessToken(const std::string& accessToken) const;
 
 #if !MOBILEAPP
-    /// Stores the access token to use for a subscription to the given remote
-    /// document, together with the time the remote document was last modified.
-    /// The latest token per WOPISrc wins.
-    void setRemoteDocumentToken(const std::string& wopiSrc, const std::string& accessToken,
-                                const std::string& lastModifiedTime);
+    /// Records the public part of a related document, the same for every view
+    void setRemoteDocumentSource(const std::string& wopiSrc, const std::string& lastModifiedTime);
 
-    /// Removes the record of a remote document subscription that was not
-    /// accepted.
-    void removeRemoteSubscription(const std::string& wopiSrc, const std::string& tag);
+    /// Records the access token one view holds for a related document. Private.
+    void setRemoteDocumentViewToken(const std::string& tag, const std::string& wopiSrc,
+                                    const std::string& accessToken);
 
-    /// Sends a remote document event to the kit and mirrors the subscription
-    /// state to the clients.
+    /// Records a related document and gives its access token to the view whose
+    /// access token matches the caller's, coming from POST /cool/relateddocument.
+    void registerRemoteDocumentToken(const std::string& callerAccessToken,
+                                     const std::string& wopiSrc, const std::string& accessToken,
+                                     const std::string& lastModifiedTime);
+
+    /// Opens or drops one view's subscription to a remote document. The view
+    /// is named by its tag.
+    void handleRemoteDocumentSubscribe(const std::string& tag,
+                                       const std::string& encodedWopiSrc, bool subscribe);
+
+    /// Returns the live session with the given id, or null when there is none.
+    std::shared_ptr<ClientSession> findSession(const std::string& id) const;
+
+    /// Removes the record of one view's remote document subscription that was
+    /// not accepted. The view is named by its tag.
+    void removeRemoteSubscription(const std::string& tag, const std::string& wopiSrc);
+
+    /// Drops everything one view held for related documents when it leaves.
+    void removeRemoteDocumentView(const std::string& tag);
+
+    /// Handles a remote document event addressed to one view, named by its
+    /// tag: updates that view's connection state, or passes a content event on
+    /// to the kit.
     void sendRemoteDocumentEvent(const std::string& tag, const std::string& encodedWopiSrc,
                                  const std::string& eventArguments);
 
-    /// Routes a read-only client command from one browser view to the remote
-    /// document with the given WOPISrc.
-    void sendRemoteDocumentCommand(const std::string& sessionId, const std::string& wopiSrc,
+    /// Routes a read-only client command from one view to the remote document
+    /// with the given WOPISrc. The view is named by its tag.
+    void sendRemoteDocumentCommand(const std::string& tag, const std::string& wopiSrc,
                                    const std::string& command);
 
-    /// Delivers a wrapped remote document reply to the browser view that
-    /// asked for it, if that view is still connected.
-    void sendRemoteDocumentCommandResult(const std::string& sessionId,
+    /// Delivers a wrapped remote document reply to the view that asked for it,
+    /// named by its tag, if that view is still connected.
+    void sendRemoteDocumentCommandResult(const std::string& tag,
                                          const std::string& encodedWopiSrc,
                                          const std::vector<char>& payload);
 
@@ -492,6 +511,9 @@ public:
     /// document through headless sessions.
     void addToIncomingDocKeyChain(const std::string& docKeyChain);
 #endif
+
+    /// The ids of the document's live sessions.
+    std::vector<std::string> getSessionIds() const;
 
     /// Transfer this socket into our polling thread / loop.
     void addSocketToPoll(const std::shared_ptr<StreamSocket>& socket);

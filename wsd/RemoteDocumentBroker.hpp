@@ -35,7 +35,8 @@ struct RemoteDocumentRequest
     std::string wopiSrc;
     /// Access token valid for the remote WOPISrc.
     std::string accessToken;
-    /// Link tag chosen by the kit document, echoed back in every event.
+    /// The originating view's session id, echoed back in every event so the
+    /// reply reaches the one view that opened the subscription.
     std::string tag;
     /// docKey of the consumer document.
     std::string localDocKey;
@@ -146,7 +147,7 @@ public:
     /// Sends a read-only client command to the remote document on behalf of
     /// one browser view, and remembers that view so the remote's replies are
     /// routed back to it.
-    void sendCommand(const std::string& localDocKey, const std::string& sessionId,
+    void sendCommand(const std::string& localDocKey, const std::string& tag,
                      const std::string& command);
 
     /// Forwards a raw frame from the remote document to every view that has
@@ -194,13 +195,13 @@ private:
     const std::string _serverUrl;
     RemoteDocumentBroker& _broker;
 
-    /// Keyed by (consumer's docKey, link tag): one document may hold several
-    /// links to the same remote document.
+    /// Keyed by (consumer's docKey, view tag): one document may hold links
+    /// from several of its views to the same remote document.
     std::map<std::pair<std::string, std::string>, Consumer> _consumers;
 
-    /// The browser views that have sent a command to this remote document,
-    /// as (consumer's docKey, session id) pairs. The remote's replies go back
-    /// to these views.
+    /// The views that have sent a command to this remote document, as
+    /// (consumer's docKey, view tag) pairs. The remote's replies go back to
+    /// these views.
     std::set<std::pair<std::string, std::string>> _commandSubscribers;
 
     std::shared_ptr<HeadlessClientSession> _session;
@@ -279,7 +280,7 @@ public:
     /// document identified by the WOPISrc and access token. Callable from any
     /// thread.
     void sendCommandAsync(std::string wopiSrc, std::string accessToken, std::string localDocKey,
-                          std::string sessionId, std::string command);
+                          std::string tag, std::string command);
 
     void dumpState(std::ostream& os) const override;
 
@@ -301,7 +302,7 @@ private:
     void unsubscribe(const std::string& wopiSrc, const std::string& accessToken,
                      const std::string& localDocKey, const std::string& tag);
     void sendCommand(const std::string& wopiSrc, const std::string& accessToken,
-                     const std::string& localDocKey, const std::string& sessionId,
+                     const std::string& localDocKey, const std::string& tag,
                      const std::string& command);
 
     /// Returns true when a subscription of the given consumer to the given
