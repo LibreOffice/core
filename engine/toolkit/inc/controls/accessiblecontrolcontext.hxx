@@ -68,28 +68,28 @@ public:
 
 private:
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleChild(sal_Int64 i) override;
+        getAccessibleChild(sal_Int64 i) override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleParent() override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
+        getAccessibleParent() override;
+    virtual sal_Int16 getAccessibleRole() override;
+    virtual OUString getAccessibleDescription() override;
+    virtual OUString getAccessibleName() override;
     virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet>
-        SAL_CALL getAccessibleRelationSet() override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+        getAccessibleRelationSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
     // XAccessibleComponent
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
-    virtual void SAL_CALL grabFocus() override;
-    virtual sal_Int32 SAL_CALL getForeground() override;
-    virtual sal_Int32 SAL_CALL getBackground() override;
+        getAccessibleAtPoint(const css::awt::Point& aPoint) override;
+    virtual void grabFocus() override;
+    virtual sal_Int32 getForeground() override;
+    virtual sal_Int32 getBackground() override;
 
     // XEventListener
     using comphelper::OAccessible::disposing;
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // retrieves the value of a string property from the model, if the property is present
     OUString getModelStringProperty(const OUString& _pPropertyName);

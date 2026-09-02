@@ -41,40 +41,40 @@ public:
     virtual ~GridColumn() override;
 
     // css::awt::grid::XGridColumn
-    virtual cpo::uno::Any SAL_CALL getIdentifier() override;
-    virtual void SAL_CALL setIdentifier(const cpo::uno::Any & value) override;
-    virtual ::sal_Int32 SAL_CALL getColumnWidth() override;
-    virtual void SAL_CALL setColumnWidth(::sal_Int32 the_value) override;
-    virtual ::sal_Int32 SAL_CALL getMaxWidth() override;
-    virtual void SAL_CALL setMaxWidth(::sal_Int32 the_value) override;
-    virtual ::sal_Int32 SAL_CALL getMinWidth() override;
-    virtual void SAL_CALL setMinWidth(::sal_Int32 the_value) override;
-    virtual bool SAL_CALL getResizeable() override;
-    virtual void SAL_CALL setResizeable(bool the_value) override;
-    virtual ::sal_Int32 SAL_CALL getFlexibility() override;
-    virtual void SAL_CALL setFlexibility( ::sal_Int32 _flexibility ) override;
-    virtual OUString SAL_CALL getTitle() override;
-    virtual void SAL_CALL setTitle(const OUString & value) override;
-    virtual OUString SAL_CALL getHelpText() override;
-    virtual void SAL_CALL setHelpText(const OUString & value) override;
-    virtual ::sal_Int32 SAL_CALL getIndex() override;
-    virtual ::sal_Int32 SAL_CALL getDataColumnIndex() override;
-    virtual void SAL_CALL setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) override;
-    virtual css::style::HorizontalAlignment SAL_CALL getHorizontalAlign() override;
-    virtual void SAL_CALL setHorizontalAlign(css::style::HorizontalAlignment align) override;
-    virtual void SAL_CALL addGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
-    virtual void SAL_CALL removeGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
+    virtual cpo::uno::Any getIdentifier() override;
+    virtual void setIdentifier(const cpo::uno::Any & value) override;
+    virtual ::sal_Int32 getColumnWidth() override;
+    virtual void setColumnWidth(::sal_Int32 the_value) override;
+    virtual ::sal_Int32 getMaxWidth() override;
+    virtual void setMaxWidth(::sal_Int32 the_value) override;
+    virtual ::sal_Int32 getMinWidth() override;
+    virtual void setMinWidth(::sal_Int32 the_value) override;
+    virtual bool getResizeable() override;
+    virtual void setResizeable(bool the_value) override;
+    virtual ::sal_Int32 getFlexibility() override;
+    virtual void setFlexibility( ::sal_Int32 _flexibility ) override;
+    virtual OUString getTitle() override;
+    virtual void setTitle(const OUString & value) override;
+    virtual OUString getHelpText() override;
+    virtual void setHelpText(const OUString & value) override;
+    virtual ::sal_Int32 getIndex() override;
+    virtual ::sal_Int32 getDataColumnIndex() override;
+    virtual void setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) override;
+    virtual css::style::HorizontalAlignment getHorizontalAlign() override;
+    virtual void setHorizontalAlign(css::style::HorizontalAlignment align) override;
+    virtual void addGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
+    virtual void removeGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
 
     // OComponentHelper
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XCloneable (base of XGridColumn)
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // attribute access
     void setIndex( sal_Int32 const i_index );

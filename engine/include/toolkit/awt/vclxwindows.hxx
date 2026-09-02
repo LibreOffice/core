@@ -61,11 +61,11 @@ protected:
 
 protected:
     // css::awt::XWindow
-    void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) override;
+    void setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
 protected:
     /** forward our bitmap to our window
@@ -104,27 +104,27 @@ public:
     virtual ~VCLXButton() override;
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XButton
-    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL setLabel( const OUString& Label ) override;
-    void SAL_CALL setActionCommand( const OUString& Command ) override;
+    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void setLabel( const OUString& Label ) override;
+    void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XToggleButton
     // css::awt::XItemEventBroadcaster
-    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -149,29 +149,29 @@ public:
 
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XCheckBox
-    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    sal_Int16 SAL_CALL getState(  ) override;
-    void SAL_CALL setState( sal_Int16 n ) override;
-    void SAL_CALL setLabel( const OUString& Label ) override;
-    void SAL_CALL enableTriState( bool b ) override;
+    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    sal_Int16 getState(  ) override;
+    void setState( sal_Int16 n ) override;
+    void setLabel( const OUString& Label ) override;
+    void enableTriState( bool b ) override;
 
     // css::awt::XButton:
-    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL setActionCommand( const OUString& Command ) override;
+    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -197,28 +197,28 @@ public:
                     VCLXRadioButton();
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XRadioButton
-    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    bool SAL_CALL getState(  ) override;
-    void SAL_CALL setState( bool b ) override;
-    void SAL_CALL setLabel( const OUString& Label ) override;
+    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    bool getState(  ) override;
+    void setState( bool b ) override;
+    void setLabel( const OUString& Label ) override;
 
     // css::awt::XButton:
-    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL setActionCommand( const OUString& Command ) override;
+    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -239,26 +239,26 @@ public:
     virtual ~VCLXFixedHyperlink() override;
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XFixedHyperlink
-    void SAL_CALL setText( const OUString& Text ) override;
-    OUString SAL_CALL getText(  ) override;
-    void SAL_CALL setURL( const OUString& URL ) override;
-    OUString SAL_CALL getURL(  ) override;
-    void SAL_CALL setAlignment( sal_Int16 nAlign ) override;
-    sal_Int16 SAL_CALL getAlignment(  ) override;
-    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void setText( const OUString& Text ) override;
+    OUString getText(  ) override;
+    void setURL( const OUString& URL ) override;
+    OUString getURL(  ) override;
+    void setAlignment( sal_Int16 nAlign ) override;
+    sal_Int16 getAlignment(  ) override;
+    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -274,15 +274,15 @@ public:
                         virtual ~VCLXFixedText() override;
 
     // css::awt::XFixedText
-    void SAL_CALL setText( const OUString& Text ) override;
-    OUString SAL_CALL getText(  ) override;
-    void SAL_CALL setAlignment( sal_Int16 nAlign ) override;
-    sal_Int16 SAL_CALL getAlignment(  ) override;
+    void setText( const OUString& Text ) override;
+    OUString getText(  ) override;
+    void setAlignment( sal_Int16 nAlign ) override;
+    sal_Int16 getAlignment(  ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -304,24 +304,24 @@ public:
 
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XScrollbar
-    void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
-    void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
-    void SAL_CALL setValue( sal_Int32 n ) override;
-    void SAL_CALL setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) override;
-    sal_Int32 SAL_CALL getValue(  ) override;
-    void SAL_CALL setMaximum( sal_Int32 n ) override;
-    sal_Int32 SAL_CALL getMaximum(  ) override;
-    void SAL_CALL setLineIncrement( sal_Int32 n ) override;
-    sal_Int32 SAL_CALL getLineIncrement(  ) override;
-    void SAL_CALL setBlockIncrement( sal_Int32 n ) override;
-    sal_Int32 SAL_CALL getBlockIncrement(  ) override;
-    void SAL_CALL setVisibleSize( sal_Int32 n ) override;
-    sal_Int32 SAL_CALL getVisibleSize(  ) override;
-    void SAL_CALL setOrientation( sal_Int32 n ) override;
-    sal_Int32 SAL_CALL getOrientation(  ) override;
+    void addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+    void removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+    void setValue( sal_Int32 n ) override;
+    void setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) override;
+    sal_Int32 getValue(  ) override;
+    void setMaximum( sal_Int32 n ) override;
+    sal_Int32 getMaximum(  ) override;
+    void setLineIncrement( sal_Int32 n ) override;
+    sal_Int32 getLineIncrement(  ) override;
+    void setBlockIncrement( sal_Int32 n ) override;
+    sal_Int32 getBlockIncrement(  ) override;
+    void setVisibleSize( sal_Int32 n ) override;
+    sal_Int32 getVisibleSize(  ) override;
+    void setOrientation( sal_Int32 n ) override;
+    sal_Int32 getOrientation(  ) override;
 
     // why isn't this part of the XScrollbar?
     /// @throws cpo::uno::RuntimeException
@@ -330,11 +330,11 @@ public:
     sal_Int32 getMinimum(  ) const;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize() override;
+    css::awt::Size getMinimumSize() override;
     /// @throws cpo::uno::RuntimeException
     static css::awt::Size implGetMinimumSize( vcl::Window const * p );
 
@@ -364,37 +364,37 @@ public:
 
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XTextComponent
-    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL setText( const OUString& aText ) override;
-    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
-    OUString SAL_CALL getText(  ) override;
-    OUString SAL_CALL getSelectedText(  ) override;
-    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
-    css::awt::Selection SAL_CALL getSelection(  ) override;
-    bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( bool bEditable ) override;
-    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
-    sal_Int16 SAL_CALL getMaxTextLen(  ) override;
+    void addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void setText( const OUString& aText ) override;
+    void insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
+    OUString getText(  ) override;
+    OUString getSelectedText(  ) override;
+    void setSelection( const css::awt::Selection& aSelection ) override;
+    css::awt::Selection getSelection(  ) override;
+    bool isEditable(  ) override;
+    void setEditable( bool bEditable ) override;
+    void setMaxTextLen( sal_Int16 nLen ) override;
+    sal_Int16 getMaxTextLen(  ) override;
 
     // css::awt::XTextEditField:
-    void SAL_CALL setEchoChar( sal_Unicode cEcho ) override;
+    void setEchoChar( sal_Unicode cEcho ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
+    css::awt::Size getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
+    void getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -417,37 +417,37 @@ public:
     virtual ~VCLXMultiLineEdit() override;
 
     // css::awt::XTextComponent
-    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL setText( const OUString& aText ) override;
-    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
-    OUString SAL_CALL getText(  ) override;
-    OUString SAL_CALL getSelectedText(  ) override;
-    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
-    css::awt::Selection SAL_CALL getSelection(  ) override;
-    bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( bool bEditable ) override;
-    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
-    sal_Int16 SAL_CALL getMaxTextLen(  ) override;
+    void addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void setText( const OUString& aText ) override;
+    void insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
+    OUString getText(  ) override;
+    OUString getSelectedText(  ) override;
+    void setSelection( const css::awt::Selection& aSelection ) override;
+    css::awt::Selection getSelection(  ) override;
+    bool isEditable(  ) override;
+    void setEditable( bool bEditable ) override;
+    void setMaxTextLen( sal_Int16 nLen ) override;
+    sal_Int16 getMaxTextLen(  ) override;
 
     //XTextArea
-    OUString SAL_CALL getTextLines(  ) override;
+    OUString getTextLines(  ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
+    css::awt::Size getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
+    void getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     // css::awt::XWindow
-    void SAL_CALL setFocus(  ) override;
+    void setFocus(  ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -467,13 +467,13 @@ public:
 
 
     // css::awt::XSpinField
-    void SAL_CALL addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
-    void SAL_CALL removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
-    void SAL_CALL up(  ) override;
-    void SAL_CALL down(  ) override;
-    void SAL_CALL first(  ) override;
-    void SAL_CALL last(  ) override;
-    void SAL_CALL enableRepeat( bool bRepeat ) override;
+    void addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
+    void removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
+    void up(  ) override;
+    void down(  ) override;
+    void first(  ) override;
+    void last(  ) override;
+    void enableRepeat( bool bRepeat ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -490,8 +490,8 @@ public:
     virtual ~SVTXFormattedField() override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
 protected:
     void    setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier);
@@ -529,22 +529,22 @@ public:
                     virtual ~SVTXNumericField() override;
 
     // css::awt::XNumericField
-    void SAL_CALL setValue( double Value ) override;
-    double SAL_CALL getValue(  ) override;
-    void SAL_CALL setMin( double Value ) override;
-    double SAL_CALL getMin(  ) override;
-    void SAL_CALL setMax( double Value ) override;
-    double SAL_CALL getMax(  ) override;
-    void SAL_CALL setFirst( double Value ) override;
-    double SAL_CALL getFirst(  ) override;
-    void SAL_CALL setLast( double Value ) override;
-    double SAL_CALL getLast(  ) override;
-    void SAL_CALL setSpinSize( double Value ) override;
-    double SAL_CALL getSpinSize(  ) override;
-    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
-    sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    void SAL_CALL setStrictFormat( bool bStrict ) override;
-    bool SAL_CALL isStrictFormat(  ) override;
+    void setValue( double Value ) override;
+    double getValue(  ) override;
+    void setMin( double Value ) override;
+    double getMin(  ) override;
+    void setMax( double Value ) override;
+    double getMax(  ) override;
+    void setFirst( double Value ) override;
+    double getFirst(  ) override;
+    void setLast( double Value ) override;
+    double getLast(  ) override;
+    void setSpinSize( double Value ) override;
+    double getSpinSize(  ) override;
+    void setDecimalDigits( sal_Int16 nDigits ) override;
+    sal_Int16 getDecimalDigits(  ) override;
+    void setStrictFormat( bool bStrict ) override;
+    bool isStrictFormat(  ) override;
 
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 };
@@ -569,54 +569,54 @@ public:
                         VCLXListBox();
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XListBox
-    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) override;
-    void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
-    void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
-    sal_Int16 SAL_CALL getItemCount(  ) override;
-    OUString SAL_CALL getItem( sal_Int16 nPos ) override;
-    cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
-    sal_Int16 SAL_CALL getSelectedItemPos(  ) override;
-    cpo::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
-    OUString SAL_CALL getSelectedItem(  ) override;
-    cpo::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
-    void SAL_CALL selectItemPos( sal_Int16 nPos, bool bSelect ) override;
-    void SAL_CALL selectItemsPos( const cpo::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
-    void SAL_CALL selectItem( const OUString& aItem, bool bSelect ) override;
-    bool SAL_CALL isMutipleMode(  ) override;
-    void SAL_CALL setMultipleMode( bool bMulti ) override;
-    sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
-    void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;
-    void SAL_CALL makeVisible( sal_Int16 nEntry ) override;
+    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addItem( const OUString& aItem, sal_Int16 nPos ) override;
+    void addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
+    void removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
+    sal_Int16 getItemCount(  ) override;
+    OUString getItem( sal_Int16 nPos ) override;
+    cpo::uno::Sequence< OUString > getItems(  ) override;
+    sal_Int16 getSelectedItemPos(  ) override;
+    cpo::uno::Sequence< sal_Int16 > getSelectedItemsPos(  ) override;
+    OUString getSelectedItem(  ) override;
+    cpo::uno::Sequence< OUString > getSelectedItems(  ) override;
+    void selectItemPos( sal_Int16 nPos, bool bSelect ) override;
+    void selectItemsPos( const cpo::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
+    void selectItem( const OUString& aItem, bool bSelect ) override;
+    bool isMutipleMode(  ) override;
+    void setMultipleMode( bool bMulti ) override;
+    sal_Int16 getDropDownLineCount(  ) override;
+    void setDropDownLineCount( sal_Int16 nLines ) override;
+    void makeVisible( sal_Int16 nEntry ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
+    css::awt::Size getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
+    void getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     // XItemListListener
-    virtual void SAL_CALL listItemInserted( const css::awt::ItemListEvent& Event ) override;
-    virtual void SAL_CALL listItemRemoved( const css::awt::ItemListEvent& Event ) override;
-    virtual void SAL_CALL listItemModified( const css::awt::ItemListEvent& Event ) override;
-    virtual void SAL_CALL allItemsRemoved( const css::lang::EventObject& Event ) override;
-    virtual void SAL_CALL itemListChanged( const css::lang::EventObject& Event ) override;
+    virtual void listItemInserted( const css::awt::ItemListEvent& Event ) override;
+    virtual void listItemRemoved( const css::awt::ItemListEvent& Event ) override;
+    virtual void listItemModified( const css::awt::ItemListEvent& Event ) override;
+    virtual void allItemsRemoved( const css::lang::EventObject& Event ) override;
+    virtual void itemListChanged( const css::lang::EventObject& Event ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& i_rEvent ) override;
+    virtual void disposing( const css::lang::EventObject& i_rEvent ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -642,43 +642,43 @@ public:
     virtual ~VCLXComboBox() override;
 
      // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XComboBox
-    void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) override;
-    void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
-    void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
-    sal_Int16 SAL_CALL getItemCount(  ) override;
-    OUString SAL_CALL getItem( sal_Int16 nPos ) override;
-    cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
-    sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
-    void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;
+    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addItem( const OUString& aItem, sal_Int16 nPos ) override;
+    void addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
+    void removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
+    sal_Int16 getItemCount(  ) override;
+    OUString getItem( sal_Int16 nPos ) override;
+    cpo::uno::Sequence< OUString > getItems(  ) override;
+    sal_Int16 getDropDownLineCount(  ) override;
+    void setDropDownLineCount( sal_Int16 nLines ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& rNewSize ) override;
+    css::awt::Size getMinimumSize(  ) override;
+    css::awt::Size getPreferredSize(  ) override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& rNewSize ) override;
 
     // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
+    css::awt::Size getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
+    void getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
     // XItemListListener
-    virtual void SAL_CALL listItemInserted( const css::awt::ItemListEvent& Event ) override;
-    virtual void SAL_CALL listItemRemoved( const css::awt::ItemListEvent& Event ) override;
-    virtual void SAL_CALL listItemModified( const css::awt::ItemListEvent& Event ) override;
-    virtual void SAL_CALL allItemsRemoved( const css::lang::EventObject& Event ) override;
-    virtual void SAL_CALL itemListChanged( const css::lang::EventObject& Event ) override;
+    virtual void listItemInserted( const css::awt::ItemListEvent& Event ) override;
+    virtual void listItemRemoved( const css::awt::ItemListEvent& Event ) override;
+    virtual void listItemModified( const css::awt::ItemListEvent& Event ) override;
+    virtual void allItemsRemoved( const css::lang::EventObject& Event ) override;
+    virtual void itemListChanged( const css::lang::EventObject& Event ) override;
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& i_rEvent ) override;
+    virtual void disposing( const css::lang::EventObject& i_rEvent ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

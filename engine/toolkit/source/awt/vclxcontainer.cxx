@@ -204,7 +204,7 @@ void VCLXContainer::setGroup( const cpo::uno::Sequence< css::uno::Reference< css
     }
 }
 
-void SAL_CALL VCLXContainer::setProperty(
+void VCLXContainer::setProperty(
     const OUString& PropertyName,
     const cpo::uno::Any& Value )
 {

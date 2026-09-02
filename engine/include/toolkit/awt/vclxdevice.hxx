@@ -47,19 +47,19 @@ public:
     const VclPtr<OutputDevice>& GetOutputDevice() const { return mpOutputDevice; }
 
     // css::awt::XDevice,
-    css::uno::Reference< css::awt::XGraphics >    SAL_CALL createGraphics(  ) override;
-    css::uno::Reference< css::awt::XDevice >      SAL_CALL createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    css::awt::DeviceInfo                                       SAL_CALL getInfo() override;
-    cpo::uno::Sequence< css::awt::FontDescriptor > SAL_CALL getFontDescriptors(  ) override;
-    css::uno::Reference< css::awt::XFont >        SAL_CALL getFont( const css::awt::FontDescriptor& aDescriptor ) override;
-    css::uno::Reference< css::awt::XBitmap >      SAL_CALL createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    css::uno::Reference< css::awt::XDisplayBitmap > SAL_CALL createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& Bitmap ) override;
+    css::uno::Reference< css::awt::XGraphics >    createGraphics(  ) override;
+    css::uno::Reference< css::awt::XDevice >      createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    css::awt::DeviceInfo                                       getInfo() override;
+    cpo::uno::Sequence< css::awt::FontDescriptor > getFontDescriptors(  ) override;
+    css::uno::Reference< css::awt::XFont >        getFont( const css::awt::FontDescriptor& aDescriptor ) override;
+    css::uno::Reference< css::awt::XBitmap >      createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    css::uno::Reference< css::awt::XDisplayBitmap > createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& Bitmap ) override;
 
     // css::awt::XUnitConversion
-    css::awt::Point SAL_CALL convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit ) override;
-    css::awt::Point SAL_CALL convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit ) override;
-    css::awt::Size SAL_CALL convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit ) override;
-    css::awt::Size SAL_CALL convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit ) override;
+    css::awt::Point convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit ) override;
+    css::awt::Point convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit ) override;
+    css::awt::Size convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit ) override;
+    css::awt::Size convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit ) override;
 
 
 };

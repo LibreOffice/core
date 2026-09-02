@@ -57,24 +57,24 @@ public:
     ScriptEventContainer();
 
     // Methods XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     // Methods XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
     // Methods XContainer
-    void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 };
 
 }   // namespace toolkit_namecontainer

@@ -39,30 +39,30 @@ public:
     virtual ~VCLXTabPageContainer() override;
 
     // css::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
+    void draw( sal_Int32 nX, sal_Int32 nY ) override;
 
     // css::awt::grid::XTabPageContainer
-    virtual ::sal_Int16 SAL_CALL getActiveTabPageID() override;
-    virtual void SAL_CALL setActiveTabPageID( ::sal_Int16 _activetabpageid ) override;
-    virtual ::sal_Int16 SAL_CALL getTabPageCount(  ) override;
-    virtual bool SAL_CALL isTabPageActive( ::sal_Int16 tabPageIndex ) override;
-    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPage( ::sal_Int16 tabPageIndex ) override;
-    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPageByID( ::sal_Int16 tabPageID ) override;
-    virtual void SAL_CALL addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
-    virtual void SAL_CALL removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
+    virtual ::sal_Int16 getActiveTabPageID() override;
+    virtual void setActiveTabPageID( ::sal_Int16 _activetabpageid ) override;
+    virtual ::sal_Int16 getTabPageCount(  ) override;
+    virtual bool isTabPageActive( ::sal_Int16 tabPageIndex ) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPage > getTabPage( ::sal_Int16 tabPageIndex ) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPage > getTabPageByID( ::sal_Int16 tabPageID ) override;
+    virtual void addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
+    virtual void removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
 
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
+    virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     // css::beans::XPropertiesChangeListener
-    virtual void SAL_CALL propertiesChange( const ::cpo::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
+    virtual void propertiesChange( const ::cpo::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
 private:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 

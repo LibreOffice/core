@@ -105,7 +105,7 @@ void SVTXGridControl::impl_checkRowIndex_throw( ::svt::table::TableControl const
 }
 
 
-sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y)
+sal_Int32 SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y)
 {
     SolarMutexGuard aGuard;
 
@@ -117,7 +117,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y)
 }
 
 
-sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y)
+sal_Int32 SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y)
 {
     SolarMutexGuard aGuard;
 
@@ -129,7 +129,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 
 }
 
 
-sal_Int32 SAL_CALL SVTXGridControl::getCurrentColumn(  )
+sal_Int32 SVTXGridControl::getCurrentColumn(  )
 {
     SolarMutexGuard aGuard;
 
@@ -141,7 +141,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getCurrentColumn(  )
 }
 
 
-sal_Int32 SAL_CALL SVTXGridControl::getCurrentRow(  )
+sal_Int32 SVTXGridControl::getCurrentRow(  )
 {
     SolarMutexGuard aGuard;
 
@@ -153,7 +153,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getCurrentRow(  )
 }
 
 
-void SAL_CALL SVTXGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
+void SVTXGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -167,13 +167,13 @@ void SAL_CALL SVTXGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 
 }
 
 
-void SAL_CALL SVTXGridControl::addSelectionListener(const Reference< XGridSelectionListener > & listener)
+void SVTXGridControl::addSelectionListener(const Reference< XGridSelectionListener > & listener)
 {
     m_aSelectionListeners.addInterface(listener);
 }
 
 
-void SAL_CALL SVTXGridControl::removeSelectionListener(const Reference< XGridSelectionListener > & listener)
+void SVTXGridControl::removeSelectionListener(const Reference< XGridSelectionListener > & listener)
 {
     m_aSelectionListeners.removeInterface(listener);
 }
@@ -595,14 +595,14 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName )
 }
 
 
-void SAL_CALL SVTXGridControl::rowsInserted( const GridDataEvent& i_event )
+void SVTXGridControl::rowsInserted( const GridDataEvent& i_event )
 {
     SolarMutexGuard aGuard;
     m_xTableModel->notifyRowsInserted( i_event );
 }
 
 
-void SAL_CALL
+void
  SVTXGridControl::rowsRemoved( const GridDataEvent& i_event )
 {
     SolarMutexGuard aGuard;
@@ -610,7 +610,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event )
+void SVTXGridControl::dataChanged( const GridDataEvent& i_event )
 {
     SolarMutexGuard aGuard;
 
@@ -624,7 +624,7 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event )
 }
 
 
-void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& )
+void SVTXGridControl::rowHeadingChanged( const GridDataEvent& )
 {
     SolarMutexGuard aGuard;
 
@@ -635,7 +635,7 @@ void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& )
 }
 
 
-void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event )
+void SVTXGridControl::elementInserted( const ContainerEvent& i_event )
 {
     SolarMutexGuard aGuard;
 
@@ -647,7 +647,7 @@ void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event )
 }
 
 
-void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event )
+void SVTXGridControl::elementRemoved( const ContainerEvent& i_event )
 {
     SolarMutexGuard aGuard;
 
@@ -657,7 +657,7 @@ void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event )
 }
 
 
-void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& )
+void SVTXGridControl::elementReplaced( const ContainerEvent& )
 {
     OSL_ENSURE( false, "SVTXGridControl::elementReplaced: not implemented!" );
         // at the moment, the XGridColumnModel API does not allow replacing columns
@@ -665,12 +665,12 @@ void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& )
 }
 
 
-void SAL_CALL SVTXGridControl::disposing(const EventObject&)
+void SVTXGridControl::disposing(const EventObject&)
 {
 }
 
 
-void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex )
+void SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -683,7 +683,7 @@ void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex )
 }
 
 
-void SAL_CALL SVTXGridControl::selectAllRows()
+void SVTXGridControl::selectAllRows()
 {
     SolarMutexGuard aGuard;
 
@@ -694,7 +694,7 @@ void SAL_CALL SVTXGridControl::selectAllRows()
 }
 
 
-void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex )
+void SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -707,7 +707,7 @@ void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex )
 }
 
 
-void SAL_CALL SVTXGridControl::deselectAllRows()
+void SVTXGridControl::deselectAllRows()
 {
     SolarMutexGuard aGuard;
 
@@ -718,7 +718,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows()
 }
 
 
-Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelectedRows()
+Sequence< ::sal_Int32 > SVTXGridControl::getSelectedRows()
 {
     SolarMutexGuard aGuard;
 
@@ -734,7 +734,7 @@ Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelectedRows()
 }
 
 
-bool SAL_CALL SVTXGridControl::hasSelectedRows()
+bool SVTXGridControl::hasSelectedRows()
 {
     SolarMutexGuard aGuard;
 
@@ -745,7 +745,7 @@ bool SAL_CALL SVTXGridControl::hasSelectedRows()
 }
 
 
-bool SAL_CALL SVTXGridControl::isRowSelected( ::sal_Int32 index )
+bool SVTXGridControl::isRowSelected( ::sal_Int32 index )
 {
     SolarMutexGuard aGuard;
 

@@ -51,22 +51,22 @@ public:
     rtl::Reference<UnoControlModel> Clone() const override;
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
-    OUString SAL_CALL getServiceName() override;
+    OUString getServiceName() override;
 
     // OPropertySetHelper
     void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"stardiv.Toolkit.GridControlModel"_ustr; }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);
@@ -89,35 +89,35 @@ public:
     OUString             GetComponentServiceName() const override;
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XControl
-    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
-    bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& rxModel ) override;
+    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    bool setModel( const css::uno::Reference< css::awt::XControlModel >& rxModel ) override;
 
     // css::awt::grid::XGridControl
-    virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
-    virtual ::sal_Int32 SAL_CALL getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
-    virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) override;
-    virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) override;
-    virtual void SAL_CALL goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) override;
+    virtual ::sal_Int32 getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
+    virtual ::sal_Int32 getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
+    virtual ::sal_Int32 getCurrentColumn(  ) override;
+    virtual ::sal_Int32 getCurrentRow(  ) override;
+    virtual void goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) override;
 
     // css::awt::grid::XGridRowSelection
-    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) override;
-    virtual void SAL_CALL selectAllRows() override;
-    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) override;
-    virtual void SAL_CALL deselectAllRows() override;
-    virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
-    virtual bool SAL_CALL hasSelectedRows() override;
-    virtual bool SAL_CALL isRowSelected(::sal_Int32 index) override;
-    virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
-    virtual void SAL_CALL removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
+    virtual void selectRow( ::sal_Int32 i_rowIndex ) override;
+    virtual void selectAllRows() override;
+    virtual void deselectRow( ::sal_Int32 i_rowIndex ) override;
+    virtual void deselectAllRows() override;
+    virtual cpo::uno::Sequence< ::sal_Int32 > getSelectedRows() override;
+    virtual bool hasSelectedRows() override;
+    virtual bool isRowSelected(::sal_Int32 index) override;
+    virtual void addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
+    virtual void removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"stardiv.Toolkit.GridControl"_ustr; }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         auto s(UnoControlBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);

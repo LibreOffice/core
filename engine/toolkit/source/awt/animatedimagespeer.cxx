@@ -152,7 +152,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::startAnimation()
+    void AnimatedImagesPeer::startAnimation()
     {
         SolarMutexGuard aGuard;
         VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
@@ -160,7 +160,7 @@ namespace toolkit
             pThrobber->start();
     }
 
-    void SAL_CALL AnimatedImagesPeer::stopAnimation()
+    void AnimatedImagesPeer::stopAnimation()
     {
         SolarMutexGuard aGuard;
         VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
@@ -168,7 +168,7 @@ namespace toolkit
             pThrobber->stop();
     }
 
-    bool SAL_CALL AnimatedImagesPeer::isAnimationRunning()
+    bool AnimatedImagesPeer::isAnimationRunning()
     {
         SolarMutexGuard aGuard;
         VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
@@ -177,7 +177,7 @@ namespace toolkit
         return false;
     }
 
-    void SAL_CALL AnimatedImagesPeer::setProperty( const OUString& i_propertyName, const Any& i_value )
+    void AnimatedImagesPeer::setProperty( const OUString& i_propertyName, const Any& i_value )
     {
         SolarMutexGuard aGuard;
 
@@ -222,7 +222,7 @@ namespace toolkit
     }
 
 
-    Any SAL_CALL AnimatedImagesPeer::getProperty( const OUString& i_propertyName )
+    Any AnimatedImagesPeer::getProperty( const OUString& i_propertyName )
     {
         SolarMutexGuard aGuard;
 
@@ -278,7 +278,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::elementInserted( const ContainerEvent& i_event )
+    void AnimatedImagesPeer::elementInserted( const ContainerEvent& i_event )
     {
         SolarMutexGuard aGuard;
         Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
@@ -301,7 +301,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::elementRemoved( const ContainerEvent& i_event )
+    void AnimatedImagesPeer::elementRemoved( const ContainerEvent& i_event )
     {
         SolarMutexGuard aGuard;
         Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
@@ -320,7 +320,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::elementReplaced( const ContainerEvent& i_event )
+    void AnimatedImagesPeer::elementReplaced( const ContainerEvent& i_event )
     {
         SolarMutexGuard aGuard;
         Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
@@ -343,18 +343,18 @@ namespace toolkit
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::disposing(const EventObject&)
+    void AnimatedImagesPeer::disposing(const EventObject&)
     {
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::modified( const EventObject& i_event )
+    void AnimatedImagesPeer::modified( const EventObject& i_event )
     {
         impl_updateImages_nolck( i_event.Source );
     }
 
 
-    void SAL_CALL AnimatedImagesPeer::dispose(  )
+    void AnimatedImagesPeer::dispose(  )
     {
         AnimatedImagesPeer_Base::dispose();
         SolarMutexGuard aGuard;

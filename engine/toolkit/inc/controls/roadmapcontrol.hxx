@@ -99,39 +99,39 @@ namespace toolkit
 
 
     // css::io::XPersistObject
-    OUString SAL_CALL getServiceName() override;
+    OUString getServiceName() override;
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any & Element) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any & Element) override;
+    virtual void insertByIndex( sal_Int32 Index, const cpo::uno::Any & Element) override;
+    virtual void removeByIndex( sal_Int32 Index ) override;
+    virtual void replaceByIndex( sal_Int32 Index, const cpo::uno::Any & Element) override;
 
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
-    cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return UnoControlRoadmapModel_Base::queryInterface(rType); }
-    cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-    void          SAL_CALL acquire() noexcept override  { UnoControlRoadmapModel_Base::acquire(); }
-    void          SAL_CALL release() noexcept override  { UnoControlRoadmapModel_Base::release(); }
+    cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override { return UnoControlRoadmapModel_Base::queryInterface(rType); }
+    cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
+    void          acquire() noexcept override  { UnoControlRoadmapModel_Base::acquire(); }
+    void          release() noexcept override  { UnoControlRoadmapModel_Base::release(); }
 
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 
-    virtual css::uno::Reference< XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< XInterface > createInstance(  ) override;
+    virtual css::uno::Reference< XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
-    virtual bool SAL_CALL hasElements() override;
+    virtual bool hasElements() override;
 
     };
 
@@ -147,35 +147,35 @@ namespace toolkit
                             UnoRoadmapControl();
         OUString     GetComponentServiceName() const override;
 
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
+    void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
 
-    void SAL_CALL   dispose(  ) override;
-
-
-    bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
-
-    void SAL_CALL elementInserted( const css::container::ContainerEvent& rEvent ) override;
-    void SAL_CALL elementRemoved( const css::container::ContainerEvent& rEvent ) override;
-    void SAL_CALL elementReplaced( const css::container::ContainerEvent& rEvent ) override;
-
-    virtual void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void   dispose(  ) override;
 
 
-    virtual void SAL_CALL itemStateChanged( const css::awt::ItemEvent& rEvent ) override;
+    bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+    void elementInserted( const css::container::ContainerEvent& rEvent ) override;
+    void elementRemoved( const css::container::ContainerEvent& rEvent ) override;
+    void elementReplaced( const css::container::ContainerEvent& rEvent ) override;
+
+    virtual void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+
+
+    virtual void itemStateChanged( const css::awt::ItemEvent& rEvent ) override;
+
+    virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )
     DECLARE_UNO3_AGG_DEFAULTS(UnoRoadmapControl, UnoControlRoadmap_Base)
 
-    cpo::uno::Any SAL_CALL queryAggregation(cpo::uno::Type const & aType) override;
+    cpo::uno::Any queryAggregation(cpo::uno::Type const & aType) override;
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
     };
 
 

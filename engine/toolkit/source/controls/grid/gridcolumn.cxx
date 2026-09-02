@@ -86,106 +86,106 @@ using namespace cpo::uno;
     }
 
 
-    cpo::uno::Any SAL_CALL GridColumn::getIdentifier()
+    cpo::uno::Any GridColumn::getIdentifier()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_aIdentifier;
     }
 
 
-    void SAL_CALL GridColumn::setIdentifier(const cpo::uno::Any & value)
+    void GridColumn::setIdentifier(const cpo::uno::Any & value)
     {
         std::unique_lock aGuard( m_aMutex );
         m_aIdentifier = value;
     }
 
 
-    ::sal_Int32 SAL_CALL GridColumn::getColumnWidth()
+    ::sal_Int32 GridColumn::getColumnWidth()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_nColumnWidth;
     }
 
 
-    void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value)
+    void GridColumn::setColumnWidth(::sal_Int32 value)
     {
         impl_set( m_nColumnWidth, value, u"ColumnWidth"_ustr );
     }
 
 
-    ::sal_Int32 SAL_CALL GridColumn::getMaxWidth()
+    ::sal_Int32 GridColumn::getMaxWidth()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_nMaxWidth;
     }
 
 
-    void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value)
+    void GridColumn::setMaxWidth(::sal_Int32 value)
     {
         impl_set( m_nMaxWidth, value, u"MaxWidth"_ustr );
     }
 
 
-    ::sal_Int32 SAL_CALL GridColumn::getMinWidth()
+    ::sal_Int32 GridColumn::getMinWidth()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_nMinWidth;
     }
 
 
-    void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value)
+    void GridColumn::setMinWidth(::sal_Int32 value)
     {
         impl_set( m_nMinWidth, value, u"MinWidth"_ustr );
     }
 
 
-    OUString SAL_CALL GridColumn::getTitle()
+    OUString GridColumn::getTitle()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_sTitle;
     }
 
 
-    void SAL_CALL GridColumn::setTitle(const OUString & value)
+    void GridColumn::setTitle(const OUString & value)
     {
         impl_set( m_sTitle, value, u"Title"_ustr );
     }
 
 
-    OUString SAL_CALL GridColumn::getHelpText()
+    OUString GridColumn::getHelpText()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_sHelpText;
     }
 
 
-    void SAL_CALL GridColumn::setHelpText( const OUString & value )
+    void GridColumn::setHelpText( const OUString & value )
     {
         impl_set( m_sHelpText, value, u"HelpText"_ustr );
     }
 
 
-    bool SAL_CALL GridColumn::getResizeable()
+    bool GridColumn::getResizeable()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_bResizeable;
     }
 
 
-    void SAL_CALL GridColumn::setResizeable(bool value)
+    void GridColumn::setResizeable(bool value)
     {
         impl_set( m_bResizeable, bool(value), u"Resizeable"_ustr );
     }
 
 
-    ::sal_Int32 SAL_CALL GridColumn::getFlexibility()
+    ::sal_Int32 GridColumn::getFlexibility()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_nFlexibility;
     }
 
 
-    void SAL_CALL GridColumn::setFlexibility( ::sal_Int32 i_value )
+    void GridColumn::setFlexibility( ::sal_Int32 i_value )
     {
         if ( i_value < 0 )
             throw IllegalArgumentException( OUString(), *this, 1 );
@@ -193,27 +193,27 @@ using namespace cpo::uno;
     }
 
 
-    HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign()
+    HorizontalAlignment GridColumn::getHorizontalAlign()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_eHorizontalAlign;
     }
 
 
-    void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align)
+    void GridColumn::setHorizontalAlign(HorizontalAlignment align)
     {
         impl_set( m_eHorizontalAlign, align, u"HorizontalAlign"_ustr );
     }
 
 
-    void SAL_CALL GridColumn::addGridColumnListener( const Reference< XGridColumnListener >& xListener )
+    void GridColumn::addGridColumnListener( const Reference< XGridColumnListener >& xListener )
     {
         std::unique_lock aGuard( m_aMutex );
         maGridColumnListeners.addInterface( aGuard, xListener );
     }
 
 
-    void SAL_CALL GridColumn::removeGridColumnListener( const Reference< XGridColumnListener >& xListener )
+    void GridColumn::removeGridColumnListener( const Reference< XGridColumnListener >& xListener )
     {
         std::unique_lock aGuard( m_aMutex );
         maGridColumnListeners.removeInterface( aGuard, xListener );
@@ -228,7 +228,7 @@ using namespace cpo::uno;
     }
 
 
-    ::sal_Int32 SAL_CALL GridColumn::getIndex()
+    ::sal_Int32 GridColumn::getIndex()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_nIndex;
@@ -242,36 +242,36 @@ using namespace cpo::uno;
     }
 
 
-    ::sal_Int32 SAL_CALL GridColumn::getDataColumnIndex()
+    ::sal_Int32 GridColumn::getDataColumnIndex()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_nDataColumnIndex;
     }
 
 
-    void SAL_CALL GridColumn::setDataColumnIndex( ::sal_Int32 i_dataColumnIndex )
+    void GridColumn::setDataColumnIndex( ::sal_Int32 i_dataColumnIndex )
     {
         impl_set( m_nDataColumnIndex, i_dataColumnIndex, u"DataColumnIndex"_ustr );
     }
 
 
-    OUString SAL_CALL GridColumn::getImplementationName(  )
+    OUString GridColumn::getImplementationName(  )
     {
         return u"org.openoffice.comp.toolkit.GridColumn"_ustr;
     }
 
-    bool SAL_CALL GridColumn::supportsService( const OUString& i_serviceName )
+    bool GridColumn::supportsService( const OUString& i_serviceName )
     {
         return cppu::supportsService(this, i_serviceName);
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL GridColumn::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > GridColumn::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.awt.grid.GridColumn"_ustr };
     }
 
 
-    Reference< XCloneable > SAL_CALL GridColumn::createClone(  )
+    Reference< XCloneable > GridColumn::createClone(  )
     {
         return new GridColumn( *this );
     }

@@ -164,7 +164,7 @@ UnoEditControl::UnoEditControl()
     maComponentInfos.nHeight = 12;
 }
 
-cpo::uno::Any SAL_CALL UnoEditControl::queryAggregation( const cpo::uno::Type & rType )
+cpo::uno::Any UnoEditControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aReturn = UnoControlBase::queryAggregation( rType );
     if ( !aReturn.hasValue() )
@@ -172,17 +172,17 @@ cpo::uno::Any SAL_CALL UnoEditControl::queryAggregation( const cpo::uno::Type & 
     return aReturn;
 }
 
-cpo::uno::Any SAL_CALL UnoEditControl::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any UnoEditControl::queryInterface( const cpo::uno::Type & rType )
 {
     return UnoControlBase::queryInterface( rType );
 }
 
-void SAL_CALL UnoEditControl::acquire(  ) noexcept
+void UnoEditControl::acquire(  ) noexcept
 {
     UnoControlBase::acquire();
 }
 
-void SAL_CALL UnoEditControl::release(  ) noexcept
+void UnoEditControl::release(  ) noexcept
 {
     UnoControlBase::release();
 }
@@ -203,7 +203,7 @@ OUString UnoEditControl::GetComponentServiceName() const
     return sName;
 }
 
-bool SAL_CALL UnoEditControl::setModel(const uno::Reference< awt::XControlModel >& _rModel)
+bool UnoEditControl::setModel(const uno::Reference< awt::XControlModel >& _rModel)
 {
     bool bReturn = UnoControlBase::setModel( _rModel );
     mbHasTextProperty = ImplHasProperty( BASEPROPERTY_TEXT );
@@ -829,12 +829,12 @@ void UnoButtonControl::removeItemListener(const uno::Reference< awt::XItemListen
     maItemListeners.removeInterface( l );
 }
 
-void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source )
+void UnoButtonControl::disposing( const lang::EventObject& Source )
 {
     UnoControlBase::disposing( Source );
 }
 
-void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
+void UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
 {
     // forward to model
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), cpo::uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
@@ -2185,14 +2185,14 @@ void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCo
 }
 
 
-::sal_Int32 SAL_CALL UnoControlListBoxModel::getItemCount()
+::sal_Int32 UnoControlListBoxModel::getItemCount()
 {
     std::unique_lock aGuard( m_aMutex );
     return m_xData->getItemCount();
 }
 
 
-void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL )
+void UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2205,7 +2205,7 @@ void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const
 }
 
 
-void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText )
+void UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2217,7 +2217,7 @@ void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, c
 }
 
 
-void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL )
+void UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2229,7 +2229,7 @@ void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, 
 }
 
 
-void SAL_CALL UnoControlListBoxModel::removeItem( ::sal_Int32 i_nPosition )
+void UnoControlListBoxModel::removeItem( ::sal_Int32 i_nPosition )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2240,7 +2240,7 @@ void SAL_CALL UnoControlListBoxModel::removeItem( ::sal_Int32 i_nPosition )
 }
 
 
-void SAL_CALL UnoControlListBoxModel::removeAllItems(  )
+void UnoControlListBoxModel::removeAllItems(  )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2251,7 +2251,7 @@ void SAL_CALL UnoControlListBoxModel::removeAllItems(  )
 }
 
 
-void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText )
+void UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2263,7 +2263,7 @@ void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, cons
 }
 
 
-void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL )
+void UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2275,7 +2275,7 @@ void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, con
 }
 
 
-void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL )
+void UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL )
 {
     std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
@@ -2288,7 +2288,7 @@ void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPositi
 }
 
 
-void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, const Any& i_rDataValue )
+void UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, const Any& i_rDataValue )
 {
     std::unique_lock aGuard( m_aMutex );
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
@@ -2296,7 +2296,7 @@ void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, cons
 }
 
 
-OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition )
+OUString UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition )
 {
     std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
@@ -2304,7 +2304,7 @@ OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition )
 }
 
 
-OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition )
+OUString UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition )
 {
     std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
@@ -2312,7 +2312,7 @@ OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition 
 }
 
 
-beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAndImage( ::sal_Int32 i_nPosition )
+beans::Pair< OUString, OUString > UnoControlListBoxModel::getItemTextAndImage( ::sal_Int32 i_nPosition )
 {
     std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
@@ -2320,7 +2320,7 @@ beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAn
 }
 
 
-Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition )
+Any UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition )
 {
     std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
@@ -2328,14 +2328,14 @@ Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition )
 }
 
 
-Sequence< beans::Pair< OUString, OUString > > SAL_CALL UnoControlListBoxModel::getAllItems(  )
+Sequence< beans::Pair< OUString, OUString > > UnoControlListBoxModel::getAllItems(  )
 {
     std::unique_lock aGuard( m_aMutex );
     return m_xData->getAllItems();
 }
 
 
-void SAL_CALL UnoControlListBoxModel::addItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener )
+void UnoControlListBoxModel::addItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( i_Listener.is() )
@@ -2343,7 +2343,7 @@ void SAL_CALL UnoControlListBoxModel::addItemListListener( const uno::Reference<
 }
 
 
-void SAL_CALL UnoControlListBoxModel::removeItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener )
+void UnoControlListBoxModel::removeItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( i_Listener.is() )
@@ -2469,7 +2469,7 @@ void UnoControlListBoxModel::impl_notifyItemListEvent(
     std::unique_lock<std::mutex>& rGuard,
     const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
     const ::std::optional< OUString >& i_rItemImageURL,
-    void ( SAL_CALL XItemListListener::*NotificationMethod )( const ItemListEvent& ) )
+    void ( XItemListListener::*NotificationMethod )( const ItemListEvent& ) )
 {
     ItemListEvent aEvent;
     aEvent.Source = *this;
@@ -2840,7 +2840,7 @@ void UnoListBoxControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines 
     Impl_getColumnsAndLines( nCols, nLines );
 }
 
-bool SAL_CALL UnoListBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
+bool UnoListBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -2860,7 +2860,7 @@ bool SAL_CALL UnoListBoxControl::setModel( const uno::Reference< awt::XControlMo
     return true;
 }
 
-void SAL_CALL UnoListBoxControl::listItemInserted( const awt::ItemListEvent& i_rEvent )
+void UnoListBoxControl::listItemInserted( const awt::ItemListEvent& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoListBoxControl::listItemInserted: invalid peer!" );
@@ -2868,7 +2868,7 @@ void SAL_CALL UnoListBoxControl::listItemInserted( const awt::ItemListEvent& i_r
         xPeerListener->listItemInserted( i_rEvent );
 }
 
-void SAL_CALL UnoListBoxControl::listItemRemoved( const awt::ItemListEvent& i_rEvent )
+void UnoListBoxControl::listItemRemoved( const awt::ItemListEvent& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoListBoxControl::listItemRemoved: invalid peer!" );
@@ -2876,7 +2876,7 @@ void SAL_CALL UnoListBoxControl::listItemRemoved( const awt::ItemListEvent& i_rE
         xPeerListener->listItemRemoved( i_rEvent );
 }
 
-void SAL_CALL UnoListBoxControl::listItemModified( const awt::ItemListEvent& i_rEvent )
+void UnoListBoxControl::listItemModified( const awt::ItemListEvent& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoListBoxControl::listItemModified: invalid peer!" );
@@ -2884,7 +2884,7 @@ void SAL_CALL UnoListBoxControl::listItemModified( const awt::ItemListEvent& i_r
         xPeerListener->listItemModified( i_rEvent );
 }
 
-void SAL_CALL UnoListBoxControl::allItemsRemoved( const lang::EventObject& i_rEvent )
+void UnoListBoxControl::allItemsRemoved( const lang::EventObject& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoListBoxControl::allItemsRemoved: invalid peer!" );
@@ -2892,7 +2892,7 @@ void SAL_CALL UnoListBoxControl::allItemsRemoved( const lang::EventObject& i_rEv
         xPeerListener->allItemsRemoved( i_rEvent );
 }
 
-void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEvent )
+void UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoListBoxControl::itemListChanged: invalid peer!" );
@@ -3142,7 +3142,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
         }
     }
 }
-bool SAL_CALL UnoComboBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
+bool UnoComboBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -3162,7 +3162,7 @@ bool SAL_CALL UnoComboBoxControl::setModel( const uno::Reference< awt::XControlM
     return true;
 }
 
-void SAL_CALL UnoComboBoxControl::listItemInserted( const awt::ItemListEvent& i_rEvent )
+void UnoComboBoxControl::listItemInserted( const awt::ItemListEvent& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::listItemInserted: invalid peer!" );
@@ -3170,7 +3170,7 @@ void SAL_CALL UnoComboBoxControl::listItemInserted( const awt::ItemListEvent& i_
         xPeerListener->listItemInserted( i_rEvent );
 }
 
-void SAL_CALL UnoComboBoxControl::listItemRemoved( const awt::ItemListEvent& i_rEvent )
+void UnoComboBoxControl::listItemRemoved( const awt::ItemListEvent& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::listItemRemoved: invalid peer!" );
@@ -3178,7 +3178,7 @@ void SAL_CALL UnoComboBoxControl::listItemRemoved( const awt::ItemListEvent& i_r
         xPeerListener->listItemRemoved( i_rEvent );
 }
 
-void SAL_CALL UnoComboBoxControl::listItemModified( const awt::ItemListEvent& i_rEvent )
+void UnoComboBoxControl::listItemModified( const awt::ItemListEvent& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::listItemModified: invalid peer!" );
@@ -3186,7 +3186,7 @@ void SAL_CALL UnoComboBoxControl::listItemModified( const awt::ItemListEvent& i_
         xPeerListener->listItemModified( i_rEvent );
 }
 
-void SAL_CALL UnoComboBoxControl::allItemsRemoved( const lang::EventObject& i_rEvent )
+void UnoComboBoxControl::allItemsRemoved( const lang::EventObject& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::allItemsRemoved: invalid peer!" );
@@ -3194,7 +3194,7 @@ void SAL_CALL UnoComboBoxControl::allItemsRemoved( const lang::EventObject& i_rE
         xPeerListener->allItemsRemoved( i_rEvent );
 }
 
-void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rEvent )
+void UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rEvent )
 {
     const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::itemListChanged: invalid peer!" );

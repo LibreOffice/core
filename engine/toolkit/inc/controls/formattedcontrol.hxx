@@ -45,25 +45,25 @@ namespace toolkit
         rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFormattedFieldModel( *this ); }
 
         // css::io::XPersistObject
-        OUString SAL_CALL getServiceName() override;
+        OUString getServiceName() override;
 
         // css::beans::XMultiPropertySet
-        css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 
         // css::lang::XServiceInfo
-        OUString SAL_CALL getImplementationName() override;
+        OUString getImplementationName() override;
 
-        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     private:
         virtual ~UnoControlFormattedFieldModel() override;
 
         // XComponent
-        void SAL_CALL dispose() override;
+        void dispose() override;
 
         // XPropertySet
-        void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
+        void setPropertyValues( const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
 
         // UnoControlModel
         virtual void ImplNormalizePropertySequence(
@@ -109,12 +109,12 @@ namespace toolkit
         OUString     GetComponentServiceName() const override;
 
         // css::awt::XTextListener
-        void SAL_CALL textChanged( const css::awt::TextEvent& rEvent ) override;
+        void textChanged( const css::awt::TextEvent& rEvent ) override;
 
         // css::lang::XServiceInfo
-        OUString SAL_CALL getImplementationName() override;
+        OUString getImplementationName() override;
 
-        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
     };
 
 

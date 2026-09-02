@@ -47,90 +47,90 @@ public:
     // XAccessibleContext
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** @return  The index of this object among the parent's children. */
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 getAccessibleIndexInParent() override;
 
     // XAccessibleComponent
 
     /** @return  The accessible child rendered under the given point. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     /** Grabs the focus to (the current cell of) the data table. */
-    virtual void SAL_CALL grabFocus() override;
+    virtual void grabFocus() override;
 
     // XAccessibleTable
 
     /** @return  The description text of the specified row. */
-    virtual OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow ) override;
+    virtual OUString getAccessibleRowDescription( sal_Int32 nRow ) override;
 
     /** @return  The description text of the specified column. */
-    virtual OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn ) override;
+    virtual OUString getAccessibleColumnDescription( sal_Int32 nColumn ) override;
 
     /** @return  The XAccessibleTable interface of the row header bar. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleTable >
     getAccessibleRowHeaders() override;
 
     /** @return  The XAccessibleTable interface of the column header bar. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleTable >
     getAccessibleColumnHeaders() override;
 
     /** @return  An index list of completely selected rows. */
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 >
     getSelectedAccessibleRows() override;
 
     /** @return  An index list of completely selected columns. */
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 >
     getSelectedAccessibleColumns() override;
 
     /** @return  TRUE, if the specified row is completely selected. */
-    virtual bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow ) override;
+    virtual bool isAccessibleRowSelected( sal_Int32 nRow ) override;
 
     /** @return  TRUE, if the specified column is completely selected. */
-    virtual bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn ) override;
+    virtual bool isAccessibleColumnSelected( sal_Int32 nColumn ) override;
 
     /** @return The XAccessible interface of the cell object at the specified
                 cell position. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  TRUE, if the specified cell is selected. */
-    virtual bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
+    virtual bool isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     // XAccessibleSelection
 
     /** Selects the specified child (row or column of the table). */
-    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
+    virtual void selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** @return  TRUE, if the specified child (row/column) is selected. */
-    virtual bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    virtual bool isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
 
     /** Clears the complete selection. */
-    virtual void SAL_CALL clearAccessibleSelection() override;
+    virtual void clearAccessibleSelection() override;
 
     /** Selects all children or first, if multiselection is not supported. */
-    virtual void SAL_CALL selectAllAccessibleChildren() override;
+    virtual void selectAllAccessibleChildren() override;
 
     /** @return  The number of selected rows/columns. */
-    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount() override;
+    virtual sal_Int64 getSelectedAccessibleChildCount() override;
 
     /** @return  The specified selected row/column. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
     getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     /** Removes the specified row/column from the selection. */
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // XServiceInfo
 
     /** @return  The name of this class. */
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
     virtual void commitEvent(sal_Int16 nEventId, const cpo::uno::Any& rNewValue,
                              const cpo::uno::Any& rOldValue) override;

@@ -148,7 +148,7 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 
 // Interface implementation of css::awt::XUnitConversion
 
-css::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit )
+css::awt::Point VCLXDevice::convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit )
 {
     SolarMutexGuard aGuard;
     if (TargetUnit == css::util::MeasureUnit::PERCENT )
@@ -172,7 +172,7 @@ css::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const css::awt::Point&
 }
 
 
-css::awt::Point SAL_CALL VCLXDevice::convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit )
+css::awt::Point VCLXDevice::convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit )
 {
     SolarMutexGuard aGuard;
     if (SourceUnit == css::util::MeasureUnit::PERCENT ||
@@ -195,7 +195,7 @@ css::awt::Point SAL_CALL VCLXDevice::convertPointToPixel( const css::awt::Point&
     return aAWTPoint;
 }
 
-css::awt::Size SAL_CALL VCLXDevice::convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit )
+css::awt::Size VCLXDevice::convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit )
 {
     SolarMutexGuard aGuard;
     if (TargetUnit == css::util::MeasureUnit::PERCENT)
@@ -219,7 +219,7 @@ css::awt::Size SAL_CALL VCLXDevice::convertSizeToLogic( const css::awt::Size& aS
     return aAWTSize;
 }
 
-css::awt::Size SAL_CALL VCLXDevice::convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit )
+css::awt::Size VCLXDevice::convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit )
 {
     SolarMutexGuard aGuard;
     if (SourceUnit == css::util::MeasureUnit::PERCENT ||

@@ -71,55 +71,55 @@ protected:
 
 public:
     // XSortableGridData
-    virtual void SAL_CALL sortByColumn( ::sal_Int32 ColumnIndex, bool SortAscending ) override;
-    virtual void SAL_CALL removeColumnSort(  ) override;
-    virtual css::beans::Pair< ::sal_Int32, bool > SAL_CALL getCurrentSortOrder(  ) override;
+    virtual void sortByColumn( ::sal_Int32 ColumnIndex, bool SortAscending ) override;
+    virtual void removeColumnSort(  ) override;
+    virtual css::beans::Pair< ::sal_Int32, bool > getCurrentSortOrder(  ) override;
 
     // XMutableGridDataModel
-    virtual void SAL_CALL addRow( const cpo::uno::Any& Heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
-    virtual void SAL_CALL addRows( const cpo::uno::Sequence< cpo::uno::Any >& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
-    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const cpo::uno::Any& i_heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
-    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const cpo::uno::Sequence< cpo::uno::Any>& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
-    virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) override;
-    virtual void SAL_CALL removeAllRows(  ) override;
-    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void SAL_CALL updateRowData( const cpo::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
-    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const cpo::uno::Any& Heading ) override;
-    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void SAL_CALL addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
-    virtual void SAL_CALL removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void addRow( const cpo::uno::Any& Heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
+    virtual void addRows( const cpo::uno::Sequence< cpo::uno::Any >& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
+    virtual void insertRow( ::sal_Int32 i_index, const cpo::uno::Any& i_heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
+    virtual void insertRows( ::sal_Int32 i_index, const cpo::uno::Sequence< cpo::uno::Any>& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
+    virtual void removeRow( ::sal_Int32 RowIndex ) override;
+    virtual void removeAllRows(  ) override;
+    virtual void updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void updateRowData( const cpo::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
+    virtual void updateRowHeading( ::sal_Int32 RowIndex, const cpo::uno::Any& Heading ) override;
+    virtual void updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void updateRowToolTip( ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
 
     // XGridDataModel
-    virtual ::sal_Int32 SAL_CALL getRowCount() override;
-    virtual ::sal_Int32 SAL_CALL getColumnCount() override;
-    virtual cpo::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
-    virtual cpo::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
-    virtual cpo::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) override;
+    virtual ::sal_Int32 getRowCount() override;
+    virtual ::sal_Int32 getColumnCount() override;
+    virtual cpo::uno::Any getCellData( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
+    virtual cpo::uno::Any getCellToolTip( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
+    virtual cpo::uno::Any getRowHeading( ::sal_Int32 RowIndex ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > getRowData( ::sal_Int32 RowIndex ) override;
 
     // OComponentHelper
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XGridDataListener
-    virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) override;
-    virtual void SAL_CALL rowsRemoved( const css::awt::grid::GridDataEvent& Event ) override;
-    virtual void SAL_CALL dataChanged( const css::awt::grid::GridDataEvent& Event ) override;
-    virtual void SAL_CALL rowHeadingChanged( const css::awt::grid::GridDataEvent& Event ) override;
+    virtual void rowsInserted( const css::awt::grid::GridDataEvent& Event ) override;
+    virtual void rowsRemoved( const css::awt::grid::GridDataEvent& Event ) override;
+    virtual void dataChanged( const css::awt::grid::GridDataEvent& Event ) override;
+    virtual void rowHeadingChanged( const css::awt::grid::GridDataEvent& Event ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) override;
+    virtual void disposing( const css::lang::EventObject& i_event ) override;
 
 private:
     /** translates the given public index into one to be passed to our delegator
@@ -153,7 +153,7 @@ private:
     /** broadcasts the given event to our registered XGridDataListeners
     */
     void    impl_broadcast(
-                void ( SAL_CALL css::awt::grid::XGridDataListener::*i_listenerMethod )( const css::awt::grid::GridDataEvent & ),
+                void ( css::awt::grid::XGridDataListener::*i_listenerMethod )( const css::awt::grid::GridDataEvent & ),
                 css::awt::grid::GridDataEvent const & i_publicEvent,
                 std::unique_lock<std::mutex>& i_instanceLock
             );
@@ -240,7 +240,7 @@ void lcl_clear( STLCONTAINER& i_container )
         return xCollator;
     }
 
-    void SAL_CALL SortableGridDataModel::initialize( const Sequence< Any >& i_arguments )
+    void SortableGridDataModel::initialize( const Sequence< Any >& i_arguments )
     {
         std::unique_lock aGuard( m_aMutex );
         throwIfDisposed(aGuard);
@@ -286,14 +286,14 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SortableGridDataModel::impl_broadcast( void ( SAL_CALL XGridDataListener::*i_listenerMethod )( const GridDataEvent & ),
+    void SortableGridDataModel::impl_broadcast( void ( XGridDataListener::*i_listenerMethod )( const GridDataEvent & ),
             GridDataEvent const & i_publicEvent, std::unique_lock<std::mutex>& i_instanceLock )
     {
         m_GridListeners.notifyEach( i_instanceLock, i_listenerMethod, i_publicEvent );
     }
 
 
-    void SAL_CALL SortableGridDataModel::rowsInserted( const GridDataEvent& i_event )
+    void SortableGridDataModel::rowsInserted( const GridDataEvent& i_event )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -343,7 +343,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::rowsRemoved( const GridDataEvent& i_event )
+    void SortableGridDataModel::rowsRemoved( const GridDataEvent& i_event )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -404,7 +404,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::dataChanged( const GridDataEvent& i_event )
+    void SortableGridDataModel::dataChanged( const GridDataEvent& i_event )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -414,7 +414,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::rowHeadingChanged( const GridDataEvent& i_event )
+    void SortableGridDataModel::rowHeadingChanged( const GridDataEvent& i_event )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -424,7 +424,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::disposing( const EventObject& )
+    void SortableGridDataModel::disposing( const EventObject& )
     {
     }
 
@@ -515,7 +515,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, bool i_sortAscending )
+    void SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, bool i_sortAscending )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -562,7 +562,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::removeColumnSort(  )
+    void SortableGridDataModel::removeColumnSort(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -570,7 +570,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    css::beans::Pair< ::sal_Int32, bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  )
+    css::beans::Pair< ::sal_Int32, bool > SortableGridDataModel::getCurrentSortOrder(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -579,7 +579,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data )
+    void SortableGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -590,7 +590,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data )
+    void SortableGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -601,7 +601,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data )
+    void SortableGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -619,7 +619,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data )
+    void SortableGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -637,7 +637,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::removeRow( ::sal_Int32 i_rowIndex )
+    void SortableGridDataModel::removeRow( ::sal_Int32 i_rowIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -650,7 +650,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::removeAllRows(  )
+    void SortableGridDataModel::removeAllRows(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -661,7 +661,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
+    void SortableGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -674,7 +674,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values )
+    void SortableGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -687,7 +687,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading )
+    void SortableGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -700,7 +700,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
+    void SortableGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -713,7 +713,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value )
+    void SortableGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -726,21 +726,21 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::addGridDataListener( const Reference< XGridDataListener >& i_listener )
+    void SortableGridDataModel::addGridDataListener( const Reference< XGridDataListener >& i_listener )
     {
         std::unique_lock aGuard(m_aMutex);
         m_GridListeners.addInterface( aGuard, i_listener );
     }
 
 
-    void SAL_CALL SortableGridDataModel::removeGridDataListener( const Reference< XGridDataListener >& i_listener )
+    void SortableGridDataModel::removeGridDataListener( const Reference< XGridDataListener >& i_listener )
     {
         std::unique_lock aGuard(m_aMutex);
         m_GridListeners.removeInterface( aGuard, i_listener );
     }
 
 
-    ::sal_Int32 SAL_CALL SortableGridDataModel::getRowCount()
+    ::sal_Int32 SortableGridDataModel::getRowCount()
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -751,7 +751,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    ::sal_Int32 SAL_CALL SortableGridDataModel::getColumnCount()
+    ::sal_Int32 SortableGridDataModel::getColumnCount()
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -762,7 +762,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    Any SAL_CALL SortableGridDataModel::getCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
+    Any SortableGridDataModel::getCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -775,7 +775,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    Any SAL_CALL SortableGridDataModel::getCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
+    Any SortableGridDataModel::getCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -788,7 +788,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    Any SAL_CALL SortableGridDataModel::getRowHeading( ::sal_Int32 i_rowIndex )
+    Any SortableGridDataModel::getRowHeading( ::sal_Int32 i_rowIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -801,7 +801,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    Sequence< Any > SAL_CALL SortableGridDataModel::getRowData( ::sal_Int32 i_rowIndex )
+    Sequence< Any > SortableGridDataModel::getRowData( ::sal_Int32 i_rowIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -833,7 +833,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    Reference< css::util::XCloneable > SAL_CALL SortableGridDataModel::createClone(  )
+    Reference< css::util::XCloneable > SortableGridDataModel::createClone(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -842,17 +842,17 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    OUString SAL_CALL SortableGridDataModel::getImplementationName(  )
+    OUString SortableGridDataModel::getImplementationName(  )
     {
         return u"org.openoffice.comp.toolkit.SortableGridDataModel"_ustr;
     }
 
-    bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName )
+    bool SortableGridDataModel::supportsService( const OUString& i_serviceName )
     {
         return cppu::supportsService(this, i_serviceName);
     }
 
-    Sequence< OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  )
+    Sequence< OUString > SortableGridDataModel::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.awt.grid.SortableGridDataModel"_ustr };
     }

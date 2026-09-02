@@ -48,14 +48,14 @@ public:
     }
 
     // css::awt::XPointer
-    void SAL_CALL setType( sal_Int32 nType ) override;
-    sal_Int32 SAL_CALL getType(  ) override;
+    void setType( sal_Int32 nType ) override;
+    sal_Int32 getType(  ) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 

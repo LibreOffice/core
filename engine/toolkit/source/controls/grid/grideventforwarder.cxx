@@ -46,19 +46,19 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::acquire() noexcept
+    void GridEventForwarder::acquire() noexcept
     {
         m_parent.acquire();
     }
 
 
-    void SAL_CALL GridEventForwarder::release() noexcept
+    void GridEventForwarder::release() noexcept
     {
         m_parent.release();
     }
 
 
-    void SAL_CALL GridEventForwarder::rowsInserted( const GridDataEvent& i_event )
+    void GridEventForwarder::rowsInserted( const GridDataEvent& i_event )
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
@@ -66,7 +66,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::rowsRemoved( const GridDataEvent& i_event )
+    void GridEventForwarder::rowsRemoved( const GridDataEvent& i_event )
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
@@ -74,7 +74,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::dataChanged( const GridDataEvent& i_event )
+    void GridEventForwarder::dataChanged( const GridDataEvent& i_event )
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
@@ -82,7 +82,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::rowHeadingChanged( const GridDataEvent& i_event )
+    void GridEventForwarder::rowHeadingChanged( const GridDataEvent& i_event )
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
@@ -90,7 +90,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::elementInserted( const ContainerEvent& i_event )
+    void GridEventForwarder::elementInserted( const ContainerEvent& i_event )
     {
         Reference< XContainerListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
@@ -98,7 +98,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::elementRemoved( const ContainerEvent& i_event )
+    void GridEventForwarder::elementRemoved( const ContainerEvent& i_event )
     {
         Reference< XContainerListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
@@ -106,7 +106,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::elementReplaced( const ContainerEvent& i_event )
+    void GridEventForwarder::elementReplaced( const ContainerEvent& i_event )
     {
         Reference< XContainerListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
@@ -114,7 +114,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::disposing( const EventObject& i_event )
+    void GridEventForwarder::disposing( const EventObject& i_event )
     {
         Reference< XEventListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )

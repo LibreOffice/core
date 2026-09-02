@@ -53,26 +53,26 @@ namespace toolkit
         DECLARE_XTYPEPROVIDER()
 
         // XComponent
-        void SAL_CALL dispose( ) override;
+        void dispose( ) override;
 
         // XSpinValue
-        virtual void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
-        virtual void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
-        virtual void SAL_CALL setValue( sal_Int32 n ) override;
-        virtual void SAL_CALL setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) override;
-        virtual sal_Int32 SAL_CALL getValue(  ) override;
-        virtual void SAL_CALL setMinimum( sal_Int32 minValue ) override;
-        virtual void SAL_CALL setMaximum( sal_Int32 maxValue ) override;
-        virtual sal_Int32 SAL_CALL getMinimum(  ) override;
-        virtual sal_Int32 SAL_CALL getMaximum(  ) override;
-        virtual void SAL_CALL setSpinIncrement( sal_Int32 spinIncrement ) override;
-        virtual sal_Int32 SAL_CALL getSpinIncrement(  ) override;
-        virtual void SAL_CALL setOrientation( sal_Int32 orientation ) override;
-        virtual sal_Int32 SAL_CALL getOrientation(  ) override;
+        virtual void addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+        virtual void removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+        virtual void setValue( sal_Int32 n ) override;
+        virtual void setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) override;
+        virtual sal_Int32 getValue(  ) override;
+        virtual void setMinimum( sal_Int32 minValue ) override;
+        virtual void setMaximum( sal_Int32 maxValue ) override;
+        virtual sal_Int32 getMinimum(  ) override;
+        virtual sal_Int32 getMaximum(  ) override;
+        virtual void setSpinIncrement( sal_Int32 spinIncrement ) override;
+        virtual sal_Int32 getSpinIncrement(  ) override;
+        virtual void setOrientation( sal_Int32 orientation ) override;
+        virtual sal_Int32 getOrientation(  ) override;
 
         // VclWindowPeer
-        virtual void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-        virtual cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+        virtual void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+        virtual cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
         // VCLXWindow
         void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent ) override;

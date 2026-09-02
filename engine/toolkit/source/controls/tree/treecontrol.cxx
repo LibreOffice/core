@@ -129,47 +129,47 @@ public:
     OUString GetComponentServiceName() const override;
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) override;
+    void dispose(  ) override;
 
     // css::awt::XControl
-    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::view::XSelectionSupplier
-    virtual bool SAL_CALL select( const cpo::uno::Any& xSelection ) override;
-    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
-    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual bool select( const cpo::uno::Any& xSelection ) override;
+    virtual cpo::uno::Any getSelection(  ) override;
+    virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // css::view::XMultiSelectionSupplier
-    virtual bool SAL_CALL addSelection( const cpo::uno::Any& Selection ) override;
-    virtual void SAL_CALL removeSelection( const cpo::uno::Any& Selection ) override;
-    virtual void SAL_CALL clearSelection(  ) override;
-    virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createReverseSelectionEnumeration(  ) override;
+    virtual bool addSelection( const cpo::uno::Any& Selection ) override;
+    virtual void removeSelection( const cpo::uno::Any& Selection ) override;
+    virtual void clearSelection(  ) override;
+    virtual ::sal_Int32 getSelectionCount(  ) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createSelectionEnumeration(  ) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createReverseSelectionEnumeration(  ) override;
 
     // css::awt::XTreeControl
-    virtual OUString SAL_CALL getDefaultExpandedGraphicURL() override;
-    virtual void SAL_CALL setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) override;
-    virtual OUString SAL_CALL getDefaultCollapsedGraphicURL() override;
-    virtual void SAL_CALL setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) override;
-    virtual bool SAL_CALL isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool SAL_CALL isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool SAL_CALL isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual void SAL_CALL removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::awt::Rectangle SAL_CALL getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool SAL_CALL isEditing(  ) override;
-    virtual bool SAL_CALL stopEditing(  ) override;
-    virtual void SAL_CALL cancelEditing(  ) override;
-    virtual void SAL_CALL startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
-    virtual void SAL_CALL removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual OUString getDefaultExpandedGraphicURL() override;
+    virtual void setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) override;
+    virtual OUString getDefaultCollapsedGraphicURL() override;
+    virtual void setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) override;
+    virtual bool isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual void removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual css::awt::Rectangle getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isEditing(  ) override;
+    virtual bool stopEditing(  ) override;
+    virtual void cancelEditing(  ) override;
+    virtual void startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual void removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
 
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, u"com.sun.star.awt.tree.TreeControl"_ustr )
@@ -197,19 +197,19 @@ OUString UnoTreeControl::GetComponentServiceName() const
 // css::view::XSelectionSupplier
 
 
-bool SAL_CALL UnoTreeControl::select( const Any& rSelection )
+bool UnoTreeControl::select( const Any& rSelection )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->select( rSelection );
 }
 
 
-Any SAL_CALL UnoTreeControl::getSelection()
+Any UnoTreeControl::getSelection()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getSelection();
 }
 
 
-void SAL_CALL UnoTreeControl::addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
+void UnoTreeControl::addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
 {
     maSelectionListeners.addInterface( xListener );
     if( getPeer().is() && (maSelectionListeners.getLength() == 1) )
@@ -221,7 +221,7 @@ void SAL_CALL UnoTreeControl::addSelectionChangeListener( const Reference< XSele
 }
 
 
-void SAL_CALL UnoTreeControl::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
+void UnoTreeControl::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
 {
     if( getPeer().is() && (maSelectionListeners.getLength() == 1) )
     {
@@ -236,37 +236,37 @@ void SAL_CALL UnoTreeControl::removeSelectionChangeListener( const Reference< XS
 // css::view::XMultiSelectionSupplier
 
 
-bool SAL_CALL UnoTreeControl::addSelection( const Any& rSelection )
+bool UnoTreeControl::addSelection( const Any& rSelection )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->addSelection(rSelection);
 }
 
 
-void SAL_CALL UnoTreeControl::removeSelection( const Any& rSelection )
+void UnoTreeControl::removeSelection( const Any& rSelection )
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->removeSelection(rSelection);
 }
 
 
-void SAL_CALL UnoTreeControl::clearSelection()
+void UnoTreeControl::clearSelection()
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->clearSelection();
 }
 
 
-sal_Int32 SAL_CALL UnoTreeControl::getSelectionCount()
+sal_Int32 UnoTreeControl::getSelectionCount()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getSelectionCount();
 }
 
 
-Reference< XEnumeration > SAL_CALL UnoTreeControl::createSelectionEnumeration()
+Reference< XEnumeration > UnoTreeControl::createSelectionEnumeration()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->createSelectionEnumeration();
 }
 
 
-Reference< XEnumeration > SAL_CALL UnoTreeControl::createReverseSelectionEnumeration()
+Reference< XEnumeration > UnoTreeControl::createReverseSelectionEnumeration()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->createReverseSelectionEnumeration();
 }
@@ -275,67 +275,67 @@ Reference< XEnumeration > SAL_CALL UnoTreeControl::createReverseSelectionEnumera
 // XTreeControl
 
 
-OUString SAL_CALL UnoTreeControl::getDefaultExpandedGraphicURL()
+OUString UnoTreeControl::getDefaultExpandedGraphicURL()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getDefaultExpandedGraphicURL();
 }
 
 
-void SAL_CALL UnoTreeControl::setDefaultExpandedGraphicURL( const OUString& _defaultexpansiongraphicurl )
+void UnoTreeControl::setDefaultExpandedGraphicURL( const OUString& _defaultexpansiongraphicurl )
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->setDefaultExpandedGraphicURL(_defaultexpansiongraphicurl);
 }
 
 
-OUString SAL_CALL UnoTreeControl::getDefaultCollapsedGraphicURL()
+OUString UnoTreeControl::getDefaultCollapsedGraphicURL()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getDefaultCollapsedGraphicURL();
 }
 
 
-void SAL_CALL UnoTreeControl::setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl )
+void UnoTreeControl::setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl )
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->setDefaultCollapsedGraphicURL(_defaultcollapsedgraphicurl);
 }
 
 
-bool SAL_CALL UnoTreeControl::isNodeExpanded( const Reference< XTreeNode >& xNode )
+bool UnoTreeControl::isNodeExpanded( const Reference< XTreeNode >& xNode )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeExpanded(xNode);
 }
 
 
-bool SAL_CALL UnoTreeControl::isNodeCollapsed( const Reference< XTreeNode >& xNode )
+bool UnoTreeControl::isNodeCollapsed( const Reference< XTreeNode >& xNode )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeCollapsed(xNode);
 }
 
 
-void SAL_CALL UnoTreeControl::makeNodeVisible( const Reference< XTreeNode >& xNode )
+void UnoTreeControl::makeNodeVisible( const Reference< XTreeNode >& xNode )
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->makeNodeVisible(xNode);
 }
 
 
-bool SAL_CALL UnoTreeControl::isNodeVisible( const Reference< XTreeNode >& xNode )
+bool UnoTreeControl::isNodeVisible( const Reference< XTreeNode >& xNode )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeVisible(xNode);
 }
 
 
-void SAL_CALL UnoTreeControl::expandNode( const Reference< XTreeNode >& xNode )
+void UnoTreeControl::expandNode( const Reference< XTreeNode >& xNode )
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->expandNode(xNode);
 }
 
 
-void SAL_CALL UnoTreeControl::collapseNode( const Reference< XTreeNode >& xNode )
+void UnoTreeControl::collapseNode( const Reference< XTreeNode >& xNode )
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->collapseNode(xNode);
 }
 
 
-void SAL_CALL UnoTreeControl::addTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
+void UnoTreeControl::addTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
 {
     maTreeExpansionListeners.addInterface( xListener );
     if( getPeer().is() && (maTreeExpansionListeners.getLength() == 1) )
@@ -347,7 +347,7 @@ void SAL_CALL UnoTreeControl::addTreeExpansionListener( const Reference< XTreeEx
 }
 
 
-void SAL_CALL UnoTreeControl::removeTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
+void UnoTreeControl::removeTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
 {
     if( getPeer().is() && (maTreeExpansionListeners.getLength() == 1) )
     {
@@ -359,49 +359,49 @@ void SAL_CALL UnoTreeControl::removeTreeExpansionListener( const Reference< XTre
 }
 
 
-Reference< XTreeNode > SAL_CALL UnoTreeControl::getNodeForLocation( sal_Int32 x, sal_Int32 y )
+Reference< XTreeNode > UnoTreeControl::getNodeForLocation( sal_Int32 x, sal_Int32 y )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getNodeForLocation(x,y);
 }
 
 
-Reference< XTreeNode > SAL_CALL UnoTreeControl::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y )
+Reference< XTreeNode > UnoTreeControl::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getClosestNodeForLocation(x,y);
 }
 
 
-awt::Rectangle SAL_CALL UnoTreeControl::getNodeRect( const Reference< XTreeNode >& Node )
+awt::Rectangle UnoTreeControl::getNodeRect( const Reference< XTreeNode >& Node )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getNodeRect( Node );
 }
 
 
-bool SAL_CALL UnoTreeControl::isEditing(  )
+bool UnoTreeControl::isEditing(  )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isEditing();
 }
 
 
-bool SAL_CALL UnoTreeControl::stopEditing()
+bool UnoTreeControl::stopEditing()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->stopEditing();
 }
 
 
-void SAL_CALL UnoTreeControl::cancelEditing()
+void UnoTreeControl::cancelEditing()
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->cancelEditing();
 }
 
 
-void SAL_CALL UnoTreeControl::startEditingAtNode( const Reference< XTreeNode >& xNode )
+void UnoTreeControl::startEditingAtNode( const Reference< XTreeNode >& xNode )
 {
     Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->startEditingAtNode(xNode);
 }
 
 
-void SAL_CALL UnoTreeControl::addTreeEditListener( const Reference< XTreeEditListener >& xListener )
+void UnoTreeControl::addTreeEditListener( const Reference< XTreeEditListener >& xListener )
 {
     maTreeEditListeners.addInterface( xListener );
     if( getPeer().is() && (maTreeEditListeners.getLength() == 1) )
@@ -413,7 +413,7 @@ void SAL_CALL UnoTreeControl::addTreeEditListener( const Reference< XTreeEditLis
 }
 
 
-void SAL_CALL UnoTreeControl::removeTreeEditListener( const Reference< XTreeEditListener >& xListener )
+void UnoTreeControl::removeTreeEditListener( const Reference< XTreeEditListener >& xListener )
 {
     if( getPeer().is() && (maTreeEditListeners.getLength() == 1) )
     {
@@ -428,7 +428,7 @@ void SAL_CALL UnoTreeControl::removeTreeEditListener( const Reference< XTreeEdit
 // XComponent
 
 
-void SAL_CALL UnoTreeControl::dispose(  )
+void UnoTreeControl::dispose(  )
 {
     lang::EventObject aEvt;
     aEvt.Source = getXWeak();
@@ -450,7 +450,7 @@ void UnoTreeControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 }
 
-void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node )
+void TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node )
 {
     std::unique_lock g(m_aMutex);
     ::comphelper::OInterfaceIteratorHelper4 aIt(g, maListeners);
@@ -478,7 +478,7 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNo
     }
 }
 
-void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNode >& Node, const OUString& NewText )
+void TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNode >& Node, const OUString& NewText )
 {
     std::unique_lock g(m_aMutex);
     ::comphelper::OInterfaceIteratorHelper4 aIt(g, maListeners);

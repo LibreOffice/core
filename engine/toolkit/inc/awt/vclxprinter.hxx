@@ -77,27 +77,27 @@ public:
     DECLARE_XTYPEPROVIDER();
 
     // css::beans::XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { OPropertySetHelper::setPropertyValue( rPropertyName, aValue ); }
-    cpo::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return OPropertySetHelper::getPropertyValue( rPropertyName ); }
-    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    void setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { OPropertySetHelper::setPropertyValue( rPropertyName, aValue ); }
+    cpo::uno::Any getPropertyValue( const OUString& rPropertyName ) override { return OPropertySetHelper::getPropertyValue( rPropertyName ); }
+    void addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // ::cppu::OPropertySetHelper
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-    bool SAL_CALL convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+    bool convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using cppu::OPropertySetHelper::getFastPropertyValue;
-    void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // css::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( bool bHorizontal ) override;
-    cpo::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override;
-    void SAL_CALL selectForm( const OUString& aFormDescription ) override;
-    cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override;
-    void SAL_CALL setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override;
+    void setHorizontal( bool bHorizontal ) override;
+    cpo::uno::Sequence< OUString > getFormDescriptions(  ) override;
+    void selectForm( const OUString& aFormDescription ) override;
+    cpo::uno::Sequence< sal_Int8 > getBinarySetup(  ) override;
+    void setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override;
 };
 
 
@@ -115,27 +115,27 @@ public:
                     virtual ~VCLXPrinter() override;
 
     // css::beans::XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
-    cpo::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
-    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
+    void setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
+    cpo::uno::Any getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
+    void addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // css::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
-    cpo::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
-    void SAL_CALL selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
-    cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
-    void SAL_CALL setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
+    void setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
+    cpo::uno::Sequence< OUString > getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
+    void selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
+    cpo::uno::Sequence< sal_Int8 > getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
+    void setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
     // css::awt::XPrinter
-    bool SAL_CALL start( const OUString& nJobName, sal_Int16 nCopies, bool nCollate ) override;
-    void SAL_CALL end(  ) override;
-    void SAL_CALL terminate(  ) override;
-    css::uno::Reference< css::awt::XDevice > SAL_CALL startPage(  ) override;
-    void SAL_CALL endPage(  ) override;
+    bool start( const OUString& nJobName, sal_Int16 nCopies, bool nCollate ) override;
+    void end(  ) override;
+    void terminate(  ) override;
+    css::uno::Reference< css::awt::XDevice > startPage(  ) override;
+    void endPage(  ) override;
 };
 
 
@@ -151,23 +151,23 @@ public:
                         virtual ~VCLXInfoPrinter() override;
 
     // css::beans::XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
-    cpo::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
-    void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
+    void setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
+    cpo::uno::Any getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
+    void addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // css::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
-    cpo::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
-    void SAL_CALL selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
-    cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
-    void SAL_CALL setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
+    void setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
+    cpo::uno::Sequence< OUString > getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
+    void selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
+    cpo::uno::Sequence< sal_Int8 > getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
+    void setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
     // css::awt::XInfoPrinter
-    css::uno::Reference< css::awt::XDevice > SAL_CALL createDevice(  ) override;
+    css::uno::Reference< css::awt::XDevice > createDevice(  ) override;
 };
 
 
@@ -180,16 +180,16 @@ class VCLXPrinterServer final : public VCLXPrinterServer_Base
 {
 public:
     // css::awt::XPrinterServer2
-    cpo::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) override;
-    OUString SAL_CALL getDefaultPrinterName() override;
-    css::uno::Reference< css::awt::XPrinter > SAL_CALL createPrinter( const OUString& printerName ) override;
-    css::uno::Reference< css::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) override;
+    cpo::uno::Sequence< OUString > getPrinterNames(  ) override;
+    OUString getDefaultPrinterName() override;
+    css::uno::Reference< css::awt::XPrinter > createPrinter( const OUString& printerName ) override;
+    css::uno::Reference< css::awt::XInfoPrinter > createInfoPrinter( const OUString& printerName ) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

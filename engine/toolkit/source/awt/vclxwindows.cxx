@@ -2032,7 +2032,7 @@ namespace
         return Image();
      }
 }
-void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent )
+void VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent )
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
@@ -2046,7 +2046,7 @@ void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent )
         i_rEvent.ItemPosition );
 }
 
-void SAL_CALL VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent )
+void VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent )
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
@@ -2058,7 +2058,7 @@ void SAL_CALL VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent )
     pListBox->RemoveEntry( i_rEvent.ItemPosition );
 }
 
-void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent )
+void VCLXListBox::listItemModified( const ItemListEvent& i_rEvent )
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
@@ -2076,7 +2076,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent )
     pListBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
 }
 
-void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& )
+void VCLXListBox::allItemsRemoved( const EventObject& )
 {
     SolarMutexGuard aGuard;
 
@@ -2086,7 +2086,7 @@ void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& )
     pListBox->Clear();
 }
 
-void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
+void VCLXListBox::itemListChanged( const EventObject& i_rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -2120,7 +2120,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
     }
 }
 
-void SAL_CALL VCLXListBox::disposing(const EventObject&)
+void VCLXListBox::disposing(const EventObject&)
 {
 }
 
@@ -2183,7 +2183,7 @@ sal_Int16 VCLXMessageBox::execute()
     return pBox ? pBox->Execute() : 0;
 }
 
-css::awt::Size SAL_CALL VCLXMessageBox::getMinimumSize()
+css::awt::Size VCLXMessageBox::getMinimumSize()
 {
     return css::awt::Size( 250, 100 );
 }
@@ -2205,7 +2205,7 @@ VCLXDialog::~VCLXDialog()
     SAL_INFO("toolkit", __FUNCTION__);
 }
 
-void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result )
+void VCLXDialog::endDialog( ::sal_Int32 i_result )
 {
     SolarMutexGuard aGuard;
     VclPtr<Dialog> pDialog = GetAsDynamic< Dialog >();
@@ -2213,7 +2213,7 @@ void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result )
         pDialog->EndDialog( i_result );
 }
 
-void SAL_CALL VCLXDialog::setHelpId( const OUString& rId )
+void VCLXDialog::setHelpId( const OUString& rId )
 {
     SolarMutexGuard aGuard;
     VclPtr< vcl::Window > pWindow = GetWindow();
@@ -2277,7 +2277,7 @@ void VCLXDialog::endExecute()
     endDialog(0);
 }
 
-void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY )
+void VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY )
 {
     SolarMutexGuard aGuard;
     VclPtr< vcl::Window > pWindow = GetWindow();
@@ -2304,7 +2304,7 @@ css::awt::DeviceInfo VCLXDialog::getInfo()
     return aInfo;
 }
 
-void SAL_CALL VCLXDialog::setProperty(
+void VCLXDialog::setProperty(
     const OUString& PropertyName,
     const cpo::uno::Any& Value )
 {
@@ -2380,7 +2380,7 @@ void VCLXMultiPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 VCLXMultiPage::~VCLXMultiPage()
 {
 }
-void SAL_CALL VCLXMultiPage::dispose()
+void VCLXMultiPage::dispose()
 {
     SolarMutexGuard aGuard;
 
@@ -2390,7 +2390,7 @@ void SAL_CALL VCLXMultiPage::dispose()
     VCLXContainer::dispose();
 }
 // css::awt::XView
-void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
+void VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
 {
     SolarMutexGuard aGuard;
     VclPtr< vcl::Window > pWindow = GetWindow();
@@ -2406,7 +2406,7 @@ void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
     }
 }
 
-cpo::uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXMultiPage::getProperty( const OUString& PropertyName )
 {
     SAL_INFO("toolkit", " **** VCLXMultiPage::getProperty " << PropertyName );
     SolarMutexGuard aGuard;
@@ -2426,7 +2426,7 @@ cpo::uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName 
     return aProp;
 }
 
-void SAL_CALL VCLXMultiPage::setProperty(
+void VCLXMultiPage::setProperty(
     const OUString& PropertyName,
     const cpo::uno::Any& Value )
 {
@@ -2490,7 +2490,7 @@ TabControl *VCLXMultiPage::getTabControl() const
         return pTabControl;
     throw cpo::uno::RuntimeException();
 }
-sal_Int32 SAL_CALL VCLXMultiPage::insertTab()
+sal_Int32 VCLXMultiPage::insertTab()
 {
     TabControl *pTabControl = getTabControl();
     VclPtrInstance<TabPage> pTab( pTabControl );
@@ -2506,7 +2506,7 @@ sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, OUString const & sTitle )
     return id;
 }
 
-void SAL_CALL VCLXMultiPage::removeTab( sal_Int32 ID )
+void VCLXMultiPage::removeTab( sal_Int32 ID )
 {
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == nullptr )
@@ -2514,7 +2514,7 @@ void SAL_CALL VCLXMultiPage::removeTab( sal_Int32 ID )
     pTabControl->RemovePage( sal::static_int_cast< sal_uInt16 >( ID ) );
 }
 
-void SAL_CALL VCLXMultiPage::activateTab( sal_Int32 ID )
+void VCLXMultiPage::activateTab( sal_Int32 ID )
 {
     TabControl *pTabControl = getTabControl();
     SAL_INFO(
@@ -2526,24 +2526,24 @@ void SAL_CALL VCLXMultiPage::activateTab( sal_Int32 ID )
     pTabControl->SelectTabPage( sal::static_int_cast< sal_uInt16 >( ID ) );
 }
 
-sal_Int32 SAL_CALL VCLXMultiPage::getActiveTabID()
+sal_Int32 VCLXMultiPage::getActiveTabID()
 {
     return getTabControl()->GetCurPageId( );
 }
 
-void SAL_CALL VCLXMultiPage::addTabListener( const uno::Reference< awt::XTabListener >& xListener )
+void VCLXMultiPage::addTabListener( const uno::Reference< awt::XTabListener >& xListener )
 {
     SolarMutexGuard aGuard;
     maTabListeners.addInterface( xListener );
 }
 
-void SAL_CALL VCLXMultiPage::removeTabListener( const uno::Reference< awt::XTabListener >& xListener )
+void VCLXMultiPage::removeTabListener( const uno::Reference< awt::XTabListener >& xListener )
 {
     SolarMutexGuard aGuard;
     maTabListeners.removeInterface( xListener );
 }
 
-void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const cpo::uno::Sequence< beans::NamedValue >& Properties )
+void VCLXMultiPage::setTabProps( sal_Int32 ID, const cpo::uno::Sequence< beans::NamedValue >& Properties )
 {
     SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
@@ -2563,7 +2563,7 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const cpo::uno::Sequence
     }
 }
 
-cpo::uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int32 ID )
+cpo::uno::Sequence< beans::NamedValue > VCLXMultiPage::getTabProps( sal_Int32 ID )
 {
     SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
@@ -2633,7 +2633,7 @@ VCLXTabPage::~VCLXTabPage()
 }
 
 // css::awt::XView
-void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
+void VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 {
     SolarMutexGuard aGuard;
     VclPtr< vcl::Window > pWindow = GetWindow();
@@ -2649,7 +2649,7 @@ void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
     }
 }
 
-void SAL_CALL VCLXTabPage::setProperty(
+void VCLXTabPage::setProperty(
     const OUString& PropertyName,
     const cpo::uno::Any& Value )
 {
@@ -3537,7 +3537,7 @@ css::awt::Size VCLXScrollBar::implGetMinimumSize( vcl::Window const * p )
     return css::awt::Size( n, n );
 }
 
-css::awt::Size SAL_CALL VCLXScrollBar::getMinimumSize()
+css::awt::Size VCLXScrollBar::getMinimumSize()
 {
     SolarMutexGuard aGuard;
     return implGetMinimumSize( GetWindow() );
@@ -4320,7 +4320,7 @@ void VCLXComboBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
         nLines = nL;
     }
 }
-void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent )
+void VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -4335,7 +4335,7 @@ void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent )
         i_rEvent.ItemPosition );
 }
 
-void SAL_CALL VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent )
+void VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -4348,7 +4348,7 @@ void SAL_CALL VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent )
     pComboBox->RemoveEntryAt( i_rEvent.ItemPosition );
 }
 
-void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent )
+void VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -4367,7 +4367,7 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent )
     pComboBox->InsertEntryWithImage(sNewText, aNewImage, i_rEvent.ItemPosition);
 }
 
-void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& )
+void VCLXComboBox::allItemsRemoved( const EventObject& )
 {
     SolarMutexGuard aGuard;
 
@@ -4377,7 +4377,7 @@ void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& )
     pComboBox->Clear();
 }
 
-void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
+void VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -4412,7 +4412,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
                 lcl_getImageFromURL(rItem.Second));
     }
 }
-void SAL_CALL VCLXComboBox::disposing(const EventObject&)
+void VCLXComboBox::disposing(const EventObject&)
 {
 }
 
@@ -5891,7 +5891,7 @@ VCLXFrame::~VCLXFrame()
 }
 
 // css::awt::XView
-void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
+void VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
 {
     SolarMutexGuard aGuard;
     VclPtr< vcl::Window > pWindow = GetWindow();
@@ -5907,7 +5907,7 @@ void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
     }
 }
 
-void SAL_CALL VCLXFrame::setProperty(
+void VCLXFrame::setProperty(
     const OUString& PropertyName,
     const cpo::uno::Any& Value )
 {
@@ -6170,7 +6170,7 @@ namespace
     }
 }
 
-void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
+void VCLXFileControl::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -7387,7 +7387,7 @@ SVTXDateField::~SVTXDateField()
 {
 }
 
-void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value )
+void SVTXDateField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value )
 {
     VCLXDateField::setProperty( PropertyName, Value );
 
@@ -7738,7 +7738,7 @@ cpo::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName )
     return aProp;
 }
 
-void SAL_CALL VCLXMultiLineEdit::setFocus(  )
+void VCLXMultiLineEdit::setFocus(  )
 {
     SolarMutexGuard aGuard;
 

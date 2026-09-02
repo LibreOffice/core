@@ -49,7 +49,7 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
 
 // XAccessibleContext ---------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL
+Reference< XAccessible >
 AccessibleGridControlHeader::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
@@ -60,7 +60,7 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int64 nChildIndex )
     return implGetChild(implGetRow(nChildIndex), implGetColumn(nChildIndex));
 }
 
-sal_Int64 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
+sal_Int64 AccessibleGridControlHeader::getAccessibleIndexInParent()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -73,7 +73,7 @@ sal_Int64 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
 
 // XAccessibleComponent -------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL
+Reference< XAccessible >
 AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aSolarGuard;
@@ -87,7 +87,7 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
     return bConverted ? implGetChild( nRow, nColumnPos ) : Reference< XAccessible >();
 }
 
-void SAL_CALL AccessibleGridControlHeader::grabFocus()
+void AccessibleGridControlHeader::grabFocus()
 {
     ensureAlive();
     // focus on header not supported
@@ -95,7 +95,7 @@ void SAL_CALL AccessibleGridControlHeader::grabFocus()
 
 // XAccessibleTable -----------------------------------------------------------
 
-OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_Int32 nRow )
+OUString AccessibleGridControlHeader::getAccessibleRowDescription( sal_Int32 nRow )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -104,7 +104,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_
     return OUString();  // no headers in headers
 }
 
-OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( sal_Int32 nColumn )
+OUString AccessibleGridControlHeader::getAccessibleColumnDescription( sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -113,7 +113,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( s
     return OUString();  // no headers in headers
 }
 
-Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleRowHeaders()
+Reference< XAccessibleTable > AccessibleGridControlHeader::getAccessibleRowHeaders()
 {
     SolarMutexGuard g;
 
@@ -121,7 +121,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
     return nullptr;        // no headers in headers
 }
 
-Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleColumnHeaders()
+Reference< XAccessibleTable > AccessibleGridControlHeader::getAccessibleColumnHeaders()
 {
     SolarMutexGuard g;
 
@@ -129,27 +129,27 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
     return nullptr;        // no headers in headers
 }
 //not selectable
-Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleRows()
+Sequence< sal_Int32 > AccessibleGridControlHeader::getSelectedAccessibleRows()
 {
     return {};
 }
 //columns aren't selectable
-Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleColumns()
+Sequence< sal_Int32 > AccessibleGridControlHeader::getSelectedAccessibleColumns()
 {
     return {};
 }
 //row headers not selectable
-bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )
+bool AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )
 {
     return false;
 }
 //columns aren't selectable
-bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 )
+bool AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 )
 {
     return false;
 }
 
-Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCellAt(
+Reference< XAccessible > AccessibleGridControlHeader::getAccessibleCellAt(
         sal_Int32 nRow, sal_Int32 nColumn)
 {
     SolarMutexGuard g;
@@ -159,7 +159,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCell
     return implGetChild(nRow, nColumn);
 }
 // not selectable
-bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
+bool AccessibleGridControlHeader::isAccessibleSelected(
         sal_Int32 /*nRow*/, sal_Int32 /*nColumn */)
 {
     return false;
@@ -167,7 +167,7 @@ bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
 
 // XServiceInfo ---------------------------------------------------------------
 
-OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
+OUString AccessibleGridControlHeader::getImplementationName()
 {
     return u"com.sun.star.accessibility.AccessibleGridControlHeader"_ustr;
 }

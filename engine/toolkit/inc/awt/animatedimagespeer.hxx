@@ -51,27 +51,27 @@ namespace toolkit
 
     public:
         // XAnimation
-        virtual void SAL_CALL startAnimation(  ) override;
-        virtual void SAL_CALL stopAnimation(  ) override;
-        virtual bool SAL_CALL isAnimationRunning(  ) override;
+        virtual void startAnimation(  ) override;
+        virtual void stopAnimation(  ) override;
+        virtual bool isAnimationRunning(  ) override;
 
         // VclWindowPeer
-        virtual void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-        virtual cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+        virtual void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+        virtual cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+        virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+        virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+        virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) override;
+        virtual void disposing( const css::lang::EventObject& i_event ) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& i_event ) override;
+        virtual void modified( const css::lang::EventObject& i_event ) override;
 
         // XComponent
-        void SAL_CALL dispose(  ) override;
+        void dispose(  ) override;
 
         struct CachedImage
         {

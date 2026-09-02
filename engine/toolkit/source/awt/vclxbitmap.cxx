@@ -50,7 +50,7 @@ cpo::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
     return vcl::bitmap::GetMaskDIB(maBitmap);
 }
 
-sal_Int64 SAL_CALL VCLXBitmap::estimateUsage()
+sal_Int64 VCLXBitmap::estimateUsage()
 {
     std::scoped_lock aGuard( GetMutex() );
 

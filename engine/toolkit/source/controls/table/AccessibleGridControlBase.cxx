@@ -54,7 +54,7 @@ AccessibleGridControlBase::AccessibleGridControlBase(
 {
 }
 
-void SAL_CALL AccessibleGridControlBase::disposing()
+void AccessibleGridControlBase::disposing()
 {
     SolarMutexGuard g;
 
@@ -66,7 +66,7 @@ void SAL_CALL AccessibleGridControlBase::disposing()
 
 // css::accessibility::XAccessibleContext
 
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent()
+css::uno::Reference< css::accessibility::XAccessible > AccessibleGridControlBase::getAccessibleParent()
 {
     SolarMutexGuard g;
 
@@ -74,7 +74,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridCo
     return m_xParent;
 }
 
-OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
+OUString AccessibleGridControlBase::getAccessibleDescription()
 {
     SolarMutexGuard g;
 
@@ -82,7 +82,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
     return m_aTable.GetAccessibleObjectDescription(m_eObjType);
 }
 
-OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
+OUString AccessibleGridControlBase::getAccessibleName()
 {
     SolarMutexGuard g;
 
@@ -90,7 +90,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
     return m_aTable.GetAccessibleObjectName(m_eObjType, 0, 0);
 }
 
-css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessibleRelationSet >
 AccessibleGridControlBase::getAccessibleRelationSet()
 {
    SolarMutexGuard g;
@@ -100,7 +100,7 @@ AccessibleGridControlBase::getAccessibleRelationSet()
    return new utl::AccessibleRelationSetHelper;
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
 AccessibleGridControlBase::getAccessibleStateSet()
 {
     SolarMutexGuard aSolarGuard;
@@ -109,7 +109,7 @@ AccessibleGridControlBase::getAccessibleStateSet()
     return implCreateStateSet();
 }
 
-lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
+lang::Locale AccessibleGridControlBase::getLocale()
 {
     SolarMutexGuard g;
 
@@ -126,13 +126,13 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
 
 // XServiceInfo
 
-bool SAL_CALL AccessibleGridControlBase::supportsService(
+bool AccessibleGridControlBase::supportsService(
         const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceNames()
+Sequence< OUString > AccessibleGridControlBase::getSupportedServiceNames()
 {
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }
@@ -196,7 +196,7 @@ void AccessibleGridControlBase::commitEvent(
     NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
 }
 
-sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
+sal_Int16 AccessibleGridControlBase::getAccessibleRole()
 {
     ensureAlive();
     sal_Int16 nRole = AccessibleRole::UNKNOWN;
@@ -223,12 +223,12 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     return nRole;
 }
 
-css::uno::Reference<css::accessibility::XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
+css::uno::Reference<css::accessibility::XAccessible > AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
 {
     return nullptr;
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
+sal_Int32 AccessibleGridControlBase::getForeground(  )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -249,7 +249,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
     return sal_Int32(nColor);
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
+sal_Int32 AccessibleGridControlBase::getBackground(  )
 {
     SolarMutexGuard aSolarGuard;
 

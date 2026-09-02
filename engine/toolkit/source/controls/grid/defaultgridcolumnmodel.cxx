@@ -59,25 +59,25 @@ public:
     DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource );
 
     // XGridColumnModel
-    virtual ::sal_Int32 SAL_CALL getColumnCount() override;
-    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL createColumn(  ) override;
-    virtual ::sal_Int32 SAL_CALL addColumn(const css::uno::Reference< css::awt::grid::XGridColumn > & column) override;
-    virtual void SAL_CALL removeColumn( ::sal_Int32 i_columnIndex ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::grid::XGridColumn > > SAL_CALL getColumns() override;
-    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL getColumn(::sal_Int32 index) override;
-    virtual void SAL_CALL setDefaultColumns(sal_Int32 rowElements) override;
+    virtual ::sal_Int32 getColumnCount() override;
+    virtual css::uno::Reference< css::awt::grid::XGridColumn > createColumn(  ) override;
+    virtual ::sal_Int32 addColumn(const css::uno::Reference< css::awt::grid::XGridColumn > & column) override;
+    virtual void removeColumn( ::sal_Int32 i_columnIndex ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::grid::XGridColumn > > getColumns() override;
+    virtual css::uno::Reference< css::awt::grid::XGridColumn > getColumn(::sal_Int32 index) override;
+    virtual void setDefaultColumns(sal_Int32 rowElements) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XContainer
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // OComponentHelper
     virtual void disposing( std::unique_lock<std::mutex>& ) override;
@@ -119,13 +119,13 @@ private:
             m_aColumns.swap( aColumns );
     }
 
-    ::sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnCount()
+    ::sal_Int32 DefaultGridColumnModel::getColumnCount()
     {
         return m_aColumns.size();
     }
 
 
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  )
+    Reference< XGridColumn > DefaultGridColumnModel::createColumn(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -133,7 +133,7 @@ private:
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column )
+    ::sal_Int32 DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -158,7 +158,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )
+    void DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -203,7 +203,7 @@ private:
     }
 
 
-    Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns()
+    Sequence< Reference< XGridColumn > > DefaultGridColumnModel::getColumns()
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -211,7 +211,7 @@ private:
     }
 
 
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index)
+    Reference< XGridColumn > DefaultGridColumnModel::getColumn(::sal_Int32 index)
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -223,7 +223,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements)
+    void DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements)
     {
         ::std::vector< ContainerEvent > aRemovedColumns;
         ::std::vector< ContainerEvent > aInsertedColumns;
@@ -297,23 +297,23 @@ private:
     }
 
 
-    OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  )
+    OUString DefaultGridColumnModel::getImplementationName(  )
     {
         return u"stardiv.Toolkit.DefaultGridColumnModel"_ustr;
     }
 
-    bool SAL_CALL DefaultGridColumnModel::supportsService( const OUString& i_serviceName )
+    bool DefaultGridColumnModel::supportsService( const OUString& i_serviceName )
     {
         return cppu::supportsService(this, i_serviceName);
     }
 
-    Sequence< OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  )
+    Sequence< OUString > DefaultGridColumnModel::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.awt.grid.DefaultGridColumnModel"_ustr };
     }
 
 
-    void SAL_CALL DefaultGridColumnModel::addContainerListener( const Reference< XContainerListener >& i_listener )
+    void DefaultGridColumnModel::addContainerListener( const Reference< XContainerListener >& i_listener )
     {
         std::unique_lock aGuard(m_aMutex);
         if ( i_listener.is() )
@@ -321,7 +321,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridColumnModel::removeContainerListener( const Reference< XContainerListener >& i_listener )
+    void DefaultGridColumnModel::removeContainerListener( const Reference< XContainerListener >& i_listener )
     {
         std::unique_lock aGuard(m_aMutex);
         if ( i_listener.is() )
@@ -355,7 +355,7 @@ private:
     }
 
 
-    Reference< css::util::XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  )
+    Reference< css::util::XCloneable > DefaultGridColumnModel::createClone(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);

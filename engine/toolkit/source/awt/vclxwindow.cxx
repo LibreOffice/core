@@ -2350,7 +2350,7 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ )
 }
 
 // css::awt::XDockable
-void SAL_CALL VCLXWindow::addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
+void VCLXWindow::addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
 {
     SolarMutexGuard aGuard;
 
@@ -2359,7 +2359,7 @@ void SAL_CALL VCLXWindow::addDockableWindowListener( const css::uno::Reference< 
 
 }
 
-void SAL_CALL VCLXWindow::removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
+void VCLXWindow::removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
 {
     SolarMutexGuard aGuard;
 
@@ -2367,7 +2367,7 @@ void SAL_CALL VCLXWindow::removeDockableWindowListener( const css::uno::Referenc
         mpImpl->getDockableWindowListeners().removeInterface( xListener );
 }
 
-void SAL_CALL VCLXWindow::enableDocking( bool bEnable )
+void VCLXWindow::enableDocking( bool bEnable )
 {
     SolarMutexGuard aGuard;
 
@@ -2376,7 +2376,7 @@ void SAL_CALL VCLXWindow::enableDocking( bool bEnable )
         pWindow->EnableDocking( bEnable );
 }
 
-bool SAL_CALL VCLXWindow::isFloating(  )
+bool VCLXWindow::isFloating(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2387,7 +2387,7 @@ bool SAL_CALL VCLXWindow::isFloating(  )
         return false;
 }
 
-void SAL_CALL VCLXWindow::setFloatingMode( bool bFloating )
+void VCLXWindow::setFloatingMode( bool bFloating )
 {
     SolarMutexGuard aGuard;
 
@@ -2396,7 +2396,7 @@ void SAL_CALL VCLXWindow::setFloatingMode( bool bFloating )
         vcl::Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
 }
 
-bool SAL_CALL VCLXWindow::isLocked(  )
+bool VCLXWindow::isLocked(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2407,7 +2407,7 @@ bool SAL_CALL VCLXWindow::isLocked(  )
         return false;
 }
 
-void SAL_CALL VCLXWindow::lock(  )
+void VCLXWindow::lock(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2416,7 +2416,7 @@ void SAL_CALL VCLXWindow::lock(  )
         vcl::Window::GetDockingManager()->Lock( pWindow );
 }
 
-void SAL_CALL VCLXWindow::unlock(  )
+void VCLXWindow::unlock(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2425,12 +2425,12 @@ void SAL_CALL VCLXWindow::unlock(  )
         vcl::Window::GetDockingManager()->Unlock( pWindow );
 }
 
-void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& )
+void VCLXWindow::startPopupMode( const css::awt::Rectangle& )
 {
     // deprecated
 }
 
-bool SAL_CALL VCLXWindow::isInPopupMode(  )
+bool VCLXWindow::isInPopupMode(  )
 {
     // deprecated
     return false;
@@ -2439,14 +2439,14 @@ bool SAL_CALL VCLXWindow::isInPopupMode(  )
 
 // css::awt::XWindow2
 
-void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize )
+void VCLXWindow::setOutputSize( const css::awt::Size& aSize )
 {
     SolarMutexGuard aGuard;
     if( VclPtr<vcl::Window> pWindow = GetWindow() )
         pWindow->SetOutputSizePixel(vcl::unohelper::ConvertToVCLSize(aSize));
 }
 
-css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
+css::awt::Size VCLXWindow::getOutputSize(  )
 {
     SolarMutexGuard aGuard;
     if( VclPtr<vcl::Window> pWindow = GetWindow() )
@@ -2455,7 +2455,7 @@ css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
         return css::awt::Size();
 }
 
-bool SAL_CALL VCLXWindow::isVisible(  )
+bool VCLXWindow::isVisible(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2464,7 +2464,7 @@ bool SAL_CALL VCLXWindow::isVisible(  )
         return false;
 }
 
-bool SAL_CALL VCLXWindow::isActive(  )
+bool VCLXWindow::isActive(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2474,7 +2474,7 @@ bool SAL_CALL VCLXWindow::isActive(  )
 
 }
 
-bool SAL_CALL VCLXWindow::isEnabled(  )
+bool VCLXWindow::isEnabled(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2483,7 +2483,7 @@ bool SAL_CALL VCLXWindow::isEnabled(  )
         return false;
 }
 
-bool SAL_CALL VCLXWindow::hasFocus(  )
+bool VCLXWindow::hasFocus(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2507,24 +2507,24 @@ VCLXWindow::GetPropHelper()
     return mpImpl->mpPropHelper.get();
 }
 
-cpo::uno::Sequence< css::beans::Property > SAL_CALL
+cpo::uno::Sequence< css::beans::Property >
 VCLXWindow::getProperties()
 {
     return GetPropHelper()->getProperties();
 }
-css::beans::Property SAL_CALL
+css::beans::Property
 VCLXWindow::getPropertyByName( const OUString& rName )
 {
     return GetPropHelper()->getPropertyByName( rName );
 }
 
-bool SAL_CALL
+bool
 VCLXWindow::hasPropertyByName( const OUString& rName )
 {
     return GetPropHelper()->hasPropertyByName( rName );
 }
 
-Reference< XStyleSettings > SAL_CALL VCLXWindow::getStyleSettings()
+Reference< XStyleSettings > VCLXWindow::getStyleSettings()
 {
     return mpImpl->getStyleSettings();
 }

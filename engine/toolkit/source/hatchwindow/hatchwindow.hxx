@@ -46,14 +46,14 @@ public:
     void Deactivated();
 
     // XHatchWindow
-    virtual void SAL_CALL setController( const css::uno::Reference< css::embed::XHatchWindowController >& xController ) override;
-    virtual css::awt::Size SAL_CALL getHatchBorderSize() override;
-    virtual void SAL_CALL setHatchBorderSize( const css::awt::Size& _hatchbordersize ) override;
+    virtual void setController( const css::uno::Reference< css::embed::XHatchWindowController >& xController ) override;
+    virtual css::awt::Size getHatchBorderSize() override;
+    virtual void setHatchBorderSize( const css::awt::Size& _hatchbordersize ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 };
 
 

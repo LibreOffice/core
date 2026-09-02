@@ -32,22 +32,22 @@ namespace accessibility
                         svt::table::TableControl& _rTable,
                         AccessibleTableControlObjType  _eObjType);
         /** @return  The count of visible children. */
-        virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+        virtual sal_Int64 getAccessibleChildCount() override;
 
         /** @return  The XAccessible interface of the specified child. */
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+        virtual css::uno::Reference< css::accessibility::XAccessible >
             getAccessibleChild( sal_Int64 nChildIndex ) override;
 
         /** @return  The index of this object among the parent's children. */
-        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+        virtual sal_Int64 getAccessibleIndexInParent() override;
 
         /** Grabs the focus to the GridControl. */
-        virtual void SAL_CALL grabFocus() override;
+        virtual void grabFocus() override;
 
         /** @return
                 The name of this class.
         */
-        virtual OUString SAL_CALL getImplementationName() override;
+        virtual OUString getImplementationName() override;
 
         /** Return a bitset of states of the current object.
         */

@@ -54,14 +54,14 @@ public:
     explicit ODocumentCloser(const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
 // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 class MainThreadFrameCloserRequest
@@ -165,7 +165,7 @@ ODocumentCloser::ODocumentCloser(const cpo::uno::Sequence< cpo::uno::Any >& aArg
 
 // XComponent
 
-void SAL_CALL ODocumentCloser::dispose()
+void ODocumentCloser::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -187,7 +187,7 @@ void SAL_CALL ODocumentCloser::dispose()
 }
 
 
-void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void ODocumentCloser::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -197,24 +197,24 @@ void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEv
 }
 
 
-void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void ODocumentCloser::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     m_aListenersContainer.removeInterface( aGuard, xListener );
 }
 
 // XServiceInfo
-OUString SAL_CALL ODocumentCloser::getImplementationName(  )
+OUString ODocumentCloser::getImplementationName(  )
 {
     return u"com.sun.star.comp.embed.DocumentCloser"_ustr;
 }
 
-bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName )
+bool ODocumentCloser::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ODocumentCloser::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.DocumentCloser"_ustr };
 }

@@ -66,23 +66,23 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
     //  whose XInterface and XTypeProvider implementations should be merged
 
 
-css::uno::Reference< css:: beans::XPropertySetInfo > SAL_CALL
+css::uno::Reference< css:: beans::XPropertySetInfo >
     ORoadmapEntry::getPropertySetInfo()
 {
     return createPropertySetInfo( getInfoHelper() );
 }
 
-OUString SAL_CALL ORoadmapEntry::getImplementationName(  )
+OUString ORoadmapEntry::getImplementationName(  )
 {
     return u"com.sun.star.comp.toolkit.RoadmapItem"_ustr;
 }
 
-bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
+bool ORoadmapEntry::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > ORoadmapEntry::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.awt.RoadmapItem"_ustr };
 }

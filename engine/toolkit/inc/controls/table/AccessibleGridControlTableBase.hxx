@@ -56,10 +56,10 @@ public:
     // XAccessibleContext
 
     /** @return  The count of visible children. */
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
 
     /** @return  The role of this object (a table). */
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual sal_Int16 getAccessibleRole() override;
 
     /*  Derived classes have to implement:
         -   getAccessibleChild,
@@ -74,35 +74,35 @@ public:
     // XAccessibleTable
 
     /** @return  The number of used rows in the table (0 = empty table). */
-    virtual sal_Int32 SAL_CALL getAccessibleRowCount() override;
+    virtual sal_Int32 getAccessibleRowCount() override;
 
     /** @return  The number of used columns in the table (0 = empty table). */
-    virtual sal_Int32 SAL_CALL getAccessibleColumnCount() override;
+    virtual sal_Int32 getAccessibleColumnCount() override;
 
     /** @return  The row extent of the specified cell (always 1). */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The column extent of the specified cell (always 1). */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The caption cell of the table (not supported). */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleCaption() override;
 
     /** @return  The summary object of the table (not supported). */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleSummary() override;
 
     /** @return  The child index of the specified cell. */
-    virtual sal_Int64 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
+    virtual sal_Int64 getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The row index of the specified child cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int64 nChildIndex ) override;
+    virtual sal_Int32 getAccessibleRow( sal_Int64 nChildIndex ) override;
 
     /** @return  The column index of the specified child cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int64 nChildIndex ) override;
+    virtual sal_Int32 getAccessibleColumn( sal_Int64 nChildIndex ) override;
 
     /*  Derived classes have to implement:
         -   getAccessibleRowDescription,

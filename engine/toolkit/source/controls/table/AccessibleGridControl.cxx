@@ -46,7 +46,7 @@ AccessibleGridControl::AccessibleGridControl(
 }
 
 
-void SAL_CALL AccessibleGridControl::disposing()
+void AccessibleGridControl::disposing()
 {
     SolarMutexGuard g;
 
@@ -76,7 +76,7 @@ sal_Int64 AccessibleGridControl::implGetAccessibleChildCount()
 // css::accessibility::XAccessibleContext ---------------------------------------------------------
 
 
-sal_Int64 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
+sal_Int64 AccessibleGridControl::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
@@ -84,7 +84,7 @@ sal_Int64 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
 }
 
 
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
@@ -126,7 +126,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
 }
 
 
-sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
+sal_Int16 AccessibleGridControl::getAccessibleRole()
 {
     SolarMutexGuard g;
 
@@ -137,7 +137,7 @@ sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
 
 // css::accessibility::XAccessibleComponent -------------------------------------------------------
 
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aSolarGuard;
@@ -161,7 +161,7 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 }
 
 
-void SAL_CALL AccessibleGridControl::grabFocus()
+void AccessibleGridControl::grabFocus()
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
@@ -169,7 +169,7 @@ void SAL_CALL AccessibleGridControl::grabFocus()
 }
 
 // XServiceInfo ---------------------------------------------------------------
-OUString SAL_CALL AccessibleGridControl::getImplementationName()
+OUString AccessibleGridControl::getImplementationName()
 {
     return u"com.sun.star.accessibility.AccessibleGridControl"_ustr;
 }

@@ -165,7 +165,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 }
 
 
-OUString SAL_CALL VCLXMenu::getImplementationName(  )
+OUString VCLXMenu::getImplementationName(  )
 {
     std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -180,7 +180,7 @@ OUString SAL_CALL VCLXMenu::getImplementationName(  )
     return implName;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > VCLXMenu::getSupportedServiceNames(  )
 {
     std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -196,7 +196,7 @@ cpo::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
             u"stardiv.vcl.MenuBar"_ustr};
 }
 
-bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
+bool VCLXMenu::supportsService(const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -510,7 +510,7 @@ sal_Int16 VCLXMenu::execute(
 }
 
 
-void SAL_CALL VCLXMenu::setCommand(
+void VCLXMenu::setCommand(
     sal_Int16 nItemId,
     const OUString& aCommand )
 {
@@ -521,7 +521,7 @@ void SAL_CALL VCLXMenu::setCommand(
         mpMenu->SetItemCommand( nItemId, aCommand );
 }
 
-OUString SAL_CALL VCLXMenu::getCommand(
+OUString VCLXMenu::getCommand(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -533,7 +533,7 @@ OUString SAL_CALL VCLXMenu::getCommand(
     return aItemCommand;
 }
 
-void SAL_CALL VCLXMenu::setHelpCommand(
+void VCLXMenu::setHelpCommand(
     sal_Int16 nItemId,
     const OUString& aHelp )
 {
@@ -544,7 +544,7 @@ void SAL_CALL VCLXMenu::setHelpCommand(
         mpMenu->SetHelpCommand( nItemId, aHelp );
 }
 
-OUString SAL_CALL VCLXMenu::getHelpCommand(
+OUString VCLXMenu::getHelpCommand(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -627,14 +627,14 @@ namespace
 }
 
 
-bool SAL_CALL VCLXMenu::isPopupMenu(  )
+bool VCLXMenu::isPopupMenu(  )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
     return IsPopupMenu();
 }
 
-void SAL_CALL VCLXMenu::clear(  )
+void VCLXMenu::clear(  )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -643,7 +643,7 @@ void SAL_CALL VCLXMenu::clear(  )
 }
 
 
-css::awt::MenuItemType SAL_CALL VCLXMenu::getItemType(
+css::awt::MenuItemType VCLXMenu::getItemType(
     ::sal_Int16 nItemPos )
 {
     SolarMutexGuard aSolarGuard;
@@ -659,7 +659,7 @@ css::awt::MenuItemType SAL_CALL VCLXMenu::getItemType(
     return aMenuItemType;
 }
 
-void SAL_CALL VCLXMenu::hideDisabledEntries(
+void VCLXMenu::hideDisabledEntries(
     bool bHide )
 {
     SolarMutexGuard aSolarGuard;
@@ -674,7 +674,7 @@ void SAL_CALL VCLXMenu::hideDisabledEntries(
 }
 
 
-bool SAL_CALL VCLXMenu::isInExecute(  )
+bool VCLXMenu::isInExecute(  )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -686,7 +686,7 @@ bool SAL_CALL VCLXMenu::isInExecute(  )
 }
 
 
-void SAL_CALL VCLXMenu::endExecute()
+void VCLXMenu::endExecute()
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -696,7 +696,7 @@ void SAL_CALL VCLXMenu::endExecute()
 }
 
 
-void SAL_CALL VCLXMenu::enableAutoMnemonics(
+void VCLXMenu::enableAutoMnemonics(
     bool bEnable )
 {
     SolarMutexGuard aSolarGuard;
@@ -711,7 +711,7 @@ void SAL_CALL VCLXMenu::enableAutoMnemonics(
 }
 
 
-void SAL_CALL VCLXMenu::setAcceleratorKeyEvent(
+void VCLXMenu::setAcceleratorKeyEvent(
     ::sal_Int16 nItemId,
     const css::awt::KeyEvent& aKeyEvent )
 {
@@ -726,7 +726,7 @@ void SAL_CALL VCLXMenu::setAcceleratorKeyEvent(
 }
 
 
-css::awt::KeyEvent SAL_CALL VCLXMenu::getAcceleratorKeyEvent(
+css::awt::KeyEvent VCLXMenu::getAcceleratorKeyEvent(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -743,7 +743,7 @@ css::awt::KeyEvent SAL_CALL VCLXMenu::getAcceleratorKeyEvent(
 }
 
 
-void SAL_CALL VCLXMenu::setHelpText(
+void VCLXMenu::setHelpText(
     ::sal_Int16 nItemId,
     const OUString& sHelpText )
 {
@@ -757,7 +757,7 @@ void SAL_CALL VCLXMenu::setHelpText(
 }
 
 
-OUString SAL_CALL VCLXMenu::getHelpText(
+OUString VCLXMenu::getHelpText(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -773,7 +773,7 @@ OUString SAL_CALL VCLXMenu::getHelpText(
 }
 
 
-void SAL_CALL VCLXMenu::setTipHelpText(
+void VCLXMenu::setTipHelpText(
     ::sal_Int16 nItemId,
     const OUString& sTipHelpText )
 {
@@ -787,7 +787,7 @@ void SAL_CALL VCLXMenu::setTipHelpText(
 }
 
 
-OUString SAL_CALL VCLXMenu::getTipHelpText(
+OUString VCLXMenu::getTipHelpText(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -802,7 +802,7 @@ OUString SAL_CALL VCLXMenu::getTipHelpText(
 }
 
 
-void SAL_CALL VCLXMenu::setItemImage(
+void VCLXMenu::setItemImage(
     ::sal_Int16 nItemId,
     const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
     bool bScale )
@@ -818,7 +818,7 @@ void SAL_CALL VCLXMenu::setItemImage(
 }
 
 
-css::uno::Reference< css::graphic::XGraphic > SAL_CALL
+css::uno::Reference< css::graphic::XGraphic >
 VCLXMenu::getItemImage(
     ::sal_Int16 nItemId )
 {

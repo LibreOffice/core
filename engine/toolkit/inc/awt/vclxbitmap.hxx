@@ -50,12 +50,12 @@ public:
     const Bitmap& GetBitmap() const                 { return maBitmap; }
 
     // css::awt::XBitmap
-    css::awt::Size                 SAL_CALL getSize() override;
-    cpo::uno::Sequence< sal_Int8 > SAL_CALL getDIB() override;
-    cpo::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() override;
+    css::awt::Size                 getSize() override;
+    cpo::uno::Sequence< sal_Int8 > getDIB() override;
+    cpo::uno::Sequence< sal_Int8 > getMaskDIB() override;
 
     // XAccounting
-    sal_Int64 SAL_CALL estimateUsage() override;
+    sal_Int64 estimateUsage() override;
 };
 
 

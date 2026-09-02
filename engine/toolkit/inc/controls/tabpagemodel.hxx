@@ -31,17 +31,17 @@ public:
     UnoControlTabPageModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory);
 
     // css::io::XPersistObject
-    OUString SAL_CALL getServiceName() override;
+    OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     // XInitialization
-    virtual void SAL_CALL initialize (const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void initialize (const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 
@@ -60,20 +60,20 @@ public:
     virtual ~UnoControlTabPage() override;
     OUString             GetComponentServiceName() const override;
 
-    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void disposing( const css::lang::EventObject& Source ) override;
 
      // css::awt::XWindowListener
-    virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override;
-    virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override;
-    virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) override;
+    virtual void windowResized( const css::awt::WindowEvent& e ) override;
+    virtual void windowMoved( const css::awt::WindowEvent& e ) override;
+    virtual void windowShown( const css::lang::EventObject& e ) override;
+    virtual void windowHidden( const css::lang::EventObject& e ) override;
     // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

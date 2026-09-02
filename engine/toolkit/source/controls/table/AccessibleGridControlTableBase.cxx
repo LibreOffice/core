@@ -45,7 +45,7 @@ AccessibleGridControlTableBase::AccessibleGridControlTableBase(
 
 // XAccessibleContext ---------------------------------------------------------
 
-sal_Int64 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()
+sal_Int64 AccessibleGridControlTableBase::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -60,7 +60,7 @@ sal_Int64 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()
     return nChildren;
 }
 
-sal_Int16 SAL_CALL AccessibleGridControlTableBase::getAccessibleRole()
+sal_Int16 AccessibleGridControlTableBase::getAccessibleRole()
 {
     SolarMutexGuard g;
 
@@ -70,7 +70,7 @@ sal_Int16 SAL_CALL AccessibleGridControlTableBase::getAccessibleRole()
 
 // XAccessibleTable -----------------------------------------------------------
 
-sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowCount()
+sal_Int32 AccessibleGridControlTableBase::getAccessibleRowCount()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -81,7 +81,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowCount()
     return  m_aTable.GetRowCount();
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnCount()
+sal_Int32 AccessibleGridControlTableBase::getAccessibleColumnCount()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -92,7 +92,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnCount()
     return m_aTable.GetColumnCount();
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowExtentAt(
+sal_Int32 AccessibleGridControlTableBase::getAccessibleRowExtentAt(
         sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
@@ -102,7 +102,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowExtentAt(
     return 1;   // merged cells not supported
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
+sal_Int32 AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
         sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
@@ -112,7 +112,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
     return 1;   // merged cells not supported
 }
 
-Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleCaption()
+Reference< XAccessible > AccessibleGridControlTableBase::getAccessibleCaption()
 {
     SolarMutexGuard g;
 
@@ -120,7 +120,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleC
     return nullptr;    // not supported
 }
 
-Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleSummary()
+Reference< XAccessible > AccessibleGridControlTableBase::getAccessibleSummary()
 {
     SolarMutexGuard g;
 
@@ -128,7 +128,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleS
     return nullptr;    // not supported
 }
 
-sal_Int64 SAL_CALL AccessibleGridControlTableBase::getAccessibleIndex(
+sal_Int64 AccessibleGridControlTableBase::getAccessibleIndex(
         sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aSolarGuard;
@@ -138,7 +138,7 @@ sal_Int64 SAL_CALL AccessibleGridControlTableBase::getAccessibleIndex(
     return static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(m_aTable.GetColumnCount()) + nColumn;
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRow( sal_Int64 nChildIndex )
+sal_Int32 AccessibleGridControlTableBase::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRow( sal_Int64 n
     return implGetRow( nChildIndex );
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumn( sal_Int64 nChildIndex )
+sal_Int32 AccessibleGridControlTableBase::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 

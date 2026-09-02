@@ -36,26 +36,26 @@ public:
     virtual ~VCLXTopWindow() override;
 
     // css::awt::XSystemDependentWindowPeer
-    cpo::uno::Any SAL_CALL getWindowHandle( const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+    cpo::uno::Any getWindowHandle( const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
     // css::awt::XTopWindow
-    void SAL_CALL addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
-    void SAL_CALL removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
-    void SAL_CALL toFront() override;
-    void SAL_CALL toBack() override;
-    void SAL_CALL setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& xMenu ) override;
+    void addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
+    void removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
+    void toFront() override;
+    void toBack() override;
+    void setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& xMenu ) override;
 
     // XTopWindow2
-    virtual bool SAL_CALL getIsMaximized() override;
-    virtual void SAL_CALL setIsMaximized( bool _ismaximized ) override;
-    virtual bool SAL_CALL getIsMinimized() override;
-    virtual void SAL_CALL setIsMinimized( bool _isminimized ) override;
-    virtual ::sal_Int32 SAL_CALL getDisplay() override;
-    virtual void SAL_CALL setDisplay( ::sal_Int32 _display ) override;
+    virtual bool getIsMaximized() override;
+    virtual void setIsMaximized( bool _ismaximized ) override;
+    virtual bool getIsMinimized() override;
+    virtual void setIsMinimized( bool _isminimized ) override;
+    virtual ::sal_Int32 getDisplay() override;
+    virtual void setDisplay( ::sal_Int32 _display ) override;
 
     // XTopWindow3
-    virtual bool SAL_CALL getFullScreen() override;
-    virtual void SAL_CALL setFullScreen(bool value) override;
+    virtual bool getFullScreen() override;
+    virtual void setFullScreen(bool value) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

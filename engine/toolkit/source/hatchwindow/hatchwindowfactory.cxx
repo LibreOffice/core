@@ -39,15 +39,15 @@ public:
     OHatchWindowFactory() {}
 
     // XHatchWindowFactory
-    virtual uno::Reference< embed::XHatchWindow > SAL_CALL createHatchWindowInstance( const uno::Reference< awt::XWindowPeer >& xParent, const awt::Rectangle& aBounds, const awt::Size& aSize ) override;
+    virtual uno::Reference< embed::XHatchWindow > createHatchWindowInstance( const uno::Reference< awt::XWindowPeer >& xParent, const awt::Rectangle& aBounds, const awt::Size& aSize ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
-uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchWindowInstance(
+uno::Reference< embed::XHatchWindow > OHatchWindowFactory::createHatchWindowInstance(
                 const uno::Reference< awt::XWindowPeer >& xParent,
                 const awt::Rectangle& aBounds,
                 const awt::Size& aHandlerSize )
@@ -61,17 +61,17 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
     return pResult;
 }
 
-OUString SAL_CALL OHatchWindowFactory::getImplementationName()
+OUString OHatchWindowFactory::getImplementationName()
 {
     return u"com.sun.star.comp.embed.HatchWindowFactory"_ustr;
 }
 
-bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )
+bool OHatchWindowFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OHatchWindowFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.HatchWindowFactory"_ustr, u"com.sun.star.comp.embed.HatchWindowFactory"_ustr };
 }

@@ -285,7 +285,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues )
+    void UnoControlFormattedFieldModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues )
     {
         bool bSettingValue = false;
         bool bSettingText = false;

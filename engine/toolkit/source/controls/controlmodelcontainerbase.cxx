@@ -181,7 +181,7 @@ Any ControlModelContainerBase::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return aHelper;
 }
 
-void SAL_CALL ControlModelContainerBase::dispose(  )
+void ControlModelContainerBase::dispose(  )
 {
 
     // tell our listeners
@@ -580,19 +580,19 @@ void ControlModelContainerBase::removeByName( const OUString& aName )
 }
 
 
-bool SAL_CALL ControlModelContainerBase::getGroupControl(  )
+bool ControlModelContainerBase::getGroupControl(  )
 {
     return true;
 }
 
 
-void SAL_CALL ControlModelContainerBase::setGroupControl( bool )
+void ControlModelContainerBase::setGroupControl( bool )
 {
     SAL_WARN("toolkit", "explicit grouping not supported" );
 }
 
 
-void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Reference< XControlModel > >& _rControls )
+void ControlModelContainerBase::setControlModels( const Sequence< Reference< XControlModel > >& _rControls )
 {
     SolarMutexGuard aGuard;
 
@@ -627,7 +627,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
 typedef ::std::multimap< sal_Int32, Reference< XControlModel > > MapIndexToModel;
 
 
-Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getControlModels(  )
+Sequence< Reference< XControlModel > > ControlModelContainerBase::getControlModels(  )
 {
     SolarMutexGuard aGuard;
 
@@ -675,7 +675,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
 }
 
 
-void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XControlModel > >&, const OUString& )
+void ControlModelContainerBase::setGroup( const Sequence< Reference< XControlModel > >&, const OUString& )
 {
     // not supported. We have only implicit grouping:
     // We only have a sequence of control models, and we _know_ (yes, that's a HACK relying on
@@ -685,7 +685,7 @@ void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XC
 }
 
 ////----- XInitialization -------------------------------------------------------------------
-void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArguments)
+void ControlModelContainerBase::initialize (const Sequence<Any>& rArguments)
 {
     if ( rArguments.getLength() == 1 )
     {
@@ -697,49 +697,49 @@ void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArgum
     else
         m_nTabPageId = -1;
 }
-::sal_Int16 SAL_CALL ControlModelContainerBase::getTabPageID()
+::sal_Int16 ControlModelContainerBase::getTabPageID()
 {
     return m_nTabPageId;
 }
-bool SAL_CALL ControlModelContainerBase::getEnabled()
+bool ControlModelContainerBase::getEnabled()
 {
     SolarMutexGuard aGuard;
     bool bEnabled = false;
     getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)) >>= bEnabled;
     return bEnabled;
 }
-void SAL_CALL ControlModelContainerBase::setEnabled( bool _enabled )
+void ControlModelContainerBase::setEnabled( bool _enabled )
 {
     SolarMutexGuard aGuard;
     setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED), Any(_enabled));
 }
-OUString SAL_CALL ControlModelContainerBase::getTitle()
+OUString ControlModelContainerBase::getTitle()
 {
     SolarMutexGuard aGuard;
     OUString sTitle;
     getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
     return sTitle;
 }
-void SAL_CALL ControlModelContainerBase::setTitle( const OUString& _title )
+void ControlModelContainerBase::setTitle( const OUString& _title )
 {
     SolarMutexGuard aGuard;
     setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),Any(_title));
 }
-OUString SAL_CALL ControlModelContainerBase::getImageURL()
+OUString ControlModelContainerBase::getImageURL()
 {
     return m_sImageURL;
 }
-void SAL_CALL ControlModelContainerBase::setImageURL( const OUString& _imageurl )
+void ControlModelContainerBase::setImageURL( const OUString& _imageurl )
 {
     m_sImageURL = _imageurl;
     SolarMutexGuard aGuard;
     setPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL), Any(_imageurl));
 }
-OUString SAL_CALL ControlModelContainerBase::getToolTip()
+OUString ControlModelContainerBase::getToolTip()
 {
     return m_sTooltip;
 }
-void SAL_CALL ControlModelContainerBase::setToolTip( const OUString& _tooltip )
+void ControlModelContainerBase::setToolTip( const OUString& _tooltip )
 {
     m_sTooltip = _tooltip;
 }
@@ -771,7 +771,7 @@ namespace
 }
 
 
-sal_Int32 SAL_CALL ControlModelContainerBase::getGroupCount(  )
+sal_Int32 ControlModelContainerBase::getGroupCount(  )
 {
     SolarMutexGuard aGuard;
 
@@ -781,7 +781,7 @@ sal_Int32 SAL_CALL ControlModelContainerBase::getGroupCount(  )
 }
 
 
-void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< Reference< XControlModel > >& _rGroup, OUString& _rName )
+void ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< Reference< XControlModel > >& _rGroup, OUString& _rName )
 {
     SolarMutexGuard aGuard;
 
@@ -805,7 +805,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
 }
 
 
-void SAL_CALL ControlModelContainerBase::getGroupByName( const OUString& _rName, Sequence< Reference< XControlModel > >& _rGroup )
+void ControlModelContainerBase::getGroupByName( const OUString& _rName, Sequence< Reference< XControlModel > >& _rGroup )
 {
     SolarMutexGuard aGuard;
 
@@ -814,14 +814,14 @@ void SAL_CALL ControlModelContainerBase::getGroupByName( const OUString& _rName,
 }
 
 
-void SAL_CALL ControlModelContainerBase::addChangesListener( const Reference< XChangesListener >& _rxListener )
+void ControlModelContainerBase::addChangesListener( const Reference< XChangesListener >& _rxListener )
 {
     std::unique_lock g(m_aMutex);
     maChangeListeners.addInterface( g, _rxListener );
 }
 
 
-void SAL_CALL ControlModelContainerBase::removeChangesListener( const Reference< XChangesListener >& _rxListener )
+void ControlModelContainerBase::removeChangesListener( const Reference< XChangesListener >& _rxListener )
 {
     std::unique_lock g(m_aMutex);
     maChangeListeners.removeInterface( g, _rxListener );
@@ -949,7 +949,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 }
 
 
-void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEvent& _rEvent )
+void ControlModelContainerBase::propertyChange( const PropertyChangeEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -975,7 +975,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
 }
 
 
-void SAL_CALL ControlModelContainerBase::disposing( const EventObject& /*rEvent*/ )
+void ControlModelContainerBase::disposing( const EventObject& /*rEvent*/ )
 {
 }
 
@@ -1023,7 +1023,7 @@ ResourceListener::~ResourceListener()
 }
 
 // XInterface
-Any SAL_CALL ResourceListener::queryInterface( const Type& rType )
+Any ResourceListener::queryInterface( const Type& rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -1036,12 +1036,12 @@ Any SAL_CALL ResourceListener::queryInterface( const Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL ResourceListener::acquire() noexcept
+void ResourceListener::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ResourceListener::release() noexcept
+void ResourceListener::release() noexcept
 {
     OWeakObject::release();
 }
@@ -1123,7 +1123,7 @@ void ResourceListener::stopListening()
 }
 
 // XModifyListener
-void SAL_CALL ResourceListener::modified(
+void ResourceListener::modified(
     const lang::EventObject& aEvent )
 {
     Reference< util::XModifyListener > xListener;
@@ -1151,7 +1151,7 @@ void SAL_CALL ResourceListener::modified(
 }
 
 // XEventListener
-void SAL_CALL ResourceListener::disposing(
+void ResourceListener::disposing(
     const EventObject& Source )
 {
     Reference< lang::XEventListener > xListener;
@@ -1356,7 +1356,7 @@ void ControlContainerBase::dispose()
     UnoControlContainer::dispose();
 }
 
-void SAL_CALL ControlContainerBase::disposing(
+void ControlContainerBase::disposing(
     const EventObject& Source )
 {
     UnoControlContainer::disposing( Source );
@@ -1604,7 +1604,7 @@ void ControlContainerBase::removingControl( const Reference< XControl >& _rxCont
 
 }
 
-void SAL_CALL ControlContainerBase::changesOccurred( const ChangesEvent& )
+void ControlContainerBase::changesOccurred( const ChangesEvent& )
 {
     SolarMutexGuard aGuard;
     // a tab controller model may have changed

@@ -43,18 +43,18 @@ public:
     const vcl::Region&   GetRegion() const                   { return maRegion; }
 
     // css::awt::XRegion
-     css::awt::Rectangle       SAL_CALL getBounds() override;
-     void                                   SAL_CALL clear() override;
-     void                                   SAL_CALL move( sal_Int32 nHorzMove, sal_Int32 nVertMove ) override;
-     void                                   SAL_CALL unionRectangle( const css::awt::Rectangle& rRect ) override;
-     void                                   SAL_CALL intersectRectangle( const css::awt::Rectangle& rRect ) override;
-     void                                   SAL_CALL excludeRectangle( const css::awt::Rectangle& rRect ) override;
-     void                                   SAL_CALL xOrRectangle( const css::awt::Rectangle& rRect ) override;
-     void                                   SAL_CALL unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     void                                   SAL_CALL intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     void                                   SAL_CALL excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     void                                   SAL_CALL xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     cpo::uno::Sequence< css::awt::Rectangle > SAL_CALL getRectangles() override;
+     css::awt::Rectangle       getBounds() override;
+     void                                   clear() override;
+     void                                   move( sal_Int32 nHorzMove, sal_Int32 nVertMove ) override;
+     void                                   unionRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   intersectRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   excludeRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   xOrRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     cpo::uno::Sequence< css::awt::Rectangle > getRectangles() override;
 
 };
 

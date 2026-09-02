@@ -42,18 +42,18 @@ public:
     rtl::Reference<UnoControlModel> Clone() const override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // css::io::XPersistObject
-    OUString SAL_CALL getServiceName() override;
+    OUString getServiceName() override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     {
         return u"stardiv.Toolkit.TreeControlModel"_ustr;
     }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);

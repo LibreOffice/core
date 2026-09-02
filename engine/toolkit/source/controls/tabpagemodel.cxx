@@ -56,12 +56,12 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
 }
 
-OUString SAL_CALL UnoControlTabPageModel::getImplementationName()
+OUString UnoControlTabPageModel::getImplementationName()
 {
     return u"stardiv.Toolkit.UnoControlTabPageModel"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UnoControlTabPageModel::getSupportedServiceNames()
 {
     cpo::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 1 );
@@ -109,7 +109,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySet
     return xInfo;
 }
 ////----- XInitialization -------------------------------------------------------------------
-void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
+void UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
 {
     sal_Int16 nPageId = -1;
     if ( rArguments.getLength() == 1 )
@@ -172,22 +172,22 @@ OUString UnoControlTabPage::GetComponentServiceName() const
     return u"TabPageModel"_ustr;
 }
 
-OUString SAL_CALL UnoControlTabPage::getImplementationName()
+OUString UnoControlTabPage::getImplementationName()
 {
     return u"stardiv.Toolkit.UnoControlTabPage"_ustr;
 }
 
-bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)
+bool UnoControlTabPage::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlTabPage::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.tab.UnoControlTabPage"_ustr };
 }
 
-void SAL_CALL UnoControlTabPage::disposing( const lang::EventObject& Source )
+void UnoControlTabPage::disposing( const lang::EventObject& Source )
 {
      ControlContainerBase::disposing( Source );
 }
@@ -217,7 +217,7 @@ static ::Size ImplMapPixelToAppFont( OutputDevice const * pOutDev, const ::Size&
     return aTmp;
 }
 // css::awt::XWindowListener
-void SAL_CALL UnoControlTabPage::windowResized( const css::awt::WindowEvent& e )
+void UnoControlTabPage::windowResized( const css::awt::WindowEvent& e )
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -251,7 +251,7 @@ void SAL_CALL UnoControlTabPage::windowResized( const css::awt::WindowEvent& e )
 
 }
 
-void SAL_CALL UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
+void UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -273,9 +273,9 @@ void SAL_CALL UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
 
 }
 
-void SAL_CALL UnoControlTabPage::windowShown( const css::lang::EventObject& ) {}
+void UnoControlTabPage::windowShown( const css::lang::EventObject& ) {}
 
-void SAL_CALL UnoControlTabPage::windowHidden( const css::lang::EventObject& ) {}
+void UnoControlTabPage::windowHidden( const css::lang::EventObject& ) {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageModel_get_implementation(

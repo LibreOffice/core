@@ -38,14 +38,14 @@ public:
     virtual rtl::Reference<UnoControlModel> Clone() const override;
 
     // XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XPersistObject
-    OUString SAL_CALL getServiceName() override;
+    OUString getServiceName() override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName(  ) override;
-    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName(  ) override;
+    cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 protected:
     virtual ~SpinningProgressControlModel() override;
@@ -90,26 +90,26 @@ protected:
     }
 
 
-    Reference< beans::XPropertySetInfo > SAL_CALL SpinningProgressControlModel::getPropertySetInfo(  )
+    Reference< beans::XPropertySetInfo > SpinningProgressControlModel::getPropertySetInfo(  )
     {
         static Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
 
-    OUString SAL_CALL SpinningProgressControlModel::getServiceName()
+    OUString SpinningProgressControlModel::getServiceName()
     {
         return u"com.sun.star.awt.SpinningProgressControlModel"_ustr;
     }
 
 
-    OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  )
+    OUString SpinningProgressControlModel::getImplementationName(  )
     {
         return u"org.openoffice.comp.toolkit.SpinningProgressControlModel"_ustr;
     }
 
 
-    Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames()
+    Sequence< OUString > SpinningProgressControlModel::getSupportedServiceNames()
     {
         return { u"com.sun.star.awt.SpinningProgressControlModel"_ustr,
                  u"com.sun.star.awt.AnimatedImagesControlModel"_ustr,

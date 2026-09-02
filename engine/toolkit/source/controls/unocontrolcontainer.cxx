@@ -339,21 +339,21 @@ public:
         : mxControlContainer(std::move( xControlContainer )) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  lang::EventObject& Source ) override;
+    virtual void disposing( const  lang::EventObject& Source ) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const  beans::PropertyChangeEvent& evt ) override;
+    virtual void propertyChange( const  beans::PropertyChangeEvent& evt ) override;
 
 };
 
 }
 
-void SAL_CALL DialogStepChangedListener::disposing( const  lang::EventObject& /*_rSource*/)
+void DialogStepChangedListener::disposing( const  lang::EventObject& /*_rSource*/)
 {
     mxControlContainer.clear();
 }
 
-void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyChangeEvent& evt )
+void DialogStepChangedListener::propertyChange( const  beans::PropertyChangeEvent& evt )
 {
     // evt.PropertyName HAS to be "Step" because we only use the listener for that
     sal_Int32 nDialogStep = 0;
@@ -448,7 +448,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
 }
 
 
-::sal_Int32 SAL_CALL UnoControlContainer::insert( const cpo::uno::Any& _rElement )
+::sal_Int32 UnoControlContainer::insert( const cpo::uno::Any& _rElement )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -463,7 +463,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
     return impl_addControl( xControl );
 }
 
-void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier )
+void UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -477,7 +477,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     impl_removeControl( _nIdentifier, xControl );
 }
 
-void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const cpo::uno::Any& _rElement )
+void UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const cpo::uno::Any& _rElement )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -515,7 +515,7 @@ void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier,
     }
 }
 
-cpo::uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier )
+cpo::uno::Any UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -525,7 +525,7 @@ cpo::uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdent
     return cpo::uno::Any( xControl );
 }
 
-cpo::uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  )
+cpo::uno::Sequence< ::sal_Int32 > UnoControlContainer::getIdentifiers(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -535,12 +535,12 @@ cpo::uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers( 
 }
 
 // container::XElementAccess
-cpo::uno::Type SAL_CALL UnoControlContainer::getElementType(  )
+cpo::uno::Type UnoControlContainer::getElementType(  )
 {
     return cppu::UnoType<awt::XControlModel>::get();
 }
 
-bool SAL_CALL UnoControlContainer::hasElements(  )
+bool UnoControlContainer::hasElements(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return !mpControls->empty();

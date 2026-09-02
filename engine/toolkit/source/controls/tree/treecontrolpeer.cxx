@@ -488,7 +488,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
 // css::view::XSelectionSupplier
 
 
-bool SAL_CALL TreeControlPeer::select( const Any& rSelection )
+bool TreeControlPeer::select( const Any& rSelection )
 {
     SolarMutexGuard aGuard;
     ChangeNodesSelection( rSelection, true, true );
@@ -496,7 +496,7 @@ bool SAL_CALL TreeControlPeer::select( const Any& rSelection )
 }
 
 
-Any SAL_CALL TreeControlPeer::getSelection()
+Any TreeControlPeer::getSelection()
 {
     SolarMutexGuard aGuard;
 
@@ -531,13 +531,13 @@ Any SAL_CALL TreeControlPeer::getSelection()
 }
 
 
-void SAL_CALL TreeControlPeer::addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
+void TreeControlPeer::addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
 {
     maSelectionListeners.addInterface( xListener );
 }
 
 
-void SAL_CALL TreeControlPeer::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
+void TreeControlPeer::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
 {
     maSelectionListeners.removeInterface( xListener );
 }
@@ -546,27 +546,27 @@ void SAL_CALL TreeControlPeer::removeSelectionChangeListener( const Reference< X
 // css::view::XMultiSelectionSupplier
 
 
-bool SAL_CALL TreeControlPeer::addSelection( const Any& rSelection )
+bool TreeControlPeer::addSelection( const Any& rSelection )
 {
     ChangeNodesSelection( rSelection, true, false );
     return true;
 }
 
 
-void SAL_CALL TreeControlPeer::removeSelection( const Any& rSelection )
+void TreeControlPeer::removeSelection( const Any& rSelection )
 {
     ChangeNodesSelection( rSelection, false, false );
 }
 
 
-void SAL_CALL TreeControlPeer::clearSelection()
+void TreeControlPeer::clearSelection()
 {
     SolarMutexGuard aGuard;
     getTreeListBoxOrThrow().SelectAll( false );
 }
 
 
-sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount()
+sal_Int32 TreeControlPeer::getSelectionCount()
 {
     SolarMutexGuard aGuard;
     return getTreeListBoxOrThrow().GetSelectionCount();
@@ -578,8 +578,8 @@ class TreeSelectionEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
     explicit TreeSelectionEnumeration( std::list< Any >& rSelection );
-    virtual bool SAL_CALL hasMoreElements() override;
-    virtual Any SAL_CALL nextElement() override;
+    virtual bool hasMoreElements() override;
+    virtual Any nextElement() override;
 
     std::list< Any > maSelection;
     std::list< Any >::iterator maIter;
@@ -594,13 +594,13 @@ TreeSelectionEnumeration::TreeSelectionEnumeration( std::list< Any >& rSelection
 }
 
 
-bool SAL_CALL TreeSelectionEnumeration::hasMoreElements()
+bool TreeSelectionEnumeration::hasMoreElements()
 {
     return maIter != maSelection.end();
 }
 
 
-Any SAL_CALL TreeSelectionEnumeration::nextElement()
+Any TreeSelectionEnumeration::nextElement()
 {
     if( maIter == maSelection.end() )
         throw NoSuchElementException();
@@ -609,7 +609,7 @@ Any SAL_CALL TreeSelectionEnumeration::nextElement()
 }
 
 
-Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
+Reference< XEnumeration > TreeControlPeer::createSelectionEnumeration()
 {
     SolarMutexGuard aGuard;
 
@@ -632,7 +632,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
 }
 
 
-Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumeration()
+Reference< XEnumeration > TreeControlPeer::createReverseSelectionEnumeration()
 {
     SolarMutexGuard aGuard;
 
@@ -658,14 +658,14 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
 // css::awt::XTreeControl
 
 
-OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL()
+OUString TreeControlPeer::getDefaultExpandedGraphicURL()
 {
     SolarMutexGuard aGuard;
     return msDefaultExpandedGraphicURL;
 }
 
 
-void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDefaultExpandedGraphicURL )
+void TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDefaultExpandedGraphicURL )
 {
     SolarMutexGuard aGuard;
     if( msDefaultExpandedGraphicURL == sDefaultExpandedGraphicURL )
@@ -694,14 +694,14 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDe
 }
 
 
-OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL()
+OUString TreeControlPeer::getDefaultCollapsedGraphicURL()
 {
     SolarMutexGuard aGuard;
     return msDefaultCollapsedGraphicURL;
 }
 
 
-void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sDefaultCollapsedGraphicURL )
+void TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sDefaultCollapsedGraphicURL )
 {
     SolarMutexGuard aGuard;
     if( msDefaultCollapsedGraphicURL == sDefaultCollapsedGraphicURL )
@@ -730,7 +730,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sD
 }
 
 
-bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNode )
+bool TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -740,14 +740,14 @@ bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNo
 }
 
 
-bool SAL_CALL TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >& xNode )
+bool TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
     return !isNodeExpanded( xNode );
 }
 
 
-void SAL_CALL TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xNode )
+void TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -758,7 +758,7 @@ void SAL_CALL TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xN
 }
 
 
-bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& xNode )
+bool TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -768,7 +768,7 @@ bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& xNod
 }
 
 
-void SAL_CALL TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode )
+void TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -779,7 +779,7 @@ void SAL_CALL TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode )
 }
 
 
-void SAL_CALL TreeControlPeer::collapseNode( const Reference< XTreeNode >& xNode )
+void TreeControlPeer::collapseNode( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -790,19 +790,19 @@ void SAL_CALL TreeControlPeer::collapseNode( const Reference< XTreeNode >& xNode
 }
 
 
-void SAL_CALL TreeControlPeer::addTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
+void TreeControlPeer::addTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
 {
     maTreeExpansionListeners.addInterface( xListener );
 }
 
 
-void SAL_CALL TreeControlPeer::removeTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
+void TreeControlPeer::removeTreeExpansionListener( const Reference< XTreeExpansionListener >& xListener )
 {
     maTreeExpansionListeners.removeInterface( xListener );
 }
 
 
-Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x, sal_Int32 y )
+Reference< XTreeNode > TreeControlPeer::getNodeForLocation( sal_Int32 x, sal_Int32 y )
 {
     SolarMutexGuard aGuard;
 
@@ -819,7 +819,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x
 }
 
 
-Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y )
+Reference< XTreeNode > TreeControlPeer::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y )
 {
     SolarMutexGuard aGuard;
 
@@ -836,7 +836,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_
 }
 
 
-awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode >& i_Node )
+awt::Rectangle TreeControlPeer::getNodeRect( const Reference< XTreeNode >& i_Node )
 {
     SolarMutexGuard aGuard;
 
@@ -848,7 +848,7 @@ awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode
 }
 
 
-bool SAL_CALL TreeControlPeer::isEditing(  )
+bool TreeControlPeer::isEditing(  )
 {
     SolarMutexGuard aGuard;
 
@@ -857,7 +857,7 @@ bool SAL_CALL TreeControlPeer::isEditing(  )
 }
 
 
-bool SAL_CALL TreeControlPeer::stopEditing()
+bool TreeControlPeer::stopEditing()
 {
     SolarMutexGuard aGuard;
 
@@ -874,7 +874,7 @@ bool SAL_CALL TreeControlPeer::stopEditing()
 }
 
 
-void SAL_CALL TreeControlPeer::cancelEditing(  )
+void TreeControlPeer::cancelEditing(  )
 {
     SolarMutexGuard aGuard;
 
@@ -883,7 +883,7 @@ void SAL_CALL TreeControlPeer::cancelEditing(  )
 }
 
 
-void SAL_CALL TreeControlPeer::startEditingAtNode( const Reference< XTreeNode >& xNode )
+void TreeControlPeer::startEditingAtNode( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -892,12 +892,12 @@ void SAL_CALL TreeControlPeer::startEditingAtNode( const Reference< XTreeNode >&
     rTree.EditEntry( pEntry );
 }
 
-void SAL_CALL TreeControlPeer::addTreeEditListener( const Reference< XTreeEditListener >& xListener )
+void TreeControlPeer::addTreeEditListener( const Reference< XTreeEditListener >& xListener )
 {
     maTreeEditListeners.addInterface( xListener );
 }
 
-void SAL_CALL TreeControlPeer::removeTreeEditListener( const Reference< XTreeEditListener >& xListener )
+void TreeControlPeer::removeTreeEditListener( const Reference< XTreeEditListener >& xListener )
 {
     maTreeEditListeners.removeInterface( xListener );
 }
@@ -952,7 +952,7 @@ bool TreeControlPeer::onEditedEntry( UnoTreeListEntry const * pEntry, const OUSt
 // css::awt::tree::TreeDataModelListener
 
 
-void SAL_CALL TreeControlPeer::treeNodesChanged( const css::awt::tree::TreeDataModelEvent& rEvent )
+void TreeControlPeer::treeNodesChanged( const css::awt::tree::TreeDataModelEvent& rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -962,7 +962,7 @@ void SAL_CALL TreeControlPeer::treeNodesChanged( const css::awt::tree::TreeDataM
     updateTree( rEvent );
 }
 
-void SAL_CALL TreeControlPeer::treeNodesInserted( const css::awt::tree::TreeDataModelEvent& rEvent )
+void TreeControlPeer::treeNodesInserted( const css::awt::tree::TreeDataModelEvent& rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -972,7 +972,7 @@ void SAL_CALL TreeControlPeer::treeNodesInserted( const css::awt::tree::TreeData
     updateTree( rEvent );
 }
 
-void SAL_CALL TreeControlPeer::treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& rEvent )
+void TreeControlPeer::treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -982,7 +982,7 @@ void SAL_CALL TreeControlPeer::treeNodesRemoved( const css::awt::tree::TreeDataM
     updateTree( rEvent );
 }
 
-void SAL_CALL TreeControlPeer::treeStructureChanged( const css::awt::tree::TreeDataModelEvent& rEvent )
+void TreeControlPeer::treeStructureChanged( const css::awt::tree::TreeDataModelEvent& rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -1150,7 +1150,7 @@ OUString TreeControlPeer::getEntryString( const Any& rValue )
 }
 
 // XEventListener
-void SAL_CALL TreeControlPeer::disposing( const css::lang::EventObject& )
+void TreeControlPeer::disposing( const css::lang::EventObject& )
 {
     // model is disposed, so we clear our tree
     SolarMutexGuard aGuard;

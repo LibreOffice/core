@@ -92,43 +92,43 @@ void OAccessibleControlContext::stopModelListening()
         xModelComp->removeEventListener(this);
 }
 
-sal_Int64 SAL_CALL OAccessibleControlContext::getAccessibleChildCount()
+sal_Int64 OAccessibleControlContext::getAccessibleChildCount()
 {
     // we do not have children
     return 0;
 }
 
-Reference<XAccessible> SAL_CALL OAccessibleControlContext::getAccessibleChild(sal_Int64)
+Reference<XAccessible> OAccessibleControlContext::getAccessibleChild(sal_Int64)
 {
     // we do not have children
     throw IndexOutOfBoundsException();
 }
 
-Reference<XAccessible> SAL_CALL OAccessibleControlContext::getAccessibleParent()
+Reference<XAccessible> OAccessibleControlContext::getAccessibleParent()
 {
     return Reference<XAccessible>();
 }
 
-sal_Int16 SAL_CALL OAccessibleControlContext::getAccessibleRole() { return AccessibleRole::SHAPE; }
+sal_Int16 OAccessibleControlContext::getAccessibleRole() { return AccessibleRole::SHAPE; }
 
-OUString SAL_CALL OAccessibleControlContext::getAccessibleDescription()
+OUString OAccessibleControlContext::getAccessibleDescription()
 {
     OContextEntryGuard aGuard(this);
     return getModelStringProperty(u"HelpText"_ustr);
 }
 
-OUString SAL_CALL OAccessibleControlContext::getAccessibleName()
+OUString OAccessibleControlContext::getAccessibleName()
 {
     OContextEntryGuard aGuard(this);
     return getModelStringProperty(u"Name"_ustr);
 }
 
-Reference<XAccessibleRelationSet> SAL_CALL OAccessibleControlContext::getAccessibleRelationSet()
+Reference<XAccessibleRelationSet> OAccessibleControlContext::getAccessibleRelationSet()
 {
     return nullptr;
 }
 
-sal_Int64 SAL_CALL OAccessibleControlContext::getAccessibleStateSet()
+sal_Int64 OAccessibleControlContext::getAccessibleStateSet()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     // no OContextEntryGuard here, as we do not want to throw an exception in case we're not alive anymore
@@ -145,7 +145,7 @@ sal_Int64 SAL_CALL OAccessibleControlContext::getAccessibleStateSet()
     return nStateSet;
 }
 
-void SAL_CALL OAccessibleControlContext::disposing(const EventObject& _rSource)
+void OAccessibleControlContext::disposing(const EventObject& _rSource)
 {
     OSL_ENSURE(Reference<XPropertySet>(_rSource.Source, UNO_QUERY).get() == m_xControlModel.get(),
                "OAccessibleControlContext::disposing: where did this come from?");
@@ -242,18 +242,18 @@ awt::Rectangle OAccessibleControlContext::implGetBounds()
 }
 
 Reference<XAccessible>
-    SAL_CALL OAccessibleControlContext::getAccessibleAtPoint(const awt::Point& /* _rPoint */)
+    OAccessibleControlContext::getAccessibleAtPoint(const awt::Point& /* _rPoint */)
 {
     // no children at all
     return nullptr;
 }
 
-void SAL_CALL OAccessibleControlContext::grabFocus()
+void OAccessibleControlContext::grabFocus()
 {
     OSL_FAIL("OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!");
 }
 
-sal_Int32 SAL_CALL OAccessibleControlContext::getForeground()
+sal_Int32 OAccessibleControlContext::getForeground()
 {
     SolarMutexGuard aSolarGuard;
     // want to do some VCL stuff here ...
@@ -278,7 +278,7 @@ sal_Int32 SAL_CALL OAccessibleControlContext::getForeground()
     return sal_Int32(nColor);
 }
 
-sal_Int32 SAL_CALL OAccessibleControlContext::getBackground()
+sal_Int32 OAccessibleControlContext::getBackground()
 {
     SolarMutexGuard aSolarGuard;
     // want to do some VCL stuff here ...

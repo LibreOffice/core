@@ -71,7 +71,7 @@ sal_Int64 AccessibleGridControlHeaderCell::implCreateStateSet()
 /** @return
         The count of visible children.
 */
-sal_Int64 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChildCount()
+sal_Int64 AccessibleGridControlHeaderCell::getAccessibleChildCount()
 {
     return 0;
 }
@@ -80,20 +80,20 @@ sal_Int64 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChildCount()
 /** @return
         The XAccessible interface of the specified child.
 */
-Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleChild( sal_Int64 )
+Reference<XAccessible > AccessibleGridControlHeaderCell::getAccessibleChild( sal_Int64 )
 {
     throw IndexOutOfBoundsException();
 }
 
 /** Grabs the focus to the column header. */
-void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
+void AccessibleGridControlHeaderCell::grabFocus()
 {
 }
 
 /** @return
         The name of this class.
 */
-OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
+OUString AccessibleGridControlHeaderCell::getImplementationName()
 {
     return u"com.sun.star.accessibility.AccessibleGridControlHeaderCell"_ustr;
 }
@@ -110,7 +110,7 @@ AbsoluteScreenPixelRectangle AccessibleGridControlHeaderCell::implGetBoundingBox
     return AbsoluteScreenPixelRectangle(AbsoluteScreenPixelPoint(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
 
-sal_Int64 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
+sal_Int64 AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
 {
     SolarMutexGuard g;
 

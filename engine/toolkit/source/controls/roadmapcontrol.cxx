@@ -113,13 +113,13 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  )
+    Reference< XInterface > UnoControlRoadmapModel::createInstance(  )
     {
         return cppu::getXWeak(new ORoadmapEntry());
     }
 
 
-    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ )
+    Reference< XInterface > UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ )
     {
         // Todo: implementation of the arguments handling
         return cppu::getXWeak(new ORoadmapEntry());
@@ -129,7 +129,7 @@ using namespace cpo::uno;
  IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, UnoControlRoadmapModel_IBase )
 
 
-    cpo::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const cpo::uno::Type & rType )
+    cpo::uno::Any  UnoControlRoadmapModel::queryAggregation( const cpo::uno::Type & rType )
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
@@ -154,12 +154,12 @@ using namespace cpo::uno;
     }
 
 
-    sal_Int32 SAL_CALL UnoControlRoadmapModel::getCount()
+    sal_Int32 UnoControlRoadmapModel::getCount()
     {
         return maRoadmapItems.size();
     }
 
-    Any SAL_CALL UnoControlRoadmapModel::getByIndex( sal_Int32 Index )
+    Any UnoControlRoadmapModel::getByIndex( sal_Int32 Index )
     {
         if ((Index < 0) || ( o3tl::make_unsigned(Index) >= maRoadmapItems.size()))
             throw IndexOutOfBoundsException();
@@ -248,7 +248,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& Element)
+    void UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& Element)
     {
         if ( ( Index >= ( static_cast<sal_Int32>(maRoadmapItems.size()) + 1 ) ) || (Index < 0))
             throw IndexOutOfBoundsException();
@@ -269,7 +269,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
+    void UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
     {
         if ((Index < 0) || ( o3tl::make_unsigned(Index) > maRoadmapItems.size()))
             throw IndexOutOfBoundsException();
@@ -299,7 +299,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::replaceByIndex( const sal_Int32 Index, const Any& Element)
+    void UnoControlRoadmapModel::replaceByIndex( const sal_Int32 Index, const Any& Element)
     {
         Reference< XInterface > xRoadmapItem;
         Element >>= xRoadmapItem;
@@ -312,25 +312,25 @@ using namespace cpo::uno;
     }
 
 
-    Type SAL_CALL UnoControlRoadmapModel::getElementType()
+    Type UnoControlRoadmapModel::getElementType()
     {
         Type aType = cppu::UnoType<XPropertySet>::get();
         return aType;
     }
 
 
-    bool SAL_CALL UnoControlRoadmapModel::hasElements()
+    bool UnoControlRoadmapModel::hasElements()
     {
         return !maRoadmapItems.empty();
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
+    void UnoControlRoadmapModel::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
     {
         maContainerListeners.addInterface( xListener );
     }
 
-    void SAL_CALL UnoControlRoadmapModel::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
+    void UnoControlRoadmapModel::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
     {
         maContainerListeners.removeInterface( xListener );
     }
@@ -355,7 +355,7 @@ cpo::uno::Any UnoRoadmapControl::queryAggregation(cpo::uno::Type const & aType) 
 }
 
 
-bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel)
+bool UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel)
     {
         Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )
@@ -426,7 +426,7 @@ void UnoRoadmapControl::elementReplaced( const ContainerEvent& rEvent )
 }
 
 
-void SAL_CALL UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent )
+void UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent )
 {
     sal_Int16 CurItemIndex = sal::static_int_cast< sal_Int16 >(rEvent.ItemId);
     Reference< XControlModel > xModel = getModel( );
@@ -437,7 +437,7 @@ void SAL_CALL UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent )
 }
 
 
-void SAL_CALL UnoRoadmapControl::addItemListener( const Reference< XItemListener >& l )
+void UnoRoadmapControl::addItemListener( const Reference< XItemListener >& l )
 {
     maItemListeners.addInterface( l );
     if( getPeer().is() && maItemListeners.getLength() == 1 )
@@ -448,7 +448,7 @@ void SAL_CALL UnoRoadmapControl::addItemListener( const Reference< XItemListener
 }
 
 
-void SAL_CALL UnoRoadmapControl::removeItemListener( const Reference< XItemListener >& l )
+void UnoRoadmapControl::removeItemListener( const Reference< XItemListener >& l )
 {
     if( getPeer().is() && maItemListeners.getLength() == 1 )
     {
@@ -460,7 +460,7 @@ void SAL_CALL UnoRoadmapControl::removeItemListener( const Reference< XItemListe
 }
 
 
-void SAL_CALL UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt )
+void UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt )
 {
     Reference< XPropertyChangeListener >  xPeer(getPeer(), UNO_QUERY);
     if ( xPeer.is() )

@@ -51,38 +51,38 @@ public:
     DefaultGridDataModel( DefaultGridDataModel const & i_copySource );
 
     // XMutableGridDataModel
-    virtual void SAL_CALL addRow( const Any& i_heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
-    virtual void SAL_CALL addRows( const cpo::uno::Sequence< cpo::uno::Any>& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
-    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const cpo::uno::Any& i_heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
-    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const cpo::uno::Sequence< cpo::uno::Any>& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
-    virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) override;
-    virtual void SAL_CALL removeAllRows(  ) override;
-    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void SAL_CALL updateRowData( const cpo::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
-    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const cpo::uno::Any& Heading ) override;
-    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void SAL_CALL addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
-    virtual void SAL_CALL removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void addRow( const Any& i_heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
+    virtual void addRows( const cpo::uno::Sequence< cpo::uno::Any>& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
+    virtual void insertRow( ::sal_Int32 i_index, const cpo::uno::Any& i_heading, const cpo::uno::Sequence< cpo::uno::Any >& Data ) override;
+    virtual void insertRows( ::sal_Int32 i_index, const cpo::uno::Sequence< cpo::uno::Any>& Headings, const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& Data ) override;
+    virtual void removeRow( ::sal_Int32 RowIndex ) override;
+    virtual void removeAllRows(  ) override;
+    virtual void updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void updateRowData( const cpo::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
+    virtual void updateRowHeading( ::sal_Int32 RowIndex, const cpo::uno::Any& Heading ) override;
+    virtual void updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void updateRowToolTip( ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
 
     // XGridDataModel
-    virtual ::sal_Int32 SAL_CALL getRowCount() override;
-    virtual ::sal_Int32 SAL_CALL getColumnCount() override;
-    virtual cpo::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 Row ) override;
-    virtual cpo::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) override;
-    virtual cpo::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) override;
+    virtual ::sal_Int32 getRowCount() override;
+    virtual ::sal_Int32 getColumnCount() override;
+    virtual cpo::uno::Any getCellData( ::sal_Int32 Column, ::sal_Int32 Row ) override;
+    virtual cpo::uno::Any getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) override;
+    virtual cpo::uno::Any getRowHeading( ::sal_Int32 RowIndex ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > getRowData( ::sal_Int32 RowIndex ) override;
 
     // OComponentHelper
     virtual void disposing( std::unique_lock<std::mutex>& ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 private:
     typedef ::std::pair< Any, Any >     CellData;
@@ -91,7 +91,7 @@ private:
 
     void broadcast(
         GridDataEvent const & i_event,
-        void ( SAL_CALL css::awt::grid::XGridDataListener::*i_listenerMethod )( css::awt::grid::GridDataEvent const & ),
+        void ( css::awt::grid::XGridDataListener::*i_listenerMethod )( css::awt::grid::GridDataEvent const & ),
         std::unique_lock<std::mutex>& i_instanceLock
     );
 
@@ -123,13 +123,13 @@ private:
     }
 
     void DefaultGridDataModel::broadcast( GridDataEvent const & i_event,
-        void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), std::unique_lock<std::mutex>& i_instanceLock )
+        void ( XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), std::unique_lock<std::mutex>& i_instanceLock )
     {
         maGridDataListeners.notifyEach( i_instanceLock, i_listenerMethod, i_event );
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount()
+    ::sal_Int32 DefaultGridDataModel::getRowCount()
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -137,7 +137,7 @@ private:
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount()
+    ::sal_Int32 DefaultGridDataModel::getColumnCount()
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -184,7 +184,7 @@ private:
     }
 
 
-    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row )
+    Any DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -192,7 +192,7 @@ private:
     }
 
 
-    Any SAL_CALL DefaultGridDataModel::getCellToolTip( ::sal_Int32 i_column, ::sal_Int32 i_row )
+    Any DefaultGridDataModel::getCellToolTip( ::sal_Int32 i_column, ::sal_Int32 i_row )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -200,7 +200,7 @@ private:
     }
 
 
-    Any SAL_CALL DefaultGridDataModel::getRowHeading( ::sal_Int32 i_row )
+    Any DefaultGridDataModel::getRowHeading( ::sal_Int32 i_row )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -212,7 +212,7 @@ private:
     }
 
 
-    Sequence< Any > SAL_CALL DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex )
+    Sequence< Any > DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -249,19 +249,19 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data )
+    void DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data )
     {
         insertRow( getRowCount(), i_heading, i_data );
     }
 
 
-    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data )
+    void DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
         insertRows( getRowCount(), i_headings, i_data );
     }
 
 
-    void SAL_CALL DefaultGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data )
+    void DefaultGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -285,7 +285,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data )
+    void DefaultGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
         if ( i_headings.getLength() != i_data.getLength() )
             throw IllegalArgumentException( OUString(), *this, -1 );
@@ -324,7 +324,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::removeRow( ::sal_Int32 i_rowIndex )
+    void DefaultGridDataModel::removeRow( ::sal_Int32 i_rowIndex )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -343,7 +343,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::removeAllRows(  )
+    void DefaultGridDataModel::removeAllRows(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -359,7 +359,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
+    void DefaultGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -374,7 +374,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values )
+    void DefaultGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -416,7 +416,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading )
+    void DefaultGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -434,7 +434,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
+    void DefaultGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -442,7 +442,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value )
+    void DefaultGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -453,14 +453,14 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
+    void DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
     {
         std::unique_lock aGuard(m_aMutex);
         maGridDataListeners.addInterface( aGuard, i_listener );
     }
 
 
-    void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
+    void DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
     {
         std::unique_lock aGuard(m_aMutex);
         maGridDataListeners.removeInterface( aGuard, i_listener );
@@ -479,23 +479,23 @@ private:
     }
 
 
-    OUString SAL_CALL DefaultGridDataModel::getImplementationName(  )
+    OUString DefaultGridDataModel::getImplementationName(  )
     {
         return u"stardiv.Toolkit.DefaultGridDataModel"_ustr;
     }
 
-    bool SAL_CALL DefaultGridDataModel::supportsService( const OUString& ServiceName )
+    bool DefaultGridDataModel::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  )
+    Sequence< OUString > DefaultGridDataModel::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.awt.grid.DefaultGridDataModel"_ustr };
     }
 
 
-    Reference< css::util::XCloneable > SAL_CALL DefaultGridDataModel::createClone(  )
+    Reference< css::util::XCloneable > DefaultGridDataModel::createClone(  )
     {
         std::unique_lock aGuard(m_aMutex);
         return new DefaultGridDataModel( *this );

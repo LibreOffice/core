@@ -35,10 +35,10 @@ class ClassName final : public ListenerMultiplexerBase<InterfaceName>, public In
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override; \
-    void                        SAL_CALL acquire() noexcept override; \
-    void                        SAL_CALL release() noexcept override; \
-    void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override; \
+    void                        acquire() noexcept override; \
+    void                        release() noexcept override; \
+    void                        disposing( const css::lang::EventObject& Source ) override;
 
 
 #define DECL_LISTENERMULTIPLEXER_START_DLLPUB( ClassName, InterfaceName ) \
@@ -46,10 +46,10 @@ class TOOLKIT_DLLPUBLIC ClassName final : public ListenerMultiplexerBase<Interfa
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override; \
-    void                        SAL_CALL acquire() noexcept override; \
-    void                        SAL_CALL release() noexcept override; \
-    void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override; \
+    void                        acquire() noexcept override; \
+    void                        release() noexcept override; \
+    void                        disposing( const css::lang::EventObject& Source ) override;
 
 
 #define DECL_LISTENERMULTIPLEXER_END \
@@ -61,8 +61,8 @@ ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
     : ListenerMultiplexerBase<InterfaceName>(rSource) \
 { \
 } \
-void SAL_CALL ClassName::acquire() noexcept { ListenerMultiplexerBase::acquire(); } \
-void SAL_CALL ClassName::release() noexcept { ListenerMultiplexerBase::release(); } \
+void ClassName::acquire() noexcept { ListenerMultiplexerBase::acquire(); } \
+void ClassName::release() noexcept { ListenerMultiplexerBase::release(); } \
 cpo::uno::Any ClassName::queryInterface( const cpo::uno::Type & rType ) \
 { \
     cpo::uno::Any aRet = ::cppu::queryInterface( rType, \
@@ -151,8 +151,8 @@ void ClassName::MethodName( const EventType& evt ) \
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    OUString SAL_CALL getImplementationName(  ) override { return u"stardiv.Toolkit." #ImplName ""_ustr; } \
-    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override   \
+    OUString getImplementationName(  ) override { return u"stardiv.Toolkit." #ImplName ""_ustr; } \
+    cpo::uno::Sequence< OUString > getSupportedServiceNames() override   \
                             { \
                                 cpo::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \

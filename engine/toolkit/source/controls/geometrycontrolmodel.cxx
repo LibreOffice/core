@@ -129,7 +129,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< Type > SAL_CALL OGeometryControlModel_Base::getTypes(  )
+    Sequence< Type > OGeometryControlModel_Base::getTypes(  )
     {
         // our own types
         Sequence< Type > aTypes = ::comphelper::concatSequences(
@@ -239,7 +239,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OGeometryControlModel_Base::queryAggregation( const Type& _rType )
+    Any OGeometryControlModel_Base::queryAggregation( const Type& _rType )
     {
         Any aReturn;
         if (_rType.equals(cppu::UnoType<XCloneable>::get()) && !m_bCloneable)
@@ -264,19 +264,19 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OGeometryControlModel_Base::queryInterface( const Type& _rType )
+    Any OGeometryControlModel_Base::queryInterface( const Type& _rType )
     {
         return OGCM_Base::queryInterface(_rType);
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::acquire(  ) noexcept
+    void OGeometryControlModel_Base::acquire(  ) noexcept
     {
         OGCM_Base::acquire();
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::release(  ) noexcept
+    void OGeometryControlModel_Base::release(  ) noexcept
     {
         OGCM_Base::release();
     }
@@ -297,20 +297,20 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL OGeometryControlModel_Base::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
+    bool OGeometryControlModel_Base::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
             sal_Int32 _nHandle, const Any& _rValue)
     {
         return OPropertyContainer::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+    void OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
     {
         OPropertyContainer::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
+    void OGeometryControlModel_Base::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
     {
         OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>(const_cast<OGeometryControlModel_Base*>(this)->getInfoHelper());
         OUString sPropName;
@@ -344,13 +344,13 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XPropertySetInfo> SAL_CALL OGeometryControlModel_Base::getPropertySetInfo()
+    Reference< XPropertySetInfo> OGeometryControlModel_Base::getPropertySetInfo()
     {
         return OPropertySetAggregationHelper::createPropertySetInfo(getInfoHelper());
     }
 
 
-    Reference< XCloneable > SAL_CALL OGeometryControlModel_Base::createClone(  )
+    Reference< XCloneable > OGeometryControlModel_Base::createClone(  )
     {
         OSL_ENSURE(m_bCloneable, "OGeometryControlModel_Base::createClone: invalid call!");
         if (!m_bCloneable)
@@ -407,7 +407,7 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XNameContainer > SAL_CALL OGeometryControlModel_Base::getEvents()
+    Reference< XNameContainer > OGeometryControlModel_Base::getEvents()
     {
         if( !mxEventContainer.is() )
             mxEventContainer = new toolkit::ScriptEventContainer();
@@ -415,7 +415,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::disposing()
+    void OGeometryControlModel_Base::disposing()
     {
         OGCM_Base::disposing();
         OPropertySetAggregationHelper::disposing();
@@ -547,7 +547,7 @@ using namespace cpo::uno;
     }
 
 
-    ::cppu::IPropertyArrayHelper& SAL_CALL OCommonGeometryControlModel::getInfoHelper()
+    ::cppu::IPropertyArrayHelper& OCommonGeometryControlModel::getInfoHelper()
     {
         return *getArrayHelper( m_nPropertyMapId );
     }
@@ -558,7 +558,7 @@ using namespace cpo::uno;
         return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
     }
 
-    Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  )
+    Sequence< sal_Int8 > OCommonGeometryControlModel::getImplementationId(  )
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
@@ -578,7 +578,7 @@ using namespace cpo::uno;
 
     }
 
-    void SAL_CALL OCommonGeometryControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
+    void OCommonGeometryControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {
         OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 

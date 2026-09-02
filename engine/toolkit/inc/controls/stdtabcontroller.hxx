@@ -53,33 +53,33 @@ public:
     static css::uno::Reference< css::awt::XControl >  FindControl( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
 
     // css::uno::XInterface
-    cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
+    cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
+    void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        release() noexcept override  { OWeakAggObject::release(); }
 
-    cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;
 
     // css::lang::XTypeProvider
-    cpo::uno::Sequence< cpo::uno::Type >  SAL_CALL getTypes() override;
-    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< cpo::uno::Type >  getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     getImplementationId() override;
 
     // XTabController
-    void SAL_CALL setModel( const css::uno::Reference< css::awt::XTabControllerModel >& Model ) override;
-    css::uno::Reference< css::awt::XTabControllerModel > SAL_CALL getModel(  ) override;
-    void SAL_CALL setContainer( const css::uno::Reference< css::awt::XControlContainer >& Container ) override;
-    css::uno::Reference< css::awt::XControlContainer > SAL_CALL getContainer(  ) override;
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls(  ) override;
-    void SAL_CALL autoTabOrder(  ) override;
-    void SAL_CALL activateTabOrder(  ) override;
-    void SAL_CALL activateFirst(  ) override;
-    void SAL_CALL activateLast(  ) override;
+    void setModel( const css::uno::Reference< css::awt::XTabControllerModel >& Model ) override;
+    css::uno::Reference< css::awt::XTabControllerModel > getModel(  ) override;
+    void setContainer( const css::uno::Reference< css::awt::XControlContainer >& Container ) override;
+    css::uno::Reference< css::awt::XControlContainer > getContainer(  ) override;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > > getControls(  ) override;
+    void autoTabOrder(  ) override;
+    void activateTabOrder(  ) override;
+    void activateFirst(  ) override;
+    void activateLast(  ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 

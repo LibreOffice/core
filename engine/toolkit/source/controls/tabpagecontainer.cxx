@@ -119,19 +119,19 @@ namespace
     }
 }
 
-Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::createTabPage( ::sal_Int16 i_tabPageID )
+Reference< XTabPageModel > UnoControlTabPageContainerModel::createTabPage( ::sal_Int16 i_tabPageID )
 {
     Sequence< Any > aInitArgs{ Any(i_tabPageID) };
     return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 
-Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage( ::sal_Int16 i_tabPageID, const OUString& i_resourceURL )
+Reference< XTabPageModel > UnoControlTabPageContainerModel::loadTabPage( ::sal_Int16 i_tabPageID, const OUString& i_resourceURL )
 {
     Sequence< Any > aInitArgs{ Any(i_tabPageID), Any(i_resourceURL) };
     return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 
-void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const cpo::uno::Any& aElement)
+void UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const cpo::uno::Any& aElement)
 {
     SolarMutexGuard aSolarGuard;
     uno::Reference < XTabPageModel > xTabPageModel;
@@ -156,22 +156,22 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
 
 }
 
-void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Index*/ )
+void UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Index*/ )
 {
 }
 // XIndexReplace
-void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Index*/, const cpo::uno::Any& /*Element*/ )
+void UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Index*/, const cpo::uno::Any& /*Element*/ )
 {
 }
 
 // XIndexAccess
-::sal_Int32 SAL_CALL UnoControlTabPageContainerModel::getCount(  )
+::sal_Int32 UnoControlTabPageContainerModel::getCount(  )
 {
     std::unique_lock aGuard( m_aMutex );
     return sal_Int32( m_aTabPageVector.size());
 }
 
-cpo::uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
+cpo::uno::Any UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( nIndex < 0 || o3tl::make_unsigned(nIndex) > m_aTabPageVector.size() )
@@ -180,12 +180,12 @@ cpo::uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  )
+cpo::uno::Type UnoControlTabPageContainerModel::getElementType(  )
 {
     return cppu::UnoType<css::awt::XControlModel>::get();
 }
 
-bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  )
+bool UnoControlTabPageContainerModel::hasElements(  )
 {
     std::unique_lock aGuard( m_aMutex );
     return !m_aTabPageVector.empty();
@@ -214,7 +214,7 @@ OUString UnoControlTabPageContainer::GetComponentServiceName() const
     return u"TabPageContainer"_ustr;
 }
 
-void SAL_CALL UnoControlTabPageContainer::dispose(  )
+void UnoControlTabPageContainer::dispose(  )
 {
     lang::EventObject aEvt;
     aEvt.Source = getXWeak();
@@ -234,43 +234,43 @@ void UnoControlTabPageContainer::createPeer( const uno::Reference< awt::XToolkit
 
 // XTabPageContainer
 
-::sal_Int16 SAL_CALL UnoControlTabPageContainer::getActiveTabPageID()
+::sal_Int16 UnoControlTabPageContainer::getActiveTabPageID()
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getActiveTabPageID();
 }
-void SAL_CALL UnoControlTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpageid )
+void UnoControlTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpageid )
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     xTPContainer->setActiveTabPageID(_activetabpageid);
 }
-::sal_Int16 SAL_CALL UnoControlTabPageContainer::getTabPageCount(  )
+::sal_Int16 UnoControlTabPageContainer::getTabPageCount(  )
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPageCount();
 }
-bool SAL_CALL UnoControlTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex )
+bool UnoControlTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex )
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->isTabPageActive(tabPageIndex);
 }
-Reference< css::awt::tab::XTabPage > SAL_CALL UnoControlTabPageContainer::getTabPage( ::sal_Int16 tabPageIndex )
+Reference< css::awt::tab::XTabPage > UnoControlTabPageContainer::getTabPage( ::sal_Int16 tabPageIndex )
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPage(tabPageIndex);
 }
-Reference< css::awt::tab::XTabPage > SAL_CALL UnoControlTabPageContainer::getTabPageByID( ::sal_Int16 tabPageID )
+Reference< css::awt::tab::XTabPage > UnoControlTabPageContainer::getTabPageByID( ::sal_Int16 tabPageID )
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPageByID(tabPageID);
 }
-void SAL_CALL UnoControlTabPageContainer::addTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener )
+void UnoControlTabPageContainer::addTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener )
 {
     m_aTabPageListeners.addInterface( listener );
     if( getPeer().is() && m_aTabPageListeners.getLength() == 1 )
@@ -279,7 +279,7 @@ void SAL_CALL UnoControlTabPageContainer::addTabPageContainerListener( const Ref
         xTabPageContainer->addTabPageContainerListener( &m_aTabPageListeners );
     }
 }
-void SAL_CALL UnoControlTabPageContainer::removeTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener )
+void UnoControlTabPageContainer::removeTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener )
 {
     if( getPeer().is() && m_aTabPageListeners.getLength() == 1 )
     {
@@ -316,7 +316,7 @@ void UnoControlTabPageContainer::updateFromModel()
         xContainerListener->elementInserted( aEvent );
     }
 }
-void SAL_CALL UnoControlTabPageContainer::addControl( const OUString& Name, const Reference< css::awt::XControl >& Control )
+void UnoControlTabPageContainer::addControl( const OUString& Name, const Reference< css::awt::XControl >& Control )
 {
     SolarMutexGuard aSolarGuard;
     ControlContainerBase::addControl(Name,Control);

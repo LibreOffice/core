@@ -109,12 +109,12 @@ void VCLXHatchWindow::InplaceDeactivate()
 }
 
 
-css::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize()
+css::awt::Size VCLXHatchWindow::getHatchBorderSize()
 {
     return aHatchBorderSize;
 }
 
-void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const css::awt::Size& _hatchbordersize )
+void VCLXHatchWindow::setHatchBorderSize( const css::awt::Size& _hatchbordersize )
 {
     if ( pHatchWindow )
     {
@@ -123,23 +123,23 @@ void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const css::awt::Size& _hatchb
     }
 }
 
-void SAL_CALL VCLXHatchWindow::setController( const uno::Reference< embed::XHatchWindowController >& xController )
+void VCLXHatchWindow::setController( const uno::Reference< embed::XHatchWindowController >& xController )
 {
     m_xController = xController;
 }
 
-void SAL_CALL VCLXHatchWindow::dispose()
+void VCLXHatchWindow::dispose()
 {
     pHatchWindow.reset();
     VCLXWindow::dispose();
 }
 
-void SAL_CALL VCLXHatchWindow::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void VCLXHatchWindow::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     VCLXWindow::addEventListener( xListener );
 }
 
-void SAL_CALL VCLXHatchWindow::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void VCLXHatchWindow::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     VCLXWindow::removeEventListener( xListener );
 }

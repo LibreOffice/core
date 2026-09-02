@@ -661,7 +661,7 @@ void UnoControl::disposing( const EventObject& rEvt )
 }
 
 
-void SAL_CALL UnoControl::setOutputSize( const awt::Size& aSize )
+void UnoControl::setOutputSize( const awt::Size& aSize )
 {
     Reference< XWindow2 > xPeerWindow;
     {
@@ -676,7 +676,7 @@ void SAL_CALL UnoControl::setOutputSize( const awt::Size& aSize )
 namespace
 {
     template < typename RETVALTYPE, typename DEFAULTTYPE >
-    RETVALTYPE lcl_askPeer( const uno::Reference< awt::XWindowPeer >& _rxPeer, RETVALTYPE (SAL_CALL XWindow2::*_pMethod)(), DEFAULTTYPE _aDefault )
+    RETVALTYPE lcl_askPeer( const uno::Reference< awt::XWindowPeer >& _rxPeer, RETVALTYPE (XWindow2::*_pMethod)(), DEFAULTTYPE _aDefault )
     {
         RETVALTYPE aReturn( _aDefault );
 
@@ -688,27 +688,27 @@ namespace
     }
 }
 
-awt::Size SAL_CALL UnoControl::getOutputSize(  )
+awt::Size UnoControl::getOutputSize(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::getOutputSize, awt::Size() );
 }
 
-bool SAL_CALL UnoControl::isVisible(  )
+bool UnoControl::isVisible(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::isVisible, maComponentInfos.bVisible );
 }
 
-bool SAL_CALL UnoControl::isActive(  )
+bool UnoControl::isActive(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::isActive, false );
 }
 
-bool SAL_CALL UnoControl::isEnabled(  )
+bool UnoControl::isEnabled(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::isEnabled, maComponentInfos.bEnable );
 }
 
-bool SAL_CALL UnoControl::hasFocus(  )
+bool UnoControl::hasFocus(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::hasFocus, false );
 }
@@ -1461,7 +1461,7 @@ Sequence< OUString > UnoControl::getSupportedServiceNames(  )
 }
 
 
-Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
+Reference< XAccessibleContext > UnoControl::getAccessibleContext(  )
 {
     // creation of the context will certainly require the SolarMutex ...
     SolarMutexGuard aSolarGuard;
@@ -1500,30 +1500,30 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
     return xCurrentContext;
 }
 
-void SAL_CALL UnoControl::addModeChangeListener( const Reference< XModeChangeListener >& _rxListener )
+void UnoControl::addModeChangeListener( const Reference< XModeChangeListener >& _rxListener )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     maModeChangeListeners.addInterface( _rxListener );
 }
 
-void SAL_CALL UnoControl::removeModeChangeListener( const Reference< XModeChangeListener >& _rxListener )
+void UnoControl::removeModeChangeListener( const Reference< XModeChangeListener >& _rxListener )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     maModeChangeListeners.removeInterface( _rxListener );
 }
 
-void SAL_CALL UnoControl::addModeChangeApproveListener( const Reference< XModeChangeApproveListener >& )
+void UnoControl::addModeChangeApproveListener( const Reference< XModeChangeApproveListener >& )
 {
     throw NoSupportException( );
 }
 
-void SAL_CALL UnoControl::removeModeChangeApproveListener( const Reference< XModeChangeApproveListener >&  )
+void UnoControl::removeModeChangeApproveListener( const Reference< XModeChangeApproveListener >&  )
 {
     throw NoSupportException( );
 }
 
 
-awt::Point SAL_CALL UnoControl::convertPointToLogic( const awt::Point& i_Point, ::sal_Int16 i_TargetUnit )
+awt::Point UnoControl::convertPointToLogic( const awt::Point& i_Point, ::sal_Int16 i_TargetUnit )
 {
     Reference< XUnitConversion > xPeerConversion;
     {
@@ -1536,7 +1536,7 @@ awt::Point SAL_CALL UnoControl::convertPointToLogic( const awt::Point& i_Point, 
 }
 
 
-awt::Point SAL_CALL UnoControl::convertPointToPixel( const awt::Point& i_Point, ::sal_Int16 i_SourceUnit )
+awt::Point UnoControl::convertPointToPixel( const awt::Point& i_Point, ::sal_Int16 i_SourceUnit )
 {
     Reference< XUnitConversion > xPeerConversion;
     {
@@ -1549,7 +1549,7 @@ awt::Point SAL_CALL UnoControl::convertPointToPixel( const awt::Point& i_Point, 
 }
 
 
-awt::Size SAL_CALL UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sal_Int16 i_TargetUnit )
+awt::Size UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sal_Int16 i_TargetUnit )
 {
     Reference< XUnitConversion > xPeerConversion;
     {
@@ -1562,7 +1562,7 @@ awt::Size SAL_CALL UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sa
 }
 
 
-awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sal_Int16 i_SourceUnit )
+awt::Size UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sal_Int16 i_SourceUnit )
 {
     Reference< XUnitConversion > xPeerConversion;
     {
@@ -1575,7 +1575,7 @@ awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sa
 }
 
 
-uno::Reference< awt::XStyleSettings > SAL_CALL UnoControl::getStyleSettings()
+uno::Reference< awt::XStyleSettings > UnoControl::getStyleSettings()
 {
     Reference< awt::XStyleSettingsSupplier > xPeerSupplier;
     {

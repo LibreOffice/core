@@ -50,59 +50,59 @@ public:
     vcl::Window* createVclControl( vcl::Window* pParent, sal_Int64 nWinStyle );
 
     // css::view::XSelectionSupplier
-    virtual bool SAL_CALL select( const cpo::uno::Any& xSelection ) override;
-    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
-    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual bool select( const cpo::uno::Any& xSelection ) override;
+    virtual cpo::uno::Any getSelection(  ) override;
+    virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // css::view::XMultiSelectionSupplier
-    virtual bool SAL_CALL addSelection( const cpo::uno::Any& Selection ) override;
-    virtual void SAL_CALL removeSelection( const cpo::uno::Any& Selection ) override;
-    virtual void SAL_CALL clearSelection(  ) override;
-    virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createReverseSelectionEnumeration(  ) override;
+    virtual bool addSelection( const cpo::uno::Any& Selection ) override;
+    virtual void removeSelection( const cpo::uno::Any& Selection ) override;
+    virtual void clearSelection(  ) override;
+    virtual ::sal_Int32 getSelectionCount(  ) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createSelectionEnumeration(  ) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createReverseSelectionEnumeration(  ) override;
 
     // css::awt::XTreeControl
-    virtual OUString SAL_CALL getDefaultExpandedGraphicURL() override;
-    virtual void SAL_CALL setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) override;
-    virtual OUString SAL_CALL getDefaultCollapsedGraphicURL() override;
-    virtual void SAL_CALL setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) override;
-    virtual bool SAL_CALL isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool SAL_CALL isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool SAL_CALL isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual void SAL_CALL removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::awt::Rectangle SAL_CALL getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool SAL_CALL isEditing(  ) override;
-    virtual bool SAL_CALL stopEditing(  ) override;
-    virtual void SAL_CALL cancelEditing(  ) override;
-    virtual void SAL_CALL startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void SAL_CALL addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
-    virtual void SAL_CALL removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual OUString getDefaultExpandedGraphicURL() override;
+    virtual void setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) override;
+    virtual OUString getDefaultCollapsedGraphicURL() override;
+    virtual void setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) override;
+    virtual bool isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual void removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual css::awt::Rectangle getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isEditing(  ) override;
+    virtual bool stopEditing(  ) override;
+    virtual void cancelEditing(  ) override;
+    virtual void startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual void removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
 
     // css::awt::tree::TreeDataModelListener
-    virtual void SAL_CALL treeNodesChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
-    virtual void SAL_CALL treeNodesInserted( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
-    virtual void SAL_CALL treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
-    virtual void SAL_CALL treeStructureChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
+    virtual void treeNodesChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
+    virtual void treeNodesInserted( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
+    virtual void treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
+    virtual void treeStructureChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
 
     // XEventListener
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    void disposing( const css::lang::EventObject& Source ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize() override;
-    css::awt::Size SAL_CALL getPreferredSize() override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
+    css::awt::Size getMinimumSize() override;
+    css::awt::Size getPreferredSize() override;
+    css::awt::Size calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
-    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
 private:
     /// @throws css::lang::IllegalArgumentException

@@ -42,15 +42,15 @@ namespace toolkit
         rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlScrollBarModel( *this ); }
 
         // css::beans::XMultiPropertySet
-        css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
         // css::io::XPersistObject
-        OUString SAL_CALL getServiceName() override;
+        OUString getServiceName() override;
 
         // XServiceInfo
-        OUString SAL_CALL getImplementationName() override;
+        OUString getImplementationName() override;
 
-        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
     };
 
 
@@ -67,42 +67,42 @@ namespace toolkit
                                     UnoScrollBarControl();
         OUString             GetComponentServiceName() const override;
 
-        cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
-        cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
-        void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
-        void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
-        void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
-        void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
-        void SAL_CALL dispose(  ) override;
+        cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
+        cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;
+        void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
+        void                        release() noexcept override  { OWeakAggObject::release(); }
+        void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+        void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
+        void dispose(  ) override;
 
         // css::lang::XTypeProvider
-        cpo::uno::Sequence< cpo::uno::Type >  SAL_CALL getTypes() override;
-        cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+        cpo::uno::Sequence< cpo::uno::Type >  getTypes() override;
+        cpo::uno::Sequence< sal_Int8 >                     getImplementationId() override;
 
         // css::awt::XAdjustmentListener
-        void SAL_CALL adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) override;
+        void adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) override;
 
         // css::awt::XScrollBar
-        void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
-        void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
-        void SAL_CALL setValue( sal_Int32 n ) override;
-        void SAL_CALL setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) override;
-        sal_Int32 SAL_CALL getValue(  ) override;
-        void SAL_CALL setMaximum( sal_Int32 n ) override;
-        sal_Int32 SAL_CALL getMaximum(  ) override;
-        void SAL_CALL setLineIncrement( sal_Int32 n ) override;
-        sal_Int32 SAL_CALL getLineIncrement(  ) override;
-        void SAL_CALL setBlockIncrement( sal_Int32 n ) override;
-        sal_Int32 SAL_CALL getBlockIncrement(  ) override;
-        void SAL_CALL setVisibleSize( sal_Int32 n ) override;
-        sal_Int32 SAL_CALL getVisibleSize(  ) override;
-        void SAL_CALL setOrientation( sal_Int32 n ) override;
-        sal_Int32 SAL_CALL getOrientation(  ) override;
+        void addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+        void removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+        void setValue( sal_Int32 n ) override;
+        void setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) override;
+        sal_Int32 getValue(  ) override;
+        void setMaximum( sal_Int32 n ) override;
+        sal_Int32 getMaximum(  ) override;
+        void setLineIncrement( sal_Int32 n ) override;
+        sal_Int32 getLineIncrement(  ) override;
+        void setBlockIncrement( sal_Int32 n ) override;
+        sal_Int32 getBlockIncrement(  ) override;
+        void setVisibleSize( sal_Int32 n ) override;
+        sal_Int32 getVisibleSize(  ) override;
+        void setOrientation( sal_Int32 n ) override;
+        sal_Int32 getOrientation(  ) override;
 
         // css::lang::XServiceInfo
-        OUString SAL_CALL getImplementationName() override;
+        OUString getImplementationName() override;
 
-        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
     };
 
 

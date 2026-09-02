@@ -65,7 +65,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXSpinButton, VCLXWindow, VCLXSpinButton_Base )
 
 
-    void SAL_CALL VCLXSpinButton::dispose( )
+    void VCLXSpinButton::dispose( )
     {
         {
             SolarMutexGuard aGuard;
@@ -79,14 +79,14 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL VCLXSpinButton::addAdjustmentListener( const Reference< XAdjustmentListener >& listener )
+    void VCLXSpinButton::addAdjustmentListener( const Reference< XAdjustmentListener >& listener )
     {
         if ( listener.is() )
             maAdjustmentListeners.addInterface( listener );
     }
 
 
-    void SAL_CALL VCLXSpinButton::removeAdjustmentListener( const Reference< XAdjustmentListener >& listener )
+    void VCLXSpinButton::removeAdjustmentListener( const Reference< XAdjustmentListener >& listener )
     {
         if ( listener.is() )
             maAdjustmentListeners.removeInterface( listener );
@@ -121,13 +121,13 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL VCLXSpinButton::setValue( sal_Int32 n )
+    void VCLXSpinButton::setValue( sal_Int32 n )
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValue, n );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue )
+    void VCLXSpinButton::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue )
     {
         SolarMutexGuard aGuard;
 
@@ -137,49 +137,49 @@ using namespace cpo::uno;
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getValue(  )
+    sal_Int32 VCLXSpinButton::getValue(  )
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValue );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setMinimum( sal_Int32 minValue )
+    void VCLXSpinButton::setMinimum( sal_Int32 minValue )
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMin, minValue );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setMaximum( sal_Int32 maxValue )
+    void VCLXSpinButton::setMaximum( sal_Int32 maxValue )
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMax, maxValue );
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getMinimum(  )
+    sal_Int32 VCLXSpinButton::getMinimum(  )
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMin );
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getMaximum(  )
+    sal_Int32 VCLXSpinButton::getMaximum(  )
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMax );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setSpinIncrement( sal_Int32 spinIncrement )
+    void VCLXSpinButton::setSpinIncrement( sal_Int32 spinIncrement )
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValueStep, spinIncrement );
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getSpinIncrement(  )
+    sal_Int32 VCLXSpinButton::getSpinIncrement(  )
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValueStep );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setOrientation( sal_Int32 orientation )
+    void VCLXSpinButton::setOrientation( sal_Int32 orientation )
     {
         SolarMutexGuard aGuard;
 
@@ -187,7 +187,7 @@ using namespace cpo::uno;
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getOrientation(  )
+    sal_Int32 VCLXSpinButton::getOrientation(  )
     {
         return  ( 0 != ( GetWindow()->GetStyle() & WB_HSCROLL ) )
             ?   ScrollBarOrientation::HORIZONTAL
@@ -227,7 +227,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL VCLXSpinButton::setProperty( const OUString& PropertyName, const Any& Value )
+    void VCLXSpinButton::setProperty( const OUString& PropertyName, const Any& Value )
     {
         SolarMutexGuard aGuard;
 
@@ -277,7 +277,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL VCLXSpinButton::getProperty( const OUString& PropertyName )
+    Any VCLXSpinButton::getProperty( const OUString& PropertyName )
     {
         SolarMutexGuard aGuard;
 
