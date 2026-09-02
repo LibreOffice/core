@@ -674,6 +674,13 @@ clipboardkey: <token>
     Current and previous hash remain valid for that period, always use
     the latest.
 
+relateddocumenttoken: <token>
+
+    A one-time token that authorizes this view to register a related document
+    over POST /cool/relateddocument. Sent when the view joins a document with
+    remote_documents enabled, and again with a fresh token after each accepted
+    POST, so a token is never accepted twice. Keep only the latest.
+
 contextmenu: <json description of the context menu>
 
     When the user right-clicks in the document, the content of the context

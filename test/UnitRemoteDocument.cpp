@@ -349,17 +349,17 @@ public:
     }
 };
 
-/// Registers a related document over POST /cool/relateddocument: the access
-/// token of any live session authorizes the request, a stranger's token does
-/// not, and the registered token then serves a subscription.
+/// Registers a related document over POST /cool/relateddocument: the request
+/// is authorized by the view's own one-time token, a wrong token is refused,
+/// the token is accepted only once, and the registered access token then
+/// serves that view's subscription.
 class UnitRelatedDocumentPost : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, WaitLoadStatus, LoadSecond, WaitSecondView, Posting, WaitConnected,
-               Done)
-    _phase;
+    STATE_ENUM(Phase, Load, WaitToken, Posting, WaitConnected, Done) _phase;
 
-    /// A second user of the same document, holding its own access token.
-    std::unique_ptr<UnitWebSocket> _secondWs;
+    /// The one-time token the view was handed for the POST.
+    std::string _oneTimeToken;
+    bool _documentLoaded = false;
 
     std::thread _postThread;
 
@@ -373,14 +373,13 @@ class UnitRelatedDocumentPost : public WopiTestServer
         return helpers::getTestServerURI() + "/wopi/files/2";
     }
 
-    /// POSTs the registration authorized by the given token and returns the
-    /// response status.
-    unsigned postRelatedDocument(const std::string& accessToken)
+    /// POSTs the registration authorized by the given one-time token and
+    /// returns the response status.
+    unsigned postRelatedDocument(const std::string& oneTimeToken)
     {
-        http::Request request("/cool/relateddocument?WOPISrc=" +
-                                  Uri::encode(documentWopiSrc()),
+        http::Request request("/cool/relateddocument?WOPISrc=" + Uri::encode(documentWopiSrc()),
                               http::Request::VERB_POST);
-        request.setBody("{\"AccessToken\":\"" + accessToken +
+        request.setBody("{\"Nonce\":\"" + oneTimeToken +
                             "\",\"RelatedDocument\":{\"WOPISrc\":\"" + remoteWopiSrc() +
                             "\",\"AccessToken\":\"remotetoken\""
                             ",\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"}}",
@@ -390,6 +389,35 @@ class UnitRelatedDocumentPost : public WopiTestServer
         session->setTimeout(std::chrono::seconds(10));
         const std::shared_ptr<const http::Response> response = session->syncRequest(request);
         return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+    }
+
+    /// Runs the POST sequence once the view has a token and the document is up.
+    void maybeStartPost()
+    {
+        if (_phase != Phase::WaitToken || _oneTimeToken.empty() || !_documentLoaded ||
+            _postThread.joinable())
+            return;
+
+        TRANSITION_STATE(_phase, Phase::Posting);
+        _postThread = std::thread(
+            [this, oneTimeToken = _oneTimeToken]
+            {
+                // A token no view holds is refused.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
+                                 postRelatedDocument("wrongtoken"));
+
+                // The view's own one-time token authorizes the registration.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                 postRelatedDocument(oneTimeToken));
+
+                // The same token is not accepted a second time.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
+                                 postRelatedDocument(oneTimeToken));
+
+                // The registered token serves this view's subscription.
+                TRANSITION_STATE(_phase, Phase::WaitConnected);
+                WSD_CMD("remotedocsubscribe wopisrc=" + Uri::encode(remoteWopiSrc()));
+            });
     }
 
 public:
@@ -415,42 +443,27 @@ public:
     {
         TST_LOG("onDocumentLoaded: [" << message << ']');
 
-        if (_phase == Phase::WaitLoadStatus)
-            TRANSITION_STATE(_phase, Phase::LoadSecond);
-
-        return true;
-    }
-
-    bool onViewLoaded(const std::string& message) override
-    {
-        TST_LOG("onViewLoaded: [" << message << ']');
-
-        if (_phase == Phase::WaitSecondView)
-        {
-            TRANSITION_STATE(_phase, Phase::Posting);
-            _postThread = std::thread(
-                [this]
-                {
-                    // A token no session holds is refused.
-                    LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
-                                     postRelatedDocument("strangertoken"));
-
-                    // The second user's token authorizes the registration.
-                    LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
-                                     postRelatedDocument("secondtoken"));
-
-                    // The registered token serves the subscription.
-                    TRANSITION_STATE(_phase, Phase::WaitConnected);
-                    WSD_CMD("remotedocsubscribe wopisrc=" + Uri::encode(remoteWopiSrc()));
-                });
-        }
-
+        _documentLoaded = true;
+        maybeStartPost();
         return true;
     }
 
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
+        if (message.starts_with("relateddocumenttoken:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            // Keep the first token; a fresh one arrives after the accepted POST.
+            if (_oneTimeToken.empty())
+            {
+                _oneTimeToken = std::string(message.substr(message.find(' ') + 1));
+                maybeStartPost();
+            }
+
+            return false;
+        }
+
         if (message.starts_with("relateddocuments:"))
         {
             TST_LOG("Got: [" << message << ']');
@@ -468,12 +481,10 @@ public:
 
         if (message.find("event=connected") != std::string::npos)
         {
-            // The event echo reaches every view, so it may be seen again
-            // after the first delivery.
             if (_phase == Phase::WaitConnected)
             {
                 TRANSITION_STATE(_phase, Phase::Done);
-                passTest("A live collaborator's token registered a related document");
+                passTest("The view's one-time token registered a related document");
             }
         }
         else if (message.find("event=error") != std::string::npos)
@@ -486,33 +497,12 @@ public:
 
     void invokeWSDTest() override
     {
-        switch (_phase)
+        if (_phase == Phase::Load)
         {
-            case Phase::Load:
-            {
-                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+            TRANSITION_STATE(_phase, Phase::WaitToken);
 
-                initWebsocket("/wopi/files/1?access_token=firsttoken");
-                WSD_CMD("load url=" + getWopiSrc());
-                break;
-            }
-            case Phase::LoadSecond:
-            {
-                TRANSITION_STATE(_phase, Phase::WaitSecondView);
-
-                const std::string secondWopiSrc =
-                    Uri::encode(documentWopiSrc() + "?access_token=secondtoken");
-                TST_LOG("Connecting a second user: " << secondWopiSrc);
-                _secondWs = std::make_unique<UnitWebSocket>(
-                    socketPoll(), "/cool/" + secondWopiSrc + "/ws", getTestname());
-                helpers::sendTextFrame(_secondWs->getWebSocket(), "load url=" + secondWopiSrc,
-                                       getTestname());
-                break;
-            }
-            default:
-            {
-                break;
-            }
+            initWebsocket("/wopi/files/1?access_token=firsttoken");
+            WSD_CMD("load url=" + getWopiSrc());
         }
     }
 };
@@ -865,11 +855,154 @@ public:
     }
 };
 
+/// Two views of one document hold different access to the same related source:
+/// only the view whose UserPrivateInfo carries the token can subscribe. The
+/// other view, which sees the source but holds no token, is refused, so one
+/// view's access is never borrowed by another.
+class UnitRemoteDocumentIsolation : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitFirstLoad, LoadSecond, WaitSecondView, WaitOutcome, Done) _phase;
+
+    /// The second view of the same document, holding no token for the source.
+    std::unique_ptr<UnitWebSocket> _secondWs;
+
+    bool _sawConnected = false;
+    bool _sawNoToken = false;
+
+    std::string remoteWopiSrc() const
+    {
+        return helpers::getTestServerURI() + "/wopi/files/2";
+    }
+
+    std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+
+public:
+    UnitRemoteDocumentIsolation()
+        : WopiTestServer("UnitRemoteDocumentIsolation")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        if (!Poco::URI(request.getURI()).getPath().ends_with("/1"))
+            return;
+
+        // Both views see the source, but only the first view is given a token
+        // for it, in its own UserPrivateInfo.
+        if (request.getURI().find("access_token=firsttoken") != std::string::npos)
+        {
+            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
+        }
+        else
+        {
+            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
+            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+            entry->set("WOPISrc", remoteWopiSrc());
+            relatedDocuments->add(entry);
+            fileInfo->set("RelatedDocuments", relatedDocuments);
+        }
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitFirstLoad)
+            TRANSITION_STATE(_phase, Phase::LoadSecond);
+
+        return true;
+    }
+
+    bool onViewLoaded(const std::string& message) override
+    {
+        TST_LOG("onViewLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitSecondView)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitOutcome);
+
+            // The first view holds the token and connects.
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+
+            // The second view holds no token for the source and is refused.
+            helpers::sendTextFrame(_secondWs->getWebSocket(),
+                                   "remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc(),
+                                   getTestname());
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotedocevent:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+            _sawConnected = true;
+        else if (message.find("event=error") != std::string::npos &&
+                 message.find("kind=notoken") != std::string::npos)
+            _sawNoToken = true;
+
+        if (_phase == Phase::WaitOutcome && _sawConnected && _sawNoToken)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("Only the view holding the token subscribed; the other was refused");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstLoad);
+
+                initWebsocket("/wopi/files/1?access_token=firsttoken");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::LoadSecond:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondView);
+
+                const std::string secondWopiSrc =
+                    Uri::encode(helpers::getTestServerURI() + "/wopi/files/1?access_token=secondtoken");
+                TST_LOG("Connecting a second view: " << secondWopiSrc);
+                _secondWs = std::make_unique<UnitWebSocket>(
+                    socketPoll(), "/cool/" + secondWopiSrc + "/ws", getTestname());
+                helpers::sendTextFrame(_secondWs->getWebSocket(), "load url=" + secondWopiSrc,
+                                       getTestname());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
-                              new UnitRemoteDocumentMutual(), new UnitRemoteDocumentCommand(),
-                              new UnitRemoteDocumentMissing(), nullptr };
+                              new UnitRelatedDocumentPost(), new UnitRemoteDocumentMutual(),
+                              new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
+                              new UnitRemoteDocumentIsolation(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

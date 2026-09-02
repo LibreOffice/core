@@ -469,10 +469,12 @@ public:
     void setRemoteDocumentViewToken(const std::string& tag, const std::string& wopiSrc,
                                     const std::string& accessToken);
 
-    /// Records a related document and gives its access token to the view whose
-    /// access token matches the caller's, coming from POST /cool/relateddocument.
-    void registerRemoteDocumentToken(const std::string& callerAccessToken,
-                                     const std::string& wopiSrc, const std::string& accessToken,
+    /// Records a related document and gives its access token to the view that
+    /// holds the given one-time token, coming from POST /cool/relateddocument.
+    /// Consumes and rotates that view's token. Returns false when no view holds
+    /// the token, so the request is refused and nothing is recorded.
+    bool registerRemoteDocumentToken(const std::string& oneTimeToken, const std::string& wopiSrc,
+                                     const std::string& accessToken,
                                      const std::string& lastModifiedTime);
 
     /// Opens or drops one view's subscription to a remote document. The view

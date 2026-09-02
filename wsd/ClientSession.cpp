@@ -86,6 +86,8 @@ using Poco::Path;
 
 // rotates regularly
 const int ClipboardTokenLengthBytes = 16;
+// One-time token authorizing a POST to /cool/relateddocument, rotated per use.
+const int RelatedDocumentTokenLengthBytes = 32;
 // home-use, disabled by default.
 const int ProxyAccessTokenLengthBytes = 32;
 
@@ -251,6 +253,18 @@ void ClientSession::rotateClipboardKey(bool notifyClient)
             " last was " << _clipboardKeys[1]);
     if (notifyClient)
         sendTextFrame("clipboardkey: " + _clipboardKeys[0]);
+}
+
+void ClientSession::rotateRelatedDocumentToken(bool notifyClient)
+{
+    if (_state == SessionState::WAIT_DISCONNECT)
+        return;
+
+    // A fresh hard-to-guess token. The previous one, if any, stops being
+    // accepted, so an accepted POST cannot be replayed.
+    _relatedDocumentToken = Util::rng::getHexString(RelatedDocumentTokenLengthBytes);
+    if (notifyClient)
+        sendTextFrame("relateddocumenttoken: " + _relatedDocumentToken);
 }
 
 std::string ClientSession::getClipboardURI(bool encode)
@@ -4237,6 +4251,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tclipboardKeys[1]: " << _clipboardKeys[1]
        << "\n\t\tclip sockets: " << _clipSockets.size()
        << "\n\t\tproxy access:: " << _proxyAccess
+       << "\n\t\trelatedDocumentToken set: " << !_relatedDocumentToken.empty()
        << "\n\t\tclientSelectedMode: " << _clientSelectedMode
        << "\n\t\tvisibleAreaMode: " << _visibleAreaMode
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()

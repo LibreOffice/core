@@ -348,6 +348,18 @@ public:
     /// Generate and rotate a new clipboard hash, sending it if appropriate
     void rotateClipboardKey(bool notifyClient);
 
+    /// Generate a fresh one-time token that authorizes a POST to
+    /// /cool/relateddocument for this view, sending it to the client when
+    /// notifyClient is set. Each accepted POST consumes and rotates it.
+    void rotateRelatedDocumentToken(bool notifyClient);
+
+    /// True when the given token is this view's current related document POST
+    /// token, and not empty.
+    bool matchesRelatedDocumentToken(const std::string& token) const
+    {
+        return !token.empty() && token == _relatedDocumentToken;
+    }
+
     /// Generate an access token for this session via proxy protocol.
     const std::string &getOrCreateProxyAccess();
 
@@ -557,6 +569,10 @@ private:
 
     /// Secure session id token for proxyprotocol authentication
     std::string _proxyAccess;
+
+    /// The current one-time token that authorizes a POST to
+    /// /cool/relateddocument for this view. Empty until the first is generated.
+    std::string _relatedDocumentToken;
 
     /// Store last sent payload of form field button, so we can filter out redundant messages.
     std::string _lastSentFormFielButtonMessage;

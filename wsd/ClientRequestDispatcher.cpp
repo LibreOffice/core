@@ -2266,22 +2266,22 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
         return false;
     }
 
-    // Tokens travel only in the body, never in the URL. The caller proves
-    // access to the target document with its own token, and names the
-    // related document the same way a CheckFileInfo RelatedDocuments entry
-    // does:
-    //   { "AccessToken": "<token of the target document>",
+    // Tokens travel only in the body, never in the URL. The caller proves it
+    // is one of the document's browser views by echoing that view's one-time
+    // related-document token, and names the related document the same way a
+    // CheckFileInfo RelatedDocuments entry does:
+    //   { "Nonce": "<the view's one-time related-document token>",
     //     "RelatedDocument": { "WOPISrc": "...", "AccessToken": "...",
     //                          "LastModifiedTime": "..." } }
     const std::string body(std::istreambuf_iterator<char>(message), {});
-    std::string accessToken;
+    std::string oneTimeToken;
     std::string remoteWopiSrc;
     std::string remoteAccessToken;
     std::string remoteLastModifiedTime;
     Poco::JSON::Object::Ptr object;
     if (JsonUtil::parseJSON(body, object))
     {
-        JsonUtil::findJSONValue(object, "AccessToken", accessToken);
+        JsonUtil::findJSONValue(object, "Nonce", oneTimeToken);
         if (auto relatedDocument = object->getObject("RelatedDocument"))
         {
             JsonUtil::findJSONValue(relatedDocument, "WOPISrc", remoteWopiSrc);
@@ -2290,14 +2290,14 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
         }
     }
 
-    if (accessToken.empty() || remoteWopiSrc.empty() || remoteAccessToken.empty())
+    if (oneTimeToken.empty() || remoteWopiSrc.empty() || remoteAccessToken.empty())
     {
-        LOG_ERR_S("RelatedDocument request rejected: incomplete body (have AccessToken: "
-                  << !accessToken.empty() << ", RelatedDocument WOPISrc: " << !remoteWopiSrc.empty()
+        LOG_ERR_S("RelatedDocument request rejected: incomplete body (have Nonce: "
+                  << !oneTimeToken.empty() << ", RelatedDocument WOPISrc: " << !remoteWopiSrc.empty()
                   << ", RelatedDocument AccessToken: " << !remoteAccessToken.empty()
                   << "): " << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
-                                         "missing AccessToken or RelatedDocument");
+                                         "missing Nonce or RelatedDocument");
         return true;
     }
 
@@ -2320,7 +2320,7 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
 
     docBroker->setupTransfer(
         disposition,
-        [docBroker, accessToken = std::move(accessToken),
+        [docBroker, oneTimeToken = std::move(oneTimeToken),
          remoteWopiSrc = std::move(remoteWopiSrc),
          remoteAccessToken = std::move(remoteAccessToken),
          remoteLastModifiedTime = std::move(remoteLastModifiedTime)](
@@ -2328,19 +2328,18 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
-            // The caller must hold the access token of one of the document's
-            // live sessions.
-            if (!docBroker->isKnownAccessToken(accessToken))
+            // The remote document's token becomes private to the one view that
+            // holds the one-time token. A request that carries no view's
+            // current token is refused, and the token is consumed on success.
+            if (!docBroker->registerRemoteDocumentToken(oneTimeToken, remoteWopiSrc,
+                                                        remoteAccessToken, remoteLastModifiedTime))
             {
                 LOG_ERR_S("RelatedDocument request for [" << docBroker->getDocKey()
-                                                          << "] with a mismatching access token");
+                                                          << "] with an invalid one-time token");
                 HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
-                                                 "invalid access_token");
+                                                 "invalid token");
                 return;
             }
-
-            docBroker->registerRemoteDocumentToken(accessToken, remoteWopiSrc, remoteAccessToken,
-                                                   remoteLastModifiedTime);
 
             http::Response httpResponse(http::StatusCode::OK);
             httpResponse.setContentLength(0);

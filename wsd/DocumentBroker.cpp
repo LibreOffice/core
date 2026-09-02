@@ -53,6 +53,7 @@
 #include <wsd/Process.hpp>
 #include <wsd/ProxyProtocol.hpp>
 #include <wsd/QuarantineUtil.hpp>
+#include <wsd/RemoteDocumentBroker.hpp>
 #include <wsd/Storage.hpp>
 #include <wsd/TileCache.hpp>
 #include <wsd/Unzip.hpp>
@@ -4519,6 +4520,11 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // changes are broadcast.
         if (!_relatedDocuments.empty())
             _relatedDocuments.sendTo(session);
+
+        // Give the view its first one-time token for registering a related
+        // document over POST /cool/relateddocument.
+        if (RemoteDocumentBroker::isEnabled())
+            session->rotateRelatedDocumentToken(/*notifyClient=*/true);
 #endif
 
         const std::size_t count = _sessions.size();
@@ -5035,25 +5041,29 @@ void DocumentBroker::setRemoteDocumentViewToken(const std::string& tag,
     _relatedDocuments.setViewToken(*this, tag, wopiSrc, accessToken);
 }
 
-void DocumentBroker::registerRemoteDocumentToken(const std::string& callerAccessToken,
+bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken,
                                                  const std::string& wopiSrc,
                                                  const std::string& accessToken,
                                                  const std::string& lastModifiedTime)
 {
     ASSERT_CORRECT_THREAD();
 
-    setRemoteDocumentSource(wopiSrc, lastModifiedTime);
-
-    // The token is private to the view whose own access token the caller
-    // proved it holds, not to every view of the document.
+    // The token is private to the one view that was handed the one-time token,
+    // not to every view of the document. Nothing is recorded for a request
+    // that carries no view's current token.
     for (const auto& it : _sessions)
     {
-        if (it.second->getAuthorization().matchesToken(callerAccessToken))
+        if (it.second->matchesRelatedDocumentToken(oneTimeToken))
         {
+            setRemoteDocumentSource(wopiSrc, lastModifiedTime);
             setRemoteDocumentViewToken(it.first, wopiSrc, accessToken);
-            return;
+            // Consume the one-time token and hand the view its next one.
+            it.second->rotateRelatedDocumentToken(/*notifyClient=*/true);
+            return true;
         }
     }
+
+    return false;
 }
 
 void DocumentBroker::handleRemoteDocumentSubscribe(const std::string& tag,
@@ -5121,9 +5131,9 @@ void DocumentBroker::addToIncomingDocKeyChain(const std::string& docKeyChain)
     _relatedDocuments.addToIncomingDocKeyChain(*this, docKeyChain);
 }
 
-void DocumentBroker::removeRemoteSubscription(const std::string& wopiSrc, const std::string& tag)
+void DocumentBroker::removeRemoteSubscription(const std::string& tag, const std::string& wopiSrc)
 {
-    _relatedDocuments.removeSubscription(*this, wopiSrc, tag);
+    _relatedDocuments.removeSubscription(*this, tag, wopiSrc);
 }
 
 void DocumentBroker::removeRemoteDocumentView(const std::string& tag)
