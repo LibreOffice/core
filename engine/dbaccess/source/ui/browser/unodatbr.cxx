@@ -3484,10 +3484,6 @@ vcl::Window* SbaTableQueryBrowser::getMenuParent() const
     return m_pTreeView;
 }
 
-void SbaTableQueryBrowser::adjustMenuPosition(const weld::TreeView&, ::Point&) const
-{
-}
-
 bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing )
 {
     _rCommand.clear();

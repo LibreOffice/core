@@ -215,7 +215,7 @@ public:
         return false;
     }
 
-    virtual void SetWidget(weld::CustomWidget* pWidget) { m_pWidget = pWidget; }
+    void SetWidget(weld::CustomWidget* pWidget) { m_pWidget = pWidget; }
 
     void Invalidate()
     {

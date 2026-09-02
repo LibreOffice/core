@@ -357,7 +357,6 @@ namespace dbaui
 
         // IController
         virtual void executeChecked(const css::util::URL& _rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
-        virtual bool isDataSourceReadOnly() const override;
         virtual css::uno::Reference< css::frame::XController > getXController() override;
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) override;
 

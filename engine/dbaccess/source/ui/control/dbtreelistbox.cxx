@@ -455,9 +455,6 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
     }
 
-    // adjust pos relative to m_xTreeView to relative to xMenuParent
-    m_pContextMenuProvider->adjustMenuPosition(*m_xTreeView, aPos);
-
     // do action for selected entry in popup menu
     css::uno::Reference<css::awt::XWindowPeer> xParent(xSourceWindow, css::uno::UNO_QUERY);
     xPopupMenu->execute(xParent, css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1), css::awt::PopupMenuDirection::EXECUTE_DOWN);

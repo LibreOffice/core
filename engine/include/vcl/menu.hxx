@@ -409,7 +409,7 @@ public:
      */
     const OUString& get_id() const { return maID; }
 
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) const;
+    void DumpAsPropertyTree(tools::JsonWriter&) const;
 
 private:
     rtl::Reference<comphelper::OAccessible> CreateAccessible();

@@ -52,12 +52,6 @@ namespace dbaui
         */
         virtual void executeChecked(const css::util::URL& _rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
-        /** checks if the selected data source is read only
-            @return
-                <TRUE/> if read only, otherwise <FALSE/>
-        */
-        virtual bool isDataSourceReadOnly() const = 0;
-
         /** provides access to the model of the controller
 
             This must be the same model as returned by XController::getModel, and might be <NULL/> when

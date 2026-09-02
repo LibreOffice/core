@@ -678,10 +678,6 @@ void Menu::SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits )
 
         pData->nBits = nBits;
 
-        // update native menu
-        if (ImplGetSalMenu())
-            ImplGetSalMenu()->SetItemBits(nPos, nBits);
-
         if (bRoleBitsChanged)
             ImplCallEventListeners(VclEventId::MenuItemRoleChanged, nPos);
     }
@@ -1142,9 +1138,6 @@ void Menu::SetTipHelpText( sal_uInt16 nItemId, const OUString& rStr )
     if ( pData )
     {
         pData->aTipHelpText = rStr;
-
-        if (ImplGetSalMenu() && pData->pSalMenuItem)
-            ImplGetSalMenu()->SetItemTooltip(pData->pSalMenuItem.get(), rStr);
     }
 }
 

@@ -98,11 +98,6 @@ namespace dbaui
 
         virtual vcl::Window* getMenuParent() const = 0;
 
-        /** adjust rPos which is initially relative to rControl to be relative to
-            the window of getMenuParent
-        */
-        virtual void adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const = 0;
-
     protected:
         ~IContextMenuProvider() {}
     };

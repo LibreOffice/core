@@ -114,7 +114,7 @@ public:
     virtual void StateChanged( StateChangedType nType ) override;
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void PopupModeEnd();
+    void PopupModeEnd();
 
     SAL_DLLPRIVATE void SetTitleType( FloatWinTitleType nTitle );
     FloatWinTitleType GetTitleType() const { return mnTitle; }

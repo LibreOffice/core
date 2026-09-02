@@ -142,8 +142,6 @@ void MenuButton::ExecuteMenu()
 {
     mbStartingMenu = true;
 
-    PrepareExecute();
-
     if (!mpMenu && !mpFloatingWindow)
     {
         mbStartingMenu = false;

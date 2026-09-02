@@ -256,7 +256,6 @@ void OGenericUnoController::disposing(const EventObject& Source)
 void OGenericUnoController::modified(const EventObject& aEvent)
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    if ( !isDataSourceReadOnly() )
     {
         Reference<XModifiable> xModi(aEvent.Source,UNO_QUERY);
         if ( xModi.is() )
@@ -968,11 +967,6 @@ void OGenericUnoController::addMouseClickHandler( const Reference< XMouseClickHa
 void OGenericUnoController::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
 {
     m_aUserInputInterception.removeMouseClickHandler( _rxHandler );
-}
-
-bool OGenericUnoController::isDataSourceReadOnly() const
-{
-    return false;
 }
 
 Reference< XController > OGenericUnoController::getXController()
