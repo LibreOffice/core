@@ -76,6 +76,16 @@ gb_MSBUILD_DEPENDENCY_TRACKING := $(if $(gb_FULLDEPS),,/p:TrackFileAccess=false)
 # msbuild reads the props path as a Windows path.
 gb_MSBUILD_DEBUGINFO := $(if $(ENABLE_Z7_DEBUG),/p:ForceImportBeforeCppTargets=$(shell cygpath -m $(GBUILDDIR)/platform/msbuild-debuginfo.props))
 
+# ccache refuses a cl command line that names more than one source file. UseMultiToolTask makes
+# msbuild run one cl per source instead of batching them into a single CL task.
+gb_MSBUILD_CCACHE := $(if $(MSBUILD_CCACHE),/p:CLToolPath=$(MSBUILD_CCACHE) /p:CLToolExe=cl.exe \
+	/p:UseMultiToolTask=true /p:MultiProcMaxCount=$(MSBUILD_CCACHE_WIDTH))
+
+# CXX is "<ccache> <compiler> <extra cxx flags>". config_host.mk spells the ccache word the same
+# in both variables, so dropping CCACHE leaves the compiler as the first word.
+gb_MSBUILD_CCACHE_ENV := $(if $(MSBUILD_CCACHE),\
+	CCACHE_COMPILER=$(firstword $(filter-out $(CCACHE),$(CXX))))
+
 gb_CONFIGURE_PLATFORMS := \
 	$(if $(and $(filter i686-pc-cygwin,$(HOST_PLATFORM)),$(filter x86_64-pc-cygwin,$(BUILD_PLATFORM))), \
 		--build=$(HOST_PLATFORM),--build=$(BUILD_PLATFORM)) --host=$(HOST_PLATFORM)

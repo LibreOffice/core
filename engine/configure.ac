@@ -13388,6 +13388,13 @@ else
 fi
 AC_SUBST(PARALLELISM)
 
+dnl msbuild has no job server client, so limit how many compiles one external runs at once.
+MSBUILD_CCACHE_WIDTH=4
+if test $PARALLELISM -ne 0 -a $PARALLELISM -lt $MSBUILD_CCACHE_WIDTH; then
+    MSBUILD_CCACHE_WIDTH=$PARALLELISM
+fi
+AC_SUBST(MSBUILD_CCACHE_WIDTH)
+
 AC_MSG_CHECKING([for make load limit])
 if test "$with_load_limit" = "no"; then
     LOADLIMIT=
