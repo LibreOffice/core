@@ -17,7 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <rtl/character.hxx>
 #include <AnnotationWin.hxx>
 #include <comphelper/kit.hxx>
 #include <hintids.hxx>
@@ -1307,6 +1310,60 @@ FIELD_INSERT:
                             aNewDesc.ChgHeaderShare(/*Share=*/false);
                         else
                             aNewDesc.ChgFooterShare(/*Share=*/false);
+                    }
+                }
+                else if (!pDlg->GetMirrorOnEvenPages()
+                         && ((bHeader && !rDesc.IsHeaderShared())
+                             || (!bHeader && !rDesc.IsFooterShared())))
+                {
+                    // Only a split that this wizard made is taken back, which its own bookmarks
+                    // identify, so a header/footer the user split stays split. Both page numbers
+                    // are removed, because the two texts merge into one that takes a single one.
+                    std::vector<SwMarkName> aWizardMarks;
+                    for (auto it = rIDMA.getAllMarksBegin(); it != rIDMA.getAllMarksEnd(); ++it)
+                    {
+                        const OUString& rName = (*it)->GetName().toString();
+                        if (!rName.startsWith(sBookmarkName))
+                            continue;
+
+                        // What follows the prefix is the page the number went on.
+                        const std::u16string_view aPageNumber(
+                            rName.subView(sBookmarkName.getLength()));
+                        if (!aPageNumber.empty()
+                            && std::all_of(aPageNumber.begin(), aPageNumber.end(),
+                                           [](sal_Unicode c) { return rtl::isAsciiDigit(c); }))
+                        {
+                            aWizardMarks.push_back((*it)->GetName());
+                        }
+                    }
+
+                    // Removing one page number invalidates the mark iterators, so look each mark
+                    // up by name.
+                    for (const SwMarkName& rWizardMark : aWizardMarks)
+                    {
+                        ppMark = rIDMA.findMark(rWizardMark);
+                        if (ppMark == rIDMA.getAllMarksEnd() || !*ppMark)
+                            continue;
+
+                        SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
+                        rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
+                    }
+
+                    if (!aWizardMarks.empty())
+                    {
+                        bChangePageDesc = true;
+
+                        // Margin mirroring came on with the numbers, so it comes off with them.
+                        if ((aNewDesc.ReadUseOn() & UseOnPage::Mirror) == UseOnPage::Mirror)
+                        {
+                            aNewDesc.WriteUseOn((aNewDesc.ReadUseOn() & ~UseOnPage::Mirror)
+                                                | UseOnPage::All);
+                        }
+
+                        if (bHeader)
+                            aNewDesc.ChgHeaderShare(/*Share=*/true);
+                        else
+                            aNewDesc.ChgFooterShare(/*Share=*/true);
                     }
                 }
 

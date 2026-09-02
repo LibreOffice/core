@@ -12,6 +12,12 @@ from uitest.uihelper.common import get_state_as_dict, select_by_text
 
 class PageNumberWizard(UITestCase):
 
+    def make_pages(self, nPages):
+        xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
+        for _ in range(nPages - 1):
+            self.xUITest.executeCommand(".uno:InsertPagebreak")
+        self.assertEqual(str(nPages), get_state_as_dict(xWriterEdit)["Pages"])
+
     def test_insert_page_number(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
@@ -88,5 +94,38 @@ class PageNumberWizard(UITestCase):
             self.assertEqual("1", xStandardStyle.FooterTextFirst.String)
             self.assertEqual("2", xStandardStyle.FooterTextLeft.String)
             self.assertEqual("1", xStandardStyle.FooterTextRight.String)
+
+    def test_rerun_without_mirror(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+
+            self.make_pages(3)
+
+            # com.sun.star.style.ParagraphAdjust
+            PARA_ADJUST_LEFT = 0
+            PARA_ADJUST_RIGHT = 1
+
+            # Right-aligned page numbers, with the mirror checkbox left at its default.
+            with self.ui_test.execute_dialog_through_command(".uno:PageNumberWizard") as xDialog:
+                select_by_text(xDialog.getChild("alignmentCombo"), "Right")
+
+            # The even page has a footer of its own now, holding a left-aligned page number.
+            xStandardStyle = document.StyleFamilies.PageStyles.Standard
+            self.assertFalse(xStandardStyle.FooterIsShared)
+            xEvenFooter = xStandardStyle.FooterTextLeft.createEnumeration().nextElement()
+            self.assertEqual(PARA_ADJUST_LEFT, xEvenFooter.ParaAdjust)
+
+            # Run the wizard again from an even page, this time asking for no mirroring.
+            document.CurrentController.ViewCursor.jumpToPage(2)
+            with self.ui_test.execute_dialog_through_command(".uno:PageNumberWizard") as xDialog:
+                select_by_text(xDialog.getChild("alignmentCombo"), "Right")
+                xDialog.getChild("mirrorCheckbox").executeAction("CLICK", tuple())
+
+            # Both pages share one footer again, with a single right-aligned page number.
+            # Without the fix in place, this test would have failed with
+            # AssertionError: False is not true
+            self.assertTrue(xStandardStyle.FooterIsShared)
+            xFooterParagraphs = [p for p in xStandardStyle.FooterTextLeft]
+            self.assertEqual(1, len(xFooterParagraphs))
+            self.assertEqual(PARA_ADJUST_RIGHT, xFooterParagraphs[0].ParaAdjust)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
