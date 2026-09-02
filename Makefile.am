@@ -376,6 +376,7 @@ shared_headers = \
                  common/FileUtil.hpp \
                  common/Globals.hpp \
                  common/HexUtil.hpp \
+                 common/IpNetwork.hpp \
                  common/JailUtil.hpp \
                  common/JsonUtil.hpp \
                  common/Landlock.hpp \

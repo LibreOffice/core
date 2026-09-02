@@ -186,39 +186,31 @@
            https://my.com/browser/a123... to https://my.com/my/sub/path/browser/a123... -->
       <service_root type="path" default="" desc="Prefix the base URL for all the pages, websockets, etc. with this path. This includes the discovery URL."></service_root>
       <!-- The host list below always filters the client IP address for POST
-           and REST requests such as convert-to. The allow attribute is
-           separate from that filter: when it is true these hosts also count as
-           allowed external data sources, the same role as net.lok_allow below.
-           Turning the attribute off does not disable the POST and REST filter. -->
+           and REST requests such as convert-to. Each host entry is either a
+           network in CIDR notation (100.64.0.0/10, fd00::/8) or a regular
+           expression that must match the whole client IP address. An IPv4
+           network also matches the IPv4-mapped IPv6 spelling of its addresses
+           (::ffff:100.64.1.2), so one CIDR entry replaces a pair of regular
+           expressions. The allow attribute is separate from that filter: when
+           it is true these hosts also count as allowed external data sources,
+           the same role as net.lok_allow below. Turning the attribute off does
+           not disable the POST and REST filter. -->
       <post_allow desc="Allow/deny client IP address for POST(REST)." allow="true">
-        <host desc="The IPv4 private 192.168 block as plain IPv4 dotted decimal addresses.">192\.168\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:192\.168\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 loopback (localhost) address.">127\.0\.0\.1</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 address">::ffff:127\.0\.0\.1</host>
-        <host desc="The IPv6 loopback (localhost) address.">::1</host>
-        <host desc="The IPv4 private 172.16.0.0/12 subnet part 1.">172\.1[6789]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:172\.1[6789]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 private 172.16.0.0/12 subnet part 2.">172\.2[0-9]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:172\.2[0-9]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 private 172.16.0.0/12 subnet part 3.">172\.3[01]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:172\.3[01]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 private 10.0.0.0/8 subnet (Podman).">10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}</host>
+        <host desc="The IPv4 private 192.168.0.0/16 block.">192.168.0.0/16</host>
+        <host desc="The IPv4 loopback (localhost) address.">127.0.0.1/32</host>
+        <host desc="The IPv6 loopback (localhost) address.">::1/128</host>
+        <host desc="The IPv4 private 172.16.0.0/12 block.">172.16.0.0/12</host>
+        <host desc="The IPv4 private 10.0.0.0/8 block (Podman).">10.0.0.0/8</host>
+        <!-- example: allow a Kubernetes pod network that is outside the private ranges
+        <host desc="Carrier-grade NAT range used as the pod network">100.64.0.0/10</host>
+        -->
       </post_allow>
-      <lok_allow desc="Allowed hosts as an external data source inside edited files. All allowed post_allow.host and storage.wopi entries are also considered to be allowed as a data source. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell.">
-        <host desc="The IPv4 private 192.168 block as plain IPv4 dotted decimal addresses.">192\.168\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:192\.168\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 loopback (localhost) address.">127\.0\.0\.1</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 address">::ffff:127\.0\.0\.1</host>
-        <host desc="The IPv6 loopback (localhost) address.">::1</host>
-        <host desc="The IPv4 private 172.16.0.0/12 subnet part 1.">172\.1[6789]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:172\.1[6789]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 private 172.16.0.0/12 subnet part 2.">172\.2[0-9]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:172\.2[0-9]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 private 172.16.0.0/12 subnet part 3.">172\.3[01]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:172\.3[01]\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="The IPv4 private 10.0.0.0/8 subnet (Podman).">10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}</host>
-        <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}</host>
+      <lok_allow desc="Allowed hosts as an external data source inside edited files. Each entry is either a network in CIDR notation or a regular expression matched against the host of the URL. All allowed post_allow.host and storage.wopi entries are also considered to be allowed as a data source. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell.">
+        <host desc="The IPv4 private 192.168.0.0/16 block.">192.168.0.0/16</host>
+        <host desc="The IPv4 loopback (localhost) address.">127.0.0.1/32</host>
+        <host desc="The IPv6 loopback (localhost) address.">::1/128</host>
+        <host desc="The IPv4 private 172.16.0.0/12 block.">172.16.0.0/12</host>
+        <host desc="The IPv4 private 10.0.0.0/8 block (Podman).">10.0.0.0/8</host>
         <host desc="Localhost access by name">localhost</host>
       </lok_allow>
       <content_security_policy desc="Customize the CSP header by specifying one or more policy-directive, separated by semicolons. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">

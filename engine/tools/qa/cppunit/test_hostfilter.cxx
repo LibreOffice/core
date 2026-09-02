@@ -33,6 +33,10 @@ public:
     void testMultiplePaths();
     void testEncodedFileUrl();
     void testParentDirectorySegments();
+    void testHostRegexOnly();
+    void testHostNetworks();
+    void testHostNetworksOnly();
+    void testHostNetworksInvalid();
 
     CPPUNIT_TEST_SUITE(TestHostFilter);
     CPPUNIT_TEST(testEmptyAllowlist);
@@ -43,6 +47,10 @@ public:
     CPPUNIT_TEST(testMultiplePaths);
     CPPUNIT_TEST(testEncodedFileUrl);
     CPPUNIT_TEST(testParentDirectorySegments);
+    CPPUNIT_TEST(testHostRegexOnly);
+    CPPUNIT_TEST(testHostNetworks);
+    CPPUNIT_TEST(testHostNetworksOnly);
+    CPPUNIT_TEST(testHostNetworksInvalid);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -126,6 +134,105 @@ void TestHostFilter::testParentDirectorySegments()
     // .. segments that stay within the allowed directory are permitted
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/docs/sub/../sheet.ods"_ustr));
     HostFilter::resetAllowedExtRefPaths();
+}
+
+void TestHostFilter::testHostRegexOnly()
+{
+    // nothing configured: nothing is forbidden
+    HostFilter::setAllowedHosts("");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"evil.example"_ustr));
+
+    HostFilter::setAllowedHosts("localhost\n10\\.[0-9]+\\.[0-9]+\\.[0-9]+");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"localhost"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"10.1.2.3"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"::ffff:10.1.2.3"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"evil.example"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"localhost2"_ustr));
+
+    // a single pre-joined regex works the same
+    HostFilter::setAllowedHosts("localhost|example\\.com");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"example.com"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"evil.example"_ustr));
+
+    HostFilter::setAllowedHosts("");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"evil.example"_ustr));
+}
+
+void TestHostFilter::testHostNetworks()
+{
+    HostFilter::setAllowedHosts(
+        "localhost\nexample\\.com\n100.64.0.0/10\n172.16.0.0/12\nfd00::/8\n::1/128");
+
+    // the regular expressions still apply
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"localhost"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"example.com"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"evil.example"_ustr));
+
+    // IPv4 networks, in both spellings a dual-stack socket produces
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"100.64.0.1"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"100.127.255.254"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"::ffff:100.100.1.1"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"[::ffff:100.100.1.1]"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"100.128.0.1"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"100.63.255.255"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"172.16.0.1"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"172.31.255.255"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"172.32.0.1"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"10.1.2.3"_ustr));
+
+    // IPv6 networks, with and without URL brackets
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"fd00::1"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"[fdab:cdef::1234]"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"FD00::ABCD"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"::1"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"[::1]"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"0:0:0:0:0:0:0:1"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"::2"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"fe80::1"_ustr));
+
+    // things that only look like addresses
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"100.64.0.1.example"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"100.64.0"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"100.64.0.256"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"fd00:::1"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"fd00::1::2"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"fd00::12345"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"1:2:3:4:5:6:7:8:9"_ustr));
+
+    HostFilter::setAllowedHosts("");
+}
+
+void TestHostFilter::testHostNetworksOnly()
+{
+    // networks without any regular expression still activate the filter
+    HostFilter::setAllowedHosts("192.168.0.0/16");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"192.168.7.7"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"::ffff:192.168.7.7"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"192.169.0.1"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"localhost"_ustr));
+
+    // the verify-host exemption follows the same list
+    HostFilter::setAllowedHostsExemptVerifyHost(true);
+    CPPUNIT_ASSERT(HostFilter::isExemptVerifyHost(u"192.168.7.7"));
+    CPPUNIT_ASSERT(!HostFilter::isExemptVerifyHost(u"192.169.0.1"));
+    HostFilter::setAllowedHostsExemptVerifyHost(false);
+    CPPUNIT_ASSERT(!HostFilter::isExemptVerifyHost(u"192.168.7.7"));
+
+    HostFilter::setAllowedHosts("");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"localhost"_ustr));
+}
+
+void TestHostFilter::testHostNetworksInvalid()
+{
+    // entries that are not valid CIDR are regular expressions; empty lines are skipped
+    HostFilter::setAllowedHosts("\n10.0.0.0/33\n10.0.0.0\nexample.com/8\n10.0.0.0/8\n\nfd00::/129\n");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"10.20.30.40"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"10.0.0.0"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"10.0.0.0/33"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"fd00::1"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"example.com"_ustr));
+
+    HostFilter::setAllowedHosts("");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestHostFilter);

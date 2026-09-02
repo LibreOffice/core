@@ -30,6 +30,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testParseHostUri);
     CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
     CPPUNIT_TEST(testGetNewUriBracketsIPv6Host);
+    CPPUNIT_TEST(testHostListWithGaps);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -37,6 +38,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     void testParseHostUri();
     void testFirstHostTrustedOnlyInFirstMode();
     void testGetNewUriBracketsIPv6Host();
+    void testHostListWithGaps();
 
 public:
     /// Clear the parsed host state, matching the empty state it starts with, and
@@ -205,6 +207,46 @@ void HostUtilTests::testGetNewUriBracketsIPv6Host()
     // An ordinary IPv4/hostname URI is unaffected.
     const Poco::URI uriV4("https://example.com:8443/wopi/files/1");
     LOK_ASSERT_EQUAL_STR("https://example.com:8443/wopi/files/1", HostUtil::getNewUri(uriV4));
+}
+
+void HostUtilTests::testHostListWithGaps()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    config->setString("storage.wopi[@allow]", "true");
+    // Integrators append to the shipped list by index, assuming its old length,
+    // e.g. --o:net.lok_allow.host[14]=... on top of a shorter default list.
+    // Such entries must not be lost because indexes 2 to 13 do not exist.
+    config->setString("storage.wopi.host", "first.example");
+    config->setString("storage.wopi.host[@allow]", "true");
+    config->setString("storage.wopi.host[1]", "second.example");
+    config->setString("storage.wopi.host[1][@allow]", "true");
+    config->setString("storage.wopi.host[14]", "appended.example");
+    config->setString("storage.wopi.host[14][@allow]", "true");
+    config->setString("storage.wopi.host[10]", "denied.example");
+    config->setString("storage.wopi.host[10][@allow]", "false");
+    // Not part of the list.
+    config->setString("storage.wopi.host[x]", "garbage.example");
+    config->setString("storage.wopi.hostname", "garbage2.example");
+
+    const ScopedHostConfig scopedConfig(config.get());
+
+    const std::vector<std::string> keys = ConfigUtil::getIndexedKeys("storage.wopi", "host");
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(4), keys.size());
+    LOK_ASSERT_EQUAL_STR("storage.wopi.host", keys[0]);
+    LOK_ASSERT_EQUAL_STR("storage.wopi.host[1]", keys[1]);
+    LOK_ASSERT_EQUAL_STR("storage.wopi.host[10]", keys[2]);
+    LOK_ASSERT_EQUAL_STR("storage.wopi.host[14]", keys[3]);
+
+    resetHostState(false);
+    HostUtil::parseWopiHost();
+    LOK_ASSERT(HostUtil::allowedWopiHost("first.example"));
+    LOK_ASSERT(HostUtil::allowedWopiHost("second.example"));
+    LOK_ASSERT(HostUtil::allowedWopiHost("appended.example"));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("denied.example"));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("garbage.example"));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("garbage2.example"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HostUtilTests);

@@ -534,6 +534,39 @@ void WhiteBoxTests::testRegexListMatcher()
     LOK_ASSERT(matcher.match("10.10.001.001"));
     LOK_ASSERT(!matcher.match("10.10.10.10"));
     LOK_ASSERT(matcher.match("10.10.250.254"));
+
+    // Networks in CIDR notation, mixed with the regular expressions above.
+    matcher.allow("100.64.0.0/10");
+    LOK_ASSERT(matcher.match("100.64.0.1"));
+    LOK_ASSERT(matcher.match("100.127.255.254"));
+    LOK_ASSERT(matcher.match("::ffff:100.100.1.1"));
+    LOK_ASSERT(!matcher.match("100.128.0.1"));
+    LOK_ASSERT(!matcher.match("100.64.0.0/10"));
+    LOK_ASSERT(matcher.match("10.10.250.254"));
+    LOK_ASSERT(matcher.match("www1example"));
+
+    matcher.deny("100.64.5.0/24");
+    LOK_ASSERT(matcher.match("100.64.4.255"));
+    LOK_ASSERT(!matcher.match("100.64.5.1"));
+    LOK_ASSERT(!matcher.match("::ffff:100.64.5.1"));
+    LOK_ASSERT(matcher.match("100.64.6.0"));
+
+    matcher.allow("fd00::/8");
+    LOK_ASSERT(matcher.match("fd12::1"));
+    LOK_ASSERT(!matcher.match("fe80::1"));
+
+    // Denying a network that was allowed removes the allow, as for regexes.
+    matcher.deny("fd00::/8");
+    LOK_ASSERT(!matcher.match("fd12::1"));
+
+    LOK_ASSERT(matcher.matchExist("100.64.5.1"));
+    LOK_ASSERT(!matcher.matchExist("203.0.113.1"));
+
+    matcher.clear();
+    LOK_ASSERT(matcher.empty());
+    LOK_ASSERT(!matcher.match("100.64.0.1"));
+    matcher.allow("100.64.0.0/10");
+    LOK_ASSERT(!matcher.empty());
 }
 
 void WhiteBoxTests::testRegexListMatcher_Init()

@@ -23,14 +23,17 @@
 
 #include <common/CommandControl.hpp>
 #include <common/ConfigUtil.hpp>
+#include <common/IpNetwork.hpp>
 #include <common/Log.hpp>
 #include <common/RegexUtil.hpp>
+#include <common/StringVector.hpp>
 
 #include <map>
 #include <optional>
 #include <regex>
 #include <set>
 #include <string>
+#include <vector>
 
 RegexUtil::RegexListMatcher HostUtil::WopiHosts;
 std::map<std::string, std::string> HostUtil::AliasHosts;
@@ -46,14 +49,8 @@ void HostUtil::parseWopiHost()
     WopiEnabled = ConfigUtil::getBool("storage.wopi[@allow]", false);
     if (WopiEnabled)
     {
-        for (size_t i = 0;; ++i)
+        for (const std::string& path : ConfigUtil::getIndexedKeys("storage.wopi", "host"))
         {
-            const std::string path = "storage.wopi.host[" + std::to_string(i) + ']';
-            if (!ConfigUtil::has(path))
-            {
-                break;
-            }
-
             HostUtil::addWopiHost(ConfigUtil::getString(path, ""),
                                   ConfigUtil::getBool(path + "[@allow]", false));
         }
@@ -366,11 +363,35 @@ bool HostUtil::isWopiHostsEmpty()
 
 bool HostUtil::isForbiddenKitHost(const std::string& host)
 {
+    // The same list that setLokitEnvironmentVariables hands to the kit: one
+    // entry per line, each either a CIDR network or a regular expression.
+    // Parsed on each call so that it follows the value the remote
+    // configuration poll writes.
     const char* allowlist = std::getenv("KIT_HOST_ALLOWLIST");
     if (!allowlist || allowlist[0] == '\0')
         return false;
 
-    const std::regex allowedRegex(allowlist);
+    std::string regex;
+    const StringVector entries = StringVector::tokenize(std::string(allowlist), '\n');
+    for (std::size_t i = 0; i < entries.size(); ++i)
+    {
+        if (std::optional<Util::IpNetwork> network = Util::IpNetwork::parse(entries[i]))
+        {
+            if (network->contains(host))
+                return false;
+        }
+        else
+        {
+            if (!regex.empty())
+                regex += '|';
+            regex += entries[i];
+        }
+    }
+
+    if (regex.empty())
+        return true;
+
+    const std::regex allowedRegex(regex);
     return !std::regex_match(host, allowedRegex);
 }
 

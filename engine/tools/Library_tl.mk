@@ -139,6 +139,7 @@ $(eval $(call gb_Library_use_system_win32_libs,tl,\
 	shell32 \
 	uuid \
 	winmm \
+	ws2_32 \
 ))
 
 endif

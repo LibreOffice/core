@@ -18,10 +18,18 @@
 class TOOLS_DLLPUBLIC HostFilter
 {
 public:
-    static void setAllowedHostsRegex(const char* sAllowedRegex);
+    /// A newline-separated list of allowed hosts. Each entry is either a
+    /// network in CIDR notation (10.0.0.0/8, fd00::/8), which allows any
+    /// host that is an IP address inside it, or a regular expression that
+    /// an allowed host name must match in full. IPv4 networks also cover
+    /// the IPv4-mapped IPv6 spelling of their addresses. An empty list
+    /// disables the filter.
+    static void setAllowedHosts(const char* sAllowlist);
 
     static void setAllowedHostsExemptVerifyHost(bool allowedHostExceptVerifyHost);
 
+    /// Return true when a host allowlist is configured and rHost is neither
+    /// matched by a regular expression nor inside an allowed network.
     static bool isForbidden(const OUString& rHost);
 
     static void setExemptVerifyHost(const OUString& rExemptVerifyHost);

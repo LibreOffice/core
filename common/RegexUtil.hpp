@@ -12,11 +12,14 @@
 #pragma once
 
 #include <common/ContainerUtil.hpp>
+#include <common/IpNetwork.hpp>
 
 #include <cassert>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
+#include <vector>
 
 namespace RegexUtil
 {
@@ -36,6 +39,9 @@ bool isRegexValid(const std::string& regex);
 /// Given one or more patterns to allow, and one or more to deny,
 /// the match member will return true if, and only if, the subject
 /// matches the allowed list, but not the deny.
+/// A pattern is either a network in CIDR notation (10.0.0.0/8, fd00::/8),
+/// which matches subjects that are IP addresses inside it, or a regular
+/// expression that must match the whole subject.
 /// By default, everything is denied.
 class RegexListMatcher final
 {
@@ -56,20 +62,34 @@ public:
     void allow(const std::string& pattern)
     {
         _matchedMemo.clear();
-        _allowed.insert(pattern);
+        if (std::optional<Util::IpNetwork> network = Util::IpNetwork::parse(pattern))
+            _allowedNetworks.push_back(std::move(*network));
+        else
+            _allowed.insert(pattern);
     }
 
     void deny(const std::string& pattern)
     {
         _matchedMemo.clear();
-        _allowed.erase(pattern);
-        _denied.insert(pattern);
+        if (std::optional<Util::IpNetwork> network = Util::IpNetwork::parse(pattern))
+        {
+            eraseNetwork(_allowedNetworks, pattern);
+            _deniedNetworks.push_back(std::move(*network));
+        }
+        else
+        {
+            _allowed.erase(pattern);
+            _denied.insert(pattern);
+        }
     }
 
     void clear()
     {
+        _matchedMemo.clear();
         _allowed.clear();
         _denied.clear();
+        _allowedNetworks.clear();
+        _deniedNetworks.clear();
     }
 
     /// Match the given value to the regex rules.
@@ -93,24 +113,56 @@ public:
     }
 
 private:
-    /// The regex rules matching logic, without memoization.
+    /// The matching logic, without memoization.
     bool matchImpl(const std::string& subject) const
     {
-        return (_allowByDefault || matchRegex(_allowed, subject)) && !matchRegex(_denied, subject);
+        return (_allowByDefault || matchRegex(_allowed, subject) ||
+                matchNetwork(_allowedNetworks, subject)) &&
+               !matchRegex(_denied, subject) && !matchNetwork(_deniedNetworks, subject);
+    }
+
+    static bool matchNetwork(const std::vector<Util::IpNetwork>& networks,
+                             const std::string& subject)
+    {
+        for (const Util::IpNetwork& network : networks)
+        {
+            if (network.contains(subject))
+                return true;
+        }
+
+        return false;
+    }
+
+    static void eraseNetwork(std::vector<Util::IpNetwork>& networks, const std::string& text)
+    {
+        for (std::vector<Util::IpNetwork>::iterator it = networks.begin(); it != networks.end();)
+        {
+            if (it->toString() == text)
+                it = networks.erase(it);
+            else
+                ++it;
+        }
     }
 
 public:
-    /// Whether a match exist in either _allowed or _denied.
+    /// Whether a match exist in either the allowed or the denied rules.
     bool matchExist(const std::string& subject) const
     {
-        return (matchRegex(_allowed, subject) || matchRegex(_denied, subject));
+        return matchRegex(_allowed, subject) || matchRegex(_denied, subject) ||
+               matchNetwork(_allowedNetworks, subject) || matchNetwork(_deniedNetworks, subject);
     }
 
-    bool empty() const { return _allowed.empty() && _denied.empty(); }
+    bool empty() const
+    {
+        return _allowed.empty() && _denied.empty() && _allowedNetworks.empty() &&
+               _deniedNetworks.empty();
+    }
 
 private:
     std::set<std::string> _allowed;
     std::set<std::string> _denied;
+    std::vector<Util::IpNetwork> _allowedNetworks;
+    std::vector<Util::IpNetwork> _deniedNetworks;
     /// Memoizes the result of match().
     mutable Util::UnorderedStringMap<bool> _matchedMemo;
     const bool _allowByDefault;

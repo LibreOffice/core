@@ -15,6 +15,7 @@
 
 #include <config.h>
 
+#include <common/IpNetwork.hpp>
 #include <net/Buffer.hpp>
 #include <net/NetUtil.hpp>
 #include <net/Socket.hpp>
@@ -54,6 +55,7 @@ class NetUtilWhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testParseUriUrl);
     CPPUNIT_TEST(testParseUrl);
     CPPUNIT_TEST(testSameOrigin);
+    CPPUNIT_TEST(testIpNetwork);
     CPPUNIT_TEST(testStreamSocketBufferBloatClose);
     CPPUNIT_TEST_SUITE_END();
 
@@ -62,6 +64,7 @@ class NetUtilWhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testParseUriUrl();
     void testParseUrl();
     void testSameOrigin();
+    void testIpNetwork();
     void testStreamSocketBufferBloatClose();
 };
 
@@ -368,6 +371,110 @@ void NetUtilWhiteBoxTests::testSameOrigin()
 // has stayed very large for long enough, the poll handler must drop the
 // connection so the memory is reclaimed. The buffer-bloat limits are wound
 // down here so the test triggers in milliseconds rather than minutes.
+void NetUtilWhiteBoxTests::testIpNetwork()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Not CIDR notation at all: plain addresses, host names and regular expressions.
+    LOK_ASSERT(!Util::IpNetwork::parse("").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("127.0.0.1").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("localhost").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse(R"(192\.168\.[0-9]{1,3}\.[0-9]{1,3})").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("/8").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("10.0.0.0/").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("10.0.0.0/8/").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("10.0.0.0/x").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("10.0.0.0/-1").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("10.0.0.0/8 ").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("example.com/8").has_value());
+
+    // Prefix length must fit the address family.
+    LOK_ASSERT(!Util::IpNetwork::parse("10.0.0.0/33").has_value());
+    LOK_ASSERT(Util::IpNetwork::parse("10.0.0.0/32").has_value());
+    LOK_ASSERT(Util::IpNetwork::parse("10.0.0.0/0").has_value());
+    LOK_ASSERT(!Util::IpNetwork::parse("fd00::/129").has_value());
+    LOK_ASSERT(Util::IpNetwork::parse("fd00::/128").has_value());
+
+    // Carrier-grade NAT range, as used for Kubernetes pod networks.
+    std::optional<Util::IpNetwork> cgnat = Util::IpNetwork::parse("100.64.0.0/10");
+    LOK_ASSERT(cgnat.has_value());
+    LOK_ASSERT_EQUAL(std::string("100.64.0.0/10"), cgnat->toString());
+    LOK_ASSERT(cgnat->contains("100.64.0.0"));
+    LOK_ASSERT(cgnat->contains("100.64.0.1"));
+    LOK_ASSERT(cgnat->contains("100.100.200.3"));
+    LOK_ASSERT(cgnat->contains("100.127.255.255"));
+    LOK_ASSERT(!cgnat->contains("100.63.255.255"));
+    LOK_ASSERT(!cgnat->contains("100.128.0.0"));
+    LOK_ASSERT(!cgnat->contains("10.64.0.1"));
+    // IPv4-mapped IPv6 spelling of the same peers, as seen on a dual-stack socket.
+    LOK_ASSERT(cgnat->contains("::ffff:100.64.0.1"));
+    LOK_ASSERT(cgnat->contains("::ffff:100.100.200.3"));
+    LOK_ASSERT(!cgnat->contains("::ffff:100.128.0.0"));
+    // Not addresses.
+    LOK_ASSERT(!cgnat->contains(""));
+    LOK_ASSERT(!cgnat->contains("localhost"));
+    LOK_ASSERT(!cgnat->contains("100.64.0.1/10"));
+    // A native IPv6 address is never in an IPv4 network.
+    LOK_ASSERT(!cgnat->contains("::1"));
+    LOK_ASSERT(!cgnat->contains("fd00::1"));
+
+    // Prefix that does not end on a byte boundary.
+    std::optional<Util::IpNetwork> slash12 = Util::IpNetwork::parse("172.16.0.0/12");
+    LOK_ASSERT(slash12.has_value());
+    LOK_ASSERT(slash12->contains("172.16.0.1"));
+    LOK_ASSERT(slash12->contains("172.31.255.254"));
+    LOK_ASSERT(!slash12->contains("172.15.255.255"));
+    LOK_ASSERT(!slash12->contains("172.32.0.0"));
+
+    // Single host and match-all.
+    std::optional<Util::IpNetwork> single = Util::IpNetwork::parse("203.0.113.7/32");
+    LOK_ASSERT(single.has_value());
+    LOK_ASSERT(single->contains("203.0.113.7"));
+    LOK_ASSERT(single->contains("::ffff:203.0.113.7"));
+    LOK_ASSERT(!single->contains("203.0.113.8"));
+
+    std::optional<Util::IpNetwork> all = Util::IpNetwork::parse("0.0.0.0/0");
+    LOK_ASSERT(all.has_value());
+    LOK_ASSERT(all->contains("203.0.113.8"));
+    LOK_ASSERT(all->contains("::ffff:1.2.3.4"));
+    LOK_ASSERT(!all->contains("::1"));
+
+    // IPv6.
+    std::optional<Util::IpNetwork> ula = Util::IpNetwork::parse("fd00::/8");
+    LOK_ASSERT(ula.has_value());
+    LOK_ASSERT(ula->contains("fd00::1"));
+    LOK_ASSERT(ula->contains("fdab:cdef::1234"));
+    LOK_ASSERT(!ula->contains("fe80::1"));
+    LOK_ASSERT(!ula->contains("::1"));
+    LOK_ASSERT(!ula->contains("10.0.0.1"));
+
+    std::optional<Util::IpNetwork> loopback6 = Util::IpNetwork::parse("::1/128");
+    LOK_ASSERT(loopback6.has_value());
+    LOK_ASSERT(loopback6->contains("::1"));
+    LOK_ASSERT(loopback6->contains("[::1]"));
+    LOK_ASSERT(loopback6->contains("0:0:0:0:0:0:0:1"));
+    LOK_ASSERT(loopback6->contains("0000:0000:0000:0000:0000:0000:0000:0001"));
+    LOK_ASSERT(!loopback6->contains("::2"));
+    LOK_ASSERT(!loopback6->contains("127.0.0.1"));
+
+    // IPv6 text forms that must be rejected.
+    LOK_ASSERT(!ula->contains("fd00:::1"));
+    LOK_ASSERT(!ula->contains("fd00::1::2"));
+    LOK_ASSERT(!ula->contains("fd00::12345"));
+    LOK_ASSERT(!ula->contains("fd00::g"));
+    LOK_ASSERT(!ula->contains("fd00:1:2:3:4:5:6:7:8"));
+    LOK_ASSERT(!ula->contains("fd00:1:2:3:4:5:6"));
+    LOK_ASSERT(!ula->contains(":fd00::1"));
+    LOK_ASSERT(!ula->contains("fd00::1:"));
+    LOK_ASSERT(!ula->contains("1.2.3.4::"));
+    // Uppercase hex and an embedded IPv4 tail are fine.
+    LOK_ASSERT(ula->contains("FD00::ABCD"));
+    LOK_ASSERT(ula->contains("fd00::1.2.3.4"));
+    // The mapped range itself folds to IPv4, where a /96 makes no sense.
+    LOK_ASSERT(!Util::IpNetwork::parse("::ffff:0:0/96").has_value());
+    LOK_ASSERT(cgnat->contains("[::ffff:100.64.0.1]"));
+}
+
 void NetUtilWhiteBoxTests::testStreamSocketBufferBloatClose()
 {
     constexpr std::string_view testname = __func__;

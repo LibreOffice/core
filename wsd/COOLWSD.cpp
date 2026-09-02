@@ -60,6 +60,7 @@
 #include <common/Session.hpp>
 #include <common/SigUtil.hpp>
 #include <common/Unit.hpp>
+#include <common/IpNetwork.hpp>
 #include <common/Util.hpp>
 #include <net/AsyncDNS.hpp>
 #include <net/HttpRequest.hpp>
@@ -199,13 +200,8 @@ extern "C"
 
 void COOLWSD::appendAllowedHostsFrom(const LayeredConfiguration& conf, const std::string& root, std::vector<std::string>& allowed)
 {
-    for (size_t i = 0; ; ++i)
+    for (const std::string& path : ConfigUtil::getIndexedKeys(conf, root, "host"))
     {
-        const std::string path = root + ".host[" + std::to_string(i) + ']';
-        if (!conf.has(path))
-        {
-            break;
-        }
         std::string host = ConfigUtil::getConfigValue<std::string>(conf, path, "");
         if (!host.empty())
         {
@@ -2581,21 +2577,23 @@ void COOLWSD::setLokitEnvironmentVariables(const Poco::Util::LayeredConfiguratio
 
     if (lokAllowedHosts.size())
     {
-        std::string allowedRegex;
+        // One entry per line; the kit tells CIDR networks and regular
+        // expressions apart itself.
+        std::string allowlist;
         for (const std::string& host : lokAllowedHosts)
         {
-            if (!RegexUtil::isRegexValid(host))
+            if (!Util::IpNetwork::parse(host) && !RegexUtil::isRegexValid(host))
             {
                 LOG_ERR("Invalid regular expression for allowed host: \"" << host << "\"");
                 continue;
             }
 
-            if (!allowedRegex.empty())
-                allowedRegex += '|';
-            allowedRegex += host;
+            if (!allowlist.empty())
+                allowlist += '\n';
+            allowlist += host;
         }
 
-        setenv("KIT_HOST_ALLOWLIST", allowedRegex.c_str(), true);
+        setenv("KIT_HOST_ALLOWLIST", allowlist.c_str(), true);
 
 #if !MOBILEAPP
         if (!ConfigUtil::getConfigValue<bool>(conf, "ssl.ssl_verification", true))

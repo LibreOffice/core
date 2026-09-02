@@ -588,19 +588,15 @@ bool ClientRequestDispatcher::allowPostFrom(const std::string& address)
     static RegexUtil::RegexListMatcher hosts;
     if (!init)
     {
-        // Parse the host allow settings.
-        for (size_t i = 0;; ++i)
+        // Parse the host allow settings. Each entry is either a network in
+        // CIDR notation or a regular expression matched against the address.
+        for (const std::string& path : ConfigUtil::getIndexedKeys("net.post_allow", "host"))
         {
-            const std::string path = "net.post_allow.host[" + std::to_string(i) + ']';
-            const auto host = ConfigUtil::getString(path, "");
+            const std::string host = ConfigUtil::getString(path, "");
             if (!host.empty())
             {
                 LOG_INF_S("Adding trusted POST_ALLOW host: [" << host << ']');
                 hosts.allow(host);
-            }
-            else if (!ConfigUtil::has(path))
-            {
-                break;
             }
         }
 

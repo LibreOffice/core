@@ -9923,7 +9923,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
 #endif
 
     if (const char* pAllowlist = ::getenv("KIT_HOST_ALLOWLIST"))
-        HostFilter::setAllowedHostsRegex(pAllowlist);
+        HostFilter::setAllowedHosts(pAllowlist);
 
     if (const char* pHostExemptVerifyHost = ::getenv("KIT_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST"))
         HostFilter::setAllowedHostsExemptVerifyHost(strncmp(pHostExemptVerifyHost,"1", 1) == 0);
