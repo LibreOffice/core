@@ -103,6 +103,22 @@ describe(['tagdesktop'], 'Draw F6 region navigation', { testIsolation: false }, 
 		});
 	}
 
+	// The tab strip is a stop of the ring, so walk to it the way the ring
+	// describes rather than counting key presses.
+	function focusTheTabStrip() {
+		cy.then(function () {
+			const names = ringNames();
+			const start = names.indexOf('documentArea');
+			const target = names.indexOf('topBar');
+			expect(target, 'the tab strip is a stop of the ring').to.be.greaterThan(-1);
+
+			const steps = (((target - start) % names.length) + names.length) % names.length;
+			for (let i = 0; i < steps; i++) cy.realPress('F6');
+		});
+
+		assertFocusedRegion('topBar');
+	}
+
 	// One full turn of the ring in the given direction, from the document
 	// back to it.
 	function walkFullRing(step) {
@@ -191,6 +207,30 @@ describe(['tagdesktop'], 'Draw F6 region navigation', { testIsolation: false }, 
 			assertFocusedRegion('topBar');
 			cy.cGet().its('activeElement.id').should(function (id) {
 				expect(id, 'focused notebookbar tab').to.equal(tabId);
+			});
+		});
+
+		it('Tab from the selected tab enters its own page, not the title bar', function () {
+			focusTheTabStrip();
+
+			cy.cGet('#main-document-content').should(function () {
+				const tab = win.document.activeElement;
+				expect(tab.getAttribute('role'), 'the ring landed on a tab').to.equal('tab');
+				expect(tab.classList.contains('selected'),
+					'focused ' + tab.tagName + '#' + tab.id + ' is the selected tab').to.be.true;
+			});
+
+			cy.realPress('Tab');
+
+			cy.cGet('#main-document-content').should(function () {
+				const tab = win.document.querySelector('.notebookbar [role="tab"].selected');
+				const page = win.document.getElementById(tab.getAttribute('aria-controls'));
+				expect(page, 'the panel the selected tab controls').to.not.equal(null);
+
+				const expected = win.JSDialog.GetFocusableElements(page)[0];
+				const active = win.document.activeElement;
+				expect(active.tagName + '#' + active.id, 'the widget Tab reached')
+					.to.equal(expected.tagName + '#' + expected.id);
 			});
 		});
 	});
