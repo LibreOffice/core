@@ -2940,83 +2940,24 @@ if test "$enable_windowsapp" = "yes"; then
     # WSL. Ideally we shouldn't need to run the configure script when
     # building CODA-W at all. Later.
 
-    # Cache the clang-cl compiles of the windows app with ccache, the same
-    # way the engine build caches its compiles. MSBuild runs the compiler
-    # without naming it on the command line, so ccache cannot be handed the
-    # compiler as an argument. The way round it is a directory holding a
-    # clang-cl.exe that is really ccache: point the C++ tool at that
-    # directory and ccache, seeing it was invoked as clang-cl, runs the real
-    # clang-cl that the Visual Studio environment puts on PATH. Make that
-    # clang-cl as a hard link to ccache, and fall back to a copy when ccache
-    # sits on another volume than the build tree. The shim goes in a
-    # directory of its own under the build tree so it is gitignored and out
-    # of the way. CODA_CCACHE holds that directory, or stays empty when no
-    # ccache is found, in which case the build keeps the stock clang-cl.
+    # The engine's configure builds a directory whose clang-cl.exe is really
+    # ccache and records it as MSBUILD_CCACHE in its config_host.mk, already as
+    # a native Windows path. Read it from there. A search here would run on WSL
+    # and could turn up a Linux ccache that native msbuild cannot start, and an
+    # engine that found no usable ccache leaves the value empty, which is the
+    # same answer the app needs.
     CODA_CCACHE=
     CODA_CCACHE_DIR=
-    AC_ARG_WITH([coda-ccache],
-        AS_HELP_STRING([--with-coda-ccache=PATH],
-            [Path to the Windows ccache.exe used to wrap the windows app
-             clang-cl compiles. Defaults to the ccache.exe found on PATH; pass
-             --without-coda-ccache to build without it.]))
-    dnl configure runs on WSL or Cygwin, but MSBuild runs the shim as a native
-    dnl Windows process, so the shim must be a Windows ccache.exe, never the
-    dnl Linux ccache that sits on the WSL PATH. Search for ccache.exe so that
-    dnl Linux ccache is passed over. (Cygwin resolves the bare name to
-    dnl ccache.exe anyway, so spelling out the .exe costs it nothing.)
-    coda_ccache_exe=
-    AS_IF([test "$with_coda_ccache" = "no"],
-              [coda_ccache_exe=no],
-          [test -n "$with_coda_ccache" -a "$with_coda_ccache" != "yes"],
-              [coda_ccache_exe="$with_coda_ccache"],
-          [AC_PATH_PROG([coda_ccache_exe], [ccache.exe])])
-    dnl A Windows executable starts with the "MZ" DOS signature. If what we
-    dnl found is something else (e.g. a Linux ELF ccache picked up from the WSL
-    dnl PATH), warn and build without ccache rather than installing a shim that
-    dnl Windows refuses to run as an "Unsupported 16-Bit Application".
-    AS_IF([test -n "$coda_ccache_exe" -a "$coda_ccache_exe" != "no"],
-        [AS_IF([test "`head -c 2 "$coda_ccache_exe" 2>/dev/null`" != "MZ"],
-            [AC_MSG_WARN([$coda_ccache_exe is not a Windows executable; building without ccache. Install a Windows ccache.exe and pass --with-coda-ccache=PATH to cache the clang-cl compiles.])
-             coda_ccache_exe=no])])
-    AS_IF([test -n "$coda_ccache_exe" -a "$coda_ccache_exe" != "no"],
-        [coda_ccache_shim="`pwd`/windows/coda/ccache-shim"
-         coda_ccache_dir=`dirname "$coda_ccache_exe"`
-         AS_MKDIR_P([$coda_ccache_shim])
-         rm -f "$coda_ccache_shim/clang-cl.exe" "$coda_ccache_shim/ccache.exe"
-         ln "$coda_ccache_exe" "$coda_ccache_shim/clang-cl.exe" 2>/dev/null \
-             || cp -f "$coda_ccache_exe" "$coda_ccache_shim/clang-cl.exe"
-         dnl The shim is the same binary in a directory of its own, so a ccache
-         dnl that links against DLLs sitting next to the original (a MinGW
-         dnl build, say the one in Strawberry Perl) stops finding them and dies
-         dnl at startup with STATUS_ENTRYPOINT_NOT_FOUND as soon as PATH offers
-         dnl another build of one of those DLLs. CODA_CCACHE_DIR puts the real
-         dnl ccache's directory back on the compiler PATH, and the check here
-         dnl makes sure the relocated binary starts at all, so a ccache that
-         dnl still cannot start costs cache hits, not the build. The check runs
-         dnl from the real ccache's directory, which Windows searches for DLLs
-         dnl too: a PATH set here would not reach a Windows process launched
-         dnl from WSL. And it runs under its own name, where ccache reports its
-         dnl version instead of masquerading as the compiler.
-         AC_MSG_CHECKING([whether $coda_ccache_exe runs from the shim directory])
-         ln "$coda_ccache_shim/clang-cl.exe" "$coda_ccache_shim/ccache.exe" 2>/dev/null \
-             || cp -f "$coda_ccache_shim/clang-cl.exe" "$coda_ccache_shim/ccache.exe"
-         coda_ccache_runs=no
-         AS_IF([(cd "$coda_ccache_dir" && "$coda_ccache_shim/ccache.exe" --version) \
-                    >/dev/null 2>&1],
-             [coda_ccache_runs=yes])
-         rm -f "$coda_ccache_shim/ccache.exe"
-         AC_MSG_RESULT([$coda_ccache_runs])
-         AS_IF([test "$coda_ccache_runs" = "no"],
-             [rm -f "$coda_ccache_shim/clang-cl.exe"
-              AC_MSG_WARN([$coda_ccache_exe does not run once copied to $coda_ccache_shim; building without ccache. Pass --with-coda-ccache=PATH to name a ccache.exe that does.])],
-             [AS_IF([command -v wslpath >/dev/null 2>&1],
-                        [CODA_CCACHE=`wslpath -w "$coda_ccache_shim"`
-                         CODA_CCACHE_DIR=`wslpath -w "$coda_ccache_dir"`],
-                    [command -v cygpath >/dev/null 2>&1],
-                        [CODA_CCACHE=`cygpath -w "$coda_ccache_shim"`
-                         CODA_CCACHE_DIR=`cygpath -w "$coda_ccache_dir"`],
-                    [CODA_CCACHE="$coda_ccache_shim"
-                     CODA_CCACHE_DIR="$coda_ccache_dir"])])])
+    AC_MSG_CHECKING([for the engine's ccache directory])
+    if test -f "$LOBUILDDIR/config_host.mk"; then
+        CODA_CCACHE=`sed -n 's/^MSBUILD_CCACHE = //p' "$LOBUILDDIR/config_host.mk"`
+        CODA_CCACHE_DIR=`sed -n 's/^MSBUILD_CCACHE_DIR = //p' "$LOBUILDDIR/config_host.mk"`
+    fi
+    if test -n "$CODA_CCACHE"; then
+        AC_MSG_RESULT([$CODA_CCACHE])
+    else
+        AC_MSG_RESULT([none, the app compiles with the stock clang-cl])
+    fi
     AC_SUBST([CODA_CCACHE])
     AC_SUBST([CODA_CCACHE_DIR])
 
