@@ -45,17 +45,17 @@ public:
         return mbPasswordRequested;
     }
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.uui.TestInteractionHandler"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & rServiceName) override
+    virtual bool supportsService(OUString const & rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { u"com.sun.star.task.InteractionHandler"_ustr,
         // added to indicate support for configuration.backend.MergeRecoveryRequest
@@ -64,15 +64,15 @@ public:
                  u"com.sun.star.uui.InteractionHandler"_ustr };
     }
 
-    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any> const & /*rArguments*/) override
+    virtual void initialize(cpo::uno::Sequence<cpo::uno::Any> const & /*rArguments*/) override
     {}
 
-    virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override
+    virtual void handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override
     {
         handleInteractionRequest(rRequest);
     }
 
-    virtual bool SAL_CALL handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& rRequest) override
+    virtual bool handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& rRequest) override
     {
         mbPasswordRequested = false;
 

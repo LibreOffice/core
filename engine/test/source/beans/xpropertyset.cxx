@@ -52,12 +52,12 @@ public:
 
     bool m_bListenerCalled;
 
-    virtual void SAL_CALL propertyChange(const beans::PropertyChangeEvent& /* xEvent */) override
+    virtual void propertyChange(const beans::PropertyChangeEvent& /* xEvent */) override
     {
         m_bListenerCalled = true;
     }
 
-    virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
+    virtual void disposing(const lang::EventObject& /* xEventObj */) override {}
 };
 
 class MockedVetoableChangeListener : public ::cppu::WeakImplHelper<beans::XVetoableChangeListener>
@@ -70,12 +70,12 @@ public:
 
     bool m_bListenerCalled;
 
-    virtual void SAL_CALL vetoableChange(const beans::PropertyChangeEvent& /* xEvent */) override
+    virtual void vetoableChange(const beans::PropertyChangeEvent& /* xEvent */) override
     {
         m_bListenerCalled = true;
     }
 
-    virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
+    virtual void disposing(const lang::EventObject& /* xEventObj */) override {}
 };
 }
 

@@ -35,12 +35,12 @@ public:
     }
 
     bool m_bListenerCalled;
-    virtual void SAL_CALL chartDataChanged(const chart::ChartDataChangeEvent& /* rEvent */) override
+    virtual void chartDataChanged(const chart::ChartDataChangeEvent& /* rEvent */) override
     {
         m_bListenerCalled = true;
     }
 
-    virtual void SAL_CALL disposing(const lang::EventObject& /* xEvent */) override {}
+    virtual void disposing(const lang::EventObject& /* xEvent */) override {}
 };
 }
 

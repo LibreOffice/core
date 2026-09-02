@@ -36,11 +36,11 @@ public:
     }
 
     bool m_bListenerCalled;
-    virtual void SAL_CALL refreshed(const lang::EventObject& /* xEvent */) override
+    virtual void refreshed(const lang::EventObject& /* xEvent */) override
     {
         m_bListenerCalled = true;
     }
-    virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
+    virtual void disposing(const lang::EventObject& /* xEventObj */) override {}
 };
 }
 

@@ -36,12 +36,12 @@ public:
     {
     }
     bool mbListenerCalled;
-    virtual void SAL_CALL
+    virtual void
     activeSpreadsheetChanged(const sheet::ActivationEvent& /* xEvent */) override
     {
         mbListenerCalled = true;
     }
-    virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
+    virtual void disposing(const lang::EventObject& /* xEventObj */) override {}
 };
 }
 

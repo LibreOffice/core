@@ -600,13 +600,13 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             }
 
             // XTopWindowListener
-            virtual void SAL_CALL windowOpened(const lang::EventObject&) override {}
-            virtual void SAL_CALL windowClosing(const lang::EventObject&) override {}
-            virtual void SAL_CALL windowClosed(const lang::EventObject&) override {}
-            virtual void SAL_CALL windowMinimized(const lang::EventObject&) override {}
-            virtual void SAL_CALL windowNormalized(const lang::EventObject&) override {}
-            virtual void SAL_CALL windowDeactivated(const lang::EventObject&) override {}
-            virtual void SAL_CALL windowActivated(const lang::EventObject& xEvent) override
+            virtual void windowOpened(const lang::EventObject&) override {}
+            virtual void windowClosing(const lang::EventObject&) override {}
+            virtual void windowClosed(const lang::EventObject&) override {}
+            virtual void windowMinimized(const lang::EventObject&) override {}
+            virtual void windowNormalized(const lang::EventObject&) override {}
+            virtual void windowDeactivated(const lang::EventObject&) override {}
+            virtual void windowActivated(const lang::EventObject& xEvent) override
             {
                 assert(mpHelper->mbWaitingForDialog);
 
@@ -626,7 +626,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             }
 
             // XEventListener
-            virtual void SAL_CALL disposing(const lang::EventObject&) override {}
+            virtual void disposing(const lang::EventObject&) override {}
         };
 
         // mimic IMPL_LINK inline

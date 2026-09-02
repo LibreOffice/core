@@ -27,7 +27,7 @@ struct TestEventListener final : ::cppu::WeakImplHelper<lang::XEventListener>
         : m_hasDisposingCalled(false)
     {
     }
-    virtual void SAL_CALL disposing(const lang::EventObject&) override
+    virtual void disposing(const lang::EventObject&) override
     {
         m_hasDisposingCalled = true;
     }

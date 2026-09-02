@@ -54,10 +54,10 @@ public:
     }
 
     // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject&) override {}
+    virtual void disposing(const lang::EventObject&) override {}
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent(const accessibility::AccessibleEventObject& aEvent) override
+    virtual void notifyEvent(const accessibility::AccessibleEventObject& aEvent) override
     {
         std::cout << "Listener got event: " << AccessibilityTools::debugString(aEvent) << std::endl;
         uno::Reference<accessibility::XAccessible> xOld(aEvent.OldValue, uno::UNO_QUERY);
