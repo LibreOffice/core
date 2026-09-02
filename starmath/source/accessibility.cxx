@@ -550,25 +550,4 @@ sal_Bool SAL_CALL SmGraphicAccessible::scrollSubstringTo( sal_Int32, sal_Int32, 
     return false;
 }
 
-OUString SAL_CALL SmGraphicAccessible::getImplementationName()
-{
-    return u"SmGraphicAccessible"_ustr;
-}
-
-sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
-        const OUString& rServiceName )
-{
-    return  cppu::supportsService(this, rServiceName);
-}
-
-Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
-{
-    return {
-        u"css::accessibility::Accessible"_ustr,
-        u"css::accessibility::AccessibleComponent"_ustr,
-        u"css::accessibility::AccessibleContext"_ustr,
-        u"css::accessibility::AccessibleText"_ustr
-    };
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

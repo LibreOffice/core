@@ -22,7 +22,6 @@
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -36,7 +35,7 @@ namespace accessibility { class AccessibleTextHelper; }
 // class used for accessibility in the graphic-window
 
 class SmGraphicAccessible final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleText>
 {
     OUString                            aAccName;
@@ -99,11 +98,6 @@ public:
     virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
