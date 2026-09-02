@@ -4573,7 +4573,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncRefListArraySUBTOTAL)
     // Matrix in F7:F9, individual STDEV of A2:A3, A3:A4 and A4:A5
     m_pDoc->InsertMatrixFormula(5, 6, 5, 8, aMark, u"=SUBTOTAL(7;OFFSET(A1;ROW(1:3);0;2))"_ustr);
     aPos.Set(5, 6, 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A2:A3 failed", 1.414214,
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A2:A3 failed", M_SQRT2,
                                          m_pDoc->GetValue(aPos), 1e-6);
     aPos.IncRow();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A3:A4 failed", 2.828427,
