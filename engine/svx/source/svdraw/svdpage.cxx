@@ -1361,6 +1361,7 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
     mnBorderUpper(0),
     mnBorderRight(0),
     mnBorderLower(0),
+    maGuid(tools::Guid::Generate),
     mpLayerAdmin(new SdrLayerAdmin(&rModel.GetLayerAdmin())),
     m_nPageNum(0),
     mbMaster(bMasterPage),
@@ -1422,6 +1423,8 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     mnBorderLower = rSrcPage.mnBorderLower;
     mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
     m_nPageNum = rSrcPage.m_nPageNum;
+    // A copy of a page starts out holding the identifier of its source page.
+    maGuid = rSrcPage.maGuid;
 
     if(rSrcPage.TRG_HasMasterPage())
     {
@@ -1902,6 +1905,8 @@ bool SdrPage::checkVisibility(
 void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPage"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maGuid"),
+                                      BAD_CAST(maGuid.getString().getStr()));
     SdrObjList::dumpAsXml(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("width"));

@@ -35,6 +35,7 @@
 #include <optional>
 #include <vector>
 #include <deque>
+#include <tools/Guid.hxx>
 #include <tools/UniqueID.hxx>
 
 // predefines
@@ -427,6 +428,9 @@ private:
     sal_Int32 mnBorderRight; // right page margin
     sal_Int32 mnBorderLower; // bottom page margin
     UniqueID maUniqueID;
+    // Globally unique identifier of the page. It is never empty. A new page generates one,
+    // and a cloned page starts out holding the identifier of its source page.
+    tools::Guid maGuid;
     bool mbBackgroundFullSize = false; ///< Background object to represent the whole page.
 
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
@@ -490,6 +494,8 @@ public:
     sal_Int32 GetRightBorder() const;
     sal_Int32 GetLowerBorder() const;
     sal_uInt64 GetUniqueID() const { return maUniqueID.getID(); }
+    const tools::Guid& GetGuid() const { return maGuid; }
+    void SetGuid(const tools::Guid& rGuid) { maGuid = rGuid; }
     void    SetBackgroundFullSize(bool bIn);
     bool    IsBackgroundFullSize() const;
 
