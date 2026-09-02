@@ -255,8 +255,11 @@
     <security desc="Altering these defaults potentially opens you to significant risk">
       <seccomp desc="Should failure to enable seccomp system call filtering be a fatal error." type="bool" default="true">true</seccomp>
 
-      <!-- deprecated: If capabilities is 'false', coolwsd will assume mount_namespaces of 'true' to achieve
-           this goal, only avoiding chroot for process isolation if linux namespaces are unavailable -->
+      <!-- With capabilities left at 'true', coolwsd picks the isolation it can get: a mount
+           namespace first, then the chroot built from the capabilities on coolforkit-caps, then
+           landlock. If it can get none of the three it refuses to start.
+           Setting capabilities to 'false' asks for landlock on its own, and a deployment where
+           landlock turns out to be unavailable then runs with no isolation at all. -->
       <capabilities desc="Should we require capabilities to isolate processes into chroot jails" type="bool" default="true">true</capabilities>
 
       <jwt_expiry_secs desc="Time in seconds before the Admin Console's JWT token expires" type="int" default="1800">1800</jwt_expiry_secs>
