@@ -35,11 +35,11 @@
 
 #define MID_FLAG_MASK                   0x00003fff
 
-// Import only: In general, properties may not throw exception, but
+// Import only: In general, properties may not throw an exception, but
 // this one may. If it throws an IllegalArgumentException, it will be
 // silently ignored. This should be used for properties whose values
 // cannot be checked. (E.g., the printer paper tray: The tray names
-// are different for all printers, and we don't know ahead whether a
+// are different for all printers, and we don't know ahead of time whether a
 // printer supports the trays in the current document.)
 #define MID_FLAG_PROPERTY_MAY_THROW     0x00100000
 
@@ -60,7 +60,7 @@
 // the current value to the importXML call.
 #define MID_FLAG_MERGE_PROPERTY         0x01000000
 
-// Import only: there are more entries for the same xml attribute existing
+// Import only: there are more entries for the same xml attribute
 #define MID_FLAG_MULTI_PROPERTY         0x02000000
 
 // the map entry denotes the name of an element item

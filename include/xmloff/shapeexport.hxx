@@ -91,7 +91,7 @@ enum class XmlShapeType
     DrawFrameShape,                     // "com.sun.star.drawing.FrameShape"
     DrawCaptionShape,                   // "com.sun.star.drawing.CaptionShape"
     DrawAppletShape,                    // "com.sun.star.drawing.AppletShape"
-    DrawPluginShape,                    // "com.sun.star.drawing.PlugginShape"
+    DrawPluginShape,                    // "com.sun.star.drawing.PluginShape"
 
     Draw3DSceneObject,                  // "com.sun.star.drawing.Shape3DSceneObject"
     Draw3DCubeObject,                   // "com.sun.star.drawing.Shape3DCubeObject"
