@@ -49,6 +49,8 @@
 #include <array>
 #include <stack>
 
+static OUString lcl_convertUINameToFileName(OUString& rStr);
+
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
     mnNumOfPalettes(3),
@@ -288,7 +290,8 @@ void PaletteManager::SetPalette(sal_Int32 nPos, bool bPosOnly)
                             XPropertyList::CreatePropertyListFromURL(
                             XPropertyListType::Color, GetSelectedPalettePath()));
         auto name = GetPaletteName(); // may change pColorList
-        mpColorList->SetName(name);
+        OUString fileName = lcl_convertUINameToFileName(name);
+        mpColorList->SetName(fileName);
         if(mpColorList->Load())
         {
             SfxObjectShell* pShell = SfxObjectShell::Current();
@@ -452,6 +455,29 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
         if (xFrame->getContainerWindow().is())
             xFrame->getContainerWindow()->setFocus();
     }
+}
+
+// tdf#171670 for soc palettes names, UI names are stored instead of file names
+// so let's convert back to file names
+static OUString lcl_convertUINameToFileName(OUString& rStr)
+{
+    if (rStr == SvxResId(RID_SVXSTR_COLOR_PALETTE_STANDARD))
+       return u"standard"_ustr;
+    else if (rStr == SvxResId(RID_SVXSTR_COLOR_PALETTE_TONAL))
+        return u"tonal"_ustr;
+    else if (rStr == SvxResId(RID_SVXSTR_COLOR_PALETTE_HTML))
+        return u"html"_ustr;
+    else if (rStr == SvxResId(RID_SVXSTR_COLOR_PALETTE_CHARTPALETTES))
+        return u"chart-palettes"_ustr;
+    else if (rStr == SvxResId(RID_SVXSTR_COLOR_PALETTE_COMPATIBILITY))
+        return u"compatibility"_ustr;
+    else if (rStr == SvxResId(RID_SVXSTR_COLOR_PALETTE_MATERIAL))
+        return u"material"_ustr;
+    else if (rStr == "LibreOffice")
+        return u"libreoffice"_ustr;
+    else if (rStr == SvxResId(RID_SVXSTR_COLOR_PALETTE_FREECOLOURHLC))
+       return u"freecolour-hlc"_ustr;
+    return rStr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
