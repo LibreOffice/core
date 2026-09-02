@@ -1495,6 +1495,13 @@ class Socket {
 			this._map.fire('relateddocuments', {
 				documents: app.relatedDocuments,
 			});
+		} else if (textMsg.startsWith('relateddocumenttoken:')) {
+			app.relatedDocumentToken = textMsg
+				.substring('relateddocumenttoken:'.length)
+				.trim();
+			this._map.fire('relateddocumenttoken', {
+				token: app.relatedDocumentToken,
+			});
 		} else if (textMsg.startsWith('presetconfigid:')) {
 			app.presetConfigId = textMsg.substring('presetconfigid:'.length).trim();
 		} else if (textMsg.startsWith('userpresetconfigid:')) {

@@ -242,6 +242,17 @@ class SlideLinks {
 			return;
 		}
 
+		if (related.state === 'noaccess') {
+			// This view holds no token for the source, so it cannot read it.
+			this.say(
+				_(
+					'You do not have access to {0}, so its pages cannot be refreshed.',
+				).replace('{0}', () => next.source),
+			);
+			this.sendNext();
+			return;
+		}
+
 		this.running = next;
 		if (related.state === 'connected') this.askForPages(related.wopiSrc);
 		else SlideImportSession.subscribeRelatedDocument(related.wopiSrc);

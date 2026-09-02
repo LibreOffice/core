@@ -223,6 +223,18 @@ class SlideImportPane {
       return;
     }
 
+    // The view holds no token for this source, so it cannot be opened.
+    if (chosen && chosen.state === 'noaccess') {
+      this.session.showError(
+        _('You do not have access to {0}.').replace(
+          '{0}',
+          this.relatedDocumentName(wopiSrc),
+        ),
+      );
+      if (this.visible) this.render();
+      return;
+    }
+
     // The document is being opened, which the pane says while the link comes up.
     this.chosenRemote = wopiSrc;
     this.session.setSource(this.relatedDocumentName(wopiSrc));
@@ -439,6 +451,8 @@ class SlideImportPane {
 
   private relatedDocumentStateLabel(state: string): string {
     switch (state) {
+      case 'noaccess':
+        return _('No access');
       case 'subscribed':
         return _('Subscribed');
       case 'connected':
