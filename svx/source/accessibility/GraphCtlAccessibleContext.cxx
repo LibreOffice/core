@@ -305,22 +305,6 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground()
     return static_cast<sal_Int32>(nColor);
 }
 
-// XServiceInfo
-OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName()
-{
-    return u"com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext"_ustr;
-}
-
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName )
-{
-    return cppu::supportsService(this, sServiceName);
-}
-
-Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames()
-{
-    return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
-}
-
 // XAccessibleSelection
 void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int64 nIndex )
 {

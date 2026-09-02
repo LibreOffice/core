@@ -27,8 +27,6 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <svl/lstner.hxx>
@@ -52,8 +50,7 @@ class SdrView;
 
 class SvxGraphCtrlAccessibleContext final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
-                                         css::accessibility::XAccessibleSelection,
-                                         css::lang::XServiceInfo>,
+                                         css::accessibility::XAccessibleSelection>,
       public SfxListener,
       public ::accessibility::IAccessibleViewForwarder
 {
@@ -83,11 +80,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
     virtual css::lang::Locale SAL_CALL getLocale() override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) override;
-    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
