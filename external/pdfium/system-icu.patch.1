@@ -1,0 +1,33 @@
+From 9b6f23989c5da39bff4ce36df96d62f9cabeebbf Mon Sep 17 00:00:00 2001
+Date: Fri, 7 Aug 2026 14:36:14 -0700
+Subject: [PATCH] fxcrt: fix building against system ICU in cfx_bidi_resolver
+
+This was the only location which forgot to check for this define,
+core/fxcrt/fx_extension.h:18 already did the same.
+
+Change-Id: I6efdd8c5a3322b146f9ccabcabd2ac2506912d85
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/154490
+Commit-Queue: Andy Phan <andyphan@chromium.org>
+Reviewed-by: Lei Zhang <thestig@chromium.org>
+Reviewed-by: Andy Phan <andyphan@chromium.org>
+---
+ core/fxcrt/cfx_bidi_resolver.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/core/fxcrt/cfx_bidi_resolver.cpp b/core/fxcrt/cfx_bidi_resolver.cpp
+index 50e302e35..efa585f38 100644
+--- a/core/fxcrt/cfx_bidi_resolver.cpp
++++ b/core/fxcrt/cfx_bidi_resolver.cpp
+@@ -10,7 +10,12 @@
+ #include "core/fxcrt/check_op.h"
+ #include "core/fxcrt/fx_safe_types.h"
+ #include "core/fxcrt/ptr_util.h"
++
++#if defined(USE_SYSTEM_ICUUC)
++#include <unicode/ubidi.h>
++#else
+ #include "third_party/icu/source/common/unicode/ubidi.h"
++#endif
+ 
+ void CFX_BidiResolver::UBiDiDeleter::operator()(UBiDi* bidi) const {
+   ubidi_close(bidi);
