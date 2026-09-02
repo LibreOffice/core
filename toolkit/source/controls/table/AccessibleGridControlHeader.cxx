@@ -165,13 +165,6 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
     return false;
 }
 
-// XServiceInfo ---------------------------------------------------------------
-
-OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
-{
-    return u"com.sun.star.accessibility.AccessibleGridControlHeader"_ustr;
-}
-
 // internal virtual methods ---------------------------------------------------
 
 AbsoluteScreenPixelRectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()

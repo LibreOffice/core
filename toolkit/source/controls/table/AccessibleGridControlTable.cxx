@@ -270,13 +270,6 @@ void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
     ensureAlive();
 }
 
-// XServiceInfo ---------------------------------------------------------------
-
-OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
-{
-    return u"com.sun.star.accessibility.AccessibleGridControlTable"_ustr;
-}
-
 void AccessibleGridControlTable::dispose()
 {
     for (rtl::Reference<AccessibleGridControlTableCell>& rxCell : m_aCellVector)

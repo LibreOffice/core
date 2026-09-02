@@ -44,11 +44,6 @@ namespace accessibility
         /** Grabs the focus to the GridControl. */
         virtual void SAL_CALL grabFocus() override;
 
-        /** @return
-                The name of this class.
-        */
-        virtual OUString SAL_CALL getImplementationName() override;
-
         /** Return a bitset of states of the current object.
         */
         sal_Int64 implCreateStateSet() override;

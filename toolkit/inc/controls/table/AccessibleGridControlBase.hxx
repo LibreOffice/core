@@ -28,7 +28,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -42,8 +41,7 @@ namespace accessibility {
 
 /** The GridControl accessible objects inherit from this base class. It
     implements basic functionality. */
-class AccessibleGridControlBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
+class AccessibleGridControlBase : public comphelper::OAccessible
 {
 public:
     /** Constructor.
@@ -114,18 +112,6 @@ public:
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
-
-    // XServiceInfo
-
-    /** @return  Whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-
-    /** @return  a list of all supported services. */
-    virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() override;
-
-    /*  Derived classes have to implement:
-        -   getImplementationName. */
 
     // helper methods
 

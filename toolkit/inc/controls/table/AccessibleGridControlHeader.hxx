@@ -106,11 +106,6 @@ public:
     /** @return  TRUE, if the specified cell is selected. */
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
-    // XServiceInfo
-
-    /** @return  The name of this class. */
-    virtual OUString SAL_CALL getImplementationName() override;
-
 private:
     /** Returns the specified row or column. Uses one of the parameters,
         depending on object type.

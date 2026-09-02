@@ -124,18 +124,6 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-// XServiceInfo
-
-sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
-        const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceNames()
-{
-    return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
-}
 // internal virtual methods
 
 bool AccessibleGridControlBase::implIsShowing()

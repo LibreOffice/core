@@ -167,12 +167,6 @@ void SAL_CALL AccessibleGridControl::grabFocus()
     m_aTable.GrabFocus();
 }
 
-// XServiceInfo ---------------------------------------------------------------
-OUString SAL_CALL AccessibleGridControl::getImplementationName()
-{
-    return u"com.sun.star.accessibility.AccessibleGridControl"_ustr;
-}
-
 // internal virtual methods ---------------------------------------------------
 
 AbsoluteScreenPixelRectangle AccessibleGridControl::implGetBoundingBoxOnScreen()

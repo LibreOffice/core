@@ -63,13 +63,6 @@ namespace accessibility {
     /** Grabs the focus to the Grid Control. */
     virtual void SAL_CALL grabFocus() override;
 
-    // XServiceInfo -----------------------------------------------------------
-
-    /** @return
-            The name of this class.
-    */
-    virtual OUString SAL_CALL getImplementationName() override;
-
 public:
     AccessibleGridControl(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,

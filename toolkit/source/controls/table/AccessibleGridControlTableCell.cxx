@@ -123,14 +123,6 @@ sal_Int32 SAL_CALL AccessibleGridControlTableCell::getIndexAtPoint(const css::aw
     return m_aTable.GetIndexForPoint(vcl::unohelper::ConvertToVCLPoint(_aPoint));
 }
 
-/** @return
-            The name of this class.
-    */
-OUString SAL_CALL AccessibleGridControlTableCell::getImplementationName()
-{
-    return u"com.sun.star.accessibility.AccessibleGridControlTableCell"_ustr;
-}
-
 /** @return  The count of visible children. */
 sal_Int64 SAL_CALL AccessibleGridControlTableCell::getAccessibleChildCount() { return 0; }
 

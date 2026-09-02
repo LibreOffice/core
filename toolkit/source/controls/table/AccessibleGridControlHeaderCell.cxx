@@ -90,14 +90,6 @@ void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
 {
 }
 
-/** @return
-        The name of this class.
-*/
-OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
-{
-    return u"com.sun.star.accessibility.AccessibleGridControlHeaderCell"_ustr;
-}
-
 AbsoluteScreenPixelRectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
