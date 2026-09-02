@@ -195,6 +195,17 @@ void RelatedDocuments::onRemoteEvent(DocumentBroker& docBroker, const std::strin
     docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
                                  ' ' + eventArguments);
 
+    // A save on the source uploaded a new file to storage. The new last-modified
+    // time is the same for every view, so refresh the shared source record.
+    if (event == "saved")
+    {
+        std::string time;
+        if (arguments.size() > 1)
+            COOLProtocol::getTokenString(arguments[1], "time", time);
+        setSource(docBroker, Uri::decode(encodedWopiSrc), Uri::decode(time));
+        return;
+    }
+
     // Content events carry no per-view connection change.
     if (event == "modified" || event == "invalidated" || event == "structure" || event.empty())
         return;

@@ -723,13 +723,16 @@ relateddocuments: <json>
     'missing' means the source could not be read from storage, so the links
     to it are broken.
 
-remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>]
+remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
 
     An event about a remote document a view subscribed to with
     remotedocsubscribe. The tag is the session id of the view that opened the
     subscription. <event> is one of:
     * 'connected': the remote document is loaded and events are flowing
     * 'modified': the remote document's modified state changed to <value>
+    * 'saved': the remote document uploaded a new file to storage; <time> is
+      the storage's last-modified time for the new content, so the source is
+      newer than the copy shown here
     * 'invalidated': the content of part <part> changed (-1 covers documents
       without parts); invalidations are coalesced, so one event stands for a
       burst of changes

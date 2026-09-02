@@ -177,6 +177,7 @@ public:
     void onLive();
     void onStructureChanged();
     void onModified(bool modified);
+    void onSaved(const std::string& lastModifiedTime);
     void onInvalidated(int part);
     void onLoadFailed(const std::string& kind);
     void onSessionClosed();
@@ -219,6 +220,11 @@ private:
 
     /// The last modified state seen, to forward only changes.
     bool _modified;
+
+    /// The storage last-modified time last seen for the source. Empty until the
+    /// first report, which is the time the source already had when this
+    /// connection opened.
+    std::string _lastModifiedTime;
 
     bool _everConnected;
 };

@@ -240,6 +240,12 @@ void HeadlessClientSession::handleMessage(const std::vector<char>& data)
             LOG_WRN("RemoteDoc: error from the remote document: " << firstLine);
         }
     }
+    else if (tokens.equals(0, "lastmodtime:") && tokens.size() > 1)
+    {
+        // The remote uploaded a new file to storage. The value is the storage's
+        // own last-modified time for the source's new content.
+        remoteDocument->onSaved(firstLine.substr(firstLine.find(' ') + 1));
+    }
 
     bool forwardable = false;
     for (const std::string& prefix : allowedResults)
@@ -430,6 +436,19 @@ void RemoteDocument::onModified(const bool modified)
     broadcastEvent(std::string("event=modified value=") + (modified ? "true" : "false"));
 }
 
+void RemoteDocument::onSaved(const std::string& lastModifiedTime)
+{
+    if (lastModifiedTime.empty() || lastModifiedTime == _lastModifiedTime)
+        return;
+
+    // The first report is the time the source already had on connect. A later,
+    // different time means the source was saved again while we were connected.
+    const bool hadTime = !_lastModifiedTime.empty();
+    _lastModifiedTime = lastModifiedTime;
+    if (hadTime)
+        broadcastEvent("event=saved time=" + Uri::encode(lastModifiedTime));
+}
+
 void RemoteDocument::onInvalidated(const int part)
 {
     if (_pendingInvalidatedParts.empty())
@@ -545,6 +564,7 @@ void RemoteDocument::dumpState(std::ostream& os) const
     os << "\n    everConnected: " << _everConnected
        << "\n    reconnectAttempts: " << _reconnectAttempts
        << "\n    modified: " << _modified
+       << "\n    lastModifiedTime: " << _lastModifiedTime
        << "\n    pendingInvalidatedParts: " << _pendingInvalidatedParts.size() << '\n';
 }
 

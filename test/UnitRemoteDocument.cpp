@@ -997,12 +997,204 @@ public:
     }
 };
 
+/// A document (file 1) subscribes to a remote document (file 2). When another
+/// user saves the remote document to storage, the subscriber's related
+/// documents list picks up the source's new last-modified time and the client
+/// is told the source is newer.
+class UnitRemoteDocumentSaved : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitConnected, LoadEditor, WaitEditorView, WaitSaved,
+               Done)
+    _phase;
+
+    /// A second user editing the remote document (file 2).
+    std::unique_ptr<UnitWebSocket> _editorWs;
+
+    /// The last-modified time last seen in a related documents list.
+    std::string _lastSeenModifiedTime;
+    /// The time seen just before the editor saved the remote document.
+    std::string _modifiedTimeBeforeSave;
+    bool _sawSavedEvent = false;
+    bool _sawUpdatedTime = false;
+
+    std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
+
+    std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+
+    static std::string modifiedTimeOf(std::string_view message)
+    {
+        static constexpr std::string_view key = "\"lastModifiedTime\":\"";
+        const std::size_t start = message.find(key);
+        if (start == std::string_view::npos)
+            return std::string();
+        const std::size_t from = start + key.size();
+        const std::size_t end = message.find('"', from);
+        if (end == std::string_view::npos)
+            return std::string();
+        return std::string(message.substr(from, end - from));
+    }
+
+    void finishWhenPropagated()
+    {
+        if (_phase == Phase::WaitSaved && _sawSavedEvent && _sawUpdatedTime)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The remote save updated the related document's last modified time and "
+                     "notified the client");
+        }
+    }
+
+public:
+    UnitRemoteDocumentSaved()
+        : WopiTestServer("UnitRemoteDocumentSaved")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
+        {
+            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken",
+                               "2026-09-01T12:00:00.000000Z");
+        }
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitLoadStatus)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitConnected);
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("relateddocuments:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            const std::string modifiedTime = modifiedTimeOf(message);
+            if (!modifiedTime.empty())
+                _lastSeenModifiedTime = modifiedTime;
+
+            if (_phase == Phase::WaitSaved && !_modifiedTimeBeforeSave.empty() &&
+                !modifiedTime.empty() && modifiedTime != _modifiedTimeBeforeSave)
+            {
+                _sawUpdatedTime = true;
+                finishWhenPropagated();
+            }
+            return false;
+        }
+
+        if (!message.starts_with("remotedocevent:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+        {
+            if (_phase == Phase::WaitConnected)
+                TRANSITION_STATE(_phase, Phase::LoadEditor);
+        }
+        else if (message.find("event=saved") != std::string::npos)
+        {
+            _sawSavedEvent = true;
+            finishWhenPropagated();
+        }
+        else if (message.find("event=error") != std::string::npos)
+        {
+            failTest("Unexpected remote document error: " + std::string(message));
+        }
+
+        return false;
+    }
+
+    bool onViewLoaded(const std::string& message) override
+    {
+        TST_LOG("onViewLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitEditorView)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitSaved);
+            _modifiedTimeBeforeSave = _lastSeenModifiedTime;
+
+            // Change the remote document and upload it to storage. The new
+            // last-modified time must reach the subscriber.
+            helpers::sendTextFrame(_editorWs->getWebSocket(), "key type=input char=97 key=0",
+                                   getTestname());
+            helpers::sendTextFrame(_editorWs->getWebSocket(), "key type=up char=0 key=512",
+                                   getTestname());
+            helpers::sendTextFrame(_editorWs->getWebSocket(),
+                                   "save dontTerminateEdit=0 dontSaveIfUnmodified=0",
+                                   getTestname());
+        }
+
+        return true;
+    }
+
+    bool onDataLoss(const std::string& reason) override
+    {
+        TST_LOG("onDataLoss: " << reason);
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/1?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::LoadEditor:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitEditorView);
+
+                const std::string editorWopiSrc =
+                    Uri::encode(remoteWopiSrc() + "?access_token=anything");
+                TST_LOG("Connecting an editor to the remote document: " << editorWopiSrc);
+                _editorWs = std::make_unique<UnitWebSocket>(
+                    socketPoll(), "/cool/" + editorWopiSrc + "/ws", getTestname());
+                helpers::sendTextFrame(_editorWs->getWebSocket(), "load url=" + editorWopiSrc,
+                                       getTestname());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitConnected:
+            case Phase::WaitEditorView:
+            case Phase::WaitSaved:
+            case Phase::Done:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
                               new UnitRelatedDocumentPost(), new UnitRemoteDocumentMutual(),
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
-                              new UnitRemoteDocumentIsolation(), nullptr };
+                              new UnitRemoteDocumentIsolation(), new UnitRemoteDocumentSaved(),
+                              nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
