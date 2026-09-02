@@ -161,6 +161,11 @@ class Dispatcher {
 			});
 		};
 
+		this.actionsMap['switchtoedit'] = function () {
+			if (app.isReadOnly()) return;
+			app.map.uiManager.permissionViewMode?.handleModeSelection('edit');
+		};
+
 		this.actionsMap['closetablet'] = function () {
 			app.map.uiManager.enterReadonlyOrClose();
 		};
