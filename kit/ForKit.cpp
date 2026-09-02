@@ -63,6 +63,8 @@ namespace
 {
 
 bool NoCapsForKit = false;
+/// True when landlock is the only isolation this kit will get.
+bool RequireLandlock = false;
 bool NoSeccomp = false;
 #if ENABLE_DEBUG
 bool SingleKit = false;
@@ -108,6 +110,7 @@ void dump_forkit_state()
            "  LogLevelStartup: " << LogLevelStartup << "\n"
            "  unit test: " << UnitTestLibrary << "\n"
            "  NoCapsForKit: " << NoCapsForKit << "\n"
+           "  RequireLandlock: " << RequireLandlock << "\n"
            "  NoSeccomp: " << NoSeccomp << "\n"
 #if ENABLE_DEBUG
            "  SingleKit: " << SingleKit << "\n"
@@ -562,7 +565,7 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
                     ] {
             sleepForDebugger();
             lokit_main(childRoot, jailId, configId, sysTemplate, loTemplate, true,
-                       true, false, queryVersion, DisplayVersion,
+                       false, true, false, queryVersion, DisplayVersion,
                        sysTemplateIncomplete, spareKitId);
         })
             .detach();
@@ -574,8 +577,8 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
                           queryVersion, sysTemplateIncomplete]()
         {
             lokit_main(childRoot, jailId, configId, sysTemplate, loTemplate,
-                       NoCapsForKit, NoSeccomp, useMountNamespaces, queryVersion,
-                       DisplayVersion, sysTemplateIncomplete, spareKitId);
+                       NoCapsForKit, RequireLandlock, NoSeccomp, useMountNamespaces,
+                       queryVersion, DisplayVersion, sysTemplateIncomplete, spareKitId);
         };
 
         auto parentFunc = [childRoot, jailId = std::move(jailId)](int pid)
@@ -971,6 +974,12 @@ int forkit_main(int argc, char** argv)
             if (!Landlock::isSupported())
                 LOG_ERR("Security: Running without the chroot/namespaces/landlock for document isolation is ill advised.");
             NoCapsForKit = true;
+        }
+
+        // landlock is the only isolation available, so failing to apply it is fatal
+        else if (std::strstr(cmd, "--require-landlock") == cmd)
+        {
+            RequireLandlock = true;
         }
 
         // we are running without seccomp protection

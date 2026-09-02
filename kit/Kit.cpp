@@ -3806,6 +3806,7 @@ void lokit_main(
                 const std::string& sysTemplate,
                 const std::string& loTemplate,
                 bool noCapabilities,
+                bool requireLandlock,
                 bool noSeccomp,
                 bool useMountNamespaces,
                 bool queryVersion,
@@ -4324,6 +4325,15 @@ void lokit_main(
             {
                 LOG_INF("Landlock jail successfully created.");
                 hasLandlock = true;
+            }
+            else if (requireLandlock)
+            {
+                // Landlock is the only thing confining this document, so the kit stops when the
+                // rules do not apply. An operator who wants it to carry on regardless sets
+                // security.capabilities to false.
+                LOG_FTL("Failed to apply the landlock rules, which are the only document "
+                        "isolation available on this installation.");
+                Util::forcedExit(EX_SOFTWARE);
             }
             else
             {
