@@ -146,12 +146,6 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
     mpBrowseBox->GrabFocus();
 }
 
-// XServiceInfo
-OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleBrowseBox"_ustr;
-}
-
 // internal virtual methods
 tools::Rectangle AccessibleBrowseBox::implGetBoundingBox()
 {

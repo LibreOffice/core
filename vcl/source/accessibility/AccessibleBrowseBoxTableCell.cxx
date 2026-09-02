@@ -109,14 +109,6 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getIndexAtPoint( const css::awt
                                              vcl::unohelper::ConvertToVCLPoint(_aPoint));
 }
 
-/** @return
-        The name of this class.
-*/
-OUString SAL_CALL AccessibleBrowseBoxTableCell::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleBrowseBoxTableCell"_ustr;
-}
-
 /** @return  The count of visible children. */
 sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleChildCount()
 {

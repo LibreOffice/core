@@ -245,13 +245,6 @@ sal_Int32 AccessibleTabListBoxTable::implGetSelRow( sal_Int32 nSelRow ) const
     return 0;
 }
 
-// XServiceInfo
-
-OUString AccessibleTabListBoxTable::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleTabListBoxTable"_ustr;
-}
-
 // XAccessibleSelection
 
 void SAL_CALL AccessibleTabListBoxTable::selectAccessibleChild( sal_Int64 nChildIndex )

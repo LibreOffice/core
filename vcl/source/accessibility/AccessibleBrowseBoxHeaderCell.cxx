@@ -97,14 +97,6 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
         mpBrowseBox->SelectColumn(static_cast<sal_uInt16>(m_nColumnRowId)); //!!!
 }
 
-/** @return
-        The name of this class.
-*/
-OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell"_ustr;
-}
-
 tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
     sal_Int32 nRow  = 0;

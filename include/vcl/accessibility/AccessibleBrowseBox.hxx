@@ -70,13 +70,6 @@ protected:
     /** Grabs the focus to the BrowseBox. */
     virtual void SAL_CALL grabFocus() override;
 
-    // XServiceInfo
-
-    /** @return
-            The name of this class.
-    */
-    virtual OUString SAL_CALL getImplementationName() override;
-
 public:
     // helper functions
     /** commitHeaderBarEvent commit the event at all listeners of the column/row header bar

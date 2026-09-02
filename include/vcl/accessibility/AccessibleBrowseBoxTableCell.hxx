@@ -47,11 +47,6 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
     /** @return
-            The name of this class.
-    */
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    /** @return
             The count of visible children.
     */
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

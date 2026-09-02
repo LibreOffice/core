@@ -24,7 +24,6 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/OAccessible.hxx>
 
@@ -42,8 +41,7 @@ namespace vcl {
 /** The BrowseBox accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces. */
 class VCL_DLLPUBLIC AccessibleBrowseBoxBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::awt::XFocusListener,
-                                         css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::awt::XFocusListener>
 {
 public:
     /** Constructor sets specified name and description. If the constant of a
@@ -142,17 +140,6 @@ public:
             The accessible child rendered under the given point.
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
-
-    // XServiceInfo
-
-    /** @return  Whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-
-    /** @return  A list of all supported services. */
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    /*  Derived classes have to implement:
-        -   getImplementationName. */
 
     // helper methods
 

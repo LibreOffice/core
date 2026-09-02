@@ -183,13 +183,6 @@ sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleSelected(
     return implIsRowSelected( nRow ) || implIsColumnSelected( nColumn );
 }
 
-// XServiceInfo ---------------------------------------------------------------
-
-OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleBrowseBoxTable"_ustr;
-}
-
 // internal virtual methods ---------------------------------------------------
 
 tools::Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()

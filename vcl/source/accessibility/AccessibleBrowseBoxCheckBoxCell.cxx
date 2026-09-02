@@ -119,11 +119,6 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleCheckB
     throw css::lang::IndexOutOfBoundsException();
 }
 
-OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.TableCheckBoxCell"_ustr;
-}
-
 sal_Int64 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()
 {
     ::osl::MutexGuard aGuard( getMutex() );

@@ -171,19 +171,6 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
     commitEvent(AccessibleEventId::STATE_CHANGED,aEmpty,aFocused);
 }
 
-// XServiceInfo
-
-sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
-        const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()
-{
-    return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
-}
-
 // other public methods
 
 void AccessibleBrowseBoxBase::setAccessibleName( const OUString& rName )

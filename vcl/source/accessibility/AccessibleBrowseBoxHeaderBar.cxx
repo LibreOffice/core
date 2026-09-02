@@ -267,13 +267,6 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::deselectAccessibleChild(
     }
 }
 
-// XServiceInfo ---------------------------------------------------------------
-
-OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar"_ustr;
-}
-
 // internal virtual methods ---------------------------------------------------
 
 tools::Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()
