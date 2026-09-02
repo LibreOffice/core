@@ -22,7 +22,6 @@
 #include "accessibletabbarbase.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace accessibility
