@@ -20,6 +20,20 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        exclusiveContent {
+            forRepository {
+                ivy {
+                    url 'https://storage.googleapis.com/r8-releases'
+
+                    patternLayout {
+                        artifact '/raw/[revision]/[module].[ext]'
+                    }
+
+                    metadataSources { artifact() }
+                }
+            }
+            filter { includeGroup("r8") }
+        }
     }
 }
 

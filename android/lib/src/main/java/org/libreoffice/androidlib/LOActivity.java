@@ -98,6 +98,8 @@ import org.json.JSONObject;
 import org.libreoffice.androidlib.lok.LokClipboardData;
 import org.libreoffice.androidlib.lok.LokClipboardEntry;
 
+import com.android.tools.r8.keepanno.annotations.UsedByNative;
+
 public class LOActivity extends AppCompatActivity {
     final static String TAG = "LOActivity";
 
@@ -1342,6 +1344,7 @@ public class LOActivity extends AppCompatActivity {
      * Passing messages from JS (instead of the websocket communication).
      */
     @JavascriptInterface
+    @UsedByNative // androidapp.cpp postDirectMessage()
     public void postMobileMessage(String message) {
         Log.d(TAG, "postMobileMessage: " + message);
 
@@ -1405,6 +1408,7 @@ public class LOActivity extends AppCompatActivity {
      * JavaScript. For example, you should use this to pass Base64ToArrayBuffer invocations to
      * the fake websocket
      */
+    @UsedByNative // androidapp.cpp send2JS
     void rawCallFakeWebsocketOnMessage(final byte[] message) {
         try {
             mMobileSocket.queueSend(message, () -> {

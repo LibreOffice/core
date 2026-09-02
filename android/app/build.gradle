@@ -32,9 +32,11 @@ android {
         manifestPlaceholders = [ appIcon: "${coLauncherIcon}" ]
         buildConfigField "boolean", "APP_HAS_BRANDING", "${coHasBranding}"
     }
+
     splits {
         abi {
-            enable true
+            // https://issuetracker.google.com/issues/402800800 - we can't build split ABIs when building bundles if R8 is enabled
+            enable = !(gradle.startParameter.taskNames.any { it.toLowerCase().contains("bundle") })
 
             reset ()
             for (abi in coAbiSplit) {
@@ -60,10 +62,9 @@ android {
                 resValue "string", "image_draw_header", "@drawable/drawer_header_brand"
             }
 
-            minifyEnabled false // FIXME disabled before we get a good proguardRules for callFakeWebsocketOnMessage calling from C++
-            shrinkResources false // FIXME cannot be enabled when minifyEnabled is turned off
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-rules.pro'
+            optimization {
+                enable true
+            }
         }
     }
 

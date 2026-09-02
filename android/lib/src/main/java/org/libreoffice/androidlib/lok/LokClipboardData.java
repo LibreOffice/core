@@ -25,7 +25,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.android.tools.r8.keepanno.annotations.KeepItemKind;
+import com.android.tools.r8.keepanno.annotations.KeepTarget;
+import com.android.tools.r8.keepanno.annotations.MethodAccessFlags;
+import com.android.tools.r8.keepanno.annotations.UsedByNative;
+
 public class LokClipboardData implements Serializable {
+    @UsedByNative(
+        additionalTargets = {
+            @KeepTarget(
+                instanceOfClassConstant = ArrayList.class,
+                kind = KeepItemKind.CLASS_AND_MEMBERS,
+                methodName = "add",
+                methodReturnType = "boolean",
+                methodParameters = {"java.lang.Object"},
+                methodAccess = {MethodAccessFlags.PUBLIC}
+            ), // androidapp.cpp Java_org_libreoffice_androidlib_LOActivity_getClipboardContent
+            @KeepTarget(
+                instanceOfClassConstant = ArrayList.class,
+                kind = KeepItemKind.CLASS_AND_MEMBERS,
+                methodName = "toArray",
+                methodReturnType = "java.lang.Object[]",
+                methodParameters = {},
+                methodAccess = {MethodAccessFlags.PUBLIC}
+            ) // androidapp.cpp Java_org_libreoffice_androidlib_LOActivity_setClipboardContent
+        }
+    ) // androidapp.cpp Java_org_libreoffice_androidlib_LOActivity_getClipboardContent, androidapp.cpp Java_org_libreoffice_androidlib_LOActivity_setClipboardContent
     public ArrayList<LokClipboardEntry> clipboardEntries = new ArrayList<LokClipboardEntry>();
 
     public String getText() {

@@ -38,7 +38,8 @@ android {
 
     splits {
         abi {
-            enable true
+            // https://issuetracker.google.com/issues/402800800 - we can't build split ABIs when building bundles if R8 is enabled
+            enable = !(gradle.startParameter.taskNames.any { it.toLowerCase().contains("bundle") })
 
             reset ()
             for (abi in coAbiSplit) {
@@ -58,9 +59,9 @@ android {
             debuggable true
         }
         release {
-            minifyEnabled false // FIXME disabled before we get a good proguardRules for callFakeWebsocketOnMessage calling from C++
-            shrinkResources false // FIXME cannot be enabled when minifyEnabled is turned off
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            optimization {
+                enable true
+            }
         }
     }
 
@@ -85,6 +86,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+
+    implementation 'r8:keepanno-annotations:9.3.16' // should match the compiler version from `cat android/build/app/outputs/mapping/release/mapping.txt | grep compiler_version`
 
     // https://stackoverflow.com/questions/75263047/duplicate-class-in-kotlin-android
     constraints {
