@@ -469,6 +469,139 @@ void ScDBDocFunc::RestoreHeaderColumnNames(ScDBData& rData, const std::vector<OU
     }
 }
 
+std::vector<ScDBDocFunc::TableRepair> ScDBDocFunc::GetTablesLosingData(
+    const ScMarkData& rMark, const ScRange& rRange, DelCellCmd eCmd) const
+{
+    const ScDocument& rDoc = rDocShell.GetDocument();
+    std::vector<TableRepair> aNames;
+
+    if (eCmd != DelCellCmd::Rows && eCmd != DelCellCmd::CellsUp)
+        return aNames;
+
+    ScRange aBand(rRange);
+    if (eCmd == DelCellCmd::Rows)
+    {
+        aBand.aStart.SetCol(0);
+        aBand.aEnd.SetCol(rDoc.MaxCol());
+    }
+
+    for (const SCTAB nTab : rMark)
+    {
+        aBand.aStart.SetTab(nTab);
+        aBand.aEnd.SetTab(nTab);
+
+        for (const ScDBData* pData : rDoc.GetAllNamedDBsInArea(aBand))
+        {
+            if (!pData->HasHeader())
+                continue;
+
+            ScRange aArea;
+            pData->GetArea(aArea);
+
+            // A cell shift moves the Table's area only when it spans the whole width of it.
+            if (eCmd == DelCellCmd::CellsUp
+                && (aBand.aStart.Col() > aArea.aStart.Col()
+                    || aBand.aEnd.Col() < aArea.aEnd.Col()))
+                continue;
+
+            // Taking the header row promotes the row below it instead, or drops the range
+            // when the whole of it goes. Neither is a repair.
+            if (aBand.aStart.Row() <= aArea.aStart.Row())
+                continue;
+
+            // The Total Row is part of the area, so it is not a row that may be given back.
+            const SCROW nFirstData = aArea.aStart.Row() + 1;
+            const SCROW nLastData = aArea.aEnd.Row() - (pData->HasTotals() ? 1 : 0);
+
+            const bool bTotalsGone = pData->HasTotals() && aBand.aStart.Row() <= aArea.aEnd.Row()
+                                     && aBand.aEnd.Row() >= aArea.aEnd.Row();
+            const bool bAllDataGone = nFirstData <= nLastData && aBand.aStart.Row() <= nFirstData
+                                      && aBand.aEnd.Row() >= nLastData;
+            if (!bTotalsGone && !bAllDataGone)
+                continue;
+
+            aNames.push_back({ pData->GetUpperName(), bTotalsGone });
+        }
+    }
+
+    return aNames;
+}
+
+void ScDBDocFunc::RepairTablesAfterDelete(const std::vector<TableRepair>& rRepairs,
+                                          DelCellCmd eCmd, bool bRecord, bool bApi)
+{
+    for (const TableRepair& rRepair : rRepairs)
+    {
+        // The Total Row first: without it the table needs one row less, which is what
+        // deciding whether a data row is owed depends on.
+        if (rRepair.mbTotalsGone)
+            DropTableTotals(rRepair.maUpperName);
+        RestoreTableDataRow(rRepair.maUpperName, eCmd, bRecord, bApi);
+    }
+}
+
+void ScDBDocFunc::DropTableTotals(const OUString& rUpperName)
+{
+    ScDBCollection* pDBs = rDocShell.GetDocument().GetDBCollection();
+    if (!pDBs)
+        return;
+
+    const ScDBData* pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
+    if (!pData || !pData->HasTotals())
+        return;
+
+    ScDBData aNoTotals(*pData);
+    aNoTotals.SetTotals(false);
+    ScSubTotalParam aParam;
+    aNoTotals.GetSubTotalParam(aParam);
+    ScDBData::ClearTotalRowParam(aParam);
+    aNoTotals.SetSubTotalParam(aParam);
+    ModifyDBData(aNoTotals);
+}
+
+void ScDBDocFunc::RestoreTableDataRow(const OUString& rUpperName, DelCellCmd eCmd,
+                                      bool bRecord, bool bApi)
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDBs = rDoc.GetDBCollection();
+    if (!pDBs)
+        return;
+
+    // Re-resolve by name: the deletion may have dropped the Table, and an earlier repair on the
+    // same sheet may have shifted it.
+    ScDBData* pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
+    if (!pData)
+        return;
+
+    ScRange aArea;
+    pData->GetArea(aArea);
+    if (aArea.aEnd.Row() - aArea.aStart.Row() >= pData->GetMinRowSpan())
+        return;
+
+    const SCROW nNewRow = aArea.aStart.Row() + 1;
+    const ScRange aInsert(aArea.aStart.Col(), nNewRow, aArea.aStart.Tab(), aArea.aEnd.Col(),
+                          nNewRow, aArea.aStart.Tab());
+    rDocShell.GetDocFunc().InsertCells(
+        aInsert, nullptr, eCmd == DelCellCmd::Rows ? INS_INSROWS_BEFORE : INS_CELLSDOWN, bRecord,
+        bApi);
+
+    // The insert widens the area on its own only when it lands inside it, which is the case for a
+    // Table with a Total Row but not for one that is down to its header row.
+    pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
+    if (!pData)
+        return;
+
+    pData->GetArea(aArea);
+    const SCROW nMissing = pData->GetMinRowSpan() - (aArea.aEnd.Row() - aArea.aStart.Row());
+    if (nMissing <= 0)
+        return;
+
+    ScDBData aNewData(*pData);
+    aArea.aEnd.IncRow(nMissing);
+    aNewData.SetArea(aArea);
+    ModifyDBData(aNewData);
+}
+
 bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
 {
     bool bDone = false;

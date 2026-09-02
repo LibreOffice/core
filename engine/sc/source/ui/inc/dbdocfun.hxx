@@ -20,6 +20,7 @@
 #pragma once
 
 #include <address.hxx>
+#include <global.hxx>
 #include <vector>
 
 struct ScImportParam;
@@ -30,6 +31,7 @@ struct ScSubTotalParam;
 class SfxViewFrame;
 class ScDBData;
 class ScDocShell;
+class ScMarkData;
 class ScDPObject;
 class ScDBCollection;
 
@@ -78,6 +80,19 @@ public:
     SC_DLLPUBLIC bool AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader, bool bRecord,
                     bool bApi, const OUString& rStyleName = u""_ustr);
     SC_DLLPUBLIC bool DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi );
+
+    struct TableRepair
+    {
+        OUString maUpperName;
+        bool mbTotalsGone;
+    };
+    /// The Tables the deletion would leave without any data row.
+    std::vector<TableRepair> GetTablesLosingData(const ScMarkData& rMark, const ScRange& rRange,
+                                                 DelCellCmd eCmd) const;
+
+    /// Put the tables GetTablesLosingData() named back into a shape a table may have.
+    void RepairTablesAfterDelete(const std::vector<TableRepair>& rRepairs, DelCellCmd eCmd,
+                                 bool bRecord, bool bApi);
 
     /** Enforce the "no empty, no duplicate" header invariant of a styled table:
         write generated "Column#" default names into empty header cells, and
@@ -134,6 +149,13 @@ public:
      * cache.
      */
     void RefreshPivotTableGroups(ScDPObject* pDPObj);
+
+private:
+    /// Switch the Total Row off, because the row it lived in was deleted.
+    void DropTableTotals(const OUString& rUpperName);
+
+    /// Give back one empty data row, as a table cannot be left with only its header row.
+    void RestoreTableDataRow(const OUString& rUpperName, DelCellCmd eCmd, bool bRecord, bool bApi);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

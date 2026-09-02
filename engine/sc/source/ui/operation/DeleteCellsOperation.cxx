@@ -9,12 +9,10 @@
 
 #include <operation/DeleteCellsOperation.hxx>
 
-#include <dbdata.hxx>
 #include <dbdocfun.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <markdata.hxx>
-#include <subtotalparam.hxx>
 #include <editable.hxx>
 #include <dpobject.hxx>
 #include <attrib.hxx>
@@ -113,140 +111,6 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         default:;
     }
     return true;
-}
-
-struct TableRepair
-{
-    OUString maUpperName;
-    bool mbTotalsGone;
-};
-
-/**
- * The Tables the deletion would leave without a data row, or without the row their Total Row
- * lived in.  Collected before the cells move, because afterwards the Table no longer says
- * which rows it lost.
- */
-std::vector<TableRepair> collectTablesLosingData(const ScDocument& rDoc, const ScMarkData& rMark,
-                                                 const ScRange& rRange, DelCellCmd eCmd)
-{
-    std::vector<TableRepair> aNames;
-
-    if (eCmd != DelCellCmd::Rows && eCmd != DelCellCmd::CellsUp)
-        return aNames;
-
-    ScRange aBand(rRange);
-    if (eCmd == DelCellCmd::Rows)
-    {
-        aBand.aStart.SetCol(0);
-        aBand.aEnd.SetCol(rDoc.MaxCol());
-    }
-
-    for (const SCTAB nTab : rMark)
-    {
-        aBand.aStart.SetTab(nTab);
-        aBand.aEnd.SetTab(nTab);
-
-        for (const ScDBData* pData : rDoc.GetAllNamedDBsInArea(aBand))
-        {
-            if (!pData->HasHeader())
-                continue;
-
-            ScRange aArea;
-            pData->GetArea(aArea);
-
-            // A cell shift moves the Table's area only when it spans the whole width of it.
-            if (eCmd == DelCellCmd::CellsUp
-                && (aBand.aStart.Col() > aArea.aStart.Col()
-                    || aBand.aEnd.Col() < aArea.aEnd.Col()))
-                continue;
-
-            // Taking the header row promotes the row below it instead, or drops the range
-            // when the whole of it goes. Neither is a repair.
-            if (aBand.aStart.Row() <= aArea.aStart.Row())
-                continue;
-
-            // The Total Row is part of the area, so it is not a row that may be given back.
-            const SCROW nFirstData = aArea.aStart.Row() + 1;
-            const SCROW nLastData = aArea.aEnd.Row() - (pData->HasTotals() ? 1 : 0);
-
-            const bool bTotalsGone = pData->HasTotals() && aBand.aStart.Row() <= aArea.aEnd.Row()
-                                     && aBand.aEnd.Row() >= aArea.aEnd.Row();
-            const bool bAllDataGone = nFirstData <= nLastData && aBand.aStart.Row() <= nFirstData
-                                      && aBand.aEnd.Row() >= nLastData;
-            if (!bTotalsGone && !bAllDataGone)
-                continue;
-
-            aNames.push_back({ pData->GetUpperName(), bTotalsGone });
-        }
-    }
-
-    return aNames;
-}
-
-void dropTableTotals(ScDocShell& rDocShell, const OUString& rUpperName)
-{
-    ScDBCollection* pDBs = rDocShell.GetDocument().GetDBCollection();
-    if (!pDBs)
-        return;
-
-    const ScDBData* pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
-    if (!pData || !pData->HasTotals())
-        return;
-
-    ScDBData aNoTotals(*pData);
-    aNoTotals.SetTotals(false);
-    ScSubTotalParam aParam;
-    aNoTotals.GetSubTotalParam(aParam);
-    ScDBData::ClearTotalRowParam(aParam);
-    aNoTotals.SetSubTotalParam(aParam);
-    ScDBDocFunc(rDocShell).ModifyDBData(aNoTotals);
-}
-
-/**
- * Give back one empty data row, as a Table cannot be left with only its header row.  The rows
- * asked for are really gone by now, so the row is a fresh empty one.
- */
-void restoreTableDataRow(ScDocShell& rDocShell, const OUString& rUpperName, DelCellCmd eCmd,
-                         bool bRecord, bool bApi)
-{
-    ScDocument& rDoc = rDocShell.GetDocument();
-    ScDBCollection* pDBs = rDoc.GetDBCollection();
-    if (!pDBs)
-        return;
-
-    // Re-resolve by name: the deletion may have dropped the Table, and an earlier repair on the
-    // same sheet may have shifted it.
-    ScDBData* pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
-    if (!pData)
-        return;
-
-    ScRange aArea;
-    pData->GetArea(aArea);
-    if (aArea.aEnd.Row() - aArea.aStart.Row() >= pData->GetMinRowSpan())
-        return;
-
-    const SCROW nNewRow = aArea.aStart.Row() + 1;
-    const ScRange aInsert(aArea.aStart.Col(), nNewRow, aArea.aStart.Tab(), aArea.aEnd.Col(),
-                          nNewRow, aArea.aStart.Tab());
-    rDocShell.GetDocFunc().InsertCells(
-        aInsert, nullptr, eCmd == DelCellCmd::Rows ? INS_INSROWS_BEFORE : INS_CELLSDOWN, bRecord,
-        bApi);
-
-    // The insert widens the area on its own only when it lands inside it, which is the case for a
-    // Table with a Total Row but not for one that is down to its header row.
-    pData = pDBs->getNamedDBs().findByUpperName(rUpperName);
-    if (!pData)
-        return;
-
-    pData->GetArea(aArea);
-    const SCROW nMissing = pData->GetMinRowSpan() - (aArea.aEnd.Row() - aArea.aStart.Row());
-    if (nMissing <= 0)
-        return;
-
-    ScDBData aNewData(*pData);
-    aArea.aEnd.IncRow(nMissing);
-    aNewData.SetArea(aArea);
-    ScDBDocFunc(rDocShell).ModifyDBData(aNewData);
 }
 
 } // anonymous namespace
@@ -445,8 +309,9 @@ bool DeleteCellsOperation::runImplementation()
     bool bDeletingMerge = false;
 
     // The list action below stays open past the deletion, for the row given back to these.
-    const std::vector<TableRepair> aStarvedTables
-        = collectTablesLosingData(rDoc, aMark, aInputRange, meCmd);
+    ScDBDocFunc aDBFunc(mrDocShell);
+    const std::vector<ScDBDocFunc::TableRepair> aStarvedTables
+        = aDBFunc.GetTablesLosingData(aMark, aInputRange, meCmd);
 
     OUString aUndo = ScResId(STR_UNDO_DELETECELLS);
     if (mbRecord)
@@ -815,12 +680,7 @@ bool DeleteCellsOperation::runImplementation()
         qDecreaseRange.pop_back();
     }
 
-    for (const TableRepair& rRepair : aStarvedTables)
-    {
-        if (rRepair.mbTotalsGone)
-            dropTableTotals(mrDocShell, rRepair.maUpperName);
-        restoreTableDataRow(mrDocShell, rRepair.maUpperName, meCmd, mbRecord, mbApi);
-    }
+    aDBFunc.RepairTablesAfterDelete(aStarvedTables, meCmd, mbRecord, mbApi);
 
     if (bDeletingMerge || (mbRecord && !aStarvedTables.empty()))
         mrDocShell.GetUndoManager()->LeaveListAction();
