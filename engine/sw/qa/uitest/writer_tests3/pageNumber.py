@@ -152,4 +152,21 @@ class PageNumberWizard(UITestCase):
             self.assertEqual(1, len(xFooterParagraphs))
             self.assertEqual("1 / 3", xFooterParagraphs[0].String)
 
+    def test_mirror_on_a_single_page(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+
+            self.make_pages(1)
+
+            # A single page has no even page to mirror onto, but the checkbox is on by default.
+            with self.ui_test.execute_dialog_through_command(".uno:PageNumberWizard") as xDialog:
+                select_by_text(xDialog.getChild("alignmentCombo"), "Right")
+                xMirrorCheckbox = xDialog.getChild("mirrorCheckbox")
+                self.assertEqual("true", get_state_as_dict(xMirrorCheckbox)["Selected"])
+
+            # The page margins stay the same on both sides, since nothing was mirrored.
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 'ALL' != 'MIRRORED'
+            xStandardStyle = document.StyleFamilies.PageStyles.Standard
+            self.assertEqual("ALL", xStandardStyle.PageStyleLayout.value)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -1248,6 +1248,8 @@ FIELD_INSERT:
                 const bool bFooterAlreadyOn = rDesc.GetMaster().GetFooter().IsActive();
                 const bool bIsSinglePage = rDesc.GetFollow() != &rDesc;
                 const size_t nMirrorPagesNeeded = rDesc.IsFirstShared() ? 2 : 3;
+                const bool bCreateMirror = !bIsSinglePage && pDlg->GetMirrorOnEvenPages()
+                    && nMirrorPagesNeeded <= rSh.GetPageCnt();
                 const OUString sBookmarkName(OUString::Concat("PageNumWizard_")
                     + (bHeader ? "HEADER" : "FOOTER") + "_" + rDesc.GetName().toString());
                 IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
@@ -1360,16 +1362,13 @@ FIELD_INSERT:
                     }
 
                     // Might as well turn on margin mirroring too - if appropriate
-                    if (pDlg->GetMirrorOnEvenPages() && !bHeaderAlreadyOn && !bFooterAlreadyOn
-                        && !bIsSinglePage
+                    if (bCreateMirror && !bHeaderAlreadyOn && !bFooterAlreadyOn
                         && (aNewDesc.ReadUseOn() & UseOnPage::Mirror) == UseOnPage::All)
                     {
-                        aNewDesc.WriteUseOn(rDesc.ReadUseOn() | UseOnPage::Mirror);
+                        aNewDesc.WriteUseOn(aNewDesc.ReadUseOn() | UseOnPage::Mirror);
                     }
                 }
 
-                const bool bCreateMirror = !bIsSinglePage && pDlg->GetMirrorOnEvenPages()
-                    && nMirrorPagesNeeded <= rSh.GetPageCnt();
                 if (bCreateMirror)
                 {
                     // Use different left/right header/footer
