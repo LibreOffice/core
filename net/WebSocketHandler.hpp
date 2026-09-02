@@ -487,18 +487,8 @@ private:
 
         //Process data frame
         readPayload(data, payloadLen, mask, _wsPayload);
-#else
-        // Unwrap what StreamSocket::readIncomingData() did
-        const size_t headerLen = sizeof(ssize_t);
-        ssize_t payloadLen;
-        memcpy(&payloadLen, socket->getInBuffer().data(), headerLen);
-        unsigned char * const p = reinterpret_cast<unsigned char*>(socket->getInBuffer().data() + headerLen);
-        _wsPayload.insert(_wsPayload.end(), p, p + payloadLen);
-#endif
 
         socket->eraseFirstInputBytes(headerLen + payloadLen);
-
-#if !MOBILEAPP
 
         LOGA_TRC(WebSocket, "Incoming WebSocket frame code "
                                 << static_cast<unsigned>(code) << ", fin? " << fin << ", mask? "
@@ -538,6 +528,15 @@ private:
             return true;
         }
 #else
+        // Unwrap what StreamSocket::readIncomingData() did
+        const size_t headerLen = sizeof(ssize_t);
+        ssize_t payloadLen;
+        memcpy(&payloadLen, socket->getInBuffer().data(), headerLen);
+        unsigned char * const p = reinterpret_cast<unsigned char*>(socket->getInBuffer().data() + headerLen);
+        _wsPayload.insert(_wsPayload.end(), p, p + payloadLen);
+
+        socket->eraseFirstInputBytes(headerLen + payloadLen);
+
         try
         {
             handleMessage(_wsPayload);
