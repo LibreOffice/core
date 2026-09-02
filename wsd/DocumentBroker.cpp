@@ -4671,17 +4671,18 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
                                      << ", IsPossiblyModified: " << isPossiblyModified());
 
 #if !MOBILEAPP
-        try
-        {
-            /// make sure to upload preset to WOPIHost
-            uploadPresetsToWopiHost();
-        }
-        catch (const std::exception& exc)
-        {
-            LOG_WRN("Failed to upload presets for session [" << id << "]: " << exc.what());
-        }
         if (!isConvertTo())
         {
+            try
+            {
+                /// make sure to upload preset to WOPIHost
+                uploadPresetsToWopiHost();
+            }
+            catch (const std::exception& exc)
+            {
+                LOG_WRN("Failed to upload presets for session [" << id << "]: " << exc.what());
+            }
+
             // Rescue the clipboard before the session goes away so its copied
             // content lands in the global SavedClipboards cache. The clipboard
             // tag is tied to this view, so once the session is gone no live one
