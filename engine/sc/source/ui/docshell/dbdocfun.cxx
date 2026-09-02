@@ -424,17 +424,25 @@ void ScDBDocFunc::RestoreHeaderColumnNames(ScDBData& rData, const std::vector<OU
         }
 
         // A header cell duplicating another header, revert it to its previous name.
-        bool bDuplicate = false;
-        for (SCCOL nOther = nStartCol; nOther <= nEndCol && !bDuplicate; ++nOther)
+        bool bReverted = false;
+        for (SCCOL nOther = nStartCol; nOther <= nEndCol && !bReverted; ++nOther)
         {
             if (nOther != nCol && rTransliteration.isEqual(rHeader, aCur[nOther - nStartCol]))
             {
                 const OUString aPrev = getPrev(nCol);
                 if (!aPrev.isEmpty() && !rTransliteration.isEqual(aPrev, rHeader))
+                {
                     writeBack(nCol, aPrev);
+                    bReverted = true;
+                }
                 break;
             }
         }
+
+        // A header cell holds a name, so a number or a formula entered there need to become a text
+        const CellType eType = rDoc.GetCellType(ScAddress(nCol, nRow, nTab));
+        if (!bReverted && eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
+            writeBack(nCol, rHeader);
     }
 
     // Release a generated name whose origin column no longer holds it: once the

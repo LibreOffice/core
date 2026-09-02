@@ -18,6 +18,8 @@
 #include <scopetools.hxx>
 #include <subtotalparam.hxx>
 #include <docfunc.hxx>
+#include <editutil.hxx>
+#include <formulacell.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <rangenam.hxx>
@@ -2048,6 +2050,76 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testDuplicateHeader)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("original header A kept", u"Sales"_ustr,
                                  m_pDoc->GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("duplicate edit restored to previous", u"Region"_ustr,
+                                 m_pDoc->GetString(2, 0, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testNumericHeaderBecomesText)
+{
+    m_pDoc->InsertTab(0, u"NumHeader"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"Sales"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"Profit"_ustr);
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"Region"_ustr);
+    ScDBDocFunc aFunc(*m_xDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+
+    m_xDocShell->GetDocFunc().SetValueCell(ScAddress(2, 0, 0), 9999.0, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("a number in a header is stored as text", CELLTYPE_STRING,
+                                 m_pDoc->GetCellType(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"9999"_ustr, m_pDoc->GetString(2, 0, 0));
+
+    const ScDBData* pData
+        = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the column is named what the cell shows", u"9999"_ustr,
+                                 pData->GetTableColumnNames()[2]);
+
+    // A formula in a header cell goes the same way, it is a name too.
+    m_xDocShell->GetDocFunc().SetFormulaCell(
+        ScAddress(1, 0, 0), new ScFormulaCell(*m_pDoc, ScAddress(1, 0, 0), u"=1+11"_ustr), false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("a formula in a header is stored as text", CELLTYPE_STRING,
+                                 m_pDoc->GetCellType(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"12"_ustr, m_pDoc->GetString(1, 0, 0));
+
+    // Rich text in a header is text already, it must survive untouched.
+    ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
+    rEE.SetTextCurrentDefaults(u"Two\nLines"_ustr);
+    m_xDocShell->GetDocFunc().SetEditCell(ScAddress(0, 0, 0), *rEE.CreateTextObject(), false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rich text in a header is not flattened", CELLTYPE_EDIT,
+                                 m_pDoc->GetCellType(ScAddress(0, 0, 0)));
+
+    // A data cell keeps its number and its formula.
+    m_xDocShell->GetDocFunc().SetValueCell(ScAddress(2, 1, 0), 1234.0, false);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, m_pDoc->GetCellType(ScAddress(2, 1, 0)));
+    m_xDocShell->GetDocFunc().SetFormulaCell(
+        ScAddress(1, 1, 0), new ScFormulaCell(*m_pDoc, ScAddress(1, 1, 0), u"=1+11"_ustr), false);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(1, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testNumericHeaderDuplicateReverts)
+{
+    m_pDoc->InsertTab(0, u"NumDup"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"12"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"Profit"_ustr);
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"Region"_ustr);
+    ScDBDocFunc aFunc(*m_xDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+
+    // 12 into C1 would read the same as A1, so C1 goes back to "Region".
+    m_xDocShell->GetDocFunc().SetValueCell(ScAddress(2, 0, 0), 12.0, false);
+    CPPUNIT_ASSERT_EQUAL(u"12"_ustr, m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("a duplicate is reverted, not turned into text", u"Region"_ustr,
                                  m_pDoc->GetString(2, 0, 0));
 
     m_pDoc->DeleteTab(0);
