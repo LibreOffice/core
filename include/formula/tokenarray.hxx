@@ -242,14 +242,14 @@ protected:
     bool            mbFromRangeName :1;     // If this array originates from a named expression
     bool            mbShareable     :1;     // Whether or not it can be shared with adjacent cells.
     bool            mbFinalized     :1;     // Whether code arrays have their final used size and no more tokens can be added.
-    bool mbDynamicArrayFunction :1; // If a dynamic-array function occurs in the formula.(i.e. UNIQUE, FILTER, SORT)
+    bool mbDynamicArrayFunction :1; // If a dynamic-array function occurs in the formula (i.e. UNIQUE, FILTER, SORT)
 
 protected:
     void                    Assign( const FormulaTokenArray& );
     void                    Assign( sal_uInt16 nCode, FormulaToken **pTokens );
     void                    Move( FormulaTokenArray&& );
 
-    /// Also used by the compiler. The token MUST had been allocated with new!
+    /// Also used by the compiler. The token MUST have been allocated with new!
     FormulaToken*           Add( FormulaToken* );
 
 public:
@@ -259,7 +259,7 @@ public:
         CODE_AND_RPN    ///< replacement in pCode and pRPN
     };
 
-    /** Also used by the compiler. The token MUST had been allocated with new!
+    /** Also used by the compiler. The token MUST have been allocated with new!
         @param  nOffset
                 Absolute offset in pCode of the token to be replaced.
         @param  eMode
@@ -324,7 +324,7 @@ public:
         return pCode[nIdx];
     }
 
-    /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
+    /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns nullptr if not.
     FormulaToken* PeekPrev( sal_uInt16 & nIdx ) const;
 
     /// Return the opcode at pCode[nIdx-1], ocNone if nIdx-1 is out of bounds

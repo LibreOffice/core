@@ -33,12 +33,12 @@ namespace drawinglayer::primitive2d
 {
         /** GridPrimitive2D class
 
-            This primitive is specialized to Grid visualisation. The graphic definition
+            This primitive is specialized to grid visualization. The graphic definition
             (Transform) contains the whole grid area, but will of course be combined
             with the visible area (Viewport) when decomposed. Also a resolution-dependent
-            point reduction is used to not create too much grid visualisation data. This
+            point reduction is used to not create too much grid visualization data. This
             makes this primitive highly view-dependent and it dynamically buffers
-            the last decomposition dependent from the Viewport used.
+            the last decomposition depending on the Viewport used.
          */
         class DRAWINGLAYER_DLLPUBLIC GridPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
@@ -57,11 +57,11 @@ namespace drawinglayer::primitive2d
             /// Grid color for single-pixel grid points
             basegfx::BColor                                 maBColor;
 
-            /// The Bitmap (with transparence) for grid cross points
+            /// The Bitmap (with transparency) for grid cross points
             Bitmap                                          maCrossMarker;
 
             /** the last used object to view transformation and the last Viewport,
-                used from getDecomposition for decide buffering
+                used from getDecomposition to decide buffering
              */
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;

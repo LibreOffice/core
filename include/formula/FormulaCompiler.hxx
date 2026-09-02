@@ -89,7 +89,7 @@ public:
         ExternalHashMap         maReverseExternalHashMap;   /// Hash map of ocExternal, AddIn String -> Filter String
         FormulaGrammar::Grammar meGrammar;                  /// Grammar, language and reference convention
         sal_uInt16              mnSymbols;                  /// Count of OpCode symbols
-        bool                    mbCore          : 1;        /// If mapping was setup by core, not filters
+        bool                    mbCore          : 1;        /// If mapping was set up by core, not filters
         bool                    mbEnglish       : 1;        /// If English symbols and external names
         bool                    mbEnglishLocale : 1;        /// If English locale for numbers
 
@@ -330,7 +330,7 @@ public:
     /** Sets the implicit intersection compute flag */
     void SetComputeIIFlag(bool bSet) { mbComputeII = bSet; }
 
-    /** Sets the matrix flag for the formula*/
+    /** Sets the matrix flag for the formula */
     void SetMatrixFlag(bool bSet) { mbMatrixFlag = bSet; }
 
     void SetPreferLocalNames(bool bSet) { mbPreferLocalNames = bSet; }

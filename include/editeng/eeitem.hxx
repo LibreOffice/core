@@ -153,6 +153,6 @@ inline constexpr sal_uInt16 EE_ITEMS_END       (EE_FEATURE_END);
 
 inline constexpr sal_uInt16 EDITITEMCOUNT (EE_ITEMS_END - EE_ITEMS_START + 1);
 
-#endif // _ INCLUDED_EDITENG_EEITEM_HXX
+#endif // INCLUDED_EDITENG_EEITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

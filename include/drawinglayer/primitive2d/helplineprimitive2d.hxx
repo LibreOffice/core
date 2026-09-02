@@ -44,11 +44,11 @@ namespace drawinglayer::primitive2d
 
             This primitive provides a view-dependent helpline definition. The Helpline
             is defined by a line equation (Point and vector) and a style. When the style
-            is a line, dependent from Viewport the visible part of that Helpline is
+            is a line, depending on the Viewport the visible part of that Helpline is
             constructed. For Point, a cross is constructed. This primitive is highly
             view-dependent.
 
-            The visualisation uses the two given colors to create a dashed line with
+            The visualization uses the two given colors to create a dashed line with
             the given dash length.
          */
         class DRAWINGLAYER_DLLPUBLIC HelplinePrimitive2D final : public BufferedDecompositionPrimitive2D
@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
             double                                          mfDiscreteDashLength;
 
             /** the last used object to view transformation and the last Viewport,
-                used from getDecomposition for decide buffering
+                used from getDecomposition to decide buffering
              */
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;

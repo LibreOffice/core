@@ -63,8 +63,8 @@ enum ELoadState
 };
 
 /*-************************************************************************************************************
-    @short      implement the topframe of frame tree
-    @descr      This is the root of the frame tree. The desktop has no window, is not visible but he is the logical
+    @short      implements the top frame of the frame tree
+    @descr      This is the root of the frame tree. The desktop has no window, is not visible but it is the logical
                 "masternode" to build the hierarchy.
 
     @implements XInterface
@@ -134,20 +134,20 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         /**
             @interface  XDesktop
 
-            @short      try to shutdown these desktop environment.
+            @short      try to shut down this desktop environment.
 
             @descr      Will try to close all frames. If at least one frame could
                         not be closed successfully termination will be stopped.
 
-                        Registered termination listener will be taken into account
-                        also. As special feature some of our registered listener
-                        are well known by its UNO implementation name. They are handled
-                        different to all other listener.
+                        Registered termination listeners will be taken into account
+                        also. As a special feature some of our registered listeners
+                        are well known by their UNO implementation name. They are handled
+                        differently to all other listeners.
 
                         Btw: Desktop.terminate() was designed in the past to be used
-                        within an UI based environment. So it's allowed e.g. to
+                        within a UI based environment. So it's allowed e.g. to
                         call XController.suspend() here. If UI isn't an option ... please
-                        use XCloseable.close() at these desktop implementation.
+                        use XCloseable.close() at this desktop implementation.
                         ... if it will be supported in the future .-))
 
             @seealso    XTerminateListener
@@ -166,10 +166,10 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
             @short      add a listener for termination events
 
-            @descr      Additional to adding normal listener these method was implemented special.
+            @descr      In addition to adding normal listeners this method was implemented specially.
                         Every listener will be asked for its uno implementation name.
                         Some of them are well known... and the corresponding listener won't be added
-                        to the container of "normal listener". Those listener will be set as special
+                        to the container of "normal listeners". Those listeners will be set as a special
                         member.
                         see e.g. member m_xSfxTerminator
 
@@ -187,10 +187,10 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
             @short      remove a listener from this container.
 
-            @descr      Additional to removing normal listener these method was implemented special.
+            @descr      In addition to removing normal listeners this method was implemented specially.
                         Every listener will be asked for its uno implementation name.
-                        Some of them are well known... and the corresponding listener was set as special member.
-                        Now those special member will be reset also.
+                        Some of them are well known... and the corresponding listener was set as a special member.
+                        Now that special member will be reset also.
                         see e.g. member m_xSfxTerminator
 
             @seealso    terminate()
@@ -383,16 +383,16 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
         /** when true, the call came from session manager
           *   the method is Desktop::terminateQuickstarterToo()
-          *   this the only one place where set this to true
-          *   In this case,  when one frame break, not make
-          *   question for other, the break of shutdown or logout
-          *   can be only once.
-          *   In Desktop::impl_closeFrames would be test and break
+          *   this is the only place where this is set to true
+          *   In this case, when one frame breaks, don't ask
+          *   questions for others, the break of shutdown or logout
+          *   can happen only once.
+          *   In Desktop::impl_closeFrames it would be tested and break
           *   the loop and reset to false
           */
         bool m_bSession;
 
-        css::uno::Reference< css::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
+        css::uno::Reference< css::uno::XComponentContext >              m_xContext;               /// reference to factory, which has created this instance
         FrameContainer                                                  m_aChildTaskContainer;    /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
         comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;     /// container for ALL Listener
         rtl::Reference< OFrames >                                       m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
@@ -419,23 +419,23 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         /** special terminate listener which loads images asynchronous for current open documents.
           * Because internally it uses blocking system APIs... it can't be guaranteed that
           * running jobs can be cancelled successfully if the corresponding document will be closed...
-          * it will not hinder those documents on closing. Instead it let all jobs running...
+          * it will not hinder those documents on closing. Instead it lets all jobs run...
           * but at least on terminate we have to wait for all those blocked requests.
-          * So these implementation must be a special terminate listener too .-(
+          * So this implementation must be a special terminate listener too .-(
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSWThreadManager;
 
         /** special terminate listener shutting down the SfxApplication.
-          * Because these desktop instance closes documents and informs listener
+          * Because this desktop instance closes documents and informs listeners
           * only... it does not really shutdown the whole application.
           *
           * Btw: that wouldn't be possible by design... because Desktop.terminate()
           * has to return a boolean value about success... it can't really shutdown the
           * process .-)
           *
-          * So we uses a trick: a special listener (exactly these one here) listen for notifyTermination()
-          * and shutdown the process asynchronous. But desktop has to make this special
-          * notification as really last one ... Otherwise it can happen that asynchronous
+          * So we use a trick: a special listener (exactly this one here) listens for notifyTermination()
+          * and shuts down the process asynchronously. But desktop has to make this special
+          * notification as really the last one ... Otherwise it can happen that asynchronous
           * shutdown will be faster than all other code around Desktop.terminate() .-))
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;
