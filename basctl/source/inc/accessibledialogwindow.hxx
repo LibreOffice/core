@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
@@ -40,8 +39,7 @@ class DlgEdObj;
 
 class AccessibleDialogWindow final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
-                                         css::accessibility::XAccessibleSelection,
-                                         css::lang::XServiceInfo>,
+                                         css::accessibility::XAccessibleSelection>,
       public SfxListener
 {
 private:
@@ -93,11 +91,6 @@ public:
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

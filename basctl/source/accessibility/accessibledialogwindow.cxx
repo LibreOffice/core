@@ -502,22 +502,6 @@ void AccessibleDialogWindow::disposing()
     m_aAccessibleChildren.clear();
 }
 
-// XServiceInfo
-OUString AccessibleDialogWindow::getImplementationName()
-{
-    return u"com.sun.star.comp.basctl.AccessibleWindow"_ustr;
-}
-
-sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleWindow"_ustr };
-}
-
 // XAccessibleContext
 sal_Int64 AccessibleDialogWindow::getAccessibleChildCount()
 {

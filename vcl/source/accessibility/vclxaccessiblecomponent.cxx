@@ -66,22 +66,6 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
     DisconnectEvents();
 }
 
-OUString VCLXAccessibleComponent::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleWindow"_ustr;
-}
-
-sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames()
-{
-    uno::Sequence< OUString > aNames { u"com.sun.star.awt.AccessibleWindow"_ustr };
-    return aNames;
-}
-
 IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     /* Ignore VclEventId::WindowEndPopupMode, because the UNO accessibility wrapper

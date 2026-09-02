@@ -20,7 +20,6 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/OAccessible.hxx>
 
@@ -37,8 +36,7 @@ namespace utl {
 class AccessibleRelationSetHelper;
 }
 
-class VCL_DLLPUBLIC VCLXAccessibleComponent
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
+class VCL_DLLPUBLIC VCLXAccessibleComponent : public comphelper::OAccessible
 {
 private:
     VclPtr<vcl::Window> m_xWindow;
@@ -66,11 +64,6 @@ public:
         return dynamic_cast< derived_type * >( GetWindow() ); }
 
     virtual void SAL_CALL disposing() override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::accessibility::XAccessibleContext
     sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
