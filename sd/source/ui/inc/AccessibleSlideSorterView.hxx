@@ -23,7 +23,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
@@ -41,8 +40,7 @@ class AccessibleSlideSorterObject;
 */
 class AccessibleSlideSorterView final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
-                                         css::accessibility::XAccessibleSelection,
-                                         css::lang::XServiceInfo>
+                                         css::accessibility::XAccessibleSelection>
 {
 public:
     AccessibleSlideSorterView(
@@ -142,17 +140,6 @@ public:
 
     virtual void SAL_CALL
         deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-
-    //=====  XServiceInfo  ====================================================
-
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    virtual sal_Bool SAL_CALL
-        supportsService (const OUString& sServiceName) override;
-
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
 
     void SwitchViewActivated();
 private:

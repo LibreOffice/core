@@ -444,28 +444,6 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int64 nChi
     mrSlideSorter.GetController().GetPageSelector().DeselectPage(pChild->GetPageNumber());
 }
 
-// XServiceInfo
-OUString SAL_CALL
-       AccessibleSlideSorterView::getImplementationName()
-{
-    return u"AccessibleSlideSorterView"_ustr;
-}
-
-sal_Bool SAL_CALL AccessibleSlideSorterView::supportsService (const OUString& sServiceName)
-{
-    return cppu::supportsService(this, sServiceName);
-}
-
-uno::Sequence< OUString> SAL_CALL
-       AccessibleSlideSorterView::getSupportedServiceNames()
-{
-    ThrowIfDisposed ();
-
-    return uno::Sequence<OUString> {
-            u"com.sun.star.accessibility.AccessibleContext"_ustr
-    };
-}
-
 void AccessibleSlideSorterView::ThrowIfDisposed()
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
