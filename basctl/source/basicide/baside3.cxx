@@ -34,6 +34,7 @@
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>

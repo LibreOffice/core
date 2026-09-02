@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
