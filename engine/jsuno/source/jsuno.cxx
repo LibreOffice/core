@@ -2925,6 +2925,23 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
                 exc.name = OUString(p.get(), n);
             }
         }
+        if (exc.name.isEmpty()) {
+            // For a UNO exception marshaled to JS, extract its name from the constructor's opaque
+            // 'data member:
+            if (ValueRef const ctorVal(ctx, JS_GetPropertyStr(ctx, err, "constructor"));
+                JS_IsObject(ctorVal))
+            {
+                if (ValueRef const dataVal(ctx, JS_GetPropertyStr(ctx, ctorVal, "'data"));
+                    JS_IsObject(dataVal))
+                {
+                    auto const typeRef = static_cast<typelib_TypeDescriptionReference *>(
+                        JS_GetOpaque(dataVal, getRuntimeData(ctx)->exceptionClassId));
+                    if (typeRef != nullptr) {
+                        exc.name = OUString::unacquired(&typeRef->pTypeName);
+                    }
+                }
+            }
+        }
         ValueRef const msgVal(ctx, JS_GetPropertyStr(ctx, err, "message"));
         if (JS_IsString(msgVal))
         {
