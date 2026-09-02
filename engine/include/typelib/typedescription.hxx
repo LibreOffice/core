@@ -86,13 +86,13 @@ public:
         @param pTypeDescr another type description
         @return this TypeDescription
     */
-    inline TypeDescription & SAL_CALL operator = ( typelib_TypeDescription * pTypeDescr );
+    inline TypeDescription & operator = ( typelib_TypeDescription * pTypeDescr );
     /** Assignment operator: acquires given type description and releases a set one.
 
         @param rTypeDescr another type description
         @return this TypeDescription
     */
-    TypeDescription & SAL_CALL operator =( const TypeDescription & rTypeDescr )
+    TypeDescription & operator =( const TypeDescription & rTypeDescr )
         { return this->operator =( rTypeDescr.get() ); }
 
     TypeDescription & operator =(TypeDescription && other) noexcept {
@@ -109,30 +109,30 @@ public:
         @param pTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
-    inline bool SAL_CALL equals( const typelib_TypeDescription * pTypeDescr ) const;
+    inline bool equals( const typelib_TypeDescription * pTypeDescr ) const;
     /** Tests whether two type descriptions are equal.
 
         @param rTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
-    bool SAL_CALL equals( const TypeDescription & rTypeDescr ) const
+    bool equals( const TypeDescription & rTypeDescr ) const
         { return equals( rTypeDescr._pTypeDescr ); }
 
     /** Makes stored type description complete.
     */
-    inline void SAL_CALL makeComplete() const;
+    inline void makeComplete() const;
 
     /** Gets the UNacquired type description pointer.
 
         @return stored pointer of type description
     */
-    typelib_TypeDescription * SAL_CALL get() const
+    typelib_TypeDescription * get() const
         { return _pTypeDescr; }
     /** Tests if a type description is set.
 
         @return true, if a type description is set, false otherwise
     */
-    bool SAL_CALL is() const
+    bool is() const
         { return (_pTypeDescr != NULL); }
 };
 
