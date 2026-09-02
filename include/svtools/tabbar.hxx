@@ -216,7 +216,7 @@ IsEditModeCanceled      - This method can be used in the EndRenaming()
 GetEditPageId   - With this method, the tab that is being/has been
                   renamed is queried in the Renaming handlers.
 
-StartRenaming() - This handler is called when the EditMode hast been
+StartRenaming() - This handler is called when the EditMode has been
                   started using StartEditMode(). GetEditPageId()
                   can be used to query which Tab should be renamed.
                   false should be returned if the EditMod should

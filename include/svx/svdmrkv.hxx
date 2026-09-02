@@ -178,7 +178,7 @@ protected:
     SAL_DLLPRIVATE bool ImpIsFrameHandles() const;
     SAL_DLLPRIVATE OUString ImpGetDescriptionString(TranslateId pStrCacheID, ImpGetDescriptionOptions nOpt=ImpGetDescriptionOptions::NONE) const;
 
-    // Generates a string including degrees symbol, from an angel specification in 1/100deg
+    // Generates a string including degrees symbol, from an angle specification in 1/100deg
     SAL_DLLPRIVATE bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
     virtual bool MarkPoints(const tools::Rectangle* pRect, bool bUnmark);
     bool MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark);
@@ -268,7 +268,7 @@ public:
     const std::vector<SdrObject*>& GetTransitiveHullOfMarkedObjects() const { return maSdrViewSelection.GetAllMarkedObjects(); }
 
 
-    // mechanism to complete disable handles at the view. Handles will be hidden and deleted
+    // mechanism to completely disable handles at the view. Handles will be hidden and deleted
     // when set, no new ones created, no interaction allowed. Handles will be recreated and shown
     // when reset. Default is false.
     void hideMarkHandles();
@@ -373,7 +373,7 @@ public:
     // SdrPageView, which should be defined correctly always.
     // Alternatively a gluepoint may be characterized by a SdrHdl.
     // In this case the SdrHdl instance consists of all required information.
-    // And in this case, the gluepoint are always is marked by enforcement
+    // And in this case, the gluepoint is always marked by enforcement
     // (Handlers are just situated at marked gluepoints )
     // Attention: With each change of the gluepoint status the handle list is re-calculated.
     // All previously saved SdrHdl* became invalid by this, the same with the point IDs!

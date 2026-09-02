@@ -290,7 +290,7 @@ private:
     BrowserMode         m_nMode;
     sal_Int32           m_nCurrentPos;      // Current position;
     ImplSVEvent *       m_nDeleteEvent;     // EventId for asynchronous deletion of rows
-    DbGridControlOptions m_nOptions;        // What is the able to do (Insert, Update, Delete)
+    DbGridControlOptions m_nOptions;        // What is it able to do (Insert, Update, Delete)
                                             // default readonly
     DbGridControlOptions m_nOptionMask;     // the mask of options to be enabled in setDataSource
                                             // (with respect to the data source capabilities)
@@ -597,7 +597,7 @@ protected:
     DECL_DLLPRIVATE_LINK(RearrangeHdl, Timer*, void);
 
     DECL_DLLPRIVATE_LINK(OnAsyncAdjust, void*, void);
-        // if the param is != NULL, AdjustRows will be called, else AdjustDataSource
+        // if the param is != nullptr, AdjustRows will be called, else AdjustDataSource
 
 private:
     using BrowseBox::InsertHandleColumn;

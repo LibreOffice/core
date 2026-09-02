@@ -87,7 +87,7 @@
                         to distinguish whether a new style
                         or a new color has been set
 
-                        GetFillColor() == COL_BLACK -> GetStyle() ,
+                        GetFillColor() == COL_BLACK -> GetStyle(),
                         GetFillColor() == COL_WHITE -> GetColor()
 
         SvxFrameToolBoxControl

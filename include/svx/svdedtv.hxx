@@ -55,7 +55,7 @@ enum class SdrInsertFlags
 {
     NONE        = 0x0000,
     DONTMARK    = 0x0001, /* object will not be marked (the actual marking remains) */
-    ADDMARK     = 0x0002, /* object will be added an existing selection  */
+    ADDMARK     = 0x0002, /* object will be added to an existing selection  */
     SETDEFATTR  = 0x0004, /* actual attributes (+StyleSheet) are assigned to the object */
     SETDEFLAYER = 0x0008, /* actual layer is assigned to the object */
 };
@@ -120,7 +120,7 @@ protected:
 
     // converts an object, when positive it removes the old one from its List
     // and inserts the new one instead. including Undo.
-    // Nor MarkEntry nor ModelChgBroadcast is created.
+    // Neither MarkEntry nor ModelChgBroadcast is created.
     SAL_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
 
     // set both flags: bToTopPossible and bToBtmPossible.
@@ -423,7 +423,7 @@ public:
 
     // If one or more objects of the type SdrGrafObj or SdrOle2Obj
     // are marked and these are capable to deliver a StarView-metafile,
-    // this methods converts the metafile to a drawing object.
+    // this method converts the metafile to a drawing object.
     // The SdrGrafObjs/SdrOle2Objs are replaced by the new objects.
     void DoImportMarkedMtf(SvdProgressInfo *pProgrInfo=nullptr);
     bool IsImportMtfPossible() const { ForcePossibilities(); return m_bImportMtfPossible; }

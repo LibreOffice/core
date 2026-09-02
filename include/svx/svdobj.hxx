@@ -246,7 +246,7 @@ protected:
     void resetViewContact();
 
 private:
-    // check if a ObjectName is set and it is in DiagramModelID syntax
+    // check if an ObjectName is set and it is in DiagramModelID syntax
     bool ObjectNameIsDiagramModelID();
 
     friend class                SdrObjListIter;
@@ -512,7 +512,7 @@ public:
 
     // FullDrag support. This is for standard interactions and for SdrObjOwn
     // support. If supportsFullDrag() returns true, getFullDragClone has to
-    // return a cloned SdrObject (who's ownership it loses) at which modifications
+    // return a cloned SdrObject (whose ownership it loses) at which modifications
     // like Move(), Scale(), etc or applySpecialDrag() will be executed. That
     // object will be visualized on overlay for full drag, but should not be
     // part of the model, thus not changing anything since it's only a temporary
