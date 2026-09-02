@@ -45,6 +45,7 @@ public:
     {
         startThread();
 
+#ifndef _WIN32
         // Steal SIGUSR2 from the backtrace handler for profiling
         struct sigaction action;
 
@@ -52,6 +53,7 @@ public:
         action.sa_flags = 0;
         action.sa_handler = handleUserProfileSignal;
         sigaction(SIGUSR2, &action, nullptr);
+#endif
     }
 
     ~Watchdog()
@@ -105,8 +107,10 @@ public:
                     // out of the poll for longer than threshold:
                     if (msSinceEpoc - snapshot > MsToTrigger)
                     {
+#ifndef _WIN32
                         // Signal the poorly behaved thread to profile it
                         ProcUtil::killThreadById(*tid, SIGUSR2);
+#endif
                         break;
                     }
                 }

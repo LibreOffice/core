@@ -12,7 +12,8 @@
 #pragma once
 
 #include <atomic>
-#include <unistd.h>
+#include <chrono>
+#include <thread>
 
 // Lives in Util.cpp for dependency reasons.
 namespace SigUtil
@@ -39,7 +40,7 @@ namespace SigUtil
         static void wait()
         {
             while (SigHandlerTrap::SigHandling)
-                sleep(1);
+                std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     };
 
