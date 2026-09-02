@@ -471,6 +471,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 // also skip hyphenation inside compound constituents right before constituent boundaries in compound words
                 // or always skip hyphenation inside compound constituents, if minCompoundTrail == 0
                 // if both minCompoundLead and minCompoundTrail == 0, don't hyphenate inside suffixes, too
+                // if both minCompoundLead and minCompoundTrail >= 99, don't hyphenate inside suffixes, too
                 if ( bCompoundHyphenation && (nCompoundHyphenationPos > -1 || minCompoundLead == 0 || minCompoundTrail > 2 || minCompoundTrail == 0 ) &&
                         // check minimal distance from the left constituent boundary
                         ( ( minCompoundLead > 2 && i - nCompoundHyphenationPos < minCompoundLead ) ||
@@ -478,7 +479,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                         ( minCompoundTrail > 2 && i - nCompoundHyphenationPos < minCompoundTrail ) ||
                         // special value: zero compound limit means forbidden hyphenation
                         // inside (stems of) compound constituents
-                        minCompoundLead == 0 || minCompoundTrail == 0 ) )
+                        minCompoundLead == 0 || minCompoundTrail == 0 ||
+                        minCompoundLead >= 99 || minCompoundTrail >= 99 ) )
                 {
                     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
                     uno::Reference< XSpellChecker1 > xSpell;
@@ -566,21 +568,58 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                             break;
                                     }
 
+                                    // handle verb and leg-, legesleg- prefixes (Hungarian-only)
+                                    sal_Int32 nPrefixLen = 0;
+                                    if ( LANGUAGE_HUNGARIAN == nLanguage && sStems.isEmpty() )
+                                    {
+                                        if ( aWord.startsWith(u"leg") &&
+                                             morph.indexOf(u"ip:leg_") > -1 )
+                                        {
+                                            sStems = aWord.replaceAt(3, 0, u"||");
+                                            nPrefixLen = 5;
+                                        }
+                                        else if ( aWord.startsWith(u"legesleg") &&
+                                                  morph.indexOf(u"ip:legesleg_") > -1 )
+                                        {
+                                            sStems = aWord.replaceAt(0, 8, u"leges||leg||");
+                                            nPrefixLen = 12;
+                                        }
+
+                                        if ( sStems.isEmpty() )
+                                        {
+                                            static constexpr OUString sVERB_PREFIX = u"ip:PREF sp:"_ustr;
+                                            nPa = morph.indexOf(sVERB_PREFIX);
+                                            if ( nPa > -1 )
+                                            {
+                                                nPa += sVERB_PREFIX.getLength();
+                                                OUString sVerbPrefix = morph.getToken(0, ' ', nPa);
+                                                nPrefixLen = sVerbPrefix.getLength();
+                                                if ( aWord.startsWith(sVerbPrefix) )
+                                                    sStems = aWord.replaceAt(nPrefixLen++, 0, u"|");
+                                            }
+                                        }
+                                    }
+
                                     // only hy:, but not pa:
-                                    if ( sStems.isEmpty() )
+                                    if ( sStems.isEmpty() || nPrefixLen > 0 )
                                     {
                                         // check hy: (pre-defined hyphenation)
                                         sal_Int32 nHy = morph.indexOf(" hy:");
                                         if (nHy > -1)
                                         {
-                                            sStems = morph.getToken(1, ' ', nHy).copy(3);
-                                            if ( sStems.indexOf('|') == -1 && sStems.indexOf('-') == -1 )
+                                            OUString sHy(morph.getToken(1, ' ', nHy).copy(3));
+                                            if ( sHy.indexOf('|') == -1 && sHy.indexOf('-') == -1 )
                                             {
-                                                if ( sal_Int32 nBreak = o3tl::toInt32(sStems) )
+                                                if ( sal_Int32 nBreak = o3tl::toInt32(sHy) )
                                                 {
-                                                    if ( nBreak < aWord.getLength() )
-                                                        sStems += OUString::Concat(aWord.subView(0, nBreak)) + u"|" +
-                                                               aWord.subView(nBreak);
+                                                    if ( sStems.isEmpty() )
+                                                        sStems = aWord;
+                                                    else
+                                                        // correction for Hungarian (e.g. "leg||meg|lepőbb")
+                                                        nBreak += nPrefixLen;
+                                                    if ( nBreak < sStems.getLength() )
+                                                        sStems = OUString::Concat(sStems.subView(0, nBreak)) + u"|" +
+                                                               sStems.subView(nBreak);
                                                 }
                                             }
                                         }
@@ -589,7 +628,23 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                             }
                         }
 
+
                         // handle string separated by |, e.g "program hy:pro|gram"
+                        //
+                        // hyphenation at special lead/trail combinations over compound splitting
+                        //
+                        // +: hyphenation, -: no hyphenation
+                        //
+                        // lead | trail || non-compound | first constituent | suffix |
+                        // -----------------------------------------------------------
+                        //    0 |     0 ||       +      |         +         |    -   |
+                        //    0 |     x ||       +      |         +         |    +   |
+                        //    x |     0 ||       +      |         +         |    +   |
+                        //    x |     x ||       +      |         +         |    +   |
+                        //    0 |  99<= ||       -      |         -         |    +   |
+                        // 99<= |     0 ||       -      |         -         |    +   |
+                        // 99<= |  99<= ||       -      |         -         |    -   |
+                        //
                         if ( sStems.indexOf('|') > -1 )
                         {
                             sal_Int32 nLetters = 0; // count not separator characters
@@ -613,13 +668,15 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                 // too close to the left break point or special case?
                                 ( i - nCompoundHyphenationPos < minCompoundLead || minCompoundLead == 0 ) &&
                                 // there is a stem boundary before the actual break point
-                                nSepPos > -1 &&
+                                // or special values: disable hyphenation in the first constituent, too
+                                ( nSepPos > -1 || minCompoundLead == 99 || minCompoundTrail == 99 ) &&
                                 // and the break point is within a stem, i.e. not in the
                                 // suffix of the last stem or both minCompoundLead and
                                 // minCompoundTrail == 0, i.e. hyphenation is allowed only
                                 // at compound constituent boundaries
                                 ( i < aWord.getLength() - nSuffixLen - 1 ||
-                                    ( minCompoundLead == 0 && minCompoundTrail == 0) ) &&
+                                    ( minCompoundLead == 0 && minCompoundTrail == 0 ) ||
+                                    ( minCompoundLead >= 99 && minCompoundTrail >= 99 ) ) &&
                                 // and it is not another stem boundary
                                 j + 1 < sStems.getLength() &&
                                 ( sStems[j] != u'|' ||
@@ -630,7 +687,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                 continue;
                             }
                             // skip break points near before the stem boundaries
-                            // (hit is not mandatory, only compondhit, because the
+                            // (hit is not mandatory, only compoundhit, because the
                             // compound boundary can be after the lead limit)
                             if (!hit &&
                                 // too close to the right break point?
@@ -640,7 +697,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                 // minCompoundTrail == 0, i.e. hyphenation is allowed only
                                 // at compound constituent boundaries
                                 ( i < aWord.getLength() - nSuffixLen - 1 ||
-                                    ( minCompoundLead == 0 && minCompoundTrail == 0) ) &&
+                                    ( minCompoundLead == 0 && minCompoundTrail == 0) ||
+                                    ( minCompoundLead >= 99 && minCompoundTrail >= 99 ) ) &&
                                 // and it is a stem boundary
                                 j + 1 < sStems.getLength() && sStems[j+1] == u'|' &&
                                 // the previous break point is not a boundary
@@ -654,8 +712,15 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                             bPrevCompound = nSepPos == j || nSepPos == j - 1;
                         }
                         else
+                        {
                             // not a compound word
+
+                            // special value: 99<= : if it is not a compound word, do not hyphenate it
+                            if ( minCompoundLead >= 99 || minCompoundTrail >= 99 )
+                                return nullptr;
+
                             bCompoundHyphenation = false;
+                        }
                     }
                     else
                         // no SPELLML support, no morphological analysis

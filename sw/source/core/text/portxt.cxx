@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/unolingu.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -38,6 +40,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <o3tl/temporary.hxx>
+#include <unotools/linguprops.hxx>
 #include <xmloff/odffields.hxx>
 #include <viewopt.hxx>
 
@@ -310,6 +313,73 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
         ExtraSpaceSize( 0 );
         SetModifiedWidth( false );
     }
+}
+
+// is it a hyphenation of a compound word, which splits the compound word between the
+// compound constituents OR it hyphenates the compound word just before or inside its suffix?
+bool SwTextPortion::IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &rGuess,
+                bool* pbHasSplitBefore )
+{
+    if ( !rGuess.HyphWord().is() )
+        return false;
+
+    LanguageType aLang = rInf.GetTextFrame()->GetLangOfChar(rInf.GetIdx(), 1, true);
+
+    // Hungarian-only yet
+    if ( LANGUAGE_HUNGARIAN != aLang )
+        return false;
+
+    LanguageTag aLanguageTag(aLang);
+
+    uno::Reference< linguistic2::XHyphenator >  xHyph;
+    xHyph = ::GetHyphenator();
+
+    ::css::uno::Sequence< ::css::beans::PropertyValue > aProperties(2);
+    ::css::beans::PropertyValue *pVal = aProperties.getArray();
+
+    pVal[0].Name    = UPN_HYPH_COMPOUND_MIN_LEADING;
+    pVal[0].Handle  = UPH_HYPH_COMPOUND_MIN_LEADING;
+    // 0: compound splitting: do not hyphenate inside second, third etc.
+    //    constituent of compound words
+    pVal[0].Value <<= sal_Int16(0);
+
+    pVal[1].Name    = UPN_HYPH_COMPOUND_MIN_TRAILING;
+    pVal[1].Handle  = UPH_HYPH_COMPOUND_MIN_TRAILING;
+    // 99<=: force compound splitting to recognize and handle compound words
+    // * do not hyphenate non-compound words
+    // * do not hyphenate the first constituent of compound words
+    // * but still hyphenate terminating suffix of compound words,
+    //   including hyphenation just before the suffix, i.e. after the
+    //   stem of the last constituent (condition: LEADING != TRAILING)
+    pVal[1].Value   <<= sal_Int16(99);
+
+    css::uno::Reference< css::linguistic2::XHyphenatedWord >
+        xHyphWord = xHyph->hyphenate( rGuess.HyphWord()->getWord(),
+                    aLanguageTag.getLocale(),
+                    rGuess.HyphWord()->getHyphenationPos() + 1,
+                    aProperties );
+
+    // compound splitting resulted the same break, so the word is really a compound word
+    // and the break point split compound constituents or it breaks the compound word
+    // 1) just before its suffix or 2) inside its suffix
+    if ( xHyphWord.is() &&
+                    xHyphWord->getHyphenationPos() == rGuess.HyphWord()->getHyphenationPos() )
+    {
+        return true;
+    }
+
+    // when IsCompoundSplit() is false,  pbHasSplitBefore's return value is true, if
+    // * the word is a compound word AND the break point
+    // * is not in a compound splitting position OR just before or inside the suffix AND
+    // * not inside the first constituent
+    // otherwise is false.
+    // Note: This value is used to optimize the hyphenation of compound words, trying to
+    // show more from the first constituent(s) and the broken one before the hyphenation,
+    // if it's not possible to skip the hyphenation completely.
+    if ( pbHasSplitBefore )
+        *pbHasSplitBefore = xHyphWord.is();
+
+    return false;
 }
 
 void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
@@ -628,6 +698,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             if ( bWordSpacing )
             {
                 std::optional<SwTextGuess> pGuess2(std::in_place);
+                std::optional<SwTextGuess> pGuess3(std::in_place);
 
                 // hyphenation slider, when 0.0 < fLevel < 0.5,
                 // enlarge both desired and maximum word spacing:
@@ -644,11 +715,26 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         ? 0
                         : (0.5 - fLevel) * 200;
 
+                // FIXME no need for pGuess2, if the desired word space is 100%
                 bool bFull2 = !pGuess2->Guess( *this, rInf, Height(), nSpacesInLine,
                                 nWeightedSpacing, nSpaceWidth, nExtraWordSpacing );
-
+                // perhaps it's possible to skip hyphenation
                 bool bOrigHyphenated2 = pGuess2->HyphWord().is() &&
                         pGuess2->BreakPos() > rInf.GetLineStart();
+
+                // possible compound splitting in the same word before the hyphenation
+                if ( bOrigHyphenated2 && pGuess2->HyphWord()->getHyphenationPos() >= 4 )
+                    pGuess3->Guess( *this, rInf, Height(), nSpacesInLine,
+                                    // fix this heuristics!!!
+                                (nWeightedSpacing+aAdjustItem.GetPropWordSpacingMaximum())/2, nSpaceWidth, nExtraWordSpacing );
+
+                bool bOrigHyphenated3 = pGuess3->HyphWord().is() &&
+                        pGuess3->BreakPos() > rInf.GetLineStart();
+
+                // perhaps there is a compound splitting in the same word before the plain hyphenation
+                bool bPossibleCompoundSplit = bOrigHyphenated3 &&
+                        pGuess3->HyphWord()->getHyphenationPos() < pGuess2->HyphWord()->getHyphenationPos() &&
+                        pGuess3->HyphWord()->getWord().equals(pGuess2->HyphWord()->getWord());
 
                 if ( !bOrigHyphenated2 &&
                                 // try to remove hyphenation in interoperability mode or
@@ -661,7 +747,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     sal_Int32 nSpacesInLine2 = rInf.GetLineSpaceCount( pGuess2->BreakPos() );
                     float fSpaceNormal2 = nSpacesInLine2 > 0
                             ? ( rInf.GetLineWidth() - ( rInf.GetBreakWidth() -
-                                                             nSpacesInLine2 * nSpaceWidth/10.0
+                                                             nSpacesInLine2 * nSpaceWidth/10.0 +
+                                                            ( bOrigHyphenated2 ? nHyphenWidth : 0)
                                                          ) ) / nSpacesInLine2
                             // no remaining space, only the space after the single word
                             : 1;
@@ -672,14 +759,58 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     // desired one
                     // FIXME if the desired word spacing is not 100%, and maximum word spacing
                     // is not the same, but minimum word spacing is, the fallback is still 100%
-                    if ( z1NotWeighted <= ( nSpacingMaximum + nExtraWordSpacing )/100.0 ||
-                                    aAdjustItem.GetPropWordSpacing() == nSpacingMaximum )
+                    if ( ( z1NotWeighted <= ( nSpacingMaximum + nExtraWordSpacing )/100.0 ||
+                                    aAdjustItem.GetPropWordSpacing() == nSpacingMaximum ) &&
+                         // skip hyphenation only if it's not compound splitting
+                         ( !bOrigHyphenated || !IsCompoundSplit(rInf, *pGuess) ) &&
+                         // skip hyphenation for another hyphenation only, if that is a compound splitting
+                         ( !bOrigHyphenated2 || IsCompoundSplit(rInf, *pGuess2) ) )
                     {
                         pGuess.emplace();
                         pGuess = std::move(pGuess2);
                         SetSpacing(rInf, *pGuess, nSpacesInLine2, nSpaceWidth);
                         fSpaceNormal = fSpaceNormal2;
                         bOrigHyphenated = bOrigHyphenated2;
+                        bFull = bFull2;
+                    }
+                }
+
+                // check compound
+                if ( bOrigHyphenated && bPossibleCompoundSplit &&
+                                // try to remove hyphenation in interoperability mode or
+                                // allow desired word spacing
+                                ( ( bOrigHyphenated && fLevel <= 0.5 ) || fLevel > 0.5 ||
+                                      aAdjustItem.GetPropWordSpacing() == nSpacingMaximum ) &&
+                                  ( aAdjustItem.GetPropLetterSpacingMinimum() < 0 ||
+                                        rInf.GetBreakWidth() <= rInf.GetLineWidth() ) )
+                {
+                    sal_Int32 nSpacesInLine3 = rInf.GetLineSpaceCount( pGuess3->BreakPos() );
+                    float fSpaceNormal3 = nSpacesInLine3 > 0
+                            ? ( rInf.GetLineWidth() - ( rInf.GetBreakWidth() -
+                                                             nSpacesInLine3 * nSpaceWidth/10.0 +
+                                                            ( bOrigHyphenated3 ? nHyphenWidth : 0)
+                                                         ) ) / nSpacesInLine3
+                            // no remaining space, only the space after the single word
+                            : 1;
+                    float z1NotWeighted = ( nSpaceWidth/10.0 +
+                                        ( fSpaceNormal3 - nSpaceWidth/10.0) ) / (nSpaceWidth/10.0);
+                    // skip hyphenation/desired spacing, if spacing doesn't exceed the maximum
+                    // word spacing, except if maximum word spacing is not different from the
+                    // desired one
+                    // FIXME if the desired word spacing is not 100%, and maximum word spacing
+                    // is not the same, but minimum word spacing is, the fallback is still 100%
+                    if ( ( z1NotWeighted <= ( nSpacingMaximum + nExtraWordSpacing )/100.0 ||
+                                    aAdjustItem.GetPropWordSpacing() == nSpacingMaximum ) &&
+                         // skip hyphenation only if it's not compound splitting
+                         ( !bOrigHyphenated || !IsCompoundSplit(rInf, *pGuess) ) &&
+                         // skip hyphenation for another hyphenation only, if that is a compound splitting
+                         ( !bOrigHyphenated3 || IsCompoundSplit(rInf, *pGuess3) ) )
+                    {
+                        pGuess.emplace();
+                        pGuess = std::move(pGuess3);
+                        SetSpacing(rInf, *pGuess, nSpacesInLine3, nSpaceWidth);
+                        fSpaceNormal = fSpaceNormal3;
+                        bOrigHyphenated = bOrigHyphenated3;
                         bFull = bFull2;
                     }
                 }
@@ -781,22 +912,40 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         float z1 = (nSpaceWidth/10.0+((fSpaceNormal-nSpaceWidth/10.0)*fExpansionWeight))/(nSpaceWidth/10.0);
                         float z1NotWeighted = ( nSpaceWidth/10.0 +
                                         ( fSpaceNormal - nSpaceWidth/10.0) ) / (nSpaceWidth/10.0);
+                        // true, if the pGuess2 hyphenation is inside the second or third etc. compound constituent
+                        bool bCompoundSplitBefore = false;
                         // always shrink at average and lower hyphenation level,
-                        // if it removes hyphenation
-                        bool bRemoveHyphenation = bOrigHyphenated && !bShrunkHyphenated && fLevel <= 0.5;
+                        // if it removes a non-compound word splitting hyphenation
+                        bool bRemoveHyphenation = bOrigHyphenated && fLevel <= 0.5 &&
+                            ( !bShrunkHyphenated || IsCompoundSplit(rInf, *pGuess2, &bCompoundSplitBefore) ||
+                                // if shrinking results in a non-compound splitting hyphenation
+                                // inside the second or third etc. constituent of a compound word,
+                                // always shrink the line to show bigger part of that non-first constituent
+                                // (no need to check pGuess for bCompoundSplitBefore, too, because shrinking
+                                // doesn't skip a compound splitting position between pGuess and pGuess2)
+                                ( bCompoundSplitBefore && !IsCompoundSplit(rInf, *pGuess) ) );
+
                         // Prefer shrinking, if 1) this is a portion OR,
                         // TODO shrink line portions only if needed
                         if ( bIsPortion ||
                             // 2) NOT shrinking would result very large spacing ( >150% ) OR
-                            // 3) shrinking removes hyphenation OR ...
+                            // 3) shrinking removes (worse) hyphenation OR ...
                             z1NotWeighted > nSpacingMaximum/100.0 || bRemoveHyphenation ||
                             // ... 4) * shrinking results better (weighted) spacing AND
-                            //        * doesn't result in an extra hyphenation
-                            ( z1 >= z0 && !( !bOrigHyphenated && bShrunkHyphenated ) ) ||
-                            // or allow more and more hyphenation choosing better and better spacing
+                            //        * doesn't result in an extra hyphenation AND
+                            //        * no losing of compound splitting
+                            ( z1 >= z0 && !( !bOrigHyphenated && bShrunkHyphenated ) &&
+                              !( bOrigHyphenated && bShrunkHyphenated && IsCompoundSplit(rInf, *pGuess) &&
+                                      !IsCompoundSplit(rInf, *pGuess2) ) ) ||
+                            // 5) or allow more and more hyphenation choosing better and better spacing
                             // when shrinking results in an extra hyphenation
-                            ( z1 >= z0 && !bOrigHyphenated && bShrunkHyphenated &&
-                                fLevel > 0.5 && z1 * ( fLevel - 0.5 ) >= z0 * ( 1 - fLevel ) ) )
+                            ( z1 >= z0 && !bOrigHyphenated && bShrunkHyphenated && (
+                                ( fLevel > 0.5 && z1 * ( fLevel - 0.5 ) >= z0 * ( 1 - fLevel ) ) ||
+                                // except compound splitting, which is equally good,
+                                // than no hyphenation, so always choose that,
+                                // if it results in better spacing
+                                IsCompoundSplit(rInf, *pGuess2) )
+                            ) )
                         {
                             pGuess = std::move(pGuess2);
                             SetSpacing(rInf, *pGuess, nSpacesInLineShrink, nSpaceWidth);

@@ -26,6 +26,11 @@ class SwTextGuess;
 class SwTextPortion : public SwLinePortion
 {
     void BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess );
+    // is this hyphenation is good enough for a compound word, i.e.
+    // it splits a compound word between compound constituents or
+    // it hyphenates the compound word just before or inside its suffix
+    static bool IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &rGuess,
+                          bool* pbCompoundSplitBefore = nullptr );
     void BreakUnderflow( SwTextFormatInfo &rInf );
     void SetSpacing( SwTextFormatInfo &rInf, SwTextGuess const &rGuess,
             const sal_Int32 nSpaces, const sal_Int16 nWidthOf10Spaces );

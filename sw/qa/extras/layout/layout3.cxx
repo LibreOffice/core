@@ -9,6 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/metaact.hxx>
 #include <editeng/unolingu.hxx>
 
@@ -846,6 +849,520 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf172674_less_hyphenation)
                 1);
 
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 3);
+}
+
+// check smart hyphenation and compound-based smart hyphenation
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
+        return;
+
+    // compound-based hyphenation needs Hunspell morphological analysis
+    // (and an up-to-date Hungarian dictionary for full testing, which
+    // contains compound splitting information. E.g. dictionary version 1.7
+    // didn't contain data for the words "valamint" and "elismerésének")
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    std::vector<std::pair<OUString, OUString>> aCompound = {
+        { u"jogorvoslatért"_ustr, "hy:3" }, { u"valamint"_ustr, "hy:4" },
+        { u"alapfokon"_ustr, "pa:fokon" },  { u"jótéteményekben"_ustr, "hy:2" },
+        { u"elismerésének"_ustr, "hy:2" },
+    };
+
+    // tests supported by the actual spelling dictionary
+    bool aTests[5];
+
+    // check Hunspell-based morphological analysis & hyphenation
+    bool bHunspell = xSpell->isValid("<?xml?>", static_cast<sal_uInt16>(eLang),
+                                     uno::Sequence<beans::PropertyValue>());
+    if (bHunspell)
+    {
+        // check dictionary support of compound splitting
+        for (size_t i = 0; i < aCompound.size(); ++i)
+        {
+            aTests[i] = false;
+            // get morphological analysis of the test word
+            uno::Reference<css::linguistic2::XSpellAlternatives> xTmpRes = xSpell->spell(
+                "<?xml?><query type='analyze'><word>" + aCompound[i].first + "</word></query>",
+                static_cast<sal_uInt16>(eLang), uno::Sequence<beans::PropertyValue>());
+            if (xTmpRes.is())
+            {
+                uno::Sequence<OUString> seq = xTmpRes->getAlternatives();
+                if (seq.hasElements())
+                {
+                    sal_Int32 nEndOfFirstAnalysis = seq[0].indexOf("</a>");
+                    // use only the first analysis, like the lingucomponent implementation
+                    OUString morph(seq[0].copy(0, nEndOfFirstAnalysis));
+
+                    // check compound data
+                    aTests[i] = morph.indexOf(aCompound[i].second) > -1;
+                }
+            }
+        }
+    }
+
+    createSwDoc("tdf119908_smart_hyphenation_hu.odt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 53 hyphenations on 5 pages using compond-based smart hyphenation
+    // This was 67 without smart hyphenation and 53 without compound-based smart hyphenation
+    // (using only the plain or interoperable smart hyphenation).
+
+    // 13 hyphenations on page 1
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Tekintettel arra, hogy az emberiség családja minden egyes tagja méltóságának, vala");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "emberiség" by shrinking
+    // This was "emberi-ség"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Tekintettel arra, hogy az emberi jogok el nem ismerése és semmibevevése az emberiség ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Tekintettel annak fontosságára, hogy az emberi jogokat a jog uralma védelmezze, ne");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"hogy az ember végső szükségében a zsarnokság és az elnyomás elleni lázadásra kény");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Tekintettel arra, hogy igen lényeges a nemzetek közötti baráti kapcsolatok kifejlődésé");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "tettek" by shrinking
+    // This was "tet-tek"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Tekintettel arra, hogy az Alapokmányban az Egyesült Nemzetek népei újból hitet tettek ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"egyenjogúsága mellett, valamint kinyilvánították azt az elhatározásukat, hogy elősegí");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Tekintettel arra, hogy a tagállamok kötelezték magukat arra, hogy az Egyesült Nemze");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"A KÖZGYŰLÉS kinyilvánítja az EMBERI JOGOK EGYETEMES NYILATKOZA");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "törekednie" by shifting
+    // This was "tö-rekednie"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"TÁT, mint azt a közös eszményt, amelynek elérésére minden népnek és nemzetnek ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Minden emberi lény szabadnak születik, és egyenlő méltósága és joga van. Az embe");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"nyelvre, vallásra, politikai vagy más véleményre, nemzeti vagy társadalmi szárma");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"zásra, vagyonra, születésre vagy más körülményre vonatkozó mindennemű megkülön");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[4]", "portion",
+        u"böztetés nélkül mindenkit megilletnek. Ezenfelül nem lehet semmiféle megkülönböz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[4]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[5]", "portion",
+        u"tetést tenni annak az országnak vagy területnek a politikai, jogi vagy nemzetközi hely");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[5]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[7]", "portion",
+        u"terület független, gyámság alatt áll, nem autonóm vagy szuverenitása bármely vonat");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[7]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 13);
+
+    // delete page 1 to update hyphenation on the next page
+
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2868, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 13 hyphenations on page 2
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Senkit sem lehet rabszolgaságban vagy szolgaságban tartani; a rabszolgaság és a rab");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Senkit sem lehet kínvallatásnak, avagy kegyetlen, embertelen vagy lealacsonyító bá");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"A törvény előtt mindenki egyenlő, és minden megkülönböztetés nélkül joga van a tör");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"sértő minden megkülönböztetéssel és minden ilyen megkülönböztetésre irányuló fel");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    // compound-based "smart" hyphenation of the compound "jog|orvoslat"
+    // This was hyphenated as "jogor-voslat" previously, now "jog-orvoslat"
+
+    if (bHunspell && aTests[0])
+    {
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]", "portion",
+                    u"alapvető jogokat sértő eljárások ellen az illetékes hazai bíróságokhoz "
+                    u"tényleges jog");
+    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"bíróság méltányosan és nyilvánosan tárgyalja, s ez határozzon egyrészt jogai és köte");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Minden büntetendő cselekménnyel vádolt személyt ártatlannak kell vélelmezni mind");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"addig, amíg bűnösségét nyilvánosan lefolytatott perben, a védelméhez szükséges vala");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Senkit sem szabad elítélni oly cselekményért vagy mulasztásért, amely elkövetése pil");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"Ugyancsak nem szabad súlyosabb büntetést kiszabni, mint amely a büntetendő cselek");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Senkinek magánéletébe, családi ügyeibe, otthonába vagy levelezésébe nem szabad ön");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "minden" by shrinking
+    // This was "Min-den"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"kényesen beavatkozni, sem pedig becsületében vagy jó hírnevében megsérteni. Minden ");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Az államon belül minden személynek joga van szabadon mozogni és lakóhelyét sza");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // compound-based "smart" hyphenation of the compound "vala|mint"
+    // This was hyphenated as "va-lamint" previously)
+
+    if (bHunspell && aTests[1])
+    {
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]", "portion",
+                    u"Minden személynek joga van minden országot, ideértve saját hazáját is, "
+                    u"elhagyni, vala");
+    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 13);
+
+    // delete page 2 to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2297, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2297, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 10 hyphenations on page 3
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Erre a jogra nem lehet hivatkozni közönséges bűncselekmény miatti, kellőképpen meg");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"alapozott üldözés, sem pedig az Egyesült Nemzetek céljaival és elveivel ellentétes te");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Senkit sem lehet sem állampolgárságától, sem állampolgársága megváltoztatásának jo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Mind a férfinak, mind a nőnek a nagykorúság elérésétől kezdve joga van fajon, nem");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"zetiségen vagy valláson alapuló korlátozás nélkül házasságot kötni és családot alapí");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Minden személynek joga van a tulajdonhoz, mind egyénileg, mind másokkal együtte");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "valamint" by shifting
+    // This was "va-lamint"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"a jog magában foglalja a vallás és a meggyőződés megváltoztatásának szabadságát, ");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Minden személynek joga van a vélemény és a kifejezés szabadságához, amely magá");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"ban foglalja azt a jogot, hogy véleménye miatt ne szenvedjen zaklatást, és hogy hatá");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "információkat" by shrinking
+    // This was "információ-kat"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"rokra való tekintet nélkül kutathasson, tájékozódhasson és terjeszthessen "
+                u"információkat ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"rendszeres, az általános és egyenlő szavazati jogot és a titkos szavazást biztosító vá");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Minden személynek mint a társadalom tagjának joga van a szociális biztonsághoz, to");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 10);
+
+    // delete page 3 to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2566, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2566, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 12 hyphenations on page 4
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Minden személynek joga van a munkához, a munka szabad megválasztásához, a mél");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Mindenkinek joga van egyenlő munkáért egyenlő bért kapni, bárminemű megkülön");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Minden személynek joga van a pihenéshez, a szabadidőhöz, beleértve a munkaidő ész");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Minden személynek joga van saját maga és családja egészségének és jólétének bizto");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"ellátáshoz, valamint a szükséges szociális szolgáltatásokhoz, továbbá joga van a szoci");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"gyermek, akár házasságból, akár házasságon kívül született, azonos szociális védelem");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // compound-based "smart" hyphenation of the compound "alap|fokon"
+    // This was hyphenated as "alapfo-kon" previously, now "alap-fokon"
+
+    if (bHunspell && aTests[2])
+    {
+        assertXPath(
+            pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
+            u"Minden személynek joga van az oktatáshoz. Az oktatásnak legalábbis elemi és alap");
+    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"A nevelésnek az emberi személyiség teljes kibontakoztatására, valamint az emberi jo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[4]", "portion",
+        u"közötti megértést, türelmet és barátságot, valamint támogatnia kell az Egyesült Nem");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[4]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"A szülőket elsőbbségi jog illeti meg a gyermekeiknek adandó oktatás megválasztásá");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // compound-based "smart" hyphenation of the compound "jó|téteményekben"
+    // This wasn't hyphenated previously, now "jó-téteményekben"
+
+    if (bHunspell && aTests[3])
+    {
+        assertXPath(
+            pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]", "portion",
+            u"a művészetek élvezéséhez, valamint a tudomány haladásában és az abból származó jó");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]/SwHyphPortion", 1);
+    }
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Mindenkinek joga van minden általa alkotott tudományos, irodalmi és művészeti ter");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 13);
+
+    // delete page 4 to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2766, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2766, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 5 hyphenations on page 5
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Minden személynek joga van ahhoz, hogy mind a társadalmi, mind a nemzetközi vi");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"szonyok tekintetében olyan rendszer uralkodjék, amelyben a jelen Nyilatkozatban ki");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Jogainak gyakorlásában és szabadságainak élvezetében mindenki csak olyan korláto");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // compound-based "smart" hyphenation of the compound "el|ismerésének"
+    // This wasn't hyphenated by the plain, i.e. not compound-based "smart" hyphenation previously.
+
+    if (bHunspell && aTests[4])
+    {
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]", "portion",
+                    u"zásoknak lehet alávetve, amelyeket a törvény kizárólag mások jogai és "
+                    u"szabadságai el");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]/SwHyphPortion", 1);
+    }
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Ezeket a jogokat és szabadságokat semmi esetre sem lehet az Egyesült Nemzetek cél");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "állam" by shifting
+    // This was "ál-lam"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"A jelen Nyilatkozat egyetlen rendelkezése sem értelmezhető úgy, hogy az valamely ");
+
+    if (bHunspell && aTests[4])
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
