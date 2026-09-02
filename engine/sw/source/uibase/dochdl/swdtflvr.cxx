@@ -1935,6 +1935,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
             case SotClipboardFormatId::BITMAP:
             case SotClipboardFormatId::PNG:
             case SotClipboardFormatId::GDIMETAFILE:
+            case SotClipboardFormatId::SVG:
                 bRet = SwTransferable::PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Insert,pPt,
                         nActionFlags, nDropAction, bNeedToSelectBeforePaste,
@@ -2057,6 +2058,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
             case SotClipboardFormatId::GDIMETAFILE:
             case SotClipboardFormatId::BITMAP:
             case SotClipboardFormatId::PNG:
+            case SotClipboardFormatId::SVG:
             case SotClipboardFormatId::NETSCAPE_BOOKMARK:
             case SotClipboardFormatId::SIMPLE_FILE:
             case SotClipboardFormatId::FILEGRPDESCRIPTOR:
@@ -2914,6 +2916,7 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
     case SotClipboardFormatId::BITMAP:
     case SotClipboardFormatId::PNG:
     case SotClipboardFormatId::GDIMETAFILE:
+    case SotClipboardFormatId::SVG:
         bRet = rData.GetGraphic( nFormat, aGraphic );
         break;
 

@@ -1769,6 +1769,20 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
         if (bRet)
             rGraphic = aBitmap;
     }
+    else if (SotExchange::GetFormatDataFlavor(SotClipboardFormatId::SVG, aFlavor)
+             && TransferableDataHelper::IsEqual(aFlavor, rFlavor))
+    {
+        Graphic aGraphic;
+        if (std::unique_ptr<SvStream> xStm = GetSotStorageStream(rFlavor))
+        {
+            if (GraphicConverter::Import(*xStm, aGraphic, ConvertDataFormat::SVG)
+                == ERRCODE_NONE)
+            {
+                rGraphic = std::move(aGraphic);
+                bRet = true;
+            }
+        }
+    }
     else if(SotExchange::GetFormatDataFlavor( SotClipboardFormatId::BITMAP, aFlavor ) &&
         TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
     {

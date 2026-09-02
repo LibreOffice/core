@@ -14,8 +14,12 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 
+#include <doc.hxx>
 #include <docsh.hxx>
+#include <flyenum.hxx>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -130,6 +134,68 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testPasteURLOverSelection)
 
     auto* pINetFormat = static_cast<const SwFormatINetFormat*>(&pAttr->GetAttr());
     CPPUNIT_ASSERT_EQUAL(aURL, pINetFormat->GetValue());
+}
+
+namespace
+{
+/// Minimal XTransferable that exposes exactly one flavor: SVG.
+class SvgTransferable : public cppu::WeakImplHelper<datatransfer::XTransferable>
+{
+    OString m_aSvg;
+    OUString m_aMime{ u"image/svg+xml;windows_formatname=\"image/svg+xml\""_ustr };
+
+public:
+    SvgTransferable(OString aSvg)
+        : m_aSvg(std::move(aSvg))
+    {
+    }
+
+    cpo::uno::Any getTransferData(const datatransfer::DataFlavor& rFlavor) override
+    {
+        if (rFlavor.MimeType != m_aMime)
+            throw datatransfer::UnsupportedFlavorException();
+        cpo::uno::Sequence<sal_Int8> aData(
+            reinterpret_cast<const sal_Int8*>(m_aSvg.getStr()), m_aSvg.getLength());
+        return cpo::uno::Any(aData);
+    }
+
+    cpo::uno::Sequence<datatransfer::DataFlavor> getTransferDataFlavors() override
+    {
+        datatransfer::DataFlavor aFlavor;
+        aFlavor.MimeType = m_aMime;
+        aFlavor.HumanPresentableName = u"SVG"_ustr;
+        aFlavor.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
+        return { aFlavor };
+    }
+
+    bool isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override
+    {
+        return rFlavor.MimeType == m_aMime;
+    }
+};
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testPasteSvg)
+{
+    // Given a Writer document and a transferable that exposes only SVG:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    OString aSvg(
+        R"(<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">)"
+        R"(<rect width="10" height="10" fill="red"/></svg>)"_ostr);
+    rtl::Reference<SvgTransferable> xTransferable(new SvgTransferable(aSvg));
+    TransferableDataHelper aHelper(xTransferable);
+
+    // When pasting:
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    // Then a graphic must land in the document:
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the SVG was not pasted as an image.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

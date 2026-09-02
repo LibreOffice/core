@@ -132,6 +132,7 @@ SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Link[] =
 /* --- DOC_TEXTFRAME --- */
 SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Def[] =
 {
+    { SotClipboardFormatId::SVG, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::DRAWING, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::PNG, EXCHG_IN_ACTION_COPY },
@@ -177,6 +178,7 @@ SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Move[] =
     { SotClipboardFormatId::NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::STRING, EXCHG_OUT_ACTION_INSERT_STRING, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::MARKDOWN, EXCHG_IN_ACTION_COPY, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+    { SotClipboardFormatId::SVG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::PNG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::JPEG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
@@ -787,6 +789,7 @@ SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =
     { SotClipboardFormatId::UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::DRAWING, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::SVXB, EXCHG_IN_ACTION_COPY },
+    { SotClipboardFormatId::SVG, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::PDF, EXCHG_IN_ACTION_COPY },
     { SotClipboardFormatId::PNG, EXCHG_IN_ACTION_COPY },
@@ -818,6 +821,7 @@ SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Move[] =
     { SotClipboardFormatId::RICHTEXT, EXCHG_IN_ACTION_COPY, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::STRING, EXCHG_OUT_ACTION_INSERT_STRING },
     { SotClipboardFormatId::MARKDOWN, EXCHG_IN_ACTION_COPY, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+    { SotClipboardFormatId::SVG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::PDF, EXCHG_OUT_ACTION_INSERT_GRAPH, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::PNG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
@@ -863,6 +867,7 @@ SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =
     { SotClipboardFormatId::NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, FILEGRPDSC_ONLY_URL },
     { SotClipboardFormatId::UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
+    { SotClipboardFormatId::SVG, EXCHG_OUT_ACTION_INSERT_BITMAP, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE, SotExchangeActionFlags::InsertImageMap | SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE, SotExchangeActionFlags::InsertTargetUrl, 0 },
