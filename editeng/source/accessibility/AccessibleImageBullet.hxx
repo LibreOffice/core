@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 class SvxEditSource;
@@ -36,8 +35,7 @@ namespace accessibility
 
 /** This class implements the image bullets for the EditEngine/Outliner UAA
  */
-class AccessibleImageBullet final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
+class AccessibleImageBullet final : public comphelper::OAccessible
 {
 
 public:
@@ -62,11 +60,6 @@ public:
     virtual void SAL_CALL grabFocus(  ) override;
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) override;
-    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
     /** Set the edit engine offset
 

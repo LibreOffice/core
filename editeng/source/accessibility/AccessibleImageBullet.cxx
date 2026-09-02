@@ -192,22 +192,6 @@ sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  )
     return static_cast<sal_Int32>( aColor );
 }
 
-OUString SAL_CALL AccessibleImageBullet::getImplementationName()
-{
-    return u"AccessibleImageBullet"_ustr;
-}
-
-sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceName)
-{
-
-    return cppu::supportsService(this, sServiceName);
-}
-
-uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames()
-{
-    return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
-}
-
 void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
 {
     maEEOffset = rOffset;
