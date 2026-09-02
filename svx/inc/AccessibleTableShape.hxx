@@ -91,9 +91,6 @@ public:
     virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override ;
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override ;
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName( ) override;
-
     // XComponent
     virtual void SAL_CALL disposing( ) override;
 

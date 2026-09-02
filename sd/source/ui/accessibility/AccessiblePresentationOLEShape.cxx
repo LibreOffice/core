@@ -38,13 +38,6 @@ AccessiblePresentationOLEShape::AccessiblePresentationOLEShape(
 
 AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape() {}
 
-// XServiceInfo
-
-OUString SAL_CALL AccessiblePresentationOLEShape::getImplementationName()
-{
-    return u"AccessiblePresentationOLEShape"_ustr;
-}
-
 /// Set this object's name if it is different to the current name.
 OUString AccessiblePresentationOLEShape::CreateAccessibleBaseName()
 {

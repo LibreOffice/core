@@ -37,13 +37,6 @@ public:
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessiblePresentationGraphicShape() override;
 
-    //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
     /// Create a name string that contains the accessible name.
     virtual OUString
         CreateAccessibleBaseName () override;

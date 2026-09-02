@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -379,11 +380,12 @@ css::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames()
 {
     ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleDrawDocumentView"_ustr };
-    uno::Sequence<OUString> aServiceNames =
-        AccessibleDocumentViewBase::getSupportedServiceNames();
+    return { u"com.sun.star.drawing.AccessibleDrawDocumentView"_ustr };
+}
 
-    return comphelper::concatSequences(aServiceNames, vals);
+sal_Bool SAL_CALL AccessibleDrawDocumentView::supportsService(const OUString& rServiceName)
+{
+    return cppu::supportsService(this, rServiceName);
 }
 
 //=====  XAccessibleGroupPosition  =========================================

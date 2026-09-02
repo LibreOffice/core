@@ -199,22 +199,6 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
     return nColor;
 }
 
-// XServiceInfo
-
-OUString SAL_CALL
-    AccessiblePageShape::getImplementationName()
-{
-    ensureAlive();
-    return u"AccessiblePageShape"_ustr;
-}
-
-css::uno::Sequence< OUString> SAL_CALL
-    AccessiblePageShape::getSupportedServiceNames()
-{
-    ensureAlive();
-    return AccessibleShape::getSupportedServiceNames();
-}
-
 //=====  XComponent  ==========================================================
 
 void AccessiblePageShape::dispose()

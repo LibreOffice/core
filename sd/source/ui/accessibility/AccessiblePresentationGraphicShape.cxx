@@ -38,13 +38,6 @@ AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape(
 
 AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape() {}
 
-// XServiceInfo
-
-OUString SAL_CALL AccessiblePresentationGraphicShape::getImplementationName()
-{
-    return u"AccessiblePresentationGraphicShape"_ustr;
-}
-
 /// Set this object's name if it is different from the current name.
 OUString AccessiblePresentationGraphicShape::CreateAccessibleBaseName()
 {

@@ -349,13 +349,6 @@ SvxTableController* AccessibleTableShape::getTableController()
 
 // XAccessible
 
-
-OUString SAL_CALL AccessibleTableShape::getImplementationName()
-{
-    return u"com.sun.star.comp.accessibility.AccessibleTableShape"_ustr;
-}
-
-
 OUString AccessibleTableShape::CreateAccessibleBaseName()
 {
     return u"TableShape"_ustr;

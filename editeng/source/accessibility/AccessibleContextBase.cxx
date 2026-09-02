@@ -301,24 +301,6 @@ sal_Int32 SAL_CALL AccessibleContextBase::getBackground()
     return sal_Int32(COL_WHITE);
 }
 
-// XServiceInfo
-OUString SAL_CALL AccessibleContextBase::getImplementationName()
-{
-    return u"AccessibleContextBase"_ustr;
-}
-
-sal_Bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
-{
-    return cppu::supportsService(this, sServiceName);
-}
-
-uno::Sequence< OUString > SAL_CALL
-       AccessibleContextBase::getSupportedServiceNames()
-{
-    return {
-        u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
 void SAL_CALL AccessibleContextBase::disposing()
 {
     SetState (AccessibleStateType::DEFUNC);
