@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-01 16:27+0200\n"
-"PO-Revision-Date: 2026-08-16 18:32+0000\n"
+"PO-Revision-Date: 2026-09-03 05:51+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 2026.9.dev0\n"
 
 #: admin/admin.strings.js:15
@@ -491,38 +491,40 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:542
 msgid "Invalid request"
-msgstr ""
+msgstr "Iarratas neamhbhailí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:543
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Eochair API neamhbhailí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "Tá easpa ceadanna ar eochair API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:547
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Níl an t-óstach AI seo ar liosta óstach ceadaithe an fhreastalaí "
+"(lok_allow.host). Iarr ar do riarthóir cead a thabhairt dó."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:549
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Ráta teoranta - fan nóiméad agus déan iarracht eile"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:550
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "Earráid freastalaí API - déan iarracht arís ar ball"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Seirbhís ar fáil go sealadach"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:609
 msgid "Signature Certificate"
@@ -586,7 +588,7 @@ msgstr "Seiceáil Litrithe Uathoibríoch"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:627
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Úsáid socruithe súmála an fhreastalaí seo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:628
 msgid "Smart Zoom"
@@ -942,13 +944,15 @@ msgstr "Socraigh roghanna comhéadain réamhshocraithe."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1379
 #: admin/src/integrator/AdminIntegratorSettings.ts:3444
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Iompar Súmála"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1524
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Nuair a bhíonn sé ar siúl, osclaítear doiciméid téacs ag an súmáil a "
+"roghnaíonn an freastalaí seo. Múch é chun an súmáil a roghnú duit féin."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1530
 msgid ""
@@ -1359,11 +1363,11 @@ msgstr "Stíleanna Tábla"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Socraigh mar Réamhshocrú"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Stíl Dhúblach"
 
 #: src/canvas/sections/CommentListSection.ts:2025
 #: src/canvas/sections/CommentListSection.ts:2038
@@ -1993,189 +1997,202 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2144
 msgid "Request too large"
-msgstr ""
+msgstr "Iarratas ró-mhór"
 
 #: src/control/Control.AIChatSidebar.ts:2145
 msgid "Invalid request format"
-msgstr ""
+msgstr "Formáid iarratais neamhbhailí"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "Iarratas curtha in ionad iarratas níos nuaí"
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
-msgstr ""
+msgstr "Níor cuireadh aon teachtaireachtaí ar fáil"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "Teachtaireacht rófhada"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "Tá gnéithe AI díchumasaithe ag an riarthóir"
 
 #: src/control/Control.AIChatSidebar.ts:2150
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "Níl an hintleacht shaorga ar fáil d'aíonna"
 
 #: src/control/Control.AIChatSidebar.ts:2152
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "Tá gnéithe AI díchumasaithe don doiciméad seo"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "AI settings not configured"
-msgstr ""
+msgstr "Socruithe AI gan chumrú"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
 msgstr ""
+"Tá URL an tsoláthraí AI neamhbhailí, seiceáil socruithe na hintleachta saorga"
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "The AI image provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "Tá URL an tsoláthraí íomhá AI neamhbhailí, seiceáil na socruithe AI"
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"Níl an t-óstach \"{0}\" ar an liosta óstach ceadaithe, déan teagmháil le do "
+"riarthóir"
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Earráid líonra - seiceáil do nasc le do thoil"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Níorbh fhéidir ceangal leis an soláthraí AI"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
-msgstr ""
+msgstr "Gan freagra ó AI"
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "Bhain AI úsáid as an iomarca céimeanna uirlisí"
 
 #: src/control/Control.AIChatSidebar.ts:2169
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
 msgstr ""
+"Bhí na comharthaí ídithe ag an tsamhail sular táirgeadh aschur. Bain triail "
+"as ionchur níos giorra nó samhail le buiséad aschuir níos mó."
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"Thug an tsamhail freagra folamh ar ais (níor gineadh aon chomharthaí). Is "
+"fadhb shealadach soláthraí í seo de ghnáth - déan iarracht eile, nó bain "
+"triail as samhail dhifriúil."
 
 #: src/control/Control.AIChatSidebar.ts:2175
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "Theip ar ghiniúint íomhá: gan aon leid ón tsamhail"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "Níl an doiciméad ar fáil"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "Níl an achoimre eagarthóireachta bailí: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2179
 msgid "Could not build any slides from the outline. Please try again."
-msgstr ""
+msgstr "Níorbh fhéidir aon sleamhnáin a thógáil ón imlíne. Déan iarracht arís."
 
 #: src/control/Control.AIChatSidebar.ts:2180
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "Níl socruithe íomhá AI cumraithe"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
-msgstr ""
+msgstr "Níl an tsamhail íomhá cumraithe"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "Theip ar ghiniúint íomhá: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "Níor gineadh íomhá"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "Theip ar an bhfreagra AI a pharsáil"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "Dhiúltaigh an soláthraí AI don iarratas mar neamhbhailí"
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "Earráid API ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Ag baint spriocanna nasc..."
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Ag meastóireacht ar an bhfoirmle..."
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Ag lódáil catalóg feidhme..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "Ag smaoineamh..."
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "Ag obair..."
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Ag socrú foirmlí..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Sleamhnán {0} de {1} á thógáil..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "Ag scipeáil sleamhnán {0}..."
 
 #: src/control/Control.AIChatSidebar.ts:2232
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "Ag giniúint íomhá {0} de {1}..."
 
 #: src/control/Control.AIChatSidebar.ts:2252
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
 msgstr ""
+"Tá an doiciméad seo rómhór le léamh ina iomláine. Roghnaigh cuid le díriú "
+"uirthi:"
 
 #: src/control/Control.AIChatSidebar.ts:2260
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Tá an bhileog seo rómhór le léamh ina hiomláine. Chun í a chúngú, is féidir "
+"leat:"
 
 #: src/control/Control.AIChatSidebar.ts:2264
 msgid "Select a range of cells in the sheet, then ask your question again"
-msgstr ""
+msgstr "Roghnaigh raon cealla sa bhileog, agus cuir do cheist arís ansin"
 
 #: src/control/Control.AIChatSidebar.ts:2267
 msgid "Reply with a range to focus on, like `A1:D100`"
-msgstr ""
+msgstr "Freagair le raon le díriú air, mar shampla `A1:D100`"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
-msgstr ""
+msgstr "Tá do dheic réidh: {0} sleamhnáin tógtha ón imlíne ceadaithe."
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "Níorbh fhéidir {0} sleamhnán a thógáil agus scipeáladh iad."
 
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "{0} image(s) could not be generated and show a placeholder."
 msgstr ""
+"Níorbh fhéidir {0} íomhá(í) a ghiniúint agus áitchoinneálaí a thaispeáint."
 
 #: src/control/Control.AIChatSidebar.ts:2328
 #: src/control/Control.AIChatSidebar.ts:3839
@@ -4282,7 +4299,7 @@ msgstr "Dearadh Tábla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Uirlisí"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4474,29 +4491,28 @@ msgid "Animations"
 msgstr "Beochana"
 
 #: src/control/Control.Notebookbar.js:581
-#, fuzzy
 msgid "Start:"
-msgstr "Tosaigh"
+msgstr "Tosaigh:"
 
 #: src/control/Control.Notebookbar.js:581
 msgid "End:"
-msgstr ""
+msgstr "Deireadh:"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Tosaigh stíl saighead"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Stíl saighead deiridh"
 
 #: src/control/Control.Notebookbar.js:669
 msgid "Line Width"
-msgstr ""
+msgstr "Leithead Líne"
 
 #: src/control/Control.Notebookbar.js:694
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Trédhearcacht Líne:"
 
 #: src/control/Control.NotebookbarBuilder.js:203
 #: src/control/Control.NotebookbarBuilder.js:784
@@ -5555,19 +5571,19 @@ msgstr "Iontráil ainm na bileoige nua"
 
 #: src/control/Control.Tabs.js:735
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Cosain Bileog"
 
 #: src/control/Control.Tabs.js:735
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Cuir isteach pasfhocal chun an bhileog a chosaint"
 
 #: src/control/Control.Tabs.js:739
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Díchosaint Bileog"
 
 #: src/control/Control.Tabs.js:739
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Cuir isteach an focal faire chun an bhileog a dhíchosaint"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -5624,11 +5640,11 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2709
 msgid "Confirm password"
-msgstr ""
+msgstr "Deimhnigh an focal faire"
 
 #: src/control/Control.UIManager.ts:2755
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "Ní hionann an dearbhú agus an focal faire"
 
 #: src/control/Control.UIManager.ts:2973
 msgid "Copy error details"
@@ -5908,9 +5924,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Pasfhocal mícheart curtha ar fáil. Bain triail eile as."
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Tá pasfhocal de dhíth ar an gcáipéis le hamharc air."
+msgstr "Éilíonn tú pasfhocal le go n-eagarthófar an doiciméad."
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -6549,59 +6564,59 @@ msgstr "Cuir Nóta isteach"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Dorcha 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Solas 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Dorcha 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Solas 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Béim 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Béim 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Béim 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Béim 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Béim 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Béim 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hipirnasc"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Hipirnasc Leantach"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% Níos Éadroime"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% Níos Dorcha"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -6804,11 +6819,11 @@ msgstr "Teorainneacha cille"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Stíl Tábla Nua..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Stíl Glan"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -6985,11 +7000,11 @@ msgstr "Ní féidir ach le húinéir an doiciméid an pasfhocal a athrú."
 
 #: src/app/Socket.ts:2454
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Níl cead agat an doiciméad seo a chur in eagar."
 
 #: src/app/Socket.ts:2455
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Níorbh fhéidir an doiciméad a dhéanamh in-eagarthóireachta."
 
 #: src/app/Socket.ts:2500 src/app/Socket.ts:2511
 msgid "Missing Fonts"
@@ -7124,12 +7139,16 @@ msgstr ""
 #: src/errormessages.js:31
 msgid "Your session will end in {time}. Refresh the page to continue."
 msgstr ""
+"Críochnóidh do sheisiún i gceann {time}. Athnuaigh an leathanach le leanúint "
+"ar aghaidh."
 
 #: src/errormessages.js:32
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Tá deireadh le do sheisiún. B’fhéidir nach sábhálfar aon athruithe eile ar "
+"an doiciméad. Athnuaigh an leathanach le leanúint ar aghaidh."
 
 #: src/errormessages.js:33
 msgid ""
@@ -7687,26 +7706,24 @@ msgid "End Show"
 msgstr "Seó Deiridh"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
-msgstr "Sos"
+msgstr "Sosaithe"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
-msgstr "Tosaigh arís"
+msgstr "Atosaithe"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Beochan: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Beochan: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Aistriú: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -7820,7 +7837,7 @@ msgstr "Stop ag Leanúint"
 
 #: src/control/Control.Extension.ts:471
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Theip ar an ordú síneadh: %1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
