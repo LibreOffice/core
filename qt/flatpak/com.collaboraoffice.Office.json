@@ -86,6 +86,23 @@
       "cleanup": [ "*" ]
     },
     {
+      "name": "linux-pam",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Ddocs=disabled",
+        "-Dexamples=false",
+        "-Dnis=disabled"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/linux-pam/linux-pam/releases/download/v1.7.1/Linux-PAM-1.7.1.tar.xz",
+          "sha256": "21dbcec6e01dd578f14789eac9024a18941e6f2702a05cf91b28c232eeb26ab0"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
       "name": "rsync",
       "buildsystem": "autotools",
       "sources": [
