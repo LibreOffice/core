@@ -1899,17 +1899,33 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
         if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip )
         {
             tools::Long nAvailable = aAreaParam.maAlignRect.GetWidth() - nTotalMargin;
-            tools::Long nRepeatSize = aVars.GetTextSize().Width();         // without margin
+            double fRepeatSize = aVars.GetTextSize().Width(); // without margin
+            const OUString& aCellStr = aVars.GetString();
+
+            // Measuring a string containing a single copy of a short repeat string is inaccurate.
+            // To increase accuracy, start with a representative sample of the repeated sequence.
+            constexpr sal_Int32 nSampleSize = 20;
+            const size_t nLen = aCellStr.getLength();
+            if (nLen && nLen < nSampleSize)
+            {
+                OUStringBuffer aFill(aCellStr);
+                aFill.ensureCapacity(nSampleSize);
+                while (aFill.getLength() < nSampleSize)
+                    aFill.append(aCellStr);
+                fRepeatSize
+                    = aVars.GetFmtTextWidth(aFill.copy(0, nSampleSize).makeStringAndClear());
+                fRepeatSize = fRepeatSize * nLen / nSampleSize;
+            }
+
             // When formatting for the printer, the text sizes don't always add up.
             // Round down (too few repetitions) rather than exceeding the cell size then:
             if ( pFmtDevice != mpRefDevice )
-                ++nRepeatSize;
-            if ( nRepeatSize > 0 )
+                ++fRepeatSize;
+            if (fRepeatSize > 0)
             {
-                tools::Long nRepeatCount = nAvailable / nRepeatSize;
+                const tools::Long nRepeatCount = nAvailable / fRepeatSize;
                 if ( nRepeatCount > 1 )
                 {
-                    OUString aCellStr = aVars.GetString();
                     OUStringBuffer aRepeated(aCellStr);
                     for ( tools::Long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                         aRepeated.append(aCellStr);
