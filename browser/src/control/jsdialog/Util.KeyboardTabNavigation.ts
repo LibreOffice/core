@@ -69,23 +69,24 @@ function moveFocusToNextTab(tabs: HTMLButtonElement[], currentIndex: number) {
 function moveFocusIntoTabPage(
 	contentDivs: HTMLElement[],
 	currentTab: HTMLButtonElement,
-) {
+): boolean {
 	if (!currentTab.hasAttribute('aria-controls')) {
 		console.warn('Current tab has no aria-controls attribute');
-		return;
+		return false;
 	}
 
 	const controlledId = currentTab.getAttribute('aria-controls');
 	const controlledDiv = contentDivs.find((div) => div.id === controlledId);
-	if (controlledDiv) {
-		const firstFocusableElement = JSDialog.FindFocusableWithin(
-			controlledDiv,
-			'next',
-		);
-		if (firstFocusableElement) {
-			firstFocusableElement.focus();
-		}
-	}
+	if (!controlledDiv) return false;
+
+	const firstFocusableElement = JSDialog.FindFocusableWithin(
+		controlledDiv,
+		'next',
+	);
+	if (!firstFocusableElement) return false;
+
+	firstFocusableElement.focus();
+	return true;
 }
 
 function handleTabKeydown(
@@ -118,6 +119,11 @@ function handleTabKeydown(
 		case enterPanelKey:
 		case 'PageDown':
 			moveFocusIntoTabPage(contentDivs, currentTab);
+			break;
+
+		case 'Tab':
+			if (event.shiftKey) break;
+			if (moveFocusIntoTabPage(contentDivs, currentTab)) event.preventDefault();
 			break;
 
 		case 'Home': {
