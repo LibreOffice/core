@@ -137,7 +137,7 @@ OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocumen
     return GetMultilineString( rEE);
 }
 
-std::unique_ptr<EditTextObject> ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
+EditTextObject ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
 {
     SvxURLField aUrlField( rURL, rText, SvxURLFormat::AppDefault);
     EditEngine& rEE = rDoc.GetEditEngine();
@@ -181,10 +181,8 @@ void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAt
     }
 }
 
-std::unique_ptr<EditTextObject> ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDestDoc )
+EditTextObject ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDestDoc )
 {
-    std::unique_ptr<EditTextObject> pNew;
-
     EditEngine& rEngine = rDestDoc.GetEditEngine();
     if (rObj.HasOnlineSpellErrors())
     {
@@ -194,17 +192,16 @@ std::unique_ptr<EditTextObject> ScEditUtil::Clone( const EditTextObject& rObj, S
         if (bNewControl)
             rEngine.SetControlWord(nControl | nSpellControl);
         rEngine.SetText(rObj);
-        pNew = rEngine.CreateTextObject();
+        EditTextObject aNew = rEngine.CreateTextObject();
         if (bNewControl)
             rEngine.SetControlWord(nControl);
+        return aNew;
     }
     else
     {
         rEngine.SetText(rObj);
-        pNew = rEngine.CreateTextObject();
+        return rEngine.CreateTextObject();
     }
-
-    return pNew;
 }
 
 OUString ScEditUtil::GetCellFieldValue(

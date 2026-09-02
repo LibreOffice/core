@@ -61,7 +61,10 @@ public:
     EditTextObject(SfxItemPool* pPool, MapUnit eDefaultMetric, bool bVertical,
                    TextRotation eRotation, SvtScriptType eScriptType);
     EditTextObject( const EditTextObject& r );
+    EditTextObject( EditTextObject&& r ) noexcept;
     ~EditTextObject();
+
+    EditTextObject& operator=(EditTextObject&&);
 
     /**
      * Set paragraph strings to the shared string pool.

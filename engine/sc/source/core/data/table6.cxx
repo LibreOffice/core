@@ -261,7 +261,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
     {
         ScFieldEditEngine& rEngine = rDocument.GetEditEngine();
         rEngine.SetTextCurrentDefaults(aString);
-        SetEditText(nCol, nRow, rEngine.CreateTextObject());
+        SetEditText(nCol, nRow, std::make_unique<EditTextObject>(rEngine.CreateTextObject()));
     }
     else
         aCol[nCol].SetString(nRow, nTab, aString, rDocument.GetAddressConvention());

@@ -65,12 +65,12 @@ public:
      */
     SC_DLLPUBLIC static OUString GetString( const EditTextObject& rEditText, const ScDocument& rDoc );
 
-    static std::unique_ptr<EditTextObject> CreateURLObjectFromURL(
+    static EditTextObject CreateURLObjectFromURL(
         ScDocument& rDoc, const OUString& rURL, const OUString& rText );
 
     static void RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAttr& rAttr );
 
-    static std::unique_ptr<EditTextObject> Clone( const EditTextObject& rSrc, ScDocument& rDestDoc );
+    static EditTextObject Clone( const EditTextObject& rSrc, ScDocument& rDestDoc );
 
     static OUString GetCellFieldValue(
         const SvxFieldData& rFieldData, const ScDocument* pDoc, std::optional<Color>* ppTextColor, std::optional<FontLineStyle>* ppFldLineStyle );

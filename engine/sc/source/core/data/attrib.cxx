@@ -453,11 +453,11 @@ bool ScPageHFItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /* nMemberId *
                     // no Text with Null are left
                     ScEditEngineDefaulter aEngine( EditEngine::CreatePool().get(), true );
                     if (!pLeftArea)
-                        pLeftArea = aEngine.CreateTextObject();
+                        pLeftArea = std::make_unique<EditTextObject>(aEngine.CreateTextObject());
                     if (!pCenterArea)
-                        pCenterArea = aEngine.CreateTextObject();
+                        pCenterArea = std::make_unique<EditTextObject>(aEngine.CreateTextObject());
                     if (!pRightArea)
-                        pRightArea = aEngine.CreateTextObject();
+                        pRightArea = std::make_unique<EditTextObject>(aEngine.CreateTextObject());
                 }
 
                 bRet = true;

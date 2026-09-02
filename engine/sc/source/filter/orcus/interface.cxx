@@ -1599,7 +1599,7 @@ size_t ScOrcusSharedStrings::commit_segments()
     for (const auto & [ rSel, rFormat ] : maFormatSegments)
         mrEditEngine.QuickSetAttribs(rFormat, rSel);
 
-    auto nPos = mrFactory.appendFormattedString(mrEditEngine.CreateTextObject());
+    auto nPos = mrFactory.appendFormattedString(std::make_unique<EditTextObject>(mrEditEngine.CreateTextObject()));
     mrEditEngine.Clear();
     maFormatSegments.clear();
     return nPos;

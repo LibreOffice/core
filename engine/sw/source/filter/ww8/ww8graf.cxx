@@ -1050,8 +1050,8 @@ std::optional<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &rS
                 m_pDrawEditEngine->QuickDelete(aFirstChar);
         }
 
-        std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
-        pRet.emplace( std::move(pTemporaryText) );
+        EditTextObject aTemporaryText = m_pDrawEditEngine->CreateTextObject();
+        pRet.emplace( std::move(aTemporaryText) );
         pRet->SetOutlinerMode( OutlinerMode::TextObject );
 
         m_pDrawEditEngine->SetText( OUString() );

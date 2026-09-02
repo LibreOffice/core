@@ -370,18 +370,18 @@ std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPa
     if (nCount <= 0)
         return std::nullopt;
 
-    std::unique_ptr<EditTextObject> xText = pEditEngine->CreateTextObject( nStartPara, nCount );
+    EditTextObject aText = pEditEngine->CreateTextObject( nStartPara, nCount );
     const sal_Int32 nLastPara(nStartPara + nCount - 1);
 
     for(sal_Int32 nPara(nStartPara); nPara <= nLastPara; nPara++)
     {
-        xText->SetNumberingDepth(nPara - nStartPara, GetParagraph(nPara)->GetNumberingDepth());
-        xText->SetNumberingStartValue(nPara - nStartPara, GetParagraph(nPara)->GetNumberingStartValue());
-        xText->SetNumberingRestart(nPara - nStartPara, GetParagraph(nPara)->IsNumberingRestart());
+        aText.SetNumberingDepth(nPara - nStartPara, GetParagraph(nPara)->GetNumberingDepth());
+        aText.SetNumberingStartValue(nPara - nStartPara, GetParagraph(nPara)->GetNumberingStartValue());
+        aText.SetNumberingRestart(nPara - nStartPara, GetParagraph(nPara)->IsNumberingRestart());
     }
 
-    xText->ClearPortionInfo(); // tdf#147166 the PortionInfo is unwanted here
-    OutlinerParaObject aPObj(std::move(xText));
+    aText.ClearPortionInfo(); // tdf#147166 the PortionInfo is unwanted here
+    OutlinerParaObject aPObj(std::move(aText));
     aPObj.SetOutlinerMode(GetOutlinerMode());
 
     return aPObj;
@@ -1973,8 +1973,8 @@ std::optional<NonOverflowingText> Outliner::GetNonOverflowingText() const
 
 OutlinerParaObject Outliner::GetEmptyParaObject() const
 {
-    std::unique_ptr<EditTextObject> pEmptyText = pEditEngine->GetEmptyTextObject();
-    OutlinerParaObject aPObj( std::move(pEmptyText) );
+    EditTextObject aEmptyText = pEditEngine->GetEmptyTextObject();
+    OutlinerParaObject aPObj( std::move(aEmptyText) );
     aPObj.SetOutlinerMode(GetOutlinerMode());
     return aPObj;
 }

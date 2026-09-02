@@ -3399,7 +3399,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInK
 void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUString aString,
                                    const OUString& aPreAutoCorrectString)
 {
-    std::unique_ptr<EditTextObject> pObject;
+    std::optional<EditTextObject> oObject;
     std::unique_ptr<ScPatternAttr> pCellAttrs;
     bool bMatrix = (nBlockMode == ScEnterMode::MATRIX);
     SfxApplication* pSfxApp = SfxGetpApp();
@@ -3546,7 +3546,7 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
         if (bAttrib)
         {
             mpEditEngine->ClearSpellErrors();
-            pObject = mpEditEngine->CreateTextObject();
+            oObject.emplace(mpEditEngine->CreateTextObject());
         }
         else if (ScModule::get()->GetAppOptions().GetAutoComplete()) // Adjust Upper/Lower case
         {
@@ -3653,14 +3653,14 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
             {
                 ScInputStatusItem aItem(FID_INPUTLINE_STATUS,
                                        aCursorPos, aCursorPos, aCursorPos,
-                                       aPreAutoCorrectString, pObject.get());
+                                       aPreAutoCorrectString, oObject ? &*oObject : nullptr);
                 aArgs[0] = &aItem;
                 rBindings.Execute(nId, aArgs);
             }
 
             ScInputStatusItem aItemCorrected(FID_INPUTLINE_STATUS,
                                              aCursorPos, aCursorPos, aCursorPos,
-                                             aString, pObject.get());
+                                             aString, oObject ? &*oObject : nullptr);
 
             sc::MisspellRangeResult aMisspellRangeResult;
             if ( !aMisspellRanges.empty() )
@@ -4872,9 +4872,8 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
         if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
         {
             // Copy content
-            std::unique_ptr<EditTextObject> pObj = mpEditEngine->CreateTextObject();
-            rDestEngine.SetTextCurrentDefaults(*pObj);
-            pObj.reset();
+            EditTextObject aObj = mpEditEngine->CreateTextObject();
+            rDestEngine.SetTextCurrentDefaults(aObj);
 
             sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
             // Delete attributes

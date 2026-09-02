@@ -506,8 +506,8 @@ public:
             case sc::FormulaResultValue::String:
                 if (aRes.mbMultiLine)
                 {
-                    std::unique_ptr<EditTextObject> pObj(mrDoc.CreateSharedStringTextObject(aRes.maString));
-                    maResValues.setValue(nRow, std::move(pObj));
+                    EditTextObject aObj(mrDoc.CreateSharedStringTextObject(aRes.maString));
+                    maResValues.setValue(nRow, std::make_unique<EditTextObject>(std::move(aObj)));
                 }
                 else
                 {

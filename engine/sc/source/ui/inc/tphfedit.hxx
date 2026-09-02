@@ -48,7 +48,7 @@ public:
 
     void            SetFont( const ScPatternAttr& rPattern );
     void            SetText( const EditTextObject& rTextObject );
-    std::unique_ptr<EditTextObject> CreateTextObject();
+    EditTextObject  CreateTextObject();
     void            SetCharAttributes();
 
     void            InsertField( const SvxFieldItem& rFld );

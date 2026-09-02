@@ -1516,9 +1516,9 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
             if( maTextData.mxString->IsRich() )
             {
                 // rich text
-                std::unique_ptr< EditTextObject > xEditObj(
+                std::optional< EditTextObject > xEditObj(
                     XclImpStringHelper::CreateTextObject( GetRoot(), *maTextData.mxString ) );
-                OutlinerParaObject aOutlineObj(std::move(xEditObj));
+                OutlinerParaObject aOutlineObj(std::move(*xEditObj));
                 aOutlineObj.SetOutlinerMode( OutlinerMode::TextObject );
                 pTextObj->NbcSetOutlinerParaObject( std::move(aOutlineObj) );
             }

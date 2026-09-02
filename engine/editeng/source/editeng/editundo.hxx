@@ -268,8 +268,8 @@ private:
 
     TransliterationFlags
                         nMode;
-    std::unique_ptr<EditTextObject>
-                        pTxtObj;
+    std::optional<EditTextObject>
+                        moTxtObj;
     OUString            aText;
 
 public:
@@ -277,7 +277,7 @@ public:
     virtual ~EditUndoTransliteration() override;
 
     void                SetText( const OUString& rText ) { aText = rText; }
-    void                SetText( std::unique_ptr<EditTextObject> pObj ) { pTxtObj = std::move( pObj ); }
+    void                SetText( EditTextObject&& aObj ) { moTxtObj.emplace( std::move( aObj ) ); }
     void                SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
 
     virtual void        Undo() override;

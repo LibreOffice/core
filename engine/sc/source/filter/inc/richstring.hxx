@@ -235,7 +235,7 @@ public:
         @param rxText  The XText interface of the target object.
      */
     void                convert( const css::uno::Reference< css::text::XText >& rxText );
-    std::unique_ptr<EditTextObject> convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont );
+    EditTextObject      convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont );
 
     RichStringPortion& getPortion(sal_Int32 nPortionIdx) { return maTextPortions[nPortionIdx]; }
 

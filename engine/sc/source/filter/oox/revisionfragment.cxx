@@ -142,13 +142,10 @@ protected:
                 {
                     // The value is a rich text string.
                     ScDocument& rDoc = getScDocument();
-                    std::unique_ptr<EditTextObject> pTextObj = mxRichString->convert(rDoc.GetEditEngine(), nullptr);
-                    if (pTextObj)
-                    {
-                        svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
-                        pTextObj->NormalizeString(rPool);
-                        mrCellValue.set(std::move(pTextObj));
-                    }
+                    EditTextObject aTextObj = mxRichString->convert(rDoc.GetEditEngine(), nullptr);
+                    svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
+                    aTextObj.NormalizeString(rPool);
+                    mrCellValue.set(std::move(aTextObj));
                 }
             }
             break;

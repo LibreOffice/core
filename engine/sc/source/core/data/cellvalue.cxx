@@ -345,6 +345,12 @@ void ScCellValue::set( const EditTextObject& rEditText )
     maData = new EditTextObject(rEditText);
 }
 
+void ScCellValue::set( EditTextObject&& rEditText )
+{
+    clear();
+    maData = new EditTextObject(std::move(rEditText));
+}
+
 void ScCellValue::set( std::unique_ptr<EditTextObject> xEditText )
 {
     clear();
@@ -402,14 +408,14 @@ void ScCellValue::assign(const ScCellValue& rOther, ScDocument& rDestDoc, ScClon
                 if (bNewControl)
                     rEngine.SetControlWord(nControl | nSpellControl);
                 rEngine.SetTextCurrentDefaults(*rOther.getEditText());
-                maData = rEngine.CreateTextObject().release();
+                maData = new EditTextObject(rEngine.CreateTextObject());
                 if (bNewControl)
                     rEngine.SetControlWord(nControl);
             }
             else
             {
                 rEngine.SetTextCurrentDefaults(*rOther.getEditText());
-                maData = rEngine.CreateTextObject().release();
+                maData = new EditTextObject(rEngine.CreateTextObject());
             }
         }
         break;

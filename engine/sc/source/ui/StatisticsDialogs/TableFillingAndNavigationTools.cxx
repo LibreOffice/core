@@ -228,8 +228,8 @@ void AddressWalkerWriter::writeBoldString(const OUString& aString)
     aItemSet.Put(aWeight);
     aItemSet.Put(aJustify);
     rEngine.QuickSetAttribs(aItemSet, ESelection(0, 0, 0, aString.getLength()) );
-    std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
-    mpDocShell->GetDocFunc().SetEditCell(mCurrentAddress, *pEditText, true);
+    EditTextObject aEditText(rEngine.CreateTextObject());
+    mpDocShell->GetDocFunc().SetEditCell(mCurrentAddress, aEditText, true);
 }
 
 void AddressWalkerWriter::writeValue(double aValue)

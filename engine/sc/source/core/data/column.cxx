@@ -786,7 +786,7 @@ public:
                 std::vector<EditTextObject*> aCloned;
                 aCloned.reserve(nDataSize);
                 for (; it != itEnd; ++it)
-                    aCloned.push_back(ScEditUtil::Clone(**it, mrDestCol.GetDoc()).release());
+                    aCloned.push_back(new EditTextObject(ScEditUtil::Clone(**it, mrDestCol.GetDoc())));
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
                     maDestPos.miCellPos, nTopRow, aCloned.begin(), aCloned.end());
@@ -1041,7 +1041,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
             if (&rDocument == &rDestCol.GetDoc())
                 rDestCol.maCells.set(nDestRow, new EditTextObject(*p));
             else
-                rDestCol.maCells.set(nDestRow, ScEditUtil::Clone(*p, rDestCol.GetDoc()).release());
+                rDestCol.maCells.set(nDestRow, new EditTextObject(ScEditUtil::Clone(*p, rDestCol.GetDoc())));
         }
         break;
         case sc::element_type_formula:
@@ -1341,7 +1341,7 @@ class CopyByCloneHandler
             EditEngine& rEngine = mrDestCol.GetDoc().GetEditEngine();
             rEngine.SetText(aStr.getString());
             maDestPos.miCellPos =
-                mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rEngine.CreateTextObject().release());
+                mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, new EditTextObject(rEngine.CreateTextObject()));
         }
         else
         {
@@ -1484,7 +1484,7 @@ public:
                 std::vector<EditTextObject*> aCloned;
                 aCloned.reserve(nDataSize);
                 for (; it != itEnd; ++it)
-                    aCloned.push_back(ScEditUtil::Clone(**it, mrDestCol.GetDoc()).release());
+                    aCloned.push_back(new EditTextObject(ScEditUtil::Clone(**it, mrDestCol.GetDoc())));
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
                     maDestPos.miCellPos, nRow, aCloned.begin(), aCloned.end());

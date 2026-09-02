@@ -390,9 +390,11 @@ public:
         SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
         const ScSetStringParam* pParam = nullptr );
 
-    void SetEditText( SCROW nRow, std::unique_ptr<EditTextObject> pEditText );
+    void SetEditText( SCROW nRow, std::unique_ptr<EditTextObject> aEditText );
+    void SetEditText( SCROW nRow, EditTextObject aEditText );
     void SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, std::unique_ptr<EditTextObject> pEditText );
     void SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const EditTextObject& rEditText );
+    void SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, EditTextObject&& rEditText );
     void SetEditText( SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
     void SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram );
     void SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );

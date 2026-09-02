@@ -5965,7 +5965,7 @@ bool extractURLInfo( const SvxFieldItem* pFieldItem, OUString* pName, OUString* 
 static void lcl_SetEngineTextKeepingDefaults(const std::shared_ptr<ScFieldEditEngine>& pEngine,
                                              ScDocument& rDoc, ScRefCellValue& rCell, const OUString& rURL)
 {
-    std::unique_ptr<EditTextObject> pTextObj;
+    std::optional<EditTextObject> oTextObj;
     if (rCell.getType() == CELLTYPE_EDIT)
     {
         if (rCell.getEditText())
@@ -5976,7 +5976,7 @@ static void lcl_SetEngineTextKeepingDefaults(const std::shared_ptr<ScFieldEditEn
           // cell ( or other type ? ) with a hyperlink associated with it.
     {
         if (rURL.isEmpty())
-            pTextObj = rCell.getFormula()->CreateURLObject();
+            oTextObj.emplace(rCell.getFormula()->CreateURLObject());
         else
         {
             OUString aRepres = rURL;
@@ -5987,11 +5987,11 @@ static void lcl_SetEngineTextKeepingDefaults(const std::shared_ptr<ScFieldEditEn
             else if (rCell.getType() == CELLTYPE_FORMULA)
                 aRepres = rCell.getFormula()->GetString().getString();
 
-            pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, rURL, aRepres);
+            oTextObj.emplace(ScEditUtil::CreateURLObjectFromURL(rDoc, rURL, aRepres));
         }
 
-        if (pTextObj)
-            pEngine->SetTextCurrentDefaults(*pTextObj);
+        if (oTextObj)
+            pEngine->SetTextCurrentDefaults(*oTextObj);
     }
 }
 

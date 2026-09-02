@@ -474,17 +474,14 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, So
                 StreamMode::READ);
             aEngine.Read(aMdStream, OUString(), EETextFormat::Markdown);
 
-            auto pTextObj = aEngine.CreateTextObject();
-            if (pTextObj)
+            EditTextObject aTextObj = aEngine.CreateTextObject();
+            bool bOk = StartPaste();
+            if (bOk)
             {
-                bool bOk = StartPaste();
-                if (bOk)
-                {
-                    rDoc.SetEditText(aRange.aStart, std::move(pTextObj));
-                    EndPaste();
-                }
-                return bOk;
+                rDoc.SetEditText(aRange.aStart, std::move(aTextObj));
+                EndPaste();
             }
+            return bOk;
         }
 
         // Table markdown: convert to HTML for multi-cell distribution
@@ -1121,7 +1118,7 @@ static bool lcl_PutString(
             {
                 ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
                 rEngine.SetTextCurrentDefaults(rStr);
-                rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
+                rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), std::make_unique<EditTextObject>(rEngine.CreateTextObject()));
                 return true;
             }
             else
@@ -1532,7 +1529,7 @@ static bool lcl_PutString(
         ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
         rEngine.SetTextCurrentDefaults(rStr);
         if ( bUseDocImport )
-            rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
+            rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), std::make_unique<EditTextObject>(rEngine.CreateTextObject()));
         else
             rDoc.SetEditText( ScAddress( nCol, nRow, nTab ), rEngine.CreateTextObject() );
     }

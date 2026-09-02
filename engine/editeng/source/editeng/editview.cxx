@@ -850,7 +850,7 @@ EVControlBits EditView::GetControlWord() const
     return getImpl().mnControl;
 }
 
-std::unique_ptr<EditTextObject> EditView::CreateTextObject()
+EditTextObject EditView::CreateTextObject()
 {
     return getImpEditEngine().CreateTextObject( getImpl().GetEditSelection() );
 }

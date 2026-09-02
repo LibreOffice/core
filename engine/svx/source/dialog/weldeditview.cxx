@@ -1393,8 +1393,8 @@ void WeldTextForwarder::CopyText(const SvxTextForwarder& rSource)
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     if (pEditEngine && pSourceEditEngine)
     {
-        std::unique_ptr<EditTextObject> pNewTextObject = pSourceEditEngine->CreateTextObject();
-        pEditEngine->SetText(*pNewTextObject);
+        EditTextObject aNewTextObject = pSourceEditEngine->CreateTextObject();
+        pEditEngine->SetText(aNewTextObject);
     }
 }
 

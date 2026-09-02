@@ -20,6 +20,7 @@
 #pragma once
 
 #include <editeng/editengdllapi.h>
+#include <editeng/editobj.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/style.hxx>
@@ -27,42 +28,10 @@
 #include <stdexcept>
 #include <memory>
 
-class EditTextObject;
-enum class OutlinerMode;
-enum class TextRotation;
-
-/**
- * This is the guts of OutlinerParaObject, refcounted and shared among
- * multiple instances of OutlinerParaObject.
- */
-struct EDITENG_DLLPUBLIC OutlinerParaObjData
-{
-    // data members
-    std::unique_ptr<EditTextObject>  mpEditTextObject;
-
-    // constructor
-    OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject );
-
-    OutlinerParaObjData( const OutlinerParaObjData& r );
-
-    OutlinerParaObjData( OutlinerParaObjData&& r ) = default;
-
-    // assignment operator
-    OutlinerParaObjData& operator=(const OutlinerParaObjData& rCandidate) = delete;
-
-    // destructor
-    ~OutlinerParaObjData();
-
-    bool operator==(const OutlinerParaObjData& rCandidate) const;
-
-    // #i102062#
-    bool isWrongListEqual(const OutlinerParaObjData& rCompare) const;
-};
-
 class EDITENG_DLLPUBLIC OutlinerParaObject
 {
 friend class std::optional<OutlinerParaObject>;
-    ::o3tl::cow_wrapper< OutlinerParaObjData > mpImpl;
+    ::o3tl::cow_wrapper< EditTextObject > mpImpl;
 
     OutlinerParaObject(std::nullopt_t) noexcept
         : mpImpl(std::nullopt) {}
@@ -71,7 +40,7 @@ friend class std::optional<OutlinerParaObject>;
 
 public:
     // constructors/destructor
-    OutlinerParaObject(std::unique_ptr<EditTextObject>);
+    OutlinerParaObject(EditTextObject&&);
     OutlinerParaObject( const OutlinerParaObject&);
     OutlinerParaObject(OutlinerParaObject&&) noexcept;
     ~OutlinerParaObject();

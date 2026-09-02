@@ -616,9 +616,9 @@ void EditUndoTransliteration::Undo()
     aDelSel.Max() = aSel.Min();
     aDelSel.Max().GetNode()->GetCharAttribs().DeleteEmptyAttribs();
     EditSelection aNewSel;
-    if ( pTxtObj )
+    if ( moTxtObj )
     {
-        aNewSel = pEE->InsertText( *pTxtObj, aSel );
+        aNewSel = pEE->InsertText( *moTxtObj, aSel );
     }
     else
     {

@@ -670,7 +670,7 @@ private:
 
     std::unique_ptr<EditUndoSetAttribs> CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
 
-    std::unique_ptr<EditTextObject> GetEmptyTextObject();
+    EditTextObject GetEmptyTextObject();
 
     std::tuple<const ParaPortion*, const EditLine*, tools::Long> GetPortionAndLine(Point aDocPos);
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
@@ -685,8 +685,7 @@ private:
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    std::unique_ptr<EditTextObject>
-                        CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
+    EditTextObject      CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
     EditSelection       PasteText( css::uno::Reference< css::datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial, SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
@@ -1060,9 +1059,9 @@ public:
     OString         GetSimpleMarkdown();
     EditPaM         ReadMarkdown(SvStream& rInput, EditSelection aSel);
 
-    std::unique_ptr<EditTextObject> CreateTextObject(sal_Int32 nPara, sal_Int32 nParas);
-    std::unique_ptr<EditTextObject> CreateTextObject();
-    std::unique_ptr<EditTextObject> CreateTextObject(const EditSelection& rSel);
+    EditTextObject CreateTextObject(sal_Int32 nPara, sal_Int32 nParas);
+    EditTextObject CreateTextObject();
+    EditTextObject CreateTextObject(const EditSelection& rSel);
     void            SetText( const EditTextObject& rTextObject );
     EditSelection   InsertText( const EditTextObject& rTextObject, EditSelection aSel );
 

@@ -2090,7 +2090,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testNumericHeaderBecomesText)
     // Rich text in a header is text already, it must survive untouched.
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
     rEE.SetTextCurrentDefaults(u"Two\nLines"_ustr);
-    m_xDocShell->GetDocFunc().SetEditCell(ScAddress(0, 0, 0), *rEE.CreateTextObject(), false);
+    m_xDocShell->GetDocFunc().SetEditCell(ScAddress(0, 0, 0), rEE.CreateTextObject(), false);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rich text in a header is not flattened", CELLTYPE_EDIT,
                                  m_pDoc->GetCellType(ScAddress(0, 0, 0)));
 

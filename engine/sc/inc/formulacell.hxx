@@ -476,7 +476,7 @@ public:
     void MarkAsSpilled();
 
     SC_DLLPUBLIC bool IsHyperLinkCell() const;
-    std::unique_ptr<EditTextObject> CreateURLObject();
+    EditTextObject CreateURLObject();
     SC_DLLPUBLIC void GetURLResult( OUString& rURL, OUString& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */

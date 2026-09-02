@@ -88,9 +88,9 @@ bool PutDataOperation::runImplementation()
             }
         }
 
-        // A copy of pNewData will be stored in the cell.
-        std::unique_ptr<EditTextObject> pNewData(mrEngine.CreateTextObject());
-        bRet = mrDocFunc.SetEditCell(mrPosition, *pNewData, !mbApi);
+        // A copy of aNewData will be stored in the cell.
+        EditTextObject aNewData(mrEngine.CreateTextObject());
+        bRet = mrDocFunc.SetEditCell(mrPosition, aNewData, !mbApi);
 
         // Set the paragraph attributes back to the EditEngine.
         for (const auto& rxItem : aRememberItems)

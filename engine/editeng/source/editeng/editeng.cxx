@@ -828,17 +828,17 @@ void EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
     getImpl().Write(rOutput, eFormat);
 }
 
-std::unique_ptr<EditTextObject> EditEngine::CreateTextObject()
+EditTextObject EditEngine::CreateTextObject()
 {
     return getImpl().CreateTextObject();
 }
 
-std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( const ESelection& rESelection )
+EditTextObject EditEngine::CreateTextObject( const ESelection& rESelection )
 {
     return getImpl().CreateTextObject(CreateSelection(rESelection));
 }
 
-std::unique_ptr<EditTextObject> EditEngine::GetEmptyTextObject()
+EditTextObject EditEngine::GetEmptyTextObject()
 {
     return getImpl().GetEmptyTextObject();
 }
@@ -915,7 +915,7 @@ void EditEngine::SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink
     getImpl().maEndPasteOrDropHdl = rLink;
 }
 
-std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
+EditTextObject EditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
 {
     return getImpl().CreateTextObject(nPara, nParas);
 }

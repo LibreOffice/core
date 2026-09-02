@@ -309,10 +309,10 @@ public:
     void            Clear();
     void            SetText( const OUString& rStr );
 
-    std::unique_ptr<EditTextObject> CreateTextObject();
-    SAL_DLLPRIVATE std::unique_ptr<EditTextObject> GetEmptyTextObject();
-    std::unique_ptr<EditTextObject> CreateTextObject( sal_Int32 nPara, sal_Int32 nParas = 1 );
-    std::unique_ptr<EditTextObject> CreateTextObject( const ESelection& rESelection );
+    EditTextObject CreateTextObject();
+    SAL_DLLPRIVATE EditTextObject GetEmptyTextObject();
+    EditTextObject CreateTextObject( sal_Int32 nPara, sal_Int32 nParas = 1 );
+    EditTextObject CreateTextObject( const ESelection& rESelection );
     void            SetText( const EditTextObject& rTextObject );
 
     SAL_DLLPRIVATE void            RemoveParagraph(sal_Int32 nPara);

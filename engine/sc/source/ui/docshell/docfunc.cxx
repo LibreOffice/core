@@ -712,8 +712,8 @@ bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr
     {
         ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
         rEngine.SetTextCurrentDefaults(rStr);
-        std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
-        return SetEditCell(rPos, *pEditText, bInteraction);
+        EditTextObject aEditText(rEngine.CreateTextObject());
+        return SetEditCell(rPos, aEditText, bInteraction);
     }
     else
         return SetStringCell(rPos, rStr, bInteraction);

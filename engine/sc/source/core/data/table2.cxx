@@ -970,7 +970,7 @@ public:
         }
 
         SCCOL nTransCol = mnCol1 + nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
-        mrClipTab.SetEditText(nTransCol, mnTransRow, ScEditUtil::Clone(*p, mrClipTab.GetDoc()));
+        mrClipTab.SetEditText(nTransCol, mnTransRow, std::make_unique<EditTextObject>(ScEditUtil::Clone(*p, mrClipTab.GetDoc())));
     }
 
     void operator() (size_t nRow, const ScFormulaCell* p)

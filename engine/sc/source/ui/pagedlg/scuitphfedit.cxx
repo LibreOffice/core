@@ -180,13 +180,13 @@ void ScHFEditPage::Reset( const SfxItemSet* rCoreSet )
 bool ScHFEditPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     ScPageHFItem    aItem( nWhich );
-    std::unique_ptr<EditTextObject> pLeft   = m_xWndLeft->CreateTextObject();
-    std::unique_ptr<EditTextObject> pCenter = m_xWndCenter->CreateTextObject();
-    std::unique_ptr<EditTextObject> pRight  = m_xWndRight->CreateTextObject();
+    EditTextObject aLeft   = m_xWndLeft->CreateTextObject();
+    EditTextObject aCenter = m_xWndCenter->CreateTextObject();
+    EditTextObject aRight  = m_xWndRight->CreateTextObject();
 
-    aItem.SetLeftArea  ( *pLeft );
-    aItem.SetCenterArea( *pCenter );
-    aItem.SetRightArea ( *pRight );
+    aItem.SetLeftArea  ( aLeft );
+    aItem.SetCenterArea( aCenter );
+    aItem.SetRightArea ( aRight );
 
     rCoreSet->Put( aItem );
 
@@ -270,17 +270,13 @@ void ScHFEditPage::SetSelectDefinedList()
     // default to customized
     ScHFEntryId eSelectEntry = eEntryCount;
 
-    std::unique_ptr< EditTextObject > pLeftObj;
-    std::unique_ptr< EditTextObject > pCenterObj;
-    std::unique_ptr< EditTextObject > pRightObj;
-
     OUString aLeftEntry;
     OUString aCenterEntry;
     OUString aRightEntry;
 
-    pLeftObj = m_xWndLeft->GetEditEngine()->CreateTextObject();
-    pCenterObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
-    pRightObj = m_xWndRight->GetEditEngine()->CreateTextObject();
+    EditTextObject aLeftObj = m_xWndLeft->GetEditEngine()->CreateTextObject();
+    EditTextObject aCenterObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
+    EditTextObject aRightObj = m_xWndRight->GetEditEngine()->CreateTextObject();
 
     bool bFound = false;
 
@@ -291,9 +287,9 @@ void ScHFEditPage::SetSelectDefinedList()
         {
             case eNoneEntry:
             {
-                aLeftEntry = pLeftObj->GetText(0);
-                aCenterEntry = pCenterObj->GetText(0);
-                aRightEntry = pRightObj->GetText(0);
+                aLeftEntry = aLeftObj.GetText(0);
+                aCenterEntry = aCenterObj.GetText(0);
+                aRightEntry = aRightObj.GetText(0);
                 if(aLeftEntry.isEmpty() && aCenterEntry.isEmpty()
                     && aRightEntry.isEmpty())
                 {
@@ -305,11 +301,11 @@ void ScHFEditPage::SetSelectDefinedList()
 
             case ePageEntry:
             {
-                aLeftEntry = pLeftObj->GetText(0);
-                aRightEntry = pRightObj->GetText(0);
+                aLeftEntry = aLeftObj.GetText(0);
+                aRightEntry = aRightObj.GetText(0);
                 if(aLeftEntry.isEmpty() && aRightEntry.isEmpty())
                 {
-                    if(IsPageEntry(m_xWndCenter->GetEditEngine(), pCenterObj.get()))
+                    if(IsPageEntry(m_xWndCenter->GetEditEngine(), &aCenterObj))
                     {
                         eSelectEntry = ePageEntry;
                         bFound = true;
@@ -326,13 +322,13 @@ void ScHFEditPage::SetSelectDefinedList()
 
             case eSheetEntry:
             {
-                aLeftEntry = pLeftObj->GetText(0);
-                aRightEntry = pRightObj->GetText(0);
+                aLeftEntry = aLeftObj.GetText(0);
+                aRightEntry = aRightObj.GetText(0);
                 if(aLeftEntry.isEmpty() && aRightEntry.isEmpty())
                 {
-                    if(pCenterObj->IsFieldObject())
+                    if(aCenterObj.IsFieldObject())
                     {
-                        const SvxFieldItem* pFieldItem = pCenterObj->GetField();
+                        const SvxFieldItem* pFieldItem = aCenterObj.GetField();
                         if(pFieldItem)
                         {
                             const SvxFieldData* pField = pFieldItem->GetField();
@@ -349,7 +345,7 @@ void ScHFEditPage::SetSelectDefinedList()
 
             case eConfidentialEntry:
             {
-                if(IsDateEntry(pCenterObj.get()) && IsPageEntry(m_xWndRight->GetEditEngine(), pRightObj.get()))
+                if(IsDateEntry(&aCenterObj) && IsPageEntry(m_xWndRight->GetEditEngine(), &aRightObj))
                 {
                     OUString aConfidentialEntry(aUserOpt.GetCompany() + " " + m_xFtConfidential->get_label());
                     if(aConfidentialEntry == m_xWndLeft->GetEditEngine()->GetText(0))
@@ -369,9 +365,9 @@ void ScHFEditPage::SetSelectDefinedList()
 
             case eExtFileNameEntry:
             {
-                aLeftEntry = pLeftObj->GetText(0);
-                aRightEntry = pRightObj->GetText(0);
-                if(IsExtFileNameEntry(pCenterObj.get()) && aLeftEntry.isEmpty()
+                aLeftEntry = aLeftObj.GetText(0);
+                aRightEntry = aRightObj.GetText(0);
+                if(IsExtFileNameEntry(&aCenterObj) && aLeftEntry.isEmpty()
                     && aRightEntry.isEmpty())
                 {
                     eSelectEntry = eExtFileNameEntry;
@@ -394,9 +390,9 @@ void ScHFEditPage::SetSelectDefinedList()
 
             case ePageExtFileNameEntry:
             {
-                aLeftEntry = pLeftObj->GetText(0);
-                if(IsPageEntry(m_xWndCenter->GetEditEngine(), pCenterObj.get()) &&
-                    IsExtFileNameEntry(pRightObj.get()) && aLeftEntry.isEmpty())
+                aLeftEntry = aLeftObj.GetText(0);
+                if(IsPageEntry(m_xWndCenter->GetEditEngine(), &aCenterObj) &&
+                    IsExtFileNameEntry(&aRightObj) && aLeftEntry.isEmpty())
                 {
                     eSelectEntry = ePageExtFileNameEntry;
                     bFound = true;
@@ -406,7 +402,7 @@ void ScHFEditPage::SetSelectDefinedList()
 
             case eUserNameEntry:
             {
-                if(IsDateEntry(pRightObj.get()) && IsPageEntry(m_xWndCenter->GetEditEngine(), pCenterObj.get()))
+                if(IsDateEntry(&aRightObj) && IsPageEntry(m_xWndCenter->GetEditEngine(), &aCenterObj))
                 {
                     OUString aUserNameEntry(aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName());
 
@@ -421,7 +417,7 @@ void ScHFEditPage::SetSelectDefinedList()
 
             case eCreatedByEntry:
             {
-                if(IsDateEntry(pCenterObj.get()) && IsPageEntry(m_xWndRight->GetEditEngine(), pRightObj.get()))
+                if(IsDateEntry(&aCenterObj) && IsPageEntry(m_xWndRight->GetEditEngine(), &aRightObj))
                 {
                     OUString aCreatedByEntry(m_xFtCreatedBy->get_label() + " " + aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName());
 
@@ -467,10 +463,10 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextOb
             {
                 aSel.start.nIndex = aSel.end.nIndex;
                 aSel.end.nIndex++;
-                std::unique_ptr< EditTextObject > pPageObj = pEngine->CreateTextObject(aSel);
-                if(pPageObj && pPageObj->IsFieldObject() )
+                EditTextObject aPageObj = pEngine->CreateTextObject(aSel);
+                if(aPageObj.IsFieldObject() )
                 {
-                    const SvxFieldItem* pFieldItem = pPageObj->GetField();
+                    const SvxFieldItem* pFieldItem = aPageObj.GetField();
                     if(pFieldItem)
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
@@ -524,7 +520,6 @@ bool ScHFEditPage::IsExtFileNameEntry(const EditTextObject* pTextObj)
 void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 {
     SvtUserOptions aUserOpt;
-    std::unique_ptr< EditTextObject > pTextObj;
 
     switch(eSel)
     {
@@ -559,8 +554,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_xWndCenter->GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.end));
             aSel.end.nIndex += aPageOfEntry.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(aSel.end));
-            pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
-            m_xWndCenter->SetText(*pTextObj);
+            m_xWndCenter->SetText(m_xWndCenter->GetEditEngine()->CreateTextObject());
             if(!bTravelling)
                 m_xWndCenter->GrabFocus();
         }
@@ -599,8 +593,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aSel.start.nIndex = aSel.end.nIndex;
             aSel.end.nIndex += aPageEntry.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.end));
-            pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
-            m_xWndCenter->SetText(*pTextObj);
+            m_xWndCenter->SetText(m_xWndCenter->GetEditEngine()->CreateTextObject());
             if(!bTravelling)
                 m_xWndCenter->GrabFocus();
         }
@@ -628,8 +621,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.end));
             aSel.end.nIndex += aCommaSpace.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.end));
-            pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
-            m_xWndCenter->SetText(*pTextObj);
+            m_xWndCenter->SetText(m_xWndCenter->GetEditEngine()->CreateTextObject());
             if(!bTravelling)
                 m_xWndCenter->GrabFocus();
         }
@@ -648,8 +640,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.end));
             aSel.end.nIndex += aCommaSpace.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.end));
-            pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
-            m_xWndCenter->SetText(*pTextObj);
+            m_xWndCenter->SetText(m_xWndCenter->GetEditEngine()->CreateTextObject());
             if(!bTravelling)
                 m_xWndCenter->GrabFocus();
         }

@@ -6094,7 +6094,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFilterRangeExpansionFromSheetView)
              ScModelObj*) {
              ScFieldEditEngine& rEE = rDocument.GetEditEngine();
              rEE.SetTextCurrentDefaults(u"6"_ustr);
-             rDocShell.GetDocFunc().SetEditCell(rPos, *rEE.CreateTextObject(), true);
+             rDocShell.GetDocFunc().SetEditCell(rPos, rEE.CreateTextObject(), true);
          },
           true },
     });
