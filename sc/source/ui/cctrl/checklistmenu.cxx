@@ -18,6 +18,9 @@
  */
 
 #include <checklistmenu.hxx>
+
+#include <unordered_map>
+
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <globstr.hrc>
@@ -923,30 +926,29 @@ void ScCheckListMenuControl::MarkCheckedMembers()
     }
     else
     {
+        // tdf#168193 - look up the row label instead of scanning all members
+        std::unordered_map<OUString, size_t> aNameToMember;
+        aNameToMember.reserve(maMembers.size());
+        for (size_t i = 0; i < maMembers.size(); ++i)
+            // duplicate names keep their first member since they all show up as a single entry
+            aNameToMember.emplace(maMembers[i].maName, i);
+
         // go over the members visible in the popup, and remember which one is
         // checked, and which one is not by setting `mbMarked` to `true`; by default
         // `mbMarked` is `false`, we clear all the marks when lock is unchecked, see
         // at the end of this callback.
-        mpChecks->all_foreach([this](weld::TreeIter& rEntry){
-            if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
+        mpChecks->all_foreach(
+            [this, &aNameToMember](weld::TreeIter& rEntry)
             {
-                for (auto& aMember : maMembers)
+                if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
                 {
-                    if (aMember.maName == mpChecks->get_text(rEntry))
-                    {
-                        aMember.mbMarked = true;
-                        /*
-                         * if there are multiple entries with the same
-                         * name in the range, they all show up as a single
-                         * entry in the autofilter, so we can break
-                         */
-                        break;
-                    }
+                    const auto aItr = aNameToMember.find(mpChecks->get_text(rEntry));
+                    if (aItr != aNameToMember.end())
+                        maMembers[aItr->second].mbMarked = true;
                 }
-            }
 
-            return false;
-        });
+                return false;
+            });
     }
 }
 
