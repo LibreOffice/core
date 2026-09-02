@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-01 16:27+0200\n"
-"PO-Revision-Date: 2026-08-17 18:51+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2026-09-03 05:51+0000\n"
+"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
-msgstr "Beheerderspaneel"
+msgstr "Beheerdersconsole"
 
 #: admin/admin.strings.js:16
 msgid "Settings"
@@ -39,7 +39,7 @@ msgstr "(huidige)"
 
 #: admin/admin.strings.js:19
 msgid "Analytics"
-msgstr "Analyse"
+msgstr "Analytisch"
 
 #: admin/admin.strings.js:20
 msgid "History"
@@ -47,7 +47,7 @@ msgstr "Geschiedenis"
 
 #: admin/admin.strings.js:21
 msgid "Log"
-msgstr "Gebeurtenissen"
+msgstr "Logboek"
 
 #: admin/admin.strings.js:22 src/control/Control.Menubar.ts:447
 #: src/control/Control.Menubar.ts:663 src/control/Control.Menubar.ts:836
@@ -493,38 +493,41 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:542
 msgid "Invalid request"
-msgstr ""
+msgstr "Ongeldig verzoek"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:543
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Ongeldige API-sleutel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "De API-sleutel heeft onvoldoende rechten"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:547
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Deze AI-host staat niet op de lijst met toegestane hosts van de server "
+"(lok_allow.host). Vraag je beheerder om deze toe te staan."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:549
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
 msgstr ""
+"Beperkte verwerkingssnelheid – even geduld a.u.b. en probeer het nog eens"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:550
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API-serverfout – probeer het later nog eens"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Dienst tijdelijk niet beschikbaar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:609
 msgid "Signature Certificate"
@@ -588,7 +591,7 @@ msgstr "Automatische spellingscontrole"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:627
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Gebruik de zoom-instellingen van deze server"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:628
 msgid "Smart Zoom"
@@ -943,13 +946,16 @@ msgstr "Standaard interfacevoorkeuren instellen."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1379
 #: admin/src/integrator/AdminIntegratorSettings.ts:3444
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Zoomgedrag"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1524
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Wanneer deze optie is ingeschakeld, worden tekstdocumenten geopend met de "
+"zoomfactor die deze server kiest. Schakel deze optie uit om zelf de "
+"zoomfactor te kiezen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1530
 msgid ""
@@ -1364,11 +1370,11 @@ msgstr "Tabelstijlen"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Als standaard instellen"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Stijl dupliceren"
 
 #: src/canvas/sections/CommentListSection.ts:2025
 #: src/canvas/sections/CommentListSection.ts:2038
@@ -1995,189 +2001,209 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2144
 msgid "Request too large"
-msgstr ""
+msgstr "Verzoek te groot"
 
 #: src/control/Control.AIChatSidebar.ts:2145
 msgid "Invalid request format"
-msgstr ""
+msgstr "Ongeldige indeling van het verzoek"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "Verzoek vervangen door een nieuwer verzoek"
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
-msgstr ""
+msgstr "Er zijn geen berichten opgegeven"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "Bericht te lang"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "AI-functies zijn door de beheerder uitgeschakeld"
 
 #: src/control/Control.AIChatSidebar.ts:2150
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "AI is niet beschikbaar voor gasten"
 
 #: src/control/Control.AIChatSidebar.ts:2152
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "AI-functies zijn voor dit document uitgeschakeld"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "AI settings not configured"
-msgstr ""
+msgstr "AI-instellingen niet geconfigureerd"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "De URL van de AI-aanbieder is ongeldig. Controleer de AI-instellingen."
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "The AI image provider URL is invalid, check the AI settings"
 msgstr ""
+"De URL van de AI-beeldleverancier is ongeldig. Controleer de AI-instellingen."
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"De host \"{0}\" staat niet op de lijst met toegestane hosts. Neem contact op "
+"met uw beheerder."
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Netwerkfout – controleer je verbinding"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Er kon geen verbinding worden gemaakt met de AI-provider"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
-msgstr ""
+msgstr "Geen reactie van de AI"
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "AI heeft te veel bewerkingsstappen gebruikt"
 
 #: src/control/Control.AIChatSidebar.ts:2169
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
 msgstr ""
+"Het model had geen tokens meer voordat het een uitvoer kon genereren. "
+"Probeer een kortere invoer of een model met een groter uitvoerbudget."
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"Het model heeft een leeg antwoord teruggestuurd (er zijn geen tokens "
+"gegenereerd). Dit is meestal een tijdelijk probleem bij de provider – "
+"probeer het nog eens, of probeer een ander model."
 
 #: src/control/Control.AIChatSidebar.ts:2175
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "Het genereren van de afbeelding is mislukt: geen reactie van het model"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "Document niet beschikbaar"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "De bewerkte opzet is ongeldig: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2179
 msgid "Could not build any slides from the outline. Please try again."
 msgstr ""
+"Er konden geen dia’s worden gemaakt op basis van de opzet. Probeer het nog "
+"eens."
 
 #: src/control/Control.AIChatSidebar.ts:2180
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "AI-beeldinstellingen zijn niet geconfigureerd"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
-msgstr ""
+msgstr "Beeldmodel niet geconfigureerd"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "Het genereren van de afbeelding is mislukt: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "Er is geen afbeelding gegenereerd"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "Het is niet gelukt om het antwoord van de AI te gebruiken"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "De AI-aanbieder heeft het verzoek als ongeldig afgewezen"
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "API-fout ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Linkbestemmingen worden opgehaald..."
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Formule wordt geëvalueerd..."
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Functiecatalogus wordt geladen..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "Even nadenken..."
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "Bezig..."
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Formules instellen..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Dia {0} van {1} wordt weergegeven..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "Dia {0} overslaan..."
 
 #: src/control/Control.AIChatSidebar.ts:2232
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "Afbeelding {0} van {1} wordt gegenereerd..."
 
 #: src/control/Control.AIChatSidebar.ts:2252
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
 msgstr ""
+"Dit document is te omvangrijk om in zijn geheel te lezen. Kies een onderdeel "
+"waarop u zich wilt concentreren:"
 
 #: src/control/Control.AIChatSidebar.ts:2260
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Dit blad is te groot om in zijn geheel te lezen. Om het te verkleinen, kun "
+"je het volgende doen:"
 
 #: src/control/Control.AIChatSidebar.ts:2264
 msgid "Select a range of cells in the sheet, then ask your question again"
 msgstr ""
+"Selecteer een reeks cellen in het werkblad en stel je vraag vervolgens "
+"nogmaals"
 
 #: src/control/Control.AIChatSidebar.ts:2267
 msgid "Reply with a range to focus on, like `A1:D100`"
 msgstr ""
+"Geef in je antwoord een bereik aan waarop je je wilt richten, bijvoorbeeld "
+"`A1:D100`"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
-msgstr ""
+msgstr "Je presentatie is klaar: {0} dia’s op basis van de goedgekeurde opzet."
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "{0} dia('s) konden niet worden gegenereerd en zijn overgeslagen."
 
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "{0} image(s) could not be generated and show a placeholder."
 msgstr ""
+"Er konden {0} afbeelding(en) niet worden gegenereerd; er wordt een standaard-"
+"afbeelding weergegeven."
 
 #: src/control/Control.AIChatSidebar.ts:2328
 #: src/control/Control.AIChatSidebar.ts:3839
@@ -4250,7 +4276,7 @@ msgstr "Tabelontwerp"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Hulpmiddelen"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4442,29 +4468,28 @@ msgid "Animations"
 msgstr "Animaties"
 
 #: src/control/Control.Notebookbar.js:581
-#, fuzzy
 msgid "Start:"
-msgstr "Start"
+msgstr "Start:"
 
 #: src/control/Control.Notebookbar.js:581
 msgid "End:"
-msgstr ""
+msgstr "Eind:"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Start in pijlpuntstijl"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Einde pijlpuntstijl"
 
 #: src/control/Control.Notebookbar.js:669
 msgid "Line Width"
-msgstr ""
+msgstr "Lijnbreedte"
 
 #: src/control/Control.Notebookbar.js:694
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Lijntransparantie:"
 
 #: src/control/Control.NotebookbarBuilder.js:203
 #: src/control/Control.NotebookbarBuilder.js:784
@@ -5517,19 +5542,19 @@ msgstr "Voer een nieuwe werkbladnaam in"
 
 #: src/control/Control.Tabs.js:735
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Bescherm werkblad"
 
 #: src/control/Control.Tabs.js:735
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Voer een wachtwoord in om het werkblad te beveiligen"
 
 #: src/control/Control.Tabs.js:739
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "De beveiliging van het werkblad opheffen"
 
 #: src/control/Control.Tabs.js:739
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Voer het wachtwoord in om de beveiliging van het werkblad op te heffen"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -5586,11 +5611,11 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2709
 msgid "Confirm password"
-msgstr ""
+msgstr "Wachtwoord bevestigen"
 
 #: src/control/Control.UIManager.ts:2755
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "De bevestiging komt niet overeen met het wachtwoord"
 
 #: src/control/Control.UIManager.ts:2973
 msgid "Copy error details"
@@ -5868,9 +5893,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Verkeerd wachtwoord opgegeven. Probeer het opnieuw."
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Er is een wachtwoord nodig om dit document te bekijken."
+msgstr "Om dit document te kunnen bewerken is een wachtwoord vereist."
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -6505,59 +6529,59 @@ msgstr "Notitie invoegen"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Donker 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Licht 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Donker 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Licht 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Accent 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Accent 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Accent 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Accent 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Accent 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Accent 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hyperlink"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Hyperlinkroute"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% lichter"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% donkerder"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -6759,11 +6783,11 @@ msgstr "Celranden"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Nieuwe tabelstijl..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Stijl wissen"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -6936,11 +6960,11 @@ msgstr "Alleen de eigenaar van het document kan het wachtwoord wijzigen."
 
 #: src/app/Socket.ts:2454
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Je hebt geen toestemming om dit document te bewerken."
 
 #: src/app/Socket.ts:2455
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Het document kon niet aanpasbaar worden gemaakt."
 
 #: src/app/Socket.ts:2500 src/app/Socket.ts:2511
 msgid "Missing Fonts"
@@ -7074,13 +7098,15 @@ msgstr ""
 
 #: src/errormessages.js:31
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr ""
+msgstr "Je sessie loopt over {time} af. Vernieuw de pagina om door te gaan."
 
 #: src/errormessages.js:32
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Deze sessie is beëindigd. Eventuele verdere wijzigingen in het document "
+"worden mogelijk niet opgeslagen. Vernieuw de pagina om door te gaan."
 
 #: src/errormessages.js:33
 msgid ""
@@ -7631,26 +7657,24 @@ msgid "End Show"
 msgstr "Presentatie beëindigen"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
-msgstr "Pauze"
+msgstr "Gepauzeerd"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
-msgstr "Hervatten"
+msgstr "Hervat"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animatie: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animatie: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Overgang: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -7761,7 +7785,7 @@ msgstr "Stop volgen"
 
 #: src/control/Control.Extension.ts:471
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Het uitbreidingscommando is mislukt: %1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
