@@ -1033,7 +1033,8 @@ int forkit_main(int argc, char** argv)
         LOG_FTL("Capabilities are not set for the coolforkit program.");
         LOG_FTL("Please make sure that the current partition was *not* mounted with the 'nosuid' option.");
         LOG_FTL("If you are on SLES11, please set 'file_caps=1' as kernel boot option.");
-        return EX_SOFTWARE;
+        // EX_CONFIG distinguishes the missing capabilities case from any other failure to start.
+        return EX_CONFIG;
     }
 
     // Initialize LoKit

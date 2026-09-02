@@ -70,6 +70,9 @@ public:
     static unsigned int NumPreSpawnedChildren;
 #if !MOBILEAPP
     static bool NoCapsForKit;
+    static bool RequireLandlock;
+    static bool LandlockAvailable;
+    static bool CapabilityJailUnusable;
     static bool NoSeccomp;
     static bool AdminEnabled;
     static bool UnattendedRun; ///< True when run from an unattended test, not interactive.
