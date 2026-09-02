@@ -738,7 +738,7 @@ void RemoteDocumentBroker::subscribe(const RemoteDocumentRequest& request)
         return;
     }
 
-    const std::pair<std::string, std::string> key = makeKey(docKey, request.accessToken);
+    const Key key = makeKey(docKey, request.accessToken, request.localDocKey, request.tag);
     auto it = _remoteDocuments.find(key);
     if (it == _remoteDocuments.end())
     {
@@ -780,7 +780,7 @@ void RemoteDocumentBroker::unsubscribe(const std::string& wopiSrc, const std::st
     ASSERT_CORRECT_THREAD();
 
     const std::string docKey = RequestDetails::getDocKey(wopiSrc);
-    const auto it = _remoteDocuments.find(makeKey(docKey, accessToken));
+    const auto it = _remoteDocuments.find(makeKey(docKey, accessToken, localDocKey, tag));
     if (it == _remoteDocuments.end())
     {
         LOG_DBG("RemoteDoc: no remote document [" << docKey << "] to unsubscribe ["
@@ -803,7 +803,7 @@ void RemoteDocumentBroker::sendCommand(const std::string& wopiSrc, const std::st
     ASSERT_CORRECT_THREAD();
 
     const std::string docKey = RequestDetails::getDocKey(wopiSrc);
-    const auto it = _remoteDocuments.find(makeKey(docKey, accessToken));
+    const auto it = _remoteDocuments.find(makeKey(docKey, accessToken, localDocKey, tag));
     if (it == _remoteDocuments.end())
     {
         LOG_DBG("RemoteDoc: no remote document [" << docKey << "] to send a command to");

@@ -21,6 +21,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -117,9 +118,10 @@ private:
     State _state;
 };
 
-/// One remote document, shared by the local documents that subscribed to the
-/// same WOPISrc with the same access token. Owns the headless session and
-/// fans events out to the consumers.
+/// One headless connection to a remote document, private to the one view that
+/// opened it: the connection is keyed by the remote document, the access
+/// token, the consumer document and the view's tag, so two views never share
+/// it. Owns the headless session and sends its events to that view.
 class RemoteDocument final : public std::enable_shared_from_this<RemoteDocument>
 {
 public:
@@ -195,8 +197,8 @@ private:
     const std::string _serverUrl;
     RemoteDocumentBroker& _broker;
 
-    /// Keyed by (consumer's docKey, view tag): one document may hold links
-    /// from several of its views to the same remote document.
+    /// The one view this connection belongs to, keyed by (consumer's docKey,
+    /// view tag). A connection is not shared, so this holds a single entry.
     std::map<std::pair<std::string, std::string>, Consumer> _consumers;
 
     /// The views that have sent a command to this remote document, as
@@ -313,15 +315,20 @@ private:
     /// Rejects the request with "event=error kind=<kind>" sent to the consumer.
     static void reject(const RemoteDocumentRequest& request, const std::string& kind);
 
-    static std::pair<std::string, std::string> makeKey(const std::string& docKey,
-                                                       const std::string& accessToken)
+    /// The key of one headless connection. A connection is private to one
+    /// view: the remote docKey and access token, plus the consumer document's
+    /// docKey and the view's tag. Two views never share a connection, even
+    /// with the same token.
+    using Key = std::tuple<std::string, std::string, std::string, std::string>;
+
+    static Key makeKey(const std::string& docKey, const std::string& accessToken,
+                       const std::string& localDocKey, const std::string& tag)
     {
-        return std::make_pair(docKey, accessToken);
+        return std::make_tuple(docKey, accessToken, localDocKey, tag);
     }
 
-    /// Keyed by (remote docKey, access token).
-    std::map<std::pair<std::string, std::string>, std::shared_ptr<RemoteDocument>>
-        _remoteDocuments;
+    /// Keyed by (remote docKey, access token, consumer docKey, view tag).
+    std::map<Key, std::shared_ptr<RemoteDocument>> _remoteDocuments;
 
     const size_t _maxRemoteDocuments;
     const unsigned _maxChainDepth;
