@@ -518,11 +518,13 @@ private:
     bool filterDownloadAs(const std::string& id) const;
 
     /// Whether the host lets the content of the document leave in a file of its own,
-    /// unwatermarked.
+    /// unwatermarked. The content may not leave when the host disables export or copy,
+    /// or when a watermark must stay over it.
     bool allowsCleanExport() const
     {
         return !_wopiFileInfo ||
-               (!_wopiFileInfo->getDisableExport() && _wopiFileInfo->getWatermarkText().empty());
+               (!_wopiFileInfo->getDisableExport() && !_wopiFileInfo->getDisableCopy() &&
+                _wopiFileInfo->getWatermarkText().empty());
     }
 
     void dumpState(std::ostream& os) override;
