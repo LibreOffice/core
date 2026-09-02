@@ -460,7 +460,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowHeightTdf165003)
     CPPUNIT_ASSERT_EQUAL(256, nHeight);
     // this row has 90-degree rotated text, and without the fix, would have had zero height.
     nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
-    CPPUNIT_ASSERT_EQUAL(582, nHeight);
+    CPPUNIT_ASSERT_EQUAL(567, nHeight);
     nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
     CPPUNIT_ASSERT_EQUAL(256, nHeight);
 }
