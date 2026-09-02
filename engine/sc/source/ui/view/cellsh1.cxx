@@ -3302,11 +3302,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const OUString aFormula = pTabViewShell->DoAutoSum( bRangeFinder, bSubTotal , eFunction );
                 if ( !aFormula.isEmpty() )
                 {
-                    const sal_Int32 nPar = aFormula.indexOf( '(' );
+                    const sal_Int32 nArgStart = ScGlobal::GetAutoSumArgStart( aFormula, bSubTotal );
                     const sal_Int32 nLen = aFormula.getLength();
                     ScInputHandler* pHdl = pScMod->GetInputHdl( pTabViewShell );
 
-                    if ( pHdl && nPar != -1 )
+                    if ( pHdl && nArgStart != -1 )
                     {
                         if ( !pScMod->IsEditMode() )
                         {
@@ -3322,7 +3322,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pHdl->DataChanging();
                             pEditView->SetSelection(aTextSel);
                             pEditView->InsertText(aFormula);
-                            pEditView->SetSelection( bRangeFinder ? ESelection( 0, nPar + ( bSubTotal ? 3 : 1 ), 0, nLen - 1 ) : ESelection( 0, nLen - 1, 0, nLen - 1 ) );
+                            pEditView->SetSelection( bRangeFinder ? ESelection( 0, nArgStart, 0, nLen - 1 ) : ESelection( 0, nLen - 1, 0, nLen - 1 ) );
                             pHdl->DataChanged();
 
                             if ( bRangeFinder )

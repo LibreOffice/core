@@ -696,6 +696,13 @@ public:
      */
     SC_DLLPUBLIC static sal_Int32   FindUnquoted( const OUString& rString, sal_Unicode cChar, sal_Int32 nStart = 0 );
 
+    /** Offset of the first argument in an AutoSum formula, so its range can be
+        preselected for overtyping. A subtotal carries a leading function number
+        (SUBTOTAL(109;...) that is stepped over as well.
+        @returns offset, or -1 if rFormula has no '('
+     */
+    static sal_Int32                GetAutoSumArgStart( const OUString& rFormula, bool bSubTotal );
+
     /** Finds an unquoted instance of cChar in null-terminated pString. Same
         semantics as FindUnquoted( const String&, ...)
         @returns: pointer to cChar if found, else NULL

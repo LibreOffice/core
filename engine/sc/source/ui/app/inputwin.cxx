@@ -789,7 +789,7 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
         return;
 
     SetFuncString( aFormula );
-    const sal_Int32 aOpen = aFormula.indexOf('(');
+    const sal_Int32 nArgStart = ScGlobal::GetAutoSumArgStart(aFormula, bSubTotal);
     const sal_Int32 aLen  = aFormula.getLength();
     if (!(bRangeFinder && pScMod->IsEditMode()))
         return;
@@ -802,9 +802,9 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 
     //! SetSelection at the InputHandler?
     //! Set bSelIsRef?
-    if ( aOpen != -1 && aLen > aOpen )
+    if ( nArgStart != -1 && aLen > nArgStart )
     {
-        ESelection aSel( 0, aOpen + (bSubTotal ? 3 : 1), 0, aLen-1 );
+        ESelection aSel( 0, nArgStart, 0, aLen-1 );
         EditView* pTableView = pHdl->GetTableView();
         if ( pTableView )
             pTableView->SetSelection( aSel );

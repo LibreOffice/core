@@ -908,7 +908,7 @@ void ScDBData::ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
                         std::unique_ptr<ScTokenArray> pArr(new ScTokenArray(rDoc));
                         pArr->AddOpCode(ocSubTotal);
                         pArr->AddOpCode(ocOpen);
-                        pArr->AddDouble(static_cast<double>(eSubType));
+                        pArr->AddDouble(static_cast<double>(eSubType) + 100);
                         pArr->AddOpCode(ocSep);
                         // Table refs structure
                         pArr->AddTableRef(GetIndex());
@@ -1346,15 +1346,16 @@ OUString ScDBData::GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL 
             if (nIdx == 2) // { ocPush, formula::svDouble }
             {
                 sal_Int32 nFunc = static_cast<sal_Int32>(static_cast<formula::FormulaDoubleToken*>(t)->GetDouble());
-                if (nFunc > 100.)
-                    nFunc -= 100;
 
-                if (nFunc < 1 || nFunc > 11)
+                // A named totalsRowFunction stands for the 100+ family only. Below that the
+                // formula still belongs in the totals row, but it has to travel as its own
+                // custom formula, or the column would claim a function it does not hold.
+                if (nFunc < 101 || nFunc > 111)
                 {
                     return u"custom"_ustr;
                 }
                 else
-                    eSubType = static_cast<ScSubTotalFunc>(nFunc);
+                    eSubType = static_cast<ScSubTotalFunc>(nFunc - 100);
             }
             else if (nIdx == 4) // { ocTableRef, formula::svIndex }
             {

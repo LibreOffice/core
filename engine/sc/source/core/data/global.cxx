@@ -43,6 +43,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <comphelper/doublecheckedinit.hxx>
@@ -794,6 +795,24 @@ void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescap
             rString = rString.replaceAll( aQuotes, OUStringChar(cQuote));
         }
     }
+}
+
+sal_Int32 ScGlobal::GetAutoSumArgStart( const OUString& rFormula, bool bSubTotal )
+{
+    const sal_Int32 nPar = rFormula.indexOf('(');
+    if (nPar == -1)
+        return -1;
+
+    sal_Int32 nArgStart = nPar + 1;
+    if (bSubTotal)
+    {
+        const sal_Int32 nLen = rFormula.getLength();
+        while (nArgStart < nLen && rtl::isAsciiDigit(rFormula[nArgStart]))
+            ++nArgStart;
+        if (nArgStart < nLen)
+            ++nArgStart;    // the separator after the number
+    }
+    return nArgStart;
 }
 
 sal_Int32 ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar, sal_Int32 nStart )

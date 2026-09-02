@@ -763,6 +763,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleDefaultExportXLSX)
                 u"average");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableTotalsRowSubtotalFamilyXLSX)
+{
+    createScDoc("xlsx/table-totals-subtotal-9.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pTable = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:table/x:tableColumns/x:tableColumn[3]", "totalsRowFunction",
+                u"custom");
+    assertXPathContent(pTable, "/x:table/x:tableColumns/x:tableColumn[3]/x:totalsRowFormula",
+                       u"SUBTOTAL(9,Table1[sdafsdaf])");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testDefaultTableStyleExportXLSX)
 {
     // The per-document default table style (used for newly inserted tables) is
