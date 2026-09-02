@@ -253,23 +253,6 @@ void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
     m_pToolBox = nullptr;
 }
 
-// XServiceInfo
-
-OUString VCLXAccessibleToolBoxItem::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleToolBoxItem"_ustr;
-}
-
-sal_Bool VCLXAccessibleToolBoxItem::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-Sequence< OUString > VCLXAccessibleToolBoxItem::getSupportedServiceNames()
-{
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChildCount(  )

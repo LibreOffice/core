@@ -22,7 +22,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
@@ -34,7 +33,7 @@ class SvtIconChoiceCtrl;
 
 typedef ::cppu::ImplInheritanceHelper<comphelper::OAccessible, css::accessibility::XAccessibleText,
                                       css::accessibility::XAccessibleAction,
-                                      css::lang::XServiceInfo, css::lang::XEventListener>
+                                      css::lang::XEventListener>
     AccessibleIconChoiceCtrlEntry_BASE;
 
 /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
@@ -82,11 +81,6 @@ public:
     AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
                                    sal_Int32 _nPos,
                                    const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

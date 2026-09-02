@@ -149,23 +149,6 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
     OAccessible::disposing();
 }
 
-// XServiceInfo
-
-OUString VCLXAccessibleListItem::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleListItem"_ustr;
-}
-
-sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames()
-{
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleChildCount(  )

@@ -21,16 +21,15 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclptr.hxx>
 
 class VCLXAccessibleToolBoxItem final
-    : public cppu::ImplInheritanceHelper<
-          comphelper::OAccessibleTextHelper, css::accessibility::XAccessibleAction,
-          css::accessibility::XAccessibleValue, css::lang::XServiceInfo>
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleTextHelper,
+                                         css::accessibility::XAccessibleAction,
+                                         css::accessibility::XAccessibleValue>
 {
 private:
     OUString                m_sOldName;
@@ -80,11 +79,6 @@ public:
 
     // XInterface
     css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

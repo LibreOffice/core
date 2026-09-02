@@ -190,23 +190,6 @@ uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const uno::Type& rType)
     return AccessibleListBoxEntry_BASE::queryInterface(rType);
 }
 
-// XServiceInfo
-
-OUString SAL_CALL AccessibleListBoxEntry::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleTreeListBoxEntry"_ustr;
-}
-
-Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames()
-{
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
-sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
-{
-    return cppu::supportsService(this, _rServiceName);
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )

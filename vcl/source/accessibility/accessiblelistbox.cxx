@@ -241,18 +241,6 @@ void SAL_CALL AccessibleListBox::disposing()
     m_xParent = nullptr;
 }
 
-// XServiceInfo
-
-OUString SAL_CALL AccessibleListBox::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleTreeListBox"_ustr;
-}
-
-Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames()
-{
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleListBox::getAccessibleChildCount(  )

@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
@@ -39,7 +38,7 @@ class SvTreeListEntry;
 typedef cppu::ImplInheritanceHelper<comphelper::OAccessible, css::accessibility::XAccessibleAction,
                                     css::accessibility::XAccessibleSelection,
                                     css::accessibility::XAccessibleText,
-                                    css::accessibility::XAccessibleValue, css::lang::XServiceInfo>
+                                    css::accessibility::XAccessibleValue>
     AccessibleListBoxEntry_BASE;
 
 /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
@@ -93,11 +92,6 @@ protected:
 
 private:
     css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

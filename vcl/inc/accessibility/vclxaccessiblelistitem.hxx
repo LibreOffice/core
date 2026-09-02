@@ -21,13 +21,12 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
 #include <accessibility/vclxaccessiblelist.hxx>
 
 class VCLXAccessibleListItem final
-    : public cppu::ImplInheritanceHelper<
-          comphelper::OAccessible, css::accessibility::XAccessibleText, css::lang::XServiceInfo>,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
+                                         css::accessibility::XAccessibleText>,
       public comphelper::OCommonAccessibleText
 {
 private:
@@ -67,11 +66,6 @@ public:
     bool         IsSelected() const { return m_bSelected; }
     void                    SetSelected( bool _bSelected );
     void                    SetVisible( bool _bVisible );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

@@ -91,18 +91,6 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
     }
 }
 
-// XServiceInfo
-
-OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleIconChoiceControl"_ustr;
-}
-
-Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames()
-{
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChildCount(  )

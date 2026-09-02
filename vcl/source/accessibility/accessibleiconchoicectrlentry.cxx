@@ -181,23 +181,6 @@ void SAL_CALL AccessibleIconChoiceCtrlEntry::disposing()
     m_xParent = nullptr;
 }
 
-// XServiceInfo
-
-OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleIconChoiceControlEntry"_ustr;
-}
-
-Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrlEntry::getSupportedServiceNames()
-{
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
-}
-
-sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::supportsService( const OUString& _rServiceName )
-{
-    return cppu::supportsService(this, _rServiceName);
-}
-
 // XAccessibleContext
 
 sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleChildCount(  )
