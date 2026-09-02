@@ -248,7 +248,7 @@ SwUnoCursorHelper::SetTextFormatColl(const cpo::uno::Any & rAny, SwPaM & rPaM)
             pDocSh->GetStyleSheetPool()->Find(sStyle.toString(), SfxStyleFamily::Para));
     if (!pStyle)
     {
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("Unknown style " + uStyle, {}, -1);
     }
 
     SwTextFormatColl *const pLocal = pStyle->GetCollection();
