@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-01 16:27+0200\n"
-"PO-Revision-Date: 2026-08-21 03:03+0000\n"
+"PO-Revision-Date: 2026-09-03 05:51+0000\n"
 "Last-Translator: tigran54 <tigran@flib.sci.am>\n"
-"Language-Team: Armenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hy/>\n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -494,38 +494,40 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:542
 msgid "Invalid request"
-msgstr ""
+msgstr "Անվավեր հարցում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:543
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Անվավեր API բանալի"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "API բանալին թույլտվություններ չունի"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:547
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Այս ԱԲ հյուրընկալ սերվերը թույլատրված հյուրընկալումների ցանկում չէ "
+"(lok_allow.host): Խնդրեք ձեր ադմինիստրատորին թույլատրել այն:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:549
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Գնահատումը սահմանափակ է. խնդրում ենք մի պահ սպասել և կրկին փորձել"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:550
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API սերվերի սխալ - փորձեք կրկին ավելի ուշ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Ծառայությունը ժամանակավորապես անհասանելի է"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:609
 msgid "Signature Certificate"
@@ -589,7 +591,7 @@ msgstr "Ինքնաշխատ ուղղագրության ստուգում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:627
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Օգտագործել այս սերվերի մեծացման կարգավորումները"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:628
 msgid "Smart Zoom"
@@ -945,13 +947,15 @@ msgstr "Սահմանեք միջերեսի լռելյայն կարգավորու�
 #: admin/src/integrator/AdminIntegratorSettings.ts:1379
 #: admin/src/integrator/AdminIntegratorSettings.ts:3444
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Մեծացման վարքագիծ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1524
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Երբ միացված է, տեքստային փաստաթղթերը բացվում են այս սերվերի ընտրած "
+"մեծացմամբ: Անջատեք այն՝ մեծացումը ինքներդ ընտրելու համար:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1530
 msgid ""
@@ -1358,11 +1362,11 @@ msgstr "Աղյուսակի ոճեր"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Սահմանել որպես լռելյայն"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Կրկնօրինակել ոճը"
 
 #: src/canvas/sections/CommentListSection.ts:2025
 #: src/canvas/sections/CommentListSection.ts:2038
@@ -1990,84 +1994,90 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2144
 msgid "Request too large"
-msgstr ""
+msgstr "Հարցումը չափազանց մեծ է"
 
 #: src/control/Control.AIChatSidebar.ts:2145
 msgid "Invalid request format"
-msgstr ""
+msgstr "Հարցման անվավեր ձևաչափ"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "Հարցումը փոխարինվել է ավելի նոր հարցմամբ"
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
-msgstr ""
+msgstr "Հաղորդագրություններ չեն տրամադրվել"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "Հաղորդագրությունը չափազանց երկար է"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "ԱԲ գործառույթները անջատված են ադմինիստրատորի կողմից"
 
 #: src/control/Control.AIChatSidebar.ts:2150
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "ԱԲ-ը հասանելի չէ հյուրերի համար"
 
 #: src/control/Control.AIChatSidebar.ts:2152
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "ԱԲ-ն գործառույթներն անջատված են այս փաստաթղթի համար"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "AI settings not configured"
-msgstr ""
+msgstr "ԱԲ-ն կարգավորումները կարգաբերված չեն"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "ԱԲ-ն մատակարարի URL-ը անվավեր է, ստուգեք ԱԲ կարգավորումները"
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "The AI image provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "ԱԲ-ն պատկերի մատակարարի URL-ը անվավեր է, ստուգեք ԱԲ կարգավորումները"
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"\"{0}\" հոսթը թույլատրված հոսթերի ցանկում չէ, կապվեք ձեր ադմինիստրատորի հետ"
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Ցանցի սխալ. խնդրում ենք ստուգել ձեր կապը"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Չհաջողվեց միանալ ԱԲ մատակարարին"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
-msgstr ""
+msgstr "ԱԲ-ից պատասխան չկա"
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "ԱԲ-ն չափազանց շատ գործիքային քայլեր է օգտագործել"
 
 #: src/control/Control.AIChatSidebar.ts:2169
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
 msgstr ""
+"Մոդելը սպառեց թոքենները նախքան արդյունք ստանալը։ Փորձեք ավելի կարճ մուտքային "
+"արժեք կամ ավելի մեծ արդյունքի բյուջե ունեցող մոդել։"
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"Մոդելը վերադարձրեց դատարկ պատասխան (տոկեններ չեն ստեղծվել): Սա սովորաբար "
+"մատակարարի ժամանակավոր խնդիր է. խնդրում ենք կրկին փորձել կամ փորձել այլ "
+"մոդել:"
 
 #: src/control/Control.AIChatSidebar.ts:2175
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "Պատկերի ստեղծումը ձախողվեց. մոդելից հուշում չկա"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
@@ -4433,9 +4443,8 @@ msgid "Animations"
 msgstr "Անիմացիաներ"
 
 #: src/control/Control.Notebookbar.js:581
-#, fuzzy
 msgid "Start:"
-msgstr "Սկսել"
+msgstr "Սկսել:"
 
 #: src/control/Control.Notebookbar.js:581
 msgid "End:"
@@ -4455,7 +4464,7 @@ msgstr ""
 
 #: src/control/Control.Notebookbar.js:694
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Գծի թափանցիկություն:"
 
 #: src/control/Control.NotebookbarBuilder.js:203
 #: src/control/Control.NotebookbarBuilder.js:784
@@ -5507,19 +5516,19 @@ msgstr "Մուտքագրեք նոր թերթիկի անունը"
 
 #: src/control/Control.Tabs.js:735
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Պաշտպանել թերթիկը"
 
 #: src/control/Control.Tabs.js:735
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Մուտքագրեք գաղտնաբառ՝ թերթիկը պաշտպանելու համար"
 
 #: src/control/Control.Tabs.js:739
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Հանել թերթիկի պաշտպանությունը"
 
 #: src/control/Control.Tabs.js:739
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Մուտքագրեք գաղտնաբառը՝ թերթիկը պաշտպանությունից հանելու համար"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -5576,11 +5585,11 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2709
 msgid "Confirm password"
-msgstr ""
+msgstr "Հաստատել գաղտնաբառը"
 
 #: src/control/Control.UIManager.ts:2755
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "Հաստատումը չի համապատասխանում գաղտնաբառին"
 
 #: src/control/Control.UIManager.ts:2973
 msgid "Copy error details"
@@ -5858,9 +5867,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Սխալ գաղտնաբառ է տրամադրվել։ Խնդրում ենք կրկին փորձել։"
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Փաստաթուղթը դիտելու համար գաղտնաբառ է պահանջվում։"
+msgstr "Փաստաթուղթը խմբագրելու համար գաղտնաբառ է պահանջվում։"
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -6497,59 +6505,59 @@ msgstr "Զետեղեք նշում"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Dark 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Light 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Dark 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Light 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Accent 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Accent 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Accent 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Accent 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Accent 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Accent 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Գերհղում"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Հետևված գերհղում"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% Ավելի լուսավոր"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% Ավելի մուգ"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -6751,11 +6759,11 @@ msgstr "Բջիջների սահմաններ"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Աղյուսակի նոր ոճ..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Մաքրել ոճը"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -6928,11 +6936,11 @@ msgstr "Միայն փաստաթղթի սեփականատերը կարող է փ�
 
 #: src/app/Socket.ts:2454
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Դուք չունեք այս փաստաթուղթը խմբագրելու թույլտվություն։"
 
 #: src/app/Socket.ts:2455
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Փաստաթուղթը հնարավոր չէ խմբագրելի դարձնել։"
 
 #: src/app/Socket.ts:2500 src/app/Socket.ts:2511
 msgid "Missing Fonts"
@@ -7068,13 +7076,15 @@ msgstr ""
 
 #: src/errormessages.js:31
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr ""
+msgstr "Ձեր սեսիան կավարտվի {time}-ից։ Շարունակելու համար թարմացրեք էջը։"
 
 #: src/errormessages.js:32
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Ձեր սեսիան ավարտվել է: Փաստաթղթում կատարված հետագա փոփոխությունները կարող են "
+"չպահպանվել: Շարունակելու համար թարմացրեք էջը:"
 
 #: src/errormessages.js:33
 msgid ""
@@ -7613,26 +7623,24 @@ msgid "End Show"
 msgstr "Ավարտել ցուցադրությունը"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
-msgstr "Դադար"
+msgstr "Դադարեցված է"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
-msgstr "Վերսկսել"
+msgstr "Վերսկսված է"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Անիմացիա: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Անիմացիա: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Անցում: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -7743,7 +7751,7 @@ msgstr "Դադարեք հետևել"
 
 #: src/control/Control.Extension.ts:471
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Ընդլայնման հրամանը ձախողվեց: %1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
