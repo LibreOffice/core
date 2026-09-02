@@ -21,6 +21,8 @@ pdfium_patches += charcodetoglyphindex.patch.1
 pdfium_patches += getfontdictobjnum.patch.1
 
 pdfium_patches += system-fast_float.diff
+# https://pdfium-review.googlesource.com/c/pdfium/+/154490
+pdfium_patches += system-icu.patch.1
 
 ifeq ($(OS),WNT)
 pdfium_patches += pdfium-vs2019-arm64_no-__umulh.patch.1
