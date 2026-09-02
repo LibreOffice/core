@@ -146,10 +146,10 @@ void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
 
 namespace {
 
-std::unique_ptr<EditTextObject> lclCreateTextObject( const XclImpRoot& rRoot,
+std::optional<EditTextObject> lclCreateTextObject( const XclImpRoot& rRoot,
         const XclImpString& rString, XclFontItemType eType, sal_uInt16 nXFIndex )
 {
-    std::unique_ptr<EditTextObject> pTextObj;
+    std::optional<EditTextObject> pTextObj;
 
     const XclImpXFBuffer& rXFBuffer = rRoot.GetXFBuffer();
     const XclImpFont* pFirstFont = rXFBuffer.GetFont( nXFIndex );
@@ -213,7 +213,7 @@ std::unique_ptr<EditTextObject> lclCreateTextObject( const XclImpRoot& rRoot,
         // send items of last text portion to edit engine
         rEE.QuickSetAttribs( aItemSet, aSelection );
 
-        pTextObj = rEE.CreateTextObject();
+        pTextObj.emplace(rEE.CreateTextObject());
     }
 
     return pTextObj;
@@ -221,7 +221,7 @@ std::unique_ptr<EditTextObject> lclCreateTextObject( const XclImpRoot& rRoot,
 
 } // namespace
 
-std::unique_ptr<EditTextObject> XclImpStringHelper::CreateTextObject(
+std::optional<EditTextObject> XclImpStringHelper::CreateTextObject(
         const XclImpRoot& rRoot, const XclImpString& rString )
 {
     return lclCreateTextObject( rRoot, rString, XclFontItemType::Editeng, 0 );
@@ -234,11 +234,11 @@ void XclImpStringHelper::SetToDocument(
     if (rString.GetText().isEmpty())
         return;
 
-    ::std::unique_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, XclFontItemType::Editeng, nXFIndex ) );
+    ::std::optional< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, XclFontItemType::Editeng, nXFIndex ) );
 
     if (pTextObj)
     {
-        rDoc.setEditCell(rPos, std::move(pTextObj));
+        rDoc.setEditCell(rPos, std::make_unique<EditTextObject>(std::move(*pTextObj)));
     }
     else
     {
@@ -253,7 +253,7 @@ void XclImpStringHelper::SetToDocument(
             ScFieldEditEngine& rEngine = rDoc.getDoc().GetEditEngine();
             rEngine.SetSingleLine(bSingleLine);
             rEngine.SetTextCurrentDefaults(aStr);
-            rDoc.setEditCell(rPos, rEngine.CreateTextObject());
+            rDoc.setEditCell(rPos, std::make_unique<EditTextObject>(rEngine.CreateTextObject()));
             rEngine.SetSingleLine(false);
         }
         else
@@ -576,7 +576,7 @@ void XclImpHFConverter::CreateCurrObject()
 {
     InsertText();
     SetAttribs();
-    GetCurrObj() = mrEE.CreateTextObject();
+    GetCurrObj() = std::make_shared<EditTextObject>(mrEE.CreateTextObject());
 }
 
 void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )

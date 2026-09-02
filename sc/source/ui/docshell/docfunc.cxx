@@ -730,8 +730,8 @@ bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr
     {
         ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
         rEngine.SetTextCurrentDefaults(rStr);
-        std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
-        return SetEditCell(rPos, *pEditText, bInteraction);
+        EditTextObject aEditText(rEngine.CreateTextObject());
+        return SetEditCell(rPos, aEditText, bInteraction);
     }
     else
         return SetStringCell(rPos, rStr, bInteraction);
@@ -869,8 +869,8 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         }
 
         // A copy of pNewData will be stored in the cell.
-        std::unique_ptr<EditTextObject> pNewData(rEngine.CreateTextObject());
-        bRet = SetEditCell(rPos, *pNewData, !bApi);
+        EditTextObject aNewData(rEngine.CreateTextObject());
+        bRet = SetEditCell(rPos, aNewData, !bApi);
 
         // Set the paragraph attributes back to the EditEngine.
         for (const auto& rxItem : aRememberItems)

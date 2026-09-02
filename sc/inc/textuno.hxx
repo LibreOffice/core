@@ -310,7 +310,7 @@ public:
         virtual         ~ScEditEngineTextObj() noexcept override;
 
     void                SetText( const EditTextObject& rTextObject );
-    std::unique_ptr<EditTextObject> CreateTextObject();
+    EditTextObject      CreateTextObject();
 };
 
 //  ScCellTextData: shared data between sub objects of a cell text object

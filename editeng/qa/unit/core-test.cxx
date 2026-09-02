@@ -996,9 +996,9 @@ void Test::testBoldItalicCopyPaste()
     aEditEngine.QuickSetAttribs(*pSet, ESelection(0, 2, 0, 14));
 
     // Assert changes
-    std::unique_ptr<EditTextObject> pEditText1(aEditEngine.CreateTextObject());
+    EditTextObject aEditText1(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs1;
-    pEditText1->GetAllSections(aAttrs1);
+    aEditText1.GetAllSections(aAttrs1);
     // There should be 3 sections - woBold - wBold - woBold (w - with, wo - without)
     CPPUNIT_ASSERT_EQUAL(size_t(3), aAttrs1.size());
 
@@ -1025,9 +1025,9 @@ void Test::testBoldItalicCopyPaste()
     aEditEngine.QuickSetAttribs(*pSet, ESelection(0, 8, 0, 18));
 
     // Assert changes
-    std::unique_ptr<EditTextObject> pEditText2(aEditEngine.CreateTextObject());
+    EditTextObject aEditText2(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs2;
-    pEditText2->GetAllSections(aAttrs2);
+    aEditText2.GetAllSections(aAttrs2);
     // There should be 5 sections - woBold&woItalic - wBold&woItalic - wBold&wItalic - woBold&wItalic - woBold&woItalic (w - with, wo - without)
     CPPUNIT_ASSERT_EQUAL(size_t(5), aAttrs2.size());
 
@@ -1073,9 +1073,9 @@ void Test::testBoldItalicCopyPaste()
                          rDoc.GetParaAsString(sal_Int32(0)));
 
     // Check updated text for appropriate Bold/Italics
-    std::unique_ptr<EditTextObject> pEditText3(aEditEngine.CreateTextObject());
+    EditTextObject aEditText3(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs3;
-    pEditText3->GetAllSections(aAttrs3);
+    aEditText3.GetAllSections(aAttrs3);
     // There should be 9 sections - woBold&woItalic - wBold&woItalic - wBold&wItalic - woBold&wItalic - woBold&woItalic - wBold&woItalic
     // - wBold&wItalic - woBold&wItalic - woBold&woItalic(w - with, wo - without)
     CPPUNIT_ASSERT_EQUAL(size_t(9), aAttrs3.size());
@@ -1173,9 +1173,9 @@ void Test::testUnderlineCopyPaste()
     aEditEngine.QuickSetAttribs(*pSet, ESelection(0, 6, 0, 18));
 
     // Assert changes
-    std::unique_ptr<EditTextObject> pEditText1(aEditEngine.CreateTextObject());
+    EditTextObject aEditText1(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs1;
-    pEditText1->GetAllSections(aAttrs1);
+    aEditText1.GetAllSections(aAttrs1);
 
     // There should be 3 sections - woUnderline - wUnderline - woUnderline (w - with, wo - without)
     CPPUNIT_ASSERT_EQUAL(size_t(3), aAttrs1.size());
@@ -1209,9 +1209,9 @@ void Test::testUnderlineCopyPaste()
     CPPUNIT_ASSERT_EQUAL(OUString(aParaText + "textforunder"), rDoc.GetParaAsString(sal_Int32(0)));
 
     // Check updated text for appropriate Underline
-    std::unique_ptr<EditTextObject> pEditText2(aEditEngine.CreateTextObject());
+    EditTextObject aEditText2(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs2;
-    pEditText2->GetAllSections(aAttrs2);
+    aEditText2.GetAllSections(aAttrs2);
 
     // There should be 4 sections - woUnderline - wUnderline - woUnderline - wUnderline (w - with, wo - without)
     CPPUNIT_ASSERT_EQUAL(size_t(4), aAttrs2.size());
@@ -1330,9 +1330,9 @@ void Test::testParaBoldItalicCopyPaste()
     aEditEngine.QuickSetAttribs(*pSet, ESelection(1, 5, 1, 19));
 
     // Assert changes
-    std::unique_ptr<EditTextObject> pEditText1(aEditEngine.CreateTextObject());
+    EditTextObject aEditText1(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs1;
-    pEditText1->GetAllSections(aAttrs1);
+    aEditText1.GetAllSections(aAttrs1);
     // There should be 7 sections - woB - wB - woB -woB -wB -woB -woB (w - with, wo - without, B - Bold, I - Italic)
     CPPUNIT_ASSERT_EQUAL(size_t(7), aAttrs1.size());
 
@@ -1380,9 +1380,9 @@ void Test::testParaBoldItalicCopyPaste()
     aEditEngine.QuickSetAttribs(*pSet, ESelection(0, 14, 1, 9));
 
     // Assert changes
-    std::unique_ptr<EditTextObject> pEditText2(aEditEngine.CreateTextObject());
+    EditTextObject aEditText2(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs2;
-    pEditText2->GetAllSections(aAttrs2);
+    aEditText2.GetAllSections(aAttrs2);
     // There should be 9 sections - woB&woI - wB&woI - wB&wI -woB&wI - woB&wI - wB&wI - wB&woI - woB&woI - woB&woI (w - with, wo - without, B - Bold, I - Italic)
     CPPUNIT_ASSERT_EQUAL(size_t(9), aAttrs2.size());
 
@@ -1455,9 +1455,9 @@ void Test::testParaBoldItalicCopyPaste()
     CPPUNIT_ASSERT_EQUAL( u"This is second"_ustr, rDoc.GetParaAsString(sal_Int32(3)) );
 
     // Check updated text for appropriate Bold/Italics
-    std::unique_ptr<EditTextObject> pEditText3(aEditEngine.CreateTextObject());
+    EditTextObject aEditText3(aEditEngine.CreateTextObject());
     std::vector<editeng::Section> aAttrs3;
-    pEditText3->GetAllSections(aAttrs3);
+    aEditText3.GetAllSections(aAttrs3);
     // There should be 15 sections - woB&woI - wB&woI - wB&wI -woB&wI - woB&wI - wB&wI - wB&woI - woB&woI - woB&woI
     // - wB&woI - wB&wI - woB&wI - -woB&wI - wB&wI - wB&woI (w - with, wo - without, B - Bold, I - Italic)
     CPPUNIT_ASSERT_EQUAL(size_t(15), aAttrs3.size());
@@ -1621,10 +1621,9 @@ void Test::testSectionAttributes()
                                      static_cast<sal_uInt16>(1), pSet->Count());
 
         aEngine.QuickSetAttribs(*pSet, ESelection(0, 3, 0, 9)); // 'bbbccc'
-        std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
-        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText);
+        EditTextObject aEditText(aEngine.CreateTextObject());
         std::vector<editeng::Section> aAttrs;
-        pEditText->GetAllSections(aAttrs);
+        aEditText.GetAllSections(aAttrs);
 
         // Now, we should have a total of 3 sections.
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sections.", static_cast<size_t>(3),
@@ -1670,10 +1669,9 @@ void Test::testSectionAttributes()
         aEngine.QuickSetAttribs(*pSet, ESelection(2, 0, 2, 3));
         aEngine.QuickSetAttribs(*pSet, ESelection(4, 0, 4, 5));
 
-        std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
-        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText);
+        EditTextObject aEditText(aEngine.CreateTextObject());
         std::vector<editeng::Section> aAttrs;
-        pEditText->GetAllSections(aAttrs);
+        aEditText.GetAllSections(aAttrs);
         CPPUNIT_ASSERT_EQUAL(size_t(5), aAttrs.size());
 
         // 1st, 3rd and 5th sections should correspond with 1st, 3rd and 5th paragraphs.
@@ -1725,10 +1723,9 @@ void Test::testSectionAttributes()
         aEngine.QuickDelete(ESelection(0, 0, 1, 3));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEngine.GetParagraphCount());
 
-        std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
-        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText);
+        EditTextObject aEditText(aEngine.CreateTextObject());
         std::vector<editeng::Section> aAttrs;
-        pEditText->GetAllSections(aAttrs);
+        aEditText.GetAllSections(aAttrs);
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aAttrs.size());
 

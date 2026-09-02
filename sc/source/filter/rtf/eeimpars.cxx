@@ -413,10 +413,11 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     mrDoc.SetTextCell(ScAddress(nCol, nRow, nTab), aStr, &aParam);
                 }
             }
-            else if (std::unique_ptr<EditTextObject> pTextObject = IsValidSel(*mpEngine, pE->aSel) ? mpEngine->CreateTextObject(pE->aSel) : nullptr)
+            else if (IsValidSel(*mpEngine, pE->aSel))
             {
+                EditTextObject aTextObject = mpEngine->CreateTextObject(pE->aSel);
                 // The cell will own the text object instance.
-                mrDoc.SetEditText(ScAddress(nCol,nRow,nTab), std::move(pTextObject));
+                mrDoc.SetEditText(ScAddress(nCol,nRow,nTab), std::move(aTextObject));
             }
             if ( !pE->maImageList.empty() )
                 bHasGraphics |= GraphicSize( nCol, nRow, pE );

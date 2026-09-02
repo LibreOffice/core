@@ -299,9 +299,9 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 // Turn this into a string or edit cell.
                 if (rSrcCell.getFormula()->IsMultilineResult())
                 {
-                    std::unique_ptr<EditTextObject> pObj(mrDestDoc.CreateSharedStringTextObject(
+                    EditTextObject aObj(mrDestDoc.CreateSharedStringTextObject(
                                 rSrcCell.getFormula()->GetString()));
-                    rSrcCell.set(*pObj);
+                    rSrcCell.set(std::move(aObj));
                 }
                 else
                     rSrcCell.set(rSrcCell.getFormula()->GetString());

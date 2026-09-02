@@ -3718,6 +3718,11 @@ bool ScDocument::SetString(
     return SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rString, pParam);
 }
 
+bool ScDocument::SetEditText( const ScAddress& rPos, EditTextObject aEditText )
+{
+    return SetEditText(rPos, std::make_unique<EditTextObject>(std::move(aEditText)));
+}
+
 bool ScDocument::SetEditText( const ScAddress& rPos, std::unique_ptr<EditTextObject> pEditText )
 {
     if (ScTable* pTable = FetchTable(rPos.Tab()))
@@ -3737,7 +3742,7 @@ void ScDocument::SetEditText( const ScAddress& rPos, const OUString& rStr )
     {
         ScFieldEditEngine& rEngine = GetEditEngine();
         rEngine.SetTextCurrentDefaults(rStr);
-        pTable->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
+        pTable->SetEditText(rPos.Col(), rPos.Row(), std::make_unique<EditTextObject>(rEngine.CreateTextObject()));
     }
 }
 
@@ -3758,7 +3763,7 @@ void ScDocument::SetTextCell(const ScAddress& rPos, const OUString& rStr,
         {
             ScFieldEditEngine& rEngine = GetEditEngine();
             rEngine.SetTextCurrentDefaults(rStr);
-            pTable->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
+            pTable->SetEditText(rPos.Col(), rPos.Row(), std::make_unique<EditTextObject>(rEngine.CreateTextObject()));
         }
         else
         {

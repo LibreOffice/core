@@ -1138,7 +1138,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 // This edit engine uses the SfxItemPool instance returned
                 // from pDoc->GetEditPool() to create the text object, which
                 // is a prerequisite for using this constructor of ScEditCell.
-                rDoc.setEditCell(rCurrentPos, mpEditEngine->CreateTextObject());
+                rDoc.setEditCell(rCurrentPos, std::make_unique<EditTextObject>(mpEditEngine->CreateTextObject()));
             }
         }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )

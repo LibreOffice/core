@@ -405,7 +405,7 @@ OUString RichString::getStringContent() const
     return sString.makeStringAndClear();
 }
 
-std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont )
+EditTextObject RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont )
 {
     ESelection aSelection;
 

@@ -2358,6 +2358,11 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
     return bNumFmtSet;
 }
 
+void ScColumn::SetEditText( SCROW nRow, EditTextObject aEditText )
+{
+    SetEditText(nRow, std::make_unique<EditTextObject>(std::move(aEditText)));
+}
+
 void ScColumn::SetEditText( SCROW nRow, std::unique_ptr<EditTextObject> pEditText )
 {
     if (!pEditText)
@@ -2406,6 +2411,22 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, cons
     // "spool" the Object through a corresponding Engine
     EditEngine& rEngine = GetDoc().GetEditEngine();
     rEngine.SetText(rEditText);
+    SetEditText(rBlockPos, nRow, rEngine.CreateTextObject());
+}
+
+void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, EditTextObject&& rEditText )
+{
+    if (GetDoc().GetEditEnginePool() == rEditText.GetPool())
+    {
+        SetEditText(rBlockPos, nRow, std::make_unique<EditTextObject>(std::move(rEditText)));
+        return;
+    }
+
+    // rats, yet another "spool"
+    // Sadly there is no other way to change the Pool than to
+    // "spool" the Object through a corresponding Engine
+    EditEngine& rEngine = GetDoc().GetEditEngine();
+    rEngine.SetText(std::move(rEditText));
     SetEditText(rBlockPos, nRow, rEngine.CreateTextObject());
 }
 

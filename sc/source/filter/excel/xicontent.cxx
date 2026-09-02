@@ -194,7 +194,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
             }
 
             // The cell will own the text object instance.
-            rDoc.setEditCell(aScPos, rEE.CreateTextObject());
+            rDoc.setEditCell(aScPos, std::make_unique<EditTextObject>(rEE.CreateTextObject()));
         }
         break;
 

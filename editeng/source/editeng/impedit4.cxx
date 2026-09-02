@@ -1146,7 +1146,7 @@ OString ImpEditEngine::GetSimpleHtml() const
     return aOutput.makeStringAndClear();
 }
 
-std::unique_ptr<EditTextObject> ImpEditEngine::GetEmptyTextObject()
+EditTextObject ImpEditEngine::GetEmptyTextObject()
 {
     EditSelection aEmptySel;
     aEmptySel.Min() = maEditDoc.GetStartPaM();
@@ -1155,27 +1155,23 @@ std::unique_ptr<EditTextObject> ImpEditEngine::GetEmptyTextObject()
     return CreateTextObject( aEmptySel );
 }
 
-std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
+EditTextObject ImpEditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
 {
-    DBG_ASSERT(0 <= nPara && nPara < maEditDoc.Count(), "CreateTextObject: Startpara out of Range");
-    DBG_ASSERT(nParas <= maEditDoc.Count() - nPara, "CreateTextObject: Endpara out of Range");
+    assert(0 <= nPara && nPara < maEditDoc.Count() && "CreateTextObject: Startpara out of Range");
+    assert(nParas <= maEditDoc.Count() - nPara && "CreateTextObject: Endpara out of Range");
 
     ContentNode* pStartNode = maEditDoc.GetObject(nPara);
     ContentNode* pEndNode = maEditDoc.GetObject(nPara + nParas - 1);
-    DBG_ASSERT( pStartNode, "Start-Paragraph does not exist: CreateTextObject" );
-    DBG_ASSERT( pEndNode, "End-Paragraph does not exist: CreateTextObject" );
+    assert( pStartNode && "Start-Paragraph does not exist: CreateTextObject" );
+    assert( pEndNode && "End-Paragraph does not exist: CreateTextObject" );
 
-    if ( pStartNode && pEndNode )
-    {
-        EditSelection aTmpSel;
-        aTmpSel.Min() = EditPaM( pStartNode, 0 );
-        aTmpSel.Max() = EditPaM( pEndNode, pEndNode->Len() );
-        return CreateTextObject(aTmpSel);
-    }
-    return nullptr;
+    EditSelection aTmpSel;
+    aTmpSel.Min() = EditPaM( pStartNode, 0 );
+    aTmpSel.Max() = EditPaM( pEndNode, pEndNode->Len() );
+    return CreateTextObject(aTmpSel);
 }
 
-std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject()
+EditTextObject ImpEditEngine::CreateTextObject()
 {
     EditSelection aCompleteSelection;
     aCompleteSelection.Min() = maEditDoc.GetStartPaM();
@@ -1184,12 +1180,12 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject()
     return CreateTextObject( aCompleteSelection );
 }
 
-std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject(const EditSelection& rSel)
+EditTextObject ImpEditEngine::CreateTextObject(const EditSelection& rSel)
 {
     return CreateTextObject(rSel, &maEditDoc.GetItemPool(), maStatus.AllowBigObjects(), mnBigTextObjectStart);
 }
 
-std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )
+EditTextObject ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )
 {
     sal_Int32 nStartNode, nEndNode;
     sal_Int32 nTextPortions = 0;
@@ -1205,8 +1201,8 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
     // (Only the name and family, template itself must be in App!)
 
     const MapUnit eMapUnit = maEditDoc.GetItemPool().GetMetric(DEF_METRIC);
-    auto pTxtObj(std::make_unique<EditTextObject>(pPool, eMapUnit, GetVertical(), GetRotation(),
-                                                      GetItemScriptType(aSel)));
+    EditTextObject aTxtObj(pPool, eMapUnit, GetVertical(), GetRotation(),
+                                                      GetItemScriptType(aSel));
 
     // iterate over the paragraphs ...
     sal_Int32 nNode;
@@ -1231,7 +1227,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             nEndPos = aSel.Max().GetIndex();
 
 
-        ContentInfo *pC = pTxtObj->CreateAndInsertContent();
+        ContentInfo *pC = aTxtObj.CreateAndInsertContent();
 
         // The paragraph attributes ...
         pC->GetParaAttribs().Set( pNode->GetContentAttribs().GetItems() );
@@ -1257,7 +1253,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             if ( bEmptyPara ||
                  ( ( pAttr->GetEnd() > nStartPos ) && ( pAttr->GetStart() < nEndPos ) ) )
             {
-                XEditAttribute aX(*pTxtObj->GetPool(), *pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
+                XEditAttribute aX(*aTxtObj.GetPool(), *pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
                 // Possibly Correct ...
                 if ( ( nNode == nStartNode ) && ( nStartPos != 0 ) )
                 {
@@ -1291,7 +1287,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
         XParaPortionList* pXList = new XParaPortionList(GetRefDevice(), GetColumnWidth(maPaperSize),
             maScalingParameters.fFontX, maScalingParameters.fFontY,
             maScalingParameters.fSpacingX, maScalingParameters.fSpacingY);
-        pTxtObj->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
+        aTxtObj.SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
             ParaPortion const& rParaPortion = GetParaPortions().getRef(nNode);
@@ -1329,7 +1325,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
 #endif
         }
     }
-    return pTxtObj;
+    return aTxtObj;
 }
 
 void ImpEditEngine::SetText( const EditTextObject& rTextObject )

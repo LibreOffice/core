@@ -1328,6 +1328,7 @@ public:
      * This is very important.</p>
      */
     SC_DLLPUBLIC bool  SetEditText( const ScAddress& rPos, std::unique_ptr<EditTextObject> pEditText );
+    SC_DLLPUBLIC bool  SetEditText( const ScAddress& rPos, EditTextObject aEditText );
     void               SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
     SC_DLLPUBLIC void  SetEditText( const ScAddress& rPos, const OUString& rStr );
     SC_DLLPUBLIC SCROW GetFirstEditTextRow( const ScRange& rRange ) const;
@@ -2777,7 +2778,7 @@ public:
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
 
-    std::unique_ptr<EditTextObject> CreateSharedStringTextObject( const svl::SharedString& rSS );
+    EditTextObject CreateSharedStringTextObject( const svl::SharedString& rSS );
 
     std::unique_ptr<ScRefreshTimerControl> const & GetRefreshTimerControlAddress() const
                                        { return pRefreshTimerControl; }

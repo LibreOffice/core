@@ -297,6 +297,8 @@ EditTextObject::EditTextObject( const EditTextObject& r )
         maContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *mpPool)));
 }
 
+EditTextObject::EditTextObject( EditTextObject&& ) noexcept = default;
+
 EditTextObject::~EditTextObject()
 {
     ClearPortionInfo();
@@ -306,6 +308,7 @@ EditTextObject::~EditTextObject()
     maContents.clear();
 }
 
+EditTextObject& EditTextObject::operator=(EditTextObject&&) = default;
 
 void EditTextObject::SetUserType( OutlinerMode n )
 {

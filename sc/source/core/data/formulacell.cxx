@@ -3167,7 +3167,7 @@ bool ScFormulaCell::IsHyperLinkCell() const
     return pCode && pCode->IsHyperLink();
 }
 
-std::unique_ptr<EditTextObject> ScFormulaCell::CreateURLObject()
+EditTextObject ScFormulaCell::CreateURLObject()
 {
     OUString aCellText;
     OUString aURL;

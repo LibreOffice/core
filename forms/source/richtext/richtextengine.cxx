@@ -78,13 +78,11 @@ namespace frm
         RichTextEngine* pClone( nullptr );
         {
             SolarMutexGuard aGuard;
-            std::unique_ptr<EditTextObject> pMyText(CreateTextObject());
-            OSL_ENSURE( pMyText, "RichTextEngine::Clone: CreateTextObject returned nonsense!" );
+            EditTextObject aMyText(CreateTextObject());
 
             pClone = Create();
 
-            if ( pMyText )
-                pClone->SetText( *pMyText );
+            pClone->SetText( aMyText );
         }
 
         return pClone;

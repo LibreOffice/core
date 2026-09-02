@@ -1074,7 +1074,7 @@ void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUStrin
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         rEE.QuickInsertField(aURLItem, ESelection());
 
-        rDoc.setEditCell(rAddress, rEE.CreateTextObject());
+        rDoc.setEditCell(rAddress, std::make_unique<EditTextObject>(rEE.CreateTextObject()));
     }
     else
     {
@@ -1611,7 +1611,7 @@ void WorksheetHelper::putRichString( const ScAddress& rAddress, RichString& rStr
     rEE.SetSingleLine(bSingleLine);
 
     // The cell will own the text object instance returned from convert().
-    getDocImport().setEditCell(rAddress, rString.convert(rEE, pFirstPortionFont));
+    getDocImport().setEditCell(rAddress, std::make_unique<EditTextObject>(rString.convert(rEE, pFirstPortionFont)));
 
     rEE.SetSingleLine(false);
 }
