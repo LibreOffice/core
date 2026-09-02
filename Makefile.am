@@ -1017,7 +1017,7 @@ czech: all-local presets-dir
 collabora-online-sbom.spdx.json: $(GBUILD_EXES) coolwsd.xml coolkitconfig.xcu \
 		$(abs_top_srcdir)/scripts/create-sbom.py \
 		$(abs_top_srcdir)/scripts/sbom-externals.json \
-		$(abs_top_srcdir)/browser/npm-shrinkwrap.json
+		$(abs_top_builddir)/browser/npm-shrinkwrap.json
 	@$(MAKE) $(AM_MAKEFLAGS) -C browser sbom-shipped-js.txt
 	$(QUIET_SBOM) python3 $(abs_top_srcdir)/scripts/create-sbom.py \
 		--srcdir $(abs_top_srcdir) \

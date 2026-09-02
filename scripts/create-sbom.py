@@ -375,7 +375,7 @@ def read_npm_runtime(browser_srcdir, browser_builddir, shipped_js_path):
     browser/Makefile.am plus the bare require()s browserified into
     admin-bundle.js; the closure follows the shrinkwrap 'dependencies' edges.
     """
-    with open(os.path.join(browser_srcdir, "npm-shrinkwrap.json"),
+    with open(os.path.join(browser_builddir, "npm-shrinkwrap.json"),
               encoding="utf-8") as f:
         packages = json.load(f)["packages"]
 
