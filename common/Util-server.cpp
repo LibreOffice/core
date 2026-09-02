@@ -24,6 +24,7 @@
 
 #include <Poco/Exception.h>
 
+#include <cstring>
 #include <dirent.h>
 #include <fstream>
 #include <iomanip>
@@ -168,11 +169,12 @@ int spawnProcess(const std::string& cmd, const StringVector& args)
     params.push_back(nullptr);
 
     pid_t pid = -1;
-    int status = posix_spawn(&pid, params[0], nullptr, nullptr, params.data(), environ);
-    if (status < 0)
+    // posix_spawn reports a failure to run cmd here too, not only a failure to fork.
+    const int error = posix_spawn(&pid, params[0], nullptr, nullptr, params.data(), environ);
+    if (error != 0)
     {
-        LOG_ERR("Failed to posix_spawn for command '" << cmd);
-        throw Poco::SystemException("Failed to fork posix_spawn command ", cmd);
+        LOG_ERR("Failed to spawn '" << cmd << "': " << std::strerror(error));
+        return -1;
     }
 
     return pid;
