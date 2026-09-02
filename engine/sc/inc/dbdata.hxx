@@ -358,6 +358,8 @@ public:
                                                 const std::vector<TableColumnAttributes>& rAttributesVector,
                                                 formula::FormulaGrammar::Grammar eGrammar) const;
     SC_DLLPUBLIC void       CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const;
+    static void             ClearTotalRowParam(ScSubTotalParam& rSubTotalParam);
+
     /// Realign the stored (Total Row off) per-column formulas to a column insert/delete/resize.
     SC_DLLPUBLIC void       AdjustTotalsRowFormulas(SCCOL nDx, SCCOL nColShift,
                                                     SCCOL nNewCol1, SCCOL nNewCol2,

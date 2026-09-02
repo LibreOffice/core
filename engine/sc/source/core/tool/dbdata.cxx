@@ -979,6 +979,13 @@ void ScDBData::CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const
     }
 }
 
+void ScDBData::ClearTotalRowParam(ScSubTotalParam& rSubTotalParam)
+{
+    rSubTotalParam.aGroups[0].AllocCustFuncs(0);
+    rSubTotalParam.aGroups[0].AllocSubLabels(0);
+    rSubTotalParam.aGroups[0].AllocNumFmts(0);
+}
+
 void ScDBData::AdjustTotalsRowFormulas(SCCOL nDx, SCCOL nColShift, SCCOL nNewCol1, SCCOL nNewCol2,
                                        const sc::RefUpdateContext* pRefCxt)
 {

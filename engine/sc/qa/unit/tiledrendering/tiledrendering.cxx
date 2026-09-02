@@ -45,6 +45,7 @@
 #include <tabvwsh.hxx>
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
+#include <subtotalparam.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <tablestyle.hxx>
@@ -1020,6 +1021,85 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteTableDataCellsUpUndo)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 7, 0), getTableArea());
     CPPUNIT_ASSERT_EQUAL(u"below"_ustr, rDoc.GetString(0, 9, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteTableTotalsRowUndoRedo)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Styled table A1:C6 with header (row 1), data rows 2-5 and a Total Row (row 6).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 5,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    rDoc.SetString(0, 0, 0, u"Name"_ustr);
+    rDoc.SetString(1, 0, 0, u"Number"_ustr);
+    rDoc.SetString(2, 0, 0, u"Column3"_ustr);
+    for (SCROW nRow = 1; nRow <= 4; ++nRow)
+        rDoc.SetValue(1, nRow, 0, static_cast<double>(nRow));
+    pData->RefreshTableColumnNames(&rDoc);
+    rDoc.SetString(0, 5, 0, u"Total"_ustr);
+    rDoc.SetString(1, 5, 0, u"=SUBTOTAL(109;Table1[Number])"_ustr);
+    rDoc.CalcAll();
+
+    auto getTable = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        return p;
+    };
+    auto getArea = [&getTable]() {
+        ScRange aArea;
+        getTable()->GetArea(aArea);
+        return aArea;
+    };
+    auto getStashedFuncs = [&getTable]() {
+        ScSubTotalParam aParam;
+        getTable()->GetSubTotalParam(aParam);
+        return static_cast<int>(aParam.aGroups[0].nCustFuncs);
+    };
+
+    // Rows 2-6: every data row and the Total Row with them.
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 1, 0, 2, 5, 0));
+    dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 1, 0), getArea());
+    CPPUNIT_ASSERT_MESSAGE("the Total Row went with its row", !getTable()->HasTotals());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("no stashed total formulas are left", 0, getStashedFuncs());
+    CPPUNIT_ASSERT_MESSAGE("the data row we give back must be empty",
+                           rDoc.GetString(1, 1, 0).isEmpty());
+
+    // One undo step brings back the rows and the Total Row.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 5, 0), getArea());
+    CPPUNIT_ASSERT_MESSAGE("undo restores the Total Row", getTable()->HasTotals());
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(1, 5, 0));
+
+    // The Total Row's row alone: the data rows stay, so only the Total Row goes.
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 5, 0, 2, 5, 0));
+    dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 4, 0), getArea());
+    CPPUNIT_ASSERT_MESSAGE("the Total Row went, the data rows did not",
+                           !getTable()->HasTotals());
+    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(1, 4, 0));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 5, 0), getArea());
+    CPPUNIT_ASSERT_MESSAGE("undo restores the Total Row", getTable()->HasTotals());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsRowsOnlyUndoRedo)
