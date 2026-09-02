@@ -35,6 +35,7 @@ fuzzer_externals = \
     libxslt \
     libxml2 \
     libjpeg \
+    libjxl \
     libpng \
     libtiff \
     libwebp \
