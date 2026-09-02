@@ -66,7 +66,7 @@ namespace cool {
 export class SimplePoint {
 	private _x: number;
 	private _y: number;
-	public part: number; // Affects nothing. To be used in view layouts that redesign coordinate space.
+	public part: number; // The part index, -1 when unknown. Affects nothing. To be used in view layouts that redesign coordinate space.
 	public mode: number; // mode, along with part property, enables easier design for different view layouts.
 
 	// Constructor uses twips.

@@ -290,7 +290,7 @@ public:
         Session::dumpState(oss);
 
         oss << "\n\tviewId: " << _viewId
-            << "\n\tpartUniqueId: " << _currentPartUniqueId
+            << "\n\tpartId: " << _currentPartId
             << "\n\tcursor: " << _cursorPosition.toString()
             << "\n\tcanonicalViewId: " << _canonicalViewId
             << "\n\tisDocLoaded: " << _isDocLoaded
@@ -323,10 +323,11 @@ private:
     /// View ID, returned by createView() or 0 by default.
     int _viewId;
 
-    /// The currently visible part, in the numbering the client uses: the page's
-    /// stable unique id for a presentation or drawing document, the part index
-    /// for the other document types. -1 before any part is known.
-    int _currentPartUniqueId;
+    /// The currently visible part, by the identifier the client uses: the page's
+    /// GUID as a braced string for a presentation or drawing document, the part
+    /// index in decimal form for the other document types. Empty before any part
+    /// is known.
+    std::string _currentPartId;
 
     /// Last known position of a cursor for prioritizing rendering
     Util::Rectangle _cursorPosition;

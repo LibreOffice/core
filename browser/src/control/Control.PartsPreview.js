@@ -1419,12 +1419,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			}
 		}
 		else {
-			// The same number of slides with part numbers at new indices
+			// The same number of slides with part identifiers at new indices
 			// means the slides were reordered (or an index holds a new
-			// slide). A part number stays the same for the slide's whole
+			// slide). A part identifier stays the same for the slide's whole
 			// lifetime, so the preview image that already carries it can
 			// move to the slide's new index and show up there immediately;
-			// only a part number no preview carries needs a fetch.
+			// only an identifier no preview carries needs a fetch.
 			const previewByPart = {};
 			for (it = 0; it < this._previewTiles.length; it++) {
 				if (this._previewTiles[it]._part) {

@@ -36,7 +36,6 @@
 #include <vector>
 #include <deque>
 #include <tools/Guid.hxx>
-#include <tools/UniqueID.hxx>
 
 // predefines
 namespace model { class Theme; }
@@ -427,7 +426,6 @@ private:
     sal_Int32 mnBorderUpper; // top page margin
     sal_Int32 mnBorderRight; // right page margin
     sal_Int32 mnBorderLower; // bottom page margin
-    UniqueID maUniqueID;
     // Globally unique identifier of the page. It is never empty. A new page generates one,
     // and a cloned page starts out holding the identifier of its source page.
     tools::Guid maGuid;
@@ -493,7 +491,6 @@ public:
     sal_Int32 GetUpperBorder() const;
     sal_Int32 GetRightBorder() const;
     sal_Int32 GetLowerBorder() const;
-    sal_uInt64 GetUniqueID() const { return maUniqueID.getID(); }
     const tools::Guid& GetGuid() const { return maGuid; }
     void SetGuid(const tools::Guid& rGuid) { maGuid = rGuid; }
     void    SetBackgroundFullSize(bool bIn);

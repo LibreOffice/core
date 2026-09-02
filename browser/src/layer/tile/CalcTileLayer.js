@@ -459,7 +459,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				this._resetInternalState();
 				window.keyboard.applyOnscreenKeyboardMode();
 			} else {
-				this._selectedPart = statusJSON.selectedpart;
+				// The status names the selected sheet by its part identifier,
+				// the sheet index in decimal form.
+				this._selectedPart = parseInt(statusJSON.selectedpart);
 			}
 
 			this._lastColumn = statusJSON.lastcolumn;
@@ -1367,9 +1369,5 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		return scroll;
-	},
-
-	getSelectedPart: function () {
-		return this._selectedPart;
 	},
 });

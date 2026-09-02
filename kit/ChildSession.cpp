@@ -111,7 +111,6 @@ ChildSession::ChildSession(const std::shared_ptr<ProtocolHandlerInterface>& prot
     , _jailRoot(jailRoot)
     , _docManager(&docManager)
     , _viewId(-1)
-    , _currentPartUniqueId(-1)
     , _isDocLoaded(false)
     , _isDocPasswordToModifyEntered(false)
     , _copyToClipboard(false)
@@ -233,7 +232,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         // Send invalidation and other sync-up messages.
         getLOKitDocument()->setView(_viewId);
 
-        int curPart = 0;
+        std::string curPart("0");
         int curMode = 0;
         if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
         {
@@ -246,8 +245,8 @@ bool ChildSession::_handleInput(const char *buffer, int length)
 
         if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
         {
-            sendTextFrame("curpart: part=" + std::to_string(curPart));
-            sendTextFrame("setpart: part=" + std::to_string(curPart));
+            sendTextFrame("curpart: part=" + curPart);
+            sendTextFrame("setpart: part=" + curPart);
         }
 
         // Invalidate if we have to
@@ -256,7 +255,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         if (_stateRecorder.isInvalidate())
         {
             const std::string payload = "0, 0, 1000000000, 1000000000, " +
-                std::to_string(curPart) + ", " + std::to_string(curMode);
+                curPart + ", " + std::to_string(curMode);
             loKitCallback(COKitCallbackType::INVALIDATE_TILES, payload);
         }
 
@@ -1171,15 +1170,13 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     if (_docType != "text" && part != -1)
     {
         // The load option names the part by its index in document order, while
-        // the document boundary names parts of a presentation or drawing
-        // document by their stable page unique ids. Resolve the index to the
-        // part number before selecting it.
-        const uint64_t uniqueId = getLOKitDocument()->getPartUniqueId(part, 0);
-        if (uniqueId != 0 && uniqueId <= static_cast<uint64_t>(INT_MAX))
-            part = static_cast<int>(uniqueId);
-        getLOKitDocument()->setPart(part);
+        // the document boundary names parts by their part identifiers. Resolve
+        // the index to the identifier before selecting it.
+        const std::string partId = getLOKitDocument()->getPartId(part, 0);
+        if (!partId.empty())
+            getLOKitDocument()->setPart(partId.c_str());
     }
-    _currentPartUniqueId = getLOKitDocument()->getPart();
+    _currentPartId = getLOKitDocument()->getPart();
 
     // Respond by the document status
     LOG_DBG("Sending status after loading view " << _viewId);
@@ -1464,7 +1461,7 @@ TilePrioritizer::Priority ChildSession::getTilePriority(const TileDesc &tile) co
 {
     // One tile past the visible area counts as pre-loading, which is more interesting to render
     // than a tile further out.
-    return TilePrioritizer::rankTile(tile, tile.getPart() == _currentPartUniqueId, _cursorPosition,
+    return TilePrioritizer::rankTile(tile, tile.getPart() == _currentPartId, _cursorPosition,
                                      _clientVisibleArea, tile.getTileWidth(),
                                      tile.getTileHeight());
 }
@@ -2937,10 +2934,12 @@ bool ChildSession::renderSlide(const StringVector& tokens)
     std::string hash;
     getTokenString(tokens[1], "hash", hash);
 
+    // The message names the slide by its part identifier; the slideshow
+    // renderer takes the index the page holds now.
     int part = -1;
     std::string partString;
-    if (getTokenString(tokens[2], "part", partString))
-        part = NumUtil::stoi(partString);
+    if (getTokenString(tokens[2], "part", partString) && !partString.empty())
+        part = getLOKitDocument()->getPartIndex(partString.c_str(), 0);
 
     unsigned suggestedWidth = 0;
     std::string widthString;
@@ -3531,9 +3530,9 @@ bool ChildSession::exportAs(const StringVector& tokens)
 
 bool ChildSession::setClientPart(const StringVector& tokens)
 {
-    int part = 0;
+    std::string part;
     if (tokens.size() < 2 ||
-        !getTokenInteger(tokens[1], "part", part))
+        !getTokenString(tokens[1], "part", part) || !isValidPartId(part))
     {
         sendTextFrameAndLogError("error: cmd=setclientpart kind=invalid");
         return false;
@@ -3545,21 +3544,21 @@ bool ChildSession::setClientPart(const StringVector& tokens)
         return true;
 
     if (part != getLOKitDocument()->getPart())
-        getLOKitDocument()->setPart(part);
+        getLOKitDocument()->setPart(part.c_str());
 
-    // The part number of a gone page selects nothing in the document, so the
+    // The identifier of a gone page selects nothing in the document, so the
     // part read back is the one actually shown.
-    _currentPartUniqueId = getLOKitDocument()->getPart();
+    _currentPartId = getLOKitDocument()->getPart();
 
     return true;
 }
 
 bool ChildSession::selectClientPart(const StringVector& tokens)
 {
-    int part = 0;
+    std::string part;
     int select = 0;
     if (tokens.size() < 3 ||
-        !getTokenInteger(tokens[1], "part", part) ||
+        !getTokenString(tokens[1], "part", part) || !isValidPartId(part) ||
         !getTokenInteger(tokens[2], "how", select))
     {
         sendTextFrameAndLogError("error: cmd=selectclientpart kind=invalid");
@@ -3572,7 +3571,7 @@ bool ChildSession::selectClientPart(const StringVector& tokens)
     {
         if (part != getLOKitDocument()->getPart())
         {
-            getLOKitDocument()->selectPart(part, select);
+            getLOKitDocument()->selectPart(part.c_str(), select);
 
             // Notify the client of the selection update.
             const std::string status = LOKitHelper::documentStatus(getLOKitDocument().get());
@@ -3637,7 +3636,9 @@ bool ChildSession::setPage(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    getLOKitDocument()->setPart(page);
+    // A text document's part identifier is the page index in decimal form.
+    const std::string pageString = std::to_string(page);
+    getLOKitDocument()->setPart(pageString.c_str());
 
     return true;
 }
@@ -4090,15 +4091,16 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
             StringVector tokens(StringVector::tokenize(payload, ','));
             if (tokens.size() == 5 || tokens.size() == 6)
             {
-                int part, x, y, width, height, mode = 0;
+                int x, y, width, height, mode = 0;
+                std::string part("0");
                 try
                 {
                     x = NumUtil::stoi(tokens[0]);
                     y = NumUtil::stoi(tokens[1]);
                     width = NumUtil::stoi(tokens[2]);
                     height = NumUtil::stoi(tokens[3]);
-                    part = (_docType != "text" ? NumUtil::stoi(tokens[4])
-                                               : 0); // Writer renders everything as part 0.
+                    if (_docType != "text") // Writer renders everything as part 0.
+                        part = Util::trimmed(tokens[4]);
                     if (tokens.size() == 6)
                         mode = NumUtil::stoi(tokens[5]);
                 }
@@ -4110,12 +4112,12 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
                     y = 0;
                     width = INT_MAX;
                     height = INT_MAX;
-                    part = 0;
+                    part = "0";
                     mode = 0;
                 }
 
                 sendTextFrame("invalidatetiles:"
-                              " part=" + std::to_string(part) +
+                              " part=" + part +
                               " mode=" + std::to_string(mode) +
                               " x=" + std::to_string(x) +
                               " y=" + std::to_string(y) +
@@ -4126,9 +4128,11 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
             else if ((tokens.size() == 2 || tokens.size() == 3) && tokens.equals(0, "EMPTY"))
             {
                 // "EMPTY, <part>" or "EMPTY, <part>, <mode>"
-                const int part = (_docType != "text" ? std::atoi(tokens[1].c_str()) : 0); // Writer renders everything as part 0.
+                const std::string part =
+                    (_docType != "text" ? Util::trimmed(tokens[1])
+                                        : std::string("0")); // Writer renders everything as part 0.
                 const int mode = (tokens.size() == 3 ? std::atoi(tokens[2].c_str()) : 0);
-                sendTextFrame("invalidatetiles: EMPTY, " + std::to_string(part) + ", " +
+                sendTextFrame("invalidatetiles: EMPTY, " + part + ", " +
                               std::to_string(mode) + " wid=" + std::to_string(getCurrentWireId()));
             }
             else
@@ -4221,11 +4225,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         break;
     case COKitCallbackType::SET_PART:
     {
-        // The payload is the part number of the part the view switched to.
-        int part = 0;
-        if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT &&
-            COOLProtocol::stringToInteger(payload, part))
-            _currentPartUniqueId = part;
+        // The payload is the identifier of the part the view switched to.
+        if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT && !payload.empty())
+            _currentPartId = payload;
 
         sendTextFrame("setpart: part=" + payload);
         break;

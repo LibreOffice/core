@@ -1167,19 +1167,22 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	// The part number of the part at the given index: the number the tiles
-	// of that part are keyed by. For a presentation or drawing document the
-	// part number is the page's stable unique id; for other document types
-	// it is the index itself. Part numbers carry no order, so arithmetic on
-	// them never yields another part. Go through the index for that.
+	// The part identifier of the part at the given index: the string the
+	// tiles of that part are keyed by. For a presentation or drawing document
+	// it is the page's GUID; for other document types it is the index in
+	// decimal form. Part identifiers carry no order, so nothing can be
+	// computed from one. Go through the index for that.
 	getPartFromIndex: function (index) {
-		return index;
+		// An index no part can hold names nothing.
+		if (!(index >= 0))
+			return '';
+		return String(index);
 	},
 
-	// The current index of the part with the given part number, or -1 when
-	// no part carries it.
+	// The current index of the part with the given part identifier, or -1
+	// when no part carries it.
 	getIndexFromPart: function (part) {
-		return part;
+		return parseInt(part);
 	},
 
 	getSelectedPart: function () {
@@ -1195,6 +1198,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			command.width = parseInt(strTwips[2]);
 			command.height = parseInt(strTwips[3]);
 			command.part = this.getSelectedPart();
+		} else if (command.part === '-1') {
+			// The wildcard for every part: treat it as the shown one.
+			command.part = this.getSelectedPart();
 		}
 
 		if (isNaN(command.mode))
@@ -1204,10 +1210,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		RenderManager.overlapInvalidatedRectangleWithView(command.part, command.mode, command.wireId, invalidArea, textMsg);
 
 		if (this.isImpress() || this.isDraw()) {
-			// The message names the part by its part number, the way tiles
-			// are keyed. The preview bookkeeping and the part events work
-			// with the index the part holds now. The part number of a gone
-			// page matches no index and updates nothing.
+			// The message names the part by its part identifier, the way
+			// tiles are keyed. The preview bookkeeping and the part events
+			// work with the index the part holds now. The identifier of a
+			// gone page matches no index and updates nothing.
 			const partIndex = this.getIndexFromPart(command.part);
 			if (partIndex >= 0 && partIndex === this._selectedPart &&
 				app.activeDocument.isModeActive(command.mode) &&
@@ -1227,7 +1233,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			// may be a structural change, so drop the cached part and
 			// re-fetch it in full. Without a part, drop every part. The
 			// vector cache is keyed by part index.
-			if (isNaN(command.part))
+			if (!command.part)
 				RenderManager.clearAllParts();
 			else if (command.width === Number.MAX_SAFE_INTEGER && partIndex >= 0)
 				RenderManager.clearCachedPart(partIndex);
@@ -1279,11 +1285,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				msg += 'part=0 ';
 			} else {
 
-				var part = parseInt(commaargs.length > 0 ? commaargs[0] : '');
+				var part = commaargs.length > 0 ? commaargs[0].trim() : '';
 				var mode = parseInt(commaargs.length > 1 ? commaargs[1] : '');
 
 				mode = (isNaN(mode) ? app.activeDocument.activeModes[0] : mode);
-				msg += 'part=' + (isNaN(part) ? this.getSelectedPart() : part)
+				msg += 'part=' + (!part || part === '-1' ? this.getSelectedPart() : part)
 					+ ((mode && mode !== 0) ? (' mode=' + mode) : '')
 					+ ' ';
 			}

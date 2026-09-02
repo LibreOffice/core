@@ -591,13 +591,13 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
         bool bHasMode = nSeparatorPos > 0;
         if (bHasMode)
         {
-            aRet.m_nPart = o3tl::toInt32(rPayload.subView(6, nSeparatorPos - 6));
+            aRet.m_aPart = OString(o3tl::trim(rPayload.subView(6, nSeparatorPos - 6)));
             assert(rPayload.getLength() > nSeparatorPos);
             aRet.m_nMode = o3tl::toInt32(rPayload.subView(nSeparatorPos + 1));
         }
         else
         {
-            aRet.m_nPart = o3tl::toInt32(rPayload.subView(6));
+            aRet.m_aPart = OString(o3tl::trim(rPayload.subView(6)));
             aRet.m_nMode = 0;
         }
 
@@ -633,10 +633,11 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
     if (pos < end)
         ++pos;
     assert(pos < end);
-    tools::Long nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
-
+    const char* pPartStart = pos;
     while (pos < end && *pos != ',')
         ++pos;
+    OString aPart(o3tl::trim(std::string_view(pPartStart, pos - pPartStart)));
+
     if (pos < end)
     {
         ++pos;
@@ -645,7 +646,7 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
     }
 
     aRet.m_aRectangle = SanitizedRectangle(nLeft, nTop, nWidth, nHeight);
-    aRet.m_nPart = nPart;
+    aRet.m_aPart = std::move(aPart);
     aRet.m_nMode = nMode;
     return aRet;
 }
@@ -1163,7 +1164,7 @@ static void doc_paintTile(COKitDocument* pThis,
                           const int nTileWidth, const int nTileHeight);
 static void doc_paintPartTile(COKitDocument* pThis,
                               unsigned char* pBuffer,
-                              const int nPart,
+                              const OString& rPart,
                               const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
@@ -1375,51 +1376,10 @@ ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
 }
 
-// Whether the boundary names this document's parts by their stable page unique ids rather than
-// by page-list indexes: the case for presentation and drawing documents, which always hold at
-// least one page.
-bool partsAreUniqueIds(ITiledRenderable* pDoc)
+// The identifier of the document's current part.
+OString currentPartId(ITiledRenderable* pDoc)
 {
-    return pDoc && pDoc->getPartUniqueId(0, 0) != 0;
-}
-
-// The part number the boundary names the part at nIndex by: the page's stable unique id. The
-// mode selects the page list the index addresses. Returns -1 when no page holds that index or
-// the id does not fit in a part number; the ids count up from 1, one step per object the
-// process creates, so a real document session stays far below that limit.
-int partNumberFromIndex(ITiledRenderable* pDoc, int nIndex, int nMode)
-{
-    if (nIndex < 0)
-        return -1;
-
-    const sal_uInt64 nUniqueId = pDoc->getPartUniqueId(nIndex, nMode);
-    if (nUniqueId == 0 || nUniqueId > o3tl::make_unsigned(std::numeric_limits<int>::max()))
-    {
-        SAL_WARN_IF(nUniqueId != 0, "kit",
-                    "The unique id " << nUniqueId << " of part " << nIndex
-                                     << " does not fit in a part number");
-        return -1;
-    }
-
-    return static_cast<int>(nUniqueId);
-}
-
-// The index the part with the given part number holds now in the given mode's page list, or -1
-// when no page carries that number any more.
-int partIndexFromNumber(ITiledRenderable* pDoc, int nPart, int nMode)
-{
-    if (nPart <= 0)
-        return -1;
-
-    // Past the last page of the mode's list the lookup returns zero.
-    for (int nIndex = 0;; ++nIndex)
-    {
-        const sal_uInt64 nUniqueId = pDoc->getPartUniqueId(nIndex, nMode);
-        if (nUniqueId == 0)
-            return -1;
-        if (nUniqueId == o3tl::make_unsigned(nPart))
-            return nIndex;
-    }
+    return pDoc->getPartId(pDoc->getPart(), pDoc->getEditMode());
 }
 
 /*
@@ -1677,14 +1637,14 @@ int COKitDocumentImpl::getViewsCount()
     return doc_getViewsCount(this);
 }
 
-void COKitDocumentImpl::paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+void COKitDocumentImpl::paintPartTile(unsigned char* pBuffer, const char* pPart, const int nMode,
                                        const int nCanvasWidth, const int nCanvasHeight,
                                        const int nTilePosX, const int nTilePosY,
                                        const int nTileWidth, const int nTileHeight,
                                        bool bIsPreview)
 {
-    doc_paintPartTile(this, pBuffer, nPart, nMode, nCanvasWidth, nCanvasHeight, nTilePosX,
-                      nTilePosY, nTileWidth, nTileHeight, bIsPreview);
+    doc_paintPartTile(this, pBuffer, pPart ? OString(pPart) : OString(), nMode, nCanvasWidth,
+                      nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight, bIsPreview);
 }
 
 bool COKitDocumentImpl::getViewIds(std::vector<int>& rIds)
@@ -2090,22 +2050,20 @@ void CallbackFlushHandler::resetUpdatedTypePerViewId( COKitCallbackType eType, i
 
 void CallbackFlushHandler::viewCallback(COKitCallbackType eType, const OString& pPayload)
 {
-    // A SET_PART payload carries the page-list index of the page the view switched to, while the
-    // boundary names parts of a presentation or drawing document by their stable page unique
-    // ids. Translate when queueing, while the page still holds that index.
+    // A SET_PART payload carries the page-list index of the page the view switched to, while
+    // the boundary names parts of a presentation or drawing document by their stable page
+    // identifiers. Translate when queueing, while the page still holds that index.
     if (eType == COKitCallbackType::SET_PART)
     {
-        ITiledRenderable* pDoc = getTiledRenderable(m_pDocument);
-        if (partsAreUniqueIds(pDoc))
+        if (ITiledRenderable* pDoc = getTiledRenderable(m_pDocument))
         {
-            const int nPart =
-                partNumberFromIndex(pDoc, pPayload.toInt32(), pDoc->getEditMode());
-            if (nPart < 0)
+            const OString aPartId = pDoc->getPartId(pPayload.toInt32(), pDoc->getEditMode());
+            if (aPartId.isEmpty())
             {
                 SAL_INFO("kit", "Skipping SET_PART for the gone part " << pPayload);
                 return;
             }
-            CallbackData callbackData(OString::number(nPart));
+            CallbackData callbackData(aPartId);
             queue(eType, callbackData);
             return;
         }
@@ -2169,22 +2127,22 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
 void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
     // The invalidation carries the page-list index of the invalidated page, while the boundary
-    // names parts of a presentation or drawing document by their stable page unique ids.
+    // names parts of a presentation or drawing document by their stable page identifiers.
     // Translate when queueing, while the page still holds that index, so the queued rectangles
     // merge under a key that survives page renumbering. A negative part stands for every part
-    // and passes through.
+    // and passes through as "-1".
+    OString aPart;
     if (nPart >= 0)
     {
         ITiledRenderable* pDoc = getTiledRenderable(m_pDocument);
-        if (partsAreUniqueIds(pDoc))
-        {
-            nPart = partNumberFromIndex(pDoc, nPart, nMode);
-            if (nPart < 0)
-                return;
-        }
+        aPart = pDoc ? pDoc->getPartId(nPart, nMode) : OString::number(nPart);
+        if (aPart.isEmpty())
+            return;
     }
+    else
+        aPart = "-1"_ostr;
 
-    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
+    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[aPart][nMode];
 
     tools::Rectangle aRect;
     if (m_bVectorRendering)
@@ -2221,7 +2179,7 @@ void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* p
     }
 
     // RectangleAndPart ctor doesn't store &aRect, so this is OK.
-    CallbackData callbackData(&aRect, nPart, nMode);
+    CallbackData callbackData(&aRect, aPart, nMode);
     queue(COKitCallbackType::INVALIDATE_TILES, callbackData);
 }
 
@@ -2612,7 +2570,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(COKitCallbackType type, C
     {
         auto pos2 = toQueue2(pos);
         const RectangleAndPart& rcOld = pos2->getRectangleAndPart();
-        if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart) &&
+        if (rcOld.isInfinite() && (rcOld.isAllParts() || rcOld.m_aPart == rcNew.m_aPart) &&
             (rcOld.m_nMode == rcNew.m_nMode))
         {
             SAL_INFO("kit", "Skipping queue [" << type << "]: [" << aCallbackData.getPayload()
@@ -2620,7 +2578,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(COKitCallbackType type, C
             return true;
         }
 
-        if ((rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart) && (rcOld.m_nMode == rcNew.m_nMode))
+        if ((rcOld.isAllParts() || rcOld.m_aPart == rcNew.m_aPart) && (rcOld.m_nMode == rcNew.m_nMode))
         {
             // If fully overlapping.
             if (rcOld.m_aRectangle.Contains(rcNew.m_aRectangle))
@@ -2635,10 +2593,10 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(COKitCallbackType type, C
     if (rcNew.isInfinite())
     {
         SAL_INFO("kit", "Have Empty [" << type << "]: [" << aCallbackData.getPayload()
-                                       << "] so removing all with part " << rcNew.m_nPart << ".");
+                                       << "] so removing all with part " << rcNew.m_aPart << ".");
         removeAll(COKitCallbackType::INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
             // Remove exiting if new is all-encompassing, or if of the same part.
-            return ((rcNew.m_nPart == -1 || rcNew.m_nPart == elemData.getRectangleAndPart().m_nPart)
+            return ((rcNew.isAllParts() || rcNew.m_aPart == elemData.getRectangleAndPart().m_aPart)
                 && (rcNew.m_nMode == elemData.getRectangleAndPart().m_nMode));
         });
     }
@@ -2649,15 +2607,15 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(COKitCallbackType type, C
         SAL_INFO("kit", "Have [" << type << "]: [" << aCallbackData.getPayload() << "] so merging overlapping.");
         removeAll(COKitCallbackType::INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
             const RectangleAndPart& rcOld = elemData.getRectangleAndPart();
-            if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 &&
-                (rcOld.m_nPart != rcNew.m_nPart || rcOld.m_nMode != rcNew.m_nMode))
+            if (!rcNew.isAllParts() && !rcOld.isAllParts() &&
+                (rcOld.m_aPart != rcNew.m_aPart || rcOld.m_nMode != rcNew.m_nMode))
             {
                 SAL_INFO("kit", "Nothing to merge between new: "
                                     << rcNew.toString() << ", and old: " << rcOld.toString());
                 return false;
             }
 
-            if (rcNew.m_nPart == -1)
+            if (rcNew.isAllParts())
             {
                 // Don't merge unless fully overlapped.
                 SAL_INFO("kit", "New " << rcNew.toString() << " has " << rcOld.toString()
@@ -2669,7 +2627,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(COKitCallbackType type, C
                     return true;
                 }
             }
-            else if (rcOld.m_nPart == -1)
+            else if (rcOld.isAllParts())
             {
                 // Don't merge unless fully overlapped.
                 SAL_INFO("kit", "Old " << rcOld.toString() << " has " << rcNew.toString()
@@ -3160,10 +3118,11 @@ void CallbackFlushHandler::removeViewStates(int viewId)
     m_viewStates.erase(viewId);
 }
 
-void CallbackFlushHandler::tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle)
+void CallbackFlushHandler::tilePainted(const OString& rPart, int nMode,
+                                       const tools::Rectangle& rRectangle)
 {
     // Painted a new tile: grow the bbox.
-    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
+    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[rPart][nMode];
     rPaintedTiles.Union(rRectangle);
 }
 
@@ -4747,7 +4706,7 @@ int COKitDocumentImpl::getParts()
     return pDoc->getParts();
 }
 
-int COKitDocumentImpl::getPart()
+std::string COKitDocumentImpl::getPart()
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::getPart");
 
@@ -4758,21 +4717,11 @@ int COKitDocumentImpl::getPart()
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return 0;
+        return "0";
     }
 
-    const int nIndex = pDoc->getPart();
-
-    // The boundary names parts of a presentation or drawing document by their stable page
-    // unique ids. An id too wide for a part number leaves the index in place.
-    if (partsAreUniqueIds(pDoc))
-    {
-        const int nPart = partNumberFromIndex(pDoc, nIndex, pDoc->getEditMode());
-        if (nPart >= 0)
-            return nPart;
-    }
-
-    return nIndex;
+    const OString aPartId = currentPartId(pDoc);
+    return std::string(aPartId.getStr(), aPartId.getLength());
 }
 
 static void doc_setPartIndexImpl(COKitDocument* pThis, int nPartIndex, bool bAllowChangeFocus = true)
@@ -4792,7 +4741,8 @@ static void doc_setPartIndexImpl(COKitDocument* pThis, int nPartIndex, bool bAll
     pDoc->setPart( nPartIndex, bAllowChangeFocus );
 }
 
-static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFocus = true)
+static void doc_setPartImpl(COKitDocument* pThis, std::string_view rPart,
+                            bool bAllowChangeFocus = true)
 {
     SolarMutexGuard aGuard;
 
@@ -4803,25 +4753,20 @@ static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFo
         return;
     }
 
-    // The boundary names parts of a presentation or drawing document by their stable page
-    // unique ids. The part number of a page that is gone selects nothing.
-    if (partsAreUniqueIds(pDoc))
+    // The identifier of a part that is gone, or a malformed identifier, selects nothing.
+    const int nIndex = pDoc->getPartIndex(rPart, pDoc->getEditMode());
+    if (nIndex < 0)
     {
-        const int nIndex = partIndexFromNumber(pDoc, nPart, pDoc->getEditMode());
-        if (nIndex < 0)
-        {
-            SAL_INFO("kit", "setPart names the gone part " << nPart);
-            return;
-        }
-        nPart = nIndex;
+        SAL_INFO("kit", "setPart names the gone part " << rPart);
+        return;
     }
 
-    doc_setPartIndexImpl(pThis, nPart, bAllowChangeFocus);
+    doc_setPartIndexImpl(pThis, nIndex, bAllowChangeFocus);
 }
 
-void COKitDocumentImpl::setPart(int nPart)
+void COKitDocumentImpl::setPart(const char* pPart)
 {
-    doc_setPartImpl(this, nPart, true);
+    doc_setPartImpl(this, pPart ? std::string_view(pPart) : std::string_view(), true);
 }
 
 std::string COKitDocumentImpl::getPartInfo(int nPart)
@@ -4839,66 +4784,58 @@ std::string COKitDocumentImpl::getPartInfo(int nPart)
     return pDoc->getPartInfo(nPart);
 }
 
-unsigned long long COKitDocumentImpl::getPartUniqueId(int nPart, int nMode)
+std::string COKitDocumentImpl::getPartId(int nPart, int nMode)
 {
-    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartUniqueId");
+    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartId");
 
     SolarMutexGuard aGuard;
     ITiledRenderable* pDoc = getTiledRenderable(this);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return 0;
+        return std::string();
     }
 
-    return pDoc->getPartUniqueId(nPart, nMode);
+    const OString aPartId = pDoc->getPartId(nPart, nMode);
+    return std::string(aPartId.getStr(), aPartId.getLength());
 }
 
-int COKitDocumentImpl::getPartIndex(int nPart, int nMode)
+int COKitDocumentImpl::getPartIndex(const char* pPart, int nMode)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::getPartIndex");
 
     SolarMutexGuard aGuard;
     ITiledRenderable* pDoc = getTiledRenderable(this);
-    if (!pDoc)
+    if (!pDoc || !pPart)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return -1;
     }
 
-    // A document whose part numbers are page-list indexes needs no lookup.
-    if (!partsAreUniqueIds(pDoc))
-        return nPart;
-
-    return partIndexFromNumber(pDoc, nPart, nMode);
+    return pDoc->getPartIndex(pPart, nMode);
 }
 
-void COKitDocumentImpl::selectPart(int nPart, int nSelect)
+void COKitDocumentImpl::selectPart(const char* pPart, int nSelect)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(this);
-    if (!pDoc)
+    if (!pDoc || !pPart)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
-    // The boundary names parts of a presentation or drawing document by their stable page
-    // unique ids. The part number of a page that is gone selects nothing.
-    if (partsAreUniqueIds(pDoc))
+    // The identifier of a part that is gone, or a malformed identifier, selects nothing.
+    const int nIndex = pDoc->getPartIndex(pPart, pDoc->getEditMode());
+    if (nIndex < 0)
     {
-        const int nIndex = partIndexFromNumber(pDoc, nPart, pDoc->getEditMode());
-        if (nIndex < 0)
-        {
-            SAL_INFO("kit", "selectPart names the gone part " << nPart);
-            return;
-        }
-        nPart = nIndex;
+        SAL_INFO("kit", "selectPart names the gone part " << pPart);
+        return;
     }
 
-    pDoc->selectPart( nPart, nSelect );
+    pDoc->selectPart( nIndex, nSelect );
 }
 
 void COKitDocumentImpl::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)
@@ -5146,10 +5083,12 @@ static void doc_paintTile(COKitDocument* pThis,
     // to invalidate those areas later.
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
     int nOrigViewId = doc_getView(pThis);
-    int nPart = pDoc->getPart();
+    // The painted-tile bookkeeping is keyed by the part identifier the boundary names the
+    // current part by.
+    const OString aPart = currentPartId(pDoc);
     int nMode = pDoc->getEditMode();
     tools::Rectangle aRectangle{Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight)};
-    pDocument->updateViewsForPaintedTile(nOrigViewId, nPart, nMode, aRectangle);
+    pDocument->updateViewsForPaintedTile(nOrigViewId, aPart, nMode, aRectangle);
 }
 
 inline static ITiledRenderable* getDocumentPointer(COKitDocument* pThis)
@@ -5164,11 +5103,11 @@ inline static ITiledRenderable* getDocumentPointer(COKitDocument* pThis)
     return pDoc;
 }
 
-inline static void writeInfoLog(const int nPart, const int nMode,
+inline static void writeInfoLog(const OString& rPart, const int nMode,
     const int nTileWidth, const int nTileHeight, const int nTilePosX, const int nTilePosY,
     const int nCanvasWidth, const int nCanvasHeight)
 {
-    SAL_INFO( "kit.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
+    SAL_INFO( "kit.tiledrendering", "paintPartTile: painting @ " << rPart << " : " << nMode << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
@@ -5246,7 +5185,7 @@ inline static int getAlternativeViewForPaint(COKitDocument* pThis, ITiledRendera
 
 static void doc_paintPartTile(COKitDocument* pThis,
                               unsigned char* pBuffer,
-                              const int nPart,
+                              const OString& rPart,
                               const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
@@ -5264,26 +5203,22 @@ static void doc_paintPartTile(COKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    writeInfoLog(nPart, nMode, nTileWidth, nTileHeight, nTilePosX, nTilePosY, nCanvasWidth, nCanvasHeight);
+    writeInfoLog(rPart, nMode, nTileWidth, nTileHeight, nTilePosX, nTilePosY, nCanvasWidth, nCanvasHeight);
 
     ITiledRenderable* pDoc = getDocumentPointer(pThis);
     if (!pDoc)
         return;
 
-    // The boundary names parts of a presentation or drawing document by their stable page unique
-    // ids. Resolve the requested part number to the index the page holds when it paints, so the
-    // pixels are of the requested page even if the pages were renumbered after the request was
-    // sent; the solar mutex is held for the whole call, so the index stays valid throughout. A
-    // page that is gone has nothing to paint.
-    int nPartIndex = nPart;
-    if (partsAreUniqueIds(pDoc))
+    // Resolve the requested part identifier to the index the page holds when it paints, so
+    // the pixels are of the requested page even if the pages were renumbered after the
+    // request was sent; the solar mutex is held for the whole call, so the index stays valid
+    // throughout. A part that is gone has nothing to paint, and so does a malformed
+    // identifier.
+    const int nPartIndex = pDoc->getPartIndex(rPart, nMode);
+    if (nPartIndex < 0)
     {
-        nPartIndex = partIndexFromNumber(pDoc, nPart, nMode);
-        if (nPartIndex < 0)
-        {
-            SAL_INFO("kit", "paintPartTile names the gone part " << nPart);
-            return;
-        }
+        SAL_INFO("kit", "paintPartTile names the gone part " << rPart);
+        return;
     }
 
     COKitDocumentImpl* pDocument = static_cast<COKitDocumentImpl*>(pThis);
@@ -5440,10 +5375,11 @@ static void doc_paintPartTile(COKitDocument* pThis,
     // Inform all views with the same view render state about the paint, so they know if makes sense
     // to invalidate those areas later.
     tools::Rectangle aRectangle{Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight)};
-    pDocument->updateViewsForPaintedTile(nOrigViewId, nPart, nMode, aRectangle);
+    pDocument->updateViewsForPaintedTile(nOrigViewId, rPart, nMode, aRectangle);
 }
 
-void COKitDocumentImpl::updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle)
+void COKitDocumentImpl::updateViewsForPaintedTile(int nOrigViewId, const OString& rPart, int nMode,
+                                                  const tools::Rectangle& rRectangle)
 {
     auto it = mpCallbackFlushHandlers.find(nOrigViewId);
     if (it == mpCallbackFlushHandlers.end())
@@ -5459,7 +5395,7 @@ void COKitDocumentImpl::updateViewsForPaintedTile(int nOrigViewId, int nPart, in
         {
             continue;
         }
-        rHandler.second->tilePainted(nPart, nMode, rRectangle);
+        rHandler.second->tilePainted(rPart, nMode, rRectangle);
     }
 }
 

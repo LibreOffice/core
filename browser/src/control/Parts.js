@@ -266,11 +266,11 @@ window.L.Map.include({
 				RenderManager.requestThumbnail(id, part, maxWidth, maxHeight);
 			} else {
 				var mode = app.activeDocument.activeModes[0];
-				// The request names the part by its part number, so it
+				// The request names the part by its part identifier, so it
 				// follows the page wherever it sits by the time it is
 				// rendered. An index no part holds names nothing to render.
 				const partNumber = docLayer.getPartFromIndex(part);
-				if (partNumber < 0) return {width: maxWidth, height: maxHeight};
+				if (!partNumber) return {width: maxWidth, height: maxHeight};
 				this._addPreviewToQueue(part, id, 'tile ' +
 								'nviewid=0' + ' ' +
 								'part=' + String(partNumber) + ' ' +
@@ -302,10 +302,10 @@ window.L.Map.include({
 			tilePosY: tilePosY, tileWidth: tileWidth, tileHeight: tileHeight, autoUpdate: autoUpdate, invalid: false};
 
 		var mode = app.activeDocument.activeModes[0];
-		// The request names the part by its part number. An index no part
+		// The request names the part by its part identifier. An index no part
 		// holds names nothing to render.
 		const partNumber = this._docLayer.getPartFromIndex(part);
-		if (partNumber < 0) return;
+		if (!partNumber) return;
 		this._addPreviewToQueue(part, id, 'tile ' +
 							'nviewid=0' + ' ' +
 							'part=' + partNumber + ' ' +

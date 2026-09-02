@@ -119,13 +119,11 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _docBroker(docBroker)
     , _lastStateTime(std::chrono::steady_clock::now())
     , _clientVisibleArea(0, 0, 0, 0)
-    , _visibleAreaPart(-1)
     , _visibleAreaMode(0)
     , _keyEvents(1)
     , _performanceCounterEpoch(0)
     , _splitX(0)
     , _splitY(0)
-    , _clientSelectedPart(-1)
     , _clientSelectedMode(0)
     , _tileWidthPixel(0)
     , _tileHeightPixel(0)
@@ -1139,15 +1137,15 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         if(!_isTextDocument)
         {
-            int temp;
+            std::string temp;
             if (tokens.size() != 2 ||
-                !getTokenInteger(tokens[1], "part", temp))
+                !getTokenString(tokens[1], "part", temp) || !isValidPartId(temp))
             {
                 logSyntaxErrorDetails(tokens, firstLine);
                 return false;
             }
 
-            _clientSelectedPart = temp;
+            _clientSelectedPart = std::move(temp);
             return forwardToChild(std::string(buffer, length), docBroker);
         }
     }
@@ -1155,10 +1153,10 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         if(!_isTextDocument)
         {
-            int part;
+            std::string part;
             int how;
             if (tokens.size() != 3 ||
-                !getTokenInteger(tokens[1], "part", part) ||
+                !getTokenString(tokens[1], "part", part) || !isValidPartId(part) ||
                 !getTokenInteger(tokens[2], "how", how))
             {
                 sendTextFrameAndLogError("error: cmd=selectclientpart kind=syntax");
@@ -3090,21 +3088,22 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
     else if (tokens.equals(0, "curpart:") && tokens.size() == 2)
     {
         //TODO: Should forward to client?
-        int curPart;
-        return getTokenInteger(tokens[1], "part", curPart);
+        std::string curPart;
+        return getTokenString(tokens[1], "part", curPart);
     }
     else if (tokens.equals(0, "setpart:") && tokens.size() == 2)
     {
         if (!_isTextDocument)
         {
-            int setPart;
-            if (getTokenInteger(tokens[1], "part", setPart))
+            std::string setPart;
+            if (getTokenString(tokens[1], "part", setPart) && isValidPartId(setPart))
             {
-                _clientSelectedPart = setPart;
+                _clientSelectedPart = std::move(setPart);
             }
-            else if (stringToInteger(tokens[1], setPart))
+            else if (isValidPartId(tokens[1]))
             {
-                _clientSelectedPart = setPart;
+                // The whole token is a bare part identifier without the part= prefix.
+                _clientSelectedPart = tokens[1];
             }
             else
                 return false;
@@ -3478,8 +3477,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
             statusJsonVar.extract<Poco::JSON::Object::Ptr>();
 
         if (statusJsonObject->has("selectedpart"))
-            _clientSelectedPart =
-                std::atoi(statusJsonObject->get("selectedpart").toString().c_str());
+            _clientSelectedPart = statusJsonObject->get("selectedpart").toString();
 
         if (statusJsonObject->has("mode"))
             _clientSelectedMode = std::atoi(statusJsonObject->get("mode").toString().c_str());
@@ -3508,11 +3506,10 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         if (ownUpdate)
         {
             // The normal, master and notes pages of one slide have different
-            // part numbers, so switching view mode changes the selected part
-            // as well as the mode. Both must be tracked together.
+            // part identifiers, so switching view mode changes the selected
+            // part as well as the mode. Both must be tracked together.
             if (statusJsonObject->has("selectedpart"))
-                _clientSelectedPart =
-                    std::atoi(statusJsonObject->get("selectedpart").toString().c_str());
+                _clientSelectedPart = statusJsonObject->get("selectedpart").toString();
 
             if (statusJsonObject->has("mode"))
                 _clientSelectedMode = std::atoi(statusJsonObject->get("mode").toString().c_str());
@@ -4237,7 +4234,7 @@ void ClientSession::handleTileInvalidation(const std::string& message,
     if(!_clientVisibleArea.hasSurface() ||
        _tileWidthPixel == 0 || _tileHeightPixel == 0 ||
        _tileWidthTwips == 0 || _tileHeightTwips == 0 ||
-       (_clientSelectedPart == -1 && !_isTextDocument))
+       (_clientSelectedPart.empty() && !_isTextDocument))
     {
         LOG_TRC("No visible area received yet - skip invalidation");
         return;
@@ -4249,7 +4246,8 @@ void ClientSession::handleTileInvalidation(const std::string& message,
         return;
     }
 
-    int part = 0, mode = 0;
+    std::string part("0");
+    int mode = 0;
     TileWireId wireId = 0;
     Util::Rectangle invalidateRect = TileCache::parseInvalidateMsg(message, part, mode, wireId);
 
@@ -4276,7 +4274,7 @@ void ClientSession::handleTileInvalidation(const std::string& message,
     if(!numPanes)
         return;
 
-    if( part == -1 ) // If no part is specified we use the part used by the client
+    if( part == "-1" ) // If no part is specified we use the part used by the client
         part = _clientSelectedPart;
 
     CanonicalViewId canonicalViewId = getCanonicalViewId();

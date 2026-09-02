@@ -44,7 +44,7 @@ describe('ServerCommand', function () {
 	});
 
 	it('invalidatetiles (specific region)', function () {
-		const part = 0;
+		const part = '{1BE1A269-4A03-4202-ACFE-0204C5E9BE1F}';
 		const mode = 0;
 		const x = 117690;
 		const y = 256050;
@@ -65,7 +65,7 @@ describe('ServerCommand', function () {
 	});
 
 	it('invalidatetiles (all cached tiles)', function () {
-		const part = 0;
+		const part = '{1BE1A269-4A03-4202-ACFE-0204C5E9BE1F}';
 		const mode = 0;
 		const wireId = '268';
 
@@ -95,7 +95,7 @@ describe('ServerCommand', function () {
 
 	it('tile', function () {
 		const nviewid = '1000';
-		const part = 0;
+		const part = '0';
 		const width = 256;
 		const height = 256;
 		const tileposx = 122880;

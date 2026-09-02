@@ -231,7 +231,7 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 				rowCount,
 				zoom,
 				tileSize,
-				0 as PartNumber,
+				'0' as PartNumber,
 				added,
 			);
 		}

@@ -42,12 +42,14 @@ struct TileLocation {
     int _left;
     int _top;
     int _size;
-    int _part;
+    /// The part identifier: a page GUID for a presentation or drawing document, a decimal
+    /// index for the other document types.
+    std::string _part;
     CanonicalViewId _canonicalViewId;
     int _viewMode;
-    TileLocation(int left, int top, int size, int part,
+    TileLocation(int left, int top, int size, std::string part,
                  CanonicalViewId canonicalViewId, int viewMode)
-        : _left(left), _top(top), _size(size), _part(part),
+        : _left(left), _top(top), _size(size), _part(std::move(part)),
           _canonicalViewId(canonicalViewId), _viewMode(viewMode)
     {
     }
@@ -55,7 +57,7 @@ struct TileLocation {
     {
         size_t left = _left;
         size_t top = _top;
-        size_t part = _part;
+        size_t part = std::hash<std::string>{}(_part);
         size_t size = _size;
         size_t canonicalViewId = to_underlying(_canonicalViewId);
         size_t viewMode = _viewMode;

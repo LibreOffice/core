@@ -140,16 +140,16 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
                       const std::string& testname);
 
     void requestTiles(std::shared_ptr<http::WebSocketSession>& socket, const std::string& docType,
-                      const int part, const int docWidth, const int docHeight,
+                      const std::string& part, const int docWidth, const int docHeight,
                       const std::string& testname);
 
-    void checkBlackTiles(std::shared_ptr<http::WebSocketSession>& socket, const int /*part*/,
-                         const int /*docWidth*/, const int /*docHeight*/,
-                         const std::string& testname);
+    void checkBlackTiles(std::shared_ptr<http::WebSocketSession>& socket,
+                         const std::string& /*part*/, const int /*docWidth*/,
+                         const int /*docHeight*/, const std::string& testname);
 
     void checkBlackTile(BlobData::const_iterator start, BlobData::const_iterator end);
 
-    bool getPartFromInvalidateMessage(const std::string& message, int& part);
+    bool getPartFromInvalidateMessage(const std::string& message, std::string& part);
 
 public:
     TileCacheTests()
@@ -191,25 +191,29 @@ public:
 };
 
 
-bool TileCacheTests::getPartFromInvalidateMessage(const std::string& message, int& part)
+bool TileCacheTests::getPartFromInvalidateMessage(const std::string& message, std::string& part)
 {
     StringVector tokens = StringVector::tokenize(message);
     if (tokens.size() == 2 && tokens.equals(1, "EMPTY"))
     {
-        part = -1;
+        part = "-1";
         return true;
     }
     if (tokens.size() > 2 && tokens.equals(1, "EMPTY,"))
-        return COOLProtocol::stringToInteger(tokens[2], part);
-    return COOLProtocol::getTokenInteger(tokens, "part", part);
+    {
+        // The part token ends with the comma separating it from the mode.
+        part = std::string(Util::rtrim(tokens[2], ','));
+        return !part.empty();
+    }
+    return COOLProtocol::getTokenString(tokens, "part", part);
 }
 
 void TileCacheTests::testDesc()
 {
     constexpr std::string_view testname = __func__;
 
-    TileDesc descA = TileDesc(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3200, 3200, /* ignored in cache */ 0, 1234, 1);
-    TileDesc descB = TileDesc(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3200, 3200, /* ignored in cache */ 1, 1235, 2);
+    TileDesc descA = TileDesc(CanonicalViewId::None, "0", 0, 256, 256, 0, 0, 3200, 3200, /* ignored in cache */ 0, 1234, 1);
+    TileDesc descB = TileDesc(CanonicalViewId::None, "0", 0, 256, 256, 0, 0, 3200, 3200, /* ignored in cache */ 1, 1235, 2);
 
     TileDescCacheCompareEq pred;
     LOK_ASSERT_MESSAGE("TileDesc versions do match", descA.getVersion() != descB.getVersion());
@@ -231,7 +235,7 @@ void TileCacheTests::testSimple()
     TileCache tc("doc.ods", std::chrono::system_clock::time_point());
 
     CanonicalViewId nviewid(CanonicalViewId::None);
-    int part = 0;
+    std::string part("0");
     int mode = 0;
     int width = 256;
     int height = 256;
@@ -452,7 +456,7 @@ void TileCacheTests::testSize()
     TileCache tc("doc.ods", std::chrono::system_clock::time_point());
 
     CanonicalViewId nviewid(CanonicalViewId::None);
-    int part = 0;
+    std::string part("0");
     int mode = 0;
     int width = 256;
     int height = 256;
@@ -919,7 +923,7 @@ void TileCacheTests::testLoad12ods()
         std::shared_ptr<http::WebSocketSession> socket
             = loadDocAndGetSession(_socketPoll, "load12.ods", _uri, testname);
 
-        int docSheet = -1;
+        std::string docSheet;
         int docSheets = 0;
         int docHeight = 0;
         int docWidth = 0;
@@ -975,7 +979,7 @@ void TileCacheTests::checkBlackTile(BlobData::const_iterator start, BlobData::co
 }
 
 void TileCacheTests::checkBlackTiles(std::shared_ptr<http::WebSocketSession>& socket,
-                                     const int /*part*/, const int /*docWidth*/,
+                                     const std::string& /*part*/, const int /*docWidth*/,
                                      const int /*docHeight*/, const std::string& testname)
 {
     // Check the last row of tiles to verify that the tiles
@@ -1060,10 +1064,10 @@ void TileCacheTests::testTileInvalidateWriterPage()
     sendTextFrame(socket, "uno .uno:InsertTable { \"Columns\": { \"type\": \"long\",\"value\": 3 }, \"Rows\": { \"type\": \"long\",\"value\": 2 }}", testname);
 
     const auto res = assertResponseString(socket, "invalidatetiles:", testname);
-    int part = -1;
-    LOK_ASSERT_MESSAGE("No part# in invalidatetiles message.",
+    std::string part;
+    LOK_ASSERT_MESSAGE("No part in invalidatetiles message.",
                            getPartFromInvalidateMessage(res, part));
-    LOK_ASSERT_EQUAL(0, part);
+    LOK_ASSERT_EQUAL(std::string("0"), part);
 
     socket->asyncShutdown();
     LOK_ASSERT_MESSAGE("Expected successful disconnection of the WebSocket",
@@ -1214,14 +1218,14 @@ void TileCacheTests::testTileInvalidatePartCalc()
         sendChar(socket2, ch, skNone, testname);
 
         const auto response1 = assertResponseString(socket1, "invalidatetiles:", testname1);
-        int value1;
+        std::string value1;
         getPartFromInvalidateMessage(response1, value1);
-        LOK_ASSERT_EQUAL(2, value1);
+        LOK_ASSERT_EQUAL(std::string("2"), value1);
 
         const auto response2 = assertResponseString(socket2, "invalidatetiles:", testname2);
-        int value2;
+        std::string value2;
         getPartFromInvalidateMessage(response2, value2);
-        LOK_ASSERT_EQUAL(5, value2);
+        LOK_ASSERT_EQUAL(std::string("5"), value2);
     }
 
     socket1->asyncShutdown();
@@ -1270,14 +1274,14 @@ void TileCacheTests::testTileInvalidatePartImpress()
         sendChar(socket2, ch, skNone, testname);
 
         const auto response1 = assertResponseString(socket1, "invalidatetiles:", testname1);
-        int value1;
+        std::string value1;
         getPartFromInvalidateMessage(response1, value1);
-        LOK_ASSERT_EQUAL(NumUtil::stoi(partIds[2]), value1);
+        LOK_ASSERT_EQUAL(partIds[2], value1);
 
         const auto response2 = assertResponseString(socket2, "invalidatetiles:", testname2);
-        int value2;
+        std::string value2;
         getPartFromInvalidateMessage(response2, value2);
-        LOK_ASSERT_EQUAL(NumUtil::stoi(partIds[5]), value2);
+        LOK_ASSERT_EQUAL(partIds[5], value2);
     }
 
     socket1->asyncShutdown();
@@ -1292,7 +1296,7 @@ void TileCacheTests::testTileInvalidatePartImpress()
 void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
                                 const std::string& docType, const std::string& testname)
 {
-    int currentPart = -1;
+    std::string currentPart;
     int totalParts = 0;
     int docHeight = 0;
     int docWidth = 0;
@@ -1309,7 +1313,7 @@ void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
 
         LOK_ASSERT_EQUAL(docType, text);
         LOK_ASSERT_EQUAL(10, totalParts);
-        LOK_ASSERT(currentPart > -1);
+        LOK_ASSERT(!currentPart.empty());
         LOK_ASSERT(docWidth > 0);
         LOK_ASSERT(docHeight > 0);
     }
@@ -1341,7 +1345,7 @@ void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
     for (int it : parts)
     {
         const std::string target = partName(it);
-        if (std::to_string(currentPart) != target)
+        if (currentPart != target)
         {
             // change part
             sendTextFrame(socket, "setclientpart part=" + target, testname);
@@ -1350,7 +1354,7 @@ void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
             // issue a new tile request as a response, which a real client would do).
             assertResponseString(socket, "setpart:", testname);
 
-            requestTiles(socket, docType, NumUtil::stoi(target), docWidth, docHeight, testname);
+            requestTiles(socket, docType, target, docWidth, docHeight, testname);
 
             if (++requests >= 3)
             {
@@ -1360,12 +1364,12 @@ void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
             }
         }
 
-        currentPart = NumUtil::stoi(target);
+        currentPart = target;
     }
 }
 
 void TileCacheTests::requestTiles(std::shared_ptr<http::WebSocketSession>& socket,
-                                  const std::string&, const int part, const int docWidth,
+                                  const std::string&, const std::string& part, const int docWidth,
                                   const int docHeight, const std::string& testname)
 {
     // twips
@@ -1419,7 +1423,7 @@ void TileCacheTests::requestTiles(std::shared_ptr<http::WebSocketSession>& socke
             StringVector tokens(StringVector::tokenize(tile, ' '));
             LOK_ASSERT_EQUAL_STR("tile:", tokens[0]);
             LOK_ASSERT_EQUAL(1000, NumUtil::stoi(tokens[1].substr(std::string_view("nviewid=").size())));
-            LOK_ASSERT_EQUAL(part, NumUtil::stoi(tokens[2].substr(std::string_view("part=").size())));
+            LOK_ASSERT_EQUAL(part, tokens[2].substr(std::string_view("part=").size()));
             LOK_ASSERT_EQUAL(pixTileSize,
                              NumUtil::stoi(tokens[3].substr(std::string_view("width=").size())));
             LOK_ASSERT_EQUAL(pixTileSize,

@@ -1107,11 +1107,11 @@ void Document::renderTiles(TileCombined &tileCombined)
     if (tileCombined.getCanonicalViewId() != CanonicalViewId::None)
         _loKitDocument->setView(session->getViewId());
 
-    // In a presentation or drawing document a tile's part is the page's stable
-    // unique id, and the document resolves it to the index the page holds when
-    // it paints. The part number of a gone page paints nothing, so there is
-    // nothing to render or send.
-    if (_loKitDocument->getPartIndex(tileCombined.getPart(), tileCombined.getEditMode()) < 0)
+    // In a presentation or drawing document a tile's part is the page's GUID,
+    // and the document resolves it to the index the page holds when it paints.
+    // The identifier of a gone page paints nothing, so there is nothing to
+    // render or send.
+    if (_loKitDocument->getPartIndex(tileCombined.getPart().c_str(), tileCombined.getEditMode()) < 0)
     {
         LOG_DBG("Skipping the render of the gone part " << tileCombined.getPart());
         return;

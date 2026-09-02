@@ -195,7 +195,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 
 		this._parts = 1;
 		if (!this._shouldIgnoreServerPageSync()) {
-			this._currentPage = statusJSON.selectedpart;
+			this._currentPage = parseInt(statusJSON.selectedpart);
 		}
 		this._pages = statusJSON.partscount;
 		app.file.writer.pageRectangleList = statusJSON.pagerectangles.slice(); // Copy the array.

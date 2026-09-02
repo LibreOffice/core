@@ -424,10 +424,10 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	_onSetPartMsg: function (textMsg) {
-		// The server names the slide by its part number. Find the index of
-		// the slide carrying that part. A part this view does not know yet
+		// The server names the slide by its part identifier. Find the index
+		// of the slide carrying that part. A part this view does not know yet
 		// selects nothing. The status that follows carries the selection.
-		const part = parseInt(textMsg.match(/\d+/g)[0]);
+		const part = app.socket.parseServerCmd(textMsg).part || '';
 		const partIndex = this.getIndexFromPart(part);
 		if (partIndex >= 0 && partIndex !== this._selectedPart) {
 			this._map.deselectAll(); // Deselect all first. This is a single selection.
@@ -443,18 +443,19 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		});
 	},
 
-	// The part number of a presentation or drawing page is the page's stable
-	// unique id, carried by each part list entry, so the tile keys survive
-	// when slides are moved, inserted or deleted.
+	// The part identifier of a presentation or drawing page is the page's
+	// GUID, carried by each part list entry, so the tile keys survive when
+	// slides are moved, inserted or deleted. An empty string means no page
+	// holds the given index.
 	getPartFromIndex: function (index) {
 		const list = app.impress.partList;
 		if (list && index >= 0 && index < list.length)
 			return list[index].part;
-		return -1;
+		return '';
 	},
 
-	// The map from each slide's part number to the index the slide holds in
-	// the given part list. The part list is replaced as a whole when the
+	// The map from each slide's part identifier to the index the slide holds
+	// in the given part list. The part list is replaced as a whole when the
 	// parts change, so the map stays valid as long as the list it was built
 	// from is the current one, and is rebuilt when another list arrives.
 	_slideIndexByPart: function (list) {
@@ -547,10 +548,14 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 				app.activeDocument.setActiveViewID(this._viewId);
 				app.console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
 				if (app.socket._reconnecting) {
-					app.socket.sendMessage('setclientpart part=' + this.getSelectedPart());
+					// Before the first status arrives there is no part list, so
+					// there is no identifier to restore the selection with.
+					const selectedPart = this.getSelectedPart();
+					if (selectedPart)
+						app.socket.sendMessage('setclientpart part=' + selectedPart);
 				} else {
-					// The status names the selected slide by its part number.
-					// Find the index of the slide carrying that part. The
+					// The status names the selected slide by its part
+					// identifier. Find the index of the slide carrying it. The
 					// part info of this status is the authority. A partstatus
 					// carries no part info, so fall back to the current list.
 					const selectedIndex = this.getIndexFromPart(statusJSON.selectedpart, statusJSON.parts);

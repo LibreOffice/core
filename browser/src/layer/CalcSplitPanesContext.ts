@@ -16,11 +16,9 @@ namespace cool {
 
 export class CalcSplitPanesContext extends SplitPanesContext {
 
-	private _part: number;
 	private _splitCell: Point;
 
 	protected _setDefaults(): void {
-		this._part = this._docLayer.getSelectedPart() as number;
 		this._splitPos = new Point(0, 0);
 		this._splitCell = new Point(0, 0);
 	}

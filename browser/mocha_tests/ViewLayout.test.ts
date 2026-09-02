@@ -100,7 +100,7 @@ describe('ViewLayout', function () {
 					_sendClientZoom: function () {},
 					// A text document has a single part, part 0.
 					getSelectedPart: function () {
-						return 0;
+						return '0';
 					},
 					// applyZoom calls this to recompute app.twipsToPixels for the new
 					// zoom. The tests pin twipsToPixels to a fixed scale (see above),

@@ -99,7 +99,7 @@ class RenderManager {
 	}
 
 	static overlapInvalidatedRectangleWithView(
-		part: number,
+		part: PartNumber,
 		mode: number,
 		wireId: number,
 		invalidatedRectangle: cool.SimpleRectangle,

@@ -148,7 +148,7 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.showSelectedCoordinate = true; // Writer.
 
 		if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing') {
-			this.sectionProperties.part = parseInt(this.sectionProperties.data.part);
+			this.sectionProperties.part = this.sectionProperties.data.part;
 			this.sectionProperties.partIndex = app.impress.getIndexFromPart(this.sectionProperties.part);
 		}
 

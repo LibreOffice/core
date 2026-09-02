@@ -339,7 +339,8 @@ void HTTPWSTest::testViewInfoMsg()
         = connectLOKit(_socketPoll, _uri, docURL, testname + "1 ");
 
     std::string response;
-    int part, parts, width, height;
+    std::string part;
+    int parts, width, height;
     int viewid[2] = { 0 };
 
     try

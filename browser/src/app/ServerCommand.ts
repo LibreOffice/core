@@ -55,7 +55,9 @@ class ServerCommand {
 	public width?: number;
 	public height?: number;
 	public zoom?: number;
-	public part?: number;
+	// The part identifier: a page GUID for a presentation or drawing
+	// document, a decimal index for the other document types.
+	public part?: string;
 	public parts?: number;
 	public selectedPart?: number;
 	public partHasComments?: boolean;
@@ -90,7 +92,7 @@ class ServerCommand {
 			} else if (tokens[i].substring(0, 7) === 'height=') {
 				this.height = parseInt(tokens[i].substring(7));
 			} else if (tokens[i].substring(0, 5) === 'part=') {
-				this.part = parseInt(tokens[i].substring(5));
+				this.part = tokens[i].substring(5);
 			} else if (tokens[i].substring(0, 6) === 'parts=') {
 				this.parts = parseInt(tokens[i].substring(6));
 			} else if (tokens[i].substring(0, 5) === 'mode=') {

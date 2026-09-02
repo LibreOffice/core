@@ -148,13 +148,29 @@ static void dumpTile(const char *pNameStem,
     ofs.close();
 }
 
+/// Select the part at the given index in document order. The boundary names
+/// parts by their identifiers, so the index is resolved to one first.
+static void setPartByIndex(COKitDocument* pDocument, int nPart)
+{
+    const std::string aPartId = pDocument->getPartId(nPart, pDocument->getEditMode());
+    if (!aPartId.empty())
+        pDocument->setPart(aPartId.c_str());
+}
+
+/// The index the document's current part holds in document order.
+static int getPartIndex(COKitDocument* pDocument)
+{
+    const std::string aPartId = pDocument->getPart();
+    return std::max(pDocument->getPartIndex(aPartId.c_str(), pDocument->getEditMode()), 0);
+}
+
 static void testTile( COKitDocument *pDocument, int max_parts,
                       int max_tiles, bool dump )
 {
     const COKitTileMode mode = pDocument->getTileMode();
 
     aTimes.emplace_back("getparts");
-    const int nOriginalPart = (pDocument->getDocumentType() == COKitDocumentType::TEXT ? 1 : pDocument->getPart());
+    const int nOriginalPart = (pDocument->getDocumentType() == COKitDocumentType::TEXT ? 1 : getPartIndex(pDocument));
     // Writer really has 1 part (the full doc).
     const int nTotalParts = (pDocument->getDocumentType() == COKitDocumentType::TEXT ? 1 : pDocument->getParts());
     const int nParts = (max_parts < 0 ? nTotalParts : std::min(max_parts, nTotalParts));
@@ -167,7 +183,7 @@ static void testTile( COKitDocument *pDocument, int max_parts,
     {
         const int nPart = (nOriginalPart + n) % nTotalParts;
         const std::string aName = pDocument->getPartName(nPart);
-        pDocument->setPart(nPart);
+        setPartByIndex(pDocument, nPart);
         pDocument->getDocumentSize(&nWidth, &nHeight);
         fprintf (stderr, "  '%s' -> %ld, %ld\n", aName.c_str(), nWidth, nHeight);
     }
@@ -191,7 +207,7 @@ static void testTile( COKitDocument *pDocument, int max_parts,
     {
         const int nPart = (nOriginalPart + n) % nTotalParts;
         const std::string aName = pDocument->getPartName(nPart);
-        pDocument->setPart(nPart);
+        setPartByIndex(pDocument, nPart);
         pDocument->getDocumentSize(&nWidth, &nHeight);
         fprintf (stderr, "render '%s' -> %ld, %ld\n", aName.c_str(), nWidth, nHeight);
 

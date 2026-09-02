@@ -118,14 +118,16 @@ UnitBase::TestResult UnitKitChildSession::testRedlineRenderModeViewId()
     // Get viewId for view 1.
     helpers::sendTextFrame(socket, "status", testname);
     std::string statusResponse1 = helpers::getResponseString(socket, "status:", testname);
-    int part1 = -1, parts1 = 0, width1 = 0, height1 = 0, viewId1 = -1;
+    std::string part1;
+    int parts1 = 0, width1 = 0, height1 = 0, viewId1 = -1;
     helpers::parseDocSize(statusResponse1.substr(7), "text", part1, parts1, width1, height1,
                           viewId1, testname);
 
     // Get viewId for view 2.
     helpers::sendTextFrame(socket2, "status", testname);
     std::string statusResponse2 = helpers::getResponseString(socket2, "status:", testname);
-    int part2 = -1, parts2 = 0, width2 = 0, height2 = 0, viewId2 = -1;
+    std::string part2;
+    int parts2 = 0, width2 = 0, height2 = 0, viewId2 = -1;
     helpers::parseDocSize(statusResponse2.substr(7), "text", part2, parts2, width2, height2,
                           viewId2, testname);
 

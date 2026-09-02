@@ -129,7 +129,7 @@ namespace RenderTiles
         // A preview request is always a single tile, never combined with others.
         const bool isPreview = tiles.size() == 1 && tiles.front().isPreview();
         document->paintPartTile(pixmap.data(),
-                                tileCombined.getPart(),
+                                tileCombined.getPart().c_str(),
                                 tileCombined.getEditMode(),
                                 pixmapWidth, pixmapHeight,
                                 renderArea.getLeft(), renderArea.getTop(),

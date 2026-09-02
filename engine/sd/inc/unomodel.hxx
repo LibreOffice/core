@@ -401,8 +401,10 @@ public:
     virtual void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) override;
     /// @see vcl::ITiledRenderable::getPartInfo().
     virtual std::string getPartInfo(int nPart) override;
-    /// @see vcl::ITiledRenderable::getPartUniqueId().
-    virtual sal_uInt64 getPartUniqueId(int nPart, int nMode) override;
+    /// @see vcl::ITiledRenderable::getPartId().
+    virtual OString getPartId(int nPart, int nMode) override;
+    /// @see vcl::ITiledRenderable::getPartIndex().
+    virtual int getPartIndex(std::string_view rPartId, int nMode) override;
     /// @see vcl::ITiledRenderable::isDisposed().
     virtual bool isDisposed() const override
     {

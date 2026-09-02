@@ -410,7 +410,7 @@ Blob TileCache::lookupCachedStream(StreamType type, const std::string& name)
     return Blob();
 }
 
-bool TileCache::invalidateTiles(int part, int mode, int x, int y, int width, int height, CanonicalViewId canonicalViewId)
+bool TileCache::invalidateTiles(const std::string& part, int mode, int x, int y, int width, int height, CanonicalViewId canonicalViewId)
 {
     LOG_TRC("Removing invalidated tiles: part: " << part << ", mode: " << mode <<
             ", x: " << x << ", y: " << y <<
@@ -452,7 +452,8 @@ bool TileCache::invalidateTiles(int part, int mode, int x, int y, int width, int
 
 bool TileCache::invalidateTiles(const std::string& tiles, CanonicalViewId canonicalViewId)
 {
-    int part = 0, mode = 0;
+    std::string part("0");
+    int mode = 0;
     TileWireId wireId = 0;
     const Util::Rectangle invalidateRect = TileCache::parseInvalidateMsg(tiles, part, mode, wireId);
 
@@ -460,46 +461,44 @@ bool TileCache::invalidateTiles(const std::string& tiles, CanonicalViewId canoni
                     invalidateRect.getWidth(), invalidateRect.getHeight(), canonicalViewId);
 }
 
-Util::Rectangle TileCache::parseInvalidateMsg(const std::string& tiles, int &part, int &mode, TileWireId &wireId)
+Util::Rectangle TileCache::parseInvalidateMsg(const std::string& tiles, std::string &part, int &mode, TileWireId &wireId)
 {
     StringVector tokens = StringVector::tokenize(tiles);
 
     assert(!tokens.empty() && tokens.equals(0, "invalidatetiles:"));
 
     mode = 0;
-    part = 0;
+    part = "0";
     wireId = 0;
     if (tokens.size() == 2 && tokens.equals(1, "EMPTY"))
     {
-        part = -1;
+        part = "-1";
         return Util::Rectangle(0, 0, INT_MAX, INT_MAX);
     }
     else if (tokens.size() == 3 && tokens.equals(1, "EMPTY,"))
     {
-        part = -1;
+        part = "-1";
         if (!tokens.getUInt32(2, "wid", wireId))
             assert(false && "missing wid");
         return Util::Rectangle(0, 0, INT_MAX, INT_MAX);
     }
     else if (tokens.size() == 4 && tokens.equals(1, "EMPTY,"))
     {
-        if (stringToInteger(tokens[2], part))
-        {
-            if (!tokens.getUInt32(3, "wid", wireId))
-                assert(false && "missing wid");
-            return Util::Rectangle(0, 0, INT_MAX, INT_MAX);
-        }
+        // The part token may end with the comma that separated it from a mode.
+        part = std::string(Util::rtrim(tokens[2], ','));
+        if (!tokens.getUInt32(3, "wid", wireId))
+            assert(false && "missing wid");
+        return Util::Rectangle(0, 0, INT_MAX, INT_MAX);
     }
     else if (tokens.size() == 5 && tokens.equals(1, "EMPTY,"))
     {
-        if (stringToInteger(tokens[2], part))
+        // The part token ends with the comma separating it from the mode.
+        part = std::string(Util::rtrim(tokens[2], ','));
+        if (stringToInteger(tokens[3], mode))
         {
-            if (stringToInteger(tokens[3], mode))
-            {
-                if (!tokens.getUInt32(4, "wid", wireId))
-                    assert(false && "missing wid");
-                return Util::Rectangle(0, 0, INT_MAX, INT_MAX);
-            }
+            if (!tokens.getUInt32(4, "wid", wireId))
+                assert(false && "missing wid");
+            return Util::Rectangle(0, 0, INT_MAX, INT_MAX);
         }
     }
     else
@@ -509,7 +508,7 @@ Util::Rectangle TileCache::parseInvalidateMsg(const std::string& tiles, int &par
         int width = 0;
         int height = 0;
         if (tokens.size() == 7 &&
-            getTokenInteger(tokens[1], "part", part) &&
+            getTokenString(tokens[1], "part", part) &&
             getNonNegTokenInteger(tokens[2], "x", x) &&
             getNonNegTokenInteger(tokens[3], "y", y) &&
             getNonNegTokenInteger(tokens[4], "width", width) &&
@@ -519,7 +518,7 @@ Util::Rectangle TileCache::parseInvalidateMsg(const std::string& tiles, int &par
             return Util::Rectangle(x, y, width, height);
         }
         else if (tokens.size() == 8 &&
-            getTokenInteger(tokens[1], "part", part) &&
+            getTokenString(tokens[1], "part", part) &&
             getTokenInteger(tokens[2], "mode", mode) &&
             getNonNegTokenInteger(tokens[3], "x", x) &&
             getNonNegTokenInteger(tokens[4], "y", y) &&
@@ -533,7 +532,7 @@ Util::Rectangle TileCache::parseInvalidateMsg(const std::string& tiles, int &par
 
     LOG_ERR("Unexpected invalidatetiles request [" << tiles << "].");
     assert(false && "Unexpected invalidatetiles request");
-    part = -1;
+    part = "-1";
     return Util::Rectangle(0, 0, 0, 0);
 }
 
@@ -547,18 +546,9 @@ std::string TileCache::cacheFileName(const TileDesc& tile)
     return oss.str();
 }
 
-bool TileCache::parseCacheFileName(const std::string& fileName, int& part, int& mode, int& width, int& height,
-                                   int& tilePosX, int& tilePosY, int& tileWidth, int& tileHeight,
-                                   int& nviewid)
+bool TileCache::intersectsTile(const TileDesc &tileDesc, const std::string& part, int mode, int x, int y, int width, int height, CanonicalViewId canonicalViewId)
 {
-    return std::sscanf(fileName.c_str(), "%d_%d_%d_%dx%d.%d,%d.%dx%d.png", &nviewid, &part, &mode,
-                       &width, &height, &tilePosX, &tilePosY, &tileWidth, &tileHeight)
-           == 8;
-}
-
-bool TileCache::intersectsTile(const TileDesc &tileDesc, int part, int mode, int x, int y, int width, int height, CanonicalViewId canonicalViewId)
-{
-    if (part != -1 && tileDesc.getPart() != part)
+    if (part != "-1" && tileDesc.getPart() != part)
         return false;
 
     if (mode != tileDesc.getEditMode())

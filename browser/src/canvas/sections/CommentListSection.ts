@@ -2365,7 +2365,7 @@ export class CommentSection extends CanvasSectionObject {
 	// We will add their part's position to comment's variables.
 	// When we are saving their position, we will remove the additions before sending the information.
 	private adjustCommentFileBasedView (comment: any): void {
-		var index = app.impress.getIndexFromPart(parseInt(comment.part));
+		var index = app.impress.getIndexFromPart(comment.part);
 		const layout = app.activeDocument.activeLayout;
 		const fbLayout =
 			layout && layout.type === 'ViewLayoutFileBased'

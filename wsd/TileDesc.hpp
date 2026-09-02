@@ -81,10 +81,11 @@ inline std::ostream& operator<<(std::ostream& os, const CanonicalViewId e)
 class TileDesc final
 {
 public:
-    TileDesc(CanonicalViewId canonicalViewId, int part, int mode, int width, int height, int tilePosX, int tilePosY, int tileWidth,
-             int tileHeight, int ver, int imgSize, int id)
+    TileDesc(CanonicalViewId canonicalViewId, std::string part, int mode, int width, int height,
+             int tilePosX, int tilePosY, int tileWidth, int tileHeight, int ver, int imgSize,
+             int id)
         : _canonicalViewId(canonicalViewId)
-        , _part(part)
+        , _part(std::move(part))
         , _mode(mode)
         , _width(width)
         , _height(height)
@@ -99,7 +100,7 @@ public:
         , _wireId(0)
     {
         if (_canonicalViewId <= CanonicalViewId::Invalid ||
-            _part < 0 ||
+            !COOLProtocol::isValidPartId(_part) ||
             _mode < 0 ||
             _width <= 0 ||
             _height <= 0 ||
@@ -115,7 +116,7 @@ public:
 
     CanonicalViewId getCanonicalViewId() const { return _canonicalViewId; }
     void setCanonicalViewId(CanonicalViewId canonicalViewId) { _canonicalViewId = canonicalViewId; }
-    int getPart() const { return _part; }
+    const std::string& getPart() const { return _part; }
     int getEditMode() const { return _mode; }
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }
@@ -182,7 +183,7 @@ public:
         uint32_t a = to_underlying(_canonicalViewId) << 17;
         uint32_t b = _tilePosX << 7;
 
-        a ^= _part;
+        a ^= static_cast<uint32_t>(std::hash<std::string>{}(_part));
         b ^= _tilePosY;
         a ^= _mode << 30;
         b ^= _tileWidth << 20;
@@ -324,7 +325,7 @@ public:
     /// Deserialize a TileDesc from a tokenized string.
     static TileDesc parse(const StringVector& tokens)
     {
-        enum argenum { height, id, imgsize, mode, nviewid, part, tileheight, tileposx, tileposy, tilewidth, ver, width, maxEnum };
+        enum argenum { height, id, imgsize, mode, nviewid, tileheight, tileposx, tileposy, tilewidth, ver, width, maxEnum };
 
         struct TileDescParseResults
         {
@@ -336,7 +337,6 @@ public:
                 { STRINGIFY(imgsize), 0 },      // Optional
                 { STRINGIFY(mode), 0 },         // Optional
                 { STRINGIFY(nviewid), 0 },
-                { STRINGIFY(part), 0 },
                 { STRINGIFY(tileheight), 0 },
                 { STRINGIFY(tileposx), 0 },
                 { STRINGIFY(tileposy), 0 },
@@ -364,10 +364,11 @@ public:
             }
         };
 
-        // We don't expect undocumented fields and
-        // assume all values to be int.
+        // We don't expect undocumented fields. The part is the part identifier
+        // string; every other value is an int.
         TileDescParseResults pairs;
 
+        std::string part("0");
         TileWireId oldWireId = 0;
         TileWireId wireId = 0;
         for (std::size_t i = 0; i < tokens.size(); ++i)
@@ -375,6 +376,8 @@ public:
             if (tokens.getUInt32(i, "oldwid", oldWireId))
                 ;
             else if (tokens.getUInt32(i, "wid", wireId))
+                ;
+            else if (COOLProtocol::getTokenString(tokens[i], "part", part))
                 ;
             else
             {
@@ -385,7 +388,7 @@ public:
             }
         }
 
-        TileDesc result(CanonicalViewId(pairs[nviewid]), pairs[part], pairs[mode],
+        TileDesc result(CanonicalViewId(pairs[nviewid]), std::move(part), pairs[mode],
                         pairs[width], pairs[height],
                         pairs[tileposx], pairs[tileposy],
                         pairs[tilewidth], pairs[tileheight],
@@ -405,7 +408,9 @@ public:
 
 private:
     CanonicalViewId _canonicalViewId;
-    int _part;
+    /// The part identifier: a page GUID for a presentation or drawing document, a decimal
+    /// index for the other document types.
+    std::string _part;
     int _mode; ///< Used in Impress for EditMode::(Page|MasterPage), 0 = default
     int _width;
     int _height;
@@ -426,14 +431,14 @@ private:
 class TileCombined
 {
 private:
-    TileCombined(CanonicalViewId canonicalViewId, int part, int mode, int width, int height,
-                 const std::string& tilePositionsX, const std::string& tilePositionsY,
+    TileCombined(CanonicalViewId canonicalViewId, std::string part, int mode, int width,
+                 int height, const std::string& tilePositionsX, const std::string& tilePositionsY,
                  int tileWidth, int tileHeight, const std::string& vers,
                  const std::string& imgSizes,
                  const std::string& oldWireIds,
                  const std::string& wireIds) :
         _canonicalViewId(canonicalViewId),
-        _part(part),
+        _part(std::move(part)),
         _mode(mode),
         _width(width),
         _height(height),
@@ -444,7 +449,7 @@ private:
         _isCombined(true),
         _hasImgSizes(false)
     {
-        if (_part < 0 ||
+        if (!COOLProtocol::isValidPartId(_part) ||
             _mode < 0 ||
             _width <= 0 ||
             _height <= 0 ||
@@ -452,7 +457,7 @@ private:
             _tileHeight <= 0)
         {
             throw BadArgumentException(
-                "Invalid tilecombine descriptor. Elements: " + std::to_string(_part) + ' ' +
+                "Invalid tilecombine descriptor. Elements: " + _part + ' ' +
                 std::to_string(_mode) + ' ' + std::to_string(_width) + ' ' +
                 std::to_string(_height) + ' ' + std::to_string(_tileWidth) + ' ' +
                 std::to_string(_tileHeight));
@@ -530,7 +535,6 @@ private:
 protected:
     TileCombined() :
         _canonicalViewId(CanonicalViewId::Invalid),
-        _part(-1),
         _mode(-1),
         _width(-1),
         _height(-1),
@@ -545,7 +549,7 @@ protected:
 
 public:
     CanonicalViewId getCanonicalViewId() const { return _canonicalViewId; }
-    int getPart() const { return _part; }
+    const std::string& getPart() const { return _part; }
     int getEditMode() const { return _mode; }
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }
@@ -658,7 +662,7 @@ public:
     /// Deserialize a TileDesc from a tokenized string.
     static TileCombined parse(const StringVector& tokens)
     {
-        enum argenum { height, mode, nviewid, part, tileheight, tilewidth, width, maxEnum };
+        enum argenum { height, mode, nviewid, tileheight, tilewidth, width, maxEnum };
 
         struct TileCombinedParseResults
         {
@@ -668,7 +672,6 @@ public:
                 { STRINGIFY(height), 0 },
                 { STRINGIFY(mode), 0 },
                 { STRINGIFY(nviewid), 0 },
-                { STRINGIFY(part), 0 },
                 { STRINGIFY(tileheight), 0 },
                 { STRINGIFY(tilewidth), 0 },
                 { STRINGIFY(width), 0 }
@@ -693,10 +696,11 @@ public:
             }
         };
 
-        // We don't expect undocumented fields and
-        // assume all values to be int.
+        // We don't expect undocumented fields. The part is the part identifier
+        // string; every other value is an int.
         TileCombinedParseResults pairs;
 
+        std::string partString("0");
         std::string tilePositionsX;
         std::string tilePositionsY;
         std::string imgSizes;
@@ -734,6 +738,10 @@ public:
                 {
                     wireIds = std::move(value);
                 }
+                else if (name == "part")
+                {
+                    partString = std::move(value);
+                }
                 else
                 {
                     int v = 0;
@@ -746,7 +754,7 @@ public:
         }
 
         return TileCombined(CanonicalViewId(pairs[nviewid]),
-                            pairs[part], pairs[mode],
+                            std::move(partString), pairs[mode],
                             pairs[width], pairs[height],
                             tilePositionsX, tilePositionsY,
                             pairs[tilewidth], pairs[tileheight],
@@ -854,7 +862,9 @@ protected:
     std::vector<TileDesc> _tiles;
     Util::Rectangle _aabbox;
     CanonicalViewId _canonicalViewId;
-    int _part;
+    /// The part identifier: a page GUID for a presentation or drawing document, a decimal
+    /// index for the other document types. Empty for a builder nothing was pushed into yet.
+    std::string _part;
     int _mode;
     int _width;
     int _height;
@@ -874,7 +884,7 @@ public:
     void pushRendered(const TileDesc &desc, TileWireId wireId, size_t imgSize)
     {
         // uninitialized
-        if (_part < 0 && _mode < 0 && _width <= 0)
+        if (_part.empty() && _mode < 0 && _width <= 0)
             initFrom(desc);
         else
             _tiles.push_back(desc);

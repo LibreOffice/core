@@ -830,15 +830,29 @@ setPart(KitDocumentView* pDocView, const std::string& rString)
     if (!priv->m_pDocument)
         return;
 
-    // The payload names the part by its part number, while the widget tracks
-    // and reports parts by their index in document order.
+    // The payload names the part by its part identifier, while the widget
+    // tracks and reports parts by their index in document order.
     {
         std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
         priv->m_nPartId = priv->m_pDocument->getPartIndex(
-            std::stoi(rString),
+            rString.c_str(),
             priv->m_pDocument->getEditMode());
     }
     g_signal_emit(pDocView, doc_view_signals[PART_CHANGED], 0, priv->m_nPartId);
+}
+
+/// The index the payload's part identifier addresses now in document order, or -1 when no
+/// part of the document carries that identifier.
+static int
+partIndexFromTree(KitDocumentView* pDocView, const boost::property_tree::ptree& rTree)
+{
+    KitDocumentViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+        return -1;
+
+    const std::string aPartId = rTree.get<std::string>("part");
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
+    return priv->m_pDocument->getPartIndex(aPartId.c_str(), priv->m_pDocument->getEditMode());
 }
 
 static void
@@ -1216,7 +1230,7 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
-        int nPart = aTree.get<int>("part");
+        const int nPart = partIndexFromTree(pDocView, aTree);
         const std::string rRectangle = aTree.get<std::string>("selection");
         if (rRectangle != "EMPTY")
             priv->m_aGraphicViewSelections[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
@@ -1300,7 +1314,7 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
-        int nPart = aTree.get<int>("part");
+        const int nPart = partIndexFromTree(pDocView, aTree);
         const std::string rRectangle = aTree.get<std::string>("rectangle");
         priv->m_aViewCursors[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
@@ -1312,7 +1326,7 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
-        int nPart = aTree.get<int>("part");
+        const int nPart = partIndexFromTree(pDocView, aTree);
         const std::string rSelection = aTree.get<std::string>("selection");
         priv->m_aTextViewSelectionRectangles[nViewId] = ViewRectangles(nPart, payloadToRectangles(pDocView, rSelection.c_str()));
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
@@ -1336,7 +1350,7 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
-        int nPart = aTree.get<int>("part");
+        const int nPart = partIndexFromTree(pDocView, aTree);
         const std::string rRectangle = aTree.get<std::string>("rectangle");
         if (rRectangle != "EMPTY")
             priv->m_aCellViewCursors[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
@@ -1355,7 +1369,7 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
-        int nPart = aTree.get<int>("part");
+        const int nPart = partIndexFromTree(pDocView, aTree);
         const std::string rRectangle = aTree.get<std::string>("rectangle");
         if (rRectangle != "EMPTY")
             priv->m_aViewLockRectangles[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
@@ -2407,15 +2421,12 @@ setPartInThread(gpointer data)
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
 
     // The widget names parts by their index in document order, while the
-    // document boundary names parts of a presentation or drawing document by
-    // their stable page unique ids.
-    const unsigned long long nPartNumber = priv->m_pDocument->getPartUniqueId(
+    // document boundary names parts by their part identifiers.
+    const std::string aPartId = priv->m_pDocument->getPartId(
         nPart,
         priv->m_pDocument->getEditMode());
-    if (nPartNumber != 0 && nPartNumber <= o3tl::make_unsigned(std::numeric_limits<int>::max()))
-        nPart = static_cast<int>(nPartNumber);
-
-    priv->m_pDocument->setPart(nPart );
+    if (!aPartId.empty())
+        priv->m_pDocument->setPart(aPartId.c_str());
     aGuard.unlock();
 
     kit_doc_view_reset_view(pDocView);
@@ -3761,10 +3772,11 @@ kit_doc_view_get_part (KitDocumentView* pDocView)
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
 
-    // The boundary reports the current part by its part number, while the
+    // The boundary reports the current part by its part identifier, while the
     // widget reports parts by their index in document order.
+    const std::string aPartId = priv->m_pDocument->getPart();
     return priv->m_pDocument->getPartIndex(
-        priv->m_pDocument->getPart(),
+        aPartId.c_str(),
         priv->m_pDocument->getEditMode());
 }
 

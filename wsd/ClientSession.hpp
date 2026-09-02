@@ -587,7 +587,7 @@ private:
     /// The part and the edit mode the visible area above was reported for. They are the values the
     /// client had selected when it last told us what it was looking at, so they equal the selected
     /// part and mode until either of those changes.
-    int _visibleAreaPart;
+    std::string _visibleAreaPart;
     int _visibleAreaMode;
 
     Poco::SharedPtr<Poco::JSON::Object> _browserSettingsJSON;
@@ -605,8 +605,10 @@ private:
     int _splitX;
     int _splitY;
 
-    /// Selected part of the document viewed by the client (no parts in Writer)
-    int _clientSelectedPart;
+    /// Selected part of the document viewed by the client, as its part identifier: a page
+    /// GUID for a presentation or drawing document, a decimal index for a spreadsheet.
+    /// Empty before any part is known (and always for Writer, which has no parts).
+    std::string _clientSelectedPart;
 
     /// Selected mode of the presentation viewed by the client (in Impress)
     int _clientSelectedMode;

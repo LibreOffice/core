@@ -546,8 +546,8 @@ void UnitWSD::defaultConfigure(Poco::Util::LayeredConfiguration& config)
     config.setBool("logging.file[@enable]", false);
 }
 
-void UnitWSD::lookupTile(int part, int mode, int width, int height, int tilePosX, int tilePosY,
-                         int tileWidth, int tileHeight,
+void UnitWSD::lookupTile(const std::string& part, int mode, int width, int height,
+                         int tilePosX, int tilePosY, int tileWidth, int tileHeight,
                          std::shared_ptr<TileData> &tile)
 {
     if (isUnitTesting())

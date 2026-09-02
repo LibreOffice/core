@@ -17,6 +17,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/vclptr.hxx>
 #include <map>
+#include <string_view>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <basegfx/range/b2drange.hxx>
 
@@ -366,16 +367,44 @@ public:
     }
 
     /*
-     * The stable identifier of one part: a nonzero integer assigned to the part
-     * for the whole document session, kept over part moves, insertions and
-     * deletions of other parts. nMode selects the part list the index addresses:
-     * 0 for the standard parts, 1 for the master pages, 2 for the notes pages,
-     * 3 for the notes master pages, 4 for the handout master page.
-     * Zero when there is no such part or the document has no part identifiers.
+     * The stable identifier of the part at the given index. For a presentation or
+     * drawing document that is the page's GUID as a braced string like
+     * {1BE1A269-4A03-4202-ACFE-0204C5E9BE1F}, kept over part moves, insertions and
+     * deletions of other parts, and persistent across sessions when the file format
+     * stores it; nMode selects the page list the index addresses: 0 for the standard
+     * pages, 1 for the master pages, 2 for the notes pages, 3 for the notes master
+     * pages, 4 for the handout master page. For the other document types the
+     * identifier is the index itself in decimal form. Empty when there is no such
+     * part.
      */
-    virtual sal_uInt64 getPartUniqueId(int /*nPart*/, int /*nMode*/)
+    virtual OString getPartId(int nPart, int /*nMode*/)
     {
-        return 0;
+        if (nPart < 0)
+            return OString();
+
+        return OString::number(nPart);
+    }
+
+    /*
+     * The index the part with the given identifier holds now in the part list nMode
+     * selects, or -1 when no part carries that identifier. For a document whose part
+     * identifiers are decimal indexes the identifier converts back to the index it
+     * spells.
+     */
+    virtual int getPartIndex(std::string_view rPartId, int /*nMode*/)
+    {
+        // Nine digits keep the converted value inside the int range.
+        if (rPartId.empty() || rPartId.size() > 9)
+            return -1;
+
+        int nIndex = 0;
+        for (const char c : rPartId)
+        {
+            if (c < '0' || c > '9')
+                return -1;
+            nIndex = nIndex * 10 + (c - '0');
+        }
+        return nIndex;
     }
 
     /**

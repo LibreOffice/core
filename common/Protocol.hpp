@@ -193,6 +193,44 @@ namespace COOLProtocol
         return getTokenInteger(token, name, value) && value >= 0;
     }
 
+    /// Whether the string is a well-formed part identifier: a decimal part index, or a page
+    /// GUID in braced form like {1BE1A269-4A03-4202-ACFE-0204C5E9BE1F}.
+    inline bool isValidPartId(const std::string_view part)
+    {
+        if (part.empty())
+            return false;
+
+        if (part[0] != '{')
+        {
+            // A decimal part index.
+            for (const char c : part)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+            return true;
+        }
+
+        // A braced GUID: 32 hex digits in groups of 8, 4, 4, 4 and 12, separated by dashes.
+        constexpr std::size_t guidLength = 38;
+        if (part.size() != guidLength || part[guidLength - 1] != '}')
+            return false;
+
+        for (std::size_t i = 1; i < guidLength - 1; ++i)
+        {
+            const char c = part[i];
+            if (i == 9 || i == 14 || i == 19 || i == 24)
+            {
+                if (c != '-')
+                    return false;
+            }
+            else if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+                return false;
+        }
+
+        return true;
+    }
+
     inline bool getTokenString(const StringVector& tokens,
                                const std::string_view name,
                                std::string& value)

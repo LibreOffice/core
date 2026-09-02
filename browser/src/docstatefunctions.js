@@ -483,7 +483,7 @@ app.impress.getIndexFromPart = function (part) {
 			if (app.impress.partList[i].part === part) return i;
 		}
 
-		app.console.warn('No part with number (getIndexFromPart): ' + part);
+		app.console.warn('No part with identifier (getIndexFromPart): ' + part);
 
 		return 0;
 	} else return 0;

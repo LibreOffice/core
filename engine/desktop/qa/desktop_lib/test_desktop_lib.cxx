@@ -2025,6 +2025,7 @@ void DesktopKitTest::testBinaryCallback()
     const tools::Rectangle rect1(Point(10,15),Size(20,25));
     // -1 means all parts, so the invalidation carries the part it was given.
     const int nAllParts = -1;
+    const OString aAllParts("-1"_ostr);
     const std::string rect1String(std::string(rect1.toString()) + ", -1, 0");
     // Verify that using queue() and viewInvalidateTilesCallback() has the same result.
     {
@@ -2045,7 +2046,7 @@ void DesktopKitTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->tilePainted(nAllParts, /*nMode=*/0, rect1);
+        handler->tilePainted(aAllParts, /*nMode=*/0, rect1);
         handler->viewInvalidateTilesCallback(&rect1, nAllParts, 0);
 
         Scheduler::ProcessEventsToIdle();
@@ -2060,7 +2061,7 @@ void DesktopKitTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->tilePainted(nAllParts, /*nMode=*/0, rect1);
+        handler->tilePainted(aAllParts, /*nMode=*/0, rect1);
         handler->viewInvalidateTilesCallback(nullptr, nAllParts, 0);
 
         Scheduler::ProcessEventsToIdle();
@@ -2101,7 +2102,7 @@ void DesktopKitTest::testOmitInvalidate()
         pHandler->setViewId(0);
 
         // When emitting an invalidation outside the painted area:
-        pHandler->tilePainted(/*nPart=*/0, /*nMode=*/0, aRectangle);
+        pHandler->tilePainted(/*rPart=*/"0"_ostr, /*nMode=*/0, aRectangle);
         tools::Rectangle aElsewhere{Point(20, 20), Size(10, 10)};
         pHandler->viewInvalidateTilesCallback(&aElsewhere, /*nPart=*/0, /*nMode=*/0);
 
@@ -2117,7 +2118,7 @@ void DesktopKitTest::testOmitInvalidate()
         pHandler->setViewId(0);
 
         // When emitting an invalidation partly outside the painted area:
-        pHandler->tilePainted(/*nPart=*/0, /*nMode=*/0, aRectangle);
+        pHandler->tilePainted(/*rPart=*/"0"_ostr, /*nMode=*/0, aRectangle);
         tools::Rectangle aLarger{Point(0, 0), Size(20, 10)};
         pHandler->viewInvalidateTilesCallback(&aLarger, /*nPart=*/0, /*nMode=*/0);
 
@@ -2146,7 +2147,7 @@ void DesktopKitTest::test2ViewsOmitInvalidate()
     // When painting a tile for a larger area, and then 2 invalidates: the first view gets a smaller
     // invalidate, the second view gets a larger invalidate:
     tools::Rectangle aPaint{Point(0, 0), Size(20, 10)};
-    pDocument->updateViewsForPaintedTile(/*nOrigViewId=*/0, /*nPart=*/0, /*nMode=*/0, aPaint);
+    pDocument->updateViewsForPaintedTile(/*nOrigViewId=*/0, /*rPart=*/"0"_ostr, /*nMode=*/0, aPaint);
     tools::Rectangle aSmaller{Point(0, 0), Size(10, 10)};
     pHandler1->viewInvalidateTilesCallback(&aSmaller, /*nPart=*/0, /*nMode=*/0);
     tools::Rectangle aLarger{Point(0, 0), Size(20, 10)};
@@ -2502,10 +2503,9 @@ void DesktopKitTest::testPaintPartTile()
 //    pDocument->registerCallback(&ViewCallback::callback, &aView2);
 
     // Go to the second slide in the second view. The boundary names a slide by
-    // its part number, the page's stable unique id.
-    const int nSecondSlide
-        = static_cast<int>(pDocument->getPartUniqueId(1, 0));
-    pDocument->setPart(nSecondSlide);
+    // its part identifier, the page's GUID.
+    const std::string aSecondSlide = pDocument->getPartId(1, 0);
+    pDocument->setPart(aSecondSlide.c_str());
 
     // Switch back to the first view and start typing.
     pDocument->setView(nView1);
@@ -2517,7 +2517,7 @@ void DesktopKitTest::testPaintPartTile()
 
     // Call paintPartTile() to paint the second part (in whichever view it finds suitable for this).
     unsigned char pPixels[256 * 256 * 4];
-    pDocument->paintPartTile(pPixels, nSecondSlide, 0, 256, 256, 0, 0, 256, 256);
+    pDocument->paintPartTile(pPixels, aSecondSlide.c_str(), 0, 256, 256, 0, 0, 256, 256);
 
     // Type again.
     Scheduler::ProcessEventsToIdle();
@@ -2567,7 +2567,7 @@ void DesktopKitTest::testCreateViewOmitInvalidate()
     pDocument->initializeForRendering(nullptr);
     ViewCallback aView2(pDocument);
     pDocument->setView(nView1);
-    pDocument->setPart(1);
+    pDocument->setPart("1");
     Scheduler::ProcessEventsToIdle();
     aView1.m_bTilesInvalidated = false;
     aView2.m_bTilesInvalidated = false;
@@ -2592,8 +2592,8 @@ void DesktopKitTest::testPaintPartTileHidesGridOnOtherPart()
     COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
     pDocument->initializeForRendering("{}");
 
-    // The boundary names a slide by its part number, the page's stable unique id.
-    const int nSecondSlide = static_cast<int>(pDocument->getPartUniqueId(1, 0));
+    // The boundary names a slide by its part identifier, the page's GUID.
+    const std::string aSecondSlide = pDocument->getPartId(1, 0);
 
     constexpr int nCanvasWidth = 256;
     constexpr int nCanvasHeight = 256;
@@ -2605,13 +2605,13 @@ void DesktopKitTest::testPaintPartTileHidesGridOnOtherPart()
     // has to temporarily borrow the only view to paint a page it is not
     // editing. This is a preview request, the way the slide panel asks for
     // a thumbnail of a slide other than the one being edited.
-    pDocument->paintPartTile(aWithoutGrid.data(), nSecondSlide, 0, nCanvasWidth, nCanvasHeight, 0,
-                              0, 3840, 3840, /*bIsPreview=*/true);
+    pDocument->paintPartTile(aWithoutGrid.data(), aSecondSlide.c_str(), 0, nCanvasWidth,
+                              nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/true);
 
     // Turn the grid on, as if the user enabled it while editing the first slide.
     dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
-    pDocument->paintPartTile(aWithGridOnEditedPart.data(), nSecondSlide, 0, nCanvasWidth,
+    pDocument->paintPartTile(aWithGridOnEditedPart.data(), aSecondSlide.c_str(), 0, nCanvasWidth,
                               nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/true);
 
     // The grid is an editing aid for the page being edited, not part of a
@@ -2626,7 +2626,7 @@ void DesktopKitTest::testPaintPartTileHidesGridOnActivePartPreview()
     COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
     pDocument->initializeForRendering("{}");
 
-    const int nFirstSlide = static_cast<int>(pDocument->getPartUniqueId(0, 0));
+    const std::string aFirstSlide = pDocument->getPartId(0, 0);
 
     constexpr int nCanvasWidth = 256;
     constexpr int nCanvasHeight = 256;
@@ -2636,21 +2636,21 @@ void DesktopKitTest::testPaintPartTileHidesGridOnActivePartPreview()
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPreviewWithGrid;
 
     // Baseline: grid off, a tile of the (only) active slide.
-    pDocument->paintPartTile(aWithoutGrid.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0,
-                              0, 3840, 3840);
+    pDocument->paintPartTile(aWithoutGrid.data(), aFirstSlide.c_str(), 0, nCanvasWidth,
+                              nCanvasHeight, 0, 0, 3840, 3840);
 
     dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // The editing viewport's own tile of the active slide still shows the
     // grid the user turned on: this is not a preview.
-    pDocument->paintPartTile(aViewportWithGrid.data(), nFirstSlide, 0, nCanvasWidth,
+    pDocument->paintPartTile(aViewportWithGrid.data(), aFirstSlide.c_str(), 0, nCanvasWidth,
                               nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/false);
     CPPUNIT_ASSERT(!(aWithoutGrid == aViewportWithGrid));
 
     // A preview of that same active slide must not carry the grid along,
     // even though the tile is otherwise identical to the viewport's own.
-    pDocument->paintPartTile(aPreviewWithGrid.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight,
-                              0, 0, 3840, 3840, /*bIsPreview=*/true);
+    pDocument->paintPartTile(aPreviewWithGrid.data(), aFirstSlide.c_str(), 0, nCanvasWidth,
+                              nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/true);
     CPPUNIT_ASSERT(operator==(aWithoutGrid, aPreviewWithGrid));
 }
 
@@ -2688,12 +2688,10 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     pDocument->initializeForRendering("{}");
 
     // Go to the second slide in the second view. The boundary names a slide by
-    // its part number, the page's stable unique id.
-    const int nFirstSlide
-        = static_cast<int>(pDocument->getPartUniqueId(0, 0));
-    const int nSecondSlide
-        = static_cast<int>(pDocument->getPartUniqueId(1, 0));
-    pDocument->setPart(nSecondSlide);
+    // its part identifier, the page's GUID.
+    const std::string aFirstSlide = pDocument->getPartId(0, 0);
+    const std::string aSecondSlide = pDocument->getPartId(1, 0);
+    pDocument->setPart(aSecondSlide.c_str());
 
     // Set to dark scheme
     {
@@ -2716,11 +2714,11 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
 
     // Both parts should be painted with dark scheme
-    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     Color aPixel(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
-    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
@@ -2728,11 +2726,11 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     pDocument->setView(nView1);
 
     // Both parts should be painted with light scheme
-    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 
-    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 }

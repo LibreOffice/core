@@ -60,12 +60,12 @@ void limitCursor(
         checkhandler,
     const std::string& testname)
 {
-    int docSheet = -1;
+    std::string docSheet;
     int docSheets = 0;
     int docHeight = 0;
     int docWidth = 0;
     int docViewId = -1;
-    int newSheet = -1;
+    std::string newSheet;
     int newSheets = 0;
     int newHeight = 0;
     int newWidth = 0;

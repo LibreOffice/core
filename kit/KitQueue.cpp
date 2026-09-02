@@ -19,6 +19,7 @@
 #include "KitQueue.hpp"
 
 #include <common/JsonUtil.hpp>
+#include <common/Util.hpp>
 
 #include <o3tl/safeint.hxx>
 
@@ -120,13 +121,14 @@ std::string extractViewId(const std::string& payload)
 }
 
 /// Extract rectangle from the invalidation callback payload
-bool extractRectangle(const StringVector& tokens, int& x, int& y, int& w, int& h, int& part, int& mode)
+bool extractRectangle(const StringVector& tokens, int& x, int& y, int& w, int& h,
+                      std::string& part, int& mode)
 {
     x = 0;
     y = 0;
     w = INT_MAX;
     h = INT_MAX;
-    part = 0;
+    part = "0";
     mode = 0;
 
     if (tokens.size() < 2)
@@ -134,7 +136,8 @@ bool extractRectangle(const StringVector& tokens, int& x, int& y, int& w, int& h
 
     if (tokens.equals(0, "EMPTY,"))
     {
-        part = std::atoi(tokens[1].c_str());
+        // The part token ends with the comma that separated it from the mode.
+        part = std::string(Util::rtrim(tokens[1], ','));
         if (tokens.size() > 2)
             mode = std::atoi(tokens[2].c_str());
         return true;
@@ -147,7 +150,7 @@ bool extractRectangle(const StringVector& tokens, int& x, int& y, int& w, int& h
     y = std::atoi(tokens[1].c_str());
     w = std::atoi(tokens[2].c_str());
     h = std::atoi(tokens[3].c_str());
-    part = std::atoi(tokens[4].c_str());
+    part = std::string(Util::rtrim(tokens[4], ','));
 
     if (tokens.size() == 6)
         mode = std::atoi(tokens[5].c_str());
@@ -177,7 +180,8 @@ bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const st
         {
             StringVector tokens = StringVector::tokenize(payload);
 
-            int msgX, msgY, msgW, msgH, msgPart, msgMode;
+            int msgX, msgY, msgW, msgH, msgMode;
+            std::string msgPart;
             if (!extractRectangle(tokens, msgX, msgY, msgW, msgH, msgPart, msgMode))
                 return false;
 
@@ -196,7 +200,8 @@ bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const st
                 }
                 StringVector queuedTokens = StringVector::tokenize(it._payload);
 
-                int queuedX, queuedY, queuedW, queuedH, queuedPart, queuedMode;
+                int queuedX, queuedY, queuedW, queuedH, queuedMode;
+                std::string queuedPart;
 
                 if (!extractRectangle(queuedTokens, queuedX, queuedY, queuedW, queuedH, queuedPart, queuedMode))
                 {

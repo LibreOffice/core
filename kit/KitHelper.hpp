@@ -146,7 +146,7 @@ namespace LOKitHelper
         std::unordered_map<std::string, std::string> resultInfo;
 
         const int partsCount = loKitDocument->getParts();
-        const int selectedPart = loKitDocument->getPart();
+        const std::string selectedPart = loKitDocument->getPart();
 
         long width, height;
         loKitDocument->getDocumentSize(&width, &height);
@@ -154,7 +154,7 @@ namespace LOKitHelper
 
         resultInfo["type"] = '"' + documentTypeToString(type) + '"';
         resultInfo["partscount"] = std::to_string(partsCount);
-        resultInfo["selectedpart"] = std::to_string(selectedPart);
+        resultInfo["selectedpart"] = '"' + selectedPart + '"';
         resultInfo["width"] = std::to_string(width);
         resultInfo["height"] = std::to_string(height);
         resultInfo["viewid"] = std::to_string(viewId);
@@ -198,7 +198,8 @@ namespace LOKitHelper
         std::string hasComments = "false";
 
         if (type == COKitDocumentType::SPREADSHEET)
-            fetchCalcSpecificData(loKitDocument, resultInfo, selectedPart);
+            // A spreadsheet's part identifier is the sheet index in decimal form.
+            fetchCalcSpecificData(loKitDocument, resultInfo, std::atoi(selectedPart.c_str()));
         else if (type == COKitDocumentType::TEXT)
             fetchWriterSpecificData(loKitDocument, resultInfo, mode, hasComments);
 

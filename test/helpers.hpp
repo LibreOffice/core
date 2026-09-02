@@ -827,7 +827,7 @@ SocketProcessor(const std::string& testname, const std::shared_ptr<http::WebSock
 
 inline
 void parseDocSize(const std::string& message, const std::string& type,
-                  int& part, int& parts, int& width, int& height, int& viewid,
+                  std::string& part, int& parts, int& width, int& height, int& viewid,
                   const std::string& testname)
 {
     Poco::JSON::Parser parser;
@@ -836,13 +836,13 @@ void parseDocSize(const std::string& message, const std::string& type,
 
     const std::string text = statusJsonObject->get("type").toString();
     parts = NumUtil::stoi(statusJsonObject->get("partscount").toString());
-    part = NumUtil::stoi(statusJsonObject->get("selectedpart").toString());
+    part = statusJsonObject->get("selectedpart").toString();
     width = NumUtil::stoi(statusJsonObject->get("width").toString());
     height = NumUtil::stoi(statusJsonObject->get("height").toString());
     viewid = NumUtil::stoi(statusJsonObject->get("viewid").toString());
     LOK_ASSERT_EQUAL(type, text);
     LOK_ASSERT(parts > 0);
-    LOK_ASSERT(part >= 0);
+    LOK_ASSERT(!part.empty());
     LOK_ASSERT(width > 0);
     LOK_ASSERT(height > 0);
     LOK_ASSERT(viewid >= 0);

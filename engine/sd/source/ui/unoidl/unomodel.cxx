@@ -5222,42 +5222,74 @@ std::string SdXImpressDocument::getPartInfo(int nPart)
     return jsonWriter.finishAndGetAsStdString();
 }
 
-sal_uInt64 SdXImpressDocument::getPartUniqueId(int nPart, int nMode)
+namespace
 {
-    if (!mpDoc || nPart < 0)
-        return 0;
+// The page at the given index of the page list a mode addresses, independently of any view's
+// current edit mode: 0 the standard slides, 1 the master pages, 2 the notes pages, 3 the
+// notes master pages, 4 the handout master page. Null past the end of that list and for an
+// unknown mode.
+SdPage* getPageByIndexAndMode(SdDrawDocument& rDoc, int nPart, int nMode)
+{
+    if (nPart < 0)
+        return nullptr;
 
-    // The mode selects the page list the index addresses, independently of any
-    // view's current edit mode: 0 the standard slides, 1 the master pages, 2 the
-    // notes pages, 3 the notes master pages, 4 the handout master page.
-    SdPage* pPage = nullptr;
     switch (nMode)
     {
         case 0:
-            if (nPart < mpDoc->GetSdPageCount(PageKind::Standard))
-                pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+            if (nPart < rDoc.GetSdPageCount(PageKind::Standard))
+                return rDoc.GetSdPage(nPart, PageKind::Standard);
             break;
         case 1:
-            if (nPart < mpDoc->GetMasterSdPageCount(PageKind::Standard))
-                pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Standard);
+            if (nPart < rDoc.GetMasterSdPageCount(PageKind::Standard))
+                return rDoc.GetMasterSdPage(nPart, PageKind::Standard);
             break;
         case 2:
-            if (nPart < mpDoc->GetSdPageCount(PageKind::Notes))
-                pPage = mpDoc->GetSdPage(nPart, PageKind::Notes);
+            if (nPart < rDoc.GetSdPageCount(PageKind::Notes))
+                return rDoc.GetSdPage(nPart, PageKind::Notes);
             break;
         case 3:
-            if (nPart < mpDoc->GetMasterSdPageCount(PageKind::Notes))
-                pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Notes);
+            if (nPart < rDoc.GetMasterSdPageCount(PageKind::Notes))
+                return rDoc.GetMasterSdPage(nPart, PageKind::Notes);
             break;
         case 4:
-            if (nPart < mpDoc->GetMasterSdPageCount(PageKind::Handout))
-                pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Handout);
+            if (nPart < rDoc.GetMasterSdPageCount(PageKind::Handout))
+                return rDoc.GetMasterSdPage(nPart, PageKind::Handout);
             break;
         default:
             break;
     }
 
-    return pPage ? pPage->GetUniqueID() : 0;
+    return nullptr;
+}
+}
+
+OString SdXImpressDocument::getPartId(int nPart, int nMode)
+{
+    if (!mpDoc)
+        return OString();
+
+    SdPage* pPage = getPageByIndexAndMode(*mpDoc, nPart, nMode);
+    return pPage ? pPage->GetGuid().getString() : OString();
+}
+
+int SdXImpressDocument::getPartIndex(std::string_view rPartId, int nMode)
+{
+    if (!mpDoc)
+        return -1;
+
+    // The identifier is the page's GUID; a value that is not one names no page.
+    const tools::Guid aGuid(rPartId);
+    if (aGuid.isEmpty())
+        return -1;
+
+    for (int nIndex = 0;; ++nIndex)
+    {
+        SdPage* pPage = getPageByIndexAndMode(*mpDoc, nIndex, nMode);
+        if (!pPage)
+            return -1;
+        if (pPage->GetGuid() == aGuid)
+            return nIndex;
+    }
 }
 
 void SdXImpressDocument::setPart( int nPart, bool bAllowChangeFocus )
@@ -5480,7 +5512,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             rJsonWriter.put("text", xText->getString());
-            rJsonWriter.put("part", pPage->GetUniqueID());
+            rJsonWriter.put("part", pPage->GetGuid().getString());
             geometry::RealPoint2D const aPoint = xAnnotation->getPosition();
             geometry::RealSize2D const aSize = xAnnotation->getSize();
             ::tools::Rectangle aRectangle(Point(aPoint.X * 100.0, aPoint.Y * 100.0), Size(aSize.Width * 100.0, aSize.Height * 100.0));
@@ -6073,7 +6105,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("hash", sSlideHash);
                 aJsonWriter.put("index", i);
                 aJsonWriter.put("hidden", true);
-                aJsonWriter.put("uniqueID", pPage->GetUniqueID());
+                aJsonWriter.put("part", pPage->GetGuid().getString());
             }
             else
             {
@@ -6081,7 +6113,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 std::string sSlideHash = GetInterfaceHash(cppu::getXWeak(pSlide));
                 aJsonWriter.put("hash", sSlideHash);
                 aJsonWriter.put("index", i);
-                aJsonWriter.put("uniqueID", pPage->GetUniqueID());
+                aJsonWriter.put("part", pPage->GetGuid().getString());
 
                 auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
                 aJsonWriter.put("name", aName);

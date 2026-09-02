@@ -467,7 +467,7 @@ class BitmapTileManager extends RenderManagerBase {
 			typeof msgObj.y !== 'number' ||
 			typeof msgObj.tileWidth !== 'number' ||
 			typeof msgObj.tileHeight !== 'number' ||
-			typeof msgObj.part !== 'number' ||
+			typeof msgObj.part !== 'string' ||
 			(typeof msgObj.mode !== 'number' && typeof msgObj.mode !== 'undefined')
 		) {
 			window.app.console.error(
@@ -948,7 +948,7 @@ class BitmapTileManager extends RenderManagerBase {
 		if (targetIndex < 0 || targetIndex >= this._docLayer._parts) return;
 
 		const targetPart = this._docLayer.getPartFromIndex(targetIndex);
-		if (targetPart < 0) return;
+		if (!targetPart) return;
 
 		// check existing timeout and clear it before the new one
 		if (this._partTilePreFetcher) clearTimeout(this._partTilePreFetcher);
@@ -1058,7 +1058,7 @@ class BitmapTileManager extends RenderManagerBase {
 		if (tileCombineQueue.length <= 0) return;
 
 		// Sort into buckets of consistent part & mode. The key is a string:
-		// part numbers can be slide unique ids, which are too wide to pack into
+		// part identifiers can be page GUIDs, which do not fit into
 		// the bits of a number next to the mode.
 		const partMode: any = {};
 		for (var i = 0; i < tileCombineQueue.length; ++i) {
@@ -1319,9 +1319,9 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	private removeIrrelevantsFromCoordsQueue(coordsQueue: Array<TileCoordData>) {
-		const selectedPart: number = app.map._docLayer.getSelectedPart();
+		const selectedPart = app.map._docLayer.getSelectedPart();
 
-		for (let i = coordsQueue.length - 1; i > 0; i--) {
+		for (let i = coordsQueue.length - 1; i >= 0; i--) {
 			if (
 				coordsQueue[i].part !== selectedPart ||
 				!app.activeDocument.isModeActive(coordsQueue[i].mode) ||
@@ -1585,7 +1585,7 @@ class BitmapTileManager extends RenderManagerBase {
 			),
 		);
 
-		if (this._preFetchPart < 0) return;
+		if (!this._preFetchPart) return;
 
 		var tilesToFetch = maxTilesToFetch; // total tile limit per call of preFetchTiles()
 		var doneAllPanes = true;
@@ -2325,7 +2325,7 @@ class BitmapTileManager extends RenderManagerBase {
 					Math.floor((localY2 - 1) / app.tile.size.pY) * app.tile.size.pY;
 
 				const part = app.map._docLayer.getPartFromIndex(i);
-				if (part < 0) continue;
+				if (!part) continue;
 
 				for (let j = startX; j <= endX; j += app.tile.size.pX) {
 					for (let k = startY; k <= endY; k += app.tile.size.pY) {

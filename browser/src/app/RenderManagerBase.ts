@@ -132,7 +132,7 @@ class RenderManagerBase {
 
 	// -- invalidation --
 	overlapInvalidatedRectangleWithView(
-		_part: number,
+		_part: PartNumber,
 		_mode: number,
 		_wireId: number,
 		_invalidatedRectangle: cool.SimpleRectangle,

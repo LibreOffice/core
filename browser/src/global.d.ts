@@ -163,7 +163,7 @@ interface AppInterface {
 		hasOverviewPage: boolean; // Whether the document has an Overview slide (part 0 when present).
 		savedViewMode: string | null; // 'normal' | 'notes' | 'master' | null
 		twipsCorrection: number;
-		getIndexFromPart(part: number): number;
+		getIndexFromPart(part: string): number;
 		isSlideHidden(partNo: number): boolean;
 		areAllSlidesHidden(): boolean;
 	};

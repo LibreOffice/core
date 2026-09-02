@@ -41,8 +41,8 @@ public:
     {
     }
 
-    virtual void lookupTile(int part, int mode, int width, int height, int tilePosX, int tilePosY,
-                            int tileWidth, int tileHeight,
+    virtual void lookupTile(const std::string& part, int mode, int width, int height,
+                            int tilePosX, int tilePosY, int tileWidth, int tileHeight,
                             std::shared_ptr<TileData> &tile)
     {
         // Call base to fire events.

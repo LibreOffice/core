@@ -352,9 +352,11 @@ enum class COKitCallbackType
     DOCUMENT_SIZE_CHANGED = 13,
 
     /**
-     * The current part number is changed.
+     * The current part is changed.
      *
-     * Payload is a single 0-based integer.
+     * Payload is the part identifier: the page's GUID as a braced string for
+     * a presentation or drawing document, the part's 0-based index in decimal
+     * form for other document types.
      */
     SET_PART = 14,
 
@@ -1845,14 +1847,15 @@ struct COKitDocument
      */
     virtual std::string getWriterPageRectangles() = 0;
 
-    /// Get the current part number of the document. For a presentation or
-    /// drawing document a part number is the page's stable unique identifier;
-    /// for other document types it is the part's index.
-    virtual int getPart() = 0;
+    /// Get the current part identifier of the document. For a presentation or
+    /// drawing document that is the page's GUID as a braced string like
+    /// {1BE1A269-4A03-4202-ACFE-0204C5E9BE1F}; for other document types it is
+    /// the part's index in decimal form.
+    virtual std::string getPart() = 0;
 
-    /// Set the current part of the document by its part number. The part
-    /// number of a page that is gone selects nothing.
-    virtual void setPart(int nPart) = 0;
+    /// Set the current part of the document by its part identifier. The
+    /// identifier of a page that is gone selects nothing.
+    virtual void setPart(const char* pPart) = 0;
 
     /// Get the current part's name.
     virtual std::string getPartName(int nPart) = 0;
@@ -2067,16 +2070,16 @@ struct COKitDocument
     /**
      * Renders a subset of the document's part to a pre-allocated buffer.
      *
-     * @param nPart the part number of the document of which the tile is painted. For a
-     * presentation or drawing document that is the page's stable unique identifier, resolved to
-     * the index the page holds when it paints; the part number of a page that is gone paints
-     * nothing.
+     * @param pPart the part identifier of the document of which the tile is painted. For a
+     * presentation or drawing document that is the page's GUID, resolved to the index the page
+     * holds when it paints; the identifier of a page that is gone paints nothing. For other
+     * document types it is the part's index in decimal form.
      * @param bIsPreview true when the tile is a small preview of the part rather than a tile of
      * the editing viewport, even when it is a preview of the part currently being edited. A
      * presentation or drawing document hides its editing grid for the duration of such a render.
      * @see paintTile.
      */
-    virtual void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+    virtual void paintPartTile(unsigned char* pBuffer, const char* pPart, const int nMode,
                                const int nCanvasWidth, const int nCanvasHeight,
                                const int nTilePosX, const int nTilePosY, const int nTileWidth,
                                const int nTileHeight, bool bIsPreview = false) = 0;
@@ -2212,9 +2215,9 @@ struct COKitDocument
      */
     virtual int createViewWithOptions(const char* pOptions) = 0;
 
-    /// Set a part's selection mode, naming the part by its part number.
+    /// Set a part's selection mode, naming the part by its part identifier.
     /// nSelect is 0 to deselect, 1 to select, and 2 to toggle.
-    virtual void selectPart(int nPart, int nSelect) = 0;
+    virtual void selectPart(const char* pPart, int nSelect) = 0;
 
     /// Moves the selected pages/slides to a new position.
     /// nPosition is the new position where the selection
@@ -2500,23 +2503,26 @@ struct COKitDocument
     virtual void flushClipboard() = 0;
 
     /**
-     * Get the stable unique identifier of one part: a nonzero integer assigned
-     * to the part for the whole document session, kept over part moves,
-     * insertions and deletions of other parts. nMode selects the part list the
-     * index addresses: 0 for the standard parts, 1 for the master pages, 2 for
-     * the notes pages. Zero when there is no such part or the document has no
-     * part identifiers.
+     * Get the stable identifier of the part at the given index. For a
+     * presentation or drawing document that is the page's GUID as a braced
+     * string, kept over part moves, insertions and deletions of other parts,
+     * and persistent across sessions when the file format stores it; nMode
+     * selects the part list the index addresses: 0 for the standard parts, 1
+     * for the master pages, 2 for the notes pages, 3 for the notes master
+     * pages, 4 for the handout master page. For other document types the
+     * identifier is the index itself in decimal form. Empty when there is no
+     * such part.
      */
-    virtual unsigned long long getPartUniqueId(int nPart, int nMode) = 0;
+    virtual std::string getPartId(int nPart, int nMode) = 0;
 
     /**
-     * Get the index the part with the given part number holds now. For a
-     * presentation or drawing document a part number is the page's stable
-     * unique identifier, and the result is the position of that page in the
-     * part list nMode selects; -1 when no page carries that number any more.
-     * For other document types the part number is the index itself.
+     * Get the index the part with the given part identifier holds now. For a
+     * presentation or drawing document the identifier is the page's GUID, and
+     * the result is the position of that page in the part list nMode selects;
+     * -1 when no page carries that identifier any more. For other document
+     * types the identifier is the index itself in decimal form.
      */
-    virtual int getPartIndex(int nPart, int nMode) = 0;
+    virtual int getPartIndex(const char* pPart, int nMode) = 0;
 
 };
 

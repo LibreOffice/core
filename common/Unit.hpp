@@ -533,8 +533,8 @@ public:
 
     // ---------------- TileCache hooks ----------------
     /// Called before the lookupTile call returns. Should always be called to fire events.
-    virtual void lookupTile(int part, int mode, int width, int height, int tilePosX, int tilePosY,
-                            int tileWidth, int tileHeight,
+    virtual void lookupTile(const std::string& part, int mode, int width, int height,
+                            int tilePosX, int tilePosY, int tileWidth, int tileHeight,
                             std::shared_ptr<TileData> &tile);
 
     // ---------------- DocumentBroker hooks ----------------
@@ -629,11 +629,11 @@ public:
     virtual void onDocBrokerViewLoaded(const std::string&, const std::shared_ptr<ClientSession>&) {}
 
     // ---------------- TileCache events ----------------
-    virtual void onTileCacheHit(int /*part*/, int /*mode*/,
+    virtual void onTileCacheHit(const std::string& /*part*/, int /*mode*/,
                                 int /*width*/, int /*height*/,
                                 int /*tilePosX*/, int /*tilePosY*/,
                                 int /*tileWidth*/, int /*tileHeight*/) {}
-    virtual void onTileCacheMiss(int /*part*/, int /*mode*/,
+    virtual void onTileCacheMiss(const std::string& /*part*/, int /*mode*/,
                                  int /*width*/, int /*height*/,
                                  int /*tilePosX*/, int /*tilePosY*/,
                                  int /*tileWidth*/, int /*tileHeight*/) {}

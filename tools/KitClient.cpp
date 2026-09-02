@@ -131,7 +131,7 @@ protected:
                     continue;
                 }
 
-                int partNumber(NumUtil::stoi(tokens[1]));
+                const std::string& partId(tokens[1]);
                 int canvasWidth(NumUtil::stoi(tokens[2]));
                 int canvasHeight(NumUtil::stoi(tokens[3]));
                 int tilePosX(NumUtil::stoi(tokens[4]));
@@ -140,7 +140,7 @@ protected:
                 int tileHeight(NumUtil::stoi(tokens[7]));
 
                 std::vector<unsigned char> pixmap(canvasWidth*canvasHeight*4);
-                loKitDocument->setPart(partNumber);
+                loKitDocument->setPart(partId.c_str());
                 loKitDocument->paintTile(pixmap.data(), canvasWidth, canvasHeight, tilePosX, tilePosY, tileWidth, tileHeight);
 
                 if (!Util::windowingAvailable())

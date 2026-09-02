@@ -746,7 +746,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
             }
             case XML_ELEMENT(CO_EXT, XML_GUID):
             {
-                // stored by the SdXMLGenericPageContext constructor
+                // A known attribute of the page, so it raises no unknown-attribute warning here.
                 break;
             }
             default:
@@ -832,7 +832,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
             }
             case XML_ELEMENT(CO_EXT, XML_GUID):
             {
-                // stored by the SdXMLGenericPageContext constructor
+                // A known attribute of the page, so it raises no unknown-attribute warning here.
                 break;
             }
             default:

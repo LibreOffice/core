@@ -256,9 +256,9 @@ OString Annotation::ToJSON(CommentNotificationType nType)
             aJsonWriter.put("author", m_Author);
             aJsonWriter.put("dateTime", utl::toISO8601(m_DateTime));
             aJsonWriter.put("text", GetTextImpl(g));
-            // The page's stable unique id as a number; 0 stands for no page, a value the
-            // ids never take.
-            aJsonWriter.put("part", mpPage ? mpPage->GetUniqueID() : sal_uInt64(0));
+            // The page's GUID as a braced string; an empty string stands for no page, a
+            // value the identifiers never take.
+            aJsonWriter.put("part", mpPage ? mpPage->GetGuid().getString() : OString());
             tools::Rectangle aRectangle(
                 Point(std::round(o3tl::toTwips(m_Position.X, o3tl::Length::mm)),
                       std::round(o3tl::toTwips(m_Position.Y, o3tl::Length::mm))),

@@ -57,7 +57,7 @@ void testEachView(const std::string& doc, const std::string& type, const std::st
         // Check document size
         helpers::sendTextFrame(socket, "status", view);
         auto response = helpers::assertResponseString(socket, "status:", view);
-        int docPart = -1;
+        std::string docPart;
         int docParts = 0;
         int docHeight = 0;
         int docWidth = 0;

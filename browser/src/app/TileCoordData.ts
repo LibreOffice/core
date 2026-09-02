@@ -45,9 +45,11 @@ class TileCoordData {
 
 	// Returns SimplePoint. To replace getPos in the short term.
 	getPosSimplePoint() {
+		// A SimplePoint carries the part index, while the tile names its part
+		// by part identifier.
 		return cool.SimplePoint.fromCorePixels(
 			[this.x, this.y],
-			this.part,
+			app.map._docLayer.getIndexFromPart(this.part),
 			this.mode,
 		);
 	}
@@ -88,10 +90,10 @@ class TileCoordData {
 			'key should be a string',
 		);
 		const k = key.split(':');
-		const mode = k.length === 4 ? +k[4] : 0;
+		const mode = k.length >= 5 ? +k[4] : 0;
 		window.app.console.assert(k.length >= 5, 'invalid key format');
-		// The key was built from a part number, so the parsed field is one.
-		return new TileCoordData(+k[0], +k[1], +k[2], +k[3] as PartNumber, mode);
+		// The key was built from a part identifier, so the parsed field is one.
+		return new TileCoordData(+k[0], +k[1], +k[2], k[3] as PartNumber, mode);
 	}
 
 	public static keyToTileCoords(key: string): TileCoordData {

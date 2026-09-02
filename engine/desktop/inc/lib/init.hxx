@@ -42,7 +42,10 @@ namespace desktop {
     struct RectangleAndPart
     {
         tools::Rectangle m_aRectangle;
-        int m_nPart;
+        /// The part identifier: a page GUID for a presentation or drawing document, a decimal
+        /// index for the other document types. "-1" stands for every part, and an empty string
+        /// for a part nobody has set yet.
+        OString m_aPart;
         int m_nMode;
 
         // This is the "EMPTY" rectangle, which somewhat confusingly actually means
@@ -51,24 +54,29 @@ namespace desktop {
         constexpr static tools::Rectangle emptyAllRectangle = {0, 0, KitHelper::MaxTwips, KitHelper::MaxTwips};
 
         RectangleAndPart()
-            : m_nPart(INT_MIN)  // A part nobody has set yet. -1 is reserved to mean "all parts".
-            , m_nMode(0)
+            : m_nMode(0)
         {
         }
 
-        RectangleAndPart(const tools::Rectangle* pRect, int nPart, int nMode)
+        RectangleAndPart(const tools::Rectangle* pRect, OString aPart, int nMode)
             : m_aRectangle( pRect ? SanitizedRectangle(*pRect) : emptyAllRectangle)
-            , m_nPart(nPart)
+            , m_aPart(std::move(aPart))
             , m_nMode(nMode)
         {
+        }
+
+        /// Whether the part stands for every part of the document.
+        bool isAllParts() const
+        {
+            return m_aPart == "-1";
         }
 
         OString toString() const
         {
             // Every payload carries the part, so the part must have been set by now.
-            assert(m_nPart >= -1);
+            assert(!m_aPart.isEmpty());
             return (isInfinite() ? "EMPTY"_ostr : m_aRectangle.toString())
-                + ", " + OString::number(m_nPart) + ", " + OString::number(m_nMode);
+                + ", " + m_aPart + ", " + OString::number(m_nMode);
         }
 
         /// Infinite Rectangle is both sides are
@@ -123,13 +131,14 @@ namespace desktop {
         }
         bool isVectorRendering() const { return m_bVectorRendering; }
 
-        DESKTOP_DLLPUBLIC void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
+        DESKTOP_DLLPUBLIC void tilePainted(const OString& rPart, int nMode,
+                                           const tools::Rectangle& rRectangle);
         const OString& getViewRenderState() const { return m_aViewRenderState; }
-        const std::map<int, std::map<int, tools::Rectangle>>& getPaintedTiles() const
+        const std::map<OString, std::map<int, tools::Rectangle>>& getPaintedTiles() const
         {
             return m_aPaintedTiles;
         }
-        void setPaintedTiles(const std::map<int, std::map<int, tools::Rectangle>>& rPaintedTiles)
+        void setPaintedTiles(const std::map<OString, std::map<int, tools::Rectangle>>& rPaintedTiles)
         {
             m_aPaintedTiles = rPaintedTiles;
         }
@@ -160,13 +169,8 @@ namespace desktop {
             {
             }
 
-            CallbackData(const tools::Rectangle* pRect, int viewId)
-                : PayloadObject(RectangleAndPart(pRect, viewId, 0))
-            { // PayloadString will be done on demand
-            }
-
-            CallbackData(const tools::Rectangle* pRect, int part, int mode)
-                : PayloadObject(RectangleAndPart(pRect, part, mode))
+            CallbackData(const tools::Rectangle* pRect, OString part, int mode)
+                : PayloadObject(RectangleAndPart(pRect, std::move(part), mode))
             { // PayloadString will be done on demand
             }
 
@@ -236,8 +240,8 @@ namespace desktop {
         std::unordered_map<OString, OString> m_lastStateChange;
         std::unordered_map<int, std::unordered_map<COKitCallbackType, OString>> m_viewStates;
 
-        /// BBox of already painted tiles: part number -> part mode -> rectangle.
-        std::map<int, std::map<int, tools::Rectangle>> m_aPaintedTiles;
+        /// BBox of already painted tiles: part identifier -> part mode -> rectangle.
+        std::map<OString, std::map<int, tools::Rectangle>> m_aPaintedTiles;
 
         // For some types only the last message matters (see isUpdatedType()) or only the last message
         // per each viewId value matters (see isUpdatedTypePerViewId()), so instead of using push model
@@ -305,14 +309,15 @@ namespace desktop {
                                     int nDocumentId);
         ~COKitDocumentImpl();
 
-        void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
+        void updateViewsForPaintedTile(int nOrigViewId, const OString& rPart, int nMode,
+                                       const tools::Rectangle& rRectangle);
 
         bool saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) override;
         COKitDocumentType getDocumentType() override;
         int getParts() override;
         std::string getWriterPageRectangles() override;
-        int getPart() override;
-        void setPart(int nPart) override;
+        std::string getPart() override;
+        void setPart(const char* pPart) override;
         std::string getPartName(int nPart) override;
         void setPartMode(COKitPartMode eMode) override;
         void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
@@ -341,7 +346,7 @@ namespace desktop {
         void setView(int nId) override;
         int getView() override;
         int getViewsCount() override;
-        void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+        void paintPartTile(unsigned char* pBuffer, const char* pPart, const int nMode,
                            const int nCanvasWidth, const int nCanvasHeight, const int nTilePosX,
                            const int nTilePosY, const int nTileWidth, const int nTileHeight,
                            bool bIsPreview = false) override;
@@ -371,7 +376,7 @@ namespace desktop {
         void postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX, int nY,
                                     int nOffset) override;
         int createViewWithOptions(const char* pOptions) override;
-        void selectPart(int nPart, int nSelect) override;
+        void selectPart(const char* pPart, int nSelect) override;
         void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) override;
         void resizeWindow(unsigned nWindowId, const int width, const int height) override;
         bool getClipboard(const char **pMimeTypes,
@@ -416,8 +421,8 @@ namespace desktop {
         void setAllowManageRedlines(int nId, bool allow) override;
         void transferClipboardFromView(int nSourceViewId) override;
         void flushClipboard() override;
-        unsigned long long getPartUniqueId(int nPart, int nMode) override;
-        int getPartIndex(int nPart, int nMode) override;
+        std::string getPartId(int nPart, int nMode) override;
+        int getPartIndex(const char* pPart, int nMode) override;
     };
 
     struct DESKTOP_DLLPUBLIC COKitImpl : public COKit

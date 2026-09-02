@@ -7,12 +7,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-// A part number: the number tiles and part-carrying messages name a part by.
-// For a presentation or drawing document it is the page's stable unique id;
-// for other document types it is the part's index. The brand keeps a plain
-// index from being stored or passed where a part number belongs: get one from
-// getPartFromIndex or getSelectedPart, or go through the index for order.
-type PartNumber = number & { readonly __partNumberBrand: 'PartNumber' };
+// A part identifier: the string tiles and part-carrying messages name a part
+// by. For a presentation or drawing document it is the page's GUID in braced
+// form; for other document types it is the part's index in decimal form. The
+// brand keeps a plain index from being stored or passed where a part
+// identifier belongs: get one from getPartFromIndex or getSelectedPart, or go
+// through the index for order.
+type PartNumber = string & { readonly __partNumberBrand: 'PartNumber' };
 
 interface PainterInterface {
 	update(): void;
@@ -82,14 +83,15 @@ interface DocLayerInterface {
 	scrollToPos(pos: InternPointLike): void;
 
 	_selectedPart: number;
-	// The part number of the part at the given index: the number the tiles
-	// of that part are keyed by. For a presentation or drawing document the
-	// part number is the page's stable unique id; for other document types
-	// it is the index itself. Part numbers carry no order, so arithmetic on
-	// them never yields another part. Go through the index for that.
+	// The part identifier of the part at the given index: the string the
+	// tiles of that part are keyed by. For a presentation or drawing document
+	// it is the page's GUID; for other document types it is the index in
+	// decimal form. Part identifiers carry no order, so nothing can be
+	// computed from one. Go through the index for that. An empty string means
+	// no part holds the given index.
 	getPartFromIndex(index: number): PartNumber;
-	// The current index of the part with the given part number, or -1 when
-	// no part carries it.
+	// The current index of the part with the given part identifier, or -1
+	// when no part carries it.
 	getIndexFromPart(part: PartNumber): number;
 	getSelectedPart(): PartNumber;
 	_oleCSelections: CSelections;

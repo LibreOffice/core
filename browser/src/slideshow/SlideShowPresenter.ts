@@ -105,7 +105,8 @@ interface SlideInfo {
 	next: string;
 	prev: string;
 	indexInSlideShow?: number;
-	uniqueID: number;
+	// The slide's part identifier: the page's GUID in braced form.
+	part: string;
 	slideWidth: number;
 	slideHeight: number;
 }
