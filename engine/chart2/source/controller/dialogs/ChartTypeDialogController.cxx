@@ -650,7 +650,7 @@ void StatisticalChartDialogController::fillSubTypeList(weld::IconView& rSubTypeL
 {
     rSubTypeList.clear();
     lcl_appendSubType(rSubTypeList, u"1"_ustr, SchResId(STR_HISTOGRAM),
-                      Bitmap(BMP_HISTOGRAM));
+                      getPreviewBitmap(Image(StockImage::Yes, BMP_HISTOGRAM)));
 }
 
 OUString StatisticalChartDialogController::getChartName( sal_Int32 nId ) const
@@ -708,7 +708,7 @@ void FunnelChartDialogController::fillSubTypeList(weld::IconView& rSubTypeList,
 {
     rSubTypeList.clear();
     lcl_appendSubType(rSubTypeList, u"1"_ustr, SchResId(STR_FUNNEL),
-                      Bitmap(BMP_FUNNEL));
+                      getPreviewBitmap(Image(StockImage::Yes, BMP_FUNNEL)));
 }
 
 void FunnelChartDialogController::adjustParameterToSubType(ChartTypeParameter& rParameter)
