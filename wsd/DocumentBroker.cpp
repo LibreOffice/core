@@ -4473,9 +4473,25 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
 #if !MOBILEAPP
         if (wopiFileInfo)
         {
+            const auto& tokens = wopiFileInfo->getRelatedDocumentTokens();
             for (const auto& related : wopiFileInfo->getRelatedDocuments())
-                setRemoteDocumentToken(related.wopiSrc, related.accessToken,
-                                       related.lastModifiedTime);
+            {
+                // The last-modified time is public; this view's token, if it
+                // holds one for this source, is private to UserPrivateInfo.
+                std::string accessToken;
+                for (const auto& token : tokens)
+                {
+                    if (token.wopiSrc == related.wopiSrc)
+                    {
+                        accessToken = token.accessToken;
+                        break;
+                    }
+                }
+
+                if (!accessToken.empty())
+                    setRemoteDocumentToken(related.wopiSrc, accessToken,
+                                           related.lastModifiedTime);
+            }
         }
 #endif
 

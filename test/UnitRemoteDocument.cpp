@@ -32,6 +32,38 @@
 #include <string>
 #include <thread>
 
+namespace
+{
+// Fills CheckFileInfo with one related document, split the way the production
+// code now expects a WOPI host to send it: the public part (WOPISrc and the
+// last-modified time) in the top-level RelatedDocuments, and this view's
+// private access token in UserPrivateInfo.RelatedDocuments.
+void setRelatedDocument(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc,
+                        const std::string& accessToken,
+                        const std::string& lastModifiedTime = std::string())
+{
+    Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
+    Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+    entry->set("WOPISrc", wopiSrc);
+    if (!lastModifiedTime.empty())
+        entry->set("LastModifiedTime", lastModifiedTime);
+    relatedDocuments->add(entry);
+    fileInfo->set("RelatedDocuments", relatedDocuments);
+
+    Poco::JSON::Array::Ptr tokens = new Poco::JSON::Array();
+    Poco::JSON::Object::Ptr tokenEntry = new Poco::JSON::Object();
+    tokenEntry->set("WOPISrc", wopiSrc);
+    tokenEntry->set("AccessToken", accessToken);
+    tokens->add(tokenEntry);
+
+    Poco::JSON::Object::Ptr userPrivateInfo = fileInfo->getObject("UserPrivateInfo");
+    if (!userPrivateInfo)
+        userPrivateInfo = new Poco::JSON::Object();
+    userPrivateInfo->set("RelatedDocuments", tokens);
+    fileInfo->set("UserPrivateInfo", userPrivateInfo);
+}
+} // namespace
+
 /// A document (file 1) subscribes to a remote document (file 2) named in its
 /// CheckFileInfo RelatedDocuments. Verifies that the subscriber receives
 /// connected and modified events while another user edits the remote
@@ -75,13 +107,8 @@ public:
         // Only the subscribing document lists a related document.
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
-            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-            entry->set("WOPISrc", remoteWopiSrc());
-            entry->set("AccessToken", "remotetoken");
-            entry->set("LastModifiedTime", "2026-09-01T12:00:00.000000Z");
-            relatedDocuments->add(entry);
-            fileInfo->set("RelatedDocuments", relatedDocuments);
+            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken",
+                               "2026-09-01T12:00:00.000000Z");
         }
     }
 
@@ -254,12 +281,7 @@ public:
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
             // The document lists itself as a related document.
-            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
-            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-            entry->set("WOPISrc", ownWopiSrc());
-            entry->set("AccessToken", "remotetoken");
-            relatedDocuments->add(entry);
-            fileInfo->set("RelatedDocuments", relatedDocuments);
+            setRelatedDocument(fileInfo, ownWopiSrc(), "remotetoken");
         }
     }
 
@@ -368,12 +390,7 @@ public:
     {
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
-            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-            entry->set("WOPISrc", remoteWopiSrc());
-            entry->set("AccessToken", "remotetoken");
-            relatedDocuments->add(entry);
-            fileInfo->set("RelatedDocuments", relatedDocuments);
+            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
         }
     }
 
@@ -749,12 +766,7 @@ public:
         const int other = path.ends_with("/1") ? 2 : path.ends_with("/2") ? 1 : 0;
         if (other)
         {
-            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
-            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-            entry->set("WOPISrc", fileWopiSrc(other));
-            entry->set("AccessToken", "remotetoken");
-            relatedDocuments->add(entry);
-            fileInfo->set("RelatedDocuments", relatedDocuments);
+            setRelatedDocument(fileInfo, fileWopiSrc(other), "remotetoken");
         }
     }
 
@@ -879,12 +891,7 @@ public:
     {
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
-            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-            entry->set("WOPISrc", remoteWopiSrc());
-            entry->set("AccessToken", "remotetoken");
-            relatedDocuments->add(entry);
-            fileInfo->set("RelatedDocuments", relatedDocuments);
+            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
         }
     }
 
@@ -998,12 +1005,7 @@ public:
         // The subscribing document lists the missing file as a related document.
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
-            Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-            entry->set("WOPISrc", remoteWopiSrc());
-            entry->set("AccessToken", "remotetoken");
-            relatedDocuments->add(entry);
-            fileInfo->set("RelatedDocuments", relatedDocuments);
+            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
         }
     }
 

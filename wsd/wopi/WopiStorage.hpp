@@ -63,22 +63,35 @@ public:
         const std::string& getHideUserList() const { return _hideUserList; }
         const std::string& getPresentationLeader() const { return _presentationLeader; }
 
-        /// One remote document this document may subscribe to.
+        // Public part
         struct RelatedDocument
         {
             /// The remote document's WOPISrc.
             std::string wopiSrc;
-            /// The access token to reach the remote document with.
-            std::string accessToken;
             /// The time the remote document was last modified, as the
             /// integrator reported it. Empty when none was provided.
             std::string lastModifiedTime;
         };
 
-        /// Remote documents this document may subscribe to.
+        // Private part
+        struct RelatedDocumentToken
+        {
+            /// The remote document's WOPISrc.
+            std::string wopiSrc;
+            /// The access token to reach the remote document with.
+            std::string accessToken;
+        };
+
+        /// Remote documents this document may subscribe to, without tokens.
         const std::vector<RelatedDocument>& getRelatedDocuments() const
         {
             return _relatedDocuments;
+        }
+
+        /// This view's access tokens for the related documents.
+        const std::vector<RelatedDocumentToken>& getRelatedDocumentTokens() const
+        {
+            return _relatedDocumentTokens;
         }
 
         bool getUserCanWrite() const { return _userCanWrite; }
@@ -221,8 +234,11 @@ public:
         /// Used for directly starting follow me presentation
         std::string _presentationLeader;
 
-        /// The RelatedDocuments entries this document may subscribe to.
+        /// The RelatedDocuments entries this document may subscribe to
         std::vector<RelatedDocument> _relatedDocuments;
+
+        /// This view's access tokens for the related documents
+        std::vector<RelatedDocumentToken> _relatedDocumentTokens;
     };
 
     WopiStorage(const Poco::URI& uri, const std::string& localStorePath,

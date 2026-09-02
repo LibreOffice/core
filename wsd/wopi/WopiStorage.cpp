@@ -169,8 +169,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
                 << _username << "] will be used until a valid name is specified.");
     }
 
-    // Take the remote documents this document may subscribe to, then redact
-    // their tokens in the response object that is logged below.
+    // The public part of the remote documents this document may subscribe to.
     if (auto relatedDocuments = object->getArray("RelatedDocuments"))
     {
         for (std::size_t i = 0; i < relatedDocuments->size(); ++i)
@@ -180,17 +179,35 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
                 continue;
 
             std::string wopiSrc;
-            std::string accessToken;
             std::string lastModifiedTime;
             JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
-            JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
             JsonUtil::findJSONValue(entry, "LastModifiedTime", lastModifiedTime);
-            if (!wopiSrc.empty() && !accessToken.empty())
-                _relatedDocuments.push_back({ std::move(wopiSrc), std::move(accessToken),
-                                              std::move(lastModifiedTime) });
+            if (!wopiSrc.empty())
+                _relatedDocuments.push_back({ std::move(wopiSrc), std::move(lastModifiedTime) });
+        }
+    }
 
-            if (entry->has("AccessToken"))
-                entry->set("AccessToken", "<redacted>");
+    // The access tokens for those related documents are private to this view.
+    if (auto userPrivateInfo = object->getObject("UserPrivateInfo"))
+    {
+        if (auto relatedTokens = userPrivateInfo->getArray("RelatedDocuments"))
+        {
+            for (std::size_t i = 0; i < relatedTokens->size(); ++i)
+            {
+                auto entry = relatedTokens->getObject(i);
+                if (!entry)
+                    continue;
+
+                std::string wopiSrc;
+                std::string accessToken;
+                JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
+                JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
+                if (!wopiSrc.empty() && !accessToken.empty())
+                    _relatedDocumentTokens.push_back(
+                        { std::move(wopiSrc), std::move(accessToken) });
+            }
+
+            userPrivateInfo->remove("RelatedDocuments");
         }
     }
 
