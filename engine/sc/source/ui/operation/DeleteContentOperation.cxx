@@ -9,11 +9,16 @@
 
 #include <operation/DeleteContentOperation.hxx>
 
+#include <dbdata.hxx>
+#include <dbdocfun.hxx>
 #include <docfuncutil.hxx>
 #include <docfunc.hxx>
 #include <editable.hxx>
 #include <formulacell.hxx>
+#include <globstr.hrc>
 #include <markdata.hxx>
+#include <scresid.hxx>
+#include <tabvwsh.hxx>
 
 #include <memory>
 
@@ -84,6 +89,24 @@ bool DeleteContentOperation::runImplementation()
         return false;
     }
 
+    // Deleting every cell of a table, header row included, drops the table itself, the
+    // way the Remove Table command does. The list action has to open before the delete
+    // for the content and the removals to undo in one step, so the tables are known by
+    // then.
+    ScDBDocFunc aDBFunc(mrDocShell);
+    const std::vector<OUString> aCoveredTables
+        = (mnFlags & InsertDeleteFlags::CONTENTS) ? rDoc.GetTablesCoveredBy(aWorkMark)
+                                                  : std::vector<OUString>();
+    const bool bGroupTables = mbRecord && !aCoveredTables.empty();
+    if (bGroupTables)
+    {
+        ViewShellId nViewShellId(-1);
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            nViewShellId = pViewSh->GetViewShellId();
+        const OUString aUndo = ScResId(STR_UNDO_DELETECONTENTS);
+        mrDocShell.GetUndoManager()->EnterListAction(aUndo, aUndo, 0, nViewShellId);
+    }
+
     ScMarkData aMultiMark = convertMark(aWorkMark);
     aMultiMark.SetMarking(false); // for MarkToMulti
 
@@ -146,6 +169,17 @@ bool DeleteContentOperation::runImplementation()
             mrDocShell.GetUndoManager(), mrDocShell, aMultiMark, aExtendedRange,
             std::move(pUndoDoc), mnFlags, pDataSpans, bMulti, bDrawUndo, aRestoreExpandedMatrices);
     }
+
+    // Re-resolve by name: the content delete in between never drops a table, but a table
+    // removed here must not leave a stale pointer for the next round.
+    for (const OUString& rUpperName : aCoveredTables)
+    {
+        if (const ScDBData* pTable = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(rUpperName))
+            aDBFunc.DeleteDBTable(pTable, mbRecord, mbApi);
+    }
+
+    if (bGroupTables)
+        mrDocShell.GetUndoManager()->LeaveListAction();
 
     syncSheetViews();
 

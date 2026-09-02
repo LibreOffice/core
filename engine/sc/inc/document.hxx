@@ -953,6 +953,7 @@ public:
     SC_DLLPUBLIC const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     std::vector<const ScDBData*> GetAllNamedDBsInArea(const ScRange& rRange) const;
+    std::vector<OUString>        GetTablesCoveredBy(const ScMarkData& rMark) const;
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
     /** True when the document holds at least one external data mapping. Checks

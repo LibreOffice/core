@@ -381,6 +381,26 @@ std::vector<const ScDBData*> ScDocument::GetAllNamedDBsInArea(const ScRange& rRa
         return std::vector<const ScDBData*>();
 }
 
+std::vector<OUString> ScDocument::GetTablesCoveredBy(const ScMarkData& rMark) const
+{
+    std::vector<OUString> aNames;
+    if (!pDBCollection)
+        return aNames;
+
+    for (const auto& rxData : pDBCollection->getNamedDBs())
+    {
+        if (!rxData->GetTableStyleInfo())
+            continue;
+
+        ScRange aArea;
+        rxData->GetArea(aArea);
+        if (rMark.GetTableSelect(aArea.aStart.Tab()) && rMark.IsAllMarked(aArea))
+            aNames.push_back(rxData->GetUpperName());
+    }
+
+    return aNames;
+}
+
 void ScDocument::RefreshDirtyTableColumnNames()
 {
     if (pDBCollection)

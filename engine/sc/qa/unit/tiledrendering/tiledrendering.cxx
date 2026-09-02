@@ -800,6 +800,54 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableResizeUndoKeepsCursor)
                                  pViewData->GetCurY());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteContentsDropsCoveredTable)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Styled table A1:C4, header plus three data rows.
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 3,
+                                   /*bByRow*/ true, /*bHasHeader*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    rDoc.SetString(0, 0, 0, u"Name"_ustr);
+    rDoc.SetString(1, 0, 0, u"Number"_ustr);
+    rDoc.SetString(2, 0, 0, u"Column3"_ustr);
+    rDoc.SetValue(1, 1, 0, 1.0);
+
+    auto hasTable = [&rDoc]() {
+        return rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr) != nullptr;
+    };
+
+    // Deleting only the data rows keeps the table.
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 1, 0, 2, 3, 0));
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_MESSAGE("a partly covered table stays", hasTable());
+    CPPUNIT_ASSERT(rDoc.GetString(1, 1, 0).isEmpty());
+
+    // The header row included: such a table goes, like Remove Table does.
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 0, 0, 2, 3, 0));
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_MESSAGE("a fully covered table goes", !hasTable());
+    CPPUNIT_ASSERT(rDoc.GetString(0, 0, 0).isEmpty());
+
+    // The content and the table come back in one undo step.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_MESSAGE("undo restores the table", hasTable());
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, rDoc.GetString(0, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableRemoveDuplicates)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
