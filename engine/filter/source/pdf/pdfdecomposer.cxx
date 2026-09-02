@@ -50,15 +50,10 @@ public:
 XPdfDecomposer::XPdfDecomposer(uno::Reference<cpo::uno::XComponentContext> const&) {}
 
 /** Get PDF page size in mm100 */
-bool getPdfPageSizeMM100(const BinaryDataContainer& rDataContainer, sal_Int32 nPageIndex,
+bool getPdfPageSizeMM100(vcl::pdf::PDFiumDocument& rPdfDocument, sal_Int32 nPageIndex,
                          double& rfWidthMM100, double& rfHeightMM100)
 {
-    std::shared_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = vcl::pdf::PDFiumLibrary::openDocumentShared(rDataContainer);
-    if (!pPdfDocument)
-        return false;
-
-    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(nPageIndex);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = rPdfDocument.openPage(nPageIndex);
     if (!pPdfPage)
         return false;
 
@@ -89,9 +84,14 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
 
     BinaryDataContainer aDataContainer = vcl::convertUnoBinaryDataContainer(xDataContainer);
 
+    std::shared_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = vcl::pdf::PDFiumLibrary::openDocumentShared(aDataContainer);
+    if (!pPdfDocument)
+        return {};
+
     double fPageWidthMM100 = 0.0;
     double fPageHeightMM100 = 0.0;
-    if (!getPdfPageSizeMM100(aDataContainer, nPageIndex, fPageWidthMM100, fPageHeightMM100))
+    if (!getPdfPageSizeMM100(*pPdfDocument, nPageIndex, fPageWidthMM100, fPageHeightMM100))
         return {};
 
     const basegfx::B2DHomMatrix aTransform(
