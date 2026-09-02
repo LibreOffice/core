@@ -96,6 +96,10 @@ tools::Long ScColumn::GetNeededSize(
     if (bInPrintTwips)
         assert(pDev->GetMapMode().GetMapUnit() == MapUnit::MapTwip);
 
+    const bool bOld = pDev->isSubpixelPositioning();
+    comphelper::ScopeGuard aSubpixelGuard([bOld, pDev] { pDev->setSubpixelPositioning(bOld); });
+    pDev->setSubpixelPositioning(true); // force same subPixel calculations as LayoutStrings
+
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
     if (it == maCells.end() || it->type == sc::element_type_empty)
