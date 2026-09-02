@@ -180,7 +180,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_realloc(
 
     @param sequence must be non-null, sequence->nRefCount must be zero
     @param type the type of the sequence, must be non-null
-    @param release function called each time an interface needs to be release,
+    @param release function called each time an interface needs to be released,
         must be non-null
 
     @since LibreOffice 4.4

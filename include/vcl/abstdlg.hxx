@@ -43,7 +43,7 @@ namespace weld
 
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
-* so we need to use virtual inheritance to keep the referencing counting
+* so we need to use virtual inheritance to keep the reference counting
 * OK.
 */
 class VCL_DLLPUBLIC VclAbstractDialog : public virtual VclReferenceBase

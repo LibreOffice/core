@@ -231,7 +231,7 @@ public:
     }
 };
 
-/// Dictionary object: a set key-value pairs.
+/// Dictionary object: a set of key-value pairs.
 class VCL_DLLPUBLIC PDFDictionaryElement final : public PDFElement
 {
     /// Key-value pairs when the dictionary is a nested value.
@@ -313,7 +313,7 @@ class XRefEntry
      * stored.
      */
     sal_uInt64 m_nOffset = 0;
-    /// Are changed as part of an incremental update?.
+    /// Changed as part of an incremental update.
     bool m_bDirty = false;
 
 public:

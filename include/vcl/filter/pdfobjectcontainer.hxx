@@ -44,6 +44,6 @@ public:
 protected:
     ~PDFObjectContainer() noexcept = default;
 };
-}
+} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

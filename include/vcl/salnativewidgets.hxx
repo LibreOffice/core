@@ -47,7 +47,7 @@ enum class ControlType {
     Editbox            =  30,
 // Control that allows text entry, but without the usual border
 // Has to be handled separately, because this one cannot handle
-// ControlPart::HasBackgroundTexture, which is drawn in the edit box'es
+// ControlPart::HasBackgroundTexture, which is drawn in the edit box's
 // border window.
     EditboxNoBorder    =  31,
 // Control that allows text entry
@@ -87,7 +87,7 @@ enum class ControlType {
     MenuPopup          = 121,
     Progress           = 131,
 // Progress bar for the intro window
-// (aka splash screen), in case some
+// (aka splash screen), in case someone
 // wants native progress bar in the
 // application but not for the splash
 // screen (used in desktop/)
@@ -97,7 +97,7 @@ enum class ControlType {
     Tooltip            = 140,
 // to draw the implemented theme
     WindowBackground   = 150,
-//to draw border of frames natively
+// to draw border of frames natively
     Frame              = 160,
 // for nodes in listviews
 // used in svtools/source/contnr/svtreebx.cxx

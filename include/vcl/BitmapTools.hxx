@@ -48,7 +48,7 @@ VCL_DLLPUBLIC lookup_table const & get_unpremultiply_table();
 VCL_DLLPUBLIC sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
 VCL_DLLPUBLIC sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
 
-/** Byte offsets channels within a 4-byte pixel. */
+/** Byte offsets of channels within a 4-byte pixel. */
 struct ScanlineChannelOffsets
 {
     sal_uInt8 nBlue;
@@ -112,7 +112,7 @@ VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
 
 /**
- * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
+ * @param data will be filled with alpha data, if rBitmap is an alpha/transparent image
  * @param bHasAlpha will be set to true if resulting surface has alpha
  **/
 VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( Bitmap const & rBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight );
