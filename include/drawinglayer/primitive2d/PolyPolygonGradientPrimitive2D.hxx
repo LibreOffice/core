@@ -27,7 +27,7 @@
 
 namespace drawinglayer::primitive2d
 {
-/** PolyPolygonColorPrimitive2D class
+/** PolyPolygonGradientPrimitive2D class
 
     This primitive defines a tools::PolyPolygon filled with a gradient. The
     decomposition will create a MaskPrimitive2D containing a

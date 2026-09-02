@@ -40,7 +40,7 @@ namespace comphelper{
 /** @short  defines a collection of UNO components, where every component will get its own unique number.
 
     @descr  Such number will be unique at runtime only... but it supports fragmentation.
-            Note: This collection uses weak references only to know her components.
+            Note: This collection uses weak references only to know its components.
             So lifetime of these components must be controlled outside.
 
     @threadsafe
@@ -96,7 +96,7 @@ class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) NumberedCollection final :
         /** set the localized prefix to be used for untitled components.
 
             Localization has to be done outside. This container will return
-            those value then. There are no further checks. Its up to you to define
+            that value then. There are no further checks. Its up to you to define
             a suitable string here :-)
 
             @param  sPrefix
@@ -131,10 +131,10 @@ class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) NumberedCollection final :
                     of this collection. (fragmentation!) If collection is full (means there
                     is no free number) the special value INVALID_NUMBER will be returned.
 
-            @note   Those method can't be called within a multithreaded environment.
-                    Because such number won't be "reserved" for the call of these method
-                    it can happen that two calls returns the same number (reasoned by the fact that first call
-                    doesn't used the returned number already.
+            @note   This method cannot be called within a multithreaded environment.
+                    Because such number won't be "reserved" for the call of this method
+                    it can happen that two calls return the same number (reasoned by the fact that the first call
+                    has not used the returned number already).
 
                     So the outside code has to make sure that retrieving and using of those numbers
                     will be an atomic operation.

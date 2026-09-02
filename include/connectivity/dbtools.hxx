@@ -93,13 +93,13 @@ namespace dbtools
 
     // date conversion
 
-    // calculates the default numberformat for a given datatype and a give language
+    // calculates the default numberformat for a given datatype and a given language
     OOO_DLLPUBLIC_DBTOOLS
     sal_Int32 getDefaultNumberFormat(const css::uno::Reference< css::beans::XPropertySet >& _xColumn,
                                      const css::uno::Reference< css::util::XNumberFormatTypes >& _xTypes,
                                      const css::lang::Locale& _rLocale);
 
-    // calculates the default numberformat for a given datatype and a give language
+    // calculates the default numberformat for a given datatype and a given language
     // @param  _nDataType @see com.sun.star.sdbc.DataType
     // @param _nScale       can be zero
     OOO_DLLPUBLIC_DBTOOLS
@@ -241,7 +241,7 @@ namespace dbtools
             Your fields live as long as this component lives.<br/>
 
             Additionally, you are encouraged to dispose this component as soon as you don't need the fields anymore.
-            It depends on the connection's implementation if this is necessary, but the is no guarantee, so to
+            It depends on the connection's implementation if this is necessary, but there is no guarantee, so to
             be on the safe side with respect to resource leaks, you should dispose the component.
 
         @param _pErrorInfo

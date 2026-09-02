@@ -97,7 +97,7 @@ namespace comphelper {
 
 }
 
-/** the UNO3_GETIMPLEMENTATION_* macros  implement a static helper function
+/** the UNO3_GETIMPLEMENTATION_* macros implement a static helper function
     that gives access to your implementation for a given interface reference,
     if possible.
 

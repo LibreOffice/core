@@ -30,12 +30,12 @@ namespace drawinglayer::primitive2d
 /** PolyPolygonGraphicPrimitive2D class
 
     This primitive defines a tools::PolyPolygon filled with bitmap data
-    (including transparence). The decomposition will create a MaskPrimitive2D
+    (including transparency). The decomposition will create a MaskPrimitive2D
     containing a FillGraphicPrimitive2D.
 
     SDPR: support alpha now directly: the decomposition creates
     FillGraphicPrimitive2D which also supports alpha directly
-    now. All direct usages are covered
+    now. All direct usages are covered.
  */
 class DRAWINGLAYER_DLLPUBLIC PolyPolygonGraphicPrimitive2D final
     : public BufferedDecompositionPrimitive2D

@@ -139,8 +139,8 @@ namespace basegfx::unotools
         // Geometry comparisons
 
 
-        /** Return smallest integer range, which completely contains
-            given floating point range.
+        /** Return the smallest integer range, which completely contains
+            the given floating point range.
 
             @param rRange
             Input range. Values must be within the representable
@@ -151,8 +151,8 @@ namespace basegfx::unotools
          */
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange   b2ISurroundingRangeFromB2DRange( const ::basegfx::B2DRange& rRange );
 
-        /** Return smallest B2DRange with integer values, which
-            completely contains given floating point range.
+        /** Return the smallest B2DRange with integer values, which
+            completely contains the given floating point range.
 
             @param rRange
             Input range.

@@ -31,13 +31,13 @@ namespace basegfx
 
 namespace basegfx::utils
 {
-        /** Expand given parallelogram, such that it extends beyond
-            bound rect in a given direction.
+        /** Expand the given parallelogram, such that it extends beyond
+            the bounding rect in a given direction.
 
             This method is useful when e.g. generating one-dimensional
             gradients, such as linear or axial gradients: those
             gradients vary only in one direction, the other has
-            constant color. Most of the time, those gradients extends
+            constant color. Most of the time, those gradients extend
             infinitely in the direction with the constant color, but
             practically, one always has a limiting bound rect into
             which the gradient is painted. The method at hand now
@@ -58,7 +58,7 @@ namespace basegfx::utils
             Left, top edge of the parallelogram. Note that this need
             not be the left, top edge geometrically, it's just used
             when determining the extension direction. Thus, it's
-            perfectly legal to affine-transform a rectangle, and given
+            perfectly legal to affine-transform a rectangle, and give
             the transformed point here. On method return, this
             parameter will contain the adapted output.
 
@@ -66,7 +66,7 @@ namespace basegfx::utils
             Left, bottom edge of the parallelogram. Note that this need
             not be the left, bottom edge geometrically, it's just used
             when determining the extension direction. Thus, it's
-            perfectly legal to affine-transform a rectangle, and given
+            perfectly legal to affine-transform a rectangle, and give
             the transformed point here. On method return, this
             parameter will contain the adapted output.
 
@@ -74,7 +74,7 @@ namespace basegfx::utils
             Right, top edge of the parallelogram. Note that this need
             not be the right, top edge geometrically, it's just used
             when determining the extension direction. Thus, it's
-            perfectly legal to affine-transform a rectangle, and given
+            perfectly legal to affine-transform a rectangle, and give
             the transformed point here. On method return, this
             parameter will contain the adapted output.
 
@@ -82,7 +82,7 @@ namespace basegfx::utils
             Right, bottom edge of the parallelogram. Note that this need
             not be the right, bottom edge geometrically, it's just used
             when determining the extension direction. Thus, it's
-            perfectly legal to affine-transform a rectangle, and given
+            perfectly legal to affine-transform a rectangle, and give
             the transformed point here. On method return, this
             parameter will contain the adapted output.
 
@@ -95,7 +95,7 @@ namespace basegfx::utils
                                             ::basegfx::B2DPoint&        io_rRightBottom,
                                             const ::basegfx::B2DRange&  rFitTarget  );
 
-        /** Creates polypolygon with the given number as seven-segment
+        /** Creates a polypolygon with the given number as seven-segment
             digits
 
             @param fVal
@@ -103,12 +103,12 @@ namespace basegfx::utils
 
             @param nTotalDigits
             Total number of digits to display. If less is needed for
-            given number, fill space with blanks.
+            the given number, fill space with blanks.
 
             @param nDecPlaces
             Decimal places to show. When 0, display as integer. When
-            negative, fill given number of before-the-decimal point
-            with zero.
+            negative, fill given number of places before the decimal point
+            with zeroes.
 
             @param bLitSegments
             When true, return a polygon containing the segments that
