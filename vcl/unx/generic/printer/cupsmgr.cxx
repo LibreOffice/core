@@ -57,17 +57,16 @@ namespace {
 struct GetPPDAttribs
 {
     osl::Condition      m_aCondition;
-    OString             m_aParameter;
+    OString m_sPrinterName;
     OString             m_aResult;
     int                 m_nRefs;
     bool*               m_pResetRunning;
     osl::Mutex*         m_pSyncMutex;
 
-    GetPPDAttribs( const char * m_pParameter,
-                   bool* pResetRunning, osl::Mutex* pSyncMutex )
-            : m_aParameter( m_pParameter ),
-              m_pResetRunning( pResetRunning ),
-              m_pSyncMutex( pSyncMutex )
+    GetPPDAttribs(const char* pPrinterName, bool* pResetRunning, osl::Mutex* pSyncMutex)
+        : m_sPrinterName(pPrinterName)
+        , m_pResetRunning(pResetRunning)
+        , m_pSyncMutex(pSyncMutex)
     {
         m_nRefs = 2;
         m_aCondition.reset();
@@ -93,7 +92,7 @@ struct GetPPDAttribs
         // This CUPS method is not at all thread-safe we need
         // to dup the pointer to a static buffer it returns ASAP
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        const char* pResult = cupsGetPPD(m_aParameter.getStr());
+        const char* pResult = cupsGetPPD(m_sPrinterName.getStr());
         OString aResult = pResult ? OString(pResult) : OString();
 SAL_WNODEPRECATED_DECLARATIONS_POP
         MutexGuard aGuard( *m_pSyncMutex );
@@ -109,8 +108,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         if (m_aCondition.wait( pDelay ) != Condition::result_ok
             )
         {
-            SAL_WARN("vcl.unx.print",
-                    "cupsGetPPD " << m_aParameter << " timed out");
+            SAL_WARN("vcl.unx.print", "cupsGetPPD " << m_sPrinterName << " timed out");
         }
         m_pSyncMutex->acquire();
 
