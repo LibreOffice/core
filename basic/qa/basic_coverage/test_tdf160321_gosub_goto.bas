@@ -24,19 +24,29 @@ Sub verify_GoSub_GoTo
     iVar = iVar + 1
     TestUtil.AssertEqual(iVar, 1, "iVar incremented incorrectly")
 
+    ' tdf#173360 - On...GoSub target must push a return address for the Return statement
+    On 1 GoSub Sub3, Sub4
+    TestUtil.AssertEqual(iVar, 2, "Return after On...GoSub did not resume execution correctly")
+
     ' tdf#160321 - check the correct functionality of the GoTo statement
     On 1 GoTo Sub1, Sub2
     iVar = iVar + 1
 
     Exit Sub
 Sub1:
-    TestUtil.AssertEqual(iVar, 1, "iVar incremented incorrectly")
+    TestUtil.AssertEqual(iVar, 2, "iVar incremented incorrectly")
     On 2 GoTo Sub1, Sub2
     iVar = iVar + 1
     Exit Sub
 Sub2:
-    TestUtil.AssertEqual(iVar, 1, "iVar incremented incorrectly")
+    TestUtil.AssertEqual(iVar, 2, "iVar incremented incorrectly")
     Exit Sub
+Sub3:
+    iVar = iVar + 1
+    Return
+Sub4:
+    iVar = iVar + 1
+    Return
 errorHandler:
     TestUtil.ReportErrorHandler("verify_GoSub_GoTo", Err, Error$, Erl)
     Exit Sub
