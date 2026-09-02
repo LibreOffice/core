@@ -432,6 +432,7 @@ shared_headers = \
                  common/RotatingToken.hpp \
                  common/SaveResult.hpp \
                  common/Seccomp.hpp \
+                 common/ServerPrivateInfo.hpp \
                  common/Session.hpp \
                  common/SettingsStorage.hpp \
                  common/SigHandlerTrap.hpp \

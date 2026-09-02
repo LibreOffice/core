@@ -31,6 +31,7 @@
 #include <common/NumUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
+#include <common/ServerPrivateInfo.hpp>
 #include <common/Session.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Util.hpp>
@@ -1811,7 +1812,9 @@ void ClientSession::uploadBrowserSettingsToWopiHost()
     httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
 }
 
-void ClientSession::uploadViewSettingsToWopiHost()
+void ClientSession::uploadSettingsToWopiHost(const std::string& filePath,
+                                             const std::string& jsonBody,
+                                             const std::string& settingName)
 {
     try
     {
@@ -1821,12 +1824,11 @@ void ClientSession::uploadViewSettingsToWopiHost()
         // A relative URI has no host to send the request to.
         if (uriObject.isRelative())
         {
-            LOG_WRN("Not uploading view settings: WOPI base URL ["
-                    << uriObject.toString() << "] is relative");
+            LOG_WRN("Not uploading " << settingName << ": WOPI base URL [" << uriObject.toString()
+                                     << "] is relative");
             return;
         }
 
-        const std::string filePath = "/settings/userconfig/viewsetting/viewsetting.json";
         uriObject.addQueryParameter("fileId", filePath);
         auth.authorizeURI(uriObject);
 
@@ -1836,13 +1838,11 @@ void ClientSession::uploadViewSettingsToWopiHost()
         httpRequest.setVerb(http::Request::VERB_POST);
         auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
 
-        std::ostringstream jsonStream;
-        _viewSettingsJSON->stringify(jsonStream, 2);
-        httpRequest.setBody(jsonStream.str(), "application/json; charset=utf-8");
+        httpRequest.setBody(jsonBody, "application/json; charset=utf-8");
 
         const std::string logPfx = getLogPrefix();
         http::Session::FinishedCallback finishedCallback =
-            [uriAnonym, logPfx](const std::shared_ptr<http::Session>& wopiSession)
+            [uriAnonym, logPfx, settingName](const std::shared_ptr<http::Session>& wopiSession)
         {
             wopiSession->asyncShutdown();
 
@@ -1850,22 +1850,50 @@ void ClientSession::uploadViewSettingsToWopiHost()
             const http::StatusLine statusLine = httpResponse->statusLine();
             if (statusLine.statusCode() != http::StatusCode::OK)
             {
-                LOG_ERR_S(logPfx << "Failed to upload updated viewsetting to wopiHost["
-                        << uriAnonym << "] with status[" << statusLine.reasonPhrase() << ']');
+                LOG_ERR_S(logPfx << "Failed to upload updated " << settingName << " to wopiHost["
+                                 << uriAnonym << "] with status[" << statusLine.reasonPhrase()
+                                 << ']');
                 return;
             }
-            LOG_TRC_S(logPfx << "Successfully uploaded viewsetting to wopiHost");
+            LOG_TRC_S(logPfx << "Successfully uploaded " << settingName << " to wopiHost");
         };
 
-        LOG_DBG("Uploading viewsetting json [" << jsonStream.str() << "] to wopiHost[" << uriAnonym
-                                               << ']');
+        LOG_DBG("Uploading " << settingName << " to wopiHost[" << uriAnonym << ']');
         httpSession->setFinishedHandler(std::move(finishedCallback));
         httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
     }
     catch (const std::exception& e)
     {
-        LOG_ERR("Failed to upload viewsetting to WOPI host: " << e.what());
+        LOG_ERR("Failed to upload " << settingName << " to WOPI host: " << e.what());
     }
+}
+
+void ClientSession::uploadViewSettingsToWopiHost()
+{
+    std::ostringstream jsonStream;
+    _viewSettingsJSON->stringify(jsonStream, 2);
+    uploadSettingsToWopiHost("/settings/userconfig/viewsetting/viewsetting.json", jsonStream.str(),
+                             "viewsetting");
+}
+
+void ClientSession::uploadServerPrivateInfoToWopiHost()
+{
+    Poco::JSON::Object::Ptr serverInfo;
+    if (getServerPrivateInfo().empty() || !JsonUtil::parseJSON(getServerPrivateInfo(), serverInfo) ||
+        !serverInfo)
+        return;
+
+    Poco::JSON::Object::Ptr body = new Poco::JSON::Object();
+    for (const std::string_view& field : ServerPrivateInfo::Fields)
+    {
+        const std::string name(field);
+        std::string value;
+        JsonUtil::findJSONValue(serverInfo, name, value);
+        body->set(name, value);
+    }
+
+    uploadSettingsToWopiHost(std::string(ServerPrivateInfo::FilePath), JsonUtil::jsonToString(body),
+                             std::string(ServerPrivateInfo::GroupName));
 }
 #endif // !MOBILEAPP
 

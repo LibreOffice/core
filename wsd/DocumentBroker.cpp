@@ -33,6 +33,7 @@
 #include <common/NumUtil.hpp>
 #include <common/Protocol.hpp>
 #include <common/SaveResult.hpp>
+#include <common/ServerPrivateInfo.hpp>
 #include <common/SettingsStorage.hpp>
 #include <common/TilePrioritizer.hpp>
 #include <common/TraceEvent.hpp>
@@ -1628,6 +1629,94 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
 }
 
 #if !MOBILEAPP
+static void applySharedServerPrivateInfo(const std::shared_ptr<ClientSession>& session,
+                                         const std::string& configId)
+{
+    if (configId.empty())
+        return;
+
+    Poco::JSON::Object::Ptr serverInfo;
+    if (session->getServerPrivateInfo().empty() ||
+        !JsonUtil::parseJSON(session->getServerPrivateInfo(), serverInfo) || !serverInfo)
+        return;
+
+    const std::string sharedPresets =
+        Poco::Path(COOLWSD::ChildRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
+    std::string sharedConfigPath = Poco::Path(sharedPresets, Uri::encode(configId)).toString();
+    sharedConfigPath.push_back('/');
+    sharedConfigPath.append(ServerPrivateInfo::GroupName);
+    sharedConfigPath.push_back('/');
+    sharedConfigPath.append(ServerPrivateInfo::FileName);
+
+    if (!FileUtil::Stat(sharedConfigPath).exists())
+        return;
+
+    Poco::JSON::Object::Ptr sharedConfig;
+    try
+    {
+        std::ifstream ifs(sharedConfigPath);
+        Poco::JSON::Parser parser;
+        sharedConfig = parser.parse(ifs).extract<Poco::JSON::Object::Ptr>();
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Failed to parse " << ServerPrivateInfo::FileName << ": " << exc.what());
+        return;
+    }
+
+    if (!sharedConfig)
+        return;
+
+    bool overridden = false;
+    for (const std::string_view& field : ServerPrivateInfo::OverrideFields)
+    {
+        const std::string name(field);
+        std::string stored;
+        JsonUtil::findJSONValue(sharedConfig, name, stored);
+        if (stored.empty())
+            continue;
+
+        serverInfo->set(name, stored);
+        overridden = true;
+    }
+
+    if (overridden)
+    {
+        LOG_DBG("Overriding electronic signature settings from " << ServerPrivateInfo::FileName);
+        session->setServerPrivateInfo(JsonUtil::jsonToString(serverInfo));
+    }
+
+    bool missingValue = false;
+    for (const std::string_view& field : ServerPrivateInfo::Fields)
+    {
+        const std::string name(field);
+        std::string stored;
+        JsonUtil::findJSONValue(sharedConfig, name, stored);
+        if (!stored.empty())
+            continue;
+
+        std::string inUse;
+        JsonUtil::findJSONValue(serverInfo, name, inUse);
+        if (!inUse.empty())
+        {
+            missingValue = true;
+            break;
+        }
+    }
+
+    if (!missingValue)
+        return;
+
+    if (!session->getIsAdminUser().value_or(false))
+    {
+        LOG_DBG("Not writing " << ServerPrivateInfo::FileName << ": the user is not an admin");
+        return;
+    }
+
+    LOG_INF("Recording the values in use in " << ServerPrivateInfo::FileName);
+    session->uploadServerPrivateInfoToWopiHost();
+}
+
 std::string
 DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& session,
                                           WopiStorage* wopiStorage,
@@ -1881,6 +1970,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     session->setIsAdminUser(isAdminUser);
     session->setUserPrivateInfo(userPrivateInfo);
     session->setServerPrivateInfo(serverPrivateInfo);
+    applySharedServerPrivateInfo(session, _configId);
     session->setWatermarkText(watermarkText);
 
     return templateSource;
@@ -2022,13 +2112,17 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
         }
         Poco::File(destDir).createDirectories();
         std::string filePath;
-        // browsersetting/viewsetting are read by fixed name; other groups
-        // derive the filename from the URL so multiple files per group can
-        // coexist (xcu: admin defaults + per-user registrymodifications).
+        // browsersetting, viewsetting and serverprivateinfo are read by fixed
+        // name; other groups derive the filename from the URL so multiple files
+        // per group can coexist (xcu: admin defaults + per-user
+        // registrymodifications).
         if (groupName == "browsersetting")
             filePath = Poco::Path(destDir.toString(), "browsersetting.json").toString();
         else if (groupName == "viewsetting")
             filePath = Poco::Path(destDir.toString(), "viewsetting.json").toString();
+        else if (groupName == ServerPrivateInfo::GroupName)
+            filePath =
+                Poco::Path(destDir.toString(), std::string(ServerPrivateInfo::FileName)).toString();
         else
         {
             // Check for a file_name='something' and use that if it exists and
@@ -2253,6 +2347,7 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
             // the jail's spif/ config dir at label-dialog build time), so this is
             // not a round-trip group; persistence is the Settings-UI upload.
             addGroup(settings, "spif", presets);
+            addGroup(settings, std::string(ServerPrivateInfo::GroupName), presets);
 
             // Ensure round-trip group directories exist in the jail even
             // when the host advertised no entries for them. Without this

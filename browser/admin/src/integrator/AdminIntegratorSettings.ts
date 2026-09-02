@@ -63,6 +63,13 @@ interface ConfigData {
 	themes: ConfigItem[] | null;
 	extensions: ConfigItem[] | null;
 	spif: ConfigItem[] | null;
+	serverprivateinfo: ConfigItem[] | null;
+}
+
+interface ServerPrivateSettings {
+	ESignatureBaseUrl: string;
+	ESignatureClientId: string;
+	ESignatureSecret: string;
 }
 
 interface ViewSettings {
@@ -633,12 +640,16 @@ class SettingIframe {
 	// URL of the stored viewsetting.json, remembered when it is fetched so a save
 	// can tell the server where to read back any secret the user chose to keep.
 	private _viewSettingFileUrl = '';
+	private _serverPrivateSetting: ServerPrivateSettings =
+		SettingIframe.getDefaultServerPrivateSettings();
+	private _serverPrivateSection: HTMLElement | null = null;
 	// Set when the user edits a chat AI field in this dialog session. Drives the
 	// View-tab / sidebar payoff so it fires on a real change, not on every save
 	// that happens to have a key already set. Set only by user input handlers,
 	// never by the load-time model auto-fetch.
 	private _aiConfigDirty = false;
 	private xcuInitializationAttempted = false;
+	private serverPrivateInfoInitializationAttempted = false;
 	private _aiModelFetchTimeout: number | null = null;
 	private _aiModelFetchAbort: AbortController | null = null;
 	private _aiModelFetchSeq = 0;
@@ -662,6 +673,10 @@ class SettingIframe {
 		aiImageModel: _('Model'),
 		aiImageSize: _('Image Size'),
 		aiRequestTimeout: _('Request Timeout (seconds)'),
+	};
+	private _serverPrivateSettingLabels: Record<string, string> = {
+		ESignatureClientId: _('Client ID'),
+		ESignatureSecret: _('Secret'),
 	};
 	private readonly settingLabels: Record<string, string> = {
 		lockAccessibilityOn: _('In-document Screen Reader'),
@@ -1067,6 +1082,8 @@ class SettingIframe {
 		themesUpload: () => this.settingConfigBasePath() + '/themes/',
 		extensionsUpload: () => this.settingConfigBasePath() + '/extensions/',
 		spifUpload: () => this.settingConfigBasePath() + '/spif/',
+		serverPrivateSettingsUpload: () =>
+			this.settingConfigBasePath() + '/serverprivateinfo/',
 	};
 	private browserSettingOptions: Record<string, any> = {};
 	// The Interface Settings as browsersetting.json holds them, before the
@@ -1141,6 +1158,13 @@ class SettingIframe {
 				JSON.stringify(this._viewSetting),
 			),
 		);
+
+		// Electronic signature
+		if (this._serverPrivateSection) {
+			saves.push(
+				this.uploadServerPrivateSettingFile(this._serverPrivateSetting),
+			);
+		}
 
 		await Promise.all(saves);
 
@@ -2806,6 +2830,92 @@ class SettingIframe {
 		);
 	}
 
+	private static getDefaultServerPrivateSettings(): ServerPrivateSettings {
+		return {
+			ESignatureBaseUrl: '',
+			ESignatureClientId: '',
+			ESignatureSecret: '',
+		};
+	}
+
+	private static readonly EDITABLE_SERVER_PRIVATE_FIELDS: (keyof ServerPrivateSettings)[] =
+		['ESignatureClientId', 'ESignatureSecret'];
+
+	private static serverPrivateSettingsFile(
+		settings: ServerPrivateSettings,
+	): File {
+		return new File([JSON.stringify(settings)], 'serverprivateinfo.json', {
+			type: 'application/json',
+			lastModified: Date.now(),
+		});
+	}
+
+	async uploadServerPrivateSettingFile(
+		settings: ServerPrivateSettings,
+	): Promise<void> {
+		await this.uploadFile(
+			this.PATH.serverPrivateSettingsUpload(),
+			SettingIframe.serverPrivateSettingsFile(settings),
+		);
+	}
+
+	private generateServerPrivateSettingUI(
+		data: ServerPrivateSettings,
+		settingsContainer: HTMLElement,
+	) {
+		this._serverPrivateSetting = data;
+
+		const container = document.createElement('div');
+		container.id = 'serverprivate-section';
+		container.classList.add('section');
+
+		container.appendChild(this.createHeading(_('Electronic Signature')));
+		const description = this.createParagraph(
+			_(
+				'Credentials for the electronic signature service. They are shared by everyone on this server.',
+			),
+		);
+		description.className = 'view-setting-description';
+		container.appendChild(description);
+
+		const editor = document.createElement('div');
+		editor.id = 'serverprivate-editor';
+		container.appendChild(editor);
+
+		for (const key of SettingIframe.EDITABLE_SERVER_PRIVATE_FIELDS) {
+			const field = this.createInputField(
+				key,
+				this._serverPrivateSettingLabels[key] || key,
+				data[key],
+				data,
+				false,
+				true,
+			);
+			editor.appendChild(field);
+		}
+
+		container.appendChild(
+			this.createSettingsActions(
+				'serverprivatesettings',
+				_('Electronic Signature'),
+				'serverprivateinfo.json',
+				// Reset keeps the stored address, which is not the admin's to change.
+				() => ({
+					...SettingIframe.getDefaultServerPrivateSettings(),
+					ESignatureBaseUrl: this._serverPrivateSetting.ESignatureBaseUrl,
+				}),
+				() => this._serverPrivateSetting,
+				(settings) => this.uploadServerPrivateSettingFile(settings),
+			),
+		);
+
+		this._serverPrivateSection = this.mountConfigSection(
+			settingsContainer,
+			this._serverPrivateSection,
+			container,
+		);
+	}
+
 	private generateDocSigningUI(
 		data: ViewSettings,
 		settingsContainer: HTMLElement,
@@ -4143,6 +4253,50 @@ class SettingIframe {
 		// Autotext, Custom dictionaries and Document themes
 		if (!isCODesktop) {
 			this.insertConfigSections(data);
+		}
+
+		if (!isUserConfig && !isCODesktop && data && this.isAdmin()) {
+			let stored: any = null;
+			if (data.serverprivateinfo && data.serverprivateinfo.length > 0) {
+				const content = await this.settingsStorage.fetchSettingFile(
+					data.serverprivateinfo[0].uri,
+				);
+				if (content !== null) {
+					stored = {};
+					if (content.trim()) {
+						try {
+							stored = JSON.parse(content);
+						} catch (error) {
+							console.error('Could not read serverprivateinfo.json', error);
+						}
+					}
+				}
+			}
+			if (stored === null && !this.serverPrivateInfoInitializationAttempted) {
+				this.serverPrivateInfoInitializationAttempted = true;
+				try {
+					await this.settingsStorage.uploadSettings(
+						this.PATH.serverPrivateSettingsUpload(),
+						SettingIframe.serverPrivateSettingsFile(
+							SettingIframe.getDefaultServerPrivateSettings(),
+						),
+					);
+					return await this.fetchAndPopulateSharedConfigs();
+				} catch (error) {
+					console.error('Could not create serverprivateinfo.json', error);
+				}
+			}
+
+			if (stored !== null) {
+				this.generateServerPrivateSettingUI(
+					{
+						ESignatureBaseUrl: stored.ESignatureBaseUrl || '',
+						ESignatureClientId: stored.ESignatureClientId || '',
+						ESignatureSecret: stored.ESignatureSecret || '',
+					},
+					settingsContainer,
+				);
+			}
 		}
 
 		// Document Signing and Zotero

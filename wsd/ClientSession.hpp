@@ -441,6 +441,8 @@ public:
 
     void uploadViewSettingsToWopiHost();
 
+    void uploadServerPrivateInfoToWopiHost();
+
     /// Resolve AI credentials with precedence:
     ///   viewSettings[aiProviderAPIKey|Model|URL]
     ///   -> userPrivateInfoObj[AIProviderAPIKey|Model|URL]
@@ -491,6 +493,9 @@ private:
     {
         return std::static_pointer_cast<ClientSession>(shared_from_this());
     }
+
+    void uploadSettingsToWopiHost(const std::string& filePath, const std::string& jsonBody,
+                                  const std::string& settingName);
 
     /// SocketHandler: disconnection event.
     void onDisconnect() override;
