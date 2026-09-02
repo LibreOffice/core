@@ -3592,6 +3592,11 @@ int SfxViewShell::getPart() const
     return 0;
 }
 
+OString SfxViewShell::getPartId() const
+{
+    return OString::number(getPart());
+}
+
 int SfxViewShell::getEditMode() const
 {
     return 0;

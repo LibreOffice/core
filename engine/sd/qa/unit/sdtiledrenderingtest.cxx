@@ -264,7 +264,9 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
-            if (aTree.get_child("part").get_value<int>() == m_nPart)
+            // The payload names the part by its identifier, the page's GUID.
+            if (aTree.get_child("part").get_value<std::string>()
+                == mpViewShell->getPartId().getStr())
                 // Ignore callbacks which are for a different part.
                 m_bGraphicViewSelectionInvalidated = true;
         }

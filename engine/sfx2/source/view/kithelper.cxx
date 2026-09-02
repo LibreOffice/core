@@ -559,7 +559,7 @@ static OString lcl_generateJSON(const SfxViewShell& rView, const boost::property
 {
     boost::property_tree::ptree aMessageProps = rTree;
     aMessageProps.put("viewId", KitHelper::getView(rView));
-    aMessageProps.put("part", rView.getPart());
+    aMessageProps.put("part", rView.getPartId().getStr());
     aMessageProps.put("mode", rView.getEditMode());
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aMessageProps, false /* pretty */);
@@ -570,7 +570,7 @@ static inline OString lcl_generateJSON(const SfxViewShell& rView, int nViewId, s
                                        const OString& rPayload)
 {
     return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId)
-           + "\", \"part\": \"" + OString::number(rView.getPart()) + "\", \"mode\": \""
+           + "\", \"part\": \"" + rView.getPartId() + "\", \"mode\": \""
            + OString::number(rView.getEditMode()) + "\", \"" + rKey + "\": \""
            + lcl_sanitizeJSONAsValue(rPayload) + "\" }";
 }

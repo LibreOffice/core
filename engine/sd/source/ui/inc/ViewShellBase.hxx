@@ -203,6 +203,8 @@ public:
     OUString RetrieveLabelFromCommand( const OUString& aCmdURL ) const;
     /// See SfxViewShell::getPart().
     int getPart() const override;
+    /// See SfxViewShell::getPartId().
+    OString getPartId() const override;
     /// See SfxViewShell::getEditMode().
     int getEditMode() const override;
     /// See SfxViewShell::setEditMode().

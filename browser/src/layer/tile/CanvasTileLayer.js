@@ -1614,7 +1614,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		var strTwips = obj.selection.match(/\d+/g);
 
-		OtherViewGraphicSelectionSection.addOrUpdateGraphicSelectionIndicator(viewId, strTwips, parseInt(obj.part), obj.mode !== undefined ? parseInt(obj.mode): 0);
+		// The message names the part by its part identifier; the section
+		// tracks parts by index.
+		OtherViewGraphicSelectionSection.addOrUpdateGraphicSelectionIndicator(viewId, strTwips, this.getIndexFromPart(obj.part), obj.mode !== undefined ? parseInt(obj.mode): 0);
 
 		if (app.getFollowedViewId() === viewId && app.isFollowingUser()) {
 			if (this.isImpress() || this.isDraw() || this.isWriter()) {
@@ -1872,7 +1874,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			for (let i = 0; i < rectangle.length; i++) rectangle[i] = parseInt(rectangle[i]);
 		}
 
-		TextCursorSection.addOrUpdateOtherViewCursor(viewId, username, rectangle, parseInt(obj.part), mode);
+		// The message names the part by its part identifier; the section
+		// tracks parts by index.
+		TextCursorSection.addOrUpdateOtherViewCursor(viewId, username, rectangle, this.getIndexFromPart(obj.part), mode);
 
 		if (app.getFollowedViewId() === viewId && (app.isFollowingEditor() || app.isFollowingUser())) {
 			if (this.isWriter() || this.isImpress() || this.isDraw()) {
@@ -1923,7 +1927,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			const cellAddress = strTwips.slice(4).join(','); // Column and row.
 			strTwips = this._convertRawTwipsToTileTwips(strTwips);
 
-			OtherViewCellCursorSection.addOrUpdateOtherViewCellCursor(viewId, this._map.getViewName(viewId), strTwips, parseInt(obj.part), cellAddress);
+			OtherViewCellCursorSection.addOrUpdateOtherViewCellCursor(viewId, this._map.getViewName(viewId), strTwips, this.getIndexFromPart(obj.part), cellAddress);
 			CursorHeaderSection.deletePopUpNow(viewId);
 		}
 
@@ -2305,7 +2309,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Get raw rectangles.
 		const rawRectangles = this._getRawRectangles(obj.selection.trim());
 
-		app.activeDocument.getView(viewId).updateSelectionRawData(viewMode, parseInt(obj.part), rawRectangles);
+		// The message names the part by its part identifier; the selection
+		// data tracks parts by index.
+		app.activeDocument.getView(viewId).updateSelectionRawData(viewMode, this.getIndexFromPart(obj.part), rawRectangles);
 
 		this._saveMessageForReplay(textMsg, viewId);
 	},

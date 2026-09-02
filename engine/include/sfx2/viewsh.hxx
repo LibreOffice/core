@@ -422,8 +422,11 @@ public:
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
-    /// See COKitDocument::getPart().
+    /// The 0-based index of the part the view sits on.
     virtual int getPart() const;
+    /// The identifier of the part the view sits on: the page's GUID as a braced string for a
+    /// presentation or drawing document, the part's index in decimal form otherwise.
+    virtual OString getPartId() const;
     /// See COKitDocument::getEditMode().
     virtual int getEditMode() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;

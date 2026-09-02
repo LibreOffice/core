@@ -1002,6 +1002,21 @@ int ViewShellBase::getPart() const
     return 0;
 }
 
+OString ViewShellBase::getPartId() const
+{
+    ViewShell* pViewShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
+
+    // Every kind of view shell reports its current page, so the identifier stays a page GUID
+    // in the outline and slide sorter views too.
+    if (pViewShell)
+    {
+        if (SdPage* pPage = pViewShell->getCurrentPage())
+            return pPage->GetGuid().getString();
+    }
+
+    return OString::number(getPart());
+}
+
 int ViewShellBase::getEditMode() const
 {
     ViewShell* pViewShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
