@@ -154,7 +154,7 @@ awt::Rectangle AccessibleDialogControlShape::GetBounds() const
 
 void AccessibleDialogControlShape::SetBounds( const awt::Rectangle& aBounds )
 {
-    if ( m_aBounds.X != aBounds.X || m_aBounds.Y != aBounds.Y || m_aBounds.Width != aBounds.Width || m_aBounds.Height != aBounds.Height )
+    if (m_aBounds != aBounds)
     {
         m_aBounds = aBounds;
         NotifyAccessibleEvent( AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any() );
