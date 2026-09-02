@@ -16,6 +16,7 @@
 #include <QApplication>
 #include <QGuiApplication>
 #include <QKeySequence>
+#include <QPointer>
 #include <QRect>
 #include <QScreen>
 #include <QShortcut>
@@ -23,6 +24,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <vector>
 
 QSize defaultWindowMinimumSize()
 {
@@ -63,11 +65,35 @@ void surfaceWindow(QWidget* window)
     window->activateWindow();
 }
 
+void closeEveryWindow()
+{
+    // Every visible window is asked to close, the same way the window manager's close button
+    // closes it, so a document that has changed is saved before its window closes. A window is
+    // free to answer by deferring its close and closing itself later, and the windows after it
+    // in the walk are asked anyway.
+    //
+    // A window can be visible without being drawn on screen, and one of those keeps the
+    // application running just as a drawn one does, so visibility is the whole test.
+    std::vector<QPointer<QWidget>> windows;
+    for (QWidget* widget : QApplication::topLevelWidgets())
+    {
+        if (widget->isVisible())
+            windows.emplace_back(widget);
+    }
+
+    // The pointers are guarded because closing one window destroys the windows parented to it.
+    for (const QPointer<QWidget>& window : windows)
+    {
+        if (window)
+            window->close();
+    }
+}
+
 void installQuitShortcut(QWidget* window)
 {
     auto* quitShortcut = new QShortcut(QKeySequence::Quit, window);
     quitShortcut->setContext(Qt::WindowShortcut);
-    QObject::connect(quitShortcut, &QShortcut::activated, [] { QApplication::closeAllWindows(); });
+    QObject::connect(quitShortcut, &QShortcut::activated, [] { closeEveryWindow(); });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
