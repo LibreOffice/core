@@ -3266,6 +3266,52 @@ AC_SUBST(CCACHE_NOHASHDIR)
 AC_SUBST(CCACHE_COMPILERCHECK)
 AC_SUBST(CCACHE_DEPEND_MODE)
 
+dnl ===================================================================
+dnl  A ccache msbuild can reach
+dnl ===================================================================
+dnl msbuild's CL task never names the compiler on a command line, so ccache
+dnl cannot be put in front of it as an argument. Give msbuild a directory whose
+dnl cl.exe and clang-cl.exe are copies of ccache instead. ccache looks at the
+dnl name it was run under to pick the compiler, so one directory serves both
+dnl the msbuild externals here and the msbuild projects of the windows app.
+MSBUILD_CCACHE=
+MSBUILD_CCACHE_DIR=
+if test -n "$CCACHE" -a -z "$SCCACHE" -a "$_os" = "WINNT"; then
+    msbuild_ccache_dir="$BUILDDIR/msbuild-ccache"
+    msbuild_ccache_origin=`dirname "$CCACHE"`
+    AS_MKDIR_P([$msbuild_ccache_dir])
+    for msbuild_ccache_name in cl.exe clang-cl.exe ccache.exe; do
+        rm -f "$msbuild_ccache_dir/$msbuild_ccache_name"
+        ln "$CCACHE" "$msbuild_ccache_dir/$msbuild_ccache_name" 2>/dev/null \
+            || cp -f "$CCACHE" "$msbuild_ccache_dir/$msbuild_ccache_name"
+    done
+    dnl A copy of ccache in another directory no longer finds the DLLs that sat
+    dnl beside the original, so check that it still runs.
+    AC_MSG_CHECKING([whether $CCACHE runs from $msbuild_ccache_dir])
+    msbuild_ccache_runs=no
+    if (cd "$msbuild_ccache_origin" && "$msbuild_ccache_dir/ccache.exe" --version) \
+            >/dev/null 2>&1; then
+        msbuild_ccache_runs=yes
+    fi
+    rm -f "$msbuild_ccache_dir/ccache.exe"
+    AC_MSG_RESULT([$msbuild_ccache_runs])
+    if test "$msbuild_ccache_runs" = "no"; then
+        rm -f "$msbuild_ccache_dir/cl.exe" "$msbuild_ccache_dir/clang-cl.exe"
+        AC_MSG_WARN([$CCACHE does not run once copied to $msbuild_ccache_dir; msbuild will compile without ccache.])
+    else
+        dnl A backslash here is lost passing through make and the shell, and
+        dnl msbuild then reports MSB6004, so use PathFormat's forward-slash
+        dnl Windows form. The conversion sits here because a plain Cygwin build
+        dnl needs it as much as a helper-shell one does.
+        PathFormat "$msbuild_ccache_dir"
+        MSBUILD_CCACHE="$formatted_path"
+        PathFormat "$msbuild_ccache_origin"
+        MSBUILD_CCACHE_DIR="$formatted_path"
+    fi
+fi
+AC_SUBST(MSBUILD_CCACHE)
+AC_SUBST(MSBUILD_CCACHE_DIR)
+
 # sccache defaults are good enough
 if test "$CCACHE" != "" -a -z "$SCCACHE"; then
     # e.g. (/home/rene/.config/ccache/ccache.conf) max_size = 20.0G

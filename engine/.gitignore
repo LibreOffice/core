@@ -23,6 +23,7 @@
 /buck-out
 /instdir
 /instdir_for_build
+/msbuild-ccache
 /workdir
 /workdir.deleting
 /workdir_for_build
