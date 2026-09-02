@@ -113,11 +113,6 @@ public:
         -   getAccessibleCellAt,
         -   isAccessibleSelected. */
 
-    // XServiceInfo
-
-    /*  Derived classes have to implement:
-        -   getImplementationName */
-
 protected:
     // internal virtual methods
 
