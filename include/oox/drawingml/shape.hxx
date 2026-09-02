@@ -462,7 +462,7 @@ private:
     /// Aspect ratio for an in-diagram shape.
     double mfAspectRatio = 0;
 
-    /// Number of child shapes to be layouted vertically inside org chart in-diagram shape.
+    /// Number of child shapes to be laid out vertically inside org chart in-diagram shape.
     sal_Int32 mnVerticalShapesCount = 0;
 
     // Is this a connector shape?

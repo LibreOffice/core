@@ -72,7 +72,7 @@ class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final :
             @param  xOwner
                     the new owner of this collection.
             @param  xNumbers
-                    provides the right string and number for  an untitled component.
+                    provides the right string and number for an untitled component.
          */
         TitleHelper(css::uno::Reference< css::uno::XComponentContext > xContext,
             const css::uno::Reference< css::uno::XInterface >& xOwner,
@@ -157,7 +157,7 @@ class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final :
         /** provides parts of our own title and we listen there for changes too. */
         css::uno::WeakReference< css::frame::XTitle > m_xSubTitle;
 
-        /** if it's set to sal_True the member m_sTitle has not to be changed internally.
+        /** if it's set to true the member m_sTitle must not be changed internally.
             It was set from outside and so outside code has to make sure it will be
             updated.
          */
@@ -169,7 +169,7 @@ class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final :
         /** knows the leased number which must be used for untitled components. */
         ::sal_Int32 m_nLeasedNumber;
 
-        /** contains all title change listener */
+        /** contains all title change listeners */
         comphelper::OInterfaceContainerHelper4<css::frame::XTitleChangeListener> m_aTitleChangeListeners;
 };
 

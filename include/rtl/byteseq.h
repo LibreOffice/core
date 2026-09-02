@@ -68,7 +68,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_release(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
-/** Constructs a bytes sequence with length nLength. All bytes are set to zero.
+/** Constructs a byte sequence with length nLength. All bytes are set to zero.
 
     @param ppSequence inout sequence; on entry *ppSequence may be null, otherwise it is released;
                       after the call, *ppSequence contains the newly constructed sequence
@@ -78,7 +78,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_byte_sequence_construct(
     sal_Sequence **ppSequence , sal_Int32 nLength )
     SAL_THROW_EXTERN_C();
 
-/** Constructs a bytes sequence with length nLength. The data is not initialized.
+/** Constructs a byte sequence with length nLength. The data is not initialized.
 
     @param ppSequence inout sequence; on entry *ppSequence may be null, otherwise it is released;
                       after the call, *ppSequence contains the newly constructed sequence
@@ -120,7 +120,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_byte_sequence_equals(
 /** Returns the data array pointer of the sequence.
 
     @return read-pointer to the data array of the sequence. If rtl_byte_sequence_reference2One()
-            has been called before, the pointer may be casted to a non const pointer and
+            has been called before, the pointer may be cast to a non const pointer and
             the sequence may be modified
 */
 SAL_DLLPUBLIC const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray(
@@ -222,7 +222,7 @@ public:
     /** Constructor:
         Creates a sequence from a C-Handle without acquiring the handle, thus taking
         over ownership. Eitherway the handle is released by the destructor.
-        This ctor is useful, when working with a c-interface (it safes a pair of
+        This ctor is useful, when working with a c-interface (it saves a pair of
         acquire and release call and is thus a performance optimization only).
 
         @param pSequence sequence handle to be taken over

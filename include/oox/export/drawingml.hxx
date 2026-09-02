@@ -299,7 +299,7 @@ class DrawingML
 {
 
 private:
-    /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
+    /// To specify where to write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
     /// Parent exporter, used for text callback.
     DMLTextExport* mpTextExport;

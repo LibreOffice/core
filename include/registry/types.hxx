@@ -71,7 +71,7 @@ enum RTTypeClass
     RT_TYPE_SERVICE,
 
     /** specifies that the blob represents a singleton type (a named object)
-        which refers exactly one existing service.
+        which refers to exactly one existing service.
      */
     RT_TYPE_SINGLETON,
 
@@ -242,7 +242,7 @@ enum class RTMethodMode
     /// @deprecated
     ONEWAY_CONST,
 
-    /// indicated the synchronous mode of a method
+    /// indicates the synchronous mode of a method
     TWOWAY,
 
     /// @deprecated
@@ -267,7 +267,7 @@ enum class RTMethodMode
 
 /** specifies the mode of a parameter.
 
-    There are three parameter modes which have impact of the handling of the
+    There are three parameter modes which have an impact on the handling of the
     parameter in the UNO bridges and the UNO code generation.
  */
 enum RTParamMode
@@ -281,7 +281,7 @@ enum RTParamMode
     /// indicates a pure out parameter which is used by reference
     RT_PARAM_OUT = 2,
 
-    /// indicates a in and out parameter which is used also by reference
+    /// indicates an in and out parameter which is used also by reference
     RT_PARAM_INOUT = 3,
 
     /**
@@ -304,7 +304,7 @@ enum class RTReferenceType
     /// the reference type is unknown
     INVALID,
 
-    /** the service support the interface that means an implementation of this
+    /** the service supports the interface that means an implementation of this
         service must implement this interface.
      */
     SUPPORTS,

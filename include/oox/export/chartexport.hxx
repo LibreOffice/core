@@ -88,7 +88,7 @@ enum AxisType
     AXIS_VALUE     // used for chartex
 };
 
-struct AxisIdPair{
+struct AxisIdPair {
     AxisType nAxisType;
     sal_Int32 nAxisId;
     sal_Int32 nCrossAx;
@@ -163,7 +163,7 @@ private:
     std::shared_ptr<URLTransformer> mpURLTransformer;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
-    bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
+    bool mbHasCategoryLabels; // if the categories are only automatically generated this will be false
 
     //css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
     css::uno::Reference< css::chart2::data::XDataSequence > mxCategoriesValues;
@@ -354,6 +354,6 @@ public:
     OOX_DLLPUBLIC OUString GetExternalDataPath() const;
 };
 
-}
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
